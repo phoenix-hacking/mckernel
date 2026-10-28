@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-28T05:29:23.220910+00:00",
+  "as_of": "2026-10-28T06:36:50.766240+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -999,7 +999,7 @@
       "c_file": "kernel/syscall.c",
       "title": "Generic syscall, process lifecycle and memory syscall orchestration",
       "status": "partial",
-      "owner": "/root/native_retirement_repair",
+      "owner": "/root/f03next",
       "inventory_basis": "Exact retained allocated-symbol frontier chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json; private HOST evidence separate from current290 selected image.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d",
@@ -2429,7 +2429,7 @@
       "c_file": "arch/x86_64/kernel/syscall.c",
       "title": "x86 syscall ABI, signal frame, ptrace and architecture memory operations",
       "status": "partial",
-      "owner": "/root/scratch_growth_mutator_source",
+      "owner": "/root/postnative",
       "inventory_basis": "Exact retained allocated-symbol frontier chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json; private HOST evidence separate from current290 selected image.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d",
@@ -3813,18 +3813,26 @@
         "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
         "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
       ]
+    },
+    {
+      "at": "2026-10-28T06:36:50.766240+00:00",
+      "actual_progress": "Accepted CURRENT116 new8Rustproviders remove7generic+1arch selectedCfunctions; C79\u219271/Rust60\u219268. No native/filedelta.",
+      "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT116-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+      "supported_file_counts": [
+        4,
+        6
+      ]
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-28T05:29:23.220910+00:00",
-    "accepted_production": "CURRENT115/de9f/C79/Rust60/process0runtimeC",
-    "native_acceptance": "ef56/f76",
+    "at": "2026-10-28T06:36:50.766240+00:00",
+    "accepted_production": "CURRENT116/42473e03/C71(54+17)/Rust68/process0runtimeC",
+    "artifact_acceptance": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT116-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "native_acceptance": "OPEN for116; accepted115/ef56/f76 remains historical matching115 proof",
     "M14_supported_files": "4/6",
-    "next_action": "Preserve116/227 READY; postnativeobserver/current/nonce/fullwindow needed beforeactualnewadmission.",
-    "limits": [
-      "Exact supported CURRENT115/de9f default only; excludedfallbacks/declarations/variant limitations retained.",
-      "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
-      "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
-    ]
+    "next_action": "First fully ready original227 native on exact retainedCURRENT110scope via realRoot61 consumer;117/BFD default queues remain ready.",
+    "current_free": "6c83eee4",
+    "current_ledger": "Root61/20e2470a/count70",
+    "current_physical_clearance_pending": false
   }
 }

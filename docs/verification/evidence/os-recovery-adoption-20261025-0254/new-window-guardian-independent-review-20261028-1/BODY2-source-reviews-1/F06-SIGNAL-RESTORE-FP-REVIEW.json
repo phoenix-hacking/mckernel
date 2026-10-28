@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/independent",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-28T06:36:08.020453+00:00",
+  "decision": "PASS_F06_SIGNAL_RESTORE_FP_PRIVATE_SOURCE_ABI_OWNERSHIP_AND_ACTUAL_HOST_FIXTURE_ONLY",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/SOURCE-READY.json",
+    "bytes": 5056,
+    "sha256": "661bb0826a9c91b9c266dce6a276739026c0ab28319322559900735a733f376b"
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/f06_native_signal_restore_fp.rs",
+    "bytes": 5179,
+    "sha256": "126c0aff5baa9a9fd97d910ec46fd7af50ea2a15c49bf7269d0e6c33e510e712"
+  },
+  "integration_patches": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/arch-selection.patch",
+      "bytes": 597,
+      "sha256": "31d427cefaa6390334efd86bacc95e2081854b2d5c6a64535cb3e4dcda7c86e8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/rust-module-selection.patch",
+      "bytes": 241,
+      "sha256": "e80fd28fe5e97b27032ddcc5ae93c5050c87680cb94c16f8d37ffe7986a12f31"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/cmake-selection.PROPOSAL.patch",
+      "bytes": 816,
+      "sha256": "a1ed21f106ec002421d10a4d836841af4efbe7c1e87db36ecdb51ba12d129eeb"
+    }
+  ],
+  "actual_HOST_summary": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/future-host-output-1/ACTUAL-QUALIFICATION-SUMMARY.json",
+    "bytes": 16735,
+    "sha256": "8938e17c4e492211d4fc195a9489e590984528aecd682a8283632e6bccb06115"
+  },
+  "checks": {
+    "selected_actual116_C_symbol": "arch_native_signal_restore_fp_bridge global0x158=344B remains",
+    "actual_commands": 4,
+    "genuine_header_ABI": "allocator(int,ulong,char*,int),free(void*,char*,int),copy(void*,constvoid*,size_t);LP64/int32/NOWAIT2/ENOMEM12/EFAULT14 staticasserts",
+    "C_Rust_pairs": 576,
+    "all_stderr_empty": true,
+    "all_children_positively_joined_groups_absent_streams_closed": true,
+    "original_C_verbatim": true,
+    "actual_artifact_hashes_authenticated": true,
+    "reviewer_test_or_compiler_replays": 0
+  },
+  "source_findings": [
+    "Configured size is fetched before null-user test exactly as C; null user calls reset and returns without allocation/copy/validate/restore. Nonnull path calls the existing size validator and propagates its negative error. Existing validator requires provided==configured and576..65536; bytes+63<=65599 fits original signed32 tracked allocator argument.",
+    "Private allocation requests same unsigned size_t+63 bits and NOWAIT2. Null returns-ENOMEM. Alignment preserves original unsigned(pointer+63)&~63 bits within the successful allocation. Raw pointers are used; no user-memory reference or new owner is formed.",
+    "Every nonzero copy result becomes-EFAULT. Only successful copy fetches mask/MXCSR and invokes existing private-buffer validator. Restore runs only on validator0 and propagates exact checked hardware result. No callback, validation, reset or hardware policy is changed.",
+    "Exactly one free of the original allocation occurs after every post-allocation result, including copy/validation/restore failures. Aligned interior pointer is never freed. Validator temporarily forms a shared slice only over the complete private kernel buffer after copy; no callback retains it past return, and allocation remains live through checked restoration.",
+    "Production callbacks reuse genuine get_xsave_size/mask, buffer-size/format validators, copy_from_user, reset/MXCSR/checked-XRSTOR and existing Rust tracked allocator/free owners. No duplicate FP instruction, validator or allocation implementation is added.",
+    "Tracked alloc/free preserve real ABI and flags. FILE/LINE provenance intentionally moves from C to two actual Rust call sites; source preserves tracking and future production verification must bind exact filename NUL/string/line operands. This is not asserted as unchanged C-file provenance.",
+    "576 deterministic callback pairs compare exact returns, all event arguments/order, allocation alignment, entire65536+128B storage/canaries and independent configured-first/reset/free-once conditions. Mock size outputs test caller preservation without claiming real validator accepts each mocked configured/size pair.",
+    "Paired C exclusion/root-module/candidate cfg/CMake selection use existing supported profile. Old C fallback and unrelated nativeVDSO/private signal-dispatch code remain unchanged. Broader held signal-dispatch undefined-domain obligations are not cleared."
+  ],
+  "integration_conditions": [
+    "Root may merge exact reviewed body2 leaf/three patches into coherent private118 after117, reconciling actual current arch/Rustroot/CMake preimages and retaining independent workers changes.",
+    "Rebind exact actual source/profile/origin hash/argv and fresh generated origin artifacts; no old receipt/hash may silently qualify changed arch source.",
+    "Full production crate and selected archTU/link must compile cfg(not(test)) adapters/public wrapper and prove zero C definition plus exactly one Rust arch_native_signal_restore_fp_bridge resolving actual signal-return consumer. Preserve all original reset/MXCSR/xstate/copy/checkedXRSTOR/trackedalloc imports and complete public ulong64/int32\u2192long64 ABI.",
+    "Production object/current-final-image proof must verify actual tracked allocation/free filename NUL strings, call-site lines, NOWAIT2/int32 narrowing and original-pointer cleanup semantics. HOST test cfg(test) excludes these wrappers/hardware and cannot supply this proof.",
+    "Require matching signal-return/native lifecycle on accepted current candidate before claiming actual C retirement or supported-file closure. Source+HOST acceptance adds no default/native/file credit or authority."
+  ],
+  "limitations": [
+    "Only genuine-header ABI and deterministic mocked core ownership are accepted here. No hardware FP, usercopy, allocator, guest, module or runtime operation was invoked by this review.",
+    "Original C callbacks reset/MXCSR and checked assembly/hardware providers retain their existing ownership/fault-fixup requirements.",
+    "Unsafe contract requires original signal-return/current-thread exclusion, successful full buffer copy before validation, and callbacks that return without retaining borrowed buffer."
+  ],
+  "counts": {
+    "qualified_source_body": 1,
+    "actual_HOST_fixture": 1,
+    "planned_C_function_removals": 1,
+    "actual_default_builds": 0,
+    "native": 0,
+    "file_closures": 0,
+    "actual_C_retirement": 0
+  },
+  "runtime_authority": null
+}

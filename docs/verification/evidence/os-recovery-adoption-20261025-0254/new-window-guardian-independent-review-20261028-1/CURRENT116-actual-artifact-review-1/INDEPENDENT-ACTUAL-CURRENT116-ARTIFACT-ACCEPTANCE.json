@@ -1,0 +1,502 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_INDEPENDENT_ACTUAL_CURRENT116_SELECTED_DEFAULT_ARTIFACT_SOURCE_ABI_LINK_AND_CURRENT_CONSUMERS",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/independent",
+  "recorded_at": "2026-10-28T06:33:13.895043+00:00",
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 116268,
+    "sha256": "c0bec142a55ddde56bc3311af06503dcb3ce55fa98070a573c49aace573e34c3"
+  },
+  "actual_worker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 15016,
+    "sha256": "9a747459f805d89a23b45993923cc11e539ce9f92a861d2478da656a4f680003"
+  },
+  "actual_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 23747,
+    "sha256": "69efa1de50b7978664a603b11594e5d711a79975454534566e7e44eeffc040ac"
+  },
+  "source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+    "bytes": 11797,
+    "sha256": "ef82f32879b49729b985ba78bb4cf5bcb6f58bb66126185a8237419366aadde2"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 19949,
+    "sha256": "4bd374524bef5c90e182289467a9691bb5d3261b4579064801ad32482082b7f9"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/SOURCE-READY.json",
+    "bytes": 4467,
+    "sha256": "86109336da795b0e7684374a9b0eb782f30b0b1710fdf92da7e0ef90263acf9e"
+  },
+  "previous_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 2866,
+    "sha256": "aae76fa20b438828b55662a196fc9266a4c0098262b7effb766f5063ad38b6f9"
+  },
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18361160,
+      "sha256": "5072a9457b945e15356320379c3d614733ad8337a3451e27d913295472bc14ae"
+    },
+    "generic_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 354296,
+      "sha256": "4e13b5424d08d4f5b23fc90507d0d8afac1ed505c7e841a63a11bc9eb6490da9"
+    },
+    "arch_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 99992,
+      "sha256": "77db1a40cdf69e5d8689d8d93f5ab8710c554bbf73dd8dc4b585cae018cdb31d"
+    },
+    "process_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 2864,
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10271792,
+      "sha256": "42473e03dae2310cb444008f4a46e84b3da87b00e4b2e2ab008f2637abbdc2c4"
+    }
+  },
+  "raw_link_objects": 11,
+  "new_objects": 3,
+  "retained_objects": 8,
+  "actual_commands": [
+    {
+      "index": 0,
+      "returncode": 0,
+      "output": {
+        "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+        "bytes": 18361160,
+        "sha256": "5072a9457b945e15356320379c3d614733ad8337a3451e27d913295472bc14ae"
+      },
+      "started_at_epoch": 1793168644.6922204,
+      "finished_at_epoch": 1793168664.335333
+    },
+    {
+      "index": 1,
+      "returncode": 0,
+      "output": {
+        "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "bytes": 354296,
+        "sha256": "4e13b5424d08d4f5b23fc90507d0d8afac1ed505c7e841a63a11bc9eb6490da9"
+      },
+      "started_at_epoch": 1793168664.3524005,
+      "finished_at_epoch": 1793168664.97567
+    },
+    {
+      "index": 2,
+      "returncode": 0,
+      "output": {
+        "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "bytes": 99992,
+        "sha256": "77db1a40cdf69e5d8689d8d93f5ab8710c554bbf73dd8dc4b585cae018cdb31d"
+      },
+      "started_at_epoch": 1793168664.9763448,
+      "finished_at_epoch": 1793168665.1347365
+    },
+    {
+      "index": 3,
+      "returncode": 0,
+      "output": {
+        "path": "/work/output/build/kernel/mckernel.img",
+        "bytes": 10271792,
+        "sha256": "42473e03dae2310cb444008f4a46e84b3da87b00e4b2e2ab008f2637abbdc2c4"
+      },
+      "started_at_epoch": 1793168665.1351225,
+      "finished_at_epoch": 1793168665.2431507
+    }
+  ],
+  "metrics": {
+    "span_seconds": 20.55093026161194,
+    "sum_command_wall_seconds": 20.53280210494995,
+    "CPU_seconds": 20.540481,
+    "worker_cumulative_peak_child_RSS_KiB": 677720
+  },
+  "counts": {
+    "selected_C_functions_before": 79,
+    "selected_C_functions_after": 71,
+    "generic_C_functions_before": 61,
+    "generic_C_functions_after": 54,
+    "arch_C_functions_before": 18,
+    "arch_C_functions_after": 17,
+    "exact_new_C_function_removals": 8,
+    "focused_selected_Rust_providers_before": 60,
+    "focused_selected_Rust_providers_after": 68,
+    "new_focused_Rust_providers": 8,
+    "generic_C_OBJECTs_before": 158,
+    "generic_C_OBJECTs_after": 157,
+    "arch_C_OBJECTs_before": 20,
+    "arch_C_OBJECTs_after": 20,
+    "process_C_FUNCTIONs": 0,
+    "process_C_OBJECTs": 0,
+    "process_non_note_runtime_ALLOC_bytes": 0,
+    "process_GNU_property_NOTE_bytes": 48,
+    "registry_slots": 389,
+    "Rust_source_closure": 121,
+    "new_semantic_Rust_data_objects": 0,
+    "compiler_string_labels_renamed": 4,
+    "compiler_string_label_bytes": 21
+  },
+  "removed_C_functions": {
+    "generic": [
+      "ptrace_report_signal_bridge",
+      "ptrace_setsiginfo",
+      "ptrace_syscall_event",
+      "ptrace_wakeup_clear_saved_bridge",
+      "ptrace_wakeup_pending_take_bridge",
+      "ptrace_wakeup_set_single_step_bridge",
+      "ptrace_wakeup_trace_syscall_bridge"
+    ],
+    "arch": [
+      "arch_do_shmget_bridge"
+    ]
+  },
+  "new_Rust_owners": [
+    {
+      "name": "f03_exec_report_signal_v1",
+      "input": {
+        "index": 4856,
+        "name": "f03_exec_report_signal_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1158,
+        "value": 0,
+        "size": 17
+      },
+      "final": {
+        "name": "f03_exec_report_signal_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684700784,
+        "size": 17
+      }
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "input": {
+        "index": 6592,
+        "name": "ptrace_syscall_event",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3647,
+        "value": 0,
+        "size": 47
+      },
+      "final": {
+        "name": "ptrace_syscall_event",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685079328,
+        "size": 47
+      }
+    },
+    {
+      "name": "ptrace_wakeup_clear_saved_bridge",
+      "input": {
+        "index": 6597,
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3654,
+        "value": 0,
+        "size": 26
+      },
+      "final": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080256,
+        "size": 26
+      }
+    },
+    {
+      "name": "ptrace_wakeup_set_single_step_bridge",
+      "input": {
+        "index": 6600,
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3660,
+        "value": 0,
+        "size": 34
+      },
+      "final": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080384,
+        "size": 34
+      }
+    },
+    {
+      "name": "ptrace_wakeup_trace_syscall_bridge",
+      "input": {
+        "index": 6602,
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3665,
+        "value": 0,
+        "size": 37
+      },
+      "final": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685081536,
+        "size": 37
+      }
+    },
+    {
+      "name": "ptrace_wakeup_pending_take_bridge",
+      "input": {
+        "index": 6598,
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3655,
+        "value": 0,
+        "size": 39
+      },
+      "final": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685080288,
+        "size": 39
+      }
+    },
+    {
+      "name": "f03_ptrace_setsiginfo_v1",
+      "input": {
+        "index": 4933,
+        "name": "f03_ptrace_setsiginfo_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1270,
+        "value": 0,
+        "size": 676
+      },
+      "final": {
+        "name": "f03_ptrace_setsiginfo_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684720640,
+        "size": 676
+      }
+    },
+    {
+      "name": "arch_do_shmget_bridge",
+      "input": {
+        "index": 4516,
+        "name": "arch_do_shmget_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 789,
+        "value": 0,
+        "size": 17
+      },
+      "final": {
+        "name": "arch_do_shmget_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684612576,
+        "size": 17
+      }
+    }
+  ],
+  "proofs": {
+    "ACTUAL-INVENTORY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/CURRENT116-actual-artifact-review-1/ACTUAL-INVENTORY.json",
+      "bytes": 6907,
+      "sha256": "947f655b3ecdbbb0f8cb0d0e2f5ee18b2ce8ecfc1624637aeff64dc346537093"
+    },
+    "ACTUAL-CURRENT-CONSUMERS-REGISTRY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/CURRENT116-actual-artifact-review-1/ACTUAL-CURRENT-CONSUMERS-REGISTRY.json",
+      "bytes": 251952,
+      "sha256": "3befb746b653223f5df124b8a9b457c04b77a85aabbba5e80dfbd7b7a2409055"
+    },
+    "ACTUAL-FINITE-SUPPLEMENT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/CURRENT116-actual-artifact-review-1/ACTUAL-FINITE-SUPPLEMENT.json",
+      "bytes": 10648,
+      "sha256": "6cdef7785b4d9f69a1e338abd20bc319e024807a6fc796e1891cb943cee58955"
+    },
+    "ACTUAL-SOURCE-ABI-ORIGIN-EDGE-SEAL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/CURRENT116-actual-artifact-review-1/ACTUAL-SOURCE-ABI-ORIGIN-EDGE-SEAL.json",
+      "bytes": 9712,
+      "sha256": "ec8514b4b89f3adcd3ed78dfd59b0873be643461089452f9892734a6e4fdae28"
+    }
+  },
+  "specific_supplements": {
+    "setsiginfo_complete_actual_body": {
+      "qualified_HOST": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+        "bytes": 18335360,
+        "sha256": "4d2265b8d178fd44fe3f57ea76c92d3ed372cdda1205518d4d4a6505d4bb37c4"
+      },
+      "actual_bytes": 676,
+      "nonrelocated_and_relocation_targets_equal": true,
+      "complete_final_bytes_reproduced": true
+    },
+    "SHM_actual_codegen": {
+      "actual_bytes": 17,
+      "historical_expectation_bytes": 12,
+      "frame_pointer_delta_bytes": 5,
+      "raw_hex": "554889e548b800000000000000005dffe0",
+      "provider": "do_shmget",
+      "provider_bytes": 2993,
+      "current_consumer": "sys_shmget",
+      "consumer_bytes": 338,
+      "consumer_relocation": [
+        {
+          "offset": 104,
+          "type": 1,
+          "target": {
+            "index": 4517,
+            "name": "do_shmget",
+            "bind": 1,
+            "type": 2,
+            "shndx": 1107,
+            "value": 0,
+            "size": 2993
+          },
+          "addend": 0,
+          "owning_section": 4291
+        }
+      ],
+      "same_low32_key_and_size_flags_register_ABI": true,
+      "full_final_bytes_readback": true,
+      "actual_compiler_fold": "sys_shmget338 differs only offset112 REX4c\u219244: mov r15,rdi becomes mov r15d,edi for genuine signed32 key narrowing; offset104 relocation directly targets original Rust do_shmget instead of17B adapter. All other instructions and relocation provenance exact115. This is observed compiler inlining with original key ABI, not byte equality."
+    },
+    "anonymous_label_renames": [
+      {
+        "previous_label": ".Lanon.417ddb61f0d242853afc022a9101b3c7.185",
+        "current_label": ".Lanon.3095605168571ccfcc70317a0dc419ec.185",
+        "bytes": 6,
+        "same_input_string_offset": 5316,
+        "literal_hex": "66756e632000",
+        "existing_payload_not_new_runtime_storage": true
+      },
+      {
+        "previous_label": ".Lanon.417ddb61f0d242853afc022a9101b3c7.186",
+        "current_label": ".Lanon.3095605168571ccfcc70317a0dc419ec.186",
+        "bytes": 6,
+        "same_input_string_offset": 5322,
+        "literal_hex": "66696c652000",
+        "existing_payload_not_new_runtime_storage": true
+      },
+      {
+        "previous_label": ".Lanon.417ddb61f0d242853afc022a9101b3c7.187",
+        "current_label": ".Lanon.3095605168571ccfcc70317a0dc419ec.187",
+        "bytes": 6,
+        "same_input_string_offset": 5328,
+        "literal_hex": "6c696e652000",
+        "existing_payload_not_new_runtime_storage": true
+      },
+      {
+        "previous_label": ".Lanon.417ddb61f0d242853afc022a9101b3c7.188",
+        "current_label": ".Lanon.3095605168571ccfcc70317a0dc419ec.188",
+        "bytes": 3,
+        "same_input_string_offset": 5334,
+        "literal_hex": "200a00",
+        "existing_payload_not_new_runtime_storage": true
+      }
+    ],
+    "C_readonly_elision": {
+      "name": "ptrace_io_kernel_offsets",
+      "bytes": 88,
+      "prior_actual_consumers": [
+        {
+          "consumer": "ptrace_setsiginfo",
+          "offset": 75,
+          "addend": 1056
+        }
+      ],
+      "reason": "Only selected prior C consumer ptrace_setsiginfo is now Rust-owned; current GCC emits unused-const warning and removes the unused table. Existing Rust ABI-offset/body ownership was qualified; no new data migration claim."
+    }
+  },
+  "current_consumer_dispositions": [
+    "179 inherited Rust function readbacks and71 data owners match accepted115 complete nonrelocated bytes/target provenance and actual final bytes; generic reader initial OPENs remain preserved.",
+    "Known prlimit16entry table and four LOCAL logger337B complete final code use accepted specialized readers. Mistyped arch_process_vm_log_bridge inventory label corrected to actual arch_process_vm_rw_log_bridge; no symbol is fabricated.",
+    "Actual new f03_execveat caller differs from115 because newly selected signal bridge folds. Complete current syscall/arch_ptrace_syscall_event/ptrace_syscall_event/f03_exec_report_signal_v1/exec caller equal genuine qualified HOST instruction bytes and symbolic relocations.",
+    "All8new Rust providers have unique linked ownership and finalbyte/RELA readback; WAKE4 and setsiginfo current bodies match qualified HOST. Five actual retained/new provider-reference edges readback at final addresses; compiler-folded public event and SHM edges are separately proven.",
+    "Actual SHM adapter17B includes5B frame-pointer convention versus historical12B HOST expectation. Current sys_shmget338 directly calls existing2993B Rust do_shmget at relocation104 and uses mov r15d,edi instead of mov r15,rdi at offset112. Every other instruction/target matches115; this explicitly preserves signed32 key narrowing and unchanged size/flags ABI.",
+    "Complete389-record registry multiset is exact115 including filename/function/FMT/line/flags/padding, process metadata owners, CPUID diagnostics and registry traversal consumers. New import set adds none; removed undefined imports become Rust-owned.",
+    "Genuine116 originfa9 and truthful semantic alias345e authenticate actual archsource/argv/header/generated Rust metadata.121-file readonly source closure plus exact8adopted source paths bind actual4commands; no SDK/compiler/archive replay."
+  ],
+  "warning_disposition": {
+    "Rust_new_messages": [],
+    "generic_C_new_message": "ptrace_io_kernel_offsets unused const, expected from measured88B table elision",
+    "arch_C_stderr_empty": true,
+    "inherited_RW_segment_ld_warning": true
+  },
+  "actual_join_evidence": {
+    "runner": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/HOLDER/RUNNER.JOINED.json",
+      "bytes": 83,
+      "sha256": "ceb5adab802f67df5ab731547a0887a396c5cea1fefefa2587369d96135b6c98"
+    },
+    "holder_local_terminal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+      "bytes": 246,
+      "sha256": "df525f2df8625a9965c3a3f5b484853fc41059a5546bb9abcf6b883f02dcf809"
+    },
+    "root_reported_holder_tool_session": 54937,
+    "root_reported_holder_tool_exitcode": 0
+  },
+  "container_scope": {
+    "exact_CID": "57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3",
+    "parent_reported_stopped_exit0_noOOM": true,
+    "reviewer_Docker_queries": 0,
+    "current_free_acceptance": false
+  },
+  "preserved_reader_failures": [
+    "READER-NAMESPACE-FAILURE.json",
+    "READER-RETAINED-OUTPUT-PLACEHOLDER-ASSUMPTION.json",
+    "review_supplement116.ORIGINAL-GENERIC-LOGGER-READER.py",
+    "seal_checks116.ORIGINAL-UNFOLDED-SHM-EDGE-ASSUMPTION.py",
+    "READER-LOGGER-LOOP-LITERAL-SHADOW.json",
+    "review_actual116.ORIGINAL-RETAINED-PLACEHOLDER-ASSUMPTION.py",
+    "review_consumers116.ORIGINAL-NAMESPACE-ASSUMPTION.py"
+  ],
+  "limits": [
+    "Artifact acceptance is at the exact actual116 source/compiler/ABI/link/current-consumer scope. It is not native/application/whole-file acceptance or permission to relabel prior native115 as matching116.",
+    "Root owns canonical/Git/current ledger and normal retirement/current-free adoption. This review performs no cleanup, custody release, currentguard query, nonce use or controller action.",
+    "Accepted115 F02/native and prior inherited seven unrelated C section-relative OPENs retain exact historical scope; no supported-file claim or whole-OS completion.",
+    "No language percentage or predicted117/body2 credit. M14/M15 and original35 practical checks remain separate."
+  ],
+  "native_acceptance": false,
+  "wholefile_retirement": false,
+  "current_free_authority": null,
+  "runtime_authority": null,
+  "compiler_replays": 0,
+  "actual_native_actions": 0,
+  "canonical_mutations": 0,
+  "cleanup_mutations": 0
+}

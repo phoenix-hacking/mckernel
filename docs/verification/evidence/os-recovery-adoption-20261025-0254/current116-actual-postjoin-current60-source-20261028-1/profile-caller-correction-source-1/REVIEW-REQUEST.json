@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "REQUEST_ONE_BOUNDED_CPU0_OWNERSHIP_CALLER_CORRECTION_REVIEW",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "bytes": 4901,
+    "sha256": "8bdb6ed7f0a3d001116608fcfb1f20451a9d25fb987312e5708e9e3936b0341e"
+  },
+  "test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/test_owned_capture.py",
+    "bytes": 2091,
+    "sha256": "e3d8804f2c680aca885cf775e3386fe8206ce4c80d8925dc60dd59c7be616b2a"
+  },
+  "regression": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/LOCAL-REGRESSION.json",
+    "bytes": 723,
+    "sha256": "68b7054affc02b07c355c6f8ad917ab80be72409900fc6e9a139c3115e006176"
+  },
+  "Root_release_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ROOT-READONLY-RELEASE-2.PROPOSED.json",
+    "bytes": 1558,
+    "sha256": "1ee8420fba1928b9661dca006e23b647b1487cbc62de88974ee8405f0ff5ee6f"
+  },
+  "command_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ROOT-COMMAND-MANIFEST.PROPOSED.json",
+    "bytes": 1146,
+    "sha256": "4de9b6dac87c1e514e507e5f1694ec7dae750186fa37a0026e229e4ca5245fbc"
+  },
+  "frozen_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+    "bytes": 13268,
+    "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+  },
+  "original_capture_hold": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ORIGINAL-CAPTURE-PROFILE-HOLD.json",
+    "bytes": 1888,
+    "sha256": "ca9f6b6a85c38ce77a44170d2bd422a2d8a98f437340acad2d097a0c712b7c61"
+  },
+  "root_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "--command-json",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ROOT-COMMAND-MANIFEST.PROPOSED.json",
+    "--command-sha256",
+    "4de9b6dac87c1e514e507e5f1694ec7dae750186fa37a0026e229e4ca5245fbc"
+  ],
+  "profile": {
+    "CPU": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 120,
+    "jobs": 1
+  },
+  "maximum_invocations": 1
+}

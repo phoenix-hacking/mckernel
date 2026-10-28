@@ -1,0 +1,275 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_THREE_COMMAND_HOST_CLEAR_HOST_PTE_ABI18_2304_PAIRS",
+  "records": [
+    {
+      "command": {
+        "label": "00-existing-body-new-clear-host-entry-Rust-object",
+        "argv": [
+          "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "f03_clear_host_pte_entry",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/callbacks.o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/lib.fixture.rs"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST mocked forwarding/log only; no actual MM, syscall, Docker, root, guest, hardware or controller action.",
+        "cwd": "/home/holden/mckernel"
+      },
+      "join": {
+        "pid": 1903563,
+        "start": 96638930,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.09857897902838886,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/00-existing-body-new-clear-host-entry-Rust-object/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804754,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793168944604450837,
+            "ctime_ns": 1793168944604450837
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/00-existing-body-new-clear-host-entry-Rust-object/stderr",
+            "sha256": "6790dac4ee64346010e71ea8d6b2aa958401e0f0b5aacbceaf48cdad004aaeee",
+            "device": 66306,
+            "inode": 59804755,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 429,
+            "mtime_ns": 1793168944660452612,
+            "ctime_ns": 1793168944660452612
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-28T06:29:04.607040+00:00",
+        "wall_seconds": 0.09979903302155435,
+        "user_CPU_seconds": 0.041144999999999994,
+        "system_CPU_seconds": 0.020572,
+        "fresh_batch_peak_child_RSS_KiB": 99484,
+        "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+      }
+    },
+    {
+      "command": {
+        "label": "01-actual-header-original-C-link",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-Werror=incompatible-pointer-types",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+          "-I/home/holden/mckernel/kernel/include",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+          "-I/home/holden/mckernel/ihk/ikc/include",
+          "-I/home/holden/mckernel/ihk/linux/include",
+          "-I/home/holden/mckernel/lib/include",
+          "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/clear-host-pte-driver.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/callbacks.o",
+          "-no-pie",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/parity"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST mocked forwarding/log only; no actual MM, syscall, Docker, root, guest, hardware or controller action.",
+        "cwd": "/home/holden/mckernel"
+      },
+      "join": {
+        "pid": 1903570,
+        "start": 96638940,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.14025617600418627,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/01-actual-header-original-C-link/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804763,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793168944704454007,
+            "ctime_ns": 1793168944704454007
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/01-actual-header-original-C-link/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804764,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793168944704454007,
+            "ctime_ns": 1793168944704454007
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-28T06:29:04.709393+00:00",
+        "wall_seconds": 0.14149313198868185,
+        "user_CPU_seconds": 0.10837699999999999,
+        "system_CPU_seconds": 0.0008979999999999995,
+        "fresh_batch_peak_child_RSS_KiB": 99484,
+        "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+      }
+    },
+    {
+      "command": {
+        "label": "02-clear-host-pte-equivalence",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/parity"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST mocked forwarding/log only; no actual MM, syscall, Docker, root, guest, hardware or controller action.",
+        "cwd": "/home/holden/mckernel"
+      },
+      "join": {
+        "pid": 1903575,
+        "start": 96638955,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.032558107981458306,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/02-clear-host-pte-equivalence/stdout",
+            "sha256": "b24e048ea9db265b9a5be22a825189a76e864bafcdfb7199925074fba79b039b",
+            "device": 66306,
+            "inode": 59804772,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 126,
+            "mtime_ns": 1793168944852458697,
+            "ctime_ns": 1793168944852458697
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/02-clear-host-pte-equivalence/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804773,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793168944848458570,
+            "ctime_ns": 1793168944848458570
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-28T06:29:04.853622+00:00",
+        "wall_seconds": 0.03380664810538292,
+        "user_CPU_seconds": 0.0,
+        "system_CPU_seconds": 0.002794999999999999,
+        "fresh_batch_peak_child_RSS_KiB": 99484,
+        "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+      }
+    }
+  ],
+  "actual_stdout": "PASS clear-host-pte actual-header ABI18; 2304 C/Rust pairs; 4608 exact-forward/publication/restoration/log/full-state oracles\n",
+  "elapsed_seconds": 0.30014072998892516,
+  "grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/ROOT-ORDINARY-HOST-GRANT.json",
+    "bytes": 1527,
+    "sha256": "6f9f4d330a9630a90a03b7d375ca24087c8648cee4251b6c5ea46459f5ba89f2"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body2-source-20261028-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 5903,
+    "sha256": "4dba23531d4019a8ac3624042538c86be0245469fc82d8a8327cae3c1faac7cf"
+  },
+  "canonical_writes": 0,
+  "native": false,
+  "production_link": false,
+  "whole_file_retired": false
+}

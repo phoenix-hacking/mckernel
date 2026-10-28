@@ -1,0 +1,26 @@
+{
+  "C_main_lines": [
+    556,
+    564
+  ],
+  "C_source": {
+    "path": "/home/holden/mckernel/ihk/linux/user/ihkconfig.c",
+    "sha256": "ce0d8ec9c3be60838389c627425335a86fa099fcdefbc1fb4fec8c204bb8314e"
+  },
+  "argv_cases": [
+    [],
+    [
+      "0"
+    ]
+  ],
+  "expected": {
+    "returncode": 1,
+    "stderr_bytes": 269,
+    "stderr_sha256": "aa7750e4f7b59ffb4594257cbe502c566c029bf5e1e8e26ee39015fe39cf23e9",
+    "stdout_bytes": 0
+  },
+  "runtime_proof": false,
+  "rust_rule": "Unchanged accepted Rustmain argc<3 callsusage,returns1 before devicepath/open.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_rule": "Original main argc<3 calls usage(argv), returns1 before snprintf/open; derive usage from exact stderr literal sequence, basenameihkconfig."
+}

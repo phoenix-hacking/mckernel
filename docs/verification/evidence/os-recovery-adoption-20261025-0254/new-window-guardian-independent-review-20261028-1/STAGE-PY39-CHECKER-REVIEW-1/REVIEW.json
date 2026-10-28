@@ -1,0 +1,100 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_PY39_CHECKER_SOURCE_TESTS_AND_CONDITIONAL_ONE_COMPLETION_PROFILE",
+  "reviewer": "/root/independent",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewed_at": "2026-10-28T07:30:18.137941+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/SOURCE-READY.json",
+    "bytes": 4937,
+    "sha256": "2af60c13f92fa97991e0814a21660966293eda861eab06ada2c262c9cfde7a48"
+  },
+  "corrected_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/check_retained_stage_py39.py",
+    "bytes": 8862,
+    "sha256": "f968367559efb4ead1d56a6d06664e278dffee6c2f9109c5d09e068fb81cd696"
+  },
+  "corrected_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/run_profiled_readback_py39.py",
+    "bytes": 940,
+    "sha256": "ffc2cb7071fd62f369c7612205c80dfbfa3ff65656688c466260e0be19101082"
+  },
+  "capture_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "bytes": 4901,
+    "sha256": "8bdb6ed7f0a3d001116608fcfb1f20451a9d25fb987312e5708e9e3936b0341e"
+  },
+  "original_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/check_retained_stage.py",
+    "bytes": 8882,
+    "sha256": "606f7dd794e21ceb2b6154dd500f65fcd4ad07f073bcbf26c8d9dd37acfe43d0"
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/FAILURE.json",
+    "bytes": 174,
+    "sha256": "f3d7dfaae076a9d1a8451855d1033851bed1949f752152dd5c576e7d39d110d1"
+  },
+  "original_incomplete_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/INDEPENDENT-INCOMPLETE-READBACK-REFUSAL.json",
+    "bytes": 4589,
+    "sha256": "af375a509e7cc2cf9127a55a6d6946367d97bba321b6ef3c01c71133aab36f5f"
+  },
+  "checks": {
+    "one_expression_delta_exact": true,
+    "all_other_checker_bytes_unchanged": true,
+    "driver_basename_only_delta_exact": true,
+    "pinned_python39_metadata_methods_independently_passed": 3,
+    "test_capture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/STAGE-PY39-CHECKER-REVIEW-1/INDEPENDENT-PY39-METADATA-CONTROLS.txt",
+      "bytes": 311,
+      "sha256": "8999d78198387c8b6d313f2b5e9c89bd24f5eb4751497880d5666632adfcf0ea"
+    },
+    "metadata_tests_write_scope": "Temporary ordinary file fixtures redirected to reviewer namespace, removed normally; no archive/helper runs.",
+    "no_follow_semantics": "Path.lstat() equals os.stat(path,follow_symlinks=False) for all original9 fields on regular file and symlink; replacement identity detected.",
+    "corrected_actual_readback_count": 0,
+    "corrected_output_namespace_fresh": true
+  },
+  "preserved_predicates": [
+    "No archive/map/CPIO/hash/metadata/member ordering/multiplicity/overlay/base-prefix/ABI/source/scratch/owner predicate changes. Only Python3.9-compatible final no-follow metadata call replaces unsupported keyword API.",
+    "All nine identity fields remain compared after full parse before serializing any final map/ordered records/acceptance. Symlink replacement remains observable as link identity rather than followed target.",
+    "Original failure/refusal and source namespace remain immutable. Earlier partial map comparison is not accepted as a completed checker result."
+  ],
+  "conditional_one_completion_profile": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/run_profiled_readback_py39.py"
+    ],
+    "CPU": [
+      0
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 120,
+    "UID": 1000,
+    "maximum_corrected_runs": 1,
+    "output_namespace": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1",
+    "capture_prefix": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/ACTUAL-READBACK-CHILD",
+    "wrapper_proof": "Existing8bdb capture sets actual childCPU0/AS2GiB/CPU60, records PID/birth/actual affinity before reading, uses positive direct wait4, bounded120 wall and requires full group absence/closed streams. Timeout retains exact ownership with no signals/retry.",
+    "actual_completion_not_performed": true
+  },
+  "Root_conditions": [
+    "Root must separately issue explicit ONE corrected completion-run grant after this source review and before any corrected actual archive readback. This report is not that grant.",
+    "Root verifies exact corrected checker/driver/wrapper bytes and fresh exclusive claim/output namespace, enough real current time for full120seconds inside earliest UTC1793253600/MONO1035705.5689454618/BOOT1051043.6959931096 and actual account/hold/resource limits. No deadline/credit renewal.",
+    "Only one retained original227 readback, no archive extraction/repack/compose/rebuild/staging/nonce/native/Docker operation. Preserve original606f/failure/af375 refusal; no third renamed retry. Corrected failure stops and escalates this exhausted family.",
+    "After completion require actual PID/birth/affinity, positive wait4 join, groupgone/closedstreams, exit0 and full serialized checker/map/ordered-record evidence before accepting stage. An earlier partial predicate pass supplies no acceptance.",
+    "Stage remains original227/CURRENT110 kernel scope only. No matching CURRENT116 or BFD default/native/file credit or heavy release follows."
+  ],
+  "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+  "cumulative_ceiling": "57774.852125",
+  "actual_archive_helper_guard_account_resource_runtime_calls": 0,
+  "canonical_controller_changes": 0,
+  "actual_stage_acceptance": null,
+  "runtime_authority": null
+}

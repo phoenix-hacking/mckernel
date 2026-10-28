@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "ORIGINAL_POSTJOIN_CAPTURE_RETAINED_NOT_CURRENTFREE_PROFILE_UNPROVEN",
+  "observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-1.json",
+    "bytes": 5928755,
+    "sha256": "ceb14af9eaa78cfcef23940eaedad9ecf5379790408565dbfffd807c389add37"
+  },
+  "caller": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/ACTUAL-CURRENT60-POSTJOIN-CAPTURE-CALLER.json",
+    "bytes": 1481,
+    "sha256": "2deca7e7fe86cb4b4adf3702da0dedae096e1c316e869286939de132a8b7b50f"
+  },
+  "defect": "Root caller omitted explicit CPU0 affinity enforcement and child PID/birth receipt. No retrospective affinity assertion. Original eligible CPU set excludesCPU1 but that does not prove requiredCPU0 profile.",
+  "new_candidate_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/owned_capture.py",
+    "bytes": 4901,
+    "sha256": "8bdb6ed7f0a3d001116608fcfb1f20451a9d25fb987312e5708e9e3936b0341e"
+  },
+  "local_regression": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/LOCAL-REGRESSION.json",
+    "bytes": 723,
+    "sha256": "68b7054affc02b07c355c6f8ad917ab80be72409900fc6e9a139c3115e006176"
+  },
+  "old_profile_acceptance": false,
+  "next": "One independently reviewed bounded caller correction; no change to physical oracles/helper/native facts; no unchanged rerun."
+}

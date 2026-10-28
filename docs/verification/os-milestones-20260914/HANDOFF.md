@@ -2,6 +2,63 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Execution cursor — 2026-10-28T07:33Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted CURRENT116 C71/Rust68, Root61/20e2470a and currentfree6c83 remain current.
+M14 4/6, M15 1/8, practical35/35; no additional native or full-file closure.
+Parent sole twenty-minute monitor1914326/birth96817752 is active; guardian1890834
+and phone1894242 unchanged. Activecontrol receipt: ACTUAL-TWENTY-MINUTE-STEERING-ARMED.json
+under new-run-until-20261028-2300-pacific-1; same immutable earliest clamps/credits.
+Original227 source fill/seal/static94d1ef84/bridge363adbde complete; nonce6b4696fd
+RESERVED UNUSED. Stage checker Python3.9 correction independently45883e2d reviewed;
+one actual retained readback granted to observerreview, no native release yet.
+ready227 owns final runtime subjects/config preparation. Frozen native227 remains
+CURRENT110/60e scope only. BFD actual3103-source export/admission and guard passed;
+new entrycoupling24f6968c/7tests is under independent review, default compiler0.
+Root chooses first fully qualified original227/BFD in sole heavy slot. Source117
+and F03/F06 body2 are banked. No accepted prefixes/nonces/holders will be replayed.
+Review buckets06:52:38.932–07:12:38.932 and07:12:38.932–07:32:38.932 both have
+0compiler/default/native/file deltas. Original30min baseline retained. Top delay:
+actual entry handoff, not capacity. Next concrete action: observerreview's exact
+once-only corrected retained readback, then Root final runtime binding/publication/
+PREWARM before fresh clocks. Evidence: ENGINEERING-REVIEW-20261028T073238.json in
+../evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/.
+
+## CURRENT116 accepted; genuine current-free adopted — 2026-10-28T06:43Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root adopted independente2f42 actual116artifact: image42473e03/10271792B,
+Rust5072a945/generic4e13b542/arch77db1a40. SelectedC79→71 (54generic+17arch),
+focusedRust60→68; all179inheritedfunctions/71dataowners/389registry records preserved.
+GenericCobjects158→157 only obsolete88B ptrace_io_kernel_offsets compilerelided;
+process0runtimeFUNC/OBJECT/non-noteALLOC,48B GNU-propertyNOTE retained. Fourcommands
+0/20.55093s span/CPU20.54048s/RSS677720KiB. New116matchingnative/filedelta0;
+M14files4/6,M15files1/8,practical35/35 unchanged. WholeOS/M14/M15 remainOPEN.
+
+Genuine CPU0capture2 currentfree6c83 independentlyPASS and ROOTADOPTED. Actualobserver
+1907223/birth96691234/affinity[0]/positivewait4join0/groupsabsent/streamsclosed;
+wall2.612267s/CPU2.366872s/RSS42108KiB. Firstcapture1ceb1 remainsprofileUNQUALIFIED,
+with originalrawbytes/refusal; one tested/reviewed caller correction only. No replay.
+CURRENT ledgerRoot61/20e2470a count70, currentphysicalpendingFALSE; ff79consumedONCE.
+Oldf76/Root59/270a are historical for currentheavyclearance, native4d1c still correctly
+native. Currentjoined artifact/free record: ../evidence/os-recovery-adoption-20261025-0254/
+CURRENT116-ACCEPTED-ARTIFACT-AND-CURRENTFREE.json (old artifact-only record retained).
+
+NEXT firstready original227native with genuineRoot61/free6c83 currentobserver/schema
+and wholeactualResource2 consumer-shape check; sourceownerready227, Rootaloneactual
+admission. Frozen227stage kernel is CURRENT110/60e (not115/116): retain exactoriginal
+executor contract and allHOST26/collector/payload/archive/stage prefixes; do notclaim
+matching116native from it. First source return-shape gap caught before clocks;
+additiveconsumer correction underway. NEXT117 two-body composition+recipe/sourcePASS
+banked, no defaultcompiler. Further clear_host_pte and signal-FP-restore HOSTfixtures
+2304+576pairs PASS and independentlyreviewedf7a155/ee6093; source-only future118.
+BFD source defaultb182 pushed/fetched; three-command realproducercohort banked, no
+newdefault/native/filecredit. User30minreview firstbucket05:52:25–06:22:25 retained:
+660HOSTpairs/0newproductionaccepted/0native/0file within thatbucket;116build/acceptance
+belongsfollowingbucket. No95percent claim. Existing parent-onlycontrols/cutoffs/credits
+unchanged: actualUTC1793253600/MONO1035705.5689454618/BOOT1051043.6959931096.
+
 ## 116 preclock publication checkpoint — 2026-10-28T06:20Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

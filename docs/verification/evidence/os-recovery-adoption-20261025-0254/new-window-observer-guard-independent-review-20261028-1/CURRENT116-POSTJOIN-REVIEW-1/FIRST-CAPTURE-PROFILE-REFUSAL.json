@@ -1,0 +1,19 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "FIRST_CAPTURE_PROFILE_UNQUALIFIED_NO_CURRENT_FREE_ACCEPTANCE",
+  "independent": true,
+  "reviewer": "/root/observerreview",
+  "capture_caller": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/ACTUAL-CURRENT60-POSTJOIN-CAPTURE-CALLER.json",
+    "bytes": 1481,
+    "sha256": "2deca7e7fe86cb4b4adf3702da0dedae096e1c316e869286939de132a8b7b50f"
+  },
+  "parent_reported_observation_sha_prefix": "ceb14af9",
+  "reason": "Actual Root subprocess.run caller omitted explicit reviewed CPU0 affinity enforcement and child PID/birth evidence. Helper has no affinity enforcement; CPU0 cannot be proven retrospectively.",
+  "capture_is_kernel_failure": false,
+  "observation_retained_as_historical": true,
+  "current_free_acceptance": false,
+  "new_heavy_release": false,
+  "allowed_family_correction": "One standalone caller wrapper correction with offline tests and a new exact read-only release/output; no observer/physical oracle changes or unreviewed replay.",
+  "runtime_authority": null
+}

@@ -1,0 +1,49 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original normal Resource2 API adapter to exact reviewed postcompose observer.
+No grant/native entry. Original identity/output/guard/floor/cgroup/directory checks retained.
+"""
+from pathlib import Path
+import argparse,hashlib,importlib.util,json,os
+A=Path(__file__).resolve().parent
+OBSERVER_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/observe_current61_original227.py', 'bytes': 10341, 'sha256': '0d0b90d3d58d19791e834b408c582843981ff79cd28b33fc1cb03048d5413ce5'}
+GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/cohort/runtime_guard.py')
+GUARD_SHA='0a08571f26509a6366e244a7a685f9e83ebf7040514541c3766d65fdf3e30262'
+def ref(p):
+ p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def load(r,name):
+ assert ref(r['path'])==r
+ spec=importlib.util.spec_from_file_location(name,r['path']);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+
+def main():
+ a=argparse.ArgumentParser();a.add_argument('--output-path',required=True,type=Path);out=a.parse_args().output_path
+ assert out.is_absolute() and out.parent==A
+ stdout=out.with_name(out.stem+'.PHYSICAL.stdout');stderr=out.with_name(out.stem+'.PHYSICAL.stderr')
+ for p in [out,stdout,stderr]:assert not os.path.lexists(p),str(p)
+ with out.open('xb') as result,stdout.open('xb') as raw,stderr.open('xb') as errors:
+  assert os.getuid()==os.geteuid()==1000 and OBSERVER_REF is not None
+  st=json.loads((A/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json').read_bytes())
+  assert st['expected_case']=='P-M01-02-child-SIGTERM-and-exec-recovery-227B'
+  assert st['expected_guest_argv']==['/bin/mcexec','-t','1','0','/apps/app']
+  assert st['current_observer_source']==OBSERVER_REF
+  for r in st['capture_sources'].values():assert ref(r['path'])==r
+  assert ref(GUARD)['sha256']==GUARD_SHA
+  guard=load(ref(GUARD),'literal_earliest_v2_guard_native227');first=guard.guard()
+  observer=load(OBSERVER_REF,'literal_reviewed_current227_observer');physical=observer.observe()
+  assert physical['Root61']==st['root_ledger35'] and physical['actual_latest_operation_postjoin_acceptance']==st['latest_serial_operation_physical_acceptance']
+  assert physical['boot_id']=='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb' and physical['no_existing_heavy'] is True and physical['pids_current']==0 and physical['active_shared_records_absent'] is True
+  assert len(physical['closed_exclusive_probes'])==2 and not physical['group_membership_observation']['errors']
+  raw.write((json.dumps(physical,indent=2)+'\n').encode())
+  memory={x.split(':')[0]:int(x.split()[1])*1024 for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith(('MemTotal:','MemAvailable:'))}
+  assert memory['MemAvailable']>=24*2**30
+  paths=['/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us','/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us','/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes','/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy','/sys/fs/cgroup/pids/mckernel-dev/pids.max']
+  cgroup={p:Path(p).read_text().strip() for p in paths};assert list(cgroup.values())==['100000','400000','12884901888','1','512']
+  pids=int(Path('/sys/fs/cgroup/pids/mckernel-dev/pids.current').read_text());assert pids==0
+  directories=[]
+  for p in [A/'CAPTURE',Path(st['attempt_parent'])]:
+   assert p.is_dir() and not list(p.iterdir());info=p.lstat();directories.append(dict(path=str(p),device=info.st_dev,inode=info.st_ino,mode=info.st_mode,uid=info.st_uid,gid=info.st_gid))
+  cutoffs=guard.current_cutoffs();assert all(a<b for a,b in zip(guard.guard(),cutoffs))
+  value=dict(scope=__doc__.splitlines()[0],observed_clocks=first,fixed_cutoffs=list(cutoffs),operation_guard_binding=guard.binding_reference(),freshness_seconds_max=120,boot_id=guard.BOOT,root_ledger35=st['root_ledger35'],actual_latest_operation_postjoin_acceptance=st['latest_serial_operation_physical_acceptance'],current_physical_observation=physical,
+   no_existing_heavy=True,running_container_observation=physical['running_container_observation'],retained_stopped_observation=physical['retained_stopped_observation'],active_shared_records_absent=True,capacity=physical['capacity'],memory=memory,cgroup=cgroup,pids_current=pids,container_reservation=dict(cpus='2-5',jobs=4,RAM_bytes=12884901888,pids=512,swap_bytes=0,network='none'),other_RAM_reserved_bytes=6442450944,aggregate_RAM_ceiling_GiB='21.6619',aggregate_jobs_max=7,fresh_directories=directories,native_acceptance=False)
+  result.write((json.dumps(value,indent=2)+'\n').encode())
+ print(json.dumps(dict(status='ACTUAL_FRESH_ORIGINAL227_RESOURCE_CAPTURE_NOT_EXECUTION_RELEASE',resource=ref(out))))
+if __name__=='__main__':main()

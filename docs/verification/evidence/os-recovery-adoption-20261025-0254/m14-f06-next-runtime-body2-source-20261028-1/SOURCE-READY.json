@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_READY_NOT_COMPILED_OR_RELEASED",
+  "runtime_authority": null,
+  "target": "arch_native_signal_restore_fp_bridge",
+  "selected_arch_frontier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "bytes": 100832,
+    "sha256": "7f5308bdc361e4c5b86bb77e8984b1c32fcb5fe317c6ae45fe9b4475a93a397c"
+  },
+  "accepted_current115": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/INDEPENDENT-ACTUAL-CURRENT115-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 22424,
+    "sha256": "b9ed6b2e14546fa2e372c11c5e5d73601a41b48172394bd38c17ab9b7fc37a3b"
+  },
+  "selection_basis": "Actualaccepted7f53 defines this public C symbol; neither116shmget nor117vdso_info, and no canonical/boundedprivate Rust public successor found.",
+  "reused_runtime_owners": [
+    "native_xstate_buffer_size_result",
+    "native_xstate_validate_result",
+    "kmalloc_tracked",
+    "kfree_tracked",
+    "copy_from_user",
+    "get_xsave_size",
+    "get_xsave_mask",
+    "arch_native_signal_reset_fp_bridge",
+    "arch_native_signal_mxcsr_mask_bridge",
+    "native_xrstor_checked"
+  ],
+  "prepared_equivalence_pairs": 576,
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/f06_native_signal_restore_fp.rs",
+      "bytes": 5179,
+      "sha256": "126c0aff5baa9a9fd97d910ec46fd7af50ea2a15c49bf7269d0e6c33e510e712"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/original-restore-fp.c.inc",
+      "bytes": 1051,
+      "sha256": "2ba61ae3db4c2fce590fcd5b01d867e14059a6d9fa8911eb167ae4f48a7bd0f9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/oracle.c",
+      "bytes": 3349,
+      "sha256": "07833083903a7a88a17eb7d44bdfd476e53da3a850be383346d7ba333f037cb8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/fixture.rs",
+      "bytes": 2865,
+      "sha256": "e235fcdfa33dccad27e3bfe6f1cea67de58806e94b28f39519ea2764d9d9dc8f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/abi_probe.c",
+      "bytes": 958,
+      "sha256": "d255ac3aaa56dcb816ff7c123df6965f5310656439d3df4e79f7eb5c56dc35ca"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/arch-selection.patch",
+      "bytes": 597,
+      "sha256": "31d427cefaa6390334efd86bacc95e2081854b2d5c6a64535cb3e4dcda7c86e8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/rust-module-selection.patch",
+      "bytes": 241,
+      "sha256": "e80fd28fe5e97b27032ddcc5ae93c5050c87680cb94c16f8d37ffe7986a12f31"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/cmake-selection.PROPOSAL.patch",
+      "bytes": 816,
+      "sha256": "a1ed21f106ec002421d10a4d836841af4efbe7c1e87db36ecdb51ba12d129eeb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/FUTURE-HOST-COMMANDS.NOT-GRANTED.json",
+      "bytes": 6762,
+      "sha256": "b1b3389ae6a929dcec061560512d0168c2211f94252e69f47759a637fb6f58a9"
+    }
+  ],
+  "preimages": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body2-source-20261028-1/PREIMAGES.json",
+    "bytes": 2206,
+    "sha256": "b4f40cca00cada65f9a290b59076e71a17492db6f6647f148ff2ec163af539dc"
+  },
+  "C_runtime_implementation_expansion": 0,
+  "canonical_changes": 0,
+  "compiler_or_fixture_calls": 0,
+  "current_default_delta": 0,
+  "native_delta": 0,
+  "wholefile_delta": 0,
+  "desired_C_function_removals_pending_proof": 1,
+  "minimum_next_check": "Fresh ordinary grant for4 exact pureHOSTcommands: realheaderABI,C reference,Rustfixture,576pairs",
+  "remaining": [
+    "Independent source/lifetime/ABI/provenance review",
+    "ActualHOSTfixture result",
+    "Coherent new source/profile/origin fullcrate+selectedarchTU/uniqueprovider/defaultlink checks",
+    "Matching signal return behavior/lifecycle native acceptance before retirement"
+  ]
+}

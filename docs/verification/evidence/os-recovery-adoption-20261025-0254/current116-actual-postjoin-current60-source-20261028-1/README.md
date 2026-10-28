@@ -1,0 +1,11 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The typed observer extends actual Root59 native-lifecycle evidence with exactly one ordinary CURRENT116 build, nonce ff79, four compiled/link command results and positive holder/runner joins. It authenticates actual Root60/count70, source/profile/grant/once/container claims and retained stopped CID57a5 terminal state. All51 prior actors remain covered by genuine native-aware common validation; holder1901931/birth96606231 and runner1901981/birth96608898 add two explicit PID controls. No native operation is reclassified as ordinary.
+
+Fresh capture uses the accepted common observer and exact O2 operation/account/guardian configurations, then observes current stopped container identity/name/all State fields, absence of53 host PIDs and numeric group controls, permanent27:4 identity/no current lock row, two closed exclusive probes, cgroup0, shared custody absence and original storage floors. It never signals, removes a CID, unlinks a lock, executes a build/guest or grants a workload. Existing Docker Mounts comparison remains unchanged in the common branch; this new stopped container query does not normalize or alter any State field.
+
+f76 is explicitly previous_accepted_free_boundary. actual_current60_postjoin_acceptance remains null. The new observation is a candidate for independent acceptance, not its own current-free receipt. Root must adopt genuine independent postjoin acceptance before another heavy/native job.
+
+The retained-only command and30 pure controls pass. Controls use actual immutable records and a clearly labeled pure projection of actual retained terminal State; no live inspection is represented by the fixture. An initial mis-transcribed Root60 hash suffix was refused before guards/observation and corrected to the actual full pin; its evidence is retained.
+
+SOURCE-READY.json contains the exact Root capture argv, schema, pins and release template. The capture requires separate Root author/decision/max1, exact source/pins/ledger/output and independent source review. The output is created exclusively, preserving refusal/failure and preventing replay with that release/output. No runtime operation was performed by the source worker.

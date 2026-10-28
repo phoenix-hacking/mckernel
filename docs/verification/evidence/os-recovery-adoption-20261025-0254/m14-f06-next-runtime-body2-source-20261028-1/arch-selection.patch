@@ -1,0 +1,18 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -471,6 +471,7 @@
+ extern unsigned int arch_native_signal_mxcsr_mask_bridge(void);
+ extern long arch_native_signal_reset_fp_bridge(void);
+ 
++#ifndef MCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP
+ long arch_native_signal_restore_fp_bridge(unsigned long user_address, int size)
+ {
+ 	int configured = get_xsave_size();
+@@ -504,6 +505,7 @@
+ 	kfree_tracked(allocation, __FILE__, __LINE__);
+ 	return result;
+ }
++#endif /* selected signal-return FP lifecycle is Rust-owned */
+ 
+ long arch_native_signal_bad_frame_bridge(long error)
+ {

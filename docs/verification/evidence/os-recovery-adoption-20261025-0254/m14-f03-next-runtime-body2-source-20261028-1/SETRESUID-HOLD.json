@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HELD_NOT_READY_NOT_COMPILED_NOT_PROPOSED_FOR_INTEGRATION",
+  "files": ["setresuid-entry.Rust.inc", "driver.c"],
+  "reason": "The existing getcred API returns a scratch pointer without establishing that an ignored offload result initialized the consumed credential values. An initialized-only HOST fixture cannot establish that production requirement. The uncompiled draft is preserved as evidence and excluded from the ready source and all planned commands.",
+  "source_contract": "No Rust may read uninitialized credential output. No checked fetch semantics are inferred from this API. Prior uninitialized C behavior is not a defined error oracle.",
+  "replacement_selected_body": "clear_host_pte",
+  "canonical_changes": 0,
+  "workloads": 0
+}
