@@ -1,3 +1,39 @@
+## A4 complete cohort ready; focused review before capture — 2026-10-28T04:02:50.090312+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root51/80bf count62 and actualfree040b remain current; no heavy holder/resource/115
+compiler. A3 finite verifier ended normally at600s/session13076 terminal1, PIDabsent,
+receipt371bb165; no fake markers/signals/restart. A4 noncefab368 remains unused.
+Complete A4 cohort c89172e8 / command manifest0a0bc99f is source-ready: coherent new
+observerb3ab/schema8f2b/reviewe364/fragment7fdd, metadata4ebb/capture7aab and pinned
+foreground six-reference join before reviewer bindings. Fore actual filler+observer
+prefix4b04/13negative controls passed, purejoin18controls reused; expertHOT33 controls
+unchanged. guardian focused cohort review active, then Root exact materialization/
+publication/fetch and custody actual waiting cold verifier before unchanged120s clock.
+Current111 complete cohort delivered; Root will not manually rebuild its script bodies.
+Independent original227 actualHOST-bound staging binder prep active; future115 artifact
+review invocation prep active, neither launches workload or changes current ledger.
+Accepted C80/Rust59/process31, M14files3/6/M15files1/8/practical35/35; no new default,
+native, file or C/data credit. Review0357 retains fixed30min buckets and first115
+compiler UNRUN; biggest avoidable loss is incomplete orchestration contract handoff.
+Fixed05:36:09Z/earlierclamps/account/cumulativeledger/realholds/caps/floors preserved.
+
+## A3 stopped before observation; A4 contract correction — 2026-10-28T03:54:30.644512+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+A3physicalfailedobserver_schema missingbeforebase.observe; noHOLDER/resource/pending/
+heldclock/READY/compiler. Refusal99e9+independent1fd8 preserved. Root51/80bf/count62 and
+actualfree040b remaincurrent; cf36/92e8 andA3unused04db not replayed. A4freshfab368
+reserved. current111 ownsONLYminimalR4filler twoactualschemafields+observerreadpath
+successor; primaryforeground ownsseparateTEST_ONLY WHOLEpipeline producer→actualfiller
+→observer→cold/HOTexercise, includingmissing/wrongrefcontrols. No freshcapturebefore
+that exactsource-test andfocusedreview. Expert149119/baed HOT33controls/29unchangedA2
+payloads remainretained; no broaderoracle/120s/scope changes. AcceptedC80/Rust59/p31,
+M14files3/6/M15files1/8/practical35/35; firstCURRENT115compiler stillUNRUN. Actual227
+HOST3/26qualifieda3ed/Rootfd3b, nativeOPEN. WAKE4twoRustprefixesretained; fiveunfinished
+C/link/reader suffixgenuineuti-layouta703+8856 readyunrun. Source/runtime/nodeownership
+controls unchanged; fixed05:36:09Z/account/debits/earlierclamps/allrealholds remain.
+
 ## A2 retired; expert schema tested; A3 source binding — 2026-10-28T03:44:45.953803+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
