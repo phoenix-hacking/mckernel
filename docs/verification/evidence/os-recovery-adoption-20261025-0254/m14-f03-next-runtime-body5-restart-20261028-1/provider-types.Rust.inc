@@ -1,0 +1,12 @@
+type SyscallPolicyAllocFn = unsafe extern "C" fn(SizeT, CULong) -> *mut c_void;
+type SyscallMckfdFreeFn = unsafe extern "C" fn(*mut c_void);
+type SyncChildAtomic64SetFn = unsafe extern "C" fn(*mut c_void, CLong);
+type PerfEventMapFn = unsafe extern "C" fn(CULong) -> CULong;
+type PerfEventValidateFn = unsafe extern "C" fn(CULong) -> CInt;
+type PerfExtraRegIdFn = unsafe extern "C" fn(CULong, CULong) -> CInt;
+type PerfExtraRegMsrFn = unsafe extern "C" fn(CInt) -> u32;
+type PerfExtraRegIdxFn = unsafe extern "C" fn(CInt) -> CInt;
+type PerfHwEventInitFn = unsafe extern "C" fn(*mut c_void) -> CInt;
+const EINVAL: CInt = 22;
+const ENOMEM: CInt = 12;
+const ENOENT: CInt = 2;

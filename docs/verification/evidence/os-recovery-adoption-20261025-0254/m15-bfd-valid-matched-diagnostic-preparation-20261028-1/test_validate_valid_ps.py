@@ -1,0 +1,143 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Synthetic parser fixtures only. No guest/device/tool or ELF is executed.
+"""
+import copy
+import json
+from pathlib import Path
+import unittest
+import importlib.util
+
+import validate_valid_ps as v
+
+HERE = Path(__file__).resolve().parent
+
+
+class ValidPsTests(unittest.TestCase):
+    def setUp(self):
+        self.inputs = json.loads((HERE / 'BOUND-INPUTS-AND-CONTEXT.json').read_bytes())
+        self.context = dict(actual_owned_native_context=True, os_id=0, os_generation=1,
+                            logical_cpus=[0], running_before=True, running_after=True,
+                            procfs_empty_before=True, procfs_empty_between=True, procfs_empty_after=True,
+                            kernel_loaded_sha256=self.inputs['refs']['kernel']['sha256'],
+                            current_mcinspect_sha256=self.inputs['refs']['current_mcinspect']['sha256'],
+                            reference_mcinspect_sha256=self.inputs['refs']['reference_mcinspect']['sha256'],
+                            actual_native_owner_receipt_sha256='a' * 64,
+                            independent_cpu_idle_facts_sha256='b' * 64)
+        self.output = (v.PREFIX + v.HEADER + v.SEPARATOR +
+                       '  0 >     0      0 0xffffffff81123000  R (idle)\n').encode()
+        def stream(data):
+            return dict(hex=data.hex(), eof=True, truncated=False, observed=len(data),
+                        retained=len(data), discarded=0, limit=65536, eof_ns=20)
+        self.captures = {tag: dict(stdout=stream(self.output), stderr=stream(b''),
+                                  status=dict(tag=tag, raw_wait_status=0, fault=False, timeout=False,
+                                              clean=True, stage=0, errno=0, started_ns=1,
+                                              reaped_ns=20, finished_ns=21))
+                         for tag in ('reference', 'current')}
+
+    def check(self, captures=None, context=None):
+        return v.validate(self.inputs, context or self.context, captures or self.captures)
+
+    def test_valid_source_oracle_fixture(self):
+        result = self.check()
+        self.assertEqual(result['current_default_tool_cases'], 1)
+        self.assertFalse(result['eclair_valid_diagnostic'])
+        self.assertFalse(result['matching_CURRENT116_native'])
+        serial = ''
+        for tag, capture in self.captures.items():
+            for name in ('stdout', 'stderr'):
+                serial += 'M15_BFD_PROBE_STREAM ' + json.dumps(dict(tag=tag, stream=name, capture=capture[name])) + '\n'
+            serial += 'M15_BFD_PROBE_STATUS ' + json.dumps(capture['status']) + '\n'
+        self.assertEqual(v.extract(serial), self.captures)
+        with self.assertRaisesRegex(ValueError, 'unique'):
+            v.extract(serial + serial)
+        with self.assertRaisesRegex(ValueError, 'both real'):
+            v.extract('header-only\n')
+
+    def test_help_empty_error_and_wrong_idle_rows_fail_even_if_paired(self):
+        values = [b'', b'Usage: mcinspect <options>\n', (v.PREFIX + v.HEADER + v.SEPARATOR).encode(),
+                  self.output.replace(b'>     0      0', b'>    37     37'),
+                  self.output.replace(b'>     0      0', b'>     1      0'),
+                  self.output.replace(b'  R (idle)', b'  U (idle)'),
+                  self.output.replace(b'  R (idle)', b'  R unknown'),
+                  self.output.replace(b'0xffffffff81123000', b'0x0000000000000000'),
+                  self.output + b'  0      9      9 0xffffffff81124000  R app\n']
+        for output in values:
+            with self.subTest(output=output):
+                captures = copy.deepcopy(self.captures)
+                for capture in captures.values():
+                    capture['stdout'].update(hex=output.hex(), observed=len(output), retained=len(output))
+                with self.assertRaises(ValueError):
+                    self.check(captures)
+
+    def test_capture_retirement_and_context_negative_controls(self):
+        for section, key, value in [('status', 'raw_wait_status', 256), ('status', 'clean', False),
+                                    ('status', 'timeout', True), ('status', 'fault', True),
+                                    ('status', 'reaped_ns', 0), ('stdout', 'truncated', True),
+                                    ('stdout', 'eof', False), ('stdout', 'observed', 10000)]:
+            with self.subTest(section=section, key=key):
+                captures = copy.deepcopy(self.captures)
+                captures['current'][section][key] = value
+                with self.assertRaises(ValueError):
+                    self.check(captures)
+        for key, value in [('actual_owned_native_context', False), ('os_id', 1), ('logical_cpus', [0, 1]),
+                           ('kernel_loaded_sha256', 'c' * 64), ('current_mcinspect_sha256', 'd' * 64),
+                           ('procfs_empty_between', False), ('running_after', False),
+                           ('independent_cpu_idle_facts_sha256', '')]:
+            with self.subTest(context=key):
+                context = dict(self.context)
+                context[key] = value
+                with self.assertRaises(ValueError):
+                    self.check(context=context)
+
+    def test_collector_reuses_supervisor_with_one_fixed_capacity_change(self):
+        original = HERE.parent / 'm15-rust-executor-process235-collector-source-1/child-cancellation-authority-correction-1'
+        expected = (original / 'supervisor.rs').read_text().replace(
+            'pub const STREAM_LIMIT: usize = 1024;',
+            '// Fixed diagnostic capture budget: retain ordinary DWARF declaration traces.\n'
+            '// Original app collectors retain their existing 1024-byte profile unchanged.\n'
+            'pub const STREAM_LIMIT: usize = 65_536;')
+        self.assertEqual((HERE / 'supervisor.rs').read_text(), expected)
+        main = (HERE / 'main.rs').read_text()
+        self.assertIn('idle_probe::capture_pair', main)
+        self.assertNotIn('"/bin/mcexec"', main)
+        self.assertNotIn('StartupRetirement::new', main)
+        self.assertIn('M15_BFD_PS_RESULT', (HERE / 'report.rs').read_text())
+
+    def test_original_declaration_traces_and_fixed_capture_ceiling(self):
+        ordinary = ('dwarf_global_var_addr: inspecting mck_num_processors\n'
+                    'dwarf_global_var_addr: inspecting mck_num_processors -> DW_DLV_NO_ENTRY for addr?\n').encode()
+        for count in (1, 24):
+            output = ordinary * count + self.output
+            self.assertLess(len(output), 65536)
+            captures = copy.deepcopy(self.captures)
+            for capture in captures.values():
+                capture['stdout'].update(hex=output.hex(), observed=len(output), retained=len(output))
+            self.check(captures)
+        for output in (ordinary, ordinary * 512 + self.output):
+            captures = copy.deepcopy(self.captures)
+            for capture in captures.values():
+                capture['stdout'].update(hex=output.hex(), observed=len(output), retained=len(output))
+            with self.assertRaises(ValueError):
+                self.check(captures)
+
+    def test_fixed_overlay_membership_and_parser_controls(self):
+        spec = importlib.util.spec_from_file_location('bfd_overlay', HERE / 'native_diagnostic_overlay_bfd.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        expected = ('apps', 'case', 'case/work', 'init', 'apps/app', 'bin/mcexec',
+                    'case/tools', 'case/tools/mcinspect', 'case/tools/mcinspect-reference', 'lib64/libelf.so.1')
+        self.assertEqual(module.OVERLAY_NAMES, expected)
+        entries = [(name, b'' if mode & 0o040000 else ('SYNTHETIC:' + name).encode(), mode)
+                   for name, mode in zip(expected, module.OVERLAY_MODES)]
+        raw = module._archive(entries)
+        rows, _ = module.parse_newc(raw)
+        self.assertEqual(tuple(row['name'] for row in rows), expected)
+        self.assertEqual([row['sha256'] for row in rows], [module._digest(data) for _, data, _ in entries])
+        with self.assertRaises(ValueError):
+            module.parse_newc(raw[:-128])
+        with self.assertRaises(ValueError):
+            module._sha256('', 'missing actual libelf')
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

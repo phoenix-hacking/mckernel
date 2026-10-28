@@ -1,0 +1,42 @@
+test_changed_ledger_and_unsupported_command_rejected (__main__.Recursive) ... ok
+test_full_recursive_real_observers_and_negative_actor (__main__.Recursive) ... FAIL
+test_old_guardian_and_wider_caps_rejected (__main__.Recursive) ... ok
+
+======================================================================
+FAIL: test_full_recursive_real_observers_and_negative_actor (__main__.Recursive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/retained_effect_oracle.py", line 113, in get
+    try:return self.rows[tuple(argv)]
+KeyError: ('/usr/bin/sudo', '-A', '/usr/bin/docker', 'ps', '-aq', '--no-trunc', '--filter', 'name=^/mckernel-native-diagnostic-4d1c28c2d9caa913e4ab1e8a504ac5ea$')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/test_recursive_routing_expert.py", line 172, in test_full_recursive_real_observers_and_negative_actor
+    result=root.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/TEST_ONLY-full-recursion-vb6_ubib/prepared/observe_current61_current118.py", line 79, in observe
+    old=load(PINS['current60_source'],'genuine116_current60_reobservation');history=old.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/TEST_ONLY-full-recursion-vb6_ubib/prepared/current60/observe_current60_postjoin.py", line 89, in observe
+    first=guard.guard();history=common.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/TEST_ONLY-full-recursion-vb6_ubib/prepared/common/observe_root59_configured.py", line 262, in observe
+    q = subprocess.run(argv, capture_output=True, text=True, timeout=15)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/test_recursive_routing_expert.py", line 101, in run
+    row=self.retained.get(argv)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/retained_effect_oracle.py", line 114, in get
+    except KeyError:raise AssertionError('UNSUPPORTED_RETAINED_EFFECT_ARGV '+json.dumps(argv))
+AssertionError: UNSUPPORTED_RETAINED_EFFECT_ARGV ["/usr/bin/sudo", "-A", "/usr/bin/docker", "ps", "-aq", "--no-trunc", "--filter", "name=^/mckernel-native-diagnostic-4d1c28c2d9caa913e4ab1e8a504ac5ea$"]
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.628s
+
+FAILED (failures=1)
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL",
+  "tests": 3,
+  "errors": 0,
+  "failures": 1,
+  "result": null,
+  "runtime_authority": null
+}

@@ -1,0 +1,148 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/REVIEW-FAILURE-PRESERVED-1/retire_exact_bfd_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py
+@@ -207,8 +207,20 @@
+  class Commands(Base):
+   def __init__(self,out,stop):
+    super().__init__(out/'commands.log',stop,sudo=True);self.command_prefix=();self.children=[];self.receipts=[];self.out=out
++   self.before_popen=None;self.raw_child=None;self.unresolved_spawn=None;self.current_failed=False;self.group_scan_failed=False
+    def popen(argv,**kwargs):
+-    child=subprocess.Popen(argv,**kwargs);wrapped=Wait4Child(child,Path(kwargs['stdout'].name).parent);wrapped.streams=(kwargs['stdout'],kwargs['stderr']);self.children.append(wrapped);return wrapped
++    capture=Path(kwargs['stdout'].name).parent
++    # Base.call has completed starting-status/log fsync and opened both captures.
++    # Caller hook does all further admission I/O, then its final clocks; there
++    # is no application I/O between that last check and this actual Popen.
++    if self.before_popen is not None:self.before_popen(argv)
++    child=subprocess.Popen(argv,**kwargs)
++    # A successful raw spawn owns custody BEFORE birth/wrapper/receipt work.
++    self.raw_child=child;self.client_retirement_unproven=True
++    self.unresolved_spawn=dict(pid=child.pid,birth=None,argv=argv,capture=str(capture),successful_Popen=True)
++    wrapped=Wait4Child(child,capture);self.unresolved_spawn['birth']=wrapped.record['birth'];wrapped.streams=(kwargs['stdout'],kwargs['stderr']);self.children.append(wrapped)
++    # Keep the raw child + uncertainty latch until its durable JOIN is sealed.
++    return wrapped
+    ns['subprocess']=types.SimpleNamespace(Popen=popen,TimeoutExpired=subprocess.TimeoutExpired,CompletedProcess=subprocess.CompletedProcess)
+   def _surviving_group_members(self,pgid):
+    members=[]
+@@ -217,24 +229,26 @@
+      fields=path.read_text().rsplit(')',1)[1].split();need(len(fields)>=20,'complete new-client group stat')
+      if int(fields[2])==pgid or int(fields[3])==pgid:members.append(int(path.parent.name))
+     except FileNotFoundError:continue
+-    except (PermissionError,ValueError,IndexError,Refusal):self.client_retirement_unproven=True
++    except (PermissionError,ValueError,IndexError,Refusal):self.group_scan_failed=True;self.client_retirement_unproven=True
+    return members
+   def _record_client_exit(self,code,status):
+    Base._record_client_exit(self,code,status)
+-   if code is None or code<0:self.client_retirement_unproven=True;status['client_retirement_unproven']=True
++   if code is None or code<0:self.current_failed=True;self.client_retirement_unproven=True;status['client_retirement_unproven']=True
+   def _retire_client(self,process,status):
+    # Deliberately replace inherited TERM/KILL with uncertainty retention only.
+-   self.client_retirement_unproven=True;status['no_signals_sent']=True
++   self.current_failed=True;self.client_retirement_unproven=True;status['no_signals_sent']=True
+    if process is not None:status['unresolved_client_pid']=process.pid;process.poll()
+   def exact(self,argv,timeout=30,check=True):
+-   prior=len(self.children)
++   prior=len(self.children);prior_uncertain=self.client_retirement_unproven
++   need(not prior_uncertain and self.raw_child is None,'prior command uncertainty cannot be cleared by a later child')
++   self.current_failed=False;self.group_scan_failed=False
+    try:return self.call(argv,timeout=timeout,check=check)
+    finally:
+     if len(self.children)>prior:
+      child=self.children[-1];members=self._surviving_group_members(child.pid);r=dict(child.record)
+-     r.update(argv=argv,group_members=members,group_absent=not members and not self.client_retirement_unproven,streams_closed=all(f.closed for f in child.streams),signals_sent=0)
+-     if not r['positive_wait4'] or members or not r['streams_closed']:self.client_retirement_unproven=True
+-     r['client_retirement_unproven']=self.client_retirement_unproven
++     r.update(argv=argv,group_members=members,group_absent=not members and not self.group_scan_failed,streams_closed=all(f.closed for f in child.streams),signals_sent=0)
++     unproven=prior_uncertain or self.current_failed or self.group_scan_failed or not r['positive_wait4'] or bool(members) or not r['streams_closed']
++     r['client_retirement_unproven']=unproven
+      r['raw']={name:reference(child.capture/name) for name in ('stdout','stderr','status.json')}
+      ns['atomic'](child.capture/'JOIN-WAIT4.json',r)
+      for path in (child.capture,self.log):
+@@ -242,6 +256,15 @@
+       try:os.fsync(fd)
+       finally:os.close(fd)
+      self.receipts.append(reference(child.capture/'JOIN-WAIT4.json'))
++     if not unproven:self.raw_child=None;self.unresolved_spawn=None;self.client_retirement_unproven=False
++     else:self.client_retirement_unproven=True
++    elif self.raw_child is not None:
++     # Birth/wrapper construction failed after a successful raw spawn. The
++     # inherited status may have no pid; preserve this honest gap separately.
++     self.client_retirement_unproven=True
++     try:write_new(Path(self.unresolved_spawn['capture'])/'UNWRAPPED-SPAWN.json',dict(scope=SCOPE,unknown_birth=True,signals_sent=0,**self.unresolved_spawn))
++     except BaseException:pass
++
+  return Commands,ns
+ 
+ def write_new(path,value):
+@@ -283,7 +306,7 @@
+  def __init__(self,b,r,out,stop):
+   self.b=b;self.r=r;self.out=out;self.stop=stop;self.m=load(b['primitive'],'unchanged_normal_lock_primitive');self.normal=load(b['normal'],'unchanged_normal_process_predicates');self.guard=load(b['guardian'],'actual_restart_guard_source');self.m.LOCK=LOCK;self.m.proc_bytes=self.proc_bytes
+   self.p,self.protected,self.profile,self.claim,self.plan,self.terminal=validate_retained(b);self.fd=None;self.mutated=False;self.command_started=False;self.proofs=[];self.rm_claimed=False;self.rm_invoked=False
+-  cls,self.ns=transport(b);self.commands=cls(out,stop)
++  cls,self.ns=transport(b);self.commands=cls(out,stop);self.commands.before_popen=self.before_spawn
+  def proc_bytes(self,path,maximum=1<<20):
+   fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK)
+   try:
+@@ -321,6 +344,22 @@
+      tasks=self.proc_bytes(path/'tasks').decode().strip();need(tasks=='','stopped-container cgroup has no tasks');container_cgroups[str(path)]=[]
+     else:container_cgroups[str(path)]=None
+   return dict(clocks=now,MemAvailable_bytes=int(memory['MemAvailable'])*1024,cgroup=cg,container_cgroups=container_cgroups,mutex=dict(device=27,inode=4,holder=os.getpid(),fd=self.fd))
++ def before_spawn(self,argv):
++  # This callback is invoked by the reused transport after all its capture
++  # open/status/log/fsync work. All our source/guard/protected/proof I/O also
++  # precedes the final direct clock/stop test below.
++  self.safe()
++  preproof=None
++  if argv==PREFIX+['rm','--',self.b['cid']]:
++   need(self.rm_claimed and self.rm_invoked,'one exact preclaimed removal')
++   claim=authenticated(self.rm_claim_reference,True);preproof=authenticated(self.rm_preproof_reference,True)
++   need(claim['preproof']==self.rm_preproof_reference and preproof['present'] is True and preproof['label']=='PREINSPECT-2','exact durable precommit proof')
++  self.guard.guard() # All actual account/identity/guardian I/O finishes here.
++  self.stop.check()
++  now=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]
++  need(all(a<c for a,c in zip(now,self.b['cutoffs'])),'final pre-Popen earliest cutoff')
++  if preproof is not None:need(0<=now[0]-preproof['clocks'][0]<=120,'final pre-Popen original120s freshness')
++  # Return directly to Popen: no application read/write/fsync follows this test.
+  def call(self,args,check=True,root_process=False):
+   if root_process:
+    need(len(args)==5 and args[0]=='-c' and args[1]==process_source(self.normal,self.p) and re.fullmatch('[0-9a-f]{32}',args[2]) and args[3:]==[str(os.getpid()),self.m.proc_stat(os.getpid())[19]],'only exact existing full-process census command')
+@@ -351,7 +390,8 @@
+   need(result.stdout.encode()==authenticated(refs['output:container.stdout']) and result.stderr.encode()==authenticated(refs['output:container.stderr']),'exact retained stopped-container log streams')
+  def claim_once(self,proof):
+   now=self.safe()['clocks'];need(0<=now[0]-proof['clocks'][0]<=120,'fresh exact precommit proof within120s')
+-  write_new(self.out/'RM-ONCE-CLAIM.json',dict(scope=SCOPE,cid=self.b['cid'],nonce=self.b['nonce'],release=self.r['_reference'],preproof=self.proofs[-1],argv=PREFIX+['rm','--',self.b['cid']],clocks=now))
++  self.rm_preproof_reference=self.proofs[-1]
++  self.rm_claim_reference=write_new(self.out/'RM-ONCE-CLAIM.json',dict(scope=SCOPE,cid=self.b['cid'],nonce=self.b['nonce'],release=self.r['_reference'],preproof=self.rm_preproof_reference,argv=PREFIX+['rm','--',self.b['cid']],clocks=now))
+   now=self.safe()['clocks'];need(0<=now[0]-proof['clocks'][0]<=120,'postfsync precommit proof within120s');self.rm_claimed=True
+  def remove(self):
+   self.mutated=True;result=self.call(['rm','--',self.b['cid']]);need(result.returncode==0 and result.stdout.strip()==self.b['cid'] and result.stderr=='','exact stopped CID removed once')
+@@ -366,7 +406,7 @@
+  def close(self):
+   if self.fd is not None:os.close(self.fd);self.fd=None
+  def uncertain(self,error):
+-  try:write_new(self.out/'UNCERTAIN.json',dict(scope=SCOPE,error=repr(error),pid=os.getpid(),birth=self.m.proc_stat(os.getpid())[19],permanent_mutex=[27,4],mutation_started=self.mutated,commands=self.commands.receipts,signals_sent=0,automatic_replay=False))
++  try:write_new(self.out/'UNCERTAIN.json',dict(scope=SCOPE,error=repr(error),pid=os.getpid(),birth=self.m.proc_stat(os.getpid())[19],permanent_mutex=[27,4],commit_attempted=self.mutated,unknown_successful_spawn=self.commands.unresolved_spawn,commands=self.commands.receipts,signals_sent=0,automatic_replay=False))
+   except BaseException:pass
+   self.m.QUARANTINE=self.out/'QUARANTINE.json';self.m.quarantine_hold(self.fd)
+ 
+@@ -374,6 +414,9 @@
+  """Same real order exercised by pure substituted-effect tests."""
+  ops.acquire();ops.safe();ops.census('PREINSPECT-1',True);ops.logs();proof,_=ops.census('PREINSPECT-2',True)
+  ops.claim_once(proof);ops.remove();ops.absence();ops.census('POSTPROOF',False);return ops.finish()
++
++def must_retain_custody(ops):
++ return ops is not None and (ops.mutated or ops.commands.client_retirement_unproven or ops.commands.raw_child is not None)
+ 
+ class Stop:
+  def __init__(self):self.requested=[]
+@@ -394,10 +437,10 @@
+   ops=Actual(b,r,out,stop);write_new(out/'STARTED.json',dict(scope=SCOPE,pid=os.getpid(),birth=int(ops.m.proc_stat(os.getpid())[19]),release=rr,bindings=files['bindings']))
+   result=transaction(ops);complete=True;print(json.dumps(dict(status='RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT',result=result)));return 0
+  except BaseException as exc:
+-  if ops is not None and (ops.mutated or ops.commands.client_retirement_unproven):ops.uncertain(exc)
++  if must_retain_custody(ops):ops.uncertain(exc)
+   raise
+  finally:
+-  if ops is not None and (complete or not ops.mutated and not ops.commands.client_retirement_unproven):ops.close()
++  if ops is not None and (complete or not must_retain_custody(ops)):ops.close()
+   for number,handler in previous.items():signal.signal(number,handler)
+ 
+ if __name__=='__main__':raise SystemExit(main())

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/reproduce_initial_blockers.py", line 43, in <module>
+    m.Actual.call(fake, ['rm', '--', b['cid']])
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/retire_exact_bfd_stopped_container.py.INITIAL-SNAPSHOT", line 328, in call
+    allowed=[['ps','-a','--no-trunc','--format','{{json .}}'],['inspect','--type','container',self.b['cid']],['image','inspect',self.profile['inputs']['image']],['logs','--',self.b['cid']],['rm','--',self.b['cid']]]
+AttributeError: 'types.SimpleNamespace' object has no attribute 'profile'

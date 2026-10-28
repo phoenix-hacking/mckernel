@@ -2,6 +2,38 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Actual BFD default producer completed — 2026-10-28T19:48Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+BFD genuine3commandconfigure/build/ownership-readback ranONCE, all0. Exactcurrent
+Rust mcinspect/eclair artifacts produced from retained3103source/SDK21; actual
+artifact/ABI/ELFreview independentlyPASSf92028de; validnative/installation/file proofOPEN. Container2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008
+started19:48:02.919/finished19:48:11.198; stopped/Pid0/exit0, RETAINED.
+3commandwall8.201202s/CPU8.009559s/maxRSS108764KiB; containerwall8.278816s.
+Actualconfigureentry19:48:02.975,2210.980s afterrelaunch; realRustcompiler occurs
+within buildphase19:48:05.420–19:48:10.709, exactchildtimeunmeasured.
+Noncefaac1b4804174de5800c58d61ba98004 CONSUMEDONCE; neverreplay producer/export/SDK.
+
+Independentverifier2123297/101423116 positivejoined0/groupsabsent/closedstreams;
+Hot5c5a5a37 resourceage.200292s. Actualpositivejoined physical42583f24+held9dded503,
+sourcepublication46447096 (40fetchedGitrows at0d4c1d986), independentexecutionc2f89ff3,
+Rootonceclaim6d0ea9fe/READY consumed byoneholder2124365/101427979. Runner2124454/
+101432667/holdertool94204 joined0; wrappernormallyreleasedFD3. These facts do not
+replace actual stoppedcontainerretirement/currentphysicalproof. Heavy/native
+clearance PENDING; Root61/free6c83 nowhistoricalafterthisjob. No native/filecredit.
+
+Ownersnext: bfd_route exactnormal
+stoppedcontainerretirement using applicablecustomrunnercontracts (no common/shared
+ownerrecords or label to relabel). Rootaloneactualmutation afterindependentrelease.
+M14 canonical118source remainsWIP withaccepteddefault116 C71/Rust68; exporter/
+materializer checksPASS butrecursiveoldcurrent60guard routingblocks118runtime.
+Oneboundedfixturecorrection consumed; original227owner nowexpertcompletes inherited
+commandoracle without changingobserverpredicates. Allfailedfixtures preserved.
+M14body3HOST6804pairs independentlyPASS; body4sourcesready, furtherHOSTexecution
+queued behind currentresource/retirement accounting. Original227frozenCURRENT110
+static/nativepreparation remainsalternate, no replay/matching116claim.
+Practical35/35/M14files4/6/M15files1/8; wholeM14/M15OPEN.
+
 ## Twenty-minute engineering checkpoint — 2026-10-28T19:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

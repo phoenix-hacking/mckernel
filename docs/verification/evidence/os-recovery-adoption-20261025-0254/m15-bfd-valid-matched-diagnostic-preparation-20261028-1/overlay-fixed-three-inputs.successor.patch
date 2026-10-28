@@ -1,0 +1,115 @@
+--- a/native_diagnostic_overlay.py
++++ b/native_diagnostic_overlay_bfd.py
+@@ -8,6 +8,8 @@
+ from __future__ import annotations
+ 
+ import argparse
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++# Private fixed-three-file extension of the accepted overlay; no native operation.
+ import contextlib
+ import gzip
+ import hashlib
+@@ -23,8 +25,10 @@
+ BASE_SIZE = 11846636
+ BASE_CPIO_SHA256 = "4f36958f2f0e4c6684d3adbd2b8b5860693298b332d11e8bb9e47a063420b265"
+ BASE_CPIO_SIZE = 38358016
+-OVERLAY_NAMES = ("apps", "case", "case/work", "init", "apps/app", "bin/mcexec")
+-OVERLAY_MODES = (0o040755, 0o040755, 0o040755, 0o100755, 0o100755, 0o100755)
++OVERLAY_NAMES = ("apps", "case", "case/work", "init", "apps/app", "bin/mcexec",
++                 "case/tools", "case/tools/mcinspect", "case/tools/mcinspect-reference", "lib64/libelf.so.1")
++OVERLAY_MODES = (0o040755, 0o040755, 0o040755, 0o100755, 0o100755, 0o100755,
++                 0o040755, 0o100755, 0o100755, 0o100755)
+ MAX_SOURCE_SIZE = 256 * 1024 * 1024
+ MAX_CPIO_SIZE = 512 * 1024 * 1024
+ _DIR_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
+@@ -476,7 +480,8 @@
+     return out.getvalue()
+ 
+ 
+-def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256, mcexec_sha256,
++def build_overlay(base, payload, collector, mcexec, mcinspect, reference, libelf, output, *,
++                  collector_sha256, mcexec_sha256, mcinspect_sha256, reference_sha256, libelf_sha256,
+                   base_sha256, base_size, base_cpio_sha256, base_cpio_size,
+                   payload_sha256):
+     base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
+@@ -484,6 +489,9 @@
+     collector_sha256 = _collector_hash(collector_sha256)
+     mcexec_sha256 = _collector_hash(mcexec_sha256)
+     payload_sha256 = _sha256(payload_sha256, "payload SHA256")
++    mcinspect_sha256 = _sha256(mcinspect_sha256, "current mcinspect SHA256")
++    reference_sha256 = _sha256(reference_sha256, "reference mcinspect SHA256")
++    libelf_sha256 = _sha256(libelf_sha256, "libelf SHA256")
+     try:
+         with contextlib.ExitStack() as stack:
+             target = _Path(output)
+@@ -494,11 +502,12 @@
+                 pass
+             else:
+                 _die("output already exists")
+-            sources = [_Source(path, stack) for path in (base, payload, collector, mcexec)]
++            sources = [_Source(path, stack) for path in
++                       (base, payload, collector, mcexec, mcinspect, reference, libelf)]
+             identities = [(s.identity["st_dev"], s.identity["st_ino"]) for s in sources]
+             if len(set(identities)) != len(identities):
+                 _die("source inputs alias one another")
+-            br, pr, cr, mr = (s.data for s in sources)
++            br, pr, cr, mr, ir, rr, er = (s.data for s in sources)
+             original = _authenticate_base(br, base_sha256=base_sha256, base_size=base_size,
+                                           base_cpio_sha256=base_cpio_sha256,
+                                           base_cpio_size=base_cpio_size)
+@@ -508,10 +517,18 @@
+                 _die("collector hash mismatch")
+             if _digest(mr) != mcexec_sha256:
+                 _die("mcexec hash mismatch")
++            for label, data, expected in (("current mcinspect", ir, mcinspect_sha256),
++                                          ("reference mcinspect", rr, reference_sha256),
++                                          ("libelf", er, libelf_sha256)):
++                if _digest(data) != expected:
++                    _die(label + " hash mismatch")
+             _check_collector(cr)
+             overlay = _archive((("apps", b"", 0o040755), ("case", b"", 0o040755),
+                                 ("case/work", b"", 0o040755), ("init", cr, 0o100755),
+-                                ("apps/app", pr, 0o100755), ("bin/mcexec", mr, 0o100755)))
++                                ("apps/app", pr, 0o100755), ("bin/mcexec", mr, 0o100755),
++                                ("case/tools", b"", 0o040755), ("case/tools/mcinspect", ir, 0o100755),
++                                ("case/tools/mcinspect-reference", rr, 0o100755),
++                                ("lib64/libelf.so.1", er, 0o100755)))
+             final_map = replay(br, overlay, base_sha256=base_sha256, base_size=base_size,
+                                base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
+             raw = _gzip(original + overlay)
+@@ -561,7 +578,8 @@
+                     _identity(os.fstat(fd)) != output_identity or
+                     os.fstat(fd).st_nlink != 1):
+                 _die("output identity changed during final source recheck")
+-            return {"sources": dict(zip(("base", "payload", "collector", "mcexec"),
++            return {"sources": dict(zip(("base", "payload", "collector", "mcexec",
++                                           "mcinspect", "reference", "libelf"),
+                                         (s.manifest() for s in sources))),
+                     "base_sha256": _digest(br), "base_cpio_sha256": _digest(original),
+                     "base_cpio_size": len(original), "payload_sha256": _digest(pr),
+@@ -575,10 +593,12 @@
+ 
+ def main(argv=None):
+     parser = argparse.ArgumentParser()
+-    for name in ("base", "payload", "collector", "mcexec", "output"):
++    for name in ("base", "payload", "collector", "mcexec", "mcinspect", "reference", "libelf", "output"):
+         parser.add_argument(name)
+     parser.add_argument("--collector-sha256", required=True, type=_collector_hash)
+     parser.add_argument("--mcexec-sha256", required=True, type=_collector_hash)
++    for name in ("mcinspect", "reference", "libelf"):
++        parser.add_argument("--" + name + "-sha256", required=True, type=_collector_hash)
+     parser.add_argument("--payload-sha256", required=True,
+                         type=lambda v: _sha256(v, "payload SHA256"))
+     parser.add_argument("--base-sha256", required=True,
+@@ -589,7 +609,10 @@
+     parser.add_argument("--base-cpio-size", required=True,
+                         type=_base_cpio_size_arg)
+     args = parser.parse_args(argv)
+-    print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.mcexec, args.output,
++    print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.mcexec,
++                                   args.mcinspect, args.reference, args.libelf, args.output,
++                                   mcinspect_sha256=args.mcinspect_sha256,
++                                   reference_sha256=args.reference_sha256, libelf_sha256=args.libelf_sha256,
+                                    collector_sha256=args.collector_sha256,
+                                    mcexec_sha256=args.mcexec_sha256,
+                                    payload_sha256=args.payload_sha256,

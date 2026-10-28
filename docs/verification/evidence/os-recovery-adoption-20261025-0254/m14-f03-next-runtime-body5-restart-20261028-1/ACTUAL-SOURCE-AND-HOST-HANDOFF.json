@@ -1,0 +1,79 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root/f03_next",
+  "status": "PASS_HOST_PERF_ALLOCATION_AFTER_ONE_RETAINED_HEADER_ONLY_CORRECTION",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/SOURCE-READY.json",
+    "bytes": 11092,
+    "sha256": "caa46517311cd0b22f3ff8a716f88ced384b45f578cf69ee82b66bea877329da"
+  },
+  "initial_actual_failure_and_Rust_prefix": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/ACTUAL-HOST-RESULT.json",
+    "bytes": 10883,
+    "sha256": "529e548de9440bba9e7f78310e8106691df4763ac779fc7b67f3730db6a202b7"
+  },
+  "correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/fixture-header-correction-1/CORRECTION.json",
+    "bytes": 1876,
+    "sha256": "3126441eee8e3920651d0513b18860ec49f79e2d4703a0416b58a6224eb0743e"
+  },
+  "actual_remaining_suffix": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/fixture-header-correction-1/output-header-correction-1/ACTUAL-HOST-RESULT.json",
+    "bytes": 11300,
+    "sha256": "c378290bed089875772ad22aed50038c4f529c0b51ea94e93a77faf26a968356"
+  },
+  "exact_compiler_fixture_commands_total": 4,
+  "actual_Rust_compiles": 1,
+  "actual_C_link_attempts": 2,
+  "actual_fixture_runs": 1,
+  "genuine_header_ABI_words": 52,
+  "C_Rust_pairs": 1152,
+  "additional_null_boundary_calls": 4,
+  "all_started_children_positive_wait4_join": true,
+  "all_process_groups_absent": true,
+  "all_streams_closed": true,
+  "command_wall_seconds_sum": 0.3255128830205649,
+  "CPU_seconds_sum": 0.282542,
+  "peak_child_RSS_KiB": 102244,
+  "actual_actors": [
+    {
+      "pid": 2136370,
+      "start": "101634490",
+      "ppid": 2136369,
+      "pgrp": 2136370,
+      "session": 2136370,
+      "state": "S"
+    },
+    {
+      "pid": 2136377,
+      "start": "101634503",
+      "ppid": 2136369,
+      "pgrp": 2136377,
+      "session": 2136377,
+      "state": "S"
+    },
+    {
+      "pid": 2136902,
+      "start": "101642911",
+      "ppid": 2136901,
+      "pgrp": 2136902,
+      "session": 2136902,
+      "state": "S"
+    },
+    {
+      "pid": 2136907,
+      "start": "101642932",
+      "ppid": 2136901,
+      "pgrp": 2136907,
+      "session": 2136907,
+      "state": "S"
+    }
+  ],
+  "semantic_correction_source": "Existing Rust cache-event before cache-extra mapping repaired privately before first fixture, matching unchanged verbatim C oracle and independent ordered effects.",
+  "infrastructure_failure": "Original C fixture missing genuine ihk/mm.h include retained; corrected driver adds that include only, reuses the one successful Rust object.",
+  "remaining": "Independent review/composition; coherent actual default object/image and applicable native provider effects/full file closure remain open.",
+  "canonical_writes": 0,
+  "default_artifacts": 0,
+  "native": 0,
+  "file_closures": 0
+}

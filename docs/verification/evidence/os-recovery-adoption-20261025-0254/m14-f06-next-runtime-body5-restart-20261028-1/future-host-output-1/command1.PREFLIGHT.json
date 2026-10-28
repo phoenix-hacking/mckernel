@@ -1,0 +1,168 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS",
+  "guard_sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18",
+  "clocks_epoch_MONO_BOOT": [
+    1793218820.813942,
+    1000927.382898778,
+    1016265.509949031
+  ],
+  "actual_cutoffs": [
+    1793253600,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "credit": {
+    "id": "7f4af94a83b14cc08f97401f5891d965",
+    "budget": "57774.852125",
+    "spent": "22812.3311000000",
+    "remaining": "34962.5210250000"
+  },
+  "all_actual_source_bindings_verified": true,
+  "all_actual_tools_verified": true,
+  "actual_preimages_and_header_inputs_verified": [
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "kind": "canonical",
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 118164,
+      "sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec"
+    },
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "kind": "snapshot",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body5-restart-20261028-1/BASE.syscall.c",
+      "bytes": 118164,
+      "sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec"
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "kind": "canonical",
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 41705,
+      "sha256": "6a1cca7de5bef74ff1d5b8d890c1b5c7482455251c285d89b242e268932d834e"
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "kind": "snapshot",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body5-restart-20261028-1/BASE.CMakeLists.txt",
+      "bytes": 41705,
+      "sha256": "6a1cca7de5bef74ff1d5b8d890c1b5c7482455251c285d89b242e268932d834e"
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "kind": "canonical",
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "bytes": 2463,
+      "sha256": "81eb7976135803483d4e3bfea0d2988df4b3080e5a894532dfd8f672bbdf551e"
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "kind": "snapshot",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body5-restart-20261028-1/BASE.lib.rs",
+      "bytes": 2463,
+      "sha256": "81eb7976135803483d4e3bfea0d2988df4b3080e5a894532dfd8f672bbdf551e"
+    },
+    {
+      "relative": "kernel/rust/abi.rs",
+      "kind": "canonical",
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "relative": "kernel/rust/abi.rs",
+      "kind": "snapshot",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body5-restart-20261028-1/abi.snapshot.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "kind": "real_header_inputs",
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "kind": "real_header_inputs",
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "bytes": 17894,
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd"
+    },
+    {
+      "kind": "real_header_inputs",
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "kind": "real_header_inputs",
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1280595,
+      "sha256": "d35d716aec8b6b6ea58f0c1891abb86fa8dc31867f296ea1cd66da67a8454f42"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 118164,
+      "sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "kernel/rust/lib.rs",
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "bytes": 2463,
+      "sha256": "81eb7976135803483d4e3bfea0d2988df4b3080e5a894532dfd8f672bbdf551e"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "kernel/CMakeLists.txt",
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 41705,
+      "sha256": "6a1cca7de5bef74ff1d5b8d890c1b5c7482455251c285d89b242e268932d834e"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "scripts/f06_origin_command_profile.json",
+      "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+      "bytes": 9100,
+      "sha256": "a1e1b96f570cc96c6dd3ad767825554cf2f6508a16dfb2cb18cb52ff1399d5aa"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "scripts/derive_f06_origin.py",
+      "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+      "bytes": 7565,
+      "sha256": "7bf01de48c828e9b6068dc612f1a87d9845435e4d399bae4ab86a6b84b6c59ab"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "kernel/syscall.c",
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 922005,
+      "sha256": "0b611cd279ef580ddabd474d346365a89e1960ff101c647d8fe1d74e56b2957b"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "kernel/rust/syscall_policy.rs",
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1280595,
+      "sha256": "d35d716aec8b6b6ea58f0c1891abb86fa8dc31867f296ea1cd66da67a8454f42"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "kernel/rust/f06_vdso_info.rs",
+      "path": "/home/holden/mckernel/kernel/rust/f06_vdso_info.rs",
+      "bytes": 5913,
+      "sha256": "4bc4a23b9444a6eab6f5a6f6e2737db41530809b3f8d987973ab0e1dbd8ebd8b"
+    },
+    {
+      "kind": "actual_root118_canonical_postimage",
+      "relative": "kernel/rust/f06_native_signal_restore_fp.rs",
+      "path": "/home/holden/mckernel/kernel/rust/f06_native_signal_restore_fp.rs",
+      "bytes": 5179,
+      "sha256": "126c0aff5baa9a9fd97d910ec46fd7af50ea2a15c49bf7269d0e6c33e510e712"
+    }
+  ]
+}

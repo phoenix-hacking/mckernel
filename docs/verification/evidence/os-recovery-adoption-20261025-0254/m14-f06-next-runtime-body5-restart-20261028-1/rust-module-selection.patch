@@ -1,0 +1,9 @@
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -124,3 +124,6 @@
+ 
+ #[cfg(f06_native_signal_restore_fp_candidate)]
+ mod f06_native_signal_restore_fp;
++
++#[cfg(f06_vdso_setup_log_candidate)]
++mod f06_vdso_setup_log;

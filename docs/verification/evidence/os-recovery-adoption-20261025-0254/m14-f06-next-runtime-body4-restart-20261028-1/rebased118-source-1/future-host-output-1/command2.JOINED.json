@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "command": 2,
+  "status": "PASS",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/future-host-output-1/oracle.o",
+    "-C",
+    "link-arg=-no-pie",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/fixture.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/future-host-output-1/fixture"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1",
+  "identity": {
+    "pid": 2132854,
+    "birth": "101567846",
+    "ppid": 2132847,
+    "pgrp": 2132854,
+    "session": 2132854,
+    "state": "R"
+  },
+  "wait4": {
+    "pid": 2132854,
+    "status": 0,
+    "exit": 0,
+    "positive_direct_join": true
+  },
+  "wall_seconds": 0.22773246199358255,
+  "CPU_user_seconds": 0.19003199999999998,
+  "CPU_system_seconds": 0.031076,
+  "CPU_seconds": 0.22110799999999997,
+  "peak_RSS_KiB": 136612,
+  "group_members": [],
+  "group_scan_errors": [],
+  "group_absent": true,
+  "parent_streams_closed": true,
+  "child_streams_closed_by_whole_group_absence": true,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

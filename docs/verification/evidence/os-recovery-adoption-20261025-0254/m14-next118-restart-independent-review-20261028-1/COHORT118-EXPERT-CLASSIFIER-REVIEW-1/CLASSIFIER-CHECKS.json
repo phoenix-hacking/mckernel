@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-28T20:02:43.361769+00:00",
+  "decision": "PASS_CLASSIFIER_ONLY_COMPLETE_EXACT_RETAINED_KEYS_AND_RECEIPT_BOUND_RESPONSES",
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/CLASSIFIER-REVIEW-PACKET.json",
+    "bytes": 3198,
+    "sha256": "f30fd92e51a28551b39a5e696b41ba52af8db2ae1f8bdffa98acf4f43727ec8a"
+  },
+  "oracle_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/retained_effect_oracle.py",
+    "bytes": 7745,
+    "sha256": "9e6ef78fb3b2e56429194c76bf16f92f5871be254573c09fdc539facd50eead8"
+  },
+  "query_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/COMPLETE-ORACLE-CLASSIFIER-SOURCE-MANIFEST.json",
+    "bytes": 864849,
+    "sha256": "0fa28e5e4c39ddc700d464cfc9f8b7ccc2adb6f89118e9c06e1c10cb47c4ec4e"
+  },
+  "authenticated_inputs": 54,
+  "exact_keys": 94,
+  "exact_prefix_counts": {
+    "/usr/bin/sudo -A /usr/bin/docker --host=unix:///var/run/docker.sock": 38,
+    "/usr/bin/sudo -A docker --host=unix:///var/run/docker.sock": 9,
+    "sudo -A /usr/bin/docker --host=unix:///var/run/docker.sock": 38,
+    "sudo -A docker --host=unix:///var/run/docker.sock": 9
+  },
+  "raw_response_keys": 92,
+  "terminal_receipt_projection_keys": 2,
+  "sudo_spelling_alias_keys": 46,
+  "Docker_spelling_aliases_generated": 0,
+  "unsupported_exact_keys_rejected": 14,
+  "conflicting_historical_reply_records_retained": 12,
+  "only_changed_AST_function": "query",
+  "actual_subprocess_commands": 0,
+  "actual_guard_account_observation_calls": 0,
+  "full_recursive_fixture_runs": 0,
+  "CPU": 0,
+  "jobs": 1,
+  "AS_bytes": 2147483648,
+  "runtime_authority": null,
+  "historical_conflict_receipt_compatibility_independently_verified": 12,
+  "compatibility_source_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/REPLY-VARIANT-COMPATIBILITY.json",
+    "bytes": 4591,
+    "sha256": "5d5549d280085f879422ac1a2d0fe34e5105ee91d9fdbf93dee3f018528dfba0"
+  },
+  "compatibility_normalization_scope": "Fixture receipt comparison only: original full Mounts records treated as multiset; no observer/test predicate change."
+}

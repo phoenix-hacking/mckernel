@@ -1,0 +1,123 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent readonly producer/ELF/link inspection. No produced executable is run.
+"""
+from pathlib import Path
+import hashlib
+import json
+import os
+import resource
+import shlex
+import subprocess
+
+os.sched_setaffinity(0, {0})
+resource.setrlimit(resource.RLIMIT_AS, (2 << 30, 2 << 30))
+resource.setrlimit(resource.RLIMIT_CPU, (60, 60))
+V = Path(__file__).resolve().parent
+E = V.parents[1]
+B = E / 'm15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1'
+O = B / 'latest-root61-consumer-successor-source-1/OUTPUT'
+W = O / 'work'
+U = W / 'current-bfd-build/executer/user'
+C = E / 'bfd-default-control-routing-restart-20261028-1/cohort'
+
+def ref(path):
+    path = Path(path)
+    raw = path.read_bytes()
+    return dict(path=str(path), bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def read(path):
+    return json.loads(Path(path).read_bytes())
+
+def checked(row):
+    assert ref(row['path']) == row
+    return read(row['path'])
+
+def mapped(row):
+    assert row['path'].startswith('/work/')
+    path = W / row['path'][6:]
+    actual = ref(path)
+    assert (actual['bytes'], actual['sha256']) == (row['bytes'], row['sha256'])
+    return actual
+
+def tool(name, *argv):
+    value = subprocess.run(list(argv), capture_output=True, text=True, timeout=15)
+    (V / (name + '.stdout')).write_text(value.stdout)
+    (V / (name + '.stderr')).write_text(value.stderr)
+    assert value.returncode == 0, (argv, value.stderr)
+    return value.stdout
+
+profile = read(C / 'PROFILE.SOURCE-ONLY.json')
+plan = read(O / 'plan.json')
+worker = read(W / 'evidence/worker-result.json')
+contract = read(W / 'evidence/producer-contract.json')
+assert plan['source_profile'] == ref(C / 'PROFILE.SOURCE-ONLY.json')
+assert plan['commands'] == profile['exact_commands']
+assert worker['commands'] == contract['commands'] and len(worker['commands']) == 3
+commands = []
+for frozen, actual in zip(plan['commands'], worker['commands']):
+    assert frozen['argv'] == actual['argv'] and frozen['cwd'] == actual['cwd']
+    digest = hashlib.sha256((json.dumps(actual['argv'], separators=(',', ':')) + '\n').encode()).hexdigest()
+    assert digest == frozen['argv_compact_json_LF_sha256']
+    assert actual['returncode'] == 0
+    commands.append(dict(index=actual['index'], argv=actual['argv'],
+                         argv_hash=digest, output=mapped(actual['output'])))
+    if 'second_output' in actual:
+        commands[-1]['second_output'] = mapped(actual['second_output'])
+terminal = read(O / 'terminal.json')
+assert terminal['returncode'] == terminal['state']['ExitCode'] == 0
+assert terminal['state']['Running'] is False and terminal['state']['Pid'] == 0
+assert terminal['container'] == (O / 'container.cid').read_text()
+claim = read(O / 'claim.json')
+grant = checked(claim['grant'])
+assert grant['nonce'] == 'faac1b4804174de5800c58d61ba98004'
+assert grant['profile'] == ref(C / 'PROFILE.SOURCE-ONLY.json')
+assert all((W / ('evidence/%02d.stderr' % i)).read_bytes() == b'' for i in range(3))
+selection = read(W / 'BFD-CURRENT-PROJECT-OBJECTS.json')
+mapped(selection['layout'])
+assert selection['layout']['bytes'] == 259
+assert selection['layout']['sha256'] == 'e21b4d9975984b7c14e13760c232dda4e755c5955f1649df77ebdc38e065530b'
+mapped(selection['bfd_actual_object'])
+objects = ['bfd_accessors.o', 'mcinspect_helpers.o', 'eclair_helpers.o', 'arch_eclair_x86_64.o']
+nm = {name: tool('nm-' + name, '/usr/bin/nm', '-g', '--defined-only', str(U / 'rust' / name))
+      for name in objects}
+bridges = [t + '_bfd_' + suffix for t in ('mcinspect', 'eclair')
+           for suffix in ('get_symtab_upper_bound_bridge', 'canonicalize_symtab_bridge')]
+for bridge in bridges:
+    assert sum(line.split()[-1] == bridge for line in nm['bfd_accessors.o'].splitlines()) == 1
+for target, count in zip(selection['targets'], (2, 3)):
+    assert len(target['actual_objects']) == count
+    for row in target['actual_objects']:
+        mapped(row)
+    mapped(target['actual_binary'])
+    link = Path(mapped(target['actual_link'])['path']).read_text()
+    argv = shlex.split(link)
+    project_objects = [v for v in argv if v.endswith('.o')]
+    assert set(project_objects) == {'rust/' + Path(v['path']).name for v in target['actual_objects']}
+    assert all(v.startswith('rust/') for v in project_objects)
+    name = target['tool']
+    executable = U / name
+    output = tool(name + '-ELF', '/usr/bin/readelf', '-hW', '-lW', '-dW', '-nW', str(executable))
+    assert 'DYN (Position-Independent Executable file)' in output
+    assert 'Machine:                           Advanced Micro Devices X86-64' in output
+    assert 'libbfd' in output and '(NEEDED)' in output
+    binary_symbols = tool(name + '-symbols', '/usr/bin/nm', '-g', '--defined-only', str(executable))
+    required = ['main'] + [v for v in bridges if v.startswith(name + '_')]
+    for symbol in required:
+        assert sum(line.split()[-1] == symbol for line in binary_symbols.splitlines()) == 1
+    assert sum(line.split()[-1] == 'main' for line in nm[name + '_helpers.o'].splitlines()) == 1
+    assert not any(line.split()[-1] == 'main' for line in nm['bfd_accessors.o'].splitlines())
+    target['independent_required_providers'] = required
+    target['host_binary_ref'] = ref(executable)
+log = (W / 'evidence/01.stdout').read_text()
+assert '/src/executer/user/rust/bfd_accessors.rs' in log
+assert '--cfg mcinspect_full_body' in log and '--cfg eclair_full_body' in log
+assert not any(v in log for v in ('mcinspect.c.o', 'eclair.c.o', 'bfd_shim.c.o'))
+report = dict(status='PASS_INDEPENDENT_ACTUAL_CURRENT_SELECTED_BFD_DEFAULT_PRODUCER_ARTIFACTS',
+    scope=__doc__.splitlines()[0], commands=commands, selection=selection,
+    terminal=ref(O / 'terminal.json'), claim=ref(O / 'claim.json'),
+    configure_warning='EXECUTER_BFD_SET_SECTION_NEEDS_BFD feature probe failed as expected; overall configure returned0',
+    produced_executables_run=0, live_guards_or_Docker_or_native_calls=0,
+    actual_producer_replayed=False, runtime_authority=None)
+(V / 'CHECKS.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(dict(status=report['status'], exact_commands=3, project_objects=[2, 3],
+                     binaries=[ref(U / n) for n in ('mcinspect', 'eclair')], produced_executables_run=0)))

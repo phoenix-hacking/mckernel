@@ -1,0 +1,100 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/recursive-routing-correction-1/test_recursive_routing.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/test_recursive_routing_expert.py
+@@ -14,7 +14,18 @@
+ import tempfile
+ import types
+ import unittest
+-import prepare_routing as p
++from retained_effect_oracle import RetainedEffectOracle
++from contextlib import contextmanager
++import resource
++ROUTING_SOURCE=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/recursive-routing-correction-1/prepare_routing.py')
++assert hashlib.sha256(ROUTING_SOURCE.read_bytes()).hexdigest()=='63061f77d27bfc0c81188312628923fe6fe27afd6fb348db6220fdfdeadb1086'
++_spec=importlib.util.spec_from_file_location('unchanged118_routing',ROUTING_SOURCE)
++p=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(p)
++@contextmanager
++def retained_directory(prefix,dir):
++ # Preserve all new test source/data fixtures, including failed expert evidence.
++ yield tempfile.mkdtemp(prefix=prefix,dir=dir)
++
+ 
+ D=Path(__file__).resolve().parent
+ def load(path,name):
+@@ -57,23 +68,10 @@
+  def __init__(self,layout,config):
+   self.layout=layout;self.config=config;self.calls=[];self.loaded=[];self.configured=[];self.held=False;self.census=[]
+   self.clocks=[v-600 for v in p.LIMITS]
+-  capture=p.read(p.E/'current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json')
+-  self.oracle={}
+-  def collect(value):
+-   if isinstance(value,dict):
+-    if all(k in value for k in ['argv','returncode','stdout','stderr'])and isinstance(value['argv'],list):self.oracle[tuple(value['argv'])]=value
+-    for v in value.values():collect(v)
+-   elif isinstance(value,list):
+-    for v in value:collect(v)
+-  collect(capture)
+-  self.capacity=capture['historical_Root59_native_and_physical']['capacity']
+-  self.cgroup=capture['historical_Root59_native_and_physical']['cgroup']
+-  self.memory=capture['historical_Root59_native_and_physical']['memory']
+-  inherited=p.E/'ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/INDEPENDENT-POSTBUILD-CURRENT-FREE.json'
+-  assert p.ref(inherited)['sha256']=='9904aa3c39b0a83d8675a77b97631f3731f2f3e568c5fde65b6ef91c28f64d19'
+-  terminalref=p.read(inherited)['container_terminal'];assert p.ref(terminalref['path'])==terminalref
+-  terminal=p.read(terminalref['path']);argv=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock','inspect',terminal['container']]
+-  self.oracle[tuple(argv)]=dict(returncode=0,stdout=json.dumps([dict(Id=terminal['container'],State=terminal['state'])]),stderr='')
++  self.retained=RetainedEffectOracle(load(p.PHYSICAL,'TEST_ONLY118_oracle_source_chain').source_chain())
++  self.oracle=self.retained.rows
++  self.capacity=self.retained.capacity;self.cgroup=self.retained.cgroup;self.memory=self.retained.memory
++  write(layout['root']/'TEST_ONLY-COMPLETE-EFFECT-ORACLE.json',self.retained.manifest())
+   self.physical=None
+   self.metadata=types.SimpleNamespace(st_mode=stat.S_IFREG|0o644,st_dev=27,st_ino=4,st_uid=0,st_gid=0,st_size=0,st_nlink=1)
+   self.os=types.SimpleNamespace(**{name:getattr(os,name)for name in dir(os)if not name.startswith('__')})
+@@ -97,9 +95,10 @@
+    historical=Path(argv[argv.index('--historical')+1]);value=self.physical.observe(historical)
+    raw=json.dumps(value);return types.SimpleNamespace(returncode=0,stdout=raw if kwargs.get('text')else raw.encode(),stderr=''if kwargs.get('text')else b'')
+   if argv[0]=='/usr/bin/findmnt':
+-   expected=p.read(p.E/'ROOT-NEW18H-KEEPER-SUCCESSOR-PREPARATION-2/ROOT-ACTUAL-POSTJOIN-CURRENT-PHYSICAL.json')['mount']
++   assert argv==['/usr/bin/findmnt','-J','-T','/home/holden/mckernel-work/scratch','-o','TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN']
++   expected=self.retained.mount
+    return types.SimpleNamespace(returncode=0,stdout=json.dumps(dict(filesystems=[expected])),stderr='')
+-  row=self.oracle[tuple(argv)]
++  row=self.retained.get(argv)
+   return types.SimpleNamespace(returncode=row['returncode'],stdout=row['stdout']if kwargs.get('text')else row['stdout'].encode(),stderr=row['stderr']if kwargs.get('text')else row['stderr'].encode())
+  def namespace(self,namespace):
+   namespace.update(Path=self.path,os=self.os,fcntl=self.fcntl,time=types.SimpleNamespace(time=lambda:self.clocks[0]),subprocess=types.SimpleNamespace(run=self.run))
+@@ -167,7 +166,7 @@
+ 
+ class Recursive(unittest.TestCase):
+  def test_full_recursive_real_observers_and_negative_actor(self):
+-  with tempfile.TemporaryDirectory(prefix='TEST_ONLY-full-recursion-',dir=D)as temporary:
++  with retained_directory(prefix='TEST_ONLY-full-recursion-',dir=D)as temporary:
+    layout,config=fixture(Path(temporary)/'prepared')
+    effects=Effects(layout,config);root=effects.patch(load(layout['observer'],'TEST_ONLY118_full_recursive'))
+    result=root.observe()
+@@ -181,16 +180,26 @@
+    effects.census=[dict(pid=700001,pgrp=1901981)]
+    with self.assertRaises((ValueError,AssertionError)):root.observe()
+    Recursive.result=dict(status='PASS_FULL_RECURSIVE118_OBSERVERS_EFFECT_LEAVES_ONLY',historical_sources=len(historical),guard_pure_configurations=len(effects.configured),effect_calls=len(effects.calls),retained_consumed_nonces=70,actual_guard_calls=0,actual_capture_calls=0,actual_subprocesses=0,observe_functions_replaced=0)
++ def test_changed_ledger_and_unsupported_command_rejected(self):
++  with retained_directory(prefix='TEST_ONLY-changed-ledger-',dir=D)as temporary:
++   layout,config=fixture(Path(temporary)/'prepared')
++   effects=Effects(layout,config);root=effects.patch(load(layout['observer'],'TEST_ONLY118_changed_ledger'))
++   root.CURRENT=copy.deepcopy(root.CURRENT)
++   root.CURRENT['ledger']['sha256']='0'*64
++   with self.assertRaises((ValueError,AssertionError)):root.observe()
++   with self.assertRaisesRegex(AssertionError,'UNSUPPORTED_RETAINED_EFFECT_ARGV'):
++    effects.run(['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock','ps','-aq','--no-trunc','--filter','id='+'f'*64],text=True)
+  def test_old_guardian_and_wider_caps_rejected(self):
+   old=p.read(p.E/'new-window-resume-20261028-1/CURRENT116-OPERATION-2-ALL-CONTROLS/EXPLICIT-OPERATION-SUCCESSOR.json')['guardian']
+   for mutation in [lambda op:op.update(guardian=old),lambda op:op['operation_cutoffs'].__setitem__(1,p.LIMITS[1]+1)]:
+-   with tempfile.TemporaryDirectory(prefix='TEST_ONLY-bad-recursion-',dir=D)as temporary:
++   with retained_directory(prefix='TEST_ONLY-bad-recursion-',dir=D)as temporary:
+     layout,config=fixture(Path(temporary)/'prepared',mutation)
+     effects=Effects(layout,config);root=effects.patch(load(layout['observer'],'TEST_ONLY118_bad_recursive'))
+     with self.assertRaises(ValueError):root.observe()
+ 
+ 
+ if __name__=='__main__':
++ resource.setrlimit(resource.RLIMIT_AS,(2*2**30,2*2**30))
+  stream=io.StringIO();result=unittest.TextTestRunner(stream=stream,verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(Recursive))
+  (D/'PURE-RECURSIVE.stdout').write_text(stream.getvalue())
+  summary=dict(scope=__doc__.splitlines()[0],status='PASS'if result.wasSuccessful()else'FAIL',tests=result.testsRun,errors=len(result.errors),failures=len(result.failures),result=getattr(Recursive,'result',None),runtime_authority=None)

@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "DATA_PREPARATION_COMPLETE_NEEDS_ROOT_EXECUTOR_BINDING_AND_INDEPENDENT_RELEASE",
+  "runtime_authority": null,
+  "actual_queries": 0,
+  "actual_cleanup_runs": 0,
+  "producer_replays": 0,
+  "native_cases": 0,
+  "files_closed": 0,
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/CURRENT-OBSERVER-SUCCESSOR.REQUIREMENTS.json",
+      "bytes": 14497,
+      "sha256": "ed97e8b62aaf423ba8cfc4b9b3326468d4b5f718adc3517c1b22b8472cabcb24"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/EXACT-ROOT-COMMANDS.NOT-AUTHORITY.json",
+      "bytes": 5047,
+      "sha256": "d994d99c6e168a7354cd0fe80be5680927867f44c48625c8152f460fbc0dfb50"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/HANDOFF.md",
+      "bytes": 4601,
+      "sha256": "a3c81218826b842cc0b8c5ca517231615b721214c59e2ad778c6385290fb44c6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/PROTECTED-ORIGINALS.json",
+      "bytes": 182208,
+      "sha256": "5720e006010758d57f15e1e3a2ba5a2d3cfc61feb698fd032dc17843d38667a7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/PURE-CHECKS.log",
+      "bytes": 476,
+      "sha256": "65a877fc7ef8fc604b280da6564dbefcefd840006164c1fbf406131668ada9c1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/RETIREMENT-PACKET.NOT-AUTHORITY.json",
+      "bytes": 18602,
+      "sha256": "b56be844a1a7ee408ef7e27267298ca13cb90e98ae8ebd81243143de37781036"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/ROOT-NEXT-LEDGER-EXTENSION.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 28722,
+      "sha256": "5b9b7f6e82f82ff86dea81e9ab632af02419b84c458f3b9269434d5322531277"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/ROOT-STOPPED-CONTAINER-ONLY-RELEASE.TEMPLATE.NOT-RELEASED.json",
+      "bytes": 1664,
+      "sha256": "36c4181ec6d7ae273761159511738bc5374186283b96883082f5615f7e517a4c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/validate_retained_packet.py",
+      "bytes": 6549,
+      "sha256": "cfaa9653df13ccc7af64e85beb6fe1e01b3afbdb9d491cf54aaa52e09e2cda86"
+    }
+  ],
+  "checks": [
+    {
+      "command_argv": [
+        "taskset",
+        "-c",
+        "6",
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/validate_retained_packet.py"
+      ],
+      "returncode": 0,
+      "tests": 5,
+      "wall_seconds": 0.025,
+      "scope": "pure retained source/records only",
+      "evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/PURE-CHECKS.log",
+        "bytes": 476,
+        "sha256": "65a877fc7ef8fc604b280da6564dbefcefd840006164c1fbf406131668ada9c1"
+      }
+    }
+  ],
+  "blocking_before_actual_cleanup": [
+    "Root exact custom BFD profile adapter and bounded existing command executor source/profile binding",
+    "actual fresh observation, saved tool94204 join, Root typed consumed-build ledger, source/fetched and independent execution release"
+  ],
+  "required_after_cleanup": "independent fresh physical/current-postjoin acceptance for new typed Root boundary; oldRoot61/free6c83 historical"
+}

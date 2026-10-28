@@ -1,0 +1,208 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_BFD_FINITE_CAPTURE_HOLDER_AND_CONDITIONAL_BUILD_RELEASE",
+  "reviewer": "/root/observerreview",
+  "independent": true,
+  "implementation_ownership": false,
+  "nonce": "faac1b4804174de5800c58d61ba98004",
+  "maximum_invocations": 1,
+  "root_authorization": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/ROOT-INDEPENDENT-FINITE-REVIEW-AUTHORIZATION.json",
+    "bytes": 1949,
+    "sha256": "3341fde8236c53bd11954a01b2395617386b8884a923bd3f27ab3c83b434a3bf"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/SOURCE-PUBLICATION.FETCHED.json",
+    "bytes": 26985,
+    "sha256": "46447096a37bc57b853716fd5bc5fe73738392474db7905f8956e74a0e015468"
+  },
+  "published_commit": "0d4c1d986b23199f9532fcddb5602286651e4b59",
+  "independently_verified_blob_rows": 40,
+  "sealed_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+    "bytes": 15440,
+    "sha256": "509adcba115395eb53c6696112b1f38375bd877b6a4e964d9f48888376b44c40"
+  },
+  "static_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINITE-REVIEW-1/STATIC-CHECK.json",
+    "bytes": 12941,
+    "sha256": "ef54e2461c5fbf51603182a7655cb59da48cd8ee6c7ded441bfda0c3988b34c1"
+  },
+  "execution_design": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINITE-REVIEW-1/REVIEW.md",
+    "bytes": 9056,
+    "sha256": "943e1daeac73958f2c8f6d126e14a630c61df563c3850ae0cc82d2072ef4a81d"
+  },
+  "handoff": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/HANDOFF-1",
+  "commands": [
+    {
+      "owner": "/root/observerreview",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual independent prewarm BEFORE Root physical clock; Root must not invoke",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/finite_review.py",
+        "--independent-reviewer",
+        "/root/observerreview",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/HANDOFF-1"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual finite CPU0 preholder physical capture after verified independent PREWARM",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/root_capture_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/HANDOFF-1",
+        "--phase",
+        "physical"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Existing sole heavy FD3 holder after physical capture",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/hold_and_run_build_only.py",
+        "--bootstrap-grant",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/ROOT-HOLDER-BOOTSTRAP-GRANT.json"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Prewritten exact held input after holder readiness",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/prepare_entry_inputs.py",
+        "--held"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual finite CPU0 held capture while independent prewarm waits",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/root_capture_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/HANDOFF-1",
+        "--phase",
+        "held"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Once publication only after actual independently emitted PASS",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/publish_after_independent_pass_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/HANDOFF-1"
+      ]
+    }
+  ],
+  "clamps": [
+    1793253600.0,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "first_guard_clocks": [
+    1793216765.8301013,
+    998872.399057874,
+    1014210.526107861
+  ],
+  "final_guard_clocks": [
+    1793216765.8719454,
+    998872.440902358,
+    1014210.567952403
+  ],
+  "fresh_initial_observations": {
+    "MemAvailable": 27343437824,
+    "capacity": {
+      "host": 147775897600,
+      "scratch": 47862149120
+    },
+    "cgroups": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.current": "0"
+    },
+    "permanent_mutex": {
+      "device": 27,
+      "inode": 4,
+      "regular": true,
+      "no_kernel_lock_row": true
+    }
+  },
+  "fresh_physical_clearance": false,
+  "guard_calls": 2,
+  "physical_captures": 0,
+  "holders": 0,
+  "producers": 0,
+  "native_cases": 0,
+  "verifier_profile": {
+    "uid": 1000,
+    "affinity": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "finite_wait_seconds": 600,
+    "custom_timeout": false,
+    "automatic_kill": false
+  },
+  "capture_profile": {
+    "uid": 1000,
+    "affinity": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "owner_wait_seconds": 90,
+    "positive_join_required": true
+  },
+  "holder_only_precondition": "Root physical capture zero/positive join and fresh sole-heavy admission; exact permanent27:4 bootstrap only",
+  "producer_preconditions": [
+    "Both original Root captures positively joined",
+    "Same original live holder PID/birth/FD3/27:4",
+    "Actual independent Hot PASS for exact pending SHA",
+    "Original120s freshness after fsync at PASS and READY",
+    "Root once publisher and original holder consume READY",
+    "All runtime operation/account/guardian/resource guards pass"
+  ],
+  "producer_profile": {
+    "CPU": "2-5",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "jobs": 1,
+    "maximum_wall_seconds": 19800
+  },
+  "no_native_payload_guest_authority": true,
+  "no_cleanup_authority": true,
+  "no_retry_authority": true,
+  "runtime_authority": "INITIAL_FINITE_READONLY_AND_ROOT_CAPTURE_RELEASE_CONDITIONAL_ONE_BUILD_ONLY",
+  "original_window_and_credit_unchanged": true
+}

@@ -1,0 +1,103 @@
+{
+  "AS_bytes": 2147483648,
+  "CPU_seconds": null,
+  "RSS_KiB": null,
+  "actual_Docker_calls": 0,
+  "actual_compilers": 0,
+  "actual_exports": 0,
+  "actual_guard_calls": 0,
+  "actual_query_commands": 0,
+  "at": "2026-10-28T20:06:22.780537+00:00",
+  "decision": "FAIL_EXACT_REVIEWED_PURE_FIXTURE_PRESERVED_NO_RETRY",
+  "expert_full_runs_cumulative": 3,
+  "failure_family_not_reset": true,
+  "failures": 1,
+  "first_failure": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "ps",
+      "-aq",
+      "--no-trunc",
+      "--filter",
+      "name=^/mckernel-native-diagnostic-4d1c28c2d9caa913e4ab1e8a504ac5ea$"
+    ],
+    "kind": "UNSUPPORTED_RETAINED_EFFECT_ARGV",
+    "location": "unchanged common.observe -> absence_queries -> subprocess effect leaf",
+    "observer_predicates_changed": false,
+    "observers_reached": [
+      "current61/current118",
+      "current60",
+      "common",
+      "physical successor",
+      "Root51",
+      "Root49",
+      "Root48",
+      "all eight historical physical sources"
+    ],
+    "reason": "Classifier requires explicit --host daemon URI; this exact retained native-absence query uses default Docker daemon spelling"
+  },
+  "full_recursive_positive_pass": false,
+  "jobs": 1,
+  "more_attempts_authorized": false,
+  "namespace": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1",
+  "native_calls": 0,
+  "negative_tests_passed": [
+    "changed_ledger",
+    "unsupported_unrecorded_command",
+    "old_guardian",
+    "wider_caps"
+  ],
+  "oracle": {
+    "bytes": 7745,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/retained_effect_oracle.py",
+    "sha256": "9e6ef78fb3b2e56429194c76bf16f92f5871be254573c09fdc539facd50eead8"
+  },
+  "retired_actor_negative_not_reached": true,
+  "review_adoption": {
+    "bytes": 1292,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/REVIEW-AND-EXACT-SOURCE-PRECHECK.json",
+    "sha256": "2bf1395f94c3ffcf5d5033709dbbb3867a1c0078a5270e522307701cb5bba7ac"
+  },
+  "reviewed_once_only_run_consumed": true,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/ACTUAL-PURE-RUN.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "bytes": 3392,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/ACTUAL-PURE-RUN.stdout",
+    "sha256": "263aad05b3a7f062752071505489e19d97898c75438fc096b3ccf15a3f5e1ad7"
+  },
+  "test": {
+    "bytes": 15086,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/test_recursive_routing_expert.py",
+    "sha256": "b9e27a5dce71310a943d393688153cdb72cbf191959f5b556bd16450ac17661a"
+  },
+  "tests": 3,
+  "tool_command": [
+    "taskset",
+    "-c",
+    "0",
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/test_recursive_routing_expert.py"
+  ],
+  "tool_completed": true,
+  "tool_exit_code": 1,
+  "tool_wall_seconds": 1.5348923669999999,
+  "unittest_output": {
+    "bytes": 3179,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/PURE-RECURSIVE.stdout",
+    "sha256": "d5e6b068d0f0824d432ce4568f203591b17c13fdb0fc6c3db48b15eb630a4a8e"
+  },
+  "unittest_summary": {
+    "bytes": 213,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/INDEPENDENT-PASS-RUN-1/PURE-RECURSIVE.json",
+    "sha256": "284aef2254b57878e9aa31b7670154677a8d74b6b33e62a453a73dcf09646822"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "BLOCKED_SOURCE_AND_EXECUTION_RELEASE_TWO_REPRODUCED_CUSTODY_FRESHNESS_DEFECTS",
+  "reviewer": "/root/bfd_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-28T20:23:13.953201+00:00",
+  "initial_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/retire_exact_bfd_stopped_container.py.INITIAL-SNAPSHOT",
+    "bytes": 38687,
+    "sha256": "e38f917bc6cfd78485e79ed9f0c231b54a6af132e3674ff275517706dc2d2b6c"
+  },
+  "initial_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/SOURCE-READY.json.INITIAL-SNAPSHOT",
+    "bytes": 5951,
+    "sha256": "b0730071966745f206a2bcb0a5eb2a72e2c853f1fa9f28a01bc68b4320106575"
+  },
+  "initial_execution_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/EXECUTION-PROFILE.SOURCE-ONLY.json.INITIAL-SNAPSHOT",
+    "bytes": 4652,
+    "sha256": "ebc3a77b38163b26e139aa07348fbc8373894b196f1533d75ee32486bd0d3b94"
+  },
+  "reproduction_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/reproduce_initial_blockers.py",
+    "bytes": 3532,
+    "sha256": "717c5f9386892c7a503e0a93c4dd6ed608ff2d2f5ce27078bc2e56fd07b9c476"
+  },
+  "reproduction_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/INITIAL-BLOCKER-REPRODUCTION.json",
+    "bytes": 564,
+    "sha256": "637454e8310d69eef5ff16a6f63489a088cd2b265a049b2fe185166d90d5f4b3"
+  },
+  "reproduction_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/ACTUAL-RETIREMENT-REVIEW-1/INITIAL-BLOCKER-REPRODUCTION.stdout",
+    "bytes": 674,
+    "sha256": "60e41bd1e4964f9f769060e1b92debb4a9d334bca3a4a480c48c8fbba7deb969"
+  },
+  "blockers": [
+    {
+      "id": "FINAL_PRESPAWN_FRESHNESS",
+      "file_line": "retire_exact_bfd_stopped_container.py:Actual.claim_once/Actual.call and transport.popen",
+      "fact": "claim_once samples safe() clocks before subsequent Actual.call.safe()/retained/protected I/O and inherited command capture/log fsync. No final rm preproof-age and current-clamp check occurs at actual Popen boundary.",
+      "pure_reproduction": "A121s substituted safe() stall after saved preproof still reaches substituted exact rm.",
+      "required_correction": "After all capture/log fsync and full safety/reference I/O, immediately before real Popen, check stop request and direct actual clock triplet against current caps and saved preproof original120s; no application I/O between final checks and spawn. Retain durable onceclaim and exactly-one rm semantics."
+    },
+    {
+      "id": "SUCCESSFUL_SPAWN_UNCERTAINTY_CUSTODY",
+      "file_line": "retire_exact_bfd_stopped_container.py:transport.Commands.__init__.popen/Commands.exact/main",
+      "fact": "Successful underlying Popen is not tracked or uncertainty-latched until Wait4Child birth setup and append finish. A wrapper/birth exception leaves Base.process=None, children empty and uncertaintyfalse. Before rm mutation, main may close its27:4 FD despite an unknown launched sudo child.",
+      "pure_reproduction": "Substituted underlying spawnPID999997 succeeds; Wait4Child birth refusal leaves children=[]/client_retirement_unprovenFalse, satisfying initial pre-mutation close condition.",
+      "required_correction": "Latch custody immediately for every successful spawn; retain raw process identity on wrapper/birth/receipt failures. Only complete positive wait/group/closedstream/sealedreceipt proof clears that new-child pending state; any prior uncertainty remains latched. No signal/retry/cleanup on unknown state."
+    }
+  ],
+  "otherwise_reviewed_constraints": [
+    "Custom OCI validator pins actual stopped CID/name/state/image/claim argv, user/entry/cmd, image env/labels, exact mounts, CPU2-5/12GiB/equal-swap/512tasks/noNet and ordinary existing cgroup limits. It does not weaken the old SDK owner-label contract or invent common/shared/lease/pidfd records.",
+    "New permanent27:4 acquisition/revalidation uses unchanged accepted primitive; exact stopped rm--CID is the only allowed mutation, with zero signals/no force/no original deletion/records_released=[]. Raw parent tool94204 attestation fe5587bf and existing holder/runner evidence remain typed retained facts.",
+    "Two preinspect proofs, one claim, exact rm, CID/name absence and postproof14command sequence preserve complete process/group/session census, capture/wait4 metrics and closed streams. Success remains pending parent positive join and separate Root62 fresh-current acceptance.",
+    "Existing guardian4889/cumulative run/floor/actualcaps, exclusions,363protectedoriginals and f920 BFD artifact acceptance remain retained. Actual Root publication/checkpoint/source-review/execution payload and typed71nonce ledger bindings remain unprovided here and cannot be fabricated."
+  ],
+  "failure_family": {
+    "candidate": "e38f917b",
+    "source_defects": 2,
+    "bounded_correction_allowed": 1,
+    "aggregate_findings_sent_to_owner": true,
+    "additional_source_change_requests": false
+  },
+  "actual_actions": {
+    "live_guard_account_query_lock_Docker_cleanup": 0,
+    "substituted_effect_reproductions": 2,
+    "implementation_writes": 0,
+    "producer_replays": 0
+  },
+  "runtime_authority": null
+}

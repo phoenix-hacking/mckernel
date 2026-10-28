@@ -1,0 +1,94 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REQUIRES_EXACT_INDEPENDENT_ROOT_RELEASE",
+  "runtime_authority": null,
+  "uid": 1000,
+  "gid": 1000,
+  "affinity": [
+    0
+  ],
+  "jobs": 1,
+  "address_space_bytes": 2147483648,
+  "fsize_bytes": 33554432,
+  "nofile": 256,
+  "core_bytes": 0,
+  "CPU_rlimit": null,
+  "outer_wall_killer": null,
+  "per_command_wall_seconds": 30,
+  "command_failure_action": "No TERM/KILL or replay. Preserve command/status/raw/wait4 facts; unproven client or any postcommit uncertainty retains existing27:4 custody using accepted quarantine primitive.",
+  "mutation": [
+    "exact sudo-A Docker rm -- stopped CID2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008"
+  ],
+  "signal_budget": 0,
+  "records_released": [],
+  "metadata_output_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1",
+  "metadata_output_name_pattern": "actual-retirement-[A-Za-z0-9_-]+",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py",
+    "--release",
+    "ACTUAL_ROOT_RELEASE_PATH",
+    "--release-sha256",
+    "ACTUAL_ROOT_RELEASE_SHA256",
+    "--execute"
+  ],
+  "files": {
+    "executor": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/retire_exact_bfd_stopped_container.py",
+      "bytes": 38687,
+      "sha256": "e38f917bc6cfd78485e79ed9f0c231b54a6af132e3674ff275517706dc2d2b6c"
+    },
+    "bindings": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/BINDINGS.json",
+      "bytes": 13856,
+      "sha256": "edeeba2a531f8663a6bf146b19e7625ef3684186d0aeeccd70cbe25ee112f7db"
+    },
+    "primitive": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "bytes": 28680,
+      "sha256": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6"
+    },
+    "normal": {
+      "bytes": 72356,
+      "path": "/home/holden/mckernel/scripts/native_rust_cutover_image_terminal_cleanup.py",
+      "sha256": "ca666d64d5a96e4cf8adb337253a5569234fca06c0b4e58bedb810c244ad525b"
+    },
+    "backend": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/runtime/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "guardian": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "prior_observer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/observe_bfd_current61.py",
+      "bytes": 10858,
+      "sha256": "72c560fd144f0fa547b2e3c3a5cd50b3695f7a53a9f10a8d2336515844958540"
+    },
+    "packet": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/RETIREMENT-PACKET.NOT-AUTHORITY.json",
+      "bytes": 18602,
+      "sha256": "b56be844a1a7ee408ef7e27267298ca13cb90e98ae8ebd81243143de37781036"
+    },
+    "protected": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/PROTECTED-ORIGINALS.json",
+      "bytes": 182208,
+      "sha256": "5720e006010758d57f15e1e3a2ba5a2d3cfc61feb698fd032dc17843d38667a7"
+    }
+  },
+  "own_postjoin": "RESULT records held FD; normal finally closes only ownFD. Separate parent direct join and fresh current observation required."
+}

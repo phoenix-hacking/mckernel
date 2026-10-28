@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root/f03_next",
+  "status": "ONE_PREAUTHORIZED_MISSING_HEADER_INFRASTRUCTURE_CORRECTION",
+  "original_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/ACTUAL-HOST-RESULT.json",
+    "bytes": 10883,
+    "sha256": "529e548de9440bba9e7f78310e8106691df4763ac779fc7b67f3730db6a202b7"
+  },
+  "original_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/driver.c",
+    "bytes": 7862,
+    "sha256": "15533b369f42cc873d6e76d126777d4c7dbe0b1ea51bdb67bf96569dceb497a4"
+  },
+  "corrected_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/fixture-header-correction-1/driver.c",
+    "bytes": 7882,
+    "sha256": "043cc1f935317ca89f371fc55a74bea899a292748fe33aa0dbd17f2f9608e314"
+  },
+  "genuine_missing_header": {
+    "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+    "bytes": 9548,
+    "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+  },
+  "only_source_change": "Add #include <ihk/mm.h>; original C allocator and functional expected-value/order/state oracles unchanged.",
+  "retained_Rust_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/output-STANDING-1/callbacks.o",
+    "bytes": 5104,
+    "sha256": "4773f586bc2d13c62eecfe4c4324ce7eb4c40db12f9e27e74a213f768e66f822"
+  },
+  "remaining_commands": 2,
+  "aggregate_commands_maximum": 4,
+  "no_Rust_recompile": true,
+  "no_semantic_oracle_change": true
+}
