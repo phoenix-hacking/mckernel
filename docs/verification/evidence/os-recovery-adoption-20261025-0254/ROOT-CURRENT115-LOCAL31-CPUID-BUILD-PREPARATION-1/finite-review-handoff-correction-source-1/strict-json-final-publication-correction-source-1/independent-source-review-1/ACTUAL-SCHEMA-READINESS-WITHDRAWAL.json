@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "SOURCE_EXECUTION_READINESS_WITHDRAWN_ACTUAL_HOT_SCHEMA_MISMATCH",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "original_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 6158,
+    "sha256": "67dd22bef83fe8ad1f484d87e2363b06aaa66df2f25df0622cab1bd644846662"
+  },
+  "actual_failed_execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/independent-execution-review-1/REVIEW.json",
+    "bytes": 4174,
+    "sha256": "6e3ae7a52ef26e54e0d97d541b0f0a45568ba64ba855200a73bfae859398a5c7"
+  },
+  "finding": "The prior focused source review closed the three stated findings but missed executable hot-path assumptions about actual observer schema. aggregate_jobs_max is absent; root_ledger35 is historical and absent in the current Root49 observation. Actual once-only verifier stopped with KeyError before producing PASS.",
+  "required_before_future_invocation": "Expert exact actual-schema mapping and one bounded source correction, plus complete hot-path regression over retained actual data using explicitly TEST_ONLY clocks and no approval writer. No actual source predicates may be silently weakened, no fallback guessed, no expired snapshot renewed, no utility replay or workload authorized by this record.",
+  "preservation": "Original source PASS and all concrete correction evidence remain immutable historical assessments. This additive record withdraws execution readiness for d4b0 until a separately reviewed exact successor resolves the observed defect.",
+  "runtime_authority": null,
+  "actual_execution_approval": null
+}

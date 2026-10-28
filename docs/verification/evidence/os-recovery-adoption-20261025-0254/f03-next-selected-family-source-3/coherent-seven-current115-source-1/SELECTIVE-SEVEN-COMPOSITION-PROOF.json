@@ -1,0 +1,234 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_FROZEN115_SELECTIVE_SOURCE_COMPOSITION",
+  "Root115_source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+    "bytes": 9624,
+    "sha256": "45c4a5ed9b5f141c60656dcabedd8c982eb07998767044c2b3f2aa218b3d4d20"
+  },
+  "frozen115_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/SOURCE-READY.json",
+    "bytes": 3846,
+    "sha256": "d78dc4f6a33323e643ee0fd2802382d2b3777d21b4c3b928be41750616c8b536"
+  },
+  "frozen115_source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 133418,
+    "sha256": "9c422a97c08591bbc8abb1f292493a6de1748d8e17858336d1e4535a5ff7c4ea"
+  },
+  "canonical115_C_preimage": {
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "bytes": 918715,
+    "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+  },
+  "frozen115_policy_preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1268725,
+    "sha256": "d2522903a4a1335aa551f87c17c8e8765f9f7373fb84984b2dd062ac301004c0"
+  },
+  "candidate_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/coherent-seven-current115-source-1/candidate/kernel/syscall.c",
+    "bytes": 920543,
+    "sha256": "c34318da009e2f834084c8e6beb24a9e788c3f6c91c19d1c5dc4e49ff48538ef"
+  },
+  "candidate_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/coherent-seven-current115-source-1/candidate/kernel/rust/syscall_policy.rs",
+    "bytes": 1275861,
+    "sha256": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+  },
+  "C_selective_insertion_sites": [
+    {
+      "old114line": 21291,
+      "inputowners": [
+        "accepted115perfrestore",
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 5
+    },
+    {
+      "old114line": 7132,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 5
+    },
+    {
+      "old114line": 7137,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 2
+    },
+    {
+      "old114line": 7144,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 5
+    },
+    {
+      "old114line": 7200,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 8
+    },
+    {
+      "old114line": 7214,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 6
+    },
+    {
+      "old114line": 25597,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 5
+    },
+    {
+      "old114line": 25688,
+      "inputowners": [
+        "qualifiedptracetrio"
+      ],
+      "inserted_lines": 2
+    },
+    {
+      "old114line": 24657,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 4
+    },
+    {
+      "old114line": 24664,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 2
+    },
+    {
+      "old114line": 24665,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 4
+    },
+    {
+      "old114line": 24670,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 2
+    },
+    {
+      "old114line": 24678,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 4
+    },
+    {
+      "old114line": 24685,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 2
+    },
+    {
+      "old114line": 24693,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 5
+    },
+    {
+      "old114line": 24702,
+      "inputowners": [
+        "bankedWAKE3_plus_step"
+      ],
+      "inserted_lines": 7
+    }
+  ],
+  "trio_production_source_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/candidate/kernel/rust/syscall_policy.rs",
+    "bytes": 1271776,
+    "sha256": "6e4ace933e7141a6b611d70fd22aac1324ea70954e8915439f77fbdd664b425f"
+  },
+  "WAKE3_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/REUSED-WAKE3.FRAGMENT.rs",
+    "bytes": 2992,
+    "sha256": "9da45c56b4f4aca72eefb0d7b6950a826f31a51a6b676e5ca60fddc8e9a18dd8"
+  },
+  "step_source_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/NEW-SINGLE-STEP.FRAGMENT.rs",
+    "bytes": 862,
+    "sha256": "7fba6263f485356f6735e04532d4316a0ce2b6563752a5673ff955f44347946c"
+  },
+  "providers_body_hashes": [
+    {
+      "name": "process_thread_ptrace_saved_context_clear_result",
+      "path": "process_helpers.rs",
+      "body_bytes": 318,
+      "body_sha256": "c42c98f7bcba25a1c71984a3ba15ac4fb3da89d31822f25d6348b372f59ec51c",
+      "unchanged114to115": true
+    },
+    {
+      "name": "process_thread_ptrace_trace_syscall_update_result",
+      "path": "process_helpers.rs",
+      "body_bytes": 451,
+      "body_sha256": "c6e831406999c4317895a8f70ab8bb583c8b3c368c602be8ee288977c6b1d4af",
+      "unchanged114to115": true
+    },
+    {
+      "name": "process_thread_ptrace_pending_signal_take_result",
+      "path": "process_helpers.rs",
+      "body_bytes": 732,
+      "body_sha256": "89928c2c5d47f74952aa2401349f50adbdbb1e2720fd65a0195d832fb9e22ba2",
+      "unchanged114to115": true
+    },
+    {
+      "name": "set_single_step",
+      "path": "syscall_policy.rs",
+      "body_bytes": 111,
+      "body_sha256": "d4271799514608dcd4a1e56e88dda2e686bd93fca67f4b53d975d6bf199538f5",
+      "unchanged114to115": true
+    },
+    {
+      "name": "arch_set_single_step_body_result",
+      "path": "syscall_policy.rs",
+      "body_bytes": 382,
+      "body_sha256": "662a904b500fcb565bf58f3c79be2ac679f1a3dbd47f15daa331b0f55e71ad33",
+      "unchanged114to115": true
+    },
+    {
+      "name": "ptrace_setsiginfo_body_result",
+      "path": "syscall_policy.rs",
+      "body_bytes": 3996,
+      "body_sha256": "6108db00eecb8578cbdb457168dbaf1ec03d2c2ec82b2c5c2f95faac36e01b34",
+      "unchanged114to115": true
+    },
+    {
+      "name": "ptrace_syscall_event_body_result",
+      "path": "syscall_policy.rs",
+      "body_bytes": 574,
+      "body_sha256": "dd945388de2d48a1e1cebe3633d120a4a1a7138e915b13f2bf914c2bd6b067c5",
+      "unchanged114to115": true
+    },
+    {
+      "name": "ptrace_report_signal",
+      "path": "syscall_policy.rs",
+      "body_bytes": 817,
+      "body_sha256": "731a24d16a52183f91624ffe1c6e7308e2a563ee576981185940fa11dfc42506",
+      "unchanged114to115": true
+    }
+  ],
+  "Root115_cpuid_suffix_byteexact": true,
+  "Root115_processhelpers_snapshot_byteexact": true,
+  "post_perf_restore_count": 1,
+  "shared_wakeup_outer_restore_count": 1,
+  "original_C_lines_removed": 0,
+  "canonical_mutations": 0,
+  "compiler_or_runtime": 0
+}

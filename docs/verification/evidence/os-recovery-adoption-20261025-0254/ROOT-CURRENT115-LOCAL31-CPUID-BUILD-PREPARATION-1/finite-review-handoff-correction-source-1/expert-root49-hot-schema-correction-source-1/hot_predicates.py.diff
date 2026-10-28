@@ -1,0 +1,35 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-finite-verifier-spec-1/hot_predicates.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/expert-root49-hot-schema-correction-source-1/hot_predicates.py
+@@ -65,6 +65,19 @@
+     need(request_adoption["profile"] == cold["profile"] and
+          request_adoption["current_physical_clearance"] ==
+          cold["native_custody_clearance"], "adoption profile/custody")
++    policy = cold["aggregate_job_policy"]
++    need(all(type(policy[k]) is int for k in ["aggregate_build_jobs_max","heavy_compiler_jobs_reserved","ordinary_CPU6_jobs_reserved","other_build_jobs_reserved","total_reserved_build_jobs","one_heavy_max","aggregate_memory_bytes","ordinary_memory_bytes_reserved","ordinary_pids_reserved","heavy_memory_bytes","heavy_pids"]), "integer actual declared job-policy fields")
++    need(policy["author"] == "/root" and policy["runtime_authority"] is None and policy["physical_occupancy_claim"] is False and policy["one_heavy_max"] == 1 and policy["aggregate_memory_bytes"] == profile["aggregate_memory_budget_bytes"] and policy["heavy_memory_bytes"] == resource["container_memory_bytes"] and policy["heavy_pids"] == resource["container_pids"], "genuine policy bound to original resource caps")
++
++    need(policy["aggregate_build_jobs_max"] == 7 and
++         policy["heavy_compiler_jobs_reserved"] == len(profile["CPU"]) == 4 and
++         policy["ordinary_CPU6_jobs_reserved"] == 1 and
++         policy["other_build_jobs_reserved"] == 0 and
++         policy["heavy_compiler_jobs_reserved"] + policy["ordinary_CPU6_jobs_reserved"] +
++         policy["other_build_jobs_reserved"] == policy["total_reserved_build_jobs"] <= 7 and
++         policy["ordinary_memory_bytes_reserved"] == resource["other_reserved_memory_bytes"] == root_input["other_reserved_memory_bytes"] and
++         policy["ordinary_pids_reserved"] == resource["other_reserved_pids"] == root_input["other_reserved_pids"],
++         "genuine cold jobpolicy and current exact declared resource reservations, not observed jobs")
+     holder = resource["reservation_holder"]
+     need(holder == ready["holder"] and holder["device"] == 27 and
+          holder["inode"] == 4 and holder["fd"] == 3 and
+@@ -134,8 +147,10 @@
+          physical["pids_current"] == 0 and
+          physical["active_shared_records_absent"] is True,
+          "fresh original current physical predicates")
+-    need(physical["root_ledger35"] == cold["nonce_ledger"] and
+-         physical["actual_latest_operation_postjoin_acceptance"] ==
++    need(physical[cold["observer_schema"]["ledger_key"]] == cold["nonce_ledger"] and
++         physical["status"] == cold["observer_schema"]["expected_status"] and
++         physical[cold["observer_schema"]["current_boundary_key"]] == cold["current_boundary"] and
++         physical[cold["observer_schema"]["latest_free_key"]] ==
+          cold["native_custody_clearance"], "physical latest ledger/current free")
+     need(ledger == cold["ledger_data"] and
+          ledger["latest_accepted_free_boundary"] == cold["native_custody_clearance"]

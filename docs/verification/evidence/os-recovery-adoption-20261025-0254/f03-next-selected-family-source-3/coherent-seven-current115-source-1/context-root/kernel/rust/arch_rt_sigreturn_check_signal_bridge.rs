@@ -1,0 +1,19 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+use core::ffi::c_void;
+use crate::abi::{CInt, CLong, CULong};
+
+unsafe extern "C" {
+    #[link_name = "check_signal"]
+    fn f06_signal_adapter_check_signal(result: CULong, context: *mut c_void, number: CInt);
+}
+
+/// # Safety
+/// Same saved context/current signal-check contract as the existing C adapter.
+#[no_mangle]
+pub unsafe extern "C" fn arch_rt_sigreturn_check_signal_bridge(
+    signum: CInt, context: *mut c_void, number: CInt,
+) {
+    // SAFETY: preserve C signed-int to unsigned-long conversion, including
+    // negative input bits, before the actual public check_signal call.
+    unsafe { f06_signal_adapter_check_signal(signum as CLong as CULong, context, number) };
+}

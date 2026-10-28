@@ -1,3 +1,25 @@
+## A2 retired; expert schema tested; A3 source binding — 2026-10-28T03:44:45.953803+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+A2actualprewarm1655/physical0/held0 failedhotmissingaggregate_jobs_max/root_ledger35
+schema6e3, noPASS/READY/compiler/Docker. ControlledonepidfdSIGINT/helper0/tool78413
+positive130/currentfree040b; Root50count61 thenRoot51count62/80bf addsWAKE4prefix.
+Oldcf36/92e8abandonedUNCONSUMED. Noheavy/nativeholdercurrentlylive. Actual227HOST3/26
+independenta3ed/Rootadoptionfd3b reusesgenericab3e; native227remainsOPEN. WAKE4twoRust
+producers0/37.357073s retained, CABIstep2genuineuti.h closureFAIL; sourcea703/review8856
+allowsONLYfiveunfinishedcommands, noRustreplay.
+
+Expert149119/baed SourcePASS +entireHOT/originalguards/postfsynccallback testedon29
+unchangedA2payloadswith33negativecontrols/NO_APPROVALwriter; no phantomphysicaljob
+field/historicalRootalias. Genuinepolicy33 static7/4+1 boundseparately. Root51/free
+040b/A3nonce04db, metadata10ca/current51observer60a9+explicitSchema5967 pendingfocused
+review. Same4compilerargv/120Rust/8genuineobjects andsource45c4/origincdcfd reused.
+FIRSTCURRENT115COMPILERSTILLUNRUN. AcceptedC80/Rust59/process31/files3of6+1of8/practical35.
+Noartifact/native/file/C/data delta03:06–03:36; measuredlatencyisreview/integration,
+notworkers/capacity. RootA3datafill→staticpub→actuallywaitingindependentcoldverifier
+BEFOREfreshclock; source-qualifiedsuffix/227/BFDparallelready. Samefixed05:36:09Z/
+earlierclamps/account/debits/realholds/oneheavy/permanent27:4/scratch21/floors.
+
 ## CURRENT115 unlaunched review expired; holder still owned — 2026-10-28T02:43:07.164062+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

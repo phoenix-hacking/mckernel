@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AND_CONDITIONAL_ONE_EXACT_A2_UNLAUNCHED_HOLDER_PIDFD_SIGINT",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "recorded_at": "2026-10-28T03:25:25.964391+00:00",
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/READY.json",
+    "bytes": 2967,
+    "sha256": "e702fad9dcf77e37de308bc20e20e61781b7ae457fe529d5ddca1fd12e312fd6"
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/interrupt_exact_attempt2_unlaunched_holder.py",
+    "bytes": 12035,
+    "sha256": "34d2fd44ece880594453911aef066124d987df095aa86d7d8a3faede3e9e739c"
+  },
+  "backend": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/pidfd_syscall_backend.py",
+    "bytes": 3017,
+    "sha256": "b9a48806133f306af1aa70ded237a85310abf17e29ddfeccc9291496df0fdb5a"
+  },
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/SOURCE-PROFILE.NOT-A-GRANT.json",
+    "bytes": 9574,
+    "sha256": "ac78fed694197fa31e4474a7ff5013e815eb61f07b753c49bafd758a80d8afd7"
+  },
+  "Root_grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/ROOT-GRANT.TEMPLATE.NOT-A-GRANT.json",
+    "bytes": 1280,
+    "sha256": "42efab03fa861fe2c22c38ed0231e5b68f3dc4c68f4658fd4e847d094b6b3d27"
+  },
+  "AST_rebase_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/REBASE-AST-AND-REUSED-API-PROOF.json",
+    "bytes": 2720,
+    "sha256": "ed3c8e2c7f88759bd69864acbe6c67a1c9dcef8341216f49ca238d29a2522fe0"
+  },
+  "actual_A1_source_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 14113,
+    "sha256": "165a774a532b8b56dece98bc9031e266a600bc262339788089ca6ebcfaea4d87"
+  },
+  "actual_A1_typed_API_precheck": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stdout",
+    "bytes": 824,
+    "sha256": "a0548202f7bd3ba90257de02262cd55f39709c8a4921878b3f1ab88df8f29df5"
+  },
+  "actual_A1_one_signal_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-COMPAT-ONE-HOLDER-INTERRUPT.ACTION.jsonl",
+    "bytes": 5775,
+    "sha256": "9bae79a78a445a3a75575d18bac5297bb8cc4a3610d3498be8adf6c9ee5755bd"
+  },
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1831939,
+    "starttime": 95475556,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "Root_positive_join_tool": 78413,
+  "nonce": "92e8d698cfe12176ddd0375937cbaeb1",
+  "preserved_A2_refusal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/independent-execution-review-1/REVIEW.json",
+    "bytes": 4174,
+    "sha256": "6e3ae7a52ef26e54e0d97d541b0f0a45568ba64ba855200a73bfae859398a5c7"
+  },
+  "conditional_operation_review": true,
+  "runtime_authority": null,
+  "findings": [
+    "A2 helper AST equals actually working b522 A1 helper after only exact FIXED metadata, PID/birth/tool/grant/journal/backend-pin literals and exact A2 refusal-schema adaptation. Backend source equals da442 except EXPECTED_PID. No new ABI/ctypes algorithm or live test replay is introduced.",
+    "Genuine reused Linux x86_64 LP64 header/libc/type proof binds434 pidfd_open and424 pidfd_send_signal. Fixed CFUNCTYPE c_long/c_int/c_uint/c_void_p signatures remain unchanged, errno/-1 raises without retry. Root must use same reviewed interpreter/path with -I -B and assertions enabled; source-only reviewer did not import/load backend or execute a syscall.",
+    "Only exact UID1000 holder1831939/birth95475556/task-only/nochildren/caught-unblocked SIGINT/FD3=27:4/full-EOF-flock and exact script/bootstrap argv qualify. Both live checks, pidfd fdinfo PID check and final v2 guard remain mandatory within fresh Root60s grant and all earlier fixedclocks/account/boot/realholds.",
+    "Exact stored A2 ready/bootstrap/profile/pending/resource/refusal authenticate before any live action. The refusal is zero-approval verifier schema failure with all recorded PASS/attestation/grant/READY/OUTPUT booleans false. Stored records are not asserted as fresh live observations by this review; helper double-live checks must reprove negative paths and no child/runner transition.",
+    "O_EXCL fresh action journal, fsynced ENTERED content and parent directory fsync precede pidfd/signal; durable ATTEMPTING is written before one send. Failure never escalates/retries. Helper closes only its own pidfd; it never unlocks/deletes the permanent mutex or signals a PID/group fallback, native owner, watcher or server.",
+    "Root must freeze all publisher/grant/READY writes until positive holder join and attest no build runner/Docker started. ExactSIGINT follows existing unlaunched holder KeyboardInterrupt/exceptBaseException/finally path to close its own permanent lock fd; no compiler/guest/container cleanup authority is granted."
+  ],
+  "conditional_release": {
+    "maximum_invocations": 1,
+    "maximum_signal_attempts": 1,
+    "signal": "SIGINT",
+    "mechanism": "Exact kernel pidfd reference only",
+    "permitted_subject": {
+      "path": "/run/lock/mckernel-development.lock",
+      "pid": 1831939,
+      "starttime": 95475556,
+      "device": 27,
+      "inode": 4,
+      "fd": 3
+    },
+    "permitted_grant_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/attempt2-held-only-retirement-source-1/ROOT-ACTUAL-ONE-A2-HOLDER-INTERRUPT-COMPAT-GRANT.json",
+    "maximum_Root_grant_lifetime_seconds": 60,
+    "required_Root_attestations": [
+      "No publisher/actual build grant/READY creation until holder positive join.",
+      "No build runner, Docker, compiler, OUTPUT or child started.",
+      "Exact source/profile/backend and this independent receipt bound in fresh Root grant."
+    ],
+    "required_helper_checks": [
+      "Existing v2 guard passes account/credit/boot/earliest UTC/MONO/BOOT cutoff before entry and immediately before send.",
+      "Both exact live identity/mutex/no-child/no-READY checks pass and opened pidfd reports exact PID.",
+      "Fresh O_EXCL journal and directory fsync succeed; no prior action journal reuse."
+    ],
+    "after_send": [
+      "Signal sent is not retirement/current-free. Root must positively join existing tool78413 and preserve actual result.",
+      "Independent exact postjoin current-free proof is required before Root advances ledger/releases next build.",
+      "Any uncertainty/error retains ownership; no repeat signal, PID/group fallback, escalation or cleanup."
+    ]
+  },
+  "blocking_findings": [],
+  "actual_queries": 0,
+  "actual_guard_calls": 0,
+  "actual_pidfd_syscalls": 0,
+  "actual_signals": 0,
+  "actual_positive_join": null,
+  "actual_current_free": null,
+  "tests_replayed": 0,
+  "compiler_or_guest_actions": 0,
+  "canonical_mutations": 0
+}
