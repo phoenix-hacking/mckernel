@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "SOURCE_READY_ONE_RECIPE_CORRECTION_PENDING_INDEPENDENT_REVIEW",
+  "runtime_authority": null,
+  "corrected_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/MINIMAL-FOUR-COMMAND-CONTINUATION.CORRECTED.NOT-GRANTED.json",
+    "bytes": 32505,
+    "sha256": "8b9216e669a5f7d8860c8290cf226ee63264392c7e5646b5a0ead9b1da9d9313"
+  },
+  "original_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/MINIMAL-FOUR-COMMAND-CONTINUATION.NOT-GRANTED.json",
+    "bytes": 28129,
+    "sha256": "b946bd82d58957dda6cf731dc8762b47bfa74f73b941dd66b52db483be8ab1bf"
+  },
+  "controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/LOCAL-CONTROLS.json",
+    "bytes": 2488,
+    "sha256": "68e3493eaee84af556588b16b7b31f3afb4e326ef3bbf97deaef236a903f56a8"
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/correct_recipe.py",
+    "bytes": 6079,
+    "sha256": "7bfdd71c6dda582c45f264a731b01db2275ade009a2e94c894caf823d5c82da7"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/INPUTS.json",
+    "bytes": 1831,
+    "sha256": "9ecdd88e2b05e772557652f0650f6c70f90bb97768d7546278feff969ec4e758"
+  },
+  "seven_original_source_postimages_unchanged": true,
+  "seven_source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/SELECTIVE-SEVEN-SOURCE-MAP.json",
+    "bytes": 8229,
+    "sha256": "5742664b695f91f317e30ac2638c72e31b9149c5335ae046e3e288903344e12a"
+  },
+  "changed_argv_indices": [
+    0,
+    2
+  ],
+  "new_argv_hashes": {
+    "0": "1e16c2698dad82321faa1bfff7ed2b9e00d2197895f79c609b017c69b147630f",
+    "2": "2d8cb4709ae3dfde39f37148391801d2d9e80b620c99b019942bb0ad8f0c98d7"
+  },
+  "origin_output": "/work/output/build/kernel/rust/f06-origin",
+  "actual_consumer_fact": "Actual116 runner consumes exact argv/cwd/output, not argv_sha256. Correction uses existing canonical_bytes field encoding reproduced by all4 accepted115 profile vectors; no invented encoding.",
+  "supersedes_original117_recipe_metadata_only": true,
+  "source_or_compiler_replays": 0
+}

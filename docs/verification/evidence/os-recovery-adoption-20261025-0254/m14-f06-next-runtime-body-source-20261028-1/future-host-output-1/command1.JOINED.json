@@ -1,0 +1,47 @@
+{
+  "index": 1,
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile Rust body and ABI/equivalence driver.",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/oracle.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/fixture.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/fixture"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+  "cpu_affinity": [
+    7
+  ],
+  "AS_bytes": 2147483648,
+  "CPU_limit_seconds": 60,
+  "wall_limit_seconds": 90,
+  "pid": 1892428,
+  "birth": 96475473,
+  "started_epoch": 1793167310.0355144,
+  "returncode": 0,
+  "wall_seconds": 0.14242655702400953,
+  "CPU_seconds": 0.14155399999999999,
+  "maximum_RSS_KiB": 123168,
+  "positive_direct_wait4_join": true,
+  "streams_closed": true,
+  "timed_out": false,
+  "finished_epoch": 1793167310.1779447,
+  "remaining_process_group_members": [],
+  "process_group_absent": true,
+  "group_observation_errors": [],
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command1.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/command1.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

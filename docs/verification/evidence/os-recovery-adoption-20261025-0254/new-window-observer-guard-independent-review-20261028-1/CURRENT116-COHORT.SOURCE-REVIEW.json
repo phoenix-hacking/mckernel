@@ -1,0 +1,191 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_CURRENT116_NEW_WINDOW_COHORT_SOURCE_MATERIALIZATION_AND_PURE_CHECKS_ONLY",
+  "independent": true,
+  "reviewer": "/root/observerreview",
+  "runtime_authority": null,
+  "implementation_ownership": false,
+  "reviewed_preparation_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/PREPARATION-MANIFEST.json",
+    "bytes": 15026,
+    "sha256": "c634254859d3f3091ab9416c21ea3b81789f59c113a2a04bf296eae08d12204b"
+  },
+  "reviewed_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/prepare_cohort.py",
+    "bytes": 11322,
+    "sha256": "43f79f87b017d02259d3e3769bc0c7ce6b664e269cbab9f3d7f0d62095c01b36"
+  },
+  "reviewed_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/check_cohort.py",
+    "bytes": 6478,
+    "sha256": "7c3d2e106efaf667722798bd15cbe84e13e05a884d5de0deeb2b21a54d027718"
+  },
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/SOURCE-READY.json",
+    "bytes": 3123,
+    "sha256": "7595e9ea2884731199c751f949c73d3e672dd350557e8b7952c53e976437f967"
+  },
+  "reviewed_guard": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-operation-guards-source-20261028-1/operation_window_guard.py",
+    "bytes": 8153,
+    "sha256": "082b165448771a751b9c26dbf6fd1f53cc477a1fcaa09130b3eee1cbf21e7a8d"
+  },
+  "exact_consumer_subject_map": {
+    "retained_complete116_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/SOURCE-READY.json",
+      "bytes": 3661,
+      "sha256": "1c1685fc343962c89a0583f8daf1c48c0c5b46c523d276f5a623cb6d550a6b60"
+    },
+    "actual_source_adoption": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+      "bytes": 11797,
+      "sha256": "ef82f32879b49729b985ba78bb4cf5bcb6f58bb66126185a8237419366aadde2"
+    },
+    "actual116_origin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-JOIN.json",
+      "bytes": 3002,
+      "sha256": "fa9c08cdd8bc382a13582b6b06c830f68879d831e4bb81cb4f5d0c2989874264"
+    },
+    "new_actual_currentfree": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/independent-actual-native-review-1/CURRENT-FREE.json",
+      "bytes": 4068,
+      "sha256": "f76d267e712f7906821f91576bab5d2847396eee9c19680aec6c5e0e4a7bb7a3"
+    },
+    "new_actual_Root59_or_latest_ledger": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER59.json",
+      "bytes": 20246,
+      "sha256": "8917629dcf0dd686c77e2531e26818c003ec43d6543786c4b4fa6e5a8cb25b53"
+    },
+    "consumer:ROOT-PREWRITTEN-RESOURCE-INPUT-FILL.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/ROOT-PREWRITTEN-RESOURCE-INPUT-FILL.py",
+      "bytes": 1635,
+      "sha256": "0a79a14649bee90d1acb669aa064b281f862141815890a0a3f9f50ab1d0e7db7"
+    },
+    "consumer:boundary_join.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/boundary_join.py",
+      "bytes": 2742,
+      "sha256": "5d6e57f561d108c81311ba63422f693e0091a60b37077687703090051c0b425b"
+    },
+    "consumer:build_only_worker.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/build_only_worker.py",
+      "bytes": 4115,
+      "sha256": "706290a511294fad82671f2c96c14a55f373733c1eb91c5ec538e857a67d5ced"
+    },
+    "consumer:capture_resources.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/capture_resources.py",
+      "bytes": 10984,
+      "sha256": "7ff91b196284653972f3d1b69f2ac0b9cf259b9003909bbcb0872b115526e854"
+    },
+    "consumer:fill_boundary_and_facts.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/fill_boundary_and_facts.py",
+      "bytes": 2426,
+      "sha256": "40b38ace4cadbd6310d95cf766bf42bb25b4bf8e84c0b72b370e73909fba364d"
+    },
+    "consumer:fill_build_metadata.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/fill_build_metadata.py",
+      "bytes": 5171,
+      "sha256": "f94a4bf655fc7772a99a8f9bf9cbf65f90fb3fc289fe0c37cb14e4fe990b8c57"
+    },
+    "consumer:finite_review.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/finite_review.py",
+      "bytes": 17407,
+      "sha256": "bed7317d0bf9a09af9a7ac9ce1dc99ba434ee839d514e6d44802afeb74855473"
+    },
+    "consumer:handoff_common.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/handoff_common.py",
+      "bytes": 3567,
+      "sha256": "a9068a0e9bf2c275bad39e551740092e2bf276f47c19c4ae4ebbd86afed66f65"
+    },
+    "consumer:hold_and_run_build_only.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/hold_and_run_build_only.py",
+      "bytes": 7010,
+      "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+    },
+    "consumer:hot_predicates.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/hot_predicates.py",
+      "bytes": 10652,
+      "sha256": "74d3e18dfde95a837eb2f54d76697e1e47468e97ad1492b01fd1e26628e172be"
+    },
+    "consumer:materialize_admission.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/materialize_admission.py",
+      "bytes": 10308,
+      "sha256": "70acc5af518794ca4a12226318a8aa912e803982c031bc41dd5f55558aceaeab"
+    },
+    "consumer:prepare_publication_rows.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/prepare_publication_rows.py",
+      "bytes": 2208,
+      "sha256": "b7e338da67a12c6a4fa5bf4b64a0f768117d204cc966d2578f7e521c337c8de3"
+    },
+    "consumer:publish_after_independent_pass_once.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/publish_after_independent_pass_once.py",
+      "bytes": 2656,
+      "sha256": "b18f4a331ebc4cf719882b1ca6841ddbe739e0ced162fc0c4d8d1b2964b73b0d"
+    },
+    "consumer:publish_approved_ready.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/publish_approved_ready.py",
+      "bytes": 3497,
+      "sha256": "af39ab7d55b8a11ca5a4a5361ce41639dd6207ffc3d9b0e55d64355d44697401"
+    },
+    "consumer:root_capture_once.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/root_capture_once.py",
+      "bytes": 3424,
+      "sha256": "e04f0511809bd46ecfeff2d01128f6d431e1c11418420b3a765e996b230af00e"
+    },
+    "consumer:run_build_only.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/run_build_only.py",
+      "bytes": 24644,
+      "sha256": "9e1eb5a2ed4cb240cd89d6631588830bf3188ed15a1bf64926fd24270965ee6c"
+    },
+    "consumer:runtime_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/runtime_guard.py",
+      "bytes": 3185,
+      "sha256": "8511ccf3bb37415d3c175752ec215d17fb7d77f66291a3deefed16abd2a03417"
+    },
+    "consumer:verify_exact_fetched_rows.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/cohort/verify_exact_fetched_rows.py",
+      "bytes": 1970,
+      "sha256": "0b944054dd8475471090d17c50a54561c6806da6c8510786e50405433a90f7c0"
+    }
+  },
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-INDEPENDENT-LOCAL-CHECKS.json",
+    "bytes": 1211,
+    "sha256": "6692d6dfd283fc3583c20eab8955ca62777a0875350f042d147586990b174946"
+  },
+  "original_failure_reproduced": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-INDEPENDENT-ORIGINAL-SCHEMA-FAILURE.json",
+    "bytes": 287,
+    "sha256": "d3ac642d4e2a2703484ed7d1c44a07a25fac9a770ab71f713f0a616763f85d79"
+  },
+  "control_count": 8,
+  "local_byte_refs_checked": 120,
+  "manifest_file_refs_authenticated": 37,
+  "compiler_commands": 4,
+  "rust_sources": 121,
+  "retained_objects": 8,
+  "source_findings": [
+    "Reviewed complete source producer/consumer graph against retained Root59 handoff7677854f. Profile.inputs and exact four argv equal retained original116; SDK/compiler/HOST/collector/archive prefixes are not replayed.",
+    "Only manifest45d375d10fb8c10221fc80967581ed77f151b310926279c665f2c3316729e10f takes additive actual116 schema compatibility branch. It preserves exact export root/destination, declared121 files/new leaf, readonly/no symlink/no hardlink metadata and all original normalized unique row/closed directory checks. All other manifest references retain original predicate.",
+    "Complete local Python source subject map is computed without embedding a successor/config hash, so static guard/source successor refs can be sealed without self-reference. Shared guard082b receives exact expected source map and must authenticate Root successor and independent operation review.",
+    "Real source fragment filler produces nine-field boundary and six exact reference joins, bound to reviewed Root59/f76 wrapper/schema. Tests use private fixture output and do not create actual Root authority.",
+    "Capture requires live independent PREWARM PID/birth/verifier before either fresh clock; finite cold checks occur before waiting. Hot resource checks and final postfsync receipt callback preserve original120s clamps.",
+    "Exclusive once claim precedes capture and publication; unchanged publisher/holder controls retain one invocation and preserve output/nonce checks.",
+    "Retained SOURCE-CONTRACT-CHECKS.PASS.json contains historical byte-unchanged booleans. Those are retained prior-cohort claims; this explicit diff review is authority for new worker/common clock and runtime guard changes."
+  ],
+  "next_root_source_actions": [
+    "May fill actual source-only boundary/facts from exact reviewed source fragment and Root59/f76 plus current Root attestation.",
+    "May materialize exact source-only metadata/admission request with fresh namespace using reviewed source producer; no resource/grant/nonce consumption is implied.",
+    "Bind sharedguard082b successor and independent operation review only after guardian/physical dependency review; publish exact new source/config closure and verify fetched bytes before prewarm."
+  ],
+  "runtime_prerequisites": [
+    "Actual new-window guardian source/receipt/PID/birth, account identity and cumulative credit checks; separate independent guardian and explicit operation successor review.",
+    "Reviewed physical-history successor plus exact new-window postnative runtime dependency binding. This dependency is unreviewed at this source decision.",
+    "Designated independent runtime reviewer owns exact /root/custody_release_review role string used by frozen cohort, actively running frozen finite verifier and actually waiting with verified PID/birth BEFORE capture. Source review does not assert such readiness.",
+    "Root actual boundary/reservations/request/publication and fresh once-only namespace/admission; preserve unspent96d07 namespace and spent native4d1c.",
+    "Original120s freshness, clocks no later than epoch1793253600 / MONO1035706.5689547858 / BOOT1051044.6960026678, existing CPU2-5/12GiB/512tasks/no network resource release and normal cleanup remain."
+  ],
+  "actual_live_guard_observer_or_account_capture_calls": 0,
+  "privileged_commands": 0,
+  "compiler_or_guest_commands": 0,
+  "new_nonce_consumptions": 0
+}

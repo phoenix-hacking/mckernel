@@ -1,0 +1,82 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -13793,7 +13793,7 @@
+         container_size: *mut *mut SizeT,
+         vdso_offset: *mut *mut isize,
+     );
+-    #[cfg(not(native_linux_irq_work_v6_12))]
++    #[cfg(all(not(native_linux_irq_work_v6_12), not(f06_vdso_info_candidate)))]
+     fn vdso_get_vdso_info() -> CInt;
+     fn arch_vdso_setup_log_bridge(event: CInt, error: CInt);
+     fn arch_vdso_add_range_bridge(
+@@ -13977,6 +13977,12 @@
+     write_volatile(addr_of_mut!((*ts).tv_sec), sec);
+     write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
+ }
++
++#[cfg(f06_vdso_info_candidate)]
++#[path = "f06_vdso_info.rs"]
++mod f06_vdso_info;
++#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
++use self::f06_vdso_info::vdso_get_vdso_info;
+ 
+ #[cfg(native_linux_irq_work_v6_12)]
+ unsafe extern "C" fn vdso_get_vdso_info() -> CInt {
+@@ -36310,3 +36316,57 @@
+     }
+     const _: PtraceSetSingleStepFn = ptrace_wakeup_set_single_step_bridge;
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(enable_perf)]
++mod f03_perf_mmap_entry_v1 {
++    use crate::abi::{CInt, CLong, CULong, Mckfd, SizeT, X86UserContext};
++    use super::{perf_mmap_body_result, PerfDoMmapFn};
++
++    // Actual C headers supply constants and offsets; no duplicated perf-page ABI.
++    #[repr(C)]
++    struct MmapBinding {
++        map_anonymous: CInt,
++        prot_write: CInt,
++        data_head: SizeT,
++        capabilities: SizeT,
++        cap_user_rdpmc: CULong,
++        do_mmap: Option<PerfDoMmapFn>,
++    }
++
++    unsafe extern "C" {
++        static f03_perf_mmap_binding_v1: MmapBinding;
++    }
++
++    /// Invoke the existing complete Rust mapping transaction with the original ABI.
++    ///
++    /// # Safety
++    /// `ctx` is the genuine live syscall context. The existing mmap provider owns
++    /// allocation, synchronization and mapping lifetime. A nonnegative result must
++    /// name the writable mapping covering both actual perf-page metadata fields,
++    /// exactly as required by the original callback. `sfd` remains unused.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_perf_mmap_v1(
++        _sfd: *mut Mckfd,
++        ctx: *mut X86UserContext,
++    ) -> CLong {
++        // SAFETY: Read the same six actual registers in their original order.
++        let addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) };
++        let len = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as SizeT;
++        let prot = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) } as CInt;
++        let flags = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx) } as CInt;
++        let fd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg4(ctx) } as CInt;
++        let off = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg5(ctx) } as CLong;
++        // SAFETY: Immutable, cfg-matched header/provider data; existing Rust body
++        // retains negative errors without metadata access and owns success writes.
++        unsafe {
++            let binding = &f03_perf_mmap_binding_v1;
++            perf_mmap_body_result(
++                addr, len, prot, flags, fd, off,
++                binding.map_anonymous, binding.prot_write,
++                binding.data_head, binding.capabilities,
++                binding.cap_user_rdpmc, binding.do_mmap,
++            )
++        }
++    }
++}

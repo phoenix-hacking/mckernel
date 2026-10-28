@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_NOT_GRANTED",
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1",
+  "commands": [
+    {
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile untouched original C body pure oracle.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/oracle.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/oracle.o"
+      ]
+    },
+    {
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile Rust body and ABI/equivalence driver.",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/oracle.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/fixture"
+      ]
+    },
+    {
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Run 500 deterministic original C/Rust behavior pairs.",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/fixture",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    }
+  ],
+  "compiler_or_fixture_invocations_performed": 0,
+  "needs_after_fixture": [
+    "coherent full production Rust crate using actual current selected cfg set",
+    "whole selected arch C TU/real header ABI",
+    "partial/final link exact unique public symbol and C deselection, debug metadata provenance",
+    "matching supported native behavior before file retirement"
+  ]
+}

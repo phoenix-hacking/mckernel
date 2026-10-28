@@ -1,0 +1,15 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/materialize_admission.py",
+    "--root-bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/ROOT-ACTUAL-BINDINGS-1.json"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/materialize_admission.py\", line 75, in <module>\n    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root-bindings',required=True);a=p.parse_args();materialize(Path(a.root_bindings))\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/materialize_admission.py\", line 40, in materialize\n    origin=read(auth(b['actual_origin_producer']));assert origin['source_generation_only'] is True and origin['compiler_executed'] is False and origin['returncode']==0 and origin['direct_child_joined'] is True and origin['streams_closed'] is True\nKeyError: 'compiler_executed'\n",
+  "runtime_authority": null
+}

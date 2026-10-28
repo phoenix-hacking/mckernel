@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_ONLY_ROOT59_TYPED_POSTNATIVE_LOCAL_REGRESSION",
+  "runtime_authority": null,
+  "observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/postnative-root59-observer-source-20261028-1/observe_root59_postnative.py",
+    "bytes": 22393,
+    "sha256": "a70bbb7d21e0d18317e83bccbd122634d6425a81de134a7a26adf1762d132cf4"
+  },
+  "observer116": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/postnative-root59-observer-source-20261028-1/observe_root59_current116.py",
+    "bytes": 3307,
+    "sha256": "2c7358b1e5f64f31327d2e114c81094f20f7008827df001c9b1c48345b18f7eb"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/postnative-root59-observer-source-20261028-1/test_postnative.py",
+    "bytes": 5151,
+    "sha256": "53a8493682b5138a5e401614939e96b7d450e18462deebd681b27df444b737fc"
+  },
+  "test_command": [
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/postnative-root59-observer-source-20261028-1/test_postnative.py"
+  ],
+  "tests_passed": 27,
+  "actual_commands_started": 0,
+  "privileged_commands_started": 0,
+  "live_observations": 0,
+  "accepted_current_boundary": "Root59/8917629d; consumed69; currentfreef76",
+  "native_operation": "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+  "native_reaped_clients": 30,
+  "native_host_absence_controls": 35,
+  "aggregate_retained_actor_controls": 51,
+  "remaining_blockers": [
+    "Independent source/schema review and real reviewed fragments",
+    "Exact new-window account_window_guard and physical_history_observer dependency sources and independent exact binding review",
+    "Root actual runtime-dependency binding; Root actual consumer boundary; normal fresh admissions before operations"
+  ],
+  "no_release_claim": true
+}

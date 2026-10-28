@@ -1,0 +1,21 @@
+{
+  "label": "00-current-body-and-new-entry-Rust-object",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--cfg",
+    "enable_perf",
+    "--crate-name",
+    "f03_perf_mmap_entry",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/output-PENDING-ROOT/callbacks.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/lib.fixture.rs"
+  ],
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST ordinary mocked mapping only; no actual mapping, PMU, syscall, Docker, root, or guest operation.",
+  "cwd": "/home/holden/mckernel"
+}

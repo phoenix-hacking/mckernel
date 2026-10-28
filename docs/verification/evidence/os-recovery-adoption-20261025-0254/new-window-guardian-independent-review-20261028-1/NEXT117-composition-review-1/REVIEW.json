@@ -1,0 +1,174 @@
+{
+  "actions": {
+    "canonical_changes": 0,
+    "compilers": 0,
+    "liveguard": 0,
+    "owned_review_evidence_only": true,
+    "root_Docker_guest_controller": 0,
+    "workloads": 0
+  },
+  "counts": {
+    "actual_C_retirement": 0,
+    "changed_sources": 7,
+    "closed_directory_files": 122,
+    "closed_rs_files": 111,
+    "compiler_commands_executed": 0,
+    "compiler_commands_prepared": 4,
+    "default_builds": 0,
+    "file_closures": 0,
+    "native_runs": 0,
+    "retained_objects": 8
+  },
+  "decision": "PASS_EXACT_SEVEN_SOURCE_COMPOSITION_ONLY_HOLD_RECIPE_METADATA",
+  "implementation_ownership": false,
+  "independent": true,
+  "pure_controls": {
+    "failures": 0,
+    "independent_rerun": "pure-controls.txt",
+    "original": {
+      "bytes": 1532,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/LOCAL-SOURCE-CONTROLS.json",
+      "sha256": "3dc575ad02792b23df5d5f2b64a57cfe8191ebfe26abd53172848d5274fe0211"
+    },
+    "tests": 10
+  },
+  "recipe_blockers": [
+    {
+      "correction": "Preserve original recipe and distinguish hashes as historical provenance or compute fresh117 hashes using actual consumer serialization. Add exact changed-argv/hash mutation control.",
+      "facts": [
+        {
+          "argv_changed": true,
+          "index": 0,
+          "inherited_hash": "3e55ef98aeed0fb6d05f19e29622903430c01aadc7662ee24e28eeee561d5db1",
+          "stage": "full current default Rust object"
+        },
+        {
+          "argv_changed": true,
+          "index": 2,
+          "inherited_hash": "f36ea9ce8439e3c544ca0bc5a2b8fa202c93c592ef7fadf1bc727ef29ebc2dc7",
+          "stage": "selected x86 syscall object"
+        }
+      ],
+      "family": "inherited_recipe_metadata_not_rebound_to_actual117",
+      "problem": "Changed argv lists retain identical historical116 argv_sha256 labels. No fresh encoding/provenance identifies them as117 command digests."
+    },
+    {
+      "actual_Rust_metadata_and_arch_include": "/work/output/build/kernel/rust/f06-origin",
+      "correction": "Rebind prerequisite_origin.output and narrow action text to actual117 source/profile path used by existing materializer; no original origin receipt reuse.",
+      "family": "inherited_recipe_metadata_not_rebound_to_actual117",
+      "prerequisite_origin_output": "/work/output/build/kernel/f06-origin",
+      "problem": "Fresh prerequisite origin output omits rust path segment; declared outputs do not match actual compiler metadata input paths."
+    }
+  ],
+  "recipe_decision": "HOLD_ONE_BOUNDED_RECIPE_COHERENCE_CORRECTION",
+  "remaining_conditions": [
+    "Root owns canonical integration; recheck live preimages and preserve concurrent changes before adopting sources. Keep original116 inputs and source-only acceptance separate.",
+    "After recipe correction bind actual closed Rust export including three external relative modules, fresh matching117 origin metadata, exact current consumers, fullcrate/selectedgeneric/selectedarch/link release, resource and account/current-boundary gates.",
+    "Require unique Rust public symbols, absent selected C callbacks, actual descriptor/provider relocations, full ABI and two debug records, complete registry/consumer proofs and applicable matching native behavior before acceptance.",
+    "Retain accepted CURRENT115/de9f until new selected build acceptance. Desired minus2Cfunctions relative116 is predicted only; new C data40B and existing do_mmap/state bridge remain honest debt."
+  ],
+  "reviewed_at": "2026-10-28T06:10:53.151920+00:00",
+  "reviewer": "/root/independent",
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_adoption_scope": "Root may adopt exactly seven reviewed source postimages to a coherent future private/default queue after current preimage recheck. This is no build or runtime release, and no current image replacement.",
+  "source_findings": [
+    "All seven postimages and existing adopted116 preimages authenticate. F03 and F06 patches are exactly the reviewed increments; shared Rust hunks commute in both orders and inverse restores original baseline. Unrelated116 providers/flags/native private initializer are unchanged.",
+    "F03 selected descriptor token maps once to exact new f03_perf_mmap_v1; new C binding remains exact40B header-generated immutable data with do_mmap pointer. Existing do_mmap remains debt.",
+    "F06 selected C public body is under paired exclusion; Rust module/public export/import selection and CMake additions preserve existing supported profile. Existing native initializer remains byte-identical. C-owned88B state/bridge remain debt.",
+    "Both new Rust production entry/log paths and full real ABI/metadata retain prior review obligations. Exactly two Rust __verbose descriptors retained; no tracing/default flags widened.",
+    "Origin profile differs only archsource hash and one MCKERNEL_RUST_F06_VDSO_INFO argv define. Origin producer changes only pinned profile hash; algorithm is unchanged and no producer executed.",
+    "Reference overlay retains121 baseline directory subjects, replacing shared Rust and adding exact child to yield122files/111.rs. Eight retained object subjects and bytes match original116 recipe; no subtree/export/compiler/archive replay performed."
+  ],
+  "source_inputs": {
+    "adopted116": {
+      "bytes": 11797,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+      "sha256": "ef82f32879b49729b985ba78bb4cf5bcb6f58bb66126185a8237419366aadde2"
+    },
+    "checkout": "/home/holden/mckernel",
+    "recipe116": {
+      "bytes": 26765,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/MINIMAL-PRODUCTION-CONTINUATION.NOT-GRANTED.json",
+      "sha256": "d612ce89f7b8d9b708609cf8c140ad3d3717b54696dcaea754ff2c6faad1f9d9"
+    },
+    "reviewF03": {
+      "bytes": 7960,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/F03-source-review-1/REVIEW.json",
+      "sha256": "279df47be5b04fd1340f5a8370d7ef1e9ed9b89a58413cc22fd08c0011cc5f82"
+    },
+    "reviewF06": {
+      "bytes": 6837,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/F06-source-review-1/REVIEW.json",
+      "sha256": "fda8e9c729bb7057bacc52d149ae9d59255a68af581532a1c9b3159351098b4d"
+    }
+  },
+  "source_map": {
+    "bytes": 8229,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/SELECTIVE-SEVEN-SOURCE-MAP.json",
+    "sha256": "5742664b695f91f317e30ac2638c72e31b9149c5335ae046e3e288903344e12a"
+  },
+  "source_postimages": [
+    {
+      "postimage": {
+        "bytes": 118050,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/arch/x86_64/kernel/syscall.c",
+        "sha256": "5ae375387108c835ef40b6a8a6644d7353496d5960af496f11ca6049b79a214d"
+      },
+      "relative": "arch/x86_64/kernel/syscall.c"
+    },
+    {
+      "postimage": {
+        "bytes": 41310,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/kernel/CMakeLists.txt",
+        "sha256": "e2880ce3bee76bfeec510d84206be2feeb937b6b1ebc61f7a18be1faa6450d37"
+      },
+      "relative": "kernel/CMakeLists.txt"
+    },
+    {
+      "postimage": {
+        "bytes": 9044,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/scripts/f06_origin_command_profile.json",
+        "sha256": "3f9bb6198a3c40bb04b75151dfd1d3716cd581daa62a2c0cdc93d1aa1d133667"
+      },
+      "relative": "scripts/f06_origin_command_profile.json"
+    },
+    {
+      "postimage": {
+        "bytes": 7565,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/scripts/derive_f06_origin.py",
+        "sha256": "0bf3371b018c0a79ce7d6778fba969b98f9d61c655b1a3b4932e7db4d0db289a"
+      },
+      "relative": "scripts/derive_f06_origin.py"
+    },
+    {
+      "postimage": {
+        "bytes": 921322,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/kernel/syscall.c",
+        "sha256": "2e1b89ee6f6cbb470311e0d4cc4dab97d3f5a070e3565e0b541033dc826ffb85"
+      },
+      "relative": "kernel/syscall.c"
+    },
+    {
+      "postimage": {
+        "bytes": 1278453,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/kernel/rust/syscall_policy.rs",
+        "sha256": "19b109bdc443bc1f371453d955dbec27e061c344c7ae8adc6355055e3b71a907"
+      },
+      "relative": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "postimage": {
+        "bytes": 5913,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/candidate/kernel/rust/f06_vdso_info.rs",
+        "sha256": "4bc4a23b9444a6eab6f5a6f6e2737db41530809b3f8d987973ab0e1dbd8ebd8b"
+      },
+      "relative": "kernel/rust/f06_vdso_info.rs"
+    }
+  ],
+  "source_ready": {
+    "bytes": 2732,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/SOURCE-READY.json",
+    "sha256": "7a9a0cb716c0b14a97d9b6fed0395bd116c8eef3b44883cc13f9f75da8804386"
+  }
+}

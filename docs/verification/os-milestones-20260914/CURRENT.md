@@ -1,3 +1,120 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
+
+## 116 preclock publication checkpoint — 2026-10-28T06:20Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual all-control116guard PASS06:16:49 at stricterUTC/MONO/BOOT minima. O2 source
+and exactoperation/config/physical/common reviews11dfa/3f43/fd1c complete; fixed
+Root DATA entrypoints tightened with original bytes retained in archivalmap, no
+helper/controller edits. Correctedstaticmaterialization PASS; workloadcount0,
+nonceff79 remains RESERVED UNUSED. Root publication301BYTEsubjects allmatch local
+fetched aliases. First old50cross-cohort aliases refused before Git/clock; data-only
+aliases corrected to actualcurrentpaths, sourcebytes unchanged. Originalplans kept.
+Next: commit/push/fetch301exactrows, coldmetadata, actualobserverreview verifier
+PREWARM+PIDbirth before ANYfreshphysicalcapture; then normalheld/resource/HOT/once4cmd.
+No capture/holder/compiler/native yet; accepted115/C79/Rust60 and4/6,1/8,35/35 stable.
+NEXT117 source+one bounded correctedrecipe now independentlyPASSd337/30df; no compiler.
+Two nextF03/F06 sourcebody lanes are active, no duplicate banked bodies assigned.
+
+## Actual parent controls live; static116 ready — 2026-10-28T06:13Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Parent receipt ACTUAL-RESTART-COMPLETE.json at /home/holden/mckernel-work/
+host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/
+is authoritative. Guardian1890834/96454663, monitor1893554/96494955 and phone1894242/
+96505809 are parent-owned LIVE, threeauxleasesheld; no Rootduplicates. First30min
+review06:22:25Z. Exact all-control minima: UTC1793253600, MONO1035705.5689454618,
+BOOT1051043.6959931096; actualbindingf0bd. Originalwindow laterMONO/BOOT are ceilings,
+not operational deadlines. Root strict116operationdata successor92b73a4a tightens
+prior11acc; configurationreview/cascade follows, no frozenhelper/controller edits.
+
+Corrected retained-origin adapter345e/Rootbindings2e8ca and actualstatic116metadata
+materialization PASS, admission1 created with workloadcount0. Original KeyError
+failure preserved; no origin/compiler replay. Nonceff79f7711b2ba35b039f3a191ab09663
+RESERVED UNUSED; no holder/resourcecapture/onceentry/compiler/guest started.
+Next: finish all-control exact configbindings, prepare actualpublication rows
+including adapter/old+adapted receipts/bindings2/configclosure, push/fetch, then
+actualobserverreview verifier PREWARM/PIDbirth BEFORE freshcapture and soleheavy4cmd.
+BFD source checkpointb1822725c pushed/fetched4canonicalblobs exact. NEXT117 two-body
+privatecomposition sourcePASS; one additive recipehash/originpath correction under
+independentreview. BFD next3command producercohort source-ready, needs actualcurrent
+free after precedingjob. Accepted115/C79/Rust60/M14 4of6/M15 1of8/practical35 unchanged.
+
+## Source/HOST progress and actual new-window guard — 2026-10-28T06:06Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root readonly actualguardian e8a117df and actual116operationguard PASS; parent owns
+sole guardian1890834/birth96454663, actualpacket369da48a. Explicit116window successor
+11acc03e/reviewa391 preserves cumulativecredits and tighteractualMONO/BOOT clamps.
+Seven real HOST children have positive joins/groups absent/streams closed, with
+original F03 compiler failure retained; HOST supplement8271 remains outside the
+explicit Recipe22plusactualFP692 runtime nonce ledger. Root59/f76/count69 unchanged.
+
+New substantive Rust bodies: F06 vdso_get_vdso_info actual500C/Rust pairs PASS96af
+and independentfda8; F03 perf_mmap ABI18/160pairs/320context-page-oracles PASS03e4,
+independent279d after one fixture nominal-type correction, original9466 preserved.
+Private next117 composition owns these two increments; no canonical kernel adoption
+or current image/C/native/file delta yet. Root DID adopt reviewed four-path BFD
+source patch2416/182d into canonical user targets; accepted SDK21 proof reused,
+real default configure/build/link/native remains OPEN. No SDK/compiler-prefix replay.
+
+Configured116 common5877/wrapper2039/schemaf2edf/cohort1bef independently sourcePASS;
+Root actualoperation config written, physical/common config exact reviews pending.
+Original227 configured source producer-consumer8groups pass; actualoperation/native
+UNRUN. Next: finish116 exact runtime dependency review, Root materialize staticdata,
+publish/fetch, actualindependentreviewer waiting/PIDbirth BEFORE freshclock, original
+120s + prewritten onceentry, then unchanged4command soleheavy. No livephysical
+capture/holder/build/guest yet. AcceptedCURRENT115/de9f/C79/Rust60 and counts4/6,
+1/8,35/35 unchanged; no wholeOS/M14/M15 completion. Evidence paths under
+../evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/.
+
+## New authorized run resumed — 2026-10-28T05:57Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New fixed deadline2026-10-29T06:00Z adopted with matching policy hashes and live
+watcher1887110/96419041→worker1887113/96419049→server1887115/96419058. All six
+predecessor controls absent. Original7f4 creditrun/debits/57774.852125 ceiling
+unchanged; observed spent22812.331100/remaining34962.521025. Root59/f76 remains
+current; CURRENT115/de9f/C79/Rust60, M14files4/6, M15files1/8, practical35/35.
+No build/native started. Parent explicitly owns sole guardian/30min monitor/phone;
+Root will not arm duplicates or hot-edit core5/frozenpacket.
+
+Source progress: genuine postnative Root59/f76 parser passes retained actual
+validation plus27 controls; 227 source renderer passes10 controls. Independent
+source review is active; old thread pin in account helper requires explicit new
+identity successor. Physical-history nested guard rebinding and whole116 cohort
+qualification remain pending. These are source results, not runtime acceptance.
+Evidence: new-window-resume-20261028-1/ADOPTION.json,
+postnative-root59-observer-source-20261028-1/LOCAL-REGRESSION.json,
+original227-newwindow-integration-source-20261028-1/READY.json, all beneath
+../evidence/os-recovery-adoption-20261025-0254/. Preserve every accepted prefix,
+failed namespace, scratch21, permanent27:4 and spent/abandoned nonces.
+
+--- Retained prior context ---
+
+## Launcher shutdown requested; future continuations paused — 2026-10-28T05:36:05.732659+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Launcher stop/time-limit instruction received: no newdispatch orruntime. All10child
+turns completed andallstartedworkloadtools joined; noheavy/nativelease outstanding.
+Actualcurrentfreef76/Root59count69 retained; acceptedCURRENT115/de9f/C79/Rust60 and
+F02supportedfilea6b377 remainverified. M14files4/6(F03/F06OPEN), M15files1/8(7OPEN),
+practical35/35. WholeOS/M14/M15 NOTcomplete. Allfailure evidence/dirtytree/scratch21/
+permanent27:4/currentimages/objects retained; no cleanup/signals/controllerchanges.
+ControlPID/birth observations preserved in ROOT-NEW12H-ACTUAL-ADMISSION-1/
+LAUNCHER-SHUTDOWN-CHECKPOINT-20261028.json. Parent/launcher retainscontrolownership.
+
+NEXT onlyafterSUBSEQUENTlauncherinvocation: use actualRoot59/f76 datahandoffs7677854f
+(116) and1c392000(227), preserveallsource/HOST/compiler/archiveprefixes; implement
+genuinepostnativecurrentobserver/schema fornative4d1c ratherthanordinary-onlyRoot57
+logic orhistorical270a. Freshoriginalaccount/window/resource/nativeadmission required;
+oldwindowclamps/nonces/releasescannotbereused. Fixed05:36:09Z/earlierclamps, same7f4
+cumulativecreditledger/debits/ceilings unchanged; no renewal/purchase/holdclear.
+EVERYworkassignmentusesfollowup_task; typedBYTEvsJSON/fullMountsmultisetonly/actual
+PREWARMbeforeclock/prewrittenonceentry rules remain inAGENTS/HANDOFF.
+
 ## Final fixed-window checkpoint ready — 2026-10-28T05:34:06.231430+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

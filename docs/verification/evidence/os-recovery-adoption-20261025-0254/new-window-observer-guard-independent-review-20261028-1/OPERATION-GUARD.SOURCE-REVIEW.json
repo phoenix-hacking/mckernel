@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_NEW_WINDOW_OPERATION_GUARD_SOURCE_ONLY",
+  "independent": true,
+  "reviewer": "/root/observerreview",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_guard": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-operation-guards-source-20261028-1/operation_window_guard.py",
+    "bytes": 8153,
+    "sha256": "082b165448771a751b9c26dbf6fd1f53cc477a1fcaa09130b3eee1cbf21e7a8d"
+  },
+  "reviewed_adapters": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-operation-guards-source-20261028-1/current116_guard_adapter.py",
+      "bytes": 3003,
+      "sha256": "af2f25cb88bc3853789df9eef85ae2b9e209e637fa2a7e553055894a9ed8b32c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-operation-guards-source-20261028-1/original227_guard_adapter.py",
+      "bytes": 3004,
+      "sha256": "307993c2dfdc44982386e5c3f8c411b3546e16ba0ecc87447ef12551101cba9f"
+    }
+  ],
+  "reviewed_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-operation-guards-source-20261028-1/test_operation_window_guard.py",
+    "bytes": 8869,
+    "sha256": "843a2510b5bdf3649a288c8f1ab417b2903cd26da6bcde4226d138948b998205"
+  },
+  "pure_test_methods_passed": 12,
+  "initial_candidate": {
+    "sha256": "373d12356150479f4b55d6e2174f52014cf98fbe70b711326a7b386803cf1502",
+    "decision": "BLOCKED_OLD_LAUNCHER_THREAD_IDENTITY",
+    "historical_thread": "01a17e6f-112f-7660-8771-85d15e07a26c"
+  },
+  "bounded_correction": {
+    "actual_new_thread": "01a18111-26a7-7ef2-bbd6-e33d1c8dc803",
+    "historical_source_unchanged": true,
+    "only_private_imported_account_module_THREAD_is_rebound": true
+  },
+  "findings": [
+    "Actual new-window JSON bytes and immutable three-clock cutoff order are pinned. Each operation requires explicit Root successor preserving exact predecessor cutoffs and separately independent exact successor review.",
+    "Current launcher thread identity is explicitly checked. Historical source bytes and complete account predicates remain unchanged; only private imported THREAD is explicitly succeeded.",
+    "Cumulative run7f4af94a83b14cc08f97401f5891d965 ceiling57774.852125 and minimum debit22812.3311 retain exact Decimal arithmetic and account-wide balance semantics. Successor floor can only tighten.",
+    "Service/policy/auth/billing holds, stop state, active goal/phase, fresh heartbeat, no purchases/API-key billing and resident balance guard remain required.",
+    "Source/binary dependencies authenticate as BYTES. JSON successor/review/account subjects use strict duplicate/nonfinite rejection.",
+    "Fresh guardian adapter source is authenticated and its actual read-only guard must return all three nondecreasing finite clocks strictly before operation clamps.",
+    "Noarg adapters configure once against exact source/config/successor/review refs and reject changed config. They remain unconfigured without an explicit caller binding."
+  ],
+  "remaining_prerequisites": [
+    "Root actual operation successor and actual independent operation review, source closure, minimum cumulative debit floor and guardian binding.",
+    "Fresh independently reviewed finite guardian with real PID/birth identity; source review grants no arming authority.",
+    "Postnative account_window_guard dependency needs a reviewed configuring wrapper or exact caller configuration; loading the raw noarg adapter resets unconfigured state and fails closed.",
+    "Exact runtime release, preclock reviewer readiness, fresh120s admissions and once entry remain separate."
+  ],
+  "live_guards_called": 0,
+  "privileged_commands": 0,
+  "resource_captures": 0,
+  "new_operations": 0
+}

@@ -1,0 +1,85 @@
+{
+  "acceptance_deltas": {
+    "C_retired": 0,
+    "HOST_mocked_fixture": 1,
+    "current_default_build": 0,
+    "native": 0,
+    "source_body": 1,
+    "wholefile": 0
+  },
+  "actual_results": {
+    "bytes": 10212,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/RESULTS.json",
+    "sha256": "96af5d4132897680af740b28ceeb8565096247c69bc2be2656ffe32dac787fb4"
+  },
+  "checks": {
+    "C_body_layout_extracted_verbatim": true,
+    "accepted_CURRENT115_arch_object_SHA": "7f5308bdc361e4c5b86bb77e8984b1c32fcb5fe317c6ae45fe9b4475a93a397c",
+    "fixture": "500 C/Rust behavior pairs PASS; all state bytes/log-event effects/returns/prepare-send-physical-pause counts",
+    "pinned_source_preimages_exact": true,
+    "reviewer_compiler_or_fixture_reruns": 0,
+    "selected_C_body_symbol": "nm confirms T vdso_get_vdso_info size0x1a7; no calculate_time_from_tsc definition",
+    "three_actual_exact_commands": "PASS all0/directwait4joined/closedstreams/groupsabsent/empty stderr"
+  },
+  "decision": "PASS_F06_VDSO_INFO_PRIVATE_SOURCE_AND_ACTUAL_HOST_FIXTURE_ONLY",
+  "implementation_ownership": false,
+  "independent": true,
+  "integration_patches": [
+    {
+      "bytes": 453,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/arch-syscall-selection.patch",
+      "sha256": "4613472b80c34f2d9a6effd0b4e1824ec3b80c10aadcc9d1cf424957f9268eee"
+    },
+    {
+      "bytes": 890,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/syscall-policy-integration.patch",
+      "sha256": "6d9bea37caa537a2aa6e4794e9e7cc4f89435029354d2486ff0541399dd457db"
+    },
+    {
+      "bytes": 771,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/cmake-selection.PROPOSAL.patch",
+      "sha256": "8d9ddb272be733f3eeab8275c73e8846c9bb13085e1dc4ce6c85d4328df58719"
+    }
+  ],
+  "limitations": [
+    "HOST fixture uses deterministic callbacks and surrogate packet layout; source compared actual canonical ABI and helpers, but fullcrate/selected-C checks remain pending.",
+    "Log-event sequence is compared in500pairs; actual production metadata/kprintf integration remains pending.",
+    "No new concurrency, timeout or IKC publication semantics are claimed beyond existing peer contract. Native runtime behavior is not proven by HOST fixture."
+  ],
+  "ownership_conditions": [
+    "Root owns coherent private-tree/shared canonical integration of module plus all three exact patches. Recheck preimages against current tree before apply; concurrent changes need a reviewed rebased delta.",
+    "Compile full current production crate and whole selected arch translation unit under actual supported profile; require exactly one exported Rust vdso_get_vdso_info and zero C definition when selector active, with required packet/send/state imports retained.",
+    "Verify both generic setup public entry and native setup private initializer call ownership; native private initializer bytes and separate protocol remain unchanged.",
+    "Verify production ArchVdso/IkcScdPacket/Ddebug ABI and two correct __verbose descriptors, strings, flags, file/line/source metadata; test fixture compiles with cfg(test) and does not compile production_log or public production wrapper.",
+    "C allocation/state bridge and other remaining arch C bodies remain explicit debt. Keep old body for profiles where selector is off. Default/link/native/whole-file retirement requires matching later checks and applicable actual native proof."
+  ],
+  "preserved_failure": {
+    "bytes": 1166,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/future-host-output-1/PRE-EFFECT-BINDING-MISMATCH.json",
+    "sha256": "afd44280d5856a9e96f557bda548b0c46d9a541b1ba1838c43db2d2c5404970d"
+  },
+  "reviewed_at": "2026-10-28T06:03:26.475753+00:00",
+  "reviewer": "/root/independent",
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_body": "vdso_get_vdso_info",
+  "source": {
+    "bytes": 5913,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/f06_vdso_info.rs",
+    "sha256": "4bc4a23b9444a6eab6f5a6f6e2737db41530809b3f8d987973ab0e1dbd8ebd8b"
+  },
+  "source_findings": [
+    "Rust owns complete reset/prepare/send/poll/error flow; MaybeUninit avoids constructing or assuming an initialized packet when original prepare writes only msg at8 and traditional arg at40. Stack packet is raw-pointer only and is not retained beyond synchronous send contract.",
+    "Existing persistent C-owned88B ArchVdso allocation and state-return bridge reused. Bridge writes supplied pointer only; no added state allocation or peer protocol change. Raw address operations avoid creating an exclusive reference over peer/callback updates.",
+    "Full88B state including padding is cleared; busy1/pages0 set; physical callback/prepare occur once; prepare error prevents send; send flags0 and channel unchanged. Signed32 errors including extrema propagate unchanged; any nonzero clears only pages. Busy uses read_volatile and original pause helper, no added timeout/fence/error policy.",
+    "Callback types match actual Rust helper ABIs. Canonical packet reprC/union layout assertions provide128B packet, body24 and arg16 within traditional body. Fixture also asserts88B/align8 state and required offsets,128B packet and offsets.",
+    "Production entry fetches current-CPU channel before debug event, uses existing state bridge, and exports legacy public symbol. Generic import selects this public entry; existing native private initializer function and native_vdso protocol body are untouched.",
+    "Production enter/exit descriptors preserve Ddebug ABI32B/align8 and flags upper8/line lower24; fmt null and default flags0 match C macro. Both original error strings remain unconditional kprintf. File/line provenance moves explicitly to Rust module, requiring production metadata acceptance.",
+    "calculate_time_from_tsc is already selected Rust and is not duplicated. Paired C exclusion and Rust cfg use narrow existing linux6.12/x86_64/nonUBSAN supported branch."
+  ],
+  "source_ready": {
+    "bytes": 4983,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/SOURCE-READY.json",
+    "sha256": "fd4cccbf60e67f0300f66848eeb7791ed61cd83e6234bfd7dc3226847e48d061"
+  }
+}

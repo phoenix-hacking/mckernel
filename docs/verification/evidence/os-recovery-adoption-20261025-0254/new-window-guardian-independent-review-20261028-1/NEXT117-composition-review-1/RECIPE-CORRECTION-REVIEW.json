@@ -1,0 +1,75 @@
+{
+  "acceptance_deltas": {
+    "C_retirement": 0,
+    "native": 0,
+    "new_production_builds": 0,
+    "recipe_correction_review": 1,
+    "source_composition_review": 1,
+    "wholefile": 0
+  },
+  "checks": {
+    "accepted115_encoding_vectors": "4/4 exact hashes reproduced",
+    "actual116_command_consumer": "Pinned commands_for_plan consumes literalargv/cwd/output, does not read argv_sha256",
+    "actual_encoder": "AST-extracted exact pinned canonical_bytes; canonical compact sorted JSON + finalLF UTF8",
+    "all_four_current117_hashes": "PASS",
+    "all_literal_argv_cwd_outputs": "UNCHANGED from source-reviewed117",
+    "all_seven_source_postimages": "UNCHANGED and authenticated",
+    "bounded_reverse_to_original_recipe": "PASS corrected digests/path plus additive history/metadata only",
+    "changed_command0_hash": "1e16c2698dad82321faa1bfff7ed2b9e00d2197895f79c609b017c69b147630f",
+    "changed_command2_hash": "2d8cb4709ae3dfde39f37148391801d2d9e80b620c99b019942bb0ad8f0c98d7",
+    "compiler_or_runtime_calls": 0,
+    "pure_controls_independent_rerun": "10/10 PASS"
+  },
+  "corrected_recipe": {
+    "bytes": 32505,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/MINIMAL-FOUR-COMMAND-CONTINUATION.CORRECTED.NOT-GRANTED.json",
+    "sha256": "8b9216e669a5f7d8860c8290cf226ee63264392c7e5646b5a0ead9b1da9d9313"
+  },
+  "correction_source": {
+    "bytes": 6079,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/correct_recipe.py",
+    "sha256": "7bfdd71c6dda582c45f264a731b01db2275ade009a2e94c894caf823d5c82da7"
+  },
+  "decision": "PASS_EXACT_NEXT117_SOURCE_AND_CORRECTED_RECIPE_CHECKS_ONLY",
+  "fixed_blockers": [
+    "Changed command0/2 argv_sha256 now freshly match current literal117 argv under actual existing canonical_bytes encoding; unchanged1/3 retain their exact hashes. Historical116 recorded/recomputed and original117 copied digests are preserved separately, not relabeled as current.",
+    "prerequisite_origin.output now matches actual Rust env metadata parent and exact arch-I directory /work/output/build/kernel/rust/f06-origin."
+  ],
+  "implementation_ownership": false,
+  "independent": true,
+  "limitations": [
+    "argv_sha256 is consistency metadata, not a newly added execution guard. Actual116 consumer-specific guards and exact profile/source bindings remain required.",
+    "Candidate origin-profile ancillary argv_sha256 remains historical copied metadata. Actual derive producer authenticates full profile BYTE hash and uses literal argv without reading that digest. Separate history documents this; seven source postimages are unchanged.",
+    "The retained116 runner itself still has old-window operation guards and requires coherent actual-window/physical-boundary successor qualification before use; this source/recipe decision does not release it."
+  ],
+  "original_bad_recipe_retained": {
+    "bytes": 28129,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/MINIMAL-FOUR-COMMAND-CONTINUATION.NOT-GRANTED.json",
+    "sha256": "b946bd82d58957dda6cf731dc8762b47bfa74f73b941dd66b52db483be8ab1bf"
+  },
+  "prior_review_retained": {
+    "bytes": 10279,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-guardian-independent-review-20261028-1/NEXT117-composition-review-1/REVIEW.json",
+    "sha256": "d33747affb02adf8dadf23b569f194dd522850e982634951dbc04f7b32a5955b"
+  },
+  "remaining_conditions": [
+    "Bind fresh actual117 origin outputs, closed122-file/111.rs Rust export and three external relative modules, eight retained objects/three new production objects, exact current consumers and unchanged four literal commands.",
+    "Fullcrate/genericC/archC/link ABI/symbol/descriptor/metadata checks and matching supported native behavior remain pending. Do not count predicted two-C-function delta, new default image, native pass or whole-file closure yet.",
+    "Keep fixed2026-10-29T06:00Z and original cumulative7f4creditrun/57774.852125 ceiling; source review cannot renew grants/time/budget or alter parent controller ownership."
+  ],
+  "reviewed_at": "2026-10-28T06:15:11.360162+00:00",
+  "reviewer": "/root/independent",
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_adoption_scope": "The prior seven-source PASS remains valid. Root may adopt that exact source map plus this exact corrected recipe into future default queue after canonical preimage recheck, preserving source-only status and accepted CURRENT115. NEXT117 may wait behind actual116 build; no unchanged accepted prefixes should replay.",
+  "source_map": {
+    "bytes": 8229,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/SELECTIVE-SEVEN-SOURCE-MAP.json",
+    "sha256": "5742664b695f91f317e30ac2638c72e31b9149c5335ae046e3e288903344e12a"
+  },
+  "source_ready": {
+    "bytes": 2967,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next117-perfmmap-vdso-selective-composition-source-20261028-1/recipe-command-binding-correction-source-1/SOURCE-READY.json",
+    "sha256": "7bddf78dce5a0b10c5b978d495ed3464ffc345177b2e8129bdd390344f01fb48"
+  }
+}

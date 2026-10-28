@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "live_guard_calls": 0,
+  "pure_validate_only": true,
+  "results": [
+    {
+      "field": "checkpoint_requested",
+      "value": true,
+      "result": "ACCEPTED"
+    },
+    {
+      "field": "stop_now",
+      "value": true,
+      "result": "ACCEPTED"
+    },
+    {
+      "field": "paused",
+      "value": true,
+      "result": "ACCEPTED"
+    },
+    {
+      "field": "transport_uncertain",
+      "value": {
+        "method": "thread/read"
+      },
+      "result": "ACCEPTED"
+    },
+    {
+      "field": "resume_instruction",
+      "value": {
+        "status": "delivery_uncertain"
+      },
+      "result": "ACCEPTED"
+    },
+    {
+      "field": "last_instruction",
+      "value": {
+        "status": "sending"
+      },
+      "result": "ACCEPTED"
+    }
+  ]
+}

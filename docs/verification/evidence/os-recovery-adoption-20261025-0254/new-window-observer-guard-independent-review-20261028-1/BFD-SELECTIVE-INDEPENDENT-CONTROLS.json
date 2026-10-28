@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_BFD_SELECTIVE_SOURCE_TESTS_AND_ACTUAL_PATCH_APPLICATION_IN_PRIVATE_FIXTURE",
+  "runtime_authority": null,
+  "tests_passed": 7,
+  "negative_controls": 12,
+  "test_output": "test_duplicate_site_rejected (bfd_selective_test.SelectiveSource) ... ok\ntest_exact_accepted_result (bfd_selective_test.SelectiveSource) ... ok\ntest_missing_site_rejected (bfd_selective_test.SelectiveSource) ... ok\ntest_real_current_source (bfd_selective_test.SelectiveSource) ... ok\ntest_same_size_byte_change_rejected (bfd_selective_test.SelectiveSource) ... ok\ntest_size_change_rejected (bfd_selective_test.SelectiveSource) ... ok\ntest_unrelated_current_bytes_preserved (bfd_selective_test.SelectiveSource) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.003s\n\nOK\n",
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/selective-default-four-paths.patch",
+    "bytes": 9377,
+    "sha256": "2416e44e29669b684cd73cc58e417ef0aed30de3533a5a24f3800c55b0b07c93"
+  },
+  "patch_commands": [
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--no-index",
+        "--check",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/selective-default-four-paths.patch"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--no-index",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/selective-default-four-paths.patch"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "patch_output_all_four_postimages_exact": true,
+  "canonical_writes": 0,
+  "compiler_or_runtime_operations": 0
+}

@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_READY_NOT_COMPILED_OR_RELEASED",
+  "runtime_authority": null,
+  "selected_body": "vdso_get_vdso_info",
+  "selected_C_contract": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "bytes": 117955,
+    "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+  },
+  "accepted_current115": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/INDEPENDENT-ACTUAL-CURRENT115-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 22424,
+    "sha256": "b9ed6b2e14546fa2e372c11c5e5d73601a41b48172394bd38c17ab9b7fc37a3b"
+  },
+  "selected_arch_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "bytes": 100832,
+    "sha256": "7f5308bdc361e4c5b86bb77e8984b1c32fcb5fe317c6ae45fe9b4475a93a397c"
+  },
+  "calculate_time_from_tsc": "Already Rust-selected; original C excluded by MCKERNEL_RUST_SYSCALL_POLICY_HELPERS; accepted arch object has no defined time symbol. Reused, no duplicate port.",
+  "body_selection_basis": "Read-only nm of accepted7f53 selected arch object defines vdso_get_vdso_info; no generic Rust body exists. Native private initializer uses separate native_vdso protocol and remains unchanged.",
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/f06_vdso_info.rs",
+      "bytes": 5913,
+      "sha256": "4bc4a23b9444a6eab6f5a6f6e2737db41530809b3f8d987973ab0e1dbd8ebd8b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/original-vdso-info.c.inc",
+      "bytes": 787,
+      "sha256": "fcb21ddb8e3d30a75d3394a3e9603000d9e323beade8579e9afb8e98cc4e7f2d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/original-vdso-layout.c.inc",
+      "bytes": 312,
+      "sha256": "092ac2e97236ae0706bfbf4dee3e6841c46cd4672447af7ab2205bc722ae38df"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/oracle.c",
+      "bytes": 3454,
+      "sha256": "eb4c214d2c3fbcbb68260c389462522b6501cf94641ddcb4a13ff38f5466e775"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/fixture.rs",
+      "bytes": 3189,
+      "sha256": "4df1a1d668f1486f159bfac827cba323c47a05276b7388c5b0747b7f0b03a063"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/arch-syscall-selection.patch",
+      "bytes": 453,
+      "sha256": "4613472b80c34f2d9a6effd0b4e1824ec3b80c10aadcc9d1cf424957f9268eee"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/syscall-policy-integration.patch",
+      "bytes": 890,
+      "sha256": "6d9bea37caa537a2aa6e4794e9e7cc4f89435029354d2486ff0541399dd457db"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/cmake-selection.PROPOSAL.patch",
+      "bytes": 771,
+      "sha256": "8d9ddb272be733f3eeab8275c73e8846c9bb13085e1dc4ce6c85d4328df58719"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/FUTURE-HOST-COMMANDS.NOT-GRANTED.json",
+      "bytes": 2952,
+      "sha256": "0dcfb7948631089af3e2f4312ba35e8f608cf2fa32f0f3223f46286b9590964a"
+    }
+  ],
+  "ordinary_compiler_or_fixture_invocations": 0,
+  "pure_checks_executed": 0,
+  "prepared_equivalence_cases": 500,
+  "preimage_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body-source-20261028-1/PREIMAGES.json",
+    "bytes": 1222,
+    "sha256": "04cfb6bfd4d06a4874f26c2c6d3eabe28b136ba9f3f03f7ebc2e9ad395d9049e"
+  },
+  "new_C_implementation": 0,
+  "canonical_edits": 0,
+  "default_delta": 0,
+  "native_delta": 0,
+  "wholefile_delta": 0,
+  "remaining": [
+    "Root review source/callback effects/ABI/debug metadata",
+    "fresh actual ordinary grant before HOST commands",
+    "full current production crate and selected arch TU/unique-symbol link checks",
+    "default/native/file acceptance still open"
+  ]
+}

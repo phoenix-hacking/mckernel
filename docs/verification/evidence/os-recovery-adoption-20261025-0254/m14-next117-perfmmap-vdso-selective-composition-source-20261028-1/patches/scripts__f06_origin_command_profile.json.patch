@@ -1,0 +1,16 @@
+--- a/scripts/f06_origin_command_profile.json
++++ b/scripts/f06_origin_command_profile.json
+@@ -117,11 +117,12 @@
+       }
+     ]
+   },
+-  "composed_arch_source_sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561",
++  "composed_arch_source_sha256": "5ae375387108c835ef40b6a8a6644d7353496d5960af496f11ca6049b79a214d",
+   "exact_commands": [
+     {
+       "argv": [
+         "/usr/bin/cc",
++        "-DMCKERNEL_RUST_F06_VDSO_INFO",
+         "-DMCKERNEL_RUST_F06_SHMGET_DISPATCH",
+         "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+         "-DIHK_OS_MANYCORE",

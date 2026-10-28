@@ -1,0 +1,204 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_TWO_COMMAND_SUFFIX_PERF_MMAP_ABI18_160_PAIRS",
+  "records": [
+    {
+      "command": {
+        "label": "01-genuine-header-C-reference-link",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-Werror=incompatible-pointer-types",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+          "-I/home/holden/mckernel/kernel/include",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+          "-I/home/holden/mckernel/ihk/ikc/include",
+          "-I/home/holden/mckernel/ihk/linux/include",
+          "-I/home/holden/mckernel/lib/include",
+          "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/driver.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/output-PENDING-ROOT/callbacks.o",
+          "-no-pie",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/output-PENDING-ROOT/parity"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST ordinary mocked mapping only; no actual mapping, PMU, syscall, Docker, root, or guest operation.",
+        "cwd": "/home/holden/mckernel"
+      },
+      "join": {
+        "pid": 1892769,
+        "start": 96480551,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.1298556460533291,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/output-PENDING-ROOT/actual-two-command-suffix-capture-1/01-genuine-header-C-reference-link/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804297,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793167360818074829,
+            "ctime_ns": 1793167360818074829
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/output-PENDING-ROOT/actual-two-command-suffix-capture-1/01-genuine-header-C-reference-link/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804298,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793167360818074829,
+            "ctime_ns": 1793167360818074829
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-28T06:02:40.820455+00:00",
+        "wall_seconds": 0.13102275202982128,
+        "user_CPU_seconds": 0.07842199999999999,
+        "system_CPU_seconds": 0.010052,
+        "fresh_batch_peak_child_RSS_KiB": 30164,
+        "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+      }
+    },
+    {
+      "command": {
+        "label": "02-perf-mmap-parity",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/output-PENDING-ROOT/parity"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST ordinary mocked mapping only; no actual mapping, PMU, syscall, Docker, root, or guest operation.",
+        "cwd": "/home/holden/mckernel"
+      },
+      "join": {
+        "pid": 1892774,
+        "start": 96480564,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.023717408999800682,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/output-PENDING-ROOT/actual-two-command-suffix-capture-1/02-perf-mmap-parity/stdout",
+            "sha256": "53e868c6a5a69da04ce8ab094c3d58b9da9a2f6ea098707cb937b905dcd1f3ba",
+            "device": 66306,
+            "inode": 59804306,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 103,
+            "mtime_ns": 1793167360954079197,
+            "ctime_ns": 1793167360954079197
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/output-PENDING-ROOT/actual-two-command-suffix-capture-1/02-perf-mmap-parity/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59804307,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793167360950079068,
+            "ctime_ns": 1793167360950079068
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-28T06:02:40.953621+00:00",
+        "wall_seconds": 0.024967637029476464,
+        "user_CPU_seconds": 0.0011540000000000022,
+        "system_CPU_seconds": 0.0,
+        "fresh_batch_peak_child_RSS_KiB": 30164,
+        "RSS_scope": "actual cumulative child high water; per-command RSS unknown"
+      }
+    }
+  ],
+  "actual_stdout": "PASS perf-mmap actual-context ABI18; 160 C/Rust pairs; 320 exact-call/context/full-page/canary oracles\n",
+  "elapsed_seconds": 0.17395513597875834,
+  "grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/ROOT-ORDINARY-HOST-SUFFIX-GRANT.json",
+    "bytes": 2191,
+    "sha256": "06ffec4296d7449582fb2eef6790a539c5c056e38e865766a99494f22b4e792c"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body-source-20261028-1/fixture-nominal-types-correction-source-1/FUTURE-HOST-SUFFIX-PLAN.NOT-GRANTED.json",
+    "bytes": 4948,
+    "sha256": "47c1f7851befe09b1d77e5de20f724122ddc4deeb4fb5f1bc957ba16f3f0f4f0"
+  },
+  "canonical_writes": 0,
+  "native": false,
+  "production_link": false,
+  "whole_file_retired": false
+}

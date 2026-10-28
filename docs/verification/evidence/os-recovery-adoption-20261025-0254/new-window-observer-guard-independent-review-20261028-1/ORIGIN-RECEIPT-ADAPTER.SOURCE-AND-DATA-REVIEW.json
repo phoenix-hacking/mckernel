@@ -1,0 +1,104 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_ORIGIN_RECEIPT_ADAPTER_SOURCE_AND_ROOT_DATA_INVOCATION_ONLY",
+  "independent": true,
+  "reviewer": "/root/observerreview",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/origin-receipt-contract-adapter-source-1/adapt_origin_receipt.py",
+    "bytes": 4836,
+    "sha256": "db4dc3fd12aa474e5b53b7b81adbf576e0955227b80794ca9b0acdca7067f906"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/origin-receipt-contract-adapter-source-1/SOURCE-READY.json",
+    "bytes": 2000,
+    "sha256": "b30f9bec472436762d260bcf29e139870293db895f74eac16612f483c405e6d6"
+  },
+  "exact_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/origin-receipt-contract-adapter-source-1/EXACT-RETAINED-RECEIPT.CONTRACT.json",
+    "bytes": 3002,
+    "sha256": "fa9c08cdd8bc382a13582b6b06c830f68879d831e4bb81cb4f5d0c2989874264"
+  },
+  "retained_original_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-JOIN.json",
+    "bytes": 3002,
+    "sha256": "fa9c08cdd8bc382a13582b6b06c830f68879d831e4bb81cb4f5d0c2989874264"
+  },
+  "first_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/CURRENT116-OPERATION-1/ACTUAL-STATIC-MATERIALIZATION.json",
+    "bytes": 1648,
+    "sha256": "99d0b955bd291b7ae0dec131de9b880c5416fc5a1ffe311e87bdc3cd8513403f"
+  },
+  "independent_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGIN-RECEIPT-ADAPTER-INDEPENDENT-CONTROLS.json",
+    "bytes": 1878,
+    "sha256": "1c202190c2facac94ad80436f243efdcc0e6a2d74e40fa81a88cac02dde9a173"
+  },
+  "Root_data_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/origin-receipt-contract-adapter-source-1/ROOT-DATA-RECIPE.NOT-GRANTED.json",
+    "bytes": 2570,
+    "sha256": "5f7e7dddf8eaa414bc7de73af6063397dbcbc4c569810ba6242a402a6aacd9e8"
+  },
+  "source_findings": [
+    "Original static materializer failed at first missing compiler_executed field before guard, admission directory or holder creation. Exact first KeyError evidence is retained; source and origin producers must not replay.",
+    "Adapter accepts only exact original fa9c3002B receipt at its original absolute path and full exact keyset/facts. It authenticates all five ordered output references and both empty stream refs, checks source_generation_only=true/compiler=false/returncode int0/positive child join/closed streams and genuine generated-binding no-compiler scope.",
+    "Every original receipt field remains unchanged. Only truthful semantic aliases compiler_executed=compiler(false), direct_child_joined=child_positive_join(true), streams_closed=closed_streams(true) plus explicit adapter schema and original source_receipt byte reference are added.",
+    "No current OS compiler result, origin-generation replay, new child join or runtime acceptance is invented. Source/binary subjects authenticate as bytes; strict duplicate/nonfinite JSON decoding is applied only to declared receipt/generated-binding JSON.",
+    "Output uses exact existing absolute parent and exclusive create0400 plus fsync. Actual output3483B SHA345e6032 is deterministically verified before execution. No original receipt, frozen consumer source, operation23subject source or old Rootbindings is modified.",
+    "Independent three-test suite passes exact preservation, semantic negative/missing/changed-source controls and complete unchanged actual materializer against real Root input facts with TEST_ONLY temporary output routing/noeffect guard. Actual admission remains absent after test."
+  ],
+  "allowed_next_Root_data_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/origin-receipt-contract-adapter-source-1/adapt_origin_receipt.py",
+    "--source-receipt",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-JOIN.json",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/CURRENT116-OPERATION-1/ADAPTED-ORIGIN-RECEIPT.json"
+  ],
+  "expected_adapter_output": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/CURRENT116-OPERATION-1/ADAPTED-ORIGIN-RECEIPT.json",
+    "bytes": 3483,
+    "sha256": "345e603271506156eb4aea222668e0e155c48d97f197a9bfa394d7bd30d6157c"
+  },
+  "allowed_additive_Root_binding": {
+    "predecessor": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/ROOT-ACTUAL-BINDINGS-1.json",
+      "bytes": 5653,
+      "sha256": "e7cd64f0052633c37304be4e4eb2c03d785d08feae921dafdb7844423a08b262"
+    },
+    "expected_new_binding": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/ROOT-ACTUAL-BINDINGS-2.json",
+      "bytes": 5601,
+      "sha256": "e8ca2f5127d86a00a56b584c1130c1ad190deb0e4a760beb4f66205897b58e00"
+    },
+    "only_changed_field": "actual_origin_producer",
+    "value": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/CURRENT116-OPERATION-1/ADAPTED-ORIGIN-RECEIPT.json",
+      "bytes": 3483,
+      "sha256": "345e603271506156eb4aea222668e0e155c48d97f197a9bfa394d7bd30d6157c"
+    },
+    "preserve_every_other_field": true
+  },
+  "next_static_materialization_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/materialize_admission.py",
+    "--root-bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/cohort/ROOT-ACTUAL-BINDINGS-2.json"
+  ],
+  "conditions": [
+    "Root reauthenticate source/contract/receipt and originalbindings hashes plus output absence, run exact data-only adapter command once, then authenticate expected3483B/345e output.",
+    "Root write bindings2 exclusively, changing only actual_origin_producer to reviewed output ref. Expected bindings2 bytes/hash assume same indent2+newline encoding; equivalent Root writer must preserve exact declared resulting ref in actual request.",
+    "Normal materializer actual read-only operation guard remains mandatory for Root; source review does not substitute TEST_ONLY guard in real execution.",
+    "Append new adapter/source-review/original-receipt/adapter-output/bindings2 byte refs to actual static publication closure before fetched verification/prewarm; retained publication helper reading bindings1 for unchanged mechanical review does not itself publish all additive correction data.",
+    "If the one bounded receipt family correction fails on a genuine semantic contract, preserve failure and escalate; do not fabricate aliases, weaken predicates or replay origin/compiler prefix.",
+    "All original account/guardian/clocks/credits/current boundary/resource/independent prewarmbeforeclock/120s/prewrittenonceentry gates remain; no holder/build/native/nonce/controller authority from this decision."
+  ],
+  "actual_adapter_output_writes": 0,
+  "actual_guard_or_observer_or_compiler_or_subprocess_calls": 0,
+  "canonical_writes": 0
+}
