@@ -1,3 +1,20 @@
+## Fresh Root44 namespace ready after pre-capture publication refusal — 2026-10-28T00:41:36.771818+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Old5fe0/Frefusal804440 preserved: Rootpublication lackedrequiredfiles; wrapper failed
+BEFOREcapturehelper. Rootincorrectlyalsoinvokedbridge; itrefusedmissingpending before
+claim/grant/nativehelper. Noresource/guest/nativefailure; old5fe ABANDONEDUNCONSUMED.
+Root44ledger00ed/SAME45consumed/latestfree221349 reservesNEW22a1; freshnamespaceC
+publication-files-correction-source-1/F. SOURCE99e7/ab5PASS, all4Rootfinalizer/static/
+nonce/bridgecommands0/emptyerr; actualstatic90b756/bridge70af/authb39f/source060428.
+Properfilespublication+exactguardpreflight BEFOREclock; Rootorchestration nowSTOPSon
+wrappernonzero andarmsbridgeONLYafter0+realresource/pending. Prewarmeddaemonready.
+Same33c11/HOST5b30+22/stageb388/archive8073/manifest06e9/m15str1/QMP92/frozen60e/e5d/
+ff227/af2/5298 preserved, no rebuild/compose/replay. Accepted114C80/R59/process31.
+NextF02LOCAL14+final14sourceprofile exactwholeRustregistrycounts/sourcewrapping
+blockers caughtprecompiler; oneboundedprivatequalifier/profilefix, noactualworkload.
+Fixed05:36:09Z/earlierclamps/accountincludedfirst/sameledger/holds/oneheavy/mutex/floors.
+
 ## Root43 startup once-entry mechanically ready — 2026-10-28T00:30:05.913435+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

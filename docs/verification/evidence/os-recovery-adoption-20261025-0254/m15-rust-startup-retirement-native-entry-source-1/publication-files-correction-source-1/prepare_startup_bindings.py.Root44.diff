@@ -1,0 +1,11 @@
+--- preserved5fe0/prepare_startup_bindings.py
++++ freshRoot44/prepare_startup_bindings.py
+@@ -46,7 +46,7 @@
+  checked(stage['scratch_manifest']);b['manifest']=stage['scratch_manifest'];b['attempt_parent']=stage['planned_attempt_parent'];b['planned_attempt_parent']=stage['planned_attempt_parent'];b['scratch_manifest_stage']=ref(A/'ACTUAL-SCRATCH-MANIFEST-STAGE.json');b['stage_result']=b['scratch_manifest_stage']
+  pure_owner._manifest_identity(b['manifest']['path'],b['manifest']['sha256']);pure_owner._manifest_outside_writable_parent(b['manifest']['path'],b['attempt_parent']);v.load_manifest(b['manifest']['path'])
+  need(not list(Path(b['attempt_parent']).iterdir()),'fresh attempt parent is not empty')
+- ledger=read(Path(b['root_ledger35']['path']));need(len(ledger['consumed_nonces'])==45 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact actual Root42-or43/free boundary')
++ ledger=read(Path(b['root_ledger35']['path']));need(len(ledger['consumed_nonces'])==45 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact actual Root44/free boundary')
+  for flag,value in [('--manifest',b['manifest']['path']),('--attempt-parent',b['attempt_parent']),('--manifest-sha256',b['manifest']['sha256'])]:b['exact_argv'][b['exact_argv'].index(flag)+1]=value
+ 
+  if args.nonce:
