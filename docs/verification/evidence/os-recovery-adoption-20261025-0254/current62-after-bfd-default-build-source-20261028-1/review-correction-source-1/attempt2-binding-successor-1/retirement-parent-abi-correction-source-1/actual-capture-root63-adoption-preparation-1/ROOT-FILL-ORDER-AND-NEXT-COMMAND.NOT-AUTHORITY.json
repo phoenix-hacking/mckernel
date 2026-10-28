@@ -1,0 +1,93 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "planned_writable_paths": {
+    "ledger": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/ROOT-CURRENT-NONCE-LEDGER63.json",
+    "boundary": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/ROOT63-CURRENT-BOUNDARY.ACTUAL.json",
+    "bindings": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/ROOT63-CURRENT-BINDINGS.ACTUAL.json",
+    "runtime_review": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/ROOT63-RUNTIME-REVIEW.ACTUAL.json"
+  },
+  "source_control_files_unchanged": true,
+  "Root_remaining_fields": {
+    "01": {
+      "author": "/root",
+      "complete_within_declared_current_boundary": true,
+      "root_attests_no_unlisted_post_boundary_execution_or_custody_operation": true,
+      "recorded_epoch": "Root actual finite epoch >=pending recorded_epoch and <1793253600",
+      "note": "Root actual adoption note"
+    },
+    "02": {
+      "author": "/root",
+      "decision": "BIND_EXISTING_REVIEWED_CURRENT_BUILD_BOUNDARY",
+      "root_attests_exact_current_boundary": true,
+      "nonce_ledger": "exact BYTEref actual01"
+    },
+    "03": {
+      "author": "/root",
+      "decision": "BIND_EXACT_ROOT62_BFD_POSTJOIN_OBSERVER",
+      "ledger": "exact BYTEref actual01",
+      "current_boundary": "exact BYTEref actual02",
+      "independent_review": "exact BYTEref existing independent owner actual04 when ready"
+    }
+  },
+  "reviewer_remaining_fields": {
+    "04": {
+      "independent": true,
+      "decision": "PASS_EXACT_ROOT62_BFD_POSTJOIN_OBSERVER_DEPENDENCIES",
+      "ledger": "exact BYTEref actual01",
+      "current_boundary": "exact BYTEref actual02"
+    }
+  },
+  "order": [
+    "Root writes actual01 with actual attestation and epoch",
+    "Root writes actual02 binding actual01 and acceptedfree/source-schema reviews",
+    "Root writes actual03 binding actual01/02; independent_review may stay null for pure validate_current_adoption only",
+    "Root runs next pure-validator argv, no guard/capture",
+    "Existing independent review owner seals actual04 exact adopted ledger/boundary/runtime bindings before any actual current observer or heavy/native consumer",
+    "Root fills actual03 independent_review with exact04ref; runtime_dependencies then requires that exact reviewed phase/ledger/free/boundary/config"
+  ],
+  "schema": {
+    "actual_current_schema": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/OBSERVER-SCHEMA.ROOT63-CURRENT.SOURCE-ONLY.json",
+      "bytes": 722,
+      "sha256": "1739d17e8435e8a532e8e32ecd4a49df609d3ee2687e3990eacee6a2c1439aee"
+    },
+    "schema_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-RETIREMENT-PARENT-ABI-REVIEW-1/OBSERVER-SCHEMA.ROOT63-CURRENT.REVIEW.json",
+      "bytes": 1451,
+      "sha256": "ca304324370d71c019fab43ce3c07cffe9090e35e56890cefc4816650b734ea7"
+    },
+    "candidate_schema": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/OBSERVER-SCHEMA.ROOT62-CANDIDATE.SOURCE-ONLY.json",
+      "bytes": 728,
+      "sha256": "3ddd7bd29c8e4e44f55b4a52cbfc6ad5b2c6d63ed70fdd5cc9a05f949a24fd6e"
+    },
+    "candidate_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-RETIREMENT-PARENT-ABI-REVIEW-1/OBSERVER-SCHEMA.ROOT62-CANDIDATE.REVIEW.json",
+      "bytes": 1459,
+      "sha256": "69736e8cb41779ff0c45cead7a3a35e18bb0ff60e6f27a4587d522c7a0a7948e"
+    }
+  },
+  "independent_current_boundary_review_reused": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT62-ACTUAL-POSTJOIN-REVIEW-1/REVIEW.json",
+    "bytes": 5501,
+    "sha256": "119318b9be4fc6438c634d5c22ee0013fc290eeddc8d79618c549e69b5953441"
+  },
+  "boundary_review_scope": "Existing genuine actual-current-free physical review; any stronger downstream exact typed descriptor/runtime dependency review remains required before execution.",
+  "next_pure_validator_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib.util,json; from pathlib import Path; p=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py'); spec=importlib.util.spec_from_file_location('actual_Root63_pure_adoption',p); m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); b=m.checked(m.ref('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/ROOT63-CURRENT-BINDINGS.ACTUAL.json')); c=m.validate_current_adoption(b,m.validate_retained()); print(json.dumps({'status':'PASS_PURE_ACTUAL_ROOT63_CURRENT_ADOPTION','nonces':len(m.checked(b['ledger'])['consumed_nonces']),'accepted_capture':c['status'],'guard_query_capture_calls':0}))"
+  ],
+  "no_recapture": true,
+  "actual_guard_query_capture_calls": 0,
+  "actual_ledger_authorship": 0
+}

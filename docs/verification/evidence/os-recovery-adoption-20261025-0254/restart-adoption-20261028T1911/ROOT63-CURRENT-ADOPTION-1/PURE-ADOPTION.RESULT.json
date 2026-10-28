@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib.util,json; from pathlib import Path; p=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py'); spec=importlib.util.spec_from_file_location('actual_Root63_pure_adoption',p); m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); b=m.checked(m.ref('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/ROOT63-CURRENT-BINDINGS.ACTUAL.json')); c=m.validate_current_adoption(b,m.validate_retained()); print(json.dumps({'status':'PASS_PURE_ACTUAL_ROOT63_CURRENT_ADOPTION','nonces':len(m.checked(b['ledger'])['consumed_nonces']),'accepted_capture':c['status'],'guard_query_capture_calls':0}))"
+  ],
+  "returncode": 0,
+  "wall_seconds": 0.3249854090390727,
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/PURE-ADOPTION.stdout",
+    "bytes": 192,
+    "sha256": "cd1c33be933cc78cb1af69208f1e4dfc521942180f19357135f7e17dbb7966c7"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ROOT63-CURRENT-ADOPTION-1/PURE-ADOPTION.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_guard_query_capture_calls": 0
+}

@@ -1,0 +1,537 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-28T21:50:00.544638+00:00",
+  "decision": "PASS_ACTUAL_RETAINED_ROOT62_CAPTURE_PURE_ACCEPTANCE_CHECKS",
+  "capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/OBSERVATION.json",
+    "bytes": 24570393,
+    "sha256": "4606c2f8315a23ae3f7581eb1141b9688807507c82ac69432c429c94ee2f7c74"
+  },
+  "parent_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-PARENT-JOIN.ACTUAL.json",
+    "bytes": 1475,
+    "sha256": "f97fd78afc1adfe23267955f970f52b97716366b9e84e840be7d5f05bb4c3a50"
+  },
+  "actual_capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py",
+    "--bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/RUNTIME-BINDINGS.ACTUAL.json",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-RELEASE.ACTUAL.json",
+    "--release-sha256",
+    "f76258ddc823171bc10b4edd1206058a3ce43574b003319350d3b52698b0feea",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/OBSERVATION.json"
+  ],
+  "release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-RELEASE.ACTUAL.json",
+    "bytes": 4799,
+    "sha256": "f76258ddc823171bc10b4edd1206058a3ce43574b003319350d3b52698b0feea"
+  },
+  "pending_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-2/ROOT-CURRENT-NONCE-LEDGER62.PENDING-AFTER-ATTEMPT2.json",
+    "bytes": 31032,
+    "sha256": "62ff5bbe9b917110800b6f206db01bbc776dd71acaabefb4d895453185744420"
+  },
+  "raw_new_query_receipts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/command-9db4e10f2a304587a010e343a0515ac6/JOIN-WAIT4.json",
+      "bytes": 6511,
+      "sha256": "79195a4196ae288195fc946fbd61956d96f5c75733b74bb47e958eac3acd69fb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/command-47b2ba16815042c19a149f0e695b7557/JOIN-WAIT4.json",
+      "bytes": 2081,
+      "sha256": "840c4aab5ce6438bcbb463716ce427e9a86bf3e2dbf0c5bfa8777ebd368f76d1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/command-79879438538d4b2da5da5f9d5850341e/JOIN-WAIT4.json",
+      "bytes": 2173,
+      "sha256": "c45df51a96e9263e2d6379c2f1b993fa6c986285803cd87ee3e12a8001935b28"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/command-01cb98277c6b434b994bbdddcc13358b/JOIN-WAIT4.json",
+      "bytes": 2167,
+      "sha256": "b0018b968ded2be8663915a0ab9dd793036e1ceef7db79c45f3a3c95aa207a1f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/command-287fa027a195454f985c94e7e59fd05b/JOIN-WAIT4.json",
+      "bytes": 6511,
+      "sha256": "c50c5c76d9721aaa2b9e5c73ed8ae047484f02efc5b1f9943e265ab135539bd0"
+    }
+  ],
+  "query_clients": [
+    {
+      "pid": 2165178,
+      "birth": 102149184
+    },
+    {
+      "pid": 2165182,
+      "birth": 102149203
+    },
+    {
+      "pid": 2165190,
+      "birth": 102149214
+    },
+    {
+      "pid": 2165198,
+      "birth": 102149225
+    },
+    {
+      "pid": 2165206,
+      "birth": 102149236
+    }
+  ],
+  "full_census_reports_checked": 2,
+  "retirement_raw_clients_checked": 14,
+  "absence_actor_rows": 87,
+  "history_actor_rows": 72,
+  "consumed_nonces": 71,
+  "all87_actors_absent_from_both_new_raw_censuses": true,
+  "inherited_physical_nodes": [
+    {
+      "JSONpointer": "",
+      "status": "PASS_Root62_BFD_POSTJOIN_OBSERVATION_PENDING_INDEPENDENT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.6133962,
+        1006151.182352805,
+        1021489.309402866
+      ],
+      "last_observed_clocks": [
+        1793224047.8446155,
+        1006154.413571916,
+        1021492.540621854
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root59_native_and_physical",
+      "status": "PASS_Root59_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.7842095,
+        1006151.353166184,
+        1021489.480216528
+      ],
+      "last_observed_clocks": [
+        1793224046.9855616,
+        1006153.554517996,
+        1021491.681567966
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root59_native_and_physical/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root59_native_and_physical/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root59_native_and_physical/historical_physical_reobservation",
+      "status": "PASS_ROOT51_CURRENT115_ATTEMPT3_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8072245,
+        1006151.376181236,
+        1021489.503231263
+      ],
+      "last_observed_clocks": [
+        1793224046.8037758,
+        1006153.372732347,
+        1021491.499782372
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation",
+      "status": "PASS_ROOT60_CURRENT116_BUILD_POSTJOIN_OBSERVATION_PENDING_INDEPENDENT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.7301657,
+        1006151.299122047,
+        1021489.426171988
+      ],
+      "last_observed_clocks": [
+        1793224047.1009223,
+        1006153.669878839,
+        1021491.796928871
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation/historical_Root59_native_and_physical",
+      "status": "PASS_Root59_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.7842095,
+        1006151.353166184,
+        1021489.480216528
+      ],
+      "last_observed_clocks": [
+        1793224046.9855616,
+        1006153.554517996,
+        1021491.681567966
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation/historical_Root59_native_and_physical/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation/historical_Root59_native_and_physical/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation",
+      "status": "PASS_ROOT51_CURRENT115_ATTEMPT3_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8072245,
+        1006151.376181236,
+        1021489.503231263
+      ],
+      "last_observed_clocks": [
+        1793224046.8037758,
+        1006153.372732347,
+        1021491.499782372
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_current60_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation",
+      "status": "PASS_Root61_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.6698785,
+        1006151.238834763,
+        1021489.365884787
+      ],
+      "last_observed_clocks": [
+        1793224047.1160288,
+        1006153.684984968,
+        1021491.812035371
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_Root59_native_and_physical",
+      "status": "PASS_Root59_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.7842095,
+        1006151.353166184,
+        1021489.480216528
+      ],
+      "last_observed_clocks": [
+        1793224046.9855616,
+        1006153.554517996,
+        1021491.681567966
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_Root59_native_and_physical/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_Root59_native_and_physical/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation",
+      "status": "PASS_ROOT51_CURRENT115_ATTEMPT3_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8072245,
+        1006151.376181236,
+        1021489.503231263
+      ],
+      "last_observed_clocks": [
+        1793224046.8037758,
+        1006153.372732347,
+        1021491.499782372
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation",
+      "status": "PASS_ROOT60_CURRENT116_BUILD_POSTJOIN_OBSERVATION_PENDING_INDEPENDENT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.7301657,
+        1006151.299122047,
+        1021489.426171988
+      ],
+      "last_observed_clocks": [
+        1793224047.1009223,
+        1006153.669878839,
+        1021491.796928871
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation/historical_Root59_native_and_physical",
+      "status": "PASS_Root59_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.7842095,
+        1006151.353166184,
+        1021489.480216528
+      ],
+      "last_observed_clocks": [
+        1793224046.9855616,
+        1006153.554517996,
+        1021491.681567966
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation/historical_Root59_native_and_physical/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation/historical_Root59_native_and_physical/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation",
+      "status": "PASS_ROOT51_CURRENT115_ATTEMPT3_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8072245,
+        1006151.376181236,
+        1021489.503231263
+      ],
+      "last_observed_clocks": [
+        1793224046.8037758,
+        1006153.372732347,
+        1021491.499782372
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation",
+      "status": "PASS_ROOT49_CURRENT115_ATTEMPT2_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.8502865,
+        1006151.419243352,
+        1021489.546293412
+      ],
+      "last_observed_clocks": [
+        1793224046.790655,
+        1006153.359611403,
+        1021491.486661526
+      ]
+    },
+    {
+      "JSONpointer": "/historical_Root61_reobservation/historical_current60_reobservation/historical_Root59_native_and_physical/historical_physical_reobservation/historical_Root49_reobservation/historical_Root48_reobservation",
+      "status": "PASS_ROOT48_EXACT_CURRENT115_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE",
+      "observed_clocks": [
+        1793224044.867522,
+        1006151.436478335,
+        1021489.563528514
+      ],
+      "last_observed_clocks": [
+        1793224046.7794695,
+        1006153.348426133,
+        1021491.475476203
+      ]
+    }
+  ],
+  "duplicate_paths_are_retained_not_additional_work": true,
+  "source_fd_checks": "Exact successful da5a observe checked cleanup PID2158579 and FD4 path absent after final fullcensus, plus oldholder2124365/FD3; raw census independently proves cleanupPID absent.",
+  "cleanup_inherited_group_absence_claimed": false,
+  "closed_exclusive_probes": 2,
+  "permanent_mutex": {
+    "device": 27,
+    "inode": 4,
+    "regular": true,
+    "no_kernel_lock_row": true
+  },
+  "capacity": {
+    "/home/holden/mckernel": 147552657408,
+    "/home/holden/mckernel-work/scratch": 47862149120
+  },
+  "memory": {
+    "MemTotal": 33199697920,
+    "MemAvailable": 27284865024
+  },
+  "cgroup": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+  },
+  "unmeasured_actor_gaps": [
+    "Original run/inspect sudo Docker child PID/birth not persisted by custom subprocess.run; do not invent.",
+    "Capture-parent/held-input/publisher transient source writers do not all have persisted birth receipts; full root publisher/actor census and exact no-unlisted Root attestation remain mandatory."
+  ],
+  "unmeasured_inherited_observer_client_births": true,
+  "publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/FETCHED-COMPLETE-NEW-CAPTURE-DATA-PUBLICATION.json",
+    "bytes": 31958,
+    "sha256": "4c3f1d4d01df0adbf890e4c947616af2483b56331d85e611042a9a5305180cad"
+  },
+  "publication_current_source_rows": 23,
+  "publication_new_DATA_rows": 22,
+  "publication_verified_receipt_reused": true,
+  "validate_acceptance": true,
+  "actual_guard_query_capture_cleanup_calls_by_reviewer": 0,
+  "runtime_authority": null
+}

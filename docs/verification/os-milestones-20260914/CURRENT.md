@@ -2,6 +2,42 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Twenty-minute checkpoint; Root63 actual current adopted — 2026-10-28T21:56Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket21:36:28.104491–21:56:28.104491: fourHOSTcommands all0 (3compiler/link+1behavior),
+840C/Rustgpregs-provider comparisons; CPU0.380245s/sumwall0.437231s/peakRSS136644KiB.
+Onefixture-onlymacro warning retained. Production/default/native/file/C-retirement
+increments0. Practical35/35/M14files4/6/M15files1/8 unchanged; accepted116C71/Rust68,
+BFDf920two currenttool links; matchingvalidnative/installation/fullfile gaps OPEN.
+
+Actualpostjoincapture4606 succeeded once,2164662/b102148912 ownsession/group,
+parentf97 directwait0/closedstreams/freshgroupabsence/noerrors. wall3.930402s/
+CPU3.580502s/RSS103140KiB. IndependentCURRENT-FREEe13 accepts all87actors/fullrecursive
+physical/two censuses/probes/FD4 absence/same71nonces. No newquery/cleanup replay.
+Root63ledger6b2e9d8c/currentbindingbe0e9a90/descriptor4a04 adopted throughpurevalidator
+PASS and independenttypedruntimee2a88. Originalnative/failedhistory andunknownbirth
+gaps preserved. Root61/free6c83 nowhistorical; thisisgenuine newphysicalacceptance,
+notmodelretirement orautomaticnewworkloadpermission. Newfrontier93recordedactors.
+
+Producer-to-physicalobservation119m16.647s, toindependentcurrentfree122m32.546s;
+capture-to-acceptance195.899s. Earlier8.201202sproducer/8.730653scleanup stayprevious
+bucket baselines. FirstHOSTcompiler15m31.301s/productionconfigure36m50.980s after
+relaunch; exactready-to-Rustcompilerchild latencyunretained. HOST/captureintervals
+do notoverlap. Current snapshot host147481784320B/scratch47862149120B abovefloors.
+Original30minbaseline/stopped41784.995s unchanged; no95percentclaim.
+
+Rootnextcommand: materialize typed118actualBOUNDARY-INPUTS/delegation fromreviewed
+c5e92/f56schema withfinalbe0e binding, publish/fetchcompleteDATAclosure, exactsource
+materializer/export andexistingadmission beforeunchanged4commanddefaultproducer.
+original227 preparesonlyremainingRootfields; canonical118 source staysunchanged.
+F03cumulativeBODY3–9 source/API independentlyPASSd622,16524priorHOSTpairs reused;
+F06cumulative independentprivateowner advances. M15authenticGitmount/BUILDIDsource
+reviewca6f passed; genuineexport/defaultconfigure/install/native remainunrun.
+Schedulingchange: finish typed118actualentry now, reuseacceptedcurrent andretained
+objects/SDK21; prebindretirement+parentconsumerbeforefutureproducer entry. No capacity
+expansion/newframework/repeatedproofquota. Exactbucket: STEERING-20261028T215628.json.
+
 ## Twenty-minute engineering checkpoint — 2026-10-28T21:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
