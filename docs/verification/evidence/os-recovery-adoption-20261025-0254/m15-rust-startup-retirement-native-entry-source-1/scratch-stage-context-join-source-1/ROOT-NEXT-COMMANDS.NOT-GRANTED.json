@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "root_fill_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.json",
+  "copy_template": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/scratch-stage-context-join-source-1/ROOT-FINAL-FILL.TEMPLATE.NOT-AUTHORIZED.json",
+  "Root_fills": [
+    "author=/root",
+    "actual_release_ledger_is_latest=true",
+    "Root_attests_no_intervening_operation_since_boundary=true",
+    "source_authority actualRootref",
+    "current_capture_independent_source_review actualPASS2ref"
+  ],
+  "commands": [
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/finalize_context.py",
+      "--seal-source-context",
+      "--root-inputs",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.json",
+      "--root-inputs-sha256",
+      "ACTUAL_ROOT_INPUT_SHA256"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/root-adopted-retirement-entry-1/prepare_startup_bindings.py",
+      "--check-static"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/root-adopted-retirement-entry-1/prepare_startup_bindings.py",
+      "--nonce",
+      "5fe0acdfcc75309f0cb40ddb1178b88b"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/finalize_context.py",
+      "--bind-bridge"
+    ]
+  ],
+  "then": "Root publishesactualstatic/helpers, fillsconditionalonceauthorization; existing run_startup_resource_once produces freshcapture+pendingpacket, exactindependentexecutionreview, normalbridge one --authorization-sha256 call. No reviewer refresh or alternate runtime.",
+  "no_actual_commands_run": true
+}

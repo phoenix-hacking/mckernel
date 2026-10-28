@@ -1,3 +1,61 @@
+## Root43 startup once-entry mechanically ready — 2026-10-28T00:30:05.913435+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Correctedschemajoin9324/immutablecba SOURCEPASS116810; all4actualfinalizer/static/nonce/
+bridgecommands0/emptyerr, finalmechanicalc603PASS. Sourceauthority8b7e/case180639/
+Rootadoptionae787/static518642/bridge96db87/auth14f99; actualnonce5fe0 UNUSED.
+Root43ledger41ade/currentfree221349/manifest06e933/newarchive8073/collector33c11
+HOST5b30+22/stageb388 exact, plannedQMP92. Publishing/fetchverifying thenfreshresource
++designateddaemonreview/prewrittenonceentry NEXT. Original3d7b/source12e andall6d2e/
+composefailurespreserved; no guardweakening/helpercodechange/nativefailureinvented.
+Accepted114c48f/C80/Rust59/process31 retained; no matchingnative/filecredit. Future
+sourcequalifiedpreparation disjointLOCAL14+final14 ongoing, foregroundF03setsiginfo6777/
+ptracepair357b SOURCEONLY. Fixed05:36:09Z/earlierclamps/account/oneheavy/controls unchanged.
+
+## CURRENT114 accepted; native startup receipt join correcting — 2026-10-28T00:24:04.316501+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independenteb527/Root4ef8 CURRENT114c48f/Rustbc882 accepted: C61+19=80,59selectedRust
+providers, process31; delta3selectedCfunctions(twoRustnewwrappers+existingatomic) and
+32Cmetadata→64typedRustslots2048B. All76datausers/5perfconsumers positive,389registry
+multiset retained; storage/show-roworder change explicit, traversalunchanged.39/59
+direct-or-alias inputedges;20inheritedbodies notclaimedexecuted. Native/filedelta0,
+14LOCAL448B+configs/sevenoldrawCprovenancedeltasOPEN. M14files3/6/M15files1/8.
+
+Newcollector33c11/HOST5b30/22controls andstageb388 onlyinitdiffactualqualified.
+Root43ledger41ade/currentfree221349, scratch06e9/m15str1/QMP92/new5fe0unused.
+EntrySOURCE12e76 preflight3d7b correctlyBLOCKED Rootscratchreceipt schema mismatch
+BEFOREresource/entry; boundedadditivejoin preservingfe8a/ownerAPI/nonceplannedfacts
+inprogress. No nativefailureinvented, no inheritedrelease/replay. Frozen60e/e5d/ff227
+normalstartup keptindependentofnew114image. Futuremetadatapackets4bb0/5d4d andF03
+6777/357b retainedSOURCEONLY; foreexactownership respected. Same05:36:09Z/earlier
+clamps/accountincludedfirst/7f4ledger/realholds/oneheavy/permanent27:4/scratch21/floors.
+
+## Four kernel commands and corrected collector HOST pass; native entry preparing — 2026-10-28T00:19:27.068311+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current114 all4commands0/sum21.691956s/span21.709497/CPU21.709201/RSS592140KiB;
+resource→compiler65.563648s. Currentfree221349/Root42ca862; stoppedCIDd521 preserved.
+Actual59providers/C80/process31 +32GLOBAL64slots2048B positiveprefix, finalartifact
+acceptance pending exact76consumer/LOCALaddress/registry traversal proof; accepted
+C83/Rust56/process63 unchanged. No compiler/HOST/nativeprefixreplay.
+
+Collector-onlyretirement correction33c11: all5HOSTcommands0/22controls/3.084014swall,
+independent5b30/facts5b51/Rootea24. Sameoriginal5s/argv/emptyenv/91B/RAWpredicates;
+6d2eFAIL/705d diagnosis/C-Rustexitparity preserved, noexecutorrepair justified.
+Firstcomposemissingparent0.174sFAIL retained; freshboundedcorrection11.111665sPASS
+8073/c560. Fullstageb388:60members/onlyinit differs fromaccepted23e2; manifest06e933/
+scratchm15str1 API0/plannedQMP92; nonce5fe0 RESERVEDUNUSED. Root43ledger41ade listsall
+knownordinaryattempts; noheavy. Entryhelpers/source/capability/publication beforefresh
+resource NEXT, independently of114artifactacceptance; frozenkernel60e/e5d/ff227 retained.
+
+Completed23:36–00:06 +1F05supportedfile only/M14files3/6; e3c1nativecase priorbucket.
+Current00:06–00:36 compiled4/HOST5+22/stagePASS, acceptednative/filedelta0 sofar.
+FutureSOURCEONLY4bb0LOCAL14+configs/5d4dfinal14(named256B, nondefaultvariantlimitations)/
+6777setsiginfo retained; foreowns futureptrace_syscall_event+report_signal pair, no
+duplicateimplementation. Same05:36:09Z/earlierclamps/accountincludedfirst/creditledger/
+realholds/oneheavy/permanent27:4/scratch21/floors. No95percentgainclaim.
+
 ## Rust startup values pass; original retirement fails — 2026-10-27T23:57:18.339179+00:00
 
 Root next114 exactsixfileSOURCE adopted67fc aftermechanical860533; canonical6readbacks matched. Global32typeddebug+perf3 sources now integrated, actual4commands3new8retained/119Rust admissionRoot41 pending. CandidateC80/Rust59/process31 remainsunaccepted; no build/default/nativecreditfromsource.

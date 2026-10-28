@@ -1,0 +1,23 @@
+/src/kernel/syscall.c: In function ‘do_execveat’:
+/src/kernel/syscall.c:7546:40: warning: unused variable ‘range’ [-Wunused-variable]
+ 7546 |                         munmap_write_lock_bridge, munmap_write_unlock_bridge,
+      |                                        ^~~~~
+/src/kernel/syscall.c: At top level:
+/src/kernel/syscall.c:26376:44: warning: ‘syscall_itimer_offsets’ defined but not used [-Wunused-const-variable=]
+26376 |  .file=__FILE__, .func="sched_setparam_log_bridge", .line=26052, .flags=DDEBUG_DEFAULT
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~
+/src/kernel/syscall.c:26058:50: warning: ‘sched_syscall_offsets’ defined but not used [-Wunused-const-variable=]
+26058 |         }
+      |                                                  ^                    
+/src/kernel/syscall.c:24297:45: warning: ‘syscall_cputime_offsets’ defined but not used [-Wunused-const-variable=]
+24297 | #ifdef MCKERNEL_RUST_RLIMIT_HELPERS
+      |                                             ^                      
+/src/kernel/syscall.c:4910:39: warning: ‘wait_scan_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4910 | static const struct wait_zombie_offsets wait_zombie_kernel_offsets = {
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
+/src/kernel/syscall.c:4877:41: warning: ‘wait_zombie_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4877 | }
+      |                                         ^                         
+/src/kernel/syscall.c:4720:43: warning: ‘ptrace_detach_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4720 | }
+      |                                           ^                           

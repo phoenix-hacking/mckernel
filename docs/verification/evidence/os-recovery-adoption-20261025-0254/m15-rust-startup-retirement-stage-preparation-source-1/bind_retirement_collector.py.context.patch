@@ -1,0 +1,20 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-stage-source-1/bind_correct_collector.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-stage-preparation-source-1/bind_retirement_collector.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ HERE=Path(__file__).resolve().parent
+ PLAN=HERE/'STAGE-PLAN.NOT-RELEASED.json'
+-PLAN_SHA='ead8af0bb3b7d57f004a9d3e1782c1ccda3836ea0eddbf680cd7453f543a6cb5'
++PLAN_SHA=None  # Root binds final plan after actual new collector qualification
+ def need(ok,why):
+  if not ok:raise ValueError(why)
+ def read(path):
+@@ -35,7 +35,7 @@
+  need(m['payload']['cwd']==facts['payload_cwd']==profile['cwd']=='/case/work','compiled cwd')
+  need(m['payload']['env']==facts['payload_env']==profile['env']=={'PATH':'/usr/bin:/bin','COKERNEL_PATH':'/apps'},'compiled twoenv')
+  need(m['payload']['oracle']==facts['oracle']==profile['oracle'] and len(bytes.fromhex(facts['oracle']['stdout_hex']))==91,'unchanged91B oracle')
+- need(facts['actual_test_count']==16 and facts['ignored']==facts['filtered']==0,'actual all16 qualification')
++ need(type(p['qualified_actual_test_count']) is int and p['qualified_actual_test_count']>0 and facts['actual_test_count']==p['qualified_actual_test_count'] and facts['ignored']==facts['filtered']==0,'exact actual new qualification count; no ignored/filtered')
+  need(facts['source_caseprofile']['sha256']==p['compiled_collector_profile']['sha256'],'qualified compiled profile join')
+  expected=p['collector'];need(m['staging']['collector']==expected,'exact collector selection')
+  need(facts['actual_collector_artifact']['path']==expected['path'] and facts['actual_collector_artifact']['sha256']==expected['sha256'] and facts['actual_collector_artifact']['bytes']==expected['size'],'actual artifact qualification')

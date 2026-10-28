@@ -1,0 +1,87 @@
+{
+  "actual_HOST_qualification": null,
+  "actual_collector_artifact": null,
+  "actual_source_refs": [
+    {
+      "bytes": 14464,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+      "sha256": "7ccf31f4e66151fc06a9fd4d2c3904ad2ad91e8b5919be92f6994c6d55f6f0cf"
+    },
+    {
+      "bytes": 1016,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/profile.rs",
+      "sha256": "b395546ba05320c50d215770d760bc4ea6f4348a35b8ce03458f21bc6ca7df0a"
+    },
+    {
+      "bytes": 2196,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/report.rs",
+      "sha256": "da958f3e0ca75817781b2914843f40bddbcbf9735204ff7f1658549ddcdaf4b9"
+    },
+    {
+      "bytes": 22348,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/supervisor.rs",
+      "sha256": "c48d5679126f2ac1b16da9c55a28bb3b5f5b3a93105212da81150a5156deebf6"
+    },
+    {
+      "bytes": 16654,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/startup_retirement.rs",
+      "sha256": "79d8fd1b1f1c7479f75ee65de723ee8e71fd5eaf92016b6cfe80e75720e8da79"
+    },
+    {
+      "bytes": 3130,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/tests.rs",
+      "sha256": "1f4b82546db14736a87476a21b71f9cdcb9f4717e6cd0b852bd1d0f39f78cd30"
+    },
+    {
+      "bytes": 6818,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/host_tests.rs",
+      "sha256": "f1b2d17c78717abfb75ec1bea0bd188d708526b6bb4726427e7275a4477387f0"
+    },
+    {
+      "bytes": 2044,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/fakeexec.rs",
+      "sha256": "cc3092a4e7a560c8417fd439006e643764b60d47b239adb4856ed8b1308f9d2c"
+    }
+  ],
+  "compiled_caseprofile": {
+    "bytes": 6884,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/COLLECTOR-CASEPROFILE.json",
+    "sha256": "1ccf48aae1958b1bffc2f81c4c9b560b7815f406beb418c7b49492cc4d3d8c37"
+  },
+  "expected_test_count": 22,
+  "expected_test_names": [
+    "host_tests::host_actual_child_observes_requested_fresh_private_cwd",
+    "host_tests::host_missing_namespace_is_an_error",
+    "host_tests::host_real_binary_streams_and_raw_wait_status",
+    "host_tests::host_real_exec_and_cwd_failures_keep_exact_setup_stage",
+    "host_tests::host_real_orphan_descendant_is_reaped_before_clean_result",
+    "host_tests::host_real_stream_overflow_counts_without_exceeding_retention",
+    "host_tests::host_real_timeout_signals_pinned_group_and_reaps_ignored_term",
+    "host_tests::host_startup_actual_exec_argv_empty_null_and_frame_pair",
+    "host_tests::host_startup_rejects_original_c020_noargs_and_dropped_empty_argument",
+    "startup_retirement::tests::actual_negative_delete_empty_then_fresh_late_zero_completes",
+    "startup_retirement::tests::missing_delete_unreadable_namespace_and_late_zero_do_not_complete",
+    "startup_retirement::tests::permanent_negative_and_shortcuts_cannot_complete_at_original_deadline",
+    "startup_retirement::tests::query_before_ack_or_terminal_and_duplicate_delete_or_unknown_rows_fail",
+    "startup_retirement::tests::raw_prefix_loss_overflow_and_incomplete_envelope_fail_without_reconstruction",
+    "startup_retirement::tests::wrong_owner_duplicate_token_bad_errno_and_excess_queries_fail",
+    "supervisor::leader_ownership_tests::descendant_reap_keeps_leader_pin_but_echild_removes_all_signal_authority",
+    "supervisor::leader_ownership_tests::positive_leader_reap_forbids_signals_on_every_later_clock_or_error_branch",
+    "tests::original_deadlines_clamp_without_renewal",
+    "tests::original_startup_retirement_requires_readable_empty_namespace_before_deadline",
+    "tests::oversize_frame_uses_original_failure_fallback",
+    "tests::report_and_execution_share_exact_startup_argv_with_empty_element",
+    "tests::stream_capture_retains_1024_and_counts_all_bytes"
+  ],
+  "new_mocked_retirement_controls": 6,
+  "retained_actual_controls": 16,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_ready": {
+    "bytes": 7307,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/READY.json",
+    "sha256": "eb59c96afd80affd945d98baca63c5d4f854f661756c7453af24810c07daa3d8"
+  },
+  "source_review": null,
+  "source_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1"
+}

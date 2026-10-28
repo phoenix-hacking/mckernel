@@ -1,0 +1,143 @@
+{
+  "Root_grant": null,
+  "Root_run_ordinary_API_only": true,
+  "actual_grant_argv_or_bridge": null,
+  "exact_five_command_rows": [
+    {
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/fakeexec.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-fakeexec"
+      ],
+      "argv_compact_json_LF_sha256": "aefa0651cac769497359dc3d7c48a02639b4b27bcd38b23f3d58a752fa6ae3ce",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "leaf": "original-startup-retirement",
+      "purpose": "Functional OS only; no security testing. Compile small HOST-only rawargv fakeexec"
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+        "STARTUP_FAKEEXEC_PATH=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-fakeexec",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "--test",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-tests"
+      ],
+      "argv_compact_json_LF_sha256": "7dd12eb40ebc13e98aae7772c9690375930bbcfb802bce9e0162b600ccc5a526",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "leaf": "original-startup-retirement",
+      "purpose": "Functional OS only; no security testing. Compile exact source-bound retained16 plus actualproducer observer controls"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-tests",
+        "--test-threads=1"
+      ],
+      "argv_compact_json_LF_sha256": "9277b7fb0b699acbf0fe4c253f99782287c2893d40da6286163a8158708f1531",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "leaf": "original-startup-retirement",
+      "purpose": "Functional OS only; no security testing. Run finite source-bound startup and retirement controls"
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-supervisor"
+      ],
+      "argv_compact_json_LF_sha256": "58fa1b723b999b99f3d82b80672aa2b2b528a4bea595518ef85f456e8dd1c682",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "leaf": "original-startup-retirement",
+      "purpose": "Functional OS only; no security testing. Compile fixedstartup productioncollector"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-output-1/startup-supervisor"
+      ],
+      "argv_compact_json_LF_sha256": "19c0c6315e2bc1c0b4db0b6149f1e75985d87d65b5bfdc18873452c1c33da50b",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-diagnosis-source-1/retirement-completion-successor-1",
+      "leaf": "original-startup-retirement",
+      "purpose": "Functional OS only; no security testing. Qualify actualcollectorELF"
+    }
+  ],
+  "existing_finite_API": {
+    "bytes": 2138,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/EXISTING-FINITE-API-RECIPE.json",
+    "sha256": "a19ea11721dfa03deb179d76e7f0dc3fe98a9f5d2f19584363e175c13b45bc71"
+  },
+  "postcapture_checker": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/check_actual_outputs.py",
+    "--bound-recipe",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/BOUND-RECIPE.NOT-GRANTED.json",
+    "--bound-recipe-sha256",
+    "bd22cbfdc0b67a80a6aa79b8983ef3ae1b353ab2fccc565af7edf3206fa44d1c",
+    "--capture-root",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/future-capture-1"
+  ],
+  "profile": {
+    "bytes": 26731,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/BOUND-RECIPE.NOT-GRANTED.json",
+    "sha256": "bd22cbfdc0b67a80a6aa79b8983ef3ae1b353ab2fccc565af7edf3206fa44d1c"
+  },
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_preflight": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-host-preparation-source-1/prepare_profile.py",
+    "--check-inputs"
+  ]
+}

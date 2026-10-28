@@ -1,0 +1,2500 @@
+[
+  {
+    "provider": "arch_do_mmap_bridge",
+    "final": {
+      "name": "arch_do_mmap_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684613424,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_do_mmap_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "reset_cputime",
+    "final": {
+      "name": "reset_cputime",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073685040896,
+      "size": 131
+    },
+    "exact_same_entry_size_type_aliases": [
+      "process_sched_reset_cputime_bridge",
+      "reset_cputime"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "perf_event_set_period_bridge",
+    "final": {
+      "name": "perf_event_set_period_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684797152,
+      "size": 8
+    },
+    "exact_same_entry_size_type_aliases": [
+      "process_pte_is_contiguous_bridge",
+      "ihk_mc_event_set_period",
+      "perf_event_alloc_hw_init_bridge",
+      "pte_is_contiguous",
+      "perf_event_set_period_bridge",
+      "hw_perf_event_init"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "perf_event_open_alloc_event_bridge",
+        "type": 2,
+        "offset": 35,
+        "actual_input_target": "perf_event_alloc_hw_init_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8646e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 32,
+        "actual_input_target": "perf_event_set_period_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8646e0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "perf_event_update_bridge",
+    "final": {
+      "name": "perf_event_update_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684814832,
+      "size": 8
+    },
+    "exact_same_entry_size_type_aliases": [
+      "ihk_mc_event_update",
+      "perf_event_update_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 56,
+        "actual_input_target": "perf_event_update_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe868bf0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_read_providers_v1",
+        "type": 1,
+        "offset": 8,
+        "actual_input_target": "perf_event_update_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe868bf0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_exit_notify_wake",
+    "final": {
+      "name": "f03_exit_notify_wake",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684704640,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "waitq_wakeup",
+      "f03_exit_notify_wake"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 3988,
+        "actual_input_target": "f03_exit_notify_wake",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84dd80",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 2154,
+        "actual_input_target": "waitq_wakeup",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84dd80",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 2642,
+        "actual_input_target": "waitq_wakeup",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84dd80",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_unmap_remove",
+    "final": {
+      "name": "f03_unmap_remove",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684726752,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_unmap_remove"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_munmap",
+        "type": 2,
+        "offset": 120,
+        "actual_input_target": "f03_unmap_remove",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8533e0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_vdso_set_range_bridge",
+    "final": {
+      "name": "arch_vdso_set_range_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684639120,
+      "size": 31
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_vdso_set_range_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "perf_counter_mask_check_bridge",
+    "final": {
+      "name": "perf_counter_mask_check_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684823392,
+      "size": 40
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_counter_mask_check_bridge",
+      "ihk_mc_perf_counter_mask_check"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 24,
+        "actual_input_target": "perf_counter_mask_check_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe86ad60",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_mmap_error_flags_bridge",
+    "final": {
+      "name": "arch_mmap_error_flags_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684620368,
+      "size": 11
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_mmap_error_flags_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_ptrace_io_unlock",
+    "final": {
+      "name": "f03_ptrace_io_unlock",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684626320,
+      "size": 143
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_ptrace_io_unlock",
+      "arch_ptrace_thread_unlock_bridge",
+      "sched_thread_unlock_bridge",
+      "sched_release_thread_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_setsiginfo",
+        "type": 2,
+        "offset": 53,
+        "actual_input_target": "f03_ptrace_io_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_wakeup_sig",
+        "type": 2,
+        "offset": 195,
+        "actual_input_target": "f03_ptrace_io_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 338,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 428,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 494,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 540,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getparam",
+        "type": 2,
+        "offset": 244,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getscheduler",
+        "type": 2,
+        "offset": 209,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_rr_get_interval",
+        "type": 2,
+        "offset": 243,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setaffinity",
+        "type": 2,
+        "offset": 286,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setparam",
+        "type": 2,
+        "offset": 424,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setscheduler",
+        "type": 2,
+        "offset": 505,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "do_process_vm_read_writev",
+    "final": {
+      "name": "do_process_vm_read_writev",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684689264,
+      "size": 382
+    },
+    "exact_same_entry_size_type_aliases": [
+      "do_process_vm_read_writev"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_ptrace_alloc_bridge",
+    "final": {
+      "name": "arch_ptrace_alloc_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684624528,
+      "size": 210
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_ptrace_alloc_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_copy_to_user_bridge",
+    "final": {
+      "name": "arch_copy_to_user_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684606656,
+      "size": 20
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_copy_to_user_bridge",
+      "syscall_copy_to_user_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_shmctl_providers_v1",
+        "type": 1,
+        "offset": 48,
+        "actual_input_target": "syscall_copy_to_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ec0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 1618,
+        "actual_input_target": "arch_copy_to_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ec0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+        "type": 1,
+        "offset": 8,
+        "actual_input_target": "arch_copy_to_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ec0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_get_mempolicy",
+        "type": 2,
+        "offset": 289,
+        "actual_input_target": "arch_copy_to_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ec0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_getrusage",
+        "type": 2,
+        "offset": 325,
+        "actual_input_target": "arch_copy_to_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ec0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_unmap_finish",
+    "final": {
+      "name": "f03_unmap_finish",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684726576,
+      "size": 161
+    },
+    "exact_same_entry_size_type_aliases": [
+      "finish_free_pages_pending",
+      "f03_unmap_finish"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_munmap",
+        "type": 2,
+        "offset": 87,
+        "actual_input_target": "f03_unmap_finish",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853330",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_prlimit_forward_request_result",
+    "final": {
+      "name": "f03_prlimit_forward_request_result",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684711024,
+      "size": 137
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_prlimit_forward_request_result"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_ptrace_io_find",
+    "final": {
+      "name": "f03_ptrace_io_find",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684624752,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_ptrace_io_find",
+      "arch_ptrace_find_thread_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_setsiginfo",
+        "type": 2,
+        "offset": 64,
+        "actual_input_target": "f03_ptrace_io_find",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a570",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_wakeup_sig",
+        "type": 2,
+        "offset": 206,
+        "actual_input_target": "f03_ptrace_io_find",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a570",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_mmap_supported_flags_bridge",
+    "final": {
+      "name": "arch_mmap_supported_flags_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684620640,
+      "size": 11
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_mmap_supported_flags_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_unmap_begin",
+    "final": {
+      "name": "f03_unmap_begin",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684639552,
+      "size": 168
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_unmap_begin",
+      "begin_free_pages_pending"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_munmap",
+        "type": 2,
+        "offset": 131,
+        "actual_input_target": "f03_unmap_begin",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83df40",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "sync_child_event",
+    "final": {
+      "name": "sync_child_event",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073685167472,
+      "size": 456
+    },
+    "exact_same_entry_size_type_aliases": [
+      "sync_child_event"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 120,
+        "actual_input_target": "sync_child_event",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8bed70",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "f03_do_exit_supported_v2",
+        "type": 2,
+        "offset": 1440,
+        "actual_input_target": "sync_child_event",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8bed70",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_copy_from_user_bridge",
+    "final": {
+      "name": "arch_copy_from_user_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684606624,
+      "size": 20
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_copy_from_user_bridge",
+      "syscall_copy_from_user_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_setsiginfo",
+        "type": 2,
+        "offset": 14,
+        "actual_input_target": "syscall_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "sys_perf_event_open",
+        "type": 2,
+        "offset": 321,
+        "actual_input_target": "syscall_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_shmctl_providers_v1",
+        "type": 1,
+        "offset": 40,
+        "actual_input_target": "syscall_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 1373,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+        "type": 1,
+        "offset": 0,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_mbind",
+        "type": 2,
+        "offset": 500,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setaffinity",
+        "type": 2,
+        "offset": 276,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_set_mempolicy",
+        "type": 2,
+        "offset": 214,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "perf_counter_start_bridge",
+    "final": {
+      "name": "perf_counter_start_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684824544,
+      "size": 125
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_counter_start_bridge",
+      "ihk_mc_perfctr_start"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 40,
+        "actual_input_target": "perf_counter_start_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe86b1e0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_ptrace_lookup_user_context_bridge",
+    "final": {
+      "name": "arch_ptrace_lookup_user_context_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684624864,
+      "size": 228
+    },
+    "exact_same_entry_size_type_aliases": [
+      "lookup_user_context",
+      "arch_ptrace_lookup_user_context_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "ptrace_read_user",
+        "type": 2,
+        "offset": 184,
+        "actual_input_target": "arch_ptrace_lookup_user_context_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a5e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "f03_ptrace_peekuser_v1",
+        "type": 2,
+        "offset": 222,
+        "actual_input_target": "arch_ptrace_lookup_user_context_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a5e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "ptrace_write_user",
+        "type": 2,
+        "offset": 237,
+        "actual_input_target": "arch_ptrace_lookup_user_context_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a5e0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_syscall_forward_context_bridge",
+    "final": {
+      "name": "arch_syscall_forward_context_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684638496,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_syscall_forward_context_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_rt_sigreturn_syscall_bridge",
+    "final": {
+      "name": "arch_rt_sigreturn_syscall_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684628816,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_rt_sigreturn_syscall_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "atomic_cmpxchg_ulong",
+    "final": {
+      "name": "atomic_cmpxchg_ulong",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684639456,
+      "size": 14
+    },
+    "exact_same_entry_size_type_aliases": [
+      "atomic_cmpxchg_ptr",
+      "atomic_cmpxchg8",
+      "atomic_cmpxchg_ulong"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate_mcexec",
+        "type": 2,
+        "offset": 90,
+        "actual_input_target": "atomic_cmpxchg_ulong",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83dee0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 559,
+        "actual_input_target": "atomic_cmpxchg_ulong",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83dee0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 1133,
+        "actual_input_target": "atomic_cmpxchg_ptr",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83dee0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_rt_sigreturn_free_bridge",
+    "final": {
+      "name": "arch_rt_sigreturn_free_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684628752,
+      "size": 32
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_rt_sigreturn_free_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_execveat_install_user_context_v1",
+    "final": {
+      "name": "f03_execveat_install_user_context_v1",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684703152,
+      "size": 416
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_execveat_install_user_context_v1"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_execveat",
+        "type": 2,
+        "offset": 527,
+        "actual_input_target": "f03_execveat_install_user_context_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84d7b0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "syscall_copy_from_user_bridge",
+    "final": {
+      "name": "syscall_copy_from_user_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684606624,
+      "size": 20
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_copy_from_user_bridge",
+      "syscall_copy_from_user_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_setsiginfo",
+        "type": 2,
+        "offset": 14,
+        "actual_input_target": "syscall_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "sys_perf_event_open",
+        "type": 2,
+        "offset": 321,
+        "actual_input_target": "syscall_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_shmctl_providers_v1",
+        "type": 1,
+        "offset": 40,
+        "actual_input_target": "syscall_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 1373,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+        "type": 1,
+        "offset": 0,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_mbind",
+        "type": 2,
+        "offset": 500,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setaffinity",
+        "type": 2,
+        "offset": 276,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_set_mempolicy",
+        "type": 2,
+        "offset": 214,
+        "actual_input_target": "arch_copy_from_user_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe835ea0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_clone_reader_lock_bridge",
+    "final": {
+      "name": "arch_clone_reader_lock_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684589520,
+      "size": 171
+    },
+    "exact_same_entry_size_type_aliases": [
+      "xpmem_rwlock_reader_lock_bridge",
+      "__mcs_rwlock_writer_lock",
+      "arch_clone_reader_lock_bridge",
+      "__mcs_rwlock_reader_lock"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_wakeup_update_lock_bridge",
+        "type": 2,
+        "offset": 2,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 189,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 619,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 709,
+        "actual_input_target": "__mcs_rwlock_reader_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 882,
+        "actual_input_target": "__mcs_rwlock_reader_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1039,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1410,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1895,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 2096,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 994,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 3731,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 289,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 3288,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 3546,
+        "actual_input_target": "__mcs_rwlock_writer_lock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831bd0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "set_cputime",
+    "final": {
+      "name": "set_cputime",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073685131360,
+      "size": 1289
+    },
+    "exact_same_entry_size_type_aliases": [
+      "set_cputime"
+    ],
+    "actual_edges": [
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "syscall",
+        "type": 2,
+        "offset": 211,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "syscall",
+        "type": 2,
+        "offset": 780,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "syscall",
+        "type": 2,
+        "offset": 2685,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "debug_handler",
+        "type": 2,
+        "offset": 32,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "gpe_handler",
+        "type": 2,
+        "offset": 25,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "handle_interrupt",
+        "type": 2,
+        "offset": 215,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "handle_interrupt",
+        "type": 2,
+        "offset": 2344,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "int3_handler",
+        "type": 2,
+        "offset": 32,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "page_fault_handler",
+        "type": 2,
+        "offset": 234,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "page_fault_handler",
+        "type": 2,
+        "offset": 3081,
+        "actual_input_target": "set_cputime",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b6060",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_wait_release_thread",
+    "final": {
+      "name": "f03_wait_release_thread",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684727952,
+      "size": 143
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_wait_release_thread",
+      "release_thread",
+      "thread_unlock"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1952,
+        "actual_input_target": "release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 2162,
+        "actual_input_target": "release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 2221,
+        "actual_input_target": "release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 3177,
+        "actual_input_target": "release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate_host",
+        "type": 2,
+        "offset": 99,
+        "actual_input_target": "f03_wait_release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 871,
+        "actual_input_target": "release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "wait4_do_wait_bridge",
+        "type": 2,
+        "offset": 1094,
+        "actual_input_target": "f03_wait_release_thread",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853890",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "perf_counter_init_raw_bridge",
+    "final": {
+      "name": "perf_counter_init_raw_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684953680,
+      "size": 193
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_counter_init_raw_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 16,
+        "actual_input_target": "perf_counter_init_raw_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe88aa50",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "syscall_atomic64_read_bridge",
+    "final": {
+      "name": "syscall_atomic64_read_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684797232,
+      "size": 9
+    },
+    "exact_same_entry_size_type_aliases": [
+      "ihk_atomic64_read",
+      "syscall_atomic64_read_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_read_providers_v1",
+        "type": 1,
+        "offset": 16,
+        "actual_input_target": "syscall_atomic64_read_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe864730",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_rt_sigreturn_set_signal_bridge",
+    "final": {
+      "name": "arch_rt_sigreturn_set_signal_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684628784,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_rt_sigreturn_set_signal_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_execveat_finish_switch_v1",
+    "final": {
+      "name": "f03_execveat_finish_switch_v1",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684702672,
+      "size": 467
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_execveat_finish_switch_v1"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_execveat",
+        "type": 2,
+        "offset": 996,
+        "actual_input_target": "f03_execveat_finish_switch_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84d5d0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "exit_do_exit_bridge",
+    "final": {
+      "name": "exit_do_exit_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684697696,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "exit_do_exit_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_vdso_add_range_bridge",
+    "final": {
+      "name": "arch_vdso_add_range_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684638608,
+      "size": 46
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_vdso_add_range_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "perf_event_alloc_free_bridge",
+    "final": {
+      "name": "perf_event_alloc_free_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684955552,
+      "size": 32
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_event_alloc_free_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "perf_event_open_alloc_event_bridge",
+        "type": 2,
+        "offset": 155,
+        "actual_input_target": "perf_event_alloc_free_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe88b1a0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_clone_reader_unlock_bridge",
+    "final": {
+      "name": "arch_clone_reader_unlock_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684589856,
+      "size": 135
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_clone_reader_unlock_bridge",
+      "xpmem_rwlock_reader_unlock_bridge",
+      "__mcs_rwlock_reader_unlock",
+      "__mcs_rwlock_writer_unlock"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_wakeup_update_unlock_bridge",
+        "type": 2,
+        "offset": 2,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 441,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 684,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 835,
+        "actual_input_target": "__mcs_rwlock_reader_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1086,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1798,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 1927,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 2147,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 2395,
+        "actual_input_target": "__mcs_rwlock_reader_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate",
+        "type": 2,
+        "offset": 3136,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 1248,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 4086,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 4154,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 4268,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 662,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 990,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 1871,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 2335,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "consumer": "do_signal",
+        "type": 2,
+        "offset": 2974,
+        "actual_input_target": "__mcs_rwlock_writer_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe831d20",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_perf_counter_attr_flags_v1",
+    "final": {
+      "name": "f03_perf_counter_attr_flags_v1",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684708400,
+      "size": 59
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_perf_counter_attr_flags_v1"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 0,
+        "actual_input_target": "f03_perf_counter_attr_flags_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84ec30",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_prctl_get_register_bridge",
+    "final": {
+      "name": "arch_prctl_get_register_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684620976,
+      "size": 47
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_prctl_get_register_bridge",
+      "ihk_mc_arch_get_special_register"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "perf_counter_extra_set_bridge",
+    "final": {
+      "name": "perf_counter_extra_set_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684953648,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_counter_extra_set_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 8,
+        "actual_input_target": "perf_counter_extra_set_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe88aa30",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_terminate_host_refcount_set_v1",
+    "final": {
+      "name": "f03_terminate_host_refcount_set_v1",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684725952,
+      "size": 8
+    },
+    "exact_same_entry_size_type_aliases": [
+      "xpmem_atomic_set_bridge",
+      "ihk_atomic_set",
+      "f03_terminate_host_refcount_set_v1"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate_host",
+        "type": 2,
+        "offset": 110,
+        "actual_input_target": "f03_terminate_host_refcount_set_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8530c0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 843,
+        "actual_input_target": "ihk_atomic_set",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8530c0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_fork",
+        "type": 2,
+        "offset": 2943,
+        "actual_input_target": "ihk_atomic_set",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8530c0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "perf_event_alloc_hw_init_bridge",
+    "final": {
+      "name": "perf_event_alloc_hw_init_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684797152,
+      "size": 8
+    },
+    "exact_same_entry_size_type_aliases": [
+      "process_pte_is_contiguous_bridge",
+      "ihk_mc_event_set_period",
+      "perf_event_alloc_hw_init_bridge",
+      "pte_is_contiguous",
+      "perf_event_set_period_bridge",
+      "hw_perf_event_init"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "perf_event_open_alloc_event_bridge",
+        "type": 2,
+        "offset": 35,
+        "actual_input_target": "perf_event_alloc_hw_init_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8646e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 32,
+        "actual_input_target": "perf_event_set_period_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8646e0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_perf_read_attr_flags_v1",
+    "final": {
+      "name": "f03_perf_read_attr_flags_v1",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684709136,
+      "size": 82
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_perf_read_attr_flags_v1"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_ioctl_data_v1",
+        "type": 1,
+        "offset": 56,
+        "actual_input_target": "f03_perf_read_attr_flags_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84ef10",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_read_providers_v1",
+        "type": 1,
+        "offset": 0,
+        "actual_input_target": "f03_perf_read_attr_flags_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84ef10",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "perf_event_alloc_kmalloc_bridge",
+    "final": {
+      "name": "perf_event_alloc_kmalloc_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684956112,
+      "size": 210
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_event_alloc_kmalloc_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "perf_event_open_alloc_event_bridge",
+        "type": 2,
+        "offset": 167,
+        "actual_input_target": "perf_event_alloc_kmalloc_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe88b3d0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "sys_perf_event_open",
+        "type": 2,
+        "offset": 266,
+        "actual_input_target": "perf_event_alloc_kmalloc_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe88b3d0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_rt_sigreturn_alloc_bridge",
+    "final": {
+      "name": "arch_rt_sigreturn_alloc_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684627536,
+      "size": 210
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_rt_sigreturn_alloc_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_rt_sigreturn_check_signal_bridge",
+    "final": {
+      "name": "arch_rt_sigreturn_check_signal_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684628720,
+      "size": 22
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_rt_sigreturn_check_signal_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_ptrace_thread_unlock_bridge",
+    "final": {
+      "name": "arch_ptrace_thread_unlock_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684626320,
+      "size": 143
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_ptrace_io_unlock",
+      "arch_ptrace_thread_unlock_bridge",
+      "sched_thread_unlock_bridge",
+      "sched_release_thread_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_setsiginfo",
+        "type": 2,
+        "offset": 53,
+        "actual_input_target": "f03_ptrace_io_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_wakeup_sig",
+        "type": 2,
+        "offset": 195,
+        "actual_input_target": "f03_ptrace_io_unlock",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 338,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 428,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 494,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getaffinity",
+        "type": 2,
+        "offset": 540,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getparam",
+        "type": 2,
+        "offset": 244,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_getscheduler",
+        "type": 2,
+        "offset": 209,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_rr_get_interval",
+        "type": 2,
+        "offset": 243,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setaffinity",
+        "type": 2,
+        "offset": 286,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setparam",
+        "type": 2,
+        "offset": 424,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_sched_setscheduler",
+        "type": 2,
+        "offset": 505,
+        "actual_input_target": "arch_ptrace_thread_unlock_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83ab90",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_execveat_ptrace_report_v1",
+    "final": {
+      "name": "f03_execveat_ptrace_report_v1",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684703568,
+      "size": 745
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_execveat_ptrace_report_v1"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_execveat",
+        "type": 2,
+        "offset": 867,
+        "actual_input_target": "f03_execveat_ptrace_report_v1",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84d950",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_mmap_ignored_flags_bridge",
+    "final": {
+      "name": "arch_mmap_ignored_flags_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684620384,
+      "size": 11
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_mmap_ignored_flags_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_wait_release_process",
+    "final": {
+      "name": "f03_wait_release_process",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684727920,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "process_release_process_bridge",
+      "f03_wait_release_process"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "terminate_host",
+        "type": 2,
+        "offset": 88,
+        "actual_input_target": "f03_wait_release_process",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853870",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "wait4_do_wait_bridge",
+        "type": 2,
+        "offset": 805,
+        "actual_input_target": "f03_wait_release_process",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe853870",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "perf_counter_stop_bridge",
+    "final": {
+      "name": "perf_counter_stop_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684954560,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "perf_counter_stop_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "f03_perf_counter_providers_v1",
+        "type": 1,
+        "offset": 48,
+        "actual_input_target": "perf_counter_stop_bridge",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe88adc0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "syscall_do_prlimit64_bridge",
+    "final": {
+      "name": "syscall_do_prlimit64_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073685217632,
+      "size": 150
+    },
+    "exact_same_entry_size_type_aliases": [
+      "syscall_do_prlimit64_bridge"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "arch_prctl_set_register_bridge",
+    "final": {
+      "name": "arch_prctl_set_register_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684621024,
+      "size": 34
+    },
+    "exact_same_entry_size_type_aliases": [
+      "arch_prctl_set_register_bridge",
+      "ihk_mc_arch_set_special_register"
+    ],
+    "actual_edges": []
+  },
+  {
+    "provider": "f03_prlimit_body_result",
+    "final": {
+      "name": "f03_prlimit_body_result",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684710368,
+      "size": 652
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_prlimit_body_result"
+    ],
+    "actual_edges": [
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_getrlimit",
+        "type": 2,
+        "offset": 149,
+        "actual_input_target": "f03_prlimit_body_result",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84f3e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_prlimit64",
+        "type": 2,
+        "offset": 159,
+        "actual_input_target": "f03_prlimit_body_result",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84f3e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_setrlimit",
+        "type": 2,
+        "offset": 149,
+        "actual_input_target": "f03_prlimit_body_result",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84f3e0",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "syscall_do_prlimit64_bridge",
+        "type": 2,
+        "offset": 130,
+        "actual_input_target": "f03_prlimit_body_result",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84f3e0",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "arch_ptrace_find_thread_bridge",
+    "final": {
+      "name": "arch_ptrace_find_thread_bridge",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684624752,
+      "size": 17
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_ptrace_io_find",
+      "arch_ptrace_find_thread_bridge"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_setsiginfo",
+        "type": 2,
+        "offset": 64,
+        "actual_input_target": "f03_ptrace_io_find",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a570",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "ptrace_wakeup_sig",
+        "type": 2,
+        "offset": 206,
+        "actual_input_target": "f03_ptrace_io_find",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe83a570",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_do_exit_supported_v2",
+    "final": {
+      "name": "f03_do_exit_supported_v2",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684699936,
+      "size": 1818
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_do_exit_supported_v2"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "util_thread",
+        "type": 2,
+        "offset": 745,
+        "actual_input_target": "f03_do_exit_supported_v2",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84cb20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "exit_do_exit_bridge",
+        "type": 2,
+        "offset": 6,
+        "actual_input_target": "f03_do_exit_supported_v2",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84cb20",
+        "selected_provider_same_exact_entry": true
+      },
+      {
+        "input": "rust/mckernel_rust.o",
+        "consumer": "sys_exit",
+        "type": 2,
+        "offset": 23,
+        "actual_input_target": "f03_do_exit_supported_v2",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84cb20",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  },
+  {
+    "provider": "f03_do_mmap_smaller_page_v2",
+    "final": {
+      "name": "f03_do_mmap_smaller_page_v2",
+      "bind": 1,
+      "type": 2,
+      "other": 0,
+      "shndx": 1,
+      "value": 18446744073684701760,
+      "size": 89
+    },
+    "exact_same_entry_size_type_aliases": [
+      "f03_do_mmap_smaller_page_v2"
+    ],
+    "actual_edges": [
+      {
+        "input": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "consumer": "do_mmap",
+        "type": 2,
+        "offset": 483,
+        "actual_input_target": "f03_do_mmap_smaller_page_v2",
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe84d240",
+        "selected_provider_same_exact_entry": true
+      }
+    ]
+  }
+]

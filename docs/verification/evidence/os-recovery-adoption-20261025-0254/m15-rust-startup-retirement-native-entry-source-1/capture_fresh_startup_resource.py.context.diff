@@ -1,0 +1,85 @@
+--- reviewedRoot40/capture_fresh_startup_resource.py
++++ exactRoot43/capture_fresh_startup_resource.py
+@@ -16,8 +16,8 @@
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ OBSERVER = E/'daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py'
+ OBSERVER_SHA = '2b7362126fbe70475a208e40df9eb56fa12df0993d83d0aa9b9a22a36638481c'
+-LEDGER = E/'ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER40.json'
+-LEDGER_SHA = '30543310425872f739b77fa973b63d4cee8430380413a5b3d3ae388f793ea6d1'
++LEDGER = E/'ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER43.json'
++LEDGER_SHA = '41ade09947062d4f7cd4136d32d466c502e096c166519b1dba2aaa0d5a53b7f4'
+ FREE = E/'ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-postbuild-current-free-review-1/CURRENT-FREE.json'
+ FREE_SHA = '13ed764e3ba6fd28861336eacbce7effffc29e879210122ea0e92a2bbb0f952d'
+ INHERITED111 = E/'ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/INDEPENDENT-POSTBUILD-CURRENT-FREE.json'
+@@ -63,6 +63,25 @@
+     assert len(exact['queries']) == 5
+     return exact
+ 
++
++ROOT42_FREE = {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-postbuild-current-free-review-1/CURRENT-FREE.json', 'bytes': 104872, 'sha256': '221349f9f93973b57c7d6b4a69d79d9f8e6dd2dcd368d16a08fcfac88c054d0d'}
++ROOT41_OBSERVER = {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root41-admission-source-1/observe_root41_current.py', 'bytes': 5061, 'sha256': 'a4cb07216e258a0fddc66c631a729067c4bb5c73620dac846ed5cb54f94d8b08'}
++
++def validate_root42_latest(review):
++    assert review['decision']=='PASS_POSITIVE_CURRENT114_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX'
++    assert review['independent'] is True and review['implementation_ownership'] is False and review['current_free'] is True and review['normal_owned_retirement'] is True
++    assert review['holder']=={'path':'/run/lock/mckernel-development.lock','pid':1763445,'starttime':94341647,'device':27,'inode':4,'fd':3}
++    assert review['runner']=={'pid':1763997,'starttime':94348302,'returncode':0,'joined':True}
++    assert review['retained_stopped_container']=='d521e2f29e9df27a258f83f22f45f7e959e4cc35be4227b6f742ece9a15ce7ca'
++    assert checked(review['runner_join'])==review['runner']
++    local=checked(review['local_terminal']);assert local['joined'] is True and local['returncode']==0 and local['holder']==review['holder']
++    tool=checked(review['holder_tool_result']);assert tool['positive_tool_completion'] is True and tool['observed_terminal']['exit_code']==0
++    terminal=review['container_terminal'];assert terminal['container']==review['retained_stopped_container'] and terminal['returncode']==0 and terminal['state']['Running'] is False and terminal['state']['Pid']==0 and terminal['state']['ExitCode']==0 and terminal['state']['OOMKilled'] is False
++    assert review['positive_termination']['actual4_command_returncodes']==[0,0,0,0] and review['positive_termination']['runner_positive_wait'] is True and review['positive_termination']['holder_tool_positive_terminal'] is True
++    assert review['fresh_current']['new_groups_absent'] is True and not review['fresh_current']['proc_census_errors'] and review['fresh_current']['startup25clients_reaped'] is True
++    assert len(review['fresh_current']['startup28actors_absent'])==28
++    return terminal
++
+ def main():
+     parser = argparse.ArgumentParser(allow_abbrev=False)
+     parser.add_argument('--output-path',required=True,type=Path)
+@@ -82,11 +101,12 @@
+         free = json.loads(FREE.read_bytes())
+         assert ledger['author'] == '/root' and ledger['complete_within_declared_current_boundary'] is True
+         assert ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
+-        assert len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 40
++        assert len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 45
+         latest40 = checked({'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/CURRENT-FREE.json', 'bytes': 7877, 'sha256': 'd4ca62159bacb2aa20cbdd34760b455dcadfcafa1c0727ccbb06dfc632824706'})
+         assert ledger['latest_accepted_free_boundary'] == {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/CURRENT-FREE.json', 'bytes': 7877, 'sha256': 'd4ca62159bacb2aa20cbdd34760b455dcadfcafa1c0727ccbb06dfc632824706'}
+         root39 = checked({'bytes': 5158, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER39.json', 'sha256': 'eacc369bb4d3691000ea8adb1e736e6f9c734d251ca06151fb41ffc2ec9ef56e'})
+         latest40_controls = validate_root40_latest(latest40)
++        latest42 = checked(ROOT42_FREE); latest42_terminal = validate_root42_latest(latest42)
+         assert free['decision'] == 'PASS_POSITIVE_CURRENT113_CORRECTED_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX'
+         assert free['independent'] is True and free['implementation_ownership'] is False
+         assert free['nonce'] == root39['consumed_nonces'][-1] and free['nonce_consumed'] is True
+@@ -180,6 +200,22 @@
+             child = subprocess.run(retained['argv'],capture_output=True,text=True,timeout=15)
+             assert child.returncode == retained['returncode'] and child.stdout == retained['stdout'] and child.stderr == retained['stderr']
+             latest40_queries.append(dict(argv=retained['argv'],returncode=child.returncode,stdout=child.stdout,stderr=child.stderr,positive_wait=True,streams_closed=True))
++        # Existing Root41 observer keeps exact failed-startup25/28 and all86 prior controls.
++        assert ref(Path(ROOT41_OBSERVER['path']))==ROOT41_OBSERVER
++        root41_child=subprocess.run(['/home/holden/anaconda3/bin/python3','-I','-B',ROOT41_OBSERVER['path']],capture_output=True,timeout=40)
++        assert root41_child.returncode==0 and not root41_child.stderr
++        root41_current=json.loads(root41_child.stdout)
++        assert root41_current['status']=='PASS_ROOT41_EXACT_FAILED_STARTUP_CURRENT_PENDING_ROOT_ACCEPTANCE' and root41_current['new_exact25_clients_reaped'] is True and len(root41_current['new_exact28_actors'])==28
++        assert root41_current['known_numeric_controls_absent']==latest42['fresh_current']['prior_controls_preserved']
++        assert not root41_current['group_membership_observation']['errors']
++        for actor in [latest42['holder'],latest42['runner']]:
++            assert not Path('/proc',str(actor['pid'])).exists()
++            assert not any(x['pid']==actor['pid'] or x['pgrp']==actor['pid'] for x in census['rows'])
++            assert not any(x['pid']==actor['pid'] or x['pgrp']==actor['pid'] for x in root41_current['group_membership_observation']['rows'])
++        retained114=subprocess.run(prefix+['inspect',latest42['retained_stopped_container']],capture_output=True,text=True,timeout=15)
++        assert retained114.returncode==0 and not retained114.stderr
++        retained114_state=json.loads(retained114.stdout);assert len(retained114_state)==1 and retained114_state[0]['Id']==latest42['retained_stopped_container']
++        assert retained114_state[0]['State']['Running'] is False and retained114_state[0]['State']['Pid']==0 and retained114_state[0]['State']['ExitCode']==0 and retained114_state[0]['State']['OOMKilled'] is False
+         memory = {line.split(':')[0]:int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith(('MemTotal:','MemAvailable:'))}
+         assert memory['MemAvailable'] >= 24*2**30
+         paths = ['/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us','/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us','/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes','/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy','/sys/fs/cgroup/pids/mckernel-dev/pids.max']
+@@ -195,7 +231,7 @@
+         assert all(a < b for a,b in zip(guard.guard(),cutoffs))
+         value = dict(scope=__doc__.splitlines()[0],observed_clocks=clocks,fixed_cutoffs=list(cutoffs),freshness_seconds_max=120,
+             boot_id=guard.BOOT,root_ledger35=ref(LEDGER),actual_latest_operation_postjoin_acceptance={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/CURRENT-FREE.json', 'bytes': 7877, 'sha256': 'd4ca62159bacb2aa20cbdd34760b455dcadfcafa1c0727ccbb06dfc632824706'},
+-            current_physical_observation=current,known_actual_actor_controls_absent=actors,latest_root40=ROOT40_FREE,latest_root40_actual33_actor_controls=ROOT40_ACTORS,latest_root40_exact_queries=latest40_queries,root38_historical_current=root38_current,root38_query_capture=dict(returncode=root38_child.returncode,stdout=root38_child.stdout.decode(),stderr=root38_child.stderr.decode()),retained_current113_terminal=terminal,
++            latest_root42=ROOT42_FREE,retained_current114_terminal=latest42_terminal,root41_historical_current=root41_current,retained114_current_query=dict(argv=prefix+['inspect',latest42['retained_stopped_container']],returncode=retained114.returncode,stdout=retained114.stdout,stderr=retained114.stderr),current_physical_observation=current,known_actual_actor_controls_absent=actors,latest_root40=ROOT40_FREE,latest_root40_actual33_actor_controls=ROOT40_ACTORS,latest_root40_exact_queries=latest40_queries,root38_historical_current=root38_current,root38_query_capture=dict(returncode=root38_child.returncode,stdout=root38_child.stdout.decode(),stderr=root38_child.stderr.decode()),retained_current113_terminal=terminal,
+             inherited_current111=ref(INHERITED111),inherited_native_retirement=ref(INHERITED_NATIVE),retained_current111_terminal=inherited_terminal,
+             no_existing_heavy=True,running_container_observation=docker[0],retained_stopped_observation=docker[1],
+             active_shared_records_absent=True,capacity=current['capacity'],memory=memory,cgroup=cgroup,pids_current=pids,
