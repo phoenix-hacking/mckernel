@@ -1,0 +1,82 @@
+{
+  "status": "PASS_BUILD_ONLY_PENDING_CURRENT_DEFAULT_AND_NATIVE_VALIDATORS",
+  "commands": [
+    {
+      "index": 0,
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/tool-project",
+        "-B",
+        "/work/current-bfd-build",
+        "-DCMAKE_C_COMPILER=/usr/bin/cc",
+        "-DSTAGED_USER_SOURCE=/src/executer/user",
+        "-DORIGINAL_SOURCE=/src",
+        "-DCMAKE_VERBOSE_MAKEFILE=ON",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+      ],
+      "cwd": "/work",
+      "started_at_epoch": 1793216882.9750202,
+      "finished_at_epoch": 1793216885.4193163,
+      "returncode": 0,
+      "CPU_seconds": 2.340967,
+      "maximum_child_RSS_KiB": 68404,
+      "output": {
+        "path": "/work/current-bfd-build/CMakeCache.txt",
+        "bytes": 22196,
+        "sha256": "196e7ed2dd35fbc372f9bef8ea514a1f8d3239ad0d6ce928ca05238bb5f4936a"
+      }
+    },
+    {
+      "index": 1,
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/current-bfd-build",
+        "--target",
+        "mcinspect",
+        "eclair",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/work",
+      "started_at_epoch": 1793216885.4195912,
+      "finished_at_epoch": 1793216890.708982,
+      "returncode": 0,
+      "CPU_seconds": 5.20192,
+      "maximum_child_RSS_KiB": 108764,
+      "output": {
+        "path": "/work/current-bfd-build/executer/user/mcinspect",
+        "bytes": 7163824,
+        "sha256": "dcd94257b077363bddfe62221f9d9ad6bd5cd54cf10d4b8fce172803caa2b387"
+      },
+      "second_output": {
+        "path": "/work/current-bfd-build/executer/user/eclair",
+        "bytes": 6807032,
+        "sha256": "ea39080e9fe8f6d8bf9f52be4dd263b98d542d044efa941954a32589a2f436c0"
+      }
+    },
+    {
+      "index": 2,
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/candidate/inspect_project_objects.py",
+        "/work/current-bfd-build",
+        "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+      ],
+      "cwd": "/work",
+      "started_at_epoch": 1793216890.7235925,
+      "finished_at_epoch": 1793216891.1911075,
+      "returncode": 0,
+      "CPU_seconds": 0.4666719999999991,
+      "maximum_child_RSS_KiB": 108764,
+      "output": {
+        "path": "/work/BFD-CURRENT-PROJECT-OBJECTS.json",
+        "bytes": 3666,
+        "sha256": "36540d7ec22baedca273df26325c0dc1f72a15cee5d23a2a7c94f9c1f2985c35"
+      }
+    }
+  ],
+  "default_native_retirement_acceptance": false
+}

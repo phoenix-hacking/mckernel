@@ -1,0 +1,104 @@
+{
+  "runtime_authority": null,
+  "deadline_epoch": 1793253600,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/tool-project",
+        "-B",
+        "/work/current-bfd-build",
+        "-DCMAKE_C_COMPILER=/usr/bin/cc",
+        "-DSTAGED_USER_SOURCE=/src/executer/user",
+        "-DORIGINAL_SOURCE=/src",
+        "-DCMAKE_VERBOSE_MAKEFILE=ON",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+      ],
+      "argv_compact_json_LF_sha256": "4722eba1838cdd8bf2f70b83be4901c8f447fe44b744497b1b705f4a562e2591",
+      "cwd": "/work",
+      "id": "0-current-selected-tools-configure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Configure genuine current executer/user targets using accepted native SDK layout witness; no full SDK/image rebuild",
+      "new_output": "/work/current-bfd-build/CMakeCache.txt"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/current-bfd-build",
+        "--target",
+        "mcinspect",
+        "eclair",
+        "--parallel",
+        "1"
+      ],
+      "argv_compact_json_LF_sha256": "3bca7895d79c545b9ae88ee1eab77413fcdbcca2c7b12d7e5819014e4dbb4230",
+      "cwd": "/work",
+      "id": "1-build-only-mcinspect-eclair",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Build only selected tools and genuine required vendor/object dependencies",
+      "new_output": "/work/current-bfd-build/executer/user/mcinspect"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/candidate/inspect_project_objects.py",
+        "/work/current-bfd-build",
+        "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+      ],
+      "argv_compact_json_LF_sha256": "38333655f91e619e98a2efefa80cc04db26753d38a6fa4ba592b0ff6abc1afef",
+      "cwd": "/work",
+      "id": "2-actual-project-object-selection",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Verify genuine new linkfiles/project objects and Rust providers; no replay of SDK21 equivalence/error vectors",
+      "new_output": "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+    }
+  ],
+  "tool_files": [
+    {
+      "path": "/usr/bin/cmake",
+      "bytes": 8838896,
+      "sha256": "a2ec9c59d15b48b6abba45cfaa873df186e01a2e3ca99302ada1e51637f4cfd1"
+    },
+    {
+      "path": "/usr/bin/cc",
+      "bytes": 1375456,
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2"
+    },
+    {
+      "path": "/usr/bin/ld",
+      "bytes": 1193976,
+      "sha256": "825f11b6b672735ab4c3a2c95cc9711294b159b1d0e1c191b5d1d1f8917e0586"
+    },
+    {
+      "path": "/nightly/bin/rustc",
+      "bytes": 645792,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    }
+  ],
+  "tool_sha256_pins": [
+    {
+      "path": "/usr/bin/clang",
+      "sha256": "48271e3fbb759560a54e6f0a13e05a4a0b768eea2ffd6aa2f1e14b8cbb76fb7f"
+    },
+    {
+      "path": "/usr/include/bfd.h",
+      "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+    },
+    {
+      "path": "/usr/lib64/libbfd.so",
+      "sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3"
+    }
+  ],
+  "producer_contract": {
+    "source": "Current closed bounded BFD source roots plus exactly four selective postimages; current mcexec preserved",
+    "new_operation": "Fresh genuine current configure; only mcinspect/eclair/jobs1; exact2/3 project Rust objects and four BFD bridge exports/259B layout",
+    "SDK21_replayed": false,
+    "eight_CLI_pairs_replayed": false,
+    "valid_native_diagnostic": false
+  },
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/PROFILE.SOURCE-ONLY.json",
+    "bytes": 16933,
+    "sha256": "4bfad3f5c7e52c69921afd61cb6a6a11a15f90876d2ea9f109c7eb5abbb1a7e8"
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "blockers_for_this_exact_DATA_cache_repair": [],
+  "checker": {
+    "AS_bytes": 2147483648,
+    "CPU": 0,
+    "CPU_limit_seconds": 30,
+    "exit": 0,
+    "program": {
+      "bytes": 4312,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-SOURCE-CACHE-CORRECTION-REVIEW-1/check.py",
+      "sha256": "5489dad69c045bcfe2fdd3e2ab2d7db171d0a2f3d132e7a5aff8e81cafd158f5"
+    },
+    "result": {
+      "bytes": 12603,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-SOURCE-CACHE-CORRECTION-REVIEW-1/CHECKS.json",
+      "sha256": "32d7b71add7b7d5baf8e4f42f75cd5c6ac730fe124a671a7f98a07d4e22696c2"
+    }
+  },
+  "counts": {
+    "actual_source_byte_checks": 9,
+    "corrected_rows": 9,
+    "operation34_overlap": 5,
+    "other_corpus_source_byte_checks": 0,
+    "total_rows": 732,
+    "unchanged_rows": 723
+  },
+  "decision": "PASS_SOURCE_CACHE_CORRECTION",
+  "definition": "Accept only corrected prepared-publication DATA9a73ced9 as an exact nine-reference cache repair from preserved88681e4a to already accepted frozen implementation seal b7dd5615. This is not a source change, fetched-publication proof, admission or execution grant.",
+  "findings": [
+    "All732 rows remain in the same order. Exactly9 actual reference values change, and they are exactly the9 paths listed by the retained Root precheck8330be failure. All other723 complete rows compare equal.",
+    "For each changed row: actual path unchanged; cached value matches original failure record; successor value matches accepted_frozen_source and implementation-seal candidate_files exactly; current source bytes/length/SHA independently match that same accepted sealed value. Exactly9 source files were read/hashed, with no full55/732-corpus source rehash.",
+    "Every fetched-equivalent alias and any other per-row field compares unchanged, including aliases on corrected rows. Top-level fields also compare unchanged except the explicit source_cache_ref_correction annotation; annotation binds exact original prepared product and seal.",
+    "Five changed script references overlap unchanged actual operation34 subjects; all five are identical to operation34 accepted refs. The remaining four template references are directly bound by implementation seal b7dd55 and remain templates, without authority promotion.",
+    "Accepted seal has55 frozen source records and actual operation has34 subjects. This review compares their metadata and exact nine relevant byte bindings; it does not reopen their prior implementation/guard review.",
+    "Original prepared product88681e4a and failure evidence remain present and hash-bound. Corrected DATA still says not-fetch-proof, actual_fetched_commitnull, runtime_authoritynull and source_export_traversal_replayedfalse. Existing nonce remains recorded RESERVED_UNUSED; this review does not consume/reset it.",
+    "No source/helper/kernel/SDK/object/argv row changes occur in this DATA correction. Its code-file references now match the already accepted typed source, rather than widening acceptance to an unsealed new version. No compiler, observer, runtime guard, query, export, workload or admission executes here."
+  ],
+  "independent": true,
+  "new_compiler_HOST_default_native_retirement_file_credit": 0,
+  "next_Root_action": "Use corrected PUBLICATION-ROWS.PREPARED.SOURCE-REFS-CORRECTED.json at exact SHA9a73ced9692a198b584458194a1f2298ff3f2eac58c4311249b30a0d21664c61 for the existing full fetched-row verification, then proceed through existing admission/current gates. This narrow PASS clears only stale cached-source-reference mismatch; full fetched verification and actual operation/account/window/identity/resource/sole-heavy admission must still pass. Do not reobserve/recompile or replay accepted prefixes for this repair.",
+  "preserved": "Original products/failures/nonce/source55/operation34/dirty work and all original holds, exclusions, deadlines, creditrun/ceiling/floor remain unchanged.",
+  "reviewer": "/root/consumer_review",
+  "runtime_authority": null,
+  "schema": "mckernel.independent-source-cache-correction-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_and_DATA_owner": "/root",
+  "subjects": {
+    "accepted_implementation_seal": {
+      "bytes": 23680,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/IMPLEMENTATION-SEAL.json",
+      "sha256": "b7dd561500a6f74747c53448951fa3c12c8f615f9f6ceeb4d6d4a1649b7f2f22"
+    },
+    "corrected_publication_rows": {
+      "bytes": 438774,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/PUBLICATION-ROWS.PREPARED.SOURCE-REFS-CORRECTED.json",
+      "sha256": "9a73ced9692a198b584458194a1f2298ff3f2eac58c4311249b30a0d21664c61"
+    },
+    "preserved_failure": {
+      "bytes": 9962,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-TYPED-INTEGRATION-1/STALE-CACHED-SOURCE-REFS.FAILURE.json",
+      "sha256": "9cc7509297615c7d17157c6fd491404d9179c64b9d49c61def938e05c5ef73a3"
+    },
+    "preserved_original_publication_rows": {
+      "bytes": 435915,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/PUBLICATION-ROWS.PREPARED.json",
+      "sha256": "88681e4ab5d3ed0ea7c82cd96b0ebbcccdac8e81e3b65783098143524c489177"
+    },
+    "unchanged_operation34": {
+      "bytes": 14089,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-TYPED-INTEGRATION-1/CURRENT118-OPERATION.ACTUAL.json",
+      "sha256": "16eb1f31b82a2b13b38bbc3bd97bc64ea75cbcafb9e87b3ce9f2723c52837c2e"
+    }
+  },
+  "transitions": [
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 11618,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/capture_resources.py",
+        "sha256": "1d8ca4458535517fa9508c01b7b2500694cd88ecf49a16729b933875adece6ae"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/capture_resources.py",
+      "index": 3,
+      "old_cached_reference": {
+        "bytes": 11039,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/capture_resources.py",
+        "sha256": "d49b0e258cb2e032d3234a1219ad73a6ac86aff9492babbeee3cc69b8e97396a"
+      },
+      "operation34_overlap": true
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 12693,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py",
+        "sha256": "2c0c14479207f56a50c65bed528a61ac2d2233cd77b489c6e92f53ceb7d34757"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py",
+      "index": 10,
+      "old_cached_reference": {
+        "bytes": 11224,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/materialize_admission.py",
+        "sha256": "9dd29eace7e2f046ee12024076be2de0d6871e4c3be23eb56873d753a8159b03"
+      },
+      "operation34_overlap": true
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 4256,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py",
+        "sha256": "17d10ee3903d4666f02d129edd2899bd68715af820e404af90923b4efd11082a"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py",
+      "index": 11,
+      "old_cached_reference": {
+        "bytes": 2492,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/prepare_publication_rows.py",
+        "sha256": "6da5292f24633b6b7d4a0a9955a1a544397115023ef0171de9ce0c268ac73daf"
+      },
+      "operation34_overlap": true
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 26588,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py",
+        "sha256": "c6cb17664d62bc0aaab8f20d3e464bbdfdfaca75107da739c15b2f55ba4d9348"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py",
+      "index": 15,
+      "old_cached_reference": {
+        "bytes": 26588,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/run_build_only.py",
+        "sha256": "81b6108cf7b8666f2e7ebb695f7a793151b5fe38777ab4134aaf5467b2b33e69"
+      },
+      "operation34_overlap": true
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 7241,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py",
+        "sha256": "62c4657bd9619e62d1b72d5eb41ec0168b0c9559982c0e7435fa7cba2f661147"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py",
+      "index": 16,
+      "old_cached_reference": {
+        "bytes": 5282,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/runtime_guard.py",
+        "sha256": "f5dc531c99b9774ae0846577a7e9d1abda209c209e4f0903c9fba01376892651"
+      },
+      "operation34_overlap": true
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 3625,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/REVIEWER-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "3c3f4f44003cb233d490e9b459be2e3b0ac06072cd516e41acb5e0c3b1dc58ad"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/REVIEWER-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+      "index": 20,
+      "old_cached_reference": {
+        "bytes": 3625,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/REVIEWER-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "84777acd1c0f401b375d3a0d1612a9dfcdb076dd2082d9060379865b609ded89"
+      },
+      "operation34_overlap": false
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 973,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-BOUNDARY.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "e3375e1e9dc9289f407dd111e96129eae0c665eb6502ccfffc4cfbf0703f780d"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-BOUNDARY.TEMPLATE.NOT-AUTHORITY.json",
+      "index": 22,
+      "old_cached_reference": {
+        "bytes": 1533,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-BOUNDARY.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "1d4607cc54c53b86a596bfb032b9c5b46b91a27b2425aa7866d489cd342185b8"
+      },
+      "operation34_overlap": false
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 1024,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-CAPTURE-PUBLISH-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "8a51e443f0b681d6154f092dddf43254aa9fef2c6e2d10077d4f77a79501ae5d"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-CAPTURE-PUBLISH-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+      "index": 23,
+      "old_cached_reference": {
+        "bytes": 1024,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-CAPTURE-PUBLISH-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "a59a70c01ade6e1a5ac4049fb49eb8455b15a98cb424a04d6519d4f40078a10a"
+      },
+      "operation34_overlap": false
+    },
+    {
+      "accepted_sealed_actual_reference": {
+        "bytes": 13081,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-OPERATION-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "6a785ec63e8ad7a721141fe199862ef96be7d7a287f3a134a16595ebebe1bdde"
+      },
+      "fetched_equivalent_path_unchanged": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-OPERATION-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+      "index": 25,
+      "old_cached_reference": {
+        "bytes": 10982,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-OPERATION-BINDINGS.TEMPLATE.NOT-AUTHORITY.json",
+        "sha256": "6e58414b7d39e77dcf320c723b28d36bc838cdf9e0244cb155cae1dbcb24a18e"
+      },
+      "operation34_overlap": false
+    }
+  ]
+}

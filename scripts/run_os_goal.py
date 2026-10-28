@@ -33,6 +33,8 @@ from os_goal_windows import window_capability
 from os_goal_instructions import reconcile_instructions
 from os_goal_credits import (CreditBudget, available_balance, billing_policy,
                              credit_budget_argument)
+from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure, classify_service_failure,
+                               classify_usage_failure)
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -361,12 +363,18 @@ class RPC:
         self.next_id += 1
         ident = self.next_id
         self.events.write(json.dumps({"at": utc(), "request": method, "id": ident}) + "\n")
-        self.send({"id": ident, "method": method, "params": params})
-        deadline = time.monotonic() + timeout
-        while ident not in self.responses:
-            if time.monotonic() >= deadline:
-                raise RecoverableFailure("App-server request timed out: " + method)
-            self.pump(min(1.0, max(0.0, deadline - time.monotonic())))
+        try:
+            self.send({"id": ident, "method": method, "params": params})
+            deadline = time.monotonic() + timeout
+            while ident not in self.responses:
+                if time.monotonic() >= deadline:
+                    raise RecoverableFailure("App-server request timed out: " + method)
+                self.pump(min(1.0, max(0.0, deadline - time.monotonic())))
+        except (RecoverableFailure, BrokenPipeError, ConnectionResetError) as error:
+            if not hasattr(error, "rpc_method"):
+                error.rpc_method = method
+                error.rpc_mutating = method not in READ_ONLY_RPC_METHODS
+            raise
         response = self.responses.pop(ident)
         if "error" in response:
             raise RuntimeError(method + ": " + json.dumps(response["error"]))
@@ -374,8 +382,12 @@ class RPC:
 
     def close(self):
         # Only this launcher's server process; never kill a host-wide process name.
+        self.close_errors = []
         if self.proc.stdin:
-            self.proc.stdin.close()
+            try:
+                self.proc.stdin.close()
+            except OSError as error:
+                self.close_errors.append("stdin.close: " + str(error))
         try:
             self.proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
@@ -483,31 +495,8 @@ def preflight(rpc, args, repo):
 
 
 def temporary_usage_read_failure(error):
-    """Retry only observed temporary failures of the read-only usage endpoint."""
-    prefix = "account/rateLimits/read: "
-    if not isinstance(error, RuntimeError) or not str(error).startswith(prefix):
-        return False
-    try:
-        detail = json.loads(str(error)[len(prefix):])
-    except (TypeError, ValueError):
-        return False
-    if not isinstance(detail, dict) or detail.get("code") != -32603:
-        return False
-    message = detail.get("message")
-    if not isinstance(message, str):
-        return False
-    unavailable = message.startswith(
-        "failed to fetch codex rate limits: GET https://chatgpt.com/backend-api/wham/usage "
-        "failed: 503 Service Unavailable;")
-    transport = message == (
-        "failed to fetch codex rate limits: error sending request for url "
-        "(https://chatgpt.com/backend-api/wham/usage)")
-    if not (unavailable or transport):
-        return False
-    protected = ("policy", "quota", "usagelimitexceeded", "sessionbudgetexceeded", "ratelimitexceeded",
-                 "authentication", "unauthorized", "forbidden", "billing",
-                 "spendcontrol", "spend control")
-    return not any(word in json.dumps(detail).lower() for word in protected)
+    """Classify only observed failures of the read-only usage endpoint."""
+    return isinstance(error, RuntimeError) and classify_usage_failure(str(error)) is not None
 
 
 class Campaign:
@@ -535,6 +524,9 @@ class Campaign:
         # Memory-only: never inherit usage freshness from a preceding worker/server.
         self.state.pop("credit_timeout_shutdown_pause", None)
         self.state.pop("credit_timeout_startup", None)
+        self.state.pop("transport_shutdown_pause", None)
+        self.state.pop("transport_startup", None)
+        self.state.pop("transport_failure", None)
         self.last_credit_notification = None
         self.last_activity = time.monotonic()
         self.stopping = False
@@ -735,12 +727,18 @@ class Campaign:
             # A timeout may mean the server accepted the steer. Never silently
             # retry a potentially non-idempotent user instruction.
             receipt.update(status="delivery_uncertain", error=str(error))
-            self.save(last_instruction=receipt)
+            self.save(last_instruction=receipt, transport_uncertain={"at": utc(),
+                      "method": "turn/steer", "error": str(error),
+                      "reason": "instruction_delivery_uncertain"})
+            self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
+            self.stop_now = True
             self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
 
     def on_signal(self, signum, frame):
         self.state.pop("credit_timeout_shutdown_pause", None)
         self.state.pop("credit_timeout_startup", None)
+        self.state.pop("transport_shutdown_pause", None)
+        self.state.pop("transport_startup", None)
         if (self.stop_reason or "").startswith("signal_"):
             self.stop_now = True
         # Signals retain stop authority even if a retryable error arrived first.
@@ -814,13 +812,18 @@ class Campaign:
         return True
 
     def record_failure(self, error, reason, will_retry=False, *, thread_id=None, turn_id=None):
+        transient = classify_service_failure(error)
+        prior_stop = self.stop_reason
+        preserve = bool(prior_stop and (prior_stop not in {
+            "server_error", "turn_failed", "rate_limit"} or transient is not None))
         self.state.pop("credit_timeout_shutdown_pause", None)
         self.state.pop("credit_timeout_startup", None)
-        self.save(last_error=error, last_failure={
+        self.state.pop("transport_shutdown_pause", None)
+        self.state.pop("transport_startup", None)
+        self.save(last_error=self.state.get("last_error", error) if preserve else error, last_failure={
             "thread_id": thread_id, "id": turn_id, "error": error,
             "reason": reason, "log_dir": str(self.log_dir), "recorded_at": utc()})
-        if (self.stop_reason or "").startswith("signal_") or self.stop_reason in {
-                "work_window", "needs_user_input", "goal_cleared"}:
+        if preserve:
             # A late server error must not turn a requested stop into recovery.
             return
         info = (error or {}).get("codexErrorInfo")
@@ -829,6 +832,28 @@ class Campaign:
         elif self.stop_reason != "quota_exhausted" and not will_retry:
             self.stop_reason = "rate_limit" if info == "rateLimitExceeded" else reason
             self.stop_now = True
+            if (transient is not None and reason in {"server_error", "turn_failed", "rate_limit"}
+                    and not self.state.get("transport_uncertain")
+                    and not any(self.state.get(key) for key in
+                                ("service_hold", "policy_hold", "auth_hold", "billing_hold"))):
+                failure = {"schema_version": 1, "worker_pid": os.getpid(),
+                    "worker_start": self.state.get("worker_start"),
+                    "thread_id": self.state.get("thread_id"), "class": "service_transient",
+                    "error": json.dumps(error, sort_keys=True, separators=(",", ":")),
+                    "error_type": "ServiceTransient", "service_error": error,
+                    "method": None, "mutating": False, "channel_unusable": False}
+                self.save(transport_failure=failure)
+                expected = (getattr(self.args, "recovery_goal_sha256", None) or
+                            getattr(self.args, "credit_timeout_goal_sha256", None))
+                active = getattr(self.args, "recovery_require_active", False)
+                if not self.controlled and (expected or active):
+                    from watch_os_goal import process_start
+                    self.save(transport_startup={"schema_version": 1, "worker_pid": os.getpid(),
+                        "worker_start": self.state.get("worker_start"), "watcher_pid": os.getppid(),
+                        "watcher_start": process_start(os.getppid()), "thread_id": self.state.get("thread_id"),
+                        "before_inference": True, "expected_goal_sha256": expected,
+                        "require_active": active, "class": "service_transient",
+                        "error": failure["error"], "method": None})
 
     def record_rate_limits(self, limits, *, notification=False):
         if notification:
@@ -870,19 +895,48 @@ class Campaign:
             self.output.notice("Usage/billing stop: " + self.stop_reason)
 
     def refresh_credit_budget(self):
-        """Poll without inference; only freshly persisted notifications can cover a timeout."""
+        """Poll without inference; only freshly persisted notifications cover transport failure."""
         for attempt in range(3):
             if self.stop_reason or self.stop_now:
                 return
             try:
-                result = self.rpc.call("account/rateLimits/read", {}, timeout=10)
+                try:
+                    result = self.rpc.call("account/rateLimits/read", {}, timeout=10)
+                except (RecoverableFailure, BrokenPipeError, ConnectionResetError) as error:
+                    label = ("broken_pipe" if isinstance(error, BrokenPipeError) else
+                             "connection_reset" if isinstance(error, ConnectionResetError) else
+                             "disconnected" if str(error) ==
+                             "Codex app server disconnected; see retained stderr." else None)
+                    if (label is None or getattr(error, "rpc_mutating", False)
+                            or getattr(error, "rpc_method", "account/rateLimits/read") !=
+                            "account/rateLimits/read"):
+                        raise
+                    failure = self.transport_error_record(error)
+                    failure.update(method="account/rateLimits/read", mutating=False, channel_unusable=True)
+                    self.save(transport_failure=failure)
+                    self.save(last_usage_transport_error={"at": utc(), "error": str(error),
+                              "error_type": type(error).__name__, "method": "account/rateLimits/read"})
+                    raise RecoverableFailure("Local account/rateLimits/read transport: " + label) from error
+                prior = self.state.get("transport_failure") or {}
+                if prior.get("method") == "account/rateLimits/read" and prior.get("channel_unusable"):
+                    self.save(transport_failure=None)
                 self.record_rate_limits(result.get("rateLimits"))
                 return
             except Exception as error:
+                if getattr(error, "rpc_mutating", False):
+                    self.save(transport_uncertain={"at": utc(), "method": error.rpc_method,
+                              "error": str(error), "reason": "nested_mutating_rpc_delivery_uncertain"})
+                    self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
+                    self.stop_now = True
+                    return
+                if self.stop_reason or self.stop_now:
+                    self.save(last_usage_read_error_after_stop={"at": utc(), "error": str(error)})
+                    return
+                failure = (classify_usage_failure(str(error))
+                           if isinstance(error, RuntimeError) else None)
                 observed = self.last_credit_notification
                 age = time.monotonic() - observed[1] if observed is not None else None
-                if (isinstance(error, RecoverableFailure)
-                        and str(error) == "App-server request timed out: account/rateLimits/read"
+                if (failure is not None
                         and self.credit_guard is not None and observed is not None
                         and observed[0] is self.rpc and age is not None
                         and 0 <= age <= CREDIT_NOTIFICATION_MAX_AGE_SECONDS
@@ -890,8 +944,8 @@ class Campaign:
                         and self.state.get("credit_budget_error") is None):
                     self.save(last_usage_read_notification_fallback={
                         "at": utc(), "age_seconds": age, "error": str(error),
-                        "source": "same_worker_server_validated_persisted_notification"})
-                    self.output.notice("Usage read timed out; current validated notification "
+                        "failure_class": failure, "source": "same_worker_server_validated_persisted_notification"})
+                    self.output.notice("Usage read transport failed; current validated notification "
                                        "already persisted the unchanged credit guard.")
                     return
                 if (attempt < 2 and not self.stop_reason and not self.stop_now
@@ -903,8 +957,7 @@ class Campaign:
                     time.sleep(attempt + 1)
                     continue
                 expected = getattr(self.args, "credit_timeout_goal_sha256", None)
-                if (isinstance(error, RecoverableFailure)
-                        and str(error) == "App-server request timed out: account/rateLimits/read"
+                if (failure is not None
                         and self.credit_guard is not None and expected
                         and not self.controlled and not self.stop_reason
                         and not self.stop_now and self.state.get("phase") == "starting"
@@ -919,6 +972,19 @@ class Campaign:
                         "thread_id": self.state.get("thread_id"), "before_inference": True,
                         "account_validated": True, "expected_goal_sha256": expected,
                         "phase_at_failure": "starting"})
+                generic_expected = getattr(self.args, "recovery_goal_sha256", None)
+                require_active = getattr(self.args, "recovery_require_active", False)
+                if (failure is not None and self.credit_guard is not None and not self.controlled
+                        and not self.stop_reason and not self.stop_now
+                        and self.state.get("phase") == "starting"
+                        and (generic_expected or require_active)):
+                    from watch_os_goal import process_start
+                    self.save(transport_startup={"schema_version": 1, "worker_pid": os.getpid(),
+                        "worker_start": self.state.get("worker_start"), "watcher_pid": os.getppid(),
+                        "watcher_start": process_start(os.getppid()), "thread_id": self.state.get("thread_id"),
+                        "before_inference": True, "expected_goal_sha256": generic_expected,
+                        "require_active": require_active, "class": failure,
+                        "error": str(error), "method": "account/rateLimits/read"})
                 self.save(credit_budget_error=str(error))
                 self.stop_reason = self.stop_reason or "credit_budget_unknown"
                 self.stop_now = True
@@ -932,6 +998,8 @@ class Campaign:
         if primary and method in {"thread/goal/updated", "thread/goal/cleared"}:
             self.state.pop("credit_timeout_shutdown_pause", None)
             self.state.pop("credit_timeout_startup", None)
+            self.state.pop("transport_shutdown_pause", None)
+            self.state.pop("transport_startup", None)
         if method in {"item/started", "item/completed"}:
             self.remember_child_provenance(data)
         if "id" in message:
@@ -1121,7 +1189,8 @@ class Campaign:
             "join/close workers, record any live process identities, checkpoint and return. "
             "If credentials or external resources are unavailable, preserve the blocker "
             "and continue independent ready work. Never store credentials in the plan or logs."
-            + (" This is automatic crash recovery. Read HANDOFF.md, relevant CURRENT.md entries and the previous "
+            + (" This is automatic crash recovery. First read " + str(self.directory / "RECOVERY.md")
+               + " as a factual snapshot, never execution or release authority. Read HANDOFF.md, relevant CURRENT.md entries and the previous "
                "run/watcher records first. Reconcile source changes and exact live "
                "process/runtime leases before any new build or guest. "
                + ("Continue from the Markdown handoff in this fresh conversation and preserve "
@@ -1132,6 +1201,26 @@ class Campaign:
                   "Resume the existing thread and acceptance ledger; do not replay completed work.")
                if self.args.recovered else "")
         )
+
+    def recovery_goal_allowed(self, goal):
+        """Validate live saved context before resume or fresh-session activation."""
+        expected = getattr(self.args, "recovery_goal_sha256", None)
+        active = getattr(self.args, "recovery_require_active", False)
+        if not expected and not active:
+            return True
+        valid = (isinstance(goal, dict) and goal.get("objective") == OBJECTIVE
+                 and goal.get("threadId", self.state.get("thread_id") or
+                              (self.state.get("previous_session") or {}).get("thread_id")) ==
+                 (self.state.get("thread_id") or (self.state.get("previous_session") or {}).get("thread_id")))
+        if expected:
+            valid = valid and goal.get("status") == "paused" and hashlib.sha256(json.dumps(
+                goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest() == expected
+        if active:
+            valid = valid and goal.get("status") == "active"
+        if not valid:
+            self.remember_goal(goal)
+            self.stop_reason, self.stop_now = "startup_goal_stopped", True
+        return bool(valid)
 
     def prepare_fresh_goal(self):
         """Read only predecessor metadata, pause active continuations, retain allowance."""
@@ -1152,6 +1241,11 @@ class Campaign:
                 raise RuntimeError("Archived thread goal is missing, changed, or unsupported; no new thread was started")
 
         validate(goal)
+        if self.args.recovered and not (getattr(self.args, "recovery_goal_sha256", None)
+                                        or getattr(self.args, "recovery_require_active", False)):
+            raise RuntimeError("Automatic fresh recovery lacks live predecessor goal provenance")
+        if not self.recovery_goal_allowed(goal):
+            return False
         if goal["status"] in {"complete", "usageLimited", "budgetLimited"}:
             self.remember_goal(goal)
             return False
@@ -1211,6 +1305,15 @@ class Campaign:
 
     def begin(self):
         # Admission failures belong to this worker, never the preceding retry.
+        if self.state.get("transport_uncertain"):
+            raise RuntimeError("Mutating RPC delivery is uncertain; reconcile before recovery")
+        if (getattr(self.args, "credit_timeout_goal_sha256", None)
+                or getattr(self.args, "recovery_goal_sha256", None)
+                or getattr(self.args, "recovery_require_active", False)) and not (
+                    self.state.get("thread_id") or (self.state.get("previous_session") or {}).get("thread_id")):
+            raise RuntimeError("Automatic recovery lost its saved thread identity")
+        if (self.state.get("last_instruction") or {}).get("status") == "delivery_uncertain":
+            raise RuntimeError("Instruction delivery is uncertain; reconcile before recovery")
         if (self.state.get("resume_instruction") or {}).get("status") in {"sending", "delivery_uncertain"}:
             raise RuntimeError("Resume instruction delivery is uncertain; reconcile its saved turn before resuming")
         note = getattr(self.args, "startup_instruction", None)
@@ -1263,6 +1366,8 @@ class Campaign:
             goal = self.rpc.call("thread/goal/get", {"threadId": previous_id})["goal"]
             if goal and goal["objective"] != OBJECTIVE:
                 raise RuntimeError("Stored thread has a different objective; it was not resumed or replaced.")
+            if not self.recovery_goal_allowed(goal):
+                return
             expected = getattr(self.args, "credit_timeout_goal_sha256", None)
             if expected and hashlib.sha256(json.dumps(
                     goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest() != expected:
@@ -1298,6 +1403,8 @@ class Campaign:
         goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
         if goal and goal["objective"] != OBJECTIVE:
             raise RuntimeError("Stored thread has a different objective; it was not replaced.")
+        if not self.recovery_goal_allowed(goal):
+            return
         expected = getattr(self.args, "credit_timeout_goal_sha256", None)
         if expected and hashlib.sha256(json.dumps(
                 goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest() != expected:
@@ -1390,6 +1497,26 @@ class Campaign:
         self.output.notice("Thread " + ident + "; " + self.args.model + "/" + self.args.effort
                            + "; resources=" + json.dumps(launch_resources(self.args, self.repo), sort_keys=True))
 
+    def transport_error_record(self, error):
+        """Keep typed transport provenance and the actual RPC delivery boundary."""
+        label = ("broken_pipe" if isinstance(error, BrokenPipeError) else
+                 "connection_reset" if isinstance(error, ConnectionResetError) else
+                 classify_rpc_failure(str(error)) if isinstance(error, RecoverableFailure) else None)
+        method = getattr(error, "rpc_method", None)
+        if isinstance(error, RecoverableFailure) and str(error).startswith(
+                "App-server request timed out: "):
+            method = method or str(error)[len("App-server request timed out: "):]
+            label = "rpc_timeout"
+        if label is None:
+            return None
+        return {"schema_version": 1, "worker_pid": os.getpid(),
+                "worker_start": self.state.get("worker_start"),
+                "thread_id": self.state.get("thread_id"), "class": label,
+                "error": str(error), "error_type": type(error).__name__, "method": method,
+                "channel_unusable": label in {"disconnected", "broken_pipe", "connection_reset"},
+                "mutating": bool(getattr(error, "rpc_mutating", False) or
+                                 method is not None and method not in READ_ONLY_RPC_METHODS)}
+
     def pause(self):
         ident = self.state.get("thread_id")
         if not ident or not self.controlled:
@@ -1399,14 +1526,14 @@ class Campaign:
             self.controlled = False
             raise RuntimeError("Goal objective changed externally; launcher will not alter it.")
         receipt = None
+        transport_receipt = None
         if current and current["status"] == "active":
             before = dict(current)
             generation = self.primary_stop_generation
             current = self.rpc.call("thread/goal/set", {"threadId": ident, "status": "paused"})["goal"]
             if (self.stopping and not self.checkpoint_requested
                     and self.stop_reason == "credit_budget_unknown" and self.stop_now
-                    and self.state.get("credit_budget_error") ==
-                    "App-server request timed out: account/rateLimits/read"
+                    and classify_usage_failure(self.state.get("credit_budget_error")) is not None
                     and current and current.get("status") == "paused"
                     and current.get("objective") == OBJECTIVE
                     and self.primary_stop_generation <= generation + 1
@@ -1420,9 +1547,33 @@ class Campaign:
                            "goal_before": before, "goal_after": current,
                            "goal_after_sha256": hashlib.sha256(json.dumps(
                                current, sort_keys=True, separators=(",", ":")).encode()).hexdigest()}
-        self.remember_goal(current)
+            failure = self.state.get("transport_failure") or {}
+            if (self.stopping and not self.checkpoint_requested
+                    and self.stop_reason in {"launcher_error", "active_goal_did_not_continue",
+                                             "server_error", "turn_failed", "rate_limit"}
+                    and failure.get("mutating") is False and failure.get("worker_pid") == os.getpid()
+                    and failure.get("worker_start") == self.state.get("worker_start")
+                    and failure.get("thread_id") == ident and current
+                    and current.get("status") == "paused" and current.get("objective") == OBJECTIVE
+                    and self.primary_stop_generation <= generation + 1
+                    and not self.state.get("transport_uncertain")
+                    and not any(self.state.get(key) for key in
+                                ("service_hold", "policy_hold", "auth_hold", "billing_hold"))):
+                transport_receipt = {"schema_version": 1, "worker_pid": os.getpid(),
+                    "worker_start": self.state.get("worker_start"), "thread_id": ident,
+                    "stop_reason": self.stop_reason, "transport_error": failure.get("error"),
+                    "transport_class": failure.get("class"), "transport_method": failure.get("method"),
+                    "pause_method": "thread/goal/set", "pause_confirmed": True,
+                    "goal_before": before, "goal_after": current,
+                    "goal_after_sha256": hashlib.sha256(json.dumps(
+                        current, sort_keys=True, separators=(",", ":")).encode()).hexdigest()}
+        self.goal = current
+        fields = {"goal": current}
         if receipt is not None:
-            self.save(credit_timeout_shutdown_pause=receipt)
+            fields["credit_timeout_shutdown_pause"] = receipt
+        if transport_receipt is not None:
+            fields["transport_shutdown_pause"] = transport_receipt
+        self.save(**fields)
 
     def request_checkpoint(self):
         self.pause()
@@ -1446,11 +1597,21 @@ class Campaign:
         if not self.rpc or self.stopping or not self.controlled:
             return
         self.stopping = True
+        failure = self.state.get("transport_failure") or {}
+        if (failure.get("channel_unusable") is True and failure.get("worker_pid") == os.getpid()
+                and failure.get("worker_start") == self.state.get("worker_start")
+                and failure.get("thread_id") == self.state.get("thread_id")):
+            self.save(stop_errors=["Known unavailable app-server channel; no shutdown RPCs attempted"],
+                      cleanup_verified=False)
+            return
         errors = []
         try:
             self.pause()
         except Exception as error:
             errors.append(str(error))
+            if getattr(error, "rpc_mutating", False):
+                self.save(transport_uncertain={"at": utc(), "method": error.rpc_method,
+                          "error": str(error), "reason": "shutdown_pause_delivery_uncertain"})
         if not self.controlled:
             self.save(stop_errors=errors, cleanup_verified=False)
             return
@@ -1508,7 +1669,11 @@ class Campaign:
                     break
                 if not self.active and now - self.last_activity > 120:
                     self.stop_reason = "active_goal_did_not_continue"
-                    self.save(retryable=True)
+                    self.save(retryable=True, transport_failure={"schema_version": 1,
+                        "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start"),
+                        "thread_id": self.state.get("thread_id"), "class": "continuation_stall",
+                        "error": "active_goal_did_not_continue", "error_type": "ContinuationStall",
+                        "method": None, "mutating": False})
                     code = 24
                     break
                 self.deliver_instruction()
@@ -1529,18 +1694,48 @@ class Campaign:
                     self.remember_goal(self.rpc.call("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"])
                     next_refresh = now + refresh_interval
         except Exception as error:
+            failure = self.transport_error_record(error)
+            prior_stop = self.stop_reason
             self.stop_reason = self.stop_reason or "launcher_error"
-            self.save(last_error=str(error), retryable=isinstance(error, (
-                RecoverableFailure, BrokenPipeError, ConnectionResetError)))
+            retryable = failure is not None and not failure["mutating"]
+            self.save(last_error=self.state.get("last_error", str(error)) if prior_stop else str(error),
+                      retryable=retryable, transport_failure=failure)
+            if failure is not None and failure["mutating"]:
+                self.save(transport_uncertain={"at": utc(), "method": failure["method"],
+                          "error": str(error), "reason": "mutating_rpc_delivery_uncertain"})
+                self.stop_reason, self.stop_now = prior_stop or "rpc_delivery_uncertain", True
+            if (retryable and not prior_stop and not self.controlled
+                    and (getattr(self.args, "recovery_goal_sha256", None)
+                         or getattr(self.args, "recovery_require_active", False)
+                         or getattr(self.args, "credit_timeout_goal_sha256", None))
+                    and not any(self.state.get(key) for key in
+                                ("service_hold", "policy_hold", "auth_hold", "billing_hold"))):
+                from watch_os_goal import process_start
+                self.save(transport_startup={"schema_version": 1, "worker_pid": os.getpid(),
+                    "worker_start": self.state.get("worker_start"), "watcher_pid": os.getppid(),
+                    "watcher_start": process_start(os.getppid()), "thread_id": self.state.get("thread_id"),
+                    "before_inference": True, "expected_goal_sha256": getattr(
+                        self.args, "recovery_goal_sha256", None) or getattr(
+                        self.args, "credit_timeout_goal_sha256", None),
+                    "require_active": getattr(self.args, "recovery_require_active", False),
+                    "class": failure["class"], "error": failure["error"], "method": failure["method"]})
             self.output.notice(str(error))
         finally:
             try:
                 self.stop()
             finally:
                 try:
-                    if self.rpc:
-                        self.rpc.close()
-                    self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code)
+                    close_errors = []
+                    try:
+                        if self.rpc:
+                            self.rpc.close()
+                    except Exception as error:
+                        close_errors.append(str(error))
+                    known = getattr(self.rpc, "close_errors", None)
+                    if isinstance(known, list):
+                        close_errors = known + close_errors
+                    self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
+                              server_close_errors=close_errors, cleanup_verified=False)
                     self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
                                        + "; " + (self.stop_reason or "goal status") + ".")
                     self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
@@ -1597,12 +1792,23 @@ def arguments(argv=None):
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--credit-timeout-goal-sha256", help=argparse.SUPPRESS)
+    parser.add_argument("--recovery-goal-sha256", help=argparse.SUPPRESS)
+    parser.add_argument("--recovery-require-active", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     if args.credit_run_id is not None and (args.credit_budget is None or
             len(args.credit_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.credit_run_id)):
         parser.error("credit-run-id requires a credit budget and a 32-character lowercase hex identifier")
     if args.worker and args.credit_budget is not None and args.credit_run_id is None:
         parser.error("Credit-funded workers require the watcher's persistent credit-run-id")
+    if ((args.recovery_goal_sha256 or args.recovery_require_active) and
+            (not args.worker or not args.recovered or
+             bool(args.recovery_goal_sha256) and args.recovery_require_active)):
+        parser.error("Generic recovery needs a supervised worker and one live-goal guard")
+    if args.recovery_goal_sha256 and (len(args.recovery_goal_sha256) != 64 or
+            any(c not in "0123456789abcdef" for c in args.recovery_goal_sha256)):
+        parser.error("Generic recovery requires an exact goal digest")
+    if args.credit_timeout_goal_sha256 and (args.recovery_goal_sha256 or args.recovery_require_active):
+        parser.error("Choose one recovery goal provenance mode")
     if args.credit_timeout_goal_sha256 and (not args.worker or not args.recovered
             or len(args.credit_timeout_goal_sha256) != 64
             or any(c not in "0123456789abcdef" for c in args.credit_timeout_goal_sha256)):
@@ -1731,6 +1937,12 @@ def main(argv=None):
     lease = Lease(directory / "run.lock")
     try:
         if args.fresh_session or args.fresh_recovery_proof:
+            saved = json.loads((directory / "state.json").read_text()) if (directory / "state.json").exists() else {}
+            if saved.get("transport_uncertain") or (saved.get("resume_instruction") or {}).get(
+                    "status") in {"sending", "delivery_uncertain"}:
+                raise RuntimeError("Uncertain RPC delivery cannot be cleared by session archival")
+            if args.fresh_recovery_proof and not (args.recovery_goal_sha256 or args.recovery_require_active):
+                raise RuntimeError("Fresh automatic recovery needs live predecessor goal provenance")
             from os_goal_sessions import prepare_fresh_session
             previous = prepare_fresh_session(
                 directory, REPO, atomic_json,
