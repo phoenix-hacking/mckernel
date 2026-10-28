@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T23:59:56.520040+00:00",
+  "decision": "PASS_SOURCE_MECHANICAL_SIX_FILE_SELECTIVE_ADOPTION_PROPOSAL",
+  "blocking_findings": [],
+  "execution_release": false,
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/SOURCE-READY.json",
+    "bytes": 7396,
+    "sha256": "b8e665a62c20bc9ba440c14bffa9b8eb4ae1b0c099c2db539196db39e37bcd7a"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 118748,
+    "sha256": "721547c8246677f55290d98ae9bc161ac0356bcb4ed493bdd28cade1f99552f7"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 8472,
+    "sha256": "941b98394b1600300165d97527059822f78860da5dba03eded90abf89940a801"
+  },
+  "write_set": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/EXACT-SIX-FILE-WRITE-SET.NOT-AUTHORITY.json",
+    "bytes": 6188,
+    "sha256": "bfefe73e210da60d242ccb6f9816214e15bfffdd296c83121d1451b7ca8e2e3f"
+  },
+  "materialization_mappings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/ROOT-MATERIALIZATION-MAPPINGS.NOT-AUTHORITY.json",
+    "bytes": 14688,
+    "sha256": "795836bf2674d3b6092ad0cfb6db326d83457973122a1ac019089abc6f69d357"
+  },
+  "next_command": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/NEXT-ROOT-COMMAND-AND-ORDER.NOT-AUTHORITY.json",
+    "bytes": 2441,
+    "sha256": "a3182639b59981aff57281c5ed806bdb05a08007d4e6bcc487299454b82e2ddc"
+  },
+  "apply_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/root-selective-adoption-materialization-proposal-source-1/apply_root_selective_adoption.py",
+    "bytes": 4665,
+    "sha256": "a76f6b806ec4193cdebf201ddcebe4c5ac5c21428c0fe6ab191ca56511688454"
+  },
+  "verified": {
+    "all_declared_packet_file_refs_match": true,
+    "apply_helper_AST_valid": true,
+    "canonical_write_count": 6,
+    "new_Rust_source_files": 1,
+    "allowed_relatives": [
+      "kernel/CMakeLists.txt",
+      "kernel/process.c",
+      "kernel/syscall.c",
+      "kernel/rust/lib.rs",
+      "kernel/rust/process_verbose_data.rs",
+      "kernel/rust/syscall_policy.rs"
+    ],
+    "all_six_current_canonical_preimages_and_candidate_refs_match": true,
+    "existing_target_and_ancestor_nosymlink_checks": true,
+    "all_six_preflight_before_first_write": true,
+    "all_existing_preimages_retained_before_source_writes": true,
+    "new_module_requires_absence_and_O_EXCL": true,
+    "existingfiles_open_NOFOLLOW_and_existingmode_preserved": true,
+    "canonical_postimage_bytes_fsync_readback_match": true,
+    "exact_write_set_and941b_review_hardpinned": true,
+    "Root_bindings_require_one_invocation_and_exclusive_integration_no_live_source_reader_conflict": true,
+    "ledger_and_positivefree_refs_hash_authenticated": true,
+    "ledger_filename_minimum": 41,
+    "ledger_requires_Root_completeboundary_and_no_unlistedoperation_attestation": true,
+    "latest_free_exactly_equals_bound_positivefree": true,
+    "positivefree_requires_currentfree_and_normal_owned_retirement": true,
+    "source_adoption_receipt_authority": null,
+    "compiler_or_runtime_interface_added": false
+  },
+  "profile_delta": {
+    "from_b619_to_721_changed_topkeys": [
+      "status",
+      "source_preparation_current_context",
+      "producer_contract"
+    ],
+    "changed_contract_fields": [
+      "expected_current_cohort_Rust_function_exports",
+      "candidate_selected_Rust_provider_accounting"
+    ],
+    "candidate_provider_count": 59,
+    "accounting": {
+      "accepted113_selected_providers": 56,
+      "new_Rust_wrapper_definitions": 2,
+      "newly_selected_existing_atomic_provider": 1,
+      "candidate_selected_providers": 59,
+      "new_actual_Rust_function_definitions": 2,
+      "physical_export_delta_not_inferred": true
+    },
+    "all_four_argv_inputs_source_map_cohort_reuse_origin_unchanged": true,
+    "unaccepted_expected_counts": {
+      "C_functions": 80,
+      "selected_Rust_providers": 59,
+      "process_C_OBJECTs": 31
+    },
+    "physical_export_delta_not_inferred": true
+  },
+  "materializer_scope": "Mappings truthfully remain proposal-only: actualmaterializer/adoptionreceipt/currentledger/free/nonce/resources/holder/output/executionreview/releaseNULL. Origincontext compares explicitretained_arch_producer.command; all4currentcommands areRust/kernelC/processC/rawlink, so no positionalarchassumption. Root must bind genuinefutureRoot41+ metadata/actualselectivesourceadoption before existingresource/executionprotocol. All4helperbytes unchanged vs941b successor. No architecture or originproducer replay.",
+  "source_limits": "941b finalouterPERF restore/sourcePASS retained. Originalcc6fBLOCKED source and deadwitness withdrawal, actualE0616failure+oneABIfix, GLOBAL32/HOST and all originalOPEN/FAIL remain preserved. This review validates only mechanicalsourceadoption and truthfulaccounting delta; no119rehash/broadinventory/HOST/CPP/compiler/controlreplay or newgate/framework/quota.",
+  "failure_semantics": "All6targets are preflighted before outputSTARTED/canonicalwrites. Existingbytes are preserved first; mid-write failures retain STARTED/preimages and cannot emit the finaladoptionreceipt or workloadgrant. Root retains exclusive recovery/actualadoption-readback responsibility. This is boundedsourcecopy, not transactionalglobalframework or executionrelease.",
+  "review_actions": {
+    "read_hash_AST_literal_data_deltas_and_six_preimages_only": true,
+    "apply_or_prepare_helpermain_calls": 0,
+    "compiler_resource_guard_query_workload_Git_canonical_operations": 0,
+    "no119walk": true,
+    "subagents": 0,
+    "only_private_review_directory_written": true
+  },
+  "next_action": "Root may supply real currentRoot41+ ledger/positivefree and exclusive-sourceownership bindings, then invoke exactsixfileadoption once. Actualmaterialization/publication/freshresources/independentexecutionreview and oneusebuildgrant remain separate; noactualcompilerentry is authorized here."
+}

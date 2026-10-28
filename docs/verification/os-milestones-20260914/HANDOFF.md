@@ -1,3 +1,25 @@
+## Rust startup values pass; original retirement fails — 2026-10-27T23:57:18.339179+00:00
+
+Root next114 exactsixfileSOURCE adopted67fc aftermechanical860533; canonical6readbacks matched. Global32typeddebug+perf3 sources now integrated, actual4commands3new8retained/119Rust admissionRoot41 pending. CandidateC80/Rust59/process31 remainsunaccepted; no build/default/nativecreditfromsource.
+
+Independent startup current-free d9e0 (25 actual Docker clients/28 actors, exact CID/name/label absent, lease false, cgroup0, two 27:4 probes) is now sealed. Root41 ledger0a841 consumes6d2e; no heavy live. Source-grounded diagnosis705d shows namespace-empty snapshot only0.473s afterreap, before selected one-second retry; final0 must carry distinctquerytoken/sameowner. Executor exact C/Rustexitordering agrees; no executorrepair justified. Next114 private sixfileadoptionb8e6/metadata721 mechanicallyreviewing, actualRoot41 admissionprepareinparallel.
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CorrectRustexecutor startup6d2e consumedonce: actualargv app/A/empty/B, exact91stdout/
+emptyerr/raw0/EOF, fullcaseFAIL BEGINretirementresult/actualos0gen1pid258token513errno-11.
+Caller1757368/start94271766 joined1/wall38.929213/CPU.883326/controllerRSS53072; bridge0
+notacceptance. Resource→entry49.150266s; exactindependentreview8f828c at48.998s.
+Failure581472 retained; independentcurrentfree pending, no newheavy untilpositiveproof.
+
+Current23:36–00:06 bucket +1supportedF05file216b only; nativecasee3c1 waspriorbucket.
+M14files3/6/M15files1/8/practical35/35; C83/Rust56/process63 accepted113 unchanged.
+Root source-only diagnoses collector timing and executor teardown independently; no
+unchanged guest replay/oracleweakening. Corrected114 GLOBAL32+perf3a589/b619/941b ready;
+Rootintegration andfreshRoot41 admission commands prepared inparallel, noactualcompiler.
+ForegroundLOCAL14/configs4bb0 +ptrace_setsiginfo6777 receivedSOURCEONLY; final14named
+metadata reservedforeground, noduplicateport. Parentcontrols/account/windowunchanged;
+fixed05:36:09Z/earlierclamps/includedfirst/sameledger/oneheavy/permanent27:4/floors.
+
 ## Supported F05 file accepted; correct Rust startup ready — 2026-10-27T23:48:53.923243+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

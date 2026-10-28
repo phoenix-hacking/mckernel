@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-27T23:57:18.339179+00:00",
+  "thread": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "goal_observed": "active",
+  "review_cadence_minutes": 20,
+  "measurement_baseline": "2026-10-27T17:36:09Z",
+  "current_nonoverlapping_bucket": {
+    "start": "2026-10-27T23:36:09Z",
+    "end": "2026-10-28T00:06:09Z",
+    "complete": false,
+    "accepted_selected_function_delta": 0,
+    "accepted_storage_delta": 0,
+    "kernel_build_delta": 0,
+    "accepted_native_case_delta": 0,
+    "supported_file_delta": 1,
+    "file_scope": "M14 F05 original applicable-native supported contract, Root216b; M14files3/6, M15files1/8 overallOPEN",
+    "actual_guest_attempts": 1,
+    "application_values_pass_full_case_fail": 1
+  },
+  "prior_completed_bucket": {
+    "start": "2026-10-27T23:06:09Z",
+    "end": "2026-10-27T23:36:09Z",
+    "accepted_functions": 4,
+    "accepted_storage": 4,
+    "accepted_kernel_artifacts": 1,
+    "accepted_full_native_case": 1,
+    "supported_file_delta": 0
+  },
+  "latest_startup": {
+    "nonce": "6d2e6c210f8bf62b1a4f1abc127fb09a",
+    "wall_seconds": 38.92921304702759,
+    "controller_cpu_seconds": 0.883326,
+    "controller_peak_rss_kib": 53072,
+    "resource_to_caller_entry_seconds": 49.15026640892029,
+    "stdout_bytes": 91,
+    "stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "fullcase": "FAIL BEGIN retirement result, actual retirement errno -11",
+    "positive_current_free": "pending independent custody review",
+    "guest_cpu_peak": "unknown"
+  },
+  "accepted_artifact": "CURRENT113 C83/Rust56/process63 unchanged",
+  "compiler_latency": {
+    "original_time_to_first_compiler_seconds": 2608.941661,
+    "latest_resource_to_compiler_seconds": 49.746964,
+    "latest_failure_to_validated_fix_seconds": 1280.263797,
+    "includes_intervening_F05_not_all_idle": true,
+    "ready_to_compiler_for_next114": null
+  },
+  "largest_avoidable_handoff": "Integration/publication/recovery between 20-second compiles and 39-second guest attempts; exact fresh-startup bridge removed post-PASS composition (review age48.998s, entry49.150s). Earlier 16m26s recovery span included intervening F05, not wholly idle. Current release/current-free durations not yet known.",
+  "scheduling_adjustment": "Prepare corrected114 source-adoption and Root41 admission command in parallel with independent startup retirement diagnosis; give first fully ready heavy job the sole slot only after positive free. No unchanged guest rerun.",
+  "active_owners": {
+    "Root": "canonical integration/actual grants",
+    "custody_release_review": "actual startup failure/current-free",
+    "f05_rust_causal_supervisor": "collector snapshot/drain diagnosis source-only",
+    "mcexec_default_prepare": "selected Rust executor teardown diagnosis source-only",
+    "current111_build_prepare": "corrected114 selective Root integration proposal",
+    "m14_f02_next_data": "corrected114 Root41 admission source",
+    "foreground": "LOCAL14/configs4bb0, ptrace_setsiginfo6777 source complete; final14 named metadata source-only"
+  },
+  "resources_snapshot": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 149015031808,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47866568704,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      1.24,
+      1.2,
+      1.13
+    ],
+    "memory": {
+      "MemAvailable_kib": 26765608,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "source_ready_not_accepted": [
+    "corrected114 GLOBAL32/perf3 a589/b619/941b",
+    "LOCAL14+3configs4bb0",
+    "ptrace_setsiginfo6777"
+  ],
+  "critical_next": "custody actual CURRENT-FREE \u2192 Root41 ledger \u2192 Root corrected114 adoption/materialization; bound startup causal fix waits exact source diagnosis",
+  "deadline": "2026-10-28T05:36:09Z",
+  "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+  "included_first": true,
+  "speedup_95_percent_achieved": false,
+  "no_workload_authority_from_review": true
+}

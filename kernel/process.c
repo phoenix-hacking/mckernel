@@ -336,14 +336,33 @@ void process_ptrace_hold_thread_bridge(void *thread);
 #line 230
 
 /* Original diagnostic identities retained as declarative data only. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+#if !defined(MCKERNEL_RUST_PROCESS_HELPERS) || \
+    !defined(MCKERNEL_PROCESS_DDEBUG_FLAGS) || !defined(MCKERNEL_PROCESS_DDEBUG_FILE)
+#error "process verbose storage requires paired Rust/build inputs"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_PROCESS_DDEBUG_FLAGS,
+    "Rust process debug flags must match C DDEBUG_DEFAULT");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_PROCESS_DDEBUG_FILE) == 0,
+    "Rust process debug filename must match actual C __FILE__");
+extern struct ddebug process_ptrace_traceme_debug[3];
+#else
+#line 232
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_ptrace_traceme_debug[3] = {
     { .file=__FILE__, .func="process_ptrace_traceme_log_bridge", .line=236, .flags=DDEBUG_DEFAULT },
     { .file=__FILE__, .func="process_ptrace_traceme_log_bridge", .line=240, .flags=DDEBUG_DEFAULT },
     { .file=__FILE__, .func="process_ptrace_traceme_log_bridge", .line=243, .flags=DDEBUG_DEFAULT },
 };
+#endif
+#line 238
 void process_ptrace_traceme_log_bridge(int event, int pid, unsigned long value, int error);
 #line 249
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 247
+#else
+#line 228
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
@@ -385,6 +404,10 @@ int process_default_ncpus_bridge(void)
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Retained source selector data, no C computation. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_create_cpu_debug;
+#else
+#line 270
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_create_cpu_debug = {
     .file = __FILE__,
@@ -392,6 +415,8 @@ process_create_cpu_debug = {
     .line = 276,
     .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 277
 void process_create_cpu_log_bridge(int event, int pid, int cpu);
 #else
 #line 268
@@ -576,6 +601,10 @@ static void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Existing diagnostic selector identity from the displaced C callsite.
  * This is declarative __verbose data consumed by the existing Rust registry. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_sched_migrate_debug;
+#else
+#line 434
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_sched_migrate_debug = {
     .file = __FILE__,
@@ -583,7 +612,10 @@ process_sched_migrate_debug = {
     .line = 422, /* source-bound original dkprintf line; keep control selectors */
     .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 441
 #else
+#line 442
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(unsigned long thread_addr,
 					     int tid, int cpu_id)
 {
@@ -592,6 +624,7 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(unsigned long 
 		 "sched_request_migrate", tid, cpu_id);
 }
 #endif
+#line 450
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_sched_vector_bridge(int vector_key);
@@ -2199,6 +2232,10 @@ int process_split_range_insert_bridge(struct process_vm *vm,
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remaining_range_debug[8];
+#else
+#line 1684
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_remaining_range_debug[8] = {
  { .file=__FILE__, .func="process_split_range_public_log_bridge", .line=1689, .flags=DDEBUG_DEFAULT },
@@ -2210,6 +2247,8 @@ process_remaining_range_debug[8] = {
  { .file=__FILE__, .func="process_remove_range_log_bridge", .line=2050, .flags=DDEBUG_DEFAULT },
  { .file=__FILE__, .func="process_remove_range_log_bridge", .line=2064, .flags=DDEBUG_DEFAULT },
 };
+#endif
+#line 1695
 void process_split_range_public_log_bridge(int event, struct process_vm *vm,
 		struct vm_range *range, unsigned long addr,
 		struct vm_range **splitp, struct vm_range *newrange, int error);
@@ -2236,6 +2275,11 @@ void process_split_range_public_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1719
+#else
+#line 1704
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 #line 1701
@@ -2441,6 +2485,10 @@ static void *process_free_range_phys_to_virt_bridge(unsigned long phys)
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 PROCESS_TRACKED_LINE_STORAGE(process_free_range_pages_source_line, 1873);
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_free_range_body_debug[3];
+#else
+#line 1873
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_free_range_body_debug[3] = {
  { .file=__FILE__, .func="process_free_range_log_bridge", .line=1947, .flags=DDEBUG_DEFAULT },
@@ -2448,6 +2496,9 @@ process_free_range_body_debug[3] = {
  { .file=__FILE__, .func="free_process_memory_range", .line=1964, .flags=DDEBUG_DEFAULT },
 };
 #endif
+#line 1879
+#endif
+#line 1880
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 #line 1871
 static void process_free_range_pages_bridge(void *addr, unsigned long pages)
@@ -2805,6 +2856,10 @@ int remove_process_memory_range(struct process_vm *vm,
  * Rust owns both event branches, field reads and the existing variadic logger.
  * The source-bound original success callsite remains selectable at line 2086.
  */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_vm_range_insert_debug;
+#else
+#line 2090
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_vm_range_insert_debug = {
     .file = __FILE__,
@@ -2812,7 +2867,10 @@ process_vm_range_insert_debug = {
     .line = 2086,
     .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2097
 #else
+#line 2098
 PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_log_bridge(int event, struct process_vm *vm,
 				       struct vm_range *newrange,
 				       struct vm_range *range)
@@ -2829,6 +2887,7 @@ PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_log_bridge(int event, struct pr
 	}
 }
 #endif
+#line 2114
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_dump_bridge(struct process_vm *vm)
@@ -2846,6 +2905,10 @@ static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remaining_range_scheduler_debug[18];
+#else
+#line 2131
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_remaining_range_scheduler_debug[18] = {
  { .file=__FILE__, .func="process_range_public_log_bridge", .line=2137, .flags=DDEBUG_DEFAULT },
@@ -2867,6 +2930,8 @@ process_remaining_range_scheduler_debug[18] = {
  { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4413, .flags=DDEBUG_DEFAULT },
  { .file=__FILE__, .func="process_sched_do_migrate_log_bridge", .line=489, .flags=DDEBUG_DEFAULT },
 };
+#endif
+#line 2152
 void process_range_public_log_bridge(int event, struct process_vm *vm,
 				     struct vm_range *range,
 				     unsigned long start,
@@ -2925,6 +2990,11 @@ void process_range_public_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2208
+#else
+#line 2182
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 #line 2179
@@ -3195,6 +3265,10 @@ void process_add_range_memclear_bridge(unsigned long phys,
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remaining_memory_log_debug[5];
+#else
+#line 2301
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_remaining_memory_log_debug[5] = {
  { .file=__FILE__, .func="process_add_range_log_bridge", .line=2318, .flags=DDEBUG_DEFAULT },
@@ -3203,6 +3277,8 @@ process_remaining_memory_log_debug[5] = {
  { .file=__FILE__, .func="process_memset_smp_log_bridge", .line=2207, .flags=DDEBUG_DEFAULT },
  { .file=__FILE__, .func="process_remove_region_log_bridge", .line=3471, .flags=DDEBUG_DEFAULT },
 };
+#endif
+#line 2309
 void process_add_range_log_bridge(int event, int rc,
 				  unsigned long start,
 				  unsigned long end);
@@ -3237,6 +3313,11 @@ void process_add_range_log_bridge(int event, int rc,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2341
+#else
+#line 2329
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 #line 2326
@@ -3391,22 +3472,41 @@ struct rfp_args {
  * static C ABI data only. Rust owns the complete callback computation. */
 const char *const process_remap_free_file = __FILE__;
 const int process_remap_free_line = 2469;
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remap_one_page_entry_debug;
+#else
+#line 2442
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_remap_one_page_entry_debug = {
     .file = __FILE__, .func = "remap_one_page",
     .line = 2448, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2447
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remap_one_page_rss_debug;
+#else
+#line 2447
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_remap_one_page_rss_debug = {
     .file = __FILE__, .func = "remap_one_page",
     .line = 2470, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2452
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_remap_one_page_exit_debug;
+#else
+#line 2452
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_remap_one_page_exit_debug = {
     .file = __FILE__, .func = "remap_one_page",
     .line = 2476, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2457
 #else
+#line 2458
 int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		   void *pgaddr, int pgshift)
 {
@@ -3451,6 +3551,7 @@ out:
 	return error;
 }
 #endif
+#line 2502
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_visit_pte_range_bridge(void *page_table, unsigned long start,
@@ -3536,17 +3637,30 @@ struct sync_args {
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Displaced sync callback dynamic-debug selectors: declarative data only. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_sync_one_page_entry_debug;
+#else
+#line 2562
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_sync_one_page_entry_debug = {
     .file = __FILE__, .func = "sync_one_page",
     .line = 2546, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2567
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_sync_one_page_exit_debug;
+#else
+#line 2567
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_sync_one_page_exit_debug = {
     .file = __FILE__, .func = "sync_one_page",
     .line = 2574, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2572
 #else
+#line 2573
 int sync_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		  void *pgaddr, int pgshift)
 {
@@ -3588,6 +3702,7 @@ out:
 	return error;
 }
 #endif
+#line 2614
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void process_sync_range_log_bridge(struct process_vm *vm,
@@ -3940,53 +4055,87 @@ unsigned long process_page_fault_mapping_state_body_result(struct vm_range *, ui
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_profile_path_debug;
+#else
+#line 2860
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_profile_path_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 2952, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2865
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_entry_debug;
+#else
+#line 2865
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_entry_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 2959, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2870
 void process_page_fault_entry_log_body_result(struct process_vm *, struct vm_range *,
         uintptr_t, uint64_t);
 #endif
+#line 2873
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 unsigned long process_page_fault_shared_permission_body_result(struct vm_range *, unsigned long);
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_pte_state_debug;
+#else
+#line 2879
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_pte_state_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3006, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2884
 void process_page_fault_pte_state_log_bridge(pte_t *, size_t);
 #endif
+#line 2886
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_page_state_debug;
+#else
+#line 2888
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_page_state_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3219, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2893
 void process_page_fault_page_state_log_bridge(struct page *);
 #endif
+#line 2895
 
 #line 2831
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Original page-fault bounds diagnostic: static ABI data, Rust computation. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_prepare_bounds_debug;
+#else
+#line 2833
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_prepare_bounds_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 2873, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2838
 int process_page_fault_prepare_body_result(struct process_vm *, struct vm_range *,
         uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, int *);
 #endif
+#line 2841
 
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
@@ -3999,41 +4148,73 @@ int process_page_fault_cow_classify_body_result(struct vm_range *, uint64_t, str
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_cow_rss_add_debug;
+#else
+#line 2853
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_cow_rss_add_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3071, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2858
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_cow_rss_sub_debug;
+#else
+#line 2858
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_cow_rss_sub_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3076, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2863
 void process_page_fault_cow_commit_body_result(struct vm_range *,uintptr_t *,
         size_t,void *,struct page **,struct ddebug *,struct ddebug *);
 #endif
+#line 2866
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_set_pte_rss_add_debug;
+#else
+#line 2868
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_set_pte_rss_add_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3118, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2873
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_set_pte_rss_skip_debug;
+#else
+#line 2873
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_set_pte_rss_skip_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3121, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2878
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_set_pte_attr_debug;
+#else
+#line 2878
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_set_pte_attr_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3125, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2883
 int process_page_fault_set_pte_body_result(struct process_vm *,struct vm_range *,
     uintptr_t,uint64_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute,int *,
     int (*)(page_table_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute),
     struct ddebug *,struct ddebug *,struct ddebug *);
 #endif
+#line 2888
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_page_fault_set_range_body_result(struct process_vm *,struct vm_range *,
@@ -4044,40 +4225,72 @@ void process_page_fault_finish_body_result(uintptr_t,int *,struct page **);
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_out_stray_debug;
+#else
+#line 2898
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_out_stray_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3202, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2903
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_out_rss_sub_debug;
+#else
+#line 2903
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_out_rss_sub_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3206, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2908
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_out_return_debug;
+#else
+#line 2908
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_out_return_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3210, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2913
 int process_page_fault_out_body_result(struct process_vm *,struct vm_range *,
     uintptr_t,uint64_t,const size_t *,struct page *,int,
     struct ddebug *,struct ddebug *,struct ddebug *);
 #endif
+#line 2917
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_anon_clear_debug;
+#else
+#line 2919
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_anon_clear_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3059, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2924
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_anon_map_debug;
+#else
+#line 2924
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_anon_map_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3067, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2929
 void process_page_fault_anon_clear_body_result(struct vm_range *,void *,size_t,void *,
     struct page *,uintptr_t,uint64_t,uintptr_t *,int,int,struct ddebug *,struct ddebug *);
 #endif
+#line 2932
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_page_fault_install_finish_body_result(struct process_vm *,
@@ -4092,11 +4305,17 @@ int process_page_fault_install_finish_body_result(struct process_vm *,
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Retained metadata for the original COW copy log and profile event. */
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_page_fault_cow_copy_debug;
+#else
+#line 2946
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_cow_copy_debug = {
  .file = __FILE__, .func = "page_fault_process_memory_range",
  .line = 3151, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 2951
 #ifdef PROFILE_ENABLE
 #ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
 extern const int process_page_fault_anon_clear_profile_event;
@@ -4789,16 +5008,28 @@ _Static_assert((IHK_MC_PG_USER) == 1, "process_init_stack_user_category selected
 const int process_init_stack_user_category = IHK_MC_PG_USER;
 #endif
 #line 3485
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_init_stack_log_size_debug;
+#else
+#line 3485
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_init_stack_log_size_debug = {
     .file = __FILE__, .func = "process_init_stack_log_bridge",
     .line = __LINE__ - 58, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 3490
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_init_stack_log_ap_user_debug;
+#else
+#line 3490
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_init_stack_log_ap_user_debug = {
     .file = __FILE__, .func = "process_init_stack_log_bridge",
     .line = __LINE__ - 58, .flags = DDEBUG_DEFAULT,
 };
+#endif
+#line 3495
 void *process_init_stack_alloc_aligned_bridge(int, int, unsigned long, unsigned long);
 void process_init_stack_free_pages_bridge(void *, int);
 int process_init_stack_add_range_bridge(struct process_vm *, unsigned long, unsigned long,
@@ -4810,6 +5041,11 @@ int process_init_stack_pt_set_range_bridge(void *, struct process_vm *, unsigned
 unsigned long process_init_stack_hwcap_bridge(void);
 void process_init_stack_modify_context_bridge(void *, int, unsigned long);
 void process_init_stack_log_bridge(int, const unsigned long *);
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3504
+#else
+#line 3494
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 #line 3504
@@ -6381,10 +6617,16 @@ static const struct sched_exit_debug process_sched_exit_debug = {
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+extern struct ddebug process_schedule_switch_debug;
+#else
+#line 4619
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_schedule_switch_debug = {
  .file=__FILE__, .func="schedule", .line=4684, .flags=DDEBUG_DEFAULT,
 };
+#endif
+#line 4623
 #ifdef RUSAGE_DEBUG
 const struct sched_exit_debug *const process_schedule_exit_debug_input =
  &process_sched_exit_debug;
@@ -6697,6 +6939,11 @@ void schedule(void)
 	}
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4933
+#else
+#line 4921
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 #line 4918

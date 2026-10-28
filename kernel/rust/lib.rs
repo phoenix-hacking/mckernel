@@ -43,6 +43,8 @@ mod page_helpers;
 mod pager;
 mod plist;
 mod process_helpers;
+#[cfg(process_verbose_data)]
+pub(crate) mod process_verbose_data;
 mod procfs;
 mod profile;
 mod pte_helpers;

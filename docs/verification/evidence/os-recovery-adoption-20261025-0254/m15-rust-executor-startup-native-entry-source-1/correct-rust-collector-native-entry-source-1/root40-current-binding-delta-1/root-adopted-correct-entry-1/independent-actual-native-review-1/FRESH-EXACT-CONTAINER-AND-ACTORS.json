@@ -1,0 +1,3143 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact startup failed-batch read-only ownership observation.",
+  "observed_at": 1793145482.753303,
+  "nonce": "6d2e6c210f8bf62b1a4f1abc127fb09a",
+  "container": "86ab2f6ea268df50a7631c95068830942d00cc919027f3f6933e4d93243b837b",
+  "owner": {
+    "pgid": 1757186,
+    "pid": 1757372,
+    "proc_starttime": 94271778,
+    "sid": 1757186
+  },
+  "capture": {
+    "joined": true,
+    "returncode": 1,
+    "caller_pid": 1757368,
+    "caller_starttime": "94271766",
+    "started_at": 1793145273.010894,
+    "finished_at": 1793145311.940107,
+    "cpu_seconds": 0.8833260000000001,
+    "peak_rss_kib": 53072
+  },
+  "bridge_pid": 1757186,
+  "all_actual_Docker_commands": [
+    {
+      "record": "001-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757377,
+        "pid": 1757377,
+        "proc_starttime": 94271816,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "002-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757383,
+        "pid": 1757383,
+        "proc_starttime": 94271818,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "003-image.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757389,
+        "pid": 1757389,
+        "proc_starttime": 94271819,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "004-create.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757395,
+        "pid": 1757395,
+        "proc_starttime": 94271821,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "005-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757401,
+        "pid": 1757401,
+        "proc_starttime": 94271825,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "006-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757407,
+        "pid": 1757407,
+        "proc_starttime": 94271827,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "007-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757413,
+        "pid": 1757413,
+        "proc_starttime": 94271829,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "008-inspect.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1757419,
+        "pid": 1757419,
+        "proc_starttime": 94271831,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "009-start.json",
+      "returncode": 1,
+      "command": {
+        "pgid": 1757425,
+        "pid": 1757425,
+        "proc_starttime": 94271832,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "010-wait.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758015,
+        "pid": 1758015,
+        "proc_starttime": 94275624,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "011-logs.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758021,
+        "pid": 1758021,
+        "proc_starttime": 94275627,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "012-inspect.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758028,
+        "pid": 1758028,
+        "proc_starttime": 94275629,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "013-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758034,
+        "pid": 1758034,
+        "proc_starttime": 94275631,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "014-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758040,
+        "pid": 1758040,
+        "proc_starttime": 94275632,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "015-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758046,
+        "pid": 1758046,
+        "proc_starttime": 94275634,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "016-inspect.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758052,
+        "pid": 1758052,
+        "proc_starttime": 94275636,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "017-stop.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758058,
+        "pid": 1758058,
+        "proc_starttime": 94275637,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "018-kill.json",
+      "returncode": 1,
+      "command": {
+        "pgid": 1758064,
+        "pid": 1758064,
+        "proc_starttime": 94275638,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "019-wait.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758070,
+        "pid": 1758070,
+        "proc_starttime": 94275640,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "020-logs.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758076,
+        "pid": 1758076,
+        "proc_starttime": 94275641,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "021-inspect.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758082,
+        "pid": 1758082,
+        "proc_starttime": 94275643,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "022-rm.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758088,
+        "pid": 1758088,
+        "proc_starttime": 94275644,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "023-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758094,
+        "pid": 1758094,
+        "proc_starttime": 94275647,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "024-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758100,
+        "pid": 1758100,
+        "proc_starttime": 94275648,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    },
+    {
+      "record": "025-ps.json",
+      "returncode": 0,
+      "command": {
+        "pgid": 1758106,
+        "pid": 1758106,
+        "proc_starttime": 94275650,
+        "reaped": true,
+        "returncode": 0,
+        "sid": 1757186
+      }
+    }
+  ],
+  "actual_Docker_commands": 25,
+  "actors": {
+    "1757372": {
+      "starttime": 94271778,
+      "role": "owner"
+    },
+    "1757368": {
+      "starttime": 94271766,
+      "role": "capture"
+    },
+    "1757186": {
+      "role": "bridge"
+    },
+    "1757377": {
+      "starttime": 94271816,
+      "role": "Docker-client"
+    },
+    "1757383": {
+      "starttime": 94271818,
+      "role": "Docker-client"
+    },
+    "1757389": {
+      "starttime": 94271819,
+      "role": "Docker-client"
+    },
+    "1757395": {
+      "starttime": 94271821,
+      "role": "Docker-client"
+    },
+    "1757401": {
+      "starttime": 94271825,
+      "role": "Docker-client"
+    },
+    "1757407": {
+      "starttime": 94271827,
+      "role": "Docker-client"
+    },
+    "1757413": {
+      "starttime": 94271829,
+      "role": "Docker-client"
+    },
+    "1757419": {
+      "starttime": 94271831,
+      "role": "Docker-client"
+    },
+    "1757425": {
+      "starttime": 94271832,
+      "role": "Docker-client"
+    },
+    "1758015": {
+      "starttime": 94275624,
+      "role": "Docker-client"
+    },
+    "1758021": {
+      "starttime": 94275627,
+      "role": "Docker-client"
+    },
+    "1758028": {
+      "starttime": 94275629,
+      "role": "Docker-client"
+    },
+    "1758034": {
+      "starttime": 94275631,
+      "role": "Docker-client"
+    },
+    "1758040": {
+      "starttime": 94275632,
+      "role": "Docker-client"
+    },
+    "1758046": {
+      "starttime": 94275634,
+      "role": "Docker-client"
+    },
+    "1758052": {
+      "starttime": 94275636,
+      "role": "Docker-client"
+    },
+    "1758058": {
+      "starttime": 94275637,
+      "role": "Docker-client"
+    },
+    "1758064": {
+      "starttime": 94275638,
+      "role": "Docker-client"
+    },
+    "1758070": {
+      "starttime": 94275640,
+      "role": "Docker-client"
+    },
+    "1758076": {
+      "starttime": 94275641,
+      "role": "Docker-client"
+    },
+    "1758082": {
+      "starttime": 94275643,
+      "role": "Docker-client"
+    },
+    "1758088": {
+      "starttime": 94275644,
+      "role": "Docker-client"
+    },
+    "1758094": {
+      "starttime": 94275647,
+      "role": "Docker-client"
+    },
+    "1758100": {
+      "starttime": 94275648,
+      "role": "Docker-client"
+    },
+    "1758106": {
+      "starttime": 94275650,
+      "role": "Docker-client"
+    }
+  },
+  "all28_actor_PID_and_PGRP_absent": true,
+  "census": {
+    "rows": [
+      {
+        "pid": 1,
+        "state": "S",
+        "ppid": 0,
+        "pgrp": 1,
+        "sid": 1,
+        "starttime": 13
+      },
+      {
+        "pid": 2,
+        "state": "S",
+        "ppid": 0,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 3,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 4,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 5,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 6,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 10,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 11,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 12,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 13,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 14,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 15,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 16,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 18,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 19,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 20,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 21,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 22,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 23,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 24,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 25,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 26,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 27,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 28,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 30,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 31,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 32,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 33,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 34,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 36,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 13
+      },
+      {
+        "pid": 37,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 38,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 39,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 40,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 42,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 43,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 44,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 45,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 46,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 48,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 49,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 50,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 51,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 52,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 54,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 55,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 56,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 57,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 58,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 60,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 14
+      },
+      {
+        "pid": 61,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 62,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 63,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 64,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 65,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 66,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 67,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 68,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 69,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 116,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 117,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 118,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 15
+      },
+      {
+        "pid": 119,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 30
+      },
+      {
+        "pid": 120,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 30
+      },
+      {
+        "pid": 121,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 30
+      },
+      {
+        "pid": 122,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 30
+      },
+      {
+        "pid": 123,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 30
+      },
+      {
+        "pid": 125,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 32
+      },
+      {
+        "pid": 128,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 36
+      },
+      {
+        "pid": 130,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 36
+      },
+      {
+        "pid": 131,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 36
+      },
+      {
+        "pid": 133,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 37
+      },
+      {
+        "pid": 135,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 37
+      },
+      {
+        "pid": 139,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 37
+      },
+      {
+        "pid": 142,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 39
+      },
+      {
+        "pid": 143,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 41
+      },
+      {
+        "pid": 144,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 41
+      },
+      {
+        "pid": 145,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 41
+      },
+      {
+        "pid": 155,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 48
+      },
+      {
+        "pid": 158,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 48
+      },
+      {
+        "pid": 166,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 50
+      },
+      {
+        "pid": 188,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 55
+      },
+      {
+        "pid": 222,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 63
+      },
+      {
+        "pid": 223,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 63
+      },
+      {
+        "pid": 224,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 64
+      },
+      {
+        "pid": 225,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 64
+      },
+      {
+        "pid": 226,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 64
+      },
+      {
+        "pid": 229,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 66
+      },
+      {
+        "pid": 235,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 68
+      },
+      {
+        "pid": 237,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 68
+      },
+      {
+        "pid": 242,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 68
+      },
+      {
+        "pid": 274,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 138
+      },
+      {
+        "pid": 297,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 265
+      },
+      {
+        "pid": 298,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 265
+      },
+      {
+        "pid": 338,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 338,
+        "sid": 338,
+        "starttime": 306
+      },
+      {
+        "pid": 416,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 416,
+        "sid": 416,
+        "starttime": 318
+      },
+      {
+        "pid": 477,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 348
+      },
+      {
+        "pid": 538,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 358
+      },
+      {
+        "pid": 554,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 360
+      },
+      {
+        "pid": 557,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 360
+      },
+      {
+        "pid": 558,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 360
+      },
+      {
+        "pid": 573,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 369
+      },
+      {
+        "pid": 855,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 855,
+        "sid": 855,
+        "starttime": 529
+      },
+      {
+        "pid": 856,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 856,
+        "sid": 856,
+        "starttime": 529
+      },
+      {
+        "pid": 861,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 861,
+        "sid": 861,
+        "starttime": 535
+      },
+      {
+        "pid": 862,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 862,
+        "sid": 862,
+        "starttime": 535
+      },
+      {
+        "pid": 865,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 865,
+        "sid": 865,
+        "starttime": 536
+      },
+      {
+        "pid": 866,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 866,
+        "sid": 866,
+        "starttime": 536
+      },
+      {
+        "pid": 867,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 867,
+        "sid": 867,
+        "starttime": 536
+      },
+      {
+        "pid": 870,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 870,
+        "sid": 870,
+        "starttime": 536
+      },
+      {
+        "pid": 873,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 873,
+        "sid": 873,
+        "starttime": 536
+      },
+      {
+        "pid": 885,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 885,
+        "sid": 885,
+        "starttime": 537
+      },
+      {
+        "pid": 891,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 891,
+        "sid": 891,
+        "starttime": 538
+      },
+      {
+        "pid": 892,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 892,
+        "sid": 892,
+        "starttime": 538
+      },
+      {
+        "pid": 896,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 896,
+        "sid": 896,
+        "starttime": 538
+      },
+      {
+        "pid": 901,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 901,
+        "sid": 901,
+        "starttime": 538
+      },
+      {
+        "pid": 910,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 910,
+        "sid": 910,
+        "starttime": 539
+      },
+      {
+        "pid": 913,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 913,
+        "sid": 913,
+        "starttime": 539
+      },
+      {
+        "pid": 916,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 916,
+        "sid": 916,
+        "starttime": 539
+      },
+      {
+        "pid": 922,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 922,
+        "sid": 922,
+        "starttime": 539
+      },
+      {
+        "pid": 924,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 924,
+        "sid": 924,
+        "starttime": 539
+      },
+      {
+        "pid": 934,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 934,
+        "sid": 934,
+        "starttime": 540
+      },
+      {
+        "pid": 959,
+        "state": "S",
+        "ppid": 865,
+        "pgrp": 865,
+        "sid": 865,
+        "starttime": 542
+      },
+      {
+        "pid": 970,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 970,
+        "sid": 970,
+        "starttime": 545
+      },
+      {
+        "pid": 971,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 971,
+        "sid": 971,
+        "starttime": 545
+      },
+      {
+        "pid": 1059,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1059,
+        "sid": 1059,
+        "starttime": 558
+      },
+      {
+        "pid": 1081,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1081,
+        "sid": 1081,
+        "starttime": 559
+      },
+      {
+        "pid": 1125,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1125,
+        "sid": 1125,
+        "starttime": 561
+      },
+      {
+        "pid": 1213,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1213,
+        "sid": 1213,
+        "starttime": 566
+      },
+      {
+        "pid": 1283,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1283,
+        "sid": 1283,
+        "starttime": 591
+      },
+      {
+        "pid": 1301,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1301,
+        "sid": 1301,
+        "starttime": 594
+      },
+      {
+        "pid": 1311,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1311,
+        "sid": 1311,
+        "starttime": 596
+      },
+      {
+        "pid": 1362,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1311,
+        "sid": 1311,
+        "starttime": 603
+      },
+      {
+        "pid": 1385,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1385,
+        "sid": 1385,
+        "starttime": 618
+      },
+      {
+        "pid": 1391,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1391,
+        "sid": 1391,
+        "starttime": 624
+      },
+      {
+        "pid": 1415,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1415,
+        "sid": 1415,
+        "starttime": 633
+      },
+      {
+        "pid": 1789,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 680
+      },
+      {
+        "pid": 1798,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 691
+      },
+      {
+        "pid": 1799,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 692
+      },
+      {
+        "pid": 1805,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 695
+      },
+      {
+        "pid": 1809,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 696
+      },
+      {
+        "pid": 2036,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 2036,
+        "sid": 2036,
+        "starttime": 1513
+      },
+      {
+        "pid": 2072,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 2072,
+        "sid": 2072,
+        "starttime": 1514
+      },
+      {
+        "pid": 2086,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 2086,
+        "sid": 2086,
+        "starttime": 1515
+      },
+      {
+        "pid": 2196,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 2196,
+        "sid": 2196,
+        "starttime": 1528
+      },
+      {
+        "pid": 2199,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 2199,
+        "sid": 2199,
+        "starttime": 1528
+      },
+      {
+        "pid": 2571,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 2571,
+        "sid": 2571,
+        "starttime": 1570
+      },
+      {
+        "pid": 3282,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 3282,
+        "sid": 3282,
+        "starttime": 2185
+      },
+      {
+        "pid": 3880,
+        "state": "S",
+        "ppid": 3282,
+        "pgrp": 3282,
+        "sid": 3282,
+        "starttime": 7505
+      },
+      {
+        "pid": 3893,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 3892,
+        "sid": 3892,
+        "starttime": 7891
+      },
+      {
+        "pid": 3898,
+        "state": "S",
+        "ppid": 3880,
+        "pgrp": 3898,
+        "sid": 3898,
+        "starttime": 7918
+      },
+      {
+        "pid": 3900,
+        "state": "S",
+        "ppid": 3898,
+        "pgrp": 3898,
+        "sid": 3898,
+        "starttime": 7919
+      },
+      {
+        "pid": 3909,
+        "state": "S",
+        "ppid": 3898,
+        "pgrp": 3898,
+        "sid": 3898,
+        "starttime": 7950
+      },
+      {
+        "pid": 3982,
+        "state": "S",
+        "ppid": 3909,
+        "pgrp": 3982,
+        "sid": 3982,
+        "starttime": 7965
+      },
+      {
+        "pid": 4000,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4000,
+        "sid": 4000,
+        "starttime": 7975
+      },
+      {
+        "pid": 4005,
+        "state": "S",
+        "ppid": 4000,
+        "pgrp": 4000,
+        "sid": 4000,
+        "starttime": 7976
+      },
+      {
+        "pid": 4013,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4013,
+        "sid": 4013,
+        "starttime": 7992
+      },
+      {
+        "pid": 4020,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 7993
+      },
+      {
+        "pid": 4034,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 8001
+      },
+      {
+        "pid": 4052,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4052,
+        "sid": 4052,
+        "starttime": 8010
+      },
+      {
+        "pid": 4057,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4052,
+        "sid": 4052,
+        "starttime": 8013
+      },
+      {
+        "pid": 4073,
+        "state": "S",
+        "ppid": 4034,
+        "pgrp": 4073,
+        "sid": 4034,
+        "starttime": 8067
+      },
+      {
+        "pid": 4077,
+        "state": "S",
+        "ppid": 4073,
+        "pgrp": 4073,
+        "sid": 4034,
+        "starttime": 8068
+      },
+      {
+        "pid": 4078,
+        "state": "S",
+        "ppid": 4073,
+        "pgrp": 4073,
+        "sid": 4034,
+        "starttime": 8068
+      },
+      {
+        "pid": 4082,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4073,
+        "sid": 4034,
+        "starttime": 8068
+      },
+      {
+        "pid": 4084,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 8068
+      },
+      {
+        "pid": 4094,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4000,
+        "sid": 4000,
+        "starttime": 8070
+      },
+      {
+        "pid": 4098,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4098,
+        "sid": 4098,
+        "starttime": 8082
+      },
+      {
+        "pid": 4101,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 8082
+      },
+      {
+        "pid": 4109,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4109,
+        "sid": 4109,
+        "starttime": 8085
+      },
+      {
+        "pid": 4118,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 8091
+      },
+      {
+        "pid": 4120,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 8094
+      },
+      {
+        "pid": 4125,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4125,
+        "sid": 4125,
+        "starttime": 8098
+      },
+      {
+        "pid": 4126,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4126,
+        "sid": 4126,
+        "starttime": 8098
+      },
+      {
+        "pid": 4133,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4133,
+        "sid": 4133,
+        "starttime": 8104
+      },
+      {
+        "pid": 4142,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 8105
+      },
+      {
+        "pid": 4150,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4150,
+        "sid": 4150,
+        "starttime": 8106
+      },
+      {
+        "pid": 4158,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4158,
+        "sid": 4158,
+        "starttime": 8107
+      },
+      {
+        "pid": 4163,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4163,
+        "sid": 4163,
+        "starttime": 8109
+      },
+      {
+        "pid": 4169,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4169,
+        "sid": 4169,
+        "starttime": 8110
+      },
+      {
+        "pid": 4184,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 8126
+      },
+      {
+        "pid": 4200,
+        "state": "S",
+        "ppid": 4052,
+        "pgrp": 4052,
+        "sid": 4052,
+        "starttime": 8130
+      },
+      {
+        "pid": 4206,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4206,
+        "sid": 4206,
+        "starttime": 8132
+      },
+      {
+        "pid": 4207,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4207,
+        "sid": 4207,
+        "starttime": 8132
+      },
+      {
+        "pid": 4209,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4209,
+        "sid": 4209,
+        "starttime": 8132
+      },
+      {
+        "pid": 4212,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4212,
+        "sid": 4212,
+        "starttime": 8132
+      },
+      {
+        "pid": 4216,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4216,
+        "sid": 4216,
+        "starttime": 8132
+      },
+      {
+        "pid": 4218,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4218,
+        "sid": 4218,
+        "starttime": 8133
+      },
+      {
+        "pid": 4222,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4222,
+        "sid": 4222,
+        "starttime": 8133
+      },
+      {
+        "pid": 4223,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4223,
+        "sid": 4223,
+        "starttime": 8133
+      },
+      {
+        "pid": 4224,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4224,
+        "sid": 4224,
+        "starttime": 8133
+      },
+      {
+        "pid": 4225,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4225,
+        "sid": 4225,
+        "starttime": 8134
+      },
+      {
+        "pid": 4226,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4226,
+        "sid": 4226,
+        "starttime": 8134
+      },
+      {
+        "pid": 4228,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4228,
+        "sid": 4228,
+        "starttime": 8134
+      },
+      {
+        "pid": 4230,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4230,
+        "sid": 4230,
+        "starttime": 8134
+      },
+      {
+        "pid": 4231,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4231,
+        "sid": 4231,
+        "starttime": 8134
+      },
+      {
+        "pid": 4234,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4234,
+        "sid": 4234,
+        "starttime": 8135
+      },
+      {
+        "pid": 4239,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4239,
+        "sid": 4239,
+        "starttime": 8135
+      },
+      {
+        "pid": 4241,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4241,
+        "sid": 4241,
+        "starttime": 8135
+      },
+      {
+        "pid": 4244,
+        "state": "S",
+        "ppid": 4020,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8136
+      },
+      {
+        "pid": 4265,
+        "state": "S",
+        "ppid": 4073,
+        "pgrp": 4073,
+        "sid": 4034,
+        "starttime": 8138
+      },
+      {
+        "pid": 4267,
+        "state": "S",
+        "ppid": 4020,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8138
+      },
+      {
+        "pid": 4287,
+        "state": "S",
+        "ppid": 4020,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8140
+      },
+      {
+        "pid": 4339,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4223,
+        "sid": 4223,
+        "starttime": 8146
+      },
+      {
+        "pid": 4369,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8183
+      },
+      {
+        "pid": 4405,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4405,
+        "sid": 4405,
+        "starttime": 8195
+      },
+      {
+        "pid": 4406,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4406,
+        "sid": 4406,
+        "starttime": 8195
+      },
+      {
+        "pid": 4498,
+        "state": "S",
+        "ppid": 4369,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8462
+      },
+      {
+        "pid": 4499,
+        "state": "S",
+        "ppid": 4369,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8462
+      },
+      {
+        "pid": 4529,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4529,
+        "sid": 4529,
+        "starttime": 8787
+      },
+      {
+        "pid": 4554,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4554,
+        "sid": 4554,
+        "starttime": 8789
+      },
+      {
+        "pid": 4564,
+        "state": "S",
+        "ppid": 4498,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8817
+      },
+      {
+        "pid": 4633,
+        "state": "S",
+        "ppid": 4369,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 9002
+      },
+      {
+        "pid": 5710,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 5710,
+        "sid": 5710,
+        "starttime": 14094
+      },
+      {
+        "pid": 5713,
+        "state": "S",
+        "ppid": 4020,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 14198
+      },
+      {
+        "pid": 6038,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 6038,
+        "sid": 6038,
+        "starttime": 17308
+      },
+      {
+        "pid": 8240,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 31758
+      },
+      {
+        "pid": 8241,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 31758
+      },
+      {
+        "pid": 8422,
+        "state": "S",
+        "ppid": 6038,
+        "pgrp": 8422,
+        "sid": 8422,
+        "starttime": 34719
+      },
+      {
+        "pid": 9073,
+        "state": "S",
+        "ppid": 8422,
+        "pgrp": 9073,
+        "sid": 8422,
+        "starttime": 38704
+      },
+      {
+        "pid": 9164,
+        "state": "S",
+        "ppid": 9073,
+        "pgrp": 9164,
+        "sid": 9164,
+        "starttime": 38834
+      },
+      {
+        "pid": 223502,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168583
+      },
+      {
+        "pid": 223508,
+        "state": "S",
+        "ppid": 223502,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168584
+      },
+      {
+        "pid": 223509,
+        "state": "S",
+        "ppid": 223502,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168584
+      },
+      {
+        "pid": 223511,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 223510,
+        "sid": 223510,
+        "starttime": 1168598
+      },
+      {
+        "pid": 223513,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 223512,
+        "sid": 223512,
+        "starttime": 1168598
+      },
+      {
+        "pid": 223519,
+        "state": "S",
+        "ppid": 223502,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168600
+      },
+      {
+        "pid": 223520,
+        "state": "S",
+        "ppid": 223502,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168600
+      },
+      {
+        "pid": 223521,
+        "state": "S",
+        "ppid": 223520,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168603
+      },
+      {
+        "pid": 223524,
+        "state": "S",
+        "ppid": 223520,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168604
+      },
+      {
+        "pid": 223546,
+        "state": "S",
+        "ppid": 223519,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168628
+      },
+      {
+        "pid": 223548,
+        "state": "S",
+        "ppid": 223502,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168629
+      },
+      {
+        "pid": 223559,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1168634
+      },
+      {
+        "pid": 223770,
+        "state": "S",
+        "ppid": 223502,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1169292
+      },
+      {
+        "pid": 223973,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 1172812
+      },
+      {
+        "pid": 467824,
+        "state": "S",
+        "ppid": 6038,
+        "pgrp": 467824,
+        "sid": 467824,
+        "starttime": 69396419
+      },
+      {
+        "pid": 621203,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 71469725
+      },
+      {
+        "pid": 760731,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 760731,
+        "sid": 760731,
+        "starttime": 74438455
+      },
+      {
+        "pid": 760741,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 760741,
+        "sid": 760741,
+        "starttime": 74438456
+      },
+      {
+        "pid": 761312,
+        "state": "S",
+        "ppid": 760731,
+        "pgrp": 760731,
+        "sid": 760731,
+        "starttime": 74438520
+      },
+      {
+        "pid": 761313,
+        "state": "S",
+        "ppid": 760731,
+        "pgrp": 760731,
+        "sid": 760731,
+        "starttime": 74438520
+      },
+      {
+        "pid": 761323,
+        "state": "S",
+        "ppid": 760741,
+        "pgrp": 760741,
+        "sid": 760741,
+        "starttime": 74438579
+      },
+      {
+        "pid": 771264,
+        "state": "S",
+        "ppid": 4369,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8623785
+      },
+      {
+        "pid": 771326,
+        "state": "S",
+        "ppid": 4499,
+        "pgrp": 4020,
+        "sid": 4020,
+        "starttime": 8624464
+      },
+      {
+        "pid": 828562,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76073219
+      },
+      {
+        "pid": 828591,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76073405
+      },
+      {
+        "pid": 828962,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76083705
+      },
+      {
+        "pid": 829378,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76084214
+      },
+      {
+        "pid": 830003,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76098038
+      },
+      {
+        "pid": 830023,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76098181
+      },
+      {
+        "pid": 830040,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 76098253
+      },
+      {
+        "pid": 865630,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 10024238
+      },
+      {
+        "pid": 985240,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 11940296
+      },
+      {
+        "pid": 1076570,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 13639431
+      },
+      {
+        "pid": 1219993,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1219993,
+        "sid": 1219993,
+        "starttime": 15809016
+      },
+      {
+        "pid": 1235363,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84253223
+      },
+      {
+        "pid": 1235376,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84253627
+      },
+      {
+        "pid": 1235914,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84259799
+      },
+      {
+        "pid": 1235956,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84260554
+      },
+      {
+        "pid": 1235970,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84260618
+      },
+      {
+        "pid": 1236587,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84265996
+      },
+      {
+        "pid": 1264053,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 84925303
+      },
+      {
+        "pid": 1265689,
+        "state": "S",
+        "ppid": 467824,
+        "pgrp": 1265689,
+        "sid": 467824,
+        "starttime": 84947287
+      },
+      {
+        "pid": 1453340,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1453340,
+        "sid": 1453340,
+        "starttime": 88184992
+      },
+      {
+        "pid": 1453342,
+        "state": "S",
+        "ppid": 1,
+        "pgrp": 1453342,
+        "sid": 1453342,
+        "starttime": 88184992
+      },
+      {
+        "pid": 1453345,
+        "state": "S",
+        "ppid": 1453340,
+        "pgrp": 1453345,
+        "sid": 1453340,
+        "starttime": 88184998
+      },
+      {
+        "pid": 1571641,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 22981351
+      },
+      {
+        "pid": 1571658,
+        "state": "S",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 22981353
+      },
+      {
+        "pid": 1616666,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1616666,
+        "sid": 1616666,
+        "starttime": 92001383
+      },
+      {
+        "pid": 1616668,
+        "state": "S",
+        "ppid": 1616666,
+        "pgrp": 1616668,
+        "sid": 1616668,
+        "starttime": 92001391
+      },
+      {
+        "pid": 1616670,
+        "state": "S",
+        "ppid": 1616668,
+        "pgrp": 1616670,
+        "sid": 1616670,
+        "starttime": 92001399
+      },
+      {
+        "pid": 1616809,
+        "state": "S",
+        "ppid": 1616670,
+        "pgrp": 1616809,
+        "sid": 1616670,
+        "starttime": 92002041
+      },
+      {
+        "pid": 1619833,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1619833,
+        "sid": 1619833,
+        "starttime": 92037917
+      },
+      {
+        "pid": 1621307,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1621307,
+        "sid": 1621307,
+        "starttime": 92054340
+      },
+      {
+        "pid": 1621308,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1621308,
+        "sid": 1621308,
+        "starttime": 92054340
+      },
+      {
+        "pid": 1658750,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 92631974
+      },
+      {
+        "pid": 1671342,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 92841818
+      },
+      {
+        "pid": 1685260,
+        "state": "S",
+        "ppid": 9164,
+        "pgrp": 1685260,
+        "sid": 1685260,
+        "starttime": 93111712
+      },
+      {
+        "pid": 1685455,
+        "state": "S",
+        "ppid": 1685260,
+        "pgrp": 1685455,
+        "sid": 1685260,
+        "starttime": 93114395
+      },
+      {
+        "pid": 1685598,
+        "state": "S",
+        "ppid": 1685260,
+        "pgrp": 1685598,
+        "sid": 1685598,
+        "starttime": 93118429
+      },
+      {
+        "pid": 1720585,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93700889
+      },
+      {
+        "pid": 1722950,
+        "state": "S",
+        "ppid": 6038,
+        "pgrp": 1722950,
+        "sid": 1722950,
+        "starttime": 93750871
+      },
+      {
+        "pid": 1722965,
+        "state": "S",
+        "ppid": 1722950,
+        "pgrp": 1722965,
+        "sid": 1722950,
+        "starttime": 93751187
+      },
+      {
+        "pid": 1724347,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93772022
+      },
+      {
+        "pid": 1726327,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93798382
+      },
+      {
+        "pid": 1726377,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93798396
+      },
+      {
+        "pid": 1734098,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93897349
+      },
+      {
+        "pid": 1734183,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93900312
+      },
+      {
+        "pid": 1736003,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93922108
+      },
+      {
+        "pid": 1736180,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93928014
+      },
+      {
+        "pid": 1741227,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 93999032
+      },
+      {
+        "pid": 1746619,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94086175
+      },
+      {
+        "pid": 1747046,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94096082
+      },
+      {
+        "pid": 1747089,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94096093
+      },
+      {
+        "pid": 1747723,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94105549
+      },
+      {
+        "pid": 1750096,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94146496
+      },
+      {
+        "pid": 1753595,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94211788
+      },
+      {
+        "pid": 1754275,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94221734
+      },
+      {
+        "pid": 1755451,
+        "state": "S",
+        "ppid": 761323,
+        "pgrp": 760741,
+        "sid": 760741,
+        "starttime": 94238636
+      },
+      {
+        "pid": 1757986,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94274984
+      },
+      {
+        "pid": 1757996,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94275620
+      },
+      {
+        "pid": 1758022,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94275627
+      },
+      {
+        "pid": 1758119,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94276069
+      },
+      {
+        "pid": 1758122,
+        "state": "I",
+        "ppid": 2,
+        "pgrp": 0,
+        "sid": 0,
+        "starttime": 94276601
+      },
+      {
+        "pid": 1759578,
+        "state": "S",
+        "ppid": 1616670,
+        "pgrp": 1759578,
+        "sid": 1759578,
+        "starttime": 94292723
+      },
+      {
+        "pid": 1759579,
+        "state": "R",
+        "ppid": 1759578,
+        "pgrp": 1759578,
+        "sid": 1759578,
+        "starttime": 94292724
+      },
+      {
+        "pid": 2179040,
+        "state": "S",
+        "ppid": 6038,
+        "pgrp": 2179040,
+        "sid": 2179040,
+        "starttime": 31763586
+      },
+      {
+        "pid": 2219399,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 32269742
+      },
+      {
+        "pid": 2219452,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 32270405
+      },
+      {
+        "pid": 2219465,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 32270423
+      },
+      {
+        "pid": 2222035,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 32308222
+      },
+      {
+        "pid": 2222142,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 32310380
+      },
+      {
+        "pid": 2335803,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 34213084
+      },
+      {
+        "pid": 2335806,
+        "state": "S",
+        "ppid": 1311,
+        "pgrp": 1789,
+        "sid": 1789,
+        "starttime": 34213085
+      },
+      {
+        "pid": 3315560,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 50007333
+      },
+      {
+        "pid": 3464340,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 52282464
+      },
+      {
+        "pid": 3474861,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 52439202
+      },
+      {
+        "pid": 3475616,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 52449908
+      },
+      {
+        "pid": 3476280,
+        "state": "S",
+        "ppid": 4052,
+        "pgrp": 4052,
+        "sid": 4052,
+        "starttime": 52458686
+      },
+      {
+        "pid": 3476295,
+        "state": "S",
+        "ppid": 4052,
+        "pgrp": 4052,
+        "sid": 4052,
+        "starttime": 52458799
+      },
+      {
+        "pid": 3810383,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 57208127
+      },
+      {
+        "pid": 4164859,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 62225247
+      },
+      {
+        "pid": 4166301,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 62241185
+      },
+      {
+        "pid": 4166316,
+        "state": "S",
+        "ppid": 223524,
+        "pgrp": 4034,
+        "sid": 4034,
+        "starttime": 62241196
+      }
+    ],
+    "confirmed_exits": [],
+    "errors": []
+  },
+  "queries": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q",
+        "--no-trunc"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=86ab2f6ea268df50a7631c95068830942d00cc919027f3f6933e4d93243b837b"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-6d2e6c210f8bf62b1a4f1abc127fb09a$"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=6d2e6c210f8bf62b1a4f1abc127fb09a"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "positive_wait": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "86ab2f6ea268df50a7631c95068830942d00cc919027f3f6933e4d93243b837b"
+      ],
+      "returncode": 1,
+      "stdout": "[]\n",
+      "stderr": "Error: No such object: 86ab2f6ea268df50a7631c95068830942d00cc919027f3f6933e4d93243b837b\n",
+      "positive_wait": true
+    }
+  ],
+  "native_cgroup_pids_current": 0,
+  "retained_last_container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-10-27T23:54:33.777944721Z",
+    "FinishedAt": "2026-10-27T23:55:11.51254137Z"
+  },
+  "original_owner_absence_verified": true,
+  "original_owner_lease_retained": false,
+  "baseline_closed_permanent_mutex_probes": [
+    "1: FLOCK  ADVISORY  WRITE 1758789 00:1b:4 0 EOF",
+    "1: FLOCK  ADVISORY  WRITE 1758789 00:1b:4 0 EOF"
+  ],
+  "baseline_is_historical_only_supplemented_by_exact_current": true,
+  "normal_owner_cleanup_only": true,
+  "reviewer_cleanup_or_signals": 0
+}

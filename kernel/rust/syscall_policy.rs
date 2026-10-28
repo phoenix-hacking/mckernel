@@ -36094,3 +36094,31 @@ mod f06_ptrace_thread_unlock;
     f06_ptrace_find_thread_candidate, f06_ptrace_thread_unlock_candidate))]
 #[path = "f06_clone_ptrace_provider_abi.rs"]
 mod f06_clone_ptrace_provider_abi;
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+/// Forward the original borrowed event to the existing architecture provider.
+/// # Safety
+/// Preserve the caller's original event validity, current-CPU perf state and
+/// synchronization contract. The raw cast adds no reference or field access.
+#[cfg(all(enable_perf, f03_perf_provider_next3_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_counter_extra_set_bridge(event: *mut c_void) -> CInt {
+    unsafe { crate::x86_perfctr::ihk_mc_perfctr_set_extra(event.cast()) }
+}
+
+/// Preserve the x86 C wrapper's unsigned-long to unsigned-int code conversion.
+/// # Safety
+/// Same original counter/mode, current-CPU PMU and caller ordering obligations.
+/// The genuine selected C provider-type assertion binds this u32-code profile.
+#[cfg(all(enable_perf, f03_perf_provider_next3_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_counter_init_raw_bridge(
+    counter_id: CInt, hw_config: CULong, mode: CInt,
+) -> CInt {
+    unsafe { crate::x86_perfctr::ihk_mc_perfctr_init_raw(counter_id, hw_config as u32, mode) }
+}
+
+// The third C callback selects the existing syscall_atomic64_read_bridge.
+// Its already-exported exact body calls atomic_helpers::ihk_atomic64_read.
+// No duplicate Rust atomic forwarding body or new atomic algorithm is added.
