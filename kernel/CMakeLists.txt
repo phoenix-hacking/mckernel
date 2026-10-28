@@ -293,6 +293,11 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 				    "${MCKERNEL_F06_ORIGIN_DIR}/f06_clone_cpuid_metadata.rs")
 				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
 				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID")
+				# Existing genuine-ABI shmget adapter; same supported profile/provider.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_shmget_dispatch_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_shmget_dispatch.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_SHMGET_DISPATCH")
 
 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"

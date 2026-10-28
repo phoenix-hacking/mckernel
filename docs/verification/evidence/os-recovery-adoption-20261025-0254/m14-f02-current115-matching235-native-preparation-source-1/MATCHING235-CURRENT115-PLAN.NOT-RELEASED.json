@@ -1,0 +1,174 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_ORIGINAL235_MATCHING115_REQUIRES_ROOT_IMAGE_SEAL_AND_GRANT",
+  "new_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10257496,
+    "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024",
+    "mode": 33261
+  },
+  "old_image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+    "size": 10255112
+  },
+  "base": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/current110-f05-mm-base.cpio.gz",
+    "sha256": "a6377bfe9735b5b6a8183d3f710305b78093512ab378a9529c38e88b13f15b37",
+    "size": 13308321
+  },
+  "base_raw_sha256": "d983c1747414b3a676676108de2cf91a98983698356a2353aab03e236f83b31c",
+  "base_raw_size": 44428264,
+  "accepted235_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/process235.NEW-COLLECTOR.HOST-BOUND.json",
+    "size": 9106,
+    "sha256": "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a",
+    "mode": 33152
+  },
+  "accepted235_overlay_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/overlay.json",
+    "size": 15637,
+    "sha256": "5a6214a268dd3dd3af8ebffaf1668ccfff449ac10a2330f9eadb63762b9eb137",
+    "mode": 33152
+  },
+  "accepted235_overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/process235-overlay.cpio.gz",
+    "sha256": "701cd7d8cecb8e6d733066e73539b31a70949f9b3d22ee7c93ffda2ecc206f33",
+    "size": 17069384
+  },
+  "accepted235_fullmap_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/independent-actual-stage-review-1/FINAL-MAP-VERIFIED.json",
+    "size": 20251,
+    "sha256": "add1856f21904fc7b19cf9d2e103bc776cbf2e69e9ca2a5887df8bc6ab7f66ad",
+    "mode": 33152
+  },
+  "accepted235_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/COLLECTOR-AND-STAGE-BINDING.json",
+    "size": 4225,
+    "sha256": "f7a9a53ab063312a63e1c34422671478600c06d5f28cd69361890dc4cb1a3efa",
+    "mode": 33152
+  },
+  "overlay_helper": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "size": 26579
+  },
+  "record_deriver": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage_repaired_kernel_elf.py",
+    "sha256": "80ac598940f2e7f2e6f929c8bef7ecb3b70f5ae68b7daa1aa317b1459e17651b",
+    "size": 10270
+  },
+  "original_payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "original_profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "original_cleanup": {
+    "child_trace_cases": [
+      "P-M06-01-process-exec-wait-235B",
+      "P-M01-02-child-SIGTERM-and-exec-recovery-227B"
+    ],
+    "consumer": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "size": 54854
+    },
+    "id": "begin-cleanup-real-ack-parent-clone-v2",
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512
+      }
+    ],
+    "provider": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/smp_application.rs",
+      "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+      "size": 72744
+    },
+    "schema_version": 1
+  },
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512
+    }
+  ],
+  "planned_output_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/root-actual-compose-1",
+  "actual115_buildmetrics": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/ROOT-ACTUAL-COMPILER-METRICS.json",
+    "size": 1554,
+    "sha256": "90b2410dbef22ddb6a21e36c13802c691c674d0bf71efac437da6e592c34d633",
+    "mode": 33152
+  },
+  "actual115_independent_artifact_seal": null,
+  "future_compose_receipt": null,
+  "future_manifest": null,
+  "future_scratch_stage": null,
+  "source_authority": null,
+  "case_capability": null,
+  "nonce": null,
+  "current_ledger": null,
+  "current_free": null,
+  "resource": null,
+  "grant": null,
+  "native_release": null,
+  "native_acceptance": null,
+  "original227_frozen60e_unchanged": true
+}

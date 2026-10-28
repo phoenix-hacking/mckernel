@@ -784,11 +784,17 @@ arch_clone_reader_unlock_bridge(void *lock, void *node)
 #endif
 #line 686
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_SHMGET_DISPATCH)
+extern int arch_do_shmget_bridge(long key, size_t size, int shmflg);
+#else
+#line 687
 int
 arch_do_shmget_bridge(long key, size_t size, int shmflg)
 {
 	return do_shmget((key_t)key, size, shmflg);
 }
+#endif
+#line 692
 
 
 #ifndef MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE

@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "authorized": true,
+  "nonce": "ff15aa757788e68798a13ec9acd37849",
+  "issued_wall": 1793162099.3622527,
+  "expires_wall": 1793162279.362253,
+  "maximum_invocations": 1,
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/SCRATCH-STAGE.PROFILE.NOT-GRANTED.json",
+    "bytes": 1956,
+    "sha256": "13bb397a5b6b2bfc54e939e49ffcab21e216f505fd952dcd8c665f72153a329e"
+  },
+  "independent_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 7349,
+    "sha256": "d6aaf9c8b7f665641c82460d3eee07ba849087e8e7ffcb50c74229b0fd03bd5e"
+  },
+  "current_nonce_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER56.json",
+    "bytes": 17303,
+    "sha256": "dc9193a369958cb5cb0a0e0e8de277e35f51660b7ce8d3731620d3b68dea35c0"
+  },
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+    "bytes": 5561,
+    "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+  },
+  "actual_admission": {
+    "wall": 1793162099.3610108,
+    "monotonic": 944205.929967812,
+    "boottime": 959544.057018224,
+    "fixed_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "memory_available_bytes": 27245834240,
+    "aggregate_reserved_bytes": 21474836480,
+    "strict_memory_floor_bytes": 23357213694,
+    "host_free_bytes": 148005740544,
+    "scratch_free_bytes": 47863566336,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-28T04:34:44.344971+00:00",
+    "phase": "running",
+    "account_wall": 1793162099.362124,
+    "heartbeat_age_seconds": 15.017153024673462,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": null,
+    "loadavg": [
+      1.24,
+      1.06,
+      0.96
+    ],
+    "CPU_affinity": [
+      6
+    ]
+  },
+  "cpu6_exclusive": true,
+  "other_cpu6_jobs": 0,
+  "heavy_jobs_current": 0,
+  "reserved_pids_ordinary": 64,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/actual-manifest-scratch-stage-source-1/root_stage_bound_manifest_once.py"
+  ],
+  "runtime_native_authority": null
+}

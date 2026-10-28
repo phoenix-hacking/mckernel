@@ -7130,11 +7130,18 @@ long sys_gettid(int n, ihk_mc_user_context_t *ctx)
 
 extern void ptrace_report_signal(struct thread *thread, int sig);
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern void f03_exec_report_signal_v1(void *thread, int sig);
+#define ptrace_report_signal_bridge f03_exec_report_signal_v1
+#else
+#line 7100
 static void
 ptrace_report_signal_bridge(void *thread, int sig)
 {
 	ptrace_report_signal((struct thread *)thread, sig);
 }
+#endif
+#line 7105
 
 static long
 ptrace_report_exec_arch_event_bridge(void *thread, void *ctx, long setret)
@@ -7142,6 +7149,11 @@ ptrace_report_exec_arch_event_bridge(void *thread, void *ctx, long setret)
 	return arch_ptrace_syscall_event((struct thread *)thread,
 			(ihk_mc_user_context_t *)ctx, setret);
 }
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 7110
+#else
+#line 7119
 #endif
 
 static int ptrace_report_exec(struct thread *thread,
@@ -7198,6 +7210,14 @@ static int ptrace_report_exec(struct thread *thread,
 #endif
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern void ptrace_syscall_event(struct thread *thread);
+#else
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 7165
+#else
+#line 7174
+#endif
 void ptrace_syscall_event(struct thread *thread)
 {
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -7212,6 +7232,12 @@ void ptrace_syscall_event(struct thread *thread)
 	}
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 7179
+#else
+#line 7188
+#endif
 
 static int ptrace_check_clone_event(struct thread *thread, int clone_flags)
 {
@@ -24660,6 +24686,10 @@ ptrace_wakeup_log_bridge(int event, int value, int result)
 	}
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern int ptrace_wakeup_clear_saved_bridge(unsigned long, unsigned long);
+#else
+#line 24434
 static int
 ptrace_wakeup_clear_saved_bridge(unsigned long thread_addr,
 		unsigned long offset)
@@ -24667,12 +24697,20 @@ ptrace_wakeup_clear_saved_bridge(unsigned long thread_addr,
 	return process_thread_ptrace_saved_context_clear_result(
 			(void *)thread_addr, offset);
 }
+#endif
+#line 24441
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern void ptrace_wakeup_set_single_step_bridge(unsigned long);
+#else
+#line 24442
 static void
 ptrace_wakeup_set_single_step_bridge(unsigned long thread_addr)
 {
 	set_single_step((struct thread *)thread_addr);
 }
+#endif
+#line 24447
 
 static void
 ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
@@ -24681,6 +24719,10 @@ ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
 			(struct mcs_rwlock_node_irqsave *)node);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern int ptrace_wakeup_trace_syscall_bridge(unsigned long, unsigned long, int);
+#else
+#line 24455
 static int
 ptrace_wakeup_trace_syscall_bridge(unsigned long thread_addr,
 		unsigned long ptrace_offset, int trace_syscall)
@@ -24688,6 +24730,8 @@ ptrace_wakeup_trace_syscall_bridge(unsigned long thread_addr,
 	return process_thread_ptrace_trace_syscall_update_result(
 			(void *)thread_addr, ptrace_offset, trace_syscall);
 }
+#endif
+#line 24462
 
 static void
 ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
@@ -24696,6 +24740,11 @@ ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
 			(struct mcs_rwlock_node_irqsave *)node);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern unsigned long ptrace_wakeup_pending_take_bridge(unsigned long,
+		unsigned long, unsigned long, int);
+#else
+#line 24470
 static unsigned long
 ptrace_wakeup_pending_take_bridge(unsigned long thread_addr,
 		unsigned long sendsig_offset, unsigned long recvsig_offset,
@@ -24705,6 +24754,13 @@ ptrace_wakeup_pending_take_bridge(unsigned long thread_addr,
 			(void *)thread_addr, sendsig_offset, recvsig_offset,
 			source);
 }
+#endif
+#line 24479
+#endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 24477
+#else
+#line 24491
 #endif
 
 static int ptrace_wakeup_sig(int pid, long request, long data) {
@@ -25600,6 +25656,11 @@ ptrace_getsiginfo(int pid, siginfo_t *data)
 #endif
 #line 25332
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+extern long f03_ptrace_setsiginfo_v1(int pid, siginfo_t *data);
+#define ptrace_setsiginfo f03_ptrace_setsiginfo_v1
+#else
+#line 25333
 static long
 ptrace_setsiginfo(int pid, siginfo_t *data)
 {
@@ -25691,6 +25752,8 @@ ptrace_setsiginfo(int pid, siginfo_t *data)
 	return rc;
 #endif
 }
+#endif
+#line 25424
 
 #ifdef MCKERNEL_RUST_F03_PTRACE_ENTRY
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
