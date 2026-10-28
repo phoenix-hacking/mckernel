@@ -1,0 +1,57 @@
+{
+  "actual_guard_query_capture_calls": 0,
+  "planned_Root_data_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1",
+  "planned_destinations": {
+    "01": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/OPERATION.ACTUAL.json",
+    "02": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/OPERATION-REVIEW.ACTUAL.json",
+    "03": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/GUARD-CONFIG.ACTUAL.json",
+    "04": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/PHYSICAL-REVIEW.ACTUAL.json",
+    "05": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/PHYSICAL-CONFIG.ACTUAL.json",
+    "06": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/COMMON-REVIEW.ACTUAL.json",
+    "07": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/HISTORY61-REVIEW.ACTUAL.json",
+    "08": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/HISTORY-FILL-INPUT.ACTUAL.json",
+    "09": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/RUNTIME-BINDINGS.ACTUAL.json",
+    "10": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/RUNTIME-REVIEW.ACTUAL.json",
+    "11": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-RELEASE.ACTUAL.json",
+    "12": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-EXECUTION-REVIEW.ACTUAL.json",
+    "13": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-PARENT-JOIN.ACTUAL.json"
+  },
+  "data_filler_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/bind_history.py",
+    "--root-input",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/HISTORY-FILL-INPUT.ACTUAL.json"
+  ],
+  "capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py",
+    "--bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/RUNTIME-BINDINGS.ACTUAL.json",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT62-POSTJOIN-CAPTURE-1/CAPTURE-RELEASE.ACTUAL.json",
+    "--release-sha256",
+    "ROOT_FILL_EXACT_RELEASE_SHA256",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1/OBSERVATION.json"
+  ],
+  "parent_Popen_kwargs": {
+    "start_new_session": true,
+    "shell": false,
+    "stdout": "Root-owned raw file",
+    "stderr": "Root-owned raw file"
+  },
+  "outer_parent_wall_seconds": 120,
+  "source_output_directory_must_not_already_exist": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/actual-postjoin-capture-root1",
+  "capture_call_not_performed": true
+}

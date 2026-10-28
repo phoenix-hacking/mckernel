@@ -2,6 +2,36 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Twenty-minute engineering checkpoint — 2026-10-28T21:36Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket21:16:28.104491–21:36:28.104491:13distinctHOSTcommands all0,9compiler/link
+and4behavior runs,5240C/Rustpairs. SumchildCPU0.837526s/sumcommandwall0.983161s/
+peakRSS135308KiB. F06BODY7later144,F03BODY8 640,F03BODY9 1600,F06BODY8 2856.
+No new production/default links, matching native cases, file closures or retiredC
+boundaries. Accepted116/C71/Rust68 andBFDf9202links retained; M14files4/6/M15files1/8.
+
+One exact stoppedBFDcontainer retirement independentlyaccepted953b:14rawcommand
+joins/one removal/all363protected originals; no signals/owner-record releases.
+Attempt2failedpreinspect andattempt3success are separate retainedoperations inbucket.
+Retirement wall8.730653s/CPU6.831824s/RSS35584KiB; actual8.201202sproducer separate.
+Producer-to-retirement103m23.420s; current-freewaiting108m16.907s atbucketend.
+Failure2-to-successfulretirement13m34.237s; reviewedrelease-to-entry19.536s.
+FirstHOSTcompiler15m31.301s afterrelaunch; firstproductionconfigure36m50.980s;
+exactoriginalready-to-Rustcompiler latency notretained, do notinvent. Original30min
+baseline/stopped downtime41784.995s unchanged; no95percentclaim. Snapshot host
+147493130240B/scratch47862149120B free, bothabovefloors.
+
+Currentcriticalpath: Rootactual23subject operationa382/guardconfig2b274 exists;
+m14_review binds exact04/07/10 then06 dependencies, RootmaterializesremainingDATA,
+onefresh ownedgroup capture+parentjoin andindependentcurrentfree beforeanyworkload.
+Retirement-only parentABIcorrectedda5/map90eb independentlyPASS203ab; genericcapture
+parent/finalfreshness/census staystrict. Cleanup2158579/FD4 absence stillmustbeobserved.
+Concrete schedulingchange: Rootfinishes currentcapture bindings before furtherproducer
+handoffs; original227typed118consumer/count123fix proceedsparallel, F03cumulativesource
+andF06gpregs source/HOST remain disjoint. No capacity expansion orcleanup/buildreplay.
+Exactbucket/resources/owners: STEERING-20261028T213628.json inrestart-adoption evidence.
+
 ## Exact BFD container retired; fresh current pending — 2026-10-28T21:32Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
