@@ -1,3 +1,31 @@
+## Final fixed-window checkpoint ready — 2026-10-28T05:34:06.231430+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT115/de9f acceptedC79/Rust60/process0runtimeC and matchingnativeef56/freef76
+close originalF02 supportedfilea6b377. M14files4/6(F03/F06remain), M15files1/8(7remain),
+practical35/35; wholeOS/M14/M15 OPEN. ActualRoot59/8917629d count69 hasnewfreef76;
+historical270a isNOTcurrent. All10children completed, startedtoolchildren joined,
+no heavy/nativelease outstanding andno newworkload queued before05:36:09Z/earlierclamps.
+
+Exact READY116handoff: D116/post-native-clearance-data-handoff-source-1/
+SOURCE-READY-HANDOFF-ROOT59.json7677854f/6534B. Exact227handoff:
+next-entry-current-boundary-source-1/postnative-pending-readiness-source-1/
+READY.ACTUAL-ROOT59-HANDOFF.json1c392000/2535B. BothbindrealRoot59/freef76 andretain
+allacceptedprefixes/exports/4commands or compiled227contract/stage. Neitherisreleased.
+Nextsourceimplementationmustextend typedcurrentobserver to actualnative4d1c lifecycle
+(join/clientreaps/exactCIDremoval/custody/currentfree), bindexactnewRoot59/schema and
+consumerboundary; currentRoot57 ordinary-only suffix isinsufficient. Nevermislabel
+nativeasordinary, reuse270a, replaySDK21/oldcompilers/guestnonces, or extendtime.
+
+Operationalrules retained: typedsource/artifactBYTEauthentication versusrealJSONdecode;
+ONLYMounts fullrecordcanonicalmultiset preservesmultiplicity/allfields, allother
+arrays/fields/rc/stderr strict; wholepreclockproducer-consumer passesBEFORErealwaiting
+independentreviewerPID/birth andfreshclock; original120s/clamps/prewrittenonceguard.
+EVERYwork/deliverablerequest usesfollowup_task, evenrunning; send_message isinformational
+only. AGENTS.md recordsrule; no live launcher/controller edits. Samecreditrun/debits/
+ceilings/includedfirst/realholds/caps/floors/scratch21/permanent27:4 preserved. No phase2
+functionalstress or broadcleanup/refactor started beforeM14/M15cutover.
+
 ## F02 supported file COMPLETE; native/current-free adopted — 2026-10-28T05:29:59.132373+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
