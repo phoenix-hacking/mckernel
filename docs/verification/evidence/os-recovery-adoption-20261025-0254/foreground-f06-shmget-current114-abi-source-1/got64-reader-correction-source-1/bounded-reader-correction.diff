@@ -1,0 +1,42 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/check_partial.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/check_partial.py
+@@ -2,10 +2,20 @@
+ Narrow compile/partial-link metadata readback. Never executes artifact/provider.
+ """
+ from pathlib import Path
+-import ast,hashlib,json,struct
++import ast,hashlib,json,stat,struct
+ P=Path(__file__).resolve().parent
+ cfg=json.loads((P/'READBACK-CONFIG.json').read_text())
+ O=Path(cfg['output'])
++report_output=Path(cfg['report_output'])
++identity_ref=cfg['retained_identities'];identity_path=Path(identity_ref['path'])
++assert identity_path.is_absolute()
++identity_raw=identity_path.read_bytes()
++assert len(identity_raw)==identity_ref['bytes'] and hashlib.sha256(identity_raw).hexdigest()==identity_ref['sha256']
++for row in json.loads(identity_raw)['records']:
++ p=Path(row['reference']['path']);assert p.is_absolute();z=p.lstat()
++ assert stat.S_ISREG(z.st_mode) and not p.is_symlink()
++ assert (z.st_dev,z.st_ino,z.st_uid,z.st_gid,stat.S_IMODE(z.st_mode),z.st_nlink,z.st_mtime_ns,z.st_ctime_ns)==tuple(row[k] for k in ['device','inode','uid','gid','mode','nlink','mtime_ns','ctime_ns'])
++ raw=p.read_bytes();assert len(raw)==row['reference']['bytes'] and hashlib.sha256(raw).hexdigest()==row['reference']['sha256']
+ driver=Path(cfg['driver']['path'])
+ assert hashlib.sha256(driver.read_bytes()).hexdigest()==cfg['driver']['sha256']
+ # Reuse only the three reviewed ELF metadata definitions, never driver main.
+@@ -37,8 +47,9 @@
+ def masked(e,s):
+  b=bytearray(data(e,s))
+  for r in rels(e,s):
+-  width={1:8,2:4,4:4,10:4,11:4}.get(r['type'])
++  width={1:8,2:4,4:4,10:4,11:4,25:8,27:8,29:8,31:8}.get(r['type'])
+   assert width is not None,('unresolved relocation width',r)
++  assert 0<=r['offset'] and r['offset']+width<=len(b),('relocation outside owning body',r,len(b))
+   b[r['offset']:r['offset']+width]=bytes(width)
+  return bytes(b)
+ def equal(a,b,name):
+@@ -73,5 +84,5 @@
+ assert len(new)==1 and new[0]['target']['shndx']==b['shndx'] and new[0]['target']['value']==b['value']
+ assert new[0]['addend']==0 and new[0]['type']==1
+ result=dict(scope=__doc__.splitlines()[0],status='PASS_GENUINE_ABI_COMPILE_AND_CURRENT114_PARTIAL_CONSUMER_LINK_ONLY',C_before=19,C_after=18,target=name,unchanged_other_C_bodies=unchanged,unique_new_Rust_adapter=adapter,actual114_existing_Rust_provider=provider,actual114_consumer=consumer,positive_callback_edge=dict(consumer=cfg['consumer'],offset=104,type=1,addend=0,unique_Rust_provider=name),retained_behavior_comparisons=3640,behavior_replay=0,artifact_execution=False,native_provider_execution=False,production_default_acceptance=False,native_acceptance=False,wholefile_retirement=False)
+-(O/'PARTIAL-READBACK.json').write_text(json.dumps(result,indent=2)+'\n')
++(report_output/'PARTIAL-READBACK.json').write_text(json.dumps(result,indent=2)+'\n')
+ print('PASS shmget current114 ABI and partial consumer link; native UNRUN')
