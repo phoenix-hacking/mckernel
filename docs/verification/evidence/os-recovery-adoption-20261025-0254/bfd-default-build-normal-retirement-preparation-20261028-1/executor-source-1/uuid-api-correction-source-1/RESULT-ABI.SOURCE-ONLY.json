@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py",
+    "bytes": 41767,
+    "sha256": "0cabb9cdc29e9d8f90a35869b09f7eb8abf94e35ff8202a089e8fd319680afe9"
+  },
+  "entrypoints": {
+    "bindings": "bindings() -> frozen source data; no live effects",
+    "transport": "transport(b) -> (Commands class, namespace); Commands(out,Stop()).exact(argv,timeout=30,check=True). Caller must provide separately reviewed exact argv scope. It does not acquire a lock or invoke a guard by itself. Optional Commands.before_popen(argv) hook runs after durable capture/log setup, directly before actual Popen; caller must complete all guard/I/O before its final clocks.",
+    "process_source": "process_source(normal,packet) -> source for unchanged root full census plus pgrp/session rows and BFD publisher identities",
+    "validate_process": "validate_process(report,normal,b,challenge,caller,command_pids) -> true; all pure; preserves original census predicates",
+    "validate_result": "validate_result(result,b) -> authenticated command receipt values; pure complete ordered14-command/proof/raw/OCI result consumer; never parentjoin/currentclearance"
+  },
+  "schema": "mckernel.bfd-default-build.stopped-container-retirement.result.v1",
+  "status": "PASS_EXACT_BFD_STOPPED_CONTAINER_RETIRED_PENDING_POSTJOIN_CURRENT",
+  "path": "actual release.output / RESULT.json",
+  "proof_schema": "mckernel.bfd-default-build.retirement-proof.v1",
+  "proof_files": [
+    "PREINSPECT-1.json",
+    "PREINSPECT-2.json",
+    "POSTPROOF.json"
+  ],
+  "command_schema": "command-UUID/JOIN-WAIT4.json with pid,birth,wait4_pid/status,returncode,positive_wait4,group/session absence,streams_closed,wall/user/system/peakRSS,signals_sent=0,raw stdout/stderr/status refs",
+  "cleanup_actor": "RESULT.cleanup_actor = actual pid,birth,mutex_fd. Parent must save positive direct join then separate actual observer must prove process/group/FD/mutex/cgroup state.",
+  "parent_tool_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/ACTUAL-HOLDER-TOOL94204-JOIN.json",
+    "bytes": null,
+    "sha256": "fe5587bfc3f6e19e59ed14c886e21afc37492c2967b7399a5b7c25dda37e0c35"
+  },
+  "actor_gaps": [
+    "Original run/inspect sudo Docker child PID/birth not persisted by custom subprocess.run; do not invent.",
+    "Capture-parent/held-input/publisher transient source writers do not all have persisted birth receipts; full root publisher/actor census and exact no-unlisted Root attestation remain mandatory."
+  ],
+  "current_or_native_acceptance": null,
+  "shared_TEST_ONLY_oracle": {
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_result_fixture.py",
+      "bytes": 1685,
+      "sha256": "0c583203fdc47fa70fd5499dc157c2a3a4a81a83d55be9942c84e6d2e57b6fa3"
+    },
+    "entrypoint": "build_result_fixture(existing_fresh_temp_dir) -> (TEST_ONLY result, frozen_bindings); exact source-bound positive14receipt fixture, no actual guard/lock/spawn"
+  },
+  "prior_failed_cleanup": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-1/FAILED-ATTEMPT-1.json",
+    "bytes": 3844,
+    "sha256": "1fbee112a2db8924c7388c6b09c7ebcc8bfd03c2bd1606e4742113335952abf6"
+  },
+  "required_pending_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-RETIREMENT-RELEASE-1/ROOT-CURRENT-NONCE-LEDGER62.PENDING-AFTER-ATTEMPT1.json",
+    "bytes": 30710,
+    "sha256": "365ccfc14b2ebabd38a7949a0207abcd3a33ff8768923b42467cce25541006f8"
+  }
+}

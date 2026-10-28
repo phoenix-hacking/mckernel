@@ -2,6 +2,36 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Retirement attempt stopped before query — 2026-10-28T20:56Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualfirstretirement0a262/Rootrelease8c142 ranONCE andparentjoined1. UUID.hex
+wascalledasmethod inActual.census beforefirstquery. OutputcontainsSTARTEDonly,
+querydirs0/removalclaim0/removals0; own27:4lockrowsnowempty, notnativeclearance.
+Failednamespace/release/source/streams/actualPIDbirth retained inBFD-RETIREMENT-RELEASE-1;
+FAILED-ATTEMPT-1 1fbee112 andnewpendingledger365ccfc1explicitlyrecordfailedcustody,
+same71consumednonces/faaconce. Oldfdd/Root61history preserved. Neverrerunroot1.
+
+OneboundedUUIDAPIcorrection plusrealUUID/Actual.censusregression isactive under
+bfd_route, followedbyexactindependentrereview/publication/newnamespace/release.
+Root62observer alsohasUUIDtypo andfinalclock-after-config gap; m14_compose fixes
+bothinadditivesource, fullrecursivequeryscopeexplicit. No newheavy/nativeuntil
+actualretirement,parentjoin,freshRoot62/63physicalacceptance. BFDartifactf920
+and2currentRustlinksremainaccepted; validnative/installation/fileproofOPEN.
+
+20:16:28–20:36:28 bucket: BODY5actual8HOSTcommands (7success+1retainedCheadercompile
+failure/oneboundedcorrection),1737pairs+4nullcalls/mixedsequence. Independentf452
+accepts source/HOST, liveRustperf-cache-order fixexplicitlychangedbody/newCbinding
+mustbetrackedinproduction.20:36:28–20:56:28: BODY6actual7HOSTcommandsPASS,6544pairs,
+F03ABI15+5debugmetadatapairs, F06persistentaliases/3Cstorageownersstilldebt.
+Production/native/file/Cretirementdeltas0bothbuckets; producer8.201202sseparate
+fromcurrentfreewaiting48m16.907s/68m16.907s respectively. No95percentclaim.
+Original118recursiveguardroute sourcequalified2621caa7; actualRoot62/63typed
+consumer/materializer updateandcompleteDATApublication stillrequiredbeforereal118.
+SourceownersadvanceunderstandingordinaryHOSTauthority; Rootintegration/cleanup
+criticalpathfirst. M15latestcursor/F03F04increments correctedoncefromf920, oldfields
+retainedinM15-STAGE-CURSOR-CORRECTION. Practical35/35/M14files4/6/M15files1/8.
+
 ## Actual BFD default producer completed — 2026-10-28T19:48Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

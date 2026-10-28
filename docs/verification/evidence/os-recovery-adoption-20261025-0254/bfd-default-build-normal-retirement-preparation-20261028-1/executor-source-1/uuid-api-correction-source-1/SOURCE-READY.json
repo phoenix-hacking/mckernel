@@ -1,0 +1,215 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ONE_BOUNDED_UUID_API_CORRECTION_SOURCE_READY_NEEDS_INDEPENDENT_REVIEW_AND_FRESH_ROOT_RELEASE",
+  "runtime_authority": null,
+  "correction_family": "uuid.UUID.hex property called as method before first query",
+  "correction_attempt": 1,
+  "executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py",
+    "bytes": 41767,
+    "sha256": "0cabb9cdc29e9d8f90a35869b09f7eb8abf94e35ff8202a089e8fd319680afe9"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/BINDINGS.json",
+    "bytes": 16255,
+    "sha256": "fa92f810ea19d5b8cd2d4d6f16e2f7d9b34a0647f4a2999652ce55ce01fd4dea"
+  },
+  "diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/SOURCE-CORRECTION.diff",
+    "bytes": 1867,
+    "sha256": "c3ddacb80ee12f987c6497b6b35b867ef17243fdc2f53ebb140e52e871ce967b"
+  },
+  "prior_actual_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/PRIOR-ACTUAL-FAILURE.json",
+    "bytes": 2879,
+    "sha256": "5b8197a4b961ca8516a476f8774f01a90a779b72cf93fc90231a927389f32476"
+  },
+  "actual_pending_ledger_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/ROOT-PENDING-LEDGER-BINDING.json",
+    "bytes": 1422,
+    "sha256": "b0d32b92ed46300d85daafd78b31187b3ae8cc733de13b036ac6298a6861d47b"
+  },
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/ACTUAL-CENSUS-UUID-TESTS.log",
+      "bytes": 490,
+      "sha256": "77e7ef51d2feca1ecee611ee6a3a44d9b9cbf580afcb2b083bfcace176a14e02"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/BINDINGS.json",
+      "bytes": 16255,
+      "sha256": "fa92f810ea19d5b8cd2d4d6f16e2f7d9b34a0647f4a2999652ce55ce01fd4dea"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/EXECUTION-PROFILE.SOURCE-ONLY.json",
+      "bytes": 5423,
+      "sha256": "39999a3e5c8dd7fd6ee94cad8fa697c1a32058f910ff58695c0ba47a719469ff"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/EXECUTION-REVIEW.TEMPLATE.NOT-A-PASS.json",
+      "bytes": 454,
+      "sha256": "09c8a1019a1cdf14228a38a7fda45f02a4d86a1b319224c2838d852015256d92"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/HANDOFF.md",
+      "bytes": 3389,
+      "sha256": "4b0cbcc44fbd7273fc0a4359173d202359914b2ca61dc522f0bee9cda140ed03"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/PRIOR-ACTUAL-FAILURE.json",
+      "bytes": 2879,
+      "sha256": "5b8197a4b961ca8516a476f8774f01a90a779b72cf93fc90231a927389f32476"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/RESULT-ABI.SOURCE-ONLY.json",
+      "bytes": 4173,
+      "sha256": "14ccd9c61d7f2eb1d057596571c583f58fda511aa348e16b934a237994b4a295"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/RETAINED-16-TESTS.log",
+      "bytes": 1487,
+      "sha256": "6151e467ba57f3dee8c6dba3e520282070f3d8d9474febef28db8f1b9e5553f4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/RETAINED-5-CUSTODY-TESTS.log",
+      "bytes": 593,
+      "sha256": "4d1c6570dbc52ac1615e06be7911eec420291a60d1ff91335a41746c375ce4f5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/ROOT-PENDING-LEDGER-BINDING.json",
+      "bytes": 1422,
+      "sha256": "b0d32b92ed46300d85daafd78b31187b3ae8cc733de13b036ac6298a6861d47b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/ROOT-PENDING-LEDGER-SUPPLEMENT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 1234,
+      "sha256": "04281f91350bcdb8fe9b4280f9a6e3e1f44dfa2eb055e236ae5679d9c546ea13"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/ROOT-RELEASE.TEMPLATE.NOT-RELEASED.json",
+      "bytes": 5665,
+      "sha256": "34a3a47227fefdd7b81ba49efce8f4221c173d05e42159bd5d80e515fe06f395"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/SHARED-FIXTURE-CHECK.json",
+      "bytes": 225,
+      "sha256": "13b63f439bade87c72304bf02322ecb2a144f89c476ad29dfbdefe5345e1309b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/SOURCE-CORRECTION.diff",
+      "bytes": 1867,
+      "sha256": "c3ddacb80ee12f987c6497b6b35b867ef17243fdc2f53ebb140e52e871ce967b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/SOURCE-REVIEW.TEMPLATE.NOT-A-PASS.json",
+      "bytes": 4157,
+      "sha256": "39c08fea5b09dbb0a4846eb72071b59f7f04f19eaf3a65abc98f2142fd067f7a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py",
+      "bytes": 41767,
+      "sha256": "0cabb9cdc29e9d8f90a35869b09f7eb8abf94e35ff8202a089e8fd319680afe9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_actual_census_uuid.py",
+      "bytes": 4909,
+      "sha256": "851744f510f15669ece15825761deaf3dc1eb0bc7e6471353b9c1741054dbe8f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_result_fixture.py",
+      "bytes": 1685,
+      "sha256": "0c583203fdc47fa70fd5499dc157c2a3a4a81a83d55be9942c84e6d2e57b6fa3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_retirement_executor.py",
+      "bytes": 19747,
+      "sha256": "00d1ad1afc5966550fdffad6afb2b7c8cdff47c1a21713397068c9fe09e244de"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_review_correction.py",
+      "bytes": 6995,
+      "sha256": "be0bab5b60d727d290d6bfe551c124ebe91d44832555d9c4adbd49bb8813dded"
+    }
+  ],
+  "checks": [
+    {
+      "command_argv": [
+        "taskset",
+        "-c",
+        "6",
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_actual_census_uuid.py"
+      ],
+      "returncode": 0,
+      "tests": 4,
+      "wall_seconds": 0.083,
+      "scope": "Real Actual.census/call + real UUID; real pure process/OCI validators, only effect leaves substituted; original failure reproduced",
+      "evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/ACTUAL-CENSUS-UUID-TESTS.log",
+        "bytes": 490,
+        "sha256": "77e7ef51d2feca1ecee611ee6a3a44d9b9cbf580afcb2b083bfcace176a14e02"
+      }
+    },
+    {
+      "command_argv": [
+        "taskset",
+        "-c",
+        "6",
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_retirement_executor.py"
+      ],
+      "returncode": 0,
+      "tests": 16,
+      "wall_seconds": 0.766,
+      "evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/RETAINED-16-TESTS.log",
+        "bytes": 1487,
+        "sha256": "6151e467ba57f3dee8c6dba3e520282070f3d8d9474febef28db8f1b9e5553f4"
+      }
+    },
+    {
+      "command_argv": [
+        "taskset",
+        "-c",
+        "6",
+        "python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_review_correction.py"
+      ],
+      "returncode": 0,
+      "tests": 5,
+      "wall_seconds": 0.095,
+      "evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/RETAINED-5-CUSTODY-TESTS.log",
+        "bytes": 593,
+        "sha256": "4d1c6570dbc52ac1615e06be7911eec420291a60d1ff91335a41746c375ce4f5"
+      }
+    }
+  ],
+  "shared_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/test_result_fixture.py",
+    "bytes": 1685,
+    "sha256": "0c583203fdc47fa70fd5499dc157c2a3a4a81a83d55be9942c84e6d2e57b6fa3"
+  },
+  "shared_oracle_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/SHARED-FIXTURE-CHECK.json",
+    "bytes": 225,
+    "sha256": "13b63f439bade87c72304bf02322ecb2a144f89c476ad29dfbdefe5345e1309b"
+  },
+  "actual_guard_calls": 0,
+  "actual_queries": 0,
+  "actual_lock_operations": 0,
+  "actual_spawns": 0,
+  "actual_Docker_commands": 0,
+  "actual_cleanup": 0,
+  "native_cases": 0,
+  "producer_replays": 0,
+  "files_closed": 0,
+  "protected_original_records": 363,
+  "consumed_nonces": 71,
+  "consumed_nonce_delta": [],
+  "physical_clearance_pending": true,
+  "required_next": "Independent exact new source/profile/failed-case/ledger review, fresh fetched publication and Root one-shot release in new output namespace; never unchanged retry; parent positive join and fresh current proof still required"
+}
