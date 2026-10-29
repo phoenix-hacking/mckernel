@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/observe_current64_current118_postjoin.py", line 373, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/observe_current64_current118_postjoin.py", line 369, in main
+    try:value=observe(checked(binding_ref),out)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/observe_current64_current118_postjoin.py", line 324, in observe
+    historical=load(PINS['runtime_base_source'],'weekly_recursive_Root63_live_observer').observe(checked(bindings['recursive_current63_bindings']),out)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/recursive-current62/observe_current62_bfd_postjoin.py", line 245, in observe
+    history=load(PINS['history_runtime_source'],'configured_recursive_Root61_historical_observation').observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/recursive-current62/history/observe_bfd_current61.py", line 71, in observe
+    ledger,free,ext,actors=validate_current(CURRENT)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/recursive-current62/history/observe_bfd_current61.py", line 46, in validate_current
+    old=load(PINS['current60_source'],'retained_actual116_current60_predicates');rows,_common,actors=old.validate_current()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/recursive-current62/history/observe_bfd_current61.py", line 23, in load
+    spec=importlib.util.spec_from_file_location(n,auth(r));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/observe_bfd_current60_history.py", line 16, in <module>
+    PINS=json.loads((HERE/'ACTUAL-PINS.json').read_bytes())
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1259, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1252, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1120, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/recursive-current62/history/ACTUAL-PINS.json'

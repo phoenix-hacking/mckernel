@@ -1,3 +1,45 @@
+## Genuine routing proof accepted; fresh capture release sealed — 2026-10-29T19:43:15.462564+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Expert actual finalmetadata traversal joined0/.585153466s/CPU.584204/peak106360KiB;
+independentbd0b1ab1 accepts real61→same-directory60→common.configured_dependencies
+with final actualsidecars,151actor/72nonce/originalUNKNOWN. Failure→metadata-test
+PASS550.736073s; runtimefix qualification stillOPEN. Exactnewpayloadf5e599 receives
+executionreview63fd4d06. Rootpublishes/fetches/freshQguard thenexecutes ONCE; no old
+release/output replay or physical5b361 rerun. Lastcapture85395 failure retained.
+
+Actualowners: Root solecapture/currentfree/119, cleanup_bindings private6leafbatch
+composition; expertTerra and independentreview source tasks completed. Final build/
+Cretirement/native/M14closure deltas0. CURRENT119uncompiled, original389/frozeninput
+unchanged. Includedonly/no paidfallback/M14exclusive/M15paused remain. Newsource
+and failure checkpoint immediately precedes fresh capture. No live Root tool.
+
+## Actual capture failed; repeated routing family escalated — 2026-10-29T19:33:53.241079+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact releasea7d5 was consumed ONCE after liveguardPASS. Tool85395 terminal1;
+parent2531194/b109975218, observer2531195/b109975222; directwait1/closedstreams/
+groupabsent/noerrors/signals0. Wall1.133737614s/CPU1.089207s/peak146780KiB.
+GatePASS→observed STARTED receipt0.035556793s (afterPopen, not exact syscalltime).
+Failure occurred BEFORE externalqueries: copied history61 static current60_source
+still selected old correction namespace, whose ACTUAL-PINS.json is absent.
+Do not create that historical missing file or replay consumed release.
+
+Root failuredf85 and independentfailurereviewdc04 retained. Root new pendingledger
+165954c9 preserves every nonce/history/UNKNOWN and appends exact closedcapture2
+facts; next required actorfrontier151. CurrentfreeFALSE;119uncompiled. Existing
+physicalstage5b361/Root4closure unchanged. Code/releasecheckpoint1f8953e25 pushed,
+fetched215changedblobs exact; failure evidence remains pending next checkpoint.
+
+Terra/xhigh now owns ONE expert consumed-routing correction in private
+EXPERT-CONSUMED-ROUTING-CORRECTION-1; independent reviewer requires genuine final
+history61.validate_current→current60.validate_current→common.configured_dependencies
+traversal with actualsourcepaths before any new execution release. Prior pure
+runtime_dependencies alone missed the static pin. No synthetic source-selection
+substitution or unchanged thirdcapture. Rootsolephysicalowner, no live Root job.
+Logger/lock source33f25 and119livepinssourcefc54 preserved, no runtimecredit.
+M14exclusive/M15paused/weeklyincludedonly; zero compiler/native/Cretirement/closure.
+
 ## Confirmed-quota controls LIVE; one consumed-binding correction — 2026-10-29T19:21:59.762694+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

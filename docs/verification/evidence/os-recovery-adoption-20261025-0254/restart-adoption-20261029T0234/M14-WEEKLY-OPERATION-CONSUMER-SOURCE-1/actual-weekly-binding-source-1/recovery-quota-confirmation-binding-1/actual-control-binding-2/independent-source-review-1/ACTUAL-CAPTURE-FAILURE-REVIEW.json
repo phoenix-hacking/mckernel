@@ -1,0 +1,64 @@
+{
+  "automatic_retry_allowed": false,
+  "consumed_release": {
+    "bytes": 8047,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/ROOT64-CAPTURE-RELEASE.ACTUAL.json",
+    "sha256": "a7d5f54fef5f3d221b2c0602a82a010c8e6648318b247e2204a37c75184b28d6"
+  },
+  "current_free": false,
+  "decision": "FAIL_CONSUMED_STATIC_HISTORY_ROUTING_PRESERVED",
+  "failed_capture": {
+    "bytes": 143,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/actual-postjoin-capture-quota-root1/CAPTURE.json",
+    "sha256": "7169c2407809368704425a00ff62169eac400374688589f6b57fae7049b1a3e5"
+  },
+  "findings": [
+    "The actual failure is deterministic source/data routing: copied history61 static PINS.current60_source still names the old correction namespace, whose history60 import requires an ACTUAL-PINS.json that does not exist.",
+    "The prior independent pure runtime_dependencies check and exact byte-copy checks did not traverse history61.validate_current/current60.validate_current/common.configured_dependencies. They therefore did not demonstrate actual final consumed routing closure.",
+    "Source fails before the inherited physical observer/external query entry; raw stderr retains the exact missing path. No successful capture, retirement replay, cleanup or current-free claim follows. Root separately authenticates tool closure and adds both new actors to the151 frontier."
+  ],
+  "implementation_ownership": false,
+  "independent": true,
+  "joined_observer": {
+    "birth": 109975222,
+    "group_absent": true,
+    "pid": 2531195,
+    "returncode": 1,
+    "signals_sent": 0,
+    "streams_closed": true,
+    "wait4_status": 256
+  },
+  "next_review_requirement": "Expert fresh namespace must bind every consumed static source/data hop and pass actual final metadata import/load/validate_current/configured_dependencies traversal without mocked source selection, historical-file fabrication, guard/proc/physical execution or oracle weakening. Existing physical and retirement algorithms are reused.",
+  "original_unknown_preserved": true,
+  "parent_join": {
+    "bytes": 3738,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/actual-postjoin-parent-root1/DIRECT-PARENT-JOIN.ACTUAL.json",
+    "sha256": "792ea51f6324541348591c022dba38e153de22bc909e8a47c99403e008704211"
+  },
+  "prior_execution_review": {
+    "bytes": 11549,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/independent-source-review-1/CAPTURE-EXECUTION-REVIEW.ACTUAL.json",
+    "sha256": "ca8d544c77b0b2fcfa84c3e910ba70a6db540fe91934bba2b5b4c26e6446f018"
+  },
+  "raw_stderr": {
+    "bytes": 4293,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/actual-postjoin-parent-root1/stderr",
+    "sha256": "42a727dc32d16d6acd42e5d2e6a7924ebd45026d95e18cb4c0a51c52c713e036"
+  },
+  "raw_stdout": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/actual-postjoin-parent-root1/stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "recorded_parent": {
+    "birth": 109975218,
+    "group": 2531192,
+    "pid": 2531194,
+    "session": 2531192
+  },
+  "reviewer": "/root/recovery_review",
+  "reviewer_executed_runtime": false,
+  "runtime_authority": null,
+  "schema": "mckernel.independent-consumed-routing-failure-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}
