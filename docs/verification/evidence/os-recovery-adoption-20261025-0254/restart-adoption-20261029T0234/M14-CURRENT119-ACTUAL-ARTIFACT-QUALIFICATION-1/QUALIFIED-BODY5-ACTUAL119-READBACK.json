@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_QUALIFIED_CHANGED_BODY5_SOURCE_AND_ACTUAL119_FINAL_READBACK_PENDING_INDEPENDENT_REVIEW",
+  "name": "perf_event_alloc_map_body_result",
+  "actual_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18461712,
+    "sha256": "c2052d7a44969720a54ea93f2fface3180eeeb1ead940072e456c66c9f125dfb"
+  },
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10298648,
+    "sha256": "759fe1cb2dda4a87ab521b79b17e771514c4da042cbfcd3344b6c5d670b17a31"
+  },
+  "actual_function": {
+    "index": 6110,
+    "name": "perf_event_alloc_map_body_result",
+    "bind": 1,
+    "type": 2,
+    "shndx": 2892,
+    "value": 0,
+    "size": 394
+  },
+  "final_function": {
+    "name": "perf_event_alloc_map_body_result",
+    "bind": 1,
+    "type": 2,
+    "other": 0,
+    "shndx": 1,
+    "value": 18446744073684957568,
+    "size": 394
+  },
+  "full_final_bytes_and_all_relocations_reproduced": true,
+  "actual_relocations": [],
+  "source_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/allocator-candidate.Rust.inc",
+    "bytes": 9670,
+    "sha256": "e1db4ba039fc70b458adcdde8affd31ecc2905ce3c4969e2b1b326b09d4e8652"
+  },
+  "actual_compiled_source_snapshot": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-EXACT-RUST-SOURCE-EXPORT-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1301841,
+    "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+  },
+  "tested_candidate_tokens_exact_in_actual_compiled_source": true,
+  "qualified_HOST_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/fixture-header-correction-1/output-header-correction-1/ACTUAL-HOST-RESULT.json",
+    "bytes": 11300,
+    "sha256": "c378290bed089875772ad22aed50038c4f529c0b51ea94e93a77faf26a968356"
+  },
+  "qualified_HOST_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body5-restart-20261028-1/fixture-header-correction-1/output-header-correction-1/actual-three-command-capture-1/01-perf-allocation-functional-equivalence/stdout",
+    "bytes": 147,
+    "sha256": "8160d8e5a3409df8ecbcf26304d6f03a553e7423d048f2fb050195859515c60e"
+  },
+  "qualified_behavior_output": "PASS perf-allocation genuine-header ABI52; 1152 C/Rust pairs plus 4 null-boundary calls; ordered provider/error/publication/free/full-byte oracles\n",
+  "expected_changed_from116": true,
+  "disposition": "F03BODY5 intentionally moves cacheevent initialization before cacheextra-map provider, exact previouslyqualified BODY5 source tokens and behavior reused. Do not require old116 unchanged-byte equality for this declared source change. Actualnewproduction function reconstructed exactly in final119image. No HOSTobject machinecode equivalence claimed across Rust1.92/nightly1.95 flags.",
+  "no_new_HOST_or_compiler_execution": true,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "runtime_authority": null
+}

@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-29T20:19:42.334891+00:00",
+  "as_of": "2026-10-29T20:55:59.263539+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -3855,22 +3855,41 @@
         6
       ],
       "new_production_native_file_credit": 0
+    },
+    {
+      "at": "2026-10-29T20:55:59.263539+00:00",
+      "actual_progress": "CURRENT119 actual4command producerPASS/fullselectedartifact3324 accepted; image759fe/C47(42+5), original389 equal. ReusedSDK21/8objects, preservedqualifiedoutputsarchive. Newnative/Cretirement/filecredit0. OwnedstoppedOCI normalretirement/currentfree pending.",
+      "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-CURRENT119-ARTIFACT-ADOPTION.ACTUAL.json",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-29T20:19:42.334891+00:00",
-    "accepted_production": "CURRENT116/42473e03/C71(54+17)/Rust68/process0runtimeC",
-    "artifact_acceptance": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT116-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
-    "native_acceptance": "OPEN for116; accepted115/ef56/f76 remains historical matching115 proof",
+    "at": "2026-10-29T20:55:59.263539+00:00",
+    "accepted_production": "CURRENT119/759fe1cb/qualifiedselectedartifact/C47(42+5); nativeOPEN",
+    "artifact_acceptance": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/independent-review-1/INDEPENDENT-ACTUAL-CURRENT119-ARTIFACT-ACCEPTANCE.json",
+    "native_acceptance": "OPEN for119; prior115native/historical116artifact retained",
     "M14_supported_files": "4/6",
-    "next_action": "Publish/fetch sealed119 source; one actual27:4 holder/resource/exactexecution review; CURRENT119 four commands/full original389 qualification. Reuse unchangedSDK21/source6153/8retained objects. M14exclusive.",
-    "current_free": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/LIVE-REVALIDATION-CAP-CORRECTION-1/actual-postjoin-acceptance-1/CURRENT-FREE.ACTUAL.json",
-    "current_ledger": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT65-CURRENT119-ADOPTION-1/ROOT65-NONCE-LEDGER.ACTUAL.json",
-    "current_physical_clearance_pending": false,
+    "next_action": "Reviewednormal retirement exactstopped593\u2192freshpostjoincurrentfree\u2192matching119native/application/lifecycle; next7leafbatch reusesqualifiedbaseline.",
+    "current_free": "PENDING_POST119_BUILD;8104 is accepted prebuildclearance",
+    "current_ledger": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT-NONCE-LEDGER66.CURRENT119-BUILD.PENDING-RETIREMENT.json",
+    "current_physical_clearance_pending": true,
     "canonical_source": "CURRENT119 exact18paths adopted45d2e604; closed133file/122Rust export607fa54f; no119compiler/defaultartifact/native proof",
     "rejected_candidate": "CURRENT118 e984 consumed; fourcommands0/image7e5 rejected20of389 registryidentities; never replay",
     "pipeline_retirement_acceptance": "monotone-census-negative-facts-source-1/independent-source-review-1/NORMAL-RETIREMENT-ACCEPTANCE.ACTUAL.json21026299",
-    "new_compiler_behavior_link_native_or_C_retirement_delta": 0
+    "new_compiler_behavior_link_native_or_C_retirement_delta": {
+      "compiled_units": 3,
+      "linked_selected_images": 1,
+      "new_guest_behavior": 0,
+      "native_qualified": 0,
+      "C_retirements": 0
+    },
+    "actual_new_builds": 1,
+    "actual_new_compiled_units": 3,
+    "actual_new_linked_images": 1
   },
   "campaign_scheduling_override": {
     "state": "exclusive_active_engineering_objective",

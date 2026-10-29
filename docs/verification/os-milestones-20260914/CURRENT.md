@@ -1,3 +1,39 @@
+## CURRENT119 actual selected artifact accepted; owned stopped OCI retained — 2026-10-29T20:55:59.263539+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual4commands0, Rustcrate+Cgeneric+Carch+rawlink. Image759fe1cb/10298648B,
+compiler→link20.559121s/CPU20.525223s/peakchild595724KiB(cumulative maximum).
+Original389/389 equality PASS. Independentfullartifact33241283 acceptsall6groups,
+24newproviders/6storage/5bindings/187inherited+71data andqualifiedBODY5change.
+Rootadopts SELECTEDARTIFACTONLY; C47=42generic+5arch actual. SDK21/8objects reused.
+No newnative/Cretirement/M14fileclosure; M14still4/6andoriginalI01-I03OPEN.
+
+Actualtool63230 terminal0, holder2549248/b110286978 andrunner2550991/b110326945
+joined; no liveholder/job. StoppedownedCID593abb2a8d66817d66c6a530341db17fa7873a42f390d3693792556f4b15cd24
+remains pendingreviewednormalretirement/postjoincurrentfree. Toolproof9377,
+Root66pending31b0/73nonces retainallhistory/UNKNOWN; old8104isPREBUILDfree.
+Do notreplaygrant/nonce dc62394cd7ae43bf8bd1559fd7f5ad20 or inferpostbuildclearance.
+Immutablearchivef649/28members/6.9MB verified, originals unchanged; qualified119
+baseline reusedfornextbatch/native, no cleanrebuild. Parent-custodyretirementchild
+4778 addsactualoldcaptureparent2540830/groupNone:168prioractors+builderactors.
+Source/operationrelease review+publicationpending; Rootsolephysicaloperator.
+Next: exactstoppedOCIretirement→freshcurrentfree→matching119native/apps, while
+sevenleafprivatecutover waitsfornextcoherentaffected-unit rebuild. M15paused;
+weeklyincludedonly/no paidfallback/resources/cutoffs unchanged.
+
+## Actual119 holder owns27:4; execution review pending — 2026-10-29T20:27:27.937788+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualtool63230 RUNNING, holder2549248/b110286978/fd3 holds27:4 fullEOF. ROOT119nonce
+dc62394cd7ae43bf8bd1559fd7f5ad20. Handshake atROOT-CURRENT119-BUILD-ADMISSION-1/HOLDER;
+no Docker/compiler yet, no ROOT-BUILD-GRANT.READY published. Preserveownedholder,
+neverlaunchduplicate/unlinkmutex. Actualsourcepublicationb7fbe153c/110blobs fetched.
+Freshresourceec6b1d01 HOST145778999296/scratch47862149120/MemAvail27502669824,
+4CPU12GiB512/noSwap/noNet/oneheavy own,2GiB64pids otherreserve/7eligibleCPU cap.
+Exactgrantpending60cab265 underindependentexecutionreview; Rootfinalgrant/go only
+afterPASSandfreshresourcepredicate. Source/SDK21/retainedobjects unchanged.
+Root65/free8104 accepted; CURRENT119compilerUNRUN; M14exclusive/M15paused.
+
 ## Current-free/Root65 accepted; actual119 source seal complete — 2026-10-29T20:19:42.334891+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
