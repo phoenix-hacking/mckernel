@@ -1,0 +1,32 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36418,3 +36418,29 @@
+         }
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_util_register_desc_logger_v1 {
++    use core::ptr::{addr_of,read_volatile};
++    use crate::{abi::{CInt,CULong},debug::Ddebug};
++    unsafe extern "C" {static mut f03_util_register_desc_debug_v1:[Ddebug;1];}
++
++    /// Keep the original registration diagnostic without changing registration.
++    ///
++    /// # Safety
++    /// The original debug record remains initialized and live under its existing
++    /// update contract. Arguments are copied scalar values; this function does
++    /// not resolve the current thread or dereference the descriptor address.
++    #[no_mangle]
++    pub unsafe extern "C" fn syscall_util_register_desc_log_bridge(tid:CInt,descriptor:CULong) {
++        let record=addr_of!(f03_util_register_desc_debug_v1).cast::<Ddebug>();
++        // SAFETY: One genuine record, preserving any-nonzero8-bit flag gating.
++        let enabled=unsafe{read_volatile(addr_of!((*record).line_flags))>>24!=0};
++        if enabled {
++            // SAFETY: Exact original function text/format and promoted-int plus
++            // unsigned-long varargs. The original logger result is ignored.
++            unsafe{super::kprintf(b"%s: tid=%d,uti_desc=%lx\n\0".as_ptr().cast(),
++                b"sys_util_register_desc\0".as_ptr().cast::<i8>(),tid,descriptor);}
++        }
++    }
++}

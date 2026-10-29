@@ -1,0 +1,12 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "status": "SOURCE_COPY_FAILED_BEFORE_GITFILE_LAYOUT",
+  "tool_session": 63099,
+  "positive_tool_join_exit": 1,
+  "first_failure": "AssertionError line17: private bank copy has ihk/.git directory, expected absent before regular Gitfile overlay",
+  "second_evidence_writer_failure": "IsADirectoryError reading private ihk/.git as file; no mutation",
+  "source_bank_modified": false,
+  "compiler_configure_native_commands": 0,
+  "correction": "Preserve copied original Git directory by rename outside source root; overlay authentic reviewed regular Gitfile; no fake metadata"
+}

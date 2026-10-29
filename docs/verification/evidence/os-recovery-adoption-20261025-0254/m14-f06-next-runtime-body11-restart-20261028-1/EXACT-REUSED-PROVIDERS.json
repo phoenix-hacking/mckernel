@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "BODY10_callback": {
+    "original": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body10-restart-20261028-1/f06_prctl_log.rs",
+      "bytes": 1348,
+      "sha256": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e"
+    },
+    "private_copy": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/f06_prctl_log.rs",
+      "bytes": 1348,
+      "sha256": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e"
+    },
+    "byte_identical": true
+  },
+  "actual_Ddebug": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    "exact_type": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/original-Ddebug.rs.inc",
+      "bytes": 132,
+      "sha256": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952"
+    }
+  },
+  "C_oracle_body": {
+    "original": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body10-restart-20261028-1/original-prctl-log.c.inc",
+      "bytes": 169,
+      "sha256": "575a401c023f800c979e85c242285087c7bf99ba6ec5351dc6e743006de48d98"
+    },
+    "private_copy": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/original-prctl-log.c.inc",
+      "bytes": 169,
+      "sha256": "575a401c023f800c979e85c242285087c7bf99ba6ec5351dc6e743006de48d98"
+    },
+    "byte_identical": true
+  },
+  "metadata_origin": "Existing MCKERNEL_F06_RT_SIGRETURN_ORIGIN producer/environment, no new synthesized filename mechanism.",
+  "C_callback_comment": "Frozen BODY10 mentions the qualified C record ABI; BODY11 changes the storage owner while retaining that exact representation/lifetime and code."
+}

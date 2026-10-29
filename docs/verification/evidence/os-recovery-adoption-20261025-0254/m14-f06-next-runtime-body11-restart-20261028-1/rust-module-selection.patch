@@ -1,0 +1,12 @@
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -124,3 +124,9 @@
+ 
+ #[cfg(f06_native_signal_restore_fp_candidate)]
+ mod f06_native_signal_restore_fp;
++
++#[cfg(f06_prctl_log_candidate)]
++mod f06_prctl_log;
++
++#[cfg(f06_prctl_log_storage_candidate)]
++mod f06_prctl_log_storage;

@@ -1,0 +1,271 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_REAL_RUST32B_VERBOSE_OWNER_AND_EXTERN_ONLY_C_CONSUMERS",
+  "artifacts": [
+    {
+      "kind": "Rust_production_object",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/runtime_descriptor.o",
+        "bytes": 1744,
+        "sha256": "1065f4963bc1fa25f10d831836070ed4b7981ac1b14c848815ba6a6790265008"
+      },
+      "target": {
+        "name": "mckernel_f06_arch_prctl_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 6,
+        "value": 0,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 669,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "all_verbose_records": [
+        {
+          "name": "mckernel_f06_arch_prctl_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 6,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 669,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "C_extern_consumer",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/consumer.o",
+        "bytes": 5544,
+        "sha256": "282dda49c8da1fa30f4c8460203ca8effefd5cb5aea48f34ea75bdf0035ba691"
+      },
+      "target": {
+        "name": "mckernel_f06_arch_prctl_debug",
+        "type": 0,
+        "bind": 1,
+        "other": 0,
+        "ndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      "all_verbose_records": [],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "C_original_oracle",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/oracle.o",
+        "bytes": 10664,
+        "sha256": "379cc5424dfd6978deb973fc1974687e53237614bc16832dea4490ed3a15366c"
+      },
+      "target": {
+        "name": "mckernel_f06_arch_prctl_debug",
+        "type": 0,
+        "bind": 1,
+        "other": 0,
+        "ndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      "all_verbose_records": [
+        {
+          "name": "ddebug.1270",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 7,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 3,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 669,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "actual_partial_link",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/joined.o",
+        "bytes": 18704,
+        "sha256": "724beb9fb5d368fdbcafc92584e11635681b41532fd917d196208587c39eb2a1"
+      },
+      "target": {
+        "name": "mckernel_f06_arch_prctl_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 13,
+        "value": 0,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 669,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "all_verbose_records": [
+        {
+          "name": "ddebug.1270",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 11,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 3,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 669,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "mckernel_f06_arch_prctl_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 13,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 669,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "actual_fixture_link",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/fixture",
+        "bytes": 6095728,
+        "sha256": "de53396ac6e140165c3d286e9a8851d8eeb4d889a9b8e9c849bc4eac79fc4634"
+      },
+      "target": {
+        "name": "mckernel_f06_arch_prctl_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 30,
+        "value": 2938496,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 669,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "all_verbose_records": [
+        {
+          "name": "ddebug.1270",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 30,
+          "value": 2938464,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 669,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "mckernel_f06_arch_prctl_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 30,
+          "value": 2938496,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 669,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    }
+  ],
+  "exact_initial_metadata_and_flags": "HOST fixture independently compared strings/nullfmt/line669/flags0/padding0 with original C macro and inherited389-row registry reference.",
+  "constructor_in_Rust_object": false,
+  "HOST_two_records": "One original independent C oracle LOCAL plus one GLOBAL selected Rust record; production must retain one total target identity.",
+  "default_native_data_file_credit": 0
+}

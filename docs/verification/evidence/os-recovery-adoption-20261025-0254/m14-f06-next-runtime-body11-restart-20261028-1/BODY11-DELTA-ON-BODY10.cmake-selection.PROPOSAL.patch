@@ -1,0 +1,15 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -315,6 +315,12 @@
+ 				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+ 				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_PRCTL_LOG")
+ 
++				# Same inherited descriptor; Rust owns its __verbose storage.
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_prctl_log_storage_candidate")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log_storage.rs")
++				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
++				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE")
++
+ 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+ 				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"

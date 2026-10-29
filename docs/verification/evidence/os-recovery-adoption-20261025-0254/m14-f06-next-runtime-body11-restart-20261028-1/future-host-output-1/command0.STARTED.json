@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile genuine Rust __verbose storage and unchanged BODY10 callback into one real no_std object.",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--crate-type=lib",
+    "--emit=obj",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "panic=abort",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/runtime_descriptor.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/runtime_descriptor.o"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1",
+  "identity": {
+    "pid": 2207275,
+    "birth": "102922410",
+    "ppid": 2207274,
+    "pgrp": 2207275,
+    "session": 2207275,
+    "state": "R"
+  },
+  "affinity": [
+    7
+  ],
+  "AS_limit": [
+    2147483648,
+    2147483648
+  ],
+  "CPU_limit": [
+    60,
+    60
+  ],
+  "epoch": 1793231779.4119651,
+  "monotonic": 1013885.980921293,
+  "boot": 1029224.107971152
+}

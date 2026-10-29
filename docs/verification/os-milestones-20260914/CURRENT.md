@@ -2,6 +2,40 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Twenty-minute checkpoint — 2026-10-28T23:56:28Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket23:36:28–23:56:28:7HOSTcommands0,5compiler/link+2behavior,3950C/Rustpairs.
+F03BODY12 originalglobal descriptor logger/ABI10/200pairs reviewc273 PASS;
+F06BODY11 Rust32B descriptor/3750pairs qualification4020, review pending.
+CPU0.552150s/sumcommandwall0.659068s/peak137108KiB, no measured HOST overlap.
+Production/default/native/file/C-retirement deltas0; CURRENT116 C71/Rust68,
+M14files4/6,M15files1/8. Original30minbaseline/stopped41784.995407s retained;
+no95percent claim. Details: restart-adoption-20261028T1911/STEERING-20261028T235628.json.
+
+CURRENT118 original four producer commands remain UNRUN. A2 abandoned/actors
+positively joined; no cleanup/nonce/capture replay. Exact A3 blocker reviewcfa3:
+closed-unlaunched frontier must be validated, abandoned1d3 rejected and A2 actors
+checked in fresh full censuses; old71 consumed/native history stays exact.
+m14_compose implements private narrow successor; Root newnoncee984 remains unused.
+All fixed resource DATA precedes clock; original120s phases run in one Root tool
+orchestration after independent source/entry approval. Entire bucket blocked;
+ready-to-entry and failure-to-validated-fix remain unavailable, not fabricated.
+
+After bucket: Root actual M15 private source adoption f24b9dbe/27676B reuses finite
+6999 SDK11 source-bank members, fd6 component selector and authentic65ef Gitfile.
+Initial copy stopped at existing ihk/.git DIRECTORY; first assertion and secondary
+read-file assumption preserved. Exact private21-member metadata directory retained
+outside source root; authentic Gitfile installed,58 selected files verified.
+No source-bank mutation/SDKrebuild/configure/compiler/install/native; real readonly
+Git metadata mount/quiescence/fresh runtime admission still open. Actual receipt:
+ROOT-M15-INSTALLED-CONSUMER-SOURCE-ADOPTION-1/ACTUAL-SOURCE-ADOPTION.json.
+M15consumer resolves existing generic producer owner/command data interface;
+old SDK11 ten-command producer driver must never execute for this consumer.
+BFDroute found image41778 original reviewed owner lineage, preparing only created-
+container copy/retirement adaptation for libelf; retired2460cp forbidden.
+Active disjoint f03BODY13/f06BODY12 source owners; no extra slot/control grant.
+
 ## Tactical steering follow-up — 2026-10-28T23:51Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

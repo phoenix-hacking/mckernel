@@ -1,0 +1,42 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -752,6 +752,22 @@
+ 
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PRCTL_LOG)
++#ifdef MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE
++extern struct ddebug arch_prctl_log_debug __asm__("mckernel_f06_arch_prctl_debug");
++#else
++struct ddebug arch_prctl_log_debug __asm__("mckernel_f06_arch_prctl_debug")
++    __attribute__((section("__verbose"),aligned(8))) = {
++    .file = __FILE__,
++    .func = "arch_prctl_log_bridge",
++    .fmt = 0,
++    .line = 669,
++    .flags = DDEBUG_DEFAULT,
++};
++#endif
++extern void arch_prctl_log_bridge(int event, int cpu, unsigned long value);
++#else
++#line 665
+ void
+ arch_prctl_log_bridge(int event, int cpu, unsigned long value)
+ {
+@@ -759,6 +775,8 @@
+ 		dkprintf("[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n", cpu, value);
+ 	}
+ }
++#endif
++#line 672
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_CLONE_READER_LOCK)
+ extern void arch_clone_reader_lock_bridge(void *lock, void *node);
+@@ -851,6 +869,7 @@
+ #endif
+ 
+ #endif
++#line 746
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void
