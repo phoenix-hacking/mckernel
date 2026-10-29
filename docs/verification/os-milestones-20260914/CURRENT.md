@@ -1,3 +1,41 @@
+## Live-cap correction and genuine metadata accepted — 2026-10-29T19:56:08.205020+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+LIVE840a source08d85, final actualmetadata traversal0/.586010347s/CPU.580163/
+peak106176KiB accepted105d9eee. Newexactpayload660f receives execution75687134.
+Historicalcaps/physicalalgorithms remainunchanged; liveconsumers selectcurrent
+weeklyvalidators. Capturerelease sealedforonefreshnamespace afterpublish/fetch
+andfreshQentry. Prior94376failure/5positivequeryjoins/158frontier/72/UNKNOWN retained.
+Runtimefix/currentfree/CURRENT119compiler remainOPEN; no newnative/Cretirement.
+CurrentPIDgetterb228 andsevenleafd323 composedsourceonly, independentSOURCEopen.
+Rootsolephysicalowner; M14exclusive/M15paused/includedonly/no paidfallback.
+
+## Read-only queries completed; historical live-cap call failed — 2026-10-29T19:51:25.018000+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Release340954 was consumed ONCE. Tool94376 terminal1; parent2535334/b110050467 and
+observer2535335/b110050470 wait1/streamsclosed/groupabsent/signals0. Wall4.834315185s,
+CPU4.129687s/peak163472KiB. Five recorded queryclients eachwait0/streamsclosed/
+groupabsent:2535851/b110050868,2535855/b110050888,2535863/b110050901,
+2535871/b110050916,2535879/b110050928. Independentextraction699705 authenticates
+rawjoins; Rootfailurefb20 andpendingledger490f preserve7measuredadditions→158.
+Inheritedunmeasuredclients/originalUNKNOWN andall72nonces remain. No currentfree.
+
+Actualnewfailure: outerlive revalidation called historical06UTC-capped base helper.
+The complete metadata routing fix worked; no oldmissingfile was created. Terra's
+LIVE-REVALIDATION-CAP-CORRECTION-1 READY840a routes2livephysicalchecks toexisting
+weeklyvalidator and adds live-only frontiercap derivative; historicalsources/caps
+stayfrozen. Pureclockregression reproducesoldfailure/checksnewcaps+15negatives;
+usesactualqueryUTC/MONO butexplicitfixtureBOOT/history becausefullin-memoryvalue
+wasnotpersisted. No fabricatedfullreplay. Focusedsource/actualsidecarreviewpending.
+Rootintent e0947645 andnewoperation62c09b4d5e sealed; neverreplayphysicalstage5b361.
+
+Rootsolecapture/currentfree/119owner; no live Roottool. recovery_review owns this
+boundedcapfamilyreview. cleanup_bindings implementsprivate currentPIDgetter;
+sixleafbatchcfb994b4 ready/sourceonly. Code/releasecheckpointa89c3c778 pushed/fetched
+114changedblobs exact. CURRENT119uncompiled; zero compiler/native/Cretirement/M14
+closure delta. M14exclusive/M15paused, includedonly/no paidfallback unchanged.
+
 ## Genuine routing proof accepted; fresh capture release sealed — 2026-10-29T19:43:15.462564+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
