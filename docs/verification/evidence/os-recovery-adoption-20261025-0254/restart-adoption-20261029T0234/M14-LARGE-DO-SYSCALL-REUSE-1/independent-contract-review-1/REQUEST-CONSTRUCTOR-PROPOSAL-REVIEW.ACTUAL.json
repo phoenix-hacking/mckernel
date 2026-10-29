@@ -1,0 +1,95 @@
+{
+  "Root_may_author_refined_contract": true,
+  "Root_proposal": {
+    "bytes": 2439,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-CONTRACT.PROPOSED.json",
+    "sha256": "5fe658aacea09281595ad556718656045d99e9c39e11841b28562f3309442f31"
+  },
+  "decision": "PASS_FIXED_WAIT4_DEFINED_ARGUMENT_INTENT_REQUIRE_GENERIC_MARSHALLING_REFINEMENT_FOR_2_3_ROWS",
+  "direct_host_consumption_facts": {
+    "11": "act_reserved_memory_syscall forMUNMAP returns-ENOSYS without argument reads; preserve behavior, no functionalmmap improvement claimed.",
+    "122": "act_setfsuid readsargs0/1 only (arg1 credential submode).",
+    "123": "act_setfsgid readsargs0 only.",
+    "802": "act_debug_mlock readsargs0/1 only.",
+    "remaining_named_numbers": "Current dispatcher default generic path reads/marshals all6; extra-slot semantic non-use at selectedLinux syscall ABI still needs explicitRootscope/binding, not guessed universal claim."
+  },
+  "exact_failed_predicate_for_blanket2_3": {
+    "consequence": "Cannot assert receiver never reads2arg slots2..5 or3arg slots3..5. Opaque requestcopy is distinct from this genuine typed/marshalling read. This does not by itself prove Linux uses extra register values semantically.",
+    "minimal_Root_refinement": "Explicitly adopt canonical zero values for the previously undefined WIRE/register slots, including reads by generic syscall marshalling/logging. Bound reviewed syscall numbers/declaredarity and distinguish actual semantic field uses. If a semantic consumer needs a previously undefined slot, give that row its own intendedbehavior decision before implementation. Do not relabel existing readings as absent.",
+    "observed_receiver": "Selected act_generic_syscall\u2192mcexec_do_generic_syscall_body\u2192mcexec_do_generic_syscall_raw_bridge, executer/user/mcexec.c5690-5693, explicitly loads all6 request args to syscall(...).",
+    "proposal_invariant": "Any receiver using allegedly unused slot blocks until explicit resolution."
+  },
+  "fixed_wait4_row": {
+    "Root_intent_vector": [
+      "pid(original signedconversion)",
+      0,
+      "options(original conversion)",
+      0,
+      0,
+      0
+    ],
+    "actualselectedhost": "executer/user/rust/mcexec_helpers.rs1779-1791 act_wait4 reads args0and2 only; waitid wrapper then do_syscall_return",
+    "caller": "kernel/syscall.c4868-4876",
+    "source_supported": true,
+    "statement": "This is a precise defined-wire correction for the fixedwait4 producer; no undefined-C parity or new lifetime/ACK semantics. Root still authors actual decision before implementation."
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "observed_declared_helper_consumers": {
+    "source_scope": "These are the concrete selected Rust provider callsites inspected in current119source, not a claim covering every optional profile or arbitrary number supplied to a helper interface.",
+    "three_arg_selected_Rust_source": [
+      "set_host_vma\u2192clear_host_pte/SYS_MUNMAP11",
+      "sys_setitimer/SYS_SETITIMER38"
+    ],
+    "two_arg_selected_Rust_source": [
+      "time/SYS_TIME201",
+      "sys_clock_gettime/SYS_CLOCK_GETTIME228",
+      "sys_gettimeofday/SYS_GETTIMEOFDAY96",
+      "sys_nanosleep/SYS_NANOSLEEP35",
+      "sys_sched_setparam and hostfallback of sys_sched_setscheduler/SYS_SCHED_SETPARAM142",
+      "sys_getitimer/SYS_GETITIMER36",
+      "sys_setfsuid/SYS_SETFSUID122",
+      "sys_setfsgid/SYS_SETFSGID123",
+      "sys_linux_mlock/SYS_LINUX_MLOCK802"
+    ]
+  },
+  "prior_do_syscall_contract_review": {
+    "bytes": 12444,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/independent-contract-review-1/CONTRACT-REVIEW.ACTUAL.json",
+    "sha256": "e7e390251a09bd7851cb3392e17bf50b73e514dbbc75fbdc7d238195386afe14"
+  },
+  "recorded_utc": "2026-10-29T23:02:54.369004+00:00",
+  "reviewer": "/root/recovery_review",
+  "runtime_authority": null,
+  "schema": "mckernel.independent-f03-request-constructor-proposal-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_implementation_authorized_by_this_review": false,
+  "source_refs": {
+    "executer/user/mcexec.c": {
+      "bytes": 221546,
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    },
+    "executer/user/rust/mcexec_helpers.rs": {
+      "bytes": 255596,
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1301841,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "kernel/syscall.c": {
+      "bytes": 928517,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+    }
+  },
+  "unchanged_invariants": [
+    "Number conversion remains original CInt\u2192CULong; requestIDs/valid remain owned by existingprepare/send helpers.",
+    "Preserve natural supportedx86stackalignment independently from source72Bstruct/128Bpacket and genuineABIwitness requirement.",
+    "No execphase/argv/env/descriptor, UTIpartialinfo/context, hostACK or lifetime authorization supplied.",
+    "No general zero-fill, Ccompute expansion, runtime/service call, external restriction clearance, compiler/link/default/native acceptance."
+  ]
+}

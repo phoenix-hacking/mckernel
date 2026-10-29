@@ -1,0 +1,58 @@
+[
+  {
+    "symbol": "ptrace_detach_kfree_bridge",
+    "old": "static void\nptrace_detach_kfree_bridge(void *ptr)\n{\n\tkfree_tracked(ptr, __FILE__, __LINE__);\n}\n",
+    "new": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__) && defined(MCKERNEL_RUST_F03_PTRACE_KFREE_PROFILE_119)\nextern void ptrace_detach_kfree_bridge(void *ptr);\n#else\nstatic void ptrace_detach_kfree_bridge(void *ptr) { kfree_tracked(ptr, __FILE__, __LINE__); }\n#endif\n",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/Rust-owned-metadata-correction-1",
+    "line_neutral": true,
+    "body_reused_exact": true
+  },
+  {
+    "symbol": "exit_group_terminate_bridge",
+    "old": "void\nexit_group_terminate_bridge(int status, int group)\n{\n\tterminate(status, group);\n}\n",
+    "new": "#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)\nextern void exit_group_terminate_bridge(int status, int group);\n#else\nvoid exit_group_terminate_bridge(int status, int group) { terminate(status, group); }\n#endif\n",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-EXIT-GROUP-TERMINATE-1",
+    "line_neutral": true,
+    "body_reused_exact": true
+  },
+  {
+    "symbol": "ptrace_wakeup_update_lock_bridge",
+    "old": "static void\nptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)\n{\n\tmcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,\n\t\t\t(struct mcs_rwlock_node_irqsave *)node);\n}",
+    "new": "#if defined(MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR)\nextern void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node);\n#else\nstatic void ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node_irqsave *)node); }\n\n#endif",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1",
+    "line_neutral": true,
+    "body_reused_exact": true
+  },
+  {
+    "symbol": "ptrace_wakeup_update_unlock_bridge",
+    "old": "static void\nptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)\n{\n\tmcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,\n\t\t\t(struct mcs_rwlock_node_irqsave *)node);\n}",
+    "new": "#if defined(MCKERNEL_RUST_F03_WAKEUP_WRITER_PAIR)\nextern void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node);\n#else\nstatic void ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node_irqsave *)node); }\n\n#endif",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1",
+    "line_neutral": true,
+    "body_reused_exact": true
+  },
+  {
+    "symbol": "ptrace_detach_wakeup_bridge",
+    "old": "static void\nptrace_detach_wakeup_bridge(void *thread, int valid_states)\n{\n\tsched_wakeup_thread((struct thread *)thread, valid_states);\n}\n",
+    "new": "#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)\nextern void ptrace_detach_wakeup_bridge(void *thread, int valid_states);\n#else\nstatic void ptrace_detach_wakeup_bridge(void *thread, int valid_states) { sched_wakeup_thread((struct thread *)thread, valid_states); }\n#endif\n",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/wakeup",
+    "line_neutral": true,
+    "body_reused_exact": true
+  },
+  {
+    "symbol": "terminate_mcexec_do_syscall_bridge",
+    "old": "static long\nterminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)\n{\n\treturn do_syscall(request, cpu);\n}\n",
+    "new": "#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)\nextern long terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu);\n#else\nstatic long terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu) { return do_syscall(request, cpu); }\n#endif\n",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/terminate_mcexec",
+    "line_neutral": true,
+    "body_reused_exact": true
+  },
+  {
+    "symbol": "perf_event_open_do_syscall_bridge",
+    "old": "static long\nperf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)\n{\n\treturn do_syscall(request, cpu);\n}\n",
+    "new": "#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)\nextern long perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu);\n#else\nstatic long perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu) { return do_syscall(request, cpu); }\n#endif\n",
+    "source_input": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/perf_open",
+    "line_neutral": true,
+    "body_reused_exact": true
+  }
+]

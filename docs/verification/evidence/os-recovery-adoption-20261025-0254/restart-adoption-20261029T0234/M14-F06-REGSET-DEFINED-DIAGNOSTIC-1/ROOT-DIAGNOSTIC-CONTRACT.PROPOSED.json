@@ -1,0 +1,67 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "PROPOSE_DEFINED_REGSET_DIAGNOSTIC_FUNCTIONAL_CORRECTION",
+  "recorded_utc": "2026-10-29T22:51:49.479242+00:00",
+  "symbol": "arch_ptrace_regset_log_bridge",
+  "original": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NEXT-ARCH-BODY-1/ORIGINAL-REGSET-LOGGER.c.txt",
+    "bytes": 243,
+    "sha256": "ff5bfb600b55e2980ec33779e3806fb66390a904acf89a85cd982c9a5553238d"
+  },
+  "provenance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-HOLD-PROVENANCE-AND-REUSE-1/PROVENANCE-AND-REUSE.json",
+    "bytes": 11996,
+    "sha256": "6c880aab8494789caf3f9bf13824bed4be020d9c465eee9af9ce57a98d9f3f4d"
+  },
+  "diagnosis": "C passes long to %x, which expects unsigned int after default promotions. No defined variadic parity contract exists for the original diagnostic call; do not infer low-bit parity.",
+  "new_contract": {
+    "ABI": "void(int event,long type) unchanged at supported x86_64 LP64 profile",
+    "event1_prefix": "ptrace_read_regset: not supported type 0x",
+    "event2_prefix": "ptrace_write_regset: not supported type 0x",
+    "other_events": "no output",
+    "value": "Render the complete c_long value converted modulo2^64 to c_ulong as lowercase unsigned hexadecimal, no leading zero padding; zero renders0; append newline. This is an intentional defined diagnostic contract, not parity with undefined original C.",
+    "implementation_constraint": "Rust-owned implementation/format storage; use qualified typed Rust formatting or existing kprintf with %lx and actual c_ulong64 vararg; verify formatter/ABI support before selection. Never pass long to %x."
+  },
+  "examples": [
+    {
+      "event": 1,
+      "type": 0,
+      "suffix": "0\n"
+    },
+    {
+      "event": 2,
+      "type": 4294967295,
+      "suffix": "ffffffff\n"
+    },
+    {
+      "event": 1,
+      "type": 4294967296,
+      "suffix": "100000000\n"
+    },
+    {
+      "event": 2,
+      "type": -1,
+      "suffix": "ffffffffffffffff\n"
+    },
+    {
+      "event": 1,
+      "type": -9223372036854775808,
+      "suffix": "8000000000000000\n"
+    },
+    {
+      "event": 0,
+      "type": -1,
+      "output": ""
+    }
+  ],
+  "invariants": [
+    "No ptrace action/status/errno, data mutation, locking or lifetime change; diagnostic only.",
+    "Preserve original supported metadata389/ABI/source selection and inactiveC fallback; no new C runtime.",
+    "Original undefined call and prior low-bit private proposal retained; no oracle weakened and no claimed C parity.",
+    "Actual service/account holds remain; this proposal neither executes rejected work nor clears any restriction."
+  ],
+  "requires_independent_review": true,
+  "selection_authorized": false,
+  "compiler_link_native_proof_open": true
+}

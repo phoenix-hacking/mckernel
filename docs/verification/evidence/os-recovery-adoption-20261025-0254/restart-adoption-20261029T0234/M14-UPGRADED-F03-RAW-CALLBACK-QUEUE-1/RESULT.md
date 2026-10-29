@@ -1,0 +1,11 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Three independently composable source-only patches are based on the exact accepted nine-leaf postimage; each includes its own postimages, source checks and ready manifest. They have not been integrated into one another or any canonical source.
+
+* `wakeup` moves only `ptrace_detach_wakeup_bridge(void *, int)` to Rust. It forwards the same raw thread and states once to the existing Rust `sched_wakeup_thread` and discards the integer result as C does. The caller retains the same pointer/lifetime and scheduler contracts.
+* `terminate_mcexec` moves only `terminate_mcexec_do_syscall_bridge(struct syscall_request *, int)` to Rust. It passes the same raw request pointer and CPU through the existing parent Rust `do_syscall` declaration and returns its `long` unchanged.
+* `perf_open` makes the same narrow request forwarding conversion for `perf_event_open_do_syscall_bridge`. Its original enclosing `#ifdef ENABLE_PERF` remains intact and its Rust module is guarded by `enable_perf` alongside the existing leaf/x86 selector.
+
+The C `do_syscall` implementation remains an unretired dependency. These callbacks do not construct, publish, inspect, retain or otherwise change requests, nor do they alter wakeup, lifecycle, service or signal internals. Same valid-pointer/ownership and execution-context contracts apply. Pure source checks bind C typedefs, callback consumers, Rust signatures and existing providers, preserve the original C fallback bytes, and model both dispatch variants and downstream logical positions. The checker confirms the perf enclosing C guard and paired Rust cfg. They do not demonstrate actual preprocessing, full 389 metadata readback, compiler/link behavior or native operation. Before integrating onto any different preimage, recalculate and recheck line origins, flag pairing and composition; independent source/ABI review remains necessary. Source-only results do not authorize runtime operations or retirement credit.
+
+The first pure checker attempt failed on the `terminate_mcexec` caller's punctuation; the preserved `CHECK-ATTEMPT-1.FAIL.txt` records the observer defect and bounded correction. All three checks passed afterward. No compiler or native work ran.

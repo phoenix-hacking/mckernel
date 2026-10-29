@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_READY_REVIEW_AND_EXECUTION_OPEN",
+  "symbol": "ptrace_detach_wakeup_bridge",
+  "source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/wakeup/SOURCE-CHECKS.json",
+    "bytes": 3194,
+    "sha256": "7e074846759789f4efaa8316b0ed77e3e28c1a3e6a03ec1a191ebf20010d3f48"
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/wakeup/postimage/kernel/rust/syscall_ptrace_detach_wakeup.rs",
+    "bytes": 720,
+    "sha256": "ead6502fdf1009f0916d7857a5c6fddec6ba0265cc900d2fbb3e27429d3fabcd"
+  },
+  "incremental_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/wakeup/PRIVATE-NOT-APPLIED.patch",
+    "bytes": 2663,
+    "sha256": "75a77afc899abb70191b62b495764556be9961d74f3153e1f031f038c9464b45"
+  },
+  "composer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/compose.py",
+    "bytes": 4567,
+    "sha256": "576446774507a5331033471c30795b4f2b725e725877af27a29ae67199541fb2"
+  },
+  "checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/check_source.py",
+    "bytes": 7447,
+    "sha256": "2f553e29d0dc8fed2cd1073717523a6002bf46e21c8bdab6b53aa939de0f03ce"
+  },
+  "handoff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-RAW-CALLBACK-QUEUE-1/RESULT.md",
+    "bytes": 2282,
+    "sha256": "d40e9496b5512005d4775356c55e9aa996b3ca7854c13696457a7adbde8a23f4"
+  },
+  "preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage/kernel/syscall.c",
+    "bytes": 928942,
+    "sha256": "dd34b8057a9ed19d3b86e204013747da40da86fd12a46bce98f53e15e596d048"
+  },
+  "limits": "Source/model only; no real preprocessor, compiler, link, native, metadata readback, or retirement acceptance. Existing callee and all its behavior remain open."
+}

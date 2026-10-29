@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY",
+  "checks": [
+    "C original prefix and suffix and byte-identical OFF fallback",
+    "selected/OFF conditional and modeled original and downstream line origins in both dispatch cases",
+    "C and Rust callback/provider ABI source declarations",
+    "same argument order and one unconditional void provider call",
+    "preserved callback users and Rust parent prefix",
+    "paired existing leaf/x86 cfg and CMake dependency",
+    "no target C debug/metadata producer"
+  ],
+  "line_model": {
+    "dispatch=False,selected=False": {
+      "fallback_start": 5688,
+      "fallback_call": 5691,
+      "next_line": 5693
+    },
+    "dispatch=False,selected=True": {
+      "external_declaration": 5689,
+      "next_line": 5693
+    },
+    "dispatch=True,selected=False": {
+      "fallback_start": 5681,
+      "fallback_call": 5684,
+      "next_line": 5686
+    },
+    "dispatch=True,selected=True": {
+      "external_declaration": 5682,
+      "next_line": 5686
+    }
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage/kernel/syscall.c",
+      "bytes": 928942,
+      "sha256": "dd34b8057a9ed19d3b86e204013747da40da86fd12a46bce98f53e15e596d048"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1303359,
+      "sha256": "03883e85fc3a071ca2b8ed7620b770c81360187e7c6181eef14bb370ea9357d1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-EXIT-GROUP-TERMINATE-1/EXIT-GROUP-TERMINATE.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 2863,
+      "sha256": "3d5f4dbf86497d84b02a328404c3266d4cf2ebe83fd33611f56dc88fffdcdab1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-EXIT-GROUP-TERMINATE-1/postimage/kernel/syscall.c",
+      "bytes": 929436,
+      "sha256": "9dd10d0437a5482301c47a2e48b4a05cf6c0cb234465a6a48924bab613c30172"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-EXIT-GROUP-TERMINATE-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1303590,
+      "sha256": "6f99bfb7dbc4c00a1ecaf5f7142a5a79257c3beb13a84dbf693455c80377b1d2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-EXIT-GROUP-TERMINATE-1/postimage/kernel/rust/syscall_exit_group_terminate.rs",
+      "bytes": 866,
+      "sha256": "a093c7cd6f36a35d9602a16297045aedf86f9ee50446300a7f39bc8c8aa1fc7a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-EXIT-GROUP-TERMINATE-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 44257,
+      "sha256": "657fe9e24ac0879461d2fc6eccb4dc54c0c99a67a2e1cc1d03ee853c77173056"
+    }
+  ],
+  "limitations": "Pure source checks only; selected C terminate body/dependency remains open. Actual preprocessing, 389 metadata readback, compile/link, independent review and native proof remain open."
+}

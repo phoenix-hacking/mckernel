@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "status": "PRIVATE_UNCOMPILED_THREE_RUST_DESCRIPTOR_CALLBACK",
+  "files": [
+    {
+      "proposed_path": "kernel/rust/syscall_ptrace_clone_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/postimage/kernel/rust/syscall_ptrace_clone_logger.rs",
+        "bytes": 3003,
+        "sha256": "049cb248d35af6f8f6362c4a3caeafe78ec50a5e6b0432ee2934a09cf9b6d4e9"
+      },
+      "canonical_preimage": null
+    },
+    {
+      "proposed_path": "kernel/syscall.c",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/postimage/kernel/syscall.c",
+        "bytes": 928172,
+        "sha256": "a6ee5e228c29f9a7e8c5f4f20821217e14126a5a3879b977bf904b88b33b5792"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 928517,
+        "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+      }
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_policy.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/postimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1302004,
+        "sha256": "8d491f87b3cd814bf5fc7d9b2ca4e144e06db20cd3c470172ef59352e24239de"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1301841,
+        "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+      }
+    },
+    {
+      "proposed_path": "kernel/CMakeLists.txt",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/postimage/kernel/CMakeLists.txt",
+        "bytes": 43532,
+        "sha256": "83fd17910e590e95c6515a09ad3aa2e3dbd26cd9ec4fb902e5f0b4d1fe83ad08"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 43464,
+        "sha256": "0fe73cfa95c24b2aa6f91062a802bffc222b0c0f1cc094740dbff7e2634d8516"
+      }
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/PTRACE-CLONE-RUST-LOGGER.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 4987,
+    "sha256": "6d380ec9bb88ecda0c35002e8d1e38b8ef5424d1172e6fd8e9387c522a5f48ca"
+  },
+  "original_rows": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/ORIGINAL-THREE-DESCRIPTORS.REFERENCE.json",
+    "bytes": 1054,
+    "sha256": "282b9febd419b05eae4b39ea4fc5bbd5d80b5df78a4927e029a7980a543f420b"
+  },
+  "ownership_transfer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/OWNERSHIP-TRANSFER.json",
+    "bytes": 580,
+    "sha256": "f520db8befd4e0af42bb214cadf8b057199a3f9c91adef6797de9fac2eb6f4b4"
+  },
+  "anchor_correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/ANCHOR-FAILURE-AND-CORRECTION.json",
+    "bytes": 548,
+    "sha256": "0f4a6b5a7a34f59294484b199a3dde973f9c0c708e05ed1f271879a74d59c86f"
+  }
+}

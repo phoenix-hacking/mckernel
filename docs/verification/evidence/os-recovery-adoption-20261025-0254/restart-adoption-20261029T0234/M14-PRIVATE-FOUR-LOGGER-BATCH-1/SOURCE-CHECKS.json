@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_FOUR_LOGGER_SOURCE_COMPOSITION_AND_ORIGIN_PRESERVATION",
+  "runtime_authority": null,
+  "all_four_leaf_bytes_reused_exactly": [
+    "kernel/rust/syscall_settid_logger.rs",
+    "kernel/rust/syscall_clear_host_pte_logger.rs",
+    "kernel/rust/syscall_exit_group_logger.rs",
+    "kernel/rust/syscall_ptrace_clone_logger.rs"
+  ],
+  "unchanged_original_C_source_lines_outside_four_ranges": true,
+  "all_C_replacement_newline_counts_identical": true,
+  "all_original_logical_file_line_directives_identical": true,
+  "ClearPTE_Exit_OFF_diagnostic_physical_line_offsets_unchanged": 3,
+  "ClearPTE_Exit_OFF_function_tokens_unchanged": true,
+  "selected_C_callback_declarations_only": true,
+  "all_four_module_and_dependency_entries_once": true,
+  "original389_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+    "bytes": 84536,
+    "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+  },
+  "four_exact_Rust_metadata_projection_rows": [
+    {
+      "file": "/src/kernel/syscall.c",
+      "function": "exit_group_log_bridge",
+      "fmt": null,
+      "line": 5678,
+      "flags": 0,
+      "padding": 0
+    },
+    {
+      "file": "/src/kernel/syscall.c",
+      "function": "ptrace_report_clone_log_bridge",
+      "fmt": null,
+      "line": 7279,
+      "flags": 0,
+      "padding": 0
+    },
+    {
+      "file": "/src/kernel/syscall.c",
+      "function": "ptrace_report_clone_log_bridge",
+      "fmt": null,
+      "line": 7283,
+      "flags": 0,
+      "padding": 0
+    },
+    {
+      "file": "/src/kernel/syscall.c",
+      "function": "ptrace_report_clone_log_bridge",
+      "fmt": null,
+      "line": 7288,
+      "flags": 0,
+      "padding": 0
+    }
+  ],
+  "projected_full_original389Counter_equal": true,
+  "actual_ELF_registry_padding_or_runtime_tested": false,
+  "preprocessor_or_compiler_or_HOST_payload_native_calls": 0,
+  "canonical_otherpacket_or_oracle_changes": 0,
+  "ptrace_wakeup_undefined_domain_deferred": true,
+  "patch_check": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-FOUR-LOGGER-BATCH-1/FOUR-LOGGER-BATCH.PRIVATE-NOT-APPLIED.patch"
+    ],
+    "returncode": 0
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_PROPOSED_ORDINARY_DEFINED_DIAGNOSTIC_CONTRACT_WITH_SELECTION_CONDITIONS",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-REGSET-DEFINED-DIAGNOSTIC-1/ROOT-DIAGNOSTIC-CONTRACT.PROPOSED.json",
+    "bytes": 2995,
+    "sha256": "fbe640f07dd0f6dd092720b6a25d3a5c40cfad80a13b0174b9e330f05ccbbd6d"
+  },
+  "original": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NEXT-ARCH-BODY-1/ORIGINAL-REGSET-LOGGER.c.txt",
+    "bytes": 243,
+    "sha256": "ff5bfb600b55e2980ec33779e3806fb66390a904acf89a85cd982c9a5553238d"
+  },
+  "provenance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-HOLD-PROVENANCE-AND-REUSE-1/PROVENANCE-AND-REUSE.json",
+    "bytes": 11996,
+    "sha256": "6c880aab8494789caf3f9bf13824bed4be020d9c465eee9af9ce57a98d9f3f4d"
+  },
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/debug.c",
+      "bytes": 7840,
+      "sha256": "5896fabfd22da1c023a9b4b9970fe7cfe1524de7bf353383b2dd04ad2b6c1f92"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/vsprintf.c",
+      "bytes": 43648,
+      "sha256": "a32a578296d1f71e607a6d05016ebb3389151c988daf5fe037e99ec27e11fa35"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "bytes": 46665,
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    }
+  ],
+  "findings": [
+    "Original void(int,long) logger passes long to %x; retained undefined variadic contract has no portable parity claim. Proposed full signed-long-to-unsigned-long modulo2^64 output is an explicit defined behavior choice.",
+    "Supported Rust ABI aliases are CInt=i32, CLong=i64, CULong=u64 in kernel/rust/abi.rs:5-7; existing callback declaration is fn arch_ptrace_regset_log_bridge(CInt,CLong) returning unit. Preserve this external ABI and supported x86_64 LP64 scope.",
+    "kernel/debug.c:140 kprintf keeps existing logging prefix and locking/output machinery and passes varargs to vsnprintf at157. Contract event prefixes refer to diagnostic payload; ordinary kprintf CPU prefix, buffer availability/truncation and sink behavior remain existing behavior, not a promise of unconditional output.",
+    "lib/vsprintf.c format_decode:967-991 selects lowercase SMALL/base16 then FORMAT_TYPE_ULONG for l without SIGN. Both C fallback extraction at1331 and Rust-callback extraction at1057 use va_arg(unsigned long). Rust numparse.rs:783-806 has corresponding lowercase/base16/ULONG decode and1192 uses args.arg::<CULong>(); number_ref_result:492 onward renders zero0 and shifts fullu64, without leading padding for unadorned %lx.",
+    "Use a Rust-owned NUL-terminated static format with %lx and exactly one CULong argument obtained directly from CLong conversion. No intermediate u32/unsigned-int narrowing; no signed argument to unsigned-format varargs; no allocation or borrowed temporary format lifetime required.",
+    "Proposal alone changes no code, selectors, metadata389 tuple Counter, line!/file!/column! origins, caller actions/status/errno, memory writes, locking or lifetime. Those invariants are requirements for the future candidate, not verified implementation outcomes."
+  ],
+  "pure_contract_examples": [
+    {
+      "event": 1,
+      "value": 0,
+      "contract_output": "ptrace_read_regset: not supported type 0x0\n"
+    },
+    {
+      "event": 2,
+      "value": 4294967295,
+      "contract_output": "ptrace_write_regset: not supported type 0xffffffff\n"
+    },
+    {
+      "event": 1,
+      "value": 4294967296,
+      "contract_output": "ptrace_read_regset: not supported type 0x100000000\n"
+    },
+    {
+      "event": 2,
+      "value": -1,
+      "contract_output": "ptrace_write_regset: not supported type 0xffffffffffffffff\n"
+    },
+    {
+      "event": 1,
+      "value": -9223372036854775808,
+      "contract_output": "ptrace_read_regset: not supported type 0x8000000000000000\n"
+    },
+    {
+      "event": 0,
+      "value": -1,
+      "contract_output": ""
+    }
+  ],
+  "pure_checks": {
+    "proposal_original_provenance_hashes": "PASS",
+    "six_proposed_examples": "PASS",
+    "fullwidth_distinguishes_u32_narrowing": "PASS",
+    "compiler_calls": 0,
+    "native_calls": 0,
+    "guard_calls": 0,
+    "proc_reads": 0
+  },
+  "selection_conditions": [
+    "Root explicitly approves this precise intentional diagnostic contract before candidate selection; retain original C and previous undefined/low-bit proposal evidence.",
+    "Candidate must preserve void(CInt,CLong) ABI, event1/event2 payload prefixes and exactly one trailing newline, return silently for every other event, and call only the existing diagnostic provider. Review exact signed-to-CULong conversion and Rust static format storage.",
+    "Bind selected formatter/build provider to reviewed %lx support; actual target compiler/ABI witness and default unique provider/link evidence remain open. A new bespoke formatter requires its own focused implementation review.",
+    "Keep inactive C fallback and supported source selection shape; compare full original389 tuple Counter byte-bound oracle unchanged and preserve macro source identities. No frozen undefined-output oracle normalization or fabricated parity.",
+    "No ptrace action/status/errno/locking/lifetime change, no new C runtime, no service/account hold clearance. Applicable compiler/link/native proof remains required before C retirement."
+  ],
+  "selection_authorized": false,
+  "implementation_review": null,
+  "metadata389_actual_candidate_check": null,
+  "compiler_link_native_proof_open": true,
+  "service_account_restriction_status": "UNCHANGED_OR_UNKNOWN; no clearance granted",
+  "native_authority": null
+}

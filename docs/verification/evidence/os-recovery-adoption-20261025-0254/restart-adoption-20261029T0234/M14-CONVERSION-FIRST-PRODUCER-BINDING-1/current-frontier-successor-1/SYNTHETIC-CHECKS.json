@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SYNTHETIC_ONLY_CURRENT_FRONTIER_PREDICATE",
+  "positive_synthetic_frontier": true,
+  "negative_cases": [
+    "stale Root68 free",
+    "stale Root68 ledger",
+    "wrong typed review",
+    "not independent",
+    "wrong reviewer owner",
+    "wrong free pointer",
+    "pending custody",
+    "changed old nonce",
+    "duplicate nonce",
+    "consumed new nonce",
+    "reserved new nonce",
+    "later custody unknown not reviewed",
+    "boundary embeds review",
+    "boundary observation aliases review",
+    "review wrong boundary pointer"
+  ],
+  "unchanged_functions": [
+    "cutoffs",
+    "origin",
+    "render_sources",
+    "main"
+  ],
+  "unchanged_producer_bytes": [
+    "accepted_bindings.py",
+    "run_build_only.template.py",
+    "build_only_worker.template.py",
+    "hold_and_run_build_only.py"
+  ],
+  "actual_current_files_created": false,
+  "guard_calls": 0,
+  "compiler_calls": 0,
+  "runtime_authority": null
+}

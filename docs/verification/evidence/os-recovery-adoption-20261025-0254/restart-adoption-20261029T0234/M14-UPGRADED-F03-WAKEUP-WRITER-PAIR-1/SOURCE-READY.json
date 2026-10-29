@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_PAIRED_IRQSAVE_WRITER_SOURCE_READY_AWAIT_REVIEW_UNCOMPILED",
+  "symbols": [
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_update_unlock_bridge"
+  ],
+  "files": {
+    "compose_and_check.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/compose_and_check.py",
+      "bytes": 8053,
+      "sha256": "4adb680325e3c833772da765b977d051fce056c9faab546611a59f725b6e3b16"
+    },
+    "WAKEUP-WRITER-PAIR.PRIVATE-NOT-APPLIED.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/WAKEUP-WRITER-PAIR.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 7009,
+      "sha256": "21d42afec1870491af6b49f8f726269389bf34fbd11125be2e6d91b24f2250a2"
+    },
+    "SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/SOURCE-CHECKS.json",
+      "bytes": 4605,
+      "sha256": "fe7c95c364e345cdd2e190afa464a707f23570fff61ba0d8b6996ceeb49d745d"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/ROOT-NEXT.md",
+      "bytes": 2768,
+      "sha256": "49762a66e2e4b654cc8d913583c582818826932638d13ad9cf595df17fe08a2b"
+    }
+  },
+  "patch_apply_check": "PASS --no-index from private preimage",
+  "independent_review": null,
+  "runtime_authority": null,
+  "actual_compile_link_native": false,
+  "C_retirement": false
+}

@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_EXPERIMENTAL_CONSTRUCTORS_SOURCE_ONLY",
+  "contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-CONTRACT.REFINED-APPROVED.json",
+    "bytes": 3258,
+    "sha256": "ca85a6c4de8c6e09f03039ffd7fc8d3c9aa3803ea94dcea21e0d52de11905ed0"
+  },
+  "ten_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-TEN-LEAF-BATCH-1/SOURCE-READY.json",
+    "bytes": 1879,
+    "sha256": "958afc6c3caf6960ef74bd095c9d7def8063ffe99d50ec4387432b4e083b3276"
+  },
+  "abi": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "wait_nr_header": {
+    "path": "/home/holden/mckernel/kernel/include/syscall.h",
+    "bytes": 20836,
+    "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/REQUEST-CONSTRUCTORS.ON-TEN.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 11166,
+    "sha256": "7b1eb5ed277fd091c5ff42b0755f3b37f98ba49792cd450ae49a95241891cc7a"
+  },
+  "files": [
+    {
+      "path": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/preimage/kernel/syscall.c",
+        "bytes": 929186,
+        "sha256": "d34a8fed978e948424b9a1b6f407c04ea504e6660de559cbd6b9e638435af4f3"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/postimage/kernel/syscall.c",
+        "bytes": 929638,
+        "sha256": "ba9ec2f45db51452d131f700e4c57f203bcea1b4ab36f7f3b26a06929300c051"
+      }
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/preimage/kernel/CMakeLists.txt",
+        "bytes": 44188,
+        "sha256": "06cfdf2c4ef85128113e0dab73137d193ceebf462615d51f3480a2d5d2057434"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/postimage/kernel/CMakeLists.txt",
+        "bytes": 44606,
+        "sha256": "10a3d8eb4b450d24c1b344d3ee6d07aeb41c0939e1f8d444e0b9ac28f8e057b4"
+      }
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/preimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1303359,
+        "sha256": "03883e85fc3a071ca2b8ed7620b770c81360187e7c6181eef14bb370ea9357d1"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/postimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1303588,
+        "sha256": "e6aef2b8423e916404db0c8c8e909c539dd1c8ad2f00ed6991192c15e9f353bd"
+      }
+    },
+    {
+      "path": "kernel/rust/f03_request_constructors.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/postimage/kernel/rust/f03_request_constructors.rs",
+        "bytes": 3733,
+        "sha256": "84187a9657e96c43362ab3f80ccefda0c530a1bc3210b431c949625e9741d476"
+      }
+    }
+  ],
+  "checks": [
+    "number plus six explicit raw field writes without complete Request reference or general zeroing",
+    "2/3/wait4 wire slots and signed C int conversions follow approved contract",
+    "align64 stack storage separate from 72B align8 request; existing do_syscall typed ABI",
+    "default selection disabled: explicit experimental CMake gate in qualified branch",
+    "OFF C tokens, C #line origins and 53 Rust line/file/column sites retained"
+  ],
+  "actual_callgraph_closure": false,
+  "actual_29_word_abi": false,
+  "default_selection_authorized": false,
+  "actual_compile_link_native": false,
+  "runtime_authority": null,
+  "independent_review": null
+}

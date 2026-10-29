@@ -1,0 +1,87 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "APPROVE_NARROW_DEFINED_REQUEST_ARGUMENT_WIRE_CONSTRUCTORS_FOR_SOURCE_IMPLEMENTATION",
+  "recorded_utc": "2026-10-29T23:04:45.391164+00:00",
+  "independent_fact_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/independent-contract-review-1/REQUEST-CONSTRUCTOR-PROPOSAL-REVIEW.ACTUAL.json",
+    "bytes": 5752,
+    "sha256": "9630d31247e1f2cecc866e9ba4b9bdd862afc93d75b92ed331d5a819d6dbf368"
+  },
+  "replaces_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-CONTRACT.PROPOSED.json",
+    "bytes": 2439,
+    "sha256": "5fe658aacea09281595ad556718656045d99e9c39e11841b28562f3309442f31"
+  },
+  "definition": "For the named declared-arity helpers assign number and each of6wireargument slots explicitly. Canonicalzero in unprovidedslots IS permitted to be read/logged/marshalled and passed as hostregister values; it is an intentional defined wire contract, not parity with indeterminate C bytes.",
+  "rows": [
+    {
+      "symbols": [
+        "syscall_do_syscall2_bridge",
+        "syscall_policy_do_syscall2_bridge"
+      ],
+      "args": [
+        "arg0",
+        "arg1",
+        0,
+        0,
+        0,
+        0
+      ],
+      "reviewed_numbers": [
+        201,
+        228,
+        96,
+        35,
+        142,
+        36,
+        122,
+        123,
+        802
+      ]
+    },
+    {
+      "symbols": [
+        "syscall_do_syscall3_bridge",
+        "syscall_policy_do_syscall3_bridge"
+      ],
+      "args": [
+        "arg0",
+        "arg1",
+        "arg2",
+        0,
+        0,
+        0
+      ],
+      "reviewed_numbers": [
+        11,
+        38
+      ]
+    },
+    {
+      "symbols": [
+        "wait_host_wait4_bridge"
+      ],
+      "number": "__NR_wait4",
+      "args": [
+        "originalpidconversion",
+        0,
+        "originaloptionsconversion",
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "activation_conditions": [
+    "Bind actual selected callgraph to reviewed numbers; an additional or semanticallyused unused slot requires an explicit further contract. Do not silently exclude supported callers or add new runtime errno/number guards.",
+    "Preserve number/argument signed conversions and return ABI, 64B IHK stack-object alignment, existing sender ID/valid writes/order; actual72Bstruct/128Bpacket/29wordABI remains a genuine compile gate.",
+    "No general request/packet/response/UTI zero-fill. Initialize only named number+6args; do not form Rust references to an incompletely initialized whole request before helper-owned fields are written.",
+    "No new response ACK/lifetime claim and no exec-phase authorization. Exact candidate/source/ABI/ownership+combinedcompile/link review required before default selection."
+  ],
+  "source_implementation_authorized": true,
+  "default_selection_authorized": false,
+  "native_execution_authority": null,
+  "service_or_account_hold_cleared": false,
+  "undefined_original_parity_claimed": false
+}

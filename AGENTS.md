@@ -1,5 +1,25 @@
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
+Latest user instruction — 2026-10-29 UTC: run until the current weekly allowance
+reaches 0% remaining (100% used), replacing the October28 11p.m. cutoff and
+disabling prepaid-credit fallback. Read
+[weekly-only window](docs/verification/os-milestones-20260914/RUN-WINDOW-WEEKLY-ONLY-20261029.md).
+Preserve the current Root, all native ownership, evidence and historical credit
+ledger. Prepare and transfer to a new included-only controller envelope; do not
+edit the older live controllers' clocks in place. M14 exclusively until accepted,
+then M15. The current weekly reset is an upper bound, never a new allowance.
+
+Latest implementation sequencing — 2026-10-29 UTC: the user directs completing
+the remaining M14 conversions in parallel, then validating the coherent combined
+result. Source implementation and compatible batch integration must not wait for
+CURRENT119 native acceptance. Reuse its accepted build/artifact baseline and
+prepared ports, retain cheap ABI/type/behavior checks and useful compile feedback,
+and reserve full matching native qualification for the integrated image. Preserve
+all existing holds, evidence, resource/ownership checks and final acceptance
+criteria. Follow [dispatcher priorities](docs/verification/os-milestones-20260914/DISPATCHER-VELOCITY-20261029.md).
+
+--- Superseded earlier window ---
+
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](docs/verification/os-milestones-20260914/RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
 --- Retained prior context ---

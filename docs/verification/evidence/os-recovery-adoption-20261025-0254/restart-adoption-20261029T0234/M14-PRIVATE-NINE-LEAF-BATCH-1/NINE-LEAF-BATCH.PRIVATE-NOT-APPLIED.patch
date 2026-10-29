@@ -1,0 +1,627 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36831,3 +36831,38 @@
+ mod f06_vdso_info;
+ #[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+ use self::f06_vdso_info::vdso_get_vdso_info;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_exit_group_current_pid.rs"]
++mod syscall_exit_group_current_pid;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_util_clone_disabled_logger.rs"]
++mod syscall_util_clone_disabled_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_settid_logger.rs"]
++mod syscall_settid_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_ptrace_clone_logger.rs"]
++mod syscall_ptrace_clone_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_exit_group_logger.rs"]
++mod syscall_exit_group_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_clear_host_pte_logger.rs"]
++mod syscall_clear_host_pte_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_munmap_clear_host_forward.rs"]
++mod syscall_munmap_clear_host_forward;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_mprotect_host_vma.rs"]
++mod syscall_mprotect_host_vma;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -119,6 +119,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/listeners.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/list_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lock_helpers.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ptrace_clone_noirq.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mem_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/numparse.rs"
+@@ -142,16 +143,24 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_current_pid.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_util_clone_disabled_logger.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_settid_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_coredump.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_log_providers.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_clone_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_local.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_logger_bridges.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_clear_host_pte_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_loggers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_perfctr.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_setup.rs"
+@@ -215,6 +224,7 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_clone_noirq_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_prlimit_body_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_exit_supported_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_begin_selected_candidate")
+@@ -598,7 +608,7 @@
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+ 			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+-				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
++				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PTRACE_CLONE_NOIRQ;MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
+ 			if (ENABLE_PERF)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 					COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES;MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES;MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES;MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES")
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5742,11 +5742,11 @@
+ 	return;
+ }
+ 
+-void
+-exit_group_log_bridge(int pid)
+-{
+-	dkprintf("sys_exit_group,pid=%d\n", pid);
+-}
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void exit_group_log_bridge(int pid);
++#else
++void exit_group_log_bridge(int pid) { dkprintf("sys_exit_group,pid=%d\n", pid); }
++#endif
+ 
+ void
+ exit_group_terminate_bridge(int status, int group)
+@@ -5754,13 +5754,13 @@
+ 	terminate(status, group);
+ }
+ 
+-int
+-exit_group_current_pid_bridge(void)
+-{
+-	struct thread *thread = get_this_cpu_local_var()->current;
+-
+-	return thread->proc->pid;
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int exit_group_current_pid_bridge(void);
++#else
++int exit_group_current_pid_bridge(void) { struct thread *thread = get_this_cpu_local_var()->current; return thread->proc->pid; }
++
++
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ long sys_exit_group(int n, ihk_mc_user_context_t *ctx);
+@@ -5775,11 +5775,11 @@
+ }
+ #endif
+ 
+-static void
+-clear_host_pte_log_bridge(long error)
+-{
+-	kprintf("clear_host_pte failed. %ld\n", error);
+-}
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void clear_host_pte_log_bridge(long error);
++#else
++static void clear_host_pte_log_bridge(long error) { kprintf("clear_host_pte failed. %ld\n", error); }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+@@ -5888,11 +5888,11 @@
+ }
+ #endif
+ 
+-static long
+-do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
+-{
+-	return clear_host_pte(addr, len, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock);
++#else
++static long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock) { return clear_host_pte(addr, len, holding_lock); }
++#endif
+ 
+ static int
+ do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
+@@ -6937,11 +6937,11 @@
+ }
+ #endif
+ 
+-static int mprotect_set_host_vma_bridge(unsigned long start, size_t len,
+-		int prot, int holding_lock)
+-{
+-	return set_host_vma(start, len, prot, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock);
++#else
++static int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock) { return set_host_vma(start, len, prot, holding_lock); }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void mprotect_flush_nfo_bridge(void)
+@@ -7187,10 +7187,10 @@
+ 		syscall_get_cpu_fn_t get_cpu_fn,
+ 		syscall_request_call_fn_t syscall_fn, void (*log_fn)(int));
+ 
+-static void syscall_settid_log_bridge(int ret)
+-{
+-	kprintf("settid: WARNING: do_syscall returns %d\n", ret);
+-}
++extern void syscall_settid_log_bridge(int ret);
++
++
++
+ #endif
+ 
+ static int settid(struct thread *thread, int nr_tids, int *tids)
+@@ -7420,36 +7420,36 @@
+ }
+ #endif
+ 
+-static void
+-ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node *)node);
+-}
+-
+-static void
+-ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node)
+-{
+-	mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr,
+-			(struct mcs_rwlock_node *)node);
+-}
+-
+-static void
+-ptrace_report_clone_log_bridge(int event, int value, int result)
+-{
+-	if (event == PTRACE_REPORT_CLONE_LOG_ENTER) {
+-		dkprintf("ptrace_report_clone,enter\n");
+-	}
+-	else if (event == PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD) {
+-		(void)value;
+-		dkprintf("ptrace_report_clone,kill SIGCHLD\n");
+-	}
+-	else if (event == PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED) {
+-		(void)value;
+-		(void)result;
+-		dkprintf("ptrace_report_clone,do_kill failed\n");
+-	}
+-}
++#if defined(MCKERNEL_RUST_F03_PTRACE_CLONE_NOIRQ)
++extern void ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node);
++extern void ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node);
++#else
++static void ptrace_report_clone_noirq_lock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node *)node); }
++static void ptrace_report_clone_noirq_unlock_bridge(unsigned long lock_addr, void *node) { mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr, (struct mcs_rwlock_node *)node); }
++
++
++
++
++
++
++#endif
++
++extern void ptrace_report_clone_log_bridge(int event, int value, int result);
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ #endif
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -29015,12 +29015,12 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-void
+-syscall_util_indicate_clone_disabled_bridge(void)
+-{
+-	kprintf("%s: error: --enable-uti mcexec option not specified\n",
+-			"sys_util_indicate_clone");
+-}
++extern void syscall_util_indicate_clone_disabled_bridge(void);
++
++
++
++
++
+ 
+ long sys_util_indicate_clone(int n, ihk_mc_user_context_t *ctx);
+ #else
+--- /dev/null
++++ b/kernel/rust/syscall_settid_logger.rs
+@@ -0,0 +1,16 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private uncompiled successor for the existing settid warning callback.
++
++use super::{kprintf, CInt};
++
++/// Preserve the existing `void (*)(int)` callback and one warning per call.
++#[no_mangle]
++pub(super) extern "C" fn syscall_settid_log_bridge(ret: CInt) {
++    // SAFETY: the static C string is NUL-terminated and contains exactly one %d;
++    // CInt is the existing i32 C int ABI, so ret has the required variadic int
++    // promotion/type. No borrowed or mutable data crosses this call. kprintf is
++    // the same synchronous kernel logger used by the original C callback.
++    unsafe {
++        kprintf(c"settid: WARNING: do_syscall returns %d\n".as_ptr().cast(), ret);
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_clear_host_pte_logger.rs
+@@ -0,0 +1,16 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private same-name successor for the clear_host_pte diagnostic callback.
++
++use super::{kprintf, CLong};
++
++/// Existing `void (*)(long)` callback; body-level nonzero gating stays upstream.
++#[no_mangle]
++pub(super) extern "C" fn clear_host_pte_log_bridge(error: CLong) {
++    // SAFETY: the immutable NUL-terminated format contains one %ld. CLong is
++    // the existing signed i64 C long ABI on the selected 64-bit compute target;
++    // error is passed unchanged as that exact variadic type. No pointer payload,
++    // allocation, retained reference or mutable logger state crosses this call.
++    unsafe {
++        kprintf(c"clear_host_pte failed. %ld\n".as_ptr().cast(), error);
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_logger.rs
+@@ -0,0 +1,41 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private candidate: both the callback and its original descriptor are Rust-owned.
++
++use core::mem::{align_of, offset_of, size_of};
++use core::ptr::{addr_of, read_volatile};
++use crate::debug::Ddebug;
++use super::{kprintf, CInt};
++
++const _: () = {
++    assert!(size_of::<Ddebug>() == 32);
++    assert!(align_of::<Ddebug>() == 8);
++    assert!(offset_of!(Ddebug, line_flags) == 24);
++};
++
++// Exactly one original af46 registry row, using the existing private F06 Rust
++// static pattern. Keep original image-lifetime storage and flag-update/exclusion
++// contract: no new reference aliases, locks or atomicity guarantees are added.
++#[used]
++#[link_section = "__verbose"]
++static mut EXIT_GROUP_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"exit_group_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: 5678 | (0 << 24),
++};
++
++/// Existing void(int) callback, with the original nonzero dynamic-debug gate.
++#[no_mangle]
++pub(super) extern "C" fn exit_group_log_bridge(pid: CInt) {
++    // SAFETY: the private static has image lifetime and the existing Ddebug ABI.
++    // Read the same mutable high-byte flags once without retaining a reference
++    // over kprintf, under the unchanged debug-update/exclusion contract. Volatile
++    // retains the load; it supplies no new synchronization guarantee.
++    // The static NUL format has exactly one %d matched by unchanged CInt/i32.
++    unsafe {
++        let flags = read_volatile(addr_of!(EXIT_GROUP_DEBUG.line_flags)) >> 24;
++        if flags != 0 {
++            kprintf(c"sys_exit_group,pid=%d\n".as_ptr().cast(), pid);
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_clone_logger.rs
+@@ -0,0 +1,74 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private same-name callback and three Rust-owned original debug descriptors.
++use core::mem::{align_of, offset_of, size_of};
++use core::ptr::{addr_of, read_volatile};
++use crate::debug::Ddebug;
++use super::{kprintf, CInt, PTRACE_REPORT_CLONE_LOG_ENTER,
++    PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD, PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED};
++
++const _: () = {
++    assert!(size_of::<Ddebug>() == 32);
++    assert!(align_of::<Ddebug>() == 8);
++    assert!(offset_of!(Ddebug, line_flags) == 24);
++};
++
++// Private image-lifetime records reuse the existing Rust __verbose pattern.
++// Preserve original debug update/exclusion; volatile is not synchronization.
++#[used]
++#[link_section = "__verbose"]
++static mut CLONE_ENTER_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"ptrace_report_clone_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: 7279 | (0 << 24),
++};
++#[used]
++#[link_section = "__verbose"]
++static mut CLONE_KILL_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"ptrace_report_clone_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: 7283 | (0 << 24),
++};
++#[used]
++#[link_section = "__verbose"]
++static mut CLONE_FAILED_DEBUG: Ddebug = Ddebug {
++    file: b"/src/kernel/syscall.c\0".as_ptr().cast(),
++    func: b"ptrace_report_clone_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(), line_flags: 7288 | (0 << 24),
++};
++
++/// # Safety
++/// The pointer is one of these live aligned records; original flag-update
++/// exclusion remains. No reference is retained across the eventual kprintf.
++unsafe fn enabled(descriptor: *const Ddebug) -> bool {
++    unsafe { read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0 }
++}
++
++/// Existing void(int,int,int) callback; value/result were never format arguments.
++#[no_mangle]
++pub(super) extern "C" fn ptrace_report_clone_log_bridge(
++    event: CInt, _value: CInt, _result: CInt,
++) {
++    // SAFETY: only the matching image-lifetime descriptor is read; each format
++    // is static NUL-terminated with zero varargs. kprintf retains its existing
++    // CPU prefix; no extra CPU query/argument or body action is added.
++    unsafe {
++        match event {
++            PTRACE_REPORT_CLONE_LOG_ENTER => {
++                if enabled(addr_of!(CLONE_ENTER_DEBUG)) {
++                    kprintf(c"ptrace_report_clone,enter\n".as_ptr().cast());
++                }
++            }
++            PTRACE_REPORT_CLONE_LOG_KILL_SIGCHLD => {
++                if enabled(addr_of!(CLONE_KILL_DEBUG)) {
++                    kprintf(c"ptrace_report_clone,kill SIGCHLD\n".as_ptr().cast());
++                }
++            }
++            PTRACE_REPORT_CLONE_LOG_DO_KILL_FAILED => {
++                if enabled(addr_of!(CLONE_FAILED_DEBUG)) {
++                    kprintf(c"ptrace_report_clone,do_kill failed\n".as_ptr().cast());
++                }
++            }
++            _ => {}
++        }
++    }
++}
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -34,6 +34,8 @@
+ mod listeners;
+ mod llist;
+ mod lock_helpers;
++#[cfg(all(f03_ptrace_clone_noirq_candidate, target_arch = "x86_64"))]
++mod ptrace_clone_noirq;
+ mod mem_helpers;
+ mod mikc;
+ mod numparse;
+--- /dev/null
++++ b/kernel/rust/ptrace_clone_noirq.rs
+@@ -0,0 +1,27 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! The x86 noirq ptrace clone callbacks delegate to the existing Rust lock pair.
++use core::ffi::c_void;
++use crate::abi::CULong;
++use crate::lock_helpers::{self, McsRwlockLock};
++
++/// # Safety
++/// `lock_addr` is the live, aligned selected x86 MCS rwlock supplied by the
++/// caller, and `node` is its live caller-owned node. Interrupt state and the
++/// surrounding critical section are owned by the caller. The matching unlock
++/// must receive the same lock and node after the protected operations.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_report_clone_noirq_lock_bridge(
++    lock_addr: CULong, node: *mut c_void,
++) {
++    lock_helpers::__mcs_rwlock_writer_lock_noirq(lock_addr as *mut McsRwlockLock, node);
++}
++
++/// # Safety
++/// The lock must be held by the matching noirq writer acquisition using this
++/// same live node. This call does not restore or otherwise alter IRQ flags.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_report_clone_noirq_unlock_bridge(
++    lock_addr: CULong, node: *mut c_void,
++) {
++    lock_helpers::__mcs_rwlock_writer_unlock_noirq(lock_addr as *mut McsRwlockLock, node);
++}
+--- /dev/null
++++ b/kernel/rust/syscall_util_clone_disabled_logger.rs
+@@ -0,0 +1,19 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private source-only successor for the existing constant disabled-UTI logger.
++
++use super::kprintf;
++
++/// Existing no-argument void callback; one unchanged diagnostic per invocation.
++#[no_mangle]
++pub(super) extern "C" fn syscall_util_indicate_clone_disabled_bridge() {
++    // SAFETY: both pointers refer to immutable static NUL-terminated C strings.
++    // The format consumes exactly one %s; its sole variadic argument is the
++    // matching const-char pointer. Neither storage can expire during kprintf.
++    // The existing synchronous logger retains its CPU-prefix/output behavior.
++    unsafe {
++        kprintf(
++            c"%s: error: --enable-uti mcexec option not specified\n".as_ptr().cast(),
++            c"sys_util_indicate_clone".as_ptr().cast::<i8>(),
++        );
++    }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_current_pid.rs
+@@ -0,0 +1,27 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Existing raw current-process PID callback; private source-only successor.
++
++use super::{current_thread_ptr, CInt};
++use crate::abi::{Process, Thread};
++use core::mem::{offset_of, size_of};
++
++// Reuse the exact existing abi.rs/process_helpers.rs assertions, not a new layout.
++const _: () = {
++    assert!(size_of::<CInt>() == 4);
++    assert!(offset_of!(Thread, proc) == 4304);
++    assert!(offset_of!(Process, pid) == 456);
++};
++
++/// Same no-argument C int callback as the original raw C getter.
++///
++/// # Safety
++/// Existing syscall-entry invariant: the local current thread and its proc are
++/// live, non-null, correctly aligned and readable for this callback. Reuse the
++/// existing accessor and scheduler/preemption/lifetime context. This getter does
++/// not schedule, acquire ownership, add null handling, or extend either lifetime.
++#[no_mangle]
++pub(super) unsafe extern "C" fn exit_group_current_pid_bridge() -> CInt {
++    // SAFETY: the unchanged caller's raw current/proc invariant above is exactly
++    // the original C getter's precondition. No Rust reference is constructed.
++    unsafe { (*(*current_thread_ptr()).proc).pid }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_munmap_clear_host_forward.rs
+@@ -0,0 +1,31 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Existing do_munmap callback forwarding to the qualified Rust clear_host_pte.
++
++use crate::abi::{CInt, CLong, CULong, SizeT};
++use super::f03_clear_host_pte_entry_v1::clear_host_pte;
++
++type ClearHostFn = unsafe extern "C" fn(CULong, SizeT, CInt) -> CLong;
++const _: ClearHostFn = clear_host_pte;
++const _: ClearHostFn = do_munmap_clear_host_bridge;
++const _: () = {
++    assert!(core::mem::size_of::<CULong>() == 8);
++    assert!(core::mem::size_of::<SizeT>() == 8);
++    assert!(core::mem::size_of::<CInt>() == 4);
++    assert!(core::mem::size_of::<CLong>() == 8);
++};
++
++/// Retain the original scalar callback ABI and exact signed long return.
++///
++/// # Safety
++/// The caller retains all existing clear_host_pte current CPU/thread/VM lifetime,
++/// original memory-range-lock state and synchronous forwarding prerequisites.
++/// The qualified Rust provider owns the existing request/endpoint/flag/logging
++/// protocol; this callback adds no access, validation, lock, retry or cleanup.
++#[no_mangle]
++pub(super) unsafe extern "C" fn do_munmap_clear_host_bridge(
++    addr: CULong, len: SizeT, holding_lock: CInt,
++) -> CLong {
++    // SAFETY: Unchanged exact original provider and argument order. No casts,
++    // normalization or null/errno policy is introduced by this forwarding leaf.
++    unsafe { clear_host_pte(addr, len, holding_lock) }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_mprotect_host_vma.rs
+@@ -0,0 +1,53 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Full reachable set_host_vma prefix, then the existing qualified Rust body.
++
++use crate::abi::{CInt, CULong, SizeT, X86UserContext};
++use crate::x86_cpu_helpers::{
++    ihk_mc_syscall_set_arg0, ihk_mc_syscall_set_arg1, ihk_mc_syscall_set_arg2,
++};
++use super::{get_this_cpu_local_var, set_host_vma_body_result};
++use core::mem::{offset_of, size_of, MaybeUninit};
++
++type SetArgFn = unsafe extern "C" fn(*mut X86UserContext, CULong);
++type HostVmaFn = unsafe extern "C" fn(CULong, SizeT, CInt, CInt) -> CInt;
++const _: SetArgFn = ihk_mc_syscall_set_arg0;
++const _: SetArgFn = ihk_mc_syscall_set_arg1;
++const _: SetArgFn = ihk_mc_syscall_set_arg2;
++const _: HostVmaFn = set_host_vma_body_result;
++const _: HostVmaFn = mprotect_set_host_vma_bridge;
++const _: () = {
++    assert!(size_of::<X86UserContext>() == 224);
++    assert!(offset_of!(X86UserContext, gpr) == 56);
++    assert!(size_of::<CULong>() == 8 && size_of::<SizeT>() == 8);
++    assert!(size_of::<CInt>() == 4);
++};
++
++/// Preserve the original callback's complete reachable prefix and return.
++///
++/// # Safety
++/// The existing CPU-local pointer remains valid/readable for its current slot;
++/// the original body's current/thread/VM and borrowed lock/endpoint prerequisites
++/// are unchanged. The unused current-thread value may be null as before. No new
++/// lifetime, ownership, locking or null/errno policy is introduced here.
++#[no_mangle]
++pub(super) unsafe extern "C" fn mprotect_set_host_vma_bridge(
++    start: CULong, len: SizeT, prot: CInt, holding_lock: CInt,
++) -> CInt {
++    // Private scratch only. X86UserContext and its nested register structs contain
++    // only u64/u8 fields, so zero is valid. Initializing these otherwise unused
++    // local bytes prevents references to uninitialized fields in existing setters.
++    // The scratch pointer never escapes those setters; no context is read back.
++    let mut ctx = MaybeUninit::<X86UserContext>::zeroed();
++    // SAFETY: Exactly the original reachable current-slot read before setters.
++    let _thread = unsafe { (*get_this_cpu_local_var()).current };
++    // SAFETY: Naturally aligned, live, zero-initialized private224B scratch; each
++    // unchanged setter performs its original volatile register write in order.
++    // C size_t/unsigned long are64-bit here. C int prot converts to unsigned long
++    // modulo2^64; Rust's direct signed-i32→u64 cast has that exact defined value.
++    unsafe {
++        ihk_mc_syscall_set_arg0(ctx.as_mut_ptr(), start);
++        ihk_mc_syscall_set_arg1(ctx.as_mut_ptr(), len as CULong);
++        ihk_mc_syscall_set_arg2(ctx.as_mut_ptr(), prot as CULong);
++    }
++    set_host_vma_body_result(start, len, prot, holding_lock)
++}

@@ -1,0 +1,71 @@
+--- a/seal_root_conversion_inputs.py
++++ b/seal_root_conversion_inputs.py
+@@ -51,24 +51,59 @@
+  assert actual['outputs']==[rows[name]for name in names]
+  return dict(actual_origin_producer=receipt,actual_generated_header=rows[names[0]],actual_generated_metadata=rows[names[1]],actual_origin_binding=rows[names[2]],actual_Rust_environment=rows[names[3]],actual_CMake_origin=rows[names[4]])
+ 
++def validate_latest_frontier(q, historical_ledger):
++    """Authenticate a Root-owned acyclic latest frontier and independent review.
++
++    Actual chronology, full unknown outcomes, caller closure and free custody are
++    independently reviewed; this data predicate is not a live operation guard.
++    """
++    bundle=read(auth(q['current_bindings']))
++    assert bundle['schema']=='mckernel.root-current-frontier-bundle.v1' and bundle['author']=='/root' and bundle['decision']=='BIND_REVIEWED_CURRENT_FRONTIER' and bundle['runtime_authority'] is None
++    assert set(bundle)=={'schema','author','decision','ledger','boundary','independent_adoption_review','runtime_authority'}
++    assert bundle['ledger']==q['current_ledger']
++    current_ledger=read(auth(bundle['ledger']));boundary=read(auth(bundle['boundary']));review=read(auth(bundle['independent_adoption_review']));free=read(auth(q['current_free']))
++    assert bundle['ledger']!=ROOT68_LEDGER and bundle['boundary']!=ROOT68_BOUNDARY and q['current_free']!=ROOT68_FREE, 'old Root68 is history, not current'
++    assert boundary['schema']=='mckernel.root-current-frontier-boundary.v1' and boundary['author']=='/root' and boundary['decision']=='ADOPT_EXACT_CURRENT_FRONTIER' and boundary['runtime_authority'] is None
++    assert set(boundary)=={'schema','author','decision','nonce_ledger','native_custody_clearance','predecessor_boundary','actual_frontier_observation','actual_caller_closure','retained_actor_rows','distinct_actor_identities','root_attests_exact_current_boundary','root_attests_no_unlisted_post_boundary_execution_or_custody_operation','runtime_authority'}
++    assert boundary['nonce_ledger']==bundle['ledger'] and boundary['native_custody_clearance']==q['current_free'] and boundary['predecessor_boundary']==ROOT68_BOUNDARY
++    assert boundary['root_attests_exact_current_boundary'] is True and boundary['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
++    assert type(boundary['retained_actor_rows']) is int and boundary['retained_actor_rows']>=199 and type(boundary['distinct_actor_identities']) is int and 194<=boundary['distinct_actor_identities']<=boundary['retained_actor_rows']
++    assert boundary['actual_frontier_observation'] not in (q['current_bindings'],bundle['boundary'],bundle['independent_adoption_review']) and boundary['actual_caller_closure'] not in (q['current_bindings'],bundle['boundary'],bundle['independent_adoption_review'])
++    auth(boundary['actual_frontier_observation']);auth(boundary['actual_caller_closure'])
++    assert free['independent'] is True and free['implementation_ownership'] is False and free['current_free'] is True and free['runtime_authority'] is None
++    assert current_ledger['author']=='/root' and current_ledger['complete_within_declared_current_boundary'] is True and current_ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
++    assert current_ledger['current_physical_clearance_pending'] is False and current_ledger['latest_accepted_free_boundary']==q['current_free']
++    assert type(current_ledger['consumed_nonces']) is list and len(current_ledger['consumed_nonces'])>=73
++    assert current_ledger['consumed_nonces'][:73]==historical_ledger['consumed_nonces'] and len(set(current_ledger['consumed_nonces']))==len(current_ledger['consumed_nonces'])
++    assert all(isinstance(n,str) and re.fullmatch('[0-9a-f]{32}',n) for n in current_ledger['consumed_nonces'])
++    assert set(historical_ledger['reserved_abandoned_unconsumed_nonces'])<=set(current_ledger['reserved_abandoned_unconsumed_nonces'])
++    assert not set(current_ledger['consumed_nonces']) & set(current_ledger['reserved_abandoned_unconsumed_nonces'])
++    assert re.fullmatch('[0-9a-f]{32}',q['nonce']) and q['nonce'] not in current_ledger['consumed_nonces']+current_ledger['reserved_abandoned_unconsumed_nonces']+current_ledger['reserved_unused_nonces']
++    assert review['schema']=='mckernel.independent-current-frontier-review.v1' and review['decision']=='PASS_EXACT_CURRENT_FRONTIER_ADOPTION' and review['independent'] is True and review['implementation_ownership'] is False and review['runtime_authority'] is None
++    assert isinstance(review['reviewer'],str) and review['reviewer'].startswith('/root/') and review['reviewer'] not in ('/root','/root/f03_munmap_terra')
++    assert review['nonce_ledger']==bundle['ledger'] and review['current_boundary']==bundle['boundary'] and review['independent_current_free']==q['current_free'] and review['predecessor_boundary']==ROOT68_BOUNDARY
++    assert review['actual_frontier_observation']==boundary['actual_frontier_observation'] and review['actual_caller_closure']==boundary['actual_caller_closure']
++    checks=review['checks'];required={'full_73_nonce_history_preserved','all_unknown_outcomes_preserved','all_later_custody_accounted','current_frontier_and_caller_closure_exact','independent_free_and_no_pending_custody','root_boundary_current_and_acyclic'}
++    assert isinstance(checks,dict) and required<=set(checks) and all(checks[k] is True for k in required) and all(value is True for value in checks.values())
++    return current_ledger
++
+ def validate_root(q):
+  assert set(q)=={'author','decision','runtime_authority','request','nonce','current_free','current_ledger','current_bindings','runtime_guard','runtime_guard_source_review','origin_directory','origin_receipt','armed_controls','control_bundle','cutoffs','candidate_snapshot_manifest','reuse_descriptor'}
+  assert q['author']=='/root' and q['decision']=='BIND_CONVERSION_FIRST_PRODUCER_SOURCE_INPUTS_ONLY' and q['runtime_authority']is None
+  for key in ['request','current_free','current_ledger','current_bindings','runtime_guard','runtime_guard_source_review','origin_receipt','armed_controls','control_bundle','candidate_snapshot_manifest','reuse_descriptor']:auth(q[key])
+  assert q['armed_controls']['path']==str(NEWSC/'ACTUAL-CONTROLS-ARMED.json'),'real new control receipt, not historical4889'
+  free=read(auth(q['current_free']));ledger=read(auth(q['current_ledger']))
+- # Preserve the previously accepted full Root65 chain, then authenticate the
+- # separately independently reviewed Root68 successor boundary and full ledger.
++ # Root65 and Root68 remain authenticated historical proofs, not current.
+  oldq=read(auth(OLD_ROOT_INPUT)); oldfree=read(auth(oldq['current_free'])); oldledger=read(auth(oldq['current_ledger']))
+  accepted.accepted_metadata(oldq,oldfree,oldledger); accepted.accepted_chain(oldq)
+- assert q['current_free']==ROOT68_FREE and q['current_ledger']==ROOT68_LEDGER and q['current_bindings']==ROOT68_BOUNDARY
+- boundary=read(auth(q['current_bindings'])); review=read(auth(ROOT68_REVIEW))
+- assert boundary['nonce_ledger']==q['current_ledger'] and boundary['native_custody_clearance']==q['current_free'] and boundary['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
+- assert review['decision']=='PASS_EXACT_ROOT68_CURRENT119_CURRENT_BOUNDARY_ADOPTION' and review['independent'] is True and review['implementation_ownership'] is False
+- assert review['nonce_ledger']==q['current_ledger'] and review['current_boundary']==q['current_bindings'] and review['independent_current_free']==q['current_free']
+- assert all(review['checks'].values()) and len(ledger['consumed_nonces'])==73 and ledger['latest_accepted_free_boundary']==q['current_free'] and ledger['current_physical_clearance_pending'] is False
++ historical=read(auth(ROOT68_LEDGER));oldboundary=read(auth(ROOT68_BOUNDARY));oldreview=read(auth(ROOT68_REVIEW));auth(ROOT68_FREE)
++ assert oldboundary['nonce_ledger']==ROOT68_LEDGER and oldboundary['native_custody_clearance']==ROOT68_FREE and oldboundary['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
++ assert oldreview['decision']=='PASS_EXACT_ROOT68_CURRENT119_CURRENT_BOUNDARY_ADOPTION' and oldreview['independent'] is True and oldreview['implementation_ownership'] is False
++ assert oldreview['nonce_ledger']==ROOT68_LEDGER and oldreview['current_boundary']==ROOT68_BOUNDARY and oldreview['independent_current_free']==ROOT68_FREE
++ assert all(oldreview['checks'].values()) and len(historical['consumed_nonces'])==73 and historical['latest_accepted_free_boundary']==ROOT68_FREE and historical['current_physical_clearance_pending'] is False
++ ledger=validate_latest_frontier(q,historical)
+  assert re.fullmatch('[0-9a-f]{32}',q['nonce']) and q['nonce']!='e984210ca59641b299cf42d392eb953b'
+- assert q['nonce']not in ledger['consumed_nonces']+ledger['reserved_abandoned_unconsumed_nonces']
++ assert q['nonce']not in ledger['consumed_nonces']+ledger['reserved_abandoned_unconsumed_nonces']+ledger['reserved_unused_nonces']
+  assert q['runtime_guard']['sha256']!='a3b53520ab34929d6fab13caea6afaa1364ef4209b191ffbb63bfa93595ac208','consumed A3 guard cannot be replayed'
+  tree=ast.parse(auth(q['runtime_guard']).read_bytes());assert any(isinstance(n,ast.FunctionDef)and n.name=='guard'and not n.args.args for n in tree.body)
+  accepted.review_binds_guard(read(auth(q['runtime_guard_source_review'])),q['runtime_guard'])

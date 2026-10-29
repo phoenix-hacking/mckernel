@@ -1,5 +1,14 @@
 Current implementation priority: [M14/M15 completion and functional refinement](FOCUS-UNTIL-20261025-2300.md).
 
+Latest sequencing — 2026-10-29 UTC: finish the remaining supported M14 conversions
+in parallel and validate the coherent integrated result. CURRENT119 native
+acceptance does not gate independent source conversion or compatible batch
+integration. Keep cheap focused checks and compile feedback; avoid a full native
+cycle for each port. Retain all final acceptance, ownership/resource checks,
+genuine holds and evidence. See [current dispatcher priorities](DISPATCHER-VELOCITY-20261029.md).
+M14 remains exclusive until accepted, then M15; the weekly-only window supersedes
+the older time/credit paragraphs retained below.
+
 Current delivery target and included-first/explicit-credit handoff limits: [October26 eighteen-hour run](RUN-WINDOW-18H-20261026.md). Active resident billing controls remain authoritative.
 
 # Convergent execution policy

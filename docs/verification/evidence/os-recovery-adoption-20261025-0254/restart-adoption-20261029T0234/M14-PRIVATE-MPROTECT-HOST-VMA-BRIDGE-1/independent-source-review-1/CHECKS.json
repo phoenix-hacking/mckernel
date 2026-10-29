@@ -1,0 +1,237 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_FULL_REACHABLE_MPROTECT_PREFIX_UNSAFE_AND_ABI_CONTRACT",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/SOURCE-READY.json",
+    "bytes": 3362,
+    "sha256": "a2613fa0531d1d0baac487d8bba219dc7f1dd8d4045eef39fe75c573a512fb20"
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/postimage/kernel/rust/syscall_mprotect_host_vma.rs",
+    "bytes": 2745,
+    "sha256": "11a6131f8f8e826912602bf89fdd32bad7675d184f4e43c16b6375f54d17b881"
+  },
+  "source_headers": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 255992,
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    },
+    "arch/x86_64/kernel/include/ihk/context.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    "arch/x86_64/kernel/include/registers.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    }
+  },
+  "zero_valid_nested_shapes": {
+    "X86BasicRegs": [
+      [
+        "r15",
+        "CULong"
+      ],
+      [
+        "r14",
+        "CULong"
+      ],
+      [
+        "r13",
+        "CULong"
+      ],
+      [
+        "r12",
+        "CULong"
+      ],
+      [
+        "rbp",
+        "CULong"
+      ],
+      [
+        "rbx",
+        "CULong"
+      ],
+      [
+        "r11",
+        "CULong"
+      ],
+      [
+        "r10",
+        "CULong"
+      ],
+      [
+        "r9",
+        "CULong"
+      ],
+      [
+        "r8",
+        "CULong"
+      ],
+      [
+        "rax",
+        "CULong"
+      ],
+      [
+        "rcx",
+        "CULong"
+      ],
+      [
+        "rdx",
+        "CULong"
+      ],
+      [
+        "rsi",
+        "CULong"
+      ],
+      [
+        "rdi",
+        "CULong"
+      ],
+      [
+        "orig_rax",
+        "CULong"
+      ],
+      [
+        "rip",
+        "CULong"
+      ],
+      [
+        "cs",
+        "CULong"
+      ],
+      [
+        "rflags",
+        "CULong"
+      ],
+      [
+        "rsp",
+        "CULong"
+      ],
+      [
+        "ss",
+        "CULong"
+      ]
+    ],
+    "X86Sregs": [
+      [
+        "fs_base",
+        "CULong"
+      ],
+      [
+        "gs_base",
+        "CULong"
+      ],
+      [
+        "ds",
+        "CULong"
+      ],
+      [
+        "es",
+        "CULong"
+      ],
+      [
+        "fs",
+        "CULong"
+      ],
+      [
+        "gs",
+        "CULong"
+      ]
+    ],
+    "X86UserContext": [
+      [
+        "sr",
+        "X86Sregs"
+      ],
+      [
+        "is_gpr_valid",
+        "u8"
+      ],
+      [
+        "is_sr_valid",
+        "u8"
+      ],
+      [
+        "spare_flags6",
+        "u8"
+      ],
+      [
+        "spare_flags5",
+        "u8"
+      ],
+      [
+        "spare_flags4",
+        "u8"
+      ],
+      [
+        "spare_flags3",
+        "u8"
+      ],
+      [
+        "spare_flags2",
+        "u8"
+      ],
+      [
+        "spare_flags1",
+        "u8"
+      ],
+      [
+        "gpr",
+        "X86BasicRegs"
+      ]
+    ]
+  },
+  "call_order": [
+    "currentCPU_currentread",
+    "volatile_arg0_rdi",
+    "volatile_arg1_rsi",
+    "volatile_arg2_rdx",
+    "qualified_Rust_body"
+  ],
+  "scratch_size": 224,
+  "scratch_gpr_offset": 56,
+  "scratch_only_three_setter_pointer_uses": true,
+  "scratch_does_not_escape_or_reach_body": true,
+  "exact_int_to_unsigned64_conversion": [
+    {
+      "prot": -2147483648,
+      "expected_unsigned64": 18446744071562067968,
+      "wrong_unsigned32": 2147483648
+    },
+    {
+      "prot": -1,
+      "expected_unsigned64": 18446744073709551615,
+      "wrong_unsigned32": 4294967295
+    },
+    {
+      "prot": 0,
+      "expected_unsigned64": 0,
+      "wrong_unsigned32": 0
+    },
+    {
+      "prot": 1,
+      "expected_unsigned64": 1,
+      "wrong_unsigned32": 1
+    },
+    {
+      "prot": 2147483647,
+      "expected_unsigned64": 2147483647,
+      "wrong_unsigned32": 2147483647
+    }
+  ],
+  "negative_memory_only_mutations_rejected": 3,
+  "original_C_helper_and_other_users_unchanged": true,
+  "no_C_set_host_vma_dependency_added": true,
+  "full_original_Rust_policy_prefix": true,
+  "all53line_and53file_origins_unchanged": true,
+  "actual_compiler_ELF_HOST_native_guard_proc_stage_cleanup_billing_calls": 0,
+  "runtime_authority": null
+}

@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY",
+  "checks": [
+    "unchanged prefix/suffix and exact C fallback",
+    "C conditional logical source origin and downstream logical position, four configurations",
+    "two unchanged callback consumers",
+    "Rust C ABI and single unconditional tracked-free forwarding",
+    "paired cfg and CMake dependency",
+    "existing tracked allocator forwarding source"
+  ],
+  "origin": {
+    "dispatch=False,selected=False": {
+      "fallback_call": 4664,
+      "next_line": 4666
+    },
+    "dispatch=False,selected=True": {
+      "metadata": 4664,
+      "next_line": 4666
+    },
+    "dispatch=True,selected=False": {
+      "fallback_call": 4657,
+      "next_line": 4659
+    },
+    "dispatch=True,selected=True": {
+      "metadata": 4657,
+      "next_line": 4659
+    }
+  },
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/PTRACE-KFREE.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 3240,
+      "sha256": "737113c68985d4457a69fb76174e75ae69ba7a01f3bbd405bf99e675fdef94ee"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/postimage/kernel/syscall.c",
+      "bytes": 929757,
+      "sha256": "a4fcd7991f62cba2441fbbd6252b25cd2ebba1d359f2dacd7709df98145e1820"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1303588,
+      "sha256": "18eb5a3868a50600ee9ba178b26b209cf3bf186da3c3550dd19c225a88809fc1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/postimage/kernel/rust/syscall_ptrace_detach_kfree.rs",
+      "bytes": 1045,
+      "sha256": "7afacf724a1f60a39738bd1de561c47d1dea2ad036f96d1662a52396f897d042"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-PTRACE-KFREE-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 44256,
+      "sha256": "c9a8b8de5defff188e517a7666d75b1bbfca75fcc4fdc8daa0f159b1f54ea012"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "bytes": 444772,
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    }
+  ],
+  "limitations": "Source checks only; no compiler/preprocessor/link/native/behavior/retirement acceptance."
+}

@@ -1,0 +1,72 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5748,11 +5748,25 @@
+ void exit_group_log_bridge(int pid) { dkprintf("sys_exit_group,pid=%d\n", pid); }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern void exit_group_terminate_bridge(int status, int group);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5678
++#else
++#line 5687
++#endif
+ void
+ exit_group_terminate_bridge(int status, int group)
+ {
+ 	terminate(status, group);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5683
++#else
++#line 5692
++#endif
+ 
+ #if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
+ extern int exit_group_current_pid_bridge(void);
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -144,6 +144,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_terminate.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_current_pid.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_util_clone_disabled_logger.rs"
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36866,3 +36866,8 @@
+ #[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
+ #[path = "syscall_mprotect_host_vma.rs"]
+ mod syscall_mprotect_host_vma;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_exit_group_terminate.rs"]
++mod syscall_exit_group_terminate;
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_terminate.rs
+@@ -0,0 +1,20 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ffi::c_int;
++
++// Same existing C provider used by the scoped Rust exit helpers. This is a
++// declaration only; it does not replace or claim the terminate implementation.
++unsafe extern "C" {
++    fn terminate(status: c_int, group: c_int);
++}
++
++/// Forward the exit-group callback to its existing termination provider.
++///
++/// # Safety
++/// The caller must meet the same execution-context and lifetime requirements
++/// as the original C callback and the existing terminate provider.
++#[no_mangle]
++pub unsafe extern "C" fn exit_group_terminate_bridge(status: c_int, group: c_int) {
++    // SAFETY: The original callback forwards these exact C int arguments once
++    // to the existing void provider and does not assume it cannot return.
++    unsafe { terminate(status, group) };
++}

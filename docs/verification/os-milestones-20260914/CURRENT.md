@@ -1,3 +1,46 @@
+## Conversion-first combined source and compiler-feedback queue — 2026-10-29T23:21:26.363089+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User223334/223733 sequencingAPPLIED: implementremainingM14inparallel, integrate
+compatiblebatches, cheapchanged-unitcompilefeedback;119nativeisNOTaprerequisite.
+M15paused. All220012/222014/224015/230017/232019 reviewrequestsrecordedinfixed
+nonoverlappingbuckets; original30minbaseline retained. Newcompile/link/native/
+Cretirement/M14closure0. WholeM14still4/6,C47selected119; historicaltotalsunmeasured.
+
+Actual119source/image759fe/artifact3324/SDK21/arch30bd+8objects retained. Nativea3
+resourcecapture27241 joined0/6.506815s CPU5.685426 peak109728KiB;529721entryrefused
+expiredresourceBEFOREclaim/grant/helper/guest. Independent033c preserves0fdcas
+EXPIRED_NOT_EXECUTED; a876abandonedunconsumed12be; no kernel failure/nativepass.
+Root68historical199rows+stage2+resource1six=>207rows202ids withUNKNOWN preserved.
+Source4G6498/H4003/B09c2/source65fe/privateA4staticfc66/newnonceb122reserved
+unconsumed/conditionalautha92 ready; no liveguard/waiter/holder/container/tool.
+Finalharnesscorrectionc4ca/e72f readySOURCE only; nativeexecutiondeferredbehind
+conversion-firstpriority, no expiredreuse orscratchstage replay.
+
+Actualplannedupgradesbyuser220901: f03_munmap_terra andf03_kfree_terra spawned
+Terra/xhigh/forknone, eachobservedrunning; delivereddisjointaliases/forwarding/
+lock/constructor/Rustownedtrackedfree candidates. Currentf03_munmapownerproduced
+3commandproducer7f32976a/149files138Rust/reusenineobjects. f03_kfreeownslargeterminate
+reuse7c5f/terminate_mcexec184f; mmap_forkTerraownswidthcorrectedmmap/TIDsnapshotand
+wholeprivateexeca5d1. NativeintegrationTerrarebaseddo_syscalled31/util1f6c. Technical
+caller/lifetime/locking/ABI contractgaps remain; notgenericserviceclearance.
+HoldownertracedF06sources6c88: nocitedaccountreceipt; unknownnotcleared. Regset
+Rootdefineddiagnosticdf27/e611 implementedc9e8; XRSTOR/badframe reused357f; context/
+do_signalexistingcandidatesawaitpreciseownership/undefinedcontractdispositions.
+
+Singlecompositorcleanup_bindings ownsM14-CONVERSION-FIRST-COMPOSITION-1 caef1419/
+patch07a7646c/input40756e0e:20target/16exactleafrefs,20originalCnameswithcandidates,
+kfreeOFF.47symbolqueue9e3a2e76; nohistoricalpercentageorretirementinference.
+Focusedreviewrecovery_receipts NOW ownscombined/producerchanged-source review;
+Rootaloneactualsnapshot/canonical/sharedABI/build/nativeexecution. Next actual
+149filesnapshot/request/currentadmission→Rustcrate+genericC+rawlinkcompilerfeedback.
+Existingtechnicalholds/undefineddomains preserved; exactnr-arityconstructorRoot
+sourcecontractca85 allowsnamedinitialized6wireargs, notgeneralzeroFill/ACK/exec.
+Actualx86DMAalignmacroempty:64objectalignmentiscandidateoveralignment, notCparity.
+
+Allweeklyincluded-only/no paidfallback/originalUTC1793774133/monotonicBOOT caps,
+resource/floors/oneheavy/permanent27:4/acceptedproofs/dirtywork/creditledger retained.
+
 ## Native119 bindings sealed; publication and Resource2 release next — 2026-10-29T21:53:27.522453+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

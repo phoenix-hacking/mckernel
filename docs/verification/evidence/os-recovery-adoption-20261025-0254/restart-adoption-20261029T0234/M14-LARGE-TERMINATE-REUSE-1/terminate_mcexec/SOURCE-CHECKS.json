@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "UNSELECTED_SOURCE_ONLY_OWNERSHIP_AND_PROFILE_REVIEW_OPEN",
+  "checks": [
+    "exact existing C wrapper",
+    "existing Rust body and provider callback source ABIs",
+    "x86 IHK_DMA_ALIGN empty and __NR_exit_group 231",
+    "raw MaybeUninit storage and same current/proc, arguments, CPU, offsets, and providers",
+    "source inspection shows body initializes all six args and number before provider",
+    "C implementation remains unselected and untouched"
+  ],
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage/kernel/syscall.c",
+    "bytes": 928942,
+    "sha256": "dd34b8057a9ed19d3b86e204013747da40da86fd12a46bce98f53e15e596d048"
+  },
+  "provider": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/postimage/kernel/rust/syscall_policy.rs",
+    "bytes": 1303359,
+    "sha256": "03883e85fc3a071ca2b8ed7620b770c81360187e7c6181eef14bb370ea9357d1"
+  },
+  "fragment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-TERMINATE-REUSE-1/terminate_mcexec/terminate_mcexec.PRIVATE.rs.inc",
+    "bytes": 1944,
+    "sha256": "184f7ecb6c122d9983d778b3262a49c133257bc0d72f26f8e2bcf6a31fe5d594"
+  },
+  "limits": "No new C selector or production integration. Provider must establish all remaining request fields before any read/copy, preserve synchronous lifetime, exact qualified provider/flags, and be independently reviewed; no actual preprocessor/compiler/link/native/389 proof."
+}

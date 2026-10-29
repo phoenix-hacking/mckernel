@@ -1,0 +1,87 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_PAIRED_WRITER_SOURCE_ONLY",
+  "symbols": [
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_update_unlock_bridge"
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/WAKEUP-WRITER-PAIR.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 7009,
+    "sha256": "21d42afec1870491af6b49f8f726269389bf34fbd11125be2e6d91b24f2250a2"
+  },
+  "files": [
+    {
+      "path": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/preimage/kernel/syscall.c",
+        "bytes": 928517,
+        "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/postimage/kernel/syscall.c",
+        "bytes": 928805,
+        "sha256": "5d67dfa8cf19879493e96f653fbbacd6838c0f25e20726e9fc574cdf935a00f6"
+      }
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/preimage/kernel/rust/lib.rs",
+        "bytes": 3283,
+        "sha256": "ceb60c3de3b0217c7bd435e3d8cb1b7aba6123811082f1248060aec66a45ea41"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/postimage/kernel/rust/lib.rs",
+        "bytes": 3468,
+        "sha256": "da7532b9265b4acfd6f76116a16ad00a4e104944fc5ed7e67b46954be661083a"
+      }
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/preimage/kernel/CMakeLists.txt",
+        "bytes": 43464,
+        "sha256": "0fe73cfa95c24b2aa6f91062a802bffc222b0c0f1cc094740dbff7e2634d8516"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/postimage/kernel/CMakeLists.txt",
+        "bytes": 43640,
+        "sha256": "b2cfd3d9a6c04b0f6deb9557771862d4c2879e0723e11ded81259e14be4247c8"
+      }
+    },
+    {
+      "path": "kernel/rust/f03_wakeup_writer_pair.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-WAKEUP-WRITER-PAIR-1/postimage/kernel/rust/f03_wakeup_writer_pair.rs",
+        "bytes": 2109,
+        "sha256": "2aa6a13ed432a5edfb03bb8af6ff25b847eaddf9502a994147af6bfe08df9dc2"
+      }
+    }
+  ],
+  "c_header": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+    "bytes": 4603,
+    "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+  },
+  "rust_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+    "bytes": 12202,
+    "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+  },
+  "caller": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NINE-LEAF-BATCH-1/preimage/kernel/syscall.c",
+    "bytes": 928517,
+    "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+  },
+  "checks": [
+    "paired C fallback tokens unchanged; source line and #line origins unchanged",
+    "selected matched linux-6.12 x86_64 non-UBSAN C and Rust cfg, fallback elsewhere",
+    "callback C and Rust scalar/raw-pointer signatures identical with typed function assertions",
+    "existing IRQsave provider selected for both callbacks exactly once; never noirq",
+    "header spinlock representation and provider node/lock ABI assertions; caller retains same stack irqsave node",
+    "no caller, signal state, logger or existing clone-noirq body changed"
+  ],
+  "limits": "Source only; no compiler/link/concurrency/native execution, no C-retirement or authority claim."
+}

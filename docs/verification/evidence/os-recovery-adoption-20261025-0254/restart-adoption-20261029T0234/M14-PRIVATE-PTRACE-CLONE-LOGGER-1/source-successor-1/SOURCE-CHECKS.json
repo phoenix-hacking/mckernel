@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_THREE_EVENT_LOGGER_RUST_METADATA_SOURCE_CHECKS",
+  "runtime_authority": null,
+  "events": [
+    5,
+    6,
+    7
+  ],
+  "original_formats": [
+    "ptrace_report_clone,enter\n",
+    "ptrace_report_clone,kill SIGCHLD\n",
+    "ptrace_report_clone,do_kill failed\n"
+  ],
+  "extra_varargs": 0,
+  "value_result_ignored_for_every_event": true,
+  "CPU_prefix": "Existing kprintf prefix retained; no extra CPU query/argument",
+  "unknown_events": "No branch, descriptor read or log",
+  "three_private_Rust_owned_descriptors": true,
+  "selected_C": "extern callback only under original helper guard; original OFF fallback body untouched",
+  "physical_callback_replacement_lines": 16,
+  "restored_following_line": 7291,
+  "expected_descriptor_lines": [
+    7279,
+    7283,
+    7288
+  ],
+  "expected_initial_flags_and_padding": 0,
+  "exact_source_projection_count": 389,
+  "actual_linked_registry_and_padding_tested": false,
+  "original_callback_parent_body_and_order_bytes_unchanged": true,
+  "Rust_ABI_assertions": [
+    32,
+    8,
+    24
+  ],
+  "flags_vectors": [
+    0,
+    1,
+    2,
+    128,
+    255
+  ],
+  "existing_update_exclusion_contract_preserved": true,
+  "no_new_synchronization_claim": true,
+  "no_new_static_exports_or_API_aliases": true,
+  "reused_pattern_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EXIT-GROUP-LOGGER-1/rust-metadata-successor-1/SOURCE_READY.json",
+    "bytes": 2736,
+    "sha256": "edb45ed0cc3a0e1aa7ed87c952abfb4778cad88b46b920a1675e50ae96251e5c"
+  },
+  "one_anchor_correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/ANCHOR-FAILURE-AND-CORRECTION.json",
+    "bytes": 548,
+    "sha256": "0f4a6b5a7a34f59294484b199a3dde973f9c0c708e05ed1f271879a74d59c86f"
+  },
+  "patch_check": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOGGER-1/source-successor-1/PTRACE-CLONE-RUST-LOGGER.PRIVATE-NOT-APPLIED.patch"
+    ],
+    "returncode": 0
+  },
+  "canonical_otherpacket_or_oracle_writes": 0,
+  "compiler_HOST_native_calls": 0
+}

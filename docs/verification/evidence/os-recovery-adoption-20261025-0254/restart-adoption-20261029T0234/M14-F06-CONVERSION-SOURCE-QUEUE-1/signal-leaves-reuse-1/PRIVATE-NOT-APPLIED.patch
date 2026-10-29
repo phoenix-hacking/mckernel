@@ -1,0 +1,112 @@
+--- /dev/null
++++ b/kernel/rust/syscall_signal_leaf_adapters.rs
+@@ -0,0 +1,36 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Rebased existing private adapters. Instruction and destructive native proof OPEN.
++use core::ffi::c_void;
++use super::{kprintf, CInt, CLong, EFAULT};
++
++unsafe extern "C" {
++    #[link_name = "terminate"]
++    fn f06_signal_adapter_terminate(status: CInt, signal: CInt);
++}
++
++/// # Safety
++/// Exact original raw XRSTOR contract: aligned valid standard state, boot mask,
++/// intended CPU and exclusion; all code/callees obey the no-FP/SIMD profile.
++/// Fault behavior stays raw; never substitute native_xrstor_checked or HOST-run.
++#[no_mangle]
++pub unsafe extern "C" fn arch_rt_sigreturn_xrstor_bridge(state: *mut c_void) {
++    // SAFETY: complete existing Rust instruction body and actual boot-mask getter.
++    unsafe {
++        let mask = crate::x86_cpu_helpers::get_xsave_mask();
++        crate::x86_cpu_helpers::x86_restore_xstate(state.cast_const(), mask);
++    }
++}
++
++/// # Safety
++/// Original native disposition: logger is available and genuine terminate owns
++/// the current process lifetime. The original void call may return in a fixture.
++#[cfg(native_linux_irq_work_v6_12)]
++#[no_mangle]
++pub unsafe extern "C" fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong {
++    // SAFETY: exact diagnostic, then original void terminate and constant result.
++    unsafe {
++        kprintf(b"native signal return rejected: %ld\n\0".as_ptr().cast(), error);
++        f06_signal_adapter_terminate(0, 11); // SIGSEGV, actual header witness.
++    }
++    -(EFAULT as CLong)
++}
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -452,6 +452,10 @@
+ 
+ #endif
+ #line 394
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_XRSTOR_LEAF)
++extern void arch_rt_sigreturn_xrstor_bridge(void *fpregs);
++#else
++#line 394
+ void
+ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
+ {
+@@ -462,6 +466,8 @@
+ 
+ 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
+ }
++#endif
++#line 404
+ 
+ #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+ extern long native_xstate_buffer_size_result(int provided, int configured);
+@@ -507,12 +513,18 @@
+ }
+ #endif /* selected signal-return FP lifecycle is Rust-owned */
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_BAD_FRAME_LEAF)
++extern long arch_native_signal_bad_frame_bridge(long error);
++#else
++#line 449
+ long arch_native_signal_bad_frame_bridge(long error)
+ {
+ 	kprintf("native signal return rejected: %ld\n", error);
+ 	terminate(0, SIGSEGV);
+ 	return -EFAULT;
+ }
++#endif
++#line 455
+ #endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -1,4 +1,8 @@
+ use core::ffi::c_void;
++
++#[cfg(f06_signal_leaf_adapters_candidate)]
++#[path = "syscall_signal_leaf_adapters.rs"]
++mod syscall_signal_leaf_adapters;
+ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
+ use core::ptr::{
+     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_signal_leaf_adapters.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -354,7 +354,7 @@
+ /// effect prevents memory reordering across restore. FP/SIMD registers are not
+ /// Rust operands: the entire kernel build excludes their compiler-generated use.
+ #[inline(always)]
+-unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
++pub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
+     unsafe {
+         core::arch::asm!(
+             "xrstor [{state}]",

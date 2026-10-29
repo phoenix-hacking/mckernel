@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_CURRENT119_REBASED_BODY_PENDING_INDEPENDENT_CONTRACT_REVIEW",
+  "files": {
+    "CURRENT119-PRIVATE-REBASE.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/CURRENT119-PRIVATE-REBASE.patch",
+      "bytes": 12499,
+      "sha256": "ed313820d52cba3001b41bfcd4598e73105ff22e3e09a217cd30d3b968b7fe84"
+    },
+    "RUST-BODY.REUSED.rs.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/RUST-BODY.REUSED.rs.inc",
+      "bytes": 9594,
+      "sha256": "a0614f264e6f629f7536a1308242265ae8614a49c9aa1f3076f266cc9b254d8e"
+    },
+    "syscall.PRIVATE.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/syscall.PRIVATE.c",
+      "bytes": 930548,
+      "sha256": "45a649278de750af1d371c211e6afa3f54e36627275637ddd76b6ce8c3587ae0"
+    },
+    "syscall_policy.PRIVATE.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/syscall_policy.PRIVATE.rs",
+      "bytes": 1311436,
+      "sha256": "efcc9c02ae264c9aa0f84f2bc2c8bf40f2303be8b799d1d7225db22202e170b4"
+    },
+    "check_rebase.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/check_rebase.py",
+      "bytes": 2726,
+      "sha256": "3415223532d2d0be2ff11d3fabec52879bb845f9a16b470b876c1436788553e3"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/ROOT-NEXT.md",
+      "bytes": 3311,
+      "sha256": "80816724ecff6774844970fa45c46529bba0c6d470be25821d27d3abb4d837f0"
+    }
+  },
+  "base_C_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+  "base_policy_sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb",
+  "source_checks": "PASS real original C fallback/projection and logical line identity; standalone git apply --check; only actual Root args5 correction selected for util",
+  "compiler": null,
+  "runtime": null,
+  "default_link_or_native": null,
+  "actual_release": null
+}
