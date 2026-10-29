@@ -2,6 +2,40 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Recovery adoption and engineering cursor — 2026-10-29T02:40Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The ordinary serverOverloaded stop at02:25:24 did not roll back successful helper
+recovery: operator2256247/b103808273 directjoin0/9.519523s; original parent
+2232650 positively waited2232651/-9, streamsclosed, tool90401terminal247. Exact
+result5e634f80 and targetjoin08dec5df are adopted once; no recovery/signal replay.
+Independent acceptance702e9c7b preserves original client2232653 UNKNOWN and
+current_free=false. Normalized operatorjoin d96fa394 retains raw1380 unchanged;
+independent normalized source review743dc7f1 retains originald82a/17refs.
+Root custody90a0ccf3 and supplemented pending72ledger3932659c pass the EXISTING
+source2 pure validators:114 historical+14actual recovery actors=128, all12client
+receipts and all72consumed nonces preserved. No fixture count became actual proof.
+Evidence: evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+ACTUAL-CUSTODY-PURE-VALIDATION.json and INDEPENDENT-RECOVERY-REVIEW/.
+
+Stopped CURRENT118 CIDd980 still needs new compatibility normal retirement,
+cleanup-parentjoin and independent current-free; helper retirement is insufficient.
+All12 compatibilityrefs/publication824310b0/source reviewac9168ca at5ba7911f
+are authentic. Concrete new blocker: guardian4889 binds retired OLD19SC controls.
+External parent owns NEWSC guardian/monitor arming; its actual receipt remains
+unobserved. cleanup_bindings owns minimal currentguardian/cleanup binding successor;
+m14_integration owns matching postjoin-observer successor. No controller duplicate,
+heavy/native admission, container mutation, new compiler or app execution occurred.
+
+CURRENT119 originalsource a255/18paths and independent83e1 retained; exact four-
+command compiler/relink plan7166e805/profile deltad9aa1aaa ready, reusing eight
+objects/SDK21. Existing source checker0/2.106859s; actual F06BODY12 review67a8120d
+located, no duplicate port. Accepted116/42473e03 C71/Rust68, practical35/35,
+M14files4/6 and M15files1/8 unchanged; rejected118image7e5 remains rejected on
+20original389 registryidentities. First genuinelyready119/M15 uses soleheavy
+slot only after actualcontrols, fresh operation/account/identity and realclearance.
+Same original06:00Z, creditrun7f4af94a83b14cc08f97401f5891d965 and allowance.
+
 ## Current execution cursor — 2026-10-29T02:09Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
