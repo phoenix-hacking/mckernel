@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "REFUSE_SOURCE_ESCALATED_EXPERT_DESIGN",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/SOURCE_READY.json",
+    "bytes": 7553,
+    "sha256": "29660b13b4d5ab05345efa97a55cc830b6f5f2c19fa598d9e5fb8fed1c313341"
+  },
+  "executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/retire_exact_current118_stopped_container.py",
+    "bytes": 43397,
+    "sha256": "b09a8b895209218995f039d5aac2c42b4d28779c0b311b85184168566f4f7d18"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/BINDINGS.json",
+    "bytes": 26743,
+    "sha256": "3e906c746b1fb816ba069042b408ca8b175787c84b8c09bca8f5ab63f2569f45"
+  },
+  "runtime_files": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/RUNTIME-FILES.json",
+    "bytes": 3951,
+    "sha256": "6261e5550d4bfba2f3e898c7998e107355f7b363a485d5c10d9fff1b3ff80701"
+  },
+  "counterexample": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/independent-source-review-1/ABANDONED-PUBLISHER.COUNTEREXAMPLE.json",
+    "bytes": 2732,
+    "sha256": "777f81238a04c7521a6a4a1b607796e846c3260d8070e04e7497c047848e4d0d"
+  },
+  "reproducer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/independent-source-review-1/reproduce_abandoned_publisher.py",
+    "bytes": 2193,
+    "sha256": "fb92274215278ee4a63ff1a33cf0a727b4845a39c6359efb2c0f94ec4ce0819c"
+  },
+  "expert_design": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/independent-source-review-1/EXPERT-DESIGN.md",
+    "bytes": 5954,
+    "sha256": "125d29c7870755fa6f99970eb3d2c153800a801b04f8c25731fbc63312f9798c"
+  },
+  "finding": "Aborted whole snapshots discard already observed publisher/known-actor relationship facts. Immediate publisher refusal plus monotone stat/parent/group facts is required across all attempts; final acceptance remains two complete snapshots under unchanged validators.",
+  "source_execution_authority": null,
+  "actual_correction_executed": false,
+  "current_free": false,
+  "native_custody_released": false,
+  "original_client_status": "UNKNOWN"
+}

@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REPRODUCED_DISCARDED_OBSERVED_PUBLISHER",
+  "executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/retire_exact_current118_stopped_container.py",
+    "bytes": 43397,
+    "sha256": "b09a8b895209218995f039d5aac2c42b4d28779c0b311b85184168566f4f7d18"
+  },
+  "test_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/test_whole_snapshot_retry.py",
+    "bytes": 6095,
+    "sha256": "6d2654587e663db62b6237a5be8b9f83992494febba8cbfc046adb0ec2a3ca0d"
+  },
+  "first_attempt": [
+    1,
+    100,
+    "150 executable /usr/bin/rustc",
+    "200 /proc/stat ENOENT"
+  ],
+  "accepted_attempts": [
+    [
+      1,
+      100,
+      300
+    ],
+    [
+      1,
+      100,
+      300
+    ]
+  ],
+  "error": null,
+  "emitted_publishers": [],
+  "abandoned_events": [
+    {
+      "schema": "mckernel.proc.whole-snapshot-abandoned.v1",
+      "phase": "first",
+      "attempt": 1,
+      "maximum_attempts": 3,
+      "errno": 2,
+      "filename": "/proc/200/stat"
+    }
+  ],
+  "original_publisher_predicate": "def publisher(exe,argv):\n    name=os.path.basename(exe[:-10] if exe.endswith(' (deleted)') else exe)\n    if name in heavy or name.startswith('qemu-system-'): return True\n    if name in ('docker','podman') and any(a in ('build','run','start') for a in argv[1:]): return True\n    if any(path in argv for path in ['/TEST_ONLY/cohort/run_build_only.py', '/TEST_ONLY/cohort/hold_and_run_build_only.py', '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/retire_exact_current118_stopped_container.py']): return True\n    for arg in argv:\n        base=os.path.basename(arg)\n        if (base.startswith(('native_rust_exact_','native-exact-','native_exact_')) and\n            base.endswith(('.py','.sh')) and any(term in base for term in ('build','cleanup','recovery','prepare'))): return True\n    return False\n",
+  "conclusion": "The original publisher predicate identifies rustc150 before unrelated200 disappears, but whole-snapshot restart discards publishers150 and emits a clean report. This violates preservation of observed functional operation/custody facts.",
+  "real_proc_root_Popen_Docker_signal_calls": 0,
+  "runtime_authority": null
+}

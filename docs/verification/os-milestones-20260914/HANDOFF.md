@@ -2,6 +2,26 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Current M14-only transaction — 2026-10-29T05:07:43Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14exclusive; M15paused. ParentNEWSC controls armed, actualguardpassed. Successful
+oldhelper recovery and oldparentjoin adopted; neverreplay signals/recovery.
+Oldclient2232653 remainsUNKNOWN. StoppedCIDd980 remainsowned/pendingcleanup.
+FreshRoot3 dcef release executedonce: firstproc census ENOENT2304479; client
+2304484/executor2304475 andparent2304474 positivelyjoined/closed, noDocker/rm/
+mutation/quarantine. Rawfailure andindependent144953e6 preserved in03a1a5108,
+pushed/fetched. Pendingledger5dea bindsclosedfailedattempt;72noncesunchanged.
+Sourceb09 whole-snapshot retry correction isREJECTED: discardsalreadyobserved
+publisher onabandonedscan. It wasneverexecuted; no releaseorcurrentfreecredit.
+recovery_review owns expertprecisecorrectiondesign; cleanup_bindings owns private
+implementation onlyafterdesign; Rootowns freshreviewedcleanup→postjoincurrentfree/
+Root65→119producer. New119actualguardian binding26379/independent08db isready,
+exact4codefiles/parentdependencies in03a1a5108. NoSDK/sourceexport/buildreplay.
+CURRENT119 hasnotcompiled; accepted116/C71/Rust68/practical35/35/M14 4of6 stays.
+OriginalM14 finalownership/reproducibleimage/app/lifecycleacceptance remainsOPEN;
+M15 onlyafterrecordedoriginalclosure. Same06:00Z/credits/27:4/resources/caps.
+
 ## Current execution cursor — 2026-10-29T02:09Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

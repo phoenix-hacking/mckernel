@@ -1,0 +1,73 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/retire_exact_current118_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/monotone-census-negative-facts-source-1/retire_exact_current118_stopped_container.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='3e906c746b1fb816ba069042b408ca8b175787c84b8c09bca8f5ab63f2569f45'
++BINDINGS_SHA='feebbf1e0cecb7d6605d2e92f1288b969e5251419bb4d327c8b012d1221b97cd'
+ SELF=D/'retire_exact_current118_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+@@ -108,8 +108,11 @@
+  need((len(found)==1 and found[0]['ID']==b['cid'] and found[0]['Names']==b['name'] and found[0]['State']=='exited') if present else not found,'exact CURRENT118 presence/absence')
+  return rows
+ 
+-def process_source(normal,p):
++def process_source(normal,p,b,prior_command_pids):
+  code=normal.PROC_CODE
++ need(all(type(pid)is int and pid>0 for pid in prior_command_pids),'exact prior-command integer PIDs')
++ waiters=sorted({row['pid'] for row in b['prior_actors']+b['new_known_actors']}|set(prior_command_pids))
++ related=sorted(set(waiters)|{b['holder_pid']});forbidden=sorted(set(waiters)|{b['runner_pid']})
+  edits={"rows=[]; publishers=[]; found=False":"rows=[]; publishers=[]; groups=[]; found=False","rows.append([pid,ppid,str(start)])":"rows.append([pid,ppid,str(start)]); groups.append([pid,ppid,str(start),int(fields[2]),int(fields[3])])","return sorted(rows),publishers":"return sorted(rows),publishers,sorted(groups)","first,pubs1=snapshot(); second,pubs2=snapshot()":"first,pubs1,groups1=snapshot(); second,pubs2,groups2=snapshot()","'snapshots':[first,second]":"'snapshots':[first,second], 'groups':[groups1,groups2]"}
+  for old,new in edits.items():need(code.count(old)==1,'unchanged full census anchor');code=code.replace(old,new)
+  anchor='    for arg in argv:\n';need(code.count(anchor)==1,'exact publisher extension anchor')
+@@ -122,6 +125,12 @@
+  code=code.replace(anchor,"def snapshot(phase):\n    for attempt in range(1,4):\n        try:\n            return _snapshot_once()\n        except FileNotFoundError as error:\n            if (error.errno!=errno.ENOENT or not isinstance(error.filename,str) or\n                re.fullmatch(r'/proc/[1-9][0-9]*/(?:stat|cmdline|exe)',error.filename) is None or\n                error.filename2 is not None):\n                raise\n            print(json.dumps({'schema':'mckernel.proc.whole-snapshot-abandoned.v1',\n                              'phase':phase,'attempt':attempt,'maximum_attempts':3,\n                              'errno':error.errno,'filename':error.filename}),\n                  file=sys.stderr,flush=True)\n            if attempt==3:\n                raise\n\n"+anchor)
+  anchor='first,pubs1,groups1=snapshot(); second,pubs2,groups2=snapshot()';need(code.count(anchor)==1,'two required whole snapshots')
+  code=code.replace(anchor,"first,pubs1,groups1=snapshot('first'); second,pubs2,groups2=snapshot('second')")
++ negative="observed_parents={}\nobserved_parent_pairs=0\nrelated_seeds=RELATED_SEEDS\nforbidden_seeds=set(FORBIDDEN_SEEDS)\ndef record_negative_observation(pid,ppid,pgid,sid):\n    global observed_parent_pairs\n    if pid in forbidden_seeds or pgid in forbidden_seeds or sid in forbidden_seeds:\n        raise ValueError('observed-forbidden-pid-group-session')\n    parents=observed_parents.setdefault(pid,set())\n    if ppid not in parents:\n        observed_parent_pairs+=1\n        if observed_parent_pairs>4096*6:\n            raise ValueError('observed-parent-map-bound')\n        parents.add(ppid)\n    related=set(related_seeds)\n    while True:\n        expanded=related|{child for child,parents in observed_parents.items() if parents & related}\n        if expanded==related:\n            break\n        related=expanded\n    if related & set(observed_parents):\n        raise ValueError('observed-owner-waiter-or-descendant')\n".replace('RELATED_SEEDS',repr(related)).replace('FORBIDDEN_SEEDS',repr(forbidden))
++ anchor='def _snapshot_once():';need(code.count(anchor)==1,'strict snapshot body exists once');code=code.replace(anchor,negative+'\n'+anchor)
++ anchor="        with open('/proc/'+name+'/cmdline','rb') as f: command=f.read(65537)";need(code.count(anchor)==1,'record checked stat before racy command reads')
++ code=code.replace(anchor,"        if pid==caller[0] and str(start)!=caller[1]: raise ValueError('caller-raced')\n        record_negative_observation(pid,ppid,int(fields[2]),int(fields[3]))\n"+anchor)
++ anchor="        exe=os.readlink('/proc/'+name+'/exe') if argv else ''";need(code.count(anchor)==1,'exact executable predicate anchor')
++ code=code.replace(anchor,anchor+"\n        if pid!=caller[0] and argv and not (pid==caller_parent and os.path.basename(exe)=='sudo') and publisher(exe,argv): raise ValueError('observed-concurrent-publisher')")
+  return code
+ 
+ def validate_process(report,normal,b,challenge,caller,command_pids):
+@@ -147,12 +156,14 @@
+  receipts=[authenticated(r,True) for r in value['command_receipts']]
+  need(receipts and all(r['positive_wait4'] is True and r['wait4_pid']==r['pid'] and type(r['birth'])is int and r['birth']>0 and r['returncode']==0 and r['wait4_status']==0 and r['group_absent'] is True and not r['group_members'] and r['streams_closed'] is True and r['client_retirement_unproven'] is False and r['signals_sent']==0 for r in receipts),'all exact command birth/wait4/group/stream proofs')
+  actor=value['cleanup_actor'];need(type(actor['pid'])is int and actor['pid']>0 and type(actor['birth'])is int and actor['birth']>0,'exact cleanup actor PID/birth')
+- packet,protected,profile,claim,plan,terminal=validate_retained(b);normal=load(b['normal'],'pure_result_normal_predicates');code=process_source(normal,packet)
++ packet,protected,profile,claim,plan,terminal=validate_retained(b);normal=load(b['normal'],'pure_result_normal_predicates')
+  roles=['PROC',['ps','-a','--no-trunc','--format','{{json .}}'],['inspect','--type','container',b['cid']],['image','inspect',profile['inputs']['image']],['logs','--',b['cid']],'PROC',['ps','-a','--no-trunc','--format','{{json .}}'],['inspect','--type','container',b['cid']],['image','inspect',profile['inputs']['image']],['rm','--',b['cid']],['ps','--all','--quiet','--no-trunc','--filter','id='+b['cid']],['ps','--all','--quiet','--no-trunc','--filter','name=^/'+b['name']+'$'],'PROC',['ps','-a','--no-trunc','--format','{{json .}}']]
+  need(len(receipts)==len(roles),'complete exact executor command sequence')
+- for r,role in zip(receipts,roles):
++ for receipt_index,(r,role) in enumerate(zip(receipts,roles)):
+   argv=r['argv']
+-  if role=='PROC':need(len(argv)==10 and argv[:7]==['/usr/bin/sudo','-A','/usr/bin/python3','-I','-B','-c',code] and re.fullmatch('[0-9a-f]{32}',argv[7]) and argv[8:]==[str(actor['pid']),str(actor['birth'])],'exact full census caller/code argv')
++  if role=='PROC':
++   code=process_source(normal,packet,b,[prior['pid'] for prior in receipts[:receipt_index]])
++   need(len(argv)==10 and argv[:7]==['/usr/bin/sudo','-A','/usr/bin/python3','-I','-B','-c',code] and re.fullmatch('[0-9a-f]{32}',argv[7]) and argv[8:]==[str(actor['pid']),str(actor['birth'])],'exact full census caller/code argv')
+   else:need(argv==PREFIX+role,'exact ordered stopped-container command argv')
+  removes=[r for r in receipts if r['argv']==PREFIX+['rm','--',b['cid']]]
+  need(len(removes)==1,'exactly one rm command receipt')
+@@ -369,7 +380,7 @@
+   # Return directly to Popen: no application read/write/fsync follows this test.
+  def call(self,args,check=True,root_process=False):
+   if root_process:
+-   need(len(args)==5 and args[0]=='-c' and args[1]==process_source(self.normal,self.p) and re.fullmatch('[0-9a-f]{32}',args[2]) and args[3:]==[str(os.getpid()),self.m.proc_stat(os.getpid())[19]],'only exact existing full-process census command')
++   need(len(args)==5 and args[0]=='-c' and args[1]==process_source(self.normal,self.p,self.b,[child.pid for child in self.commands.children]) and re.fullmatch('[0-9a-f]{32}',args[2]) and args[3:]==[str(os.getpid()),self.m.proc_stat(os.getpid())[19]],'only exact existing full-process census command')
+   else:
+    allowed=[['ps','-a','--no-trunc','--format','{{json .}}'],['inspect','--type','container',self.b['cid']],['image','inspect',self.profile['inputs']['image']],['logs','--',self.b['cid']],['rm','--',self.b['cid']]]
+    allowed.extend([['ps','--all','--quiet','--no-trunc','--filter',q] for q in ('id='+self.b['cid'],'name=^/'+self.b['name']+'$')])
+@@ -382,7 +393,7 @@
+  def census(self,label,present):
+   safety=self.safe();challenge=uuid.uuid4().hex;caller=[os.getpid(),self.m.proc_stat(os.getpid())[19]]
+   prior_pids=[self.commands.children[i].pid for i in range(len(self.commands.children))]
+-  process=self.call(['-c',process_source(self.normal,self.p),challenge,str(caller[0]),caller[1]],root_process=True)
++  process=self.call(['-c',process_source(self.normal,self.p,self.b,prior_pids),challenge,str(caller[0]),caller[1]],root_process=True)
+   report=strict(process.stdout);validate_process(report,self.normal,self.b,challenge,caller,prior_pids)
+   inventory=self.call(['ps','-a','--no-trunc','--format','{{json .}}']);rows=validate_inventory(inventory.stdout,self.b,present)
+   inspected=None;image=None
