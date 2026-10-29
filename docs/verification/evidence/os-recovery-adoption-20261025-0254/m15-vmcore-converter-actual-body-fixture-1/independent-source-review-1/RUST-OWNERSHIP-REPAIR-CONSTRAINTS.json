@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTIONABLE_PRIVATE_RUST_REPAIR_CONSTRAINTS_SELECTED_BFD_LIFETIME_PENDING",
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/ldump2mcdump_helpers.ack-candidate.rs",
+    "bytes": 29466,
+    "sha256": "5205663e825abfb26d8eb0e01c225c1eb7cecd95051832b7234890dba5f3de78"
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/reference/ldump2mcdump_helpers.rs",
+    "bytes": 28439,
+    "sha256": "4e036420cd4f3e62694c33d235747d23dabc4ac54236fe46b9cdf0290c93a9f0"
+  },
+  "constraints": [
+    "Keep the ACK candidate5205663e, baseline4e036420, original contract, all failure logs and27case matrix immutable. Implement a separate private Rust ownership successor, with canonical integration owned by Root.",
+    "Use explicit owned Rust guards for nullable payload and mem_chunks, plus BFD handle and caller-supplied section-name storage. Register each successful allocation immediately, so every early return after second-pass metadata FALSE, payload allocation failure, BFD fopen/format/time/section failure or name allocation failure has a known owner. Do not add kernel C.",
+    "Preserve source data/ABI layouts, exact section names/sizes/flags/VMA/LMA, metadata FALSE return-before-use, bitmap cleanup, original physical-read error text and continued later physical observations. Retain suppression of ACK on all partial/error conversions and one successful close/cleanup before exact ACK then flush.",
+    "Name lifetime is borrowed by the fixture section pointer; no safe free immediately after make_section may be inferred. Keep all dynamically supplied names valid through the selected BFD last use, including close/error handling. A name allocated before make_section failure must also be owned. Never free static date/hostname/user/physchunks string literals.",
+    "Bind exact selected Rocky binutils2.41-63.el10 close/name source and applicable patches before choosing teardown. Do not assume bfd_close(FALSE) destroyed the handle, never blindly retry close on a possibly consumed handle, and do not substitute a fake close-success oracle. Separate helper is extracting selected source evidence; this review grants no lifetime semantic proof.",
+    "Preserve all original27 functional checks and add explicit zero-live-producer ownership assertions for the repair. Update only the expected ownership differences in baseline comparison, retaining original read/write/diagnostic/ACK behavior. Retain old20 failing ownership records; no pass by merely reclaiming memory in harness after observation.",
+    "Extend callback ownership oracle before relying on it for BFD/name lifetime: assert dynamic section-name allocations remain live during all uses and final BFD teardown; track handle live/closed state and all intended early-error teardown paths. Current static BFD token cannot prove actual BFD heap release.",
+    "Add only the newly repaired fault routes to the existing actual body fixture: BFD open/format/make-section/section-size/flags/time/localtime failures as applicable, plus accurate selected close-failure semantics. No production SDK/native whole-file claim follows from HOST callbacks. ACK sink fprintf/fflush error behavior, repeated-command lifecycle and actual valid dump remain outside this matrix."
+  ],
+  "selected_bfd_provenance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-bfd-source-1/actual-queue-source-2/current-cohort-owner-source-4/soleheavy-sdk-source-successor-1/fixture-runtime-rustc-successor-1/candidate/PINNED-ABI.json",
+    "bytes": 2216,
+    "sha256": "d8c9f701f1c4bda3f8ed70c1c7639bab2bc388eddce13e80bf2a34269fcb5102"
+  },
+  "selected_bfd_semantics_verified": false,
+  "runtime_authority": null
+}

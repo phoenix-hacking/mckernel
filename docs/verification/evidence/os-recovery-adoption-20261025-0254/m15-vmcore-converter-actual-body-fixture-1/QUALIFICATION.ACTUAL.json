@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_FULL_COMMAND_ACK_LAYOUT_MATRIX_PASS_WITH_SEPARATE_OWNERSHIP_FAILURES",
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/ldump2mcdump_helpers.ack-candidate.rs",
+    "bytes": 29466,
+    "sha256": "5205663e825abfb26d8eb0e01c225c1eb7cecd95051832b7234890dba5f3de78"
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/reference/ldump2mcdump_helpers.rs",
+    "bytes": 28439,
+    "sha256": "4e036420cd4f3e62694c33d235747d23dabc4ac54236fe46b9cdf0290c93a9f0"
+  },
+  "contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/converter-ack-contract.json",
+    "bytes": 2621,
+    "sha256": "971cccbdd9d351e24ca81a5aeeb35008c606421bb72eaeea61d671e54bacbde5"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/converter-ack.patch",
+    "bytes": 4486,
+    "sha256": "a3c14d0f3474c101a6c80505e5fb33df45950c4a7df72c8c23658afdfa32e7f5"
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/fixture.c",
+    "bytes": 12177,
+    "sha256": "618ec740c124adafe311be086afacfb74518a2f316de44e4fd76946ee540576b"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/run_fixture.py",
+    "bytes": 8013,
+    "sha256": "1be23e295f937b92136f4b49b0b38db8ea081ad064e8777bf48bcd5ba4cd326f"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/RESULT.json",
+    "bytes": 19982,
+    "sha256": "c960989857e411d8b03ed12e76df436ac715d269a239bf31bad7016613b874ae"
+  },
+  "ownership_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/OWNERSHIP-FAILURES.ACTUAL.json",
+    "bytes": 8599,
+    "sha256": "fa697a5719c7ceed6bb2a96b9d7a5f5b8f63c7d149a65be70c30c81484b5223b"
+  },
+  "candidate_cases": 27,
+  "matched_original_cases": 13,
+  "genuine_Rust_compiles": 2,
+  "C_links": 4,
+  "body_invocations": 41,
+  "first_failed_fixture_body_invocation_retained": true,
+  "total_direct_children": 47,
+  "all_direct_children_positive_wait4": true,
+  "first_command_failure_count": 1,
+  "first_failure_returncode": -6,
+  "all_subsequent_commands_returncode_zero": true,
+  "new_Rust_source_edits": 0,
+  "source_original_hashes_preserved": true,
+  "cumulative_command_wall_seconds": 1.11933450284414,
+  "cumulative_child_CPU_seconds": 0.9547240000000001,
+  "peak_command_maxrss_KiB": 98848,
+  "ordinary_HOST_profile": {
+    "CPU": [
+      0
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "wall_seconds": 90
+  },
+  "parent_envelopes": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/PARENT-START.json",
+      "bytes": 628,
+      "sha256": "88e87c26d215dbd301f771c41c177635e1496eb3cebbe4cf78a79e2fe325d529"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/PARENT-START.json",
+      "bytes": 628,
+      "sha256": "fb731e715bb2082027030b8dd9dd89f7bb76d73e0ccfb5a41fc3f258b543777b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/PARENT-FINISH.json",
+      "bytes": 212,
+      "sha256": "b95b55bf3f01d010ae2ee71a593ae9343176caba2112e51bed0e43a18a8324f5"
+    }
+  ],
+  "SDK_native_real_BFD_dump_execution": false,
+  "whole_file_or_lifecycle_acceptance": false,
+  "runtime_authority": null
+}

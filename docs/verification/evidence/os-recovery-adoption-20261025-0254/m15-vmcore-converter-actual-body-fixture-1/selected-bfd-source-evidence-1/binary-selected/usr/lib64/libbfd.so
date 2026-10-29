@@ -1,0 +1,9 @@
+/* GNU ld script */
+
+/* Ensure this .so library will not be used by a link for a different format
+   on a multi-architecture system.  */
+OUTPUT_FORMAT(elf64-x86-64)
+
+/* The libz & libsframe dependencies are unexpected by legacy build scripts.  */
+/* The libdl dependency is for plugin support.  (BZ 889134)  */
+INPUT ( /usr/lib64/libbfd.a /usr/lib64/libsframe.a -liberty -lz -ldl )

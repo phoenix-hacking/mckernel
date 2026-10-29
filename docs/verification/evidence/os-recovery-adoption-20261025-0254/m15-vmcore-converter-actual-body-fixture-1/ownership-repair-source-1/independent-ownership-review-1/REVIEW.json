@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SCOPED_OWNERSHIP_SOURCE_AND_HOST_WITH_SEPARATE_SELECTED_SDK_ABI_BLOCKER",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/READY.SOURCE-AND-HOST-ONLY.json",
+    "bytes": 4088,
+    "sha256": "e77cf59619ebc2123dae0d1ad85395cbdac5de4d83e32430d9ff19618d324058"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ldump2mcdump_helpers.ownership-candidate.rs",
+    "bytes": 32135,
+    "sha256": "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/OWNERSHIP-REPAIR.patch",
+    "bytes": 5781,
+    "sha256": "6f8c63650a8891778cac5cafbd15f7020a10af7a50cd74f71a4ee5241bd814e1"
+  },
+  "strict_fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/strict_fixture.c",
+    "bytes": 15940,
+    "sha256": "86b4028e3470b3bc20894622a4936328e33fe31f0dec3b15270523d14529d70e"
+  },
+  "strict_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/run_strict_fixture.py",
+    "bytes": 9060,
+    "sha256": "cb5dede92b486a844acbf7c6b17a6b022cbaf4d8a77b6ae8db58a802430bf8d1"
+  },
+  "strict_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/RESULT.json",
+    "bytes": 96432,
+    "sha256": "0cee4564693154fe0680f0e7136997fe35d30a11f6a3bd6c9dca67cb77f989a7"
+  },
+  "BFD_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/BFD-OWNERSHIP-AND-NEW-FFI-CONTRACT.json",
+    "bytes": 3871,
+    "sha256": "25798b65897270ede6d9809b27d3ee961653c7e09a0b4d667718aeb71e4e2de5"
+  },
+  "source_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/SOURCE-LIFETIME-FACTS.json",
+    "bytes": 15962,
+    "sha256": "3db997f0c067ce19992d9a0ff57e352abdcecea40ddacb66b406a7aa6381b54c"
+  },
+  "evidence_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/independent-ownership-review-1/EVIDENCE-CHECK.ACTUAL.json",
+    "bytes": 77373,
+    "sha256": "1a8b03c53fb1f33204cca6bc306c6bfe57d43dc3741f4c37c71d1f3cdf03d643"
+  },
+  "selected_SDK_ABI_blocker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/independent-ownership-review-1/SELECTED-BFD-ABI-BLOCKER-AND-CHECKLIST.json",
+    "bytes": 6328,
+    "sha256": "c779e8c163a6bfe89e491ce9aa4caaf19b02035ebd9f8d4ed4b1f6c6e34c3d3f"
+  },
+  "original_ownership_FAILURE": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/OWNERSHIP-FAILURES.ACTUAL.json",
+    "bytes": 8599,
+    "sha256": "fa697a5719c7ceed6bb2a96b9d7a5f5b8f63c7d149a65be70c30c81484b5223b"
+  },
+  "original_fixture_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/independent-source-review-1/REVIEW.json",
+    "bytes": 9006,
+    "sha256": "336a85681e14d9149206d03b621d714e788a304acd1480075a5db2b9072d0f2d"
+  },
+  "runtime_authority": null,
+  "ownership_source_and_HOST_pass": true,
+  "selected_SDK_ABI_pass": false,
+  "selected_actual_static_archive_bound": false,
+  "whole_file_native_SDK_acceptance": false,
+  "reviewer_new_compiles_or_body_invocations": 0,
+  "findings": [
+    {
+      "boundary": "Unsafe Rust ownership delta",
+      "result": "PASS_SCOPED_SOURCE",
+      "details": "Exact patch6f8 reconstructs private dc0 from frozen520. Each bitmap/chunks/payload allocation is immediately owned by a non-Copy guard; nullable guards free only nonnull pointers once, moving a guard disarms the old location by Rust move semantics. Explicit map_owner drop replaces prior free with no further map use. Private40B name nodes prepend a unique malloc-owned block; returned bytes start after the8B next link, and destructor saves next before freeing the original block base. No new dynamic size arithmetic or public data layout changes are introduced. Existing wrapping metadata arithmetic is unchanged and not newly qualified by this bounded ordinary-data matrix."
+    },
+    {
+      "boundary": "Handle/name drop order and terminal semantics",
+      "result": "PASS_SCOPED_SOURCE_AND_PACKAGE_CONTRACT",
+      "details": "chunks then payload then names then BFD declaration order guarantees reverse early-return BFD teardown before its borrowed storage. Every nonnull opened handle is immediately owned. finish consumes pointer before normal close and NULL owner prevents destructor retry, including FALSE. Early error reports its primary diagnostic before Drop invokes close_all_done once, also consuming first. Package opncls890-895 always calls close_all_done even on write failure;920-936 always deletes BFD including cleanupFALSE. Section source163/1199 borrows caller name. Explicit normal-path drops BFD/names/payload/chunks all precede exact PATH ACK/flush. No raw abfd callback use follows terminal teardown."
+    },
+    {
+      "boundary": "Strict oracle and actual full-body evidence",
+      "result": "PASS_SCOPED_HOST",
+      "details": "599 selected evidence assertions authenticate exact sources,59 genuine direct wait4joins/zero exits and56 actual registered full-command callbacks. Original27 ACK/read/write/diagnostic fields compare unchanged against retained observations;29 added early-fault cases exercise open/format/time/localtime,7each section make/size/flags,3physical lookups and abortFALSE. Every case asserts zero live producer allocations; every mock handle is separately allocated and destroyed once, with both FALSE terminal routes tested. Every BFD callback/terminal teardown validates borrowed names still live and correct; producer frees are forbidden while handle live. Test-process fallback reclamation was removed, so no leak is hidden after observation. Old20failure report and source hashes remain intact."
+    },
+    {
+      "boundary": "Selected implementation scope and real descriptor limit",
+      "result": "OPEN_RUNTIME_PREREQUISITE",
+      "details": "Official exactNEVRA headerde900 and linker script6cfd match; no opncls/section package patch changes. Package source justifies handle consumption evenFALSE, but actualSDK libbfd.a identity is UNBOUND. Source cleanupFALSE can skip iovec bclose while still destroying BFD; mock owned-handle destruction does not prove real OS descriptor/file release. No repeat call on destroyed handle is safe. Full realBFD/SDK/native lifecycle remains open."
+    },
+    {
+      "boundary": "Concrete inherited SDK ABI failure",
+      "result": "FAIL_SELECTED_SDK_ABI_UNCHANGED_DEBT",
+      "details": "Ownership delta does not repair old BFD declarations. Exact selected header uses two-argument bool section_size/flags; Rust and strictfixture still use three-argument c_int variants. Existing section prefix differs in field order and missing section_id. Selected bool return types for set_format/contents/close remain c_int; bfd_init actual unsigned result is ignored via void declaration. The NEW close_all_done bool binding is correct. StrictHOST therefore verifies ownership under old callback ABI only. Focused checklist binds every visible BFD import and requires one coherent exact-header-driven ABI successor; no dc0 selectedSDK integration approval is granted."
+    }
+  ],
+  "ownership_repair_blockers": [],
+  "SDK_integration_blockers": [
+    "Concrete inherited selected-header BFD API/section-layout mismatch; exact checklist attached.",
+    "Actual selected SDK static archive identity unbound; real descriptor/native qualification pending."
+  ]
+}

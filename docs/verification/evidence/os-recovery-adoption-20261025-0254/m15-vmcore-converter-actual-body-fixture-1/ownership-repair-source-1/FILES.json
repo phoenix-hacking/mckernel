@@ -1,0 +1,985 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "files": {
+    "BFD-OWNERSHIP-AND-NEW-FFI-CONTRACT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/BFD-OWNERSHIP-AND-NEW-FFI-CONTRACT.json",
+      "bytes": 3871,
+      "sha256": "25798b65897270ede6d9809b27d3ee961653c7e09a0b4d667718aeb71e4e2de5"
+    },
+    "EXACT-REPAIR-SCOPE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/EXACT-REPAIR-SCOPE.json",
+      "bytes": 1791,
+      "sha256": "77eb343f16f93fe44c69a5adfd8ab263d40057116f2a5ecfb396b13900289a63"
+    },
+    "OWNERS.inc.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/OWNERS.inc.rs",
+      "bytes": 2243,
+      "sha256": "d079872e193263baf3e6c85e73f4d95f5eb64083684cf726aeb575d07a9ff5c9"
+    },
+    "OWNERSHIP-REPAIR.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/OWNERSHIP-REPAIR.patch",
+      "bytes": 5781,
+      "sha256": "6f8c63650a8891778cac5cafbd15f7020a10af7a50cd74f71a4ee5241bd814e1"
+    },
+    "PREPARATION-ASSERTION-CORRECTION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/PREPARATION-ASSERTION-CORRECTION.json",
+      "bytes": 250,
+      "sha256": "1ccdb75b541a7b33b98ce1486a78b062f14adbab00bb52d1e55fa52c4c42110b"
+    },
+    "READY.SOURCE-AND-HOST-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/READY.SOURCE-AND-HOST-ONLY.json",
+      "bytes": 4088,
+      "sha256": "e77cf59619ebc2123dae0d1ad85395cbdac5de4d83e32430d9ff19618d324058"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ROOT-NEXT.md",
+      "bytes": 4254,
+      "sha256": "16a2075564de90f2138359728b0185345b5308daa9728e3ce223bb37441cd5a4"
+    },
+    "actual-strict-run-1/COMMANDS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/COMMANDS.json",
+      "bytes": 109000,
+      "sha256": "cb9af16746e7a91555733e9d23224c9891385e918da09999d36b76536cfb3646"
+    },
+    "actual-strict-run-1/INPUTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/INPUTS.json",
+      "bytes": 2945,
+      "sha256": "a33a02f62f8221f8ee02be0cdba86b87c5ebe3bc41cbc86a6332a4e5f723e260"
+    },
+    "actual-strict-run-1/PARENT-FINISH.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/PARENT-FINISH.json",
+      "bytes": 249,
+      "sha256": "7fa32190dbeb6d23c0e1e207c1de5a4c301e4c54059a5e45590ffaafcd5e8517"
+    },
+    "actual-strict-run-1/PARENT-START.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/PARENT-START.json",
+      "bytes": 535,
+      "sha256": "1e389f5364481bcad224e47857bd75a1fe73b1cdce88528ceed271072ef2ea0d"
+    },
+    "actual-strict-run-1/RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/RESULT.json",
+      "bytes": 96432,
+      "sha256": "0cee4564693154fe0680f0e7136997fe35d30a11f6a3bd6c9dca67cb77f989a7"
+    },
+    "actual-strict-run-1/candidate-compile/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/candidate-compile/JOIN-WAIT4.json",
+      "bytes": 2293,
+      "sha256": "0e732056cb377d3cdfc37c2d845d03f5fa3a99e40a773532d287588815c1fbd3"
+    },
+    "actual-strict-run-1/candidate-compile/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/candidate-compile/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/candidate-compile/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/candidate-compile/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/ownership-candidate.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/ownership-candidate.o",
+      "bytes": 19976,
+      "sha256": "e1fb12275e07aaa7abb1b787d31334bae233a355af975173226639b507407778"
+    },
+    "actual-strict-run-1/strict-abort-false-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-abort-false-1/JOIN-WAIT4.json",
+      "bytes": 1743,
+      "sha256": "d4da59181e8ec369843230b9c489c311cc7405fa0228cd00695bb4627ef7522f"
+    },
+    "actual-strict-run-1/strict-abort-false-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-abort-false-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-abort-false-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-abort-false-1/stdout",
+      "bytes": 547,
+      "sha256": "994ae458e8181412cfe8e72d140748ec4c851707bb18706fc8168e9bcdd7a305"
+    },
+    "actual-strict-run-1/strict-allocation-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-1/JOIN-WAIT4.json",
+      "bytes": 1741,
+      "sha256": "e2ca40ff471e08c535eeb06c30b9fc6ee0ad009119d6dce2189b6e86aac0ecd4"
+    },
+    "actual-strict-run-1/strict-allocation-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-1/stdout",
+      "bytes": 543,
+      "sha256": "2c3beb72c4cb73a6af6098f947835d77cf1bf84e3fbda9b51c7d74f75681e2ac"
+    },
+    "actual-strict-run-1/strict-allocation-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-2/JOIN-WAIT4.json",
+      "bytes": 1740,
+      "sha256": "cd58e40b7277620a8692627088c1c98a40facb17eb2f9a58b26f304a04341deb"
+    },
+    "actual-strict-run-1/strict-allocation-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-2/stdout",
+      "bytes": 543,
+      "sha256": "6476b84e78f43f654e78d9476e3acc35aae5b04f979b66b96c49b1253ff5ef33"
+    },
+    "actual-strict-run-1/strict-allocation-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-3/JOIN-WAIT4.json",
+      "bytes": 1751,
+      "sha256": "7aaaed4268a670da8ee505cd3002843f6b2e4edff74be8fa55a50a02afeace05"
+    },
+    "actual-strict-run-1/strict-allocation-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-3/stdout",
+      "bytes": 544,
+      "sha256": "ceb74c71907433c056910296f745d8fcbaff9a7c4f2454242cbcc951542aa6c4"
+    },
+    "actual-strict-run-1/strict-allocation-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-4/JOIN-WAIT4.json",
+      "bytes": 1741,
+      "sha256": "831c6edf590318f82e0db993e37a9636adf049a335686b11a68cdb3edd5f5433"
+    },
+    "actual-strict-run-1/strict-allocation-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-4/stdout",
+      "bytes": 544,
+      "sha256": "b27789ea7f2f1eb43fba08db30c903bbce74975002ec276cd5f63fb355a86ded"
+    },
+    "actual-strict-run-1/strict-allocation-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-5/JOIN-WAIT4.json",
+      "bytes": 1740,
+      "sha256": "94f7fecf8f08bc7755bdef765ce69bf3318325a2e8facfce628ddef99b5e0418"
+    },
+    "actual-strict-run-1/strict-allocation-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-5/stdout",
+      "bytes": 546,
+      "sha256": "36ccdfe8006ba140cada1d5edd463db48240457bef6bc51fa8e8dbd090752f20"
+    },
+    "actual-strict-run-1/strict-allocation-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-6/JOIN-WAIT4.json",
+      "bytes": 1739,
+      "sha256": "e3d25e555f940df4b50125a1925b638bd6d05d702c649cdbfd3a2164acf64b99"
+    },
+    "actual-strict-run-1/strict-allocation-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-6/stdout",
+      "bytes": 546,
+      "sha256": "ad9b6a90fb2261b590b68cbb23174b0162207977a39b354159668fec4067c67f"
+    },
+    "actual-strict-run-1/strict-allocation-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-7/JOIN-WAIT4.json",
+      "bytes": 1741,
+      "sha256": "dafdca4f4a3a7e7d21bc9defd35960adb87ab5c64647a849c17280c1a784373b"
+    },
+    "actual-strict-run-1/strict-allocation-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-allocation-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-allocation-7/stdout",
+      "bytes": 547,
+      "sha256": "077574c36a5e121b00ff355f894757c93e0dee10849f458b5f40d6f071f64c08"
+    },
+    "actual-strict-run-1/strict-close-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-close-1/JOIN-WAIT4.json",
+      "bytes": 1738,
+      "sha256": "77854c30b9ca3a8883cfebf25dd98eccf2af4b55b098dc7e1aedb5ee39e7be18"
+    },
+    "actual-strict-run-1/strict-close-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-close-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-close-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-close-1/stdout",
+      "bytes": 544,
+      "sha256": "44980c9e25fde8be0ae4fee21cf4c2d82795761ba3838f376b9051f537cb9998"
+    },
+    "actual-strict-run-1/strict-fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-fixture",
+      "bytes": 43560,
+      "sha256": "d02e89d0ade3c8def484dc3f299bbc333af5bef993b4842ba8d5000962e29c54"
+    },
+    "actual-strict-run-1/strict-flags-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-1/JOIN-WAIT4.json",
+      "bytes": 1726,
+      "sha256": "60e693201b3b130964907da2560a3a604019c7b258a0dfba50bf45fedc3bd502"
+    },
+    "actual-strict-run-1/strict-flags-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-1/stdout",
+      "bytes": 541,
+      "sha256": "8fa638928f67a656b8d0936be7045eed2f89ab0dfc43f3b91428ce77119b8f41"
+    },
+    "actual-strict-run-1/strict-flags-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-2/JOIN-WAIT4.json",
+      "bytes": 1723,
+      "sha256": "b77d2a1b6beb74ff4d1a10650bb3aa391f44c5b576f1d61af3c0b44948b77593"
+    },
+    "actual-strict-run-1/strict-flags-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-2/stdout",
+      "bytes": 541,
+      "sha256": "e324bb370031250673d35f36bfaf2dd23baba195db392d0b4cb914ee804a839e"
+    },
+    "actual-strict-run-1/strict-flags-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-3/JOIN-WAIT4.json",
+      "bytes": 1726,
+      "sha256": "26113a0b1b13bbd17d2313ee589274638da2c53d321be174820eef13d270d40a"
+    },
+    "actual-strict-run-1/strict-flags-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-3/stdout",
+      "bytes": 541,
+      "sha256": "0266ca0fd606ef68175447d239cdbbc59fad11a881de79dda5b6288a8740ab23"
+    },
+    "actual-strict-run-1/strict-flags-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-4/JOIN-WAIT4.json",
+      "bytes": 1726,
+      "sha256": "561a1ab39f1bc542ba07c659fcc9b4b4b940285e2b0269b520699417785e4590"
+    },
+    "actual-strict-run-1/strict-flags-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-4/stdout",
+      "bytes": 541,
+      "sha256": "76682b8b8beeea11a2e87b948ec32f21d60ab091dde0cbb02ac20d4fd905d973"
+    },
+    "actual-strict-run-1/strict-flags-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-5/JOIN-WAIT4.json",
+      "bytes": 1737,
+      "sha256": "2d3e0b5656c962d8a3b81c6ec6ae56255bbaa790fc684bc77211310a3ddb69fa"
+    },
+    "actual-strict-run-1/strict-flags-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-5/stdout",
+      "bytes": 541,
+      "sha256": "d2f24f72ba5d67c4614f13bbc2a0a17f6f8eb0247813acbf953c0c9debb7d517"
+    },
+    "actual-strict-run-1/strict-flags-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-6/JOIN-WAIT4.json",
+      "bytes": 1738,
+      "sha256": "ff349212a3550a0c86386d5b2b0af6279395ce4ec761fe057f3bced34f4b42be"
+    },
+    "actual-strict-run-1/strict-flags-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-6/stdout",
+      "bytes": 542,
+      "sha256": "2593d529fe66d086b33e4d5fb86e8d06e3c5d2ea0621bfd4f270303ab3dd0813"
+    },
+    "actual-strict-run-1/strict-flags-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-7/JOIN-WAIT4.json",
+      "bytes": 1725,
+      "sha256": "d005b4d65b72a5946828c5bdb68e08ea13dd4e95d4e18cdbb2648638a16fabd6"
+    },
+    "actual-strict-run-1/strict-flags-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-flags-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-flags-7/stdout",
+      "bytes": 542,
+      "sha256": "2bb3566ef590993e328161629d079af738533d6fc9a6373b0613b84772549896"
+    },
+    "actual-strict-run-1/strict-format-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-format-1/JOIN-WAIT4.json",
+      "bytes": 1729,
+      "sha256": "cbbbca085f076d45a5ce28efd345fc1f6243a67dec460939969394a3b325b268"
+    },
+    "actual-strict-run-1/strict-format-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-format-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-format-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-format-1/stdout",
+      "bytes": 542,
+      "sha256": "fef11d4eab11a624c80bd25e924005a2f7869076eef320575b3020bdfffbab74"
+    },
+    "actual-strict-run-1/strict-get-phys-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-1/JOIN-WAIT4.json",
+      "bytes": 1733,
+      "sha256": "2066dfc754b8625ba008eeb821cecc526f3e1a2a31112da79718683b162fa295"
+    },
+    "actual-strict-run-1/strict-get-phys-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-get-phys-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-1/stdout",
+      "bytes": 545,
+      "sha256": "3d3b59e4909074f61682f5fb40a4e4e92168cdb203c44895ae21e48582af4040"
+    },
+    "actual-strict-run-1/strict-get-phys-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-2/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "04dc4f49f6341ddf5e5cfca05b3c5bffbe22fbec613a1d5c23b609a4f8885116"
+    },
+    "actual-strict-run-1/strict-get-phys-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-get-phys-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-2/stdout",
+      "bytes": 545,
+      "sha256": "004f5f7c3d6030c2eeeb9c82c19c523486968e09f2a27a05faf7d54b949a8f70"
+    },
+    "actual-strict-run-1/strict-get-phys-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-3/JOIN-WAIT4.json",
+      "bytes": 1732,
+      "sha256": "0a6f26b4346cd9ef5f74a20ec467a4cd245d92a35755766eab8de311caf0431c"
+    },
+    "actual-strict-run-1/strict-get-phys-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-get-phys-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-get-phys-3/stdout",
+      "bytes": 545,
+      "sha256": "25e37a3297fa6b5f0a0baaf179f5f7f82fdd13b48f2dfd79e84279e7d9df3aeb"
+    },
+    "actual-strict-run-1/strict-link/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-link/JOIN-WAIT4.json",
+      "bytes": 2556,
+      "sha256": "7d5184f9b1c52716bfd8d4d0d3e497fa27c8882ace646b3b957dfa4649021dbc"
+    },
+    "actual-strict-run-1/strict-link/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-link/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-link/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-link/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-localtime-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-localtime-1/JOIN-WAIT4.json",
+      "bytes": 1749,
+      "sha256": "2017faa76a7157c61df710306f2a8462a35dfd7139ad8d78c68f0153a98ab77e"
+    },
+    "actual-strict-run-1/strict-localtime-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-localtime-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-localtime-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-localtime-1/stdout",
+      "bytes": 545,
+      "sha256": "598c019ed814cbec83201d9377adcf88f362e7bfc7cb5e108251210106841e90"
+    },
+    "actual-strict-run-1/strict-make-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-1/JOIN-WAIT4.json",
+      "bytes": 1735,
+      "sha256": "1e2d90e54a6ab529e3bbe837ce70261adb4e79354c6aae465136d8aa7fffc297"
+    },
+    "actual-strict-run-1/strict-make-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-1/stdout",
+      "bytes": 540,
+      "sha256": "9964d798de8eb4eae9ab242a429a3183b1eb3bda0b28006c436b23579c3a9d77"
+    },
+    "actual-strict-run-1/strict-make-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-2/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "ca7c3a1f36d25feed9bb7b895c8bd32d0c5733db11c781f8aa8e3293bc5dca55"
+    },
+    "actual-strict-run-1/strict-make-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-2/stdout",
+      "bytes": 540,
+      "sha256": "08456e1c0bd123a23856cdad206181dbf0015e2ff7b649302d24e4c7e700b07f"
+    },
+    "actual-strict-run-1/strict-make-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-3/JOIN-WAIT4.json",
+      "bytes": 1722,
+      "sha256": "9b288bbbccf03a03b5539f5af4102be34e4a4c61609a6d504f3b2126c63d331c"
+    },
+    "actual-strict-run-1/strict-make-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-3/stdout",
+      "bytes": 540,
+      "sha256": "10e43fba4575f525993cbcefbd92dbe295014fbf5c1cf5aa4ea631cf39859045"
+    },
+    "actual-strict-run-1/strict-make-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-4/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "71828ac0d7883d2bdec2aad16e3096ebb7398709b416e33a2d0d4dd424cecda8"
+    },
+    "actual-strict-run-1/strict-make-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-4/stdout",
+      "bytes": 540,
+      "sha256": "04731e62a5a49d88bed5337cd5450d06252233dab72d2c51a87e35395b397310"
+    },
+    "actual-strict-run-1/strict-make-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-5/JOIN-WAIT4.json",
+      "bytes": 1722,
+      "sha256": "3ff46e18944f1b087a4fdfb2fe625221f9e1a82908d68af61b9353591859a4cc"
+    },
+    "actual-strict-run-1/strict-make-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-5/stdout",
+      "bytes": 540,
+      "sha256": "65e6e479bed75da0e43e44fac443fd0fadb7bb0ee4cc131a2671d95dc2a4db18"
+    },
+    "actual-strict-run-1/strict-make-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-6/JOIN-WAIT4.json",
+      "bytes": 1735,
+      "sha256": "9bab695aa9f1439013228b831403aa9cc9fa9aec9340b2803edc075438067792"
+    },
+    "actual-strict-run-1/strict-make-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-6/stdout",
+      "bytes": 540,
+      "sha256": "e5027af34d407fcbee5c959f17e6d2aee067057fd714dcea025c655b0797b245"
+    },
+    "actual-strict-run-1/strict-make-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-7/JOIN-WAIT4.json",
+      "bytes": 1736,
+      "sha256": "97919e792052a1d77056fa13a2ceca4064d527039150d4f787eb0e082bf7eb04"
+    },
+    "actual-strict-run-1/strict-make-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-make-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-make-7/stdout",
+      "bytes": 541,
+      "sha256": "d11e7bc6a2b668fcfbefcabd32797995a653531cb0b68e0e6a5fb1efcc99eca4"
+    },
+    "actual-strict-run-1/strict-metadata-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-1/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "5b8091696b1a92f690c7a245339921dad18f3675627cdb0e01ad1ace186f4be1"
+    },
+    "actual-strict-run-1/strict-metadata-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-1/stdout",
+      "bytes": 541,
+      "sha256": "b66375ff646c00580d86e8dfb035150e9c57bc50488623a944f80413253e5f5c"
+    },
+    "actual-strict-run-1/strict-metadata-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-2/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "63c9aa537fbdcd95205c10d0814221f8fcddf2a7452e0f4f7eb30391a1a3b152"
+    },
+    "actual-strict-run-1/strict-metadata-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-2/stdout",
+      "bytes": 541,
+      "sha256": "34efff37b5b50bc38061022901e0f9a26d0d387eba2047da3c8d288c56fb94fe"
+    },
+    "actual-strict-run-1/strict-metadata-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-3/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "4465131e81d24241929494e1d655d0433fb01166b5f6b45aa44b1c9cf8f8019c"
+    },
+    "actual-strict-run-1/strict-metadata-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-3/stdout",
+      "bytes": 541,
+      "sha256": "c3214f7afbf1f69000fddef6588d126a938cf366ed2d48cb3145cf942cf192b6"
+    },
+    "actual-strict-run-1/strict-metadata-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-4/JOIN-WAIT4.json",
+      "bytes": 1733,
+      "sha256": "a6ad7549d0e77169dc402f56d46178006e7bd08d3aefb5c934c4cd366fdaff27"
+    },
+    "actual-strict-run-1/strict-metadata-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-4/stdout",
+      "bytes": 541,
+      "sha256": "396acab950815b41aa948ad7b33a34941ad5ff2de45bc315f1561d50130182d5"
+    },
+    "actual-strict-run-1/strict-metadata-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-5/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "99dda486941d283de1e626952aca3fe9975050f43b3609caa6982a5df1f3b1e8"
+    },
+    "actual-strict-run-1/strict-metadata-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-5/stdout",
+      "bytes": 541,
+      "sha256": "f0beacc15461942e683d0b2eb403566463a07a73f7cc8fd9a5e22d3267e6db47"
+    },
+    "actual-strict-run-1/strict-metadata-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-6/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "c7711fb5da5a03c400263092b3cefc8f1d66114803a9f5bb970fdbde003e4760"
+    },
+    "actual-strict-run-1/strict-metadata-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-6/stdout",
+      "bytes": 542,
+      "sha256": "6e5515186ece539b79922af4b07a71dd02cd7d802de4961b9f6a468198629736"
+    },
+    "actual-strict-run-1/strict-metadata-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-7/JOIN-WAIT4.json",
+      "bytes": 1747,
+      "sha256": "88c85b208da743edb4d845ae23cc013430ad619ad70f641ef583a486ba191def"
+    },
+    "actual-strict-run-1/strict-metadata-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-metadata-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-metadata-7/stdout",
+      "bytes": 542,
+      "sha256": "790018888113f55609d09d00e71530828577c955de0002c11614004c83181145"
+    },
+    "actual-strict-run-1/strict-open-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-open-1/JOIN-WAIT4.json",
+      "bytes": 1722,
+      "sha256": "89b969412acfd9e399011743bda6c101ab4e443e19d979b8189e4fb1c4e0e57d"
+    },
+    "actual-strict-run-1/strict-open-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-open-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-open-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-open-1/stdout",
+      "bytes": 539,
+      "sha256": "96ee00bb1f04c7a13a81454415c4d7c1448e9cd2dc1008b418bfda60f72f6f59"
+    },
+    "actual-strict-run-1/strict-physchunks-null-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physchunks-null-1/JOIN-WAIT4.json",
+      "bytes": 1755,
+      "sha256": "f63a6e80c06f55e85c0916b8d57c0bc1a58b5b59afc0ebef69754c2188084400"
+    },
+    "actual-strict-run-1/strict-physchunks-null-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physchunks-null-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-physchunks-null-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physchunks-null-1/stdout",
+      "bytes": 554,
+      "sha256": "23d1b4ae9ae6b3053b1a779f05f0836e1926e945e9b865a44b8197d96ca1051e"
+    },
+    "actual-strict-run-1/strict-physical-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-1/JOIN-WAIT4.json",
+      "bytes": 1735,
+      "sha256": "91e3e331bfc95fae9531531f0ccd70ce465b381f36f707e7305c94f16bcda798"
+    },
+    "actual-strict-run-1/strict-physical-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-physical-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-1/stdout",
+      "bytes": 547,
+      "sha256": "27f32444bd53207d1d4b1f5359b9caea51f2567959a0626c3b208eb64b85aa3e"
+    },
+    "actual-strict-run-1/strict-physical-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-2/JOIN-WAIT4.json",
+      "bytes": 1732,
+      "sha256": "8ac97d86557a9857898487f295620d5bddcea45c1dfb1cf8c2cd8fb365e30f24"
+    },
+    "actual-strict-run-1/strict-physical-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-physical-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-2/stdout",
+      "bytes": 547,
+      "sha256": "d80a2c488e46366aa306397f7c7082d43f68b2c8ff5afaa787f2e069c82b1b4c"
+    },
+    "actual-strict-run-1/strict-physical-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-3/JOIN-WAIT4.json",
+      "bytes": 1734,
+      "sha256": "40e3b9d07bc1e3f8bf3c4c44d707eaa0853e28c757ce8ca9f3f2036ea0d45957"
+    },
+    "actual-strict-run-1/strict-physical-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-physical-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-physical-3/stdout",
+      "bytes": 547,
+      "sha256": "238315d394d66f58717319f75e77f3de26a87b3e671650b012b486783de725fc"
+    },
+    "actual-strict-run-1/strict-size-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-1/JOIN-WAIT4.json",
+      "bytes": 1722,
+      "sha256": "ccc8dd899017d1159a49066dfb5c71fe25ddd5f7181b17a631e698f7c23087ea"
+    },
+    "actual-strict-run-1/strict-size-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-1/stdout",
+      "bytes": 540,
+      "sha256": "828c21d39398c9dc10f5b66f5dc095b85af8984dd3e090ebfa39ccf7ea4a912d"
+    },
+    "actual-strict-run-1/strict-size-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-2/JOIN-WAIT4.json",
+      "bytes": 1723,
+      "sha256": "c246f6dbc082ef7959ca601e11f397780c1dcf8aa7920daefc6e21667bcbf27c"
+    },
+    "actual-strict-run-1/strict-size-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-2/stdout",
+      "bytes": 540,
+      "sha256": "87acbc0e49bef32eab794451d890c90d2d1a760d8cd405cdf829bb206a23ab09"
+    },
+    "actual-strict-run-1/strict-size-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-3/JOIN-WAIT4.json",
+      "bytes": 1722,
+      "sha256": "ea5f566688bb343139b4cffed3a0980dff7d8805de29d6bad3f667f3312dfe42"
+    },
+    "actual-strict-run-1/strict-size-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-3/stdout",
+      "bytes": 540,
+      "sha256": "997683d25654f2990b00a9abdc4300cfa7fc4db2b8880eab65e1b48450db2c8a"
+    },
+    "actual-strict-run-1/strict-size-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-4/JOIN-WAIT4.json",
+      "bytes": 1735,
+      "sha256": "3907e6021109545f8ba1d1c417aa3d91ec124b0991ed398b5815d39a53a84bc9"
+    },
+    "actual-strict-run-1/strict-size-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-4/stdout",
+      "bytes": 540,
+      "sha256": "76b2a95959c94243a0c7adcf8298436b59a057b3b4f94013ceb50d4ff1a6c2b8"
+    },
+    "actual-strict-run-1/strict-size-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-5/JOIN-WAIT4.json",
+      "bytes": 1736,
+      "sha256": "b763a776ec74132a55d0e68834d3710efe60d1f1a7d46f4e223ac0be718d23ef"
+    },
+    "actual-strict-run-1/strict-size-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-5/stdout",
+      "bytes": 540,
+      "sha256": "df2e62ea3b7fecaa6b220b56ab09d04756cc86803416c301b39442dde617007f"
+    },
+    "actual-strict-run-1/strict-size-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-6/JOIN-WAIT4.json",
+      "bytes": 1735,
+      "sha256": "dc988f50bfadc18431a4ed384d37a1633508ced77f5746d893053f66a8452d59"
+    },
+    "actual-strict-run-1/strict-size-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-6/stdout",
+      "bytes": 541,
+      "sha256": "9b75cdf45ab5fa5dc3450c3b598403ae6ceff54ed089b96804e10c57e5144224"
+    },
+    "actual-strict-run-1/strict-size-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-7/JOIN-WAIT4.json",
+      "bytes": 1722,
+      "sha256": "cc48ba9b6a0ca99fd8b0fadc0677dabffa4ffdc36dc382ee7645d964401f3c3a"
+    },
+    "actual-strict-run-1/strict-size-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-size-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-size-7/stdout",
+      "bytes": 541,
+      "sha256": "649c2bccaba6e6603719140b8461a95cad6d6281e984b5df5d2e1b441e38ffa9"
+    },
+    "actual-strict-run-1/strict-success-0/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-success-0/JOIN-WAIT4.json",
+      "bytes": 1732,
+      "sha256": "db6e3317f138ac25a36608ab4dc232030bd0bf3c8d2a5a71052467fdd9f60638"
+    },
+    "actual-strict-run-1/strict-success-0/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-success-0/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-success-0/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-success-0/stdout",
+      "bytes": 547,
+      "sha256": "8135a60fa5472a9ac91cfc5fe27441b212633b818c7fe1b4f5167d1bf06ffac4"
+    },
+    "actual-strict-run-1/strict-time-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-time-1/JOIN-WAIT4.json",
+      "bytes": 1721,
+      "sha256": "7c731d362d51b3401d871572902917b5d601fcfae08bbe980f150e62f5b22e2f"
+    },
+    "actual-strict-run-1/strict-time-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-time-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-time-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-time-1/stdout",
+      "bytes": 540,
+      "sha256": "5554cf74c0daf236d4cfb3b71574386022b5e8756f2a5d37ad00268561de9e27"
+    },
+    "actual-strict-run-1/strict-write-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-1/JOIN-WAIT4.json",
+      "bytes": 1739,
+      "sha256": "06c61c92786f53d2b666847945a34202b8d22c7729960fcd1bc9fab1a49b0932"
+    },
+    "actual-strict-run-1/strict-write-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-1/stdout",
+      "bytes": 542,
+      "sha256": "2935a205b292c7b3b1140709314e6f3a1fe1f3abde59dbb9043160384bb218d5"
+    },
+    "actual-strict-run-1/strict-write-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-2/JOIN-WAIT4.json",
+      "bytes": 1725,
+      "sha256": "8e7accd3245bd73ac95ed8ec2040aa70489e028bd08b9af5b552756d63095d5f"
+    },
+    "actual-strict-run-1/strict-write-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-2/stdout",
+      "bytes": 542,
+      "sha256": "d27f4d0b27bf1914c75257dcf7c2094b0dc3ccfb23a74974b34cdd7863355d7b"
+    },
+    "actual-strict-run-1/strict-write-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-3/JOIN-WAIT4.json",
+      "bytes": 1725,
+      "sha256": "e61943f9c363180e40b0d73e92b7ebf1f7d2661d600da3c090a9cba34f8e9731"
+    },
+    "actual-strict-run-1/strict-write-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-3/stdout",
+      "bytes": 542,
+      "sha256": "ca2fe7e6a81b9214052af7e74620997d56986b473768bc1babfda40f914d6eda"
+    },
+    "actual-strict-run-1/strict-write-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-4/JOIN-WAIT4.json",
+      "bytes": 1725,
+      "sha256": "c5ea2e9c6acc233a5549d255e3b82be52b20fdef0dd503a51c40b55301a03be1"
+    },
+    "actual-strict-run-1/strict-write-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-4/stdout",
+      "bytes": 542,
+      "sha256": "30af6ce29400c77da546228f11850afed706c4598d575725205846591f94f8a4"
+    },
+    "actual-strict-run-1/strict-write-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-5/JOIN-WAIT4.json",
+      "bytes": 1739,
+      "sha256": "f02deae660b26723f7dbf5d031657ca8b1ca2d38cc0c887b7ae7e159909ff1c0"
+    },
+    "actual-strict-run-1/strict-write-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-5/stdout",
+      "bytes": 542,
+      "sha256": "fa17a2434d4ae772892e576e5f50320b1f199f36407b65edd5405db997de1183"
+    },
+    "actual-strict-run-1/strict-write-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-6/JOIN-WAIT4.json",
+      "bytes": 1726,
+      "sha256": "53ea72ff751fda2ee803ac808f1b412a81aa6509135a7d84cfce2a30a190dce1"
+    },
+    "actual-strict-run-1/strict-write-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-6/stdout",
+      "bytes": 542,
+      "sha256": "b7ed6152dd003fff8bb9286fa83b80766213c004574a162f46a8d2d1243f2e63"
+    },
+    "actual-strict-run-1/strict-write-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-7/JOIN-WAIT4.json",
+      "bytes": 1739,
+      "sha256": "c8072bff45c2da34f0e6bdd5347271a3bc6878a2142d3f66ddda2080962d097b"
+    },
+    "actual-strict-run-1/strict-write-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/strict-write-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/strict-write-7/stdout",
+      "bytes": 543,
+      "sha256": "b15b691a14ca29761c088dafabf5b9cdcee5a1b85d04945b14dfb0506fc00636"
+    },
+    "actual-strict-run-1/undefined-symbols/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/undefined-symbols/JOIN-WAIT4.json",
+      "bytes": 1763,
+      "sha256": "d94b10b05a4993deaf6beeb7311346e4b4a7ce60941f85e3edf42a462f900bac"
+    },
+    "actual-strict-run-1/undefined-symbols/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/undefined-symbols/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-strict-run-1/undefined-symbols/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/actual-strict-run-1/undefined-symbols/stdout",
+      "bytes": 1097,
+      "sha256": "911309c2b86b45ecbbf09efe5f5dc4375159d126a480498e35c2bb07e763d0fc"
+    },
+    "dump-layout.h": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/dump-layout.h",
+      "bytes": 563,
+      "sha256": "788e43a79da00da5d2e5d6fc9821e3e24cade3868ccc98883ff3ab18ebfc0334"
+    },
+    "ldump2mcdump_helpers.ownership-candidate.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ldump2mcdump_helpers.ownership-candidate.rs",
+      "bytes": 32135,
+      "sha256": "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac"
+    },
+    "prepare_strict_fixture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/prepare_strict_fixture.py",
+      "bytes": 8065,
+      "sha256": "d418a1cd5ec3f9f3d633af55f39ad4cfbc8164c8f730489e9c022e691b13849d"
+    },
+    "run_strict_fixture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/run_strict_fixture.py",
+      "bytes": 9060,
+      "sha256": "cb5dede92b486a844acbf7c6b17a6b022cbaf4d8a77b6ae8db58a802430bf8d1"
+    },
+    "strict_fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/strict_fixture.c",
+      "bytes": 15940,
+      "sha256": "86b4028e3470b3bc20894622a4936328e33fe31f0dec3b15270523d14529d70e"
+    }
+  }
+}

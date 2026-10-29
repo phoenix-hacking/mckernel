@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "frozen_ACK_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-11/m15-vmcore2mckdump/ldump2mcdump_helpers.ack-candidate.rs",
+    "bytes": 29466,
+    "sha256": "5205663e825abfb26d8eb0e01c225c1eb7cecd95051832b7234890dba5f3de78"
+  },
+  "private_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ldump2mcdump_helpers.ownership-candidate.rs",
+    "bytes": 32135,
+    "sha256": "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/OWNERSHIP-REPAIR.patch",
+    "bytes": 5781,
+    "sha256": "6f8c63650a8891778cac5cafbd15f7020a10af7a50cd74f71a4ee5241bd814e1"
+  },
+  "reused_pure_helpers_unchanged": true,
+  "original_public_dump_type_and_constant_prefix_unchanged": true,
+  "new_production_C": 0,
+  "new_FFI_imports": [
+    "bool bfd_close_all_done(bfd *)"
+  ],
+  "project_owned_changes": [
+    "OwnedAllocation guard replaces manual bitmap/payload/mem_chunks ownership",
+    "OwnedSectionNames retains linked name blocks through BFD last use",
+    "OwnedBfd disarms before normalclose and abortclose; no retry after FALSE",
+    "Success explicitly drops all project owners before exact ACK and flush"
+  ],
+  "original_27_ACK_read_write_diagnostic_fields_preserved_in_actual_matrix": true,
+  "all_original_failure_reports_retained": true,
+  "original_candidate_or_canonical_edits": 0,
+  "runtime_authority": null
+}

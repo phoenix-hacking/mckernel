@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "first_driver_exit": 1,
+  "candidate_runtime_exit": -6,
+  "all_started_children_positive_wait4": true,
+  "cause": "Fixture missed LLVM malloc+zeroing to calloc transformation; actual nm import confirms",
+  "source_modified": false,
+  "correction": "Track calloc and fwrite effect leaves only; reuse successful two Rust objects; new C links and runtime attempts in actual-run-2",
+  "runtime_authority": null
+}

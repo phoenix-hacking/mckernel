@@ -1,0 +1,1 @@
+mod platform; mod config; mod stop; fn main(){let args=std::env::args().skip(1).collect::<Vec<_>>();let mut h=platform::Native::new();let rc=match stop::parse(&args){Ok(o)=>stop::execute(&mut h,&config::Config::installed(),&o),Err(e)=>{eprintln!("{e}");1}};std::process::exit(rc)}

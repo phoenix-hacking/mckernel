@@ -2,6 +2,88 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## M15 private ownership repair and genuine ABI blocker — 2026-10-29T03:29Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+PrivateRustguardcandidate dc0d6f75 fixes observed projectallocation retention at
+source/mockHOSTscope:56fullcallbackcases/59positivelyjoinedcommands, zerolive
+projectallocations/ownedmockBFDhandles; namesretainedthroughterminalteardown;
+falsecloseconsumespointeronce/no retry; alldropsbeforesuccessACK. Independent
+b2f6ed9e/599checks passes THIS ownershipscope only; actualSDK/native notqualified.
+Original520566,20ownershipFAILcases and40caseevidence remainimmutable.
+
+Independentreview additionally reproduced INHERITED selectedSDK ABI debt: actual
+pinnedbfd.h hasname,next,prev,id,section_id,index,flags sectionprefix andtwoargument
+size/flags setters; oldRust/strictmock useoldprefix/threeargs. Several BFD bool
+returns andinitunsigned also mismatch. Exactchecklistc779e8c1 isnowtheblocking
+sourcecontract. Old56mockpasses cannotproveactualSDKcompatibility. m14_integration
+owns newprivate coherent ABIrepair using genuinepinnedheader-driven witness/Cstub
+and Rustopaque/offsetaccess pattern; preserveownershipguards andstrictoracles.
+No canonicalconverter or SDK/default/nativeintegration of dc0 was approved.
+
+Privatejoint17CMake/converter proposal87a482f2 has2actualgeneratorcasesPASS and
+refusesold520566hash, but its conditionalready4fc3a05d remainsunqualified/blocked
+on newselectedABI successor. Existing16files/sourceb6ed/eightgenerationcontrols
+remainretained. No new runtimebodyportwasduplicated. ExactsourceRPM/develRPM and
+restorationmapeec9b562 preserve BFDfacts3db997f0; actualSDKlibbfd.a hash remainsOPEN.
+
+ParentNEWSC actualcontrolsreceiptstillabsent; no stopped118cleanup/currentfree,
+newkernelbuild or McKernelguest started. Accepted116C71/Rust68/practical35/35,
+M14 4/6,M15 1/8 unchanged. Same06:00Z/cumulativecredit andoriginalUNKNOWNclient.
+
+## Foreground steering and M15 functional results — 2026-10-29T03:15Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+STEERING-20261029T0315.json records actual1320s bucket. PrivateM15 runtimeCMake
+rebase16files/11unchangedRust-config bodies fixes explicitcompiler dependencies;
+8actualCMakegeneration cases andindependentreviewb6ed3465 PASS. SelectorsremainOFF;
+noSDK/build/install/native/C-retirementcredit. Patch37c048f9 isnotcanonicalapplied.
+
+Newconverter fixture executes exactfull registered Rustcmd:27candidate+13original
+cases,47directchildrenpositivelyjoined (2Rustobjectcompiles,4Clinks,41callbackcalls
+includingpreservedfirstfixture-6). NarrowACK/layoutPASS9942eafb; OWNERSHIPFAIL
+fa697a57 in20cases:success96B,write/close1048744B,secondpassmetadata72Bretained.
+Originalmatchedcases sharefailures; no full-lifecyclePASS. Independentactualbody/
+oraclereview336a8568 plus291assertions accepted scoped evidence only. Onefixture
+calloc/fwrite aliascorrection reusedbothsuccessfulRustobjects, originalsretained.
+
+ExactofficialRocky2.41-63source/develRPMread-onlyextraction3db997f0 binds pinned
+bfd.h andlibbfd.so bytes. The latteris anldscript; actualSDKlibbfd.a hash stillOPEN.
+Packageclose/name semanticsandconstraints support PRIVATE Rustowner-guard repair
+activeunder m14_integration. No blinddoubleclose or prematuresectionnamefree.
+Candidate520566 andoriginal40caseevidence remainimmutable; nextstrictmatrix must
+provezeroprojectallocations/ownedhandles andnamevaliditythroughterminalclose.
+Evidencebase:m15-vmcore-converter-actual-body-fixture-1/; sourceREADY/SDK/native/
+wrapper22PTY/validdump qualification remainseparate. Ordinarymodelcapacityfailed
+recovery_receipts wasrestartedviafollowup_task,actualturnconfirmed,existingdownload
+adoptedonce andfactscompleted; no realholdcleared ormodel/budgetfallback.
+
+ParentNEWSC actualcontrolsreceiptstillabsent; stopped118/currentfree pending.
+Kernelcandidatebuilds0/newMcKernelguestapps0/native0/fileclosure0 thisbucket;
+accepted116 C71/Rust68, practical35/35,M14 4/6,M15 1/8 unchanged. Fullpost119pure
+history/custodyvalidation alsoPASS128actors/72nonces. Nextheavy remains actual
+controls→compatcleanup/directparentjoin→freshcurrentfree→119origin+fourproducer
+commands/original389 comparator. Same06:00Z/credits, nospeedupclaim.
+
+## Twenty-minute foreground review — 2026-10-29T02:54Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same-window review after1237s recorded in restart-adoption-20261029T0234/
+STEERING-20261029T0254.json. Actualnewbuilds0/apps0/native0/fileclosures0;
+accepted116/C71/Rust68, practical35/35,M14 4/6,M15 1/8 unchanged. Real progress:
+independent successfulrecovery+128actor custody/72ledger, exact18path119 canonical
+integration and133/122physicalsourceexport; two minimal currentcontrol constructors
+independentlySOURCEPASS (6Python3.8groups each). Checkpoints50c238897/2da65c1e9
+pushed and exactfetched73/59files. Allfour bounded agents completed their actual
+turns; none is falsely listed active. Launcherworker2259062/server2259064 live.
+
+Externalparent NEWSC actualcontrolreceipt still absent; no generatedguardian,
+cleanup, observation, origin/compiler or native workload was admitted. Next actual
+receipt→reviewedguard/cleanup sourcepublication→newone-shot stopped118 retirement
+andparentjoin→freshfull current-free/Rootadoption→freshorigin+fourcommand119producer.
+Originalcensusclient UNKNOWN, rejected118, allusedreleases andnativecustody retained.
+Approx534s predecessor downtime is separate fromactive1237s; no speedup inferred.
+
 ## CURRENT119 canonical integration — 2026-10-29T02:49Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "kind": "PRIVATE_EXACT_SELECTED_SOURCE_FFI_AND_OWNERSHIP_CONTRACT_NOT_SDK_QUALIFICATION",
+  "selected_source_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/SOURCE-LIFETIME-FACTS.json",
+    "bytes": 15962,
+    "sha256": "3db997f0c067ce19992d9a0ff57e352abdcecea40ddacb66b406a7aa6381b54c"
+  },
+  "selected_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/binary-selected/usr/include/bfd.h",
+    "bytes": 252810,
+    "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+  },
+  "new_FFI": {
+    "name": "bfd_close_all_done",
+    "Rust": "unsafe extern C fn(*mut Bfd) -> bool",
+    "C": "bool bfd_close_all_done (bfd *);",
+    "header_line": 2968,
+    "provider": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/upstream-selected/binutils-2.41/bfd/opncls.c",
+      "bytes": 55534,
+      "sha256": "8b47a53d8ef9f98acc22bd593c2d924c15a094a9201501104faf294e8fbe1669"
+    },
+    "provider_lines": [
+      920,
+      922,
+      924,
+      926,
+      932,
+      933,
+      934,
+      936
+    ]
+  },
+  "normal_terminal_call": {
+    "name": "bfd_close",
+    "count": "Exactly once on completed conversion, before success ACK",
+    "FALSE_semantics": "Handle consumed and owner disarmed; preserve bfd_close primary diagnostic, never retry or use handle"
+  },
+  "early_error_terminal_call": {
+    "name": "bfd_close_all_done",
+    "count": "Exactly once only if handle is still owned",
+    "semantics": "No pending-output finalization; preserve primary error diagnostic first; handle is unconditionally destroyed including FALSE, never retried",
+    "limitation": "Selected target cleanup FALSE may skip underlying iovec bclose; real OS descriptor/file behavior is not proven by mock handle consumption"
+  },
+  "names": {
+    "provider": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/upstream-selected/binutils-2.41/bfd/section.c",
+      "bytes": 52320,
+      "sha256": "0186ffe7cc0a0136aa83f48f90682f877a6b687d2fdf852eef4dbba824017740"
+    },
+    "borrowed_pointer_lines": [
+      163,
+      164,
+      1176,
+      1199,
+      1200
+    ],
+    "lifetime": "All caller-owned physical section-name blocks remain live through every BFD use and terminal close/abort, then free exactly once",
+    "allocation": "Private40B block:8B next link +32B existing name; no public dump layout change"
+  },
+  "drop_order": [
+    "BFD terminal teardown",
+    "section name blocks",
+    "payload buffer",
+    "mem_chunks buffer"
+  ],
+  "bitmap": "OwnedAllocation immediately owns each successful bitmap allocation and releases on all helper returns",
+  "no_BFD_or_callback_uses_after_terminal_call": true,
+  "SDK_prerequisite": [
+    "PINNED-ABI /usr/lib64/libbfd.so is a382-byte GNU ld linker script, not ELF. It selects /usr/lib64/libbfd.a plus libsframe.a/liberty/z/dl. Header and script match official sameNEVRA exactly, but selected SDK libbfd.a bytes are not recorded by PINNED-ABI and have NOT been compared to extracted official static archive. Therefore selected actual linked implementation proof remains OPEN; this is source/package evidence and does not assert actual SDK/provider identity or native acceptance."
+  ],
+  "actual_SDK_static_archive_identity": null,
+  "real_BFD_runtime_or_native_acceptance": false,
+  "runtime_authority": null
+}

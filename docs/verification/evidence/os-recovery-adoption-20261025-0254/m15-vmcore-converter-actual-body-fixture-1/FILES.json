@@ -1,0 +1,825 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "files": {
+    "FIRST-FAILURE.fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/FIRST-FAILURE.fixture.c",
+      "bytes": 11727,
+      "sha256": "b707dc2b0cb3892eeae8003ee7c1330ea52dc4094a0ebe4bf0852c8fc85b8e19"
+    },
+    "FIRST-FAILURE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/FIRST-FAILURE.json",
+      "bytes": 510,
+      "sha256": "9ce354f327b5bef671b4fb7f24231937605bc184ccf3dbe037c3d808b7fb6312"
+    },
+    "FIRST-FAILURE.run_fixture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/FIRST-FAILURE.run_fixture.py",
+      "bytes": 7803,
+      "sha256": "114b2753a7e22b7293ad41e286b6d396ec33f38caa8e8a54e50b469a46cd5484"
+    },
+    "OWNERSHIP-FAILURES.ACTUAL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/OWNERSHIP-FAILURES.ACTUAL.json",
+      "bytes": 8599,
+      "sha256": "fa697a5719c7ceed6bb2a96b9d7a5f5b8f63c7d149a65be70c30c81484b5223b"
+    },
+    "QUALIFICATION.ACTUAL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/QUALIFICATION.ACTUAL.json",
+      "bytes": 4238,
+      "sha256": "9942eafb6451f07ecdd530371c030dda6613f43f35e841442f72e0b2b00c2f4d"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ROOT-NEXT.md",
+      "bytes": 4362,
+      "sha256": "41e5a10d1f7ab554563546502fcefeea1694c36d2effa1e6afbeb7ba3c35d62f"
+    },
+    "actual-run-1/INPUTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/INPUTS.json",
+      "bytes": 2060,
+      "sha256": "d1ba3a0906029bfe7b85f5cc17bfb20ba25acf18b5ea3a28752849f2f384ae87"
+    },
+    "actual-run-1/PARENT-START.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/PARENT-START.json",
+      "bytes": 628,
+      "sha256": "88e87c26d215dbd301f771c41c177635e1496eb3cebbe4cf78a79e2fe325d529"
+    },
+    "actual-run-1/candidate-compile/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-compile/JOIN-WAIT4.json",
+      "bytes": 2089,
+      "sha256": "537801f4e60c7c5a8e43a723488be659b143dd2e6d62093529353a4c5f9f4c10"
+    },
+    "actual-run-1/candidate-compile/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-compile/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/candidate-compile/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-compile/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/candidate-fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-fixture",
+      "bytes": 33976,
+      "sha256": "3a08d98942fdd8b50cf27c6291aceea18e3e76d3631ab5504b772a02dad8e994"
+    },
+    "actual-run-1/candidate-link/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-link/JOIN-WAIT4.json",
+      "bytes": 2324,
+      "sha256": "6bc21c575fd1712c72b651dafde9b246bcaa68aad51d38694e908666cbd265b2"
+    },
+    "actual-run-1/candidate-link/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-link/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/candidate-link/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-link/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/candidate-success-0/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-success-0/JOIN-WAIT4.json",
+      "bytes": 1618,
+      "sha256": "45b7ca7f162e7a7de09606a9e4d152d5ccec3fb4acf94283c23b9fedb94b6b21"
+    },
+    "actual-run-1/candidate-success-0/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-success-0/stderr",
+      "bytes": 246,
+      "sha256": "5351813a1e2f3278058253547fe04db50716a0a2818a6b5494e4f5418c70bfaa"
+    },
+    "actual-run-1/candidate-success-0/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate-success-0/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/candidate.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/candidate.o",
+      "bytes": 18232,
+      "sha256": "e1f01dcef7e2ab979488c50526eaaa262182c4db90cb3a3a3fda0a8c488d9718"
+    },
+    "actual-run-1/reference-compile/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-compile/JOIN-WAIT4.json",
+      "bytes": 2096,
+      "sha256": "1d004677760731e100a77db35a4a5f6efe49c1587683bb5fabc413bb4442be91"
+    },
+    "actual-run-1/reference-compile/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-compile/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/reference-compile/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-compile/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/reference-fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-fixture",
+      "bytes": 33928,
+      "sha256": "2858b3823302ca6f4f4953dd4055b91f0e8128a7f2a812ba99603c0c19f3d6c6"
+    },
+    "actual-run-1/reference-link/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-link/JOIN-WAIT4.json",
+      "bytes": 2315,
+      "sha256": "3d0124a9b0446af5d0708f4e0d5a11a6b0e1cd405253bf587315bfae0f567de0"
+    },
+    "actual-run-1/reference-link/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-link/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/reference-link/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference-link/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-1/reference.o": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-1/reference.o",
+      "bytes": 17976,
+      "sha256": "47747c87c22aee8f6020e0ec112dc238934372e30862cb93087848305a27c1ba"
+    },
+    "actual-run-2/COMMANDS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/COMMANDS.json",
+      "bytes": 73396,
+      "sha256": "0ab44d35c2cf90aba734e65ef11abc7f990ee16970d4bb2202f01e0c66382a32"
+    },
+    "actual-run-2/INPUTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/INPUTS.json",
+      "bytes": 2060,
+      "sha256": "c0118cf48568a44bfcb16c6a7f07994c20a8af29019384a3110038b7c0bd361e"
+    },
+    "actual-run-2/PARENT-FINISH.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/PARENT-FINISH.json",
+      "bytes": 212,
+      "sha256": "b95b55bf3f01d010ae2ee71a593ae9343176caba2112e51bed0e43a18a8324f5"
+    },
+    "actual-run-2/PARENT-START.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/PARENT-START.json",
+      "bytes": 628,
+      "sha256": "fb731e715bb2082027030b8dd9dd89f7bb76d73e0ccfb5a41fc3f258b543777b"
+    },
+    "actual-run-2/RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/RESULT.json",
+      "bytes": 19982,
+      "sha256": "c960989857e411d8b03ed12e76df436ac715d269a239bf31bad7016613b874ae"
+    },
+    "actual-run-2/REUSED-OBJECTS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/REUSED-OBJECTS.json",
+      "bytes": 1277,
+      "sha256": "2397c639ea2c2a8efcf30b0d4b3df75c9b7984dd0a3a13dec98ae8a083e8bfe7"
+    },
+    "actual-run-2/candidate-allocation-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-1/JOIN-WAIT4.json",
+      "bytes": 1624,
+      "sha256": "54c518b03fa0921e5d94770436f891a8abf8ca18ef59355022e803295ea256ef"
+    },
+    "actual-run-2/candidate-allocation-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-1/stdout",
+      "bytes": 429,
+      "sha256": "fc1f20eb9896f8131598aadf506f560d4f326797b9d69bdede0556019a47b3d7"
+    },
+    "actual-run-2/candidate-allocation-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-2/JOIN-WAIT4.json",
+      "bytes": 1636,
+      "sha256": "bf14aaeb63286271dbd2d1fb53c9207ee9740a54e4d561a54073f8f42a0b8528"
+    },
+    "actual-run-2/candidate-allocation-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-2/stdout",
+      "bytes": 429,
+      "sha256": "3eb6dc870eb0676d72b7e9793517faf7f95ba72838dc3400ad59a82cceecf898"
+    },
+    "actual-run-2/candidate-allocation-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-3/JOIN-WAIT4.json",
+      "bytes": 1637,
+      "sha256": "061c4b93b55f8360e661f5b13417026fba2ae815f9375466ff73773f03fcfd25"
+    },
+    "actual-run-2/candidate-allocation-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-3/stdout",
+      "bytes": 431,
+      "sha256": "9ddb31c8c13528c106fa2660c879424d3da593aebae086a6703b069dfb3025b6"
+    },
+    "actual-run-2/candidate-allocation-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-4/JOIN-WAIT4.json",
+      "bytes": 1623,
+      "sha256": "ffde9bee8a0dbe7ec1b511b3e29d3177dd3d4bf50d000bf59db74f8d4ef286b9"
+    },
+    "actual-run-2/candidate-allocation-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-4/stdout",
+      "bytes": 431,
+      "sha256": "e32ed7fab30005d105db90e29daf1b6b83ba58bcdf4472466558bf27c20bae87"
+    },
+    "actual-run-2/candidate-allocation-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-5/JOIN-WAIT4.json",
+      "bytes": 1625,
+      "sha256": "67bc73b2c32adf0aedf929804c60a700449ce975befb7ec6561aca91ed7c2c2c"
+    },
+    "actual-run-2/candidate-allocation-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-5/stdout",
+      "bytes": 436,
+      "sha256": "cfbe8186fa9cd679a06fdbdb7dbdbc39015bdd2966f71b33779cbf56bca5c8fb"
+    },
+    "actual-run-2/candidate-allocation-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-6/JOIN-WAIT4.json",
+      "bytes": 1638,
+      "sha256": "58571593fbbe7ed769f990105a3f878fef632a555a5c8eb1694c7d29a9972b32"
+    },
+    "actual-run-2/candidate-allocation-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-6/stdout",
+      "bytes": 436,
+      "sha256": "2c9e1dc9b581227d164087a0637db18f748f69114efc4dc0a037f5415ec78a7e"
+    },
+    "actual-run-2/candidate-allocation-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-7/JOIN-WAIT4.json",
+      "bytes": 1637,
+      "sha256": "34b58315f9a0e480f099d144af1f3b05c80f6117b1ec98d12814d376f155e9dc"
+    },
+    "actual-run-2/candidate-allocation-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-allocation-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-allocation-7/stdout",
+      "bytes": 436,
+      "sha256": "8e769f7ca5b668304764cb490114803ec3b8ceff4fedd2cfb16a9db4bae79550"
+    },
+    "actual-run-2/candidate-close-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-close-1/JOIN-WAIT4.json",
+      "bytes": 1610,
+      "sha256": "17141359760be537f7dda54ee5fca69150d3720b443b68cd613e137d215693f6"
+    },
+    "actual-run-2/candidate-close-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-close-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-close-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-close-1/stdout",
+      "bytes": 433,
+      "sha256": "be6007565173e41cce337d85993cb054d652ae0470bd3abdd94aabba7a834334"
+    },
+    "actual-run-2/candidate-fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-fixture",
+      "bytes": 34104,
+      "sha256": "08b0cac60e06dfdd3ae2570988c91a97d57edc78da497936cbed2c60d7f1ea44"
+    },
+    "actual-run-2/candidate-link/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-link/JOIN-WAIT4.json",
+      "bytes": 2377,
+      "sha256": "1530a749d3fbcf3b1514d15187b5a9e8205ba2322f2646ba39241d218927d4a0"
+    },
+    "actual-run-2/candidate-link/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-link/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-link/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-link/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-1/JOIN-WAIT4.json",
+      "bytes": 1619,
+      "sha256": "36aae1c8056185608435279df7694b111c8619786a3f6ba28b9284ba38540e85"
+    },
+    "actual-run-2/candidate-metadata-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-1/stdout",
+      "bytes": 427,
+      "sha256": "96e0ab8068d2e822ea0eba6ecf7b2168c5e997a1989f32a07934f1d23d6037c6"
+    },
+    "actual-run-2/candidate-metadata-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-2/JOIN-WAIT4.json",
+      "bytes": 1632,
+      "sha256": "aad8ced6aff31581670f3977ccbd8999ff5e2e6e1dfc6d2efd05004f721f6450"
+    },
+    "actual-run-2/candidate-metadata-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-2/stdout",
+      "bytes": 427,
+      "sha256": "e0f495e57c01549a4cff49bd70cb9ca964d0bb9c8904f7c0c210338d9e7fedc6"
+    },
+    "actual-run-2/candidate-metadata-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-3/JOIN-WAIT4.json",
+      "bytes": 1618,
+      "sha256": "afe8734f9a2fa2c69593abf9ce520a8f0a93161e61b325adb59a6b826a1fd433"
+    },
+    "actual-run-2/candidate-metadata-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-3/stdout",
+      "bytes": 427,
+      "sha256": "bcd2e8a8d14635e7a2480e9e1d886f44322e89a32b08de0057ffda74949f95b8"
+    },
+    "actual-run-2/candidate-metadata-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-4/JOIN-WAIT4.json",
+      "bytes": 1619,
+      "sha256": "013bcaafd21ccc21ce40a4e7338dc07b7b72eaccaea6ba1ba6908631e1d18dd5"
+    },
+    "actual-run-2/candidate-metadata-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-4/stdout",
+      "bytes": 427,
+      "sha256": "361022e5b8af970499cb6add516d920650747dcd7c3b089c4c4801f933b7ab7a"
+    },
+    "actual-run-2/candidate-metadata-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-5/JOIN-WAIT4.json",
+      "bytes": 1619,
+      "sha256": "018fa6900571c0a05f759ce39fdd9dc3d45b2fac221492a1f1b9557f72987a8b"
+    },
+    "actual-run-2/candidate-metadata-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-5/stdout",
+      "bytes": 429,
+      "sha256": "a7d3f43f1c6c4e0eb48647b1e9b623fb24249ac24d32fc60ef2d263e013d6305"
+    },
+    "actual-run-2/candidate-metadata-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-6/JOIN-WAIT4.json",
+      "bytes": 1618,
+      "sha256": "df05233b35580ccd8574edbb91b7f91ced2f5f73cccc4fad824bbf6b183b5f9f"
+    },
+    "actual-run-2/candidate-metadata-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-6/stdout",
+      "bytes": 429,
+      "sha256": "3b825bc0a387817daea0f2f8656107c03b4eb25d6b71f056b41fc50100442063"
+    },
+    "actual-run-2/candidate-metadata-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-7/JOIN-WAIT4.json",
+      "bytes": 1617,
+      "sha256": "fd18ed309f3f86db2e4ec85421c09207b77f630802c2ade5ac1a4fbf6f31e3cf"
+    },
+    "actual-run-2/candidate-metadata-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-metadata-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-metadata-7/stdout",
+      "bytes": 428,
+      "sha256": "c184dea24b80011e722eeac6184fa110a4976d8a3bc52ba58fc44c85a5e014fd"
+    },
+    "actual-run-2/candidate-physchunks-null-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physchunks-null-1/JOIN-WAIT4.json",
+      "bytes": 1640,
+      "sha256": "bd96748ef6634bd2c0c1c230f65e41818c6fb00b2b2cd086607211cb05a71b71"
+    },
+    "actual-run-2/candidate-physchunks-null-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physchunks-null-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-physchunks-null-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physchunks-null-1/stdout",
+      "bytes": 440,
+      "sha256": "115458613f94d195b5a5a088606919da76c1058130b16f1ef925d5ef8e127492"
+    },
+    "actual-run-2/candidate-physical-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-1/JOIN-WAIT4.json",
+      "bytes": 1632,
+      "sha256": "cdda657ca82fd3b47479ea00a742b06a32174a5a5b92c527eed41d5679037c67"
+    },
+    "actual-run-2/candidate-physical-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-physical-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-1/stdout",
+      "bytes": 433,
+      "sha256": "f6d07574b5be0af7a864b1136a04e65da55ea47b5e8eee77ee270e3fd0e82c4d"
+    },
+    "actual-run-2/candidate-physical-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-2/JOIN-WAIT4.json",
+      "bytes": 1616,
+      "sha256": "d5283e56a3d8082548d41c040dccaea7da28dbc6345aaa6e4a5f915b2be7d213"
+    },
+    "actual-run-2/candidate-physical-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-physical-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-2/stdout",
+      "bytes": 433,
+      "sha256": "e6acb7fc07297870805eaed6d34f4062bd3de730c0848bc7c93c019dc7e7ae5e"
+    },
+    "actual-run-2/candidate-physical-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-3/JOIN-WAIT4.json",
+      "bytes": 1631,
+      "sha256": "fcfef9509f6d639db46d90c2b2c80a7a98fdf2b0c086668b7bbd872325a1e15d"
+    },
+    "actual-run-2/candidate-physical-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-physical-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-physical-3/stdout",
+      "bytes": 433,
+      "sha256": "4f059f7aaac4dd8635d9720a8c72615c760971f9af6ddbc6b1455208fafcf693"
+    },
+    "actual-run-2/candidate-success-0/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-success-0/JOIN-WAIT4.json",
+      "bytes": 1614,
+      "sha256": "910510e903c69a9fc9f53bac22a27c3151cba0310efe8ae2d64465c0b3b25b34"
+    },
+    "actual-run-2/candidate-success-0/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-success-0/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-success-0/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-success-0/stdout",
+      "bytes": 433,
+      "sha256": "22deb5a02f45e25d6f15b150e60a4a7787a49e9cc985fc9803df9f5a982579fe"
+    },
+    "actual-run-2/candidate-write-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-1/JOIN-WAIT4.json",
+      "bytes": 1610,
+      "sha256": "5c469210451a96e3e905be56ecc8f239c12e8a387e0b3a2e3041a1a42006b74a"
+    },
+    "actual-run-2/candidate-write-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-1/stdout",
+      "bytes": 431,
+      "sha256": "c6186a54f8055048d0dc4366309c6c14ca52c8a18aa356577b2af43cf365e2bd"
+    },
+    "actual-run-2/candidate-write-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-2/JOIN-WAIT4.json",
+      "bytes": 1609,
+      "sha256": "6654198834f86c9c72c58e017f01921dea24dbb69179aab27b996cf497f3a6fa"
+    },
+    "actual-run-2/candidate-write-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-2/stdout",
+      "bytes": 431,
+      "sha256": "c6c31212ed8bf59dec23b3064c51f58dbaad425712ea51d4beea62b04ba18310"
+    },
+    "actual-run-2/candidate-write-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-3/JOIN-WAIT4.json",
+      "bytes": 1615,
+      "sha256": "0673830cf153562f3d543bc1aedd9756a4310fe8ed3c297069bf14e851efaf34"
+    },
+    "actual-run-2/candidate-write-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-3/stdout",
+      "bytes": 431,
+      "sha256": "d0053899bb192da0a34768f882e1c45727d68d335bca0bab5d1e4562092b0ded"
+    },
+    "actual-run-2/candidate-write-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-4/JOIN-WAIT4.json",
+      "bytes": 1610,
+      "sha256": "cb74440ff8c9a52b81d451595d2ea696ab490946746f7b60b82a8be353d24497"
+    },
+    "actual-run-2/candidate-write-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-4/stdout",
+      "bytes": 431,
+      "sha256": "1aba1db33417fc9cbaa3e72e653d06b1cde204e182872cf0a6be2fbe8977871b"
+    },
+    "actual-run-2/candidate-write-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-5/JOIN-WAIT4.json",
+      "bytes": 1622,
+      "sha256": "fa273dd9dc5e6c80b7f95f876bada995d611703d0638687405b50923f163ec90"
+    },
+    "actual-run-2/candidate-write-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-5/stdout",
+      "bytes": 431,
+      "sha256": "fb951e15ee61834960fb9ca848ef9a7989e812d12d9eb3e0f0c3ee70f44c34af"
+    },
+    "actual-run-2/candidate-write-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-6/JOIN-WAIT4.json",
+      "bytes": 1609,
+      "sha256": "c12d63e51d3b8f9cc438695a385c50c225ab9ba7cd5a674c4f7f2bb526981c0b"
+    },
+    "actual-run-2/candidate-write-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-6/stdout",
+      "bytes": 431,
+      "sha256": "d6e75a9becc548a06b3e24bd4804e7c06034a5a9c284594c20e09f617f641256"
+    },
+    "actual-run-2/candidate-write-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-7/JOIN-WAIT4.json",
+      "bytes": 1609,
+      "sha256": "fd04de287d781cefeec1dfd0d02a3f24e71098230fbd2f20c2a146d93d72fde3"
+    },
+    "actual-run-2/candidate-write-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/candidate-write-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/candidate-write-7/stdout",
+      "bytes": 432,
+      "sha256": "bbd4c2529f04f4a252fff20b7a08b1cbfabe7ea830b0bda1fbb65c0206a4faf1"
+    },
+    "actual-run-2/reference-close-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-close-1/JOIN-WAIT4.json",
+      "bytes": 1607,
+      "sha256": "c1eb768f5744307edd00ed73a0e870497946b42acafdd556bcabd2059387a706"
+    },
+    "actual-run-2/reference-close-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-close-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-close-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-close-1/stdout",
+      "bytes": 433,
+      "sha256": "be6007565173e41cce337d85993cb054d652ae0470bd3abdd94aabba7a834334"
+    },
+    "actual-run-2/reference-fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-fixture",
+      "bytes": 34056,
+      "sha256": "defc77ef5fe1e7aece14ef5319972b524ee9c1267486f9edd031113e55f20c5f"
+    },
+    "actual-run-2/reference-link/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-link/JOIN-WAIT4.json",
+      "bytes": 2377,
+      "sha256": "694bb3be752261c3fbe20908f6d862a2f5720590704a19c09a85a24bd185b6fb"
+    },
+    "actual-run-2/reference-link/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-link/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-link/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-link/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-physchunks-null-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physchunks-null-1/JOIN-WAIT4.json",
+      "bytes": 1640,
+      "sha256": "f83907feefb70cc5ebe8f852419f5935a4280dcbbde7bd324e815502ada700c0"
+    },
+    "actual-run-2/reference-physchunks-null-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physchunks-null-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-physchunks-null-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physchunks-null-1/stdout",
+      "bytes": 440,
+      "sha256": "115458613f94d195b5a5a088606919da76c1058130b16f1ef925d5ef8e127492"
+    },
+    "actual-run-2/reference-physical-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-1/JOIN-WAIT4.json",
+      "bytes": 1618,
+      "sha256": "0c985e9576c63d2d256184ff055fd5a3b094113c7320080b4851eec6d7546104"
+    },
+    "actual-run-2/reference-physical-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-physical-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-1/stdout",
+      "bytes": 433,
+      "sha256": "f6d07574b5be0af7a864b1136a04e65da55ea47b5e8eee77ee270e3fd0e82c4d"
+    },
+    "actual-run-2/reference-physical-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-2/JOIN-WAIT4.json",
+      "bytes": 1618,
+      "sha256": "8905a20de7787fca85f0c806b409c212e83dfffb7f39880b29b6fc576453bf5e"
+    },
+    "actual-run-2/reference-physical-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-physical-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-2/stdout",
+      "bytes": 433,
+      "sha256": "e6acb7fc07297870805eaed6d34f4062bd3de730c0848bc7c93c019dc7e7ae5e"
+    },
+    "actual-run-2/reference-physical-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-3/JOIN-WAIT4.json",
+      "bytes": 1632,
+      "sha256": "4f1b95173dbae9034e78b1949aea2ad1b893c3eb964c36233cd6a6d17317f6d0"
+    },
+    "actual-run-2/reference-physical-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-physical-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-physical-3/stdout",
+      "bytes": 433,
+      "sha256": "4f059f7aaac4dd8635d9720a8c72615c760971f9af6ddbc6b1455208fafcf693"
+    },
+    "actual-run-2/reference-success-0/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-success-0/JOIN-WAIT4.json",
+      "bytes": 1628,
+      "sha256": "32bb2a6ec29148e702b6d8ec7a3f0e65b9eae1ae1d3ed46942826955fd19f2e8"
+    },
+    "actual-run-2/reference-success-0/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-success-0/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-success-0/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-success-0/stdout",
+      "bytes": 432,
+      "sha256": "10559702b73a3cf49a0dde92e1e75e7741fa385c99baf4bc5a7ff71ffa78394c"
+    },
+    "actual-run-2/reference-write-1/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-1/JOIN-WAIT4.json",
+      "bytes": 1608,
+      "sha256": "b4242c7853b6df7e1ea0f4245c6cb2e1fe58481e4107e01ad01e212d087aca36"
+    },
+    "actual-run-2/reference-write-1/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-1/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-1/stdout",
+      "bytes": 431,
+      "sha256": "c6186a54f8055048d0dc4366309c6c14ca52c8a18aa356577b2af43cf365e2bd"
+    },
+    "actual-run-2/reference-write-2/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-2/JOIN-WAIT4.json",
+      "bytes": 1622,
+      "sha256": "6b11ec0c93c8486d2af9dbc86cfb4a7e17d4b2fdf95797287c92b2de3b8098a6"
+    },
+    "actual-run-2/reference-write-2/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-2/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-2/stdout",
+      "bytes": 431,
+      "sha256": "c6c31212ed8bf59dec23b3064c51f58dbaad425712ea51d4beea62b04ba18310"
+    },
+    "actual-run-2/reference-write-3/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-3/JOIN-WAIT4.json",
+      "bytes": 1609,
+      "sha256": "0b92ad0f2cc9d1e4825708f7445924f47eb1cf29723a531576d67cba835b129e"
+    },
+    "actual-run-2/reference-write-3/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-3/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-3/stdout",
+      "bytes": 431,
+      "sha256": "d0053899bb192da0a34768f882e1c45727d68d335bca0bab5d1e4562092b0ded"
+    },
+    "actual-run-2/reference-write-4/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-4/JOIN-WAIT4.json",
+      "bytes": 1609,
+      "sha256": "7445b5a5e8eba57c9a9de897faf667f1ebe8467c479ad27c6a53d09e4be6a243"
+    },
+    "actual-run-2/reference-write-4/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-4/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-4/stdout",
+      "bytes": 431,
+      "sha256": "1aba1db33417fc9cbaa3e72e653d06b1cde204e182872cf0a6be2fbe8977871b"
+    },
+    "actual-run-2/reference-write-5/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-5/JOIN-WAIT4.json",
+      "bytes": 1615,
+      "sha256": "dc6a7a2a6f2e25da8caa61a6395fe43731604ba3e11c352981de06a10fbb031b"
+    },
+    "actual-run-2/reference-write-5/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-5/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-5/stdout",
+      "bytes": 431,
+      "sha256": "fb951e15ee61834960fb9ca848ef9a7989e812d12d9eb3e0f0c3ee70f44c34af"
+    },
+    "actual-run-2/reference-write-6/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-6/JOIN-WAIT4.json",
+      "bytes": 1608,
+      "sha256": "3f6122644fa31dc137493890fd76af9fbeaace169d33a30ee4abac156b02fd98"
+    },
+    "actual-run-2/reference-write-6/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-6/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-6/stdout",
+      "bytes": 431,
+      "sha256": "d6e75a9becc548a06b3e24bd4804e7c06034a5a9c284594c20e09f617f641256"
+    },
+    "actual-run-2/reference-write-7/JOIN-WAIT4.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-7/JOIN-WAIT4.json",
+      "bytes": 1610,
+      "sha256": "fef89ffd5ab405549e5359d93ed7dad5f8d51343216568fb90a7f012640f0789"
+    },
+    "actual-run-2/reference-write-7/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-run-2/reference-write-7/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/actual-run-2/reference-write-7/stdout",
+      "bytes": 432,
+      "sha256": "bbd4c2529f04f4a252fff20b7a08b1cbfabe7ea830b0bda1fbb65c0206a4faf1"
+    },
+    "dump-layout.h": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/dump-layout.h",
+      "bytes": 563,
+      "sha256": "788e43a79da00da5d2e5d6fc9821e3e24cade3868ccc98883ff3ab18ebfc0334"
+    },
+    "fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/fixture.c",
+      "bytes": 12177,
+      "sha256": "618ec740c124adafe311be086afacfb74518a2f316de44e4fd76946ee540576b"
+    },
+    "run_fixture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/run_fixture.py",
+      "bytes": 8013,
+      "sha256": "1be23e295f937b92136f4b49b0b38db8ea081ad064e8777bf48bcd5ba4cd326f"
+    }
+  }
+}

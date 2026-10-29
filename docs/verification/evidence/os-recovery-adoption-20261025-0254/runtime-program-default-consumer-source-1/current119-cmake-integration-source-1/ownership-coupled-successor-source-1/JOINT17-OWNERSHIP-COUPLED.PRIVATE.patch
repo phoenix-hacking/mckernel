@@ -1,0 +1,906 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -303,18 +303,12 @@
+ add_subdirectory(tools/mcstat)
+ add_subdirectory(tools/crash)
+ 
+-configure_file(scripts/mcreboot-smp.sh.in mcreboot.sh @ONLY)
+-configure_file(scripts/mcstop+release-smp.sh.in mcstop+release.sh @ONLY)
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++# Existing script consumers remain defaults until root qualifies and selects the Rust counterparts.
++include("${PROJECT_SOURCE_DIR}/scripts/rust/boot-tools/SelectRustBootTools.cmake")
++include("${PROJECT_SOURCE_DIR}/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake")
+ configure_file(scripts/mcreboot.1in mcreboot.1 @ONLY)
+-configure_file(scripts/eclair-dump-backtrace.exp.in eclair-dump-backtrace.exp @ONLY)
+ configure_file(test/mck_test_config.sample.in mck_test_config.sample @ONLY)
+-install(PROGRAMS
+-		"${CMAKE_CURRENT_BINARY_DIR}/mcreboot.sh"
+-		"${CMAKE_CURRENT_BINARY_DIR}/mcstop+release.sh"
+-	DESTINATION "${CMAKE_INSTALL_SBINDIR}")
+-install(PROGRAMS
+-		"${CMAKE_CURRENT_BINARY_DIR}/eclair-dump-backtrace.exp"
+-	DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ install(FILES "scripts/irqbalance_mck.in"
+ 	DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}")
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/mcreboot.1"
+--- a/executer/user/CMakeLists.txt
++++ b/executer/user/CMakeLists.txt
+@@ -602,7 +602,7 @@
+ 	target_compile_definitions(ldump2mcdump PRIVATE -DEXECUTER_BFD_SET_SECTION_NEEDS_BFD)
+ endif()
+ 
+-configure_file(vmcore2mckdump.in vmcore2mckdump @ONLY)
++include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/SelectRustVmcore2mckdump.cmake")
+ 
+ configure_file(mcexec.1in mcexec.1 @ONLY)
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+--- /dev/null
++++ b/executer/user/cmake/SelectRustVmcore2mckdump.cmake
+@@ -0,0 +1,33 @@
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++# Reuses the existing private wrapper; current script remains selected until joint ACK qualification.
++option(ENABLE_RUST_VMCORE2MCKDUMP "Select the jointly qualified Rust vmcore wrapper/converter contract" OFF)
++if(ENABLE_RUST_VMCORE2MCKDUMP)
++  if(NOT ENABLE_RUST_USER_TOOLS OR NOT CMAKE_SYSTEM_NAME STREQUAL "Linux" OR NOT ARCH STREQUAL "x86_64" OR NOT TARGET ldump2mcdump_rust_helpers)
++    message(FATAL_ERROR "Rust vmcore wrapper requires the actual Linux/x86_64 Rust ldump2mcdump producer")
++  endif()
++  # Source presence is necessary; source/fixture/SDK/native acceptance is a separate root decision.
++  file(SHA256 "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs" _vmcore_ack_source_sha256)
++  if(NOT _vmcore_ack_source_sha256 STREQUAL "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac")
++    message(FATAL_ERROR "Rust vmcore wrapper requires the exact jointly reviewed ACK producer; current unmodified converter is incompatible")
++  endif()
++  set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
++  if(NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}" OR NOT EXISTS "${MCKERNEL_RUNTIME_TOOL_RUSTC}")
++    message(FATAL_ERROR "Rust vmcore wrapper requires the absolute pinned MCKERNEL_RUNTIME_TOOL_RUSTC")
++  endif()
++  set(VMCORE2MCKDUMP_RUST_BIN "${CMAKE_CURRENT_BINARY_DIR}/vmcore2mckdump")
++  add_custom_command(
++    OUTPUT "${VMCORE2MCKDUMP_RUST_BIN}"
++    COMMAND ${CMAKE_COMMAND} -E env
++      "VMCORE_INSTALLDIR=${prefix}" "VMCORE_ARCH=${ARCH}"
++      "VMCORE_CRASH=/usr/bin/crash" "VMCORE_PROMPT_TIMEOUT_MS=300000"
++      "${MCKERNEL_RUNTIME_TOOL_RUSTC}" --edition=2021 -C opt-level=2 -C debuginfo=1
++      "${CMAKE_CURRENT_SOURCE_DIR}/rust/vmcore2mckdump.rs" -o "${VMCORE2MCKDUMP_RUST_BIN}"
++    DEPENDS "${MCKERNEL_RUNTIME_TOOL_RUSTC}" "${CMAKE_CURRENT_SOURCE_DIR}/rust/vmcore2mckdump.rs"
++      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SelectRustVmcore2mckdump.cmake"
++      "${PROJECT_BINARY_DIR}/CMakeCache.txt"
++    VERBATIM)
++  add_custom_target(vmcore2mckdump_rust ALL DEPENDS "${VMCORE2MCKDUMP_RUST_BIN}")
++  add_dependencies(vmcore2mckdump_rust ldump2mcdump)
++else()
++  configure_file(vmcore2mckdump.in vmcore2mckdump @ONLY)
++endif()
+--- /dev/null
++++ b/scripts/rust/boot-tools/SelectRustBootTools.cmake
+@@ -0,0 +1,43 @@
++# Functional OS/apps Rust migration only; no security testing.
++# Default OFF retains the working scripts until matching qualification/root cutover.
++# Explicit ON builds the unchanged existing Rust program bodies at their shipped names.
++option(ENABLE_RUST_BOOT_TOOLS "Select Rust installed McKernel boot/stop programs" OFF)
++if(ENABLE_RUST_BOOT_TOOLS)
++  set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
++  if(NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}" OR NOT EXISTS "${MCKERNEL_RUNTIME_TOOL_RUSTC}")
++    message(FATAL_ERROR "Rust boot/stop consumers require the absolute pinned MCKERNEL_RUNTIME_TOOL_RUSTC")
++  endif()
++  foreach(_value prefix ETCDIR KMODDIR MCKERNELDIR ARCH BUILDID)
++    if("${${_value}}" MATCHES "[^A-Za-z0-9_./:+,@%=-]")
++      message(FATAL_ERROR "Rust boot/stop configuration requires reviewed literal configured values: ${_value}")
++    endif()
++  endforeach()
++  set(_boot_src "${PROJECT_SOURCE_DIR}/scripts/rust/boot-tools")
++  set(_boot_build "${PROJECT_BINARY_DIR}/rust-boot-tools")
++  file(MAKE_DIRECTORY "${_boot_build}")
++  configure_file("${_boot_src}/config.rs.in" "${_boot_build}/config.rs" @ONLY)
++  foreach(_file platform.rs reboot.rs stop.rs mcreboot_main.rs mcstop_main.rs)
++    configure_file("${_boot_src}/${_file}" "${_boot_build}/${_file}" COPYONLY)
++  endforeach()
++  foreach(_entry mcreboot mcstop)
++    if(_entry STREQUAL "mcreboot")
++      set(_output "${PROJECT_BINARY_DIR}/mcreboot.sh")
++    else()
++      set(_output "${PROJECT_BINARY_DIR}/mcstop+release.sh")
++    endif()
++    add_custom_command(OUTPUT "${_output}"
++      COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= "${MCKERNEL_RUNTIME_TOOL_RUSTC}"
++        --edition=2021 --crate-name ${_entry} -C panic=abort -C opt-level=2
++        "${_boot_build}/${_entry}_main.rs" -o "${_output}"
++      DEPENDS "${MCKERNEL_RUNTIME_TOOL_RUSTC}" "${_boot_build}/${_entry}_main.rs" "${_boot_build}/config.rs"
++        "${_boot_build}/platform.rs" "${_boot_build}/reboot.rs" "${_boot_build}/stop.rs"
++      VERBATIM)
++    add_custom_target(${_entry}_rust_program ALL DEPENDS "${_output}")
++  endforeach()
++else()
++  message(WARNING "M15 debt: explicit retained shell boot/stop fallback selected")
++  configure_file(scripts/mcreboot-smp.sh.in mcreboot.sh @ONLY)
++  configure_file(scripts/mcstop+release-smp.sh.in mcstop+release.sh @ONLY)
++endif()
++install(PROGRAMS "${PROJECT_BINARY_DIR}/mcreboot.sh"
++  "${PROJECT_BINARY_DIR}/mcstop+release.sh" DESTINATION "${CMAKE_INSTALL_SBINDIR}")
+--- /dev/null
++++ b/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake
+@@ -0,0 +1,35 @@
++# Functional McKernel OS/apps migration only; no security testing.
++# Default OFF retains the working Expect program until matching qualification/root cutover.
++# Independent selector from boot/stop; installed name and PROGRAMS mode are unchanged.
++option(ENABLE_RUST_ECLAIR_BACKTRACE "Select Rust installed eclair backtrace helper" OFF)
++if(ENABLE_RUST_ECLAIR_BACKTRACE)
++  set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
++  if(NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}" OR NOT EXISTS "${MCKERNEL_RUNTIME_TOOL_RUSTC}")
++    message(FATAL_ERROR "Rust backtrace consumer requires the absolute pinned MCKERNEL_RUNTIME_TOOL_RUSTC")
++  endif()
++  foreach(_value prefix ARCH)
++    if("${${_value}}" MATCHES "[^A-Za-z0-9_./:+,@%=-]")
++      message(FATAL_ERROR "Rust backtrace configuration requires reviewed literal configured values: ${_value}")
++    endif()
++  endforeach()
++  set(_eclair_src "${PROJECT_SOURCE_DIR}/scripts/rust/eclair-backtrace")
++  set(_eclair_build "${PROJECT_BINARY_DIR}/rust-eclair-backtrace")
++  file(MAKE_DIRECTORY "${_eclair_build}")
++  configure_file("${_eclair_src}/config.rs.in" "${_eclair_build}/config.rs" @ONLY)
++  foreach(_file eclair_backtrace.rs eclair_native.rs eclair_main.rs)
++    configure_file("${_eclair_src}/${_file}" "${_eclair_build}/${_file}" COPYONLY)
++  endforeach()
++  set(_eclair_output "${PROJECT_BINARY_DIR}/eclair-dump-backtrace.exp")
++  add_custom_command(OUTPUT "${_eclair_output}"
++    COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= "${MCKERNEL_RUNTIME_TOOL_RUSTC}"
++      --edition=2021 --crate-name eclair_dump_backtrace -C panic=abort -C opt-level=2
++      "${_eclair_build}/eclair_main.rs" -o "${_eclair_output}"
++    DEPENDS "${MCKERNEL_RUNTIME_TOOL_RUSTC}" "${_eclair_build}/eclair_main.rs" "${_eclair_build}/eclair_backtrace.rs"
++      "${_eclair_build}/eclair_native.rs" "${_eclair_build}/config.rs" VERBATIM)
++  add_custom_target(eclair_backtrace_rust_program ALL DEPENDS "${_eclair_output}")
++else()
++  message(WARNING "M15 debt: explicit retained expect helper selected")
++  configure_file(scripts/eclair-dump-backtrace.exp.in eclair-dump-backtrace.exp @ONLY)
++endif()
++install(PROGRAMS "${PROJECT_BINARY_DIR}/eclair-dump-backtrace.exp"
++  DESTINATION "${CMAKE_INSTALL_BINDIR}")
+--- /dev/null
++++ b/scripts/rust/boot-tools/config.rs.in
+@@ -0,0 +1,3 @@
++// Configured by CMake @ONLY, matching installed SMP paths.
++#[derive(Clone)] pub struct Config {pub sbin:String,pub etc:String,pub modules:String,pub kernel:String,pub arch:String,pub buildid:String,pub linux_work_irq:bool,pub trampoline:String}
++impl Config {pub fn installed()->Self{Self{sbin:"@prefix@/sbin".into(),etc:"@ETCDIR@".into(),modules:"@KMODDIR@".into(),kernel:"@MCKERNELDIR@".into(),arch:"@ARCH@".into(),buildid:"@BUILDID@".into(),linux_work_irq:"@ENABLE_LINUX_WORK_IRQ_FOR_IKC@"=="ON",trampoline:std::env::var("IHK_TRAMPOLINE_PHYS").unwrap_or_default()}}}
+--- /dev/null
++++ b/scripts/rust/boot-tools/platform.rs
+@@ -0,0 +1,50 @@
++// Functional McKernel OS/apps migration only; no security testing.
++// Linux utilities are upstream dependencies; no project shell bodies are invoked.
++use std::{fs,io::{self,Write},path::Path,process::{Command,Stdio},time::Duration};
++#[derive(Clone,Debug,Default)] pub struct Output { pub code:i32,pub out:String,pub err:String }
++impl Output { pub fn ok(&self)->bool {self.code==0} }
++#[derive(Clone,Debug,PartialEq)] pub struct Call {pub program:String,pub args:Vec<String>,pub privileged:bool,pub input:Option<String>}
++pub trait Host {
++ fn call(&mut self,c:Call)->Output;
++ fn read(&mut self,path:&str)->io::Result<String>;
++ fn list(&mut self,path:&str)->io::Result<Vec<String>>;
++ fn exists(&mut self,path:&str)->bool;
++ fn file(&mut self,path:&str)->bool;
++ fn sleep(&mut self,millis:u64);
++ fn umask(&mut self,value:u32)->u32;
++ fn diagnostic(&mut self,text:&str);
++}
++pub fn run(h:&mut dyn Host,p:&str,args:&[&str],root:bool)->Output { {let o=h.call(Call{program:p.into(),args:args.iter().map(|s|s.to_string()).collect(),privileged:root,input:None});if (p.ends_with("/ihkconfig")||p.ends_with("/ihkosctl")||p.ends_with("/ihkmond")||p=="chown")&&!o.err.is_empty(){h.diagnostic(o.err.trim_end())}o} }
++pub fn write(h:&mut dyn Host,path:&str,text:&str)->bool {h.call(Call{program:"tee".into(),args:vec![path.into()],privileged:true,input:Some(text.into())}).ok()}
++pub fn entries(h:&mut dyn Host,path:&str)->Vec<String> {let mut v=h.list(path).unwrap_or_default();v.sort();v}
++pub fn devices(h:&mut dyn Host,prefix:&str)->Vec<String> {entries(h,"/dev").into_iter().filter(|s|s.starts_with(prefix)).map(|s|format!("/dev/{s}")).collect()}
++pub fn loaded(h:&mut dyn Host,module:&str)->bool {h.read("/proc/modules").unwrap_or_default().lines().any(|s|s.split_whitespace().next()==Some(module))}
++pub fn words(s:&str)->Vec<&str>{s.split_whitespace().collect()}
++pub fn destroy(h:&mut dyn Host,ctl:&str,index:&str)->bool {for attempt in 0..5 {if run(h,ctl,&["0","destroy",index],true).ok(){return true}if attempt<4{h.sleep(250)}} false}
++pub const IRQ_CONFIG:&str="/run/systemd/system/irqbalance.service.d/mckernel.conf";
++pub const IRQ_SAVE:&str="/run/sysconfig/irqbalance_mck_affinities";
++pub fn irq_restore(h:&mut dyn Host) {
++ if !h.file(IRQ_CONFIG){return}
++ for irq in entries(h,&format!("{IRQ_SAVE}/proc/irq")) {let f=format!("/proc/irq/{irq}/smp_affinity");if let Ok(s)=h.read(&format!("{IRQ_SAVE}{f}")){write(h,&f,&s);}}
++ run(h,"rm",&["-rf",IRQ_CONFIG,"/run/sysconfig/irqbalance_mck",IRQ_SAVE],true);
++ run(h,"rmdir",&["/run/systemd/system/irqbalance.service.d"],true);
++ run(h,"systemctl",&["daemon-reload"],true);run(h,"systemctl",&["restart","irqbalance.service"],true);
++}
++pub struct Native {pub sudo:bool}
++extern "C" {fn umask(mask:u32)->u32;fn geteuid()->u32;}
++impl Native {pub fn new()->Self{Self{sudo:unsafe{geteuid()!=0}}}}
++impl Host for Native {
++ fn call(&mut self,c:Call)->Output {
++  let mut command=if c.program=="insmod" {let mut q=Command::new("taskset");q.args(["-c","0"]);if c.privileged&&self.sudo{q.arg("sudo");}q.arg("insmod");q}else if c.privileged&&self.sudo {let mut q=Command::new("sudo");q.arg(&c.program);q}else{Command::new(&c.program)};
++  command.args(&c.args).stdin(if c.input.is_some(){Stdio::piped()}else{Stdio::null()}).stdout(Stdio::piped()).stderr(Stdio::piped());
++  match command.spawn(){Ok(mut child)=>{if let Some(input)=c.input {if let Some(mut stdin)=child.stdin.take(){if let Err(e)=stdin.write_all(input.as_bytes()){let _=child.wait();return Output{code:1,err:e.to_string(),..Output::default()}}}}
++   match child.wait_with_output(){Ok(o)=>Output{code:o.status.code().unwrap_or(1),out:String::from_utf8_lossy(&o.stdout).into_owned(),err:String::from_utf8_lossy(&o.stderr).into_owned()},Err(e)=>Output{code:1,err:e.to_string(),..Output::default()}}},
++   Err(e)=>Output{code:if e.kind()==io::ErrorKind::NotFound{127}else{126},err:e.to_string(),..Output::default()}}
++ }
++ fn read(&mut self,p:&str)->io::Result<String>{fs::read_to_string(p)}
++ fn list(&mut self,p:&str)->io::Result<Vec<String>>{fs::read_dir(p)?.map(|v|v.map(|e|e.file_name().to_string_lossy().into_owned())).collect()}
++ fn exists(&mut self,p:&str)->bool{Path::new(p).exists()} fn file(&mut self,p:&str)->bool{Path::new(p).is_file()}
++ fn sleep(&mut self,ms:u64){std::thread::sleep(Duration::from_millis(ms))}
++ fn umask(&mut self,v:u32)->u32{unsafe{umask(v)}}
++ fn diagnostic(&mut self,t:&str){eprintln!("{t}")}
++}
+--- /dev/null
++++ b/scripts/rust/boot-tools/reboot.rs
+@@ -0,0 +1,64 @@
++// Based on mcreboot-smp.sh.in; Copyright RIKEN AICS 2014, Fujitsu Ltd. 2018.
++// Functional McKernel OS/apps migration only; no security testing.
++use crate::{config::Config,platform::*};
++#[derive(Clone,Debug,PartialEq)]pub struct Options {pub mem:String,pub cpus:String,pub ikc:String,pub facility:String,pub owner:Option<String>,pub redirect:String,pub interval:String,pub irq:String,pub dump:String,pub extra:String,pub turbo:bool,pub safe:bool,pub halt:bool,pub oversubscribe:bool,pub sharing:bool,pub reserve:bool}
++impl Default for Options {fn default()->Self{Self{mem:"512M@0".into(),cpus:String::new(),ikc:String::new(),facility:"LOG_LOCAL6".into(),owner:None,redirect:"0".into(),interval:"-1".into(),irq:String::new(),dump:"24".into(),extra:String::new(),turbo:false,safe:false,halt:false,oversubscribe:false,sharing:true,reserve:false}}}
++pub fn parse(args:&[String])->Result<Options,String>{let mut o=Options::default();let mut i=0;while i<args.len(){let a=&args[i];if a=="--"||!a.starts_with('-')||a=="-"{break}let mut chars=a[1..].char_indices();while let Some((n,ch))=chars.next(){match ch{'s'=>o.safe=true,'t'=>o.turbo=true,'h'=>o.halt=true,'O'=>o.oversubscribe=true,'R'=>o.reserve=true,'f'|'o'|'k'|'c'|'m'|'r'|'q'|'e'|'d'|'i'|'T'=>{let start=n+2;let v=if start<a.len(){a[start..].to_string()}else{i+=1;args.get(i).ok_or_else(||format!("option requires an argument -- {ch}"))?.clone()};match ch{'f'=>o.facility=v,'o'=>o.owner=Some(v),'k'=>o.redirect=v,'c'=>o.cpus=v,'m'=>o.mem=v,'r'=>o.ikc=v,'q'=>o.irq=v,'e'=>o.extra=v,'d'=>o.dump=v,'i'=>o.interval=v,'T'=>match v.as_str(){"1"=>o.sharing=true,"0"=>o.sharing=false,_=>{}},_=>{}}break},_=>return Err(format!("invalid option -- {ch}"))}}i+=1;}Ok(o)}
++#[derive(Default)]struct Acquired {ihk:bool,smp:bool,mcctrl:bool,mem:bool,cpu:bool,os:bool,irq_saved:bool,irq_stopped:bool}
++fn reserve(h:&mut dyn Host,ctl:&str,kind:&str,value:&str)->bool{run(h,ctl,&["0","reserve",kind,value],true).ok()}
++fn fail(h:&mut dyn Host,c:&Config,o:&Options,a:&Acquired,oldmask:u32,irq_used:bool,message:&str)->i32{
++ h.diagnostic(message);let ctl=format!("{}/ihkconfig",c.sbin);
++ // Roll back only state acquired by this attempt. Successful reboot still targets
++ // every existing OS, just as the original public command specifies.
++ if a.os&&!run(h,&ctl,&["0","destroy","0"],true).ok(){h.diagnostic("warning: failed to destroy LWK instance 0")}
++ if a.mcctrl&&!run(h,"rmmod",&["mcctrl"],true).ok(){h.diagnostic("warning: failed to remove mcctrl")}
++ for (owned,kind,value,label) in [(a.cpu,"cpu",o.cpus.as_str(),"CPUs"),(a.mem,"mem",o.mem.as_str(),"memory")] {if owned&&!run(h,&ctl,&["0","release",kind,value],true).ok(){h.diagnostic(&format!("warning: failed to release {label}"))}}
++ for (owned,module) in [(a.smp,format!("ihk_smp_{}",c.arch)),(a.ihk,"ihk".into())]{if owned&&!run(h,"rmmod",&[&module],true).ok(){h.diagnostic(&format!("warning: failed to remove {module}"))}}
++ h.umask(oldmask);if a.irq_saved&&irq_used{restore_saved_affinities(h);if h.file(IRQ_CONFIG){irq_restore(h);}else{run(h,"rm",&["-rf",IRQ_SAVE],true);}}if a.irq_stopped&&irq_used{if !run(h,"systemctl",&["start","irqbalance.service"],true).ok(){h.diagnostic("warning: failed to start irqbalance")}}1
++}
++pub fn cpu_set(text:&str)->Result<Vec<usize>,String>{let mut out=Vec::new();for part in text.trim().split(','){let mut r=part.split('-');let a=r.next().unwrap_or("").parse::<usize>().map_err(|_|"invalid CPU list")?;let b=match r.next(){Some(v)=>v.parse::<usize>().map_err(|_|"invalid CPU range")?,None=>a};if r.next().is_some()||a>b||b>1_048_575{return Err("invalid CPU range".into())}out.extend(a..=b)}out.sort_unstable();out.dedup();Ok(out)}
++pub fn masks(cpus:&str,count:usize)->Result<(Vec<u32>,String,String),String>{if count==0||count>1_048_576{return Err("invalid CPU count".into())}let mut mask=vec![0u32;(count+31)/32];for cpu in cpu_set(cpus)?{if cpu>=count{return Err("CPU exceeds topology".into())}mask[cpu/32]|=1<<(cpu%32)}let fmt=|invert:bool|->String{mask.iter().enumerate().rev().map(|(i,v)|{let bits=if invert{!v}else{*v};let width=if i==mask.len()-1&&count%32!=0{(count%32+3)/4}else{8};let bits=if i==mask.len()-1&&count%32!=0{bits&((1u32<<(count%32))-1)}else{bits};format!("{bits:0width$x}")}).collect::<Vec<_>>().join(",")};let selected=fmt(false);let inverse=fmt(true);Ok((mask,selected,inverse))}
++fn affinity_hit(text:&str,mask:&[u32])->bool{let words=text.trim().split(',').rev().collect::<Vec<_>>();mask.iter().enumerate().any(|(i,m)|words.get(i).and_then(|s|u32::from_str_radix(s,16).ok()).unwrap_or(0)&m!=0)}
++fn restore_saved_affinities(h:&mut dyn Host){for irq in entries(h,&format!("{IRQ_SAVE}/proc/irq")){let f=format!("/proc/irq/{irq}/smp_affinity");if let Ok(s)=h.read(&format!("{IRQ_SAVE}{f}")){write(h,&f,&s);}}}
++fn node_memory(h:&mut dyn Host,node:u32)->Vec<String>{let base=format!("/sys/devices/system/node/node{node}");entries(h,&base).into_iter().filter(|s|s.starts_with("memory")).map(|s|format!("{base}/{s}/online")).filter(|s|h.file(s)).collect()}
++fn ofp_memory(h:&mut dyn Host){let hostname=run(h,"hostname",&[],false).out;let b=hostname.as_bytes();let ofp=b.windows(9).any(|v|v[0]==b'c'&&v[1..5].iter().all(u8::is_ascii_digit)&&&v[5..9]==b".ofp");if !ofp{return}let online=h.read("/sys/devices/system/node/online").unwrap_or_default();match online.trim(){"0-7"=>{for node in 0..4{let files=node_memory(h,node);for v in ["0\n","1\n"]{for f in &files{write(h,f,v);}}}for v in ["0\n","1\n"]{for node in 4..8{for f in node_memory(h,node){write(h,&f,v);}}}},"0-1"=>{let files=node_memory(h,1);for v in ["0\n","1\n"]{for f in &files{write(h,f,v);}}},_=>{}}}
++pub fn execute(h:&mut dyn Host,c:&Config,options:&Options)->i32{
++ let mut o=options.clone();let mut acquired=Acquired::default();let oldmask=h.umask(0);h.umask(oldmask);
++ let enforcing=run(h,"getenforce",&[],false);if enforcing.ok()&&enforcing.out.trim().eq_ignore_ascii_case("enforcing"){h.diagnostic("error: SELinux must not be enabled when running McKernel (update /etc/selinux/config or see setenforce)");return 1}
++ let owner=o.owner.clone().unwrap_or_else(||{let user=run(h,"id",&["-un"],false).out.trim_end().to_string();if user=="root"{run(h,"logname",&[],false).out.trim_end().into()}else{user}});
++ let irq_used=run(h,"systemctl",&["status","irqbalance.service"],false).ok();let ctl=format!("{}/ihkconfig",c.sbin);let osctl=format!("{}/ihkosctl",c.sbin);
++ let pids=run(h,"pidof",&["ihkmond"],false).out;if !pids.trim().is_empty(){let mut a=vec!["-9"];a.extend(words(&pids));run(h,"kill",&a,true);}
++ if o.redirect!="0"||o.interval!="-1"{run(h,&format!("{}/ihkmond",c.sbin),&["-f",&o.facility,"-k",&o.redirect,"-i",&o.interval],true);}
++ if o.cpus.is_empty(){let topology=run(h,"lscpu",&["--parse"],false).out;let cpus=topology.lines().filter(|l|!l.starts_with('#')).filter_map(|l|{let v=l.split(',').collect::<Vec<_>>();if v.len()>3&&v[3]=="0"{Some(v[0].to_string())}else{None}}).collect::<Vec<_>>();o.cpus=cpus.iter().skip(cpus.len()-cpus.len()/2).cloned().collect::<Vec<_>>().join(",");if o.cpus.is_empty(){h.diagnostic("error: no available CPUs on NUMA node 0?");return 1}}
++ run(h,"systemctl",&["stop","irqbalance.service"],true);acquired.irq_stopped=true;let mut selected=String::new();
++ macro_rules! error {($msg:expr)=>{return fail(h,c,&o,&acquired,oldmask,irq_used,$msg)}}
++ if irq_used{let topology=run(h,"lscpu",&[],false).out;let count=topology.lines().find_map(|l|l.strip_prefix("CPU(s):").and_then(|v|v.trim().parse::<usize>().ok())).unwrap_or(0);selected=match masks(&o.cpus,count){Ok((_,mask,_))=>mask,Err(_)=>error!("error: modifying /proc/irq/*/smp_affinity")};}
++ if irq_used&&!h.exists(IRQ_SAVE){acquired.irq_saved=true;
++  for irq in entries(h,"/proc/irq"){let f=format!("/proc/irq/{irq}/smp_affinity");if !h.file(&f){continue}let dest=format!("{IRQ_SAVE}{f}");let parent=dest.rsplit_once('/').unwrap().0;run(h,"mkdir",&["-p",parent],true);let text=run(h,"cat",&[&f],true);if !text.ok()||!write(h,&dest,&text.out){error!("error: saving /proc/irq/*/smp_affinity")}}
++  let topology=run(h,"lscpu",&[],false).out;let count=topology.lines().find_map(|l|l.strip_prefix("CPU(s):").and_then(|v|v.trim().parse::<usize>().ok())).unwrap_or(0);let (mask,s,inv)=match masks(&o.cpus,count){Ok(v)=>v,Err(_)=>error!("error: modifying /proc/irq/*/smp_affinity")};selected=s;
++  for irq in entries(h,"/proc/irq"){let f=format!("/proc/irq/{irq}/smp_affinity");if let Ok(text)=h.read(&f){if affinity_hit(&text,&mask)&&!write(h,&f,&format!("{inv}\n")){error!("error: modifying /proc/irq/*/smp_affinity")}}}
++ }
++ h.umask(oldmask&2);
++ if !loaded(h,"ihk"){if !run(h,"insmod",&[&format!("{}/ihk.ko",c.modules)],true).ok(){error!("error: loading ihk")}acquired.ihk=true;}
++ write(h,"/proc/sys/vm/swappiness","100\n");if run(h,"sync",&[],true).ok(){write(h,"/proc/sys/vm/drop_caches","3\n");}write(h,"/proc/sys/vm/compact_memory","1\n");run(h,"sync",&[],true);
++ let smp=format!("ihk_smp_{}",c.arch);
++ if !loaded(h,&smp){if o.irq.is_empty()&&!c.linux_work_irq{let interrupts=h.read("/proc/interrupts").unwrap_or_default();for irq in 64..=255{if !h.exists(&format!("/proc/irq/{irq}"))&&!interrupts.lines().any(|l|l.split(':').next().unwrap_or("").trim()==irq.to_string()){o.irq=irq.to_string();break}}if o.irq.is_empty(){error!("error: no IRQ available")}}
++  let module=format!("{}/ihk-smp-{}.ko",c.modules,c.arch);let mut args=vec![module];if !o.irq.is_empty(){args.push(format!("ihk_start_irq={}",o.irq))}if !c.trampoline.is_empty(){args.push(format!("ihk_trampoline={}",c.trampoline))}args.push("ihk_ikc_irq_core=0".into());let refs=args.iter().map(String::as_str).collect::<Vec<_>>();if !run(h,"insmod",&refs,true).ok(){error!(&format!("error: loading ihk-smp-{}",c.arch))}acquired.smp=true;ofp_memory(h);
++  if !reserve(h,&ctl,"mem",&o.mem){error!("error: reserving memory")}acquired.mem=true;if !reserve(h,&ctl,"cpu",&o.cpus){error!("error: reserving CPUs")}acquired.cpu=true;
++ }
++ if o.reserve&&!acquired.smp{if !reserve(h,&ctl,"mem",&o.mem){error!("error: reserving memory")}acquired.mem=true;if !reserve(h,&ctl,"cpu",&o.cpus){error!("error: reserving CPUs")}acquired.cpu=true;}
++ if !loaded(h,"mcctrl"){if !run(h,"insmod",&[&format!("{}/mcctrl.ko",c.modules)],true).ok(){error!("error: inserting mcctrl.ko")}acquired.mcctrl=true;}
++ let buildid=run(h,&ctl,&["0","get","buildid"],true).out.trim_end().to_string();if buildid!=c.buildid{error!(&format!("IHK build-id ({buildid}) didn't match McKernel build-id ({}).",c.buildid))}
++ for dev in devices(h,"mcos"){let index=&dev[9..];if !destroy(h,&ctl,index){error!(&format!("error: destroying LWK instance {index} failed"))}}
++ if !run(h,&ctl,&["0","create"],true).ok(){error!("error: creating OS instance")}acquired.os=true;
++ if !run(h,&osctl,&["0","assign","cpu",&o.cpus],true).ok(){error!("error: assign CPUs")}
++ if !o.ikc.is_empty()&&!run(h,&osctl,&["0","set","ikc_map",&o.ikc],true).ok(){error!("error: assign CPUs")}
++ if !run(h,&osctl,&["0","assign","mem",&o.mem],true).ok(){error!("error: assign memory")}
++ let image=format!("{}/mckernel.img",c.kernel);if !run(h,&osctl,&["0","load",&image],true).ok(){error!(&format!("error: loading kernel image: {image}"))}
++ let kargs=format!("hidos {} {} {} dump_level={} {} {} {}",if o.turbo{"turbo"}else{""},if o.safe{"safe_kernel_map"}else{""},if o.halt{"idle_halt"}else{""},o.dump,o.extra,if o.oversubscribe{"allow_oversubscribe"}else{""},if o.sharing{"time_sharing"}else{""});
++ if !run(h,&osctl,&["0","kargs",&kargs],true).ok(){error!("error: setting kernel arguments")}
++ if !run(h,&osctl,&["0","boot"],true).ok(){error!("error: booting")}
++ let mut devs=devices(h,"mcd");if devs.is_empty(){devs.push("/dev/mcd*".into())}let os=devices(h,"mcos");if os.is_empty(){devs.push("/dev/mcos*".into())}else{devs.extend(os)}let mut chown=vec![owner];chown.extend(devs);if !run(h,"chown",&chown.iter().map(String::as_str).collect::<Vec<_>>(),true).ok(){h.diagnostic("warning: failed to chown device files")}
++ if irq_used{let interrupts=h.read("/proc/interrupts").unwrap_or_default();let ban=interrupts.lines().filter(|l|l.trim_end().ends_with("IHK-SMP")).filter_map(|l|l.split(':').next().map(str::trim)).collect::<String>();let template=h.read(&format!("{}/irqbalance_mck.in",c.etc)).unwrap_or_default();write(h,"/run/sysconfig/irqbalance_mck",&template.replace("%mask%",&selected).replace("%banirq%",&ban));run(h,"mkdir",&["/run/systemd/system/irqbalance.service.d"],true);write(h,IRQ_CONFIG,"[Service]\nEnvironmentFile=\nEnvironmentFile=/run/sysconfig/irqbalance_mck\n");run(h,"systemctl",&["daemon-reload"],true);if !run(h,"systemctl",&["restart","irqbalance.service"],true).ok(){error!("error: restarting irqbalance with mckernelconfig")}}
++ h.umask(oldmask);0
++}
+--- /dev/null
++++ b/scripts/rust/boot-tools/stop.rs
+@@ -0,0 +1,31 @@
++// Based on mcstop+release-smp.sh.in; Copyright FUJITSU LIMITED 2018, RIKEN AICS 2015.
++// Functional McKernel OS/apps migration only; no security testing.
++use crate::{config::Config,platform::*};
++#[derive(Default,Debug,PartialEq)] pub struct Options {pub rmmod:String,pub kill:bool,pub retain:bool}
++pub fn parse(args:&[String])->Result<Options,String> {
++ let mut o=Options{rmmod:"/sbin/rmmod".into(),..Options::default()};let mut i=0;
++ while i<args.len(){let a=&args[i];if a=="--"{i+=1;break}if !a.starts_with('-')||a=="-"{break}
++ let mut chars=a[1..].char_indices().peekable();while let Some((n,c))=chars.next(){match c{'k'=>o.kill=true,'R'=>o.retain=true,'r'=>{let start=n+2;if start<a.len(){o.rmmod=a[start..].into()}else{i+=1;o.rmmod=args.get(i).ok_or("option requires an argument -- r")?.clone()}break},_=>return Err(format!("invalid option -- {c}"))}}i+=1;}
++ if i<args.len(){return Err(format!("Extra arguments: {}",args[i..].join(" ")))}Ok(o)
++}
++pub fn execute(h:&mut dyn Host,c:&Config,o:&Options)->i32 {
++ if !h.file(&o.rmmod){h.diagnostic(&format!("error: {} doesn't exist, please specify by -r <path_to_rmmod>",o.rmmod));return 1}
++ let smp=format!("ihk_smp_{}",c.arch);if !loaded(h,&smp){return 0}
++ if h.file(IRQ_CONFIG){run(h,"systemctl",&["stop","irqbalance"],true);}
++ let ctl=format!("{}/ihkconfig",c.sbin);
++ for dev in devices(h,"mcos") {
++  let users=run(h,"lsof",&["-t",&dev],false).out;
++  if !users.trim().is_empty(){if !o.kill{h.diagnostic(&format!("Proesses still using {dev}: {}",users.trim_end()));return 1}
++   let mut args=vec!["-9"];args.extend(words(&users));run(h,"kill",&args,false);}
++  let index=&dev[9..];if !destroy(h,&ctl,index){h.diagnostic(&format!("error: destroying LWK instance {index} failed"));return 1}
++ }
++ h.sleep(2000);
++ if !run(h,&ctl,&["0","query","cpu"],true).ok(){h.diagnostic("error: querying cpus");return 1}
++ let cpus=run(h,&ctl,&["0","query","cpu"],true).out;
++ if !cpus.trim().is_empty()&&!run(h,&ctl,&["0","release","cpu",cpus.trim_end()],true).ok(){h.diagnostic("warning: failed to release CPUs")}
++ if !run(h,&ctl,&["0","release","mem","all"],true).ok(){h.diagnostic("error: releasing memory");return 1}
++ if o.retain{return 0}
++ for m in ["mcctrl",smp.as_str(),"ihk"] {if loaded(h,m)&&!run(h,&o.rmmod,&[m],true).ok(){h.diagnostic(&format!("error: removing {m}"));return 1}}
++ let pids=run(h,"pidof",&["ihkmond"],false).out;if !pids.trim().is_empty(){let mut a=vec!["-9"];a.extend(words(&pids));run(h,"kill",&a,true);}
++ irq_restore(h);write(h,"/proc/sys/vm/swappiness","60\n");0
++}
+--- /dev/null
++++ b/scripts/rust/boot-tools/mcreboot_main.rs
+@@ -0,0 +1 @@
++mod platform; mod config; mod reboot; fn main(){let args=std::env::args().skip(1).collect::<Vec<_>>();let mut h=platform::Native::new();let rc=match reboot::parse(&args){Ok(o)=>reboot::execute(&mut h,&config::Config::installed(),&o),Err(e)=>{eprintln!("{e}");1}};std::process::exit(rc)}
+--- /dev/null
++++ b/scripts/rust/boot-tools/mcstop_main.rs
+@@ -0,0 +1 @@
++mod platform; mod config; mod stop; fn main(){let args=std::env::args().skip(1).collect::<Vec<_>>();let mut h=platform::Native::new();let rc=match stop::parse(&args){Ok(o)=>stop::execute(&mut h,&config::Config::installed(),&o),Err(e)=>{eprintln!("{e}");1}};std::process::exit(rc)}
+--- /dev/null
++++ b/scripts/rust/eclair-backtrace/config.rs.in
+@@ -0,0 +1,2 @@
++pub const ECLAIR:&str="@prefix@/bin/eclair";
++pub const KERNEL:&str="@prefix@/smp-@ARCH@/kernel/mckernel.img";
+--- /dev/null
++++ b/scripts/rust/eclair-backtrace/eclair_backtrace.rs
+@@ -0,0 +1,31 @@
++// Based on scripts/eclair-dump-backtrace.exp.in, original retained as reference.
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use std::io;
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]pub enum State {Init,ThreadsList,ThreadChosen,ThreadBt,ThreadSkip,UnknownPrompt,UnknownQuit,Finished}
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]enum Event{Quit,Unknown,UnknownFrame,Prompt,More,Continue,NotKnown}
++const PATTERNS:[(&[u8],Event);7]=[(b"Quit anyway? (y or n) ",Event::Quit),(b"Unknown thread",Event::Unknown),(b"in ?? ()",Event::UnknownFrame),(b"(eclair) ",Event::Prompt),(b"Type <RET> for more, q to quit, c to continue without paging--",Event::More),(b"Type <return> to continue, or q <return> to quit",Event::Continue),(b" not known.",Event::NotKnown)];
++pub struct Session {pub state:State,pub thread_id:u64,pending:Vec<u8>}
++impl Default for Session {fn default()->Self{Self{state:State::Init,thread_id:0,pending:Vec::new()}}}
++impl Session{
++ pub fn feed(&mut self,bytes:&[u8])->Result<Vec<String>,String>{self.pending.extend_from_slice(bytes);let mut sends=Vec::new();loop{
++  let mut found=None;for (order,(pattern,event)) in PATTERNS.iter().enumerate(){if let Some(at)=self.pending.windows(pattern.len()).position(|v|v==*pattern){if found.map_or(true,|(best,best_order,_,_)|at<best||(at==best&&order<best_order)){found=Some((at,order,pattern.len(),*event));}}}
++  let Some((at,_,len,event))=found else{let keep=PATTERNS.iter().map(|(s,_)|s.len()).max().unwrap()-1;if self.pending.len()>keep{self.pending.drain(..self.pending.len()-keep);}break};
++  self.pending.drain(..at+len);
++  if self.state==State::Finished{break}
++  // The reference's nested expects after "not known." wait for only these two
++  // prompts; ordinary pagination/state handlers must not consume that transition.
++  if self.state==State::UnknownPrompt{if event==Event::Prompt{sends.push("quit\r".into());self.state=State::UnknownQuit;}continue}
++  if self.state==State::UnknownQuit{if event==Event::Quit{sends.push("y\r".into());self.state=State::Finished;}continue}
++  match event{
++   Event::Quit=>{sends.push("y\r".into());self.state=State::Finished;},
++   Event::Unknown=>sends.push("quit\r".into()),
++   Event::UnknownFrame=>if matches!(self.state,State::ThreadChosen|State::ThreadBt){self.state=State::ThreadSkip},
++   Event::Prompt=>match self.state{State::Init=>{self.state=State::ThreadsList;sends.push("info threads\r".into());},State::ThreadsList|State::ThreadBt|State::ThreadSkip=>{self.thread_id=self.thread_id.checked_add(1).ok_or("thread index overflow")?;self.state=State::ThreadChosen;sends.push(format!("thread {}\r",self.thread_id));},State::ThreadChosen=>{self.state=State::ThreadBt;sends.push("bt\r".into());},_=>{}},
++   Event::More=>match self.state{State::ThreadsList=>sends.push("\r".into()),State::ThreadBt|State::ThreadSkip=>sends.push("q\r".into()),_=>{}},
++   Event::Continue=>match self.state{State::ThreadsList|State::ThreadBt=>sends.push("\r".into()),State::ThreadSkip=>sends.push("q\r".into()),_=>{}},
++   Event::NotKnown=>self.state=State::UnknownPrompt,
++  }
++ }Ok(sends)}
++}
++pub trait Terminal{fn read(&mut self)->io::Result<Vec<u8>>;fn send(&mut self,text:&str)->io::Result<()>;fn transcript(&mut self,bytes:&[u8])->io::Result<()>;fn wait(&mut self)->io::Result<()>;}
++pub fn drive(t:&mut dyn Terminal)->Result<(),String>{let mut session=Session::default();loop{let bytes=t.read().map_err(|e|e.to_string())?;if bytes.is_empty(){t.wait().map_err(|e|e.to_string())?;return Ok(())}t.transcript(&bytes).map_err(|e|e.to_string())?;for text in session.feed(&bytes)?{t.send(&text).map_err(|e|e.to_string())?;}if session.state==State::Finished{t.wait().map_err(|e|e.to_string())?;return Ok(())}}}
+--- /dev/null
++++ b/scripts/rust/eclair-backtrace/eclair_native.rs
+@@ -0,0 +1,21 @@
++// Linux PTY transport. Only upstream libc interfaces; no Tcl/shell body.
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::eclair_backtrace::Terminal;
++use std::{ffi::{c_char,c_int,c_ulong,c_void},fs::File,io::{self,Read,Write},os::{fd::{AsRawFd,FromRawFd},unix::process::CommandExt},process::{Child,Command,Stdio}};
++#[link(name="util")]extern "C"{fn openpty(master:*mut c_int,slave:*mut c_int,name:*mut c_char,term:*const c_void,window:*const c_void)->c_int;}
++extern "C"{fn setsid()->c_int;fn ioctl(fd:c_int,request:c_ulong,...)->c_int;}
++pub struct Pty{master:File,child:Child,waited:bool}
++impl Pty{pub fn spawn(executable:&str,kernel:&str)->io::Result<Self>{let(mut master,mut slave)=(-1,-1);if unsafe{openpty(&mut master,&mut slave,std::ptr::null_mut(),std::ptr::null(),std::ptr::null())}<0{return Err(io::Error::last_os_error())}let master=unsafe{File::from_raw_fd(master)};let slave=unsafe{File::from_raw_fd(slave)};
++ let mut command=Command::new(executable);command.args(["-k",kernel,"-i","-l"]).stdin(Stdio::from(slave.try_clone()?)).stdout(Stdio::from(slave.try_clone()?)).stderr(Stdio::from(slave));
++ // Closing the master in the child prevents an inherited writer from keeping the
++ // PTY alive at EOF. FDs created by openpty predate Command's CLOEXEC discipline.
++ let master_fd=master.as_raw_fd();unsafe{command.pre_exec(move||{if setsid()<0{return Err(io::Error::last_os_error())}if ioctl(0,0x540e as c_ulong,0 as c_int)<0{return Err(io::Error::last_os_error())}close_fd(master_fd);Ok(())});}
++ let child=command.spawn()?;Ok(Self{master,child,waited:false})}}
++extern "C"{fn close(fd:c_int)->c_int;}
++unsafe fn close_fd(fd:c_int){close(fd);}
++impl Terminal for Pty{
++ fn read(&mut self)->io::Result<Vec<u8>>{let mut buf=vec![0u8;8192];loop{match self.master.read(&mut buf){Ok(n)=>{buf.truncate(n);return Ok(buf)},Err(e)if e.kind()==io::ErrorKind::Interrupted=>continue,Err(e)if e.raw_os_error()==Some(5)=>return Ok(Vec::new()),Err(e)=>return Err(e)}}}
++ fn send(&mut self,text:&str)->io::Result<()>{self.master.write_all(text.as_bytes())}
++ fn transcript(&mut self,b:&[u8])->io::Result<()>{let mut out=io::stdout().lock();out.write_all(b)?;out.flush()}
++ fn wait(&mut self)->io::Result<()>{if !self.waited{self.child.wait()?;self.waited=true;}Ok(())}
++}
+--- /dev/null
++++ b/scripts/rust/eclair-backtrace/eclair_main.rs
+@@ -0,0 +1,2 @@
++mod eclair_backtrace;mod eclair_native;mod config;
++fn main(){println!("spawn {} -k {} -i -l",config::ECLAIR,config::KERNEL);let result=eclair_native::Pty::spawn(config::ECLAIR,config::KERNEL).map_err(|e|e.to_string()).and_then(|mut p|eclair_backtrace::drive(&mut p));if let Err(e)=result{eprintln!("eclair-dump-backtrace: {e}");std::process::exit(1)}}
+--- /dev/null
++++ b/executer/user/rust/vmcore2mckdump.rs
+@@ -0,0 +1,215 @@
++// Derived from vmcore2mckdump.in COPYRIGHT FUJITSU LIMITED 2017-2018.
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Private source candidate. Dump production stays in existing Rust converter.
++// Intended behavior (requires reviewed converter-ack.patch): clean conversation,
++// clean crash exit, exact fresh-file acknowledgment, and atomic publication.
++use std::ffi::{CString, OsStr, OsString};
++use std::fs::{self, File, OpenOptions};
++use std::io::{self, Read, Write};
++use std::os::fd::{AsRawFd, FromRawFd};
++use std::os::unix::ffi::{OsStrExt, OsStringExt};
++use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
++use std::os::unix::process::CommandExt;
++use std::path::{Path, PathBuf};
++use std::process::{Child, Command, Stdio};
++use std::time::{Duration, Instant};
++use std::os::raw::{c_int, c_short, c_ulong, c_void};
++const PREFIX: &str = env!("VMCORE_INSTALLDIR");
++const ARCH: &str = env!("VMCORE_ARCH");
++const CRASH: &str = env!("VMCORE_CRASH");
++const TIMEOUT_MS: &str = env!("VMCORE_PROMPT_TIMEOUT_MS");
++const PROMPT: &[u8] = b"crash>";
++const ACK: &[u8] = b"MCKERNEL_LDUMP2MCDUMP_SUCCESS ";
++#[repr(C)]
++struct PollFd { fd: c_int, events: c_short, revents: c_short }
++#[link(name = "util")]
++extern "C" { fn openpty(master: *mut c_int, slave: *mut c_int, name: *mut u8, term: *const c_void, win: *const c_void) -> c_int; }
++extern "C" {
++    fn setsid() -> c_int;
++    fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
++    fn poll(fds: *mut PollFd, count: c_ulong, timeout: c_int) -> c_int;
++    fn kill(pid: c_int, signal: c_int) -> c_int;
++}
++fn literal_path(path: &OsStr) -> bool {
++    !path.is_empty() && path.as_bytes().iter().all(|b| b.is_ascii_alphanumeric() || b"/._:+,@%=-".contains(b))
++}
++fn uname_release() -> OsString {
++    // Original command substitution runs before any CLI validation and ignores
++    // uname's exit status. Keep stderr inherited and strip trailing LFs only.
++    match Command::new("uname").arg("-r").stderr(Stdio::inherit()).output() {
++        Ok(mut output) => {
++            while output.stdout.last() == Some(&b'\n') { output.stdout.pop(); }
++            OsString::from_vec(output.stdout)
++        }
++        Err(error) => { eprintln!("uname: {error}"); OsString::new() }
++    }
++}
++struct Staging { path: PathBuf, identity: (u64, u64), committed: bool }
++impl Staging {
++    fn create(output: &Path) -> io::Result<Self> {
++        let parent = output.parent().filter(|p| !p.as_os_str().is_empty()).unwrap_or(Path::new("."));
++        for index in 0..100u32 {
++            let path = parent.join(format!(".vmcore2mckdump-{}-{index}.tmp", std::process::id()));
++            match OpenOptions::new().create_new(true).write(true).mode(0o666).open(&path) {
++                Ok(file) => { let m = file.metadata()?; return Ok(Self { path, identity: (m.dev(), m.ino()), committed: false }); }
++                Err(e) if e.kind() == io::ErrorKind::AlreadyExists => continue,
++                Err(e) => return Err(e),
++            }
++        }
++        Err(io::Error::new(io::ErrorKind::AlreadyExists, "no unused output staging name"))
++    }
++    fn publish(&mut self, output: &Path) -> io::Result<()> {
++        let metadata = fs::symlink_metadata(&self.path)?;
++        if !metadata.is_file() || metadata.len() == 0 || (metadata.dev(), metadata.ino()) != self.identity {
++            return Err(io::Error::new(io::ErrorKind::InvalidData, "fresh acknowledged output is absent, empty, or changed identity"));
++        }
++        // Preserve an existing regular output's permission bits on success.
++        // Existing bytes remain untouched until this atomic path publication.
++        if let Ok(old) = fs::metadata(output) { if old.is_file() { fs::set_permissions(&self.path, old.permissions())?; } }
++        fs::rename(&self.path, output)?;
++        self.committed = true;
++        Ok(())
++    }
++}
++impl Drop for Staging {
++    fn drop(&mut self) {
++        if !self.committed {
++            if let Ok(m) = fs::symlink_metadata(&self.path) {
++                if m.is_file() && (m.dev(), m.ino()) == self.identity {
++                    eprintln!("vmcore2mckdump: retained incomplete output {}", self.path.display());
++                }
++            }
++        }
++    }
++}
++struct Session { child: Child, master: File, pending: Vec<u8>, line: Vec<u8>, wanted_ack: Vec<u8>, acknowledged: bool, eof: bool }
++impl Session {
++    fn spawn(vmlinux: &OsStr, infile: &OsStr, outfile: &OsStr, staging: &Path) -> io::Result<Self> {
++        let mut master = -1; let mut slave = -1;
++        if unsafe { openpty(&mut master, &mut slave, std::ptr::null_mut(), std::ptr::null(), std::ptr::null()) } != 0 { return Err(io::Error::last_os_error()); }
++        let master = unsafe { File::from_raw_fd(master) };
++        let slave = unsafe { File::from_raw_fd(slave) };
++        let mut command = Command::new(CRASH);
++        command.arg(vmlinux).arg(infile)
++            .env("VMLINUX", vmlinux).env("INSTALLDIR", PREFIX).env("INFILE", infile).env("OUTFILE", outfile)
++            .stdin(Stdio::from(slave.try_clone()?)).stdout(Stdio::from(slave.try_clone()?)).stderr(Stdio::from(slave));
++        unsafe {
++            command.pre_exec(|| {
++                if setsid() < 0 { return Err(io::Error::last_os_error()); }
++                if ioctl(0, 0x540eu64 as c_ulong, 0 as c_int) < 0 { return Err(io::Error::last_os_error()); }
++                Ok(())
++            });
++        }
++        let child = command.spawn()?;
++        let mut wanted_ack = ACK.to_vec(); wanted_ack.extend_from_slice(staging.as_os_str().as_bytes());
++        Ok(Self { child, master, pending: Vec::new(), line: Vec::new(), wanted_ack, acknowledged: false, eof: false })
++    }
++    fn receive(&mut self, deadline: Instant) -> io::Result<()> {
++        if self.eof { return Err(io::Error::new(io::ErrorKind::UnexpectedEof, "crash PTY closed")); }
++        let left = deadline.saturating_duration_since(Instant::now());
++        if left.is_zero() { return Err(io::Error::new(io::ErrorKind::TimedOut, "crash prompt deadline")); }
++        let mut descriptor = PollFd { fd: self.master.as_raw_fd(), events: 1, revents: 0 };
++        let ready = unsafe { poll(&mut descriptor, 1, left.as_millis().min(c_int::MAX as u128).max(1) as c_int) };
++        if ready < 0 {
++            let e = io::Error::last_os_error(); if e.kind() == io::ErrorKind::Interrupted { return Ok(()); } return Err(e);
++        }
++        if ready == 0 { return Err(io::Error::new(io::ErrorKind::TimedOut, "crash prompt deadline")); }
++        let mut buffer = [0u8; 8192];
++        let n = match self.master.read(&mut buffer) {
++            Ok(0) => { self.eof = true; return Ok(()); }
++            Ok(n) => n,
++            Err(e) if e.raw_os_error() == Some(5) => { self.eof = true; return Ok(()); }
++            Err(e) if e.kind() == io::ErrorKind::Interrupted => return Ok(()),
++            Err(e) => return Err(e),
++        };
++        io::stdout().write_all(&buffer[..n])?; io::stdout().flush()?;
++        self.pending.extend_from_slice(&buffer[..n]);
++        for b in &buffer[..n] {
++            if *b == b'\n' {
++                while self.line.last() == Some(&b'\r') { self.line.pop(); }
++                if self.line == self.wanted_ack { self.acknowledged = true; }
++                self.line.clear();
++            } else if self.line.len() <= self.wanted_ack.len() + 1 { self.line.push(*b); }
++        }
++        Ok(())
++    }
++    fn prompt(&mut self, timeout: Duration) -> io::Result<()> {
++        let deadline = Instant::now() + timeout;
++        loop {
++            if let Some(i) = self.pending.windows(PROMPT.len()).position(|p| p == PROMPT) { self.pending.drain(..i + PROMPT.len()); return Ok(()); }
++            if self.pending.len() > PROMPT.len() - 1 { let n = self.pending.len() - (PROMPT.len() - 1); self.pending.drain(..n); }
++            self.receive(deadline)?;
++        }
++    }
++    fn send(&mut self, bytes: &[u8]) -> io::Result<()> { self.master.write_all(bytes) }
++    fn finish(&mut self, timeout: Duration) -> io::Result<()> {
++        let deadline = Instant::now() + timeout;
++        loop {
++            if let Some(status) = self.child.try_wait()? {
++                // Drain already readable bytes, including a final ack, before
++                // accepting exit. PTY EOF/EIO is normal after crash closes.
++                while !self.eof {
++                    let short = Instant::now() + Duration::from_millis(20);
++                    match self.receive(short) { Ok(()) => {}, Err(e) if e.kind() == io::ErrorKind::TimedOut => break, Err(e) => return Err(e) }
++                }
++                if !status.success() { return Err(io::Error::new(io::ErrorKind::Other, format!("crash failed: {status}"))); }
++                return Ok(());
++            }
++            if self.eof {
++                if Instant::now() >= deadline { return Err(io::Error::new(io::ErrorKind::TimedOut, "crash exit deadline")); }
++                std::thread::sleep(Duration::from_millis(1));
++                continue;
++            }
++            self.receive(deadline)?;
++            self.pending.clear();
++        }
++    }
++}
++impl Drop for Session {
++    fn drop(&mut self) {
++        // While the unreaped leader is owned its PID cannot be reused. Kill its
++        // private session group on failure; do not signal a reaped numeric PID.
++        if matches!(self.child.try_wait(), Ok(None)) { unsafe { kill(-(self.child.id() as c_int), 9); } let _ = self.child.wait(); }
++    }
++}
++fn convert(vmlinux: &OsStr, infile: &OsStr, outfile: &OsStr) -> io::Result<()> {
++    if !literal_path(infile) || !literal_path(outfile) || !literal_path(OsStr::new(PREFIX)) {
++        return Err(io::Error::new(io::ErrorKind::InvalidInput, "review nonliteral path quoting against crash before enabling it"));
++    }
++    let arch = if ARCH == "x86_64" { "x86" } else { ARCH };
++    let timeout = Duration::from_millis(TIMEOUT_MS.parse::<u64>().map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid configured timeout"))?);
++    if timeout.is_zero() { return Err(io::Error::new(io::ErrorKind::InvalidInput, "zero configured timeout")); }
++    let mut staging = Staging::create(Path::new(outfile))?;
++    // CString check is independent of shell/Tcl syntax; no interpreter executes.
++    let _ = CString::new(staging.path.as_os_str().as_bytes()).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "NUL output path"))?;
++    let mut session = Session::spawn(vmlinux, infile, outfile, &staging.path)?;
++    let mut spawn = b"spawn ".to_vec(); spawn.extend_from_slice(CRASH.as_bytes()); spawn.push(b' '); spawn.extend_from_slice(vmlinux.as_bytes()); spawn.push(b' '); spawn.extend_from_slice(infile.as_bytes()); spawn.extend_from_slice(b"\r\n");
++    io::stdout().write_all(&spawn)?; io::stdout().flush()?;
++    let commands = [format!("mod -s ihk_smp_{arch} {PREFIX}/kmod/ihk-smp-{arch}.ko\n"),
++        format!("extend {PREFIX}/lib/ldump2mcdump.so\n"),
++        format!("ldump2mcdump 0 -o {}\n", staging.path.display()),
++        format!("extend -u {PREFIX}/lib/ldump2mcdump.so\n"), "quit\n".to_string()];
++    for command in commands { session.prompt(timeout)?; session.send(command.as_bytes())?; }
++    session.finish(timeout)?;
++    if !session.acknowledged { return Err(io::Error::new(io::ErrorKind::InvalidData, "no matched converter close acknowledgment")); }
++    staging.publish(Path::new(outfile))
++}
++fn run() -> c_int {
++    let release = uname_release();
++    let mut vmlinux = OsString::from("/usr/lib/debug/lib/modules/"); vmlinux.push(release); vmlinux.push("/vmlinux");
++    let args: Vec<OsString> = std::env::args_os().collect();
++    let infile = args.get(1).map(OsString::as_os_str).unwrap_or(OsStr::new(""));
++    let outfile = args.get(2).map(OsString::as_os_str).unwrap_or(OsStr::new(""));
++    if infile.is_empty() || outfile.is_empty() || args.get(3).is_some_and(|x| !x.is_empty()) {
++        eprintln!("usage: vmcore2mckdump <vmcore> <mckdump>"); return 1;
++    }
++    if !Path::new(infile).is_file() {
++        let mut stderr = io::stderr(); let _ = stderr.write_all(infile.as_bytes()); let _ = stderr.write_all(b": not found\n"); return 1;
++    }
++    if ARCH.is_empty() { println!("ARCH_NAME is empty."); return 1; }
++    match convert(&vmlinux, infile, outfile) {
++        Ok(()) => { println!("mcdump: {} is extracted.", outfile.to_string_lossy()); 0 }
++        Err(error) => { eprintln!("vmcore2mckdump: {error}"); println!("Error: failed to extract mcdump."); 1 }
++    }
++}
++fn main() { std::process::exit(run()); }
+--- a/executer/user/rust/ldump2mcdump_helpers.rs
++++ b/executer/user/rust/ldump2mcdump_helpers.rs
+@@ -231,6 +231,7 @@
+     fn free(ptr: *mut c_void);
+     fn perror(s: *const c_char);
+     fn fprintf(stream: *mut File, format: *const c_char, ...) -> c_int;
++    fn fflush(stream: *mut File) -> c_int;
+     fn gethostname(name: *mut c_char, len: usize) -> c_int;
+     fn getuid() -> c_uint;
+     fn getpwuid(uid: c_uint) -> *mut Passwd;
+@@ -259,6 +260,8 @@
+         count: c_ulong,
+     ) -> c_int;
+     fn bfd_close(abfd: *mut Bfd) -> c_int;
++    // Exact selected binutils2.41-63 bfd.h: bool bfd_close_all_done(bfd *).
++    fn bfd_close_all_done(abfd: *mut Bfd) -> bool;
+ }
+ 
+ #[no_mangle]
+@@ -599,6 +602,81 @@
+ #[cfg(ldump2_full_body)]
+ pub unsafe extern "C" fn ldump2mcdump_fini() {}
+ 
++// Project-owned temporary allocations are scoped to their live users.
++#[cfg(ldump2_full_body)]
++struct OwnedAllocation(*mut c_void);
++
++#[cfg(ldump2_full_body)]
++impl OwnedAllocation {
++    unsafe fn allocate(size: usize) -> Self { Self(malloc(size)) }
++    fn as_ptr(&self) -> *mut c_void { self.0 }
++}
++
++#[cfg(ldump2_full_body)]
++impl Drop for OwnedAllocation {
++    fn drop(&mut self) {
++        if !self.0.is_null() {
++            unsafe { free(core::mem::replace(&mut self.0, null_mut())); }
++        }
++    }
++}
++
++// BFD borrows names until terminal teardown. Private prefixes own these blocks;
++// no public dump layout or allocator boundary changes.
++#[repr(C)]
++#[cfg(ldump2_full_body)]
++struct OwnedSectionName { next: *mut OwnedSectionName, bytes: [c_char; PHYSMEM_NAME_SIZE] }
++
++#[cfg(ldump2_full_body)]
++struct OwnedSectionNames { head: *mut OwnedSectionName }
++
++#[cfg(ldump2_full_body)]
++impl OwnedSectionNames {
++    fn new() -> Self { Self { head: null_mut() } }
++    unsafe fn allocate(&mut self) -> *mut c_char {
++        let item = malloc(size_of::<OwnedSectionName>()).cast::<OwnedSectionName>();
++        if item.is_null() { return null_mut(); }
++        (*item).next = self.head;
++        self.head = item;
++        addr_of_mut!((*item).bytes).cast::<c_char>()
++    }
++}
++
++#[cfg(ldump2_full_body)]
++impl Drop for OwnedSectionNames {
++    fn drop(&mut self) {
++        unsafe {
++            while !self.head.is_null() {
++                let item = self.head;
++                self.head = (*item).next;
++                free(item.cast::<c_void>());
++            }
++        }
++    }
++}
++
++#[cfg(ldump2_full_body)]
++struct OwnedBfd { handle: *mut Bfd }
++
++#[cfg(ldump2_full_body)]
++impl OwnedBfd {
++    unsafe fn finish(&mut self) -> c_int {
++        // Selected bfd_close consumes the handle even on FALSE. Disarm first.
++        bfd_close(core::mem::replace(&mut self.handle, null_mut()))
++    }
++}
++
++#[cfg(ldump2_full_body)]
++impl Drop for OwnedBfd {
++    fn drop(&mut self) {
++        if !self.handle.is_null() {
++            // Earlier errors do not finalize pending output. Selected
++            // close_all_done unconditionally deletes BFD, including FALSE.
++            unsafe { let _ = bfd_close_all_done(core::mem::replace(&mut self.handle, null_mut())); }
++        }
++    }
++}
++
+ #[cfg(ldump2_full_body)]
+ unsafe fn read_or_return(addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong) -> c_int {
+     readmem(
+@@ -625,27 +703,32 @@
+ 
+     while i < (*dump_page_set).count {
+         let mut ihk_dump_page = MaybeUninit::<IhkDumpPage>::uninit();
+-        read_or_return(
++        if read_or_return(
+             ihk_dump_page_addr,
+             ihk_dump_page.as_mut_ptr().cast::<c_void>(),
+             size_of::<IhkDumpPage>(),
+             FAULT_ON_ERROR,
+-        );
++        ) != TRUE {
++            return -1;
++        }
+         let ihk_dump_page = ihk_dump_page.assume_init();
+         let map_size = size_of::<c_ulong>().wrapping_mul(ihk_dump_page.map_count as usize);
+-        let map_buf = malloc(map_size).cast::<c_ulong>();
++        let map_owner = OwnedAllocation::allocate(map_size);
++        let map_buf = map_owner.as_ptr().cast::<c_ulong>();
+         if map_buf.is_null() {
+             perror(cstr(ALLOC_MEM_BUFFER));
+             return -1;
+         }
+ 
+         memset(map_buf.cast::<c_void>(), 0, map_size);
+-        read_or_return(
++        if read_or_return(
+             ihk_dump_page_addr.wrapping_add(size_of::<IhkDumpPage>() as c_ulong),
+             map_buf.cast::<c_void>(),
+             map_size,
+             FAULT_ON_ERROR,
+-        );
++        ) != TRUE {
++            return -1;
++        }
+ 
+         let chunk_count = if count_only {
+             ldump2_count_chunks_result(map_buf.cast::<usize>(), ihk_dump_page.map_count as usize)
+@@ -660,7 +743,7 @@
+             )
+         };
+ 
+-        free(map_buf.cast::<c_void>());
++        drop(map_owner);
+ 
+         if count_only {
+             if chunk_count < 0 || chunk_count > c_int::MAX - total {
+@@ -694,6 +777,9 @@
+ #[no_mangle]
+ #[cfg(ldump2_full_body)]
+ pub unsafe extern "C" fn cmd_ldump2mcdump() {
++    // Private acknowledgment proposal: retain existing failure observations and
++    // data-writing behavior, but never acknowledge a partial conversion.
++    let mut conversion_complete = true;
+     static mut PATH: [c_char; PATH_MAX] = [0; PATH_MAX];
+     static mut HNAME: [c_char; HOST_NAME_MAX + 1] = [0; HOST_NAME_MAX + 1];
+ 
+@@ -734,20 +820,24 @@
+ 
+     let symbol_dump_page_set = symbol_value(cstr_mut(DUMP_MEM_SYMBOL));
+     let mut dump_page_set_addr: c_ulong = 0;
+-    read_or_return(
++    if read_or_return(
+         symbol_dump_page_set,
+         addr_of_mut!(dump_page_set_addr).cast::<c_void>(),
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+-    );
++    ) != TRUE {
++        return;
++    }
+ 
+     let mut dump_page_set = MaybeUninit::<IhkDumpPageSet>::uninit();
+-    read_or_return(
++    if read_or_return(
+         dump_page_set_addr,
+         dump_page_set.as_mut_ptr().cast::<c_void>(),
+         size_of::<IhkDumpPageSet>(),
+         FAULT_ON_ERROR,
+-    );
++    ) != TRUE {
++        return;
++    }
+     let dump_page_set = dump_page_set.assume_init();
+ 
+     let mut mem_num: c_int = 0;
+@@ -757,7 +847,8 @@
+ 
+     let mem_size = size_of::<DumpMemChunks>()
+         .wrapping_add(size_of::<DumpMemChunk>().wrapping_mul(mem_num as usize));
+-    mem_chunks = malloc(mem_size).cast::<DumpMemChunks>();
++    let chunks_owner = OwnedAllocation::allocate(mem_size);
++    mem_chunks = chunks_owner.as_ptr().cast::<DumpMemChunks>();
+     if mem_chunks.is_null() {
+         perror(cstr(ALLOC_MEM_BUFFER));
+         return;
+@@ -770,12 +861,14 @@
+ 
+     let symbol_bootstrap_mem = symbol_value(cstr_mut(BOOTSTRAP_MEM_SYMBOL));
+     let mut bootstrap_mem: c_ulong = 0;
+-    read_or_return(
++    if read_or_return(
+         symbol_bootstrap_mem,
+         addr_of_mut!(bootstrap_mem).cast::<c_void>(),
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+-    );
++    ) != TRUE {
++        return;
++    }
+     (*mem_chunks).kernel_base = bootstrap_mem
+         .wrapping_add(LARGE_PAGE_SIZE * 2)
+         .wrapping_sub(1)
+@@ -790,19 +883,23 @@
+     let _ = phys_size;
+ 
+     let bsize: usize = 0x100000;
+-    buf = malloc(bsize);
++    let payload_owner = OwnedAllocation::allocate(bsize);
++    buf = payload_owner.as_ptr();
+     if buf.is_null() {
+         perror(cstr(ALLOC_MALLOC));
+         return;
+     }
+ 
+     bfd_init();
++    // Declaration order keeps borrowed names alive through BFD teardown.
++    let mut section_names = OwnedSectionNames::new();
+     abfd = bfd_fopen(
+         addr_of_mut!(PATH).cast::<c_char>(),
+         null(),
+         cstr(b"w\0"),
+         -1,
+     );
++    let mut bfd_owner = OwnedBfd { handle: abfd };
+     if abfd.is_null() {
+         bfd_perror(cstr(BFD_FOPEN));
+         return;
+@@ -886,7 +983,7 @@
+ 
+     i = 0;
+     while i < (*mem_chunks).nr_chunks as usize {
+-        let physmem_name_buf = malloc(PHYSMEM_NAME_SIZE).cast::<c_char>();
++        let physmem_name_buf = section_names.allocate();
+         if physmem_name_buf.is_null() {
+             perror(cstr(ALLOC_MALLOC));
+             return;
+@@ -945,6 +1042,9 @@
+     }
+ 
+     scn = bfd_get_section_by_name(abfd, cstr(SECTION_PHYSCHUNKS));
++    if scn.is_null() {
++        conversion_complete = false;
++    }
+     if !scn.is_null()
+         && bfd_set_section_contents(
+             abfd,
+@@ -1007,6 +1107,9 @@
+                 }
+                 phys_offset = phys_offset.wrapping_add(cpsize as c_ulong);
+             } else {
++                // Preserve the original diagnostic and continued observation of
++                // later chunks, while suppressing a successful-conversion ack.
++                conversion_complete = false;
+                 fprintf(fp, cstr(READMEM_ERROR), read_mem_ret);
+             }
+             addr = addr.wrapping_add(cpsize as c_ulong);
+@@ -1014,13 +1117,24 @@
+         i += 1;
+     }
+ 
+-    if bfd_close(abfd) == 0 {
++    if bfd_owner.finish() == 0 {
+         bfd_perror(cstr(BFD_CLOSE));
+         return;
+     }
+ 
+-    free(buf);
+-    free(mem_chunks.cast::<c_void>());
++    drop(bfd_owner);
++    drop(section_names);
++    drop(payload_owner);
++    drop(chunks_owner);
++    if conversion_complete {
++        if fprintf(
++            fp,
++            cstr(b"MCKERNEL_LDUMP2MCDUMP_SUCCESS %s\n\0"),
++            addr_of_mut!(PATH).cast::<c_char>(),
++        ) >= 0 {
++            let _ = fflush(fp);
++        }
++    }
+ }
+ 
+ #[panic_handler]

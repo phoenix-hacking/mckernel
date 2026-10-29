@@ -1,0 +1,37 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/binary-functions/opncls.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000130 <_bfd_delete_bfd>:
+     130:	53                   	push   %rbx
+     131:	48 83 bf 20 01 00 00 	cmpq   $0x0,0x120(%rdi)
+     138:	00 
+     139:	48 89 fb             	mov    %rdi,%rbx
+     13c:	74 4a                	je     188 <_bfd_delete_bfd+0x58>
+     13e:	48 8b 47 08          	mov    0x8(%rdi),%rax
+     142:	48 85 c0             	test   %rax,%rax
+     145:	74 10                	je     157 <_bfd_delete_bfd+0x27>
+     147:	ff 90 20 01 00 00    	call   *0x120(%rax)
+     14d:	48 83 bb 20 01 00 00 	cmpq   $0x0,0x120(%rbx)
+     154:	00 
+     155:	74 31                	je     188 <_bfd_delete_bfd+0x58>
+     157:	48 8d 7b 68          	lea    0x68(%rbx),%rdi
+     15b:	e8 00 00 00 00       	call   160 <_bfd_delete_bfd+0x30>
+			15c: R_X86_64_PLT32	bfd_hash_table_free-0x4
+     160:	48 8b bb 20 01 00 00 	mov    0x120(%rbx),%rdi
+     167:	e8 00 00 00 00       	call   16c <_bfd_delete_bfd+0x3c>
+			168: R_X86_64_PLT32	objalloc_free-0x4
+     16c:	48 8b bb e0 00 00 00 	mov    0xe0(%rbx),%rdi
+     173:	e8 00 00 00 00       	call   178 <_bfd_delete_bfd+0x48>
+			174: R_X86_64_PLT32	free-0x4
+     178:	48 89 df             	mov    %rbx,%rdi
+     17b:	5b                   	pop    %rbx
+     17c:	e9 00 00 00 00       	jmp    181 <_bfd_delete_bfd+0x51>
+			17d: R_X86_64_PLT32	free-0x4
+     181:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+     188:	48 8b 3b             	mov    (%rbx),%rdi
+     18b:	e8 00 00 00 00       	call   190 <_bfd_delete_bfd+0x60>
+			18c: R_X86_64_PLT32	free-0x4
+     190:	eb da                	jmp    16c <_bfd_delete_bfd+0x3c>

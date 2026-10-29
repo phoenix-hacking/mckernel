@@ -1,0 +1,137 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CONCRETE_INHERITED_SELECTED_HEADER_ABI_FAILURE_ONE_COHERENT_SUCCESSOR_REQUIRED",
+  "selected_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/binary-selected/usr/include/bfd.h",
+    "bytes": 252810,
+    "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+  },
+  "private_ownership_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/ownership-repair-source-1/ldump2mcdump_helpers.ownership-candidate.rs",
+    "bytes": 32135,
+    "sha256": "dc0d6f75f0d6fbc648223a4b75da6419f4e7d8fbbdacb77a6056daceafd22cac"
+  },
+  "inherited_from_frozen_ACK_candidate": true,
+  "not_caused_by_ownership_delta": true,
+  "ffi": [
+    {
+      "name": "bfd_init",
+      "selected": "unsigned int bfd_init(void)",
+      "current": "fn bfd_init() -> ()",
+      "action": "Align return declaration even though caller discards value."
+    },
+    {
+      "name": "bfd_fopen",
+      "selected": "bfd *bfd_fopen(const char *, const char *, const char *, int)",
+      "current": "four arguments, pointer result",
+      "action": "Preserve compatible opaque pointer and four arguments."
+    },
+    {
+      "name": "bfd_perror",
+      "selected": "void bfd_perror(const char *)",
+      "current": "void, const char pointer",
+      "action": "Preserve compatible primary diagnostic call."
+    },
+    {
+      "name": "bfd_set_format",
+      "selected": "bool bfd_set_format(bfd *, bfd_format)",
+      "current": "two arguments, c_int result",
+      "action": "Use bool return; preserve bfd_format C enum representation/value."
+    },
+    {
+      "name": "bfd_make_section_anyway",
+      "selected": "asection *bfd_make_section_anyway(bfd *, const char *)",
+      "current": "two arguments, section pointer",
+      "action": "Preserve compatible opaque section pointer and borrowed name lifetime."
+    },
+    {
+      "name": "bfd_set_section_size",
+      "selected": "bool bfd_set_section_size(asection *, bfd_size_type)",
+      "current": "THREE arguments: bfd *, section *, c_ulong; c_int result",
+      "action": "Remove obsolete bfd argument; use selected uint64 size and bool result."
+    },
+    {
+      "name": "bfd_set_section_flags",
+      "selected": "bool bfd_set_section_flags(asection *, flagword)",
+      "current": "THREE arguments: bfd *, section *, c_uint; c_int result",
+      "action": "Remove obsolete bfd argument; use uint32 flagword and bool result."
+    },
+    {
+      "name": "bfd_get_section_by_name",
+      "selected": "asection *bfd_get_section_by_name(bfd *, const char *)",
+      "current": "two arguments, section pointer",
+      "action": "Preserve compatible pointer results/NULL handling."
+    },
+    {
+      "name": "bfd_set_section_contents",
+      "selected": "bool bfd_set_section_contents(bfd *, asection *, const void *, file_ptr, bfd_size_type)",
+      "current": "five arguments, c_long offset/c_ulong count, c_int result",
+      "action": "Use bool return; witness selected int64 offset/uint64 count against profile."
+    },
+    {
+      "name": "bfd_close",
+      "selected": "bool bfd_close(bfd *)",
+      "current": "one argument, c_int result",
+      "action": "Use bool return including OwnedBfd.finish; preserve consume-before-call/no retry FALSE behavior."
+    },
+    {
+      "name": "bfd_close_all_done",
+      "selected": "bool bfd_close_all_done(bfd *)",
+      "current": "one argument, bool result",
+      "action": "New import already matches; preserve exact bool declaration and consuming terminal semantics."
+    }
+  ],
+  "section_layout": {
+    "selected_header_lines": [
+      423,
+      436,
+      443,
+      702
+    ],
+    "selected_prefix": [
+      "const char *name",
+      "struct bfd_section *next",
+      "struct bfd_section *prev",
+      "unsigned int id",
+      "unsigned int section_id",
+      "unsigned int index",
+      "flagword flags",
+      "unsigned int packed bitfields including user_set_vma",
+      "bfd_vma vma",
+      "bfd_vma lma",
+      "bfd_size_type size"
+    ],
+    "current_prefix": [
+      "name",
+      "id",
+      "index",
+      "next",
+      "prev",
+      "flags",
+      "bitfields",
+      "vma",
+      "lma",
+      "size"
+    ],
+    "selected_types": {
+      "flagword": "uint32_t",
+      "bfd_vma": "uint64_t when BFD64",
+      "bfd_size_type": "uint64_t when BFD64",
+      "file_ptr": "int64_t"
+    },
+    "defect": "Current repr(C) ASection inserts id/index before next/prev and omits section_id; its vma/lma/bitfields offsets are incompatible with the selected header. Existing fixture hardcodes the same old prefix and therefore cannot detect this selected-provider mismatch.",
+    "required_witness": [
+      "Reuse selected-header to nonshipped C layout witness to Rust accessor/offset pattern; canonical bfd_accessors.rs only covers xvec plus four wrappers, not a full reusable section implementation.",
+      "Measure selected sizeof/alignof/offsetof for needed name, flags, vma, lma, size and actual packed user_set_vma byte/mask; do not retain old offset40/64-byte-prefix assertions as selected SDK proof.",
+      "Prefer opaque asection/BFD with focused Rust accessors derived from exact selected layout, preserving other BFD internal fields. No production C expansion."
+    ]
+  },
+  "next_successor": [
+    "Keep dc0 ownership guards and original520/4e03 sources,40/56case reports and20ownership failures immutable; private ABI successor only.",
+    "Compile functional callback fixture against exact extracted bfd.hde900 instead of duplicating an old3argument prototype/prefix; all supplied BFD callbacks must satisfy actual header declarations.",
+    "Retain original read/write/data/ACK oracles and zero-live-allocation/one-handle/name-lifetime checks; update fixture section allocation/layout to actual asection rather than weakening assertions.",
+    "Bind actual selected SDK libbfd.a bytes before matching SDK provider/link acceptance; header and382-byte .so linker script match is not static archive identity."
+  ],
+  "runtime_authority": null,
+  "SDK_integration_blocked": true
+}
