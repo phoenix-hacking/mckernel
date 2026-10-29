@@ -1,0 +1,124 @@
+{
+  "canonical_applied": false,
+  "changed_postimages": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 43902,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/CMakeLists.txt",
+      "sha256": "570964c368a5df56fe3f1f62a585a2d47729b99776a2b591566ac2a097c29818"
+    },
+    "kernel/rust/lib.rs": {
+      "bytes": 3377,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/lib.rs",
+      "sha256": "8c57731ede6aa125d132a08b012438fc7d16046ebb0f633d189409571add9344"
+    },
+    "kernel/rust/ptrace_clone_noirq.rs": {
+      "bytes": 1184,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/ptrace_clone_noirq.rs",
+      "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+    },
+    "kernel/rust/syscall_clear_host_pte_logger.rs": {
+      "bytes": 772,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/syscall_clear_host_pte_logger.rs",
+      "sha256": "1982650efce731c33d02084b809b10fa9f2e44ceee69ef755325e253f5bf33f5"
+    },
+    "kernel/rust/syscall_exit_group_logger.rs": {
+      "bytes": 1719,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/syscall_exit_group_logger.rs",
+      "sha256": "2f88ddd3dc2957d589abb61f0e1f23412039753bad5c5d2719d17d33bdd79f09"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1302481,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/syscall_policy.rs",
+      "sha256": "9f4943c43cb72d09bee7dc1a19b06774fb7e040c7287e62dc88706a45a5b9693"
+    },
+    "kernel/rust/syscall_ptrace_clone_logger.rs": {
+      "bytes": 3003,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/syscall_ptrace_clone_logger.rs",
+      "sha256": "049cb248d35af6f8f6362c4a3caeafe78ec50a5e6b0432ee2934a09cf9b6d4e9"
+    },
+    "kernel/rust/syscall_settid_logger.rs": {
+      "bytes": 768,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/rust/syscall_settid_logger.rs",
+      "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+    },
+    "kernel/syscall.c": {
+      "bytes": 928548,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/postimage/kernel/syscall.c",
+      "sha256": "9795d862bb364eab22e6f213b6690b21f60243adc1144625219228c0f08bdaf1"
+    }
+  },
+  "checks": [
+    {
+      "command": "/home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/check_source.py",
+      "compiler_preprocessor_native_calls": 0,
+      "exit_status": 0,
+      "original389_source_counter_equal": true,
+      "result": "PASS_PRIVATE_COMPOSITION_SOURCE_CHECKS",
+      "reused_leaf_count": 5,
+      "source_paths": 9,
+      "unchanged_lines_outside_lock_block": true,
+      "unchanged_original_directives": true,
+      "unselected_C_tokens_exact": true
+    },
+    {
+      "kind": "independent exact ref and bounded composition inspection",
+      "result": "PASS"
+    }
+  ],
+  "compiler_executed": false,
+  "current_free": false,
+  "decision": "PASS_SOURCE",
+  "execution_authority": null,
+  "filemap": {
+    "bytes": 6595,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/FILEMAP.SOURCE-ONLY.json",
+    "sha256": "3a4dc770573d18e7036f44c92ffdd0df5276fa5527132265037bae91d0f79d89"
+  },
+  "findings": [
+    "Composition reuses all five leaf byte streams exactly, including paired lock leafa346 and four logger leaves895f/1982/2f88/049c. syscall_policy postimage is byte-identical to the four-logger input; the new composition does not modify its existing body algorithms or callbacks.",
+    "The only new syscall.c composition delta against the four-logger postimage is the original 13-line lock bridge region. The selected preprocessor branch declares two external callback symbols; the unselected branch compacts the exact original two C function token streams onto two lines. No token invokes a line-sensitive macro in those lock bodies. The same block length preserves every outside line and all original file/line directive positions.",
+    "The selected callback ABI and unsafe ownership findings in the prior5ed8 lock review carry through unchanged: C unsigned long/void* matches selected x86 CULong/raw pointer, caller stack nodes span the synchronous paired operations, and the existing writer noirq functions preserve acquisition/release and preemption ordering. No new node storage, borrow, IRQ state, fallback algorithm or nested ownership is added.",
+    "The explicit Rust leaf dependency, single cfg module declaration and single C selector are paired under the same existing Linux6.12/x86_64/non-UBSAN condition. Selected C definitions are absent while Rust owns their exact names; unselected C definitions remain. The composition does not duplicate definitions or alter the parent call ordering.",
+    "All four reused logger leaves retain their static NUL formats, CInt/CLong varargs, callback names and event gating. Exit/ptrace dynamic-debug records use existing Ddebug layout and raw volatile high-byte flag reads without retained references across kprintf; the existing debug-update/exclusion contract is preserved and no synchronization guarantee is added.",
+    "The exact source projection of the four moved debug records is exit_group line5678 and ptrace lines7279/7283/7288, with original file/function/fmt/flags/padding projection. Recombining those four with the unchanged reference records matches the original af46 389-record Counter. This is source projection, not an observed ELF registry or proof of emitted padding."
+  ],
+  "guard_executed": false,
+  "host_payload_executed": false,
+  "implementation_ownership": false,
+  "independent": true,
+  "native_executed": false,
+  "open_requirements": [
+    "Actual CURRENT119 feedback and explicit Root canonical integration remain pending.",
+    "Applicable real header ABI witness, compilation, selected/unselected object/provider/link checks and full389 actual ELF registry checks remain required.",
+    "Native functional proof, whole-file C retirement and M14 acceptance remain open."
+  ],
+  "original_unknown_preserved": true,
+  "patch": {
+    "bytes": 16634,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/LOGGER-LOCK-BATCH.PRIVATE-NOT-APPLIED.patch",
+    "sha256": "b2adebb13296d6f935afc0efa6d8032ae53ba71fd91a243fd1b642a08f38d25d"
+  },
+  "preserved_failures": [
+    "Original lock source-check substring fixture error and corrected ordered-call test remain immutable in its own packet.",
+    "Prior logger/source failures and CURRENT119 original389 qualification remain preserved; this review does not relabel or replace them."
+  ],
+  "reused_lock_review": {
+    "bytes": 7276,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "sha256": "5ed8b1934ab9fb5ac08910e300496808b700e601511606c2bbf995cd6326d253"
+  },
+  "reviewer": "/root/recovery_review",
+  "schema": "mckernel.independent-focused-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_checks": {
+    "bytes": 1457,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/SOURCE-CHECKS.json",
+    "sha256": "818bef12a5f42a219bbd86d244b1e42139432731e09580e5689d3c311d4e5e6c"
+  },
+  "source_ready": {
+    "bytes": 5760,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/SOURCE-READY.json",
+    "sha256": "7f9c58f4a9f17f399c2548d383cd8b6e0a253ae0ead7e91895fc77133bb68375"
+  },
+  "subject": "Private four-logger and paired ptrace noirq lock composition; source equivalence and selection only"
+}

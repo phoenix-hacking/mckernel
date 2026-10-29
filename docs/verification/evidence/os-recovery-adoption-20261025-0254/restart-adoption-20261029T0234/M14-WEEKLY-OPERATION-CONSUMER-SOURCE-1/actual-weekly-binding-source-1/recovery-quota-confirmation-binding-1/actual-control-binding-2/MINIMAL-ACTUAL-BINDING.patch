@@ -1,0 +1,67 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/guardian_guard.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/guardian_guard.py
+@@ -12,24 +12,24 @@
+ 
+ BASE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1')
+ CONTROL = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1')
+-ARM_RECEIPT_REF = None
+-CONFIG_SHA = None
++ARM_RECEIPT_REF = {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/ACTUAL-CONTROLS-ARMED.json', 'bytes': 2021, 'sha256': '42c8b2a0045a7720f15ef591436a0158c2e08f219e30982d22f961c19be4c039'}
++CONFIG_SHA = 'a35c97e0b8ba9fb1d2e84a6b7a08cdecc01ef1da3b1216634dbb91e7bb60521d'
+ CAMPAIGN = Path('/home/holden/mckernel/.git/os-autopilot')
+-PACKET_SHA = None
++PACKET_SHA = '37ec170a9c65b65a4fd4749f0db554a77131432817e00c8d09e70186f0aa6a39'
+ WINDOW_SHA = 'c19b84c10175b49f5db8129ef17b5041ceab3ee41ac1a7688e8ff706ceb3f596'
+ THREAD = '01a18582-1fc6-77b1-bfb6-15c86483f579'
+ DEADLINE = 1793774133
+ WINDOW_BOOT_CAP = 1571576.6960040887
+-JOURNAL_BOOT_CAP = 1571574.6959790066
+-BOOT_CAP = 1571574.6959790066
+-MONO_CAP = 1556236.568932019
++JOURNAL_BOOT_CAP = 1571573.6959699572
++BOOT_CAP = 1571573.6959699572
++MONO_CAP = 1556235.568922472
+ BOOT_ID = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+-INITIAL = None
+-
+-GUARDIAN_LAUNCH_PPID = None
+-GUARDIAN_RECORDED_PPID = None
+-EXPECTED_ACTORS = None
+-AUX_RECORDED_PPIDS = None
++INITIAL = {'watcher': (2525801, '109898158'), 'worker': (2525803, '109898174'), 'server': (2525805, '109898192')}
++
++GUARDIAN_LAUNCH_PPID = 2526572
++GUARDIAN_RECORDED_PPID = 1311
++EXPECTED_ACTORS = {'watcher': (2525801, '109898158'), 'worker': (2525803, '109898174'), 'server': (2525805, '109898192'), 'guardian': (2526573, '109903679'), 'monitor': (2526609, '109904364'), 'phone': (2526610, '109904364')}
++AUX_RECORDED_PPIDS = {'guardian': 1311, 'monitor': 1311, 'phone': 1311}
+ 
+ 
+ def need(value, message):
+@@ -186,15 +186,15 @@
+ 
+ AUTH_START=1793251609.1432834
+ WEEK_SECONDS=604800
+-ARM_STATUS=None
++ARM_STATUS = 'LIVE_CONFIRMED_QUOTA_SAME_WEEK_CONTROLS'
+ 
+ def require_live_binding():
+     need(all(value is not None for value in (ARM_STATUS, ARM_RECEIPT_REF, CONFIG_SHA, PACKET_SHA, INITIAL, EXPECTED_ACTORS, GUARDIAN_LAUNCH_PPID, GUARDIAN_RECORDED_PPID, AUX_RECORDED_PPIDS, MONITOR_ARM_SHA, PHONE_PACKET_SHA)), "UNBOUND: genuine quota-confirmation arm/actors/publications required")
+ 
+ RESET=1793774133
+ WEEKLY_IDENTITY=dict(limit_id='codex',window_duration_mins=10080,resets_at=RESET)
+-MONITOR_ARM_SHA= None
+-PHONE_PACKET_SHA= None
++MONITOR_ARM_SHA = '23c409cf4dfa8f3a9150945dbe53073526d4232c4207b8ac76c60a158451d2c6'
++PHONE_PACKET_SHA = '8f55b85c80f8065897b149083ef5ddf81de955621347d71e499221e3e50fac6b'
+ 
+ class WeeklyWindowChanged(ValueError):
+     pass
+@@ -242,7 +242,7 @@
+     need(state.get('weekly_usage')==row and not state.get('weekly_confirmation_pending') and not state.get('weekly_usage_error'), 'fresh confirmation required; advisory metadata cannot grant admission')
+     need(state.get('weekly_effective_boot_id')==BOOT_ID, 'confirmed quota boot identity')
+     effective=[state.get('weekly_effective_end'),state.get('weekly_effective_monotonic_end'),state.get('weekly_effective_boot_end')]
+-    need(all(finite(x) and 0<x<=cap for x,cap in zip(effective,[RESET,MONO_CAP,BOOT_CAP])), 'confirmed quota ceilings may only tighten')
++    need(all(finite(x) and 0<x<=cap for x,cap in zip(effective,[RESET,1556236.568932019,1571574.6959790066])), 'confirmed quota ceilings may only tighten')
+     need(wall<effective[0], 'confirmed earlier weekly end reached')
+     need(state.get('weekly_usage_thread_id')==THREAD and state.get('weekly_usage_worker_pid')==INITIAL['worker'][0]
+          and state.get('weekly_usage_worker_start')==INITIAL['worker'][1],'weekly account observation belongs to current worker/Root')

@@ -1,3 +1,43 @@
+## Confirmed-quota controls LIVE; one consumed-binding correction — 2026-10-29T19:21:59.762694+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Request20261029T192055430096Z-4ac529edc4f945618a776580d0cee9c7 applied. Q receipt
+LIVE_CONFIRMED_QUOTA_SAME_WEEK_CONTROLS read and adopted: included-only32used,
+canonicalUTC1793774133/MONO1556235.568922472/BOOT1571573.6959699572. No paidfallback.
+Source-only arm wait is over; operation still requires exact live-consumer binding
+and execution release. Rootsolecapture/current-free/119owner; M15paused.
+
+cleanup_bindings owns actual minimal guardian/shared/control-data successor;
+recovery_review continues one focused review session. Exact remaining predicate:
+outer/recursive consumed PINS guardian/shared and fresh operation/config refs must
+agree; old refs must not silently remain. Physicalstage5b361 and original149/72/
+UNKNOWN proof stay preserved. Private logger+lock batch SOURCEPASS33f25, lockleaf
+SOURCEPASS5ed8; no compiler/native/Cretirement credit. Terra completed composition.
+Next actual result: coherent consumed refs→reviewed freshcapture→current-free→119
+four commands/full original389. Reuse baselineSDK21/source6153/objects where exact.
+
+## Manual resume; pending quota-confirmation envelope — 2026-10-29T19:19:52.217118+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation 20261029T191857Z-83497995 supersedes preceding model pauses.
+M14 remains exclusive; M15 paused. SOURCE/REVIEW ONLY: recovery-quota-confirmation-1
+has SOURCE_READY_TESTED_NO_RUNTIME_ARM and no ACTUAL-CONTROLS-ARMED receipt at read.
+Parent owns activation. Old actor receipts/releases are historical. Included-only
+canonical reset1793774133 and original maximum2026-11-04T06:35:33Z remain; no paid
+fallback. Do not treat a model resume as native clearance.
+
+Actual resumed turns: cleanup_bindings prepares minimal current confirmation-policy
+guard successor in fresh recovery-quota-confirmation-binding-1; Terra completes
+retained private logger/lock composition; recovery_review independently reviews
+paired ptrace lock ABI/ownership and will review the changed guard interface.
+Root owns the pending capture/current-free/119 path. Physical formatter5b361 and
+accepted Root4 retirement remain preserved, not replayed.149actor/72nonce frontier
+and original UNKNOWN outcome remain. CURRENT119 is uncompiled; no new compile,
+behavior/native/image/C-retirement or M14-closure result. Original389 unchanged.
+Next source result: finish private composition and minimal consumed guard delta;
+actual capture requires new live receipt and exact operation release. Controller
+work is parent-owned. Checkpoint256f7a569 confirmed on origin by ls-remote.
+
 ## M14 resumed under live reset-jitter recovery controls — 2026-10-29T07:07:42.427596+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

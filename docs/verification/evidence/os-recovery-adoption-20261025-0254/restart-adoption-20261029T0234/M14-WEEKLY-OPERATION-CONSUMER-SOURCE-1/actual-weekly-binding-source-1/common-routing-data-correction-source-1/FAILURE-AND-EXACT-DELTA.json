@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/actual-postjoin-parent-root1/stderr",
+    "bytes": 3011,
+    "sha256": "07e916635c027add6704d81e3affc74b684ba514f319cd17fbfd83a09dd2c7f7"
+  },
+  "capture_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/actual-postjoin-capture-weekly-root1/CAPTURE.json",
+    "bytes": 150,
+    "sha256": "cf0f08b2e48b71e49e566483e838b12e979519912942733f2092a6465c7f9b94"
+  },
+  "parent_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/actual-postjoin-parent-root1/DIRECT-PARENT-JOIN.ACTUAL.json",
+    "bytes": 3249,
+    "sha256": "f14adae8da84f299db2598d4d7f2bd6049d5960cb043ac06be9a3af7ae7aef1c"
+  },
+  "used_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/ROOT64-CAPTURE-RELEASE.ACTUAL.json",
+    "bytes": 7569,
+    "sha256": "fb5eda8f4449dc1389f0f2c36c760e15f90628c3c09ec9b4e765f1890832531e"
+  },
+  "used_actual_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/ACTUAL-PINS.json",
+    "bytes": 6297,
+    "sha256": "9f170e5fb4d7e206f1fe718405768781906620764d2eaefe6bacf3b0ebbfdf19"
+  },
+  "predicate": "bindings['observer'] == ref(__file__)",
+  "consumer": "common=load(PINS['common'],...)",
+  "mistake": "Constructor wrote unused common_source while consumed common remained original old history source",
+  "correction": "Bind consumed common to exact fresh same-directory copied Root59 source; remove unused common_source. Propagate only BYTE refs and same-directory templates up current61/current62/outer chain.",
+  "algorithms_unchanged": true,
+  "no_external_query_evidence": {
+    "capture_directory_entries": [
+      "CAPTURE.json"
+    ],
+    "trace_stops_before_common_observe_and_guard": true
+  },
+  "runtime_authority": null
+}

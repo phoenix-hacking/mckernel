@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_COMPOSITION_SOURCE_CHECKS",
+  "source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/check_source.py",
+    "bytes": 5262,
+    "sha256": "b655ef60b0f8587d904286729326ce16c81e6a99918c75b266ee38e977728dd1"
+  },
+  "command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/check_source.py"
+  ],
+  "returncode": 0,
+  "apply_check": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/LOGGER-LOCK-BATCH.PRIVATE-NOT-APPLIED.patch"
+    ],
+    "returncode": 0
+  },
+  "source_paths": 9,
+  "unchanged_leaf_count": 5,
+  "outside_lock_block_matches_prior_four_logger_postimage": true,
+  "same_original_C_newlines_and_line_directives": true,
+  "preexisting_C_lock_pair_tokens_preserved": true,
+  "exact_lock_address_and_node_forwarding": true,
+  "original389_counter_equal": true,
+  "compiler_preprocessor_native_calls": 0,
+  "actual_ELF_registry_or_native_proof": false,
+  "runtime_authority": null
+}

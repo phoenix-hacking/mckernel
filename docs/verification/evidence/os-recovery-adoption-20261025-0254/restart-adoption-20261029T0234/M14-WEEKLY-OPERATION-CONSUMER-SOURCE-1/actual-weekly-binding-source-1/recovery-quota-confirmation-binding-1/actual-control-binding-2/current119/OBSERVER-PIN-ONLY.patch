@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/current119/accepted_bindings.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/current119/accepted_bindings.py
+@@ -36,7 +36,7 @@
+  bindings=read(q['current_bindings'])
+  need(bindings['phase']=='accepted_current' and bindings['ledger']==q['current_ledger'] and bindings['latest_free']==q['current_free'],'same accepted-current bindings/ledger/free')
+  boundary=read(bindings['current_boundary']);source=boundary['observer']
+- need(source=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/common-routing-data-correction-source-1/observe_current64_current118_postjoin.py', 'bytes': 50085, 'sha256': '331dd596623d100b5d8b84284edce0f4457a12910026075a566709c44d2aeb3d'},'exact expert-census observer body and constructor namespace')
++ need(source=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/routing/observe_current64_current118_postjoin.py', 'bytes': 50085, 'sha256': '331dd596623d100b5d8b84284edce0f4457a12910026075a566709c44d2aeb3d'},'exact expert-census observer body and constructor namespace')
+  observer=load(source,'actual_root65_pure_adoption')
+  # Proven existing pure reader: all72/native history, retirement, raw capture,
+  # positive joins, independent free and boundary/schema checks; no observe/guard.

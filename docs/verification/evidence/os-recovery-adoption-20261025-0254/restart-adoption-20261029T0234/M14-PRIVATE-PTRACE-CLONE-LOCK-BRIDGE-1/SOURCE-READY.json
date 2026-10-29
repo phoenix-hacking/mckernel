@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_CANDIDATE_NOT_COMPILED_NOT_RUNTIME",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/PRIVATE-LEAF.rs",
+    "bytes": 1184,
+    "sha256": "a3466b4decd926036048c70f56ca8de3ef206bab6e26dd4db75d0f9af4d39dbe"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/PTRACE-CLONE-NOIRQ.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 5042,
+    "sha256": "e731d058ffcec16508dd37c2b732943a9455f428bbcd91773981c4c5ff4842a2"
+  },
+  "source_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/SOURCE-INPUTS.json",
+    "bytes": 974,
+    "sha256": "b941f1860d3e92451ad9907480ec3f86bdd73f72410560f5f6e89c71b80ae823"
+  },
+  "source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/check_source.py",
+    "bytes": 3803,
+    "sha256": "2cfb839b492434d2b436a3a3966207501ab98ee53500b157ba4dd381b782c947"
+  },
+  "next": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/ROOT-NEXT.md",
+    "bytes": 2796,
+    "sha256": "54846d953f504b71c7fb4f90ec793af207d59899a946ee5ba1a0a22a03233357"
+  },
+  "observed_checks": [
+    "git apply --check passed",
+    "bounded source check passed after fixture-only substring correction"
+  ],
+  "actual_compiler": false,
+  "actual_native": false,
+  "actual_guard": false,
+  "execution_authority": null,
+  "parent_body_changed": false,
+  "selected_candidate_symbols": [
+    "ptrace_report_clone_noirq_lock_bridge",
+    "ptrace_report_clone_noirq_unlock_bridge"
+  ]
+}
