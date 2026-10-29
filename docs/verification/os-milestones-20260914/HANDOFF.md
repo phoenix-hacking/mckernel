@@ -2,6 +2,27 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Current execution cursor — 2026-10-29T00:59Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+e984210ca59641b299cf42d392eb953b A3 is CONSUMED: all4producercommands0,
+newimage7e5dca2b/C67/Rust72 is REJECTED for20of389registryidentity changes.
+Accepteddefault remainsCURRENT116/42473e03/C71/Rust68; filesM14 4/6,M15 1/8.
+Exactcontainerd980474cc189c35f6d78132856be10b6903aac988808336e7d44efcca0f4108f
+is retained/stoppedexit0/Pid0, NOTretired/currentfree. Holder2222137,
+runner2222194,verifier2221500 positivelyjoined0. Rejected4outputs/23records
+archived4c68af05; originals/rawfailure27e8/reviewa922 retained, neverrerunA3.
+Normal118 retirementSOURCEf230 andactualpending72ledger6838 compatibility7b35
+PASS. Exactremainingpredicate: fetchedsourcecheckpoint/publication10refs mustmatch
+source_review.source_checkpoint, thenindependentexecutionpayloadhash; Rootpublishes,
+bfd_reviewbinds/reviews, Rootexecutesone reviewednormalretirement promptly. No
+metadata-repair dependency. Root64pending72 preservesnativehistory/physicalpending;
+m14_composepreparesseparatefreshpostjoinconsumer/adoption, nofreeclaim.
+Nextcoherentmetadatarepair uses disjointF03layout4e9b/F06identitybbd2 source deltas
+against unchanged389oracle, genuine newcompiler/relink aftersourcechecks; noELFpatch.
+M15consumeractualturn advancesonlyremainingouterrole/bindings; frontierlatebound
+honestlyafterretirement. Originaldeadline06:00Z/cumulativecredits/solecontrols remain.
+
 ## Twenty-minute checkpoint — 2026-10-29T00:16:28Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

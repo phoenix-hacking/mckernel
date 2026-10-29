@@ -1,0 +1,178 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/retire_exact_bfd_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py
+@@ -1,12 +1,12 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-Single custom-BFD stopped-container retirement. Source-only until exact Root release.
++Single CURRENT118 A3 stopped-container retirement. Source-only until exact Root release.
+ Reuse existing transport/census/lock primitives; never signal or release old records.
+ """
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='83c104435ed34b7137f3ff7e84e4e5569130114e9fd1bab95311d9cd54da3aba'
+-SELF=D/'retire_exact_bfd_stopped_container.py'
++BINDINGS_SHA='e402b73ca6b21763228fe14e37a0e7a85c86468280ca6e3693a3c227071e4d1c'
++SELF=D/'retire_exact_current118_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+ LOCK=Path('/run/lock/mckernel-development.lock')
+@@ -38,7 +38,7 @@
+  authenticated(r);s=importlib.util.spec_from_file_location(name,r['path']);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+ 
+ def bindings():
+- need(reference(D/'BINDINGS.json')['sha256']==BINDINGS_SHA,'frozen BFD retirement bindings')
++ need(reference(D/'BINDINGS.json')['sha256']==BINDINGS_SHA,'frozen CURRENT118 retirement bindings')
+  b=strict((D/'BINDINGS.json').read_bytes());need(b['scope']==SCOPE and b['runtime_authority'] is None,'source binding is not authority');return b
+ 
+ def validate_retained(b):
+@@ -46,33 +46,31 @@
+  for r in p['source_refs'].values():authenticated(r)
+  for r in protected['failed_source_evidence']:authenticated(r)
+  refs=p['source_refs'];profile=authenticated(refs['PROFILE.SOURCE-ONLY.json'],True);claim=authenticated(refs['output:claim.json'],True);plan=authenticated(refs['output:plan.json'],True);terminal=authenticated(refs['output:terminal.json'],True);result=authenticated(refs['worker_result'],True)
+- need(p['container_id']==b['cid'] and p['container_name']==b['name'] and p['nonce']==b['nonce'],'exact single BFD identity')
+- need(claim['native_authority'] is False and claim['pid']==2124454 and claim['grant']==refs['ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json'],'actual BFD claim')
++ need(p['container_id']==b['cid'] and p['container_name']==b['name'] and p['nonce']==b['nonce'],'exact single CURRENT118 identity')
++ need(claim['native_authority'] is False and claim['pid']==b['runner_pid'] and claim['grant']==refs['ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json'],'actual CURRENT118 claim')
+  need(terminal['returncode']==0 and terminal['container']==b['cid'] and terminal['default_native_retirement_acceptance'] is False,'actual terminal only')
+- need(plan['source_profile']==refs['PROFILE.SOURCE-ONLY.json'] and plan['commands']==profile['exact_commands'] and len(result['commands'])==3,'exact three-command plan/profile')
++ need(plan['source_profile']==refs['PROFILE.SOURCE-ONLY.json'] and plan['commands']==profile['exact_commands'] and len(result['commands'])==len(plan['commands'])==b['command_count'],'exact four-command plan/profile')
+  for n,(actual,expected) in enumerate(zip(result['commands'],plan['commands'])):
+   need(actual['index']==n and actual['returncode']==0 and actual['argv']==expected['argv'] and actual['cwd']==expected['cwd'],'actual command argv/cwd/returncode')
+  holder=authenticated(refs['holder:HOLDER.READY.json'],True)['holder'];joined=authenticated(refs['holder:RUNNER.JOINED.json'],True);local=authenticated(refs['holder:BUILD-LOCAL-TERMINAL.json'],True)
+- need(holder==local['holder']==dict(path=str(LOCK),pid=2124365,starttime=101427979,device=27,inode=4,fd=3),'actual holder FD3 identity')
+- need(joined==dict(pid=2124454,starttime=101432667,returncode=0,joined=True) and local['returncode']==0 and local['joined'] is True and local['container_terminal_or_no_launch'] is True,'positive actual holder/runner terminal')
++ need(holder==local['holder']==dict(path=str(LOCK),pid=b['holder_pid'],starttime=b['holder_birth'],device=27,inode=4,fd=3),'actual holder FD3 identity')
++ need(joined==dict(pid=b['runner_pid'],starttime=b['runner_birth'],returncode=0,joined=True) and local['returncode']==0 and local['joined'] is True and local['container_terminal_or_no_launch'] is True,'positive actual holder/runner terminal')
+  parent=authenticated(b['parent_tool_join'],True)
+- need(parent['author']=='/root' and parent['decision']=='ROOT_ATTESTS_OBSERVED_ACTUAL_TOOL_SESSION_JOIN' and parent['session_id']==94204 and parent['returncode']==0 and parent['joined'] is True and parent['actual_tool_response']['chunk_id']=='8c21ed' and parent['actual_tool_response']['exit_code']==0,'saved actual Root tool join attestation')
++ need(parent['author']=='/root' and parent['decision']=='ROOT_ATTESTS_OBSERVED_ACTUAL_TOOL_SESSION_JOIN' and parent['session_id']==3240 and parent['returncode']==0 and parent['joined'] is True and parent['actual_tool_response']['chunk_id']=='69d894' and parent['actual_tool_response']['exit_code']==0,'saved actual Root tool join attestation')
+  for r in b['actor_evidence']:authenticated(r)
+  return p,protected,profile,claim,plan,terminal
+ 
+ def expected_mounts(p,profile):
+- inp=profile['inputs'];rows=[dict(Source=p['output_root']+'/work',Destination='/work',RW=True)]
+- rows.extend([dict(Source=inp['source_export_root'],Destination='/src',RW=False),dict(Source=inp['assets_root'],Destination='/candidate',RW=False)])
+- rows.extend(dict(Source=r['host_path'],Destination=r['container_path'],RW=False) for r in inp['toolchain_mounts'])
+- rows.extend([dict(Source=p['cohort']+'/build_only_worker.py',Destination='/build-only-worker.py',RW=False),dict(Source=p['output_root']+'/plan.json',Destination='/build-only-plan.json',RW=False)])
+- return rows
++ # Frozen finite mount declaration parsed from the original approved claim.
++ # The complete original pure Docker argv builder is independently rerun below.
++ return copy.deepcopy(p['expected_mounts'])
+ 
+ def validate_profile(item,image,b,p,profile,claim,terminal):
+  """Disjoint custom profile; no SDK owner-label predicate is removed or reused."""
+  need(type(item)is dict and item['Id']==b['cid'] and item['Name']=='/'+b['name'] and item['State']==terminal['state'],'exact fresh stopped ID/name/all state fields')
+  st=item['State'];need(st['Status']=='exited' and st['Running'] is False and st['Pid']==0 and st['ExitCode']==0 and not any(st[k] for k in ('Paused','Restarting','OOMKilled','Dead')) and st['Error']=='','normal exit0/Pid0/noOOM')
+  image_id=profile['inputs']['image'];need(image['Id']==item['Image']==image_id,'exact immutable OCI image')
+- c=item['Config'];h=item['HostConfig'];need(c['Image']==image_id and c['User']=='1000:1000' and c['WorkingDir']=='/work' and c['Entrypoint']==['/usr/bin/python3'] and c['Cmd']==['-I','-B','/build-only-worker.py','/build-only-plan.json'],'exact actual user/entry/command/workdir')
++ c=item['Config'];h=item['HostConfig'];need(c['Image']==image_id and c['User']=='1000:1000' and c['WorkingDir']==b['working_directory'] and c['Entrypoint']==['/usr/bin/python3'] and c['Cmd']==['-I','-B','/build-only-worker.py','/build-only-plan.json'],'exact actual user/entry/command/workdir')
+  need(c.get('Labels')==image['Config'].get('Labels')==b['approved_image_labels'] and c.get('Env')==image['Config'].get('Env')==b['approved_image_environment'],'exact pinned inherited image labels/env; no creation overrides or current ownership inference')
+  need(c.get('OpenStdin') is False and c.get('Tty') is False and c.get('StdinOnce') is False,'no interactive stdin/tty')
+  fixed=dict(ReadonlyRootfs=True,Privileged=False,AutoRemove=False,NetworkMode='none',CpusetCpus='2-5',CpusetMems='',Memory=12<<30,MemorySwap=12<<30,PidsLimit=512,CgroupParent='',PidMode='',IpcMode='private',UTSMode='',UsernsMode='',CpuShares=0,CpuPeriod=0,CpuQuota=0,NanoCpus=0)
+@@ -93,7 +91,7 @@
+   need(match is not None and row['Source']==match['Source'] and row.get('ReadOnly',False)==(not match['RW']) and row.get('Consistency','')=='','exact OCI declared mount')
+  need(len({r['Destination'] for r in actual})==len(actual) and len({r['Target'] for r in declared})==len(declared),'no duplicate OCI mounts')
+  # Reuse original pure argv construction to bind claim to the immutable mount/plan data.
+- runner=load(p['source_refs']['run_build_only.py'],'actual_BFD_pure_argv_builder')
++ runner=load(p['source_refs']['run_build_only.py'],'actual_CURRENT118_pure_argv_builder')
+  mountrows=[dict(host=r['Source'],target=r['Destination'],readonly=not r['RW']) for r in expected if r['Destination']!='/work']
+  need(runner.docker_argv(profile,b['name'],mountrows,Path(p['output_root']))==claim['argv'],'actual Docker claim argv unchanged')
+  return True
+@@ -104,7 +102,7 @@
+   need(type(r)is dict and re.fullmatch('[0-9a-f]{64}',r.get('ID','')) and r['ID'] not in seen and type(r.get('Names'))is str and type(r.get('Labels'))is str and r.get('State') in ('created','restarting','running','removing','paused','exited','dead'),'complete ordinary container inventory shape')
+   seen.add(r['ID']);need(r['State'] not in ('running','restarting','paused','removing'),'no active container/heavy overlap')
+   if r['ID']==b['cid'] or r['Names']==b['name']:found.append(r)
+- need((len(found)==1 and found[0]['ID']==b['cid'] and found[0]['Names']==b['name'] and found[0]['State']=='exited') if present else not found,'exact BFD presence/absence')
++ need((len(found)==1 and found[0]['ID']==b['cid'] and found[0]['Names']==b['name'] and found[0]['State']=='exited') if present else not found,'exact CURRENT118 presence/absence')
+  return rows
+ 
+ def process_source(normal,p):
+@@ -119,10 +117,10 @@
+ 
+ def validate_process(report,normal,b,challenge,caller,command_pids):
+  need(type(report)is dict and 'groups' in report,'complete group-extended normal census')
+- base={k:v for k,v in report.items() if k!='groups'};normal.BOOT_ID=b['boot'];normal.OWNER_PID=2124365;normal.WAITER_PIDS=tuple(sorted({a['pid'] for a in b['prior_actors']+b['new_known_actors']}|set(command_pids)))
++ base={k:v for k,v in report.items() if k!='groups'};normal.BOOT_ID=b['boot'];normal.OWNER_PID=b['holder_pid'];normal.WAITER_PIDS=tuple(sorted({a['pid'] for a in b['prior_actors']+b['new_known_actors']}|set(command_pids)))
+  normal.validate_process_report(base,challenge,caller) # Every unchanged normal predicate runs.
+  need(len(report['groups'])==2,'two full group snapshots')
+- forbidden=set(normal.WAITER_PIDS)|{2124454}
++ forbidden=set(normal.WAITER_PIDS)|{b['runner_pid']}
+  for basic,groups in zip(report['snapshots'],report['groups']):
+   need(type(groups)is list and len(groups)==len(basic),'complete group rows')
+   need([r[:3] for r in groups]==basic,'same full process/group snapshots')
+@@ -133,7 +131,7 @@
+ 
+ def validate_result(value,b):
+  """Pure authenticated success consumer for the separate postjoin observer."""
+- need(value['schema']=='mckernel.bfd-default-build.stopped-container-retirement.result.v1' and value['status']=='PASS_EXACT_BFD_STOPPED_CONTAINER_RETIRED_PENDING_POSTJOIN_CURRENT' and value['scope']==SCOPE,'exact BFD stopped retirement result schema/status')
++ need(value['schema']=='mckernel.current118-build.stopped-container-retirement.result.v1' and value['status']=='PASS_EXACT_CURRENT118_STOPPED_CONTAINER_RETIRED_PENDING_POSTJOIN_CURRENT' and value['scope']==SCOPE,'exact CURRENT118 stopped retirement result schema/status')
+  need(value['cid']==b['cid'] and value['nonce']==b['nonce'] and value['container_absent'] is True and value['signals_sent']==0 and value['records_released']==[],'exact once stopped-CID retirement result')
+  need(value['bindings']==reference(D/'BINDINGS.json') and value['protected_originals']==b['protected'] and value['native_acceptance'] is False and value['fullfile_acceptance'] is False and value['parent_positive_join_and_fresh_current_acceptance_required'] is True,'result has exact source/data and remains pending postjoin')
+  authenticated(value['release'])
+@@ -157,7 +155,7 @@
+  proofs=[authenticated(r,True) for r in value['proofs']]
+  need([x['label'] for x in proofs]==['PREINSPECT-1','PREINSPECT-2','POSTPROOF'] and [x['present'] for x in proofs]==[True,True,False],'exact preinspect/commit/postproof chain')
+  for proof,index,end in zip(proofs,[0,5,12],[4,9,14]):
+-  need(proof['schema']=='mckernel.bfd-default-build.retirement-proof.v1' and proof['cid']==b['cid'] and proof['nonce']==b['nonce'] and proof['command_receipts']==value['command_receipts'][:end],'same exact proof identity/cumulative command closure')
++  need(proof['schema']=='mckernel.current118-build.retirement-proof.v1' and proof['cid']==b['cid'] and proof['nonce']==b['nonce'] and proof['command_receipts']==value['command_receipts'][:end],'same exact proof identity/cumulative command closure')
+   process_raw=authenticated(receipts[index]['raw']['stdout']);need(strict(process_raw)==proof['process'],'actual raw full process proof')
+   validate_process(proof['process'],normal,b,receipts[index]['argv'][7],[actor['pid'],str(actor['birth'])],[r['pid'] for r in receipts[:index]])
+   inventory_raw=authenticated(receipts[index+1]['raw']['stdout']);need(validate_inventory(inventory_raw,b,proof['present'])==proof['inventory'],'actual raw complete container proof')
+@@ -280,16 +278,16 @@
+  return reference(path)
+ 
+ def validate_release(r,b,files):
+- need(r['schema']=='mckernel.bfd-default-build.stopped-container-retirement.release.v1' and r['author']=='/root' and r['decision']=='GRANT_ONE_EXACT_STOPPED_BFD_CONTAINER_RETIREMENT' and type(r['maximum_invocations'])is int and r['maximum_invocations']==1,'exact Root one-shot stopped-container release')
++ need(r['schema']=='mckernel.current118-build.stopped-container-retirement.release.v1' and r['author']=='/root' and r['decision']=='GRANT_ONE_EXACT_STOPPED_CURRENT118_CONTAINER_RETIREMENT' and type(r['maximum_invocations'])is int and r['maximum_invocations']==1,'exact Root one-shot stopped-container release')
+  need(r['bindings']==reference(D/'BINDINGS.json') and r['files']==files and r['parent_tool_join']==b['parent_tool_join'],'exact consumed source/data/actual join closure')
+  need(r['cid']==b['cid'] and r['nonce']==b['nonce'] and r['signals_allowed']==0 and r['records_released']==[],'exact stopped CID only; no signals/record release')
+  need(r['cutoffs']==b['cutoffs'] and r['credit_run_id']=='7f4af94a83b14cc08f97401f5891d965' and r['credit_ceiling']=='57774.852125' and r['minimum_cumulative_spent']=='22812.3311','immutable clock/credit limits')
+  need(r['Root_attests_no_unlisted_intervening_operation'] is True and r['actual_account_identity_operation_admission_accepted'] is True,'Root fresh operation/identity/admission attestations')
+- ledger=authenticated(r['current_ledger'],True);prior=authenticated(authenticated(b['packet'],True)['source_refs']['PROFILE.SOURCE-ONLY.json'],True)['actual_root_ledger'];old=authenticated(prior,True)
++ ledger=authenticated(r['current_ledger'],True);prior=b['prior_ledger'];old=authenticated(prior,True)
+  need(ledger['author']=='/root' and ledger['complete_within_declared_current_boundary'] is True and ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True and ledger['consumed_nonces']==old['consumed_nonces']+[b['nonce']] and ledger['current_physical_clearance_pending'] is True and ledger['current_native_operation']==old['current_native_operation'],'actual typed consumed-build boundary; old free remains historical')
+- build=ledger.get('bfd_default_build',{});packet=authenticated(b['packet'],True);expected_refs=packet['source_refs']
+- need(build.get('operation')=='BFD_CURRENT_DEFAULT_THREE_COMMAND_BUILD_ONLY_NOT_NATIVE' and build.get('nonce')==b['nonce'] and build.get('container_id')==b['cid'],'typed exact ordinary BFD ledger extension')
+- for key,sourcekey in [('profile','PROFILE.SOURCE-ONLY.json'),('actual_grant','ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json'),('container_claim','output:claim.json'),('plan','output:plan.json'),('worker_result','worker_result'),('terminal','output:terminal.json'),('holder_ready','holder:HOLDER.READY.json'),('runner_join','holder:RUNNER.JOINED.json'),('holder_local_terminal','holder:BUILD-LOCAL-TERMINAL.json')]:need(build.get(key)==expected_refs[sourcekey],'typed exact BFD ledger '+key)
++ build=ledger.get(b['ledger_key'],{});packet=authenticated(b['packet'],True);expected_refs=packet['source_refs']
++ need(build.get('operation')==b['operation'] and build.get('nonce')==b['nonce'] and build.get('container_id')==b['cid'],'typed exact ordinary CURRENT118 ledger extension')
++ for key,sourcekey in [('profile','PROFILE.SOURCE-ONLY.json'),('actual_grant','ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json'),('container_claim','output:claim.json'),('plan','output:plan.json'),('worker_result','worker_result'),('terminal','output:terminal.json'),('holder_ready','holder:HOLDER.READY.json'),('runner_join','holder:RUNNER.JOINED.json'),('holder_local_terminal','holder:BUILD-LOCAL-TERMINAL.json')]:need(build.get(key)==expected_refs[sourcekey],'typed exact CURRENT118 ledger '+key)
+  need(build.get('actual_holder_tool_join_receipt')==b['parent_tool_join'],'actual saved tool join in current ledger')
+  source=authenticated(r['source_review'],True)
+  need(source['decision']=='PASS_SOURCE' and source['independent'] is True and source['implementation_ownership'] is False and source['files']==files and source['bindings']==r['bindings'] and source['reviewer'] not in ('/root','/root/bfd_route') and source['source_checkpoint']==r['source_checkpoint'],'independent exact source/data review')
+@@ -366,7 +364,7 @@
+   else:
+    allowed=[['ps','-a','--no-trunc','--format','{{json .}}'],['inspect','--type','container',self.b['cid']],['image','inspect',self.profile['inputs']['image']],['logs','--',self.b['cid']],['rm','--',self.b['cid']]]
+    allowed.extend([['ps','--all','--quiet','--no-trunc','--filter',q] for q in ('id='+self.b['cid'],'name=^/'+self.b['name']+'$')])
+-   need(args in allowed,'only exact finite BFD retirement command argv')
++   need(args in allowed,'only exact finite CURRENT118 retirement command argv')
+    if args[0]=='rm':
+     need(self.rm_claimed and not self.rm_invoked,'exact once-claimed stopped CID removal only');self.rm_invoked=True
+   self.safe();self.command_started=True
+@@ -383,7 +381,7 @@
+    inspected=strict(self.call(['inspect','--type','container',self.b['cid']]).stdout);image=strict(self.call(['image','inspect',self.profile['inputs']['image']]).stdout)
+    need(type(inspected)is list and len(inspected)==1 and type(image)is list and len(image)==1,'one exact container/image inspect')
+    validate_profile(inspected[0],image[0],self.b,self.p,self.profile,self.claim,self.terminal)
+-  proof=dict(schema='mckernel.bfd-default-build.retirement-proof.v1',label=label,scope=SCOPE,cid=self.b['cid'],nonce=self.b['nonce'],present=present,safety=safety,process=report,inventory=rows,container=inspected,image=image,command_receipts=list(self.commands.receipts),clocks=self.safe()['clocks'])
++  proof=dict(schema='mckernel.current118-build.retirement-proof.v1',label=label,scope=SCOPE,cid=self.b['cid'],nonce=self.b['nonce'],present=present,safety=safety,process=report,inventory=rows,container=inspected,image=image,command_receipts=list(self.commands.receipts),clocks=self.safe()['clocks'])
+   r=write_new(self.out/(label+'.json'),proof);self.proofs.append(r);return proof,r
+  def logs(self):
+   result=self.call(['logs','--',self.b['cid']]);refs=self.p['source_refs']
+@@ -401,7 +399,7 @@
+  def finish(self):
+   final=self.safe();receipts=[authenticated(r,True) for r in self.commands.receipts]
+   need(receipts and all(x['positive_wait4'] and x['returncode']==0 and x['group_absent'] and x['streams_closed'] and not x['client_retirement_unproven'] and x['signals_sent']==0 for x in receipts),'every exact command PID/birth/wait4/group/stream accounting')
+-  value=dict(schema='mckernel.bfd-default-build.stopped-container-retirement.result.v1',status='PASS_EXACT_BFD_STOPPED_CONTAINER_RETIRED_PENDING_POSTJOIN_CURRENT',scope=SCOPE,cid=self.b['cid'],nonce=self.b['nonce'],container_absent=True,signals_sent=0,records_released=[],protected_originals=self.b['protected'],release=self.r['_reference'],bindings=reference(D/'BINDINGS.json'),proofs=self.proofs,command_receipts=self.commands.receipts,cleanup_actor=dict(pid=os.getpid(),birth=int(self.m.proc_stat(os.getpid())[19]),mutex_fd=self.fd),final_safety=final,own_fd_closed_only_after_result_on_normal_return=True,parent_positive_join_and_fresh_current_acceptance_required=True,native_acceptance=False,fullfile_acceptance=False,original_Docker_actor_gaps=self.b['actor_gaps'])
++  value=dict(schema='mckernel.current118-build.stopped-container-retirement.result.v1',status='PASS_EXACT_CURRENT118_STOPPED_CONTAINER_RETIRED_PENDING_POSTJOIN_CURRENT',scope=SCOPE,cid=self.b['cid'],nonce=self.b['nonce'],container_absent=True,signals_sent=0,records_released=[],protected_originals=self.b['protected'],release=self.r['_reference'],bindings=reference(D/'BINDINGS.json'),proofs=self.proofs,command_receipts=self.commands.receipts,cleanup_actor=dict(pid=os.getpid(),birth=int(self.m.proc_stat(os.getpid())[19]),mutex_fd=self.fd),final_safety=final,own_fd_closed_only_after_result_on_normal_return=True,parent_positive_join_and_fresh_current_acceptance_required=True,native_acceptance=False,fullfile_acceptance=False,original_Docker_actor_gaps=self.b['actor_gaps'])
+   return write_new(self.out/'RESULT.json',value)
+  def close(self):
+   if self.fd is not None:os.close(self.fd);self.fd=None
+@@ -429,7 +427,7 @@
+  for kind,wanted in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:need(resource.getrlimit(kind)==(wanted,wanted),'exact reviewed execution rlimit')
+  b=bindings();validate_retained(b);rr=reference(a.release);need(rr['sha256']==a.release_sha256,'exact actual release bytes');r=authenticated(rr,True)
+  files=dict(executor=reference(SELF),bindings=reference(D/'BINDINGS.json'))
+- files.update({k:b[k] for k in ('primitive','normal','backend','guardian','prior_observer','packet','protected')})
++ files.update({k:b[k] for k in ('primitive','normal','backend','guardian','prior_observer','packet','protected','base_reviewed_executor')})
+  out=validate_release(r,b,files);r['_reference']=rr;stop=Stop();previous={}
+  for number in (signal.SIGHUP,signal.SIGINT,signal.SIGTERM,signal.SIGQUIT):previous[number]=signal.signal(number,stop.receive)
+  out.mkdir(mode=0o700);ops=None;complete=False

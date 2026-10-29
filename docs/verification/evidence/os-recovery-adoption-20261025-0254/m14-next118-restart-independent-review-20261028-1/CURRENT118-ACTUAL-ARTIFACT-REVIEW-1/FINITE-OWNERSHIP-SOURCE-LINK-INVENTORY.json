@@ -1,0 +1,480 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "FINITE_CURRENT118_OWNERSHIP_SOURCE_LINK_INVENTORY_REGISTRY_BLOCKED",
+  "providers": [
+    {
+      "original_C": "clear_host_pte",
+      "Rust_input": {
+        "index": 4697,
+        "name": "clear_host_pte",
+        "bind": 1,
+        "type": 2,
+        "shndx": 990,
+        "value": 0,
+        "size": 318
+      },
+      "final": {
+        "name": "clear_host_pte",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684650880,
+        "size": 318
+      },
+      "unique_defining_Rust_object": true,
+      "exact_input_to_final_shape": true
+    },
+    {
+      "original_C": "perf_mmap",
+      "unresolved_candidates": [
+        {
+          "index": 4892,
+          "name": "f03_perf_mmap_v1",
+          "bind": 1,
+          "type": 2,
+          "shndx": 1210,
+          "value": 0,
+          "size": 199
+        },
+        {
+          "index": 6080,
+          "name": "perf_mmap_body_result",
+          "bind": 1,
+          "type": 2,
+          "shndx": 2868,
+          "value": 0,
+          "size": 69
+        }
+      ]
+    },
+    {
+      "original_C": "arch_native_signal_restore_fp_bridge",
+      "Rust_input": {
+        "index": 4562,
+        "name": "arch_native_signal_restore_fp_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 814,
+        "value": 0,
+        "size": 683
+      },
+      "final": {
+        "name": "arch_native_signal_restore_fp_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684618576,
+        "size": 683
+      },
+      "unique_defining_Rust_object": true,
+      "exact_input_to_final_shape": true
+    },
+    {
+      "original_C": "vdso_get_vdso_info",
+      "Rust_input": {
+        "index": 7254,
+        "name": "vdso_get_vdso_info",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4635,
+        "value": 0,
+        "size": 850
+      },
+      "final": {
+        "name": "vdso_get_vdso_info",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685267584,
+        "size": 850
+      },
+      "unique_defining_Rust_object": true,
+      "exact_input_to_final_shape": true
+    }
+  ],
+  "actual_new_GLOBAL_Rust_functions": [
+    "arch_native_signal_restore_fp_bridge",
+    "clear_host_pte",
+    "f03_perf_mmap_v1",
+    "vdso_get_vdso_info"
+  ],
+  "source_closure": {
+    "manifest": {
+      "bytes": 56047,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/ROOT-ACTUAL-RUST123-EXPORT-MANIFEST.json",
+      "sha256": "20cb6326fada122882d2618d6d8b5cf3b9ea45ef864c42b74f93f4f9bfc032c3"
+    },
+    "source_paths": 123,
+    "Rust_rs_paths": 112,
+    "external_modules": 3,
+    "all123snapshot_bytes_match_overlay": true
+  },
+  "retained_8_and_raw11_link_verified": true,
+  "retained_ABI_object": {
+    "source": {
+      "bytes": 2880,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+    },
+    "symbols": []
+  },
+  "original_fullcrate_argv": [
+    "/usr/bin/cmake",
+    "-E",
+    "env",
+    "MAKEFLAGS=",
+    "MCKERNEL_RUST_VERSION=1.8.0",
+    "MCKERNEL_RUST_BUILDID=3114d9e",
+    "MCKERNEL_X86_ENABLE_SSE=1",
+    "MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c",
+    "MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c",
+    "MCKERNEL_PROCESS_C_FILE=/src/kernel/process.c",
+    "MCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+    "MCKERNEL_F06_CLONE_CPUID_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs",
+    "/nightly/bin/rustc",
+    "--crate-name",
+    "mckernel_rust",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "--cfg",
+    "f03_io_diagnostic_callbacks_candidate",
+    "--cfg",
+    "f03_mincore_candidate",
+    "--cfg",
+    "f03_move_pages_candidate",
+    "--cfg",
+    "f03_sched_bridges_candidate",
+    "--cfg",
+    "f03_signal_process_bridges_candidate",
+    "--cfg",
+    "f03_dispatch_context_candidate",
+    "--cfg",
+    "f03_leaf_callbacks_candidate",
+    "--cfg",
+    "native_linux_irq_work_v6_12",
+    "--cfg",
+    "f03_syscall_entry_candidate",
+    "--cfg",
+    "f03_futex_atomic_candidate",
+    "--cfg",
+    "f03_futex_no_uaccess_candidate",
+    "--cfg",
+    "process_global_storage_candidate",
+    "--cfg",
+    "f03_syscall_table_candidate",
+    "--cfg",
+    "f03_ptrace_entry_candidate",
+    "--cfg",
+    "f03_syscall_table_clone3",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "enable_rusage",
+    "--cfg",
+    "f03_prlimit_body_candidate",
+    "--cfg",
+    "f03_do_exit_supported_candidate",
+    "--cfg",
+    "f03_unmap_begin_selected_candidate",
+    "--cfg",
+    "f03_unmap_remove_selected_candidate",
+    "--cfg",
+    "f03_unmap_finish_selected_candidate",
+    "--cfg",
+    "f03_mmap_page_callback_candidate",
+    "--cfg",
+    "f03_wait_release_selected_candidate",
+    "--cfg",
+    "f06_mmap_flag_providers",
+    "--cfg",
+    "f06_prctl_set_register_candidate",
+    "--cfg",
+    "f06_prctl_get_register_candidate",
+    "--cfg",
+    "f06_mmap_dispatch_bridge_candidate",
+    "--cfg",
+    "f03_wait_process_release_selected_candidate",
+    "--cfg",
+    "f03_terminate_refcount_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_find_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_unlock_selected_candidate",
+    "--cfg",
+    "f06_ptrace_context_candidate",
+    "--cfg",
+    "f06_ptrace_alloc_candidate",
+    "--cfg",
+    "f06_vdso_add_range_candidate",
+    "--cfg",
+    "f06_vdso_set_range_candidate",
+    "--cfg",
+    "f03_sync_child_event_candidate",
+    "--cfg",
+    "f06_process_vm_entry_candidate",
+    "--cfg",
+    "f03_exit_waitq_wake_selected_candidate",
+    "--cfg",
+    "f06_copy_to_user_candidate",
+    "--cfg",
+    "f06_copy_from_user_candidate",
+    "--cfg",
+    "f06_forward_context_candidate",
+    "--cfg",
+    "f03_perf_alloc_bridges_selected_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_syscall_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_set_signal_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_check_signal_candidate",
+    "--cfg",
+    "f03_perf_counter_control_bridges_selected_candidate",
+    "--cfg",
+    "f03_perf_event_provider_bridges_selected_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_alloc_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_free_candidate",
+    "--cfg",
+    "f06_clone_reader_lock_candidate",
+    "--cfg",
+    "f06_clone_reader_unlock_candidate",
+    "--cfg",
+    "f06_ptrace_find_thread_candidate",
+    "--cfg",
+    "f06_ptrace_thread_unlock_candidate",
+    "--cfg",
+    "f03_perf_provider_next3_bridges_selected_candidate",
+    "--emit=obj=/work/output/build/kernel/rust/mckernel_rust.o",
+    "--cfg",
+    "process_verbose_data",
+    "--cfg",
+    "process_verbose_local_companions",
+    "--cfg",
+    "f06_obtain_clone_cpuid_candidate",
+    "--cfg",
+    "f06_shmget_dispatch_candidate",
+    "--cfg",
+    "f06_vdso_info_candidate",
+    "--cfg",
+    "f06_native_signal_restore_fp_candidate",
+    "/src/kernel/rust/lib.rs"
+  ],
+  "origin_bindings": {
+    "actual_origin_producer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-TYPED-INTEGRATION-1/ACTUAL-ORIGIN-PRODUCER-FACTS.json",
+      "bytes": 4936,
+      "sha256": "c930216076e5e42a8e2cb34ed9906e1440d1e4ef057c9e746daa648a928a8593"
+    },
+    "actual_generated_header": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h",
+      "bytes": 268,
+      "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+    },
+    "actual_generated_metadata": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/f06_clone_cpuid_metadata.rs",
+      "bytes": 201,
+      "sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48"
+    },
+    "actual_origin_binding": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/ORIGIN-BINDING.json",
+      "bytes": 4643,
+      "sha256": "e5b3bd987604da84a6d646a42284a93318a9a9c125fc31e0e97fb5f649281134"
+    },
+    "actual_Rust_environment": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/rust-environment.json",
+      "bytes": 378,
+      "sha256": "7d567ef99b8c1e496017289ac6e5dd7e18b2e19b9b18118043e4bf429a81ab9f"
+    },
+    "actual_CMake_origin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.cmake",
+      "bytes": 373,
+      "sha256": "44231a7d27134801557b4ac817a0e8733c77d3232646c51a042acfe716fafb2f"
+    }
+  },
+  "storage_counts_and_raw_symbol_deltas": {
+    "generic_C": {
+      "before_count": 157,
+      "after_count": 159,
+      "removed": [],
+      "added": [
+        {
+          "index": 489,
+          "name": "f03_clear_host_pte_binding_v1",
+          "bind": 1,
+          "type": 1,
+          "shndx": 8,
+          "value": 2592,
+          "size": 24
+        },
+        {
+          "index": 453,
+          "name": "f03_perf_mmap_binding_v1",
+          "bind": 1,
+          "type": 1,
+          "shndx": 8,
+          "value": 1792,
+          "size": 40
+        }
+      ]
+    },
+    "arch_C": {
+      "before_count": 20,
+      "after_count": 17,
+      "removed": [
+        {
+          "index": 16,
+          "name": "__func__.2",
+          "bind": 0,
+          "type": 1,
+          "shndx": 7,
+          "value": 104,
+          "size": 10
+        },
+        {
+          "index": 26,
+          "name": "__func__.5",
+          "bind": 0,
+          "type": 1,
+          "shndx": 7,
+          "value": 128,
+          "size": 22
+        },
+        {
+          "index": 15,
+          "name": "ddebug.13",
+          "bind": 0,
+          "type": 1,
+          "shndx": 9,
+          "value": 224,
+          "size": 32
+        },
+        {
+          "index": 8,
+          "name": "ddebug.14",
+          "bind": 0,
+          "type": 1,
+          "shndx": 9,
+          "value": 256,
+          "size": 32
+        },
+        {
+          "index": 6,
+          "name": "ddebug.15",
+          "bind": 0,
+          "type": 1,
+          "shndx": 9,
+          "value": 288,
+          "size": 32
+        },
+        {
+          "index": 10,
+          "name": "mcexec_v10_signal_logs.3",
+          "bind": 0,
+          "type": 1,
+          "shndx": 4,
+          "value": 0,
+          "size": 4
+        },
+        {
+          "index": 9,
+          "name": "mcexec_v10_signal_pid.4",
+          "bind": 0,
+          "type": 1,
+          "shndx": 3,
+          "value": 0,
+          "size": 4
+        }
+      ],
+      "added": [
+        {
+          "index": 23,
+          "name": "__func__.4",
+          "bind": 0,
+          "type": 1,
+          "shndx": 7,
+          "value": 96,
+          "size": 22
+        },
+        {
+          "index": 21,
+          "name": "ddebug.5",
+          "bind": 0,
+          "type": 1,
+          "shndx": 9,
+          "value": 0,
+          "size": 32
+        },
+        {
+          "index": 10,
+          "name": "mcexec_v10_signal_logs.2",
+          "bind": 0,
+          "type": 1,
+          "shndx": 4,
+          "value": 0,
+          "size": 4
+        },
+        {
+          "index": 9,
+          "name": "mcexec_v10_signal_pid.3",
+          "bind": 0,
+          "type": 1,
+          "shndx": 3,
+          "value": 0,
+          "size": 4
+        }
+      ]
+    }
+  },
+  "selected_C": {
+    "generic_C_functions": 52,
+    "arch_C_functions": 15,
+    "selected_C_functions": 67,
+    "generic_C_objects": 159,
+    "arch_C_objects": 17,
+    "process_C_functions": 0,
+    "process_C_objects": 0,
+    "process_runtime_ALLOC_bytes": 0,
+    "process_NOTE_bytes": 48
+  },
+  "process_note_classification": "0FUNC/0OBJECT/0nonNOTE_ALLOC;48B_toolchain_GNU_propertyNOTE",
+  "C_data_retirement_acceptance": false,
+  "registry_acceptance": false,
+  "artifact_acceptance": false,
+  "ABI_scope": "Retained genuine ABI checker object byte-identical; fullcrate/new C compiler and productionlink rc0. New provider pointer/error contracts reuse exact source/HOST reviews; inherited full current-consumer/read-only/timer/idle/runqueue proof suffix remains unaccepted behind original389metadata failure.",
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "compiler_Docker_native_calls": 0,
+  "runtime_authority": null
+}

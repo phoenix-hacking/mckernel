@@ -1,0 +1,26 @@
+/src/kernel/syscall.c: In function ‘do_execveat’:
+/src/kernel/syscall.c:7546:26: warning: unused variable ‘range’ [-Wunused-variable]
+ 7546 |         info.si_signo = SIGCHLD;
+      |                          ^~~~~
+/src/kernel/syscall.c: At top level:
+/src/kernel/syscall.c:26376:51: warning: ‘syscall_itimer_offsets’ defined but not used [-Wunused-const-variable=]
+26376 |         for (cpu = 0; cpu < nr_cpus; cpu++) {
+      |                                                   ^                     
+/src/kernel/syscall.c:26058:43: warning: ‘sched_syscall_offsets’ defined but not used [-Wunused-const-variable=]
+26058 | }
+      |                                           ^                    
+/src/kernel/syscall.c:24599:46: warning: ‘ptrace_io_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+24599 |         .proc_threads_list_offset = __builtin_offsetof(struct process,
+      |                                              ^~~~~~~~~~~~~~~~~~~~~~~~
+/src/kernel/syscall.c:24297:45: warning: ‘syscall_cputime_offsets’ defined but not used [-Wunused-const-variable=]
+24297 | #endif
+      |                                             ^                      
+/src/kernel/syscall.c:4910:39: warning: ‘wait_scan_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4910 | static const struct wait_zombie_offsets wait_zombie_kernel_offsets = {
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
+/src/kernel/syscall.c:4877:41: warning: ‘wait_zombie_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4877 | }
+      |                                         ^                         
+/src/kernel/syscall.c:4720:43: warning: ‘ptrace_detach_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4720 | }
+      |                                           ^                           

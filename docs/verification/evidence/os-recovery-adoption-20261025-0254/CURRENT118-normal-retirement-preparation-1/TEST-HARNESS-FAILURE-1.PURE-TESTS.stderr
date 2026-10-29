@@ -1,0 +1,45 @@
+test_original_real_census_reproduces_uuid_hex_failure_before_first_command (test_actual_census_uuid.ActualCensusUUID) ... ok
+test_real_actual_census_absence_path_with_real_UUID (test_actual_census_uuid.ActualCensusUUID) ... ok
+test_real_actual_census_present_path_with_real_UUID (test_actual_census_uuid.ActualCensusUUID) ... ok
+test_real_census_retains_original_OCI_rejection_before_proof_publication (test_actual_census_uuid.ActualCensusUUID) ... ok
+test_core_lock_clock_spawn_custody_transaction_is_unchanged (test_current118_adaptation.Current118Applicability) ... ok
+test_exact_claim_and_new_workdir_required_before_mutation (test_current118_adaptation.Current118Applicability) ... ok
+test_original_claim_four_outputs_and_actor_frontier (test_current118_adaptation.Current118Applicability) ... ok
+test_retired_bfd_identity_cannot_be_removed_by_current118_adapter (test_current118_adaptation.Current118Applicability) ... ERROR
+test_same_wrong_env_or_label_on_both_image_and_container_refused (test_current118_adaptation.Current118Applicability) ... ok
+test_actual_retained_bindings_and_independent_OCI_expectation (test_retirement_executor.ProfileAndOrder) ... ok
+test_census_preserves_normal_and_adds_groups (test_retirement_executor.ProfileAndOrder) ... ok
+test_complete_preinspect_commit_postproof_order (test_retirement_executor.ProfileAndOrder) ... ok
+test_inventory_exact_presence_absence_and_active_overlap (test_retirement_executor.ProfileAndOrder) ... ok
+test_postfsync_delay_prevents_commit (test_retirement_executor.ProfileAndOrder) ... ok
+test_postproof_failure_stays_one_mutation_and_does_not_finish (test_retirement_executor.ProfileAndOrder) ... ok
+test_preproof_failures_have_no_remove (test_retirement_executor.ProfileAndOrder) ... ok
+test_profile_mismatches_never_reach_remove (test_retirement_executor.ProfileAndOrder) ... ok
+test_current_ledger_cannot_reuse_Root61_or_clear_physical_pending (test_retirement_executor.ReleaseAndConsumer) ... ok
+test_exact_release_consumer_static_only (test_retirement_executor.ReleaseAndConsumer) ... ok
+test_release_refuses_wrong_operation_budget_and_self_review_before_effect (test_retirement_executor.ReleaseAndConsumer) ... ok
+test_success_result_still_requires_parent_join_and_fresh_current (test_retirement_executor.ReleaseAndConsumer) ... ok
+test_argv_scope_and_once_guard_before_effect (test_retirement_executor.Transport) ... ok
+test_existing_capture_transport_positive_receipt (test_retirement_executor.Transport) ... ok
+test_existing_capture_transport_timeout_sends_no_signal_and_retains_uncertainty (test_retirement_executor.Transport) ... ok
+test_positive_wait4_metrics_without_spawning (test_retirement_executor.Transport) ... ok
+test_final_clock_check_follows_protected_io_and_checks_earliest_cap (test_review_correction.ReviewCorrection) ... ok
+test_stall_after_durable_log_refuses_actual_spawn (test_review_correction.ReviewCorrection) ... ok
+test_successful_spawn_birth_failure_retains_raw_child_and_custody (test_review_correction.ReviewCorrection) ... ok
+test_successful_spawn_status_or_receipt_publication_failure_keeps_custody (test_review_correction.ReviewCorrection) ... ok
+test_successful_spawn_wrapper_failure_after_birth_keeps_latch (test_review_correction.ReviewCorrection) ... ok
+
+======================================================================
+ERROR: test_retired_bfd_identity_cannot_be_removed_by_current118_adapter (test_current118_adaptation.Current118Applicability)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/test_current118_adaptation.py", line 47, in test_retired_bfd_identity_cannot_be_removed_by_current118_adapter
+    with patch.object(m.subprocess,'Popen',side_effect=AssertionError('no actual effect')),self.assertRaises(m.Refusal):m.Actual.call(fake,['rm','--',oldcid])
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py", line 365, in call
+    allowed=[['ps','-a','--no-trunc','--format','{{json .}}'],['inspect','--type','container',self.b['cid']],['image','inspect',self.profile['inputs']['image']],['logs','--',self.b['cid']],['rm','--',self.b['cid']]]
+AttributeError: 'Fake' object has no attribute 'profile'
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.680s
+
+FAILED (errors=1)

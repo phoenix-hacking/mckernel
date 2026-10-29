@@ -1,0 +1,733 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_FOUR_NEW_PROVIDERS_AND_TWO_HEADER_BINDINGS_FINAL_READBACK",
+  "proofs": [
+    {
+      "original_C": "clear_host_pte",
+      "selected_Rust": "clear_host_pte",
+      "input": {
+        "index": 4697,
+        "name": "clear_host_pte",
+        "bind": 1,
+        "type": 2,
+        "shndx": 990,
+        "value": 0,
+        "size": 318
+      },
+      "final": {
+        "name": "clear_host_pte",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684650880,
+        "size": 318
+      },
+      "unique_Rust_owner": true,
+      "all_final_instruction_bytes_and_relocation_targets_reproduced": true,
+      "relocations": [
+        {
+          "offset": 27,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 40,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 100,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        },
+        {
+          "offset": 180,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe903860",
+          "kind": "NAMED",
+          "target": "f03_clear_host_pte_binding_v1",
+          "addend": 0
+        },
+        {
+          "offset": 192,
+          "type": 1,
+          "input_addend": 8,
+          "actual_final_address": "0xfffffffffe903868",
+          "kind": "NAMED",
+          "target": "f03_clear_host_pte_binding_v1",
+          "addend": 8
+        },
+        {
+          "offset": 205,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe903870",
+          "kind": "NAMED",
+          "target": "f03_clear_host_pte_binding_v1",
+          "addend": 16
+        }
+      ]
+    },
+    {
+      "original_C": "perf_mmap",
+      "selected_Rust": "f03_perf_mmap_v1",
+      "input": {
+        "index": 4892,
+        "name": "f03_perf_mmap_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1210,
+        "value": 0,
+        "size": 199
+      },
+      "final": {
+        "name": "f03_perf_mmap_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684707760,
+        "size": 199
+      },
+      "unique_Rust_owner": true,
+      "all_final_instruction_bytes_and_relocation_targets_reproduced": true,
+      "relocations": [
+        {
+          "offset": 62,
+          "type": 1,
+          "input_addend": 32,
+          "actual_final_address": "0xfffffffffe903560",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 32
+        },
+        {
+          "offset": 90,
+          "type": 1,
+          "input_addend": 8,
+          "actual_final_address": "0xfffffffffe903548",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 8
+        },
+        {
+          "offset": 103,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe903550",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 16
+        },
+        {
+          "offset": 116,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe903558",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 24
+        },
+        {
+          "offset": 129,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe903540",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 0
+        },
+        {
+          "offset": 139,
+          "type": 1,
+          "input_addend": 4,
+          "actual_final_address": "0xfffffffffe903544",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 4
+        }
+      ]
+    },
+    {
+      "original_C": "arch_native_signal_restore_fp_bridge",
+      "selected_Rust": "arch_native_signal_restore_fp_bridge",
+      "input": {
+        "index": 4562,
+        "name": "arch_native_signal_restore_fp_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 814,
+        "value": 0,
+        "size": 683
+      },
+      "final": {
+        "name": "arch_native_signal_restore_fp_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684618576,
+        "size": 683
+      },
+      "unique_Rust_owner": true,
+      "all_final_instruction_bytes_and_relocation_targets_reproduced": true,
+      "relocations": [
+        {
+          "offset": 31,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9903a0",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_size",
+          "addend": 0
+        },
+        {
+          "offset": 109,
+          "type": 1,
+          "input_addend": 5003,
+          "actual_final_address": "0xfffffffffe909be5",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f6e61746976655f7369676e616c5f726573746f72655f66702e727300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 119,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe833e60",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "addend": 0
+        },
+        {
+          "offset": 164,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe842280",
+          "kind": "NAMED",
+          "target": "copy_from_user",
+          "addend": 0
+        },
+        {
+          "offset": 196,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990398",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_mask",
+          "addend": 0
+        },
+        {
+          "offset": 311,
+          "type": 1,
+          "input_addend": 5003,
+          "actual_final_address": "0xfffffffffe909be5",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f6e61746976655f7369676e616c5f726573746f72655f66702e727300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 321,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8339b0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "addend": 0
+        },
+        {
+          "offset": 349,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990394",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_available",
+          "addend": 0
+        },
+        {
+          "offset": 361,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990380",
+          "kind": "NAMED",
+          "target": "x86_cpu_initial_fp_regs_available",
+          "addend": 0
+        },
+        {
+          "offset": 373,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990398",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_mask",
+          "addend": 0
+        },
+        {
+          "offset": 386,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe98f380",
+          "kind": "NAMED",
+          "target": "x86_cpu_initial_fp_regs",
+          "addend": 0
+        },
+        {
+          "offset": 396,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8afb30",
+          "kind": "NAMED",
+          "target": "rust_x86_native_signal_reset_fp",
+          "addend": 0
+        },
+        {
+          "offset": 430,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 455,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 490,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        },
+        {
+          "offset": 529,
+          "type": 1,
+          "input_addend": 17762,
+          "actual_final_address": "0xfffffffffe90cd87",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 539,
+          "type": 1,
+          "input_addend": 5003,
+          "actual_final_address": "0xfffffffffe909be5",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f6e61746976655f7369676e616c5f726573746f72655f66702e727300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 549,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 662,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe809040",
+          "kind": "NAMED",
+          "target": "native_xrstor_checked",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "original_C": "vdso_get_vdso_info",
+      "selected_Rust": "vdso_get_vdso_info",
+      "input": {
+        "index": 7254,
+        "name": "vdso_get_vdso_info",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4635,
+        "value": 0,
+        "size": 850
+      },
+      "final": {
+        "name": "vdso_get_vdso_info",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685267584,
+        "size": 850
+      },
+      "unique_Rust_owner": true,
+      "all_final_instruction_bytes_and_relocation_targets_reproduced": true,
+      "relocations": [
+        {
+          "offset": 18,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 98,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        },
+        {
+          "offset": 134,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe808e50",
+          "kind": "NAMED",
+          "target": "arch_vdso_state_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 158,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8ff078",
+          "kind": "NAMED",
+          "target": "_RNvNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy13f06_vdso_info14production_log5ENTER",
+          "addend": 24
+        },
+        {
+          "offset": 177,
+          "type": 1,
+          "input_addend": 9284,
+          "actual_final_address": "0xfffffffffe90ac8e",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f5f6765745f7664736f5f696e666f28290a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 189,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 303,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f918",
+          "kind": "NAMED",
+          "target": "linux_page_offset_base",
+          "addend": 0
+        },
+        {
+          "offset": 343,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8fffd8",
+          "kind": "NAMED",
+          "target": "x86_addr_log_straight_debug",
+          "addend": 24
+        },
+        {
+          "offset": 362,
+          "type": 1,
+          "input_addend": 36988,
+          "actual_final_address": "0xfffffffffe911861",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204d41505f53545f5354415254203c3d203078256c78203c3d204d41505f46495845445f53544152540a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 372,
+          "type": 1,
+          "input_addend": 36975,
+          "actual_final_address": "0xfffffffffe911854",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "766972745f746f5f7068797300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 387,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 411,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9903b0",
+          "kind": "NAMED",
+          "target": "x86_kernel_phys_base",
+          "addend": 0
+        },
+        {
+          "offset": 424,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8fffb8",
+          "kind": "NAMED",
+          "target": "x86_addr_log_kernel_debug",
+          "addend": 24
+        },
+        {
+          "offset": 443,
+          "type": 1,
+          "input_addend": 36918,
+          "actual_final_address": "0xfffffffffe91181b",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a204d41505f4b45524e454c5f5354415254203c3d203078256c78203c3d206c696e75785f706167655f6f66667365745f626173650a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 453,
+          "type": 1,
+          "input_addend": 36975,
+          "actual_final_address": "0xfffffffffe911854",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "766972745f746f5f7068797300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 468,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 569,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe867f10",
+          "kind": "NAMED",
+          "target": "ihk_ikc_write_queue",
+          "addend": 0
+        },
+        {
+          "offset": 586,
+          "type": 1,
+          "input_addend": 16741,
+          "actual_final_address": "0xfffffffffe90c98a",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "69686b5f696b635f73656e6400",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 628,
+          "type": 1,
+          "input_addend": 16701,
+          "actual_final_address": "0xfffffffffe90c962",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a20636f756c646e277420617070656e64207061636b6574202d3e207265747279696e670a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 643,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 708,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869e40",
+          "kind": "NAMED",
+          "target": "ihk_mc_interrupt_host",
+          "addend": 0
+        },
+        {
+          "offset": 751,
+          "type": 1,
+          "input_addend": 9306,
+          "actual_final_address": "0xfffffffffe90aca4",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f5f6765745f7664736f5f696e666f3a2069686b5f696b635f73656e64206661696c65642e2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 766,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 785,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8ff058",
+          "kind": "NAMED",
+          "target": "_RNvNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy13f06_vdso_info14production_log4EXIT",
+          "addend": 24
+        },
+        {
+          "offset": 804,
+          "type": 1,
+          "input_addend": 9351,
+          "actual_final_address": "0xfffffffffe90acd1",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7664736f5f6765745f7664736f5f696e666f28293a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 819,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "C_header_binding": "f03_clear_host_pte_binding_v1",
+      "input": {
+        "index": 489,
+        "name": "f03_clear_host_pte_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 2592,
+        "size": 24
+      },
+      "final": {
+        "name": "f03_clear_host_pte_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685448800,
+        "size": 24
+      },
+      "all_bytes_and_provider_relocations_match_final": true,
+      "initial_bytes": "0b0000000000000000000000000000000000000000000000",
+      "relocations": [
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 3344,
+          "actual_final_address": "0xfffffffffe801d10",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "syscall_do_syscall3_bridge"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "input_addend": 288,
+          "actual_final_address": "0xfffffffffe801120",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "clear_host_pte_log_bridge"
+          ],
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "C_header_binding": "f03_perf_mmap_binding_v1",
+      "input": {
+        "index": 453,
+        "name": "f03_perf_mmap_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 1792,
+        "size": 40
+      },
+      "final": {
+        "name": "f03_perf_mmap_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685448000,
+        "size": 40
+      },
+      "all_bytes_and_provider_relocations_match_final": true,
+      "initial_bytes": "20000000020000000004000000000000280000000000000004000000000000000000000000000000",
+      "relocations": [
+        {
+          "offset": 32,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe803430",
+          "kind": "NAMED",
+          "target": "do_mmap",
+          "addend": 0
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "exact_compiled_source_C_ABI_signatures": {
+    "pub unsafe extern \"C\" fn clear_host_pte(": "pub unsafe extern \"C\" fn clear_host_pte(\n        addr: CULong, len: SizeT, holding_lock: CInt,\n    ) -> CLong",
+    "pub unsafe extern \"C\" fn f03_perf_mmap_v1(": "pub unsafe extern \"C\" fn f03_perf_mmap_v1(\n        _sfd: *mut Mckfd,\n        ctx: *mut X86UserContext,\n    ) -> CLong",
+    "pub unsafe extern \"C\" fn arch_native_signal_restore_fp_bridge(": "pub unsafe extern \"C\" fn arch_native_signal_restore_fp_bridge(\n    user_address: CULong,\n    size: CInt,\n) -> CLong",
+    "pub unsafe extern \"C\" fn vdso_get_vdso_info()": "pub unsafe extern \"C\" fn vdso_get_vdso_info() -> CInt"
+  },
+  "provider_alias_disposition": "C perf_mmap is selected via source #define perf_mmap f03_perf_mmap_v1; earlier inventory unresolved_candidates field retained, not an artifact/provider failure.",
+  "actual_selected_Rust_provider_accounting": {
+    "accepted116_before": 68,
+    "unique_new_actual_functions": 4,
+    "observed_candidate_total": 72,
+    "accepted_default_total_remains68_until_registry_and_allgates_PASS": true
+  },
+  "registry_acceptance": false,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "compiler_Docker_native_calls": 0,
+  "runtime_authority": null
+}

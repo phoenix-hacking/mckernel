@@ -1,0 +1,125 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "recorded_at": "2026-10-29T00:38:25.994113+00:00",
+  "decision": "ACTUAL_CURRENT118_FOUR_COMMAND_PRODUCER_JOINED_ZERO_ARTIFACT_ACCEPTANCE_PENDING",
+  "nonce": "e984210ca59641b299cf42d392eb953b",
+  "nonce_disposition": "CONSUMED_ONCE_NEVER_REPLAY",
+  "admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3",
+  "container": "d980474cc189c35f6d78132856be10b6903aac988808336e7d44efcca0f4108f",
+  "container_last_actual_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T00:33:01.448404299Z",
+    "FinishedAt": "2026-10-29T00:33:23.329012307Z"
+  },
+  "container_retirement_pending": true,
+  "new_current_free": false,
+  "source_export_origin_SDK_rebuilt_or_replayed": false,
+  "producer_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 15234,
+    "sha256": "7b6cb2abadd736955d36765515701b0be08604e36fd556321e663925716153b6"
+  },
+  "commands": [
+    {
+      "index": 0,
+      "returncode": 0,
+      "start": 1793233981.5114348,
+      "finish": 1793234002.292944,
+      "CPU_seconds": 20.833285,
+      "output": {
+        "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+        "bytes": 18401808,
+        "sha256": "6133a664f9900a9c5e70ebdac167f9c26460308f8d9704b115d4e283fcd0bd1b"
+      }
+    },
+    {
+      "index": 1,
+      "returncode": 0,
+      "start": 1793234002.3122847,
+      "finish": 1793234003.000582,
+      "CPU_seconds": 0.6555220000000013,
+      "output": {
+        "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "bytes": 350360,
+        "sha256": "2a470b932ddcf43a46e4d82a5df43237806fbdb90128b82dde6c6ee39d81a037"
+      }
+    },
+    {
+      "index": 2,
+      "returncode": 0,
+      "start": 1793234003.0014083,
+      "finish": 1793234003.177172,
+      "CPU_seconds": 0.17539099999999763,
+      "output": {
+        "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "bytes": 91040,
+        "sha256": "999ac14daa868028327a570bcd42a513d796db90f40d02aaecdd6f17e051ad1f"
+      }
+    },
+    {
+      "index": 3,
+      "returncode": 0,
+      "start": 1793234003.1774938,
+      "finish": 1793234003.3075645,
+      "CPU_seconds": 0.11790900000000093,
+      "output": {
+        "path": "/work/output/build/kernel/mckernel.img",
+        "bytes": 10285416,
+        "sha256": "7e5dca2b68d1e8c6da21c8be19e85d2fe28bf79d3451ece90146279b56551416"
+      }
+    }
+  ],
+  "producer_elapsed_wall_seconds": 21.79612970352173,
+  "producer_command_wall_seconds_sum": 21.775640726089478,
+  "producer_CPU_seconds_sum": 21.782107,
+  "producer_peak_job_RSS_KiB": 600224,
+  "RSS_scope": "Cumulative worker child max, not separate per-command peak",
+  "physical_to_Root_input_fill_seconds": 2.075425148010254,
+  "physical_to_independent_Hot_seconds": 3.018657922744751,
+  "Hot_resource_age_seconds": 0.385345458984375,
+  "prewarm_creation_mtime_proxy_epoch": 1793233936.5166318,
+  "prewarm_mtime_proxy_to_compiler_seconds": 44.994802951812744,
+  "mtime_latency_limit": "Filesystem creation-mtime proxy, not independently instrumented queue-ready timestamp",
+  "holder_identity": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 2222137,
+    "starttime": 103142320,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "holder_tool_session": 3240,
+  "holder_positive_tool_join": {
+    "cell": 375,
+    "chunk": "69d894",
+    "exit_code": 0
+  },
+  "runner_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/HOLDER/RUNNER.JOINED.json",
+    "bytes": 84,
+    "sha256": "85dfa2a682f409274278e398678ef53d3ca68e98afd88ca424a2cc722a958634"
+  },
+  "finite_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-3/FINITE-REVIEW-HANDOFF/FINITE-COMPLETION.PASS.json",
+    "bytes": 2161,
+    "sha256": "66d799b15b05773e757c7e9a597f438efdf6fe176f49ac781b85cda72e519ff3"
+  },
+  "retained_historical_ledger_count": 71,
+  "accepted_before_new_artifact_review": "CURRENT116 C71/Rust68; practical35/35,M14files4/6,M15files1/8",
+  "new_compiler_commands": 3,
+  "new_linked_image_candidates": 1,
+  "independently_accepted_new_default_artifacts": 0,
+  "matching_native_cases": 0,
+  "files_closed": 0,
+  "retired_C_boundaries": 0,
+  "critical_next": "m14_review existing actual default ABI/ELF/389 qualifier; bfd_route existing normal retirement preparation; Root sole actual integration/admission"
+}
