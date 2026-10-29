@@ -2,6 +2,51 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Current execution cursor — 2026-10-29T01:36Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+No newcompiler/OSbehavior/link/native/file/C-retirement acceptance in01:16–01:36.
+Accepted116/C71/Rust68, M14 4/6,M15 1/8 unchanged; A3e984 consumed/7e5 rejected20.
+Oldretirementf3b consumed/failedbeforeDocker/rm; idlequarantine2232651/b103343097
+stillholdssoleFD4/permanent27:4; parent2232650/b103343093/tool90401 waits. Client
+2232653statusUNKNOWN/positivewait4false mustneverbe rewritten0. No oldrelease replay.
+Portablec895/44fd source isfixed/tested38cases actualPython3.8/review7e1f; current
+helpercannotresume. Exactexistingpidfdprotocol rebind9e36/4ed5/11runtime refs now
+underonem14_review; Rootactualowneroperation65e only2232651/no container mutation,
+onepidfdsignalbudgetinNEWrelease, actualparentjoin/custodyproof stillmandatory.
+No signal/unlock/lockunlink/currentfreeclaim. Rootfinishesfixedsourcepublication/
+release beforefreshobservations, thenonlyoncewheneligible. Joint119 a25518paths
+sealed underboundedconsumer_review; M15outerrole4f12/compat5eb readywithRootfrontier/
+quiescence/grantslatebound. No duplicateportability work or heavygrant. Same06:00Z/
+credits/controls. Records: STEERING-20261029T011628.json andT013628.json.
+
+## Current execution cursor — 2026-10-29T01:16Z and immediate reconciliation
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+A3 e984 isCONSUMED/4commands0; image7e5/C67/Rust72 remainsREJECTED on20registry
+identities (line20,file2; function/fmt/flags/count unchanged). Accepted116/C71/
+Rust68 andfilesM14 4/6,M15 1/8 unchanged; no native/C-retirement acceptance.
+Rejected4outputs/23records archived4c68 andexactfetched43c719d5; originals retained.
+Normalretirement attempt1 releasef3b9c5d6 isUSED/FAILED beforeDocker/rm: onlyfirst
+readonlyprocclient2232653/b103343210 ran; statusUNKNOWN, positivewait4false,
+groupabsent/streamsclosed. PreserveallrawUNCERTAIN/JOIN/status/stdout; no join0.
+Executor2232651/b103343097 remainsLIVE quarantine FD4 sole27:4owner; parent
+2232650/b103343093 andRoottool90401 remainlivewaiting. No rmclaim/commit/RESULT.
+Oldrelease/prefix mustNEVER replay; no modelrestart/nativeclearance/lockunlink.
+Cause:/usr/bin/python3 3.8.10 lacksos.waitstatus_to_exitcode afterwait4 reapedchild.
+Singleportableconverterc895/executor44fd/BINDINGS49c0/12refs actual3.8tests38PASS;
+independentreview7e1f PASS_SOURCE only. It cannotrepairalreadyloadedquarantinedcode.
+Reconciliation1567/FACTS5034 confirms no normalresume/withdrawal hook; bfd_route
+prepares onlycurrent-boundexisting3fdb exactidle-guard pidfd retirement protocol,
+all6currentcontrols deniedtargets, Root/reviewer newexactrelease stillrequired.
+No signal/unlock/retry performed. Onlyaftergenuineowner/directparentretirement
+maycorrectednormalcleanup usefreshnamespace/release; oldunknownstatus staysunknown.
+Root64pending6838 retains72consumed/nativehistory/physicalpending; postjoinsource
+6f54 isbanked, no currentfreeclaim. Joint119 18postimages combinesexactF03layout/
+F06descriptor repairs; original389predicateunchanged, newcompiler/relinkrequired.
+M15consumer actuallyactiveonremainingrole/immediatecompatbindings, sharedconverter
+only; grants/currentfrontier/quiescence remainnull. Same06:00Z/credit/solecontrols.
+
 ## Current execution cursor — 2026-10-29T00:59Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

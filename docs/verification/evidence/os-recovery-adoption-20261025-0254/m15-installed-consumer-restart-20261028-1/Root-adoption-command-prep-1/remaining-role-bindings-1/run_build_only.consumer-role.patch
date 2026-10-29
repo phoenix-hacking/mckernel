@@ -1,0 +1,112 @@
+--- accepted-bfd-cohort/run_build_only.py
++++ remaining-role-bindings-1/run_build_only.py
+@@ -53,11 +53,10 @@
+     require(resources['native_custody_unchanged'] is True,'native/global custody must remain untouched')
+ 
+ def mounts(profile,export,output):
+-    require(export['source_export_plan']==profile['inputs']['source_export_plan'],'exact source-export plan')
+-    require(export['readable_source_export']==profile['inputs']['source_export_root'],'exact private closed export path')
++    require(export['source_adoption']==profile['actual_source_adoption'],'exact adopted consumer source')
++    require(export['readable_source_export']==profile['inputs']['source_export_root'],'exact private adopted source path')
+     verify_bfd_source_export(profile)
+-    rows=[dict(host=export['readable_source_export'],target='/src',readonly=True),dict(host=profile['inputs']['assets_root'],target='/candidate',readonly=True)]
+-    rows += [dict(host=r['host_path'],target=r['container_path'],readonly=True) for r in profile['inputs']['toolchain_mounts']]
++    rows=[dict(r) for r in read(D/'STATIC-ROLE.SOURCE-ONLY.json')['read_only_mount_roles']]
+     rows += [dict(host=str(D/'build_only_worker.py'),target='/build-only-worker.py',readonly=True),dict(host=str(output/'plan.json'),target='/build-only-plan.json',readonly=True)]
+     return rows
+ 
+@@ -79,35 +78,38 @@
+     return argv
+ 
+ def verify_bfd_source_export(profile):
+-    plan=read(auth(profile['inputs']['source_export_plan']));root=strict_parent(profile['inputs']['source_export_root'])
+-    require(root.is_dir() and str(root)==plan['export_root'],'actual source export exists at exact bound path')
+-    for row in plan['records']:
+-        relative=Path(row['relative']);require(not relative.is_absolute() and '..' not in relative.parts,'normalized exact selected source path')
+-        p=root/relative
+-        if row['type']=='directory':require(p.is_dir() and not p.is_symlink(),'ordinary selected source directory')
+-        elif row['type']=='symlink':require(p.is_symlink() and os.readlink(p)==row['link_target'],'exact selected source symlink')
+-        else:
+-            require(p.is_file() and not p.is_symlink(),'ordinary selected source file')
+-            actual=reference(p);require(actual['bytes']==row['source']['bytes'] and actual['sha256']==row['source']['sha256'],'exact selected current source bytes')
+-    # Materializer created only this finite map; a closed exported snapshot is mandatory.
+-    expected={r['relative'] for r in plan['records']}
+-    actual={str(p.relative_to(root)) for p in root.rglob('*')}
+-    require(actual==expected,'exact closed selected source export, no extras')
+-    asset=read(auth(profile['inputs']['asset_map']));assets=Path(profile['inputs']['assets_root'])
+-    require({str(p.relative_to(assets)) for p in assets.rglob('*') if p.is_file()}=={r['relative'] for r in asset['files']},'exact three readonly assets')
+-    for row in asset['files']:auth(row['reference'])
+-    return plan
++    # Existing callback name retained; this role consumes Root's adopted SDK11 source.
++    role=read(auth(profile['static_role']))
++    require(profile['static_role']==reference(D/'STATIC-ROLE.SOURCE-ONLY.json'),'exact finite consumer role')
++    require(profile['actual_source_adoption']==role['source_adoption'],'exact f24 adopted source receipt')
++    adoption=read(auth(role['source_adoption']));root=strict_parent(profile['inputs']['source_export_root'])
++    require(str(root)==role['source_root']==adoption['private_root'] and root.is_dir(),'same actual private source')
++    require(adoption['author']=='/root' and adoption['status']=='PRIVATE_SOURCE_ADOPTED_FROM_ACCEPTED_BANK_NOT_EXECUTION_RELEASE' and adoption['runtime_authority'] is None,'source adoption does not supply execution authority')
++    require(adoption['copied_finite_members']==6999 and adoption['source_bank_modified'] is False and adoption['accepted_export_replayed'] is False and adoption['SDK_rebuilt'] is False,'reuse adopted bank without export/SDK replay')
++    require(len(adoption['verified_selected_inputs'])==58,'same finite selected consumer inputs')
++    for row in adoption['verified_selected_inputs']:
++        relative=Path(row['relative']);require(not relative.is_absolute() and '..' not in relative.parts,'normalized selected consumer path')
++        p=root/relative;require(str(p)==row['actual']['path'] and p.is_file() and not p.is_symlink(),'ordinary selected source file')
++        auth(row['actual'])
++    layout=adoption['private_layout_change'];auth(layout['authentic_gitfile'])
++    require(layout['real_metadata_host_directory']=='/home/holden/mckernel/.git/modules/ihk' and layout['container_readonly_destination']=='/source/.git/modules/ihk','authentic readonly metadata mount role')
++    require((root/'ihk/.git').read_bytes()==b'gitdir: ../.git/modules/ihk\n','authentic 28-byte Git pointer')
++    target=root/'.git/modules/ihk';require(target.is_dir() and not target.is_symlink() and not any(target.iterdir()),'empty genuine metadata bind target')
++    require(profile['inputs']['read_only_mount_roles']==role['read_only_mount_roles'],'exact source/helper/SDK/toolchain readonly mounts')
++    for row in profile['inputs']['qualified_readonly_files']:auth(row)
++    return adoption
+ 
+ def commands_for_plan(profile):
+-    require(profile['request_sha256']==reference(D/'REQUEST.SOURCE-ONLY.json')['sha256'],'exact finite BFD request')
+-    request=read(D/'REQUEST.SOURCE-ONLY.json');require(request['runtime_authority'] is None,'request supplies no runtime authority')
+-    require(profile['exact_commands']==request['commands'],'exact three current BFD commands')
+-    commands=profile['exact_commands'];require(len(commands)==3,'exact configure/build/readback commands only')
+-    require([c['new_output'] for c in commands]==['/work/current-bfd-build/CMakeCache.txt','/work/current-bfd-build/executer/user/mcinspect','/work/BFD-CURRENT-PROJECT-OBJECTS.json'],'exact fresh current BFD products')
+-    require(all(c['cwd']=='/work' for c in commands),'literal three-command CWD')
+-    require(commands[1]['argv']==['/usr/bin/cmake','--build','/work/current-bfd-build','--target','mcinspect','eclair','--parallel','1'],'only two genuine targets/jobs1')
+-    require(profile['inputs']['image']=='sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5','same accepted SDK image')
+-    return commands
++    role=read(D/'STATIC-ROLE.SOURCE-ONLY.json')
++    require(profile['static_role']==reference(D/'STATIC-ROLE.SOURCE-ONLY.json'),'exact consumer static role')
++    auth(role['phase_contract']);auth(role['source_ready']);auth(role['independent_source_review'])
++    require(profile['runtime_authority'] is None and role['runtime_authority'] is None,'source data supplies no runtime authority')
++    require(profile['exact_commands']==role['exact_commands'] and len(profile['exact_commands'])==1,'one exact serial consumer leaf only')
++    command=profile['exact_commands'][0]
++    require(command['cwd']=='/work' and command['new_output']=='/work/evidence/current-consumer-producer.json','exact consumer receipt and outer cwd')
++    require(profile['producer_contract']==role['producer_contract'],'exact consumer behavior contract')
++    require(profile['inputs']['image']==role['image']=='sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5','same accepted SDK image')
++    return profile['exact_commands']
+ 
+ 
+ def current_operation_guard():
+@@ -136,13 +138,16 @@
+     require(export['container_tool_files']==profile['inputs']['container_tool_files'] and export['container_sha256_pins']==profile['inputs']['container_sha256_pins'],'exact accepted tool/library/header pins')
+     require(len(export['container_tool_files'])>=4 and {'/usr/bin/cmake','/usr/bin/cc','/usr/bin/ld','/nightly/bin/rustc'}<=set(x['path'] for x in export['container_tool_files']),'qualified exact Rust/GCC/linker/tool files required')
+     require(export['Rust_release']=='1.95.0-nightly' and export['GCC_major']==14,'same pinned compiler versions; no HOST ABI substitution')
+-    require(export['SDK21_recompiled'] is False,'no SDK21/eight-pair replay')
++    require(export['SDK11_recompiled'] is False,'no SDK11/full-producer replay')
+     require(export['source_adoption']==profile['actual_source_adoption'],'same actual Root selective adoption')
+-    adoption=read(auth(profile['actual_source_adoption']));require(adoption['decision']=='ROOT_ADOPTED_EXACT_REVIEWED_BFD_FOUR_PATH_SOURCE_ONLY' and profile['actual_source_adoption']==read(auth(profile['inputs']['source_export_plan']))['actual_root_adoption'],'genuine Root exact four-path adoption')
++    verify_bfd_source_export(profile)
++    require(export['current_entry_bindings']==review['current_entry_bindings']==resources['current_entry_bindings']==profile['current_entry_bindings'],'same genuinely current Root entry binding');auth(profile['current_entry_bindings'])
++    require(export['source_writer_quiescence']==review['source_writer_quiescence']==profile['source_writer_quiescence'],'same independently reviewed actual Root source-writer interval')
++    quiescence=read(auth(profile['source_writer_quiescence']));require(quiescence['author']=='/root','Root actual source-writer attestation required')
+     output=strict_parent(grant['fresh_output_root'])
+     require(review['fresh_output_root']==str(output) and resources['fresh_output_root']==str(output),'same fresh disjoint output')
+     require(PROTECTED_SUFFIX not in str(output) and not os.path.lexists(output),'fresh output distinct from attempt5')
+-    originals=[profile['inputs']['source_export_root'],profile['inputs']['assets_root']]+[x['host_path'] for x in profile['inputs']['toolchain_mounts']]
++    originals=[x['host'] for x in profile['inputs']['read_only_mount_roles']]
+     for original in originals:
+         p=Path(original).resolve();require(p!=output and p not in output.parents and output not in p.parents,'outputs disjoint from protected inputs')
+     holder=resources['reservation_holder'];reservation=strict_parent(holder['path']);st=reservation.lstat()
+@@ -164,7 +169,7 @@
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='bfd-current-two-target-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='m15-current-consumer-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
+     current_operation_guard()
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')

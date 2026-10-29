@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "operation": "RETIRE_EXACT_FAILED_CURRENT118_IDLE_HELPER_ONLY",
+  "target": {
+    "pid": 2232651,
+    "starttime": "103343097",
+    "parent_pid": 2232650,
+    "parent_birth": "103343093",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "uid": 1000,
+    "gid": 1000,
+    "threads": 1,
+    "pgrp": 2232651,
+    "session": 2232651,
+    "exe": "/usr/bin/python3.8",
+    "exe_device": 66306,
+    "exe_inode": 1048651,
+    "exe_size": 5490456,
+    "exe_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+    "source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+    "source_sha256": "4179233c5a604b2a5924b98469e0dba5fe782eb76e3ff54286767b69288e4488",
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+      "--release",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/ROOT-RELEASE.ACTUAL.json",
+      "--release-sha256",
+      "f3b9c5d63bc2c6649e52a754fd3228e6f564466c25358fb8a4c57eaa7824d3dd",
+      "--execute"
+    ],
+    "root_lock": {
+      "path": "/run/lock/mckernel-development.lock",
+      "device": 27,
+      "inode": 4,
+      "fd": 4
+    },
+    "parent_exe": "/home/holden/anaconda3/bin/python3.9",
+    "parent_threads": 1,
+    "parent_pgrp": 2232649,
+    "parent_session": 2232649
+  },
+  "failed_client_status": "UNKNOWN",
+  "container_mutations_allowed": 0,
+  "maximum_invocations": 1,
+  "signal_budget": 1,
+  "current_pending_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/ROOT-CURRENT-NONCE-LEDGER64.PENDING.json",
+    "bytes": 36529,
+    "sha256": "683803be833add00d798f19dd398cafe65bfa94bbe6182d4844092f1385ca932"
+  },
+  "failed_retirement_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-NORMAL-RETIREMENT-RELEASE-1/ROOT-RELEASE.ACTUAL.json",
+    "bytes": 6158,
+    "sha256": "f3b9c5d63bc2c6649e52a754fd3228e6f564466c25358fb8a4c57eaa7824d3dd"
+  },
+  "independent_reconciliation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/REVIEW.json",
+    "bytes": 9162,
+    "sha256": "156735f9f21165d1b0a869e6cdf2ba5cc235cc9ecd053a30e542935fd4466221"
+  },
+  "actual_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+    "bytes": 6105,
+    "sha256": "503496d7f29d0fe3ac4028160de66218272d80bc02fb01aa13e9cf2b5ae3b7c0"
+  },
+  "accepted_default": "CURRENT116 C71/Rust68",
+  "rejected_candidate": "CURRENT118 7e5d C67/Rust72 original389FAIL20",
+  "no_build_nonce_consumed_by_owner_only_operation": true,
+  "new_current_free": false,
+  "cutoffs": [
+    1793253600.0,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "credit_ceiling": "57774.852125",
+  "records_released": [],
+  "recorded_epoch": 1793238056.7711017,
+  "runtime_authority": null
+}

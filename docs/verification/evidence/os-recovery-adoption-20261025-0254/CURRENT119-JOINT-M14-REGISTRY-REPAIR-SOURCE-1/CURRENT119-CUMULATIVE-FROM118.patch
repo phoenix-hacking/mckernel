@@ -1,0 +1,1575 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4887,6 +4887,16 @@
+ }
+ 
+ #endif
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_zombie_log_debug_v1[2]={
++    {.file=__FILE__,.func="wait_zombie_log_bridge",.line=4862,.flags=DDEBUG_DEFAULT},
++    {.file=__FILE__,.func="wait_zombie_log_bridge",.line=4868,.flags=DDEBUG_DEFAULT}
++};
++extern void f03_wait_zombie_log_v1(int,int,int,int);
++#define wait_zombie_log_bridge f03_wait_zombie_log_v1
++#else
++#line 4864
+ static void
+ wait_zombie_log_bridge(int event, int pid, int status, int ret)
+ {
+@@ -4906,6 +4916,13 @@
+ 		break;
+ 	}
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4872
++#else
++#line 4881
++#endif
++
+ 
+ static const struct wait_zombie_offsets wait_zombie_kernel_offsets = {
+ 	.thread_ptrace_offset = __builtin_offsetof(struct thread, ptrace),
+@@ -5087,6 +5104,19 @@
+ 	schedule();
+ }
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_log_debug_v1[5]={
++    {.file=__FILE__,.func="do_wait_log_bridge",.line=5061,.flags=DDEBUG_DEFAULT},
++    {.file=__FILE__,.func="do_wait_log_bridge",.line=5065,.flags=DDEBUG_DEFAULT},
++    {.file=__FILE__,.func="do_wait_log_bridge",.line=5068,.flags=DDEBUG_DEFAULT},
++    {.file=__FILE__,.func="do_wait_log_bridge",.line=5071,.flags=DDEBUG_DEFAULT},
++    {.file=__FILE__,.func="do_wait_log_bridge",.line=5074,.flags=DDEBUG_DEFAULT}
++};
++extern void f03_wait_log_v1(int,int,int);
++#define do_wait_log_bridge f03_wait_log_v1
++#else
++#line 5064
+ static void do_wait_log_bridge(int event, int current_pid, int wait_pid)
+ {
+ 	switch (event) {
+@@ -5110,6 +5140,13 @@
+ 		break;
+ 	}
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5076
++#else
++#line 5085
++#endif
++
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ /* Declarative addresses of unchanged existing C endpoint bodies only. */
+@@ -5875,13 +5912,50 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_do_munmap_log_debug_v1[1]={
++    {.file=__FILE__,.func="do_munmap_log_bridge",.line=5826,.flags=DDEBUG_DEFAULT}
++};
++extern void f03_do_munmap_log_v1(unsigned long,size_t,int);
++#define do_munmap_log_bridge f03_do_munmap_log_v1
++#else
++#line 5830
+ static void
+ do_munmap_log_bridge(unsigned long addr, size_t len, int error)
+ {
+ 	dkprintf("%s: 0x%lx:%lu, error: %d\n",
+ 		"do_munmap", addr, len, error);
+ }
+-
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5825
++#else
++#line 5834
++#endif
++
++
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++struct f03_do_munmap_binding {
++	do_munmap_void_fn_t begin;
++	do_munmap_remove_range_fn_t remove_range;
++	do_munmap_clear_host_fn_t clear_host;
++	mprotect_set_host_vma_fn_t set_host;
++	do_munmap_void_fn_t finish;
++	do_munmap_log_fn_t log;
++};
++const struct f03_do_munmap_binding f03_do_munmap_binding_v1 = {
++	.begin = do_munmap_begin_bridge,
++	.remove_range = do_munmap_remove_range_bridge,
++	.clear_host = do_munmap_clear_host_bridge,
++	.set_host = do_munmap_set_host_bridge,
++	.finish = do_munmap_finish_bridge,
++	.log = do_munmap_log_bridge,
++};
++extern int do_munmap(void *, size_t, int);
++#else
++#line 5837
+ int do_munmap(void *addr, size_t len, int holding_memory_range_lock)
+ {
+ 	struct thread *thread = get_this_cpu_local_var()->current;
+@@ -5894,6 +5968,13 @@
+ 			do_munmap_clear_host_bridge, do_munmap_set_host_bridge,
+ 			do_munmap_finish_bridge, do_munmap_log_bridge);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5838
++#else
++#line 5847
++#endif
++
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern int f03_search_free_space_v1(size_t, int, uintptr_t *);
+@@ -21349,12 +21430,20 @@
+ #line 21106
+ 
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int f03_perf_counter_allocate_v1(void *,void *);
++#define perf_event_open_counter_alloc_bridge f03_perf_counter_allocate_v1
++#else
++#line 21108
+ static int
+ perf_event_open_counter_alloc_bridge(void *thread, void *event)
+ {
+ 	return ihk_mc_perfctr_alloc((struct thread *)thread,
+ 			(struct mc_perf_event *)event);
+ }
++#endif
++#line 21113
++
+ 
+ static long
+ perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)
+@@ -21427,6 +21516,25 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++#ifdef ENABLE_PERF
++#define F03_POLICY_LOG_SOURCE_LINE 21193
++#else
++#define F03_POLICY_LOG_SOURCE_LINE 21223
++#endif
++struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_vm_policy_insert_log_debug_v1[1]={
++    {.file=__FILE__,.func="syscall_vm_policy_insert_log_bridge",.line=F03_POLICY_LOG_SOURCE_LINE,.flags=DDEBUG_DEFAULT}
++};
++#undef F03_POLICY_LOG_SOURCE_LINE
++extern void f03_vm_policy_insert_log_v1(struct process_vm *,struct vm_range_numa_policy *,struct vm_range_numa_policy *);
++#define syscall_vm_policy_insert_log_bridge f03_vm_policy_insert_log_v1
++#else
++#ifdef ENABLE_PERF
++#line 21178
++#else
++#line 21210
++#endif
+ static void syscall_vm_policy_insert_log_bridge(struct process_vm *vm,
+ 		struct vm_range_numa_policy *newrange,
+ 		struct vm_range_numa_policy *overlap)
+@@ -21445,6 +21553,13 @@
+ 				newrange->numa_mem_policy);
+ 	}
+ }
++#endif
++#ifdef ENABLE_PERF
++#line 21195
++#else
++#line 21227
++#endif
++
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -21683,6 +21798,34 @@
+ #endif
+ #line 21418
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYNC_CHILD_EVENT)
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++struct f03_perf_allocation_binding {
++    unsigned long alloc_flags,hardware_type,cache_type,raw_type,reference_cycles;
++    syscall_policy_alloc_fn_t allocate;
++    syscall_mckfd_free_fn_t release;
++    sync_child_atomic64_set_fn_t atomic_set;
++    perf_event_map_fn_t hardware_map,cache_map,cache_extra_map,raw_map;
++    perf_event_validate_fn_t validate;
++    perf_extra_reg_id_fn_t extra_id;
++    perf_extra_reg_msr_fn_t extra_msr;
++    perf_extra_reg_idx_fn_t extra_index;
++    perf_hw_event_init_fn_t initialize;
++};
++const struct f03_perf_allocation_binding f03_perf_allocation_binding_v1={
++    .alloc_flags=IHK_MC_AP_NOWAIT,.hardware_type=PERF_TYPE_HARDWARE,.cache_type=PERF_TYPE_HW_CACHE,
++    .raw_type=PERF_TYPE_RAW,.reference_cycles=PERF_COUNT_HW_REF_CPU_CYCLES,
++    .allocate=perf_event_alloc_kmalloc_bridge,.release=perf_event_alloc_free_bridge,
++    .atomic_set=sync_child_count_set_bridge,.hardware_map=ihk_mc_hw_event_map,
++    .cache_map=ihk_mc_hw_cache_event_map,.cache_extra_map=ihk_mc_hw_cache_extra_reg_map,
++    .raw_map=ihk_mc_raw_event_map,.validate=ihk_mc_validate_event,.extra_id=ihk_mc_get_extra_reg_id,
++    .extra_msr=ihk_mc_get_extra_reg_msr,.extra_index=ihk_mc_get_extra_reg_idx,
++    .initialize=perf_event_alloc_hw_init_bridge,
++};
++extern int f03_perf_event_allocate_v1(void **,void *);
++#define perf_event_open_alloc_event_bridge f03_perf_event_allocate_v1
++#else
++#line 21419
+ static int mc_perf_event_alloc(struct mc_perf_event **out,
+ 			       struct perf_event_attr *attr)
+ {
+@@ -21729,12 +21872,23 @@
+ 	return mc_perf_event_alloc((struct mc_perf_event **)event_out,
+ 			(struct perf_event_attr *)attr);
+ }
+-
++#endif
++#line 21464
++
++
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int f03_perf_attr_frequency_v1(const void *);
++#define perf_event_open_attr_freq_bridge f03_perf_attr_frequency_v1
++#else
++#line 21466
+ static int
+ perf_event_open_attr_freq_bridge(const void *attr)
+ {
+ 	return ((const struct perf_event_attr *)attr)->freq;
+ }
++#endif
++#line 21470
++
+ 
+ long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
+ {
+@@ -28688,6 +28842,11 @@
+ extern void save_uctx(void *, void *);
+ 
+ /* TODO: use copy_from_user() */
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++extern int util_show_syscall_profile(void);
++#else
++#line 28277
+ int util_show_syscall_profile()
+ {
+ 	int i;
+@@ -28709,6 +28868,9 @@
+ 
+ 	return 0;
+ }
++#endif
++#line 28297
++
+ 
+ int util_thread(struct uti_attr *arg)
+ {
+@@ -29013,12 +29175,21 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++extern struct ddebug f03_util_register_desc_debug_v1[1];
++extern void syscall_util_register_desc_log_bridge(int,unsigned long);
++#else
++#line 28602
+ void
+ syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
+ {
+ 	dkprintf("%s: tid=%d,uti_desc=%lx\n", "sys_util_register_desc",
+ 			tid, desc);
+ }
++#endif
++#line 28607
++
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -13978,12 +13978,6 @@
+     write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
+ }
+ 
+-#[cfg(f06_vdso_info_candidate)]
+-#[path = "f06_vdso_info.rs"]
+-mod f06_vdso_info;
+-#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+-use self::f06_vdso_info::vdso_get_vdso_info;
+-
+ #[cfg(native_linux_irq_work_v6_12)]
+ unsafe extern "C" fn vdso_get_vdso_info() -> CInt {
+     let (vdso, _, _) = match arch_vdso_state() {
+@@ -20852,7 +20846,6 @@
+     let Some(hw_event_init) = hw_event_init_fn else {
+         return -EINVAL as CLong;
+     };
+-
+     let mut extra_config = 0;
+     let val = if attr_type == hardware_type {
+         let Some(hw_event_map) = hw_event_map_fn else {
+@@ -20866,8 +20859,9 @@
+         let Some(hw_cache_extra_reg_map) = hw_cache_extra_reg_map_fn else {
+             return -EINVAL as CLong;
+         };
++        let mapped = hw_cache_event_map(attr_config);
+         extra_config = hw_cache_extra_reg_map(attr_config);
+-        hw_cache_event_map(attr_config)
++        mapped
+     } else if attr_type == raw_type {
+         let Some(raw_event_map) = raw_event_map_fn else {
+             return -EINVAL as CLong;
+@@ -36418,3 +36412,422 @@
+         }
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_do_munmap_entry_v1 {
++    use core::{ffi::c_void, mem::offset_of};
++    use crate::abi::{CInt, CULong, Process, SizeT};
++    use super::{do_munmap_body_result, DoMunmapVoidFn, DoMunmapRemoveRangeFn,
++                DoMunmapClearHostFn, MprotectSetHostVmaFn, DoMunmapLogFn};
++
++    #[repr(C)]
++    struct DoMunmapBinding {
++        begin: Option<DoMunmapVoidFn>,
++        remove_range: Option<DoMunmapRemoveRangeFn>,
++        clear_host: Option<DoMunmapClearHostFn>,
++        set_host: Option<MprotectSetHostVmaFn>,
++        finish: Option<DoMunmapVoidFn>,
++        log: Option<DoMunmapLogFn>,
++    }
++    unsafe extern "C" {
++        static f03_do_munmap_binding_v1: DoMunmapBinding;
++    }
++
++    /// Enter the existing unmap body with the original borrowed process and VM.
++    ///
++    /// # Safety
++    /// The current CPU/thread/process/VM and immutable provider binding remain
++    /// live throughout this synchronous operation. Callers retain the original
++    /// range-lock contract indicated by `holding_lock`; this entry acquires no
++    /// additional lock and preserves the existing begin/remove/host/finish/log
++    /// lifetime and error precedence in `do_munmap_body_result`.
++    #[no_mangle]
++    pub unsafe extern "C" fn do_munmap(
++        addr: *mut c_void, len: SizeT, holding_lock: CInt,
++    ) -> CInt {
++        // SAFETY: Identical original CPU-local lookup and live borrowed fields.
++        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
++        let thread = unsafe { (*cpu).current };
++        let vm = unsafe { (*thread).vm };
++        let proc = unsafe { (*thread).proc };
++        // SAFETY: The repr(C) fields match the genuine C provider typedefs.
++        // Real Rust Process offsets replace the corresponding C offsetof values.
++        unsafe {
++            let binding = &f03_do_munmap_binding_v1;
++            do_munmap_body_result(
++                vm.cast(), proc.cast(), addr as CULong, len, holding_lock,
++                offset_of!(Process, straight_va), offset_of!(Process, straight_len),
++                binding.begin, binding.remove_range, binding.clear_host,
++                binding.set_host, binding.finish, binding.log,
++            )
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_util_profile_v1 {
++    use core::ptr;
++    use crate::abi::{CInt as c_int, CLong as c_long, CULong as c_ulong};
++
++    // Exact existing project Rust ABI declarations, reused without field edits.
++const UTI_SZ_SYSCALL_STACK: usize = 16;
++const UTI_SYSCALL_PROFILE_SLOTS: usize = 512;
++#[repr(C)]
++struct SyscallStruct {
++    number: c_int,
++    args: [c_ulong; 6],
++    ret: c_ulong,
++    uti_info: c_ulong,
++}
++
++#[repr(C)]
++struct UtiDesc {
++    lctx: [u8; 4096],
++    rctx: [u8; 4096],
++    mck_tid: c_int,
++    key: c_ulong,
++    pid: c_int,
++    tid: c_int,
++    uti_info: c_ulong,
++    fd: c_int,
++    syscall_stack: [SyscallStruct; UTI_SZ_SYSCALL_STACK],
++    syscall_stack_top: c_int,
++    syscalls: [c_long; UTI_SYSCALL_PROFILE_SLOTS],
++    syscalls2: [c_long; UTI_SYSCALL_PROFILE_SLOTS],
++    start_syscall_intercept: c_int,
++}
++
++    /// Print the original two ordered syscall-counter tables.
++    ///
++    /// # Safety
++    /// The original caller supplies a live, aligned, initialized UtiDesc at the
++    /// captured uti_desc address for the entire call. It retains the existing
++    /// foreign-memory synchronization/lifetime contract. No borrowed whole
++    /// descriptor reference is formed and no descriptor byte is written.
++    #[no_mangle]
++    pub unsafe extern "C" fn util_show_syscall_profile() -> c_int {
++        // SAFETY: Same one-time global descriptor capture before the first log.
++        let desc = unsafe { super::uti_desc as *const UtiDesc };
++        unsafe {
++            super::kprintf(b"Syscall stats for offloaded thread:\n\0".as_ptr().cast());
++            for i in 0..UTI_SYSCALL_PROFILE_SLOTS {
++                let slot = ptr::addr_of!((*desc).syscalls).cast::<c_long>().add(i);
++                if ptr::read(slot) != 0 {
++                    super::kprintf(b"nr=%d #called=%ld\n\0".as_ptr().cast(), i as c_int, ptr::read(slot));
++                }
++            }
++            super::kprintf(b"Syscall stats for other threads:\n\0".as_ptr().cast());
++            for i in 0..UTI_SYSCALL_PROFILE_SLOTS {
++                let slot = ptr::addr_of!((*desc).syscalls2).cast::<c_long>().add(i);
++                if ptr::read(slot) != 0 {
++                    super::kprintf(b"nr=%d #called=%ld\n\0".as_ptr().cast(), i as c_int, ptr::read(slot));
++                }
++            }
++        }
++        0
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_sync_child_event_candidate)]
++mod f03_perf_alloc_entry_v1 {
++    use core::{ffi::c_void,mem::{offset_of,size_of}};
++    use crate::abi::{CInt,CLong,CULong,SizeT};
++    use crate::f03_perf_attr_callbacks::PerfEventAttr;
++    use crate::x86_perfctr::HwPerfEventExtra;
++    use super::f03_sync_child_layout_v2::{FullMcPerfEvent,HwPerfEvent};
++    use super::{perf_event_alloc_body_result,SyscallPolicyAllocFn,SyscallMckfdFreeFn,
++        SyncChildAtomic64SetFn,PerfEventMapFn,PerfEventValidateFn,PerfExtraRegIdFn,
++        PerfExtraRegMsrFn,PerfExtraRegIdxFn,PerfHwEventInitFn};
++
++    #[repr(C)]
++    struct PerfAllocationBinding {
++        alloc_flags:CULong,hardware_type:CULong,cache_type:CULong,raw_type:CULong,reference_cycles:CULong,
++        allocate:Option<SyscallPolicyAllocFn>,release:Option<SyscallMckfdFreeFn>,
++        atomic_set:Option<SyncChildAtomic64SetFn>,hardware_map:Option<PerfEventMapFn>,
++        cache_map:Option<PerfEventMapFn>,cache_extra_map:Option<PerfEventMapFn>,raw_map:Option<PerfEventMapFn>,
++        validate:Option<PerfEventValidateFn>,extra_id:Option<PerfExtraRegIdFn>,
++        extra_msr:Option<PerfExtraRegMsrFn>,extra_index:Option<PerfExtraRegIdxFn>,initialize:Option<PerfHwEventInitFn>,
++    }
++    unsafe extern "C" { static f03_perf_allocation_binding_v1:PerfAllocationBinding; }
++
++    /// Keep the original event allocation, initialized bytes and publication protocol.
++    ///
++    /// # Safety
++    /// Nonnull attributes are aligned, initialized genuine perf_event_attr objects
++    /// retained during this synchronous call; nonnull output is writable pointer
++    /// storage. Providers retain their existing allocation/lifetime contracts.
++    /// The complete existing Rust body releases a failed allocation exactly once
++    /// and publishes output only on success. This entry does not own a live PMU.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_perf_event_allocate_v1(output:*mut *mut c_void,attribute:*mut c_void)->CInt {
++        let attribute=attribute.cast::<PerfEventAttr>();
++        let (event_type,config,frequency,sample_frequency,sample_period)=if attribute.is_null() {
++            (0,0,0,0,0)
++        } else {
++            // SAFETY: Raw scalar/union reads preserve the original initialized C
++            // bitfield allocation unit, without borrowing a whole foreign object.
++            unsafe { ((*attribute).type_ as CULong,(*attribute).config,
++                (((*attribute).flags>>PerfEventAttr::FREQUENCY_SHIFT)&1) as CInt,
++                (*attribute).sampling.sample_freq,(*attribute).sampling.sample_period) }
++        };
++        unsafe {
++            let binding=&f03_perf_allocation_binding_v1;
++            perf_event_alloc_body_result(output,attribute.cast(),size_of::<FullMcPerfEvent>(),size_of::<PerfEventAttr>(),
++                binding.alloc_flags,offset_of!(FullMcPerfEvent,attr),offset_of!(FullMcPerfEvent,group_entry),
++                offset_of!(FullMcPerfEvent,sibling_list),offset_of!(FullMcPerfEvent,sample_freq),
++                offset_of!(FullMcPerfEvent,nr_siblings),offset_of!(FullMcPerfEvent,count),
++                offset_of!(FullMcPerfEvent,child_count_total),offset_of!(FullMcPerfEvent,parent),
++                offset_of!(FullMcPerfEvent,hw)+offset_of!(HwPerfEvent,sample_period),
++                offset_of!(FullMcPerfEvent,hw)+offset_of!(HwPerfEvent,last_period),
++                offset_of!(FullMcPerfEvent,hw)+offset_of!(HwPerfEvent,period_left),
++                offset_of!(FullMcPerfEvent,use_invariant_tsc),offset_of!(FullMcPerfEvent,hw_config),
++                offset_of!(FullMcPerfEvent,hw_config_ext),offset_of!(FullMcPerfEvent,extra_reg)+offset_of!(HwPerfEventExtra,config),
++                offset_of!(FullMcPerfEvent,extra_reg)+offset_of!(HwPerfEventExtra,reg),
++                offset_of!(FullMcPerfEvent,extra_reg)+offset_of!(HwPerfEventExtra,idx),
++                event_type,config,frequency,sample_frequency,sample_period,
++                binding.hardware_type,binding.cache_type,binding.raw_type,binding.reference_cycles,
++                binding.allocate,binding.release,binding.atomic_set,binding.hardware_map,binding.cache_map,
++                binding.cache_extra_map,binding.raw_map,binding.validate,binding.extra_id,binding.extra_msr,
++                binding.extra_index,binding.initialize) as CInt
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_wait_log_v1 {
++    use core::ptr::{addr_of,read_volatile};
++    use crate::{abi::CInt,debug::Ddebug};
++    use super::{WAIT_LOG_ENTER,WAIT_LOG_SLEEPING,WAIT_LOG_WOKEN,WAIT_LOG_FOUND,WAIT_LOG_NOTFOUND};
++    unsafe extern "C" { static mut f03_wait_log_debug_v1:[Ddebug;5]; }
++
++    /// Preserve the five existing dynamic-debug sites and exact printf ABI.
++    ///
++    /// # Safety
++    /// The genuine five-record debug array is live and initialized for the kernel
++    /// lifetime, with the existing dynamic-debug update contract. The selected
++    /// internal index is checked before address arithmetic. PID arguments are
++    /// scalar values; this logger borrows no task and changes no wait state.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_wait_log_v1(event:CInt,current_pid:CInt,wait_pid:CInt) {
++        let index=match event {
++            WAIT_LOG_ENTER=>0,WAIT_LOG_SLEEPING=>1,WAIT_LOG_WOKEN=>2,
++            WAIT_LOG_FOUND=>3,WAIT_LOG_NOTFOUND=>4,_=>return,
++        };
++        // SAFETY: Match above bounds the original array index. Reuse the current
++        // Rust dynamic-debug ABI and accepted raw volatile flag-read idiom.
++        let descriptor=unsafe{addr_of!(f03_wait_log_debug_v1).cast::<Ddebug>().add(index)};
++        let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
++        if !enabled { return; }
++        // SAFETY: Static exact original formats and original promoted C-int args.
++        unsafe {
++            match event {
++                WAIT_LOG_ENTER=>{super::kprintf(b"wait4(): current->proc->pid: %d, pid: %d\n\0".as_ptr().cast(),current_pid,wait_pid);}
++                WAIT_LOG_SLEEPING=>{super::kprintf(b"wait4,sleeping\n\0".as_ptr().cast());}
++                WAIT_LOG_WOKEN=>{super::kprintf(b"wait4(): woken up\n\0".as_ptr().cast());}
++                WAIT_LOG_FOUND=>{super::kprintf(b"wait4,out_found\n\0".as_ptr().cast());}
++                WAIT_LOG_NOTFOUND=>{super::kprintf(b"wait4,out_notfound\n\0".as_ptr().cast());}
++                _=>{},
++            }
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_vm_policy_insert_log_v1 {
++    use core::ptr::{addr_of,read_volatile};
++    use crate::{abi::{CULong,ProcessVm,VmRangeNumaPolicy},debug::Ddebug};
++    unsafe extern "C" {static mut f03_vm_policy_insert_log_debug_v1:[Ddebug;1];}
++
++    /// Preserve original overlap diagnostics and conditional policy-range reads.
++    ///
++    /// # Safety
++    /// A nonnull overlap and both logged range operands are initialized, aligned,
++    /// live original policy records. When overlap is null and debugging disabled,
++    /// no range is accessed. The VM is an opaque printed address. This function
++    /// neither owns nor mutates the VM, range tree, ranges or debug descriptor.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_vm_policy_insert_log_v1(
++        vm:*mut ProcessVm,new_range:*mut VmRangeNumaPolicy,overlap:*mut VmRangeNumaPolicy,
++    ) {
++        if !overlap.is_null() {
++            // SAFETY: Original overlap path logs unconditionally. Preserve the
++            // original numa_mask ARRAY ADDRESS varargs, not mask-word values.
++            unsafe {
++                super::kprintf(b"%s(%p,%lx-%lx (nodemask)%lx (policy)%d): overlap %lx-%lx (nodemask)%lx (policy)%d\n\0".as_ptr().cast(),
++                    b"vm_policy_insert\0".as_ptr().cast::<i8>(),vm,(*new_range).start,(*new_range).end,
++                    addr_of!((*new_range).numa_mask).cast::<CULong>().cast_mut(),(*new_range).numa_mem_policy,
++                    (*overlap).start,(*overlap).end,addr_of!((*overlap).numa_mask).cast::<CULong>().cast_mut(),
++                    (*overlap).numa_mem_policy);
++            }
++        } else {
++            // SAFETY: One genuine live record, using the accepted debug ABI.
++            let descriptor=unsafe{addr_of!(f03_vm_policy_insert_log_debug_v1).cast::<Ddebug>()};
++            let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
++            if enabled {
++                // SAFETY: Field reads occur only inside the original debug gate.
++                unsafe {
++                    super::kprintf(b"%s: %p,%p: %lx-%lx (nodemask)%lx (policy)%d\n\0".as_ptr().cast(),
++                        b"vm_policy_insert\0".as_ptr().cast::<i8>(),vm,new_range,(*new_range).start,(*new_range).end,
++                        addr_of!((*new_range).numa_mask).cast::<CULong>().cast_mut(),(*new_range).numa_mem_policy);
++                }
++            }
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_wait_zombie_log_v1 {
++    use core::ptr::{addr_of,read_volatile};
++    use crate::{abi::CInt,debug::Ddebug};
++    use super::{WAIT_ZOMBIE_LOG_FOUND,WAIT_ZOMBIE_LOG_WARNING,WAIT_ZOMBIE_LOG_STATUS};
++    unsafe extern "C" {static mut f03_wait_zombie_log_debug_v1:[Ddebug;2];}
++
++    /// Preserve zombie-reap diagnostics without changing process/host behavior.
++    ///
++    /// # Safety
++    /// The two original debug records remain initialized and live for the kernel
++    /// lifetime under their existing update contract. All other arguments are
++    /// copied scalar values; this function owns no task, resource or wait state.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_wait_zombie_log_v1(event:CInt,pid:CInt,status:CInt,_host_result:CInt) {
++        if event==WAIT_ZOMBIE_LOG_WARNING {
++            // SAFETY: The original host-wait warning is unconditional and static.
++            unsafe{super::kprintf(b"WARNING: host waitpid failed?\n\0".as_ptr().cast());}
++            return;
++        }
++        let index=match event {WAIT_ZOMBIE_LOG_FOUND=>0,WAIT_ZOMBIE_LOG_STATUS=>1,_=>return};
++        // SAFETY: Match bounds the original two-record array before pointer add.
++        let descriptor=unsafe{addr_of!(f03_wait_zombie_log_debug_v1).cast::<Ddebug>().add(index)};
++        let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
++        if !enabled{return;}
++        // SAFETY: Exact static original formats and promoted C-int arguments.
++        // Preserve the original signed-int status vararg even with %08x format.
++        unsafe {
++            if event==WAIT_ZOMBIE_LOG_FOUND {
++                super::kprintf(b"wait_zombie,found PS_ZOMBIE process: %d\n\0".as_ptr().cast(),pid);
++            } else {
++                super::kprintf(b"wait_zombie,child->pid=%d,status=%08x\n\0".as_ptr().cast(),pid,status);
++            }
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_do_munmap_log_v1 {
++    use core::ptr::{addr_of,read_volatile};
++    use crate::{abi::{CInt,CULong,SizeT},debug::Ddebug};
++    unsafe extern "C" {static mut f03_do_munmap_log_debug_v1:[Ddebug;1];}
++
++    /// Preserve the original unmap-result diagnostic and its independent flag.
++    ///
++    /// # Safety
++    /// The original debug record remains initialized and live under its existing
++    /// dynamic-debug update contract. Arguments are scalar copies; the address
++    /// is printed without dereference. This logger owns no mapping or resource.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_do_munmap_log_v1(address:CULong,length:SizeT,error:CInt) {
++        let descriptor=addr_of!(f03_do_munmap_log_debug_v1).cast::<Ddebug>();
++        // SAFETY: One genuine live debug record; any nonzero8-bit flag enables it.
++        let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
++        if enabled {
++            // SAFETY: Exact original format/text and unsigned-long/size_t/int
++            // varargs; no address, range or pointer-bearing object is accessed.
++            unsafe{super::kprintf(b"%s: 0x%lx:%lu, error: %d\n\0".as_ptr().cast(),
++                b"do_munmap\0".as_ptr().cast::<i8>(),address,length,error);}
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(enable_perf)]
++mod f03_perf_attr_frequency_v1 {
++    use core::ffi::c_void;
++    use crate::{abi::CInt,f03_perf_attr_callbacks::PerfEventAttr};
++
++    /// Reuse the existing genuine-header-qualified frequency-bit implementation.
++    ///
++    /// # Safety
++    /// The internal caller supplies a nonnull, aligned, initialized complete
++    /// perf_event_attr retained immutably during this synchronous callback. Its
++    /// existing full-size copy succeeds before this call. No null/partial-copy/
++    /// uninitialized domain is accepted or inferred from an ignored result.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_perf_attr_frequency_v1(attribute:*const c_void)->CInt {
++        // SAFETY: The original live complete attribute contract above supports
++        // a short immutable borrow. The existing method reads only flags and
++        // returns the original C bitfield's exact 0/1 value; no byte is written.
++        unsafe{(&*attribute.cast::<PerfEventAttr>()).frequency()}
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(enable_perf)]
++mod f03_perf_counter_allocate_v1 {
++    use core::ffi::c_void;
++    use crate::abi::{CInt,Thread};
++
++    /// Retain the callback ABI while reusing the complete existing Rust provider.
++    ///
++    /// # Safety
++    /// The original internal caller retains its nonnull live thread/event for
++    /// the synchronous provider call. The existing allocator keeps its own
++    /// thread/counter-state contract. This adapter accesses no object field and
++    /// introduces no ownership, lock, hardware action, failure or rollback.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_perf_counter_allocate_v1(thread:*mut c_void,event:*mut c_void)->CInt {
++        // SAFETY: Preserve both original pointer values, typed thread cast and
++        // exact signed-int result. The original provider is not reimplemented.
++        unsafe{crate::x86_perfctr::ihk_mc_perfctr_alloc(thread.cast::<Thread>(),event)}
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++mod f03_util_register_desc_logger_v1 {
++    use core::ptr::{addr_of,read_volatile};
++    use crate::{abi::{CInt,CULong},debug::Ddebug};
++    unsafe extern "C" {static mut f03_util_register_desc_debug_v1:[Ddebug;1];}
++
++    /// Keep the original registration diagnostic without changing registration.
++    ///
++    /// # Safety
++    /// The original debug record remains initialized and live under its existing
++    /// update contract. Arguments are copied scalar values; this function does
++    /// not resolve the current thread or dereference the descriptor address.
++    #[no_mangle]
++    pub unsafe extern "C" fn syscall_util_register_desc_log_bridge(tid:CInt,descriptor:CULong) {
++        let record=addr_of!(f03_util_register_desc_debug_v1).cast::<Ddebug>();
++        // SAFETY: One genuine record, preserving any-nonzero8-bit flag gating.
++        let enabled=unsafe{read_volatile(addr_of!((*record).line_flags))>>24!=0};
++        if enabled {
++            // SAFETY: Exact original function text/format and promoted-int plus
++            // unsigned-long varargs. The original logger result is ignored.
++            unsafe{super::kprintf(b"%s: tid=%d,uti_desc=%lx\n\0".as_ptr().cast(),
++                b"sys_util_register_desc\0".as_ptr().cast::<i8>(),tid,descriptor);}
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact original C metadata provenance, retained from the accepted registry.
++mod f03_util_register_desc_debug_storage_v1 {
++    use crate::debug::Ddebug;
++    // The C consumer and existing BODY12 logger retain this exact global symbol
++    // and repr(C) layout. Static lifetime/writable flags/section membership are
++    // unchanged; original update synchronization remains the caller's contract.
++    #[used]
++    #[no_mangle]
++    #[link_section="__verbose"]
++    pub static mut f03_util_register_desc_debug_v1:[Ddebug;1]=[Ddebug {
++        file:b"/src/kernel/syscall.c\0".as_ptr().cast(),
++        func:b"syscall_util_register_desc_log_bridge\0".as_ptr().cast(),
++        fmt:core::ptr::null(),
++        line_flags:28605,
++    }];
++}
++
++#[cfg(f06_vdso_info_candidate)]
++#[path = "f06_vdso_info.rs"]
++mod f06_vdso_info;
++#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
++use self::f06_vdso_info::vdso_get_vdso_info;
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -752,6 +752,22 @@
+ 
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PRCTL_LOG)
++#ifdef MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE
++extern struct ddebug arch_prctl_log_debug __asm__("mckernel_f06_arch_prctl_debug");
++#else
++struct ddebug arch_prctl_log_debug __asm__("mckernel_f06_arch_prctl_debug")
++    __attribute__((section("__verbose"),aligned(8))) = {
++    .file = __FILE__,
++    .func = "arch_prctl_log_bridge",
++    .fmt = 0,
++    .line = 669,
++    .flags = DDEBUG_DEFAULT,
++};
++#endif
++extern void arch_prctl_log_bridge(int event, int cpu, unsigned long value);
++#else
++#line 665
+ void
+ arch_prctl_log_bridge(int event, int cpu, unsigned long value)
+ {
+@@ -759,6 +775,8 @@
+ 		dkprintf("[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n", cpu, value);
+ 	}
+ }
++#endif
++#line 672
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_CLONE_READER_LOCK)
+ extern void arch_clone_reader_lock_bridge(void *lock, void *node);
+@@ -851,6 +869,7 @@
+ #endif
+ 
+ #endif
++#line 746
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void
+@@ -983,9 +1002,23 @@
+ 	unsigned long wall_time_snsec;
+ };
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_STATE)
++#ifdef MCKERNEL_RUST_F06_VDSO_STORAGE
++extern struct vdso vdso __asm__("mckernel_f06_vdso_state");
++extern size_t container_size __asm__("mckernel_f06_vdso_container_size");
++extern ptrdiff_t vdso_offset __asm__("mckernel_f06_vdso_offset");
++#else
++struct vdso vdso __asm__("mckernel_f06_vdso_state") = {0};
++size_t container_size __asm__("mckernel_f06_vdso_container_size") = 0;
++ptrdiff_t vdso_offset __asm__("mckernel_f06_vdso_offset") = 0;
++#endif
++#else
++#line 878
+ static struct vdso vdso;
+ static size_t container_size = 0;
+ static ptrdiff_t vdso_offset;
++#endif
++#line 881
+ 
+ extern int num_processors;
+ 
+@@ -1434,6 +1467,13 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_USER_BRIDGES)
++extern long arch_ptrace_read_user_bridge(unsigned long thread_addr, long addr,
++		unsigned long *value);
++extern long arch_ptrace_write_user_bridge(unsigned long thread_addr, long addr,
++		unsigned long value);
++#else
++#line 1323
+ long
+ arch_ptrace_read_user_bridge(unsigned long thread_addr, long addr,
+ 		unsigned long *value)
+@@ -1448,6 +1488,9 @@
+ 	return ptrace_write_user((struct thread *)thread_addr, addr, value);
+ }
+ #endif
++#line 1336
++#endif
++#line 1337
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long ptrace_read_fpregs(struct thread *thread, void *fpregs);
+@@ -1522,6 +1565,11 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES)
++extern long arch_ptrace_read_gpregs_bridge(unsigned long thread_addr, void *regs);
++extern long arch_ptrace_write_gpregs_bridge(unsigned long thread_addr, const void *regs);
++#else
++#line 1411
+ long
+ arch_ptrace_read_gpregs_bridge(unsigned long thread_addr, void *regs)
+ {
+@@ -1533,7 +1581,14 @@
+ {
+ 	return ptrace_write_gpregs((struct thread *)thread_addr, regs);
+ }
+-
++#endif
++#line 1422
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO)
++extern long arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
++		unsigned long user_addr, size_t bytes);
++#else
++#line 1423
+ long
+ arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
+ 		unsigned long user_addr, size_t bytes)
+@@ -1545,7 +1600,14 @@
+ 	}
+ 	return copy_to_user((void *)user_addr, thread->fp_regs, bytes);
+ }
+-
++#endif
++#line 1434
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM)
++extern long arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
++		unsigned long user_addr, size_t bytes);
++#else
++#line 1435
+ long
+ arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
+ 		unsigned long user_addr, size_t bytes)
+@@ -1557,6 +1619,8 @@
+ 	}
+ 	return copy_from_user(thread->fp_regs, (void *)user_addr, bytes);
+ }
++#endif
++#line 1446
+ 
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)
+@@ -1569,6 +1633,7 @@
+ 	}
+ }
+ #endif
++#line 1458
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long ptrace_read_regset(struct thread *thread, long type,
+@@ -3131,6 +3196,11 @@
+ #define ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED 4
+ #define ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED 5
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_STATE)
++extern void arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
++		ptrdiff_t **vdso_offset_p);
++#else
++#line 3020
+ void
+ arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
+ 		ptrdiff_t **vdso_offset_p)
+@@ -3145,7 +3215,13 @@
+ 		*vdso_offset_p = &vdso_offset;
+ 	}
+ }
+-
++#endif
++#line 3034
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_SETUP_LOG)
++extern void arch_vdso_setup_log_bridge(int event, int error);
++#else
++#line 3035
+ void
+ arch_vdso_setup_log_bridge(int event, int error)
+ {
+@@ -3166,6 +3242,8 @@
+ 		break;
+ 	}
+ }
++#endif
++#line 3055
+ 
+ #ifndef MCKERNEL_RUST_F06_VDSO_ADD_RANGE
+ int
+@@ -3190,6 +3268,12 @@
+ 
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_MAP_LOG)
++extern void arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
++		unsigned long a, unsigned long b, unsigned long c,
++		unsigned long d, int pages);
++#else
++#line 3077
+ void
+ arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
+ 		unsigned long a, unsigned long b, unsigned long c,
+@@ -3215,9 +3299,12 @@
+ 		break;
+ 	}
+ }
+-
+-
+-#endif
++#endif
++#line 3104
++
++
++#endif
++#line 3107
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -124,3 +124,27 @@
+ 
+ #[cfg(f06_native_signal_restore_fp_candidate)]
+ mod f06_native_signal_restore_fp;
++
++// Exact existing F06 BODY3-9 implementations, selected together by supported CMake profile.
++#[cfg(f06_ptrace_xstate_copy_to_candidate)]
++mod f06_ptrace_xstate_copy_to;
++#[cfg(f06_ptrace_xstate_copy_from_candidate)]
++mod f06_ptrace_xstate_copy_from;
++#[cfg(f06_vdso_setup_log_candidate)]
++mod f06_vdso_setup_log;
++#[cfg(f06_vdso_state_candidate)]
++mod f06_vdso_state;
++#[cfg(f06_vdso_storage_candidate)]
++mod f06_vdso_storage;
++#[cfg(f06_ptrace_user_bridges_candidate)]
++mod f06_ptrace_user_bridges;
++#[cfg(f06_ptrace_gpregs_bridges_candidate)]
++mod f06_ptrace_gpregs_bridges;
++
++// Exact subsequent F06 BODY10-12; storage and diagnostic identities retained.
++#[cfg(f06_prctl_log_candidate)]
++mod f06_prctl_log;
++#[cfg(f06_prctl_log_storage_candidate)]
++mod f06_prctl_log_storage;
++#[cfg(f06_vdso_map_log_candidate)]
++mod f06_vdso_map_log;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -309,6 +309,34 @@
+ 				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+ 				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_VDSO_INFO")
+ 
++				# Exact F06 BODY3-9 cumulative selection; storage has one Rust owner each.
++				list(APPEND RUST_KERNEL_CFG
++				    "--cfg" "f06_ptrace_xstate_copy_to_candidate"
++				    "--cfg" "f06_ptrace_xstate_copy_from_candidate"
++				    "--cfg" "f06_vdso_setup_log_candidate"
++				    "--cfg" "f06_vdso_state_candidate"
++				    "--cfg" "f06_vdso_storage_candidate"
++				    "--cfg" "f06_ptrace_user_bridges_candidate"
++				    "--cfg" "f06_ptrace_gpregs_bridges_candidate"
++				    "--cfg" "f06_prctl_log_candidate"
++				    "--cfg" "f06_prctl_log_storage_candidate"
++				    "--cfg" "f06_vdso_map_log_candidate"
++				)
++				list(APPEND RUST_KERNEL_SRCS
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_to.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_xstate_copy_from.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_setup_log.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_state.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_storage.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_user_bridges.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_gpregs_bridges.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_log_storage.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_map_log.rs"
++				)
++				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
++				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO;MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM;MCKERNEL_RUST_F06_VDSO_SETUP_LOG;MCKERNEL_RUST_F06_VDSO_STATE;MCKERNEL_RUST_F06_VDSO_STORAGE;MCKERNEL_RUST_F06_PTRACE_USER_BRIDGES;MCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES;MCKERNEL_RUST_F06_PRCTL_LOG;MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE;MCKERNEL_RUST_F06_VDSO_MAP_LOG")
++
+ 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+ 				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"
+--- a/scripts/f06_origin_command_profile.json
++++ b/scripts/f06_origin_command_profile.json
+@@ -1,4 +1,5 @@
+ {
++  "BODY12_review_status": "Under independent review, this packet grants no acceptance.",
+   "accepted_CURRENT111": {
+     "bytes": 253155,
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/DEFAULT-ARTIFACT-REVIEW.json",
+@@ -8,6 +9,11 @@
+     "bytes": 93795,
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/PROFILE.SOURCE-ONLY.json",
+     "sha256": "82b1159fc5e39220a370f5024b9df4069d2f764748015f017203e824288313fa"
++  },
++  "actual118_registry_failure": {
++    "bytes": 129474,
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-ACTUAL-ARTIFACT-REVIEW-1/FIRST-ACTUAL-REGISTRY-CHECK.json",
++    "sha256": "27e8ded9f12fe258a5e7e7be711c171206296bc533e2baa2c7db096c3ead6c9b"
+   },
+   "arch_predecessor_command": {
+     "argv": [
+@@ -117,11 +123,38 @@
+       }
+     ]
+   },
+-  "composed_arch_source_sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec",
++  "composed_arch_source_sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669",
++  "cumulative_from118_source_adoption": {
++    "bytes": 9433,
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/M14-CANONICAL118-SOURCE-ADOPTION-1/ROOT-SOURCE-ADOPTION.json",
++    "sha256": "c161d7b6732d6d48ad73083c4bc95ff0c665528bb241d16ac71cc54d75533e7e"
++  },
++  "cumulative_leaf_Rust_sources": {
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body10-restart-20261028-1/f06_prctl_log.rs": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/f06_prctl_log_storage.rs": "c20113faa7526cf49a896f73e8072aa2d4132f93bbdcb21efae8f056b2098474",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/f06_vdso_map_log.rs": "72ba6caf872579d865ea6ad271b032532de68cae51d0f8c01915f5e7f4bcd659",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/f06_ptrace_xstate_copy_to.rs": "c2a01b19c1434a13b6adf24607490b35ea8771c17824b8cebf10e7d5ae19618a",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/f06_ptrace_xstate_copy_from.rs": "6a6e89f1e956ca599cee4dd9c851125acada5565aa2c3835d3e5184fbfb6dde5",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body5-restart-20261028-1/f06_vdso_setup_log.rs": "c39c89399990db0beb111ccd917b1cdef42ef10c06d1b251723dbdfdf44f743f",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body6-restart-20261028-1/f06_vdso_state.rs": "0b3fe45b768f58ddc813ebc5e088316b2c50adb5ef14bd620832c295de2fa160",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body7-restart-20261028-1/f06_vdso_storage.rs": "622eb07989c097aaeca8cadca8151088a1d71dbbee0a2e51e6cd787d508182ad",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body8-restart-20261028-1/f06_ptrace_user_bridges.rs": "da4a5bf6cd0e72b6ec252e4c79ee8ed9e48350ca9c742bf17dce6d6533be114c",
++    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body9-restart-20261028-1/f06_ptrace_gpregs_bridges.rs": "9aac9bf94a1490c4b584f473e6939fe7f1da13b06d4f29128a38e6bac4ebdd12"
++  },
+   "exact_commands": [
+     {
+       "argv": [
+         "/usr/bin/cc",
++        "-DMCKERNEL_RUST_F06_PRCTL_LOG",
++        "-DMCKERNEL_RUST_F06_PRCTL_LOG_STORAGE",
++        "-DMCKERNEL_RUST_F06_VDSO_MAP_LOG",
++        "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO",
++        "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM",
++        "-DMCKERNEL_RUST_F06_VDSO_SETUP_LOG",
++        "-DMCKERNEL_RUST_F06_VDSO_STATE",
++        "-DMCKERNEL_RUST_F06_VDSO_STORAGE",
++        "-DMCKERNEL_RUST_F06_PTRACE_USER_BRIDGES",
++        "-DMCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES",
+         "-DMCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP",
+         "-DMCKERNEL_RUST_F06_VDSO_INFO",
+         "-DMCKERNEL_RUST_F06_SHMGET_DISPATCH",
+@@ -207,6 +240,11 @@
+       "stage": "selected x86 syscall object"
+     }
+   ],
++  "frozen_accepted_BODY3_9_source_map": {
++    "bytes": 27412,
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F06-cumulative-next-source-1/SOURCE-MAP-FROM118.json",
++    "sha256": "c9bbb6af1b7ff73d2b899629633a25039b187287e70029afe1c1ba9954dc8299"
++  },
+   "new_C_runtime_objects": 0,
+   "predecessor_CURRENT112_origin_context": {
+     "bytes": 3409,
+@@ -220,5 +258,16 @@
+   },
+   "runtime_authority": null,
+   "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+-  "status": "PROPOSED_F06_CLONE_CPUID_PAIRED_SELECTION_AND_ORIGIN_SOURCE_ONLY"
++  "status": "PRIVATE_BODY3_12_METADATA_SUCCESSOR_AFTER_ACTUAL118_ORIGINAL389_FAILURE_NOT_ARTIFACT_ACCEPTANCE",
++  "vdso_info_descriptor_source_repair": {
++    "ENTER_line": 2859,
++    "EXIT_line": 2887,
++    "fmt": null,
++    "function": "vdso_get_vdso_info",
++    "initial_flags": 0,
++    "layout": "Existing actual Ddebug32/align8 unchanged, same local static attributes and mutable flag storage.",
++    "origin_environment": "MCKERNEL_F06_RT_SIGRETURN_ORIGIN",
++    "relative": "kernel/rust/f06_vdso_info.rs",
++    "sha256": "20e5a3c758e177725433b5a211e419e07ac551945b0f95752a4fb08605af9095"
++  }
+ }
+--- a/scripts/derive_f06_origin.py
++++ b/scripts/derive_f06_origin.py
+@@ -2,7 +2,7 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ 
+ Source producer only. No subprocesses/compiler or workload authority.
+-Support precisely the private CURRENT113 arch-command profile; reject profile drift.
++Support precisely the private cumulative F06-on118 arch profile; reject profile drift.
+ """
+ import argparse
+ import hashlib
+@@ -10,7 +10,7 @@
+ from pathlib import Path
+ import re
+ 
+-PROFILE_SHA256 = "a1e1b96f570cc96c6dd3ad767825554cf2f6508a16dfb2cb18cb52ff1399d5aa"
++PROFILE_SHA256 = "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
+ 
+ 
+ def derive(profile_path, source_path):
+--- /dev/null
++++ b/kernel/rust/f06_ptrace_xstate_copy_to.rs
+@@ -0,0 +1,38 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Complete remaining selected xstate read callback; reuse the Rust user-copy provider.
++use core::ptr::{addr_of, read};
++
++use crate::abi::{CLong, CULong, SizeT, Thread};
++
++/// Copy borrowed target FP state through the existing user-copy implementation.
++///
++/// # Safety
++/// `thread_addr` names a live, properly aligned Thread whose fp_regs field is
++/// readable under the caller's existing ptrace/thread exclusion. A nonnull FP
++/// allocation remains live for the provider call. The caller retains the same
++/// user-copy address/size contract and original target lifetime; this callback
++/// acquires/releases no thread reference, lock, allocation, mapping or FP state.
++/// Null/invalid thread addresses remain outside the original C defined domain.
++/// No reference is formed over target state or user memory. Provider errors and
++/// partial-copy effects pass through unchanged, including signed int32 widening.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_xstate_copy_to_bridge(
++    thread_addr: CULong,
++    user_addr: CULong,
++    bytes: SizeT,
++) -> CLong {
++    let thread = thread_addr as *const Thread;
++    // SAFETY: one ordinary raw read of the same borrowed field as the C body.
++    let fp_regs = unsafe { read(addr_of!((*thread).fp_regs)) };
++    if fp_regs.is_null() {
++        return -12; // unchanged -ENOMEM; no user-copy call on this path.
++    }
++    // SAFETY: same raw pointers/count, existing Rust provider and ownership.
++    unsafe {
++        crate::x86_memory_helpers::copy_to_user(
++            user_addr as *mut core::ffi::c_void,
++            fp_regs.cast_const(),
++            bytes,
++        ) as CLong
++    }
++}
+--- /dev/null
++++ b/kernel/rust/f06_ptrace_xstate_copy_from.rs
+@@ -0,0 +1,38 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Complete selected xstate write callback; reuse the existing Rust user-copy provider.
++use core::ptr::{addr_of, read};
++
++use crate::abi::{CLong, CULong, SizeT, Thread};
++
++/// Update borrowed target FP state through the existing user-copy implementation.
++///
++/// # Safety
++/// `thread_addr` names a live, properly aligned Thread whose fp_regs field is
++/// readable under the caller's existing ptrace/thread exclusion. A nonnull FP
++/// allocation remains live and writable for the provider call. The caller keeps
++/// the original user-copy address/count and target lifetime/exclusion contract.
++/// No thread reference, lock, allocation, mapping or FP-state ownership changes.
++/// Null/invalid thread addresses remain outside the original C defined domain.
++/// No Rust reference is formed over target state or user memory. Partial writes
++/// and provider errors pass through, with original signed-int32 result widening.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_xstate_copy_from_bridge(
++    thread_addr: CULong,
++    user_addr: CULong,
++    bytes: SizeT,
++) -> CLong {
++    let thread = thread_addr as *const Thread;
++    // SAFETY: unchanged ordinary raw read of the borrowed FP-state pointer.
++    let fp_regs = unsafe { read(addr_of!((*thread).fp_regs)) };
++    if fp_regs.is_null() {
++        return -12; // unchanged -ENOMEM; no copy or state write on this branch.
++    }
++    // SAFETY: caller retains write exclusion and existing provider obligations.
++    unsafe {
++        crate::x86_memory_helpers::copy_from_user(
++            fp_regs,
++            user_addr as *const core::ffi::c_void,
++            bytes,
++        ) as CLong
++    }
++}
+--- /dev/null
++++ b/kernel/rust/f06_vdso_setup_log.rs
+@@ -0,0 +1,38 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Complete selected VDSO setup event logger; retain existing kprintf implementation.
++use crate::abi::CInt;
++
++const GET_INFO_FAILED: CInt = 1;
++const LOCAL_GETTIME_DISABLED: CInt = 2;
++const VDSO_DISABLED: CInt = 3;
++const MAP_GLOBAL_FAILED: CInt = 4;
++
++unsafe extern "C" {
++    fn kprintf(format: *const i8, ...) -> CInt;
++}
++
++/// Preserve exact original event selection, message bytes and int32 arguments.
++/// All format pointers name immutable static NUL-terminated bytes; the two %d
++/// arguments have the genuine promoted C int type. Existing kprintf retains its
++/// synchronization and output ownership. Its result is ignored exactly as C.
++#[no_mangle]
++pub extern "C" fn arch_vdso_setup_log_bridge(event: CInt, error: CInt) {
++    // SAFETY: static format lifetimes and exact C variadic int32 argument ABI.
++    unsafe {
++        match event {
++            GET_INFO_FAILED => {
++                kprintf(b"arch_setup_vdso: vdso_get_vdso_info failed. %d\n\0".as_ptr().cast(), error);
++            }
++            LOCAL_GETTIME_DISABLED => {
++                kprintf(b"x86 local gettime disabled: host vgtod data unavailable\n\0".as_ptr().cast());
++            }
++            VDSO_DISABLED => {
++                kprintf(b"vdso disabled: host vgtod data unavailable\n\0".as_ptr().cast());
++            }
++            MAP_GLOBAL_FAILED => {
++                kprintf(b"arch_setup_vdso: vdso_map_global_pages failed. %d\n\0".as_ptr().cast(), error);
++            }
++            _ => {}
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/f06_vdso_state.rs
+@@ -0,0 +1,43 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Reuse the real VDSO type; existing three C storage owners remain explicit debt.
++use crate::abi::SizeT;
++use crate::syscall_policy::ArchVdso;
++use core::ptr::{addr_of_mut, write};
++
++unsafe extern "C" {
++    #[link_name = "mckernel_f06_vdso_state"]
++    static mut VDSO_STATE: ArchVdso;
++    #[link_name = "mckernel_f06_vdso_container_size"]
++    static mut CONTAINER_SIZE: SizeT;
++    #[link_name = "mckernel_f06_vdso_offset"]
++    static mut VDSO_OFFSET: isize;
++}
++
++/// Publish the same optional borrowed storage addresses in original order.
++///
++/// # Safety
++/// Each nonnull output names a live, aligned, writable slot of its exact pointer
++/// type. The original caller owns exclusion over output slots and VDSO state.
++/// Returned pointers borrow the same three static C objects for image lifetime;
++/// this function neither reads nor changes their contents or ownership. No Rust
++/// reference, allocation, refcount or lock is introduced. Null outputs are valid.
++#[no_mangle]
++pub unsafe extern "C" fn arch_vdso_state_bridge(
++    vdso: *mut *mut ArchVdso,
++    container_size: *mut *mut SizeT,
++    vdso_offset: *mut *mut isize,
++) {
++    // SAFETY: optional writable slots and externally defined image-lifetime
++    // storage retain the original C contract; only raw addresses are formed.
++    unsafe {
++        if !vdso.is_null() {
++            write(vdso, addr_of_mut!(VDSO_STATE));
++        }
++        if !container_size.is_null() {
++            write(container_size, addr_of_mut!(CONTAINER_SIZE));
++        }
++        if !vdso_offset.is_null() {
++            write(vdso_offset, addr_of_mut!(VDSO_OFFSET));
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/f06_vdso_storage.rs
+@@ -0,0 +1,18 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact three existing VDSO storage objects; no constructor or synchronization change.
++use crate::abi::SizeT;
++use crate::syscall_policy::ArchVdso;
++
++// SAFETY: the pinned repr(C) ArchVdso contains only signed integers, i8 fields,
++// integer arrays and raw pointers. Every field permits all-zero initialization,
++// including null raw pointers; no reference, NonNull, enum or drop owner exists.
++// This preserves the complete zero initialization of the former C static object.
++// Callers retain their original raw-pointer publication and exclusion contract.
++#[export_name = "mckernel_f06_vdso_state"]
++pub static mut VDSO_STATE: ArchVdso = unsafe { core::mem::zeroed() };
++
++#[export_name = "mckernel_f06_vdso_container_size"]
++pub static mut CONTAINER_SIZE: SizeT = 0;
++
++#[export_name = "mckernel_f06_vdso_offset"]
++pub static mut VDSO_OFFSET: isize = 0;
+--- /dev/null
++++ b/kernel/rust/f06_ptrace_user_bridges.rs
+@@ -0,0 +1,32 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact selected adapters; existing Rust ptrace providers retain all behavior/ownership.
++use crate::abi::{CLong,CULong,Thread};
++
++/// # Safety
++/// Caller retains the existing ptrace provider's target lifetime/exclusion and
++/// output-pointer contract. This adapter only casts the original LP64 thread
++/// bits to the genuine nominal type, then forwards arguments/result unchanged.
++/// No reference, validation, allocation, locking or ownership change is added.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_read_user_bridge(
++    thread_addr:CULong,
++    address:CLong,
++    value:*mut CULong,
++) -> CLong {
++    // SAFETY: same raw target/output pointers and provider contract as original C.
++    unsafe { crate::syscall_policy::ptrace_read_user(thread_addr as *mut Thread,address,value) }
++}
++
++/// # Safety
++/// The unchanged Rust write provider owns target access, errors and exclusion.
++/// Raw thread/value bits and signed offset/return retain the original C ABI;
++/// the adapter neither dereferences nor retains the target pointer.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_write_user_bridge(
++    thread_addr:CULong,
++    address:CLong,
++    value:CULong,
++) -> CLong {
++    // SAFETY: caller supplies the original target lifetime/provider obligations.
++    unsafe { crate::syscall_policy::ptrace_write_user(thread_addr as *mut Thread,address,value) }
++}
+--- /dev/null
++++ b/kernel/rust/f06_ptrace_gpregs_bridges.rs
+@@ -0,0 +1,38 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact nominal adapters; existing Rust general-register providers retain behavior.
++use core::ffi::c_void;
++use crate::abi::{CLong,CULong,Thread,UserRegsStruct};
++
++/// # Safety
++/// Caller keeps the existing provider's target lifetime/exclusion and writable
++/// register-buffer contract. Raw LP64 thread bits and register address retain
++/// their original meanings; no reference, validation or resource owner is added.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_read_gpregs_bridge(
++    thread_addr:CULong,
++    registers:*mut c_void,
++) -> CLong {
++    // SAFETY: exact original nominal casts, provider obligations and signed result.
++    unsafe {
++        crate::syscall_policy::ptrace_read_gpregs(
++            thread_addr as *mut Thread,registers.cast::<UserRegsStruct>(),
++        )
++    }
++}
++
++/// # Safety
++/// Target and readable const register-buffer lifetime/exclusion remain with the
++/// unchanged Rust provider/caller. This adapter neither reads nor mutates them;
++/// it preserves the exact provider result and all partial effects on the target.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_write_gpregs_bridge(
++    thread_addr:CULong,
++    registers:*const c_void,
++) -> CLong {
++    // SAFETY: original borrowed target/const-input contract; no new ownership.
++    unsafe {
++        crate::syscall_policy::ptrace_write_gpregs(
++            thread_addr as *mut Thread,registers.cast::<UserRegsStruct>(),
++        )
++    }
++}
+--- /dev/null
++++ b/kernel/rust/f06_prctl_log.rs
+@@ -0,0 +1,29 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Preserve the original C diagnostic descriptor and existing Rust print provider.
++use core::ptr::{addr_of,read_volatile};
++use crate::abi::{CInt,CULong};
++use crate::debug::{Ddebug,kprintf};
++
++const ARCH_SET_FS:CInt=0x1002;
++unsafe extern "C" {
++    #[link_name="mckernel_f06_arch_prctl_debug"]
++    static mut ARCH_PRCTL_DEBUG:Ddebug;
++}
++
++/// Preserve event selection, the original eight-bit debug gate and exact print ABI.
++/// Descriptor storage is the same image-lifetime C record. Its defining x86 ABI
++/// places flags at byte27; read only that byte and form no Rust reference across
++/// printing. This adds no synchronization or atomicity guarantee; original flag
++/// update/exclusion and kprintf ownership remain with their existing providers.
++#[no_mangle]
++pub extern "C" fn arch_prctl_log_bridge(event:CInt,cpu:CInt,value:CULong) {
++    if event!=ARCH_SET_FS {return;}
++    // SAFETY: the paired selector supplies the qualified32B/align8 C descriptor;
++    // formats are immutable NUL-terminated and %d/%lX consume exact int/ulong args.
++    unsafe {
++        let flags=read_volatile(addr_of!(ARCH_PRCTL_DEBUG).cast::<u8>().add(27));
++        if flags!=0 {
++            kprintf(b"[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n\0".as_ptr().cast(),cpu,value);
++        }
++    }
++}
+--- /dev/null
++++ b/kernel/rust/f06_prctl_log_storage.rs
+@@ -0,0 +1,18 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Preserve the original image-lifetime ddebug record and existing C consumers.
++use crate::debug::Ddebug;
++
++// The existing F06 origin producer binds this filename to the actual C command.
++// Ddebug's qualified x86 ABI is 32B/align8, with line:24 then flags:8. The
++// initializer retains line669, flags0, null fmt and immutable NUL strings.
++// C's original flag-update/exclusion contract remains in force; this introduces
++// no lock, reference alias, or stronger synchronization/atomicity guarantee.
++#[used]
++#[link_section="__verbose"]
++#[export_name="mckernel_f06_arch_prctl_debug"]
++pub static mut ARCH_PRCTL_LOG_DEBUG:Ddebug=Ddebug {
++    file:concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"),"\0").as_ptr().cast(),
++    func:b"arch_prctl_log_bridge\0".as_ptr().cast(),
++    fmt:core::ptr::null(),
++    line_flags:669,
++};
+--- /dev/null
++++ b/kernel/rust/f06_vdso_map_log.rs
+@@ -0,0 +1,80 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::ptr::{addr_of,addr_of_mut,null_mut,read,read_volatile};
++use crate::abi::{CInt,CULong,SizeT,Process,ProcessVm};
++use crate::debug::{Ddebug,kprintf};
++use crate::syscall_policy::ArchVdso;
++
++// The existing F06 producer supplies the original C filename. Retain exactly
++// the CURRENT116 site identity, including its null fmt and initial flags0.
++#[used]
++#[link_section="__verbose"]
++#[export_name="mckernel_f06_vdso_map_debug"]
++pub static mut VDSO_MAP_DEBUG:Ddebug=Ddebug {
++    file:concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"),"\0").as_ptr().cast(),
++    func:b"arch_vdso_map_log_bridge\0".as_ptr().cast(),
++    fmt:core::ptr::null(),
++    line_flags:3084,
++};
++
++unsafe extern "C" {
++    fn arch_vdso_state_bridge(vdso:*mut *mut ArchVdso,size:*mut *mut SizeT,offset:*mut *mut isize);
++}
++
++/// Preserve the original event, argument, debug-gate and diagnostic behavior.
++///
++/// # Safety
++/// For the mapped event only, nonnull vm and vm.proc must retain their original
++/// valid, aligned ProcessVm/Process lifetimes and caller-owned exclusion. Other
++/// events never access vm. The existing state bridge supplies the same stable
++/// image-lifetime offset address; its read retains the original plain-load
++/// semantics. No reference, allocation, hold/release, lock or error is added.
++#[no_mangle]
++pub unsafe extern "C" fn arch_vdso_map_log_bridge(
++    event:CInt,error:CInt,vm:*mut ProcessVm,container:CULong,vdso_address:CULong,
++    vdso_end:CULong,container_size:CULong,pages:CInt,
++) {
++    match event {
++        1=>{
++            // SAFETY: qualified32B/align8 descriptor; original eight-bit flags
++            // reside at byte27. Keep its original updates/exclusion contract.
++            if unsafe{read_volatile(addr_of!(VDSO_MAP_DEBUG).cast::<u8>().add(27))}!=0 {
++                // SAFETY: immutable NUL string, no variadic arguments.
++                unsafe{kprintf(b"arch_map_vdso(): not available\n\0".as_ptr().cast());}
++            }
++        }
++        2=>{
++            // SAFETY: exact original int32 argument for %d.
++            unsafe{kprintf(b"ERROR: adding memory range for vdso. %d\n\0".as_ptr().cast(),error);}
++        }
++        3=>{
++            // SAFETY: original null short circuit; caller retains both object
++            // lifetimes. Read only the original proc pointer and int32 pid.
++            let pid=unsafe{
++                if vm.is_null(){-1}else{
++                    let process=read(addr_of!((*vm).proc)).cast::<Process>();
++                    if process.is_null(){-1}else{read(addr_of!((*process).pid))}
++                }
++            };
++            let mut offset_address=null_mut();
++            // SAFETY: exact existing optional-output ABI, writable local slot.
++            // The qualified bridge always publishes the same nonnull static
++            // offset address and does not alter its contents or ownership.
++            let offset=unsafe{
++                arch_vdso_state_bridge(null_mut(),null_mut(),addr_of_mut!(offset_address));
++                read(offset_address) as CULong
++            };
++            // SAFETY: %d consumes int32 and five %lx consume unsigned long64;
++            // signed ptrdiff_t converts modulo2^64, as in the original C cast.
++            unsafe{kprintf(b"mcexec_v10: vdso_map pid=%d container=0x%lx vdso=0x%lx vdso_end=0x%lx offset=0x%lx size=0x%lx pages=%d\n\0".as_ptr().cast(),pid,container,vdso_address,vdso_end,offset,container_size,pages);}
++        }
++        4=>{
++            // SAFETY: exact original int32 argument for %d.
++            unsafe{kprintf(b"ihk_mc_pt_set_range failed. %d\n\0".as_ptr().cast(),error);}
++        }
++        5=>{
++            // SAFETY: exact original int32 argument for %d.
++            unsafe{kprintf(b"ERROR: adding memory range for vvar. %d\n\0".as_ptr().cast(),error);}
++        }
++        _=>{}
++    }
++}
+--- a/kernel/rust/f06_vdso_info.rs
++++ b/kernel/rust/f06_vdso_info.rs
+@@ -81,18 +81,18 @@
+     #[used]
+     #[link_section = "__verbose"]
+     static mut ENTER: Ddebug = Ddebug {
+-        file: concat!(file!(), "\0").as_ptr().cast(),
++        file: concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"), "\0").as_ptr().cast(),
+         func: b"vdso_get_vdso_info\0".as_ptr().cast(),
+         fmt: core::ptr::null(),
+-        line_flags: line!() & 0x00ff_ffff,
++        line_flags: 2859,
+     };
+     #[used]
+     #[link_section = "__verbose"]
+     static mut EXIT: Ddebug = Ddebug {
+-        file: concat!(file!(), "\0").as_ptr().cast(),
++        file: concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"), "\0").as_ptr().cast(),
+         func: b"vdso_get_vdso_info\0".as_ptr().cast(),
+         fmt: core::ptr::null(),
+-        line_flags: line!() & 0x00ff_ffff,
++        line_flags: 2887,
+     };
+     match event {
+         LOG_ENTER => {

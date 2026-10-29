@@ -1,0 +1,29 @@
+--- accepted5f95df84/retire_exact_bfd_stopped_container.py
++++ immediate-runtime-compatibility-1/retire_exact_bfd_stopped_container.py
+@@ -4,7 +4,7 @@
+ """
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+-D=Path(__file__).resolve().parent
++D=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1')  # Retain original readonly transport metadata directory.
+ BINDINGS_SHA='83c104435ed34b7137f3ff7e84e4e5569130114e9fd1bab95311d9cd54da3aba'
+ SELF=D/'retire_exact_bfd_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -36,6 +36,8 @@
+ 
+ def load(r,name):
+  authenticated(r);s=importlib.util.spec_from_file_location(name,r['path']);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
++
++WAIT_STATUS_COMPAT=load({'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/wait_status_compat.py', 'bytes': 552, 'sha256': 'c895898a0a0162d78e521f4ded5ea7c75b46bd47d7764003f31c09d2d2f31d0a'},'m15_shared_wait_status_compat')
+ 
+ def bindings():
+  need(reference(D/'BINDINGS.json')['sha256']==BINDINGS_SHA,'frozen BFD retirement bindings')
+@@ -181,7 +183,7 @@
+   if self.returncode is not None:return self.returncode
+   pid,status,usage=self.wait4(self.pid,os.WNOHANG)
+   if pid:
+-   need(pid==self.pid,'exact direct wait4 child');self.returncode=os.waitstatus_to_exitcode(status);self.process.returncode=self.returncode
++   need(pid==self.pid,'exact direct wait4 child');self.returncode=WAIT_STATUS_COMPAT.waitstatus_to_exitcode(status);self.process.returncode=self.returncode
+    self.record.update(positive_wait4=True,wait4_pid=pid,wait4_status=status,returncode=self.returncode,finished_epoch=self.clock.time(),wall_seconds=self.clock.monotonic()-self.started,user_cpu_seconds=usage.ru_utime,system_cpu_seconds=usage.ru_stime,peak_rss_kib=usage.ru_maxrss)
+   return self.returncode
+  def poll(self):return self.reap()

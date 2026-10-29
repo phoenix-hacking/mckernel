@@ -1,0 +1,216 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -752,6 +752,22 @@
+ 
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PRCTL_LOG)
++#ifdef MCKERNEL_RUST_F06_PRCTL_LOG_STORAGE
++extern struct ddebug arch_prctl_log_debug __asm__("mckernel_f06_arch_prctl_debug");
++#else
++struct ddebug arch_prctl_log_debug __asm__("mckernel_f06_arch_prctl_debug")
++    __attribute__((section("__verbose"),aligned(8))) = {
++    .file = __FILE__,
++    .func = "arch_prctl_log_bridge",
++    .fmt = 0,
++    .line = 669,
++    .flags = DDEBUG_DEFAULT,
++};
++#endif
++extern void arch_prctl_log_bridge(int event, int cpu, unsigned long value);
++#else
++#line 665
+ void
+ arch_prctl_log_bridge(int event, int cpu, unsigned long value)
+ {
+@@ -759,6 +775,8 @@
+ 		dkprintf("[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n", cpu, value);
+ 	}
+ }
++#endif
++#line 672
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_CLONE_READER_LOCK)
+ extern void arch_clone_reader_lock_bridge(void *lock, void *node);
+@@ -851,6 +869,7 @@
+ #endif
+ 
+ #endif
++#line 746
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void
+@@ -983,9 +1002,23 @@
+ 	unsigned long wall_time_snsec;
+ };
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_STATE)
++#ifdef MCKERNEL_RUST_F06_VDSO_STORAGE
++extern struct vdso vdso __asm__("mckernel_f06_vdso_state");
++extern size_t container_size __asm__("mckernel_f06_vdso_container_size");
++extern ptrdiff_t vdso_offset __asm__("mckernel_f06_vdso_offset");
++#else
++struct vdso vdso __asm__("mckernel_f06_vdso_state") = {0};
++size_t container_size __asm__("mckernel_f06_vdso_container_size") = 0;
++ptrdiff_t vdso_offset __asm__("mckernel_f06_vdso_offset") = 0;
++#endif
++#else
++#line 878
+ static struct vdso vdso;
+ static size_t container_size = 0;
+ static ptrdiff_t vdso_offset;
++#endif
++#line 881
+ 
+ extern int num_processors;
+ 
+@@ -1434,6 +1467,13 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_USER_BRIDGES)
++extern long arch_ptrace_read_user_bridge(unsigned long thread_addr, long addr,
++		unsigned long *value);
++extern long arch_ptrace_write_user_bridge(unsigned long thread_addr, long addr,
++		unsigned long value);
++#else
++#line 1323
+ long
+ arch_ptrace_read_user_bridge(unsigned long thread_addr, long addr,
+ 		unsigned long *value)
+@@ -1448,6 +1488,9 @@
+ 	return ptrace_write_user((struct thread *)thread_addr, addr, value);
+ }
+ #endif
++#line 1336
++#endif
++#line 1337
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long ptrace_read_fpregs(struct thread *thread, void *fpregs);
+@@ -1522,6 +1565,11 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES)
++extern long arch_ptrace_read_gpregs_bridge(unsigned long thread_addr, void *regs);
++extern long arch_ptrace_write_gpregs_bridge(unsigned long thread_addr, const void *regs);
++#else
++#line 1411
+ long
+ arch_ptrace_read_gpregs_bridge(unsigned long thread_addr, void *regs)
+ {
+@@ -1533,7 +1581,14 @@
+ {
+ 	return ptrace_write_gpregs((struct thread *)thread_addr, regs);
+ }
+-
++#endif
++#line 1422
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO)
++extern long arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
++		unsigned long user_addr, size_t bytes);
++#else
++#line 1423
+ long
+ arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
+ 		unsigned long user_addr, size_t bytes)
+@@ -1545,7 +1600,14 @@
+ 	}
+ 	return copy_to_user((void *)user_addr, thread->fp_regs, bytes);
+ }
+-
++#endif
++#line 1434
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM)
++extern long arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
++		unsigned long user_addr, size_t bytes);
++#else
++#line 1435
+ long
+ arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
+ 		unsigned long user_addr, size_t bytes)
+@@ -1557,6 +1619,8 @@
+ 	}
+ 	return copy_from_user(thread->fp_regs, (void *)user_addr, bytes);
+ }
++#endif
++#line 1446
+ 
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)
+@@ -1569,6 +1633,7 @@
+ 	}
+ }
+ #endif
++#line 1458
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long ptrace_read_regset(struct thread *thread, long type,
+@@ -3131,6 +3196,11 @@
+ #define ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED 4
+ #define ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED 5
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_STATE)
++extern void arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
++		ptrdiff_t **vdso_offset_p);
++#else
++#line 3020
+ void
+ arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
+ 		ptrdiff_t **vdso_offset_p)
+@@ -3145,7 +3215,13 @@
+ 		*vdso_offset_p = &vdso_offset;
+ 	}
+ }
+-
++#endif
++#line 3034
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_SETUP_LOG)
++extern void arch_vdso_setup_log_bridge(int event, int error);
++#else
++#line 3035
+ void
+ arch_vdso_setup_log_bridge(int event, int error)
+ {
+@@ -3166,6 +3242,8 @@
+ 		break;
+ 	}
+ }
++#endif
++#line 3055
+ 
+ #ifndef MCKERNEL_RUST_F06_VDSO_ADD_RANGE
+ int
+@@ -3190,6 +3268,12 @@
+ 
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_VDSO_MAP_LOG)
++extern void arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
++		unsigned long a, unsigned long b, unsigned long c,
++		unsigned long d, int pages);
++#else
++#line 3077
+ void
+ arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
+ 		unsigned long a, unsigned long b, unsigned long c,
+@@ -3215,9 +3299,12 @@
+ 		break;
+ 	}
+ }
+-
+-
+-#endif
++#endif
++#line 3104
++
++
++#endif
++#line 3107
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void

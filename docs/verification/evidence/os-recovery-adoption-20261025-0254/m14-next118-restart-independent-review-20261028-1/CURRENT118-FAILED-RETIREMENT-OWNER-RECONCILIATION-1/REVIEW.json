@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T01:21:04.379350+00:00",
+  "decision": "READONLY_RECONCILED_EXACT_OWNER_BLOCKED_NO_APPLICABLE_NORMAL_RESUME_OR_CURRENT_BOUND_RETIREMENT_RELEASE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/m14_review",
+  "facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-FAILED-RETIREMENT-OWNER-RECONCILIATION-1/FACTS.json",
+    "bytes": 6105,
+    "sha256": "503496d7f29d0fe3ac4028160de66218272d80bc02fb01aa13e9cf2b5ae3b7c0"
+  },
+  "source_executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/retire_exact_current118_stopped_container.py",
+    "bytes": 41515,
+    "sha256": "4179233c5a604b2a5924b98469e0dba5fe782eb76e3ff54286767b69288e4488"
+  },
+  "pinned_existing_recovery_primitive": {
+    "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+    "bytes": 28680,
+    "sha256": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6"
+  },
+  "existing_historical_recovery_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority1-root-quarantine-recovery-independent-review-20261017.json",
+    "bytes": 11131,
+    "sha256": "be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19"
+  },
+  "source_anchors": {
+    "bind_release": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 184,
+      "end_line": 217
+    },
+    "guard_identity": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 280,
+      "end_line": 301
+    },
+    "require_lock_holder": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 318,
+      "end_line": 322
+    },
+    "validate_process_report": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 349,
+      "end_line": 373
+    },
+    "snapshot": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 391,
+      "end_line": 442
+    },
+    "pidfd_open": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 445,
+      "end_line": 451
+    },
+    "bind_pidfd": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 454,
+      "end_line": 458
+    },
+    "sole_sigkill": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 461,
+      "end_line": 467
+    },
+    "exit_ready": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 470,
+      "end_line": 477
+    },
+    "quarantine_hold": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 501,
+      "end_line": 519
+    },
+    "execute": {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py",
+      "line": 522,
+      "end_line": 586
+    }
+  },
+  "confirmed_facts": [
+    "Existing helper2232651/b103343097 is live UID/GID1000,singlethread,sleeping,newsession/pgrp2232651,childof2232650/b103343093. Rootparent is live and directly owns helper. Bounded actual helper children list is empty; no live-workload or controller inference is made.",
+    "ExacthelperFD4 links permanent /run/lock/mckernel-development.lock device27/inode4 and /proc/locks shows sole FLOCK ADVISORY WRITE owner2232651. No flock/unlock/acquisition/mutation performed by reviewer.",
+    "Only client2232653/b103343210 was an actual readonly rootproc census. Persisted status records actual systemPython3.8 missing os.waitstatus_to_exitcode; receipt positive_wait4false/client_retirement_unproventrue. Existing finally repoll produced NoChildProcesses. Both streams closed, rawstdout35087B completeprocJSON/stderr0 and groupabsent are preserved; none proves exitcode0.",
+    "UNCERTAIN commit_attemptedfalse, no RM-ONCE-CLAIM and no RESULT, no Docker operation/removal reached. Stopped image/container/artifacts/producer nonce are not retired or replayed by these observations."
+  ],
+  "normal_continuation_analysis": {
+    "result": "NO_EXISTING_RESUME_API",
+    "quarantine_loop": "primitive.quarantine_hold501\u2013519 is whileTrue and only may acquire lock if missing, publish QUARANTINE if absent and sleep; both publication and sleep exceptions including BaseException are swallowed. It reads no config, stop latch, release, withdrawal, resume file or time/account cutoff. It never returns to executor close/finally.",
+    "signals_installed": "Executor main installs Stop.receive for HUP/INT/TERM/QUIT; it only appends requests. Quarantine does not call Stop.check. These are not a normal return mechanism. This is a source finding, not permission to try any signal.",
+    "source_fix_limit": "A portable wait-status converter fixes a separately started successor only. It cannot rewrite the alreadyloaded function/record/latcheduncertainty or unblock this live loop.",
+    "child_status_limit": "Raw kernel waitstatus is absent from persisted receipt. Do not infer status from JSON output, empty stderr, PID disappearance, group absence or a later Popen state. No permitted existing interface recovers the first wait4 tuple; no process-memory/debugger intervention is proposed."
+  },
+  "smallest_existing_protocol_route": {
+    "protocol": "Reuse the existing independently reviewed exact idle-quarantine-owner pidfd retirement protocol in native_exact_scratch22_authority1_quarantine_recovery.py, not ordinary stopped-container cleanup or a model/controller retirement.",
+    "historical_scope": "Current canonical primitive is fixed to PID80259/start718109/parent80258 and profileSHAbe4ea78f. Existing guard/profile/absence/input/census/status predicates describe that historical recovery. Its CLI cannot simply supply2232651 and no existingrelease was shown to bind this newhelper. Unchanged invocation is inapplicable.",
+    "minimal_new_binding_needed": "Root must prepare one narrowly rebound successor/release using that existingprotocol, exact2232651/b103343097,parent2232650/b103343093,loadedsource/release fingerprints,Python3.8 executable identity,FD4/sole27:4,newsession/group and current controls/caps. It must retain firstclient unknownstatus and prove no live descendants/publishers plus exact preserved inputs using existing full rootcensus protocol. Independent review must authorize the exact bounded owner-retirement operation; this read-only review does not.",
+    "existing_protocol_effects_requiring_release": "The existingprotocol uses an exactbound pidfd with a sole fatal owner signal, exitreadiness and replacement27:4custody, freshpostproof andretainedinput equality. Those are actual signal/custody operations with separate existingrelease requirements; they were neither authorized by this review nor executed. No numeric/group fallback or globalholdclear is acceptable.",
+    "postcondition_needed": "Root direct parent must record the actual helper exit/join status and close streams, fresh exactprocess/group/FD/27:4absence/ownership reconciliation. This is failed-helper retirement only: originalreadonlyclient status remains unknown, original failedattempt remains failure, container andbuildnonce state unchanged.",
+    "then": "Only after actual verified owner retirement and normal global/custody gates may Root separately release corrected normalretirement helper in a fresh capture namespace, preserving old UNCERTAIN/JOIN bytes and all protected source/artifact/record exclusions. No producer/compiler/native replay and no fresh current-free from this source report."
+  },
+  "precise_current_blocker": "There is no normal resume/withdrawal edge in the live helper, and no exact current-bound independently released owner-retirement successor for2232651 was provided. Do not start a competing lockowner/cleanup or treat portableconverter success as oldowner retirement.",
+  "recommendation_to_dispatcher": "Use the existing exactowner pidfd recovery protocol as the bounded next lane; source/profile/release rebinding and independent execution review are the concrete remaining work, not a new ownership framework. Preserve unknownclientstatus and permanent27:4 until actual Root retirement completes.",
+  "reviewer_signals_kills_unlocks_holdclears_releases": 0,
+  "reviewer_Docker_cleanup_native_workload_controller_actions": 0,
+  "runtime_authority": null,
+  "native_or_current_free_acceptance": false,
+  "original_custody_and_all_failures_preserved": true,
+  "reviewer_privileged_global_query_commands": 0,
+  "bounded_unprivileged_owner_proc_and_permanent27_4_lock_readback_performed": true
+}

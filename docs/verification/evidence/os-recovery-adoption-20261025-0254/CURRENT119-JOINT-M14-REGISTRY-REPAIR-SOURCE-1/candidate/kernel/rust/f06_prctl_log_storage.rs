@@ -1,0 +1,18 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Preserve the original image-lifetime ddebug record and existing C consumers.
+use crate::debug::Ddebug;
+
+// The existing F06 origin producer binds this filename to the actual C command.
+// Ddebug's qualified x86 ABI is 32B/align8, with line:24 then flags:8. The
+// initializer retains line669, flags0, null fmt and immutable NUL strings.
+// C's original flag-update/exclusion contract remains in force; this introduces
+// no lock, reference alias, or stronger synchronization/atomicity guarantee.
+#[used]
+#[link_section="__verbose"]
+#[export_name="mckernel_f06_arch_prctl_debug"]
+pub static mut ARCH_PRCTL_LOG_DEBUG:Ddebug=Ddebug {
+    file:concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"),"\0").as_ptr().cast(),
+    func:b"arch_prctl_log_bridge\0".as_ptr().cast(),
+    fmt:core::ptr::null(),
+    line_flags:669,
+};
