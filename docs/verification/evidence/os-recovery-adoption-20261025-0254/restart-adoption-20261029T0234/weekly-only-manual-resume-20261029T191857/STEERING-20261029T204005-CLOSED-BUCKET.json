@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "request_id": "20261029T204005762940Z-24b652bb734d4d088b3683038338361e",
+  "recorded_at": "2026-10-29T21:18:06.878302+00:00",
+  "bucket_start": 1793304461.4767694,
+  "bucket_end": 1793305661.4767694,
+  "original30minute_baseline": 1793166745.701095,
+  "delta": {
+    "current_candidate_builds": 0,
+    "compiled_units": 0,
+    "linked_images": 0,
+    "accepted_selected_artifacts": 0,
+    "new_guest_behavior": 0,
+    "native_qualified": 0,
+    "C_retired": 0,
+    "M14_closures": 0
+  },
+  "actual_first_compiler_epoch": 1793305827.384507,
+  "manual_resume_to_first_compiler_seconds": 4290.384506940842,
+  "current_free_receipt_file_write_to_first_compiler_seconds": 1851.4523119926453,
+  "latency_note": "Free receipt mtime is recorded immutable file-write time, not a timestamp within receipt; exact Docker Popen time unavailable.",
+  "build_metrics": {
+    "wall": 20.559120655059814,
+    "CPU": 20.525223,
+    "maximum_child_RSS_KiB": 595724
+  },
+  "actual_C_functions": 47,
+  "current_retirements_per_hour": 0,
+  "SDK21_rebuilt": false,
+  "reused_objects": 8,
+  "current_snapshot_epoch": 1793307607.4268668,
+  "previous_snapshot_epoch": 1793306405.755101,
+  "current_resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 145585860608,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47862149120,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      0.89,
+      0.67,
+      0.74
+    ],
+    "memory": {
+      "MemAvailable_kib": 26715276,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "critical_next": "review/publish/execute186actor freshpostjoinchecker then matching235native",
+  "owner": "/root",
+  "largest_avoidable_handoff": "Repeated producer/control source data compatibility fixes and R1 freshness expiry; preserved all failures",
+  "scheduling_adjustment": "Compose new image-only native package in parallel with retirement/freshchecker; reusequalified119 with no recompilation",
+  "M15": "PAUSED",
+  "paid_fallback": false,
+  "target95_claimed": false
+}

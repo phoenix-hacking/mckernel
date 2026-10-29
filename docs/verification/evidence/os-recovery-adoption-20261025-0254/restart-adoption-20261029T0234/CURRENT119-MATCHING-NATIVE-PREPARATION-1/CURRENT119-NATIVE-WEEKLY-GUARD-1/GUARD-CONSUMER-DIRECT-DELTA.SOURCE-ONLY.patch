@@ -1,0 +1,69 @@
+--- historical/root_once_startup_entry.py
++++ source-only/root_once_startup_entry.py
+@@ -30,10 +30,10 @@
+ STDOUT = STARTUP/'ROOT-ONCE-ENTRY.stdout'
+ STDERR = STARTUP/'ROOT-ONCE-ENTRY.stderr'
+ HELPER = STARTUP/'run_native_startup_capture.py'
+-GUARD = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
++GUARD = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/native_operation_guard.py')
+ STATIC_SHA = 'ROOT_FINAL_STATIC_SHA256'
+ HELPER_SHA = '32354b7717eb63e100ad04309c7cfcb4bcd75badf5d05704617e2e6487a6de68'
+-GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
++GUARD_SHA = '1f89fba32c016346cec9f11ae96fe1e4b0c5e781c307c34bda646ab7c05f92e4'
+ PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'
+ NONCE = 'ROOT_NEW_UNUSED_235_NONCE'
+ CASE = 'P-M06-01-process-exec-wait-235B'
+--- historical/capture_fresh_startup_resource.py
++++ source-only/capture_fresh_startup_resource.py
+@@ -6,8 +6,8 @@
+ import argparse,hashlib,importlib.util,json,os
+ A=Path(__file__).resolve().parent
+ OBSERVER_REF=None  # ROOT_ACTUAL_REVIEWED_OBSERVER_LITERAL
+-GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py')
+-GUARD_SHA='1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
++GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/native_operation_guard.py')
++GUARD_SHA='1f89fba32c016346cec9f11ae96fe1e4b0c5e781c307c34bda646ab7c05f92e4'
+ def ref(p):
+  p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ def load(r,name):
+--- historical/run_native_startup_capture.py
++++ source-only/run_native_startup_capture.py
+@@ -1,7 +1,7 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+ from pathlib import Path
+ import json,hashlib,subprocess,os,time,resource,datetime,decimal,importlib.util,math
+-AUTHORIZED_FIXED_LIMITS = (1793165769.0, 947874.5689514667, 963213.6960030915)
++AUTHORIZED_FIXED_LIMITS = (1793774133, 1556235.568922472, 1571573.6959699572)
+ 
+ def cutoff_triplet(values, label):
+  if type(values) not in (list, tuple) or len(values) != 3:
+@@ -39,15 +39,15 @@
+ review=json.loads(Path(G['execution_review']['path']).read_bytes());packet_raw=Path(G['pending_execution_packet']['path']).read_bytes()
+ assert review['decision']=='PASS_EXECUTION' and review['implementation_ownership'] is False and review['reviewer']!='/root' and review['payload_sha256']==hashlib.sha256(packet_raw).hexdigest()
+ P=json.loads(packet_raw);assert G['exact_argv']==P['exact_argv'] and G['nonce']==P['nonce']
+-policy=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py')
+-assert hashlib.sha256(policy.read_bytes()).hexdigest()=='1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
++policy=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/native_operation_guard.py')
++assert hashlib.sha256(policy.read_bytes()).hexdigest()=='1f89fba32c016346cec9f11ae96fe1e4b0c5e781c307c34bda646ab7c05f92e4'
+ spec=importlib.util.spec_from_file_location('f05v2_literal_actual_new12h_guard',policy);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+ assert m.__file__==str(policy) and m.__spec__.origin==str(policy)
+ clocks=m.guard();cutoffs=m.current_cutoffs()
+ R=json.loads(Path(G['fresh_resource_physical']['path']).read_bytes())
+ clampsUsed=entry_clamps(clocks,R['observed_clocks'],R['fixed_cutoffs'],P['fixed_cutoffs'],cutoffs)
+ assert P['decision']=='PENDING_ONE_EXACT_NATIVE_M15_STARTUP_RELEASE' and P['expected_case']=='P-M06-01-process-exec-wait-235B'
+-assert P['expected_new_image_sha256']=='de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024'
++assert P['expected_new_image_sha256']=='759fe1cb2dda4a87ab521b79b17e771514c4da042cbfcd3344b6c5d670b17a31'
+ assert P['owner_sha256']=='af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10' and P['evaluator_sha256']=='529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da'
+ C=A/'CAPTURE';assert C.is_dir() and not list(C.iterdir())
+ stat=Path('/proc/self/stat').read_text().rsplit(') ',1)[1].split();start=time.time()
+--- historical/bind_startup_resource.py
++++ source-only/bind_startup_resource.py
+@@ -11,7 +11,7 @@
+ def write(p,value):
+  with p.open('x') as f:json.dump(value,f,indent=2,sort_keys=True);f.write('\n')
+ 
+-AUTHORIZED_FIXED_LIMITS = (1793165769.0, 947874.5689514667, 963213.6960030915)
++AUTHORIZED_FIXED_LIMITS = (1793774133, 1556235.568922472, 1571573.6959699572)
+ 
+ def cutoff_triplet(values, label):
+  if type(values) not in (list, tuple) or len(values) != 3:

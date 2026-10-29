@@ -1,0 +1,140 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_CONTEXT_NOT_NATIVE_AUTHORITY",
+  "runtime_authority": null,
+  "selected_current119_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10298648,
+    "sha256": "759fe1cb2dda4a87ab521b79b17e771514c4da042cbfcd3344b6c5d670b17a31",
+    "mode": 33261
+  },
+  "independent_current119_artifact_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/independent-review-1/INDEPENDENT-ACTUAL-CURRENT119-ARTIFACT-ACCEPTANCE.json",
+    "size": 31084,
+    "sha256": "3324128344411d3e8c0c87ce970b3fc851edc87507613b2186944f7be1158c6c",
+    "mode": 33152
+  },
+  "root_artifact_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/ROOT-CURRENT119-ARTIFACT-ADOPTION.ACTUAL.json",
+    "size": 2847,
+    "sha256": "6edb28eaa44ec0df4ee385a8d3d689d5a2738406fa285ee773d5de76e78cb5b8",
+    "mode": 33152
+  },
+  "previous_actual_matching115": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F02-CURRENT115-ORIGINAL235-INDEPENDENT-NATIVE-ACCEPTANCE.json",
+    "bytes": 1880,
+    "sha256": "95e0231feb3170bd3903e4a2bdc4271749417e54108894df2fcf8dab59233616"
+  },
+  "existing_strict235_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/root-actual-compose-1/manifest.HOST-STATIC.json",
+    "bytes": 8986,
+    "sha256": "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+  },
+  "existing_runtime_owner": {
+    "bytes": 94258,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "sha256": "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10"
+  },
+  "existing_runtime_profile": {
+    "cap_drop": "ALL",
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "container_uid": "1000:1000",
+    "guest": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "no_new_privileges": true,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "runner_timeout_seconds": 300,
+    "stream_cap_bytes": 33554432
+  },
+  "existing_oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512
+    }
+  ],
+  "guest": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "current_weekly_guardian_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recovery-quota-confirmation-binding-1/actual-control-binding-2/guardian_guard.py",
+    "bytes": 18114,
+    "sha256": "5d991e2a0b43d624035d77d7b46f00d3600e351e4b0f5b1461a0c8371d4e2276"
+  },
+  "new_native_specific_operation_binding": null,
+  "new_independent_source_and_execution_reviews": null,
+  "new_post119_retirement_current_free": null,
+  "new_root_ledger_and_nonce": null,
+  "new_resource_and_lease_admission": null,
+  "fresh_overlay_manifest_and_fullmap_review": null,
+  "new_sole_heavy_and_once_release": null,
+  "native_acceptance": null,
+  "limitations": [
+    "Retained matching115 is historical; 119 image and compatible module/native ABI must be independently reviewed.",
+    "Strict235 measures the original exec/wait lifecycle only; changed CURRENT119 syscall branches require separately applicable coverage.",
+    "Existing post-build stopped OCI is not retired by this preparation."
+  ],
+  "prior_owner_argv_shape": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f02p115n1",
+    "--nonce",
+    null,
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    null,
+    "--manifest-sha256",
+    null
+  ],
+  "historical_guard_or_cutoffs_are_not_new_authority": true
+}
