@@ -1,0 +1,69 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CONFIRMED_FAIL_CLOSED_PRE_DOCKER_PROC_ENUMERATION_RACE",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "failed_release": {
+    "bytes": 6483,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/ROOT-CURRENT118-NORMAL-RETIREMENT.ACTUAL.json",
+    "sha256": "dcef9ac2766fbb92df74a1eb4833136ab4790329d44be13822e4dd40a071d579"
+  },
+  "direct_parent_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/ACTUAL-RETIREMENT-ROOT3-PARENT/DIRECT-PARENT-JOIN.ACTUAL.json",
+    "bytes": 2360,
+    "sha256": "89cbabfbcaba7c42a2ff87565adcf0b04882416fa34286ed4570fcc03819da18"
+  },
+  "command_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/actual-retirement-root3-e984/command-daa68c7e960c4559a0ae76565d4c6868/JOIN-WAIT4.json",
+    "bytes": 6327,
+    "sha256": "b5d784b41f29feace61531245ddae9d3c2d313c9e8fa3ff25611646a8ec89b6f"
+  },
+  "executor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py",
+    "bytes": 42041,
+    "sha256": "2837c0cf8e0465f596938855b6c473ab662567c2ff8533f714fd65f3148510eb"
+  },
+  "parent_stderr": {
+    "bytes": 2685,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/ACTUAL-RETIREMENT-ROOT3-PARENT/stderr",
+    "sha256": "2c65ab1970099f87054378e08c0400f60d9a0b30c6e4111cf6074522cc89855d"
+  },
+  "command_stderr": {
+    "bytes": 192,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/actual-retirement-root3-e984/command-daa68c7e960c4559a0ae76565d4c6868/stderr",
+    "sha256": "eb9840a03b94dfe62ec0fc299f9c40d7f3c8860cc970f6bd36d84c097e7dea7d"
+  },
+  "classification": "The first root process snapshot failed because an enumerated /proc/2304479/stat no longer existed. This is a transient process enumeration/exit race; no executable/birth was captured for vanishedPID2304479, so its specific identity is unknown. No complete snapshot/report was accepted. The transport message docker command failed names sudo generically; actual command was root Python process census, not a Docker invocation.",
+  "observed_effects": {
+    "root_process_census_commands": 1,
+    "Docker_commands": 0,
+    "rm_claims": 0,
+    "rm_attempts": 0,
+    "mutation": false,
+    "signals_sent": 0,
+    "executor_returncode": 1,
+    "census_returncode": 1,
+    "client_retirement_unproven": false
+  },
+  "join_and_mutex_reasoning": [
+    "Command2304484 has positive direct wait4 exit1, absent process group and closed stdout/stderr; durable JOIN says no retirement uncertainty.",
+    "Transport exact finally therefore clears raw_child, unresolved_spawn and client_retirement_unproven even when command returns positive failure1. No timeout/negativeexit/group uncertainty occurred.",
+    "Before the first accepted census, Actual.mutated remains false; the extracted unchanged must_retain_custody predicate evaluates false for this proven state. Main finally calls Actual.close and closes its own permanent mutex FD.",
+    "Executor2304475 itself has genuine parent wait4 exit1 and closed streams; process exit also releases its FDs. This proves release of this failed executor's mutex ownership, not global current-free or absence of every other holder.",
+    "There is no quarantine/UNCERTAIN/RM-claim/result or accepted proof in the failed output. Existing stoppedCID and native/UNKNOWN custody remain pending."
+  ],
+  "next_smallest_correction": [
+    "One source-bound bounded whole-snapshot restart on specifically recognized transient missing numeric /proc process files, retaining failed-attempt diagnostics. Restart enumeration from scratch; never skip individual rows or accept partial snapshots.",
+    "Keep all original complete snapshot, stat/birth/cmdline/exe, caller/publisher/group/session and 2-snapshot/boot predicates. Malformed data, permission/I/O errors, caller disappearance, PID-birth change and exhausted attempts remain fatal; preserve no timeout/signal/retry of the external operation.",
+    "Pure fake-proc tests must prove transient disappearance succeeds only through a fresh complete snapshot and persistent/malformed/unrelated-error cases fail closed. Reuse old transport/ACK/resource predicates and currentguardian.",
+    "Fresh correction source publication/review and new exact one-shot release/output/account/identity/resource admission are required. dcef and root3 output are consumed failures; never replay.",
+    "Record actual root3 parent/executor/census actors and joins in the next genuine Root metadata/custody boundary before fresh admission/current capture, preserving all72 consumed nonces, originalUNKNOWN and immutable native history."
+  ],
+  "current_free": false,
+  "native_custody_released": false,
+  "original_client_status": "UNKNOWN",
+  "guard_calls": 0,
+  "live_process_census_calls": 0,
+  "execution_approval": false
+}

@@ -2,6 +2,48 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Actual cleanup attempt stopped before Docker — 2026-10-29T05:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New one-shot release dcef9ac2, independently approved a61ecbaf, executed once.
+Root3 failed its first read-only proc census: process2304479 exited before stat
+read. No Docker command/rm claim/mutation occurred. Client2304484/b104745982
+positivelywait4 joined1, groupabsent/streamsclosed; executor2304475/b104745869
+directparentwait4 joined1, streamsclosed. Parenttool46611 terminal1; all absent,
+no quarantine or permanentmutexholder. Failure retained d001b3f2 and rawcaptures.
+Actual wall1.515496s, CPU1.379926s, peak53764KiB. No current-free/build/native
+acceptance; old client2232653 UNKNOWN preserved. Independent failure review now
+determines fresh admission; consumed release/output must never be replayed.
+
+## Actual controls admitted and cleanup source published — 2026-10-29T04:58Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Requests `20261029T044741484751Z-beb70e349fba4d0f943b8915566466fc` and
+`20261029T044823854418Z-dc4602d0fc3645ab9f2e01cf775d3e4e` received. Parent
+NEWSC controls are armed; actual guard passed at epoch1793249913.300967. No
+controller duplicated. Earliest caps UTC1793253600/MONO1035703.5689321246/
+BOOT1051041.695980609 apply. Checkpoint c33bfa2ac3860485dcaac646308b1a5709c942db
+is pushed and exact12 runtime dependencies fetched (publication b411951d).
+Independent42 source checks and SOURCE355fa523 pass; exact one-shot execution
+review pending. No stopped118 retirement/current-free/CURRENT119 compiler result
+yet. Native custody and original client2232653 UNKNOWN remain preserved.
+
+M14 exclusively owns coordination/capacity. Actual owners: cleanup_bindings
+completed actualguardian/cleanup binding; recovery_review owns exact execution
+review; m14_integration completed current119 sealer new-receipt schema binding;
+recovery_receipts completed original-scope/firstregistry consumer readiness.
+M15 remains paused with no owned live operation. Next Root executable command is
+new2837 cleanup/direct parent join, then fresh current-free/Root65, then119.
+This scheduling change puts cleanup ahead of further readiness work; no repeated
+SDK/source export or old BUILD3/A3 replay. Accepted116/practical35/35/M14 4of6
+unchanged; new compiled/behavior/production-linked/native-qualified deltas all0.
+CURRENT119 queue-to-first-compiler and failure-to-validated-fix remain unmeasured.
+Current monitor04:47 snapshot and old predecessor02:17 snapshot do not form a
+comparable active velocity bucket; preserve original30minute baseline/no95claim.
+HOST146581942272B/scratch47862149120B available at guard admission. Parent-control
+wait02:34:18 to04:47:41 spans8003s, overlapping source repairs; avoidable share
+is not established. Original06:00Z/credit/resource/ownership limits unchanged.
+
 ## M14 exclusive direction applied — 2026-10-29T04:11:39.252803+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
