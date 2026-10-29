@@ -1,0 +1,81 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/new-guardian-source-1/guardian_guard.py
+@@ -11,23 +11,28 @@
+ import time
+ 
+ BASE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1')
+-CONTROL = BASE / 'restart-20261028-1200-pacific-1'
+-ARM_RECEIPT_REF = {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1200-pacific-1/ACTUAL-CONTROLS-ARMED.json', 'bytes': 3171, 'sha256': 'fe3c2193600ce06c98f769d4659faaf52d3035437a98c5fa8d33ab43a7ed8202'}
+-CONFIG_SHA = 'b8a15af2a6272bf67c73d0c7f097c4a737eea62c1716c1e9a254a48746156b5a'
++CONTROL = BASE / 'restart-20261028-1930-pacific-1'
++ARM_RECEIPT_REF = {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/new-run-until-20261028-2300-pacific-1/restart-20261028-1930-pacific-1/ACTUAL-CONTROLS-ARMED.json', 'bytes': 3245, 'sha256': '128e8386ba8cec84795576b475549c34c714160dad2b6588de7d13b083e8f95e'}
++CONFIG_SHA = '04a86d287290081017c78ca08ed4d0a24e99ff2a35e274838db9534bf64223fb'
+ CAMPAIGN = Path('/home/holden/mckernel/.git/os-autopilot')
+-PACKET_SHA = '5bc656cc12b97c2ec5f53312a26e8ef800e45d5451c1f0b5d084576d95ff1b22'
++PACKET_SHA = 'b3dbc995a73fe894c8c333a536d2a3764f7dfa2550b89f64d63beb6f969bf5d2'
+ WINDOW_SHA = '0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e'
+-THREAD = '01a183ec-72e5-7400-8f48-b4efb8725520'
++THREAD = '01a18582-1fc6-77b1-bfb6-15c86483f579'
+ RUN = '7f4af94a83b14cc08f97401f5891d965'
+ CEILING = Decimal('57774.852125')
+ SPENT_FLOOR = Decimal('22812.3311000000')
+ DEADLINE = 1793253600
+ WINDOW_BOOT_CAP = 1051044.6960026678
+ JOURNAL_BOOT_CAP = 1051043.6959931096
+-BOOT_CAP = 1051042.6959879305
+-MONO_CAP = 1035704.5689393478
++BOOT_CAP = 1051041.695980609
++MONO_CAP = 1035703.5689321246
+ BOOT_ID = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+-INITIAL = {'watcher': (2109395, '101211669'), 'worker': (2109397, '101211677'), 'server': (2109399, '101211685')}
++INITIAL = {'watcher': (2259058, '103870300'), 'worker': (2259062, '103870308'), 'server': (2259064, '103870316')}
++
++GUARDIAN_LAUNCH_PPID = 2299796
++GUARDIAN_RECORDED_PPID = 1311
++EXPECTED_ACTORS = {'watcher': (2259058, '103870300'), 'worker': (2259062, '103870308'), 'server': (2259064, '103870316'), 'guardian': (2299797, '104663028'), 'monitor': (2300393, '104670607'), 'phone': (1894242, '96505809')}
++AUX_RECORDED_PPIDS = {'guardian': 1311, 'monitor': 2300390, 'phone': 1311}
+ 
+ 
+ def need(value, message):
+@@ -81,7 +86,7 @@
+     live = observe(receipt.get('pid'))
+     need(live is not None and all(live.get(k) == owner.get(k) == armed['actors']['guardian'].get(k) for k in ('pid', 'start'))
+          and live.get('state') not in ('Z', 'X'), 'guardian receipt live birth')
+-    need(owner.get('ppid') == 2111551 and armed['actors']['guardian']['ppid'] == 1311,
++    need(owner.get('ppid') == GUARDIAN_LAUNCH_PPID and armed['actors']['guardian']['ppid'] == GUARDIAN_RECORDED_PPID,
+          'exact recorded guardian shell to supervisor transition')
+     original = journal.get('original') or {}
+     need(set(original) == set(INITIAL) and all((original[k].get('pid'), original[k].get('start')) == v
+@@ -155,11 +160,11 @@
+ 
+ 
+ def validate_armed(armed, observe):
+-    need(armed.get('status') == 'LIVE_CONTINUED_CAMPAIGN_GUARDIAN_20MIN_STEERING_AND_RETAINED_PHONE'
++    need(armed.get('status') == 'LIVE_SAME_WINDOW_M14_EXCLUSIVE_CONTROLS'
+          and armed.get('thread_id') == THREAD and armed.get('phase') == 'running'
+          and armed.get('goal_status') == 'active' and armed.get('native_release') is False
+          and armed.get('guardian_packet_sha256') == PACKET_SHA
+-         and armed.get('original_window_unchanged_sha256') == WINDOW_SHA
++         and armed.get('original_window_sha256') == WINDOW_SHA
+          and armed.get('steering_interval_seconds') == 1200, 'actual parent control receipt')
+     caps = armed['earliest_control_caps']
+     need((caps['deadline_epoch'], caps['monotonic_deadline'], caps['boot_deadline']) ==
+@@ -174,8 +179,7 @@
+          and supervisor.get('start') == '596' and supervisor.get('ppid') == 1
+          and supervisor.get('comm') == 'systemd' and supervisor.get('state') not in ('Z','X'),
+          'actual measured auxiliary supervisor birth/name')
+-    expected = dict(INITIAL, guardian=(2111552, '101236067'),
+-                    monitor=(2111966, '101243270'), phone=(1894242, '96505809'))
++    expected = EXPECTED_ACTORS
+     need(set(armed['actors']) == set(expected), 'actual parent control actors')
+     for name, identity in expected.items():
+         actor = armed['actors'][name]
+@@ -184,7 +188,7 @@
+         # Auxiliary launch shells exited after recording their initial births.
+         # Only the measured existing supervisor 1311 is an allowed reparent.
+         if name in ('guardian', 'monitor', 'phone'):
+-            recorded = dict(guardian=1311,monitor=2111963,phone=1311)
++            recorded = AUX_RECORDED_PPIDS
+             need(actor['ppid'] == recorded[name], 'actual parent recorded auxiliary PPID '+name)
+             parents = (1311,)
+         else:

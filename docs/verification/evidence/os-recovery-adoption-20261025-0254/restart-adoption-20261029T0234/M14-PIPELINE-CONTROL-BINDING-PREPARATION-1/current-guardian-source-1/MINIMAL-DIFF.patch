@@ -1,0 +1,44 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/BINDINGS.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/BINDINGS.json
+@@ -26,9 +26,9 @@
+     "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+   },
+   "guardian": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+-    "bytes": 13388,
+-    "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/new-guardian-source-1/guardian_guard.py",
++    "bytes": 13603,
++    "sha256": "5af549bdf87a248a76bfe4e96de2ddc8c20435f3bafff5397ca7a9557ca68df4"
+   },
+   "prior_observer": {
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py",
+@@ -753,14 +753,14 @@
+   "boot": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+   "cutoffs": [
+     1793253600.0,
+-    1035704.5689393478,
+-    1051042.6959879305
++    1035703.5689321246,
++    1051041.695980609
+   ],
+   "cid": "d980474cc189c35f6d78132856be10b6903aac988808336e7d44efcca0f4108f",
+   "name": "current118-build-build-only-e984210ca59641b299cf42d392eb953b",
+   "nonce": "e984210ca59641b299cf42d392eb953b",
+   "maximum_command_seconds": 30,
+-  "output_root_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1",
++  "output_root_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1",
+   "scope_only": "Source-only binding, no runtime authority",
+   "runtime_authority": null,
+   "approved_image_labels": {
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-normal-retirement-preparation-1/compatibility-source-1/retire_exact_current118_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/current-guardian-source-1/retire_exact_current118_stopped_container.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='49c0deaafbe38894335577b5b1d0512aed6e5e297477d45c0b96295df6b554f8'
++BINDINGS_SHA='501f8a8661005ce656cf1741c0e1437ee875983839fee44f57c576ef1fe85bdc'
+ SELF=D/'retire_exact_current118_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
