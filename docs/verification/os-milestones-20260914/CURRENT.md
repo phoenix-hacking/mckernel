@@ -1,3 +1,25 @@
+## Conversion build holder admission ready — 2026-10-29T23:54:21.603350+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current capture and caller closure independently pass5326; Root69 adoption36e1
+accepts212 rows/207 identities,73 unchanged heavy nonces and all UNKNOWN outcomes.
+No capture replay or119 native prerequisite. Root69 bundle d0ef is current at this
+checkpoint. All capture clients joined; no holder, compiler or guest is running.
+
+Conversion source sealing succeeded0: profile8ab49, runner791fc, worker6d018.
+Exact build guard7de/sourceffc3/operationd8f7/bindinge377 passed independent review.
+Actual UID1000 export authority42fd checks177 files and retains SDK21/source6153,
+9 objects and20 qualified readonly aliases. Root holder bootstrapb8f8 and independent
+prewarm7537 authorize one holder waiting for a separate build grant. Next after
+publication: acquire27:4 through the unchanged holder, measure fresh resources,
+obtain atomic exact execution review, then run Rustcrate+genericC+rawlink. Root is
+sole executor. Fresh candidate nonce4709c9fae2c743a7acd662e93a663358 is unconsumed.
+
+M14 remains4/6 with47 selected C functions; source candidates are not retirement.
+No new compiler/native result yet. Remaining large bodies/default-OFF contracts and
+F06 ABI/lifetime requirements stay open. M15 paused. Weekly included-only40%used,
+no paid fallback; original clock/resource/ownership limits and failures preserved.
+
 ## Read-only frontier release sealed — 2026-10-29T23:42:09.739803+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

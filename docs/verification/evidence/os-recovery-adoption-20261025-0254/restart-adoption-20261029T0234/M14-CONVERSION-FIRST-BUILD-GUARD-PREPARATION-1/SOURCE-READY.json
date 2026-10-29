@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_INDEPENDENT_REVIEW_AND_ACTUAL_FRONTIER_PENDING",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-BUILD-GUARD-PREPARATION-1/runtime_guard.py",
+    "bytes": 12642,
+    "sha256": "7de5656a287b9a8904f3052b147c235662527aa9362df03d740bbb8069fe79b7"
+  },
+  "formatter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-BUILD-GUARD-PREPARATION-1/prepare_operation.py",
+    "bytes": 2983,
+    "sha256": "5c89d94f525d3407ed7777f31366f84e60d23bc69047d937f5db0ac26c36ed37"
+  },
+  "fixed_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-BUILD-GUARD-PREPARATION-1/FIXED-INPUTS.SOURCE-ONLY.json",
+    "bytes": 6266,
+    "sha256": "a428be01e57aae19c754588bd68fb3c5804fd9cd304abc01cce354109ced25ea"
+  },
+  "intent_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-BUILD-GUARD-PREPARATION-1/ROOT-PRODUCER-INTENT.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 2029,
+    "sha256": "caca39ccf9433c0826a65f428dfbf70b7e666c7917e006ab338b7195789db824"
+  },
+  "pure_test_sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-BUILD-GUARD-PREPARATION-1/test_guard.py",
+      "bytes": 5047,
+      "sha256": "1cca57599710a350ea119f5747b041b6b72aa61d9c5da7bbeae32f862c23bdc6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-BUILD-GUARD-PREPARATION-1/test_frontier_binding.py",
+      "bytes": 5989,
+      "sha256": "2902841b2c33fcee22988014f2a7d6efe90c141a6024dbd4c102b374b3fe196c"
+    }
+  ],
+  "pure_tests": {
+    "actual_fixed_subjects_authenticated": 203,
+    "snapshot_files": 149,
+    "retained_objects": 9,
+    "q_operation_negatives": 23,
+    "synthetic_frontier_negatives": 8,
+    "clock_equality_negatives": 3
+  },
+  "limitations": [
+    "Synthetic current frontier is not actual evidence.",
+    "Source review, actual current free, ledger, boundary review/bundle, fresh nonce, Root binding, independent operation review and separate resource/execution release remain required.",
+    "No actual guard, capture, host probe, build, native or cleanup operation was run."
+  ],
+  "runtime_authority": null
+}
