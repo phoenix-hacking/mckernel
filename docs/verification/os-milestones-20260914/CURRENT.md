@@ -2,6 +2,26 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## CURRENT119 canonical integration — 2026-10-29T02:49Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root installed exact18 reviewed83e1 CURRENT119 postimages:8existing canonical
+preimages retained in verified archive,10new Rust leaves. Adoption45d2e604 passes
+all18 pre/post hashes; no protected CURRENT118 file intersects these paths and
+all protected originals remain unchanged. Source-only closed export607fa54f now
+physically contains133files/122Rust/10352029B matching exact reviewedoverlay;
+no compiler, origin generation, container or native operation ran. Source6153,
+SDK21/eight retainedobjects and accepted116 image remain unchanged. Whole-file/
+default/native credit remains0; same original389 comparator required after link.
+Evidence: restart-adoption-20261029T0234/M14-CANONICAL119-SOURCE-ADOPTION-1/ and
+CURRENT119-EXACT-RUST-SOURCE-EXPORT-1/. Recoverycheckpoint50c238897 pushed and
+all73files exactly fetched; proof CHECKPOINT50C238897.FETCHED.json.
+
+Newguardian source rebinder independentlyPASSbd733b8d (6Python3.8groups), matching
+observerconstructor6groupsPASS/e0478c3b now under independentreview. No successor
+materialized before actual NEWSC receipt. Externalparent owns actualarming; none
+observed yet. Newcleanup/current-free and fresh119origin/compiler remain next.
+
 ## Recovery adoption and engineering cursor — 2026-10-29T02:40Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

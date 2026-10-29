@@ -81,18 +81,18 @@ unsafe extern "C" fn production_log(event: CInt, error: CInt) {
     #[used]
     #[link_section = "__verbose"]
     static mut ENTER: Ddebug = Ddebug {
-        file: concat!(file!(), "\0").as_ptr().cast(),
+        file: concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"), "\0").as_ptr().cast(),
         func: b"vdso_get_vdso_info\0".as_ptr().cast(),
         fmt: core::ptr::null(),
-        line_flags: line!() & 0x00ff_ffff,
+        line_flags: 2859,
     };
     #[used]
     #[link_section = "__verbose"]
     static mut EXIT: Ddebug = Ddebug {
-        file: concat!(file!(), "\0").as_ptr().cast(),
+        file: concat!(env!("MCKERNEL_F06_RT_SIGRETURN_ORIGIN"), "\0").as_ptr().cast(),
         func: b"vdso_get_vdso_info\0".as_ptr().cast(),
         fmt: core::ptr::null(),
-        line_flags: line!() & 0x00ff_ffff,
+        line_flags: 2887,
     };
     match event {
         LOG_ENTER => {

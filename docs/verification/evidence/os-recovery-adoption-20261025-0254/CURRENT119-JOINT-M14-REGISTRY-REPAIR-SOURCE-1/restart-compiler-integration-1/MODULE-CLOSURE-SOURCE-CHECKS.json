@@ -1,0 +1,754 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_REFERENCE_CLOSURE_NOT_EXPORTED",
+  "subtree_files": 133,
+  "Rust_files": 122,
+  "external_modules": {
+    "scripts/tests/fixtures/mckernel_guest_sysfs.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "bytes": 14227,
+      "sha256": "2262fddd9cb33052d7259fe3f0ee47cd4a56502fba97cc93797c9f7f394cac4c"
+    },
+    "host-kernel/native-rust/abi/vdso.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/host-kernel/native-rust/abi/vdso.rs",
+      "bytes": 17839,
+      "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d"
+    },
+    "host-kernel/native-rust/zero_pages.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/host-kernel/native-rust/zero_pages.rs",
+      "bytes": 4354,
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def"
+    }
+  },
+  "edges": [
+    {
+      "from_file": "fork_child_credits.rs",
+      "module": "constructed",
+      "to_file": "fork_constructed_credits.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "fork_control_guest.rs",
+      "module": "child_credits",
+      "to_file": "fork_child_credits.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "fork_control_guest.rs",
+      "module": "final_ack",
+      "to_file": "fork_final_ack.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "fork_control_guest.rs",
+      "module": "runnable",
+      "to_file": "fork_runnable_child.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "abi",
+      "to_file": "abi.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "abort",
+      "to_file": "abort.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "affinity",
+      "to_file": "affinity.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "ap",
+      "to_file": "ap.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "atomic_helpers",
+      "to_file": "atomic_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "bitmap",
+      "to_file": "bitmap.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "bitops",
+      "to_file": "bitops.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "builtin_dma",
+      "to_file": "builtin_dma.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "cls",
+      "to_file": "cls.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "cls_helpers",
+      "to_file": "cls_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "debug",
+      "to_file": "debug.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "devobj",
+      "to_file": "devobj.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "fileobj",
+      "to_file": "fileobj.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "fork_control_guest",
+      "to_file": "fork_control_guest.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "fork_control_registry",
+      "to_file": "fork_control_registry.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "freeze",
+      "to_file": "freeze.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "futex",
+      "to_file": "futex.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "gencore",
+      "to_file": "gencore.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "hash",
+      "to_file": "hash.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "host_helpers",
+      "to_file": "host_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "hugefileobj",
+      "to_file": "hugefileobj.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "ikc_manycore",
+      "to_file": "ikc_manycore.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "ikc_master",
+      "to_file": "ikc_master.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "ikc_queue",
+      "to_file": "ikc_queue.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "init",
+      "to_file": "init.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "list_helpers",
+      "to_file": "list_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "listeners",
+      "to_file": "listeners.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "llist",
+      "to_file": "llist.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "lock_helpers",
+      "to_file": "lock_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "mem_helpers",
+      "to_file": "mem_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "mikc",
+      "to_file": "mikc.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "numparse",
+      "to_file": "numparse.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "object_helpers",
+      "to_file": "object_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "page_alloc",
+      "to_file": "page_alloc.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "page_helpers",
+      "to_file": "page_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "pager",
+      "to_file": "pager.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "plist",
+      "to_file": "plist.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "process_helpers",
+      "to_file": "process_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "process_verbose_data",
+      "to_file": "process_verbose_data.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "procfs",
+      "to_file": "procfs.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "profile",
+      "to_file": "profile.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "pte_helpers",
+      "to_file": "pte_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "rbtree",
+      "to_file": "rbtree.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "refcount_helpers",
+      "to_file": "refcount_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "rlimit_helpers",
+      "to_file": "rlimit_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "sched_helpers",
+      "to_file": "sched_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "shmid_helpers",
+      "to_file": "shmid_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_shmget_dispatch",
+      "to_file": "f06_shmget_dispatch.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "shmobj",
+      "to_file": "shmobj.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "smp_ikc",
+      "to_file": "smp_ikc.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "spinlock_helpers",
+      "to_file": "spinlock_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "string",
+      "to_file": "string.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "syscall_policy",
+      "to_file": "syscall_policy.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "native_signal",
+      "to_file": "native_signal.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "native_fault",
+      "to_file": "native_fault.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "native_futex",
+      "to_file": "native_futex.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "native_xstate",
+      "to_file": "native_xstate.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "sysfs",
+      "to_file": "sysfs.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "sysfs_verify",
+      "to_file": "scripts/tests/fixtures/mckernel_guest_sysfs.rs",
+      "kind": "existing_external_module"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "timer",
+      "to_file": "timer.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "tofu_uapi",
+      "to_file": "tofu_uapi.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "ubsan",
+      "to_file": "ubsan.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "waitq",
+      "to_file": "waitq.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_coredump",
+      "to_file": "x86_coredump.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_cpu_helpers",
+      "to_file": "x86_cpu_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_cpu_log_providers",
+      "to_file": "x86_cpu_log_providers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_local",
+      "to_file": "x86_local.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_memory_helpers",
+      "to_file": "x86_memory_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_memory_loggers",
+      "to_file": "x86_memory_loggers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_memory_logger_bridges",
+      "to_file": "x86_memory_logger_bridges.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_perfctr",
+      "to_file": "x86_perfctr.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_setup",
+      "to_file": "x86_setup.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "x86_vsyscall",
+      "to_file": "x86_vsyscall.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "vdso_protocol",
+      "to_file": "host-kernel/native-rust/abi/vdso.rs",
+      "kind": "existing_external_module"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "native_vdso",
+      "to_file": "native_vdso.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "zero_pages",
+      "to_file": "host-kernel/native-rust/zero_pages.rs",
+      "kind": "existing_external_module"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "clone3",
+      "to_file": "clone3.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "xpmem_helpers",
+      "to_file": "xpmem_helpers.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "zeroobj",
+      "to_file": "zeroobj.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f03_perf_attr_callbacks",
+      "to_file": "f03_perf_attr_callbacks.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f03_prlimit",
+      "to_file": "f03_prlimit.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_native_signal_restore_fp",
+      "to_file": "f06_native_signal_restore_fp.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_ptrace_xstate_copy_to",
+      "to_file": "f06_ptrace_xstate_copy_to.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_ptrace_xstate_copy_from",
+      "to_file": "f06_ptrace_xstate_copy_from.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_vdso_setup_log",
+      "to_file": "f06_vdso_setup_log.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_vdso_state",
+      "to_file": "f06_vdso_state.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_vdso_storage",
+      "to_file": "f06_vdso_storage.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_ptrace_user_bridges",
+      "to_file": "f06_ptrace_user_bridges.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_ptrace_gpregs_bridges",
+      "to_file": "f06_ptrace_gpregs_bridges.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_prctl_log",
+      "to_file": "f06_prctl_log.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_prctl_log_storage",
+      "to_file": "f06_prctl_log_storage.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "lib.rs",
+      "module": "f06_vdso_map_log",
+      "to_file": "f06_vdso_map_log.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_mmap_flags",
+      "to_file": "f06_mmap_flags.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_prctl_set_register",
+      "to_file": "f06_prctl_set_register.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_prctl_get_register",
+      "to_file": "f06_prctl_get_register.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_mmap_dispatch_bridge",
+      "to_file": "f06_mmap_dispatch_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_ptrace_context",
+      "to_file": "f06_ptrace_context.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_ptrace_alloc",
+      "to_file": "f06_ptrace_alloc.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_vdso_add_range",
+      "to_file": "f06_vdso_add_range.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_vdso_set_range",
+      "to_file": "f06_vdso_set_range.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_process_vm_entry",
+      "to_file": "f06_process_vm_entry.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_copy_to_user_candidate",
+      "to_file": "arch_copy_to_user_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_copy_from_user_candidate",
+      "to_file": "arch_copy_from_user_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_forward_context_candidate",
+      "to_file": "arch_syscall_forward_context_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_rt_sigreturn_syscall_candidate",
+      "to_file": "arch_rt_sigreturn_syscall_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_rt_sigreturn_set_signal_candidate",
+      "to_file": "arch_rt_sigreturn_set_signal_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_rt_sigreturn_check_signal_candidate",
+      "to_file": "arch_rt_sigreturn_check_signal_bridge.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_rt_sigreturn_alloc_free",
+      "to_file": "f06_rt_sigreturn_alloc_free.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_clone_reader_lock",
+      "to_file": "f06_clone_reader_lock.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_clone_reader_unlock",
+      "to_file": "f06_clone_reader_unlock.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_ptrace_find_thread",
+      "to_file": "f06_ptrace_find_thread.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_ptrace_thread_unlock",
+      "to_file": "f06_ptrace_thread_unlock.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_clone_ptrace_provider_abi",
+      "to_file": "f06_clone_ptrace_provider_abi.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_obtain_clone_cpuid",
+      "to_file": "f06_obtain_clone_cpuid.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "syscall_policy.rs",
+      "module": "f06_vdso_info",
+      "to_file": "f06_vdso_info.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "tests/string_bcmp.rs",
+      "module": "abi",
+      "to_file": "abi.rs",
+      "kind": "closed_Rust_subtree"
+    },
+    {
+      "from_file": "tests/string_bcmp.rs",
+      "module": "string",
+      "to_file": "string.rs",
+      "kind": "closed_Rust_subtree"
+    }
+  ],
+  "generated_clone_metadata_from_existing_origin_recipe_not_produced": true,
+  "physical_exports": 0,
+  "runtime_authority": null
+}

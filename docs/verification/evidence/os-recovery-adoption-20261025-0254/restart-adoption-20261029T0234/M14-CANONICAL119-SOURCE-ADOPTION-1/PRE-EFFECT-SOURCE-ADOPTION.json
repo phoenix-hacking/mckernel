@@ -1,0 +1,236 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/SOURCE-MAP-FROM118.json",
+    "bytes": 56124,
+    "sha256": "c5122ce1b19cbecbc557bf99da85564ff38176c766428bc67c1c6064d662976d"
+  },
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/JOINT119-SOURCE-REVIEW-1/REVIEW.json",
+    "bytes": 17228,
+    "sha256": "83e1b77144398289d3e05e6975e8cfefb7a60380cd1a6f08a1ce2d98d8d0b941"
+  },
+  "exact_preimages": [
+    {
+      "relative": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 922005,
+        "sha256": "0b611cd279ef580ddabd474d346365a89e1960ff101c647d8fe1d74e56b2957b"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/syscall.c",
+        "bytes": 928517,
+        "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1280595,
+        "sha256": "d35d716aec8b6b6ea58f0c1891abb86fa8dc31867f296ea1cd66da67a8454f42"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1301841,
+        "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 118164,
+        "sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 121256,
+        "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2463,
+        "sha256": "81eb7976135803483d4e3bfea0d2988df4b3080e5a894532dfd8f672bbdf551e"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/lib.rs",
+        "bytes": 3283,
+        "sha256": "ceb60c3de3b0217c7bd435e3d8cb1b7aba6123811082f1248060aec66a45ea41"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 41705,
+        "sha256": "6a1cca7de5bef74ff1d5b8d890c1b5c7482455251c285d89b242e268932d834e"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 43464,
+        "sha256": "0fe73cfa95c24b2aa6f91062a802bffc222b0c0f1cc094740dbff7e2634d8516"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "scripts/f06_origin_command_profile.json",
+      "preimage": {
+        "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+        "bytes": 9100,
+        "sha256": "a1e1b96f570cc96c6dd3ad767825554cf2f6508a16dfb2cb18cb52ff1399d5aa"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/scripts/f06_origin_command_profile.json",
+        "bytes": 13525,
+        "sha256": "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "scripts/derive_f06_origin.py",
+      "preimage": {
+        "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "7bf01de48c828e9b6068dc612f1a87d9845435e4d399bae4ab86a6b84b6c59ab"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/scripts/derive_f06_origin.py",
+        "bytes": 7567,
+        "sha256": "73d618039490fc5faeb06683555f274fabde94866f616d18474aedf133ad7462"
+      },
+      "mode": 384
+    },
+    {
+      "relative": "kernel/rust/f06_ptrace_xstate_copy_to.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_ptrace_xstate_copy_to.rs",
+        "bytes": 1714,
+        "sha256": "c2a01b19c1434a13b6adf24607490b35ea8771c17824b8cebf10e7d5ae19618a"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_ptrace_xstate_copy_from.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_ptrace_xstate_copy_from.rs",
+        "bytes": 1720,
+        "sha256": "6a6e89f1e956ca599cee4dd9c851125acada5565aa2c3835d3e5184fbfb6dde5"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_vdso_setup_log.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_vdso_setup_log.rs",
+        "bytes": 1564,
+        "sha256": "c39c89399990db0beb111ccd917b1cdef42ef10c06d1b251723dbdfdf44f743f"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_vdso_state.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_vdso_state.rs",
+        "bytes": 1696,
+        "sha256": "0b3fe45b768f58ddc813ebc5e088316b2c50adb5ef14bd620832c295de2fa160"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_vdso_storage.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_vdso_storage.rs",
+        "bytes": 934,
+        "sha256": "622eb07989c097aaeca8cadca8151088a1d71dbbee0a2e51e6cd787d508182ad"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_ptrace_user_bridges.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_ptrace_user_bridges.rs",
+        "bytes": 1443,
+        "sha256": "da4a5bf6cd0e72b6ec252e4c79ee8ed9e48350ca9c742bf17dce6d6533be114c"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_ptrace_gpregs_bridges.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_ptrace_gpregs_bridges.rs",
+        "bytes": 1512,
+        "sha256": "9aac9bf94a1490c4b584f473e6939fe7f1da13b06d4f29128a38e6bac4ebdd12"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_prctl_log.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_prctl_log.rs",
+        "bytes": 1348,
+        "sha256": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_prctl_log_storage.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_prctl_log_storage.rs",
+        "bytes": 904,
+        "sha256": "c20113faa7526cf49a896f73e8072aa2d4132f93bbdcb21efae8f056b2098474"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_vdso_map_log.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_vdso_map_log.rs",
+        "bytes": 3879,
+        "sha256": "72ba6caf872579d865ea6ad271b032532de68cae51d0f8c01915f5e7f4bcd659"
+      },
+      "mode": 420
+    },
+    {
+      "relative": "kernel/rust/f06_vdso_info.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/f06_vdso_info.rs",
+        "bytes": 5913,
+        "sha256": "4bc4a23b9444a6eab6f5a6f6e2737db41530809b3f8d987973ab0e1dbd8ebd8b"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/candidate/kernel/rust/f06_vdso_info.rs",
+        "bytes": 5945,
+        "sha256": "20e5a3c758e177725433b5a211e419e07ac551945b0f95752a4fb08605af9095"
+      },
+      "mode": 384
+    }
+  ],
+  "backup": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CANONICAL119-SOURCE-ADOPTION-1/EXACT-EIGHT-CANONICAL118-PREIMAGES.tar.gz",
+    "bytes": 414173,
+    "sha256": "967e89d5f8db508ef9134b08c9accf31482f5c39b46f661002e4d73bf132abe9"
+  },
+  "protected_intersections": [],
+  "recorded_epoch": 1793241965.139035,
+  "runtime_authority": null
+}

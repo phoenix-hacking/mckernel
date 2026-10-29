@@ -2,7 +2,7 @@
 """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 Source producer only. No subprocesses/compiler or workload authority.
-Support precisely the private CURRENT113 arch-command profile; reject profile drift.
+Support precisely the private cumulative F06-on118 arch profile; reject profile drift.
 """
 import argparse
 import hashlib
@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import re
 
-PROFILE_SHA256 = "a1e1b96f570cc96c6dd3ad767825554cf2f6508a16dfb2cb18cb52ff1399d5aa"
+PROFILE_SHA256 = "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
 
 
 def derive(profile_path, source_path):

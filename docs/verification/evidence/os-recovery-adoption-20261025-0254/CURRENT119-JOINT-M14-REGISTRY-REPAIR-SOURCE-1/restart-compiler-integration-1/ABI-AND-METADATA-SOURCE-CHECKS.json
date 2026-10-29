@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_UNCHANGED_OWNER_POSTIMAGES_SOURCE_ABI_METADATA_CHECKS_NOT_LINKED_PROOF",
+  "F03_ABI": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-through-body13-source-1/SOURCE-PROVIDER-ABI-OWNERSHIP.json",
+    "bytes": 29923,
+    "sha256": "137861507f37b55cf785083c003ab72f3defef4723add02b3c16505e4b348d97"
+  },
+  "F06_ABI": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F06-cumulative-through-body12-metadata-successor-source-1/ABI-REUSE-AND-UNIQUE-OWNERS.json",
+    "bytes": 3147,
+    "sha256": "a31ef6a2e27eba6e68281575518985fb8aea129421f93edd8c8278d33d824110"
+  },
+  "BODY5_tested_tokens_order_preserved": true,
+  "F03_ten_functions_and_BODY13_storage_unique": true,
+  "F06_ten_functions_five_storage_owners_inherited_exact": true,
+  "all88_genuine_macro_source_sites_preserved": true,
+  "F03_observed17_failure_rows_cause_repaired": true,
+  "F06_exact_three_original_source_rows": [
+    {
+      "file": "/src/arch/x86_64/kernel/syscall.c",
+      "function": "vdso_get_vdso_info",
+      "fmt": null,
+      "line": 2859,
+      "flags": 0,
+      "padding": 0
+    },
+    {
+      "file": "/src/arch/x86_64/kernel/syscall.c",
+      "function": "vdso_get_vdso_info",
+      "fmt": null,
+      "line": 2887,
+      "flags": 0,
+      "padding": 0
+    },
+    {
+      "file": "/src/arch/x86_64/kernel/syscall.c",
+      "function": "arch_vdso_map_log_bridge",
+      "fmt": null,
+      "line": 3084,
+      "flags": 0,
+      "padding": 0
+    }
+  ],
+  "actual118_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-ACTUAL-ARTIFACT-REVIEW-1/FIRST-ACTUAL-REGISTRY-CHECK.json",
+    "bytes": 129474,
+    "sha256": "27e8ded9f12fe258a5e7e7be711c171206296bc533e2baa2c7db096c3ead6c9b"
+  },
+  "original389_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+    "bytes": 84536,
+    "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+  },
+  "oracle_changed": false,
+  "original389_linked_candidate_PASS_claimed": false,
+  "runtime_ABI_logic_changed_by_joint_union": false,
+  "runtime_authority": null
+}

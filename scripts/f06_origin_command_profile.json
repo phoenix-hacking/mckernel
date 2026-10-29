@@ -1,4 +1,5 @@
 {
+  "BODY12_review_status": "Under independent review, this packet grants no acceptance.",
   "accepted_CURRENT111": {
     "bytes": 253155,
     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/DEFAULT-ARTIFACT-REVIEW.json",
@@ -8,6 +9,11 @@
     "bytes": 93795,
     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/PROFILE.SOURCE-ONLY.json",
     "sha256": "82b1159fc5e39220a370f5024b9df4069d2f764748015f017203e824288313fa"
+  },
+  "actual118_registry_failure": {
+    "bytes": 129474,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/CURRENT118-ACTUAL-ARTIFACT-REVIEW-1/FIRST-ACTUAL-REGISTRY-CHECK.json",
+    "sha256": "27e8ded9f12fe258a5e7e7be711c171206296bc533e2baa2c7db096c3ead6c9b"
   },
   "arch_predecessor_command": {
     "argv": [
@@ -117,11 +123,38 @@
       }
     ]
   },
-  "composed_arch_source_sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec",
+  "composed_arch_source_sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669",
+  "cumulative_from118_source_adoption": {
+    "bytes": 9433,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/M14-CANONICAL118-SOURCE-ADOPTION-1/ROOT-SOURCE-ADOPTION.json",
+    "sha256": "c161d7b6732d6d48ad73083c4bc95ff0c665528bb241d16ac71cc54d75533e7e"
+  },
+  "cumulative_leaf_Rust_sources": {
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body10-restart-20261028-1/f06_prctl_log.rs": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/f06_prctl_log_storage.rs": "c20113faa7526cf49a896f73e8072aa2d4132f93bbdcb21efae8f056b2098474",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/f06_vdso_map_log.rs": "72ba6caf872579d865ea6ad271b032532de68cae51d0f8c01915f5e7f4bcd659",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/f06_ptrace_xstate_copy_to.rs": "c2a01b19c1434a13b6adf24607490b35ea8771c17824b8cebf10e7d5ae19618a",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body4-restart-20261028-1/rebased118-source-1/f06_ptrace_xstate_copy_from.rs": "6a6e89f1e956ca599cee4dd9c851125acada5565aa2c3835d3e5184fbfb6dde5",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body5-restart-20261028-1/f06_vdso_setup_log.rs": "c39c89399990db0beb111ccd917b1cdef42ef10c06d1b251723dbdfdf44f743f",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body6-restart-20261028-1/f06_vdso_state.rs": "0b3fe45b768f58ddc813ebc5e088316b2c50adb5ef14bd620832c295de2fa160",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body7-restart-20261028-1/f06_vdso_storage.rs": "622eb07989c097aaeca8cadca8151088a1d71dbbee0a2e51e6cd787d508182ad",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body8-restart-20261028-1/f06_ptrace_user_bridges.rs": "da4a5bf6cd0e72b6ec252e4c79ee8ed9e48350ca9c742bf17dce6d6533be114c",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body9-restart-20261028-1/f06_ptrace_gpregs_bridges.rs": "9aac9bf94a1490c4b584f473e6939fe7f1da13b06d4f29128a38e6bac4ebdd12"
+  },
   "exact_commands": [
     {
       "argv": [
         "/usr/bin/cc",
+        "-DMCKERNEL_RUST_F06_PRCTL_LOG",
+        "-DMCKERNEL_RUST_F06_PRCTL_LOG_STORAGE",
+        "-DMCKERNEL_RUST_F06_VDSO_MAP_LOG",
+        "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO",
+        "-DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM",
+        "-DMCKERNEL_RUST_F06_VDSO_SETUP_LOG",
+        "-DMCKERNEL_RUST_F06_VDSO_STATE",
+        "-DMCKERNEL_RUST_F06_VDSO_STORAGE",
+        "-DMCKERNEL_RUST_F06_PTRACE_USER_BRIDGES",
+        "-DMCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES",
         "-DMCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP",
         "-DMCKERNEL_RUST_F06_VDSO_INFO",
         "-DMCKERNEL_RUST_F06_SHMGET_DISPATCH",
@@ -207,6 +240,11 @@
       "stage": "selected x86 syscall object"
     }
   ],
+  "frozen_accepted_BODY3_9_source_map": {
+    "bytes": 27412,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F06-cumulative-next-source-1/SOURCE-MAP-FROM118.json",
+    "sha256": "c9bbb6af1b7ff73d2b899629633a25039b187287e70029afe1c1ba9954dc8299"
+  },
   "new_C_runtime_objects": 0,
   "predecessor_CURRENT112_origin_context": {
     "bytes": 3409,
@@ -220,5 +258,16 @@
   },
   "runtime_authority": null,
   "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
-  "status": "PROPOSED_F06_CLONE_CPUID_PAIRED_SELECTION_AND_ORIGIN_SOURCE_ONLY"
+  "status": "PRIVATE_BODY3_12_METADATA_SUCCESSOR_AFTER_ACTUAL118_ORIGINAL389_FAILURE_NOT_ARTIFACT_ACCEPTANCE",
+  "vdso_info_descriptor_source_repair": {
+    "ENTER_line": 2859,
+    "EXIT_line": 2887,
+    "fmt": null,
+    "function": "vdso_get_vdso_info",
+    "initial_flags": 0,
+    "layout": "Existing actual Ddebug32/align8 unchanged, same local static attributes and mutable flag storage.",
+    "origin_environment": "MCKERNEL_F06_RT_SIGRETURN_ORIGIN",
+    "relative": "kernel/rust/f06_vdso_info.rs",
+    "sha256": "20e5a3c758e177725433b5a211e419e07ac551945b0f95752a4fb08605af9095"
+  }
 }

@@ -13978,12 +13978,6 @@ pub unsafe extern "C" fn calculate_time_from_tsc(ts: *mut TimeSpec) {
     write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
 }
 
-#[cfg(f06_vdso_info_candidate)]
-#[path = "f06_vdso_info.rs"]
-mod f06_vdso_info;
-#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
-use self::f06_vdso_info::vdso_get_vdso_info;
-
 #[cfg(native_linux_irq_work_v6_12)]
 unsafe extern "C" fn vdso_get_vdso_info() -> CInt {
     let (vdso, _, _) = match arch_vdso_state() {
@@ -20852,7 +20846,6 @@ pub unsafe extern "C" fn perf_event_alloc_map_body_result(
     let Some(hw_event_init) = hw_event_init_fn else {
         return -EINVAL as CLong;
     };
-
     let mut extra_config = 0;
     let val = if attr_type == hardware_type {
         let Some(hw_event_map) = hw_event_map_fn else {
@@ -20866,8 +20859,9 @@ pub unsafe extern "C" fn perf_event_alloc_map_body_result(
         let Some(hw_cache_extra_reg_map) = hw_cache_extra_reg_map_fn else {
             return -EINVAL as CLong;
         };
+        let mapped = hw_cache_event_map(attr_config);
         extra_config = hw_cache_extra_reg_map(attr_config);
-        hw_cache_event_map(attr_config)
+        mapped
     } else if attr_type == raw_type {
         let Some(raw_event_map) = raw_event_map_fn else {
             return -EINVAL as CLong;
@@ -36418,3 +36412,422 @@ mod f03_perf_mmap_entry_v1 {
         }
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_do_munmap_entry_v1 {
+    use core::{ffi::c_void, mem::offset_of};
+    use crate::abi::{CInt, CULong, Process, SizeT};
+    use super::{do_munmap_body_result, DoMunmapVoidFn, DoMunmapRemoveRangeFn,
+                DoMunmapClearHostFn, MprotectSetHostVmaFn, DoMunmapLogFn};
+
+    #[repr(C)]
+    struct DoMunmapBinding {
+        begin: Option<DoMunmapVoidFn>,
+        remove_range: Option<DoMunmapRemoveRangeFn>,
+        clear_host: Option<DoMunmapClearHostFn>,
+        set_host: Option<MprotectSetHostVmaFn>,
+        finish: Option<DoMunmapVoidFn>,
+        log: Option<DoMunmapLogFn>,
+    }
+    unsafe extern "C" {
+        static f03_do_munmap_binding_v1: DoMunmapBinding;
+    }
+
+    /// Enter the existing unmap body with the original borrowed process and VM.
+    ///
+    /// # Safety
+    /// The current CPU/thread/process/VM and immutable provider binding remain
+    /// live throughout this synchronous operation. Callers retain the original
+    /// range-lock contract indicated by `holding_lock`; this entry acquires no
+    /// additional lock and preserves the existing begin/remove/host/finish/log
+    /// lifetime and error precedence in `do_munmap_body_result`.
+    #[no_mangle]
+    pub unsafe extern "C" fn do_munmap(
+        addr: *mut c_void, len: SizeT, holding_lock: CInt,
+    ) -> CInt {
+        // SAFETY: Identical original CPU-local lookup and live borrowed fields.
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let thread = unsafe { (*cpu).current };
+        let vm = unsafe { (*thread).vm };
+        let proc = unsafe { (*thread).proc };
+        // SAFETY: The repr(C) fields match the genuine C provider typedefs.
+        // Real Rust Process offsets replace the corresponding C offsetof values.
+        unsafe {
+            let binding = &f03_do_munmap_binding_v1;
+            do_munmap_body_result(
+                vm.cast(), proc.cast(), addr as CULong, len, holding_lock,
+                offset_of!(Process, straight_va), offset_of!(Process, straight_len),
+                binding.begin, binding.remove_range, binding.clear_host,
+                binding.set_host, binding.finish, binding.log,
+            )
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_util_profile_v1 {
+    use core::ptr;
+    use crate::abi::{CInt as c_int, CLong as c_long, CULong as c_ulong};
+
+    // Exact existing project Rust ABI declarations, reused without field edits.
+const UTI_SZ_SYSCALL_STACK: usize = 16;
+const UTI_SYSCALL_PROFILE_SLOTS: usize = 512;
+#[repr(C)]
+struct SyscallStruct {
+    number: c_int,
+    args: [c_ulong; 6],
+    ret: c_ulong,
+    uti_info: c_ulong,
+}
+
+#[repr(C)]
+struct UtiDesc {
+    lctx: [u8; 4096],
+    rctx: [u8; 4096],
+    mck_tid: c_int,
+    key: c_ulong,
+    pid: c_int,
+    tid: c_int,
+    uti_info: c_ulong,
+    fd: c_int,
+    syscall_stack: [SyscallStruct; UTI_SZ_SYSCALL_STACK],
+    syscall_stack_top: c_int,
+    syscalls: [c_long; UTI_SYSCALL_PROFILE_SLOTS],
+    syscalls2: [c_long; UTI_SYSCALL_PROFILE_SLOTS],
+    start_syscall_intercept: c_int,
+}
+
+    /// Print the original two ordered syscall-counter tables.
+    ///
+    /// # Safety
+    /// The original caller supplies a live, aligned, initialized UtiDesc at the
+    /// captured uti_desc address for the entire call. It retains the existing
+    /// foreign-memory synchronization/lifetime contract. No borrowed whole
+    /// descriptor reference is formed and no descriptor byte is written.
+    #[no_mangle]
+    pub unsafe extern "C" fn util_show_syscall_profile() -> c_int {
+        // SAFETY: Same one-time global descriptor capture before the first log.
+        let desc = unsafe { super::uti_desc as *const UtiDesc };
+        unsafe {
+            super::kprintf(b"Syscall stats for offloaded thread:\n\0".as_ptr().cast());
+            for i in 0..UTI_SYSCALL_PROFILE_SLOTS {
+                let slot = ptr::addr_of!((*desc).syscalls).cast::<c_long>().add(i);
+                if ptr::read(slot) != 0 {
+                    super::kprintf(b"nr=%d #called=%ld\n\0".as_ptr().cast(), i as c_int, ptr::read(slot));
+                }
+            }
+            super::kprintf(b"Syscall stats for other threads:\n\0".as_ptr().cast());
+            for i in 0..UTI_SYSCALL_PROFILE_SLOTS {
+                let slot = ptr::addr_of!((*desc).syscalls2).cast::<c_long>().add(i);
+                if ptr::read(slot) != 0 {
+                    super::kprintf(b"nr=%d #called=%ld\n\0".as_ptr().cast(), i as c_int, ptr::read(slot));
+                }
+            }
+        }
+        0
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_sync_child_event_candidate)]
+mod f03_perf_alloc_entry_v1 {
+    use core::{ffi::c_void,mem::{offset_of,size_of}};
+    use crate::abi::{CInt,CLong,CULong,SizeT};
+    use crate::f03_perf_attr_callbacks::PerfEventAttr;
+    use crate::x86_perfctr::HwPerfEventExtra;
+    use super::f03_sync_child_layout_v2::{FullMcPerfEvent,HwPerfEvent};
+    use super::{perf_event_alloc_body_result,SyscallPolicyAllocFn,SyscallMckfdFreeFn,
+        SyncChildAtomic64SetFn,PerfEventMapFn,PerfEventValidateFn,PerfExtraRegIdFn,
+        PerfExtraRegMsrFn,PerfExtraRegIdxFn,PerfHwEventInitFn};
+
+    #[repr(C)]
+    struct PerfAllocationBinding {
+        alloc_flags:CULong,hardware_type:CULong,cache_type:CULong,raw_type:CULong,reference_cycles:CULong,
+        allocate:Option<SyscallPolicyAllocFn>,release:Option<SyscallMckfdFreeFn>,
+        atomic_set:Option<SyncChildAtomic64SetFn>,hardware_map:Option<PerfEventMapFn>,
+        cache_map:Option<PerfEventMapFn>,cache_extra_map:Option<PerfEventMapFn>,raw_map:Option<PerfEventMapFn>,
+        validate:Option<PerfEventValidateFn>,extra_id:Option<PerfExtraRegIdFn>,
+        extra_msr:Option<PerfExtraRegMsrFn>,extra_index:Option<PerfExtraRegIdxFn>,initialize:Option<PerfHwEventInitFn>,
+    }
+    unsafe extern "C" { static f03_perf_allocation_binding_v1:PerfAllocationBinding; }
+
+    /// Keep the original event allocation, initialized bytes and publication protocol.
+    ///
+    /// # Safety
+    /// Nonnull attributes are aligned, initialized genuine perf_event_attr objects
+    /// retained during this synchronous call; nonnull output is writable pointer
+    /// storage. Providers retain their existing allocation/lifetime contracts.
+    /// The complete existing Rust body releases a failed allocation exactly once
+    /// and publishes output only on success. This entry does not own a live PMU.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_event_allocate_v1(output:*mut *mut c_void,attribute:*mut c_void)->CInt {
+        let attribute=attribute.cast::<PerfEventAttr>();
+        let (event_type,config,frequency,sample_frequency,sample_period)=if attribute.is_null() {
+            (0,0,0,0,0)
+        } else {
+            // SAFETY: Raw scalar/union reads preserve the original initialized C
+            // bitfield allocation unit, without borrowing a whole foreign object.
+            unsafe { ((*attribute).type_ as CULong,(*attribute).config,
+                (((*attribute).flags>>PerfEventAttr::FREQUENCY_SHIFT)&1) as CInt,
+                (*attribute).sampling.sample_freq,(*attribute).sampling.sample_period) }
+        };
+        unsafe {
+            let binding=&f03_perf_allocation_binding_v1;
+            perf_event_alloc_body_result(output,attribute.cast(),size_of::<FullMcPerfEvent>(),size_of::<PerfEventAttr>(),
+                binding.alloc_flags,offset_of!(FullMcPerfEvent,attr),offset_of!(FullMcPerfEvent,group_entry),
+                offset_of!(FullMcPerfEvent,sibling_list),offset_of!(FullMcPerfEvent,sample_freq),
+                offset_of!(FullMcPerfEvent,nr_siblings),offset_of!(FullMcPerfEvent,count),
+                offset_of!(FullMcPerfEvent,child_count_total),offset_of!(FullMcPerfEvent,parent),
+                offset_of!(FullMcPerfEvent,hw)+offset_of!(HwPerfEvent,sample_period),
+                offset_of!(FullMcPerfEvent,hw)+offset_of!(HwPerfEvent,last_period),
+                offset_of!(FullMcPerfEvent,hw)+offset_of!(HwPerfEvent,period_left),
+                offset_of!(FullMcPerfEvent,use_invariant_tsc),offset_of!(FullMcPerfEvent,hw_config),
+                offset_of!(FullMcPerfEvent,hw_config_ext),offset_of!(FullMcPerfEvent,extra_reg)+offset_of!(HwPerfEventExtra,config),
+                offset_of!(FullMcPerfEvent,extra_reg)+offset_of!(HwPerfEventExtra,reg),
+                offset_of!(FullMcPerfEvent,extra_reg)+offset_of!(HwPerfEventExtra,idx),
+                event_type,config,frequency,sample_frequency,sample_period,
+                binding.hardware_type,binding.cache_type,binding.raw_type,binding.reference_cycles,
+                binding.allocate,binding.release,binding.atomic_set,binding.hardware_map,binding.cache_map,
+                binding.cache_extra_map,binding.raw_map,binding.validate,binding.extra_id,binding.extra_msr,
+                binding.extra_index,binding.initialize) as CInt
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_wait_log_v1 {
+    use core::ptr::{addr_of,read_volatile};
+    use crate::{abi::CInt,debug::Ddebug};
+    use super::{WAIT_LOG_ENTER,WAIT_LOG_SLEEPING,WAIT_LOG_WOKEN,WAIT_LOG_FOUND,WAIT_LOG_NOTFOUND};
+    unsafe extern "C" { static mut f03_wait_log_debug_v1:[Ddebug;5]; }
+
+    /// Preserve the five existing dynamic-debug sites and exact printf ABI.
+    ///
+    /// # Safety
+    /// The genuine five-record debug array is live and initialized for the kernel
+    /// lifetime, with the existing dynamic-debug update contract. The selected
+    /// internal index is checked before address arithmetic. PID arguments are
+    /// scalar values; this logger borrows no task and changes no wait state.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_wait_log_v1(event:CInt,current_pid:CInt,wait_pid:CInt) {
+        let index=match event {
+            WAIT_LOG_ENTER=>0,WAIT_LOG_SLEEPING=>1,WAIT_LOG_WOKEN=>2,
+            WAIT_LOG_FOUND=>3,WAIT_LOG_NOTFOUND=>4,_=>return,
+        };
+        // SAFETY: Match above bounds the original array index. Reuse the current
+        // Rust dynamic-debug ABI and accepted raw volatile flag-read idiom.
+        let descriptor=unsafe{addr_of!(f03_wait_log_debug_v1).cast::<Ddebug>().add(index)};
+        let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
+        if !enabled { return; }
+        // SAFETY: Static exact original formats and original promoted C-int args.
+        unsafe {
+            match event {
+                WAIT_LOG_ENTER=>{super::kprintf(b"wait4(): current->proc->pid: %d, pid: %d\n\0".as_ptr().cast(),current_pid,wait_pid);}
+                WAIT_LOG_SLEEPING=>{super::kprintf(b"wait4,sleeping\n\0".as_ptr().cast());}
+                WAIT_LOG_WOKEN=>{super::kprintf(b"wait4(): woken up\n\0".as_ptr().cast());}
+                WAIT_LOG_FOUND=>{super::kprintf(b"wait4,out_found\n\0".as_ptr().cast());}
+                WAIT_LOG_NOTFOUND=>{super::kprintf(b"wait4,out_notfound\n\0".as_ptr().cast());}
+                _=>{},
+            }
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_vm_policy_insert_log_v1 {
+    use core::ptr::{addr_of,read_volatile};
+    use crate::{abi::{CULong,ProcessVm,VmRangeNumaPolicy},debug::Ddebug};
+    unsafe extern "C" {static mut f03_vm_policy_insert_log_debug_v1:[Ddebug;1];}
+
+    /// Preserve original overlap diagnostics and conditional policy-range reads.
+    ///
+    /// # Safety
+    /// A nonnull overlap and both logged range operands are initialized, aligned,
+    /// live original policy records. When overlap is null and debugging disabled,
+    /// no range is accessed. The VM is an opaque printed address. This function
+    /// neither owns nor mutates the VM, range tree, ranges or debug descriptor.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_vm_policy_insert_log_v1(
+        vm:*mut ProcessVm,new_range:*mut VmRangeNumaPolicy,overlap:*mut VmRangeNumaPolicy,
+    ) {
+        if !overlap.is_null() {
+            // SAFETY: Original overlap path logs unconditionally. Preserve the
+            // original numa_mask ARRAY ADDRESS varargs, not mask-word values.
+            unsafe {
+                super::kprintf(b"%s(%p,%lx-%lx (nodemask)%lx (policy)%d): overlap %lx-%lx (nodemask)%lx (policy)%d\n\0".as_ptr().cast(),
+                    b"vm_policy_insert\0".as_ptr().cast::<i8>(),vm,(*new_range).start,(*new_range).end,
+                    addr_of!((*new_range).numa_mask).cast::<CULong>().cast_mut(),(*new_range).numa_mem_policy,
+                    (*overlap).start,(*overlap).end,addr_of!((*overlap).numa_mask).cast::<CULong>().cast_mut(),
+                    (*overlap).numa_mem_policy);
+            }
+        } else {
+            // SAFETY: One genuine live record, using the accepted debug ABI.
+            let descriptor=unsafe{addr_of!(f03_vm_policy_insert_log_debug_v1).cast::<Ddebug>()};
+            let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
+            if enabled {
+                // SAFETY: Field reads occur only inside the original debug gate.
+                unsafe {
+                    super::kprintf(b"%s: %p,%p: %lx-%lx (nodemask)%lx (policy)%d\n\0".as_ptr().cast(),
+                        b"vm_policy_insert\0".as_ptr().cast::<i8>(),vm,new_range,(*new_range).start,(*new_range).end,
+                        addr_of!((*new_range).numa_mask).cast::<CULong>().cast_mut(),(*new_range).numa_mem_policy);
+                }
+            }
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_wait_zombie_log_v1 {
+    use core::ptr::{addr_of,read_volatile};
+    use crate::{abi::CInt,debug::Ddebug};
+    use super::{WAIT_ZOMBIE_LOG_FOUND,WAIT_ZOMBIE_LOG_WARNING,WAIT_ZOMBIE_LOG_STATUS};
+    unsafe extern "C" {static mut f03_wait_zombie_log_debug_v1:[Ddebug;2];}
+
+    /// Preserve zombie-reap diagnostics without changing process/host behavior.
+    ///
+    /// # Safety
+    /// The two original debug records remain initialized and live for the kernel
+    /// lifetime under their existing update contract. All other arguments are
+    /// copied scalar values; this function owns no task, resource or wait state.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_wait_zombie_log_v1(event:CInt,pid:CInt,status:CInt,_host_result:CInt) {
+        if event==WAIT_ZOMBIE_LOG_WARNING {
+            // SAFETY: The original host-wait warning is unconditional and static.
+            unsafe{super::kprintf(b"WARNING: host waitpid failed?\n\0".as_ptr().cast());}
+            return;
+        }
+        let index=match event {WAIT_ZOMBIE_LOG_FOUND=>0,WAIT_ZOMBIE_LOG_STATUS=>1,_=>return};
+        // SAFETY: Match bounds the original two-record array before pointer add.
+        let descriptor=unsafe{addr_of!(f03_wait_zombie_log_debug_v1).cast::<Ddebug>().add(index)};
+        let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
+        if !enabled{return;}
+        // SAFETY: Exact static original formats and promoted C-int arguments.
+        // Preserve the original signed-int status vararg even with %08x format.
+        unsafe {
+            if event==WAIT_ZOMBIE_LOG_FOUND {
+                super::kprintf(b"wait_zombie,found PS_ZOMBIE process: %d\n\0".as_ptr().cast(),pid);
+            } else {
+                super::kprintf(b"wait_zombie,child->pid=%d,status=%08x\n\0".as_ptr().cast(),pid,status);
+            }
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_do_munmap_log_v1 {
+    use core::ptr::{addr_of,read_volatile};
+    use crate::{abi::{CInt,CULong,SizeT},debug::Ddebug};
+    unsafe extern "C" {static mut f03_do_munmap_log_debug_v1:[Ddebug;1];}
+
+    /// Preserve the original unmap-result diagnostic and its independent flag.
+    ///
+    /// # Safety
+    /// The original debug record remains initialized and live under its existing
+    /// dynamic-debug update contract. Arguments are scalar copies; the address
+    /// is printed without dereference. This logger owns no mapping or resource.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_do_munmap_log_v1(address:CULong,length:SizeT,error:CInt) {
+        let descriptor=addr_of!(f03_do_munmap_log_debug_v1).cast::<Ddebug>();
+        // SAFETY: One genuine live debug record; any nonzero8-bit flag enables it.
+        let enabled=unsafe{read_volatile(addr_of!((*descriptor).line_flags))>>24!=0};
+        if enabled {
+            // SAFETY: Exact original format/text and unsigned-long/size_t/int
+            // varargs; no address, range or pointer-bearing object is accessed.
+            unsafe{super::kprintf(b"%s: 0x%lx:%lu, error: %d\n\0".as_ptr().cast(),
+                b"do_munmap\0".as_ptr().cast::<i8>(),address,length,error);}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(enable_perf)]
+mod f03_perf_attr_frequency_v1 {
+    use core::ffi::c_void;
+    use crate::{abi::CInt,f03_perf_attr_callbacks::PerfEventAttr};
+
+    /// Reuse the existing genuine-header-qualified frequency-bit implementation.
+    ///
+    /// # Safety
+    /// The internal caller supplies a nonnull, aligned, initialized complete
+    /// perf_event_attr retained immutably during this synchronous callback. Its
+    /// existing full-size copy succeeds before this call. No null/partial-copy/
+    /// uninitialized domain is accepted or inferred from an ignored result.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_attr_frequency_v1(attribute:*const c_void)->CInt {
+        // SAFETY: The original live complete attribute contract above supports
+        // a short immutable borrow. The existing method reads only flags and
+        // returns the original C bitfield's exact 0/1 value; no byte is written.
+        unsafe{(&*attribute.cast::<PerfEventAttr>()).frequency()}
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(enable_perf)]
+mod f03_perf_counter_allocate_v1 {
+    use core::ffi::c_void;
+    use crate::abi::{CInt,Thread};
+
+    /// Retain the callback ABI while reusing the complete existing Rust provider.
+    ///
+    /// # Safety
+    /// The original internal caller retains its nonnull live thread/event for
+    /// the synchronous provider call. The existing allocator keeps its own
+    /// thread/counter-state contract. This adapter accesses no object field and
+    /// introduces no ownership, lock, hardware action, failure or rollback.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_counter_allocate_v1(thread:*mut c_void,event:*mut c_void)->CInt {
+        // SAFETY: Preserve both original pointer values, typed thread cast and
+        // exact signed-int result. The original provider is not reimplemented.
+        unsafe{crate::x86_perfctr::ihk_mc_perfctr_alloc(thread.cast::<Thread>(),event)}
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_util_register_desc_logger_v1 {
+    use core::ptr::{addr_of,read_volatile};
+    use crate::{abi::{CInt,CULong},debug::Ddebug};
+    unsafe extern "C" {static mut f03_util_register_desc_debug_v1:[Ddebug;1];}
+
+    /// Keep the original registration diagnostic without changing registration.
+    ///
+    /// # Safety
+    /// The original debug record remains initialized and live under its existing
+    /// update contract. Arguments are copied scalar values; this function does
+    /// not resolve the current thread or dereference the descriptor address.
+    #[no_mangle]
+    pub unsafe extern "C" fn syscall_util_register_desc_log_bridge(tid:CInt,descriptor:CULong) {
+        let record=addr_of!(f03_util_register_desc_debug_v1).cast::<Ddebug>();
+        // SAFETY: One genuine record, preserving any-nonzero8-bit flag gating.
+        let enabled=unsafe{read_volatile(addr_of!((*record).line_flags))>>24!=0};
+        if enabled {
+            // SAFETY: Exact original function text/format and promoted-int plus
+            // unsigned-long varargs. The original logger result is ignored.
+            unsafe{super::kprintf(b"%s: tid=%d,uti_desc=%lx\n\0".as_ptr().cast(),
+                b"sys_util_register_desc\0".as_ptr().cast::<i8>(),tid,descriptor);}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact original C metadata provenance, retained from the accepted registry.
+mod f03_util_register_desc_debug_storage_v1 {
+    use crate::debug::Ddebug;
+    // The C consumer and existing BODY12 logger retain this exact global symbol
+    // and repr(C) layout. Static lifetime/writable flags/section membership are
+    // unchanged; original update synchronization remains the caller's contract.
+    #[used]
+    #[no_mangle]
+    #[link_section="__verbose"]
+    pub static mut f03_util_register_desc_debug_v1:[Ddebug;1]=[Ddebug {
+        file:b"/src/kernel/syscall.c\0".as_ptr().cast(),
+        func:b"syscall_util_register_desc_log_bridge\0".as_ptr().cast(),
+        fmt:core::ptr::null(),
+        line_flags:28605,
+    }];
+}
+
+#[cfg(f06_vdso_info_candidate)]
+#[path = "f06_vdso_info.rs"]
+mod f06_vdso_info;
+#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+use self::f06_vdso_info::vdso_get_vdso_info;

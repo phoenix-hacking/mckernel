@@ -4887,6 +4887,16 @@ wait_process_release_bridge(void *proc)
 }
 
 #endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_zombie_log_debug_v1[2]={
+    {.file=__FILE__,.func="wait_zombie_log_bridge",.line=4862,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="wait_zombie_log_bridge",.line=4868,.flags=DDEBUG_DEFAULT}
+};
+extern void f03_wait_zombie_log_v1(int,int,int,int);
+#define wait_zombie_log_bridge f03_wait_zombie_log_v1
+#else
+#line 4864
 static void
 wait_zombie_log_bridge(int event, int pid, int status, int ret)
 {
@@ -4906,6 +4916,13 @@ wait_zombie_log_bridge(int event, int pid, int status, int ret)
 		break;
 	}
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 4872
+#else
+#line 4881
+#endif
+
 
 static const struct wait_zombie_offsets wait_zombie_kernel_offsets = {
 	.thread_ptrace_offset = __builtin_offsetof(struct thread, ptrace),
@@ -5087,6 +5104,19 @@ static void do_wait_schedule_bridge(void)
 	schedule();
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_wait_log_debug_v1[5]={
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5061,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5065,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5068,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5071,.flags=DDEBUG_DEFAULT},
+    {.file=__FILE__,.func="do_wait_log_bridge",.line=5074,.flags=DDEBUG_DEFAULT}
+};
+extern void f03_wait_log_v1(int,int,int);
+#define do_wait_log_bridge f03_wait_log_v1
+#else
+#line 5064
 static void do_wait_log_bridge(int event, int current_pid, int wait_pid)
 {
 	switch (event) {
@@ -5110,6 +5140,13 @@ static void do_wait_log_bridge(int event, int current_pid, int wait_pid)
 		break;
 	}
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5076
+#else
+#line 5085
+#endif
+
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 /* Declarative addresses of unchanged existing C endpoint bodies only. */
@@ -5875,13 +5912,50 @@ do_munmap_finish_bridge(void)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_do_munmap_log_debug_v1[1]={
+    {.file=__FILE__,.func="do_munmap_log_bridge",.line=5826,.flags=DDEBUG_DEFAULT}
+};
+extern void f03_do_munmap_log_v1(unsigned long,size_t,int);
+#define do_munmap_log_bridge f03_do_munmap_log_v1
+#else
+#line 5830
 static void
 do_munmap_log_bridge(unsigned long addr, size_t len, int error)
 {
 	dkprintf("%s: 0x%lx:%lu, error: %d\n",
 		"do_munmap", addr, len, error);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5825
+#else
+#line 5834
+#endif
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_do_munmap_binding {
+	do_munmap_void_fn_t begin;
+	do_munmap_remove_range_fn_t remove_range;
+	do_munmap_clear_host_fn_t clear_host;
+	mprotect_set_host_vma_fn_t set_host;
+	do_munmap_void_fn_t finish;
+	do_munmap_log_fn_t log;
+};
+const struct f03_do_munmap_binding f03_do_munmap_binding_v1 = {
+	.begin = do_munmap_begin_bridge,
+	.remove_range = do_munmap_remove_range_bridge,
+	.clear_host = do_munmap_clear_host_bridge,
+	.set_host = do_munmap_set_host_bridge,
+	.finish = do_munmap_finish_bridge,
+	.log = do_munmap_log_bridge,
+};
+extern int do_munmap(void *, size_t, int);
+#else
+#line 5837
 int do_munmap(void *addr, size_t len, int holding_memory_range_lock)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -5894,6 +5968,13 @@ int do_munmap(void *addr, size_t len, int holding_memory_range_lock)
 			do_munmap_clear_host_bridge, do_munmap_set_host_bridge,
 			do_munmap_finish_bridge, do_munmap_log_bridge);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5838
+#else
+#line 5847
+#endif
+
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int f03_search_free_space_v1(size_t, int, uintptr_t *);
@@ -21349,12 +21430,20 @@ perf_mmap(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 #line 21106
 
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_perf_counter_allocate_v1(void *,void *);
+#define perf_event_open_counter_alloc_bridge f03_perf_counter_allocate_v1
+#else
+#line 21108
 static int
 perf_event_open_counter_alloc_bridge(void *thread, void *event)
 {
 	return ihk_mc_perfctr_alloc((struct thread *)thread,
 			(struct mc_perf_event *)event);
 }
+#endif
+#line 21113
+
 
 static long
 perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)
@@ -21427,6 +21516,25 @@ static void syscall_vm_policy_color_bridge(struct rb_node *node,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#ifdef ENABLE_PERF
+#define F03_POLICY_LOG_SOURCE_LINE 21193
+#else
+#define F03_POLICY_LOG_SOURCE_LINE 21223
+#endif
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_vm_policy_insert_log_debug_v1[1]={
+    {.file=__FILE__,.func="syscall_vm_policy_insert_log_bridge",.line=F03_POLICY_LOG_SOURCE_LINE,.flags=DDEBUG_DEFAULT}
+};
+#undef F03_POLICY_LOG_SOURCE_LINE
+extern void f03_vm_policy_insert_log_v1(struct process_vm *,struct vm_range_numa_policy *,struct vm_range_numa_policy *);
+#define syscall_vm_policy_insert_log_bridge f03_vm_policy_insert_log_v1
+#else
+#ifdef ENABLE_PERF
+#line 21178
+#else
+#line 21210
+#endif
 static void syscall_vm_policy_insert_log_bridge(struct process_vm *vm,
 		struct vm_range_numa_policy *newrange,
 		struct vm_range_numa_policy *overlap)
@@ -21445,6 +21553,13 @@ static void syscall_vm_policy_insert_log_bridge(struct process_vm *vm,
 				newrange->numa_mem_policy);
 	}
 }
+#endif
+#ifdef ENABLE_PERF
+#line 21195
+#else
+#line 21227
+#endif
+
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -21683,6 +21798,34 @@ perf_event_alloc_hw_init_bridge(void *event)
 #endif
 #line 21418
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYNC_CHILD_EVENT)
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_perf_allocation_binding {
+    unsigned long alloc_flags,hardware_type,cache_type,raw_type,reference_cycles;
+    syscall_policy_alloc_fn_t allocate;
+    syscall_mckfd_free_fn_t release;
+    sync_child_atomic64_set_fn_t atomic_set;
+    perf_event_map_fn_t hardware_map,cache_map,cache_extra_map,raw_map;
+    perf_event_validate_fn_t validate;
+    perf_extra_reg_id_fn_t extra_id;
+    perf_extra_reg_msr_fn_t extra_msr;
+    perf_extra_reg_idx_fn_t extra_index;
+    perf_hw_event_init_fn_t initialize;
+};
+const struct f03_perf_allocation_binding f03_perf_allocation_binding_v1={
+    .alloc_flags=IHK_MC_AP_NOWAIT,.hardware_type=PERF_TYPE_HARDWARE,.cache_type=PERF_TYPE_HW_CACHE,
+    .raw_type=PERF_TYPE_RAW,.reference_cycles=PERF_COUNT_HW_REF_CPU_CYCLES,
+    .allocate=perf_event_alloc_kmalloc_bridge,.release=perf_event_alloc_free_bridge,
+    .atomic_set=sync_child_count_set_bridge,.hardware_map=ihk_mc_hw_event_map,
+    .cache_map=ihk_mc_hw_cache_event_map,.cache_extra_map=ihk_mc_hw_cache_extra_reg_map,
+    .raw_map=ihk_mc_raw_event_map,.validate=ihk_mc_validate_event,.extra_id=ihk_mc_get_extra_reg_id,
+    .extra_msr=ihk_mc_get_extra_reg_msr,.extra_index=ihk_mc_get_extra_reg_idx,
+    .initialize=perf_event_alloc_hw_init_bridge,
+};
+extern int f03_perf_event_allocate_v1(void **,void *);
+#define perf_event_open_alloc_event_bridge f03_perf_event_allocate_v1
+#else
+#line 21419
 static int mc_perf_event_alloc(struct mc_perf_event **out,
 			       struct perf_event_attr *attr)
 {
@@ -21729,12 +21872,23 @@ perf_event_open_alloc_event_bridge(void **event_out, void *attr)
 	return mc_perf_event_alloc((struct mc_perf_event **)event_out,
 			(struct perf_event_attr *)attr);
 }
+#endif
+#line 21464
 
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int f03_perf_attr_frequency_v1(const void *);
+#define perf_event_open_attr_freq_bridge f03_perf_attr_frequency_v1
+#else
+#line 21466
 static int
 perf_event_open_attr_freq_bridge(const void *attr)
 {
 	return ((const struct perf_event_attr *)attr)->freq;
 }
+#endif
+#line 21470
+
 
 long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
 {
@@ -28688,6 +28842,11 @@ static void do_mod_exit(int status){
 extern void save_uctx(void *, void *);
 
 /* TODO: use copy_from_user() */
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+extern int util_show_syscall_profile(void);
+#else
+#line 28277
 int util_show_syscall_profile()
 {
 	int i;
@@ -28709,6 +28868,9 @@ int util_show_syscall_profile()
 
 	return 0;
 }
+#endif
+#line 28297
+
 
 int util_thread(struct uti_attr *arg)
 {
@@ -29013,12 +29175,21 @@ long sys_util_register_desc(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+extern struct ddebug f03_util_register_desc_debug_v1[1];
+extern void syscall_util_register_desc_log_bridge(int,unsigned long);
+#else
+#line 28602
 void
 syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
 {
 	dkprintf("%s: tid=%d,uti_desc=%lx\n", "sys_util_register_desc",
 			tid, desc);
 }
+#endif
+#line 28607
+
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
