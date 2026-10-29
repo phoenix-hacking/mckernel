@@ -1,0 +1,80 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/retire_exact_failed_guard.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-failed-guard-retirement-rebind-source-1/protected-identity-correction-source-1/controlled-cid-read-exception-source-1/accepted-alias-shape-source-1/retire_exact_failed_guard.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import argparse,ast,copy,ctypes,hashlib,importlib.util,json,os,re,resource,signal,stat,time
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='b58dd562cef34d08cae2d9028f80024ae723b11e3d37320bd82b4c8e68868c6b'
++BINDINGS_SHA='0b54c1729651ca01ca51be63eeec84c798f562ce061af6fadaf3f9208e65fb15'
+ SELF=D/'retire_exact_failed_guard.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ def need(ok,why):
+@@ -26,6 +26,14 @@
+ def data():
+  need(B['scope']==SCOPE and B['runtime_authority'] is None and PROFILE['runtime_authority'] is None,'preparation is not authority')
+  for key in ['primitive','historical_profile','transport_executor','transport_bindings','portable_converter','guardian','controls','earliest_caps','reconciliation_facts','reconciliation_review']:T.authenticated(B[key])
++ for key in ['controlled_cid_subject','pre_identity_correction_executor','failed_rebind_attempt']:T.authenticated(B[key])
++ for key in ['publisher_alias_contract','pre_alias_correction_executor','actual_cid_leaf_read','preserved_full_callback_refusal']:T.authenticated(B[key])
++ contract=T.authenticated(B['publisher_alias_contract'],True)
++ for key in ['publisher_source','actual_publication','actual_reviewer_bindings']:T.authenticated(contract[key])
++ pub=T.authenticated(contract['actual_publication'],True);reviewer=T.authenticated(contract['actual_reviewer_bindings'],True)
++ need(pub['status'].startswith('PASS_FETCHED_CURRENT118_') and pub['runtime_authority'] is None and any(r['actual']==contract['publisher_source'] for r in pub['rows']) and reviewer['static_refs']['handoff_common']==contract['publisher_source'],'actual accepted publisher source contract')
++ need(len(contract['pairs'])==6 and all(p['canonical'] in B['protected'] and p['alias']['path']==p['canonical']['path']+'.complete-source-'+str(p['publisher_pid']) and p['expected']['st_nlink']==2 for p in contract['pairs']),'only six fixed accepted publication pairs')
++
+  need(T.reference(T.D/'BINDINGS.json')==B['transport_bindings'],'exact transport data')
+  controls=T.authenticated(B['controls'],True)
+  deny=[dict(role=k,pid=v['pid'],birth=v['start']) for k,v in controls['actors'].items()]
+@@ -34,10 +42,43 @@
+  need(PROFILE['first_readonly_client']['status']=='UNKNOWN' and PROFILE['first_readonly_client']['positive_wait4'] is False and F['saved_client_status_unknown'] is True and F['saved_positive_wait4'] is False,'original client status remains UNKNOWN')
+  return True
+ 
++def controlled_cid_identity(path):
++ # Only this exact retained CID receives the same permitted ordinary-read method
++ # as the original fixed Python executable. No shared module/global is changed.
++ need(Path(path)==Path(B['controlled_cid_subject']['path']),'exact controlled CID read exception only')
++ tree=ast.parse(T.authenticated(B['primitive']))
++ node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='file_identity')
++ assignment=next(n for n in ast.walk(node) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='noatime' for t in n.targets))
++ need(isinstance(assignment.value,ast.IfExp),'unchanged original read flag anchor')
++ assignment.value.test=ast.BoolOp(op=ast.Or(),values=[assignment.value.test,ast.Compare(left=ast.Name(id='path',ctx=ast.Load()),ops=[ast.Eq()],comparators=[ast.Call(func=ast.Name(id='Path',ctx=ast.Load()),args=[ast.Constant(B['controlled_cid_subject']['path'])],keywords=[])])])
++ ast.fix_missing_locations(node);context=dict(vars(M))
++ exec(compile(ast.Module(body=[node],type_ignores=[]),str(SELF),'exec'),context)
++ return context['file_identity'](Path(path))
++
++def publisher_alias_identity(path):
++ contract=T.authenticated(B['publisher_alias_contract'],True)
++ pair=next((p for p in contract['pairs'] if p['canonical']['path']==str(path)),None)
++ need(pair is not None,'only exact accepted publisher canonical row')
++ tree=ast.parse(T.authenticated(B['primitive']))
++ node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='file_identity')
++ comparisons=[n for n in ast.walk(node) if isinstance(n,ast.Compare) and isinstance(n.left,ast.Attribute) and isinstance(n.left.value,ast.Name) and n.left.value.id=='before' and n.left.attr=='st_nlink' and len(n.comparators)==1 and isinstance(n.comparators[0],ast.Constant) and n.comparators[0].value==1]
++ need(len(comparisons)==1 and pair['expected']['st_nlink']==contract['expected_nlink']==2,'exact original single-link shape anchor to fixed expected2')
++ comparisons[0].comparators[0].value=2;ast.fix_missing_locations(node);context=dict(vars(M))
++ exec(compile(ast.Module(body=[node],type_ignores=[]),str(SELF),'exec'),context)
++ rows=[]
++ for key in ('canonical','alias'):
++  subject=pair[key];T.authenticated(subject);p=Path(subject['path']);before=p.lstat()
++  need(all(getattr(before,k)==v for k,v in pair['expected'].items()),'fixed accepted alias node/owner/mode/link/size/time identity')
++  row,raw=context['file_identity'](p);after=p.lstat()
++  need(raw is None and all(getattr(after,k)==v for k,v in pair['expected'].items()) and row['sha256']==subject['sha256'] and row['size']==subject['bytes'],'same original stable FD/linked-node/byte checks for both retained names')
++  rows.append(row)
++ need({k:v for k,v in rows[0].items() if k!='path'}=={k:v for k,v in rows[1].items() if k!='path'},'both exact names remain same protected inode')
++ return rows[0],None
++
+ def protected_inputs(release,profile):
+  data();T.validate_retained(TB);observed={}
+  for r in B['protected']:
+-  T.authenticated(r);row,_=M.file_identity(Path(r['path']))
++  T.authenticated(r);aliases=T.authenticated(B['publisher_alias_contract'],True)['pairs'];row,_=(controlled_cid_identity(Path(r['path'])) if r==B['controlled_cid_subject'] else publisher_alias_identity(Path(r['path'])) if any(p['canonical']==r for p in aliases) else M.file_identity(Path(r['path'])))
+   need(row['sha256']==r['sha256'] and row['size']==r['bytes'],'protected original unchanged');observed[r['path']]=row
+  need(release['protected_inputs']==B['protected'],'exact retained source/image/raw failure closure')
+  receipt=T.authenticated(F['client_receipt'],True);uncertain=T.authenticated(F['uncertain'],True)
+@@ -140,6 +181,8 @@
+ def runtime_files():
+  rows=dict(executor=T.reference(SELF),bindings=T.reference(D/'BINDINGS.json'))
+  rows.update({k:B[k] for k in ('profile','primitive','historical_profile','transport_executor','transport_bindings','portable_converter','guardian','reconciliation_facts','reconciliation_review')})
++ rows.update({k:B[k] for k in ('pre_identity_correction_executor','failed_rebind_attempt')})
++ rows.update({k:B[k] for k in ('publisher_alias_contract','pre_alias_correction_executor','actual_cid_leaf_read','preserved_full_callback_refusal')})
+  return rows
+ 
+ def bind_stop_requests(requested):
