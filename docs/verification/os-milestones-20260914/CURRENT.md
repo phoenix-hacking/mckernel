@@ -2,6 +2,72 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## M14 exclusive direction applied — 2026-10-29T04:11:39.252803+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Acknowledged request `20261029T040237372323Z-phone-79600609001652c3f404d9e22664a23f4db1d54da809dd0be92a66032261b1b2`.
+[M14-only instruction](M14-ONLY-20261029T040237.md) now supersedes parallelM15
+scheduling. M15isPAUSED atretainedcheckpoints; no newM15source/HOST/integration/
+build/nativework. AgentsreportnoownedliveM15operation; allpreviousHOSTchildren
+joined, noM15Docker/PTY/guestcampaign wasstarted. Noresourcesabandoned.
+
+Actualfollowupturnsconfirmed: m14_integration owns actualCURRENT119producer
+binding(133/122manifest/currentrecipe/guard/tightcaps); cleanup_bindings owns
+M14control-bindingproposal+finalclockmonotoneclamp; recovery_review owns truthful
+retirement/currentfrontier/releasebindings. recovery_receipts completed original
+M14contractmapd2f203de afteritsactualturn:119projectionC42/5 isNOTC0orclosure;
+originalfinalI01/I02/I03 andallholds remain. None isportedbeforeactual119feedback.
+
+Firstexecution: actualnewcontrols→newstopped118compatcleanup/directparentjoin→
+freshfullcurrentfree/Rootadoption→119origin/fourcommandproducer→original389artifact
+acceptance. Concreteblocker: parentNEWSC actualcontrolreceiptstillabsent. Current
+runner alsohardcodesold123/112 counts/recipe/A3guard; ownercorrectsminimalbinding,
+notnewframework. ActualbootstrapMONO1035703.5689321246 is1s tighter; finaldirect
+prePopen cutoffs mustcomponentwisemin withactualcaps, notstale1035704.5689393478.
+
+M14closure stillrequiresallremainingCownershipremoved, finalcoherentreproducible
+Rust/assemblyimage andmatchingapplications/lifecycle acceptedat originalscope.
+Onlyafterrecordedacceptance switchagents toM15withoutanotherconfirmation. Existing
+06:00Z/credits/resources/dirtywork/evidence/holds unchanged. NoCURRENT119pass,
+function-count/sourceprojection/percentagebecomeswholeM14credit. Acknowledgement:
+evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-ONLY-REQUEST-ACK.ACTUAL.json.
+
+## Selected-header ABI repair and full private producer wiring — 2026-10-29T03:48Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Newprivateconverter5aab8a42 corrects all11 selectedBFD imports, replacesobsolete
+ASection withopaque/rawaccessorsfromgenuineselectedheaderwitness, andmatchesfull
+bfd_set_section_vma inlineeffects includingLMA/packedbitwithwholeobjectcanaries.
+Actualpinnedheaderde900 HOST56functional/zeroownershipcases PASS/63joinedcommands;
+obsoletearity/layout eachfailcompilationasexpected. Independent e1f92370 passes
+SOURCE+EXACT-HEADER-HOST only. Priorownershipguarddc0 remainsretained; original
+20leaks/40cases and56oldABIcases immutable, notselectedSDKproof.
+
+Completeprivatejoint19 c314e549 now wires defaultRustldump witness/ENV/objectdeps
+withVMcoreOFFandON, preservingflags/compilerselection/installednames/defaults.
+FivefocusedCMakegraphchecksandindependentfe54f7e4 PASS; compiler/probe effects
+weredeclaredTEST_ONLYleaves, production78bcfragment/hashguardsunchanged. Noactual
+SDKprobe/link/install/default/native/validdump result. ActualSDKGCC14witnessand
+libbfd.a2324bytebinding remainOPEN. m14_integration preparedfixed3providercreated-
+only41778adapter e58cc4e8/f1127467,6Python3.8puregroupsPASS, nowindependentreview;
+noDockerexport/start/probe/oldCIDreuse. Firstheavy119/M15priorityunchanged.
+
+Checkpoint307b8ae55 pushedandall123changedfilesexactlyfetched. Capturearchives
+verified819generator/339HOSTrawmembers; alloriginals/RPMsretained, no deletion.
+TwofrozenblankEOFstylenoticesretained; nofunctionaloracleor reviewedbyteschanged.
+Steeringrecord0348 includes actual1954s interval andexplicitlate durable review;
+noexact20mincadence/speedupclaim. ParentNEWSCactualarmingreceiptstillabsent.
+Accepted116C71/Rust68/practical35/35/M14 4/6/M15 1/8 unchanged; no newkernelbuild/
+McKernelguest/native/fileclosure. ExistingRoot64custodyledger is retained atits
+recorded boundary; ordinarysource/HOSTqualification receipts remainseparate and
+mustbereconciledwithfutureactualadmission ratherthanclaimednativeclearance.
+
+Nextordinarylane cleanup_bindings preparesexisting22caseHOSTwrapperfixture;
+source-owner observed secondcommunicate timeout canbypassadoptedPTYcleanup,
+so minimalownedprocessorderingfix/puretests precedeanyrealPTYrun. NoSDK/Docker/
+root/native/actualdump action; originalwrapper/cases andmissingExpect remainfrozen.
+
 ## M15 private ownership repair and genuine ABI blocker — 2026-10-29T03:29Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

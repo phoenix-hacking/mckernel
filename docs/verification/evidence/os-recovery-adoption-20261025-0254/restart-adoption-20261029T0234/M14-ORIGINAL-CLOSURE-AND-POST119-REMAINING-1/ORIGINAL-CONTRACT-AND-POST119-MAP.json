@@ -1,0 +1,575 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root/recovery_receipts",
+  "recorded_epoch": 1793246913.7425683,
+  "status": "FACTUAL_ORIGINAL_M14_CONTRACT_AND_PROJECTED_POST119_MAP_ONLY",
+  "active_user_request": "20261029T040237372323Z-phone-79600609001652c3f404d9e22664a23f4db1d54da809dd0be92a66032261b1b2",
+  "M15_paused": true,
+  "definition_of_done": "No live McKernel-owned compute-kernel C implementation remains on the supported default co-booted LWK path; the Rust/reviewed-assembly image works with the existing Linux supporting control plane and the practical application/lifecycle baseline.",
+  "source_bindings": {
+    "original_definition": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md",
+      "bytes": 37096,
+      "sha256": "e9fa33fbbaa97bbe12af23ffb1266f7ebd704670e052ad52a0cfe2a399173aaf"
+    },
+    "worklist": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "bytes": 244722,
+      "sha256": "fc286033f5dfc93120627189d697e0a7b9df89a425b3281dc2eb8f66eb441163"
+    },
+    "joint_source_map": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/SOURCE-MAP-FROM118.json",
+      "bytes": 56124,
+      "sha256": "c5122ce1b19cbecbc557bf99da85564ff38176c766428bc67c1c6064d662976d"
+    },
+    "joint_source_ready": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/SOURCE-READY.json",
+      "bytes": 5441,
+      "sha256": "a2550bad94ecea42a63c7de75c3664956fae6ef0920f2f336acf8a2a71e124ac"
+    },
+    "joint_root_next": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/ROOT-NEXT.md",
+      "bytes": 4499,
+      "sha256": "0e1cb31bdadd5514957d4f1f495d9140390f57ccfe063494fea8e3a8d0d0fb07"
+    },
+    "joint_ABI_metadata": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/ABI-AND-METADATA-SOURCE-CHECKS.json",
+      "bytes": 2472,
+      "sha256": "6c9812a3ab8f8c9e2568303b96e8220ce3e0000cfb66e96c7333ab8ab59fa36d"
+    },
+    "joint_independent_source_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/JOINT119-SOURCE-REVIEW-1/REVIEW.json",
+      "bytes": 17228,
+      "sha256": "83e1b77144398289d3e05e6975e8cfefb7a60380cd1a6f08a1ce2d98d8d0b941"
+    },
+    "canonical119_adoption": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CANONICAL119-SOURCE-ADOPTION-1/ROOT-SOURCE-ADOPTION.ACTUAL.json",
+      "bytes": 12321,
+      "sha256": "45d2e604c96f15b189d0f22c98ee2ec5300feb82877b1e91cce0f81c94f9e664"
+    },
+    "exact119_source_export": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-EXACT-RUST-SOURCE-EXPORT-1/SOURCE-EXPORT.ACTUAL.json",
+      "bytes": 95618,
+      "sha256": "607fa54fca73452ea8d45e7bf078050e7808ed9bf4e398e587248f662c120b53"
+    },
+    "remaining_F03": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-through-body13-source-1/SELECTED-REMAINING-C-AND-BODY-MAP.json",
+      "bytes": 27025,
+      "sha256": "45ad790a3f99553df5c121b813d16be7b6691ca555b1ed0ea56c9e10ed83283f"
+    },
+    "remaining_F06": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F06-cumulative-through-body12-metadata-successor-source-1/SELECTED-REMAINING-C-AND-BODY-MAP.json",
+      "bytes": 31367,
+      "sha256": "3c50c8b378d536e044f550b0609214fcd14488388337427839dbb4d1f48a73f8"
+    },
+    "frozen_original389": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+      "bytes": 84536,
+      "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+    },
+    "accepted116": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT116-ACCEPTED-ARTIFACT-AND-CURRENTFREE.json",
+      "bytes": 6506,
+      "sha256": "ce4822f9d90fc5b8b1cc3340e081582e85c7a3370e36b3f77e0343f8608ce16e"
+    }
+  },
+  "original_proof_stages": {
+    "implementation": "Reuse or implement Rust owning the complete supported behavior, including substantive callbacks; retain reviewed assembly and remove live compute-C implementation dependency.",
+    "focused_checks": "Run the relevant actual-body regression and error/lifetime checks under the existing ordinary profile; reuse matching accepted evidence.",
+    "production_link": "Compile the real selected translation unit and Rust object, then prove default selection, ABI and ownership in the matched linked image. A C wrapper calling Rust is insufficient while substantive C remains.",
+    "native_validation": "Demonstrate applicable actual native functional behavior on matching artifacts; record exact supported scope and unresolved branches. Model-only results are insufficient."
+  },
+  "accepted_four_files": {
+    "F01": {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "bytes": 2140,
+        "sha256": "0f311e0330490763c8cb94f1dac20694bb0069e7be4af88af6b75401590c8385"
+      },
+      "status": "PASS_M14_F01_FROZEN_SUPPORTED_PROFILE_FILE_CUTOVER",
+      "decision": null,
+      "supported_scope_only": true
+    },
+    "F02": {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F02-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "bytes": 2689,
+        "sha256": "a6b3779a8f612a4070531e0da775b7fa6b4b29b4545ee221dac5d5268223994f"
+      },
+      "status": "COMPLETE_ORIGINAL_M14_F02_SUPPORTED_DEFAULT_FILE",
+      "decision": null,
+      "supported_scope_only": true
+    },
+    "F04": {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "bytes": 3832,
+        "sha256": "f936dce9f10173d6febab4949a3a6a87b5629873c2960ec9ba2113eb77e75de0"
+      },
+      "status": "COMPLETE_SUPPORTED_PROFILE_FILE_CONTRACT",
+      "decision": "PASS_F04_SUPPORTED_PROFILE_FILE_PROOF",
+      "supported_scope_only": true
+    },
+    "F05": {
+      "record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "bytes": 3551,
+        "sha256": "216b4622e0437a2c424303e40ab5c3a6007094949f24b2c3b94f00fe07df0b25"
+      },
+      "status": "ROOT_ACCEPTS_ORIGINAL_SUPPORTED_M14_F05_FILE_COMPLETE_WITH_EXPLICIT_SCOPE_LIMITS",
+      "decision": null,
+      "supported_scope_only": true
+    }
+  },
+  "accepted_baseline": "CURRENT116/42473e03; selectedC71=54generic+17arch; focusedRust68. Practical35/35 separate.",
+  "source_projection_only": {
+    "F03_baseline_C_functions": 54,
+    "F03_projected_remaining": 42,
+    "F03_119_banked_functions": [
+      "perf_mmap",
+      "clear_host_pte",
+      "do_munmap",
+      "util_show_syscall_profile",
+      "perf_event_open_alloc_event_bridge",
+      "do_wait_log_bridge",
+      "syscall_vm_policy_insert_log_bridge",
+      "wait_zombie_log_bridge",
+      "do_munmap_log_bridge",
+      "perf_event_open_attr_freq_bridge",
+      "perf_event_open_counter_alloc_bridge",
+      "syscall_util_register_desc_log_bridge"
+    ],
+    "F03_BODY13_function_delta": 0,
+    "F06_baseline_C_functions": 17,
+    "F06_projected_remaining": 5,
+    "F06_119_banked_functions": [
+      "vdso_get_vdso_info",
+      "arch_native_signal_restore_fp_bridge",
+      "arch_ptrace_xstate_copy_to_bridge",
+      "arch_ptrace_xstate_copy_from_bridge",
+      "arch_vdso_setup_log_bridge",
+      "arch_vdso_state_bridge",
+      "arch_ptrace_read_user_bridge",
+      "arch_ptrace_write_user_bridge",
+      "arch_ptrace_read_gpregs_bridge",
+      "arch_ptrace_write_gpregs_bridge",
+      "arch_prctl_log_bridge",
+      "arch_vdso_map_log_bridge"
+    ],
+    "F06_five_Rust_storage_candidates": [
+      {
+        "symbol": "mckernel_f06_vdso_state",
+        "bytes": 88,
+        "body": 7
+      },
+      {
+        "symbol": "mckernel_f06_vdso_container_size",
+        "bytes": 8,
+        "body": 7
+      },
+      {
+        "symbol": "mckernel_f06_vdso_offset",
+        "bytes": 8,
+        "body": 7
+      },
+      {
+        "symbol": "mckernel_f06_arch_prctl_debug",
+        "bytes": 32,
+        "body": 11
+      },
+      {
+        "symbol": "mckernel_f06_vdso_map_debug",
+        "bytes": 32,
+        "body": 12
+      }
+    ],
+    "F03_remaining_functions": [
+      {
+        "name": "clear_host_pte_log_bridge",
+        "bytes": 27
+      },
+      {
+        "name": "syscall_settid_log_bridge",
+        "bytes": 26
+      },
+      {
+        "name": "ptrace_report_clone_noirq_lock_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_wakeup_update_lock_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_wakeup_update_unlock_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_report_clone_noirq_unlock_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_detach_do_kill_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_detach_kfree_bridge",
+        "bytes": 27
+      },
+      {
+        "name": "syscall_forward_context_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_wakeup_sig",
+        "bytes": 249
+      },
+      {
+        "name": "ptrace_detach_wakeup_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "ptrace_wakeup_log_bridge",
+        "bytes": 56
+      },
+      {
+        "name": "ptrace_report_clone_log_bridge",
+        "bytes": 152
+      },
+      {
+        "name": "do_munmap_set_host_bridge",
+        "bytes": 147
+      },
+      {
+        "name": "mprotect_set_host_vma_bridge",
+        "bytes": 147
+      },
+      {
+        "name": "do_munmap_clear_host_bridge",
+        "bytes": 129
+      },
+      {
+        "name": "syscall_do_syscall3_bridge",
+        "bytes": 59
+      },
+      {
+        "name": "wait_host_wait4_bridge",
+        "bytes": 70
+      },
+      {
+        "name": "terminate_mcexec_do_syscall_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "do_execveat",
+        "bytes": 1739
+      },
+      {
+        "name": "perf_event_open_do_syscall_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "do_mmap",
+        "bytes": 7963
+      },
+      {
+        "name": "do_syscall",
+        "bytes": 1197
+      },
+      {
+        "name": "terminate_mcexec",
+        "bytes": 136
+      },
+      {
+        "name": "terminate",
+        "bytes": 3273
+      },
+      {
+        "name": "terminate_host",
+        "bytes": 177
+      },
+      {
+        "name": "interrupt_syscall",
+        "bytes": 249
+      },
+      {
+        "name": "exit_group_log_bridge",
+        "bytes": 50
+      },
+      {
+        "name": "exit_group_terminate_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "exit_group_current_pid_bridge",
+        "bytes": 38
+      },
+      {
+        "name": "syscall_execveat_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "do_fork",
+        "bytes": 4396
+      },
+      {
+        "name": "do_setresuid",
+        "bytes": 95
+      },
+      {
+        "name": "do_setresgid",
+        "bytes": 95
+      },
+      {
+        "name": "syscall_forward_rt_sigprocmask_bridge",
+        "bytes": 63
+      },
+      {
+        "name": "syscall_forward_sigaction_update_bridge",
+        "bytes": 113
+      },
+      {
+        "name": "syscall_policy_forward_context_bridge",
+        "bytes": 12
+      },
+      {
+        "name": "sys_perf_event_open",
+        "bytes": 482
+      },
+      {
+        "name": "syscall_policy_do_syscall2_bridge",
+        "bytes": 55
+      },
+      {
+        "name": "syscall_policy_do_syscall3_bridge",
+        "bytes": 59
+      },
+      {
+        "name": "util_thread",
+        "bytes": 1244
+      },
+      {
+        "name": "syscall_util_indicate_clone_disabled_bridge",
+        "bytes": 34
+      }
+    ],
+    "F06_remaining_functions": [
+      {
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "size": 42,
+        "value": 0,
+        "section_index": 1,
+        "bind": 1,
+        "visibility": 0
+      },
+      {
+        "name": "arch_native_signal_bad_frame_bridge",
+        "size": 59,
+        "value": 400,
+        "section_index": 1,
+        "bind": 1,
+        "visibility": 0
+      },
+      {
+        "name": "arch_rt_sigreturn_context_bridge",
+        "size": 107,
+        "value": 464,
+        "section_index": 1,
+        "bind": 1,
+        "visibility": 0
+      },
+      {
+        "name": "arch_ptrace_regset_log_bridge",
+        "size": 72,
+        "value": 800,
+        "section_index": 1,
+        "bind": 1,
+        "visibility": 0
+      },
+      {
+        "name": "do_signal",
+        "size": 4170,
+        "value": 880,
+        "section_index": 1,
+        "bind": 1,
+        "visibility": 0
+      }
+    ],
+    "actual119_C_count": null,
+    "actual119_artifact_acceptance": "OPEN; parent owns actual runtime/result capture, not inferred here",
+    "projection_total_functions_47_is_not_wholeM14_credit": true,
+    "data_header_callback_ownership_not_proven_by_function_counts": true
+  },
+  "original_final_subgoals": [
+    {
+      "id": "M14-I01",
+      "title": "Account for the final supported compute image",
+      "status": "unassessed",
+      "requirement": "Reconcile all emitted executable implementation with the final selected sources and link inputs. Zero live McKernel-owned compute-C implementations; resolve unknown owners and included-header/macro bodies. Check the ABI witness stubs are absent/inert at runtime rather than assuming every C input requires porting. If another active file is discovered, add it with provenance.",
+      "evidence": []
+    },
+    {
+      "id": "M14-I02",
+      "title": "Deliver a coherent reproducible Rust/assembly image",
+      "status": "unassessed",
+      "requirement": "Record the real default build/config/toolchain and matching image/modules, with all file cutovers linked and unchanged required capabilities preserved. Reuse matching practical M10 evidence; do not require an all-Rust Linux/control plane or a C-free compiler toolchain.",
+      "evidence": []
+    },
+    {
+      "id": "M14-I03",
+      "title": "Validate useful applications and lifecycle on the final cutover image",
+      "status": "unassessed",
+      "requirement": "Reuse matching qualified functional application/process/mapping/thread/signal/lifecycle evidence and run affected regressions after cutovers. The final supported image must retain the practical functional baseline. No new broad hardware, exposure quota or exhaustive unsupported-operation matrix.",
+      "evidence": []
+    }
+  ],
+  "completion_path": [
+    {
+      "stage": "119 intermediate compiler/artifact",
+      "status": "OPEN_ACTUAL_MATCHED_COMPILER_AND_INDEPENDENT_ARTIFACT_RESULT_REQUIRED",
+      "source_evidence": [
+        "joint_source_map",
+        "joint_source_ready",
+        "joint_independent_source_review",
+        "canonical119_adoption",
+        "exact119_source_export"
+      ],
+      "predicates": [
+        "Fresh admitted genuine origin/config/source closure:133 directory files/122 Rust files plus3 external modules; exact18 postimages; matching current operation/account/window/identity/resources/custody and independent execution release. No old118/A3 replay.",
+        "One existing four-command producer:full default Rust object, selected generic syscall C object, selected arch syscall C object, final raw link with3 new+8 retained exact objects; capture each actual result and positive parent/holder/runner joins. Reuse unchangedSDK21 scope; no SDK rebuild.",
+        "Actual selected/fallback origins/config/ABI/layout/unique providers and storage must match banked F03 BODY3-13/F06 BODY3-12; resolve imports/linkage and actual selected C functions/data. Source projection does not supply compiled ownership.",
+        "Decode linked registry and compare complete original389 file/function/fmt/line/flags/count multiset with frozenaf46e443 oracle unchanged. Preserve original88 macro locations; F06 original2859/2887/map3084/clone898/908 identities. Reject mismatch without normalization, expected-record rewrite or ELF patch.",
+        "Independent artifact acceptance and Root adoption must identify actualimage, exactobjects/toolchain/profile/source. CURRENT116/C71/Rust68 remains accepted until genuine successor accepted; any119 pass is an intermediate artifact, zero wholefile credit by itself."
+      ]
+    },
+    {
+      "stage": "remaining supported compute C to zero",
+      "status": "OPEN_F03_F06",
+      "predicates": [
+        "Use actual119 feedback first; reconcile existing projections to emitted selected functions, OBJECT/storage and included-header/macro bodies without inventing counts. Preserve existing4 acceptedfile closures at exact unchanged scope.",
+        "Finish all supportedF03/F06 behavior in Rust/reviewedassembly, including substantive callbacks/loggers/bridges and owneddata; wrapper-to-Rust alone is insufficient while live C remains. Reuse banked bodies rather than port twice.",
+        "For each changed scope retain actual-body/error/lifetime ABI evidence, real selectedTU/fullRust/defaultimage unique ownership and applicable matchingnative behavior; reuse unaffected qualified evidence.",
+        "Resolve unknown emitted implementation owners; ABIwitness abi_checks.c five inertXPMEMstubs require actual finalabsence/inertness. GNU-propertyNOTE/toolchainmetadata alone is not runtime C. No supportedcapability disabled to obtain C0."
+      ]
+    },
+    {
+      "stage": "final matching reproducible Rust/assembly image",
+      "status": "OPEN_ORIGINAL_M14_I01_I02",
+      "predicates": [
+        "Reconcile all emitted executable implementation with the final selected sources and link inputs. Zero live McKernel-owned compute-C implementations; resolve unknown owners and included-header/macro bodies. Check the ABI witness stubs are absent/inert at runtime rather than assuming every C input requires porting. If another active file is discovered, add it with provenance.",
+        "Record the real default build/config/toolchain and matching image/modules, with all file cutovers linked and unchanged required capabilities preserved. Reuse matching practical M10 evidence; do not require an all-Rust Linux/control plane or a C-free compiler toolchain."
+      ]
+    },
+    {
+      "stage": "final matching apps/lifecycle and independent original M14 closure",
+      "status": "OPEN_ORIGINAL_M14_I03_AND_FINAL_REVIEW",
+      "predicates": [
+        "Reuse matching qualified functional application/process/mapping/thread/signal/lifecycle evidence and run affected regressions after cutovers. The final supported image must retain the practical functional baseline. No new broad hardware, exposure quota or exhaustive unsupported-operation matrix.",
+        "Record exact final source/config/compiler/image/modules and applicable application/process/mapping/thread/signal/lifecycle results, exits/logs and normal teardown/current-free. Earlier35/35 and accepted4file evidence retain their frozen scopes; they are not automatic finalimage proof.",
+        "Independent final review evaluates original definition plus6 supportedfile contracts andI01-I03, accepts exact matching evidence/reuse and explicit limits, then Root may record M14closure. No new broad hardware/allbranch/exposure quota."
+      ]
+    }
+  ],
+  "supported_profile": {
+    "BUILD_TARGET": "smp-x86",
+    "ENABLE_RUST_KERNEL": "ON",
+    "MCKERNEL_HOST_IRQ_ABI": "linux-6.12",
+    "ENABLE_NATIVE_FORK_OWNED_TRANSACTION": "ON",
+    "ENABLE_PERF": "ON",
+    "ENABLE_RUSAGE": "ON",
+    "ENABLE_TOFU": "OFF",
+    "ENABLE_FUGAKU_HACKS": "OFF",
+    "ENABLE_UBSAN": "OFF",
+    "ENABLE_PER_CPU_ALLOC_CACHE": "OFF",
+    "ENABLE_NATIVE_SYSFS_VERIFY": "OFF"
+  },
+  "allowed_remaining_source": [
+    "Reviewed assembly",
+    "Linux control-plane compatibility C",
+    "Non-executable public ABI declarations",
+    "Unused reference/fallback C outside the selected default compute implementation",
+    "Vendor/generated/test sources outside the compute-kernel ownership scope"
+  ],
+  "scope_limits": [
+    "Supported defaultco-bootedLWK only;46Rust-selected-out legacyfiles and7disabled/optional/fallbackfiles outside activeprofiledebt. Optionalconfigs require separateinventory/admission before claimed supported.",
+    "Reviewed context.S/interrupt.S/trampoline.S allowed; Linux supportingcontrolplane remains allowed. Hostmodules/tools/M15 outside M14exclusivework. No allRustLinux or Cfreecompilertoolchain requirement.",
+    "Newly discovered activecomputeC/headerimplementation must be added withprovenance, never silentlyexcluded.",
+    "F04 supportedfile closure does NOT change preserved wholeFPapplicationprotocolFAIL4096/1024. F02 JSON nestedfile_closure retains historicalunassessed fields; actualoriginalF02closure record controls accepted4/6.",
+    "Original389oracle retained; no denominatorrewrite, newproofquota or wholeM14percentage."
+  ],
+  "existing_holds": {
+    "F03": "Credential/request/endpoint/signal/service/undefined-domain holds remain; remaining table is debt, not release.",
+    "F06": "arch_ptrace_regset_log_bridge passes original long to %x; defined variadic contract unresolved. Do not port/bypass held or undefined domains.",
+    "F06_signal": [
+      "arch_rt_sigreturn_xrstor_bridge",
+      "arch_native_signal_bad_frame_bridge",
+      "arch_rt_sigreturn_context_bridge",
+      "do_signal"
+    ]
+  },
+  "useful_next_file_owners_after_actual119_only": [
+    {
+      "file": "kernel/syscall.c",
+      "proposed_owner_responsibility": "Existing F03 owner, private disjoint callback/logging successor; Root alone coordinates syscall_policy/ABI/canonicalintegration.",
+      "after": "Actual119 compiler/artifact feedback and recheck current ownership/holds; no implementation authorized by this map.",
+      "existing_remaining_candidates": [
+        "clear_host_pte_log_bridge",
+        "syscall_settid_log_bridge",
+        "ptrace_wakeup_log_bridge",
+        "ptrace_report_clone_log_bridge",
+        "exit_group_log_bridge"
+      ],
+      "check": "Confirm actual119 selectedbody survives, exact argument/format/order and original389 metadata; reuse existingRust logger/ABI and preserve held domains.",
+      "downstream": "Removes remaining supported logger callbacks without duplicating119 bodies."
+    },
+    {
+      "file": "kernel/syscall.c",
+      "proposed_owner_responsibility": "Existing F03 integration owner schedules functional hostVM/offload/process-lifetime successor only where released.",
+      "after": "Actual119 feedback and explicit existing hold disposition.",
+      "existing_remaining_candidates": [
+        "do_munmap_set_host_bridge",
+        "mprotect_set_host_vma_bridge",
+        "do_munmap_clear_host_bridge",
+        "wait_host_wait4_bridge",
+        "do_execveat",
+        "do_mmap",
+        "do_syscall",
+        "terminate",
+        "do_fork"
+      ],
+      "check": "Existing tables list actualbaseline functiondebt, not permission to execute or remove request/endpoint/credential/service holds. Keep ABI/ordering/error/ownership and existingRust body reuse.",
+      "downstream": "Substantive C orchestration and callbackdebt required for F03wholefile."
+    },
+    {
+      "file": "arch/x86_64/kernel/syscall.c",
+      "proposed_owner_responsibility": "Existing F06 owner: resolve exact remaining ptrace logger defined variadic contract before port.",
+      "after": "Actual119feedback; source diagnosis only until defined behavior and applicable holds resolved.",
+      "existing_remaining_candidates": [
+        "arch_ptrace_regset_log_bridge"
+      ],
+      "check": "Original passes long to%x; existing map marks undefined variadicdomain. No guessed parity, cast/oracle weakening or implicit exception.",
+      "downstream": "Only projected ordinary remaining F06function outside held4signal group."
+    },
+    {
+      "file": "arch/x86_64/kernel/syscall.c",
+      "proposed_owner_responsibility": "Existing F06 signal owner after applicable holds/release; no current assignment to implement.",
+      "after": "Actual119feedback and genuine separate disposition of held signal domain.",
+      "existing_remaining_candidates": [
+        "arch_rt_sigreturn_xrstor_bridge",
+        "arch_native_signal_bad_frame_bridge",
+        "arch_rt_sigreturn_context_bridge",
+        "do_signal"
+      ],
+      "check": "Preserve currentframe/xstate/context/errno/native lifetime semantics; supported signal functionality cannot simply be excluded to claimC0.",
+      "downstream": "Remaining F06 supported signal C bodydebt."
+    }
+  ],
+  "actions_in_this_task": {
+    "implementation": 0,
+    "compilers_preprocessors_guests": 0,
+    "new_inventory": 0,
+    "source_only_factual_extraction": true,
+    "owned_live_process_resources": []
+  },
+  "runtime_authority": null
+}

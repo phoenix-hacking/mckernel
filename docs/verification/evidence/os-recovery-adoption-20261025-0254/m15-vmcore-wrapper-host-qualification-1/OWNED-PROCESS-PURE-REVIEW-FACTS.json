@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PURE_REPRODUCED_DEFECT_AND_BOUNDED_SOURCE_CORRECTION_PASS",
+  "runtime_authority": null,
+  "actual_Python38_subprocess_source": {
+    "path": "/usr/lib/python3.8/subprocess.py",
+    "bytes": 77330,
+    "sha256": "994d9284d438d44d08bbac73c8e5b2ec4b0e1c992a5ffe15505f6cbc4135015f"
+  },
+  "original_owner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-wrapper-host-qualification-1/original-owned_process.py",
+    "bytes": 2603,
+    "sha256": "5b9d08025672eb3323483f3d767c6e5afdcea5b324eddcdd444f380f782e1028"
+  },
+  "corrected_owner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-wrapper-host-qualification-1/fixture/owned_process.py",
+    "bytes": 4538,
+    "sha256": "80f3e6052518ce0c9a19b6dae86c7ebf5e8edd8602fde674750538aa385f4633"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-wrapper-host-qualification-1/OWNED-PROCESS-ORDERING-REPAIR.patch",
+    "bytes": 6183,
+    "sha256": "9d4b8706569c8f3791abab0dc083c629c8e438d3665ba0a11a0bb9943e40241f"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-wrapper-host-qualification-1/test_owned_process.py",
+    "bytes": 4225,
+    "sha256": "d997778975604987b8b43d3f38613d7d9a5ed06b080768a3de7c58c8957c1d35"
+  },
+  "actual_pure_test_result": "Ran4tests in0.014s OK under /usr/bin/taskset -c0 /usr/bin/python3 -I -B",
+  "original_defect": "Retry communicate after group signal can time out while separate-session descendant holds capture pipes; original code then bypasses descendant cleanup and ownership.json",
+  "correction": "Wait exact original leader first, retire only WNOHANG-verified adopted direct children, then drain capture; all retirement shares six-second deadline; close streams/write partial evidence even on failure; unknown leader remains UNKNOWN",
+  "real_process_PTY_prctl_signal_wait_compiler_calls": 0
+}

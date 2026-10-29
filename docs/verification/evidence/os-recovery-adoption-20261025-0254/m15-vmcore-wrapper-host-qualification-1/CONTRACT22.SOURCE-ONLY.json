@@ -1,0 +1,172 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "cases_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-wrapper-host-qualification-1/fixture/cases.json",
+    "bytes": 2499,
+    "sha256": "d4494f6efcf237469bff632ce8df071c08f9290dfe5d0b8629fe1a5c5a9c8110"
+  },
+  "case_count": 22,
+  "cases": [
+    {
+      "name": "no-arguments",
+      "args": [],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "one-argument",
+      "args": [
+        "{in}"
+      ],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "empty-input",
+      "args": [
+        "",
+        "{out}"
+      ],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "empty-output",
+      "args": [
+        "{in}",
+        ""
+      ],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "third-nonempty",
+      "args": [
+        "{in}",
+        "{out}",
+        "extra"
+      ],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "missing-input",
+      "args": [
+        "{missing}",
+        "{out}"
+      ],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "directory-input",
+      "args": [
+        "{indir}",
+        "{out}"
+      ],
+      "status": 1,
+      "cli_parity": true
+    },
+    {
+      "name": "success-fresh",
+      "mode": "success",
+      "status": 0
+    },
+    {
+      "name": "success-replace-old",
+      "mode": "success",
+      "status": 0,
+      "old": true
+    },
+    {
+      "name": "empty-third-ignores-fourth",
+      "mode": "success",
+      "args": [
+        "{in}",
+        "{out}",
+        "",
+        "ignored"
+      ],
+      "status": 0
+    },
+    {
+      "name": "fragmented-prompt",
+      "mode": "fragmented",
+      "status": 0
+    },
+    {
+      "name": "missing-ack-preserves-old",
+      "mode": "no-ack",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "no-output-preserves-old",
+      "mode": "no-output",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "empty-output-preserves-old",
+      "mode": "empty",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "wrong-ack-preserves-old",
+      "mode": "wrong-ack",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "crash-nonzero-preserves-old",
+      "mode": "nonzero",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "read-error-preserves-old",
+      "mode": "read-error",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "crash-signal-preserves-old",
+      "mode": "signal",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "early-exit-preserves-old",
+      "mode": "early-exit",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "prompt-timeout-preserves-old",
+      "mode": "timeout",
+      "status": 1,
+      "old": true
+    },
+    {
+      "name": "missing-output-parent",
+      "mode": "success",
+      "args": [
+        "{in}",
+        "{no_parent}/out"
+      ],
+      "status": 1
+    },
+    {
+      "name": "uname-nonzero-is-ignored",
+      "mode": "success",
+      "status": 0,
+      "uname_status": 7
+    }
+  ],
+  "intended_success_contract": "clean prompts, converter ACK for exact fresh staging output, child exit0, fresh nonempty staging and atomic publish; failures preserve old output",
+  "actual_Expect_protocol_parity": false,
+  "old_shell_false_success_never_acceptance": true,
+  "actual_converter_ACK_or_real_dump_tested": false
+}

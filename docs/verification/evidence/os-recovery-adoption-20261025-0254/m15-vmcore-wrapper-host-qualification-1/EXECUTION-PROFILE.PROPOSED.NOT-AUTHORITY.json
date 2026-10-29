@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_SOURCE_ONLY_REQUIRES_ROOT_AND_INDEPENDENT_SOURCE_PROFILE_APPROVAL",
+  "runtime_authority": null,
+  "uid": 1000,
+  "gid": 1000,
+  "cpu_affinity": [
+    0
+  ],
+  "jobs": 1,
+  "rlimits": {
+    "RLIMIT_AS": 1073741824,
+    "RLIMIT_CORE": 0,
+    "RLIMIT_FSIZE": 67108864
+  },
+  "whole_wall_seconds_maximum": 160,
+  "driver_work_seconds": 150,
+  "retirement_seconds_maximum": 6,
+  "Rust_compiler": {
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "bytes": 654904,
+    "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+  },
+  "interpreter": {
+    "path": "/usr/bin/python3.8",
+    "bytes": 5490456,
+    "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+  },
+  "Expect_present": false,
+  "Expect_protocol_parity": false,
+  "ordinary_PTY": "/dev/ptmx",
+  "Docker": false,
+  "root": false,
+  "native": false,
+  "custom_devices": false,
+  "SDK": false,
+  "real_dump": false,
+  "subreaper_scope": "Only this single-threaded fixture owner and its spawned descendants; exact per-command session before leader reap, then WNOHANG-verified unreaped direct children; no global process selectors",
+  "actual_controls_or_native_custody_clearance": false,
+  "hold_bypass": false,
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--core=0:0",
+    "--fsize=67108864:67108864",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-wrapper-host-qualification-1/fixture/run_fixture.py",
+    "--execute",
+    "--rustc",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc"
+  ],
+  "environment_limits": {
+    "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+    "MAKEFLAGS": "-j1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "outer_parent_requirement": "Root existing capture must bound complete driver160s, retain direct child wait/stream close and failure records; no execution until current finitewatcher/account/hold and independent profile/source approval"
+}

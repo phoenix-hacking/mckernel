@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "order": [
+    "archive",
+    "linker_script",
+    "header"
+  ],
+  "providers": {
+    "archive": {
+      "source": "/usr/lib64/libbfd.a",
+      "target_basename": "libbfd.a",
+      "format": "regular_ar_archive",
+      "bytes": 18504828,
+      "sha256": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e",
+      "official_reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/binary-selected/usr/lib64/libbfd.a",
+        "bytes": 18504828,
+        "sha256": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e"
+      }
+    },
+    "linker_script": {
+      "source": "/usr/lib64/libbfd.so",
+      "target_basename": "libbfd.so",
+      "format": "GNU_ld_script",
+      "bytes": 382,
+      "sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3",
+      "official_reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/binary-selected/usr/lib64/libbfd.so",
+        "bytes": 382,
+        "sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3"
+      }
+    },
+    "header": {
+      "source": "/usr/include/bfd.h",
+      "target_basename": "bfd.h",
+      "format": "selected_BFD_header",
+      "bytes": 252810,
+      "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432",
+      "official_reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/binary-selected/usr/include/bfd.h",
+        "bytes": 252810,
+        "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+      }
+    }
+  },
+  "source_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-vmcore-converter-actual-body-fixture-1/selected-bfd-source-evidence-1/SOURCE-LIFETIME-FACTS.json",
+    "bytes": 15962,
+    "sha256": "3db997f0c067ce19992d9a0ff57e352abdcecea40ddacb66b406a7aa6381b54c"
+  },
+  "actual_SDK_provider_copied": false,
+  "runtime_authority": null
+}
