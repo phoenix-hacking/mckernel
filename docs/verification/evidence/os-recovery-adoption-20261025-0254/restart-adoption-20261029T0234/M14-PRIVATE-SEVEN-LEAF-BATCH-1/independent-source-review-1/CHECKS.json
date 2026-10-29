@@ -1,0 +1,900 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NEW_TWO_LEAF_SOURCE_FACTS_PASS_COMPOSITION_METADATA_APPLICABILITY_FAIL",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/SOURCE-READY.json",
+    "bytes": 2905,
+    "sha256": "d323a920ba6f851e0c298acef81ba785594d04b883316c605d5cd2066c5fc9ed"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/SEVEN-LEAF-BATCH.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 20471,
+    "sha256": "9e51595ab639964eefaab827ce6267b16a49f44dcfbafcc30beeb49c85b2af05"
+  },
+  "reused_five_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-LOGGER-LOCK-BATCH-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 9158,
+    "sha256": "33f25ba33420a30279276478ad5dc8641dd9411b8615f4f20d4b8beef0cfc664"
+  },
+  "reused_lock_review": {
+    "bytes": 7276,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-CLONE-LOCK-BRIDGE-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "sha256": "5ed8b1934ab9fb5ac08910e300496808b700e601511606c2bbf995cd6326d253"
+  },
+  "new_leaf_source_checks": {
+    "pid_getter": "PASS raw current\u2192proc\u2192pid/noargsCInt; same nonnull live context, no added ownership/nullpolicy",
+    "util_logger": "PASS exactstaticformat/one%s/matchingi8ptr/onecall/no descriptor"
+  },
+  "reused_five_leaves_exact": true,
+  "crate_lib_exact_reviewed": true,
+  "Cnewline_and_directive_positions_unchanged": true,
+  "genuine_Rust_line_macro_sites": {
+    "count": 53,
+    "seven_vs_reviewed5_shift": 9,
+    "util_increment": 4,
+    "getter_increment": 5,
+    "seven_vs_frozen119_shift": 25,
+    "preimage": [
+      {
+        "line": 23523,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23531,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23725,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23733,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23741,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30026,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30075,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30082,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30084,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30097,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30103,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30105,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30113,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30161,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30248,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30333,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30342,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30351,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30454,
+        "text": "line_flags:line!()&0x00ff_ffff,"
+      },
+      {
+        "line": 30525,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30530,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30535,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30790,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30970,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30978,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 31095,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 32625,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32673,
+        "text": "pids.cast(), concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32767,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32815,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33291,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33599,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33605,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33670,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33676,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33751,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33757,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33811,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33814,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33817,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33820,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 34223,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34229,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34235,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34241,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34247,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34253,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34466,
+        "text": "*(*req).nodes.offset(i as isize), 0, !0, concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 34496,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 35093,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35100,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35107,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35114,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      }
+    ],
+    "reviewed5": [
+      {
+        "line": 23539,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23547,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23741,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23749,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23757,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30042,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30091,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30098,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30100,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30113,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30119,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30121,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30129,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30177,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30264,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30349,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30358,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30367,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30470,
+        "text": "line_flags:line!()&0x00ff_ffff,"
+      },
+      {
+        "line": 30541,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30546,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30551,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30806,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30986,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30994,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 31111,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 32641,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32689,
+        "text": "pids.cast(), concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32783,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32831,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33307,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33615,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33621,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33686,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33692,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33767,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33773,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33827,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33830,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33833,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33836,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 34239,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34245,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34251,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34257,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34263,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34269,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34482,
+        "text": "*(*req).nodes.offset(i as isize), 0, !0, concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 34512,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 35109,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35116,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35123,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35130,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      }
+    ],
+    "sixleaf": [
+      {
+        "line": 23543,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23551,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23745,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23753,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23761,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30046,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30095,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30102,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30104,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30117,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30123,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30125,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30133,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30181,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30268,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30353,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30362,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30371,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30474,
+        "text": "line_flags:line!()&0x00ff_ffff,"
+      },
+      {
+        "line": 30545,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30550,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30555,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30810,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30990,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30998,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 31115,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 32645,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32693,
+        "text": "pids.cast(), concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32787,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32835,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33311,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33619,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33625,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33690,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33696,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33771,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33777,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33831,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33834,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33837,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33840,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 34243,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34249,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34255,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34261,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34267,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34273,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34486,
+        "text": "*(*req).nodes.offset(i as isize), 0, !0, concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 34516,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 35113,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35120,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35127,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35134,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      }
+    ],
+    "sevenleaf": [
+      {
+        "line": 23548,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23556,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23750,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23758,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 23766,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30051,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30100,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30107,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30109,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30122,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30128,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30130,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30138,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30186,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30273,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30358,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30367,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30376,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 30479,
+        "text": "line_flags:line!()&0x00ff_ffff,"
+      },
+      {
+        "line": 30550,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30555,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30560,
+        "text": "concat!(file!(),\"\\0\").as_ptr().cast_mut().cast(),line!() as CInt);"
+      },
+      {
+        "line": 30815,
+        "text": "line!() as CInt,"
+      },
+      {
+        "line": 30995,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 31003,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 31120,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 32650,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32698,
+        "text": "pids.cast(), concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32792,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt,"
+      },
+      {
+        "line": 32840,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33316,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33624,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33630,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33695,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33701,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33776,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33782,
+        "text": "line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 33836,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33839,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33842,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 33845,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },"
+      },
+      {
+        "line": 34248,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34254,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34260,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34266,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34272,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34278,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 34491,
+        "text": "*(*req).nodes.offset(i as isize), 0, !0, concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 34521,
+        "text": "concat!(file!(), \"\\0\").as_ptr().cast_mut().cast(), line!() as CInt);"
+      },
+      {
+        "line": 35118,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35125,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35132,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      },
+      {
+        "line": 35139,
+        "text": "fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,"
+      }
+    ]
+  },
+  "blocking_defect": "Added child-module declarations precede53genuineRustline!() descriptor sites. Newutil/getter additions shift all53by+9 relative reviewedfive; entireseven shifts+25relativefrozen119. Four movedCdescriptor projection test omits inheritedRustline identities; sourceprojection cannot satisfy untouched389oracle.",
+  "smallest_source_correction": "Reuse accepted119pattern: move all six introduced syscall_policy child-module declaration blocks to EOF, preserving sameparent lexicalscope/cfg/path and all7leafbytes; recover exactfrozen119prefix/macropositions. Never alteroriginal389oracle/lineconstants/ELF.",
+  "undefined_variadic_hold_preserved": "ptrace_wakeup undefinedlong/format-domain remains excluded; no cast or domainwidening is approved.",
+  "compiler_preprocessor_HOST_ELF_native_guard_cleanup_calls": 0,
+  "canonical_writes": 0,
+  "runtime_authority": null
+}

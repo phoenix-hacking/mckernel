@@ -1,0 +1,71 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/postimage/kernel/rust/syscall_policy.rs
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/postimage/kernel/rust/syscall_policy.rs
+@@ -1,17 +1,4 @@
+ use core::ffi::c_void;
+-
+-// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
+-#[path = "syscall_exit_group_current_pid.rs"]
+-mod syscall_exit_group_current_pid;
+-
+-// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[path = "syscall_util_clone_disabled_logger.rs"]
+-mod syscall_util_clone_disabled_logger;
+-
+-// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[path = "syscall_settid_logger.rs"]
+-mod syscall_settid_logger;
+ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
+ use core::ptr::{
+     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
+@@ -27,21 +14,9 @@
+     VmRegions, X86UserContext, XsaveStruct, PROCESS_NUMA_MASK_WORDS,
+ };
+ use crate::lock_helpers::McsRwlockNodeIrqsave;
+-
+-// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[path = "syscall_ptrace_clone_logger.rs"]
+-mod syscall_ptrace_clone_logger;
+ use crate::mem_helpers::{rusage_check_overmap, rusage_get_free_memory, rusage_get_total_memory};
+ use crate::sched_helpers::SchedSyscallOffsets;
+-
+-// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[path = "syscall_exit_group_logger.rs"]
+-mod syscall_exit_group_logger;
+ use crate::waitq::{Waitq as RuntimeWaitq, WaitqEntry};
+-
+-// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[path = "syscall_clear_host_pte_logger.rs"]
+-mod syscall_clear_host_pte_logger;
+ 
+ const EINVAL: CInt = 22;
+ const ENOMEM: CInt = 12;
+@@ -36856,3 +36831,28 @@
+ mod f06_vdso_info;
+ #[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+ use self::f06_vdso_info::vdso_get_vdso_info;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_exit_group_current_pid.rs"]
++mod syscall_exit_group_current_pid;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_util_clone_disabled_logger.rs"]
++mod syscall_util_clone_disabled_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_settid_logger.rs"]
++mod syscall_settid_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_ptrace_clone_logger.rs"]
++mod syscall_ptrace_clone_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_exit_group_logger.rs"]
++mod syscall_exit_group_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_clear_host_pte_logger.rs"]
++mod syscall_clear_host_pte_logger;
