@@ -2,6 +2,28 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## New CURRENT118 retirement succeeded — 2026-10-29T05:19:24Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+NewRoot4 release9ee4/independentexecutionfb04 executedonce with expertbec450
+sourcecd4e/fetched300f8. RESULT915c7809:14commands, containerabsent, no signals,
+recordsreleased[]. Executor2311393/b104859782 directwait4 joined0 byparent
+2311392/b104859779; parenttool46268 terminal0/streamsclosed, join2c404137.
+Wall10.987719s/CPU9.067768s/peak45824KiB. OriginalRoot3 failure→successful
+correctedcleanup1148.602476s; independentretirementreview pending. Allfailed
+releases/sourceb09/originalUNKNOWN remainretained. No cleanup replay.
+
+Freshpendingledgeraefd078e recordsclosedRoot4andRoot3;72nonces/custody unchanged.
+Current-free/native/image/fileacceptance remainfalse/open. m14_integration owns
+minimalpostjoinobserver4argAPI+typedRoot3threeactoraddition+119exactobserverpin;
+recovery_review acceptsactualretirementthenreviewsderivative. Rootnext: fresh
+fullpostjoin/current-free/Root65, thenactual119compiler/original389qualification.
+Newkernel/compiler/guest/Cretirements0; accepted116/practical35/35/M14 4of6 stays.
+M15paused. Latestcapacitysupervisorreceipt read:2310790/b104852788 islive, healthy
+Sol unchanged; no competingcontroller/modelrestart. Request
+20261029T051853789596Z-36e1ee88ebf44349a4441524e9c84a7a received/applied: fallback
+onlyafterconfirmedterminalcapacity, preserve same06UTC/earliercaps/creditlimits.
+
 ## Current M14-only transaction — 2026-10-29T05:07:43Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

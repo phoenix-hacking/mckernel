@@ -2,6 +2,24 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Current successful retirement frontier — 2026-10-29T05:19:24Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root4 expertbec cleanup executedonce andindependentlyaccepted21026299:
+RESULT915c7809, rawparentjoin2c404137, RootABIprojection6a17cf3f/supplement0b5eccff.
+14positivejoinedcommands; containerabsent; executor2311393/b104859782 parent
+2311392/b104859779 joined0/closed. No signals/recordsreleased. DoNOTreplay any
+cleanup. aefd pendingledger preserves72nonces, priorRoot3failedraw/joins andold
+UNKNOWNclient. No current-free/native/119compiler resultyet.
+
+m14_integration owns newpostjoinobserver4argAPI, exactRoot3three+Root4parent
+append beforecapture (132retained+15cleanup=147), strictconstructor and119exact
+observerpin. recovery_review owns independentreview/executionclearance. Root
+nextcommand isfreshfullpostjoinobserver/currentfree→Root65→119producer/original389.
+M14exclusive/M15paused; accepted116/practical35/35/M14 4of6 unchanged. Same06UTC/
+earlierMONOBOOT/credits/floors/oneheavy/27:4. Capacitysupervisor2310790 islive;
+healthySol unchanged, onlyconfirmedterminalcapacity allowsadvertisedalternate.
+
 ## Current M14-only transaction — 2026-10-29T05:07:43Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
