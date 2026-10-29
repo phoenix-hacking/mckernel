@@ -2,6 +2,26 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Current execution cursor — 2026-10-29T02:09Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted116/C71/Rust68, M14files4/6 and M15files1/8 remain unchanged. A3e984
+fourcommands0/image7e5 remains consumed and rejected for20registry identities.
+Guard retirement release200fd is consumed: operator2247306/b103642908 positively
+joined1 in0.367336s before queries/pidfd/signal/lock mutation. Exact failure is
+UID1000 O_NOATIME read of ROOT-owned container.cid; no ownership/mode change.
+Original quarantine2232651/b103343097 still owns FD4/permanent27:4; parent2232650
+and Roottool90401 wait. Original client2232653 exitUNKNOWN remains UNKNOWN.
+bfd_route owns narrow identity-read successor and actual-runtime readonly
+pre-effect check; m14_review owns changed-source review. Preserve all inode,
+device, owner, mode, content and stable timestamps; atime contract checked
+explicitly before selecting read method. No old release replay or free claim.
+Compatibilityc895/44fd already fixed; joint119 independent83e1 and M15ed857 are
+source-only PASS, ready behind genuine current-free. Next Root action is fresh
+reviewed exact owner retirement, direct parent join/custody, then new compatibility
+container retirement/current-free; no build/export/SDK replay. Bucket015628 has
+zero new OS/compiler/artifact/native/file closure. Same06:00Z/credits/controls.
+
 ## Current execution cursor — 2026-10-29T01:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
