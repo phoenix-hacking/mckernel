@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "request_id": "20261029T234020682506Z-1d3c40eb53384b01a79931754c6e9066",
+  "recorded_utc": "2026-10-29T23:41:18.362335+00:00",
+  "bucket_index": 55,
+  "bucket_start_epoch": 1793315261.4767694,
+  "bucket_end_epoch": 1793316461.4767694,
+  "original_30min_baseline_epoch": 1793166745.701095,
+  "deltas": {
+    "compiled_units": 0,
+    "production_links": 0,
+    "behavior_qualified": 0,
+    "native_qualified": 0,
+    "accepted_C_retirements": 0,
+    "accepted_M14_closures": 0
+  },
+  "source_results": "149-file snapshot and private source candidates; source progress does not imply compiled, linked, or native acceptance. Additional alignment/SIGTRAP corrections occurred in ongoing next bucket, not backdated here.",
+  "M14": "4/6 originalfileclosures, I01-I03OPEN, selected119C47",
+  "M15": "PAUSED",
+  "usage_primary": {
+    "resetsAt": "1793774133",
+    "usedPercent": "40",
+    "windowDurationMins": "10080"
+  },
+  "resources_as_observed": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 145315811328,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47862128640,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      0.6,
+      0.65,
+      0.7
+    ],
+    "memory": {
+      "MemAvailable_kib": 26969068,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "critical_path": {
+    "owner": "/root",
+    "next_command": "corrected root_capture_parent.py after exact source/release publication",
+    "blocked_predicate": "final exact independent readonly execution review and publication; no guard or capture started",
+    "known_source_failure": "parent exception ownership corrected and source accepted3e36; failedoriginal preserved"
+  },
+  "latencies": {
+    "conversion_queue_to_compiler": "not reached; no current conversion compiler Popen",
+    "gate_PASS_to_capture_Popen": "not reached",
+    "failure_to_runtime_validated_fix": "not reached; source-only correction passed",
+    "largest_measured_avoidable_handoff": "historical native review reached admission age112.65s, leaving insufficient120s entry; no kernel failure"
+  },
+  "scheduling_adjustment": "prepare distinct build guard/source bindings in parallel while Root finishes sole readonly capture; conversion integration does not wait119native; reuse9objects/SDK21",
+  "checkpoint": "bb881b14c pushed/fetched517changedblobs verified",
+  "constraints": "oneheavy,27:4,seveneligibleCPU,HOSTreserve16GiB/scratch12GiB,allUNKNOWN/noncehistory preserved; included-only/no paidfallback"
+}

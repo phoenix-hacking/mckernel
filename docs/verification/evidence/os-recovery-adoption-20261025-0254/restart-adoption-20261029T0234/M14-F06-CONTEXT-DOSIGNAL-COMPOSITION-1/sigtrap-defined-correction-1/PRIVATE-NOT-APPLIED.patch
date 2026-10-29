@@ -1,0 +1,100 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -29982,7 +29982,7 @@
+     use super::{
+         arch_copy_from_user_bridge, arch_copy_to_user_bridge, kprintf,
+         ptrace_report_signal, rt_sigreturn_zero_siginfo, schedule, sigmask_to_signal_number,
+-        CLD_STOPPED, EBUSY, EFAULT, ENOMEM, IHK_MC_AP_NOWAIT, PS_DELAY_STOPPED,
++        CLD_STOPPED, CLD_TRAPPED, EBUSY, EFAULT, ENOMEM, IHK_MC_AP_NOWAIT, PS_DELAY_STOPPED,
+         PS_DELAY_TRACED, PS_STOPPED, PS_TRACED, PT_TRACED, RFLAGS_TF, SIGCHLD, SIGCONT,
+         SIGKILL, SIGNAL_STOP_STOPPED, SIGSTOP, SIGTRAP, SIGTSTP, SIGTTIN, SIGTTOU, SIGURG,
+         TRAP_TRACE,
+@@ -30366,10 +30366,12 @@
+ /// The live thread and process are the caller's original borrowed inputs; their
+ /// process/parent/report references remain valid through synchronous notify,
+ /// waitq wake and schedule. Pending is already consumed and sigcommon unlocked.
+-/// `info` is forwarded without reading, initializing or retaining it here. For a
+-/// defined execution, its bytes must be valid for the existing do_kill consumer.
+-/// The C caller's original SIGTRAP branch may supply uninitialized local info;
+-/// that remains an explicit caller debt, not permission to assume_init or zero it.
++/// On the traced path, `info` is aligned writable complete SigInfo storage owned
++/// by the caller through both synchronous notification calls. It need not be
++/// initialized on input: the approved constructor initializes every byte before
++/// reading fields or notifying. No pointer/reference survives into schedule.
++/// Untraced execution returns before touching info. Original thread/parent/report
++/// lifetime and CPU/IRQ exclusions remain required; this correction creates none.
+ #[no_mangle]
+ pub unsafe extern "C" fn arch_do_signal_trap_stop_result(
+     thread: *mut Thread,
+@@ -30395,6 +30397,31 @@
+     unsafe {
+         (*thread).exit_status = SIGTRAP;
+         (*thread).status = PS_TRACED;
++    }
++    // Root-approved defined notification; initialize complete caller-owned storage
++    // before any reference or synchronous consumer. Never read the old pending.
++    // SAFETY: info is aligned writable SigInfo storage kept live through do_kill.
++    // Every byte, including union extent and padding, is initialized first. This
++    // is the existing ptrace_report_signal_body_result writer/layout pattern.
++    unsafe {
++        let raw = info.cast::<u8>();
++        let mut offset = 0;
++        while offset < size_of::<SigInfo>() {
++            raw.add(offset).write_volatile(0);
++            offset += 1;
++        }
++        let info_ref = &mut *info;
++        info_ref.si_signo = SIGCHLD;
++        info_ref.si_code = CLD_TRAPPED;
++        let sigchld = (&mut info_ref.sifields as *mut crate::abi::SigInfoFields)
++            .cast::<crate::abi::SigInfoChild>();
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_pid), (*thread).tid,
++        );
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_status),
++            core::ptr::read_volatile(core::ptr::addr_of!((*thread).exit_status)),
++        );
+     }
+     // SAFETY: proc remains live across the borrowed main-thread comparison.
+     if thread == unsafe { (*proc).main_thread } {
+@@ -31007,11 +31034,10 @@
+ /// mask selects a valid action in the actual64-entry table. Original object and
+ /// callback lifetimes/IRQ/scheduling preconditions apply, including XSAVE CPU
+ /// exclusion. Kernel and frame layouts must match native_linux_irq_work_v6_12.
+-/// The original traced default-SIGTRAP info bytes are uninitialized caller debt;
+-/// that branch remains OUTSIDE this port's defined qualification domain. This
+-/// source does not zero or assume_init them. C stays selected until root resolves
+-/// that debt and qualifies complete ownership/default/native behavior. Counter
+-/// races and overwritten old core slots are also preserved, not silently fixed.
++/// The default traced-SIGTRAP notification uses Root's approved fully initialized
++/// SIGCHLD/CLD_TRAPPED constructor in arch_do_signal_trap_stop_result. Whole C
++/// remains selected until complete ABI/ownership/default/native proof passes.
++/// Counter races and overwritten old core slots remain separate existing debt.
+ #[no_mangle]
+ pub unsafe extern "C" fn do_signal(
+     mut result: CULong,
+@@ -31204,8 +31230,8 @@
+         return restart;
+     }
+ 
+-    // Native C declares this storage uninitialized before pending disposal. Do
+-    // NOT assume_init/zero: traced SIGTRAP remains a qualified-execution HOLD.
++    // Caller-owned aligned output storage. The traced helper initializes every
++    // byte under the approved contract before notification; never reuse pending.
+     let mut trap_info = MaybeUninit::<SigInfo>::uninit();
+     // SAFETY: complete default ownership helper caches ptracecont before free,
+     // transfers ptrace nodes or consumes pending, then releases the original lock.
+@@ -31221,9 +31247,9 @@
+             );
+         },
+         SIGTRAP => {
+-            // SAFETY: full-defined qualification explicitly EXCLUDES the traced
+-            // branch's uninitialized-info consumer. This preserves original C
+-            // source debt, not a new validity claim or zero-initialization repair.
++            // SAFETY: writable aligned stack storage stays live through the
++            // synchronous notify copies; helper constructs all bytes before use.
++            // Original thread/parent/report ownership preconditions still apply.
+             let handled = unsafe {
+                 arch_do_signal_trap_stop_result(thread, proc, trap_info.as_mut_ptr())
+             };

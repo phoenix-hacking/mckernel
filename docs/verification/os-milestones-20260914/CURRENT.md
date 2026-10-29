@@ -1,3 +1,53 @@
+## Read-only frontier release sealed — 2026-10-29T23:42:09.739803+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Review request20261029T234020682506Z-1d3c40eb53384b01a79931754c6e9066 recorded in
+fixed closed bucket55: new compile/link/native/C retirement/M14 closures all0.
+Current usage40% included weekly, reset1793774133; prepaid fallback disabled.
+M14 remains exclusive4/6; M15 paused. Accepted119 image/SDK21/nine objects retained.
+
+Actual source fixes: request alignment corrected to natural8 (Rootf847, reviewer4ef5,
+privateleafd1e4); undefined SIGTRAP info now explicitly initialized (Root4284,
+reviewer2a94, privatepatch1005153f). Source checks passed; ABI/compiler/native remain
+open. Compatible next large compositionb6c1 sealed separately, selectorsOFF; first149
+snapshot unchanged. No Rust ownership/native credit inferred from these sources.
+
+Root custody3a683 and exact readonly operationb8e8/guard857018/physical805a/observer669e
+are sealed. Parent exception-ownership defect preserved in bb135; one coherent
+correction7652 passed fault-injection and independent3e36. Exact executionreviewedea
+and Rootrelease1726 authorize ONE read-only capture, with fresh output paths and live
+Q controls. No guard or capture has run yet. Next command after publication is the
+corrected root_capture_parent.py; Root owns it and its resulting clients to join.
+Integration worker prepares distinct build guard in parallel, retaining genuine
+future-free requirements. No native119 prerequisite, expired nonce, cleanup replay,
+current-free claim or new heavy/native authorization follows from this release.
+
+## Conversion-first execution checkpoint — 2026-10-29T23:33:03.001906+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Acknowledged review request20261029T232019044542Z-59869f04c2564c2f9ad30ab956e1bcc1.
+Actual149-file/138-Rust source snapshot materialized in0.056776s; manifest18ac3dc3,
+export08b1cacd. Source predicates independently accepted757bb9e5 after15 negative
+fixtures. No new compiler, link, behavior/native result, C retirement or M14 closure;
+M14 remains4/6 and selected119 has47C functions. Native119 is not a conversion gate.
+Checkpointbb881b14c pushed and fetched,517 changed Git blobs verified.
+
+Actual running turns verified once: cleanup_bindings composes next large batch;
+f03_kfree_terra composes termination family; m14_clone_logger reuses context/do_signal;
+m14_integration_terra prepares exact readonly frontier operation. Subsequently
+f03_munmap_terra received exact source-data preparation followup and f03_mmap_fork_terra
+received exec/fork contract corrections. Independent reviewer available. Root alone
+owns physical execution and shared ABI. Failed Sol writer stays retired. M15 paused.
+
+Exact execution blocker: source4 native guard cannot authorize a fresh readonly
+frontier capture. Integration owner prepares distinct readonly Q binding reusing
+207/202 measured history and explicitUNKNOWN; no historical free/Root68 relabeling.
+Root next executes only after matching release, accepts actual free/caller closure,
+then fresh one-heavy grant for Rustcrate+genericC+rawlink, reusing9 objects/SDK21.
+No old nonce/grant replay. Scheduling adjustment: source-only composition/contract
+corrections continue while that single physical binding is completed. Included-only,
+no paid fallback and original UTC/BOOT/MONO/resource/ownership caps remain.
+
 ## Conversion-first combined source and compiler-feedback queue — 2026-10-29T23:21:26.363089+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

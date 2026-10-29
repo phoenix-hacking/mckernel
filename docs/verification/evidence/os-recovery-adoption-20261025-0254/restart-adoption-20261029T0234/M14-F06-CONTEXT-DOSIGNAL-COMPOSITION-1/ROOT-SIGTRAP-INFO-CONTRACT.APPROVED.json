@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "created_utc": "2026-10-29T23:35:03.049048+00:00",
+  "decision": "APPROVE_DEFINED_SIGTRAP_PARENT_NOTIFICATION_SOURCE_CORRECTION",
+  "independent_review_sha256": "2a9400121dc9ece48dba40613748e705686de9670f18ff186206863a6faf3c1e",
+  "constructor": "Zero complete SigInfo; si_signo=SIGCHLD,si_code=CLD_TRAPPED,sigchld.si_pid=thread.tid,sigchld.si_status=thread.exit_status after assignment to SIGTRAP. Reuse exact selected ptrace_report_signal_body_result field layout/write pattern.",
+  "ordering": "Keep original targetpid,-1tid,ptracecont0,notification/lock/wake/schedule order. Do not reread freed/transferred pending payload.",
+  "reason": "Intentional defined functional correction to selected C uninitialized info; not undefined behavior parity.",
+  "still_open": [
+    "thread/parent/report lifetimes",
+    "synchronous stack-info consumption",
+    "actual ABI20/codegen",
+    "GS/TSS and xstate constraints",
+    "matching functional/native proof",
+    "any genuine originating service/account restriction"
+  ],
+  "runtime_authority": null,
+  "candidate_selection_authority": false
+}

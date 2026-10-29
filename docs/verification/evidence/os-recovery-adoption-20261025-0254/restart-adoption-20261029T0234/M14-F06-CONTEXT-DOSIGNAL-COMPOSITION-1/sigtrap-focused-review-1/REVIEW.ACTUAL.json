@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SIGTRAP_INFO_DEFINED_FUNCTIONAL_CONTRACT_ONLY_WITH_LIFETIME_AND_SELECTION_CONDITIONS",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F06-CONTEXT-DOSIGNAL-COMPOSITION-1/ROOT-CONTRACT-DECISIONS.PROPOSED.json",
+    "bytes": 4631,
+    "sha256": "5053f904d5ca2882ba971a90dd36d2feedf9341c72aeb3689c95b4946a99bc9a"
+  },
+  "reviewed_contract_id": "SIGTRAP-INFO",
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 121256,
+      "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "bytes": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    }
+  ],
+  "exact_constructor": {
+    "storage": "Fresh caller-owned suitably aligned complete SigInfo; zero every byte including representation/padding before references or consumer copy",
+    "si_signo": "SIGCHLD = 17",
+    "si_errno": 0,
+    "si_code": "CLD_TRAPPED = 4",
+    "sigchld_si_pid": "thread.tid as existing CInt, NOT proc.pid or parent pid",
+    "sigchld_si_status": "thread.exit_status after branch assigns SIGTRAP = 5; no wait-status encoding shift",
+    "remaining_bytes": "All zero: si_uid, si_utime, si_stime, outer/payload padding and unused union extent"
+  },
+  "findings": [
+    "arch/x86_64/kernel/syscall.c:2195 declares independent local info; pending is transferred to ptrace_recvsig or freed before sigcommon writer unlock and default switch. Pending producer bytes cannot initialize this separate local. SIGTRAP branch at2259 uses it in both notifications without initialization.",
+    "SIGTRAP untraced path still jumps to original core handling. Traced path sets thread.exit_status=SIGTRAP and thread.status=PS_TRACED. Main-thread path locks process.update_lock, writes group_exit_status=SIGTRAP/proc.status=PS_DELAY_TRACED, unlocks, then rereads parent pid and calls do_kill; nonmain path reads report pid, do_kill then rereads report_proc waitq and wakes. Existing schedule follows notification. Constructor does not authorize reordering these effects or adding another wake.",
+    "Existing C ptrace_report_signal fallback at1810 and selected Rust ptrace_report_signal_body_result at22340 explicitly zero complete object then set SIGCHLD/CLD_TRAPPED/tid/exit_status. This is an appropriate source precedent for the new parent trapped notification fields. Do not wholesale call that helper: its locking/debugregister/signalflags/wake behavior differs from original default SIGTRAP.",
+    "Selected arch_do_kill_pending_enqueue_result:32738 copies full size_ofSigInfo into new owned pending under original pending lock; coalescing returns without copying and allocation failure returns ENOMEM. Fresh complete initialization is required for every noncoalesced successful enqueue. Synchronous do_kill tail no longer receives the caller info pointer after enqueue; pending owns copied bytes.",
+    "ABI source uses reprC SigInfo with integer fields/plain pointer-capable union and explicit padding; allzero is valid for selected SIGCHLD child arm. C public signal.h has corresponding child int pid/uid/status and long utime/stime. This source correspondence does not replace missing actual selected ABI20 witness.",
+    "Proposed fresh notification is an intentional ordinary functional correction to undefined info input. No undefined parity, old pending payload reuse, oracle normalization, source default selection or native acceptance is inferred."
+  ],
+  "unresolved_lifetime_constraints": [
+    "Current thread and proc must remain valid at each original state store, main-thread comparison, lock/unlock and notification; retain existing currentCPU/interrupt/scheduler exclusions without widening locks.",
+    "Parent/report_proc pointers must retain genuine existing ownership through pid read and synchronous do_kill; nonmain report_proc must still be live when reread after callback for waitq. No caching across callbacks, invented reference, null fallback or added lifetime extension.",
+    "Fresh info storage stays aligned/live/fully initialized throughout synchronous do_kill and all recursive process/group routing until return; provider must copy or synchronously consume and never retain stack pointer. Do not access freed/transferred pending info.",
+    "Read thread.tid and thread.exit_status at explicit construction point after SIGTRAP state assignment, before either notify; any concurrent writer safety remains existing thread ownership obligation, not proven by initialization.",
+    "Genuine selected C/Rust SigInfo/Thread/Process layout and callback ABI20, actual provider/default uniqueness and applicable lock/lifetime/native proof remain open. No GS/TSS/xstate/service restriction disposition here."
+  ],
+  "selection_conditions": [
+    "Root approves exact fresh constructor contract before implementation/selection.",
+    "Implement only defined info construction; preserve original callback target, tid=-1, signalSIGCHLD,ptracecont0, ignoredreturn and state/lock/wake/schedule ordering.",
+    "Preserve all original metadata389/source origins and originalundefinedfailure records; actual candidate checks and ABI/compiler/link/native evidence remain separate."
+  ],
+  "root_approval": null,
+  "implementation": null,
+  "actual_ABI20": null,
+  "compiler": 0,
+  "native": 0,
+  "guard": 0,
+  "proc": 0,
+  "runtime_authority": null,
+  "other_contracts_reviewed": false,
+  "service_account_holds": "UNCHANGED/UNKNOWN"
+}

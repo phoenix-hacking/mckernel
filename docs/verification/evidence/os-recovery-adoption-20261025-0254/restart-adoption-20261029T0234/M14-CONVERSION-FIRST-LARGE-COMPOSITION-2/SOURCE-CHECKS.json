@@ -1,0 +1,63 @@
+{
+  "status": "PASS_PRIVATE_COMPOSITION_SOURCE_CHECKS_ONLY",
+  "checks": [
+    "all16 inherited external leafrefs and lib byteexact; new natural-alignment constructor leaf byteexact",
+    "entire first20 Rust prefix unchanged plus exact two incoming modules and one EOF module",
+    "all53 inherited line!/file! coordinates/text unchanged, no macro-site movement",
+    "three exact original C patch hunks apply and reverse to entire first20 C bytes, all inherited origin/fallback directives preserved",
+    "do_syscall/util whole selectors absent from CMake; constructors explicit opt-in absent default; all inherited flags unchanged",
+    "existing request ABI declaration reused, natural storage correction exact; no invented API or duplicated body",
+    "complete21-target patch applies to frozen119 preimages"
+  ],
+  "reverse_projection": [
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--reverse",
+        "--no-index",
+        "--include=kernel/syscall.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/REQUEST-CONSTRUCTORS.ON-TEN.PRIVATE-NOT-APPLIED.patch"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--reverse",
+        "--no-index",
+        "--include=kernel/syscall.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/CURRENT119-PRIVATE-REBASE.patch"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--reverse",
+        "--no-index",
+        "--include=kernel/syscall.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/CURRENT119-PRIVATE-REBASE.patch"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    }
+  ],
+  "full_patch_check": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--no-index",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/LARGE-COMPOSITION.PRIVATE-NOT-APPLIED.patch"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  "original389_counter": "INHERITED_FIRST20_SOURCE_PROJECTION_UNCHANGED; selected large metadata/ABI acceptance remains OPEN",
+  "actual_compile_link_native": false
+}

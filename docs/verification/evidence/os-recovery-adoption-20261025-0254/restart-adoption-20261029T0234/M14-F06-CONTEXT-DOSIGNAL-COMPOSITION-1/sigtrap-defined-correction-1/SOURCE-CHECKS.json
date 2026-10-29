@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY",
+  "checks": [
+    "full-byte zero precedes references and approved field writes",
+    "untraced return avoids storage",
+    "SIGTRAP state precedes constructor",
+    "all original helper effects unchanged after removing constructor",
+    "both exact notification argument lists",
+    "unlock/parent and report/notify/wake/schedule order",
+    "five rejected field mutations",
+    "saved unified patch reproduces postimage",
+    "metadata and OFF selector guards retained"
+  ],
+  "mutations_rejected": [
+    "partial_zero",
+    "wrong_signo",
+    "wrong_code",
+    "process_pid",
+    "encoded_status"
+  ],
+  "limitations": "Source/order regression only: no Rust execution, compiler, actual layout, codegen, native lifetime or application acceptance proof.",
+  "patch_sha256": "1005153fa0cb5ffa5e5525ca51d8727a4bbb1a96d7dd1d770b7b3cf342ade139",
+  "postimage_sha256": "0b30a2b2e804a91d964a52e45b6a4888991838a85e963ebfbde4501a034cb7dd"
+}

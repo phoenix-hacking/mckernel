@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_ONLY_NO_RESTRICTION_CLEARED",
+  "contracts": [
+    {
+      "id": "SIGTRAP-INFO",
+      "status": "ROOT_DECISION_REQUIRED_NOT_IMPLEMENTED",
+      "finding": "Selected C declares siginfo_t info in default-action block; no initialization precedes SIGTRAP do_kill(...SIGCHLD,&info,0). Default pending is already freed or transferred before notify. Producer initializes pending->info, not this independent stack object.",
+      "writers_consumers": [
+        {
+          "path": "arch/x86_64/kernel/syscall.c",
+          "scope": "do_signal default block/SIGTRAP; sibling STOP explicitly zeroes and sets CLD_STOPPED while SIGTRAP does not."
+        },
+        {
+          "path": "kernel/rust/syscall_policy.rs",
+          "scope": "selected do_kill enqueue helper zeroes new pending, memcpy size_of::<SigInfo>() from supplied info; coalescing can avoid copy but cannot define all executions."
+        },
+        {
+          "path": "kernel/rust/syscall_policy.rs",
+          "scope": "selected ptrace_report_signal_body_result is existing source precedent for initialized SIGCHLD/CLD_TRAPPED notification."
+        },
+        {
+          "path": "kernel/syscall.c",
+          "scope": "ptrace resume path copies retained pending->info before freeing, otherwise explicitly constructs SI_USER info; distinct payload and event, not authority to reuse after free."
+        }
+      ],
+      "smallest_proposal": "Define this parent/report notification as a fresh fully initialized SIGCHLD stop notification, using the same constructor/field contract as existing ptrace_report_signal_body_result: zero complete object, si_signo=SIGCHLD, si_code=CLD_TRAPPED, sigchld.si_pid=thread->tid, sigchld.si_status=thread->exit_status (set to SIGTRAP before notify). Keep target pid, -1 tid argument, ptracecont0, state/lock/wake/schedule order unchanged. Root must approve this intentional behavior definition; do not silently copy pending trap payload or invent sender/status values.",
+      "alternative_if_root_requires_other_fields": "Root specifies exact pid/status/code source contract; no guessed implementation before disposition.",
+      "implementation_in_patch": "None; original undefined body retained cfg-OFF, cannot select whole candidate as fully defined yet."
+    },
+    {
+      "id": "GS-TSS-CONTEXT",
+      "status": "PRESERVED_EXISTING_PRECONDITION_PROOF_OPEN",
+      "finding": "Selected set_kstack writes kernel_stack then packed TSS.rsp0 from actual typed offsets. Context reads GS:(tss+offsetof rsp0), subtracts one complete X86UserContext; thread output first, size second, regs last. Whole do_signal reads GS only for null regs; nonnull regs supplies result bits from rax.",
+      "smallest_proposal": "Retain existing current-CPU/GS base/current stack ownership and saved-context lifetime preconditions. Root identifies same-CPU exclusion covering provider read and use, matching GS180 C/Rust geometry and complete live saved context immediately below rsp0; no added null fallback, guessed stack arithmetic or pointer lifetime extension. Private patch shares exact reader and adds source assertions only.",
+      "proof_needed": "Actual historical ABI20 receipt, matching public C layout and codegen, current CPU/stack lifetime and applicable native context behavior."
+    },
+    {
+      "id": "XSTATE-LIFETIME",
+      "status": "PRESERVED_EXISTING_PRECONDITION_PROOF_OPEN",
+      "finding": "Whole candidate uses real boot get_xsave_size/mask, kmalloc size+64, align-up64, zero configured bytes, existing pub(crate) x86_save_xstate, copy-to-user then free base; native/legacy cleanup differs and is retained.",
+      "smallest_proposal": "Keep positive boot-stable extent and no signed size+64 overflow; matching standard-layout mask, aligned covered buffer and no migration/FP-state mutation through XSAVE capture. Temporary base must remain owned until copy completes then free exactly once. No checked substitute, state synthesis or silent synchronization change.",
+      "proof_needed": "Root binds actual profile/CPUID extent/CPU exclusion/codegen and provider ABI/native proof; private composition establishes none of these runtime predicates."
+    }
+  ],
+  "service_account_provenance": "UNKNOWN: bounded original handoffs cite technical state/layout/ownership/native gaps and explicit undefined caller contract; no originating service/account rejection receipt identified. Any actual hold remains.",
+  "not_changed": "XRSTOR/bad-frame/regset private candidates are separate and not repeated."
+}

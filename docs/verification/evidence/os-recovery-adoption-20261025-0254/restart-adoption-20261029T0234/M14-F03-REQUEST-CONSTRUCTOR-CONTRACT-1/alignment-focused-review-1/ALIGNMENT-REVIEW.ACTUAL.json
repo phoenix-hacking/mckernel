@@ -1,0 +1,74 @@
+{
+  "Root_contract_correction_required": "Current ca85 record explicitly demands64B IHK stack-object alignment. Root should author an additive correction identifying this exactselectedempty macro and replacing only that premise with selectednaturalrequestalignment beforeimplementation/integration. Preserve originalrecord; do not silentlyrewrite or claim oldcontract already authorized8.",
+  "Root_current_contract": {
+    "bytes": 3258,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-CONTRACT.REFINED-APPROVED.json",
+    "sha256": "ca85a6c4de8c6e09f03039ffd7fc8d3c9aa3803ea94dcea21e0d52de11905ed0"
+  },
+  "acceptance_limits": {
+    "actual_ABI29_codegen_pass": false,
+    "canonical_edits": false,
+    "compiler_executed": false,
+    "default_selection_authorized": false,
+    "native_executed": false,
+    "runtime_authority": null,
+    "source_alignment_decision": true
+  },
+  "candidate_patch": {
+    "bytes": 11166,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/REQUEST-CONSTRUCTORS.ON-TEN.PRIVATE-NOT-APPLIED.patch",
+    "sha256": "7b1eb5ed277fd091c5ff42b0755f3b37f98ba49792cd450ae49a95241891cc7a"
+  },
+  "candidate_source_ready": {
+    "bytes": 2087,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/SOURCE-READY.json",
+    "sha256": "6df2c45b3df5060d7315fcb5b701d88cb5cba0ba627d4867c577e6967190dd11"
+  },
+  "decision": "PASS_SOURCE_JUSTIFICATION_FOR_ROOT_CORRECTION_TO_NATURAL_REQUEST_ALIGNMENT",
+  "exact_selected_alignment_macro": {
+    "bytes": 198,
+    "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+    "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+  },
+  "existing_selected_transport": {
+    "bytes": 1301841,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+  },
+  "facts": {
+    "Ccaller": "struct syscall_request request IHK_DMA_ALIGN; selected macro expands empty. Naturalstructminimumalignment comesfrom int/unsignedlong members, not cacheline64.",
+    "address_lifetime": "Originalsender publishes physicaladdress of RESPONSE, not callerrequest. Callerrequest remains stacklive through synchronousdo_syscall/copy/offload. Naturalalignment doesnot change stack/response/IKC lifetime requirements or imply hostcompletionACK.",
+    "copy_and_publish": "Current syscall_send_prepare_result writes response.status0 and request.valid0. syscall_request_copy_result copies size_of<SyscallRequest> asu8, explicitlysupports unalignedbytecopy and nonoverlap. send_syscall copies into a separate existing IkcScdPacket, then packet.request.valid AtomicU64 Release; required8alignment is provided by selectedreprC layout. Existingpacket128B/cohort is separate.",
+    "currentcandidate": "DmaRequest repr(C,align64) around MaybeUninit<SyscallRequest> imposes64minimum and implies128storagefootprint ratherthan72. Innerrequest wiretype/fields stay72/8; containerpadding is not requestwiredata.",
+    "no64constraintfound": "No exactselectedCmacro/type or inspected existingRustrequestprepare/copy/publication boundary requires a64aligned callerrequest. Stronger64alignment is legal as a localchoice but is not sourceparity or a transport prerequisite.",
+    "selected_scope": "SMP x86_64 selected IHK memconst macro; no claim for MIC attached/otherprofile64alignment.",
+    "supported_request_type": "C/Rust declarations imply72bytes/align8; offsets rtid0,ttid4,valid8,number16,args24 with6CULong words. Real selectedcompiler ABI/codegenwitness stillpending."
+  },
+  "implementation_ownership": false,
+  "independent": true,
+  "recorded_utc": "2026-10-29T23:35:19.844027+00:00",
+  "request_C_declaration": {
+    "bytes": 9756,
+    "path": "/home/holden/mckernel/executer/include/uprotocol.h",
+    "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+  },
+  "request_Rust_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "reviewer": "/root/recovery_review",
+  "schema": "mckernel.independent-f03-request-stack-alignment-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "supported_bounded_correction": {
+    "must_preserve": [
+      "Individual number+all6args writes and original signedconversions from approvedaritycontract",
+      "Sender-ownedrtid/ttid/valid initialization order, no initializedwholeobjectreference/assume_init beforethosewrites",
+      "Exactrequestwiretype/sizeofcopy, separatepacket128B/provider, no packet/response/UTI zero-fill or layoutchange",
+      "Stackrequest borrowedspan and all originalhost/response/scheduler lifetimes",
+      "ExperimentaldefaultOFF/profile/callgraph/unsafeABI/compiler/link/default/native gates"
+    ],
+    "not_required": "Do not assert actualruntimeaddress is NOT64aligned. Natural8 is a minimum; compiler mayincidentallychoose strongeralignment.",
+    "preferred": "Remove artificial align64, use direct MaybeUninit<SyscallRequest>, or a repr(C)/repr(transparent) singlefield wrapper without explicit over-alignment. Preserve natural alignment inherited from SyscallRequest."
+  }
+}

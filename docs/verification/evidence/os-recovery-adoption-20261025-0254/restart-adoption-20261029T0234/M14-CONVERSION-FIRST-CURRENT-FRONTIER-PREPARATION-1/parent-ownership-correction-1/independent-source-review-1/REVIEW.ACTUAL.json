@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_COHERENT_PARENT_EXCEPTION_OWNERSHIP_CORRECTION_AND_READONLY_ROUTING_SOURCE",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/SOURCE-READY.json",
+    "bytes": 8826,
+    "sha256": "46aa6a9edc4a7a0ce20d52efde1f9b8d316cd5e01fb8b5b8cc0e02384de2ccd5"
+  },
+  "inputs": {
+    "root_capture_parent.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/root_capture_parent.py",
+      "bytes": 4953,
+      "sha256": "7652d8259b6f456926cbecac9f004e763bdd2744d13416a82337079849457820"
+    },
+    "readonly_operation_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/readonly_operation_guard.py",
+      "bytes": 9868,
+      "sha256": "29bc19df20118485418a96a2dd0fd9099ff550a5732a8dfcd402aa332b28d066"
+    },
+    "observe_conversion_frontier.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/observe_conversion_frontier.py",
+      "bytes": 33515,
+      "sha256": "c97d9fb8b217dfb36196a24be8ba1e30bce3e76085d474186693e9528fb0ee2f"
+    },
+    "readonly_history_guard.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/readonly_history_guard.py",
+      "bytes": 1215,
+      "sha256": "265858fdb0d968d45d45d55a45fbcc32615bd02dd51f369fda33199f41c732d7"
+    },
+    "test_parent_ownership.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/test_parent_ownership.py",
+      "bytes": 4334,
+      "sha256": "71919947cad9cc173d6cb1ee9b45b90fac97b0d793eae5b42eb941eef5b5f153"
+    },
+    "test_source_routing.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/test_source_routing.py",
+      "bytes": 2386,
+      "sha256": "53865831203947a5e1a9da71537909ab114d1367120b18f4a10d5b855bd02979"
+    }
+  },
+  "prior_guard_observer_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/independent-source-review-1/REVIEW.ACTUAL.json",
+    "bytes": 7781,
+    "sha256": "bb135a892ed4a5652d50a51127a7f7701c8b4c043795e631a60c4f79301d3bc7"
+  },
+  "operation_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-CURRENT-FRONTIER-PREPARATION-1/parent-ownership-correction-1/independent-operation-review-1/OPERATION-REVIEW.ACTUAL.json",
+    "bytes": 11871,
+    "sha256": "fa31ef4f931053b558237d35ba124b0abbc56e7117cf88f8ebbf3a284e0ebd39"
+  },
+  "findings": [
+    "Popen success is followed by guarded identity/STARTED evidence capture; either exception records evidence_error without invented birth, then wait4 runs once before stream contexts close. Final evidence-error result exits1 even when childexit0. This closes prior7e095e ownership defect. wait4/hostfailure uncertainty remains actual owner responsibility.",
+    "Complete JSON is exclusive temporary-write/flush/fsync/close then atomic os.link nooverwrite, directoryfsync, tempunlink,directoryfsync. Existing or concurrently appearing destination refuses; temp remains on failedlink. Final join after wait4 and closedstreams. Parent_source exactbyte ref is included.",
+    "Q guard/fixedsubjects/formatter bytes identical29bc; Drelative context now binds corrected childparent. Observer only GUARD exactref changed, adapter only guardpath changed. Capture argv/profile AST unchanged; accepted physical207/202 and UNKNOWN algorithms reused.",
+    "Pure parentfixtures success/identityENOENT/STARTEDwritefailure each joinonce/closestreams, unknownbirth retained; failureexits1. Atomic destination collision refuses overwrite. Pure source routing verifies exact dependentrefs/templateclosure and unchangedargv.",
+    "Exact b8e8 operation subjects/context/authenticated Rootcustody3a683 and armed/bootstrap/original minima pass pure metadata validation. No actual guard/liveclocks/capture or physical acceptance performed."
+  ],
+  "conditions": [
+    "Before launch require exactactual guardbinding, full physicalhistory/sourcechain independentreview, observerbinding wholepayload independentreview and readonlyrelease wholepayload executionreview.",
+    "Root confirms allfresh output/temporary/parent/query namespaces absent; samefinite CPU0/AS2GiB/CPU60/anaconda3profile, onecapture/no retry.",
+    "Actual independent acceptance must check evidence_error is None, child is actual measuredidentity, wait4pid==childpid/status0/positivejoin,closedstreams,groupabsence/noerrors, signals0, parent_source==exact7652, rawstreams/release refs exact.",
+    "Parent result current_freefalse and observer pendingcandidate never clear owner/native/build authority. Newactualfree/callerclosure and all207retainedplusnewactors/unknowns remain mandatory."
+  ],
+  "tests": {
+    "parent_ownership_returncode": 0,
+    "source_routing_returncode": 0,
+    "fixture_IO_process_calls": 0
+  },
+  "actual_guard": 0,
+  "actual_proc": 0,
+  "actual_capture": 0,
+  "compiler": 0,
+  "native": 0,
+  "runtime_authority": null
+}

@@ -1,0 +1,37 @@
+--- a/syscall_policy.PRIVATE-WHOLE-MMAP-AND-FORK.rs
++++ b/syscall_policy.PRIVATE-WHOLE-MMAP-AND-FORK.rs
+@@ -31529,8 +31529,8 @@
+ ///
+ /// # Safety
+ /// The caller has completed thread/process publication and, for non-CLONE_VM,
+-/// the unchanged host clone request successfully. `new` remains retained across
+-/// enqueue and any schedule, as required by the original final TID read. `oldproc`
++/// the unchanged host clone request successfully. `new` remains retained through
++/// report, TID snapshot and enqueue. The result is a scalar thereafter. `oldproc`
+ /// and both report lists are live in the reporting branch; their genuine lock
+ /// serializes list membership. No host request, ownership release or ACK is added.
+ #[no_mangle]
+@@ -31575,16 +31575,19 @@
+         unsafe { let _ = crate::process_helpers::hold_thread(new); }
+     }
+ 
++    // Snapshot while the caller still owns the prepared child. Once enqueued,
++    // the child may run and release its last reference before this caller resumes.
++    // The TID was committed before publication and is the result of this clone.
++    let child_tid = unsafe { addr_of!((*new).tid).read() };
+     // SAFETY: This is the original live prepared thread and chosen CPU. Call the
+     // genuine void public enqueuer, not its checked internal alternative.
+     unsafe { crate::sched_helpers::runq_add_thread(new, cpuid) };
+     if ptrace_event != 0 {
+-        // SAFETY: The original caller's execution/IRQ context permits schedule;
+-        // its retained child edge remains valid across the existing C provider.
++        // SAFETY: The original caller's execution/IRQ context permits schedule.
++        // The scalar snapshot avoids accessing the child after publication.
+         unsafe { schedule() };
+     }
+-    // SAFETY: The caller retains new through schedule; read at the original point.
+-    unsafe { addr_of!((*new).tid).read() }
++    child_tid
+ }
+ 
+ // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

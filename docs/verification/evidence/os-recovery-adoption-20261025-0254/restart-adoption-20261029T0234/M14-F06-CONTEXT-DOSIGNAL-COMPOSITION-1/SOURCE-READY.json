@@ -1,0 +1,147 @@
+{
+  "task_id": "M14-F06-CONTEXT-DOSIGNAL-COMPOSITION-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COMPOSITION_SOURCE_READY_UNRESOLVED_SIGTRAP_CONTRACT_NOT_SELECTABLE_AS_WHOLE_DEFINED_PORT",
+  "implemented": "Reuse current119 existing context, whole do_signal and restart provider; share one unchanged GS reader; six Rust-owned descriptors use immutable original tuples. No semantic info repair, shared ABI change or C rewrite.",
+  "C_selection_existing": [
+    "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+    "MCKERNEL_RUST_F06_SIGNAL_CONTEXT",
+    "MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE"
+  ],
+  "Rust_selection_existing": [
+    "f06_signal_context_candidate",
+    "f06_do_signal_whole_candidate",
+    "f06_do_signal_reuse_qualified_context"
+  ],
+  "exclude_partial_cfgs": [
+    "f06_handler_commit_candidate",
+    "f06_xsave_copy_candidate",
+    "f06_frame_copy_candidate",
+    "f06_core_termination_candidate",
+    "f06_trap_stop_candidate"
+  ],
+  "ABI_composition": "Current119 Thread.sigcommon remains opaque *mut c_void; existing same-use casts to SigCommon avoid historical ABI20 typing patch. Root-only shared ABI untouched; actual equivalence proof still required.",
+  "historical_ABI20": "Exact receipt not supplied; requested from Root; existing real-ABI.FRAGMENT.c source asserts GS180 only, not executable proof.",
+  "metadata": [
+    {
+      "symbol": "F06_SIGNAL_ENTRY_DEBUG",
+      "record": {
+        "file": "/src/arch/x86_64/kernel/syscall.c",
+        "function": "do_signal",
+        "fmt": null,
+        "line": 1778,
+        "flags": 0,
+        "padding": 0
+      }
+    },
+    {
+      "symbol": "F06_SIGNAL_STOP_WAKE_DEBUG",
+      "record": {
+        "file": "/src/arch/x86_64/kernel/syscall.c",
+        "function": "do_signal",
+        "fmt": null,
+        "line": 2077,
+        "flags": 0,
+        "padding": 0
+      }
+    },
+    {
+      "symbol": "F06_SIGNAL_TRAP_ENTER_DEBUG",
+      "record": {
+        "file": "/src/arch/x86_64/kernel/syscall.c",
+        "function": "do_signal",
+        "fmt": null,
+        "line": 2081,
+        "flags": 0,
+        "padding": 0
+      }
+    },
+    {
+      "symbol": "F06_SIGNAL_TRAP_SLEEP_DEBUG",
+      "record": {
+        "file": "/src/arch/x86_64/kernel/syscall.c",
+        "function": "do_signal",
+        "fmt": null,
+        "line": 2106,
+        "flags": 0,
+        "padding": 0
+      }
+    },
+    {
+      "symbol": "F06_SIGNAL_TRAP_WAKE_DEBUG",
+      "record": {
+        "file": "/src/arch/x86_64/kernel/syscall.c",
+        "function": "do_signal",
+        "fmt": null,
+        "line": 2109,
+        "flags": 0,
+        "padding": 0
+      }
+    },
+    {
+      "symbol": "F06_SIGNAL_TERMINATE_DEBUG",
+      "record": {
+        "file": "/src/arch/x86_64/kernel/syscall.c",
+        "function": "do_signal",
+        "fmt": null,
+        "line": 2162,
+        "flags": 0,
+        "padding": 0
+      }
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+      "bytes": 84536,
+      "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 121256,
+      "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 255992,
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "bytes": 115646,
+      "sha256": "9adb2435e75a1b27cd9511f4b69739fe25d2bb95dc0fc80eb73d2abd60c34813"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 928517,
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-sigreturn-shared-context-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "bytes": 5384,
+      "sha256": "d43af8a76d175805cbc8d891eff344e7c5afad315863d09cdac20a6161584406"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-sigreturn-shared-context-source-1/fixture-fragments/real-ABI.FRAGMENT.c",
+      "bytes": 812,
+      "sha256": "a762c16e35bf6f4829181ddf39caa3d54581ddb54cf8cbcd9cdef3f43f7b90f4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-signal-whole-entry-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+      "bytes": 9835,
+      "sha256": "62d39ea50183cfb8fa3312c089a2b5f570b6bc8e6a98531e1f1dd49dab180413"
+    }
+  ],
+  "next": "Root reviews proposed exact SIGTRAP notification contract; independently reviews this composition and binds historical ABI20/current proof. Then authorizes any concrete implementation and matching source/compiler queue separately. All service/account/native restrictions retained.",
+  "no_runtime_authority": true
+}
