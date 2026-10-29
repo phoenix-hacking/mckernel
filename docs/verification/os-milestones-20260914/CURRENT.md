@@ -1,3 +1,29 @@
+## M14 resumed under live reset-jitter recovery controls — 2026-10-29T07:07:42.427596+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation 20261029T070202Z-38c29836 and foreground request
+20261029T070418733977Z-b0c1c5401c214885a525d087752b3870 applied. Prior model pause
+is superseded. Recovery receipt is LIVE, included-only30%used, canonical reset
+1793774133; tighter MONO1556236.568932019/BOOT1571574.6959790066. No paid fallback.
+M14 exclusive; M15 paused. Root remains sole physical execution/build owner.
+
+Actual resumed child turns: cleanup_bindings owns fresh minimal live guardian
+binding/predicate successor; recovery_review owns the existing independent batch
+review; m14_integration_terra owns private paired ptrace-clone lock/unlock bridge.
+Existing physical formatter stage5b361 joined0 is preserved and will not repeat.
+Exact blocker: old guardian3b4d pins retired controllers and raw exact reset.
+Change only consumed live DATA and authorized ±1 reported jitter predicate while
+canonical deadline stays unchanged; preserve149actors/72nonces/UNKNOWN and all
+accepted physical/retirement proof. No live Root native/tool operation exists.
+
+Next: accepted changed guard bindings→remaining formatter stages→fresh capture
+release/current-free→CURRENT119 four commands/full original389. Frozen119 and
+four-logger next batch remain separate. Compiled/behavior-tested/production-linked/
+native-qualified/C-retirement/M14-closure deltas are all0. Time-to-first-compiler
+and current-free→producer latency remain unmeasured because neither occurred.
+Scheduling adjustment: one bounded guard owner and one continuous reviewer turn;
+private kernel implementation continues rather than reopening historical audits.
+
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 Current window: weekly allowance ONLY, codex10080/reset1793774133, stop100%used.

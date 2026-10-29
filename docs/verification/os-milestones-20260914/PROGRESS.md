@@ -121,11 +121,11 @@ M15 closes with the delivered-runtime ownership manifest, actual Rust/assembly p
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-29T05:26:17+00:00`
-- Launcher state heartbeat: `2026-10-29T05:26:07.991640+00:00`
+- Dashboard refreshed: `2026-10-29T07:07:53+00:00`
+- Launcher state heartbeat: `2026-10-29T07:07:42.091980+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `2259062`; server PID: `2259064`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261029T023418Z-407ad93e`
+- Worker PID: `2344126`; server PID: `2344128`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261029T070202Z-38c29836`
 
 ## Stable kernel core: engineering progress
 
