@@ -1,0 +1,61 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_FULL_PREFIX_MPROTECT_SOURCE_READY_AWAIT_REVIEW_UNCOMPILED",
+  "files": {
+    "prepare_private.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/prepare_private.py",
+      "bytes": 5466,
+      "sha256": "f6ba402d0d0739d432c23264eb5d579f91967c42da411fdc39783728b8d2fe6d"
+    },
+    "check_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/check_source.py",
+      "bytes": 8364,
+      "sha256": "6fd5e07f84604d312b7cae80b44e2e380fc1a54d0b4c82d00cfd3ada08e98837"
+    },
+    "FILEMAP.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/FILEMAP.SOURCE-ONLY.json",
+      "bytes": 3237,
+      "sha256": "a1d07a2376ce24099f537791a4e97991958aebb7dfa2e3f60abc1039846a54d0"
+    },
+    "MPROTECT-HOST-VMA.PRIVATE-NOT-APPLIED.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/MPROTECT-HOST-VMA.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 4462,
+      "sha256": "9713669dc82eec5251547a6f9fb1cb04a01b60fa6da582e022e8caab8f79b441"
+    },
+    "PREFIX-SOURCE-CONTRACT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/PREFIX-SOURCE-CONTRACT.json",
+      "bytes": 3412,
+      "sha256": "35955ece108fee1300d3edb003a973edefbe8f1d838c1f38f42d016d9689f3b3"
+    },
+    "SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/SOURCE-CHECKS.json",
+      "bytes": 857,
+      "sha256": "7e416c2cd4685a6ddad255b3ca34cc8897c6674857e638619c8290c8c87af64f"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/ROOT-NEXT.md",
+      "bytes": 3812,
+      "sha256": "ebd8e66fe6e8198c32b4a663494029b93c2f5e9a55507db3026cf71a6feb6330"
+    }
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-MPROTECT-HOST-VMA-BRIDGE-1/postimage/kernel/rust/syscall_mprotect_host_vma.rs",
+    "bytes": 2745,
+    "sha256": "11a6131f8f8e826912602bf89fdd32bad7675d184f4e43c16b6375f54d17b881"
+  },
+  "body": "mprotect_set_host_vma_bridge",
+  "reused_helpers": [
+    "get_this_cpu_local_var",
+    "ihk_mc_syscall_set_arg0",
+    "ihk_mc_syscall_set_arg1",
+    "ihk_mc_syscall_set_arg2",
+    "set_host_vma_body_result"
+  ],
+  "volatile_setter_writes_preserved": 3,
+  "scratch_context_bytes": 224,
+  "parent_line_sites_preserved": 53,
+  "independent_source_review": null,
+  "runtime_authority": null,
+  "actual_compile_link_native": false,
+  "C_retirement": false
+}

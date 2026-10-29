@@ -1,0 +1,53 @@
+{
+  "task_id": "M14-PRIVATE-NEXT-ARCH-BODY-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BLOCKED_NO_ELIGIBLE_DEFINED_DOMAIN_BODY",
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 121256,
+      "sha256": "b5e9a382491d0f6dc4b71a55f54f76f3d4ca610fa9f81adc60e70ec97a194669"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ORIGINAL-CLOSURE-AND-POST119-REMAINING-1/ORIGINAL-CONTRACT-AND-POST119-MAP.json",
+      "bytes": 25607,
+      "sha256": "d2f203de81bb4c5f6e6b62f76b42009d9426c674e29397fe20f942a1f609b9f2"
+    }
+  ],
+  "candidate_symbols": [
+    "arch_native_signal_bad_frame_bridge",
+    "arch_ptrace_regset_log_bridge",
+    "arch_rt_sigreturn_context_bridge",
+    "arch_rt_sigreturn_xrstor_bridge",
+    "do_signal"
+  ],
+  "signal_exclusion": [
+    "arch_native_signal_bad_frame_bridge",
+    "arch_rt_sigreturn_context_bridge",
+    "arch_rt_sigreturn_xrstor_bridge",
+    "do_signal"
+  ],
+  "remaining_blocker": "arch_ptrace_regset_log_bridge accepts long type and supplies it unchanged to two %x variadic int slots; original contract expressly holds this unresolved undefined variadic domain. No guessed cast or held-domain bypass authorized.",
+  "existing_rust_bodies": [
+    "arch_rt_sigreturn_context_bridge",
+    "do_signal"
+  ],
+  "source_checks": {
+    "five_contract_symbols": true,
+    "four_signal_excluded": true,
+    "only_other_symbol_is_held_regset": true,
+    "original_long_to_percent_x_confirmed": true
+  },
+  "implementation": null,
+  "patch": null,
+  "canonical_writes": 0,
+  "compiler_or_runtime_checks": 0,
+  "artifact_extraction": 0,
+  "next_task": "Dispatcher must assign a different released symbol or supply an explicit defined-domain/hold disposition; reuse existing signal Rust bodies rather than duplicate.",
+  "history": "Previous clone-logger assignment stopped on read-only discovery permission errors and a guessed missing private patch filename. Those original tool failures remain retained in conversation; this distinct arch assignment made only bounded successful source reads."
+}

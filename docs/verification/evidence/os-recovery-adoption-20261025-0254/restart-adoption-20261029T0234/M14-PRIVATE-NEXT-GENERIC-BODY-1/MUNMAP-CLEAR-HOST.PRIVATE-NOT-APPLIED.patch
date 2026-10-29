@@ -1,0 +1,74 @@
+--- /dev/null
++++ b/kernel/rust/syscall_munmap_clear_host_forward.rs
+@@ -0,0 +1,31 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Existing do_munmap callback forwarding to the qualified Rust clear_host_pte.
++
++use crate::abi::{CInt, CLong, CULong, SizeT};
++use super::f03_clear_host_pte_entry_v1::clear_host_pte;
++
++type ClearHostFn = unsafe extern "C" fn(CULong, SizeT, CInt) -> CLong;
++const _: ClearHostFn = clear_host_pte;
++const _: ClearHostFn = do_munmap_clear_host_bridge;
++const _: () = {
++    assert!(core::mem::size_of::<CULong>() == 8);
++    assert!(core::mem::size_of::<SizeT>() == 8);
++    assert!(core::mem::size_of::<CInt>() == 4);
++    assert!(core::mem::size_of::<CLong>() == 8);
++};
++
++/// Retain the original scalar callback ABI and exact signed long return.
++///
++/// # Safety
++/// The caller retains all existing clear_host_pte current CPU/thread/VM lifetime,
++/// original memory-range-lock state and synchronous forwarding prerequisites.
++/// The qualified Rust provider owns the existing request/endpoint/flag/logging
++/// protocol; this callback adds no access, validation, lock, retry or cleanup.
++#[no_mangle]
++pub(super) unsafe extern "C" fn do_munmap_clear_host_bridge(
++    addr: CULong, len: SizeT, holding_lock: CInt,
++) -> CLong {
++    // SAFETY: Unchanged exact original provider and argument order. No casts,
++    // normalization or null/errno policy is introduced by this forwarding leaf.
++    unsafe { clear_host_pte(addr, len, holding_lock) }
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5888,11 +5888,11 @@
+ }
+ #endif
+ 
+-static long
+-do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
+-{
+-	return clear_host_pte(addr, len, holding_lock);
+-}
++#if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
++extern long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock);
++#else
++static long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock) { return clear_host_pte(addr, len, holding_lock); }
++#endif
+ 
+ static int
+ do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36831,3 +36831,8 @@
+ mod f06_vdso_info;
+ #[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+ use self::f06_vdso_info::vdso_get_vdso_info;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, target_arch = "x86_64"))]
++#[path = "syscall_munmap_clear_host_forward.rs"]
++mod syscall_munmap_clear_host_forward;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"

@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NEW_FORWARDING_SOURCE_AND_EXACT_EIGHT_LEAF_COMPOSITION",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/SOURCE-READY.json",
+    "bytes": 3825,
+    "sha256": "3bb9ddef2edf785f51851a65a92d07febc524d1a08fe99c2db6cc0b81c7f85f7"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EIGHT-LEAF-BATCH-1/EIGHT-LEAF-BATCH.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 22450,
+    "sha256": "d5ed68b28879f0605d4b489091f07c409c94f5f5adc7265a5c66ef445f81d76d"
+  },
+  "new_body_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NEXT-GENERIC-BODY-1/SOURCE-READY.json",
+    "bytes": 3540,
+    "sha256": "c9ae533a801ab373c61e6022ee6c2d416af0171eb87c46e58322481547804ba2"
+  },
+  "new_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-NEXT-GENERIC-BODY-1/postimage/kernel/rust/syscall_munmap_clear_host_forward.rs",
+    "bytes": 1417,
+    "sha256": "8c0f771b28c76551f387b4936064b05ef8c646d22045ad296b98cd4abd7c6ec1"
+  },
+  "reused_seven_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SEVEN-LEAF-BATCH-1/line-preserving-composition-correction-1/independent-review-1/REVIEW.ACTUAL.json",
+    "bytes": 6500,
+    "sha256": "f0218681b64f20bd22ff11998d54003f2ec5ed4bded121de0b0e3d7574bbd9f1"
+  },
+  "all_prior_seven_leaf_and_lib_bytes_unchanged": true,
+  "new_body_effect": "One exact existingqualifiedRust clear_host_pte scalarcall/result, no extraVM/host/lock/endpoint effects",
+  "ABI_source": "long(ulong,size_t,int) LP64 matches CLong(CULong,SizeT,CInt); both compile-timefunctionpointerchecks present, no actualnewcompile claimed",
+  "C_OFF_tokens_and_selected_extern_exact": true,
+  "only_new_C_region_changed": true,
+  "only_new_Rust_EOF_module": true,
+  "one_new_CMake_dependency": true,
+  "all53line_and53file_sites_exact": true,
+  "source389_projection_reused_unchanged": true,
+  "undefined_variadic_and_other_domain_holds_preserved": true,
+  "source_forwarding42fixture_reused_not_rerun": true,
+  "actual_compiler_preprocessor_ELF_HOST_native_guard_proc_stage_cleanup_billing_calls": 0,
+  "runtime_authority": null
+}

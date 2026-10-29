@@ -1,3 +1,46 @@
+## Native119 bindings sealed; publication and Resource2 release next — 2026-10-29T21:53:27.522453+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fouractualdata commands bind/check-static/nonce/bridge returned0 (797a7b);
+source3 materialized at root-adopted-current119-process235-entry-3. Static09e593,
+unusednativea876915e19964ad8978887961e630f65 reserved646a, sourceauthorityd896,
+casecap04d9, supplement0561. Root68d948/aceb andfree3fd remain accepted historical
+199rows; actualstage2 appended viaauthentic0561 for resourcefrontier201/196.
+Nativeoperation3de600/44subjects passes8369; G5e76 bound, originalphysicalH239f
+passes8e00, exactruntimeobserverB442e passes96e9; typedSOURCEacc03 staysdistinct.
+No liveRoottool/holder/container/guest; no Resource2 or native call has run.
+
+Root next publishes/fetches exactsixstatic/G/H/B/source+review refs, obtainsone
+Resource2readonlyrelease, runsfreshresourcecapture then exactone-shotoriginal235
+underreviewednativeprofile. Reuse119759fe/SDK21/8objects; no recompile. Eightleaf
+3bb9/d5ed now independentSOURCEaccepted4740; mprotectfullprefixa261/9713 private
+sourcecandidate preservesCPU/current read+3volatilewrites, review/compile/nativeOPEN.
+M14files4/6/C47/native0/wholeM14OPEN; M15paused. Weeklyonly/no paidfallback,
+originalclocks/resources/UNKNOWN/history remain. Nativeblockedby publication/
+readonlyexecutionrelease, not modelcapacity or compileravailability.
+
+## Actual119 manifest staged; two-actor native custody delta — 2026-10-29T21:42:56.326602+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Request20261029T214010... acknowledged. Closed21:07:41–21:27:41 bucket has0compile/
+link/native/Cretirement/M14closure; retirement acceptance40a, imageonlycompose1 and
+successfulfreshcapture1. Currentfree3fd/Root68 acceptance occurred followingbucket.
+Actualscratchstage72f5b8 exit0/0.300844s; exact9068B25bb manifest
+in scratch/m119n1i, attemptm119n1empty. Independentacceptancedbee/c913receipt/b48djoin;
+child2574948/b110734869 andparent2574947/b110734866 joined, parentgroupNone;
+outertool2574946birthUNKNOWN. No liveRoottool/holder/guest/nativecleanup ownership.
+Root68 remains199rows/194ids; supplementary0561 authentically appends2stageactors
+for201rows/196ids before native. Terra owns minimal source3observer/staticpin delta;
+frozen335e/source2 and materializedsourceonlydirectories1/2 preserved. Earlierhash
+cycle corrected by explicit typedSOURCEfd8 vs laterexactruntimebindingreview.
+Resourceobserver runtimechecks/af2/original235/profile/73nonces unchanged.
+Critical nextRoot source3/materialization+actualauthority/static/bridge→freshResource2/
+oneheavylease→matchingoriginal235guest. Nativeblocked sincefree21:29:25; no new
+kernelbuild needed. recovery_receipts reviews newclear-host bridge/eightleaf3bb9;
+source8leaf only, no compile/nativecredit. Archworker found no eligible nonheldbody;
+signal/undefinedvararg holds retained, no duplicateport. M15paused; M14files4/6/C47.
+Weeklyincludedonly/no paidfallback and all originalclocks/resources/history retained.
+
 ## CURRENT119 current-free and Root68 accepted; matching native next — 2026-10-29T21:31:52.125580+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "authorized": true,
+  "grant_id": "89fabdbf7c224716a69b4f407eaee1af",
+  "issued_wall": 1793309891.576889,
+  "expires_wall": 1793309981.576889,
+  "maximum_invocations": 1,
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/current119-manifest-scratch-stage-source-1/SCRATCH-STAGE.PROFILE.NOT-GRANTED.json",
+    "bytes": 4709,
+    "sha256": "3feb0b4c007832bd6eb5ee2883d4f2395c98cb180b2e0139fd4b604faa69a671"
+  },
+  "independent_source_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/current119-manifest-scratch-stage-source-1/independent-source-review-1/SOURCE-PROFILE-REVIEW.ACTUAL.json",
+    "bytes": 6347,
+    "sha256": "008e6f0918bf7b2ed70effd438048451ca458b6a8f03ab3361987106685b2153"
+  },
+  "current_nonce_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT68-CURRENT119-ADOPTION-1/ROOT68-NONCE-LEDGER.ACTUAL.json",
+    "bytes": 89874,
+    "sha256": "d948ba50890c2e735bb92b541c997694154c9cf62963e748bf47f1a992b57022"
+  },
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-POSTJOIN-CURRENTFREE-PREPARATION-1/actual-acceptance-1/CURRENT-FREE.ACTUAL.json",
+    "bytes": 49224,
+    "sha256": "3fd1a6facf34a9e6ac9259526da96ddee2dd22c6032ee47b37be97e56d0086e3"
+  },
+  "actual_admission": {
+    "guard_clocks": [
+      1793309891.5755978,
+      1091998.144554461,
+      1107336.271604833
+    ],
+    "resources": [
+      {
+        "path": "/home/holden/mckernel",
+        "available_bytes": 145551773696,
+        "floor": 17179869184
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch",
+        "available_bytes": 47862149120,
+        "floor": 12884901888
+      }
+    ],
+    "memory_available_bytes": 27686207488,
+    "aggregate_jobs_max": 7,
+    "one_ordinary_job": true,
+    "heavy_jobs_current": 0,
+    "root_attests_no_unlisted_custody_since_Root68": true
+  },
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/current119-manifest-scratch-stage-source-1/root_stage_bound_manifest_once.py"
+  ],
+  "runtime_native_authority": null,
+  "weekly_only": true,
+  "paid_fallback": false
+}

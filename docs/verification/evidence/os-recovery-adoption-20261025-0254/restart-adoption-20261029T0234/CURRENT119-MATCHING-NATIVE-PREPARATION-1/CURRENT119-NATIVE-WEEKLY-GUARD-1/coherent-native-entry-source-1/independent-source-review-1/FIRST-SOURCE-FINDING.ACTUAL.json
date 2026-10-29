@@ -1,0 +1,43 @@
+{
+  "Resource2_consumer": {
+    "bytes": 6485,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/coherent-native-entry-source-1/capture_fresh_startup_resource.py",
+    "sha256": "59e8532dde22fecf493040066f4f174871a981102860c61b644fc970ba734f8b"
+  },
+  "decision": "FAIL_SOURCE_STATIC_AND_RUNTIME_OBSERVER_REVIEW_HASH_CYCLE",
+  "exact_failed_dependency": [
+    "STATIC.current_observer_review R",
+    "R.binding_payload.physical_history_binding H",
+    "H.guard_config native G",
+    "G.successor.context.native_source_closure root_once bridgeW",
+    "W.STATIC_SHA",
+    "STATIC containing R"
+  ],
+  "implementation_ownership": false,
+  "independent": true,
+  "materializer": {
+    "bytes": 5662,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/coherent-native-entry-source-1/materialize_entries.py",
+    "sha256": "f2ee2988c16ca53e0ea1c6ba8b9f9f5575fae3e6bc3cbcb9ee648673a94ddca8"
+  },
+  "minimal_correction": [
+    "Use a distinct truthful static SOURCE-only observer review decision PASS_EXACT_CURRENT119_RESOURCE_OBSERVER_SOURCE_BINDING with exact observer/Root68/free/boundary refs and preservedresourceflags, no actual binding_payload or physical/nativeguard refs.",
+    "Change only static Resource2 validate_post119_route and materializer check to consume this distinct SOURCE decision. Runtime observer335e validate_route remains unchanged, requiring later PASS_EXACT_CURRENT119_FRESH_RESOURCE_OBSERVER and exact complete binding_payload.",
+    "Materialize source/authority/static/bridge first; then actualnativeoperation+guard, physicalhistorybinding and actual runtime observer binding/review; no source rewrite or fake future hash. Test DAG and reject SOURCE projection at runtime observer."
+  ],
+  "native_execution_authorized": false,
+  "recorded_utc": "2026-10-29T21:35:28.100868+00:00",
+  "reviewer": "/root/recovery_review",
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_phase_only": {
+    "reviewed_safe_to_prepare": true,
+    "scope": "No bind/bridge/runtime/sourceauthority/native approval. Sourcephase requires genuineRootidentity/intent/reviewer/finite authorizedcutoffs, no invented future refs.",
+    "source_side_effects": "writes five exact approved sources and SOURCE-STATIC-TEMPLATE.PENDING.json to a fresh Rootselected canonical output directory"
+  },
+  "source_ready": {
+    "bytes": 4750,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/coherent-native-entry-source-1/SOURCE-READY.json",
+    "sha256": "e1dd4402cfe5845a833718e25f0cf8e7965e9bc8945e06c50d3e5ab373f00978"
+  }
+}

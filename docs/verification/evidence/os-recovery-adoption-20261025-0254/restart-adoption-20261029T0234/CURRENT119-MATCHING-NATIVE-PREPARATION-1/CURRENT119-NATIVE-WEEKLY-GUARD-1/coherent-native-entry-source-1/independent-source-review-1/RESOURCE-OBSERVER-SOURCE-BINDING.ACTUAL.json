@@ -1,0 +1,49 @@
+{
+  "actual_runtime_binding_review": false,
+  "complete_actual_actor_frontier": true,
+  "current_boundary": {
+    "bytes": 1958,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT68-CURRENT119-ADOPTION-1/ROOT68-CURRENT-BOUNDARY.ACTUAL.json",
+    "sha256": "acebac5fd5bc97597251bff18b97518a7bf3868ad28900e59d6d56aa0d2599e3"
+  },
+  "current_free": {
+    "bytes": 49224,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-POSTJOIN-CURRENTFREE-PREPARATION-1/actual-acceptance-1/CURRENT-FREE.ACTUAL.json",
+    "sha256": "3fd1a6facf34a9e6ac9259526da96ddee2dd22c6032ee47b37be97e56d0086e3"
+  },
+  "current_ledger": {
+    "bytes": 89874,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT68-CURRENT119-ADOPTION-1/ROOT68-NONCE-LEDGER.ACTUAL.json",
+    "sha256": "d948ba50890c2e735bb92b541c997694154c9cf62963e748bf47f1a992b57022"
+  },
+  "decision": "PASS_EXACT_CURRENT119_RESOURCE_OBSERVER_SOURCE_BINDING",
+  "implementation_ownership": false,
+  "independent": true,
+  "independent_Root68_adoption_review": {
+    "bytes": 3843,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT68-CURRENT119-ADOPTION-1/independent-review-1/ADOPTION-REVIEW.ACTUAL.json",
+    "sha256": "0c9b567e31debc957a654f4098288910cd90067f1109c28370151b4391ce1789"
+  },
+  "independent_source_review": {
+    "bytes": 6155,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/post119-resource-successor-source-1/accepted-current-physical-source-1/independent-source-review-1/SOURCE-REVIEW.ACTUAL.json",
+    "sha256": "2ea67d826b4ccd35eb603dd52b82e277bf2ccf63335e8cc14e44637b1e45eb4e"
+  },
+  "limitations": [
+    "Static source/context review only. No actual physical-history/native operation binding or runtime observer configuration is approved by this receipt.",
+    "Runtime335e observer must separately require PASS_EXACT_CURRENT119_FRESH_RESOURCE_OBSERVER with the exact complete binding_payload and unchanged validate_route. This SOURCE decision cannot satisfy that predicate.",
+    "No observation, resource release, native workload, source authority or current-free creation is granted. Existing accepted-current refs are authenticated source inputs only."
+  ],
+  "observer": {
+    "bytes": 14062,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/post119-resource-successor-source-1/accepted-current-physical-source-1/observe_current119_native_resources.py",
+    "sha256": "335e82f3e1a2c0a88d50fcdd1d1410aeb8881d2b07f95dbb0b6057488c641171"
+  },
+  "original_resource_lock_holder_cgroup_checks_preserved": true,
+  "recorded_utc": "2026-10-29T21:35:50.627314+00:00",
+  "review_scope": "SOURCE_ONLY_STATIC_OBSERVER_BINDING_NOT_RUNTIME_CONFIGURATION",
+  "reviewer": "/root/recovery_review",
+  "runtime_authority": null,
+  "schema": "mckernel.independent-current119-resource-observer-source-binding.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

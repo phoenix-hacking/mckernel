@@ -1,0 +1,10 @@
+void
+arch_ptrace_regset_log_bridge(int event, long type)
+{
+	if (event == 1) {
+		kprintf("ptrace_read_regset: not supported type 0x%x\n", type);
+	}
+	else if (event == 2) {
+		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+	}
+}

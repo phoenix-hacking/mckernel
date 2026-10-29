@@ -1,0 +1,101 @@
+[
+  {
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "label": "bind",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/coherent-native-entry-source-3/materialize_entries.py",
+      "--phase",
+      "bind",
+      "--root-intent",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/ROOT-NATIVE-ENTRY-BIND-INTENT3.ACTUAL.json",
+      "--root-intent-sha256",
+      "028a56cd913671bc9acdee4387692f794e665c94c5c463256d8b03f3e470730d"
+    ],
+    "started_epoch": 1793310377.9045136,
+    "finished_epoch": 1793310377.9447505,
+    "wall_seconds": 0.040237247943878174,
+    "returncode": 0
+  },
+  {
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "label": "check-static",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/root-adopted-current119-process235-entry-3/prepare_startup_bindings.py",
+      "--check-static"
+    ],
+    "started_epoch": 1793310377.9451108,
+    "finished_epoch": 1793310378.1682699,
+    "wall_seconds": 0.22315924777649343,
+    "returncode": 0
+  },
+  {
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "label": "nonce",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/root-adopted-current119-process235-entry-3/prepare_startup_bindings.py",
+      "--nonce",
+      "a876915e19964ad8978887961e630f65"
+    ],
+    "started_epoch": 1793310378.1685894,
+    "finished_epoch": 1793310378.4804425,
+    "wall_seconds": 0.3118539401330054,
+    "returncode": 0
+  },
+  {
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "label": "bridge",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/CURRENT119-NATIVE-WEEKLY-GUARD-1/coherent-native-entry-source-3/materialize_entries.py",
+      "--phase",
+      "bridge",
+      "--root-intent",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CURRENT119-MATCHING-NATIVE-PREPARATION-1/ROOT-NATIVE-ENTRY-BIND-INTENT3.ACTUAL.json",
+      "--root-intent-sha256",
+      "028a56cd913671bc9acdee4387692f794e665c94c5c463256d8b03f3e470730d"
+    ],
+    "started_epoch": 1793310378.4807265,
+    "finished_epoch": 1793310378.5228846,
+    "wall_seconds": 0.042158595053479075,
+    "returncode": 0
+  }
+]

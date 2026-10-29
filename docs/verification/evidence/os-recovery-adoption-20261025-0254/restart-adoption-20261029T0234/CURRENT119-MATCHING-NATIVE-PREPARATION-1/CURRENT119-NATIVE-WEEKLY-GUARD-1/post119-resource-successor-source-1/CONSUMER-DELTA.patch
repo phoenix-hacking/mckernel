@@ -1,0 +1,36 @@
+--- candidate-templates/capture_fresh_startup_resource.py	2026-10-29 14:23:38.784151713 -0700
++++ post119-resource-successor-source-1/capture_fresh_startup_resource.py	2026-10-29 14:26:32.761628396 -0700
+@@ -14,6 +14,19 @@
+  assert ref(r['path'])==r
+  spec=importlib.util.spec_from_file_location(name,r['path']);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ 
++def validate_post119_route(st, context, review):
++ # No observation is made here: Root must bind a separately reviewed fresh observer.
++ assert st['root_ledger35']==context['current_ledger']
++ assert st['latest_serial_operation_physical_acceptance']==context['post119_current_free']
++ assert st['current_boundary']==context['current_boundary']
++ assert review['decision']=='PASS_EXACT_CURRENT119_FRESH_RESOURCE_OBSERVER' and review['independent'] is True and review['implementation_ownership'] is False
++ assert review['observer']==st['current_observer_source'] and review['current_ledger']==context['current_ledger'] and review['current_free']==context['post119_current_free'] and review['current_boundary']==context['current_boundary']
++ assert review['complete_actual_actor_frontier'] is True and review['original_resource_lock_holder_cgroup_checks_preserved'] is True and review['runtime_authority'] is None
++
++def validate_post119_physical(context, physical):
++ assert physical['current_ledger']==context['current_ledger'] and physical['current_boundary']==context['current_boundary'] and physical['actual_latest_operation_postjoin_acceptance']==context['post119_current_free']
++ assert physical['complete_actual_actor_frontier'] is True and physical['native_acceptance'] is False and physical['runtime_authority'] is None
++
+ def main():
+  a=argparse.ArgumentParser();a.add_argument('--output-path',required=True,type=Path);out=a.parse_args().output_path
+  assert out.is_absolute() and out.parent==A
+@@ -28,8 +41,11 @@
+   for r in st['capture_sources'].values():assert ref(r['path'])==r
+   assert ref(GUARD)['sha256']==GUARD_SHA
+   guard=load(ref(GUARD),'literal_earliest_v2_guard_native235');first=guard.guard()
+-  observer=load(OBSERVER_REF,'literal_reviewed_current235_observer');physical=observer.observe()
+-  assert physical['Root54']==st['root_ledger35'] and physical['actual_latest_operation_postjoin_acceptance']==st['latest_serial_operation_physical_acceptance']
++  _,_,context,_=guard.binding_metadata(guard.read(guard.ref(guard.BINDING)))
++  review=guard.read(st['current_observer_review'])
++  validate_post119_route(st,context,review)
++  observer=load(OBSERVER_REF,'literal_reviewed_current119_resource_observer');physical=observer.observe()
++  validate_post119_physical(context,physical)
+   assert physical['boot_id']=='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb' and physical['no_existing_heavy'] is True and physical['pids_current']==0 and physical['active_shared_records_absent'] is True
+   assert len(physical['closed_exclusive_probes'])==2 and not physical['group_membership_observation']['errors']
+   raw.write((json.dumps(physical,indent=2)+'\n').encode())

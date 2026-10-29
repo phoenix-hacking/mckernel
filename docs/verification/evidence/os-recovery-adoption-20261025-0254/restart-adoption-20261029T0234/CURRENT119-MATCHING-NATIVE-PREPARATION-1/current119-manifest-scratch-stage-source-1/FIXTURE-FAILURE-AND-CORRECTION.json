@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "first_result": "5tests:3PASS/1KeyError/1ASTfixtureFAIL",
+  "causes": [
+    "Test named prior_accepted_stage_source_review instead of actualprofile prior_stage_source_review",
+    "ASTtest-createdConstant omitted Python3.8 kind=None field present in original parsedAST"
+  ],
+  "bounded_correction": "Fix exactfixturemetadata key and preservekind in ASTtest normalization; stage source/profile unchanged.",
+  "stage_or_runtime_effects": 0
+}

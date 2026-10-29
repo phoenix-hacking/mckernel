@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": "One source-authorized existing accepted _ReuseElf AST read of actual b426 object; no nm/ELF subprocess/compiler/native.",
+  "actual_generic_C_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "bytes": 336736,
+    "sha256": "b4260267b1cacde54057f823364fe880462924e85a12883d60df31a0971ec7c0"
+  },
+  "accepted_reader_node": {
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py",
+      "bytes": 226480,
+      "sha256": "9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd"
+    },
+    "name": "_ReuseElf",
+    "first_line": 1969,
+    "last_line": 2010,
+    "source_segment_sha256": "16617d6755e66455b09b654195c4a4c43468fdf7fb7dd005b69924523eabbc1e",
+    "AST_sha256": "718c90e5c12e745f6850fccaf03da924e02ded2e257bc1ef79c5faf4410ca0fa",
+    "reuse": "EXACT_AUTHENTICATED_NODE_NO_OLD_REVIEW_TOPLEVEL"
+  },
+  "qualification_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/QUALIFICATION-EVIDENCE-READY.json",
+    "bytes": 12989,
+    "sha256": "3ad285972bd43313b17464b380d2829ce9a40c12e404d50c262bce9a949a7ffe"
+  },
+  "independent_artifact_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CURRENT119-ACTUAL-ARTIFACT-QUALIFICATION-1/independent-review-1/INDEPENDENT-ACTUAL-CURRENT119-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 31084,
+    "sha256": "3324128344411d3e8c0c87ce970b3fc851edc87507613b2186944f7be1158c6c"
+  },
+  "allocated_generic_C_function_names": [
+    "clear_host_pte_log_bridge",
+    "syscall_settid_log_bridge",
+    "ptrace_report_clone_noirq_lock_bridge",
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_update_unlock_bridge",
+    "ptrace_report_clone_noirq_unlock_bridge",
+    "ptrace_detach_do_kill_bridge",
+    "ptrace_detach_kfree_bridge",
+    "syscall_forward_context_bridge",
+    "do_munmap_clear_host_bridge",
+    "ptrace_wakeup_sig",
+    "ptrace_detach_wakeup_bridge",
+    "ptrace_wakeup_log_bridge",
+    "ptrace_report_clone_log_bridge",
+    "do_munmap_set_host_bridge",
+    "mprotect_set_host_vma_bridge",
+    "wait_host_wait4_bridge",
+    "terminate_mcexec_do_syscall_bridge",
+    "syscall_do_syscall3_bridge",
+    "do_execveat",
+    "perf_event_open_do_syscall_bridge",
+    "do_mmap",
+    "do_syscall",
+    "terminate_mcexec",
+    "terminate",
+    "terminate_host",
+    "interrupt_syscall",
+    "exit_group_log_bridge",
+    "exit_group_terminate_bridge",
+    "exit_group_current_pid_bridge",
+    "syscall_execveat_bridge",
+    "do_fork",
+    "do_setresuid",
+    "do_setresgid",
+    "syscall_forward_rt_sigprocmask_bridge",
+    "syscall_forward_sigaction_update_bridge",
+    "syscall_policy_forward_context_bridge",
+    "sys_perf_event_open",
+    "syscall_policy_do_syscall2_bridge",
+    "syscall_policy_do_syscall3_bridge",
+    "util_thread",
+    "syscall_util_indicate_clone_disabled_bridge"
+  ],
+  "selected": "do_munmap_clear_host_bridge",
+  "private_equivalent_search": "No definition/declaration in canonical kernel/rust or readysevenleaf Rust; no active ownership conflict known. No duplicateclear_host_pte body."
+}
