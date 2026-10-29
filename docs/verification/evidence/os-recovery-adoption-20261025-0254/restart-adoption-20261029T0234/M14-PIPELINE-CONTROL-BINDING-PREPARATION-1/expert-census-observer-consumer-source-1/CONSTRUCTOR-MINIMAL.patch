@@ -1,0 +1,87 @@
+--- retained/prepare_observer_current_controls.py
++++ successor/prepare_observer_current_controls.py
+@@ -35,6 +35,9 @@
+     'ledger': (ACTUAL / 'ROOT-CURRENT-NONCE-LEDGER64.SUPPLEMENTED.PENDING.json', '3932659c13ba04997870e1d67b2a356b0205e699951a959dd6fdac4ddc7694ff'),
+     'custody_validation': (ACTUAL / 'ACTUAL-CUSTODY-PURE-VALIDATION.json', 'b8e5be77b605fb69a8199d624cbda0b106667e3a8caa3bae793d298f5c3c4488'),
+ }
++EXACT_CLEANUP = {'cleanup_executor': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/monotone-census-negative-facts-source-1/retire_exact_current118_stopped_container.py', 'bytes': 45759, 'sha256': 'bec450e0f2a25f4624b83abf43338b424ce275d85193ae9f0caf3aedcb844f90'}, 'cleanup_bindings': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/monotone-census-negative-facts-source-1/BINDINGS.json', 'bytes': 26741, 'sha256': 'feebbf1e0cecb7d6605d2e92f1288b969e5251419bb4d327c8b012d1221b97cd'}, 'cleanup_runtime_files': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/monotone-census-negative-facts-source-1/RUNTIME-FILES.json', 'bytes': 3947, 'sha256': 'f367b012cba27dea8845771e4f77cdc39270c4c2f927fafa04abd31c650acaa7'}, 'cleanup_source_ready': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/monotone-census-negative-facts-source-1/SOURCE_READY.json', 'bytes': 7857, 'sha256': '924c17f8044b7deac160fd06474bd7e15161f4ba5d6c003b1b7434bef468ac2c'}, 'cleanup_source_review': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/monotone-census-negative-facts-source-1/independent-source-review-1/SOURCE-REVIEW.ACTUAL.json', 'bytes': 10526, 'sha256': 'cd4e215caf1995e819eb182f00583b49decf7a99115c0aaafcec476deb62ca44'}, 'expert_design': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/whole-snapshot-ENOENT-correction-source-1/independent-source-review-1/EXPERT-DESIGN.md', 'bytes': 5954, 'sha256': '125d29c7870755fa6f99970eb3d2c153800a801b04f8c25731fbc63312f9798c'}}
++EXTRA_CUSTODY = {'post_root3_pending': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT-NONCE-LEDGER64.POST-ROOT3-FAILURE.PENDING.json', 'bytes': 42557, 'sha256': '5dea3b99e01f011e674f2bffb00730e1273f462bb9b8b0a51a857910d31fb8d4'}, 'post_root4_pending': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT-NONCE-LEDGER64.POST-ROOT4-RETIREMENT.PENDING.json', 'bytes': 43724, 'sha256': 'aefd078e282480715a4803cff9f46d3c71033616b91b950d8f0c9d5e9e888366'}, 'root4_parent_normalized': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/ACTUAL-RETIREMENT-ROOT4-PARENT/DIRECT-PARENT-JOIN.NORMALIZED.ACTUAL.json', 'bytes': 1616, 'sha256': '6a17cf3f4f923d42464c2741bd8b122261ed4de49519db3e091da56634b2e551'}, 'root4_parent_raw': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/ACTUAL-RETIREMENT-ROOT4-PARENT/DIRECT-PARENT-JOIN.ACTUAL.json', 'bytes': 2383, 'sha256': '2c4041377247ffedb960c8e38ddf5a7abf31777b2706330fd483a651c34bf805'}}
++OBSERVER_TEMPLATE = {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.template.py', 'bytes': 45953, 'sha256': '124f9f04c295a205751865cba962c1394c909449d5a5495515717e2f12013b4a'}
+ FIELDS = {'schema','scope','guardian','guardian_review','armed_receipt','cleanup_executor','cleanup_bindings','cleanup_runtime_files','cleanup_source_ready','cleanup_source_review','thread_id'}
+ 
+ def need(ok, why):
+@@ -74,14 +77,14 @@
+     old = {}
+     for node in tree.body:
+         if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+-            if node.targets[0].id in ('GUARDIAN_SOURCE', 'THREAD'):
++            if node.targets[0].id in ('GUARDIAN_SOURCE', 'THREAD', 'E'):
+                 old[node.targets[0].id] = node
+-    need(set(old) == {'GUARDIAN_SOURCE','THREAD'}, 'exact two shared guard assignments')
++    need(set(old) == {'GUARDIAN_SOURCE','THREAD','E'}, 'exact namespace and two shared guard assignments')
+     lines = source.splitlines(True)
+-    for name, value in [('GUARDIAN_SOURCE', guardian), ('THREAD', thread_id)]:
++    for name, value in [('GUARDIAN_SOURCE', guardian), ('THREAD', thread_id), ('E', str(BASE))]:
+         node = old[name]
+         need(node.lineno == node.end_lineno, 'one-line exact source assignment')
+-        lines[node.lineno - 1] = name + ' = ' + repr(value) + '\n'
++        lines[node.lineno - 1] = name + ' = ' + ('Path(' + repr(value) + ')' if name == 'E' else repr(value)) + '\n'
+     result = ''.join(lines)
+     after = ast.parse(result)
+     for before_node, after_node in zip(tree.body, after.body):
+@@ -109,11 +112,13 @@
+     CUTOFF.validate_monotone_cutoffs(old['cutoffs'],new['cutoffs'])
+     need(new['guardian'] == manifest['guardian'], 'same actual new guardian in cleanup and observer')
+     need(new['output_root_parent'] == str(Path(manifest['cleanup_executor']['path']).parent), 'cleanup output root matches its exact successor source directory')
+-    original = auth(pins['retirement_source']).read_text()
+-    anchor = "BINDINGS_SHA='" + pins['retirement_bindings']['sha256'] + "'"
+-    need(original.count(anchor) == 1, 'one exact cleanup binding digest')
+-    expected = original.replace(anchor, "BINDINGS_SHA='" + manifest['cleanup_bindings']['sha256'] + "'")
+-    need(auth(manifest['cleanup_executor']).read_text() == expected, 'cleanup code differs only in binding digest')
++    # Exact expert-reviewed successor only; never an AST/pattern allowance.
++    for key in ('cleanup_executor','cleanup_bindings','cleanup_runtime_files','cleanup_source_ready','cleanup_source_review'):
++        need(manifest[key] == EXACT_CLEANUP[key], 'exact independently reviewed monotone-census successor ' + key)
++        auth(EXACT_CLEANUP[key])
++    auth(EXACT_CLEANUP['expert_design'])
++    review = checked(manifest['cleanup_source_review'])
++    need(review['expert_design'] == EXACT_CLEANUP['expert_design'], 'exact expert design source')
+     old_runtime = checked(pins['compatibility_runtime_files'])
+     new_runtime = checked(manifest['cleanup_runtime_files'])
+     expected_runtime = dict(old_runtime, executor=manifest['cleanup_executor'], bindings=manifest['cleanup_bindings'], guardian=manifest['guardian'])
+@@ -155,28 +160,32 @@
+     manifest = checked(supplied)
+     validate_manifest(manifest,pins)
+     old_observer = auth(refs['observer']).read_text()
++    new_observer = auth(OBSERVER_TEMPLATE).read_text()
++    for row in EXTRA_CUSTODY.values():
++        auth(row)
+     old_shared = auth(refs['shared_guard']).read_text()
+     new_shared = rewrite_guard(old_shared,manifest['guardian'],manifest['thread_id'])
+     outputs = ['observe_current64_current118_postjoin.py','operation_window_guard64.py','INPUTS.json','CONTROL-SOURCE-CONSTRUCTION.json','ROOT64-RUNTIME-BINDINGS.ACTUAL-CUSTODY.TEMPLATE.NOT-AUTHORITY.json','MINIMAL-DIFF.patch']
+     need(not any((HERE/name).exists() for name in outputs), 'never overwrite existing materialization')
+     # All authentication and scope checks precede first write. Exclusive creation
+     # leaves any interrupted construction retained; this is never an execution grant.
+-    for name,text in [('observe_current64_current118_postjoin.py',old_observer),('operation_window_guard64.py',new_shared)]:
++    for name,text in [('observe_current64_current118_postjoin.py',new_observer),('operation_window_guard64.py',new_shared)]:
+         with (HERE/name).open('x') as stream:
+             stream.write(text)
+     newpins = copy.deepcopy(pins)
+     changes = dict(guardian=manifest['guardian'],shared_guard=ref(HERE/'operation_window_guard64.py'),retirement_source=manifest['cleanup_executor'],retirement_bindings=manifest['cleanup_bindings'],compatibility_runtime_files=manifest['cleanup_runtime_files'],compatibility_source_ready=manifest['cleanup_source_ready'])
++    changes.update(EXTRA_CUSTODY)
+     newpins.update(changes)
+     with (HERE/'INPUTS.json').open('x') as stream:
+         stream.write(json.dumps(newpins,indent=2)+'\n')
+     binding = checked(ref(SOURCE2/'ROOT64-RUNTIME-BINDINGS.TEMPLATE.NOT-AUTHORITY.json'))
+-    binding.update(ledger=refs['ledger'],custody_supplement=refs['custody'])
++    binding.update(ledger=EXTRA_CUSTODY['post_root4_pending'],custody_supplement=refs['custody'],retirement_result=checked(EXTRA_CUSTODY['post_root4_pending']) and json.loads(checked(EXTRA_CUSTODY['post_root4_pending'])['note'])['closed_current118_root4_retirement']['result'],retirement_parent_join=EXTRA_CUSTODY['root4_parent_normalized'])
+     with (HERE/'ROOT64-RUNTIME-BINDINGS.ACTUAL-CUSTODY.TEMPLATE.NOT-AUTHORITY.json').open('x') as stream:
+         stream.write(json.dumps(binding,indent=2)+'\n')
+     with (HERE/'MINIMAL-DIFF.patch').open('x') as stream:
+-        for old,new,name in [(auth(refs['inputs']).read_text(),json.dumps(newpins,indent=2)+'\n','INPUTS.json'),(old_shared,new_shared,'operation_window_guard64.py')]:
++        for old,new,name in [(old_observer,new_observer,'observe_current64_current118_postjoin.py'),(auth(refs['inputs']).read_text(),json.dumps(newpins,indent=2)+'\n','INPUTS.json'),(old_shared,new_shared,'operation_window_guard64.py')]:
+             stream.writelines(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='retained/'+name,tofile='successor/'+name))
+-    receipt = dict(scope=SCOPE,status='SOURCE_ONLY_SUCCESSOR_REQUIRES_INDEPENDENT_REVIEW_NO_EXECUTION',runtime_authority=None,constructor_inputs=supplied,retained=refs,explicit_new_sources=manifest,observer=ref(HERE/'observe_current64_current118_postjoin.py'),inputs=ref(HERE/'INPUTS.json'),shared_guard=ref(HERE/'operation_window_guard64.py'),changed_INPUTS_fields=sorted(changes),changed_shared_guard_assignments=['GUARDIAN_SOURCE','THREAD'],observer_source_byte_identical=True,actual_custody=refs['custody'],actual_supplemented_pending_ledger=refs['ledger'],historical_pending_ledger_pin_unchanged=pins['pending_ledger'],original389_rejection_unchanged=True,compiler_guard_cleanup_proc_capture_calls=0)
++    receipt = dict(scope=SCOPE,status='SOURCE_ONLY_SUCCESSOR_REQUIRES_INDEPENDENT_REVIEW_NO_EXECUTION',runtime_authority=None,constructor_inputs=supplied,retained=refs,explicit_new_sources=manifest,observer=ref(HERE/'observe_current64_current118_postjoin.py'),inputs=ref(HERE/'INPUTS.json'),shared_guard=ref(HERE/'operation_window_guard64.py'),changed_INPUTS_fields=sorted(changes),changed_shared_guard_assignments=['E','GUARDIAN_SOURCE','THREAD'],observer_source_byte_identical=False,observer_template=OBSERVER_TEMPLATE,observer_independent_source_review=None,actual_custody=refs['custody'],actual_supplemented_pending_ledger=EXTRA_CUSTODY['post_root4_pending'],historical_pending_ledger_pin_unchanged=pins['pending_ledger'],original389_rejection_unchanged=True,compiler_guard_cleanup_proc_capture_calls=0)
+     with (HERE/'CONTROL-SOURCE-CONSTRUCTION.json').open('x') as stream:
+         stream.write(json.dumps(receipt,indent=2)+'\n')
+     print(json.dumps(receipt))

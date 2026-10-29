@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/READY.SOURCE-ONLY.json",
+    "bytes": 8678,
+    "sha256": "bdcb8dc0445f09f246b2802cb6b4f707e9419ef57f4d796bcfa9d30f203c8754"
+  },
+  "observer_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.template.py",
+    "bytes": 45953,
+    "sha256": "124f9f04c295a205751865cba962c1394c909449d5a5495515717e2f12013b4a"
+  },
+  "future_materialized_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.py",
+    "bytes": 45953,
+    "sha256": "124f9f04c295a205751865cba962c1394c909449d5a5495515717e2f12013b4a"
+  },
+  "constructor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/prepare_observer_current_controls.py",
+    "bytes": 16715,
+    "sha256": "3731b6e3c4e545cd1cf191c611de86b128ae1187564be663c0533c3bb43b7ea3"
+  },
+  "external_sources_and_custody": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/EXACT-EXTERNAL-SOURCE-AND-CUSTODY.json",
+    "bytes": 3963,
+    "sha256": "70a5ddbf52b9f04b06baa68951424cdd37526abd8bece971a3507b1b56c0582d"
+  },
+  "original_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT118-postbuild-current-successor-preparation-1/source-2/observe_current64_current118_postjoin.py",
+    "bytes": 39250,
+    "sha256": "d216adacf568e3e13c70bc8877a0e6a5af6713dad0c60044b03b87091e03ecfd"
+  },
+  "independent_pure_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/independent-source-review-1/PURE-TESTS.ACTUAL.json",
+    "bytes": 601,
+    "sha256": "ea96f40cfd986f9e61dcd049cc0ffa9d551027eb77ce99d384c572f012c1b048"
+  },
+  "all_ready_byte_references_authenticated": true,
+  "changed_existing_observer_functions": [
+    "attach_custody",
+    "source_subjects",
+    "validate_new_commands",
+    "observe"
+  ],
+  "added_observer_functions": [
+    "root3_failed_actors",
+    "root4_outer_parent_actors"
+  ],
+  "all_other_observer_function_ASTs_unchanged": true,
+  "findings": [
+    "Both four-argument process_source calls bind actualbec executor, its unchangedb, and the exact preceding command and actor PID prefix used by validate_process. Generation excludes current census process and raw receipt validation reconstructs the same prefix.",
+    "Constructor accepts only exactbec/feeb/f367/cd4 source closure and expert125d, rather than widening old hash-only-delta rule; all12 map and cleanup guardian/output/cap predicates retained. Guardian5af/sharedguard thread and absolute evidence-root assignments are the sole sharedguard deltas; guard predicate ASTs unchanged.",
+    "Original custody128 is preserved. New functions authenticate exact5dea Root3 failed parent/executor/client and aefd Root4 raw/Rootnormal6a17; actor births projected from actual records, Root3 measured groups retained, Root4 outerparent groupNone.132retained+unchanged15successfulcleanup=147 beforecapture.",
+    "Root3 failure1, positive command and directparent waits, rawstatuses/streams and UNKNOWN remain separate from successfulRoot4. Root4 normalization and stdout bind exactresult915c. All72 consumednonces and immutable native/artifact rejection history preserved.",
+    "Original validate_retained/failedcustody/pendingledger/retirement/capture/acceptance/currentadoption/absence/physical functions are unchanged. Recursive process/group/FD/lock/mount/cgroup/resources and originaltwo closedprobes,120s,freshclock/entry guards remain required.",
+    "Six pure CPU0/Python3.8/AS2GiB groups independentlyPASS, including actual147/72/UNKNOWN, malformedjoin/group/refusal and exactAPIprefix dataflow. Firstfixture assertion failure retained as harness-only; no capture or runtime guard invoked."
+  ],
+  "downstream119": {
+    "source_ready": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/READY.SOURCE-ONLY.json",
+      "bytes": 4110,
+      "sha256": "ce1f06ccedb86ea9ab1595dd1ca1be30a025b69d55ab611a9c7e54a9f502e47b"
+    },
+    "files": {
+      "accepted_bindings.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/accepted_bindings.py",
+        "bytes": 5523,
+        "sha256": "88ee998e82b530d8de9d70da4229d66a20688a5656098b023a458125b1036908"
+      },
+      "seal_root_current119_inputs.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/seal_root_current119_inputs.py",
+        "bytes": 9249,
+        "sha256": "bee8a014b3253be0fcee844bc33d786163a726f427950f5195fdc4837af0567f"
+      },
+      "run_build_only.corrected-template.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/run_build_only.corrected-template.py",
+        "bytes": 26663,
+        "sha256": "48bfbf5a53d9ea34bcc8fff217167504d0ffec0a763379577eee561b53cd63e7"
+      },
+      "hold_and_run_build_only.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/hold_and_run_build_only.py",
+        "bytes": 7010,
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "ROOT-CURRENT119-INPUT.TEMPLATE.NOT-AUTHORITY.json": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/ROOT-CURRENT119-INPUT.TEMPLATE.NOT-AUTHORITY.json",
+        "bytes": 414,
+        "sha256": "02c9414422371d665a4df8616a3bca61dfd1acc71fa8d13e38a1c9d688773bcb"
+      }
+    },
+    "expected_actual_observer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.py",
+      "bytes": 45953,
+      "sha256": "124f9f04c295a205751865cba962c1394c909449d5a5495515717e2f12013b4a"
+    },
+    "exact_minimal_helper_and_namespace_changes": true,
+    "runner_holder_byte_identical": true
+  },
+  "source_publication": null,
+  "actual_materialization_review": null,
+  "runtime_dependency_execution_review": null,
+  "execution_approval": false,
+  "current_free": false,
+  "native_acceptance": false,
+  "original_client_status": "UNKNOWN",
+  "runtime_authority": null,
+  "remaining": [
+    "Publish/fetch exactcode/templates; constructor is source/data-only and realRootmanifest must bind reviewedguardian.",
+    "Independently bind actual constructed observer/INPUTS/sharedguard bytes and exactcurrent operation/config/account/resource release before readonly capture.",
+    "Actual rawcapture plus positiveobserver-parent join and independentcurrentfree/Root65 adoption remain mandatory; accepted119origin/seal/build/native remain pending."
+  ]
+}

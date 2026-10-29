@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/accepted_bindings.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/accepted_bindings.py
+@@ -36,7 +36,7 @@
+  bindings=read(q['current_bindings'])
+  need(bindings['phase']=='accepted_current' and bindings['ledger']==q['current_ledger'] and bindings['latest_free']==q['current_free'],'same accepted-current bindings/ledger/free')
+  boundary=read(bindings['current_boundary']);source=boundary['observer']
+- need(source['sha256']=='d216adacf568e3e13c70bc8877a0e6a5af6713dad0c60044b03b87091e03ecfd' and source['bytes']==39250,'exact retained pure current observer body at actual path')
++ need(source=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.py', 'bytes': 45953, 'sha256': '124f9f04c295a205751865cba962c1394c909449d5a5495515717e2f12013b4a'},'exact expert-census observer body and constructor namespace')
+  observer=load(source,'actual_root65_pure_adoption')
+  # Proven existing pure reader: all72/native history, retirement, raw capture,
+  # positive joins, independent free and boundary/schema checks; no observe/guard.

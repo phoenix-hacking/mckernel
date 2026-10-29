@@ -2,6 +2,36 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Weekly-only successor requested; current controls unchanged — 2026-10-29T05:26:49Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Request20261029T052649204290Z-dfcd27027e454b71a0618ad691fc979f authorizes weekly-only
+continuation until0%remaining, replacing06UTC anddisablingprepaidfallback. Parent
+ispreparing WEEKLY-ONLY-20261029-1 envelope, upperboundreset1793774133/quota100,
+changedreset/window/unknownusage stops. It isNOTarmedhere. DoNOTeditoldcontrols,
+selflaunchcontrollers, infernewnative/workloadrelease, orruntimepastoldactualcaps
+untilnewactualcontrols/operationbinding exists. No prepaidtransition/purchase/API
+billing. Historicalcreditledger/evidence/nativeowners preserved. Continuecurrent
+authorizedfunctionalworkuntilparentrequestsnormalmodel-onlycheckpoint/handoff.
+
+CURRENT119 hasNOTenteredcompiler. No liveRootnative/heavychild: successfulRoot4
+parenttool46268 terminal0, parent2311392/b104859779 andexecutor2311393/b104859782
+joined0/closed;14clients retained inRESULT915c7809, acceptance21026299. Checkpoint
+b4956408f8515da4d9a4d34a29b1f02de150d533 pushed/fetched84exactfiles. Root3failure
+releases/sourceb09 preserved, oldclient2232653 UNKNOWN. aefd pending72ledger.
+
+Currentowner m14_integration finalizes privateexpert-census-observer-consumer-
+source-1 constructor3731b6e3/template124f9f04 (6puregroupsPASS147actors), plus
+119expert-census-observer-binding-source-1 exactobserverpin. recovery_review owns
+preciseindependentreview; neither has executedobserver/capture. Rootnextactual
+operation remainsreviewedfreshfullpostjoin/current-free/Root65, then119producer.
+DoNOTreplay anycleanup/oldBUILD3/A3/SDK/sourceexport. Actual119origin command
+record: CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-
+binding-1/FRESH-ORIGIN-AND-SEAL.STEPS.NOT-GRANTED.json; actualnonce/Root65/current
+free/origin/sealedrunner stillUNRUN. M14exclusive; M15pauseduntiloriginalM14
+acceptance, thenautomaticwithinnewactualauthorizedwindow. Currentoldcaps still
+UTC1793253600/MONO1035703.5689321246/BOOT1051041.695980609 at runtimeentry.
+
 ## Current successful retirement frontier — 2026-10-29T05:19:24Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
