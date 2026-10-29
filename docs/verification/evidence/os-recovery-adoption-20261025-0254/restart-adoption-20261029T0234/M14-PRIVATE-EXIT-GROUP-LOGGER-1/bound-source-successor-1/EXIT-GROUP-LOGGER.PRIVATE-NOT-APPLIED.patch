@@ -1,0 +1,77 @@
+--- /dev/null
++++ b/kernel/rust/syscall_exit_group_logger.rs
+@@ -0,0 +1,26 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private candidate: original descriptor identity is pinned by the accompanying source map.
++
++use core::ptr::{addr_of, read_volatile};
++use crate::debug::Ddebug;
++use super::{kprintf, CInt};
++
++unsafe extern "C" {
++    // The one original dkprintf descriptor, retained by the candidate C binding.
++    static mut f03_exit_group_log_debug_v1: Ddebug;
++}
++
++/// Existing void(int) callback, with the original nonzero dynamic-debug gate.
++#[no_mangle]
++pub(super) extern "C" fn exit_group_log_bridge(pid: CInt) {
++    // SAFETY: the required C object has the existing Ddebug32-byte/alignment8
++    // layout and lifetime. Its high byte at line_flags offset24 is the original
++    // flags field. Read it once without retaining a reference over kprintf.
++    // The static NUL format has exactly one %d, matched by unchanged CInt/i32.
++    unsafe {
++        let flags = read_volatile(addr_of!(f03_exit_group_log_debug_v1.line_flags)) >> 24;
++        if flags != 0 {
++            kprintf(c"sys_exit_group,pid=%d\n".as_ptr().cast(), pid);
++        }
++    }
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5742,11 +5742,22 @@
+ 	return;
+ }
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void exit_group_log_bridge(int pid);
++struct ddebug __attribute__((aligned(8),section("__verbose")))
++    f03_exit_group_log_debug_v1 = {
++    .file=__FILE__, .func="exit_group_log_bridge", .fmt=NULL,
++    .line=5678, .flags=DDEBUG_DEFAULT,
++};
++#else
++#line 5675
+ void
+ exit_group_log_bridge(int pid)
+ {
+ 	dkprintf("sys_exit_group,pid=%d\n", pid);
+ }
++#endif
++#line 5680
+ 
+ void
+ exit_group_terminate_bridge(int status, int group)
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -16,6 +16,10 @@
+ use crate::lock_helpers::McsRwlockNodeIrqsave;
+ use crate::mem_helpers::{rusage_check_overmap, rusage_get_free_memory, rusage_get_total_memory};
+ use crate::sched_helpers::SchedSyscallOffsets;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_exit_group_logger.rs"]
++mod syscall_exit_group_logger;
+ use crate::waitq::{Waitq as RuntimeWaitq, WaitqEntry};
+ 
+ const EINVAL: CInt = 22;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -147,6 +147,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_coredump.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_log_providers.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_local.rs"

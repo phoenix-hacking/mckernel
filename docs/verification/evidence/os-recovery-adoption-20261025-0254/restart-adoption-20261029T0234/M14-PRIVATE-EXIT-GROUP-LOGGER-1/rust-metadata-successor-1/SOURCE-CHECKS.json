@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_RUST_OWNED_DESCRIPTOR_AND_CALLBACK_PRIVATE_SOURCE_CHECKS",
+  "runtime_authority": null,
+  "selected_C_arm": "extern callback only; zero selected Cmetadata objects",
+  "one_private_Rust_descriptor_used_section": "__verbose",
+  "Rust_descriptor_ABI_assertions": {
+    "size": 32,
+    "alignment": 8,
+    "line_flags_offset": 24
+  },
+  "exact_af46_identity": {
+    "file": "/src/kernel/syscall.c",
+    "function": "exit_group_log_bridge",
+    "fmt": null,
+    "line": 5678,
+    "flags": 0,
+    "padding": 0
+  },
+  "projected389Counter_equal": true,
+  "actual_linked_registry_or_padding_tested": false,
+  "actual_padding_zero_remains_linked_check": true,
+  "flag_vectors_checked": [
+    0,
+    1,
+    2,
+    128,
+    255
+  ],
+  "original_update_exclusion_contract_preserved": true,
+  "volatile_load_not_new_synchronization": true,
+  "static_or_data_symbol_exports_added": 0,
+  "callback_name_ABI_format_argument_order_unchanged": true,
+  "selected_C_descriptor_partial_attempt_superseded": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EXIT-GROUP-LOGGER-1/bound-source-successor-1/SOURCE_READY.json",
+    "bytes": 2868,
+    "sha256": "0a373907e5be8cace5a86e1524dad4ae07730bc7bed72dfeb6c0b76b34b90440"
+  },
+  "unchanged_module_dependency_composition_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EXIT-GROUP-LOGGER-1/bound-source-successor-1/SOURCE-CHECKS.json",
+    "bytes": 1818,
+    "sha256": "b69697d72c476cbc2eb998c247a7d599b62a40b9174815814b38b7e8d50b0522"
+  },
+  "updated_C_SetTid_ClearPTE_composition": true,
+  "other_packets_or_canonical_or_oracle_modified": false,
+  "patch_check": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EXIT-GROUP-LOGGER-1/rust-metadata-successor-1/EXIT-GROUP-RUST-METADATA.PRIVATE-NOT-APPLIED.patch"
+    ],
+    "returncode": 0
+  },
+  "compiler_HOST_native_calls": 0
+}

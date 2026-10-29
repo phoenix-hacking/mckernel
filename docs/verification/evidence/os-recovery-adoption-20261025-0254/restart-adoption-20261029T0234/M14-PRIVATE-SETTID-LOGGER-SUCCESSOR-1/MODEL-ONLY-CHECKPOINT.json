@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "MODEL_ONLY_CHECKPOINT_NO_ACTIVE_WORK",
+  "runtime_authority": null,
+  "source_state": "Draft Rust leaf saved only; previous preparation script stopped on source-anchor AssertionError before writing integration postimages/filemap/patch",
+  "draft": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/DRAFT.syscall_settid_logger.rs",
+    "bytes": 767,
+    "sha256": "cfbebb17c4a2d773675fda77124912ae3f4df9b649a957dec71a5bbca389f186"
+  },
+  "integration_patch_exists": false,
+  "canonical_writes": 0,
+  "compiler_or_payload_or_Docker_or_native_or_guest_calls": 0,
+  "checks_completed_for_this_leaf": [],
+  "last_preparation_failure": "Python AssertionError at generator line29; subsequent git apply --check could not open nonexistent patch. No patch/test pass claimed.",
+  "known_design": "Reuse parent syscall_policy CInt/kprintf ABI; same callback name, exact format/newline/int argument; intended C extern under existing selector plus Rust child module and explicit CMake dependency. Existing callback Cstatic-to-Rust-linkage fact requires later integration review.",
+  "remaining_work": "Resume only after parent handoff: reconcile exact source anchor, prepare private complete postimages/patch, source-level check and independent review; Root119 compiler/runtime feedback before integration/count credit",
+  "active_owned_operations": [],
+  "live_client_PIDs": [],
+  "parent_or_tool_handles": [],
+  "checkpoint_state": "checkpointed/no active work",
+  "M15_paused": true,
+  "self_resume_authorized": false
+}

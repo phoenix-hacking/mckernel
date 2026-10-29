@@ -1,6 +1,100 @@
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
+Current window: weekly allowance ONLY, codex10080/reset1793774133, stop100%used.
+No prepaid fallback/purchase/API billing. M14exclusive untiloriginalacceptance,
+thenM15. New actual controls and per-operation releases govern execution.
+
+## New weekly controls adopted; M14 execution owner active — 2026-10-29T05:52:19.506038+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Requests054607actualresume and054745steering received. WeeklyACTUAL-CONTROLS-ARMED
+isLIVE: watcher2319323/b104996085→worker2319326/b104996100→server2319328/b104996117;
+guardian2320122/b105006828, monitor2320168/phone2320169 b105008470; capacity2320864/
+b105021244. Includedonly, credit_budgetnull; weekly10080/reset1793774133/stop100.
+ActualcapsUTC1793774133/MONO1556237.568944064/BOOT1571575.6959913536. No controller
+mutation orduplicateactivation. Rootissolephysicalcapture/currentfree/119owner.
+
+Sourceprereq isconcrete: outer124f callsinheritedda5a liveRoot63/61guardchain that
+stillpinsretiredguardian/oldpaidwindow/06caps. m14_integration rebinds ONLYlive
+guard/routing/config data inprivateweeklysuccessor while oldpurehistoricalproof
+andallphysical/147actor/72nonce/UNKNOWN predicates remain. No oldrelease reuse.
+No current-free/Root65/119compiler/guest resultyet; acceptedRoot4 notrerun.
+
+PrivateSettidlogger source successor46ac/895f hasindependentSOURCEPASS380e: exact
+format/CInt/callbackABI unchanged, minimalCextern/module/CMake wiring, no canonical
+orcompiler/link/nativecredit. cleanup_bindings recordsnextptrace logger'sreal
+vararg/%08x+dkprintf-descriptor blocker; noinventedparity. recovery_receipts prepares
+minimal119fullartifactDATAadapter; original389unchanged. M15paused.
+
+20minbucket05:27:41–05:47:41 haszero newkernel/app/link/native/Cretirement. Explicit
+modelhandoffdispatchpause306.833542s isseparate; snapshotscrossserverrestart and
+arenotcontinuousactivevelocity. Original30minbaseline/no95claim preserved.
+LatestmeasuredHOST146537869312B/scratch47862149120B available. Nextactualresult:
+reviewedweeklylivebindings→fullpostjoin/currentfree/Root65→119fourcommands/389.
+
+## Explicit weekly-only manual resume — 2026-10-29T05:45:10.698502+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manualinvocation `20261029T054156Z-06af825a` explicitlysupersedes precedingmodel-
+handoff/stopbanners. Engineeringresumedat SOURCE/REVIEWONLY; do notwaitforanother
+resumeinstruction. NEWweekly ACTUAL-CONTROLS-ARMED isnotyetpresent. Parentowns
+activation. No capture/compiler/guest/cleanup/actualguard untilnewreceipt plus
+applicableoperation/source/resource/releasebindings. Old5af/3423/06caps are
+historical; neverextendoldreceiptsorreplayacceptedretirement. WeeklyONLYcodex
+10080/reset1793774133/stop100used; no prepaid/purchase/APIbilling.
+
+Confirmedactualfollowupturns: cleanup_bindings resumesprivateSettidlogger draft
+and source-anchorcorrection; m14_integration preparesprivateweeklyoperationguard
+consumer preserving124f physical/147actor/72nonce/UNKNOWN predicates. M15paused,
+M14exclusive. Root4retirement21026299/RESULT915c7809 remainsaccepted, all14clients
+andexecutor+parent joined; noRootnative/heavyjob livefrompriorinvocation. Full
+postjoin/current-free/Root65/119compiler remainUNRUN. Ready119fourcommandrecipe
+0c01/original389/source6153/SDK21/unchangedobjects retained, no rebuild/replay.
+
+Previousshutdowncommit wasinterrupted beforeGitmutation: HEADa9d695107, prior
+CURRENT/HANDOFF/privateSettidcheckpoint preserveddirty. Newadoptionreceipt at
+`evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+weekly-only-manual-resume-20261029T054156/MANUAL-RESUME-ADOPTION.ACTUAL.json`.
+Nextgenuineexecution afternewarm isfreshfullpostjoin/current-free/Root65→119;
+private source workproceeds meanwhile, no genericreadiness/audit loops.
+
+## MODEL-ONLY CHECKPOINT READY — 2026-10-29T05:39:32.710857+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Request `20261029T053649166458Z-8ccabb8236064d7fbfd3b153de5c1fbc` applied.
+New dispatch stopped; all four children checkpointed/no active work/no live owned
+handles. No compiler, guest, cleanup, release or capture was started after request.
+No Root native/heavy operation/client/tool is live. Last Root4 tool46268 terminal0;
+parent2311392/b104859779, executor2311393/b104859782 directjoin0/streamsclosed;
+14 command clients joined. Accepted retirement21026299, RESULT915c7809 preserved.
+No native resources cleaned or ownership records released for this model handoff.
+
+Postjoin observer124f/INPUTSda05 materialized; source98e, operation5c34, dependency
+894b, exactcaptureexecution3423 PASS. Capture hasNOTstarted, actual capture release
+hasNOTbeen sealed, outputactual-postjoin-capture-root1 isabsent. Current-free/Root65
+remainOPEN. Rootsoleowner resumes this exact operation only after explicit parent
+resume+actualnewincluded-onlycontrol/operation binding. Preserve147actor frontier,
+72nonces, aefd pendingledger andoldclient2232653 UNKNOWN. NeverreplayRoot4/Root3/
+oldBUILD3/A3/SDK/sourceexport orrenormalize acceptedunchangedlogs.
+
+Latest source checkpointa9d695107590fe9405777238c15bf9e37a2da600 pushed/fetched51
+exactfiles. CURRENT119 hasNOTenteredcompiler; no origin/newnonce/Root65/sealedrun.
+119source sealer/holder path: CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/
+m14-exclusive-producer-binding-1/root-sealer-predicate-correction-source-1/
+actual-guardian-schema-binding-source-1/expert-census-observer-binding-source-1/.
+Exactorigin/sealer/holder argv andallbytepins are in weeklyROOT-CHECKPOINT-READY.json;
+four-commandrecipe0c01 andoriginal389oracle remain unchanged. Need newactualguards,
+freshphysicalcurrent-free/Root65, genuineorigin, unusednonce, sourcepublication and
+reviewedbootstrapgrant before `hold_and_run_build_only.py --bootstrap-grant ...`.
+
+cleanup_bindings privateSettid directory preservesonlydraft+checkpoint: source-
+anchorassertion stoppedintegration; no patch/test/compiler/acceptance claim.
+M14exclusive untiloriginalfullscope acceptance; M15paused. Accepted116/practical
+35/35/M14 4of6 unchanged. Weekly-only authorization replaces06UTC anddisables
+prepaidfallback; parentreported27%used/reset1793774133 at05:35:58. Existingold
+actualcaps remain untilnewcontrolreceipt. Rootwillnoteditcontrollers/ledgers/locks,
+selflaunch orselfresume; foregroundowns exactmodeldrain/newlaunch. This isshort
+modelhandoff, notgoalcompletion orindefiniteuserpause.
 
 ## Weekly-only successor requested; current controls unchanged — 2026-10-29T05:26:49Z
 

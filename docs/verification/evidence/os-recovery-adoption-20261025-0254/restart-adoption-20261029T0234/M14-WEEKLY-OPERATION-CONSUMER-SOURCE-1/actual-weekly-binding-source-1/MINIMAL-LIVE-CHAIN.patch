@@ -1,0 +1,165 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/observe_current64_current118_postjoin.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/observe_current64_current118_postjoin.py
+@@ -179,10 +179,11 @@
+ 
+ def capture_scope():
+  base=load(PINS['base_source'],'CURRENT118_source_scope')
+- return dict(schema='mckernel.root64.complete-recursive-readonly-capture-scope.v1',inherited_Root63_bindings=PINS['base_bindings'],inherited_readonly_operation='bfd-postjoin-current62',inherited_scope=base.capture_scope(),new_operation=PINS['operation'],new_tracked_commands=3,new_tracked_command_order=['exact CURRENT118 CID absence','exact CURRENT118 name absence','complete normal process/group census'],total_tracked_raw_clients=8,original_full_proc_group_FD_lock_mount_cgroup_resource_Docker_checks=True,two_original_closed_probes=True,automatic_retries=0,cleanup_or_signals=False,unmeasured_inherited_client_births_preserved=True,failed_normal_client_status='UNKNOWN',failed_normal_and_recovery_history_required=True,actual_recovery_operator_parent_and_all_recorded_clients_required=True)
++ return dict(schema='mckernel.root64.complete-recursive-readonly-capture-scope.v1',inherited_Root63_bindings=PINS['base_bindings'],inherited_readonly_operation='bfd-postjoin-current62',inherited_scope=base.capture_scope(),explicit_weekly_recursive_entry=PINS['runtime_base_source'],explicit_weekly_recursive_scope=load(PINS['runtime_base_source'],'weekly_recursive_capture_scope').capture_scope(),new_operation=PINS['operation'],new_tracked_commands=3,new_tracked_command_order=['exact CURRENT118 CID absence','exact CURRENT118 name absence','complete normal process/group census'],total_tracked_raw_clients=8,original_full_proc_group_FD_lock_mount_cgroup_resource_Docker_checks=True,two_original_closed_probes=True,automatic_retries=0,cleanup_or_signals=False,unmeasured_inherited_client_births_preserved=True,failed_normal_client_status='UNKNOWN',failed_normal_and_recovery_history_required=True,actual_recovery_operator_parent_and_all_recorded_clients_required=True)
+ 
+ def source_subjects():
+  result=dict(observer=ref(__file__),inputs=ref(HERE/'INPUTS.json'))
++ runtime=load(PINS['runtime_base_source'],'weekly_recursive_source_closure');result['runtime_base_source']=PINS['runtime_base_source'];auth(PINS['runtime_base_source']);result.update({'weekly_recursive:'+key:value for key,value in runtime.source_subjects().items()})
+  for key in ['base_source','base_bindings','base_ledger','frontier_core','A2frontier','producer_inputs','producer_actors','retirement_source','retirement_bindings','guard','shared_guard','guardian','pending_ledger','artifact_rejection','registry_failure']:result[key]=PINS[key];auth(PINS[key])
+  inherited=load(PINS['base_source'],'CURRENT118_source_closure').source_subjects()
+  result.update({'inherited:'+key:value for key,value in inherited.items()})
+@@ -193,7 +194,7 @@
+ def runtime_dependencies(bindings):
+  need(bindings['author']=='/root' and bindings['decision']=='BIND_EXACT_ROOT64_CURRENT118_POSTJOIN_OBSERVER' and bindings['runtime_authority']is None,'Root-only new explicit observer binding')
+  need(bindings['phase']in ('postjoin_candidate','accepted_current') and bindings['guard_adapter']==PINS['guard'],'exact new64 adapter and typed phase')
+- keys=['ledger','retirement_result','retirement_parent_join','guard_adapter','guard_configuration','custody_supplement']
++ keys=['ledger','retirement_result','retirement_parent_join','guard_adapter','guard_configuration','custody_supplement','recursive_current63_bindings']
+  if bindings['phase']=='accepted_current':keys+=['pending_ledger','latest_free','current_boundary']
+  for key in keys:auth(bindings[key])
+  review=checked(bindings['independent_review'])
+@@ -302,7 +303,7 @@
+   actors.append(actor(accepted['observer_self'],'accepted_Root64_capture'))
+   actors.extend(actor(dict(r,group=r['pid']),'accepted_Root64_query_client')for r in accepted['query_clients'])
+  guard=runtime_dependencies(bindings);first=guard.guard()
+- historical=retained['base'].observe(checked(PINS['base_bindings']),out)
++ historical=load(PINS['runtime_base_source'],'weekly_recursive_Root63_live_observer').observe(checked(bindings['recursive_current63_bindings']),out)
+  retained['base'].validate_fresh_physical(historical['historical_Root61_reobservation'],actors,historical['BFD_exact_absence_queries'],historical['observed_clocks'],historical['last_observed_clocks'],historical['fixed_cutoffs'])
+  retained['frontier_core'].validate_fresh_closed_unlaunched(historical,retained['frontier'],retained['base'])
+  executor=retained['executor'];b=retained['b'];cls,_=executor.transport(b);commands=cls(out,executor.Stop())
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/INPUTS.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/INPUTS.json
+@@ -71,20 +71,20 @@
+     "sha256": "f5c157f2723c0aad85dc3017ee30d49cf8d52ad3ec350a7f2020f59a8cc79b07"
+   },
+   "shared_guard": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/expert-census-observer-consumer-source-1/operation_window_guard64.py",
+-    "bytes": 8672,
+-    "sha256": "8ca768a246e04ddae946ea6154daa7401e50ac9d840e18627e048cc8e0ce0bb1"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/operation_window_guard.py",
++    "bytes": 6649,
++    "sha256": "6a93c241bf9778b251f85f5c309eda01b5249c2d4dc9a26bd49de97e38c03998"
+   },
+   "operation": "current118-postjoin-current64",
+   "guardian": {
+-    "bytes": 13603,
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/new-guardian-source-1/guardian_guard.py",
+-    "sha256": "5af549bdf87a248a76bfe4e96de2ddc8c20435f3bafff5397ca7a9557ca68df4"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/guardian_guard.py",
++    "bytes": 16310,
++    "sha256": "3b4d2c9816d69084a26433383333082885a2b4bfe88a17e39cd6675702d843ab"
+   },
+   "limits": [
+-    1793253600,
+-    1035704.5689393478,
+-    1051042.6959879305
++    1793774133,
++    1556237.568944064,
++    1571575.6959913536
+   ],
+   "nonce": "e984210ca59641b299cf42d392eb953b",
+   "CID": "d980474cc189c35f6d78132856be10b6903aac988808336e7d44efcca0f4108f",
+@@ -163,5 +163,10 @@
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PIPELINE-CONTROL-BINDING-PREPARATION-1/ACTUAL-RETIREMENT-ROOT4-PARENT/DIRECT-PARENT-JOIN.ACTUAL.json",
+     "bytes": 2383,
+     "sha256": "2c4041377247ffedb960c8e38ddf5a7abf31777b2706330fd483a651c34bf805"
++  },
++  "runtime_base_source": {
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/observe_current62_bfd_postjoin.py",
++    "bytes": 37857,
++    "sha256": "48b80a8f8d8715fba6a83bd67993e3a974f60b3ea29f27701a9fdc37d764e577"
+   }
+ }
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/observe_current62_bfd_postjoin.py
+@@ -234,7 +234,7 @@
+  retained=validate_retained();ledger=checked(bindings['ledger'])
+  current_capture=None
+  if bindings['phase']=='postjoin_candidate':validate_pending_ledger(ledger,retained)
+- else:current_capture=validate_current_adoption(bindings,retained)
++ else:current_capture=load({'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/observe_current62_bfd_postjoin.py', 'bytes': 37436, 'sha256': 'da5a628ca0248c30f78fe6617f50a33b7c469a1095ed4dd28a7d2f1257bd6935'},'frozen_historical_Root63_adoption_only').validate_current_adoption(bindings,retained)
+  executor=load(PINS['retirement_executor'],'exact_BFD_normal_retirement_pure_API')
+  b,retirement,retirement_commands,retired=validate_retirement(executor,bindings['retirement_result'],bindings['retirement_parent_join'])
+  actors=retained['actors']+retired
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/INPUTS.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/INPUTS.json
+@@ -90,20 +90,20 @@
+   "CID": "2460c49fbbbf8be6ee5ae931e7e769eec2f26e352937e7f4a4dcf5d2ebec8008",
+   "NAME": "bfd-current-two-target-faac1b4804174de5800c58d61ba98004",
+   "limits": [
+-    1793253600,
+-    1035704.5689393478,
+-    1051042.6959879305
++    1793774133,
++    1556237.568944064,
++    1571575.6959913536
+   ],
+   "new_operation": "bfd-postjoin-current62",
+   "guardian": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+-    "bytes": 13388,
+-    "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/guardian_guard.py",
++    "bytes": 16310,
++    "sha256": "3b4d2c9816d69084a26433383333082885a2b4bfe88a17e39cd6675702d843ab"
+   },
+   "history_runtime_source": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_current61.py",
+-    "bytes": 10956,
+-    "sha256": "2f8581a67975ab414978c6dbfbe7c929c00407c13a7562e5138dd8c91c0513eb"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current61.py",
++    "bytes": 10926,
++    "sha256": "30409461a026793c1b70feb19af1c7b9a6094d519fc1bae9ed1aa4ee223751b9"
+   },
+   "retirement_executor": {
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/retire_exact_bfd_stopped_container.py",
+@@ -116,9 +116,9 @@
+     "sha256": "83c104435ed34b7137f3ff7e84e4e5569130114e9fd1bab95311d9cd54da3aba"
+   },
+   "shared_guard": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/operation_window_guard62.py",
+-    "bytes": 8531,
+-    "sha256": "bc749fd082688320d2f5d9a1b6b4a3e5b0a7d0cf6ab863b16b61a7db0ea11167"
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/operation_window_guard.py",
++    "bytes": 6649,
++    "sha256": "6a93c241bf9778b251f85f5c309eda01b5249c2d4dc9a26bd49de97e38c03998"
+   },
+   "guard_adapter": {
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current62-postjoin-operation-source-1/current62_guard_adapter.py",
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_current61.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current61.py
+@@ -8,7 +8,7 @@
+ import os
+ 
+ HERE=Path(__file__).resolve().parent
+-PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/observe_bfd_current60_history.py', 'bytes': 13303, 'sha256': '4bc439b4ad5b648c3d669974540cedb3171a306554cc2e8cb0e4f5cab736f220'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}
++PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_current60_history.py', 'bytes': 13303, 'sha256': '4bc439b4ad5b648c3d669974540cedb3171a306554cc2e8cb0e4f5cab736f220'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}
+ CURRENT={'ledger': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'latest_free': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CURRENT-FREE.json', 'bytes': 12188, 'sha256': '6c83eee41b7e90d0f055034b9bbd30cfc9e32efac9e8285a90fc8948f7b82e7d'}, 'root_inputs': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'ledger_key': 'Root61', 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}}
+ STATUS='PASS_Root61_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE'
+ 
+@@ -80,7 +80,7 @@
+  census=history['group_membership_observation'];need(not census['errors'],'complete current actor census')
+  for actor in actors:
+   need(not Path('/proc',str(actor['pid'])).exists() and not any(row['pid']==actor['pid'] or row['pgrp']==actor.get('group',actor['pid']) for row in census['rows']),'all prior/build/sourcequalification/capture actors absent')
+- last=guard.guard();cutoffs=guard.current_cutoffs();need(all(now<limit<=ceiling for now,limit,ceiling in zip(last,cutoffs,(1793253600.0,1035704.5689393478,1051042.6959879305))),'exact original227 earliest inherited clamps')
++ last=guard.guard();cutoffs=guard.current_cutoffs();need(all(now<limit<=ceiling for now,limit,ceiling in zip(last,cutoffs,(1793774133, 1556237.568944064, 1571575.6959913536))),'exact original227 earliest inherited clamps')
+  return consumer_value(history,first,last,cutoffs,guard.BOOT)
+ 
+ if __name__=='__main__':
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current62-after-bfd-default-build-source-20261028-1/review-correction-source-1/attempt2-binding-successor-1/retirement-parent-abi-correction-source-1/history/ACTUAL-PINS.TEMPLATE.NOT-AUTHORITY.json
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/ACTUAL-PINS.TEMPLATE.NOT-AUTHORITY.json
+@@ -89,5 +89,10 @@
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+     "bytes": 246,
+     "sha256": "df525f2df8625a9965c3a3f5b484853fc41059a5546bb9abcf6b883f02dcf809"
++  },
++  "common_source": {
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/recursive-current62/history/observe_bfd_root59_history.py",
++    "bytes": 23317,
++    "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+   }
+ }

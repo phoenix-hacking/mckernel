@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_SINGLE_ORACLE_ROW_REUSE_GATE_FORMAT_ABI_LINE_RESTORE_AND_COMPOSITION_SOURCE_ONLY",
+  "runtime_authority": null,
+  "original_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+    "bytes": 84536,
+    "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+  },
+  "unique_original_row": {
+    "file": "/src/kernel/syscall.c",
+    "function": "exit_group_log_bridge",
+    "fmt": null,
+    "line": 5678,
+    "flags": 0,
+    "padding": 0
+  },
+  "projected_Counter_unchanged_count": 389,
+  "projection_is_not_linked_artifact_acceptance": true,
+  "original_source_default_flags_retained": "DDEBUG_DEFAULT; expected frozen selected-profile value0, dynamic nonzero flags remain mutable",
+  "fmt_metadata_NULL_preserved": true,
+  "flags_read_once_before_logger": true,
+  "exact_callback_body_order_unchanged": true,
+  "C_fallback_original_body_retained": true,
+  "explicit_original_line_and_following_line_restored": [
+    5675,
+    5678,
+    5680
+  ],
+  "source_scope_compile_file_identity": "/src/kernel/syscall.c required by original bound candidate profile",
+  "in_memory_SetTid_ClearPTE_ExitGroup_composition": true,
+  "other_packets_changed": false,
+  "patch_check": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-EXIT-GROUP-LOGGER-1/bound-source-successor-1/EXIT-GROUP-LOGGER.PRIVATE-NOT-APPLIED.patch"
+    ],
+    "returncode": 0
+  },
+  "compiler_HOST_native_calls": 0,
+  "canonical_or_oracle_writes": 0
+}

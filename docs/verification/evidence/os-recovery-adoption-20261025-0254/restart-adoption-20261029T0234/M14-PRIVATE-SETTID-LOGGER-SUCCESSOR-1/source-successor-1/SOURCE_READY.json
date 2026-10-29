@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SETTID_LOGGER_SOURCE_READY_NOT_COMPILED_OR_INTEGRATED",
+  "runtime_authority": null,
+  "files": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/FILEMAP.SOURCE-ONLY.json",
+    "bytes": 3958,
+    "sha256": "dbcb7dd93abbb03ecece8ab0ea8738d59516c70a5d37e10579af37ba2d8485ad"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/SETTID-LOGGER.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 2159,
+    "sha256": "46acb87df9e830fa96af2076603e8cab718d95d3548ea45e39bb866a1a247728"
+  },
+  "Rust_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/postimage/kernel/rust/syscall_settid_logger.rs",
+    "bytes": 768,
+    "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+  },
+  "source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/SOURCE-CHECKS.json",
+    "bytes": 2347,
+    "sha256": "bd939de8b1b3cd3fb689c7bfc234115f54475603db404b8932102a878018a3f2"
+  },
+  "constructor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/prepare_source_successor.py",
+    "bytes": 3155,
+    "sha256": "a992ef9c743114dfd4770ea880eaf613f357c71b37c724b45698396b48e60005"
+  },
+  "retained_draft": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/DRAFT.syscall_settid_logger.rs",
+    "bytes": 767,
+    "sha256": "cfbebb17c4a2d773675fda77124912ae3f4df9b649a957dec71a5bbca389f186"
+  },
+  "retained_model_checkpoint": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/MODEL-ONLY-CHECKPOINT.json",
+    "bytes": 1739,
+    "sha256": "8964902fb24139d37d4734bb79c1a44683ef8867135b6fb51fd4c245329c7197"
+  },
+  "bounded_anchor_correction": "Exactly one generator correction: match exact leading production import rather than18 unqualified substring occurrences",
+  "source_function_retirement_credit": 0,
+  "compiler_or_link_or_actual119_feedback": false,
+  "native_or_M14_acceptance": false,
+  "canonical_writes": 0,
+  "export_registry_or_389_oracle_changes": 0,
+  "independent_source_review": null,
+  "weekly_window": "weekly-only codex10080/reset1793774133; no prepaid; new controls parent-owned; source-only until actual activation",
+  "M15_paused": true,
+  "next_compiler_check": {
+    "status": "NOT_GRANTED_REQUIRES_ROOT_LATER_RELEASE_AND_CURRENT119_FEEDBACK",
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "REQUIRED_FRESH_ROOT_REVIEWED_CANDIDATE_BUILD",
+      "--target",
+      "mckernel_rust_obj",
+      "--",
+      "-j1",
+      "VERBOSE=1"
+    ],
+    "after_object": "Compile selected syscall.c consumer and coherently relink exact candidate; inspect same-name callback definition/resolution, one kprintf call and warning bytes, then matching functional/native evidence. No export/registry oracle rewriting.",
+    "new_global_or_heavy_authority": false
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_LEAF_FORMAT_TYPE_GATE_AND_ORDER_SOURCE_CHECKS_DESCRIPTOR_DEPENDENCY_OPEN",
+  "runtime_authority": null,
+  "format_bytes_hex": "7379735f657869745f67726f75702c7069643d25640a00",
+  "signed_CInt_vararg_domain_defined": true,
+  "callback_signature": "void(int)/extern C fn(CInt)",
+  "nonzero_flag_gate_preserved_for_all_flag_values": true,
+  "volatile_read_once_before_logger": true,
+  "no_reference_retained_across_logger": true,
+  "existing_body_log_before_terminate_unchanged": true,
+  "source_refs": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 928517,
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    "kernel/rust/debug.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    "kernel/rust/x86_memory_logger_bridges.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_logger_bridges.rs",
+      "bytes": 9235,
+      "sha256": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce"
+    }
+  },
+  "compiler_HOST_native_calls": 0,
+  "canonical_changes": 0,
+  "registry_oracle_API_changes": 0
+}

@@ -1,0 +1,100 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "review_scope": "Only actual weekly guardian identity/quota/reset/billing/stop/caps/auxiliary leases and shared operation binding API; complete routed consumer packet not yet reviewed.",
+  "guardian": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/guardian_guard.py",
+    "bytes": 16310,
+    "sha256": "3b4d2c9816d69084a26433383333082885a2b4bfe88a17e39cd6675702d843ab"
+  },
+  "shared_guard": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/operation_window_guard.py",
+    "bytes": 6649,
+    "sha256": "6a93c241bf9778b251f85f5c309eda01b5249c2d4dc9a26bd49de97e38c03998"
+  },
+  "external_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-WEEKLY-OPERATION-CONSUMER-SOURCE-1/actual-weekly-binding-source-1/SOURCE-EXTERNAL-INPUTS.json",
+    "bytes": 2809,
+    "sha256": "9224365a6f95c47de220e1effb23575e6770b1e934478412b596c1cd0b57a2e7"
+  },
+  "armed": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/ACTUAL-CONTROLS-ARMED.json",
+    "bytes": 1900,
+    "sha256": "20826b1cc9378165ad5e056133c3898355351d2209888a933510df41dc81adc5"
+  },
+  "configuration": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/armed-controller/CONFIG.json",
+    "bytes": 4439,
+    "sha256": "376bb1edc72b1953f9f00b5dcabf448ec67f7660770920ee46ad50a808c37dc3"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/armed-controller/FROZEN-PACKET.json",
+    "bytes": 1216,
+    "sha256": "891670cb841c8e5846c4e803b76aa6345f109d31920f9798e31f93e3e2f978a0"
+  },
+  "window": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/ACTUAL-WINDOW.json",
+    "bytes": 1373,
+    "sha256": "c19b84c10175b49f5db8129ef17b5041ceab3ee41ac1a7688e8ff706ceb3f596"
+  },
+  "earliest_caps": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/EARLIEST-CONTROL-CAPS.json",
+    "bytes": 638,
+    "sha256": "8d76e73071c2c44d709771cb1d87322d367933871dc9ba580661cb06d617db79"
+  },
+  "weekly_policy": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/weekly_policy.py",
+    "bytes": 6557,
+    "sha256": "f457db72ddfe7ab56f1b0dca4a152e776558ccdd075425b01d75ee60148eedd1"
+  },
+  "checks": [
+    "actual receipt/config metadata accepts exact new weekly identity and caps",
+    "weekly_row exact controller policy AST reused",
+    "TEST_ONLY primary codex10080 exact reset/currentworker/fresh usage accepts",
+    "TEST_ONLY refuse exhausted100",
+    "TEST_ONLY refuse reset_changed",
+    "TEST_ONLY refuse wrong_limit_identity",
+    "TEST_ONLY refuse ambiguous_weekly",
+    "TEST_ONLY refuse paid_mode",
+    "TEST_ONLY refuse live_credit_budget",
+    "TEST_ONLY refuse automatic_purchase",
+    "TEST_ONLY refuse api_billing",
+    "TEST_ONLY refuse wrong_worker",
+    "TEST_ONLY refuse quota_unavailable",
+    "TEST_ONLY refuse stale120s",
+    "TEST_ONLY refuse missing dedicated lease",
+    "TEST_ONLY refuse strict deadline current118-postjoin-current64",
+    "TEST_ONLY refuse active credit fields current118-postjoin-current64",
+    "TEST_ONLY refuse strict deadline bfd-postjoin-current62",
+    "TEST_ONLY refuse active credit fields bfd-postjoin-current62",
+    "both explicit operation APIs preserve exact independent successor/source/weekly-only binding"
+  ],
+  "check_count": 20,
+  "findings": [
+    "Actual sameRoot thread and six measured PID/birth/PPID identities are exact; live checks retain supervisorbirth/systemd and chain/birth/state constraints, activeheartbeat, realholds/stop/uncertainty and explicitstop-file vetoes. No live observation was called by this review.",
+    "Fresh quota belongs to currentworker2319326/b104996100 and sameRoot; exact codex unique10080-minute row/reset1793774133, finite0<=used<100, no usageerror and observation age<120s. Ambiguity/resetchange/unavailable/exhaustion fail closed. Actual pinned receipt is primary; exact retained controller policy locates the unique10080 row in primary or secondary while preserving identity/reset.",
+    "Live settings.billing must be included_only with credit_budgetNone, automaticpurchase/api billing/accountbalanceguard false; immutable config/window refuse prepaidfallback. Historical state.credit_budget is intentionally not active spending authority. New shared successor rejects old creditrun/ceiling/floor grantfields and imports no prepaid predecessor semantics.",
+    "UTC1793774133/MONO1556237.568944064/BOOT1571575.6959913536 are bound to actualearliest caps. Everyoperation may tighten and cannot extend them. Reset is upperbound; no renewed allowance is accepted automatically.",
+    "Auxiliary lease matcher requires exact measuredguardian/monitor/phone PID and device/inode WRITE-FLOCK rows, plus actualpidbirth checks. Pure fake lease rows exercised; no real flock/proc read occurred.",
+    "Explicit separately reviewed operation/current sourceclosure is required for each existing readonly operation. Sharedguard authenticatesboundguardian/arm/subjects, callsnewweeklyguardian on futureguardentry and rechecksstrictoperationclocks. This sourceapproval grants no operation execution."
+  ],
+  "remaining_requirements": [
+    "Review coherent routed consumer metadata/source closure when immutableREADY arrives; reuse this exact two-file review only if endhashes stay unchanged.",
+    "Root-owned actual operation/config/dependency/sourcepublication/resource/execution releases and actualguard remain mandatory before capture/compiler/native work.",
+    "All unchanged retirement/fullphysical/native ownership proofs are reused at their exactscope; no acceptance/free status or historicalnonce is changed."
+  ],
+  "weekly_allowance": {
+    "limit_id": "codex",
+    "window_duration_mins": 10080,
+    "resets_at": 1793774133,
+    "stop_at_used_percent": 100,
+    "prepaid_fallback": false
+  },
+  "actual_guard_lease_proc_Docker_capture_compiler_calls": 0,
+  "current_free": false,
+  "native_acceptance": false,
+  "runtime_authority": null
+}

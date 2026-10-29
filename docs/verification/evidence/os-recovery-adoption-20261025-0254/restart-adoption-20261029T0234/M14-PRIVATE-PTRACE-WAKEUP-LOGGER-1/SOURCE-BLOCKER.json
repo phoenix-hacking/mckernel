@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BLOCKED_PRIVATE_LOGGER_PORT_UNDEFINED_SIGNED_HEX_VARARGS_DOMAIN",
+  "runtime_authority": null,
+  "source_refs": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 928517,
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    "lib/vsprintf.c": {
+      "path": "/home/holden/mckernel/lib/vsprintf.c",
+      "bytes": 43648,
+      "sha256": "a32a578296d1f71e607a6d05016ebb3389151c988daf5fe037e99ec27e11fa35"
+    },
+    "kernel/debug.c": {
+      "path": "/home/holden/mckernel/kernel/debug.c",
+      "bytes": 7840,
+      "sha256": "5896fabfd22da1c023a9b4b9970fe7cfe1524de7bf353383b2dd04ad2b6c1f92"
+    }
+  },
+  "source_fragments": {
+    "C_callback": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-WAKEUP-LOGGER-1/ORIGINAL-PTRACE-WAKEUP-LOGGER.c.txt",
+      "bytes": 198,
+      "sha256": "039e77ac9b7f2e859425ea872e0885810b1f086cbb7298db285c877d6c5fe788"
+    },
+    "Rust_entry": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-PTRACE-WAKEUP-LOGGER-1/ORIGINAL-RUST-CALLBACK-ENTRY.rs.txt",
+      "bytes": 916,
+      "sha256": "7f42b722ab63487ee28780bb04163bb435d160b5da685428d7e61a554a661399"
+    }
+  },
+  "callback_ABI": "void (*)(int event,int value,int result), Rust unsafe extern C fn(CInt,CInt,CInt); CInt=i32",
+  "event_predicate": "Only PTRACE_CONTROL_LOG_WAKEUP_ENTER=4 produces the gated diagnostic; other events stay silent",
+  "format_bytes_hex": "7074726163655f77616b6575705f7369672c7069643d25642c646174613d253038780a00",
+  "argument_order": [
+    "value: signed int for %d",
+    "result: signed int passed to %08x, formatter extracts unsigned int"
+  ],
+  "concrete_domain_witness": "data:CLong=-1 is converted to CInt=-1 and logged before ptrace_signal_data_result rejects negative data. The callback itself has no nonnegative result precondition.",
+  "blocker": "Negative signed int passed as %x unsigned-int vararg lacks a defined signed/unsigned-representable contract. A new unsigned cast would choose new behavior; passing signed i32 directly in a new Rust variadic leaf would retain the mismatch. Neither is implemented or called accepted parity.",
+  "debug_descriptor_obligation": "dkprintf emits the original static __verbose ddebug identity and gates on nonzero flags. Future reviewed Rust logger must preserve that actual existing descriptor identity/gating; unguarded kprintf would change behavior and registry.",
+  "body_or_registry_or_API_changes": 0,
+  "Rust_leaf_generated": false,
+  "integration_patch_generated": false,
+  "source_only_checks": "PASS callback/event/format/type/order/negative-before-validation and debuggate consumer evidence; this PASS establishes the blocker, not port acceptance",
+  "actual_compiler_HOST_payload_native_calls": 0,
+  "proposed_followup": "Root/expert chooses explicit signed-hex logging contract for invalid negative input and descriptor-preserving ownership path; no arbitrary cast, weakened oracle or registry rewrite. Then prepare a private leaf after that concrete decision.",
+  "compose_with_settid": "Separate candidate; no duplicate settid files. Both future leaf modules would require independent additions to parent syscall_policy module list and kernel/CMakeLists dependency list. Rebase their small insertions in Root integration order; do not apply either shared postimage over the other.",
+  "settid_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/SOURCE_READY.json",
+    "bytes": 3720,
+    "sha256": "8eb350dc375cf3f1b006d821acd7f84a3a8989686096504cd157f9fb99312fcd"
+  },
+  "weekly_only": true,
+  "weekly_reset_upper_bound": 1793774133,
+  "M15_paused": true,
+  "active_owned_operations": []
+}

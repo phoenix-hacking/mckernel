@@ -1,0 +1,8 @@
+static void
+ptrace_wakeup_log_bridge(int event, int value, int result)
+{
+	if (event == PTRACE_CONTROL_LOG_WAKEUP_ENTER) {
+		dkprintf("ptrace_wakeup_sig,pid=%d,data=%08x\n",
+				value, result);
+	}
+}

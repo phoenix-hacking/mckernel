@@ -1,0 +1,124 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/SOURCE_READY.json",
+    "bytes": 3720,
+    "sha256": "8eb350dc375cf3f1b006d821acd7f84a3a8989686096504cd157f9fb99312fcd"
+  },
+  "filemap": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/FILEMAP.SOURCE-ONLY.json",
+    "bytes": 3958,
+    "sha256": "dbcb7dd93abbb03ecece8ab0ea8738d59516c70a5d37e10579af37ba2d8485ad"
+  },
+  "files": [
+    {
+      "proposed_path": "kernel/rust/syscall_settid_logger.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/postimage/kernel/rust/syscall_settid_logger.rs",
+        "bytes": 768,
+        "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+      },
+      "canonical_preimage": null
+    },
+    {
+      "proposed_path": "kernel/syscall.c",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/postimage/kernel/syscall.c",
+        "bytes": 928455,
+        "sha256": "b8b6ece494fe1f47d871150794b7f9ef0c7783ecbc8d5a42ef67d15a78b32a9f"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 928517,
+        "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+      }
+    },
+    {
+      "proposed_path": "kernel/rust/syscall_policy.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/postimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1301992,
+        "sha256": "358dc4330718708b0c9a8b80847821a2b3f3b8fd369cdeb7308b8f559f281a61"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1301841,
+        "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+      }
+    },
+    {
+      "proposed_path": "kernel/CMakeLists.txt",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/postimage/kernel/CMakeLists.txt",
+        "bytes": 43526,
+        "sha256": "b08937eaa657e90d5caeae8435bb7a0b40afd5cfac2c1203e5739d96729042b5"
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 43464,
+        "sha256": "0fe73cfa95c24b2aa6f91062a802bffc222b0c0f1cc094740dbff7e2634d8516"
+      }
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/SETTID-LOGGER.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 2159,
+    "sha256": "46acb87df9e830fa96af2076603e8cab718d95d3548ea45e39bb866a1a247728"
+  },
+  "Rust_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/postimage/kernel/rust/syscall_settid_logger.rs",
+    "bytes": 768,
+    "sha256": "895f6a205232e503f6f737ce363425c3d9571faaf99c517ced9ed95723c22a29"
+  },
+  "worker_source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/source-successor-1/SOURCE-CHECKS.json",
+    "bytes": 2347,
+    "sha256": "bd939de8b1b3cd3fb689c7bfc234115f54475603db404b8932102a878018a3f2"
+  },
+  "retained_generator_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PRIVATE-SETTID-LOGGER-SUCCESSOR-1/MODEL-ONLY-CHECKPOINT.json",
+    "bytes": 1739,
+    "sha256": "8964902fb24139d37d4734bb79c1a44683ef8867135b6fb51fd4c245329c7197"
+  },
+  "parent_abi": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "parent_lib": {
+    "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+    "bytes": 3283,
+    "sha256": "ceb60c3de3b0217c7bd435e3d8cb1b7aba6123811082f1248060aec66a45ea41"
+  },
+  "independent_exact_postimage_reconstruction_pass": true,
+  "findings": [
+    "Rust callback externC fn(CInt)->() matches existing C void(*)(int); CInt is the retained i32 ABI. The existing parent variadic kprintf(*consti8,...)->CInt declaration is reused without a new ABI.",
+    "The static c-string has the exact old warning bytes, newline and terminatingNUL, with precisely one%d. ret:CInt passes as the required signedCint vararg without narrowing, pointer payload or changed ordering. One kprintf call occurs per callback invocation; unchanged settid body continues invoking it only after negative converteddo_syscall result.",
+    "The unsafe block passes only static read-only string storage and an integer. No allocation, borrowed mutable object, retained reference, aliasing, ownership, arithmetic or callback-lifetime changes occur. Logger context/contract is inherited from the original C callback.",
+    "C static definition is removed once and replaced with same-name extern under the unchanged MCKERNEL_RUST_SYSCALL_POLICY_HELPERS selector. Rust no_mangle supplies one same-name cross-language definition; pub(super) is Rust visibility. This intentionally changes localC binding to an unmangled ELF link symbol, not EXPORT_SYMBOL or registry/API registration. Actual symbol resolution is untested.",
+    "Parent Rust file differs only by one leading child-module insertion; C and Rust settid bodies, callback argument order, original selectors and all registry/oracle records remain unchanged. ExplicitCMake child source dependency is added exactly once; existing lib.rs selects syscall_policy.",
+    "Original generatoranchor assertion and nonexistent-patch check failure are preserved. One bounded correction matches the exact production file prefix rather than18 matching nested-test substrings. Worker gitapply--check/source checks pass are retained; no compiler/HOSTpayload/liveguard/native operation was repeated."
+  ],
+  "remaining_requirements": [
+    "GenuineCURRENT119 compiler/artifact feedback must precede any canonical integration of this private successor.",
+    "Later releasedcandidate build must compile mckernel_rust_obj and selectedsyscall.c consumer and coherently relink; inspect exactly one callback definition/resolution and preserved warning bytes/onecall at its actual target ABI.",
+    "Matching functional/native qualification is required before C-retirement or wholeM14 credit. Source-only proof grants no build, HOSTpayload, currentfree, native or controller action."
+  ],
+  "weekly_allowance": {
+    "identity": "codex",
+    "minutes": 10080,
+    "reset_epoch": 1793774133,
+    "stop_at_used_percent": 100,
+    "prepaid_fallback": false,
+    "new_controller_activation_parent_owned": true
+  },
+  "canonical_writes": 0,
+  "compiler_or_HOST_payload_or_Docker_guard_native_calls": 0,
+  "source_function_retirement_credit": 0,
+  "native_or_M14_acceptance": false,
+  "runtime_authority": null
+}

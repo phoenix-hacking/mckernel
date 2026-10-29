@@ -1,0 +1,54 @@
+--- /dev/null
++++ b/kernel/rust/syscall_settid_logger.rs
+@@ -0,0 +1,16 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Private uncompiled successor for the existing settid warning callback.
++
++use super::{kprintf, CInt};
++
++/// Preserve the existing `void (*)(int)` callback and one warning per call.
++#[no_mangle]
++pub(super) extern "C" fn syscall_settid_log_bridge(ret: CInt) {
++    // SAFETY: the static C string is NUL-terminated and contains exactly one %d;
++    // CInt is the existing i32 C int ABI, so ret has the required variadic int
++    // promotion/type. No borrowed or mutable data crosses this call. kprintf is
++    // the same synchronous kernel logger used by the original C callback.
++    unsafe {
++        kprintf(c"settid: WARNING: do_syscall returns %d\n".as_ptr().cast(), ret);
++    }
++}
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -7187,10 +7187,7 @@
+ 		syscall_get_cpu_fn_t get_cpu_fn,
+ 		syscall_request_call_fn_t syscall_fn, void (*log_fn)(int));
+ 
+-static void syscall_settid_log_bridge(int ret)
+-{
+-	kprintf("settid: WARNING: do_syscall returns %d\n", ret);
+-}
++extern void syscall_settid_log_bridge(int ret);
+ #endif
+ 
+ static int settid(struct thread *thread, int nr_tids, int *tids)
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -1,4 +1,8 @@
+ use core::ffi::c_void;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[path = "syscall_settid_logger.rs"]
++mod syscall_settid_logger;
+ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
+ use core::ptr::{
+     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -142,6 +142,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/smp_ikc.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sysfs.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_settid_logger.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/timer.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/tofu_uapi.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/ubsan.rs"
