@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "index": 0,
+  "label": "00-new-Rust-owned-debug-record-object",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--cfg",
+    "enable_perf",
+    "--crate-name",
+    "f03_util_desc_debug_storage",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/debug-storage.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/lib.storage.rs"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. New Rust debug storage and existing BODY12 Rust logger object with genuine C metadata/flag consumer; local mocked prints only, no registration/syscall/MM/IKC/hardware/locks/root/native/Docker/guest effects.",
+  "actor": {
+    "pid": 2212380,
+    "start": "103003564",
+    "ppid": 2212379,
+    "pgrp": 2212380,
+    "session": 2212380,
+    "state": "S"
+  },
+  "affinity": [
+    6
+  ],
+  "preentry_clocks_epoch_MONO_BOOT": [
+    1793232590.9508924,
+    1014697.519849026,
+    1030035.646899954
+  ],
+  "started_epoch": 1793232590.9531794,
+  "limits": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "jobs": 1
+  },
+  "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-new-Rust-owned-debug-record-object/stdout",
+  "stderr": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-new-Rust-owned-debug-record-object/stderr"
+}

@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AUTHENTICATION_AND_PURE_AST_API_BINDING_ONLY",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/SOURCE-READY.json",
+    "bytes": 8932,
+    "sha256": "ed980a278fa78e24c7fb1978ea282c0e97673fc6e08d1e0bdacfdbc6ca8dab7c"
+  },
+  "adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/created_only_libelf_adapter.py",
+    "bytes": 8436,
+    "sha256": "5bc1f45ff057511a84927bba8c5d68b401d6a8cf158c9f5aa11fe598f040d346"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/BINDINGS.json",
+    "bytes": 3811,
+    "sha256": "f6670b8f41e08b20a4a9161b5ed6d780df6f8fc498285d5f057e5859437a2975"
+  },
+  "historical_three_units_byte_equivalent_AST": true,
+  "current_uid_gid": [
+    1000,
+    1000
+  ],
+  "derived_exact_create_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "create",
+    "--name",
+    "m15-libelf-extract-11111111111111111111111111111111",
+    "--label",
+    "mckernel.owner=11111111111111111111111111111111",
+    "--init",
+    "--network=none",
+    "--ipc=private",
+    "--cpus=4",
+    "--cpuset-cpus=2-5",
+    "--memory=12g",
+    "--memory-swap=12g",
+    "--pids-limit=512",
+    "--user",
+    "1000:1000",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,size=256m",
+    "--entrypoint",
+    "/usr/bin/sleep",
+    "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "infinity"
+  ],
+  "ordinary_LIMITS": {
+    "NanoCpus": 4000000000,
+    "CpusetCpus": "2-5",
+    "Memory": 12884901888,
+    "MemorySwap": 12884901888,
+    "PidsLimit": 512,
+    "NetworkMode": "none"
+  },
+  "retained_pure_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/PURE-CHECK-RESULT.json",
+    "bytes": 1099,
+    "sha256": "68345ca2605756b61bbc9a46611a19ea92e9de5312fe2f443e0f0246d0b421be"
+  },
+  "retained_test_log": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/PURE-TESTS.log",
+    "bytes": 855,
+    "sha256": "6f8b93f8770e64e2a4ec5aed18f9cb35db04e020f5553df9127b62e50e04eae7"
+  },
+  "retained_tests": 8,
+  "compiler_Docker_query_extraction_guard_or_runtime_calls": 0,
+  "original_archive_hash_replays": 0,
+  "pure_test_reruns": 0,
+  "review_profile": {
+    "affinity": [
+      0
+    ],
+    "AS_bytes": 2147483648,
+    "jobs": 1
+  }
+}

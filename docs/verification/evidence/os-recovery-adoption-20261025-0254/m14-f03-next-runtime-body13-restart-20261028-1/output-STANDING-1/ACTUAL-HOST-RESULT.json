@@ -1,0 +1,285 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_THREE_COMMAND_HOST_RUST_DEBUG_STORAGE_AND_256_FLAG_PAIRS",
+  "grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/WORKER-RECORDED-STANDING-HOST-AUTHORIZATION.json",
+    "bytes": 7646,
+    "sha256": "1933dcfbc7a5733bea492ee72871ca3f834ca8662ca1c3152e34ac1e3d23ba36"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/FIXED-HOST-COMMAND-PLAN.json",
+    "bytes": 6597,
+    "sha256": "488c016e18be2bbd4a94c71f4ee15afafaf74cf801e45bd927a773996c5bd036"
+  },
+  "commands": [
+    {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "index": 0,
+      "label": "00-new-Rust-owned-debug-record-object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--cfg",
+        "enable_perf",
+        "--crate-name",
+        "f03_util_desc_debug_storage",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/debug-storage.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/lib.storage.rs"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. New Rust debug storage and existing BODY12 Rust logger object with genuine C metadata/flag consumer; local mocked prints only, no registration/syscall/MM/IKC/hardware/locks/root/native/Docker/guest effects.",
+      "actor": {
+        "pid": 2212380,
+        "start": "103003564",
+        "ppid": 2212379,
+        "pgrp": 2212380,
+        "session": 2212380,
+        "state": "S"
+      },
+      "affinity": [
+        6
+      ],
+      "preentry_clocks_epoch_MONO_BOOT": [
+        1793232590.9508924,
+        1014697.519849026,
+        1030035.646899954
+      ],
+      "started_epoch": 1793232590.9531794,
+      "limits": {
+        "AS_bytes": 2147483648,
+        "CPU_seconds": 60,
+        "wall_seconds": 90,
+        "jobs": 1
+      },
+      "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-new-Rust-owned-debug-record-object/stdout",
+      "stderr": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-new-Rust-owned-debug-record-object/stderr",
+      "wall_seconds": 0.03346794203389436,
+      "finished_epoch": 1793232590.9866707,
+      "stdout_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-new-Rust-owned-debug-record-object/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/00-new-Rust-owned-debug-record-object/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "parent_streams_closed": true,
+      "status": "JOINED",
+      "returncode": 0,
+      "wait_status": 0,
+      "positive_wait4_join": true,
+      "wait4_pid": 2212380,
+      "CPU_seconds": 0.022909,
+      "user_seconds": 0.0076359999999999996,
+      "system_seconds": 0.015273,
+      "peak_RSS_KiB": 73836,
+      "process_group_members": [],
+      "process_group_absent": true,
+      "child_proc_absent": true
+    },
+    {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "index": 1,
+      "label": "01-genuine-C-consumer-reuse-BODY12-logger-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Werror=incompatible-pointer-types",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-I/home/holden/mckernel/executer/include",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/output-STANDING-1/callbacks.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/debug-storage.o",
+        "-no-pie",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. New Rust debug storage and existing BODY12 Rust logger object with genuine C metadata/flag consumer; local mocked prints only, no registration/syscall/MM/IKC/hardware/locks/root/native/Docker/guest effects.",
+      "actor": {
+        "pid": 2212387,
+        "start": "103003571",
+        "ppid": 2212379,
+        "pgrp": 2212387,
+        "session": 2212387,
+        "state": "S"
+      },
+      "affinity": [
+        6
+      ],
+      "preentry_clocks_epoch_MONO_BOOT": [
+        1793232591.011856,
+        1014697.580813045,
+        1030035.707863837
+      ],
+      "started_epoch": 1793232591.013922,
+      "limits": {
+        "AS_bytes": 2147483648,
+        "CPU_seconds": 60,
+        "wall_seconds": 90,
+        "jobs": 1
+      },
+      "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/01-genuine-C-consumer-reuse-BODY12-logger-link/stdout",
+      "stderr": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/01-genuine-C-consumer-reuse-BODY12-logger-link/stderr",
+      "wall_seconds": 0.10419796500355005,
+      "finished_epoch": 1793232591.1181438,
+      "stdout_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/01-genuine-C-consumer-reuse-BODY12-logger-link/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/01-genuine-C-consumer-reuse-BODY12-logger-link/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "parent_streams_closed": true,
+      "status": "JOINED",
+      "returncode": 0,
+      "wait_status": 0,
+      "positive_wait4_join": true,
+      "wait4_pid": 2212387,
+      "CPU_seconds": 0.09357,
+      "user_seconds": 0.070951,
+      "system_seconds": 0.022619,
+      "peak_RSS_KiB": 27144,
+      "process_group_members": [],
+      "process_group_absent": true,
+      "child_proc_absent": true
+    },
+    {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "index": 2,
+      "label": "02-C-updater-existing-Rust-logger-storage-ABI",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. New Rust debug storage and existing BODY12 Rust logger object with genuine C metadata/flag consumer; local mocked prints only, no registration/syscall/MM/IKC/hardware/locks/root/native/Docker/guest effects.",
+      "actor": {
+        "pid": 2212392,
+        "start": "103003583",
+        "ppid": 2212379,
+        "pgrp": 2212392,
+        "session": 2212392,
+        "state": "S"
+      },
+      "affinity": [
+        6
+      ],
+      "preentry_clocks_epoch_MONO_BOOT": [
+        1793232591.1406112,
+        1014697.709567841,
+        1030035.836618114
+      ],
+      "started_epoch": 1793232591.1426091,
+      "limits": {
+        "AS_bytes": 2147483648,
+        "CPU_seconds": 60,
+        "wall_seconds": 90,
+        "jobs": 1
+      },
+      "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/02-C-updater-existing-Rust-logger-storage-ABI/stdout",
+      "stderr": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/02-C-updater-existing-Rust-logger-storage-ABI/stderr",
+      "new_executable": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/parity",
+        "bytes": 25408,
+        "sha256": "e7de733f907e336c7c5f7cd2e1522cadb333404ea13a646e91e42520efee62cf"
+      },
+      "wall_seconds": 0.013364496058784425,
+      "finished_epoch": 1793232591.1560023,
+      "stdout_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/02-C-updater-existing-Rust-logger-storage-ABI/stdout",
+        "bytes": 126,
+        "sha256": "59f73969054672de22b89ffda19b6af5350383a67f867575edfeeeb024ea4ebf"
+      },
+      "stderr_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/output-STANDING-1/actual-three-command-capture-1/02-C-updater-existing-Rust-logger-storage-ABI/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "parent_streams_closed": true,
+      "status": "JOINED",
+      "returncode": 0,
+      "wait_status": 0,
+      "positive_wait4_join": true,
+      "wait4_pid": 2212392,
+      "CPU_seconds": 0.000928,
+      "user_seconds": 0.000928,
+      "system_seconds": 0.0,
+      "peak_RSS_KiB": 9768,
+      "process_group_members": [],
+      "process_group_absent": true,
+      "child_proc_absent": true
+    }
+  ],
+  "actual_commands_started": 3,
+  "whole_wall_seconds": 0.2274985529948026,
+  "canonical_writes": 0,
+  "default_artifacts": 0,
+  "native": 0,
+  "file_closures": 0,
+  "limitations": "HOST genuine-header ABI and mocked functional callbacks only; no default/native/file credit."
+}

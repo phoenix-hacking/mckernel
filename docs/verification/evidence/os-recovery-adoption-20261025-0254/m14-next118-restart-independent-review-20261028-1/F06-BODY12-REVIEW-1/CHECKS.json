@@ -1,0 +1,558 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T00:23:35.465923+00:00",
+  "decision": "PASS_SOURCE_ABI_AND_RETAINED_ACTUAL_HOST_BODY12_CHECKS",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/SOURCE-READY.json",
+    "bytes": 12187,
+    "sha256": "2709519537398bffcbc1d72828ae266b2a3774a25ef72828d0b91910186ac883"
+  },
+  "qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/HOST-QUALIFICATION.json",
+    "bytes": 4570,
+    "sha256": "200295b70fa366ac9b520a934255cae9969acb97d4e44a3048a95cf7c44cb4bd"
+  },
+  "unique_authenticated_BYTE_refs": 62,
+  "raw_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/RESULTS.json",
+    "bytes": 10773,
+    "sha256": "1a2f4f8b5c66c80508d6dc07165b07772652066208fcf3999f0fc3da643fa8a1"
+  },
+  "commands": [
+    {
+      "index": 0,
+      "UTC": "2026-10-29T00:06:05.073829+00:00",
+      "pid": 2211191,
+      "birth": "102980976",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/runtime_vdso_map_log.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/runtime_vdso_map_log.o"
+      ],
+      "wall_seconds": 0.07738511997740716,
+      "CPU_seconds": 0.059434,
+      "RSS_KiB": 100424,
+      "started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command0.STARTED.json",
+        "bytes": 1427,
+        "sha256": "ce8955ebceb8d258454aa46eac465632e769028d0879fe0d1cd05171e0648091"
+      },
+      "joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command0.JOINED.json",
+        "bytes": 1623,
+        "sha256": "99ed02e4e55d5a73d216555fc25a2db94845127336c74f2f161fc6b7215db647"
+      },
+      "preflight": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command0.PREFLIGHT.json",
+        "bytes": 6777,
+        "sha256": "ff641b4596ef54e72f62b362bed48d3b14b7f84cde8ea7a58b12afd19084d157"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command0.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command0.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 1,
+      "UTC": "2026-10-29T00:06:05.210944+00:00",
+      "pid": 2211198,
+      "birth": "102980990",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Werror=incompatible-pointer-types",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-std=gnu11",
+        "-fno-builtin",
+        "-save-temps",
+        "-r",
+        "-nostdlib",
+        "-no-pie",
+        "-I",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1",
+        "-x",
+        "c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/oracle.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/consumer.c",
+        "-x",
+        "none",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/runtime_vdso_map_log.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/joined.o"
+      ],
+      "wall_seconds": 0.12800267594866455,
+      "CPU_seconds": 0.10815999999999999,
+      "RSS_KiB": 34996,
+      "started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command1.STARTED.json",
+        "bytes": 4545,
+        "sha256": "fc9ca0ee96aa620a941f28ef96f5e980675c5b5769fa7811861ef2d241dfd7fb"
+      },
+      "joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command1.JOINED.json",
+        "bytes": 4724,
+        "sha256": "227ec45c40bada518a31264d5768973e8f86288bcc9dd13824978824df29092d"
+      },
+      "preflight": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command1.PREFLIGHT.json",
+        "bytes": 6776,
+        "sha256": "35c652c435c682d0c9aeb65702dfa296a1e5852bfb2fd514a48779d8c1f2b495"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command1.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command1.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 2,
+      "UTC": "2026-10-29T00:06:05.395378+00:00",
+      "pid": 2211207,
+      "birth": "102981009",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/joined.o",
+        "-C",
+        "link-arg=-no-pie",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/fixture"
+      ],
+      "wall_seconds": 0.3047842800151557,
+      "CPU_seconds": 0.302162,
+      "RSS_KiB": 142032,
+      "started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command2.STARTED.json",
+        "bytes": 1564,
+        "sha256": "34ad044948836e012f4575196a8e4e8a516e084767423a79666b8317de335aeb"
+      },
+      "joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command2.JOINED.json",
+        "bytes": 1770,
+        "sha256": "f8d834504c5d5f397bc2028e24e7de56229ca6a70ed9b8a52c5cfb6ed7bc3e9e"
+      },
+      "preflight": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command2.PREFLIGHT.json",
+        "bytes": 6777,
+        "sha256": "2b2c075279170219dfb4f4d435da6368b24fadaeac3a5820c85e1911cbc39a46"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command2.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command2.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 3,
+      "UTC": "2026-10-29T00:06:05.752763+00:00",
+      "pid": 2211220,
+      "birth": "102981044",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/fixture",
+        "--exact",
+        "original_c_and_rust_vdso_map_log",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "wall_seconds": 0.07798979105427861,
+      "CPU_seconds": 0.056947,
+      "RSS_KiB": 35112,
+      "started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command3.STARTED.json",
+        "bytes": 1138,
+        "sha256": "19012ac2a75008280c760528fe283fefbe13cd84f197a81bd62483b1343ed6b4"
+      },
+      "joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command3.JOINED.json",
+        "bytes": 1301,
+        "sha256": "d89bbb4214790327acd7fea3fe80ae900dc4f2a9a98e8bbbf22886e39918729c"
+      },
+      "preflight": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command3.PREFLIGHT.json",
+        "bytes": 6777,
+        "sha256": "163bab9a524f7439fbb3b0beb395e8b23fd19f13a30ccc39c199032f5a553908"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command3.stdout",
+        "bytes": 398,
+        "sha256": "493ad885c5402d6de5d02734108f359b94a21a00180fd7c305f52a0cff82a5c4"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/command3.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "pairs": 56250,
+  "ignored_VM_cases": 7,
+  "ELF_readback": [
+    {
+      "kind": "Rust",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/runtime_vdso_map_log.o",
+        "bytes": 3696,
+        "sha256": "999203c251cd86cab2e69bdeac640a2575135ecd4377fa841202958da9285938"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 11,
+        "value": 0,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 3084,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "selected_logger_definitions": 1,
+      "verbose_records": [
+        {
+          "name": "mckernel_f06_vdso_map_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 11,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Cextern",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/consumer.o",
+        "bytes": 28240,
+        "sha256": "790fc740992051ea6b638713103cfe7fac40bb0f32982926a4b9bb674a2a3c67"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 0,
+        "bind": 1,
+        "other": 0,
+        "ndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      "selected_logger_definitions": 0,
+      "verbose_records": []
+    },
+    {
+      "kind": "Coracle",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/oracle.o",
+        "bytes": 36008,
+        "sha256": "a8c240ce569c4e0ba3c5edc67fac8169e56dac6cae13595b45b7fa11f6190f62"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 0,
+        "bind": 1,
+        "other": 0,
+        "ndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      "selected_logger_definitions": 0,
+      "verbose_records": [
+        {
+          "name": "ddebug.7064",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 8,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 3,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "partial",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/joined.o",
+        "bytes": 91264,
+        "sha256": "7d485f94c6329d8a0d821f1452ed7e7f7dbba2e27383ac259540d83e12124a49"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 18,
+        "value": 0,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 3084,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "selected_logger_definitions": 1,
+      "verbose_records": [
+        {
+          "name": "ddebug.7064",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 16,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 3,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "mckernel_f06_vdso_map_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 18,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "fixture",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/fixture",
+        "bytes": 6134744,
+        "sha256": "0051139b09264cff18e29ce6b410504c474971afdc60e90ec8919c679ee3227d"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 30,
+        "value": 2944224,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 3084,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "selected_logger_definitions": 1,
+      "verbose_records": [
+        {
+          "name": "ddebug.7064",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 30,
+          "value": 2944192,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "mckernel_f06_vdso_map_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 30,
+          "value": 2944224,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata_record": {
+    "file": "/src/arch/x86_64/kernel/syscall.c",
+    "function": "arch_vdso_map_log_bridge",
+    "fmt": null,
+    "line": 3084,
+    "flags": 0,
+    "padding": 0
+  },
+  "original389records_preserved_scope": true,
+  "canonical118_line3086_source_derived_unobserved_default": true,
+  "BODY12_line3084_source_HOST_qualified_only": true,
+  "postprocess_failure_and_bounded_correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/POSTPROCESSING-CORRECTION.json",
+    "bytes": 2213,
+    "sha256": "04a8bad43682942916f9a9cffa6232fc50225e768a6b8b7e00a65f3eef0212ef"
+  },
+  "sum_wall_seconds": 0.588161866995506,
+  "sum_CPU_seconds": 0.5267029999999999,
+  "peak_RSS_KiB": 142032,
+  "reviewer_compiler_or_fixture_runs": 0,
+  "reviewer_actual_runtime_calls": 0,
+  "runtime_authority": null,
+  "default_native_fullfile_credit": 0
+}

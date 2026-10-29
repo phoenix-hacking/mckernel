@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T00:11:36.270980+00:00",
+  "decision": "PASS_FOCUSED_A3_SOURCE_AND_EXACT_ROOT_FRONTIER",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/SOURCE-READY.json",
+    "bytes": 5013,
+    "sha256": "48a0972329860f23979c8374650c7632c02456691f498f1a067666363fb08a68"
+  },
+  "core": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/typed_current_boundary.py",
+    "bytes": 23327,
+    "sha256": "f893832e6f3b5a547bf357aa9c6b79525dbe17c64096c50c81f0462eb5b29b90"
+  },
+  "consumer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/observe_current63_current118.py",
+    "bytes": 1544,
+    "sha256": "290a657d7700e7a01790f2e9889efdf0c42f3e2861ff674f029499dd10b04645"
+  },
+  "materializer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/materialize_admission.py",
+    "bytes": 12660,
+    "sha256": "a41f7562cde1e144973861fc6099a69b17c1352230e3bd986000e4edb6fb6b14"
+  },
+  "source_subjects": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/EXACT-OPERATION-SOURCE-SUBJECTS.json",
+    "bytes": 12105,
+    "sha256": "1d618153a6b8309a47e69edb4c6524faaab353853dcf4b6dbb81070175b86bf3"
+  },
+  "source_subject_count": 35,
+  "unique_DIRECT_BYTE_refs_authenticated": 98,
+  "exact_delta": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/EXACT-SOURCE-DELTA.json",
+    "bytes": 10568,
+    "sha256": "8a6dd6dce1a8612525522d4089c00334937f587fb5c4c65f8ece9a047773c592"
+  },
+  "actual_Root_frontier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/ROOT-CLOSED-UNLAUNCHED-FRONTIER.ACTUAL.json",
+    "bytes": 2509,
+    "sha256": "e59a728ad8dbe7829761411da56fed3550df95e317c049a0348ae714b185ae3d"
+  },
+  "A2actor_rows": [
+    {
+      "pid": 2198978,
+      "birth": 102765089,
+      "role": "A2_unlaunched_holder",
+      "group": null,
+      "fd": 3
+    },
+    {
+      "pid": 2198306,
+      "birth": 102756246,
+      "role": "A2_finite_waiter",
+      "group": 2198306,
+      "fd": null
+    },
+    {
+      "pid": 2199449,
+      "birth": 102772979,
+      "role": "A2_held_capture_child",
+      "group": 2199449,
+      "fd": null
+    },
+    {
+      "pid": 2199448,
+      "birth": 102772975,
+      "role": "A2_held_wrapper",
+      "group": null,
+      "fd": null
+    },
+    {
+      "pid": 2198340,
+      "birth": 102760320,
+      "role": "A2_physical_capture_child",
+      "group": 2198340,
+      "fd": null
+    },
+    {
+      "pid": 2198339,
+      "birth": 102760316,
+      "role": "A2_physical_wrapper",
+      "group": null,
+      "fd": null
+    }
+  ],
+  "same71_consumed_nonces": true,
+  "A2abandoned_nonce_rejected": true,
+  "RootA3_unused_reservation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/ROOT-A3-NONCE-RESERVATION.json",
+    "bytes": 1431,
+    "sha256": "0cfdc24e900d9ed65d5a02eb468463c7b7f698450e4cca333d3ddd38be161814"
+  },
+  "independent_focused_tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 7.301,
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-SOURCE-CORRECTION-REVIEW-1/PURE-FOCUSED.stdout",
+    "bytes": 704,
+    "sha256": "246aaf3e71862186a9a37fdd28aa793ba4fb2876d7243a76b28d4ef52d7b005e"
+  },
+  "CPU": 0,
+  "AS_bytes": 2147483648,
+  "TEST_ONLY_temporary_writes_under": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-SOURCE-CORRECTION-REVIEW-1",
+  "unchanged_BYTE_runtime_sources": [
+    "finite_review.py",
+    "hot_predicates.py",
+    "hold_and_run_build_only.py",
+    "publish_approved_ready.py",
+    "publish_after_independent_pass_once.py",
+    "root_capture_once.py"
+  ],
+  "capture_resources_implementation_functions_AST_exact_except_typed_source_loader": true,
+  "whole_observe_mocks": 0,
+  "actual_guard_observe_query_runtime_calls": 0,
+  "original_observer_or_archive_execution": 0,
+  "runtime_authority": null
+}

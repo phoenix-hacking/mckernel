@@ -1,0 +1,113 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-29T00:11:36.270980+00:00",
+  "decision": "PASS_EXACT_A3_CLOSED_UNLAUNCHED_FRONTIER_SOURCE_CORRECTION",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/m14_review",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/SOURCE-READY.json",
+    "bytes": 5013,
+    "sha256": "48a0972329860f23979c8374650c7632c02456691f498f1a067666363fb08a68"
+  },
+  "core": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/typed_current_boundary.py",
+    "bytes": 23327,
+    "sha256": "f893832e6f3b5a547bf357aa9c6b79525dbe17c64096c50c81f0462eb5b29b90"
+  },
+  "consumer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/observe_current63_current118.py",
+    "bytes": 1544,
+    "sha256": "290a657d7700e7a01790f2e9889efdf0c42f3e2861ff674f029499dd10b04645"
+  },
+  "materializer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/materialize_admission.py",
+    "bytes": 12660,
+    "sha256": "a41f7562cde1e144973861fc6099a69b17c1352230e3bd986000e4edb6fb6b14"
+  },
+  "source_subjects": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/EXACT-OPERATION-SOURCE-SUBJECTS.json",
+    "bytes": 12105,
+    "sha256": "1d618153a6b8309a47e69edb4c6524faaab353853dcf4b6dbb81070175b86bf3"
+  },
+  "subject_count": 35,
+  "exact_delta": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/EXACT-SOURCE-DELTA.json",
+    "bytes": 10568,
+    "sha256": "8a6dd6dce1a8612525522d4089c00334937f587fb5c4c65f8ece9a047773c592"
+  },
+  "prior_blocking_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-failed-unlaunched-supplement-review-1/REVIEW.json",
+    "bytes": 13410,
+    "sha256": "cfa3a5d1176cc726cd3af2d18ee00e0dbf4b1b9a781b73495d6e6b4968f6de35"
+  },
+  "actual_Root_frontier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/ROOT-CLOSED-UNLAUNCHED-FRONTIER.ACTUAL.json",
+    "bytes": 2509,
+    "sha256": "e59a728ad8dbe7829761411da56fed3550df95e317c049a0348ae714b185ae3d"
+  },
+  "findings": [
+    {
+      "requirement": "Exact complete closed-A2 custody history",
+      "result": "PASS",
+      "details": "New validator authenticates actual Root frontier e59a, immutable6b/e13/be0 base, original6c923packet/11records and extra physicalwrapperc329, exact6actor PID/birth/FD/group dispositions, old actual HOLDER.READY and normalfailure/withdrawal/no buildREADY/runner/claim/compiler/container/native outcomes. Root complete/no-unlisted postbase attestation required. Same71 consumed/native history is retained; closed history is not freshclearance."
+    },
+    {
+      "requirement": "Abandonednonce and freshreservation",
+      "result": "PASS",
+      "details": "validate_root_context rejects consumednonces and A2abandoned1d3, requires same supplement ref and exact actual unusedRootA3reservation0cfd matching newnonce/admission/base/priorabandoned disposition; no nonce append or native reclassification."
+    },
+    {
+      "requirement": "Actual fresh raw A2 PID/group/FD/lock absence",
+      "result": "PASS",
+      "details": "Typedobserve calls unchanged actual upstreamobserve then new supplementary validator before typedPASS. Existing raw5client validator authenticates2fullcensuses/4snapshots; checks all6A2PIDs and3dedicatedgroups absent, then fresh procPID/oldholderFD3 and permanent27:4 lock absence. Requires postfrontierepoch for observation and everyclient; carries exactfrontier plus checkedactors to result. Holder and bothouterwrapper groups remain explicitly unclaimed. Original93 inherited actors and globalphysical predicates remain unchanged."
+    },
+    {
+      "requirement": "Truthful materializer declaration",
+      "result": "PASS",
+      "details": "Oldledger completeness remains at original historicalscope through unchanged upstreamadoption validation; materializer calls validated supplemented rootcontext and carries explicit closedfrontier/base scope into profile. No silent assertion that oldRoot63 has no laterA2custody."
+    },
+    {
+      "requirement": "Scope/resource and exactsource coupling",
+      "result": "PASS",
+      "details": "35source map equals executablecohort subjects; new FRONTIER-INPUTS is included. Kernel/SDK/export/origin semantics unchanged. Finite600s/Hot/120s/holder/publisher/Rootcapture source bytes unchanged; capture_resources changes only pinned guard/core source routing. Oldsource55/withdrawn operation/failurehistory retained."
+    },
+    {
+      "requirement": "Focused pure regression",
+      "result": "PASS",
+      "details": "Independent6groups PASS7.301s onCPU0/AS2GiB, all6livePID/3group/FD/lock/stale/missingfrontier/review/delegation/nonce cases; no wholeobserve mocks or actualeffects. Owner6groups7.309s retained; original observers/archives were not executed."
+    }
+  ],
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-SOURCE-CORRECTION-REVIEW-1/CHECKS.json",
+    "bytes": 4910,
+    "sha256": "4397bbda485a19f55018c7c584d68d35d5b15e6e7de9b58be6159d98827e7c13"
+  },
+  "reviewer_metadata_check_correction": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-SOURCE-CORRECTION-REVIEW-1/REVIEWER-CHECKER-CORRECTION.json",
+    "bytes": 1033,
+    "sha256": "9d68dc1e079a11c1cac135aceb114743effe8a231e64e165c15226820646e842"
+  },
+  "schema_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/A3-SOURCE-CORRECTION-REVIEW-1/OBSERVER-SCHEMA.REVIEW.json",
+    "bytes": 1649,
+    "sha256": "3c1dc0c467b315825e86bf465f25fe7db3f532dc4dafdadfa4da53a08639017a"
+  },
+  "Root_readonly_delegation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/ROOT-CURRENT118-READONLY-DELEGATION.ACTUAL.json",
+    "bytes": 3471,
+    "sha256": "32bb99769f11c4f5d62804cfd14914d5d25c8aa2b9f4cec57359ca36af9acc02"
+  },
+  "delegation_output_empty_at_review": true,
+  "source_blockers": [],
+  "runtime_authority": null,
+  "current_free_acceptance": false,
+  "compiler_native_default_fullfile_acceptance": false,
+  "actual_guard_observe_query_runtime_calls": 0,
+  "next_requirements": [
+    "Root authors exact new consumer descriptor/schema-review binding, independently reviewed typed binding/delegation/frontier and materializer inputs; sourcePASS alone is not DATA/runtimeauthority.",
+    "New35subject operation/config/review/source publication/fetched-byte closure must bind changed sourcehashes; old34map/current118operation review is not transferable.",
+    "Only then follow original static/one-call actualentry and unchanged fresh global/source/physical/holder/Hot/120s/resource predicates; preserve all failures and unknownbirth limits."
+  ],
+  "all_original_native389registry_finalfile_obligations_preserved": true
+}

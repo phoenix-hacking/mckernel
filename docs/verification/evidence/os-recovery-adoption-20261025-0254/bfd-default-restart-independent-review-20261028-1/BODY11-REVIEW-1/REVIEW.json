@@ -1,0 +1,269 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_F06_BODY11_RUST_DESCRIPTOR_SOURCE_ABI_AND_RETAINED_HOST_OWNERSHIP_ONLY",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/bfd_review",
+  "runtime_authority": null,
+  "source_correctness_ABI_HOST_blockers": [],
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/SOURCE-READY.json",
+    "bytes": 12295,
+    "sha256": "6dce9415c6de7ef0503b52793915ac663b2e64c55ad8635594b27fcd73809a5f"
+  },
+  "qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/HOST-QUALIFICATION.json",
+    "bytes": 4432,
+    "sha256": "4020e864f2a991c07927f4dc195c6ef8f6e82a916146b6b8c8c696650d507cf9"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/WORKER-HOST-BINDINGS.json",
+    "bytes": 14622,
+    "sha256": "805ebf58e76f3e3d8273390155baff12c05166cd67a05ce79adabc90659ba619"
+  },
+  "storage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/f06_prctl_log_storage.rs",
+    "bytes": 904,
+    "sha256": "c20113faa7526cf49a896f73e8072aa2d4132f93bbdcb21efae8f056b2098474"
+  },
+  "unchanged_BODY10_callback": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/f06_prctl_log.rs",
+    "bytes": 1348,
+    "sha256": "d3e2e4c974fa9f2b3d15d8f49ffad8d08ea90e3be488e519460aa5e91af81a8e"
+  },
+  "original_C_macro_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/oracle.c",
+    "bytes": 2514,
+    "sha256": "9c6a15af5180df06f866ff205963a72eff0570f51e793a7738e52298d1fced05"
+  },
+  "C_extern_consumer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/consumer.c",
+    "bytes": 1510,
+    "sha256": "99312d22d8faf4e6fee49836dd4bda56fb9ff4502f0b56de5a6f5dd05044e285"
+  },
+  "descriptor_identity": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/ORIGINAL-DESCRIPTOR-IDENTITY.json",
+    "bytes": 5123,
+    "sha256": "50d09ed9b56c32e2093cd1fa106a3bfa95f10dd9fa47891bf2cebe0728d92f95"
+  },
+  "ownership_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/REAL-RUST-DESCRIPTOR-ELF-OWNERSHIP.json",
+    "bytes": 7706,
+    "sha256": "e8527089e9f6c06063f37657d230e3e097dfcb4c266dc58c613874b9cc04da57"
+  },
+  "independent_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BODY11-REVIEW-1/INDEPENDENT-CHECKS.json",
+    "bytes": 13390,
+    "sha256": "938bd3f2471a7f3bdd8c281129921c382fc6b3129af9470658fa11b741433a99"
+  },
+  "command_times": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/ACTUAL-COMMAND-TIMES.json",
+    "bytes": 1471,
+    "sha256": "a5ff565f7862a92cd5926dc06435d6cc83d113d9409bf95b0761bf3818e16dee"
+  },
+  "source_assessment": [
+    "Private BODY11 adds one Rust static mut Ddebug with export mckernel_f06_arch_prctl_debug, used writable alloc __verbose storage and no constructor. It imports the existing repr(C) Ddebug layout and preserves image lifetime. No shared/canonical implementation was edited.",
+    "Metadata is the original file-origin env MCKERNEL_F06_RT_SIGRETURN_ORIGIN with NUL terminator, function arch_prctl_log_bridge, null fmt, line669 and flags0. Genuine C header has three pointers then unsigned line:24/flags:8, aligned8; on qualified x86_64 LP64 this is32 bytes, flagbyte27. Actual object/partial/final HOST bytes independently show null fmt, line_flags669 and four zero padding bytes.",
+    "BYTE-identical BODY10 callback is reused: event0x1002 only, volatile raw flagbyte27 read, nonzero gate, original int/unsigned-long varargs and exact printer format. It forms no Rust reference to the mutable descriptor. Existing C flag-update/exclusion and kprintf contracts remain; no new synchronization promise is introduced.",
+    "Selected C branch is extern-only when both existing logger selection and new storage flag are enabled. Disabling storage retains the exact BODY10 C global record; disabling logger retains original C body/dkprintf LOCAL descriptor. New CMake cfg/module/source and C storage selection are paired inside the existing supported branch. Logical fallback line665 and outer line672 restore remain unchanged.",
+    "Actual C oracle retains genuine dkprintf and original function identifier with HOST-only asm alias and filename/line remap. C extern consumer uses genuine headers and static ABI assertions, takes the actual Rust descriptor address, and writes/reads the real C bitfield. The oracle LOCAL descriptor is independent from the one GLOBAL selected Rust record.",
+    "Fixture qualification exercises3750 original C/Rust pairs over six events, five flag bytes, five CPU ints, five unsigned-long values and five printer returns. It compares an independent expected trace and rendered text, metadata/line/padding canaries, C/Rust pointer identity and bidirectional flagbyte/C-bitfield roundtrips. Source/authenticated retained stdout confirms1 test passed0 failed; no execution was repeated.",
+    "Independent read-only ELF parser inspection of real Rust object, C consumer, C oracle, partial link and final HOST fixture confirms one GLOBAL OBJECT32 target aligned8 in writable alloc __verbose; C consumer/oracle target symbols are undefined imports. Original oracle contributes one distinct LOCAL32 record; partial/final HOST have exactly those two record symbols. No Rust-object constructor section exists.",
+    "All39 frozen source/actual-source bindings, genuine header/type providers, qualification/result/ELF references, raw four STARTED/JOINED/stdout/stderr records and all nine canonical118 postimages were authenticated. Four recorded argv/cwd equal the exact plan; each PID/birth has direct wait4 exit0, whole-group absence and closed streams; stderr is empty. No retries or failures in this BODY11 HOST run."
+  ],
+  "actual_retained_command_metrics": [
+    {
+      "command": 0,
+      "UTC": "2026-10-28T23:56:19.411965+00:00",
+      "epoch": 1793231779.4119651,
+      "MONO": 1013885.980921293,
+      "BOOT": 1029224.107971152,
+      "pid": 2207275,
+      "birth": "102922410",
+      "wall_seconds": 0.07768711203243583,
+      "CPU_seconds": 0.064937,
+      "peak_RSS_KiB": 97720,
+      "positive_wait4": {
+        "pid": 2207275,
+        "status": 0,
+        "exit": 0,
+        "positive_direct_join": true
+      },
+      "raw_started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command0.STARTED.json",
+        "bytes": 1393,
+        "sha256": "b266faeda67e55299225812b009dd0632d4b24af8b96fe2305784dc7a3329697"
+      },
+      "raw_joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command0.JOINED.json",
+        "bytes": 1630,
+        "sha256": "879ec680f2bc598da157dbeb4116f4b98bef7be6062d7610e52d1fafe76dd363"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command0.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command0.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": 1,
+      "UTC": "2026-10-28T23:56:19.546261+00:00",
+      "epoch": 1793231779.5462613,
+      "MONO": 1013886.115218052,
+      "BOOT": 1029224.242267904,
+      "pid": 2207282,
+      "birth": "102922424",
+      "wall_seconds": 0.07814154401421547,
+      "CPU_seconds": 0.05769799999999999,
+      "peak_RSS_KiB": 35116,
+      "positive_wait4": {
+        "pid": 2207282,
+        "status": 0,
+        "exit": 0,
+        "positive_direct_join": true
+      },
+      "raw_started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command1.STARTED.json",
+        "bytes": 4521,
+        "sha256": "f24e105e8738cfe0e5151cd74a6a899a7c28ed29b359d512a7bd8873ebbc6a87"
+      },
+      "raw_joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command1.JOINED.json",
+        "bytes": 4734,
+        "sha256": "c6a855866488e3849816f813fdf751c4bc7803845567609b8ce799c7f362e162"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command1.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command1.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": 2,
+      "UTC": "2026-10-28T23:56:19.685768+00:00",
+      "epoch": 1793231779.6857684,
+      "MONO": 1013886.254726005,
+      "BOOT": 1029224.381776258,
+      "pid": 2207291,
+      "birth": "102922438",
+      "wall_seconds": 0.30407468194607645,
+      "CPU_seconds": 0.287731,
+      "peak_RSS_KiB": 137108,
+      "positive_wait4": {
+        "pid": 2207291,
+        "status": 0,
+        "exit": 0,
+        "positive_direct_join": true
+      },
+      "raw_started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command2.STARTED.json",
+        "bytes": 1553,
+        "sha256": "e9174e1399a2e8848dfb5c7b217e22855a0ad8a0e60ef7b4da32f9e8e8dc42d0"
+      },
+      "raw_joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command2.JOINED.json",
+        "bytes": 1759,
+        "sha256": "6622126e7bc818530de362e8d61f4dd5421c3738dab3f670536aedc3000ddb8d"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command2.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command2.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": 3,
+      "UTC": "2026-10-28T23:56:20.051178+00:00",
+      "epoch": 1793231780.051178,
+      "MONO": 1013886.620134274,
+      "BOOT": 1029224.747184195,
+      "pid": 2207304,
+      "birth": "102922474",
+      "wall_seconds": 0.02808590291533619,
+      "CPU_seconds": 0.004493,
+      "peak_RSS_KiB": 35236,
+      "positive_wait4": {
+        "pid": 2207304,
+        "status": 0,
+        "exit": 0,
+        "positive_direct_join": true
+      },
+      "raw_started": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command3.STARTED.json",
+        "bytes": 1130,
+        "sha256": "463447f2c5f9e9b2916f59d3a2e5063ff48a833379ac9df63c543864f45e9f6b"
+      },
+      "raw_joined": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command3.JOINED.json",
+        "bytes": 1309,
+        "sha256": "13e2c627470e30b4bff61d2961ab3112a2b4ba910b2b8ebaa4c5a345c72bd3db"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command3.stdout",
+        "bytes": 354,
+        "sha256": "6a2a5f13575c2decf9b61f1d793609a76c490278b05e0483977be441cf494280"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body11-restart-20261028-1/future-host-output-1/command3.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "aggregate_metrics": {
+    "actual_commands": 4,
+    "compiler_link_commands": 3,
+    "fixture_runs": 1,
+    "original_C_Rust_pairs": 3750,
+    "sum_wall_seconds": 0.48798924090806395,
+    "sum_CPU_seconds": 0.41485900000000003,
+    "peak_RSS_KiB": 137108,
+    "host_profile": {
+      "CPU": 7,
+      "jobs": 1,
+      "AS_bytes": 2147483648,
+      "CPU_limit_seconds": 60,
+      "wall_limit_seconds": 90
+    },
+    "all_exit_zero": true,
+    "all_direct_wait4_positive": true,
+    "all_groups_absent": true,
+    "all_streams_closed": true
+  },
+  "next_concrete_root_operation": "Compose either canonical118+BODY10+BODY11 full patches OR BODY11 delta on BODY10 with the accepted disjoint cumulative BODY3-9 source once. Rebind the existing F06 origin producer/profile/argv to that exact composition. The next qualifying artifact must build genuine selected/fallback C TU, full Rust crate and default partial/final image under reviewed admission, preserving389-record registry multiset and one selected GLOBAL32/align8 Rust target with no selected C definition/constructor; then matching-current native/configuration proof remains required.",
+  "limitations": [
+    "This accepts exact private source/ABI and already-completed ordinary HOST ownership evidence only; no compiler/fixture/runtime command was rerun by this review.",
+    "The HOST fixture intentionally contains an independent LOCAL C oracle record and one GLOBAL Rust record. These two HOST records do not prove the production image389-record multiset or a whole-file/data retirement.",
+    "New defaultartifact/native/configuration/data/file retirement credit remains0. Accepted CURRENT116 C71/archC17/focusedRust68/M14files4of6 and all389 registry obligations remain unchanged.",
+    "BODY11 adds32 bytes of proposed Rust storage ownership, not a new function retirement count. Original format-domain blockers, held signal bodies, source failures/previous BODY7 namespace issue, stopped scratch21/permanent27:4/exclusions and finite caps/credit remain preserved.",
+    "HOST process-group retirement proves only these four recorded children; it supplies no fresh global/native custody or BFD clearance."
+  ],
+  "review_checks_profile": {
+    "CPU": 0,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "read_only_hash_metadata_ELF_inspection": true
+  },
+  "new_execution_credit": {
+    "compiler_fixture_reruns": 0,
+    "default_artifacts": 0,
+    "native_cases": 0,
+    "M14_file_closures": 0,
+    "M15_file_closures": 0
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_FUNCTIONAL_ADAPTER_FOR_EXISTING_ORDINARY_OWNER_NOT_RELEASED",
+  "adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/created_only_libelf_adapter.py",
+    "bytes": 8436,
+    "sha256": "5bc1f45ff057511a84927bba8c5d68b401d6a8cf158c9f5aa11fe598f040d346"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/BINDINGS.json",
+    "bytes": 3811,
+    "sha256": "f6670b8f41e08b20a4a9161b5ed6d780df6f8fc498285d5f057e5859437a2975"
+  },
+  "entrypoint": "execute_created_only(q, commands=reviewed_wait4_transport, admit=actual_existing_owner_admission, publish=existing_durable_O_EXCL_writer, retain_uncertainty=actual_owner_keep_custody)",
+  "request_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/ROOT-REQUEST.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 701,
+    "sha256": "d7f2b23e42dd4f87f8c97c815fd65f8f0e42ef9b8899cafaf1ef34eea3dc1b39"
+  },
+  "first_future_command": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "image",
+    "inspect",
+    "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+  ],
+  "reviewed_create_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "create",
+    "--name",
+    "m15-libelf-extract-ROOT_MUST_SUPPLY_FRESH_32HEX_NONCE",
+    "--label",
+    "mckernel.owner=ROOT_MUST_SUPPLY_FRESH_32HEX_NONCE",
+    "--init",
+    "--network=none",
+    "--ipc=private",
+    "--cpus=4",
+    "--cpuset-cpus=2-5",
+    "--memory=12g",
+    "--memory-swap=12g",
+    "--pids-limit=512",
+    "--user",
+    "1000:1000",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,size=256m",
+    "--entrypoint",
+    "/usr/bin/sleep",
+    "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "infinity"
+  ],
+  "copy_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "cp",
+    "-L",
+    "ACTUAL_NEW_CREATED_CID:/usr/lib64/libelf.so.1",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/actual-libelf-export-ROOT_FRESH/libelf.so.1"
+  ],
+  "inspect_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "inspect",
+    "--type",
+    "container",
+    "ACTUAL_NEW_CREATED_CID"
+  ],
+  "remove_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "rm",
+    "--",
+    "ACTUAL_NEW_CREATED_CID"
+  ],
+  "absence_filters": [
+    "id=ACTUAL_NEW_CREATED_CID",
+    "name=^/ACTUAL_NEW_NAME$"
+  ],
+  "caller_before_start": [
+    "Root supplies actual new source/fetched/execution review and fresh request, owner nonce/name/output, complete current ledger/free and same-boot/account/window/identity/resource/exclusion admission. Historical9634/scratch18 documents are source lineage only.",
+    "Existing ordinary owner owns27:4 and its genuine one-heavy/lease reservation; resources fixed4CPU2-5/12GiB/equal swap/512/noNet/noMounts. The adapter creates no shared records and cannot release another owner.",
+    "Root creates/pins one fresh ordinary output namespace and binds canonical non-symlink ancestry/inode/ownership. Refuse existing library destination.",
+    "Install actual final before_popen guard hook on existing no-signal wait4 Commands; all guard/source/protected/profile/log/fsync I/O before final earliest clock/stop check, then immediate spawn.",
+    "admit(q) revalidates exact granted operation/current ledger/free/reservation/exclusions/slot/output before each command; commands records actual PID/birth/wait4/group/session/streams/time/CPU/RSS/raw status.",
+    "publish(name,value) reuses existing durable no-replace owner writer in that exact fresh namespace. retain_uncertainty retains global/lease custody and original outputs/client state without signals/retry."
+  ],
+  "caller_after_success": [
+    "Authenticate exact library bytes, image/newCID/request, eight actual command receipts and exact created-only/absence proofs; parent positively joins owner and closes only its own custody.",
+    "Fresh independent physical/current-postjoin proof before another heavy/native operation. Library export only; no native/fullfile acceptance.",
+    "Perform actual SONAME libelf.so.1/GNU versions/recursive NEEDED closure against existing guest libc/zlib/loader and both retained mcinspect artifacts. Stage only after exact closure and current110 collector/overlay/owner review."
+  ],
+  "forbidden": [
+    "full old rebind execute()",
+    "start/exec/run/build/stop/kill",
+    "retired2460 cp or recreation",
+    "collector compile replay/PID1 HOST execution",
+    "host distro library substitution",
+    "source/native/default producer or guest replay"
+  ],
+  "actual_runtime_authority": null
+}

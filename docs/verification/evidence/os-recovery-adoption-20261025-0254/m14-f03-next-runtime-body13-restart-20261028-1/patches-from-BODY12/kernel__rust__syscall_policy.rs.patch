@@ -1,0 +1,24 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36444,3 +36444,21 @@
+         }
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact original C metadata provenance, retained from the accepted registry.
++mod f03_util_register_desc_debug_storage_v1 {
++    use crate::debug::Ddebug;
++    // The C consumer and existing BODY12 logger retain this exact global symbol
++    // and repr(C) layout. Static lifetime/writable flags/section membership are
++    // unchanged; original update synchronization remains the caller's contract.
++    #[used]
++    #[no_mangle]
++    #[link_section="__verbose"]
++    pub static mut f03_util_register_desc_debug_v1:[Ddebug;1]=[Ddebug {
++        file:b"/src/kernel/syscall.c\0".as_ptr().cast(),
++        func:b"syscall_util_register_desc_log_bridge\0".as_ptr().cast(),
++        fmt:core::ptr::null(),
++        line_flags:28605,
++    }];
++}

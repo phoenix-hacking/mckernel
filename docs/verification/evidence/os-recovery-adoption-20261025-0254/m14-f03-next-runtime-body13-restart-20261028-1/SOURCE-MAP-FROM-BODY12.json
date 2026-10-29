@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_DELTA_DEPENDS_ON_ACCEPTED_BODY12_SELECTION",
+  "runtime_authority": null,
+  "writes": [
+    {
+      "relative": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/predecessor-BODY12/kernel/syscall.c",
+        "bytes": 922449,
+        "sha256": "3376269d3087b4080a6c318461e4f519438e404593a22a24f91f8b51ff9770ae"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/candidate/kernel/syscall.c",
+        "bytes": 922302,
+        "sha256": "f94fbcf61d1212cb6443481b58ed44465875c19c4f1b2703ea75aa24802bd8c0"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/patches-from-BODY12/kernel__syscall.c.patch",
+        "bytes": 606,
+        "sha256": "36b1c98143b1ff789b92919768e08e87861a27176c479bb5bdbcef33b3bbe365"
+      },
+      "canonical_write_authority": null
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/predecessor-BODY12/kernel/rust/syscall_policy.rs",
+        "bytes": 1281960,
+        "sha256": "85355e2c8f015a7c552152c3985a4e5ab5cddae7ddd33179b6a57a4785ba76da"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1282774,
+        "sha256": "7976b6ad41c2ce217358508be21a568e4f54e3be8350518d8c2121fb01914187"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/patches-from-BODY12/kernel__rust__syscall_policy.rs.patch",
+        "bytes": 950,
+        "sha256": "134a7921c091f7dc3d4f19fc7ffb719faedfb250bdd36accb1c67d5a60f95a61"
+      },
+      "canonical_write_authority": null
+    }
+  ],
+  "exact_dependency": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/SOURCE-READY.json",
+    "bytes": 8786,
+    "sha256": "f0d92939f983d1e4e1759e7200296f1b7fa2b152bb950e9e2277f30ae98b6219"
+  },
+  "frozen118_source_reference": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/candidate",
+  "code": "BODY12 logger unchanged exactly once; only C storage definition becomes extern plus Rust-owned static data.",
+  "new_function_ports": 0,
+  "new_C_storage_definitions": 0
+}

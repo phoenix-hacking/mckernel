@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Execute reviewed A3 static materializer once; no compiler/container/native or physical capture.",
+  "argv": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=60",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/materialize_admission.py",
+    "--root-bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next-attempt-after-expired-capture-preparation-1/A3-source-successor-1/cohort/ROOT-ACTUAL-BINDINGS-1.json"
+  ],
+  "pid": 2214035,
+  "birth": 103034723,
+  "start_epoch": 1793232902.5393834,
+  "finish_epoch": 1793232902.5787013,
+  "returncode": 1,
+  "positive_direct_wait4": true,
+  "streams_closed": true,
+  "wall_seconds": 0.03931785200256854,
+  "CPU_seconds": 0.038539,
+  "peak_RSS_KiB": 14600,
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/MATERIALIZER.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CURRENT118-FRESH-A3-1/MATERIALIZER.stderr",
+    "bytes": 1322,
+    "sha256": "6067de140dc1b2fa8ec94e38bbc33b5f4724dfea489c8c9878d4f793eecafefb"
+  }
+}

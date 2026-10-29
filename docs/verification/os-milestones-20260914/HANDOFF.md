@@ -2,6 +2,40 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Twenty-minute checkpoint — 2026-10-29T00:16:28Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket23:56:28–00:16:28:7HOSTcommands0 (5compiler/link+2behavior),56506C/Rustpairs
+plus7ignoredVMcases; CPU0.644110s/sumcommandwall0.739192s/peak142032KiB/nooverlap.
+F03BODY13 Rust32B storage review81b8 andF06BODY12 vDSO logger+storage review67a8
+PASS atprivate source/HOST only. Default/native/file/C-retirement deltas0;
+CURRENT116 C71/Rust68, practical35/35/M14files4/6/M15files1/8 unchanged.
+Original30minbaseline/stopped41784.995407s retained; no95percent claim.
+
+A3 source9b5c/schema3c1d/operation4fce/typedDATAfe6a PASS, new35subject actualguard
+PASS. Exact6actor Rootfrontiere59 preserves71consumed/nativehistory and rejects
+abandonedA2nonce1d3. Staticmaterializer first failed on one stale616B schema row;
+originalmanifest/failure retained. DATA-only correction3e8 matchesexisting schema
+review; sameunusede984/source/export20cb/originc930/8objects/SDK21 unchanged.
+Correctedstatic child2214149/b103042770 joined0:wall0.474321s/CPU0.472067/RSS106644.
+Failure→validatedstaticfix80.943510s; fullruntimefix stillunvalidated.
+A3admission3/profileb2f created, nophysicalclock/holder/producer/container yet.
+Standaloneaccepted-role publication rebind e2d2 now returned0/761rows98cb;
+fetchedproof andexistingfiniteCold/PREWARM remain next. AllfixedDATA/aliases/module
+loads beforefirstphysical; oneRootfunctions-exec throughoriginal120s stages.
+Futuremanifest-orderrecipe isNOTanentryprerequisite. Rootownssoleintegration;
+original227pub rebind/observerreviewdesignatedfinite; no newcontroller orslot.
+
+M15actualprivate source f24b/58selected/Gitlayout review8809 PASS; cwdconsumer
+adapter9c22/4purechecks reviewca32 andcreated-onlylibelfed98/8purechecks review66e6
+PASS. Genuine mount/quiescence/outerrole/currentadmission stillopen; noSDKproducer/
+probe/retired2460cp replay. Firstactuallyreadyworkload uses soleheavy slot.
+F03/F06 owners now assemble compatibleprivate cumulativebatches (throughBODY13/12)
+forRootonlyAFTER118actualartifactfeedback, noheavyadmission per tinybody.
+Known118vDSOline3086 vsaccepted3084 isSOURCE-DERIVED/unobserveddefault; original
+389record artifact/nativevalidation remainsmandatory. No silentmetadata acceptance.
+Details: restart-adoption-20261028T1911/STEERING-20261029T001628.json.
+
 ## Twenty-minute checkpoint — 2026-10-28T23:56:28Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

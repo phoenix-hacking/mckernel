@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_snapshot": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-valid-matched-diagnostic-preparation-20261028-1/newlibelf-collector-root63-preparation-1/libelf-extraction-prep-1/reviewed-image-owner-133af.py",
+    "bytes": 17814,
+    "sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679"
+  },
+  "reviewed_source_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-source-20261001.json",
+    "bytes": 2215,
+    "sha256": "904d237a0dad30e2b65721b53bf53799306a10485bcb3f9d1cc2b765dae41e8b"
+  },
+  "historical_execution_preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-execution-release-20261001.json",
+    "bytes": 4921,
+    "sha256": "4adc1d73ebbedd2e16e375510f0d84be264aa8a3e86414cbc0831fcb627987da"
+  },
+  "current_source": {
+    "path": "/home/holden/mckernel/scripts/native_rust_exact_build_image_rebind_probe.py",
+    "bytes": 24966,
+    "sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+  },
+  "unchanged_AST_units": [
+    "create_args",
+    "validate_image_inspect",
+    "validate_container",
+    "ordinary_backend.check_profile",
+    "ordinary_backend.LIMITS",
+    "ordinary_backend.RESOURCE_ARGS"
+  ],
+  "changed_behavior": "Drop old owner start/exec/full tool probe/candidate rebinding path. Add one fixed created-only libelf copy, regular ELF initial check, unchanged created-state recheck and exact newly owned removal/absence.",
+  "no_framework": "A single functional adapter and request/profile data; Root reuses actual ordinary owner, resource/lease admission, wait4 capture, durable writer and uncertainty custody.",
+  "profile_unchanged": {
+    "cpus4": true,
+    "cpuset": "2-5",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "mounts": [],
+    "init_configured_but_not_started": true,
+    "entrypoint": "/usr/bin/sleep",
+    "cmd": [
+      "infinity"
+    ],
+    "readonly": true
+  },
+  "artifact_uid_contract": "sudo-mediated Docker cp can create Root-owned bytes; exact regular readable single-link output permits UID0/1000 and records actual UID/GID/mode without chown. SONAME/version closure remains pending.",
+  "runtime_authority": null
+}

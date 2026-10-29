@@ -1,0 +1,271 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_REAL_RUST32B_VERBOSE_OWNER_AND_EXTERN_ONLY_C_CONSUMERS",
+  "artifacts": [
+    {
+      "kind": "Rust_production_object",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/runtime_vdso_map_log.o",
+        "bytes": 3696,
+        "sha256": "999203c251cd86cab2e69bdeac640a2575135ecd4377fa841202958da9285938"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 11,
+        "value": 0,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 3084,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "all_verbose_records": [
+        {
+          "name": "mckernel_f06_vdso_map_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 11,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "C_extern_consumer",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/consumer.o",
+        "bytes": 28240,
+        "sha256": "790fc740992051ea6b638713103cfe7fac40bb0f32982926a4b9bb674a2a3c67"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 0,
+        "bind": 1,
+        "other": 0,
+        "ndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      "all_verbose_records": [],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "C_original_oracle",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/oracle.o",
+        "bytes": 36008,
+        "sha256": "a8c240ce569c4e0ba3c5edc67fac8169e56dac6cae13595b45b7fa11f6190f62"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 0,
+        "bind": 1,
+        "other": 0,
+        "ndx": 0,
+        "value": 0,
+        "size": 0
+      },
+      "all_verbose_records": [
+        {
+          "name": "ddebug.7064",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 8,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 3,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "actual_partial_link",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/joined.o",
+        "bytes": 91264,
+        "sha256": "7d485f94c6329d8a0d821f1452ed7e7f7dbba2e27383ac259540d83e12124a49"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 18,
+        "value": 0,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 3084,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "all_verbose_records": [
+        {
+          "name": "ddebug.7064",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 16,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 3,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "mckernel_f06_vdso_map_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 18,
+          "value": 0,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    },
+    {
+      "kind": "actual_fixture_link",
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body12-restart-20261028-1/future-host-output-1/fixture",
+        "bytes": 6134744,
+        "sha256": "0051139b09264cff18e29ce6b410504c474971afdc60e90ec8919c679ee3227d"
+      },
+      "target": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "type": 1,
+        "bind": 1,
+        "other": 0,
+        "ndx": 30,
+        "value": 2944224,
+        "size": 32,
+        "section": "__verbose",
+        "section_type": 1,
+        "section_flags": 2097155,
+        "section_alignment": 8,
+        "initial_fmt_pointer": 0,
+        "initial_line_flags": 3084,
+        "initial_padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "all_verbose_records": [
+        {
+          "name": "ddebug.7064",
+          "type": 1,
+          "bind": 0,
+          "other": 0,
+          "ndx": 30,
+          "value": 2944192,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "mckernel_f06_vdso_map_debug",
+          "type": 1,
+          "bind": 1,
+          "other": 0,
+          "ndx": 30,
+          "value": 2944224,
+          "size": 32,
+          "section": "__verbose",
+          "section_type": 1,
+          "section_flags": 2097155,
+          "section_alignment": 8,
+          "initial_fmt_pointer": 0,
+          "initial_line_flags": 3084,
+          "initial_padding": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "one_actual_Rust_owner_or_C_import_verified": true
+    }
+  ],
+  "exact_initial_metadata_and_flags": "HOST fixture independently compared strings/nullfmt/line3084/flags0/padding0 with original C macro and inherited389-row registry reference.",
+  "constructor_in_Rust_object": false,
+  "HOST_two_records": "One original independent C oracle LOCAL plus one GLOBAL selected Rust record; production must retain one total target identity.",
+  "default_native_data_file_credit": 0
+}

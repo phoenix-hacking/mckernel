@@ -1,0 +1,163 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root/f03_next",
+  "status": "PRIVATE_RUST_DEBUG_STORAGE_READY_FOR_STANDING_HOST_PLAN",
+  "selected_storage": "f03_util_register_desc_debug_v1[1]",
+  "predecessor_C_bytes": 32,
+  "expected_Rust_storage_bytes": 32,
+  "new_function_ports": 0,
+  "dependency": "BODY12 selection must be composed first; packet supplies exact private delta/full postimages, not canonical integration or a duplicate logger body.",
+  "dependency_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/SOURCE-MAP-FROM-BODY12.json",
+    "bytes": 3035,
+    "sha256": "76a34577709a85ca4b12dbd1783a97a6f3f283007129737703b4e394e68904e5"
+  },
+  "unchanged_logger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/util-desc-log-entry.Rust.inc",
+    "bytes": 1364,
+    "sha256": "e6dcfcf71ae9034cc241bb3deec3e177965ff7ac5a91923d4da148396b13a7d9"
+  },
+  "reused_actual_BODY12_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/output-STANDING-1/callbacks.o",
+    "bytes": 1768,
+    "sha256": "6ff7fa282d023df29ac05f15aa9814e3448303a9850d2d0284418a1ed2b19820"
+  },
+  "actual_origin": {
+    "file": "/src/kernel/syscall.c",
+    "function": "syscall_util_register_desc_log_bridge",
+    "fmt": null,
+    "line": 28605,
+    "flags": 0,
+    "padding": 0
+  },
+  "origin_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+    "bytes": 84536,
+    "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+  },
+  "source_preimages": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/SOURCE-READY.json",
+      "bytes": 8786,
+      "sha256": "f0d92939f983d1e4e1759e7200296f1b7fa2b152bb950e9e2277f30ae98b6219"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/output-STANDING-1/ACTUAL-HOST-RESULT.json",
+      "bytes": 14374,
+      "sha256": "eec549c185038e5503e8c50fbd9bca7f7438de01dd5e80560e8a18d920f81dfb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/output-STANDING-1/callbacks.o",
+      "bytes": 1768,
+      "sha256": "6ff7fa282d023df29ac05f15aa9814e3448303a9850d2d0284418a1ed2b19820"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body12-restart-20261028-1/debug-layout.reused.Rust.inc",
+      "bytes": 132,
+      "sha256": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+      "bytes": 84536,
+      "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "bytes": 515,
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmsg.h",
+      "bytes": 379,
+      "sha256": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5"
+    }
+  ],
+  "expected": {
+    "ABI_words_reused": 10,
+    "C_Rust_flag_pairs": 256,
+    "record_size": 32,
+    "record_alignment": 8,
+    "record_section": "__verbose"
+  },
+  "storage_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/debug-storage.Rust.inc",
+    "bytes": 813,
+    "sha256": "3217a6dead1016f194d69c59183792e37f3b5b2e764afd1ab61ab8238e35da17"
+  },
+  "registry_count_change": 0,
+  "original_callback_symbol_and_ABI_unchanged": true,
+  "actual_compilers": 0,
+  "actual_fixture_runs": 0,
+  "canonical_writes": 0,
+  "default": 0,
+  "native": 0,
+  "file_closure": 0,
+  "other_packets": "BODY3-12 and reviewed cumulative remain unchanged; held domains/credits/window/scratch21/permanent27:4 preserved.",
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/FIXED-HOST-COMMAND-PLAN.json",
+      "bytes": 6597,
+      "sha256": "488c016e18be2bbd4a94c71f4ee15afafaf74cf801e45bd927a773996c5bd036"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/README.md",
+      "bytes": 3611,
+      "sha256": "ddb44c1535fb008f7b34f7989dc004c2137711411589aa0544aa472513e9071e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/SOURCE-MAP-FROM-BODY12.json",
+      "bytes": 3035,
+      "sha256": "76a34577709a85ca4b12dbd1783a97a6f3f283007129737703b4e394e68904e5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/debug-layout.reused.Rust.inc",
+      "bytes": 132,
+      "sha256": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/debug-storage.Rust.inc",
+      "bytes": 813,
+      "sha256": "3217a6dead1016f194d69c59183792e37f3b5b2e764afd1ab61ab8238e35da17"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/debug.binding.C.inc",
+      "bytes": 216,
+      "sha256": "a13f7fc139329fa429c7d098e4607cba69ca85d0f7cdf01d89f3b85deeadb89a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/driver.c",
+      "bytes": 4860,
+      "sha256": "038dac9fc53cfeaf2bf4e97eb38a1a2d34144716a816f1dec3bc53931062d758"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/lib.storage.rs",
+      "bytes": 187,
+      "sha256": "5fe06d65738bcb2a689c505a28dff7f62d2d78c27dc8450b89a1b98d7b3360bb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/original.fixture.C.inc",
+      "bytes": 192,
+      "sha256": "3655ad04f1c8970a4e19c4f6bcfecae6a3649c9494904b69d724c06e2a84d5d1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/prepare_source.py",
+      "bytes": 11549,
+      "sha256": "dafc984468cee9fe31882225678e450e51972e481e220879300cde4e564cedb9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body13-restart-20261028-1/storage-consumer.C.inc",
+      "bytes": 172,
+      "sha256": "c7b9e5880565e8e10e7eb5aafe15b36e381a260079572b21c141754b155f7e8c"
+    }
+  ]
+}
