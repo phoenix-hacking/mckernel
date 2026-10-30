@@ -1,0 +1,21 @@
+warning: type `SyscallRequest` is more private than the item `getcred_body_result`
+ --> actual-bodies.rs:1:1
+  |
+1 | / pub unsafe extern "C" fn getcred_body_result(
+2 | |     raw_buf: *mut CInt,
+3 | |     page_mask: CULong,
+4 | |     syscall_nr: CInt,
+... |
+7 | |     do_syscall_fn: Option<SyscallRequestCallFn>,
+8 | | ) -> *mut CInt {
+  | |______________^ function `getcred_body_result` is reachable at visibility `pub`
+  |
+note: but type `SyscallRequest` is only usable at visibility `pub(crate)`
+ --> test.rs:5:12
+  |
+5 | #[repr(C)] struct SyscallRequest { number:u64, args:[u64;6], other:[u64;2] }
+  |            ^^^^^^^^^^^^^^^^^^^^^
+  = note: `#[warn(private_interfaces)]` on by default
+
+warning: 1 warning emitted
+

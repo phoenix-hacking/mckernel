@@ -1,0 +1,94 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4727,6 +4727,14 @@
+ }
+ #endif
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(MCKERNEL_RUST_F03_PTRACE_DETACH_KILL_EXPERIMENTAL) && defined(__x86_64__)
++extern long ptrace_detach_do_kill_bridge(void *, int, int, int, const void *, int);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4687
++#else
++#line 4696
++#endif
+ static long
+ ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid,
+ 		int sig, const void *info, int ptracecont)
+@@ -4734,6 +4742,12 @@
+ 	return do_kill((struct thread *)current_thread, pid, tid, sig,
+ 			(struct siginfo *)info, ptracecont);
+ }
++#endif
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 4694
++#else
++#line 4703
++#endif
+ 
+ #if defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && defined(__x86_64__)
+ extern void ptrace_detach_wakeup_bridge(void *thread, int valid_states);
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36991,3 +36991,8 @@
+ #[cfg(all(f03_leaf_callbacks_candidate, f03_ptrace_wakeup_log_candidate, target_arch = "x86_64"))]
+ #[path = "syscall_ptrace_wakeup_logger.rs"]
+ mod syscall_ptrace_wakeup_logger;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(all(f03_leaf_callbacks_candidate, f03_ptrace_detach_kill_candidate, target_arch = "x86_64"))]
++#[path = "syscall_ptrace_detach_kill.rs"]
++mod syscall_ptrace_detach_kill;
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -156,6 +156,7 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wakeup_writer_pair.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_exit_group_terminate.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kfree.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_ptrace_detach_kill.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_context_forward_pair.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_mprotect_host_vma.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_munmap_clear_host_forward.rs"
+@@ -240,6 +241,9 @@
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+ 				if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
+ 					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_request_constructors_candidate")
++				endif()
++				if (MCKERNEL_F03_PTRACE_DETACH_KILL_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_detach_kill_candidate")
+ 				endif()
+ 				if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+ 					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_defined_candidate")
+@@ -632,6 +636,9 @@
+ 			if (MCKERNEL_F03_REQUEST_CONSTRUCTORS_EXPERIMENTAL)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_REQUEST_CONSTRUCTORS)
+ 			endif()
++			if (MCKERNEL_F03_PTRACE_DETACH_KILL_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_PTRACE_DETACH_KILL_EXPERIMENTAL)
++			endif()
+ 
+ 			if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+--- /dev/null
++++ b/kernel/rust/syscall_ptrace_detach_kill.rs
+@@ -0,0 +1,20 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use crate::abi::{CInt, CLong, SigInfo};
++use core::ffi::c_void;
++
++/// Forward the original callback to the existing do_kill provider.
++///
++/// # Safety
++/// Caller retains the current thread and, when non-null, info for the duration
++/// of the existing provider call, following the original C callback contract.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_do_kill_bridge(
++    current_thread: *mut c_void, pid: CInt, tid: CInt, sig: CInt,
++    info: *const c_void, ptracecont: CInt,
++) -> CLong {
++    // SAFETY: Existing adapter uses the original unsigned C provider and
++    // bit-preserving long conversion; raw pointers and arguments are unchanged.
++    unsafe { super::f06_ptrace_report_signal_kill(
++        current_thread, pid, tid, sig, info.cast::<SigInfo>(), ptracecont,
++    ) }
++}

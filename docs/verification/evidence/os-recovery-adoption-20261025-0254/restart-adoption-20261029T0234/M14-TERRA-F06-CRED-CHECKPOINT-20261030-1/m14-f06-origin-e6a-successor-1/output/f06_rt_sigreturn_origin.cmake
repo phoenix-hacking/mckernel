@@ -1,0 +1,2 @@
+set(MCKERNEL_F06_RT_SIGRETURN_ORIGIN "/src/arch/x86_64/kernel/syscall.c")
+set(MCKERNEL_F06_CLONE_CPUID_METADATA_RS "output/f06_clone_cpuid_metadata.rs")

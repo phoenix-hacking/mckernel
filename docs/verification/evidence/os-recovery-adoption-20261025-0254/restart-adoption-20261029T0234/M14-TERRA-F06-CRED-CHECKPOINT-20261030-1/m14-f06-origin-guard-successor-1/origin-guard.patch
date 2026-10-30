@@ -1,0 +1,25 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -1041,6 +1041,22 @@
+ 
+ extern int num_processors;
+ 
++/* Compile-time binding for the explicitly selected M14 origin successor. */
++#if defined(MCKERNEL_M14_F06_ORIGIN_GUARD)
++#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID)
++#error "M14 F06 origin guard requires the paired Rust clone provider"
++#endif
++#ifdef DEBUG_PRINT_SC
++#error "M14 F06 clone descriptor requires DEBUG_PRINT_SC disabled"
++#endif
++#ifndef DDEBUG_DEFAULT
++#error "M14 F06 clone descriptor requires an actual debug default"
++#endif
++_Static_assert(DDEBUG_DEFAULT == 0, "M14 F06 clone descriptor debug default drift");
++_Static_assert(__builtin_strcmp(__FILE__, "/src/arch/x86_64/kernel/syscall.c") == 0,
++        "M14 F06 clone descriptor source origin drift");
++#endif
++
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID)
+ extern int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last);
+ #else

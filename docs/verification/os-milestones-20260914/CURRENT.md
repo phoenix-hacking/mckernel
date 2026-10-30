@@ -1,3 +1,30 @@
+## M14 F06 origin and credential cursor — 2026-10-30T08:22Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical 35/35; M15 queued. No SDK/default/native/C-retirement/file
+credit. Private F06 route selects guarded origin producer only for combined ON;
+OFF uses predecessor source/profile. Extracted OFF/ON succeed and ON/predecessor
+mismatch fails closed; exact full configure, actual emitted argv, /out/build,
+transitive headers, original389 and link remain open. APPEND retains all earlier
+F06 selectors; lexical comparison to e6a flags is not generated-command proof.
+
+Private ptrace detach bridge is HELD: real ptrace attach sends non-sentinel TID
+to preexisting held do_kill target; its other callers include clone and wakeup.
+Private credential pair is NO-GO: host changes unconditional, guest void refresh
+can hide a failure after host mutation, and selected physical mapping/lifetime is
+unproven. Extracted mcctrl Rust helper passes two mocked tests for eight slots and
+nine missing callbacks; no actual transport or loaded module claim.
+
+Independent static disassembly of strict235 mcctrl SHA 57546af5...f6ae8 shows
+GET_CRED 0x30a0290a returns -EINVAL; GET_CREDV 0x30a0290b uses a distinct host
+user-pointer contract. This applies to retained artifact, not verified live module.
+Real GET_CRED needs exact OS generation/guest physical 32-byte mapping, lifetime,
+visibility and reconciliation after host success/guest refresh failure. M14 source
+owners are tracing existing Rust IHK mapping contracts; no held transport was run.
+Fresh current-free/health/SDK release remain open; preserve all UNKNOWNs and owners.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-
+20261029T0234/M14-TERRA-F06-CRED-CHECKPOINT-20261030-1/REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T08:06Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
