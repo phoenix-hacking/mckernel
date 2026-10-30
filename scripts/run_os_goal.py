@@ -43,6 +43,14 @@ SUDO_CREDENTIAL = Path.home() / ".local/state/mckernel-os-goal/sudo-password"
 PLAN_REL = "docs/verification/os-milestones-20260914"
 CAPTURE_PROGRESS_CAPABILITY = 1
 DEFAULT_DISPATCHER_MODEL = "gpt-6.1-sol"
+DEFAULT_DISPATCHER_EFFORT = "max"
+# User preference, 2026-10-30: Sol/max first; capable fallbacks before economy
+# models, with max reasoning preferred. This orders routing choices; advertised
+# capability is not proof of current capacity, entitlement, or service clearance.
+DISPATCHER_MODEL_PREFERENCE = (
+    "gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra", "gpt-6-sol", "gpt-6-luna",
+)
+DISPATCHER_EFFORT_PREFERENCE = ("max", "ultra", "xhigh", "high", "medium", "low")
 DEFAULT_WORKER_MODEL = "gpt-6.1-sol"
 AUDIT_MODEL = "gpt-6.1-sol"
 REVIEW_MODEL = "gpt-6.1-sol"
@@ -426,6 +434,45 @@ def agent_settings(args, repo):
             "default_subagent_reasoning_effort": "medium"}
 
 
+def dispatcher_candidates(catalog, unavailable=()):
+    """Return advertised max-first dispatcher pairs; perform no inference/retry.
+
+    Accept the app-server model/list rows, a model-keyed mapping, or the retained
+    controller catalog's models/efforts rows. Callers still enforce exact capacity
+    classification, account holds, cooldown, ownership and finite run limits.
+    """
+    if isinstance(catalog, dict):
+        rows = catalog.get("models", catalog.get("data", catalog))
+        rows = rows.values() if isinstance(rows, dict) else rows
+    else:
+        rows = catalog
+    offered = {}
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("model"), str):
+            raise ValueError("Dispatcher catalog requires named model rows")
+        name = row["model"]
+        raw = row.get("supportedReasoningEfforts", row.get("efforts", []))
+        efforts = {item.get("reasoningEffort") if isinstance(item, dict) else item
+                   for item in raw}
+        efforts &= set(DISPATCHER_EFFORT_PREFERENCE)
+        if name in offered and offered[name] != efforts:
+            raise ValueError("Conflicting dispatcher model catalog rows: " + name)
+        offered[name] = efforts
+    excluded = set(unavailable)
+    result = []
+    # Prefer max-capable choices across the ranked models before lowering the
+    # dispatcher effort. A failed model is excluded as a whole, never retried at
+    # a different effort to reinterpret a service rejection.
+    for maximum in (True, False):
+        for name in DISPATCHER_MODEL_PREFERENCE:
+            efforts = offered.get(name, set())
+            if name in excluded or not efforts or ("max" in efforts) != maximum:
+                continue
+            effort = next(value for value in DISPATCHER_EFFORT_PREFERENCE if value in efforts)
+            result.append({"model": name, "effort": effort})
+    return result
+
+
 def model_routing(args):
     """One source for model admission, dispatcher guidance and preview output."""
     return {
@@ -472,13 +519,25 @@ def preflight(rpc, args, repo):
     if any(build_env.get(key) != value
            for key, value in resource_environment(launch_resources(args, repo)).items()):
         raise RuntimeError("Effective build environment differs from the requested resource profile.")
-    models, cursor = {}, None
+    models, catalog_rows, cursor = {}, [], None
     while True:
         page = rpc.call("model/list", {"includeHidden": True, "limit": 100, "cursor": cursor})
+        catalog_rows.extend(page["data"])
         models.update((row["model"], row) for row in page["data"])
         cursor = page.get("nextCursor")
         if not cursor:
             break
+    choices = dispatcher_candidates(catalog_rows)
+    requested_dispatcher = {"model": args.model, "effort": args.effort}
+    available = {r["reasoningEffort"] for r in
+                 models.get(args.model, {}).get("supportedReasoningEfforts", [])}
+    if args.effort not in available:
+        if args.dispatcher_pinned:
+            raise RuntimeError("Pinned dispatcher model/effort not advertised: " +
+                               args.model + "/" + args.effort)
+        if not choices:
+            raise RuntimeError("No eligible dispatcher model/effort advertised")
+        args.model, args.effort = choices[0]["model"], choices[0]["effort"]
     for selection in model_routing(args).values():
         model, effort = selection["model"], selection["effort"]
         if effort not in {r["reasoningEffort"] for r in models.get(model, {}).get("supportedReasoningEfforts", [])}:
@@ -486,6 +545,13 @@ def preflight(rpc, args, repo):
     # Deliberately do not serialize the full personal config or authentication data.
     return {"model": args.model, "effort": args.effort, "agents": expected,
             "model_routing": model_routing(args),
+            "requested_dispatcher": requested_dispatcher,
+            "dispatcher_selection": "pinned" if args.dispatcher_pinned else "advertised_preference",
+            # Strict config above checks the server defaults. Thread start/resume
+            # passes the selected pair explicitly and verifies its own readback.
+            "server_defaults": {"model": config["model"],
+                                "effort": config["model_reasoning_effort"]},
+            "dispatcher_preference": choices,
             "included_usage_stop_percent": INCLUDED_USAGE_STOP_PERCENT,
             "billing": billing_policy(args),
             "resources": launch_resources(args, repo), "policy_sha256": policy_hashes(repo),
@@ -1112,9 +1178,12 @@ class Campaign:
             "The user requested more GPT-6.1 use. Apply this invocation's model routing "
             "instead of older model-selection instructions in workflow documents: "
             + json.dumps(model_routing(self.args), sort_keys=True) + ". " +
-            "Use GPT-6.1 Sol/medium for implementation, test repair and ordinary workers; "
-            "use GPT-6.1 Sol/high for difficult multi-step kernel repairs. All "
-            "roles must use gpt-6.1-sol, including auditors and independent reviewers. Use the "
+            "Prefer GPT-6.1 Sol/max for the dispatcher. If it is unavailable, use the "
+            "strongest eligible advertised fallback in this configured preference order: "
+            + ", ".join(DISPATCHER_MODEL_PREFERENCE) + ". Prefer max-capable choices "
+            "before lower-effort choices; service/account holds never authorize fallback. "
+            "Workers may use medium, complex workers and reviewers high, and bounded "
+            "auditors low, according to the explicit routing above. Use the "
             "auditor model only for bounded extraction/inventory tasks with fixed "
             "expectations. Preserve the independent reviewer for unsafe ownership, "
             "concurrency, ABI, execution release and final acceptance. Do not use "
@@ -1124,7 +1193,8 @@ class Campaign:
             "inventories and extraction, medium for routine implementation/tests, "
             "high for complex repairs and independent safety review. Increase effort "
             "only when a concrete difficulty or failed bounded correction warrants "
-            "it; do not spend high effort on repetitive bookkeeping. Max/Ultra are disabled. "
+            "it; do not spend high effort on repetitive bookkeeping. The dispatcher uses "
+            "the max-first preference above independently of worker effort. "
             + resource_instructions(launch_resources(self.args, self.repo)) + " " +
             "Apply CONVERGENCE.md on every continuation: one failed candidate and one "
             "bounded correction per failure family before expert escalation. Carry family "
@@ -1757,9 +1827,12 @@ def arguments(argv=None):
                         help='Explicit fresh capture directory; with --instruct register it before steering, otherwise at startup')
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
-    parser.add_argument("--model", default=DEFAULT_DISPATCHER_MODEL, choices=[DEFAULT_DISPATCHER_MODEL],
-                        help="Dispatcher model; default: " + DEFAULT_DISPATCHER_MODEL)
-    parser.add_argument("--effort", default="medium", choices=["low", "medium", "high"])
+    parser.add_argument("--model",
+                        choices=list(dict.fromkeys((DEFAULT_DISPATCHER_MODEL,) + DISPATCHER_MODEL_PREFERENCE)),
+                        help="Pin dispatcher model; default preference: " + DEFAULT_DISPATCHER_MODEL)
+    parser.add_argument("--effort",
+                        choices=list(DISPATCHER_EFFORT_PREFERENCE),
+                        help="Pin dispatcher reasoning; max preferred by default, workers retain separate effort levels")
     parser.add_argument("--profile", choices=["aggressive", "balanced"], default="aggressive",
                         help="Dedicated-machine parallelism (default) or historical balanced limits")
     parser.add_argument("--max-agents", type=int, help="Child-agent ceiling; default up to 8 aggressive / 3 balanced")
@@ -1795,6 +1868,11 @@ def arguments(argv=None):
     parser.add_argument("--recovery-goal-sha256", help=argparse.SUPPRESS)
     parser.add_argument("--recovery-require-active", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    args.dispatcher_pinned = args.model is not None or args.effort is not None
+    if args.model is None:
+        args.model = DEFAULT_DISPATCHER_MODEL
+    if args.effort is None:
+        args.effort = DEFAULT_DISPATCHER_EFFORT
     if args.credit_run_id is not None and (args.credit_budget is None or
             len(args.credit_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.credit_run_id)):
         parser.error("credit-run-id requires a credit budget and a 32-character lowercase hex identifier")

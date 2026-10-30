@@ -1,0 +1,3 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Independent reviewer /root/restart_review inspected canonical source 95bf2fd22559100b0cedf92f96c7077cf6cd7c844483e09d44c7b33f7002b17b and the capacity-successor-1 delta. It found no additional blocking source defect after explicit pair pinning, separate server-default provenance, canonical candidate ranking, lower worker effort and obsolete parser adaptation corrections. Retained hold/capacity/clock/retirement predicates and all five templates matched originals. Its required final-hash retest has now passed in canonical-verification and successor-verification. This is source review only. It does not release a controller, authenticate mount data, grant physical admission or accept M14.

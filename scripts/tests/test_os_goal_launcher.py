@@ -46,7 +46,7 @@ class FakeRPC:
         self.bad_environment = False
         self.worker_model = "gpt-6.1-sol"
         self.worker_effort = "medium"
-        self.models = {"gpt-6.1-sol": ["low", "medium", "high"]}
+        self.models = {"gpt-6.1-sol": ["low", "medium", "high", "max"]}
         self.account_type = "chatgpt"
         self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
                        "credits": {"hasCredits": False, "balance": "0"}, "planType": "pro"}
@@ -170,7 +170,7 @@ class CampaignTests(unittest.TestCase):
 
     def test_gpt_61_coordinator_and_worker_defaults_keep_aggressive_limits(self):
         self.assertEqual(self.args.model, "gpt-6.1-sol")
-        self.assertEqual(self.args.effort, "medium")
+        self.assertEqual(self.args.effort, "max")
         self.assertIsNone(self.args.token_budget)
         self.assertEqual(self.args.profile, "aggressive")
         self.assertEqual(self.args.stall_seconds, 0)
@@ -180,7 +180,7 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('shell_environment_policy.set.CARGO_BUILD_JOBS="' + str(resources["build_jobs"]) + '"', command)
         self.assertIn("agents.max_depth=1", command)
         self.assertIn('model="gpt-6.1-sol"', command)
-        self.assertIn('model_reasoning_effort="medium"', command)
+        self.assertIn('model_reasoning_effort="max"', command)
         self.assertIn('agents.default_subagent_model="gpt-6.1-sol"', command)
         self.assertIn('agents.default_subagent_reasoning_effort="medium"', command)
         self.assertIn('sandbox_mode="danger-full-access"', command)
@@ -190,7 +190,7 @@ class CampaignTests(unittest.TestCase):
     def test_model_routing_uses_only_gpt_61_for_every_role(self):
         routing = launcher.model_routing(self.args)
         self.assertEqual(routing, {
-            "dispatcher": {"model": "gpt-6.1-sol", "effort": "medium"},
+            "dispatcher": {"model": "gpt-6.1-sol", "effort": "max"},
             "default_worker": {"model": "gpt-6.1-sol", "effort": "medium"},
             "complex_worker": {"model": "gpt-6.1-sol", "effort": "high"},
             "auditor": {"model": "gpt-6.1-sol", "effort": "low"},
@@ -199,14 +199,17 @@ class CampaignTests(unittest.TestCase):
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol" for selection in routing.values()))
 
     def test_coordinator_rejects_other_models_before_launch(self):
-        for model in ("gpt-5.6-sol", "gpt-5.6-luna", "gpt-6-astra", "unknown"):
+        for model in ("gpt-5.6-sol", "gpt-5.6-luna", "unknown"):
             with self.subTest(model=model), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
                 launcher.arguments(["--model", model])
 
-    def test_coordinator_rejects_efforts_above_high(self):
+    def test_coordinator_accepts_known_preferences_but_rejects_unknown_efforts(self):
+        for model in launcher.DISPATCHER_MODEL_PREFERENCE:
+            self.assertEqual(launcher.arguments(["--model", model]).model, model)
         for effort in ("xhigh", "max", "ultra"):
-            with self.subTest(effort=effort), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
-                launcher.arguments(["--effort", effort])
+            self.assertEqual(launcher.arguments(["--effort", effort]).effort, effort)
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            launcher.arguments(["--effort", "unknown"])
 
     def test_coordinator_effort_override_keeps_all_roles_on_gpt_61(self):
         for effort in ("low", "high"):
@@ -223,6 +226,92 @@ class CampaignTests(unittest.TestCase):
                                  {"model": "gpt-6.1-sol", "effort": "medium"})
                 self.assertEqual(settings["agents"]["default_subagent_model"], "gpt-6.1-sol")
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
+
+    def test_dispatcher_preference_uses_max_and_excludes_failed_models(self):
+        catalog = {"models": [
+            {"model": "gpt-6.1-sol", "efforts": ["high", "max", "ultra"]},
+            {"model": "gpt-6-astra", "efforts": ["high", "max", "ultra"]},
+            {"model": "gpt-6.1-terra", "efforts": ["xhigh", "max"]},
+        ]}
+        self.assertEqual(launcher.dispatcher_candidates(catalog), [
+            {"model": "gpt-6.1-sol", "effort": "max"},
+            {"model": "gpt-6-astra", "effort": "max"},
+            {"model": "gpt-6.1-terra", "effort": "max"},
+        ])
+        self.assertEqual(launcher.dispatcher_candidates(catalog, {"gpt-6.1-sol"})[0],
+                         {"model": "gpt-6-astra", "effort": "max"})
+        self.assertEqual(launcher.dispatcher_candidates(catalog,
+            {"gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra"}), [])
+
+    def test_dispatcher_prefers_max_capable_fallback_before_lower_effort(self):
+        catalog = [
+            {"model": "gpt-6.1-sol", "efforts": ["high", "xhigh"]},
+            {"model": "gpt-6-astra", "efforts": ["high", "max"]},
+            {"model": "gpt-6.1-terra", "efforts": ["xhigh", "ultra"]},
+            {"model": "unreviewed-model", "efforts": ["max"]},
+        ]
+        self.assertEqual(launcher.dispatcher_candidates(catalog), [
+            {"model": "gpt-6-astra", "effort": "max"},
+            {"model": "gpt-6.1-sol", "effort": "xhigh"},
+            {"model": "gpt-6.1-terra", "effort": "ultra"},
+        ])
+
+    def test_conflicting_catalog_rows_refuse_dispatcher_selection(self):
+        with self.assertRaisesRegex(ValueError, "Conflicting dispatcher"):
+            launcher.dispatcher_candidates([
+                {"model": "gpt-6.1-sol", "efforts": ["max"]},
+                {"model": "gpt-6.1-sol", "efforts": ["high"]},
+            ])
+
+    def test_advertised_fallback_resumes_exact_pair_and_preserves_worker_efforts(self):
+        self.saved(goal("paused"))
+        rpc = FakeRPC(self.args, goal("paused"),
+                      [lambda r: (r.completed(), r.status("complete"))])
+        rpc.models["gpt-6.1-sol"].remove("max")
+        rpc.models["gpt-6-astra"] = ["high", "max", "ultra"]
+        state = self.run_campaign(rpc, 0)
+        settings = state["settings"]
+        self.assertEqual(settings["requested_dispatcher"],
+                         {"model": "gpt-6.1-sol", "effort": "max"})
+        self.assertEqual(settings["server_defaults"], settings["requested_dispatcher"])
+        self.assertEqual(settings["dispatcher_selection"], "advertised_preference")
+        self.assertEqual(settings["model_routing"]["dispatcher"],
+                         {"model": "gpt-6-astra", "effort": "max"})
+        params = next(p for m, p in rpc.calls if m == "thread/resume")
+        self.assertEqual(params["model"], "gpt-6-astra")
+        self.assertEqual(params["config"]["model_reasoning_effort"], "max")
+        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "medium")
+        self.assertEqual(settings["model_routing"]["reviewer"],
+                         {"model": "gpt-6.1-sol", "effort": "high"})
+
+    def test_explicit_dispatcher_pair_is_pinned_even_if_fallback_is_advertised(self):
+        for argv in (["--model", "gpt-6.1-sol", "--effort", "max"],
+                     ["--model=gpt-6.1-sol", "--effort=max"]):
+            with self.subTest(argv=argv):
+                args = launcher.arguments(argv)
+                rpc = FakeRPC(args)
+                rpc.models["gpt-6.1-sol"].remove("max")
+                rpc.models["gpt-6-astra"] = ["max"]
+                with self.assertRaisesRegex(RuntimeError, "Pinned dispatcher"):
+                    launcher.preflight(rpc, args, self.directory)
+                self.assertEqual(args.model, "gpt-6.1-sol")
+                self.assertEqual(args.effort, "max")
+                self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
+
+    def test_fallback_with_mismatched_thread_readback_stops(self):
+        class WrongModelRPC(FakeRPC):
+            def call(rpc, method, params, **kwargs):
+                result = super().call(method, params, **kwargs)
+                if method == "thread/resume":
+                    result["model"] = "gpt-6.1-terra"
+                return result
+        self.saved(goal("paused"))
+        rpc = WrongModelRPC(self.args, goal("paused"))
+        rpc.models["gpt-6.1-sol"].remove("max")
+        rpc.models["gpt-6-astra"] = ["max"]
+        state = self.run_campaign(rpc, 1)
+        self.assertIn("model/effort differs", state["last_error"])
+        self.assertFalse(any(m == "turn/start" for m, _ in rpc.calls))
 
     def test_live_instruction_is_queued_and_delivered_to_active_coordinator(self):
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
@@ -1081,7 +1170,7 @@ class CampaignTests(unittest.TestCase):
             self.assertIn(name, params["developerInstructions"])
         self.assertEqual(state["settings"]["resources"]["profile"], "aggressive")
         self.assertEqual(params["model"], "gpt-6.1-sol")
-        self.assertEqual(params["config"]["model_reasoning_effort"], "medium")
+        self.assertEqual(params["config"]["model_reasoning_effort"], "max")
         self.assertEqual(state["settings"]["agents"]["default_subagent_model"], "gpt-6.1-sol")
         self.assertEqual(state["goal"]["objective"], saved_goal["objective"])
         self.assertEqual(state["goal"]["tokenBudget"], saved_goal["tokenBudget"])

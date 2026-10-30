@@ -1,3 +1,16 @@
+## Foreground dispatcher repair — 2026-10-30T17:48Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Campaign still stopped on technical integration work. The persistent dispatcher
+now prefers Sol/max with ranked advertised fallbacks; workers retain independent
+medium/high/low effort. Canonical172 and successor11 offline tests pass, with
+independent source review. The combined16-target parser passes18 synthetic tests;
+it returns unauthenticated data and releases no physical workload. A new same-Root
+envelope is being prepared; no restart/heartbeat or native acceptance is claimed.
+Fresh account readback reports84% weekly used; reset remains the original upper
+bound and prepaid fallback is disabled. M14 remains4/6; M15 queued. See
+[dispatcher policy](DISPATCHER-MAX-PREFERENCE-20261030.md) and its retained evidence.
+
 ## M14 engineering review — 2026-10-30T11:06Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

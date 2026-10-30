@@ -27,6 +27,17 @@ compile-only candidate is not production/default/native acceptance. Missing futu
 native proof alone does not block its source preparation or compilation. Genuine
 restrictions, known source/ABI requirements and physical execution controls remain.
 
+Dispatcher model preference — user instruction 2026-10-30 UTC: future dispatchers
+prefer `gpt-6.1-sol` with `max` reasoning. If unavailable, use the strongest
+eligible advertised fallback in the configured order: `gpt-6-astra`,
+`gpt-6.1-terra`, `gpt-6-sol`, then `gpt-6-luna`. Prefer advertised max-capable
+choices before lowering dispatcher effort. Workers retain separate lower effort
+levels (ordinary medium, complex/reviewer high, bounded auditor low). Use the
+shared canonical selection policy in `scripts/run_os_goal.py` when preparing
+new controller envelopes; preserve older frozen controllers. Model availability
+does not clear service/account holds, authorize rejected-request replay, extend
+the weekly allowance or grant a physical workload release.
+
 --- Superseded earlier window ---
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](docs/verification/os-milestones-20260914/RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.

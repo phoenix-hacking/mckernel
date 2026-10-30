@@ -6,6 +6,26 @@ The user directs the dispatcher to maximize useful engineering throughput. Keep
 M14 exclusive until original-scope acceptance, then shift automatically to M15.
 Use the active weekly-only window and actual controls; stop at weekly exhaustion.
 
+## Dispatcher max preference and separate worker effort
+
+Explicit user direction — 2026-10-30 UTC: prefer `gpt-6.1-sol/max` for every
+future dispatcher. The configured fallback ranking is Astra6, Terra6.1, Sol6,
+then Luna6, preferring advertised max-capable choices before lower dispatcher
+effort. `scripts/run_os_goal.py` owns the shared model/effort selection policy.
+An explicitly pinned CLI pair stays pinned; automatic selection records both
+the strict server defaults and the separately selected thread parameters. The
+actual thread must confirm its exact model, effort and full-access permissions.
+
+Keep ordinary workers at medium, complex workers/reviewers at high, and bounded
+auditors at low. A dispatcher capacity replacement must not copy max/xhigh to
+every worker. Check all required worker pairs are advertised separately. Prepare
+reviewed successor controllers for this policy; older sealed sources remain
+historical and must not be edited or reused against changed canonical sources.
+Capacity fallback retains its exact typed failure, cooldown, ownership and hold
+checks. Service rejection, authentication/billing hold, uncertain submission or
+weekly exhaustion grants no model-switch retry. The current weekly reset is
+still the absolute upper bound, with prepaid fallback disabled.
+
 ## Target all remaining functions in one coherent candidate
 
 Latest user instruction — 2026-10-30 UTC: "push many C functions at once like

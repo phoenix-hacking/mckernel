@@ -1,0 +1,219 @@
+test_active_resume_is_not_replaced_or_started_twice (test_os_goal_launcher.CampaignTests) ... ok
+test_advertised_fallback_resumes_exact_pair_and_preserves_worker_efforts (test_os_goal_launcher.CampaignTests) ... ok
+test_api_key_auth_is_rejected_before_inference (test_os_goal_launcher.CampaignTests) ... ok
+test_automatic_recovery_does_not_resume_exhausted_credits (test_os_goal_launcher.CampaignTests) ... ok
+test_automatic_recovery_never_seeds_a_duplicate_startup_message (test_os_goal_launcher.CampaignTests) ... ok
+test_blocked_resume_replaces_historical_window_instructions (test_os_goal_launcher.CampaignTests) ... ok
+test_budget_limited_requires_explicit_new_budget (test_os_goal_launcher.CampaignTests) ... ok
+test_capacity_and_temporary_rate_errors_are_recoverable (test_os_goal_launcher.CampaignTests) ... ok
+test_child_failure_identity_survives_sibling_interruptions (test_os_goal_launcher.CampaignTests) ... ok
+test_clarification_request_does_not_stop_campaign (test_os_goal_launcher.CampaignTests) ... ok
+test_cleared_goal_is_not_silently_recreated (test_os_goal_launcher.CampaignTests) ... ok
+test_completed_goal_does_not_resume (test_os_goal_launcher.CampaignTests) ... ok
+test_conflicting_catalog_rows_refuse_dispatcher_selection (test_os_goal_launcher.CampaignTests) ... ok
+test_coordinator_accepts_known_preferences_but_rejects_unknown_efforts (test_os_goal_launcher.CampaignTests) ... ok
+test_coordinator_effort_override_keeps_all_roles_on_gpt_61 (test_os_goal_launcher.CampaignTests) ... ok
+test_coordinator_rejects_other_models_before_launch (test_os_goal_launcher.CampaignTests) ... ok
+test_default_run_has_no_deadline_or_recovery_limit (test_os_goal_launcher.CampaignTests) ... ok
+test_different_goal_is_neither_resumed_nor_paused (test_os_goal_launcher.CampaignTests) ... ok
+test_disconnect_keeps_cursor_and_reports_failure (test_os_goal_launcher.CampaignTests) ... ok
+test_dispatcher_preference_uses_max_and_excludes_failed_models (test_os_goal_launcher.CampaignTests) ... ok
+test_dispatcher_prefers_max_capable_fallback_before_lower_effort (test_os_goal_launcher.CampaignTests) ... ok
+test_explicit_dispatcher_pair_is_pinned_even_if_fallback_is_advertised (test_os_goal_launcher.CampaignTests) ... ok
+test_explicit_prepaid_budget_allows_exhausted_included_plan (test_os_goal_launcher.CampaignTests) ... ok
+test_explicit_window_instructions_preserve_user_limit (test_os_goal_launcher.CampaignTests) ... ok
+test_failed_turn_without_error_event_preserves_credit_exhaustion (test_os_goal_launcher.CampaignTests) ... ok
+test_fallback_with_mismatched_thread_readback_stops (test_os_goal_launcher.CampaignTests) ... ok
+test_falling_credit_balance_stops_active_campaign (test_os_goal_launcher.CampaignTests) ... ok
+test_fresh_startup_user_message_precedes_goal_activation_once (test_os_goal_launcher.CampaignTests) ... ok
+test_gpt_61_coordinator_and_worker_defaults_keep_aggressive_limits (test_os_goal_launcher.CampaignTests) ... ok
+test_heartbeat_stays_live_without_resetting_agent_quiet_time (test_os_goal_launcher.CampaignTests) ... ok
+test_included_limit_guard_stops_before_starting_inference (test_os_goal_launcher.CampaignTests) ... ok
+test_included_usage_through_99_percent_uses_full_included_allowance (test_os_goal_launcher.CampaignTests) ... ok
+test_instructions_prioritize_diagnostic_app_pilot_without_acceptance_credit (test_os_goal_launcher.CampaignTests) ... ok
+test_interrupt_requests_checkpoint_without_completing_goal (test_os_goal_launcher.CampaignTests) ... ok
+test_invalid_included_usage_refuses_inference (test_os_goal_launcher.CampaignTests) ... ok
+test_lease_and_corrupted_state_fail_closed (test_os_goal_launcher.CampaignTests) ... ok
+test_legacy_failure_advice_uses_unique_failed_worker_not_interrupted_reviewer (test_os_goal_launcher.CampaignTests) ... ok
+test_live_instruction_is_queued_and_delivered_to_active_coordinator (test_os_goal_launcher.CampaignTests) ... [17:46:15Z][agent-t-thread] Turn completed turn-1
+[17:46:15Z][os-goal] Delivered live instruction 20261030T174615675626Z-f613184d2b2349f68a45e8359f9a6694 to the coordinator.
+ok
+test_live_instruction_waits_during_checkpoint_and_rejects_invalid_text (test_os_goal_launcher.CampaignTests) ... ok
+test_manual_resume_without_note_overrides_the_saved_user_pause (test_os_goal_launcher.CampaignTests) ... ok
+test_misconfigured_build_environment_fails_before_thread_start (test_os_goal_launcher.CampaignTests) ... ok
+test_misconfigured_concurrency_fails_before_thread_start (test_os_goal_launcher.CampaignTests) ... ok
+test_misconfigured_worker_model_or_effort_fails_before_resume (test_os_goal_launcher.CampaignTests) ... ok
+test_missing_automatic_continuation_stops_instead_of_prompt_loop (test_os_goal_launcher.CampaignTests) ... ok
+test_missing_gpt_61_refuses_resume_even_with_legacy_models_available (test_os_goal_launcher.CampaignTests) ... ok
+test_model_routing_uses_only_gpt_61_for_every_role (test_os_goal_launcher.CampaignTests) ... ok
+test_new_goal_continues_multiple_turns_without_client_prompt_loop (test_os_goal_launcher.CampaignTests) ... ok
+test_new_pause_or_block_during_manual_resume_prevents_activation (test_os_goal_launcher.CampaignTests) ... ok
+test_only_gpt_61_catalogue_supports_all_routes (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_budget_threshold_stops_without_automatic_recovery (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_mode_does_not_ignore_real_service_quota_error (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_mode_unknown_balance_refuses_before_inference (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_refresh_failure_stops_instead_of_waiting_for_notifications (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_refresh_reads_balance_without_unsolicited_events (test_os_goal_launcher.CampaignTests) ... [17:46:16Z][os-goal] Usage/billing stop: credit_budget_exhausted
+ok
+test_paid_startup_can_recover_usage503_before_starting_inference (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_usage503_retries_only_read_and_retains_spending (test_os_goal_launcher.CampaignTests) ... [17:46:16Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:16Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_paid_usage_retry_limit_still_stops_unknown_balance (test_os_goal_launcher.CampaignTests) ... [17:46:16Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:16Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_paid_usage_retry_never_retries_other_or_protected_errors (test_os_goal_launcher.CampaignTests) ... ok
+test_paid_usage_retry_preserves_stop_received_during_backoff (test_os_goal_launcher.CampaignTests) ... [17:46:16Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+ok
+test_paid_usage_transport_retries_preserve_budget_when_weekly_allowance_returns (test_os_goal_launcher.CampaignTests) ... [17:46:16Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+ok
+test_policy_failed_turn_notice_recommends_feedback_without_retry (test_os_goal_launcher.CampaignTests) ... ok
+test_progress_report_distinguishes_stale_turns_and_real_heartbeat (test_os_goal_launcher.CampaignTests) ... ok
+test_progress_report_leads_with_practical_checks_and_preserves_live_runner (test_os_goal_launcher.CampaignTests) ... ok
+test_quota_stops_without_another_inference_attempt (test_os_goal_launcher.CampaignTests) ... ok
+test_quota_survives_later_failed_turn_and_blocked_events (test_os_goal_launcher.CampaignTests) ... ok
+test_resource_guard_fails_before_starting_server (test_os_goal_launcher.CampaignTests) ... ok
+test_resource_rejection_replaces_previous_retryable_worker_snapshot (test_os_goal_launcher.CampaignTests) ... ok
+test_restart_advice_only_special_cases_current_policy_stop (test_os_goal_launcher.CampaignTests) ... ok
+test_resume_preserves_thread_objective_and_usage (test_os_goal_launcher.CampaignTests) ... ok
+test_resume_receives_profile_and_convergence_without_replacing_goal (test_os_goal_launcher.CampaignTests) ... ok
+test_service_transient_does_not_override_an_unattributed_blocked_goal (test_os_goal_launcher.CampaignTests) ... ok
+test_shutdown_stops_touching_threads_after_objective_ownership_changes (test_os_goal_launcher.CampaignTests) ... ok
+test_signal_notice_keeps_resume_hint_with_stale_policy_error (test_os_goal_launcher.CampaignTests) ... ok
+test_signal_or_usage_stop_during_startup_message_prevents_goal_activation (test_os_goal_launcher.CampaignTests) ... ok
+test_signal_overrides_an_earlier_transient_error (test_os_goal_launcher.CampaignTests) ... ok
+test_stale_bound_hold_is_archived_before_resume_and_never_steered (test_os_goal_launcher.CampaignTests) ... ok
+test_startup_instruction_precedes_saved_goal_resume_and_activation (test_os_goal_launcher.CampaignTests) ... ok
+test_startup_message_cannot_overwrite_a_terminal_cleared_or_changed_goal (test_os_goal_launcher.CampaignTests) ... ok
+test_startup_user_message_refuses_an_existing_active_turn (test_os_goal_launcher.CampaignTests) ... ok
+test_stop_discovers_unobserved_child_and_interrupts_it (test_os_goal_launcher.CampaignTests) ... ok
+test_stop_reason_survives_late_transient_error (test_os_goal_launcher.CampaignTests) ... ok
+test_unadvertised_routed_effort_refuses_resume_without_fallback (test_os_goal_launcher.CampaignTests) ... ok
+test_uncertain_startup_delivery_keeps_goal_paused_and_records_receipt (test_os_goal_launcher.CampaignTests) ... ok
+test_uncertain_startup_receipt_blocks_fresh_launch_and_recovery_before_rpc (test_os_goal_launcher.CampaignTests) ... ok
+test_window_pauses_and_requests_checkpoint (test_os_goal_launcher.CampaignTests) ... ok
+test_zero_credit_account_update_preserves_included_plan_allowance (test_os_goal_launcher.CampaignTests) ... ok
+test_interleaved_agents_partial_lines_completion_and_output_fallback (test_os_goal_launcher.LiveOutputTests) ... ok
+test_partial_fragments_flush_on_timer_and_buffers_are_bounded (test_os_goal_launcher.LiveOutputTests) ... ok
+test_quiet_keeps_log_and_heartbeat_and_omits_raw_reasoning (test_os_goal_launcher.LiveOutputTests) ... ok
+test_real_transport_streams_before_command_completes_and_retains_stderr (test_os_goal_launcher.LiveOutputTests) ... ok
+test_forced_stop_labels_stale_snapshot_without_mutation_or_server (test_os_goal_launcher.StatusTests) ... ok
+test_askpass_process_uses_only_private_file_and_stdout (test_os_goal_launcher.SudoHelperTests) ... ok
+test_helper_watch_retries_transient_failure_but_not_bad_credentials (test_os_goal_launcher.SudoHelperTests) ... ok
+test_invalid_credential_contents_are_rejected (test_os_goal_launcher.SudoHelperTests) ... ok
+test_private_credential_is_read_and_insecure_files_are_rejected (test_os_goal_launcher.SudoHelperTests) ... ok
+test_fragmented_events_and_unsupported_approval_are_handled_without_approval (test_os_goal_launcher.TransportTests) ... ok
+test_questions_return_standing_instruction_without_selecting_approval_or_secret (test_os_goal_launcher.TransportTests) ... ok
+test_agent_events_keep_a_quiet_campaign_running (test_os_goal_launcher.WatcherTests) ... ok
+test_agent_stall_recovers_even_when_worker_keeps_writing_heartbeats (test_os_goal_launcher.WatcherTests) ... ok
+test_backoff_stays_bounded_after_months_of_retries (test_os_goal_launcher.WatcherTests) ... ok
+test_only_recoverable_failures_restart (test_os_goal_launcher.WatcherTests) ... ok
+test_progress_marker_requires_current_running_worker (test_os_goal_launcher.WatcherTests) ... ok
+test_recovery_keeps_thread_and_original_work_window (test_os_goal_launcher.WatcherTests) ... ok
+test_server_retirement_does_not_signal_reused_or_unverified_pid (test_os_goal_launcher.WatcherTests) ... ok
+test_stalled_worker_recovers_without_losing_session (test_os_goal_launcher.WatcherTests) ... ok
+test_unlimited_supervisor_recovers_more_than_three_times_then_stops_on_quota (test_os_goal_launcher.WatcherTests) ... ok
+test_unowned_transient_hints_and_user_stops_do_not_restart (test_os_goal_launcher.WatcherTests) ... ok
+test_known_service_events_require_typed_active_or_actual_owned_pause (test_os_goal_comms_recovery.CommsClassification) ... ok
+test_paused_requires_real_owned_pause_and_matching_goal (test_os_goal_comms_recovery.CommsClassification) ... ok
+test_real_typed_eof_pipe_reset_timeout_and_stall_recover_active (test_os_goal_comms_recovery.CommsClassification) ... ok
+test_shared_usage502_and_scoped_local_eof_keep_legacy_receipts (test_os_goal_comms_recovery.CommsClassification) ... ok
+test_startup_can_inherit_only_this_same_watcher_in_memory_origin (test_os_goal_comms_recovery.CommsClassification) ... ok
+test_user_holds_uncertain_mutation_and_unknown_transport_never_promote (test_os_goal_comms_recovery.CommsClassification) ... ok
+test_exit_before_pidfd_send_is_positive_retirement (test_os_goal_comms_recovery.PinnedModelServer) ... ok
+test_pidfd_is_closed_and_pid_reuse_never_signals_replacement (test_os_goal_comms_recovery.PinnedModelServer) ... ok
+test_unknown_or_foreign_native_owner_never_receives_any_signal (test_os_goal_comms_recovery.PinnedModelServer) ... ok
+test_async_paused_notification_waits_at_most60s_with_live_worker_birth (test_os_goal_comms_recovery.SteeringDecisions) ... ok
+test_expired_and_unknown_context_never_queues_or_rebinds (test_os_goal_comms_recovery.SteeringDecisions) ... ok
+test_pause_publication_window_cannot_override_user_or_hard_holds (test_os_goal_comms_recovery.SteeringDecisions) ... ok
+test_published_origin_survives_same_watcher_new_worker_but_not_user_stop (test_os_goal_comms_recovery.SteeringDecisions) ... ok
+test_successful_owned_pause_waits_before_supervisor_publication (test_os_goal_comms_recovery.SteeringDecisions) ... ok
+test_typed_service_owned_pause_waits_without_queue (test_os_goal_comms_recovery.SteeringDecisions) ... ok
+test_owned_paused_pipe_passes_hash_and_failed_retirement_or_note_holds (test_os_goal_comms_recovery.Supervision) ... ok
+test_owned_service_code23_uses_same_goal_hash_and_no_fresh_thread (test_os_goal_comms_recovery.Supervision) ... ok
+test_same_cursor_active_eof_never_fresh_preserves_budget_and_window (test_os_goal_comms_recovery.Supervision) ... ok
+test_same_pid_wrong_worker_birth_never_retires_server_or_restarts (test_os_goal_comms_recovery.Supervision) ... ok
+test_unexpected_supervisor_exception_retires_only_exact_owned_models (test_os_goal_comms_recovery.Supervision) ... ok
+test_code24_resumes_saved_session_after_server_retirement (test_os_goal_recovery.RecoveryTests) ... ok
+test_direct_stop_signals_are_not_crashes (test_os_goal_recovery.RecoveryTests) ... ok
+test_explicit_first_fresh_launch_does_not_repeat_on_saved_recovery (test_os_goal_recovery.RecoveryTests) ... ok
+test_fresh_opt_in_cannot_archive_unreconciled_remote_cursor (test_os_goal_recovery.RecoveryTests) ... ok
+test_fresh_opt_in_cannot_override_stop_or_unresolved_retirement (test_os_goal_recovery.RecoveryTests) ... ok
+test_fresh_recovery_preserves_same_prepaid_credit_run (test_os_goal_recovery.RecoveryTests) ... ok
+test_generic_failures_need_structured_transient_evidence (test_os_goal_recovery.RecoveryTests) ... ok
+test_recognized_transients_require_current_typed_active_or_owned_paused_context (test_os_goal_recovery.RecoveryTests) ... ok
+test_recorded_stops_override_every_recovery_path (test_os_goal_recovery.RecoveryTests) ... ok
+test_responsive_watchdog_checkpoint_recovers_paused_goal (test_os_goal_recovery.RecoveryTests) ... ok
+test_restart_limit_prevents_fresh_recovery_receipt (test_os_goal_recovery.RecoveryTests) ... ok
+test_stale_retryable_snapshot_cannot_spawn_another_worker (test_os_goal_recovery.RecoveryTests) ... ok
+test_supervisor_stops_instead_of_spawning_another_blocked_worker (test_os_goal_recovery.RecoveryTests) ... ok
+test_terminal_goals_and_supervisor_stop_override_transient_errors (test_os_goal_recovery.RecoveryTests) ... ok
+test_unclassified_pauses_and_blockers_do_not_restart (test_os_goal_recovery.RecoveryTests) ... ok
+test_unknown_bootstrap_goal_is_held_without_new_thread (test_os_goal_recovery.RecoveryTests) ... ok
+test_unknown_server_ownership_blocks_even_code24_recovery (test_os_goal_recovery.RecoveryTests) ... ok
+test_usage_auth_and_policy_stops_survive_crash_and_watchdog (test_os_goal_recovery.RecoveryTests) ... ok
+test_watchdog_checkpoint_requires_positive_supervisor_classification (test_os_goal_recovery.RecoveryTests) ... ok
+test_watchdog_termination_reconnects_same_cursor_after_retirement (test_os_goal_recovery.RecoveryTests) ... ok
+test_request_requires_current_parent_and_worker_birth_identities (test_os_goal_recovery.WatchdogRequestTests) ... ok
+test_no_restart_without_positive_server_retirement (test_os_goal_timeout_recovery.CreditWatcher) ... ok
+test_only_exact_timeout_exit_class_restarts (test_os_goal_timeout_recovery.CreditWatcher) ... ok
+test_real_unknown_exhaustion_auth_policy_and_holds_stay_stopped (test_os_goal_timeout_recovery.CreditWatcher) ... ok
+test_same_thread_route_no_fresh_proof_budget_unchanged_cutoff_tightens (test_os_goal_timeout_recovery.CreditWatcher) ... ok
+test_startup_timeout_retries_only_under_same_live_watcher_origin (test_os_goal_timeout_recovery.CreditWatcher) ... ok
+test_user_pause_and_terminal_states_never_promoted (test_os_goal_timeout_recovery.CreditWatcher) ... ok
+test_actual_owned_pause_receipt_and_fingerprint_changes_veto (test_os_goal_timeout_recovery.PauseReceipt) ... ok
+test_preexisting_userpause_block_checkpoint_or_signal_has_no_receipt (test_os_goal_timeout_recovery.PauseReceipt) ... ok
+test_startup_changed_goal_vetoes_before_thread_resume (test_os_goal_timeout_recovery.PauseReceipt) ... ok
+test_startup_marker_is_not_approval_without_matching_watcher_origin (test_os_goal_timeout_recovery.PauseReceipt) ... [17:46:23Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:24Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_uncertain_pause_later_goal_event_and_new_instance_clear_authority (test_os_goal_timeout_recovery.PauseReceipt) ... ok
+test_502_retries_only_read_then_validates_persistent_guard (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+ok
+test_exhaustion_and_explicit_holds_win (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:26Z][os-goal] Usage/billing stop: credit_budget_exhausted
+ok
+test_gateway_failure_fresh_notification_and_stale_data_paths (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_gateway_owns_pause_and_startup_receipts_with_same_legacy_keys (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_generic_recovery_usage_failure_emits_only_read_only_startup_marker (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_invalid_notification_and_persistence_error_cannot_grant_freshness (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage/billing stop: included_usage_unknown
+[17:46:27Z][os-goal] Usage/billing stop: credit_budget_unknown
+ok
+test_missing_or_stale_or_monotonic_rollback_stops (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_new_rpc_cannot_reuse_previous_server_notification (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_next_poll_fails_after_notification_age_bound (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_non_timeout_transport_auth_billing_and_guard_errors_are_not_hidden (test_os_goal_credit_timeout.CreditTimeout) ... ok
+test_notification_during_rpc_timeout_preserves_guard_and_spending (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.
+ok
+test_successful_poll_or_saved_state_is_not_notification_freshness (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.
+[17:46:27Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.
+ok
+test_true_guard_write_failure_during_rpc_is_not_normalized_or_overwritten (test_os_goal_credit_timeout.CreditTimeout) ... [17:46:27Z][os-goal] Usage/billing stop: credit_budget_unknown
+ok
+
+----------------------------------------------------------------------
+Ran 172 tests in 12.876s
+
+OK

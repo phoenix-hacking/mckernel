@@ -1,3 +1,16 @@
+## Foreground dispatcher repair — 2026-10-30T17:48Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Read [persistent dispatcher policy](DISPATCHER-MAX-PREFERENCE-20261030.md).
+Sol/max is preferred; eligible advertised fallbacks retain separate lower worker
+efforts. Canonical172/successor11 offline checks and independent source review pass.
+The new16-target graph parser is data-only, tested synthetically, and grants no
+authority. A fresh same-Root envelope is being prepared from the stopped technical
+Root01a18bc3; activation is not yet claimed. Preserve all held requests, native
+owners, consumed operations, scratch21, evidence and original weekly-only caps.
+M14 remains4/6, then automatic M15. Physical profile/observer/ownership release is
+still separate from source preparation. Reuse completed ports and accepted images.
+
 ## M14 ptrace and SDK checkpoint — 2026-10-30T07:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
