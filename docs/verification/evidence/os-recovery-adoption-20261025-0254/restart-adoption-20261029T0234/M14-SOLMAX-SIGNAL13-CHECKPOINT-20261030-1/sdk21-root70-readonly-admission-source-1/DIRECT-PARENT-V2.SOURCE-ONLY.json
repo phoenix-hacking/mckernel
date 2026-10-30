@@ -1,0 +1,163 @@
+{
+  "authority": null,
+  "child_gate": "FD197, one byte G after parent records exact child PID/birth/PPID/PGID/SID and atomic STARTED; EOF/no GO exits without observer or query. Child taskset/prlimit/gate exec retain PID; observer Popen uses new session.",
+  "current_free": false,
+  "exact_direct_child_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import os,sys; fd=int(sys.argv[1]); b=os.read(fd,1); os.close(fd); b==b\"G\" or sys.exit(71); os.execv(sys.executable,[sys.executable,\"-I\",\"-B\",sys.argv[2]])",
+    "197",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/read_root70_identity.py"
+  ],
+  "exact_outer_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--foreground",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "60s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root_observer_direct_parent_v2.py"
+  ],
+  "external_watchdog": "Root sudo executes taskset CPU7 then GNU timeout --foreground TERM60/KILL+6 around prlimit and direct parent. Timeout may kill parent without closing observer/query; external caller must retain UNKNOWN and review actual sudo/timeout/parent lineage and direct terminal joins. Never use sudo exit as observer join.",
+  "fixed_outputs": {
+    "all_absent": true,
+    "observer": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root70-observation-1",
+    "parent": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root70-direct-parent-v2-1",
+    "release": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/ROOT-OBSERVER-RELEASE-V2.ACTUAL.json",
+    "release_exists": false
+  },
+  "observer_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/ROOT70-READONLY-OPERATION.SOURCE-ONLY.json",
+    "sha256": "fca24f38dc603f2b4f04708ec5be890ded7cd22efd7a845850a692797d63e39e"
+  },
+  "observer_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/read_root70_identity.py",
+    "sha256": "b5a1bc9c4b49142cddee82c1df49b356d5d0972f71acda0146f3a34baa6c9f13"
+  },
+  "parent_custody": "Direct parent records gate child PID/birth/PPID/PGID/SID, writes exclusive intent/start records, polls waitid WNOWAIT and directly wait4-joins. On stop it may signal only same PID+birth+PPID+PGID+SID still unreaped; no group signal. TERM then KILL after 4 seconds, bounded wait 5.5 seconds from signal. KILL never proves query groups closed; parent errors, missing identity/join/summary, timeout and descendant escape remain UNKNOWN. On a positive observer result, observer self PID/start/PPID/parent birth/PGID/SID and all three query join records must match the gated direct child and recorded parent. V2 repeats the sealed validation after STARTED publication and immediately before G; any mismatch, expiration or stop closes the gate without G and retains UNKNOWN; pre-GO clocks are recorded in the terminal result.",
+  "parent_pattern": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/root_capture_parent.py",
+    "reuse": "Retained direct-PID wait4 and atomic link/fsync publication pattern; new bounded watchdog, pre-query gate, identity and external-release requirements are distinct and require independent review.",
+    "sha256": "f71d0820520b70cd0b3309624741c16c777b6aa0391355b64880c44b0df98af0"
+  },
+  "parent_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root_observer_direct_parent_v2.py",
+    "sha256": "09c1c571c7a43bddf70ab1a7ba5244e9d9847b06389e1d3bf655567253660ed2"
+  },
+  "physical_release": false,
+  "predecessor": {
+    "finding": "Initial release validation alone could become stale while setup or evidence publication stalled before GO.",
+    "packet": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/DIRECT-PARENT.SOURCE-ONLY.json",
+      "sha256": "7a1f316ecacd32fb0c764f5adba01eee782c832f7ca4eee6ee9f6819eadfc9bc"
+    },
+    "preserved": true,
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root_observer_direct_parent.py",
+      "sha256": "fb4525f7039edb363fd902c9aae5db933e590ae4221c827ce2ff93884f342e8f"
+    }
+  },
+  "prior_observer_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/INDEPENDENT-OPERATION-REVIEW.md",
+    "sha256": "5731b14b156a2d6f42ac37e3be357a9983482dccaf3ae3c9a9d69c83287484be"
+  },
+  "query_group_custody": "Observer retains owned_capture990807ab. The helper filters a /proc stat traversal to its owned PGID; independent review accepts it for that bounded purpose, while escaped descendants remain unproven. Parent relies on observer join records only; no new process inventory.",
+  "release_rules": "Root release must be root-owned regular nonsymlink single-link, no group/other bits and <=64KiB. Parent captures release, exact source and controller receipts with O_NOFOLLOW and stable fd/path identity, verifies hashes and original included-only/time requirements; immediately before gate GO it recaptures and requires same release JSON, raw bytes, sha256, device/inode and metadata and same bound source/control identities, then rechecks weekly freshness/expiry and UTC/BOOT/MONO ceilings. Failure closes gate with no G; direct bounded child join is attempted and uncertain outcomes remain UNKNOWN. External live service/controller authority, actual loaded-code/ancestry integrity, operation uniqueness and resource admission remain independent root obligations.",
+  "remaining_caller_facts": [
+    "Exact trusted root/foreground caller start identity and a fresh root-owned sealed release are not yet established.",
+    "A stable owner-controlled source/output ancestry and execution of exactly the hashed source bytes must be externally enforced; self-reading __file__ alone does not prove loaded code identity.",
+    "Caller must positively join and capture sudo/timeout identities and terminal results; sudo exit alone does not prove root observer/query retirement.",
+    "Watchdog command behavior, all actual read-only output/mount/resource identities and source controls require independent operation/execution review before first use.",
+    "Cgroup confinement and full descendant no-escape proof are not supplied; a missing/failed/forced observer join or any observer query error stays UNKNOWN and retains ownership.",
+    "A pending stop or root-owned control mutation concurrent with the final check must still be contained by the independent controller and stable-ancestry release; the check does not itself prove live account or daemon state."
+  ],
+  "resource_budget": {
+    "AS": "parent soft1GiB hard2GiB; observer hard2GiB; each one-at-a-time Docker child inherits hard2GiB; sudo and timeout have no enforced AS cap in this exact argv",
+    "CPU": "parent/observer and serial Docker CLI share CPU7; old native CPU2-5/12GiB/512 tasks and mutex27:4/scratch21 remain reserved; proposed compile CPU6/4GiB remains unadmitted",
+    "conservative_simultaneous_hard_AS_planning": "native12 + parent2 + observer2 + one query2 + proposed compile4 + outer-client allowance0.25 = 22.25 GiB, leaving 0.1311 GiB under 22.3811 GiB before any other work; outer allowance is NOT enforced. Prefer no overlap with compiler and require independent current aggregate/cgroup measurement; do not claim sufficiency.",
+    "jobs": "native4 + compile1 + CPU7 observer chain1 = 6 CPU shares; any other current jobs and control reserve require fresh review",
+    "time": "observer alarm55s (after its initial setup), outer timeout TERM60 and KILL+6s; parent signals only exact unreaped observer, query groups separately owned by observer. Popen/setup/filesystem stalls or outer hard kill may prevent final evidence; ownership stays UNKNOWN."
+  },
+  "root_release_schema_not_created": {
+    "capacity_sha256": "FRESH_ACTUAL_REQUIRED",
+    "controls_sha256": "FRESH_ACTUAL_REQUIRED",
+    "expiry_utc": "FUTURE_NO_LATER_THAN_1793774133",
+    "observer_sha256": "b5a1bc9c4b49142cddee82c1df49b356d5d0972f71acda0146f3a34baa6c9f13",
+    "operation": "root70-readonly-observer-v1",
+    "operation_nonce": "UNUSED_32_LOWER_HEX_NOT_4709; uniqueness external",
+    "packet_sha256": "fca24f38dc603f2b4f04708ec5be890ded7cd22efd7a845850a692797d63e39e",
+    "paid_fallback": false,
+    "parent_sha256": "09c1c571c7a43bddf70ab1a7ba5244e9d9847b06389e1d3bf655567253660ed2",
+    "service_status": "NO_NEW_REJECTION",
+    "status": "ROOT_RELEASE_EXACT_OBSERVER_ONLY",
+    "weekly_observed_utc": "FRESH_UTC_WITHIN_30S",
+    "weekly_used_percent": "FRESH_NUMBER_BELOW_100"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "static_only_checks": "AST parse and nonexecuting source predicates verify initial and immediate pre-GO sealed checks, literal raw release byte equality and stable identity/control checks, strict single-link nonsymlink capture, failure-to-EOF and wait4 presence; no observer, Docker, sudo, compiler or physical action executed.",
+  "status": "PRIVATE_DIRECT_PARENT_V2_SOURCE_NOT_REVIEWED_NOT_RELEASED",
+  "tools": [
+    {
+      "path": "/usr/bin/sudo",
+      "resolved": "/usr/bin/sudo",
+      "sha256": "aa14020c0639285fc2e4592eaf6a4e8e9c5fa799bc7bda3ee929a0b5593239dc",
+      "status": "retained filesystem bytes only; actual invocation/tool/loader bindings need fresh review"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "resolved": "/usr/bin/taskset",
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "status": "retained filesystem bytes only; actual invocation/tool/loader bindings need fresh review"
+    },
+    {
+      "path": "/usr/bin/timeout",
+      "resolved": "/usr/bin/timeout",
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "status": "retained filesystem bytes only; actual invocation/tool/loader bindings need fresh review"
+    },
+    {
+      "path": "/usr/bin/prlimit",
+      "resolved": "/usr/bin/prlimit",
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "status": "retained filesystem bytes only; actual invocation/tool/loader bindings need fresh review"
+    },
+    {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "status": "retained filesystem bytes only; actual invocation/tool/loader bindings need fresh review"
+    },
+    {
+      "path": "/usr/bin/docker",
+      "resolved": "/usr/bin/docker",
+      "sha256": "2e94ad2db8c6c9cfffd02d403eea69a2d0bd14c84eb9dccdcebbcf2a68fcc257",
+      "status": "retained filesystem bytes only; actual invocation/tool/loader bindings need fresh review"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T06:03:24.340457+00:00",
+  "status": "ADMIT_ONE_EXACT_ROOT_READONLY_OBSERVATION",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--foreground",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "60s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root_observer_direct_parent_v2.py"
+  ],
+  "packet_sha256": "3b13019e844b986c25432983665f0b539f8c2bb2425ca2162474d0292f4567f1",
+  "independent_review": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/INDEPENDENT-DIRECT-PARENT-V2-REVIEW.md",
+  "release_sha256": "45df5e01a614f9e37123c250bff2cf0d950f16581657c1201d25cfc883adf3bb",
+  "ancestry": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o775",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o775",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o775",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o775",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home/holden",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o755",
+      "group_writer_uids": [
+        1000
+      ]
+    },
+    {
+      "path": "/home",
+      "uid": 0,
+      "gid": 0,
+      "mode": "0o755",
+      "group_writer_uids": [
+        0
+      ]
+    },
+    {
+      "path": "/",
+      "uid": 0,
+      "gid": 0,
+      "mode": "0o755",
+      "group_writer_uids": [
+        0
+      ]
+    }
+  ],
+  "controllers": {
+    "guardian": {
+      "pid": 2727507,
+      "start": "113108156"
+    },
+    "monitor": {
+      "pid": 2727509,
+      "start": "113108266"
+    },
+    "server": {
+      "pid": 2727360,
+      "start": "113107784"
+    },
+    "watcher": {
+      "pid": 2727356,
+      "start": "113107752"
+    },
+    "worker": {
+      "pid": 2727358,
+      "start": "113107768"
+    },
+    "capacity": {
+      "pid": 2727510,
+      "start": "113108369"
+    }
+  },
+  "weekly": {
+    "at": "2026-10-30T06:03:22.233002+00:00",
+    "primary": {
+      "resetsAt": 1793774133,
+      "usedPercent": 67,
+      "windowDurationMins": 10080
+    }
+  },
+  "resource_plan_GiB": {
+    "reserved_native": 12,
+    "parent": 2,
+    "observer": 2,
+    "serial_query": 2,
+    "outer": 0.75,
+    "daemon": 1,
+    "controls": 1,
+    "readonly_review": 0.5,
+    "total": 21.25,
+    "ceiling": 22.3811
+  },
+  "current_control_RSS_bytes": 428257280,
+  "MemAvailable_bytes": 28496216064,
+  "free_bytes": {
+    "/home/holden/mckernel": 144203972608,
+    "/home/holden/mckernel-work/scratch": 47696433152
+  },
+  "no_compiler_concurrent": true,
+  "current_free": false,
+  "service_holds_and_old_native_unknowns_retained": true,
+  "ownership_correction": "Group1000 grants no writer beyond UID1000; no file/directory/ACL metadata changed."
+}

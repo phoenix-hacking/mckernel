@@ -1,3 +1,64 @@
+## M14 signal implementation checkpoint — 2026-10-30T06:08Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same Root/Sol max remains active, included-only67%, original/tighter clocks and
+all service/native/resource holds unchanged. M14 stays4/6; practical35/35 is
+separate, and M15 remains queued. Qualified image1cd7e4e6 still selects23generic
+and5architecture C names. No new production/default/native/file/C-retirement credit.
+
+Both signal diagnostics now preserve original check, formatter, increment order.
+All5 deterministic actual-helper regressions pass, including nested63-to65 and
+formatter PID changes. Full Rust do_signal and paired architecture C compile;
+HOST raw image d16444de (10486072B) passes independent13-provider/11-input review.
+Atomic state is8 bytes in8-aligned storage; two actual do_signal relocations
+reach its helper, and observed dependencies143Rust/70C bind to the admitted tree.
+Architecture C has no global function provider, retaining debug_constants data.
+These are HOST facts; real formatter/whole behavior, caller lifetimes, SDK21,
+original389, default ownership and matching functional/native proof remain open.
+Rust18.30s wall/18.29CPU/601420KiB peak; C.03s/.03CPU/23040KiB; link.10s/.09/26796KiB.
+
+Validator7/7 passes after one bounded interpreter correction: genuine pinned
+Python3.8 matches all13 original AST hashes; Python3.9 changes their representation.
+Original failed streams, source/AST hashes and389 oracle are unchanged. SDK13
+source profile3e6d2491 rebuilds Rust and both C objects, retaining eight objects;
+independent source review passes, execution remains unreleased.
+
+Last root control action: v2 sealed release plus parent validation exited2 before
+observer/query because Root omitted service_status. Positive sudo wait4 is retained;
+root parent birth remains UNKNOWN. No Docker query or native cleanup occurred.
+V2 original root-owned release/nonce/early error remain. A fresh v3 schema/tighter
+clock correction passes5 synthetic cases and conditional independent review.
+Its pure wrapper lacks measured group closure; retain that512MiB planning share.
+NEXT Root: full actual v3 preseal/schema, fresh controls/resources/unique nonce and
+exact reviewed argv. No reuse of v2 release. This is only a read-only observation;
+current-free and historical no-unlisted custody remain unresolved, SDK build and
+native execution unreleased. Held generic_c/direct-TID/terminate_host and execve
+transfer/ACK remain excluded, with no equivalent replay.
+
+Evidence: M14-SOLMAX-SIGNAL13-CHECKPOINT-20261030-1 under the retained restart
+adoption evidence. The05:46:29.892–06:06:29.892 bucket adds1HOST kernel build/link,
+5helper cases, zero production/native/retirements. Original30min baseline preserved;
+exact queue/compiler-start and blocked times remain unknown, no95% claim.
+Scheduling change: validate complete required release keys cheaply before sudo;
+retain immediate terminal/group validation and advance eligible compiler work.
+
+## M14 steering — 2026-10-30T05:46Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The 05:26:29.892–05:46:29.892 UTC bucket adds one Rust object, one architecture
+C object and one HOST diagnostic link, with four additional architecture Rust
+providers (twelve total). New behavior/native/production/C-retirement/file closure
+deltas are zero. M14 remains 4/6, practical 35/35 separate, M15 queued.
+The latest checkpoint 197399b3 was pushed and fetched exactly. Included use65%.
+
+NEXT: composition binds the existing root direct-parent/watchdog for the exact
+Root70 read-only query; custody_review then reviews that operation. Current fca24
+packet is NO-GO for its missing outer caller binding. No Docker/query release.
+Arch_source privately restores original post-formatter counter ordering;
+signal_review prepares the three-object SDK21 validator using the frozen389 oracle.
+No native/current-free assertion, held request replay, cleanup or new controller.
+Exact bucket metrics and limits: ENGINEERING-REVIEW-20261030T0546.json.
+
 ## M14 HOST architecture and ABI checkpoint — 2026-10-30T05:41Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,16 @@
+--- retained/M14-CONVERSION-FIRST-ACTUAL-ARTIFACT-QUALIFICATION-1/context.py
++++ private/sdk21-nonheld12-validator-source-1/validate_artifacts.py (semantic binding delta; not a patch to apply)
+@@
+-assert len(worker['commands'])==3
++assert len(worker['commands'])==4  # Rust, generic C, arch C, ld; exact argv/cwd/status/output
+@@
+-assert len(objects)==11 and sum(r['replace']for r,e in objects)==2
++assert len(objects)==11 and set(rebuilt)=={Rust, generic_C, arch_C} and len(retained)==8
+@@
+-registry_before=registry(oldimage);registry_after=registry(image);compare(registry_before,registry_after)
++compare(expected_records(frozen_original389['records']), registry(image))
++# Same authenticated compare and registry nodes; exact old 389 tuples, never rewritten.
++# The adapter additionally binds twelve named Rust functions, both C residuals,
++# actual link argv, map, link depfile, three compiler depfiles, excluded object
++# references, and an independently reviewed new arch full-source-origin receipt.
++# Separate original ABI, producer, dependency-origin, caller and acceptance gates remain.

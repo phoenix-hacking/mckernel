@@ -1,0 +1,197 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ADMITTED_EXACT_ORDINARY_HOST_CHECK_ONCE",
+  "owner": "/root",
+  "at": "2026-10-30T05:50:22.273484+00:00",
+  "epoch": 1793339422.273495,
+  "monotonic": 1121528.842451377,
+  "boottime": 1136866.969501668,
+  "proposal_sha256": "e86e7a682d984ab4cb154eb2b9e8f7b150e2ab7c02309b5665730c67ec52bac5",
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch-signal-postformat-budget-1/INDEPENDENT-SOURCE-REVIEW.md",
+    "sha256": "521c1c2c17e0200b6f65cfb699a02ed133310ff23f3beabcd0c6e2d695384776"
+  },
+  "base_profile": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/request-constructor-microtest-profile-1/INDEPENDENT-PROFILE-REVIEW.md",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "HOME=/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/home",
+    "TMPDIR=/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=150",
+    "--nofile=256",
+    "--fsize=67108864",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "180s",
+    "/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a/run.sh",
+    "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a"
+  ],
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-postformat-20261030-0twkqp6a",
+  "control_identities": {
+    "guardian": {
+      "pid": 2727507,
+      "start": "113108156",
+      "ppid": 2727313,
+      "state": "S"
+    },
+    "monitor": {
+      "pid": 2727509,
+      "start": "113108266",
+      "ppid": 2727313,
+      "state": "S"
+    },
+    "server": {
+      "pid": 2727360,
+      "start": "113107784",
+      "ppid": 2727358,
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2727356,
+      "start": "113107752",
+      "ppid": 2727313,
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2727358,
+      "start": "113107768",
+      "ppid": 2727356,
+      "state": "S"
+    }
+  },
+  "caps": {
+    "boot_deadline": 1571569.6959267766,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556231.5688797957
+  },
+  "weekly": {
+    "at": "2026-10-30T05:50:21.921839+00:00",
+    "primary": {
+      "resetsAt": 1793774133,
+      "usedPercent": 66,
+      "windowDurationMins": 10080
+    },
+    "age_seconds": 0.3514120578765869
+  },
+  "tool_identities": [
+    {
+      "path": "/usr/bin/env",
+      "resolved": "/usr/bin/env",
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "resolved": "/usr/bin/taskset",
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/prlimit",
+      "resolved": "/usr/bin/prlimit",
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/timeout",
+      "resolved": "/usr/bin/timeout",
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/bin/bash",
+      "resolved": "/usr/bin/bash",
+      "sha256": "025cf78cd9d276019e916b97b0decd10cacb14902db8eb9f28233019babfb331",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/time",
+      "resolved": "/usr/bin/time",
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/cat",
+      "resolved": "/usr/bin/cat",
+      "sha256": "87e5bd81850e11eeec2d3bb696b626b2a7f45673241cbbd64769c83580432869",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/ps",
+      "resolved": "/usr/bin/ps",
+      "sha256": "a8cf81f3a1137c999c3cf336507ce120b3065e633ade01db6280d427b7d986ca",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/cc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/ld",
+      "resolved": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/usr/bin/ldd",
+      "resolved": "/usr/bin/ldd",
+      "sha256": "d089c1054925b1f1dc9b574c2e7fabf3a495a1ce2ef946cd66d507daf09b7b8f",
+      "uid": 0,
+      "mode": "0o755"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "resolved": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "uid": 1000,
+      "mode": "0o755"
+    }
+  ],
+  "library_bindings_verified_against": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/request-constructor-microtest-profile-1/ADMISSION.ACTUAL.json",
+  "resources": {
+    "cpu": [
+      6
+    ],
+    "planning_bytes": 2147483648,
+    "reserved_native_bytes": 12884901888,
+    "aggregate_ceiling_GiB": 22.3811,
+    "aggregate_CPU_cap": 7,
+    "ordinary_share_owner": "/root single current CPU6 share; no concurrent compiler or root observer",
+    "free_bytes": {
+      "/home/holden/mckernel": 144350887936,
+      "/home/holden/mckernel-work/scratch": 47733686272
+    },
+    "mem_available_bytes": 28464218112,
+    "old_CPU2_5_native_ownership_preserved": true
+  },
+  "no_native_release": true,
+  "held_exclusions": "generic_c/direct-TID/terminate_host and execve transfer/ACK; whole signal selector stays OFF",
+  "full_access": "danger-full-access/never inherited and previously confirmed"
+}

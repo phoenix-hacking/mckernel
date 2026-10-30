@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T06:01:35.091405+00:00",
+  "status": "PRE_SUDO_LOCAL_ANCESTRY_ASSERTION_FAILED_NO_PHYSICAL_ACTION",
+  "failed_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1",
+  "uid": 1000,
+  "gid": 1000,
+  "mode": "0775",
+  "ACL": "user::rwx group::rwx other::r-x",
+  "mount": "rw ext4 /dev/nvme0n1p2",
+  "cause": "The dispatcher used a blanket group-write rejection before checking whether the owning group grants any additional writer. This was a local preflight assertion, not a permission denial or controller/service hold.",
+  "operation_outputs_created": false,
+  "sudo_or_query_run": false,
+  "operation_nonce_consumed": false,
+  "correction_evidence": {
+    "group": "holden",
+    "supplementary_members": [],
+    "primary_members": [
+      {
+        "name": "holden",
+        "uid": 1000
+      }
+    ]
+  },
+  "no_metadata_change": true
+}
