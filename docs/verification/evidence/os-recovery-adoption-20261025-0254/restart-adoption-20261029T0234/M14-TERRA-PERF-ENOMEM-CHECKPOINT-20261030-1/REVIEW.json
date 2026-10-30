@@ -1,0 +1,7 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "candidate_sha256": "89537d78c5a920ebea53bf672a23a5ea709c5147fda1d0134a0d8c466e277907",
+  "independent_source_review": "Conditional source support for standalone local event release on null descriptor allocation: selected x86 initialization and counter scan do not retain event, standalone group is self-linked, host request passes scalars, retained host handler has no event pointer, and descriptor is not published. Build/provider/ABI binding and deployed host artifact are not proven. No execution.",
+  "limitations": "Host FD and counter bit remain owned without safe rollback; host close completion may be unknown, scan/set has no established serialized reservation, and grouped lifetime remains open. Not complete failure rollback; not selected, compiled or native-qualified.",
+  "next": "Root to obtain actual controller health, current ownership and fresh one-shot admission before exact integrated compile; source owners continue only dependency-ready M14 repairs."
+}

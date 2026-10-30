@@ -1,3 +1,22 @@
+## M14 perf failure ownership cursor — 2026-10-30T10:51Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued; no new compile, behavior, production/native,
+guest, C-retirement or file credit. Private Rust patch 89537d78 frees the still
+private standalone event when descriptor allocation fails after host success,
+returning unchanged ENOMEM. Independent source review conditionally supports the
+local free against retained x86 providers; selected build/ABI and deployed host
+artifact not bound. Patch remains unselected/uncompiled and is not full rollback.
+Host FD close can have unknown completion; counter map scan/set lacks an established
+serialized owner. Neither host FD nor counter is retired by the patch. Group and
+monitor lifetimes remain open. XPMEM needs a stable partition reservation before
+TG recheck: its bucket lock cannot keep its own containing partition alive.
+
+Root owns integrated compiler admission; external supervisor owns fresh controller
+health. Current physical clearance remains UNKNOWN, with retained owners and used
+nonces preserved. Evidence: ../evidence/os-recovery-adoption-20261025-0254/
+restart-adoption-20261029T0234/M14-TERRA-PERF-ENOMEM-CHECKPOINT-20261030-1/.
+
 ## M14 engineering review — 2026-10-30T10:46Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
