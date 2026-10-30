@@ -1,3 +1,22 @@
+## M14 XPMEM and perf composite cursor — 2026-10-30T11:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued. Private source composite 5aa4827f combines
+the retained XPMEM publication composite with perf negative-host cleanup,
+descriptor initialization, standalone descriptor-ENOMEM local-event cleanup and
+paired C layout witness. Independent review confirmed exact composition and input
+bindings; descriptor initialization also affects grouped opens. No candidate was
+selected, compiled, behavior tested, mounted, production linked or native qualified.
+No C boundary or file retired. cfg(test) fixture is not installed. Validator rejects
+XPMEM nested mount; effective source map, ON/OFF selection, deployed host and ABI
+remain unproved. Perf group/FD/counter/monitor and XPMEM lifetime holds remain.
+
+External supervisor owns fresh controller health; Root owns current ownership,
+operation-specific admission and the integrated configure/compiler lane. Preserve
+all native/OCI ownership and consumed nonces. Evidence: ../evidence/
+os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-XPMEM-PERF-COMPOSITE-CHECKPOINT-20261030-1/.
+
 ## M14 descriptor pin cursor — 2026-10-30T10:57Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
