@@ -1,3 +1,33 @@
+## M14 engineering review — 2026-10-30T09:46Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 09:26:29.892–09:46:29.892 bucket: zero current-candidate kernel builds,
+production links, native qualifications, guest apps, retired C boundaries or file
+closures. M14 4/6, practical 35/35; M15 queued. Disabled inner observer successor
+rejects nonfinite/widened supplied caps and persistent callback mutations in13 mock
+cases; independent NO-GO persists for authenticated inherited caps, interruptible
+watchdog, host/container/proc/cgroup binding and outer retirement. No observer ran.
+
+Private descriptor-relative scripts materializer and expert parent-revalidation
+successor pass14+5 tiny fixtures; CLI remains disabled. Rename-away/back, later
+mutation, bind aliases, external manifest/checker authority, ownership and partial
+output durability remain open. Child receipt fault tests preserve UNKNOWN even when
+success-shaped bytes remain; the bare-receipt helper is not wired to a real owner.
+A new scripts owner branch is hard-disabled, accepts no mocked result as success;
+actual child FD/descriptor/receipt/identity and post-spawn custody remain unbound.
+Old CURRENT290 grant and workflow were not replayed.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance UNKNOWN. BUILD3/CID5487 and consumed nonces not replayed; native attempt3
+expired before claim. Root owns fresh health/admission; F03 perf actual-body fixture
+continues independently. Exact current compiler queue/first start, blocked time,
+overlap, CPU/peak and failure-to-validated-kernel-fix unmeasured; prior 418.778s
+first-stream proxy, 491.317s handoff and original30-minute baseline retained, no95%
+claim. At 09:47:31 host/scratch free 143355650048 / 47613485056 bytes; weekly81%
+used, weekly-only. Evidence: ../evidence/os-recovery-adoption-20261025-0254/
+restart-adoption-20261029T0234/M14-TERRA-ENGINEERING-REVIEW-20261030T0946-1/
+REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T09:26Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
