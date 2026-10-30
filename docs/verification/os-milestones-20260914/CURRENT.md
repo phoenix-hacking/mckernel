@@ -1,3 +1,40 @@
+## M14 actual compiler and disposition checkpoint — 2026-10-30T20:16Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same Root01a18bc3 active; included90% used, no credits/API fallback. M14 stays4/6,
+practical35/35 separate; M15 paused. Retained1cd7/0633 still23generic C definitions;
+arch5 remains historical and live selection unknown. No new default/native image.
+
+Actual compiled result:one wholeRust crate object23d7,18.87wall/18.56userCPU/
+602472KiB peak;144depinfo sources join163stagedfiles. It includes retained5aa
+XPMEM publication source, whose behavior/selection remains held. The isolated
+perfON mckfd C witness passes80/8/12/24/72,0runtimeFUNC,75headers;0.03wall,
+23556KiB peak. Matching11input link remains held:oldgenericobject carries the
+heldexec-tail selector. No new genericC/execve command or held selector is replayed.
+
+Two private perf modules pass wholecrate frontend;four reviewed lookup/dup/fd/
+alignment corrections then pass affected rerun8c8e:3.03wall/2.87userCPU/469444KiB.
+Metadata is not machinecode/default/ABI/native proof. Actual new source regressions:
+6callback cases and21close/consumer/lockorder cases PASS under separate bound
+interpreters. Peak19728/21436KiB; positive terminals and emptygroups release only
+ordinaryCPU6 shares. Aborted clock-preflight evidence retained; guardian's actual
+conservative effectiveclock contract is respected without changing its controls.
+
+Production-link/OS-behavior/native-qualified/C-retired/file-accepted deltas0.
+First observed resumed compiler6101.410s afterresume;grant-to-observation<=9.652s,
+processbirth proxy0.43s, exactqueue-to-exec unknown. Original30min baseline and
+adjacent20min buckets retained; no95% claim. Largest avoidable compiler/SDK
+handoff duration unmeasured. Scheduling:readyCPU6 compiler independent of native;
+explicitlygranted lighttests canrun whileRoot checkpoints, neverduplicate slots.
+
+Root currentfree/later-operation custody/V2birthUNKNOWN and fullscriptsunion/
+fourhostroots/effectivemountedview remain actual physical blockers;2GiB V2 and
+native12GiB/scratch21/permanent27:4 remain owned. SDK source lockorder review and
+21mocked cases are useful source proof, not rootactivation/retirement. NEXT Root:
+verifiedpush, then actual supervisor install/source binding or readycredential
+frontend through solecompositor; no metadataonlyprobe ascurrentfree substitute.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FIRST-RESUMED-COMPILER-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 projection, owner and toolchain checkpoint — 2026-10-30T19:33Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

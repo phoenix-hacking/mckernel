@@ -1,0 +1,58 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_AFFECTED_FRONTEND_OWNER4_PARTICIPANTS2",
+  "at": 1793391182.9536333,
+  "exit_status": 0,
+  "positive_tool_terminal": true,
+  "owner": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "pid": 3048780,
+    "ppid": 2996005,
+    "pgid": 3048780,
+    "start": "118855810",
+    "at": 1793391113.4638326,
+    "role": "tool-owned no-Pythonfork fresh affected perf frontend rerun"
+  },
+  "inner_owner": {
+    "pid": 3048782,
+    "ppid": 3048781,
+    "start": "118855816",
+    "state": "R"
+  },
+  "censused_groups": [
+    3048780,
+    3048782
+  ],
+  "timeout_group_members": [],
+  "grant_released": true,
+  "ordinary_reservation_released_bytes": 4294967296,
+  "source_rows": 165,
+  "unique_depinfo_sources": 146,
+  "metadata_bytes": 7353883,
+  "metadata_sha256": "8c8e31677dc1f517de5e562a7c188bc588f1dddc51ebb7633c5d0984d6d24d91",
+  "outer_wall_seconds": 3.45,
+  "outer_user_cpu_seconds": 3.03,
+  "outer_system_cpu_seconds": 0.24,
+  "peak_rss_kib": 469444,
+  "changed_sources": [
+    "perf_group_owner.rs owner4 1ae7b90a48bb80e7b08e034c77332c2d4300fee3649ce1578e46c90106cd8ed6",
+    "perf_descriptor_participants.rs participants2 b2b2c3ca6ead9bbe630f94d1937a8abf4e73d92f30d3544b07cdf126dacb4da0"
+  ],
+  "source_findings_addressed": [
+    "absent vs invalid lookup, fail-closed close disposition",
+    "null dup callback enforced",
+    "destination fd uniqueness",
+    "prewrite allocator alignment and returned raw custody"
+  ],
+  "Rust_private_modules_retypechecked": 2,
+  "compiled_machine_code_delta": 0,
+  "new_original_C_function_replacements_selected_delta": 0,
+  "production_link_delta": 0,
+  "native_qualified_delta": 0,
+  "C_retirement_delta": 0,
+  "limits": [
+    "frontend metadata only; no production caller or C selector",
+    "functional behavior/ABI/native proof and record drain/host/descriptor/fork/monitor ownership remain open",
+    "trusted platform/static toolmanifest diagnostic limits inherited"
+  ]
+}

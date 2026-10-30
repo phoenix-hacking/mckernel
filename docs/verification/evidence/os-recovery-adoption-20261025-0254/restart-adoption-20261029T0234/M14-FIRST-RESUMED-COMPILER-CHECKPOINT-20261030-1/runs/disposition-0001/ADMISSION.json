@@ -1,0 +1,179 @@
+{
+  "actors": {
+    "capacity": {
+      "pid": 2996161,
+      "start": "118034604",
+      "state": "S"
+    },
+    "guardian": {
+      "pid": 2996157,
+      "start": "118034389",
+      "state": "S"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "start": "118034501",
+      "state": "S"
+    },
+    "server": {
+      "pid": 2996005,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "TMPDIR=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=128",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_actual_close",
+    "test_validator_consumer",
+    "test_lock_order"
+  ],
+  "at": 1793391278.455127,
+  "caps": {
+    "boot_deadline": 1571567.6959065471,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556229.568859425
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1",
+  "free_bytes": {
+    "host": 142542753792,
+    "scratch": 47613485056
+  },
+  "grant": {
+    "cpu": [
+      6
+    ],
+    "cpu_seconds": 30,
+    "heavy_lease": false,
+    "jobs": 1,
+    "max_address_space_bytes": 536870912,
+    "native_access": false,
+    "wall_seconds": 45
+  },
+  "grant_id": "ROOT_LIGHT_TEST_DISPOSITION21_20261030",
+  "graph_sha256": "a0c5c4d0222fac7906a1591449efefab36d9f97a076a9cc47c913de06614ea1b",
+  "guardian_effective_clock": {
+    "journal": 1793391285.7644463,
+    "lower": 1793391288.4473903,
+    "upper": 1793391288.4474375
+  },
+  "mem_available_bytes": 27441754112,
+  "nonce": "2a3d0c3647b7bf5f1969ed2106dd79491fe83f0fda52547ca374bd6d25bff03a",
+  "review_sha256": "d2b69cd13d4a38f4dc6e043417794f12bc8ee3bb6e41b66397c56f03a2f00f46",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_exclusion": "Root-reviewed disjoint source; manifest rechecked before exec; no filesystem lock claimed",
+  "source_manifest_sha256": "9e643192dec39fb7ce5f3f9c020a1e3d1063688be1d8aa3599fc9fe5f267d407",
+  "sources": {
+    "GRAPH-CONTRACT.json": "d4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd",
+    "SOURCE-DELTA.patch": "290b971a199432bcef4b0c421d4365c7f60a674bf7369bee7edfd86b1a2a6408",
+    "adapter.py": "c15978cbfa06921bd3bb6c4e6cf49827e7032fe8536646590945cc000a1711e9",
+    "compositor.py": "b06705c0b35119125a7d08381bc409bc31bffbb1ad6903252c8cfb9a1927f5f4",
+    "custody_protocol_v2.py": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb",
+    "deferred_fork.py": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f",
+    "graph_observations.py": "a0c5c4d0222fac7906a1591449efefab36d9f97a076a9cc47c913de06614ea1b",
+    "operation_supervisor.py": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90",
+    "operation_watchdog.py": "6f1ddee0c59588413f5c8a70600f2d24ad2131684228ba8c71bffe4a7442183c",
+    "ownership_latch.py": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390",
+    "pidfd_compat.py": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+    "pidfd_custody.py": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e",
+    "root_bootstrap.py": "66b8aba3242efb03b52badee7a10bb3dd304bceeff94e12bc95bca9f7b55461b",
+    "runtime_binding.py": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414",
+    "supervisor_entry.py": "e85c03563699d3ea08d1f3b3eaaaa56c6cf47f59a6aeead43ec1f1951d99ab4c",
+    "test_actual_close.py": "afd1ae2693155ebdfd0ee023bec8c5e360ddf46c89f904641abdb76cea63a906",
+    "test_callback_handoff.py": "c529a06971df496c733ae9c5dc5662f1a71f7e40cd2ffa1bf547823406434859",
+    "test_lock_order.py": "217345fa2efe050633a58d6713f2db128ec0d1c08c8ef84bb38246ce1cbff8a8",
+    "test_validator_consumer.py": "293e667db1126ff89bbe5776671e223c3976d4168bd511bcc2841e46f431132e",
+    "validator_consumer.py": "81ba58db539eb35651bd8cfe284d0f5d558a12d2a6308c76d66a1d88f40dc0cd",
+    "validator_entry.py": "94ab9992b574d472ed47186d122668e436cf80c31cfc81440be84bc8b8047290"
+  },
+  "status": "THREE_SYNTHETIC_MODULES_PRE_EXEC",
+  "tools": {
+    "/usr/bin/env": {
+      "device": 66306,
+      "inode": 1048858,
+      "mode": 33261,
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "uid": 0
+    },
+    "/usr/bin/prlimit": {
+      "device": 66306,
+      "inode": 1052683,
+      "mode": 33261,
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "uid": 0
+    },
+    "/usr/bin/python3.8": {
+      "device": 66306,
+      "inode": 1048651,
+      "mode": 33261,
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "uid": 0
+    },
+    "/usr/bin/taskset": {
+      "device": 66306,
+      "inode": 1052691,
+      "mode": 33261,
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "uid": 0
+    },
+    "/usr/bin/time": {
+      "device": 66306,
+      "inode": 1049782,
+      "mode": 33261,
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "uid": 0
+    },
+    "/usr/bin/timeout": {
+      "device": 66306,
+      "inode": 1049784,
+      "mode": 33261,
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "uid": 0
+    }
+  },
+  "weekly": {
+    "at": "2026-10-30T20:14:34.043871+00:00",
+    "resetsAt": 1793774133,
+    "usedPercent": 90,
+    "windowDurationMins": 10080
+  }
+}

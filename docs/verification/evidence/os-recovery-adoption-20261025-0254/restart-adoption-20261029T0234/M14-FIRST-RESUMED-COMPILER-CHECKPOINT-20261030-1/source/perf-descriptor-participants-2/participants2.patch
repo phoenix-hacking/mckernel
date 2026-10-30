@@ -1,0 +1,145 @@
+--- a/kernel/rust/perf_descriptor_participants.rs
++++ b/kernel/rust/perf_descriptor_participants.rs
+@@ -8,12 +8,14 @@
+ 
+ const EINVAL: CInt = 22;
+ const ENOMEM: CInt = 12;
++const EEXIST: CInt = 17;
+ 
+ /// This intentionally has no drain. It owns records permanently until a separately
+ /// reviewed finalization/quarantine owner is wired. Do not select for production.
+ struct Record { next: *mut Record, payload: Payload }
+ enum Payload {
+     Vacant,
++    MisalignedRegistration {raw:*mut c_void},
+     FreshRejected {event:*mut FullMcPerfEvent, event_owner:*mut owner::EventOwner,
+         group:*mut owner::GroupOwner, error:CInt},
+     StandaloneRejected {descriptor:*mut Mckfd, registration:*mut owner::Registration,
+@@ -65,6 +67,12 @@
+ }
+ unsafe fn lock(proc:*mut Process)->CLong {super::syscall_mckfd_lock_bridge(addr_of_mut!((*proc).mckfd_lock).cast())}
+ unsafe fn unlock(proc:*mut Process,irq:CLong) {super::syscall_mckfd_unlock_bridge(addr_of_mut!((*proc).mckfd_lock).cast(),irq)}
++/// Caller holds this process's descriptor lock and supplies a live list.
++unsafe fn fd_exists_locked(proc:*mut Process,fd:CInt)->bool {
++    let mut cur=(*proc).mckfd.cast::<Mckfd>();
++    while !cur.is_null() {if (*cur).fd==fd {return true;} cur=(*cur).next;}
++    false
++}
+ 
+ /// A successful group lookup owns its operation pin plus a preallocated record.
+ /// A member-FD result is preserved distinctly; this adapter does not choose its
+@@ -107,6 +115,8 @@
+         return Err(-EINVAL);
+     }
+     let irq=lock(proc);
++    if fd_exists_locked(proc,(*desc).fd) {unlock(proc,irq);
++        retain(record,Payload::PublishRejected {descriptor:desc,registration:reg,error:-EEXIST,lease});return Err(-EEXIST);}
+     let outcome=owner::register_descriptor_locked(desc,reg,lease,callbacks());
+     match outcome {
+         Ok(_key)=>{(*desc).next=(*proc).mckfd.cast(); (*proc).mckfd=desc.cast();
+@@ -122,6 +132,20 @@
+ pub(super) unsafe fn reserve_record()->Result<RecordReservation,CInt> {Ok(RecordReservation{record:new_record()?})}
+ /// Only for a reservation before any owned input was transferred into it.
+ pub(super) unsafe fn cancel_unused_reservation(reservation:RecordReservation) {free_vacant(reservation.record)}
++/// A misaligned tracked allocation is never dereferenced or discarded: retain
++/// its exact raw pointer for the separately reviewed allocator/custody owner.
++pub(super) unsafe fn allocate_registration_reserved(reservation:RecordReservation)->Result<*mut owner::Registration,CInt> {
++    finish_registration_allocation(reservation.record,owner::allocate_registration())
++}
++unsafe fn finish_registration_allocation(record:*mut Record,
++    result:Result<*mut owner::Registration,owner::RegistrationAllocationError>)->Result<*mut owner::Registration,CInt> {
++    match result {
++        Ok(reg)=>{free_vacant(record);Ok(reg)},
++        Err(owner::RegistrationAllocationError::NoMemory)=>{free_vacant(record);Err(-ENOMEM)},
++        Err(owner::RegistrationAllocationError::Oversize)=>{free_vacant(record);Err(-EINVAL)},
++        Err(owner::RegistrationAllocationError::Misaligned {raw})=>{retain(record,Payload::MisalignedRegistration {raw});Err(-EINVAL)},
++    }
++}
+ pub(super) unsafe fn publish_reserved(proc:*mut Process,desc:*mut Mckfd,reg:*mut owner::Registration,
+     lease:owner::DescriptorLease,reservation:RecordReservation)->Result<CInt,CInt> {
+     publish_descriptor(proc,desc,reg,lease,reservation.record)
+@@ -169,6 +193,8 @@
+         retain(record,Payload::StandaloneRejected {descriptor:desc,registration:reg,pending,error:-EINVAL});return Err(-EINVAL);
+     }
+     let irq=lock(proc);
++    if fd_exists_locked(proc,(*desc).fd) {unlock(proc,irq);
++        retain(record,Payload::StandaloneRejected {descriptor:desc,registration:reg,pending,error:-EEXIST});return Err(-EEXIST);}
+     let lease=match owner::commit_standalone_locked(pending) {Ok(l)=>l,Err((e,pending))=>{
+         unlock(proc,irq);retain(record,Payload::StandaloneRejected {descriptor:desc,registration:reg,pending,error:e});return Err(e);}};
+     match owner::register_descriptor_locked(desc,reg,lease,callbacks()) {
+@@ -196,6 +222,8 @@
+         owner::AcquiredGroup::Member {..}=>{retain(record,Payload::MemberRejected {
+             descriptor:desc,registration:reg,member,error:-EINVAL}); return Err(-EINVAL);}};
+     let irq=lock(proc);
++    if fd_exists_locked(proc,(*desc).fd) {unlock(proc,irq);
++        retain(record,Payload::MemberRejected {descriptor:desc,registration:reg,member,error:-EEXIST});return Err(-EEXIST);}
+     let lease=match owner::publish_member_locked(pin,member) {Ok(p)=>p,Err(e)=>{
+         unlock(proc,irq); retain(record,Payload::MemberRejected {descriptor:desc,registration:reg,member,error:e}); return Err(e);}};
+     match owner::register_descriptor_locked(desc,reg,lease,callbacks()) {
+@@ -231,13 +259,22 @@
+     if cur.is_null() || !(*src).dup_cb.is_null() {
+         unlock(parent,irq); retain(record,Payload::CloneInputRejected {descriptor:dst,registration:reg,error:-EINVAL}); return Err(-EINVAL);
+     }
+-    let key=match owner::registration_key_locked(src) {Ok(k)=>k,Err(e)=>{unlock(parent,irq);
+-        retain(record,Payload::CloneInputRejected {descriptor:dst,registration:reg,error:e}); return Err(e);}};
++    let key=match owner::registration_lookup_locked(src) {owner::RegistrationLookup::Found(k)=>k,
++        owner::RegistrationLookup::Absent=>{unlock(parent,irq);retain(record,Payload::CloneInputRejected {descriptor:dst,registration:reg,error:-EINVAL});return Err(-EINVAL);},
++        owner::RegistrationLookup::Invalid(e)=>{unlock(parent,irq);retain(record,Payload::CloneInputRejected {descriptor:dst,registration:reg,error:e});return Err(e);}};
+     let lease=match owner::duplicate_registered_locked(src,key) {Ok(p)=>p,Err(e)=>{unlock(parent,irq);
+         retain(record,Payload::CloneInputRejected {descriptor:dst,registration:reg,error:e});return Err(e);}};
+     core::ptr::copy_nonoverlapping(src,dst,1); (*dst).opt=null_mut(); (*dst).next=null_mut();
+     unlock(parent,irq);
+     let child_irq=lock(child);
++    if fd_exists_locked(child,(*dst).fd) {
++        let rolled=owner::abort_unpublished_lease(lease); unlock(child,child_irq);
++        match rolled {
++            Ok(removed)=>{let outcome=owner::finish_detach(removed);retain(record,Payload::CloneAbort {descriptor:dst,registration:reg,outcome});},
++            Err((error,lease))=>retain(record,Payload::CloneRejected {descriptor:dst,registration:reg,error,lease}),
++        }
++        return Err(-EEXIST);
++    }
+     match owner::register_descriptor_locked(dst,reg,lease,callbacks()) {
+         Ok(_)=>{(*dst).next=(*child).mckfd.cast(); (*child).mckfd=dst.cast();
+             unlock(child,child_irq); free_vacant(record); Ok(())},
+@@ -252,21 +289,31 @@
+     }
+ }
+ 
+-/// Detach only a registered perf descriptor; leave unrelated descriptors intact.
+-/// Current sys_close calls tofu helper under lock then callback/free/forward; this
+-/// adapter neither calls nor replaces those operations. Its record keeps their
+-/// descriptor and group outcome until exact close, host and finalizer ownership is
+-/// established. A process must remain live through this entire call.
+-pub(super) unsafe fn detach_for_close(proc:*mut Process,fd:CInt,reservation:RecordReservation)->Result<bool,CInt> {
++/// The unregistered variants are NOT permission for a legacy callback/free.
++/// A separate type/provenance owner must positively classify the descriptor.
++#[derive(Debug,PartialEq,Eq)]
++pub(super) enum CloseDisposition { NoDescriptor, MissingPerfRegistration, NeedsNonperfProof, Detached }
++/// A fingerprint is solely a reason to stop, not proof of provider identity.
++unsafe fn perf_fingerprint(desc:*mut Mckfd)->bool {
++    let c=callbacks(); (*desc).read_cb==c.read || (*desc).ioctl_cb==c.ioctl || (*desc).mmap_cb==c.mmap
++        || (*desc).close_cb==c.close || (*desc).fcntl_cb==c.fcntl
++}
++/// No legacy handling, callback, host forward, free, or syscall result here.
++pub(super) unsafe fn detach_for_close(proc:*mut Process,fd:CInt,reservation:RecordReservation)->Result<CloseDisposition,CInt> {
+     let record=reservation.record;
+     if proc.is_null() {free_vacant(record);return Err(-EINVAL);}
+     let irq=lock(proc); let mut prev:*mut Mckfd=null_mut(); let mut cur=(*proc).mckfd.cast::<Mckfd>();
+     while !cur.is_null() && (*cur).fd!=fd {prev=cur;cur=(*cur).next;}
+-    if cur.is_null() {unlock(proc,irq);free_vacant(record);return Ok(false);}
+-    let key=match owner::registration_key_locked(cur) {Ok(k)=>k,Err(_)=>{unlock(proc,irq);free_vacant(record);return Ok(false);}};
++    if cur.is_null() {unlock(proc,irq);free_vacant(record);return Ok(CloseDisposition::NoDescriptor);}
++    let key=match owner::registration_lookup_locked(cur) {
++        owner::RegistrationLookup::Found(k)=>k,
++        owner::RegistrationLookup::Absent=>{let disposition=if perf_fingerprint(cur) {CloseDisposition::MissingPerfRegistration}
++            else {CloseDisposition::NeedsNonperfProof};unlock(proc,irq);free_vacant(record);return Ok(disposition);},
++        owner::RegistrationLookup::Invalid(e)=>{unlock(proc,irq);free_vacant(record);return Err(e);},
++    };
+     let removed=match owner::unregister_descriptor_locked(cur,key) {Ok(r)=>r,Err(e)=>{unlock(proc,irq);free_vacant(record);return Err(e);}};
+     if prev.is_null() {(*proc).mckfd=(*cur).next.cast();} else {(*prev).next=(*cur).next;}
+     (*cur).next=null_mut(); unlock(proc,irq);
+     let outcome=owner::finish_detach(removed);
+-    retain(record,Payload::Close {descriptor:cur,outcome}); Ok(true)
+-}
++    retain(record,Payload::Close {descriptor:cur,outcome}); Ok(CloseDisposition::Detached)
++}

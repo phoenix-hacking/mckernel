@@ -1,0 +1,14 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36986,3 +36986,11 @@
+ #[cfg(f06_signal_leaf_adapters_candidate)]
+ #[path = "syscall_signal_leaf_adapters.rs"]
+ mod syscall_signal_leaf_adapters;
++
++// Private HOST type-check composition only; no runtime caller or selector.
++#[cfg(all(enable_perf, f03_perf_owner_typecheck_only))]
++#[path = "perf_group_owner.rs"]
++mod perf_group_owner;
++#[cfg(all(enable_perf, f03_perf_owner_typecheck_only))]
++#[path = "perf_descriptor_participants.rs"]
++mod perf_descriptor_participants;

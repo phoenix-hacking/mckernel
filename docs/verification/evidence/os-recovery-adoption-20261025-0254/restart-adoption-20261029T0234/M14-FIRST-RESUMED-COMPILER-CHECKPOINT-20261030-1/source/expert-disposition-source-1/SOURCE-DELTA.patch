@@ -1,0 +1,694 @@
+--- close-state-correction-1/adapter.py	2026-10-30 12:58:01.886460956 -0700
++++ expert-disposition-source-1/adapter.py	2026-10-30 13:03:03.279641685 -0700
+@@ -4,7 +4,7 @@
+ import hashlib
+ import pidfd_compat
+ import deferred_fork
+-from pidfd_custody import PidfdCustodyRecord,PublicationUnknown
++from pidfd_custody import PidfdCustodyRecord,SocketDupRecord,PublicationUnknown
+ import fcntl
+ import json
+ import math
+@@ -150,12 +150,18 @@
+     A successful result authenticates a supervisor statement at a bounded instant;
+     it is not permission to launch or proof of custody after this channel ends.
+     """
+-    def __init__(self, fd, pidfd_record):
++    def __init__(self, fd, pidfd_record, owner):
+         if type(pidfd_record) is not PidfdCustodyRecord or pidfd_record.state!='REGISTERED':
+             fail('caller-owned pre-registered pidfd custody required')
+-        self.pidfd_record=pidfd_record
++        if (getattr(owner,'session',None) is not self or getattr(owner,'record',None) is not pidfd_record or
++            type(getattr(owner,'duplicate',None)) is not SocketDupRecord):
++            fail('pre-owned operation and duplicate record required')
++        self.pidfd_record=pidfd_record;self.owner=owner;self.duplicate=owner.duplicate
+         self.closed=False;self.close_state='OPEN';self.sock=None;self.session_lock=threading.RLock()
+-        self.sock = socket.socket(fileno=os.dup(fd))
++        with owner.lock:
++            if owner.state=='UNKNOWN_RETAINED':fail('operation already unknown')
++            with deferred_fork.DeferredFork() as guard:
++                self.sock=guard.duplicate_and_adopt(self.duplicate,fd)
+         self.wire = load_wire()
+         try:
+             if self.sock.family != socket.AF_UNIX or self.sock.getsockopt(socket.SOL_SOCKET, socket.SO_TYPE) != socket.SOCK_STREAM:
+@@ -278,22 +284,32 @@
+         return self.data
+ 
+     def close(self,owner):
+-        with self.session_lock:
+-            if (getattr(owner,'session',None) is not self or getattr(owner,'record',None) is not self.pidfd_record or
+-                getattr(owner,'state',None)=='UNKNOWN_RETAINED'):
+-                raise RuntimeError('caller-owned disposition required')
+-            if self.close_state!='OPEN':raise RuntimeError('close already attempted or unavailable')
+-            self.close_state='CLOSING'
+-            try:
+-                with deferred_fork.DeferredFork() as guard:
+-                    guard.close_session(self.pidfd_record,self.sock)
+-            except BaseException:
+-                self.close_state='CLOSURE_UNKNOWN'
+-                if self.pidfd_record.state in ('VERIFIED_HELD','CLOSING','VERIFIED_CLOSED'):
+-                    try:self.pidfd_record.closure_unknown()
+-                    except BaseException as error:self.close_publication_error=error
+-                raise
+-            if self.pidfd_record.state!='VERIFIED_CLOSED':
+-                self.close_state='CLOSURE_UNKNOWN'
+-                raise RuntimeError('close disposition unavailable')
+-            self.closed=True;self.close_state='VERIFIED_CLOSED'
++        # Lock order is operation -> session -> pidfd -> socket record.
++        with owner.lock:
++            with self.session_lock:
++                if (owner is not self.owner or getattr(owner,'session',None) is not self or
++                    getattr(owner,'record',None) is not self.pidfd_record or owner.duplicate is not self.duplicate or
++                    owner.state=='UNKNOWN_RETAINED'):
++                    raise RuntimeError('caller-owned disposition required')
++                if self.close_state!='OPEN':raise RuntimeError('close already attempted or unavailable')
++                self.close_state='CLOSING'
++                try:
++                    with deferred_fork.DeferredFork() as guard:
++                        guard.close_session(self.pidfd_record,self.duplicate)
++                except BaseException:
++                    self.close_state='CLOSURE_UNKNOWN'
++                    if self.pidfd_record.state in ('VERIFIED_HELD','CLOSING','VERIFIED_CLOSED'):
++                        try:self.pidfd_record.closure_unknown()
++                        except BaseException as error:self.close_publication_error=error
++                    if self.duplicate.state in ('DUPLICATED','ADOPTED','CLOSING'):
++                        try:self.duplicate.closure_unknown()
++                        except BaseException as error:self.socket_publication_error=error
++                    raise
++                if (self.pidfd_record.state!='VERIFIED_CLOSED' or self.duplicate.state!='VERIFIED_CLOSED'):
++                    self.close_state='CLOSURE_UNKNOWN'
++                    raise RuntimeError('close disposition unavailable')
++                # Reentrant configured-stop handlers may latch UNKNOWN while
++                # restoring the mask. Keep the confirmed dispositions, never
++                # restore live status, and propagate the owner failure.
++                self.closed=True;self.close_state='VERIFIED_CLOSED'
++                if owner.state=='UNKNOWN_RETAINED':raise RuntimeError('operation failed after local close')
+--- close-state-correction-1/compositor.py	2026-10-30 12:57:08.364842989 -0700
++++ expert-disposition-source-1/compositor.py	2026-10-30 13:03:03.279641685 -0700
+@@ -135,33 +135,50 @@
+     """Caller retains this operation object and its pre-registered FD record."""
+     def __init__(self,journal_fd,nonce):
+         _require(type(journal_fd) is int and journal_fd>=0,'inherited custody journal required')
+-        self.journal_fd=journal_fd;self.nonce=nonce;self.record=None;self.session=None;self.plan=None;self.state='ALLOCATED'
++        self.lock=threading.RLock();self.journal_fd=journal_fd;self.nonce=nonce;self.record=None;self.duplicate=None;self.session=None;self.plan=None;self.state='ALLOCATED'
+ 
+     def reserve(self,adapter):
+-        _require(self.state=='ALLOCATED' and self.record is None,'operation custody already used')
+-        self.record=adapter.PidfdCustodyRecord(self.journal_fd,self.nonce)
+-        self.state='REGISTERED'
+-        return self.record
++        with self.lock:
++            _require(self.state=='ALLOCATED' and self.record is None,'operation custody already used')
++            self.record=adapter.PidfdCustodyRecord(self.journal_fd,self.nonce)
++            self.duplicate=adapter.SocketDupRecord(self.record)
++            self.state='REGISTERED'
++            return self.record
+ 
+     def bind_session(self,session):
+-        _require(self.state=='REGISTERED' and self.session is None,'session custody already used')
+-        self.session=session
++        with self.lock:
++            _require(self.state=='REGISTERED' and self.session is None,'session custody already used')
++            self.session=session
+ 
+     def retain_unknown(self):
+-        _require(self.record is not None and self.record.state=='UNKNOWN_RETAINED','no uncertain pidfd record')
+-        self.state='UNKNOWN_RETAINED'
+-        with _UNKNOWN_LOCK:
+-            if self not in _UNKNOWN_OWNERS:_UNKNOWN_OWNERS.append(self)
++        with self.lock:
++            _require(self.record is not None and self.record.state=='UNKNOWN_RETAINED','no uncertain pidfd record')
++            self.state='UNKNOWN_RETAINED'
++            with _UNKNOWN_LOCK:
++                if self not in _UNKNOWN_OWNERS:_UNKNOWN_OWNERS.append(self)
+ 
+     def retain_session_unknown(self,session,plan=None):
+-        # Preserve references first, including partial close outcomes.
+-        self.session=session;self.plan=plan;self.state='UNKNOWN_RETAINED'
+-        with _UNKNOWN_LOCK:
+-            if self not in _UNKNOWN_OWNERS:_UNKNOWN_OWNERS.append(self)
++        # Operation lock is outermost, then session then record; no live state
++        # may be restored after an unknown or a completed disposition.
++        with self.lock:
++            self.session=session;self.plan=plan;self.state='UNKNOWN_RETAINED'
++            with _UNKNOWN_LOCK:
++                if self not in _UNKNOWN_OWNERS:_UNKNOWN_OWNERS.append(self)
++            lock=getattr(session,'session_lock',None)
++            if lock is None:
++                self._retain_records_unknown()
++            else:
++                with lock:self._retain_records_unknown()
++
++    def _retain_records_unknown(self):
+         record=self.record
+         if record is not None and record.state=='VERIFIED_HELD':
+             try:record.retain_unknown(record.fd,record.target_pid,record.target_birth)
+             except BaseException as error:self.publication_error=error
++        dup=self.duplicate
++        if dup is not None and dup.state in ('DUPLICATED','ADOPTED','CLOSING'):
++            try:dup.closure_unknown()
++            except BaseException as error:self.socket_publication_error=error
+ 
+     def retire(self):
+         raise RuntimeError('no authority to retire uncertain pidfd custody')
+@@ -184,7 +201,7 @@
+     session=adapter.CustodySession.__new__(adapter.CustodySession)
+     operation_custody.bind_session(session)
+     try:
+-        session.__init__(fd,record)
++        session.__init__(fd,record,operation_custody)
+     except BaseException:
+         operation_custody.retain_session_unknown(session)
+         raise
+@@ -196,8 +213,10 @@
+         _require(second==first and not session.closed,'custody revalidation differs')
+         # Session ownership transfers to caller; this does not release any lease.
+         plan=SourcePlan(session,first,profile)
+-        operation_custody.plan=plan
+-        return plan
++        with operation_custody.lock:
++            _require(operation_custody.state!='UNKNOWN_RETAINED','operation failed before plan handoff')
++            operation_custody.plan=plan
++            return plan
+     except BaseException:
+         operation_custody.retain_session_unknown(session)
+         raise
+--- close-state-correction-1/deferred_fork.py	2026-10-30 12:58:01.886460956 -0700
++++ expert-disposition-source-1/deferred_fork.py	2026-10-30 13:02:45.439095608 -0700
+@@ -3,11 +3,12 @@
+ """
+ import os
+ import signal
++import socket
+ import threading
+ import graph_observations as obs
+ import pidfd_compat
+ from ownership_latch import ChildRecord
+-from pidfd_custody import PidfdCustodyRecord,PublicationUnknown
++from pidfd_custody import PidfdCustodyRecord,SocketDupRecord,PublicationUnknown
+ 
+ STOPS=(signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT)
+ _LOCK=threading.Lock()
+@@ -26,7 +27,7 @@
+     """
+     def __init__(self):
+         self.saved={};self.captured=[];self.original_mask=None
+-        self.acquired=False;self.entered=False;self.forked=False;self.fd_record=None;self.close_record=None
++        self.acquired=False;self.entered=False;self.forked=False;self.fd_record=None;self.close_record=None;self.socket_record=None
+ 
+     def _capture(self,signum,frame):
+         self.captured.append(signum)
+@@ -82,6 +83,12 @@
+                         self.close_record.closure_unknown()
+                 except BaseException as exc:
+                     if error is None:error=exc
++            if self.original_mask is not None and not child and self.socket_record is not None:
++                try:
++                    if self.socket_record.state in ('DUPLICATED','ADOPTED','CLOSING','VERIFIED_CLOSED') and (self.captured or set(signal.sigpending()).intersection(STOPS)):
++                        self.socket_record.closure_unknown()
++                except BaseException as exc:
++                    if error is None:error=exc
+             if self.original_mask is not None:
+                 try:signal.pthread_sigmask(signal.SIG_SETMASK,self.original_mask)
+                 except BaseException as exc:
+@@ -104,8 +111,16 @@
+                 if kind is not None or self.captured or set(signal.sigpending()).intersection(STOPS):
+                     self.close_record.closure_unknown()
+         except BaseException as error:failure=error
++        try:
++            if self.socket_record is not None and self.socket_record.state in ('DUPLICATED','ADOPTED','CLOSING','VERIFIED_CLOSED'):
++                if kind is not None or self.captured or set(signal.sigpending()).intersection(STOPS):
++                    self.socket_record.closure_unknown()
++        except BaseException as error:failure=error
+         try:self._restore(False)
+         except BaseException as error:
++            if self.socket_record is not None and self.socket_record.state in ('DUPLICATED','ADOPTED','CLOSING','VERIFIED_CLOSED'):
++                try:self.socket_record.closure_unknown()
++                except BaseException as publication:failure=publication
+             if self.close_record is not None and self.close_record.state in ('CLOSING','VERIFIED_CLOSED'):
+                 try:self.close_record.closure_unknown()
+                 except BaseException as publication:failure=publication
+@@ -114,6 +129,8 @@
+                 except BaseException as publication:failure=publication
+             if failure is None:failure=error
+         if failure is not None:raise failure
++        if kind is None and self.socket_record is not None and self.socket_record.state=='CLOSURE_UNKNOWN':
++            raise StopDuringAcquisition('uncertain socket disposition')
+         if kind is None and self.close_record is not None and self.close_record.state=='CLOSURE_UNKNOWN':
+             raise StopDuringAcquisition('uncertain session close')
+         if kind is None and self.fd_record is not None and self.fd_record.state=='UNKNOWN_RETAINED':
+@@ -140,23 +157,42 @@
+         record.retain_verified(fd,pid,birth)
+         return fd
+ 
+-    def close_session(self,record,sock):
+-        if not self.entered or self.forked or type(record) is not PidfdCustodyRecord:
+-            raise RuntimeError('guard and owned record required')
++    def duplicate_and_adopt(self,record,source_fd):
++        if not self.entered or self.forked or type(record) is not SocketDupRecord or record.state!='REGISTERED':
++            raise RuntimeError('pre-owned socket duplicate record required')
++        self.forked=True;self.socket_record=record
++        try:
++            if self.captured or set(signal.sigpending()).intersection(STOPS):
++                record.closure_unknown();raise StopDuringAcquisition('stop before duplicate')
++            fd=os.dup(source_fd)
++            record.assigned(fd)
++            sock=socket.socket(fileno=fd)
++            record.adopted(sock)
++            return sock
++        except BaseException:
++            if record.state!='CLOSURE_UNKNOWN':record.closure_unknown()
++            raise
++
++    def close_session(self,record,socket_record):
++        if not self.entered or self.forked or type(record) is not PidfdCustodyRecord or type(socket_record) is not SocketDupRecord:
++            raise RuntimeError('guard and owned records required')
+         if record.state!='VERIFIED_HELD':raise RuntimeError('pidfd unavailable for close')
+-        self.forked=True;self.close_record=record
++        if socket_record.state!='ADOPTED':raise RuntimeError('socket unavailable for close')
++        self.forked=True;self.close_record=record;self.socket_record=socket_record
+         try:
+             if self.captured or set(signal.sigpending()).intersection(STOPS):
+-                record.closure_unknown()
++                record.closure_unknown();socket_record.closure_unknown()
+                 raise StopDuringAcquisition('stop before session close')
+             with record.lock:
+-                record.begin_close()
+-                sock.close()
+-                os.close(record.fd)
+-                record.closed_after_syscall()
++                with socket_record.lock:
++                    record.begin_close();socket_record.begin_close()
++                    socket_record.socket.close();socket_record.closed_after_syscall()
++                    os.close(record.fd);record.closed_after_syscall()
+         except BaseException:
+             if record.state in ('VERIFIED_HELD','CLOSING','VERIFIED_CLOSED'):
+                 record.closure_unknown()
++            if socket_record.state in ('ADOPTED','CLOSING'):
++                socket_record.closure_unknown()
+             raise
+ 
+     def fork_and_pin(self,record,child_callback):
+--- close-state-correction-1/pidfd_custody.py	2026-10-30 12:57:08.392843835 -0700
++++ expert-disposition-source-1/pidfd_custody.py	2026-10-30 13:02:35.726798443 -0700
+@@ -119,3 +119,73 @@
+ 
+     def retire(self):
+         raise RuntimeError('no authority to close an uncertain retained pidfd')
++
++
++class SocketDupRecord:
++    """Pre-owned duplicate channel descriptor; unknown never grants reuse."""
++    def __init__(self,pidfd_record):
++        if type(pidfd_record) is not PidfdCustodyRecord or pidfd_record.state!='REGISTERED':
++            raise ValueError('pre-registered operation record required')
++        self.parent=pidfd_record;self.fd=None;self.historical_fd=None;self.socket=None
++        self.state='REGISTERED';self.lock=threading.RLock()
++
++    def _publish(self):
++        p=self.parent
++        event={'role':'validator-duplicated-channel','status':self.state,
++               'owner_pid':p.owner_pid,'owner_birth':p.owner_birth,'boot_id':p.boot_id,'nonce':p.nonce,
++               'channel_fd':self.fd if self.state in ('DUPLICATED','ADOPTED') else None,
++               'historical_fd':self.historical_fd,
++               'disposition':'possibly_closed_do_not_use_or_retry' if self.state=='CLOSURE_UNKNOWN' else None,
++               'journal_device':p.journal_identity[0],'journal_inode':p.journal_identity[1]}
++        raw=(json.dumps(event,sort_keys=True,separators=(',',':'))+'\n').encode()
++        st=os.fstat(p.journal_fd)
++        if (st.st_dev,st.st_ino)!=p.journal_identity:raise RuntimeError('journal identity changed')
++        offset=0
++        while offset<len(raw):
++            count=os.write(p.journal_fd,raw[offset:])
++            if count<=0:raise OSError('short custody journal write')
++            offset+=count
++        os.fsync(p.journal_fd)
++        st=os.fstat(p.journal_fd)
++        if (st.st_dev,st.st_ino)!=p.journal_identity:raise RuntimeError('journal identity changed')
++
++    def assigned(self,fd):
++        with self.lock:
++            if self.state!='REGISTERED' or type(fd) is not int or fd<0:raise RuntimeError('duplicate assignment')
++            self.fd=fd;self.historical_fd=fd;self.state='DUPLICATED'
++            try:self._publish()
++            except BaseException as error:
++                self.fd=None;self.state='CLOSURE_UNKNOWN';raise PublicationUnknown(self) from error
++
++    def adopted(self,sock):
++        with self.lock:
++            if self.state!='DUPLICATED':raise RuntimeError('duplicate adoption')
++            self.socket=sock;self.state='ADOPTED'
++            try:self._publish()
++            except BaseException as error:
++                self.fd=None;self.state='CLOSURE_UNKNOWN';raise PublicationUnknown(self) from error
++
++    def begin_close(self):
++        with self.lock:
++            if self.state!='ADOPTED':raise RuntimeError('socket is not adopted')
++            self.state='CLOSING'
++            try:self._publish()
++            except BaseException as error:
++                self.fd=None;self.state='CLOSURE_UNKNOWN';raise PublicationUnknown(self) from error
++
++    def closed_after_syscall(self):
++        with self.lock:
++            if self.state!='CLOSING':raise RuntimeError('socket close state')
++            self.fd=None;self.state='VERIFIED_CLOSED'
++            try:self._publish()
++            except BaseException as error:
++                self.state='CLOSURE_UNKNOWN';raise PublicationUnknown(self) from error
++
++    def closure_unknown(self):
++        with self.lock:
++            if self.state=='CLOSURE_UNKNOWN':return
++            if self.state not in ('REGISTERED','DUPLICATED','ADOPTED','CLOSING','VERIFIED_CLOSED'):
++                raise RuntimeError('socket disposition unavailable')
++            self.fd=None;self.state='CLOSURE_UNKNOWN'
++            try:self._publish()
++            except BaseException as error:raise PublicationUnknown(self) from error
+--- close-state-correction-1/root_bootstrap.py	2026-10-30 12:57:08.364842989 -0700
++++ expert-disposition-source-1/root_bootstrap.py	2026-10-30 13:04:59.475204419 -0700
+@@ -163,7 +163,14 @@
+ if config['modules']['validator_entry']['path']!=sys.argv[4]:raise ValueError('validator entry path')
+ if set(config['runtime'])!={'path','sha256'}:raise ValueError('validator runtime binding')
+ sys.modules['runtime_binding'].verify_current(config['runtime']['path'],config['runtime']['sha256'])
+-sys.modules['validator_entry'].run()
++result,operation=sys.modules['validator_entry'].run()
++# Emit one bounded diagnostic DATA record on already captured stdout. Preserve
++# operation/session on a partial or failed write; no authority follows.
++try:
++ sys.modules['validator_entry'].emit_stdout(result,operation,sys.stdout.buffer,os.environ['MCKERNEL_PIDFD_CUSTODY_NONCE'])
++except BaseException:
++ import signal
++ while True:signal.pause()
+ """
+ 
+ 
+--- close-state-correction-1/validator_consumer.py	2026-10-30 12:57:42.429872255 -0700
++++ expert-disposition-source-1/validator_consumer.py	2026-10-30 13:04:29.694290344 -0700
+@@ -1,5 +1,8 @@
+ """Functional McKernel data-only source preparation; no security testing."""
+ from dataclasses import dataclass
++import base64
++import hashlib
++import json
+ import compositor
+ 
+ 
+@@ -19,3 +22,24 @@
+     if type(result) is not bytes:raise TypeError('collector must return data-only bytes')
+     plan.revalidate()
+     return SourceCollection(result)
++
++
++# New diagnostic serialization format limit; not a collector limit.
++MAX_RESULT_OUTPUT_BYTES = 2 * 1024 * 1024
++
++
++def stdout_record(result,nonce):
++    if type(result) is not SourceCollection or type(result.value) is not bytes:
++        raise ValueError('data-only source collection required')
++    if len(result.value)>MAX_RESULT_OUTPUT_BYTES:
++        raise ValueError('diagnostic payload length %d exceeds output limit %d' % (len(result.value),MAX_RESULT_OUTPUT_BYTES))
++    if type(nonce) is not str or len(nonce)!=64 or any(c not in '0123456789abcdef' for c in nonce):
++        raise ValueError('operation nonce required')
++    record={'record_type':'source_collection_result_data_v1','authority':None,
++            'nonce':nonce,'payload_length':len(result.value),
++            'payload_sha256':hashlib.sha256(result.value).hexdigest(),
++            'payload_base64':base64.b64encode(result.value).decode('ascii')}
++    raw=(json.dumps(record,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode('ascii')
++    if len(raw)>MAX_RESULT_OUTPUT_BYTES:
++        raise ValueError('diagnostic record length %d exceeds output limit %d (payload length %d)' % (len(raw),MAX_RESULT_OUTPUT_BYTES,len(result.value)))
++    return raw
+--- close-state-correction-1/validator_entry.py	2026-10-30 12:57:28.501451184 -0700
++++ expert-disposition-source-1/validator_entry.py	2026-10-30 13:04:59.475204419 -0700
+@@ -19,6 +19,7 @@
+         if plan.session.closed:raise RuntimeError('session closed before terminal completion')
+         plan.session.close(operation)
+         complete=True
++        return result
+     finally:
+         if not complete:
+             # Registration precedes publication; even publication/close errors
+@@ -26,6 +27,18 @@
+             operation.retain_session_unknown(plan.session,plan)
+ 
+ 
++def emit_stdout(result,operation,stream,nonce):
++    """Emit the single diagnostic record; retain ownership on uncertain output."""
++    try:
++        raw=validator_consumer.stdout_record(result,nonce)
++        written=stream.write(raw)
++        if written!=len(raw):raise RuntimeError('short diagnostic data output')
++        stream.flush()
++    except BaseException:
++        operation.retain_session_unknown(operation.session,operation.plan)
++        raise
++
++
+ def run():
+     if os.geteuid()!=1000:raise ValueError('ordinary validator UID required')
+     channel=int(os.environ['MCKERNEL_CUSTODY_FD'])
+@@ -34,7 +47,8 @@
+     operation=compositor.OperationCustody(journal,nonce)
+     try:
+         plan=compositor.prepare_from_inherited_channel(channel,operation)
+-        _consume_prepared(plan,operation)
++        result=_consume_prepared(plan,operation)
++        return result,operation
+     except BaseException:
+         if operation.session is not None and operation.state!='UNKNOWN_RETAINED':
+             operation.retain_session_unknown(operation.session,operation.plan)
+--- close-state-correction-1/test_actual_close.py	2026-10-30 12:58:01.886460956 -0700
++++ expert-disposition-source-1/test_actual_close.py	2026-10-30 13:03:31.536507135 -0700
+@@ -1,94 +1,136 @@
+-"""Functional-only synthetic actual-adapter close tests. UNRUN.
+-All FD, socket and signal operations are mocked; no root/fork/pidfd work.
++"""Functional-only synthetic actual-adapter disposition tests. UNRUN.
++FD, socket and configured-signal operations are mocked; no root/fork/pidfd.
+ """
+ import signal
+ import threading
+ import unittest
+ from unittest.mock import patch
+ import adapter
++import compositor
+ import deferred_fork
+ import pidfd_custody
+ 
+ 
+ class FakeSignals:
+     SIG_IGN=signal.SIG_IGN;SIG_BLOCK=signal.SIG_BLOCK;SIG_SETMASK=signal.SIG_SETMASK
+-    def __init__(self):self.pending=set();self.events=[]
++    def __init__(self):self.pending=set()
+     def getsignal(self,sig):return 'old'
+-    def signal(self,sig,handler):self.events.append(('handler',sig,handler))
+-    def pthread_sigmask(self,how,mask):self.events.append(('mask',how));return set()
++    def signal(self,sig,handler):pass
++    def pthread_sigmask(self,how,mask):return set()
+     def sigpending(self):return self.pending.copy()
+     def raise_signal(self,sig):self.pending.add(sig)
+ 
+ 
+ class Socket:
+-    def __init__(self,events,fail=False):self.events=events;self.fail=fail
++    family=1
++    def __init__(self,events,fail=False,action=None):self.events=events;self.fail=fail;self.action=action
+     def close(self):
+         self.events.append('socket-close')
++        if self.action:self.action()
+         if self.fail:raise OSError('synthetic socket close uncertainty')
+ 
+ 
+-class Owner:pass
+-
+-
+-class ActualCloseCases(unittest.TestCase):
++class ActualDispositionCases(unittest.TestCase):
+     def setUp(self):
+         self.events=[];self.signals=FakeSignals()
+         self.record=pidfd_custody.PidfdCustodyRecord.__new__(pidfd_custody.PidfdCustodyRecord)
+         self.record.state='VERIFIED_HELD';self.record.fd=71;self.record.target_pid=12
+         self.record.target_birth='123';self.record.lock=threading.RLock()
++        self.duplicate=pidfd_custody.SocketDupRecord.__new__(pidfd_custody.SocketDupRecord)
++        self.duplicate.parent=self.record;self.duplicate.fd=72;self.duplicate.historical_fd=72
++        self.duplicate.state='ADOPTED';self.duplicate.lock=threading.RLock()
++        self.duplicate.socket=Socket(self.events)
++        self.owner=compositor.OperationCustody(9,'a'*64);self.owner.record=self.record
++        self.owner.duplicate=self.duplicate;self.owner.state='REGISTERED'
+         self.session=adapter.CustodySession.__new__(adapter.CustodySession)
+-        self.session.pidfd_record=self.record;self.session.sock=Socket(self.events)
+-        self.session.closed=False;self.session.close_state='OPEN';self.session.session_lock=threading.RLock()
+-        self.owner=Owner();self.owner.session=self.session;self.owner.record=self.record;self.owner.state='REGISTERED'
++        self.session.pidfd_record=self.record;self.session.duplicate=self.duplicate;self.session.owner=self.owner
++        self.session.sock=self.duplicate.socket;self.session.closed=False
++        self.session.close_state='OPEN';self.session.session_lock=threading.RLock();self.owner.session=self.session
+     def invoke(self,close_fn):
+-        def publish(status,*args):self.events.append(status)
++        def pid_publish(status,*args):self.events.append('pid-'+status)
++        def socket_publish():self.events.append('socket-'+self.duplicate.state)
+         with patch.object(deferred_fork,'signal',self.signals),\
+              patch.object(deferred_fork.pidfd_compat,'require_implementation'),\
+-             patch.object(self.record,'_publish',side_effect=publish),\
++             patch.object(self.record,'_publish',side_effect=pid_publish),\
++             patch.object(self.duplicate,'_publish',side_effect=socket_publish),\
+              patch.object(deferred_fork.os,'close',side_effect=close_fn):
+             return self.session.close(self.owner)
+     def test_confirmed_close(self):
+         self.invoke(lambda fd:self.events.append(('pidfd-close',fd)))
+-        self.assertEqual(self.events,['CLOSING','socket-close',('pidfd-close',71),'VERIFIED_CLOSED'])
++        self.assertEqual(self.events,['pid-CLOSING','socket-CLOSING','socket-close','socket-VERIFIED_CLOSED',('pidfd-close',71),'pid-VERIFIED_CLOSED'])
+         self.assertEqual((self.record.state,self.record.fd),('VERIFIED_CLOSED',None))
+-        self.assertEqual(self.record.historical_fd,71);self.assertTrue(self.session.closed)
++        self.assertEqual((self.duplicate.state,self.duplicate.fd),('VERIFIED_CLOSED',None))
++        self.assertTrue(self.session.closed)
+     def test_pending_before_close_never_calls_close(self):
+         self.signals.pending.add(deferred_fork.STOPS[0])
+         with self.assertRaises(deferred_fork.StopDuringAcquisition):
+             self.invoke(lambda fd:self.fail('must not close'))
+         self.assertEqual((self.record.state,self.record.fd),('CLOSURE_UNKNOWN',None))
+-        self.assertEqual(self.record.historical_fd,71);self.assertNotIn('socket-close',self.events)
++        self.assertEqual((self.duplicate.state,self.duplicate.fd),('CLOSURE_UNKNOWN',None))
++        self.assertNotIn('socket-close',self.events)
+         with self.assertRaises(RuntimeError):self.session.close(self.owner)
+     def test_pending_after_syscall_never_reuses_numeric_descriptor(self):
+         def close(fd):self.events.append(('pidfd-close',fd));self.signals.pending.add(deferred_fork.STOPS[0])
+         with self.assertRaises(deferred_fork.StopDuringAcquisition):self.invoke(close)
+         self.assertEqual((self.record.state,self.record.fd),('CLOSURE_UNKNOWN',None))
++        self.assertEqual((self.duplicate.state,self.duplicate.fd),('CLOSURE_UNKNOWN',None))
+         self.assertEqual(self.record.historical_fd,71);self.assertEqual(self.events.count(('pidfd-close',71)),1)
+         with self.assertRaises(RuntimeError):self.session.close(self.owner)
+-    def test_partial_socket_close_is_uncertain_and_never_attempts_pidfd_close(self):
+-        self.session.sock=Socket(self.events,True)
++    def test_partial_socket_close_does_not_close_pidfd(self):
++        self.duplicate.socket=Socket(self.events,True);self.session.sock=self.duplicate.socket
+         with self.assertRaises(OSError):self.invoke(lambda fd:self.fail('must not close'))
+         self.assertEqual((self.record.state,self.record.fd),('CLOSURE_UNKNOWN',None))
+-        self.assertEqual(self.record.historical_fd,71)
+-    def test_constructor_failure_never_eagerly_disposes(self):
+-        class WrongSocket:
+-            family=-1
+-            def close(self):raise AssertionError('constructor must not close')
+-        new=adapter.CustodySession.__new__(adapter.CustodySession)
+-        record=pidfd_custody.PidfdCustodyRecord.__new__(pidfd_custody.PidfdCustodyRecord)
+-        record.state='REGISTERED'
+-        with patch.object(adapter.os,'dup',return_value=75),\
+-             patch.object(adapter.socket,'socket',return_value=WrongSocket()),\
+-             patch.object(adapter,'load_wire',return_value=object()):
+-            with self.assertRaises(ValueError):new.__init__(5,record)
+-        self.assertEqual(new.close_state,'OPEN');self.assertFalse(new.closed)
+-        self.assertIsInstance(new.sock,WrongSocket)
+-
++        self.assertEqual((self.duplicate.state,self.duplicate.fd),('CLOSURE_UNKNOWN',None))
++    def test_unknown_before_admission_blocks_close(self):
++        with patch.object(self.record,'_publish'),patch.object(self.duplicate,'_publish'):
++            self.owner.retain_session_unknown(self.session)
++        with self.assertRaises(RuntimeError):self.session.close(self.owner)
++        self.assertEqual(self.events,[]);self.assertEqual(self.owner.state,'UNKNOWN_RETAINED')
++    def test_unknown_concurrent_with_close_waits_for_confirmed_disposition(self):
++        attempted=threading.Event();done=threading.Event();threads=[]
++        def fail_owner():
++            attempted.set();self.owner.retain_session_unknown(self.session);done.set()
++        def on_socket_close():
++            thread=threading.Thread(target=fail_owner);threads.append(thread);thread.start()
++            self.assertTrue(attempted.wait(1));self.assertFalse(done.is_set())
++        self.duplicate.socket.action=on_socket_close
++        self.invoke(lambda fd:self.events.append(('pidfd-close',fd)))
++        threads[0].join(1);self.assertTrue(done.is_set())
++        self.assertEqual(self.owner.state,'UNKNOWN_RETAINED')
++        self.assertEqual((self.record.state,self.record.fd),('VERIFIED_CLOSED',None))
++        self.assertEqual((self.duplicate.state,self.duplicate.fd),('VERIFIED_CLOSED',None))
+     def test_revalidate_failure_never_eagerly_disposes(self):
+         with patch.object(self.session,'_revalidate',side_effect=ValueError('synthetic')):
+             with self.assertRaises(ValueError):self.session.revalidate()
+         self.assertEqual((self.record.state,self.record.fd),('VERIFIED_HELD',71))
+         self.assertEqual(self.events,[])
++    def test_duplicate_adoption_failure_is_unknown_and_never_closed_again(self):
++        self.record.state='REGISTERED';self.record.fd=None
++        self.duplicate.state='REGISTERED';self.duplicate.fd=None;self.duplicate.socket=None
++        self.owner.session=adapter.CustodySession.__new__(adapter.CustodySession)
++        with patch.object(deferred_fork,'signal',self.signals),\
++             patch.object(deferred_fork.pidfd_compat,'require_implementation'),\
++             patch.object(deferred_fork.os,'dup',return_value=75),\
++             patch.object(deferred_fork.os,'close') as close,\
++             patch.object(deferred_fork.socket,'socket',side_effect=OSError('adoption failed')),\
++             patch.object(self.duplicate,'_publish'):
++            with self.assertRaises(OSError):self.owner.session.__init__(5,self.record,self.owner)
++        self.assertEqual((self.duplicate.state,self.duplicate.fd),('CLOSURE_UNKNOWN',None))
++        self.assertEqual(self.duplicate.historical_fd,75);close.assert_not_called()
++    def test_constructor_error_after_adoption_never_eagerly_closes(self):
++        self.record.state='REGISTERED';self.record.fd=None
++        self.duplicate.state='REGISTERED';self.duplicate.fd=None;self.duplicate.socket=None
++        self.owner.session=adapter.CustodySession.__new__(adapter.CustodySession)
++        wrong=Socket(self.events);wrong.family=-1
++        with patch.object(deferred_fork,'signal',self.signals),\
++             patch.object(deferred_fork.pidfd_compat,'require_implementation'),\
++             patch.object(deferred_fork.os,'dup',return_value=75),\
++             patch.object(deferred_fork.socket,'socket',return_value=wrong),\
++             patch.object(adapter,'load_wire',return_value=object()),\
++             patch.object(self.duplicate,'_publish'):
++            with self.assertRaises(ValueError):self.owner.session.__init__(5,self.record,self.owner)
++        self.assertEqual(self.duplicate.state,'ADOPTED');self.assertEqual(self.events,[])
++        self.assertIs(self.duplicate.socket,wrong)
+ 
+ 
+ if __name__=='__main__':unittest.main()
+--- close-state-correction-1/test_validator_consumer.py	2026-10-30 12:57:42.429872255 -0700
++++ expert-disposition-source-1/test_validator_consumer.py	2026-10-30 13:04:59.475204419 -0700
+@@ -39,7 +39,8 @@
+             events.append('consume');actual.revalidate()
+             return validator_consumer.SourceCollection(b'')
+         with patch.object(validator_consumer,'consume',side_effect=consumer):
+-            self.assertIsNone(validator_entry._consume_prepared(plan,owner))
++            result=validator_entry._consume_prepared(plan,owner)
++            self.assertEqual(result.value,b'')
+         self.assertEqual(events,['revalidate','consume','revalidate','revalidate','close'])
+         self.assertTrue(plan.session.closed);self.assertEqual(owner.state,'HELD')
+     def test_failure_preserves_plan_and_live_session(self):
+@@ -68,6 +69,47 @@
+         gate.assert_called_once_with(plan);effective.assert_not_called();collect.assert_not_called()
+         self.assertEqual(events,['revalidate','revalidate','unknown'])
+         self.assertFalse(plan.session.closed)
++    def test_stdout_data_record_is_canonical_and_bound(self):
++        import base64,hashlib,json
++        data=b'abc\x00';result=validator_consumer.SourceCollection(data)
++        raw=validator_consumer.stdout_record(result,'a'*64)
++        value=json.loads(raw)
++        self.assertEqual(value,{'record_type':'source_collection_result_data_v1','authority':None,
++            'nonce':'a'*64,'payload_length':4,'payload_sha256':hashlib.sha256(data).hexdigest(),
++            'payload_base64':base64.b64encode(data).decode('ascii')})
++        self.assertEqual(raw,(json.dumps(value,sort_keys=True,separators=(',',':'))+'\n').encode('ascii'))
++    def test_stdout_refuses_oversize_with_actual_lengths(self):
++        result=validator_consumer.SourceCollection(b'ab')
++        with patch.object(validator_consumer,'MAX_RESULT_OUTPUT_BYTES',1):
++            with self.assertRaisesRegex(ValueError,'payload length 2'):
++                validator_consumer.stdout_record(result,'a'*64)
++        with patch.object(validator_consumer,'MAX_RESULT_OUTPUT_BYTES',2):
++            with self.assertRaisesRegex(ValueError,'record length .*payload length 2'):
++                validator_consumer.stdout_record(result,'a'*64)
++
++    def test_actual_emitter_partial_write_retains_operation(self):
++        class Stream:
++            def write(self,raw):return len(raw)-1
++            def flush(self):raise AssertionError('short output must not flush')
++        class Operation:
++            session=object();plan=object();state='REGISTERED'
++            def retain_session_unknown(self,session,plan):
++                self.state='UNKNOWN_RETAINED';self.held=(session,plan)
++        operation=Operation()
++        with self.assertRaisesRegex(RuntimeError,'short diagnostic'):
++            validator_entry.emit_stdout(validator_consumer.SourceCollection(b'ok'),operation,Stream(),'a'*64)
++        self.assertEqual(operation.state,'UNKNOWN_RETAINED')
++        self.assertEqual(operation.held,(operation.session,operation.plan))
++    def test_actual_emitter_oversize_retains_operation(self):
++        class Operation:
++            session=object();plan=object();state='REGISTERED'
++            def retain_session_unknown(self,session,plan):self.state='UNKNOWN_RETAINED'
++        operation=Operation()
++        with patch.object(validator_consumer,'MAX_RESULT_OUTPUT_BYTES',1):
++            with self.assertRaisesRegex(ValueError,'payload length 2'):
++                validator_entry.emit_stdout(validator_consumer.SourceCollection(b'ab'),operation,object(),'a'*64)
++        self.assertEqual(operation.state,'UNKNOWN_RETAINED')
++
+     def test_operation_retains_session_even_if_journal_publish_fails(self):
+         events=[];plan=Plan(events)
+         class Record:

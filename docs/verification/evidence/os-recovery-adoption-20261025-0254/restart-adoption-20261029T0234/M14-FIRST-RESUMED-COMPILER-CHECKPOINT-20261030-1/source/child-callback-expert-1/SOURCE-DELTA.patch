@@ -1,0 +1,487 @@
+--- child-restoration-fix-1/adapter.py	2026-10-30 12:33:40.667184828 -0700
++++ child-callback-expert-1/adapter.py	2026-10-30 12:37:59.819420400 -0700
+@@ -3,6 +3,7 @@
+ """
+ import hashlib
+ import pidfd_compat
++import deferred_fork
+ from pidfd_custody import PidfdCustodyRecord,PublicationUnknown
+ import fcntl
+ import json
+@@ -163,15 +164,8 @@
+                 fail('peer is not root supervisor parent')
+             self.pid, self.uid, self.gid = pid, uid, gid
+             self.parent, self.birth = proc_identity(pid)
+-            try:
+-                self.pidfd = pidfd_compat.open_pidfd(pid, 0)
+-            except pidfd_compat.PidfdVerificationError as error:
+-                try:pidfd_record.retain_unknown(error.fd,pid,self.birth)
+-                except PublicationUnknown as publication:
+-                    publication.pidfd_error=error
+-                    raise
+-                error.custody_record=pidfd_record
+-                raise
++            with deferred_fork.DeferredFork() as guard:
++                self.pidfd = guard.acquire_and_pin(pidfd_record,pid,self.birth)
+             self.bootstrap = json.loads(trusted_file(BOOTSTRAP), object_pairs_hook=unique)
+             shape(self.bootstrap, 'version supervisor_source supervisor_sha256 interpreter_sha256 argv contract_sha256 lease_sha256 custody_sha256 nonce caps boot_id max_age_seconds max_step_seconds')
+             b = self.bootstrap
+@@ -287,5 +281,6 @@
+         if not self.closed:
+             self.closed = True
+             self.sock.close()
+-            if hasattr(self, 'pidfd'):
+-                os.close(self.pidfd)
++            if hasattr(self, 'pidfd') and self.pidfd_record.state=='VERIFIED_HELD':
++                self.pidfd_record.close_verified()
++            # UNKNOWN_RETAINED remains owned by the pre-registered operation.
+--- child-restoration-fix-1/compositor.py	2026-10-30 12:33:33.554958716 -0700
++++ child-callback-expert-1/compositor.py	2026-10-30 12:38:18.696020062 -0700
+@@ -19,7 +19,7 @@
+ ADAPTER_SOURCE_SHA256 = None
+ PIDFD_CUSTODY_SHA256 = None
+ PIDFD_CUSTODY_SOURCE = Path(__file__).parent / 'pidfd_custody.py'
+-ADAPTER_SOURCE = Path(__file__).parent.parent / 'authenticated-adapter-source-1' / 'adapter.py'
++ADAPTER_SOURCE = Path(__file__).parent / 'adapter.py'
+ CONTRACT_SHA256 = 'd4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd'
+ PARSER_SHA256 = '74eec517909d92d178d77771dd8ae59e826df50cd17121957a03e320b93d1c96'
+ COMPOSITE_SHA256 = '5aa4827ff9a66c89b27102e53f606da5527aaf317812a8b7ad53174a8840c6c2'
+@@ -67,17 +67,12 @@
+ 
+ def _load_pinned_adapter():
+     # Both are held unselected until independent review; no caller DATA is trusted.
+-    custody_raw=_read_regular(PIDFD_CUSTODY_SOURCE,PIDFD_CUSTODY_SHA256)
+-    raw=_read_regular(ADAPTER_SOURCE, ADAPTER_SOURCE_SHA256)
+-    custody=types.ModuleType('pidfd_custody');custody.__file__=str(PIDFD_CUSTODY_SOURCE)
+-    mod=types.ModuleType('_m14_pinned_custody_adapter');mod.__file__=str(ADAPTER_SOURCE)
+-    _require('pidfd_custody' not in sys.modules,'unexpected preloaded custody module')
+-    sys.modules['pidfd_custody']=custody;sys.modules[mod.__name__]=mod
+-    try:
+-        exec(compile(custody_raw,custody.__file__,'exec'),custody.__dict__)
+-        exec(compile(raw,mod.__file__,'exec'),mod.__dict__)
+-    finally:
+-        sys.modules.pop(mod.__name__,None);sys.modules.pop('pidfd_custody',None)
++    _read_regular(PIDFD_CUSTODY_SOURCE,PIDFD_CUSTODY_SHA256)
++    _read_regular(ADAPTER_SOURCE,ADAPTER_SOURCE_SHA256)
++    custody=sys.modules.get('pidfd_custody');mod=sys.modules.get('adapter')
++    _require(custody is not None and mod is not None and
++             custody.__file__==str(PIDFD_CUSTODY_SOURCE) and mod.__file__==str(ADAPTER_SOURCE),
++             'verified validator loader required')
+     _require(getattr(mod,'CONTRACT_SHA',None)==CONTRACT_SHA256 and
+              getattr(mod,'SOURCE_SHA',None)==PARSER_SHA256 and
+              isinstance(getattr(mod,'CustodySession',None),type) and
+--- child-restoration-fix-1/deferred_fork.py	2026-10-30 12:30:27.105028704 -0700
++++ child-callback-expert-1/deferred_fork.py	2026-10-30 12:36:39.932882319 -0700
+@@ -7,12 +7,14 @@
+ import graph_observations as obs
+ import pidfd_compat
+ from ownership_latch import ChildRecord
++from pidfd_custody import PidfdCustodyRecord,PublicationUnknown
+ 
+ STOPS=(signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT)
+ _LOCK=threading.Lock()
+ 
+ 
+ class StopBeforeFork(RuntimeError):pass
++class StopDuringAcquisition(RuntimeError):pass
+ 
+ 
+ class DeferredFork:
+@@ -24,7 +26,7 @@
+     """
+     def __init__(self):
+         self.saved={};self.captured=[];self.original_mask=None
+-        self.acquired=False;self.entered=False;self.forked=False
++        self.acquired=False;self.entered=False;self.forked=False;self.fd_record=None
+ 
+     def _capture(self,signum,frame):
+         self.captured.append(signum)
+@@ -68,6 +70,12 @@
+                         try:signal.raise_signal(sig)
+                         except BaseException as exc:
+                             if error is None:error=exc
++            if self.original_mask is not None and not child and self.fd_record is not None:
++                try:
++                    if self.fd_record.state=='VERIFIED_HELD' and (self.captured or set(signal.sigpending()).intersection(STOPS)):
++                        self.fd_record.retain_unknown(self.fd_record.fd,self.fd_record.target_pid,self.fd_record.target_birth)
++                except BaseException as exc:
++                    if error is None:error=exc
+             if self.original_mask is not None:
+                 try:signal.pthread_sigmask(signal.SIG_SETMASK,self.original_mask)
+                 except BaseException as exc:
+@@ -79,11 +87,45 @@
+         if error is not None:raise error
+ 
+     def __exit__(self,kind,value,traceback):
+-        self._restore(False)
++        failure=None
++        try:
++            if self.fd_record is not None and self.fd_record.state=='VERIFIED_HELD':
++                if kind is not None or self.captured or set(signal.sigpending()).intersection(STOPS):
++                    self.fd_record.retain_unknown(self.fd_record.fd,self.fd_record.target_pid,self.fd_record.target_birth)
++        except BaseException as error:failure=error
++        try:self._restore(False)
++        except BaseException as error:
++            if self.fd_record is not None and self.fd_record.state=='VERIFIED_HELD':
++                try:self.fd_record.retain_unknown(self.fd_record.fd,self.fd_record.target_pid,self.fd_record.target_birth)
++                except BaseException as publication:failure=publication
++            if failure is None:failure=error
++        if failure is not None:raise failure
++        if kind is None and self.fd_record is not None and self.fd_record.state=='UNKNOWN_RETAINED':
++            raise StopDuringAcquisition('configured stop during pidfd acquisition')
+         return False
+ 
+-    def fork_and_pin(self,record):
+-        if not self.entered or self.forked or type(record) is not ChildRecord:
++    def acquire_and_pin(self,record,pid,birth):
++        if not self.entered or self.forked or type(record) is not PidfdCustodyRecord:
++            raise RuntimeError('guard and pre-registered pidfd record required')
++        if record.state!='REGISTERED':raise RuntimeError('pidfd record already used')
++        if self.captured or set(signal.sigpending()).intersection(STOPS):
++            raise StopBeforeFork('configured stop pending before pidfd acquisition')
++        self.forked=True
++        try:fd=pidfd_compat.open_pidfd(pid,0)
++        except pidfd_compat.PidfdVerificationError as error:
++            self.fd_record=record
++            try:record.retain_unknown(error.fd,pid,birth)
++            except PublicationUnknown as publication:
++                publication.pidfd_error=error
++                raise
++            error.custody_record=record
++            raise
++        self.fd_record=record
++        record.retain_verified(fd,pid,birth)
++        return fd
++
++    def fork_and_pin(self,record,child_callback):
++        if not self.entered or self.forked or type(record) is not ChildRecord or not callable(child_callback):
+             raise RuntimeError('guard and pre-registered child record required')
+         pending=set(signal.sigpending()).intersection(STOPS)
+         if pending or self.captured:
+@@ -96,14 +138,14 @@
+             record.unknown(error)
+             raise
+         if pid==0:
+-            # Never unwind through parent-oriented custody code from a new child.
+-            # A handler/mask restoration error must terminate only this child.
++            # Stops remain masked while entering this child-only finally region.
++            # No restored handler or exec error may return into the parent path.
+             try:
+                 self._restore(True)
+-            except BaseException:
++                child_callback()
++            finally:
+                 os._exit(127)
+-                raise RuntimeError('child os._exit unexpectedly returned')
+-            return 0,None,None
++            raise RuntimeError('child os._exit unexpectedly returned')
+         try:
+             record.assigned(pid)  # first Python-level parent action
+             try:pidfd=pidfd_compat.open_pidfd(pid,0)
+--- child-restoration-fix-1/pidfd_custody.py	2026-10-30 12:34:05.631978464 -0700
++++ child-callback-expert-1/pidfd_custody.py	2026-10-30 12:36:26.252447627 -0700
+@@ -37,35 +37,59 @@
+         self.boot_id=open('/proc/sys/kernel/random/boot_id').read().strip()
+         self.fd=None;self.state='REGISTERED';self.lock=threading.RLock()
+ 
+-    def retain_unknown(self,fd,target_pid,target_birth):
+-        if type(fd) is not int or fd<0:raise ValueError('unverified descriptor identity')
++    def _publish(self,status,reason,target_pid,target_birth):
++        event={'status':status,'reason':reason,'owner_pid':self.owner_pid,
++               'owner_birth':self.owner_birth,'boot_id':self.boot_id,'nonce':self.nonce,
++               'pidfd':self.fd,'target_pid':target_pid,'target_birth':target_birth,
++               'journal_device':self.journal_identity[0],'journal_inode':self.journal_identity[1]}
++        raw=(json.dumps(event,sort_keys=True,separators=(',',':'))+'\n').encode()
++        before=os.fstat(self.journal_fd)
++        if (before.st_dev,before.st_ino)!=self.journal_identity:raise RuntimeError('custody journal identity changed')
++        offset=0
++        while offset<len(raw):
++            count=os.write(self.journal_fd,raw[offset:])
++            if count<=0:raise OSError('short custody journal write')
++            offset+=count
++        os.fsync(self.journal_fd)
++        after=os.fstat(self.journal_fd)
++        if (after.st_dev,after.st_ino)!=self.journal_identity:raise RuntimeError('custody journal identity changed after fsync')
++
++    def retain_verified(self,fd,target_pid,target_birth):
++        if type(fd) is not int or fd<0:raise ValueError('descriptor identity')
+         if type(target_pid) is not int or target_pid<=0 or type(target_birth) is not str or not target_birth.isdigit():
+             raise ValueError('target process identity required')
+         with self.lock:
+             if self.state!='REGISTERED' or self.fd is not None:raise RuntimeError('custody record already consumed')
+-            # Retain first: a later short write/fsync failure must not lose the FD.
+-            self.fd=fd;self.state='UNKNOWN_RETAINED'
+-            event={'status':'UNKNOWN_RETAINED','reason':'PIDFD_VERIFICATION_FAILED',
+-                   'owner_pid':self.owner_pid,'owner_birth':self.owner_birth,'boot_id':self.boot_id,
+-                   'nonce':self.nonce,'pidfd':fd,'target_pid':target_pid,'target_birth':target_birth,
+-                   'journal_device':self.journal_identity[0],'journal_inode':self.journal_identity[1]}
+-            raw=(json.dumps(event,sort_keys=True,separators=(',',':'))+'\n').encode()
+-            try:
+-                before=os.fstat(self.journal_fd)
+-                if (before.st_dev,before.st_ino)!=self.journal_identity:
+-                    raise RuntimeError('custody journal identity changed')
+-                offset=0
+-                while offset<len(raw):
+-                    count=os.write(self.journal_fd,raw[offset:])
+-                    if count<=0:raise OSError('short custody journal write')
+-                    offset+=count
+-                os.fsync(self.journal_fd)
+-                after=os.fstat(self.journal_fd)
+-                if (after.st_dev,after.st_ino)!=self.journal_identity:
+-                    raise RuntimeError('custody journal identity changed after fsync')
++            # Own first; publish the live descriptor before stop signals resume.
++            self.fd=fd;self.target_pid=target_pid;self.target_birth=target_birth;self.state='VERIFIED_HELD'
++            try:self._publish('VERIFIED_HELD','PIDFD_ACQUIRED',target_pid,target_birth)
+             except BaseException as error:
++                self.state='UNKNOWN_RETAINED'
+                 raise PublicationUnknown(self) from error
+             return self
+ 
++    def retain_unknown(self,fd,target_pid,target_birth):
++        if type(fd) is not int or fd<0:raise ValueError('unverified descriptor identity')
++        if type(target_pid) is not int or target_pid<=0 or type(target_birth) is not str or not target_birth.isdigit():
++            raise ValueError('target process identity required')
++        with self.lock:
++            if self.state=='UNKNOWN_RETAINED':
++                if self.fd!=fd:raise RuntimeError('unknown descriptor differs')
++                return self
++            if self.state=='REGISTERED' and self.fd is None:
++                self.fd=fd;self.target_pid=target_pid;self.target_birth=target_birth
++            elif (self.state!='VERIFIED_HELD' or self.fd!=fd or self.target_pid!=target_pid or
++                  self.target_birth!=target_birth):raise RuntimeError('custody record already consumed')
++            # Sticky before publication: a failed fsync never loses the descriptor.
++            self.state='UNKNOWN_RETAINED'
++            try:self._publish('UNKNOWN_RETAINED','PIDFD_OR_STOP_UNCERTAIN',target_pid,target_birth)
++            except BaseException as error:raise PublicationUnknown(self) from error
++            return self
++
++    def close_verified(self):
++        with self.lock:
++            if self.state!='VERIFIED_HELD':raise RuntimeError('unknown descriptor cannot be closed')
++            os.close(self.fd);self.state='OBSERVER_CLOSED'
++
+     def retire(self):
+         raise RuntimeError('no authority to close an uncertain retained pidfd')
+--- child-restoration-fix-1/root_bootstrap.py	2026-10-30 12:33:33.554958716 -0700
++++ child-callback-expert-1/root_bootstrap.py	2026-10-30 12:38:46.896915889 -0700
+@@ -22,9 +22,9 @@
+     return bool(struct.unpack('I',data)[0] & FS_IMMUTABLE_FL)
+ 
+ 
+-def pinned_root_file(path, expected_sha, limit=2*1024*1024):
++def _pinned_file(path, expected_sha, limit=2*1024*1024):
+     """Return retained FD and exact verified bytes; no symlink path components."""
+-    if os.geteuid()!=0 or type(path) is not str or not path.startswith('/') or '//' in path:
++    if type(path) is not str or not path.startswith('/') or '//' in path:
+         raise ValueError('root absolute path required')
+     parts=path.split('/')[1:]
+     if not parts or any(part in ('','.','..') for part in parts): raise ValueError('bad path')
+@@ -58,6 +58,28 @@
+         raise
+ 
+ 
++def pinned_root_file(path,expected_sha,limit=2*1024*1024):
++    if os.geteuid()!=0:raise ValueError('root required')
++    return _pinned_file(path,expected_sha,limit)
++
++
++def pinned_validator_file(path,expected_sha,limit=2*1024*1024):
++    if os.getuid()!=1000 or os.geteuid()!=1000:raise ValueError('ordinary validator required')
++    return _pinned_file(path,expected_sha,limit)
++
++
++def load_verified_validator_module(name,path,expected_sha):
++    fd,raw=pinned_validator_file(path,expected_sha)
++    module=types.ModuleType(name);module.__file__=path
++    if name in sys.modules:os.close(fd);raise ValueError('module already loaded')
++    sys.modules[name]=module
++    try:
++        exec(compile(raw,path,'exec'),module.__dict__)
++        return fd,module
++    except BaseException:
++        sys.modules.pop(name,None);os.close(fd);raise
++
++
+ def load_verified_module(name,path,expected_sha):
+     """Execute exactly the bytes read from a held immutable root-owned FD."""
+     fd,raw=pinned_root_file(path,expected_sha)
+@@ -82,7 +104,7 @@
+  return d
+ config=json.loads(raw,object_pairs_hook=unique)
+ if set(config)!={'modules','extra_files','operation_config_path','operation_config_sha','runtime'}:raise ValueError('loader config')
+-names=('ownership_latch','custody_protocol_v2','graph_observations','pidfd_compat','runtime_binding','deferred_fork','inplace_custody','immutable_epoch','adapter','materializer','source_freeze','split_inventory','union_server_guarded','graph_producer','graph_server','operation_supervisor','supervisor_entry')
++names=('ownership_latch','custody_protocol_v2','graph_observations','pidfd_compat','runtime_binding','pidfd_custody','deferred_fork','inplace_custody','immutable_epoch','adapter','materializer','source_freeze','split_inventory','union_server_guarded','graph_producer','graph_server','operation_supervisor','supervisor_entry')
+ if set(config['modules'])!=set(names):raise ValueError('module set')
+ checker=os.path.join(os.path.dirname(config['modules']['materializer']['path']),'verify_scripts_fd.py')
+ if set(config['extra_files'])!={checker}:raise ValueError('checker source closure')
+@@ -108,6 +130,50 @@
+             base64.b64encode(verified_bootstrap_bytes).decode('ascii'),loader_manifest,loader_sha,entry_path]
+ 
+ 
++VALIDATOR_INLINE = r"""import base64,json,os,sys,types
++m=types.ModuleType('root_bootstrap');m.__file__='<verified-bootstrap-bytes>';sys.modules['root_bootstrap']=m
++exec(compile(base64.b64decode(sys.argv[1],validate=True),m.__file__,'exec'),m.__dict__)
++fd,raw=m.pinned_validator_file(sys.argv[2],sys.argv[3]);hold=[fd]
++def unique(pairs):
++ d={}
++ for k,v in pairs:
++  if k in d:raise ValueError('duplicate loader key')
++  d[k]=v
++ return d
++config=json.loads(raw,object_pairs_hook=unique)
++if set(config)!={'modules','extra_files','runtime'}:raise ValueError('validator loader config')
++names=('ownership_latch','graph_observations','pidfd_compat','pidfd_custody','deferred_fork','runtime_binding','adapter','compositor','validator_entry')
++if set(config['modules'])!=set(names):raise ValueError('validator module set')
++base='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/RESTART-REPAIR-20261030/combined-graph-source-1'
++local=os.path.dirname(config['modules']['adapter']['path'])
++if local!=os.path.dirname(config['modules']['compositor']['path']):raise ValueError('validator source directory')
++expected={os.path.join(local,'custody_protocol_v2.py'):'587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb',
++ os.path.join(base,'candidate_data.py'):'74eec517909d92d178d77771dd8ae59e826df50cd17121957a03e320b93d1c96',
++ os.path.join(base,'contract.json'):'d4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd',
++ os.path.join(local,'GRAPH-CONTRACT.json'):'d4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd'}
++profile=os.path.join(local,'PROFILE.V2.SOURCE-ONLY.json')
++if set(config['extra_files'])!=set(expected)|{profile}:raise ValueError('validator source closure')
++if any(config['extra_files'][path]!=sha for path,sha in expected.items()):raise ValueError('validator source closure hash')
++for path,sha in config['extra_files'].items():
++ fd,_=m.pinned_validator_file(path,sha);hold.append(fd)
++for name in names:
++ spec=config['modules'][name]
++ if set(spec)!={'path','sha256'}:raise ValueError('validator module pin')
++ fd,mod=m.load_verified_validator_module(name,spec['path'],spec['sha256']);hold.append(fd)
++if config['modules']['validator_entry']['path']!=sys.argv[4]:raise ValueError('validator entry path')
++if set(config['runtime'])!={'path','sha256'}:raise ValueError('validator runtime binding')
++sys.modules['runtime_binding'].verify_current(config['runtime']['path'],config['runtime']['sha256'])
++sys.modules['validator_entry'].run()
++"""
++
++
++def validator_argv(executable,verified_bootstrap_bytes,loader_manifest,loader_sha,entry_path):
++    if type(verified_bootstrap_bytes) is not bytes or not verified_bootstrap_bytes:
++        raise ValueError('verified bootstrap bytes required')
++    return [executable,'-I','-B','-c',VALIDATOR_INLINE,
++            base64.b64encode(verified_bootstrap_bytes).decode('ascii'),loader_manifest,loader_sha,entry_path]
++
++
+ OWNER_INLINE = r"""import base64,os,sys,types
+ m=types.ModuleType('root_bootstrap');m.__file__='<verified-bootstrap-bytes>';sys.modules['root_bootstrap']=m
+ exec(compile(base64.b64decode(sys.argv[1],validate=True),m.__file__,'exec'),m.__dict__)
+@@ -149,24 +215,21 @@
+     parent,child=socket.socketpair(socket.AF_UNIX,socket.SOCK_STREAM)
+     record.add(parent,child,journal_fd)
+     try:
+-        pid,pidfd,birth=guard.fork_and_pin(record)
+-        if pid==0:
+-            try:
+-                parent.close()
+-                channel=child.fileno()
+-                if channel==journal_fd:raise ValueError('journal and channel alias')
+-                for fd in (channel,journal_fd):os.set_inheritable(fd,True)
+-                upper=resource.getrlimit(resource.RLIMIT_NOFILE)[0]
+-                if upper==resource.RLIM_INFINITY or upper>1048576:upper=1048576
+-                keep=sorted((channel,journal_fd))
+-                os.closerange(3,keep[0]);os.closerange(keep[0]+1,keep[1]);os.closerange(keep[1]+1,int(upper))
+-                os.setgroups([]);os.setresgid(gid,gid,gid);os.setresuid(uid,uid,uid)
+-                env=dict(environment);env['MCKERNEL_CUSTODY_FD']=str(channel)
+-                env['MCKERNEL_PIDFD_CUSTODY_JOURNAL_FD']=str(journal_fd)
+-                env['MCKERNEL_PIDFD_CUSTODY_NONCE']=nonce
+-                os.execve(executable,argv,env)
+-            finally:
+-                os._exit(127)
++        def child_exec():
++            parent.close()
++            channel=child.fileno()
++            if channel==journal_fd:raise ValueError('journal and channel alias')
++            for fd in (channel,journal_fd):os.set_inheritable(fd,True)
++            upper=resource.getrlimit(resource.RLIMIT_NOFILE)[0]
++            if upper==resource.RLIM_INFINITY or upper>1048576:upper=1048576
++            keep=sorted((channel,journal_fd))
++            os.closerange(3,keep[0]);os.closerange(keep[0]+1,keep[1]);os.closerange(keep[1]+1,int(upper))
++            os.setgroups([]);os.setresgid(gid,gid,gid);os.setresuid(uid,uid,uid)
++            env=dict(environment);env['MCKERNEL_CUSTODY_FD']=str(channel)
++            env['MCKERNEL_PIDFD_CUSTODY_JOURNAL_FD']=str(journal_fd)
++            env['MCKERNEL_PIDFD_CUSTODY_NONCE']=nonce
++            os.execve(executable,argv,env)
++        pid,pidfd,birth=guard.fork_and_pin(record,child_exec)
+         child.close()
+         return parent,pid,pidfd,('BOUND',None)
+     except BaseException as error:
+@@ -191,16 +254,14 @@
+     parent,child=socket.socketpair(socket.AF_UNIX,socket.SOCK_STREAM)
+     record.add(parent,child)
+     try:
+-        pid,pidfd,birth=guard.fork_and_pin(record)
+-        if pid==0:
+-            try:
+-                parent.close();channel=child.fileno();os.set_inheritable(channel,True)
+-                upper=resource.getrlimit(resource.RLIMIT_NOFILE)[0]
+-                if upper==resource.RLIM_INFINITY or upper>1048576:upper=1048576
+-                os.closerange(3,channel);os.closerange(channel+1,int(upper))
+-                env=dict(environment);env['MCKERNEL_UNION_CUSTODY_FD']=str(channel)
+-                os.execve(executable,argv,env)
+-            finally:os._exit(127)
++        def child_exec():
++            parent.close();channel=child.fileno();os.set_inheritable(channel,True)
++            upper=resource.getrlimit(resource.RLIMIT_NOFILE)[0]
++            if upper==resource.RLIM_INFINITY or upper>1048576:upper=1048576
++            os.closerange(3,channel);os.closerange(channel+1,int(upper))
++            env=dict(environment);env['MCKERNEL_UNION_CUSTODY_FD']=str(channel)
++            os.execve(executable,argv,env)
++        pid,pidfd,birth=guard.fork_and_pin(record,child_exec)
+         child.close()
+         return parent,pid,pidfd,('BOUND',None)
+     except BaseException as error:
+--- child-restoration-fix-1/supervisor_entry.py	2026-10-30 12:33:33.554958716 -0700
++++ child-callback-expert-1/supervisor_entry.py	2026-10-30 12:38:18.696020062 -0700
+@@ -81,7 +81,7 @@
+     owner=cfg['owner'];validator=cfg['validator'];target=cfg['target'];manifest=cfg['source_manifest']
+     if type(owner) is not dict or set(owner)!={'executable','executable_sha','entry','entry_sha','argv','environment','targets','max_step','bootstrap_source','bootstrap_sha','owner_config_path','owner_config_sha'}:
+         fail('owner config')
+-    if type(validator) is not dict or set(validator)!={'executable','executable_sha','entry','entry_sha','argv','environment','uid','gid','max_age','max_step'}:
++    if type(validator) is not dict or set(validator)!={'executable','executable_sha','entry','entry_sha','argv','environment','uid','gid','max_age','max_step','bootstrap_source','bootstrap_sha','loader_manifest','loader_sha'}:
+         fail('validator config')
+     if (owner['executable']!=cfg['runtime']['path'] or owner['executable_sha']!=cfg['runtime']['sha256'] or
+         validator['executable']!=cfg['runtime']['path'] or validator['executable_sha']!=cfg['runtime']['sha256']):
+@@ -130,9 +130,12 @@
+         bootstrap_file(record)
+         exefd,_=root_bootstrap.pinned_root_file(validator['executable'],validator['executable_sha'],128*1024*1024);held.append(exefd)
+         entryfd,_=root_bootstrap.pinned_root_file(validator['entry'],validator['entry_sha']);held.append(entryfd)
+-        if validator['entry'] not in validator['argv']:fail('validator source argv differs')
++        bsfd,bsbytes=root_bootstrap.pinned_root_file(validator['bootstrap_source'],validator['bootstrap_sha']);held.append(bsfd)
++        loaderfd,_=root_bootstrap.pinned_root_file(validator['loader_manifest'],validator['loader_sha']);held.append(loaderfd)
++        expected_argv=root_bootstrap.validator_argv(validator['executable'],bsbytes,validator['loader_manifest'],validator['loader_sha'],validator['entry'])
++        if validator['argv']!=expected_argv:fail('validator exact loader argv differs')
+         with deferred_fork.DeferredFork() as guard:
+-            record=operation.reserve_validator(exefd,entryfd,root_fd,lease_fd)
++            record=operation.reserve_validator(exefd,entryfd,bsfd,loaderfd,root_fd,lease_fd)
+             journal_name='PIDFD-CUSTODY-'+cfg['nonce']+'.jsonl'
+             journal_fd=os.open(journal_name,os.O_WRONLY|os.O_APPEND|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd)
+             record.add(journal_fd)
+--- pidfd-compat-expert-1/operation_watchdog.py	2026-10-30 12:01:22.449154363 -0700
++++ child-callback-expert-1/operation_watchdog.py	2026-10-30 12:37:59.819420400 -0700
+@@ -56,17 +56,15 @@
+     if type(record) is not ChildRecord or type(guard) is not deferred_fork.DeferredFork or not guard.entered:
+         fail('guarded pre-registered supervisor custody required')
+     record.add(root_fd,lease_fd)
+-    pid,pidfd,birth=guard.fork_and_pin(record)
+-    if pid==0:
+-        try:
+-            for fd in (root_fd,lease_fd):os.set_inheritable(fd,True)
+-            keep=sorted((root_fd,lease_fd))
+-            upper=resource.getrlimit(resource.RLIMIT_NOFILE)[0]
+-            if upper==resource.RLIM_INFINITY or upper>1048576:upper=1048576
+-            os.closerange(3,keep[0]);os.closerange(keep[0]+1,keep[1]);os.closerange(keep[1]+1,int(upper))
+-            env=dict(environment);env['MCKERNEL_OPERATION_ROOT_FD']=str(root_fd);env['MCKERNEL_OPERATION_LEASE_FD']=str(lease_fd)
+-            os.execve(executable,argv,env)
+-        finally:os._exit(127)
++    def child_exec():
++        for fd in (root_fd,lease_fd):os.set_inheritable(fd,True)
++        keep=sorted((root_fd,lease_fd))
++        upper=resource.getrlimit(resource.RLIMIT_NOFILE)[0]
++        if upper==resource.RLIM_INFINITY or upper>1048576:upper=1048576
++        os.closerange(3,keep[0]);os.closerange(keep[0]+1,keep[1]);os.closerange(keep[1]+1,int(upper))
++        env=dict(environment);env['MCKERNEL_OPERATION_ROOT_FD']=str(root_fd);env['MCKERNEL_OPERATION_LEASE_FD']=str(lease_fd)
++        os.execve(executable,argv,env)
++    pid,pidfd,birth=guard.fork_and_pin(record,child_exec)
+     return pid,pidfd,('BOUND',None)
+ 
+ 

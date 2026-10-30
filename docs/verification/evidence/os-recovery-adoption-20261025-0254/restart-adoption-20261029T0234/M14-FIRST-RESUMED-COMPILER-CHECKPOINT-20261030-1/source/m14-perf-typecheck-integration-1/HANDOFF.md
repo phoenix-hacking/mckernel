@@ -1,0 +1,19 @@
+# Private perf owner/participant whole-crate type-check proposal
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The exact retained 23d7 HOST crate parent `syscall_policy.rs` SHA256 `11d9d9e14c6c4ee3d593083ce18137414a7780c23507a44fb0834937fa9618e4` has a private postimage SHA256 `217091d13694fb04a4b14930256e60dd9decdc5ae771fc101605b609aa35e403`. Its sole delta appends `perf_group_owner` and `perf_descriptor_participants` as sibling modules guarded by `all(enable_perf, f03_perf_owner_typecheck_only)`. Their exact prior sources are copied without edits: candidate-3 owner SHA256 `cf93722b1d2eb9501c0ca46dad68296f152c8a907be0fc6bb0b2ed163f255bde`, participants SHA256 `c45e9e6bb882cb5a6842e2cac65905e438274e1f805f37b8582c9af16ca5f9ed`. This is a type-check-only private cfg; no CMake, production caller or new production selector is wired. The prior 23d7 cfgs and source, including perf/XPMEM postimages with held behavior, remain unchanged.
+
+`PROFILE.V2.SOURCE-ONLY.json` SHA256 `e5238111bdf3822bf3ba22c83273c19bbfb7cead6a47aec4b5e0c3712b8b2fbb` binds 165 named inputs in a fresh prospective private source tree. It uses the exact historical HOST rustc argv with source/emit rebased, metadata and depinfo output, and just the new `f03_perf_owner_typecheck_only` cfg appended. The profile lists source-declared helper functions and genuine dependencies, including existing sync-child event layout, actual `abi`, rbtree, spinlock bridges, allocator bridges and the existing perf read/ioctl/mmap/descriptor callback modules. Metadata output is not a linkable Rust object. Exact selected-source/type availability and Rust type correctness must be checked by the compiler, not assumed.
+
+The source-bound direct-owner derivatives `host_gate_typecheck.py` SHA256 `df45ac329565bd782279ee0199a8a6347f474898f91504330d5060024eba74ae` and `host_typecheck_exec.py` SHA256 `802c5ed03787654feeec35bf544b788c19b9f5b5463967df14807bc4cad6198e` adapt the previous HOST staging/exec mechanism to these 165 inputs, unique source/output root, profile and type-check grant. The gate names the already admitted HOST toolchain manifest SHA256 `9f25b4c4d927dfb2ec96abd662ba13a9c7641bb6a0004c84ccb5bd43855ec6c3`; a current trusted source/tool owner must maintain and revalidate its bindings. No new toolchain inventory is implied. Python 3.8.10 `ast.parse` plus compile-only on the two wrapper sources exited 0 in 0.025 s, without importing or executing them. The Rust source was not compiled or run.
+
+The possible command **only after independent review and fresh Root admission**, under an already reviewed external direct-process owner and resource limits, is:
+
+```
+/usr/bin/python3 -s -E -S -B /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/host_typecheck_exec.py
+```
+
+It needs a fresh `TYPECHECK-GRANT.json`, nonce, exclusive source and output ownership, verified source and tool identities, actual weekly/control/clock/resource state, external process-tree custody/watchdog and positive retirement. UNKNOWN retains its share and evidence. No whole-crate metadata result, C ABI, link, runtime, native, SDK or C-retirement claim follows from source preparation. Participant records intentionally lack reclamation; fork/close/monitor/IRQ/host/counter/finalization and member-FD semantics remain held. The single compositor ledger records these as private support helpers, never original C-function replacements.
+
+Separately, `m14-host-c-link-preparation-1/PROFILE.V2.SOURCE-ONLY.json` SHA256 `373f3022d02f1470d7aae9d62e0dcc982d029a3f102b138f3036a63524f08cb7` adds `-DENABLE_PERF` to the standalone C witness profile. Its isolated perf-enabled header configuration cannot establish the historical generic C object's configuration.

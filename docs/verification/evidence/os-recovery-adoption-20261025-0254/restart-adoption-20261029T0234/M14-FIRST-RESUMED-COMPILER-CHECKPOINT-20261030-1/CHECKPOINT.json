@@ -1,0 +1,1591 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T20:17:27.635317+00:00",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "status": "ACTIVE_CHECKPOINT_DIAGNOSTIC_NOT_ACCEPTANCE",
+  "delta_since_previous_pushed_checkpoint": {
+    "Rust_crate_object": 1,
+    "C_header_only_ABI_witness": 1,
+    "unique_new_private_Rust_modules_frontend_typechecked": 2,
+    "affected_frontend_reruns": 1,
+    "new_source_callback_tests": 6,
+    "new_source_disposition_tests": 21,
+    "production_linked": 0,
+    "OS_behavior_tested": 0,
+    "native_qualified": 0,
+    "retired_C_boundaries": 0,
+    "accepted_M14_files": 0
+  },
+  "actual_results": {
+    "host-rust-0001": {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "PASS_HOST_DIAGNOSTIC_RUST_OBJECT_DEPINFO_ONLY",
+      "at": 1793389087.469803,
+      "exit_status": 0,
+      "positive_tool_terminal": true,
+      "owner": {
+        "pid": 3037105,
+        "ppid": 2996005,
+        "start": "118643240",
+        "state": "R",
+        "pgid": 3037105,
+        "uid": 1000,
+        "at": 1793388987.760517,
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "role": "tool-owned same-PID outer constrained HOST staging and rustc chain"
+      },
+      "inner_owner": {
+        "pid": 3037107,
+        "ppid": 3037106,
+        "start": "118643245",
+        "state": "R"
+      },
+      "censused_groups": [
+        3037105,
+        3037107
+      ],
+      "timeout_group_members": [],
+      "observed_births_remaining": [],
+      "grant_released": true,
+      "ordinary_reservation_released_bytes": 4294967296,
+      "nonce": "920dffef6d27e831e67d155d463f2be4b50220c7e1d349e8c683dead12aef24c",
+      "inner_metrics": {
+        "user_cpu_seconds": 18.56,
+        "system_cpu_seconds": 0.3,
+        "peak_rss_kib": 602472.0,
+        "exit_status": 0.0,
+        "wall_text": "0:18.87"
+      },
+      "outer_metrics": {
+        "user_cpu_seconds": 18.72,
+        "system_cpu_seconds": 0.35,
+        "peak_rss_kib": 602472.0,
+        "exit_status": 0.0,
+        "wall_text": "0:19.24"
+      },
+      "artifacts": {
+        "mckernel_rust.o": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/mckernel_rust.o",
+          "bytes": 18799600,
+          "sha256": "23d7163716aac9b56f6a503c2811d1196df19509438fe5c292eb61b15592528d"
+        },
+        "mckernel.d": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/mckernel.d",
+          "bytes": 92572,
+          "sha256": "fb685733767f6765be9a8447de9e79772d0bc08104a92edc7548a68dd21a29a6"
+        },
+        "staged-readback.json": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/staged-readback.json",
+          "bytes": 67643,
+          "sha256": "4712c14e74c1f075d6feaf1fbe9516d8a2f903901e64e2868411f82334b0d9ea"
+        },
+        "exec-intent.json": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/exec-intent.json",
+          "bytes": 8251,
+          "sha256": "c7fabc47b03a6b5c669abfdfb59e23d1889162fbb2990abf9492dc2e2e1cf411"
+        },
+        "time.txt": {
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/time.txt",
+          "bytes": 5000,
+          "sha256": "6660dd4f5649a7fd212ad21f087bc3ef1a4eb12d888ae6dc309c2ea873708a0c"
+        }
+      },
+      "unique_depinfo_sources": 144,
+      "allowed_source_files": 163,
+      "literal_dotdot_spellings": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/src/kernel/rust/../../host-kernel/native-rust/abi/vdso.rs",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/src/kernel/rust/../../host-kernel/native-rust/zero_pages.rs"
+      ],
+      "unexpected_normalized_sources": [],
+      "compiled_Rust_crate_delta": 1,
+      "compiled_C_delta": 0,
+      "linked_image_delta": 0,
+      "production_linked_delta": 0,
+      "behavior_tested_OS_delta": 0,
+      "native_qualified_delta": 0,
+      "C_retirement_delta": 0,
+      "M14_file_acceptance_delta": 0,
+      "first_compiler_observed_at": 1793388997.4101264,
+      "resume_to_observed_compiler_seconds": 6101.410126447678,
+      "grant_to_observed_compiler_upper_bound_seconds": 9.6521155834198,
+      "owner_birth_to_compiler_birth_proxy_seconds": 0.43,
+      "clock_ticks_per_second": 100,
+      "timing_limits": "Observed rustc argv confirms running compiler; process-birth proxy is not exact exec or queue latency. Original thirty-minute baseline unchanged.",
+      "diagnostic_platform_limits": [
+        "Trusted root-owned installed Linux Python/stdlib/extensions and system loader/cache; not a claim of full measured platform runtime closure",
+        "Toolchain tree/static dependency manifest held by cooperating coordinator; current canonical dependency identity revalidation only, no full rehash",
+        "Actual loader/dlopen/helper choices not fully observed; unexpected depinfo or uncertain process retirement is UNKNOWN"
+      ],
+      "warnings_retained": true,
+      "first_compiler_error": null,
+      "native_ownership_changed": false
+    },
+    "mckfd-header-0001": {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "PASS_STANDALONE_PERF_ON_HEADER_ABI_WITNESS",
+      "at": 1793389765.167449,
+      "exit_status": 0,
+      "positive_tool_terminal": true,
+      "owner": {
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "pid": 3041388,
+        "ppid": 2996005,
+        "pgid": 3041388,
+        "start": "118714547",
+        "at": 1793389700.8616972,
+        "role": "tool-owned no-Pythonfork exec of finite header-only compile"
+      },
+      "timeout_group_members": [],
+      "grant_released": true,
+      "ordinary_reservation_released_bytes": 536870912,
+      "C_layout_words": [
+        80,
+        8,
+        12,
+        24,
+        72
+      ],
+      "witness_object_STT_FUNC_definitions": 0,
+      "witness_object_bytes": 42176,
+      "witness_object_sha256": "b59c8606bb9910878b027224508794405f35083c18ea2bf12fb130ce5fad17d0",
+      "header_dependencies": 75,
+      "header_bytes": 412563,
+      "compiled_header_ABI_witness_delta": 1,
+      "compiled_production_C_delta": 0,
+      "production_link_delta": 0,
+      "native_qualified_delta": 0,
+      "retired_C_boundaries_delta": 0,
+      "configuration": "explicit ENABLE_PERF isolated witness; does not establish historical generic object macro config",
+      "closure_limit": "postcompile header hash/identity under cooperating exclusion; complete immutable physical/actualcompilerinput proof not claimed",
+      "paired_Rust_scope": "Rust compiled size/align/opt/dup offsets; sig_no12 C result corresponds to Rust padding; opaqueRustdup slot does not prove callbacksignature"
+    },
+    "perf-typecheck-0001": {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "PASS_WHOLE_CRATE_FRONTEND_PERF_OWNER_AND_PARTICIPANTS_TYPECHECK_ONLY",
+      "at": 1793389922.8173122,
+      "exit_status": 0,
+      "positive_tool_terminal": true,
+      "owner": {
+        "pid": 3041995,
+        "ppid": 2996005,
+        "start": "118728957",
+        "state": "R",
+        "pgid": 3041995,
+        "uid": 1000,
+        "at": 1793389844.9346075,
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "role": "tool-owned direct constrained private perf typecheck; no Python fork"
+      },
+      "inner_owner": {
+        "pid": 3041997,
+        "ppid": 3041996,
+        "start": "118728963",
+        "state": "R"
+      },
+      "censused_groups": [
+        3041995,
+        3041997
+      ],
+      "timeout_group_members": [],
+      "grant_released": true,
+      "ordinary_reservation_released_bytes": 4294967296,
+      "source_rows": 165,
+      "unique_depinfo_sources": 146,
+      "private_modules_actually_in_depinfo": [
+        "perf_group_owner.rs",
+        "perf_descriptor_participants.rs"
+      ],
+      "metadata_bytes": 7344265,
+      "metadata_sha256": "91064f0439f3ca69eb47a549874cef19f4394bc45397eae1f8ba6177b8df5b24",
+      "outer_wall_seconds": 3.32,
+      "outer_user_cpu_seconds": 2.93,
+      "outer_system_cpu_seconds": 0.22,
+      "peak_rss_kib": 468512,
+      "new_private_source_functions": {
+        "perf_group_owner.rs": [
+          "empty",
+          "push_event",
+          "merge",
+          "registry_search",
+          "allocate_registration",
+          "free_registration_after_detach",
+          "register_descriptor_locked",
+          "registration_key_locked",
+          "unregister_descriptor_locked",
+          "duplicate_registered_locked",
+          "bit",
+          "index",
+          "try_pin",
+          "put",
+          "init_event",
+          "init_group",
+          "commit_standalone_locked",
+          "release_edges",
+          "release_pair",
+          "abort_standalone",
+          "acquire_group",
+          "duplicate_registered_pair",
+          "publish_member_locked",
+          "detach_count_under_registry",
+          "abort_unpublished_lease",
+          "finish_detach",
+          "rollback_grouped",
+          "final_event_base"
+        ],
+        "perf_descriptor_participants.rs": [
+          "new_record",
+          "free_vacant",
+          "retain",
+          "callbacks",
+          "lock",
+          "unlock",
+          "acquire_open_group",
+          "group_fd_is_member",
+          "release_open_group",
+          "publish_descriptor",
+          "reserve_record",
+          "cancel_unused_reservation",
+          "publish_reserved",
+          "prepare_standalone",
+          "abort_prepared",
+          "commit_standalone_and_publish",
+          "publish_member_reserved",
+          "clone_registered",
+          "detach_for_close"
+        ]
+      },
+      "Rust_private_modules_typechecked_delta": 2,
+      "compiled_machine_code_delta": 0,
+      "new_original_C_function_replacements_selected_delta": 0,
+      "production_link_delta": 0,
+      "native_qualified_delta": 0,
+      "C_retirement_delta": 0,
+      "limits": [
+        "metadata/frontend only; unused private functions have no machine-code emission claim",
+        "no production callers/selectors wired; real perf close/fork/teardown/IRQ/host/quarantine drain contracts open",
+        "retained baseline XPMEM publication source remains behavior/selection NO-GO",
+        "trusted Linux platform/static toolmanifest limits inherited"
+      ]
+    },
+    "perf-typecheck-0002": {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "status": "PASS_AFFECTED_FRONTEND_OWNER4_PARTICIPANTS2",
+      "at": 1793391182.9536333,
+      "exit_status": 0,
+      "positive_tool_terminal": true,
+      "owner": {
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "pid": 3048780,
+        "ppid": 2996005,
+        "pgid": 3048780,
+        "start": "118855810",
+        "at": 1793391113.4638326,
+        "role": "tool-owned no-Pythonfork fresh affected perf frontend rerun"
+      },
+      "inner_owner": {
+        "pid": 3048782,
+        "ppid": 3048781,
+        "start": "118855816",
+        "state": "R"
+      },
+      "censused_groups": [
+        3048780,
+        3048782
+      ],
+      "timeout_group_members": [],
+      "grant_released": true,
+      "ordinary_reservation_released_bytes": 4294967296,
+      "source_rows": 165,
+      "unique_depinfo_sources": 146,
+      "metadata_bytes": 7353883,
+      "metadata_sha256": "8c8e31677dc1f517de5e562a7c188bc588f1dddc51ebb7633c5d0984d6d24d91",
+      "outer_wall_seconds": 3.45,
+      "outer_user_cpu_seconds": 3.03,
+      "outer_system_cpu_seconds": 0.24,
+      "peak_rss_kib": 469444,
+      "changed_sources": [
+        "perf_group_owner.rs owner4 1ae7b90a48bb80e7b08e034c77332c2d4300fee3649ce1578e46c90106cd8ed6",
+        "perf_descriptor_participants.rs participants2 b2b2c3ca6ead9bbe630f94d1937a8abf4e73d92f30d3544b07cdf126dacb4da0"
+      ],
+      "source_findings_addressed": [
+        "absent vs invalid lookup, fail-closed close disposition",
+        "null dup callback enforced",
+        "destination fd uniqueness",
+        "prewrite allocator alignment and returned raw custody"
+      ],
+      "Rust_private_modules_retypechecked": 2,
+      "compiled_machine_code_delta": 0,
+      "new_original_C_function_replacements_selected_delta": 0,
+      "production_link_delta": 0,
+      "native_qualified_delta": 0,
+      "C_retirement_delta": 0,
+      "limits": [
+        "frontend metadata only; no production caller or C selector",
+        "functional behavior/ABI/native proof and record drain/host/descriptor/fork/monitor ownership remain open",
+        "trusted platform/static toolmanifest diagnostic limits inherited"
+      ]
+    },
+    "callback-0002": {
+      "at": 1793391005.6837096,
+      "files": {
+        "ADMISSION.json": "ab5c5f31667455d9f6357db0ec4a3652dd88c84b679c0aff6837d53e0471875e",
+        "PROCESS-OWNER.json": "bc9c12e04323395fd569031d7a1495b61a31869051463931b0de2b2114dedddd",
+        "preflight_exec.py": "2046847f2b5dbbcc972edb0724eae810243b99fa85658b63656c0d8926c0456a",
+        "stderr.txt": "8d27b24382b4095ccfb96bdfdee9f80c4f412183d9be89866058dc16d1971745",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "time.txt": "c0eae709b74c5672dd40d3c7e78177db84c6f07d42a37d2a7b2ea0dfb6cefe0d"
+      },
+      "fixture_result_verified": true,
+      "grant_id": "ROOT_LIGHT_TEST_CALLBACK6_2_20261030",
+      "grant_released": true,
+      "group": {
+        "errors": [],
+        "members": [],
+        "observed_at": 1793391005.6837082,
+        "pgid": 3048158,
+        "scope": "point-in-time exact owned PGID; no escaped-descendant or global-free claim"
+      },
+      "kernel_native_retirement_credit": 0,
+      "owner": {
+        "at": 1793390984.5757322,
+        "pgid": 3048158,
+        "pid": 3048158,
+        "ppid": 2996005,
+        "role": "tool-owned same-PID exec",
+        "start": "118842923",
+        "state": "R",
+        "uid": 1000
+      },
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "source_unchanged": true,
+      "status": "PASS6_SYNTHETIC_CALLBACK",
+      "terminal": {
+        "chunk_id": "b8f26e",
+        "completed": true,
+        "exit_code": 0,
+        "tool": "exec_command"
+      },
+      "tests": 6
+    },
+    "disposition-0001": {
+      "at": 1793391291.1877654,
+      "files": {
+        "ADMISSION.json": "cce9304ffa100dcbba0687d38ffcd5c4ed805f0d98e1a24e35721d2a607b10ac",
+        "PROCESS-OWNER.json": "796a980d310ad867de2a9f0e55fcd73db37963fcf2a5afdc43374ad0dec940c0",
+        "preflight_exec.py": "afa06b46c24eabb28f6fe822ff8953e63af8e8e3382bd33124de3eda3fefa589",
+        "stderr.txt": "d34bcfe0e9a1b400c3fd374f4b5c23414a9ce7ccdef9c33fe6fe05d1189b9fd8",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "time.txt": "3a55201d9412b785686484c21d504f3c72fc3817ededd49c9613ebf3978020e3"
+      },
+      "fixture_result_verified": true,
+      "grant_id": "ROOT_LIGHT_TEST_DISPOSITION21_20261030",
+      "grant_released": true,
+      "group": {
+        "errors": [],
+        "members": [],
+        "observed_at": 1793391291.1877635,
+        "pgid": 3049860,
+        "scope": "point-in-time exact owned PGID; no escaped-descendant or global-free claim"
+      },
+      "kernel_native_retirement_credit": 0,
+      "module_counts": {
+        "test_actual_close": 9,
+        "test_lock_order": 3,
+        "test_validator_consumer": 9
+      },
+      "owner": {
+        "at": 1793391278.455064,
+        "pgid": 3049860,
+        "pid": 3049860,
+        "ppid": 2996005,
+        "role": "tool-owned same-PID exec",
+        "start": "118872311",
+        "state": "R",
+        "uid": 1000
+      },
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "source_unchanged": true,
+      "status": "PASS21_SYNTHETIC_DISPOSITION",
+      "terminal": {
+        "chunk_id": "27180d",
+        "completed": true,
+        "exit_code": 0,
+        "tool": "exec_command"
+      },
+      "tests": 21
+    }
+  },
+  "closed_nonoverlapping_twenty_minute_buckets": [
+    {
+      "start_utc": "2026-10-30T19:14:56+00:00",
+      "end_utc": "2026-10-30T19:34:56+00:00",
+      "duration_seconds": 1200,
+      "observations": [
+        {
+          "run": "host-toolchain-0001",
+          "at": 1793388000.8083034,
+          "status": "FAIL_GATE_SYNTAX_BEFORE_BODY",
+          "exit": 1
+        },
+        {
+          "run": "host-toolchain-0002",
+          "at": 1793388533.3822198,
+          "status": "FAILED_COLLECTOR_TERMINAL_RETIRED",
+          "exit": 1
+        },
+        {
+          "run": "collector-source-0001",
+          "at": 1793388685.2938704,
+          "status": "PASS3_COLLECTOR_SYNTHETIC_INPUT_TESTS",
+          "exit": 0
+        },
+        {
+          "run": "host-toolchain-0003",
+          "at": 1793388737.9219155,
+          "status": "PASS_OBSERVATIONAL_TOOLCHAIN_COLLECTION_REQUIRES_REVIEW",
+          "exit": 0
+        }
+      ],
+      "native_lane_unreleased_seconds": 1200,
+      "production_link_delta": 0,
+      "OS_behavior_test_delta": 0,
+      "native_qualification_delta": 0,
+      "retired_C_boundary_delta": 0,
+      "accepted_M14_file_delta": 0
+    },
+    {
+      "start_utc": "2026-10-30T19:34:56+00:00",
+      "end_utc": "2026-10-30T19:54:56+00:00",
+      "duration_seconds": 1200,
+      "observations": [
+        {
+          "run": "host-rust-0001",
+          "at": 1793389087.469803,
+          "status": "PASS_HOST_DIAGNOSTIC_RUST_OBJECT_DEPINFO_ONLY",
+          "exit": 0
+        },
+        {
+          "run": "mckfd-header-0001",
+          "at": 1793389765.167449,
+          "status": "PASS_STANDALONE_PERF_ON_HEADER_ABI_WITNESS",
+          "exit": 0
+        },
+        {
+          "run": "perf-typecheck-0001",
+          "at": 1793389922.8173122,
+          "status": "PASS_WHOLE_CRATE_FRONTEND_PERF_OWNER_AND_PARTICIPANTS_TYPECHECK_ONLY",
+          "exit": 0
+        }
+      ],
+      "native_lane_unreleased_seconds": 1200,
+      "production_link_delta": 0,
+      "OS_behavior_test_delta": 0,
+      "native_qualification_delta": 0,
+      "retired_C_boundary_delta": 0,
+      "accepted_M14_file_delta": 0
+    },
+    {
+      "start_utc": "2026-10-30T19:54:56+00:00",
+      "end_utc": "2026-10-30T20:14:56+00:00",
+      "duration_seconds": 1200,
+      "observations": [
+        {
+          "run": "perf-typecheck-0002",
+          "at": 1793391182.9536333,
+          "status": "PASS_AFFECTED_FRONTEND_OWNER4_PARTICIPANTS2",
+          "exit": 0
+        },
+        {
+          "run": "callback-0002",
+          "at": 1793391005.6837096,
+          "status": "PASS6_SYNTHETIC_CALLBACK",
+          "exit": null
+        },
+        {
+          "run": "disposition-0001",
+          "at": 1793391291.1877654,
+          "status": "PASS21_SYNTHETIC_DISPOSITION",
+          "exit": null
+        }
+      ],
+      "native_lane_unreleased_seconds": 1200,
+      "production_link_delta": 0,
+      "OS_behavior_test_delta": 0,
+      "native_qualification_delta": 0,
+      "retired_C_boundary_delta": 0,
+      "accepted_M14_file_delta": 0
+    }
+  ],
+  "original_thirty_minute_baseline": "preserved",
+  "target_95_percent_achieved": false,
+  "M14_files": [
+    4,
+    6
+  ],
+  "practical_functional_checks": "35/35 separate historical closure",
+  "M15": "PAUSED_UNTIL_ORIGINAL_SUPPORTED_M14_ACCEPTANCE",
+  "retained_image": "1cd7e4e66bdbd7d34bcca2e7cb698da814df470ffd726270a612a2d92faf8c38",
+  "remaining_C_cursor": "23generic original definitions rejoined to retained0633 object;5arch historical. No new selected/default artifact or live image selection proven.",
+  "compiled_source_limits": [
+    "23d7 Rust object includes retained5aa XPMEM publication code; behavior/selection held, not a NO-GO-free wholecrate",
+    "Owner4/participants2 metadata is frontend only; no machinecode/productioncaller or original C replacement credit",
+    "mckfd C witness explicitly ENABLE_PERF,0FUNC; historicalgenericobject config not inferred; callbacktype opaqueRustslot stillrequiresABIproof"
+  ],
+  "critical_native_fields": {
+    "owner": "/root",
+    "currentfree": null,
+    "later_operation_no_unlisted_custody": "UNKNOWN until truthful V1/V2/V3 and later-operation binding",
+    "V2_parent_birth": "UNKNOWN;2GiB reservation retained",
+    "effective_source_view": "four graph host roots/completeunion/split outputs and actualmountedview unadmitted",
+    "next_deliverable": "Root actual immutable supervisor/validator installation + exact current operation/source/resource bindings then independent one-shot preliminary observation admission; do not launch metadata-only probe as currentfree proof"
+  },
+  "current_compiler_next": "Use existing admitted HOST toolchain/closure for dependency-ready private credential bodies, not CURRENT119 native wait; compositor m14_arch only",
+  "largest_avoidable_handoff": "HOST compiler preparation was coupled to unfinished root/SDK/native adapter and custom parent runner; exact avoidable duration not measured",
+  "scheduling_adjustment": "Root keeps a ready ordinary CPU6 compiler queue independent of native; delegated bounded source tests can occupy the same explicitly granted slot while Root checkpoints; no concurrent slot multiplication",
+  "queue_latency": {
+    "resume_to_first_observed_rustc_seconds": 6101.410126447678,
+    "grant_to_observed_rustc_upper_bound_seconds": 9.6521155834198,
+    "owner_to_compiler_birth_proxy_seconds": 0.43,
+    "actual_queue_to_exec_seconds": null
+  },
+  "compiler_failure_to_fix": "No Rust/C compiler error observed in these selected checks; source-review four-fix frontend validation is separate from behavior/native proof",
+  "source_fixture_failure_to_validated_fix_seconds": 233.73492980003357,
+  "collector_ELF_failure_to_observed_fix_seconds": 204.5396957397461,
+  "guardian_preflight_correction": "First callback preflight aborted before fixture; compared effective guardianclock incorrectly towall. Corrected compare preserves bridge.max(wall,UTC+BOOT-savedBOOT,last_seen), allcaps/stopvetoes, controllers unchanged. Second freshgrant6testsPASS.",
+  "resources": "All recorded ordinary commands terminal and groups empty before share releases; no native/heavy launch or overlap. Native12GiB+V2UNKNOWN2GiB/scratch21/permanent27:4 unchanged; HOST16/scratch12GiB floors retained. Latest test memavailable27441754112/host142542753792/scratch47613485056 bytes; included weekly90% used, no credit/API fallback.",
+  "retained_private_binaries": "18.8MB object and7.35MB metadata remain in exact private paths/hashes in results; not deleted or restaged as accepted image",
+  "preserved_files": [
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/HANDOFF.md",
+      "retained": "source/m14-host-c-link-preparation-1/HANDOFF.md",
+      "bytes": 3228,
+      "sha256": "33bebabdfab381e228161a7a4abb1d19ea79e85af3a2578ce2c89f00a723f224"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/INDEPENDENT-REVIEW.md",
+      "retained": "source/m14-host-c-link-preparation-1/INDEPENDENT-REVIEW.md",
+      "bytes": 4315,
+      "sha256": "a977d569e05f5a621759d8b5e11fcca840eac1a06b2f60be2f9f286528b2617b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/PROFILE.SOURCE-ONLY.json",
+      "retained": "source/m14-host-c-link-preparation-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 25602,
+      "sha256": "15ef28daea3687ad16cfe561c36937d79394bd4aaa9144acd170840e2e6010f7"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/PROFILE.V2.SOURCE-ONLY.json",
+      "retained": "source/m14-host-c-link-preparation-1/PROFILE.V2.SOURCE-ONLY.json",
+      "bytes": 26134,
+      "sha256": "373f3022d02f1470d7aae9d62e0dcc982d029a3f102b138f3036a63524f08cb7"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/mckfd_layout_witness.c",
+      "retained": "source/m14-host-c-link-preparation-1/mckfd_layout_witness.c",
+      "bytes": 2150,
+      "sha256": "2920d4803caf54b622c9b0943abc1e17f74eb7e853d6871049cc446e7f49a834"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/DIRECT-STAGING-INTENT.json",
+      "retained": "source/m14-perf-typecheck-integration-1/DIRECT-STAGING-INTENT.json",
+      "bytes": 264,
+      "sha256": "fbaee6967d833f18f7e3caf8778e0048825218ae72c5f6760968bd8e3c4ba462"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/HANDOFF.md",
+      "retained": "source/m14-perf-typecheck-integration-1/HANDOFF.md",
+      "bytes": 3869,
+      "sha256": "eeab31a7c64503530d6275f261ae6c2709368e3315b29b4c2260a79f9913b3b5"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/PROFILE.SOURCE-ONLY.json",
+      "retained": "source/m14-perf-typecheck-integration-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 88823,
+      "sha256": "91d2a3f7de7e42c92d60668aa9ae0d35787e06c937c78629b93b1e05cdf5b7f9"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/PROFILE.V2.SOURCE-ONLY.json",
+      "retained": "source/m14-perf-typecheck-integration-1/PROFILE.V2.SOURCE-ONLY.json",
+      "bytes": 154136,
+      "sha256": "e5238111bdf3822bf3ba22c83273c19bbfb7cead6a47aec4b5e0c3712b8b2fbb"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/TYPECHECK-GRANT.json",
+      "retained": "source/m14-perf-typecheck-integration-1/TYPECHECK-GRANT.json",
+      "bytes": 4077,
+      "sha256": "c78b354e0132e1aad8c3b8cca09b6a7f2c467a97325e244cd9c069af796345d2"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/host_gate_typecheck.py",
+      "retained": "source/m14-perf-typecheck-integration-1/host_gate_typecheck.py",
+      "bytes": 8361,
+      "sha256": "df45ac329565bd782279ee0199a8a6347f474898f91504330d5060024eba74ae"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/host_typecheck_exec.py",
+      "retained": "source/m14-perf-typecheck-integration-1/host_typecheck_exec.py",
+      "bytes": 8755,
+      "sha256": "802c5ed03787654feeec35bf544b788c19b9f5b5463967df14807bc4cad6198e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/DIRECT-STAGING-INTENT.json",
+      "retained": "source/m14-perf-typecheck-integration-2/DIRECT-STAGING-INTENT.json",
+      "bytes": 264,
+      "sha256": "0657aa8bbcf403d91b45be42c95660e5088de150cdec54dc543d7fc269679820"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/HANDOFF.md",
+      "retained": "source/m14-perf-typecheck-integration-2/HANDOFF.md",
+      "bytes": 3046,
+      "sha256": "3cea1f5bbbbf064bbe659c8eaf1d42e66d6e70049db2e80b6f494f55816eefa1"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/PROFILE.SOURCE-ONLY.json",
+      "retained": "source/m14-perf-typecheck-integration-2/PROFILE.SOURCE-ONLY.json",
+      "bytes": 155449,
+      "sha256": "6e46cbc07637ea6985119caffe1993258a8ed1f2a7542a42d9e2d92fffa88083"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/TYPECHECK-GRANT.json",
+      "retained": "source/m14-perf-typecheck-integration-2/TYPECHECK-GRANT.json",
+      "bytes": 4049,
+      "sha256": "8963a91de78e75b7265ccfc5973657def90b0663701482afc85173a2d3df8c81"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/host_gate_typecheck.py",
+      "retained": "source/m14-perf-typecheck-integration-2/host_gate_typecheck.py",
+      "bytes": 8495,
+      "sha256": "b8fc9ec7e82afdd4243bc2c5d632fcea495c2f142432f8ef0d90c0fd952f171a"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/host_typecheck_exec.py",
+      "retained": "source/m14-perf-typecheck-integration-2/host_typecheck_exec.py",
+      "bytes": 8752,
+      "sha256": "b7a8fd40555cfbddcfa58212e871586cdcade9938a24578895e82cceb50f9fc3"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/MANIFEST.json",
+      "retained": "source/perf-descriptor-participants-1/MANIFEST.json",
+      "bytes": 1473,
+      "sha256": "c47f55c968998ce0b1c55fbaeb55ab65650f1395e7061fb429d7d97fa5e5e397"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/RESULT.md",
+      "retained": "source/perf-descriptor-participants-1/RESULT.md",
+      "bytes": 4381,
+      "sha256": "53ef65008ed8e97a4df215878ed38f3c06d6f5ea1c549c130c99d4ba43f4198f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/c-witness.patch",
+      "retained": "source/perf-descriptor-participants-1/c-witness.patch",
+      "bytes": 3061,
+      "sha256": "cca4d5ac213f267d53cd3b8c03325eeed69b4f6c1257e5e807f7f85eb9140753"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/participants-module.patch",
+      "retained": "source/perf-descriptor-participants-1/participants-module.patch",
+      "bytes": 17542,
+      "sha256": "8a4b6770abf50baedec629f51274b97669b55b8b82f57abad007cea63c04efce"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/perf_descriptor_participants.rs",
+      "retained": "source/perf-descriptor-participants-1/perf_descriptor_participants.rs",
+      "bytes": 17188,
+      "sha256": "c45e9e6bb882cb5a6842e2cac65905e438274e1f805f37b8582c9af16ca5f9ed"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/perf_group_owner_abi_witness.c.inc",
+      "retained": "source/perf-descriptor-participants-1/perf_group_owner_abi_witness.c.inc",
+      "bytes": 2740,
+      "sha256": "372f5997ea529ac94c8ee9ef0ade3d72c03dda8dfcfc7ef3fd8eb3cf848551a0"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-1/regression.rs.inc",
+      "retained": "source/perf-descriptor-participants-1/regression.rs.inc",
+      "bytes": 5774,
+      "sha256": "40a8186537068394c2b9daf93c69ef6a73746156b53a759ccf3af655e3d61c30"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/MANIFEST.json",
+      "retained": "source/perf-descriptor-participants-2/MANIFEST.json",
+      "bytes": 1783,
+      "sha256": "ee6bd44ccf1f3ff2ccd870b4dec8d16b8cbf2151971c3920361e25fa508eb47e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/RESULT.md",
+      "retained": "source/perf-descriptor-participants-2/RESULT.md",
+      "bytes": 3755,
+      "sha256": "021858bbe20309d16bc7698c09d1253b0a94fb2a33a1e04af567b3ad7c9c2d01"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/c-witness.patch",
+      "retained": "source/perf-descriptor-participants-2/c-witness.patch",
+      "bytes": 3061,
+      "sha256": "cca4d5ac213f267d53cd3b8c03325eeed69b4f6c1257e5e807f7f85eb9140753"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/owner4.patch",
+      "retained": "source/perf-descriptor-participants-2/owner4.patch",
+      "bytes": 4734,
+      "sha256": "85d828c154523ff2958dd52f5fb488675e92edd16aa4de2be11ad4fdecb3f5ff"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/owner_regression.rs.inc",
+      "retained": "source/perf-descriptor-participants-2/owner_regression.rs.inc",
+      "bytes": 2366,
+      "sha256": "6ead93b3cbd4a77ea39c9609e0656e35e3d915dfe08a468ad15ea3302a09e454"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/participants2.patch",
+      "retained": "source/perf-descriptor-participants-2/participants2.patch",
+      "bytes": 9671,
+      "sha256": "b6e223200fd9be808555570e306c226ac38c7b15f7339775442660c8bf065122"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/perf_descriptor_participants.rs",
+      "retained": "source/perf-descriptor-participants-2/perf_descriptor_participants.rs",
+      "bytes": 20401,
+      "sha256": "b2b2c3ca6ead9bbe630f94d1937a8abf4e73d92f30d3544b07cdf126dacb4da0"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/perf_group_owner.rs",
+      "retained": "source/perf-descriptor-participants-2/perf_group_owner.rs",
+      "bytes": 36956,
+      "sha256": "1ae7b90a48bb80e7b08e034c77332c2d4300fee3649ce1578e46c90106cd8ed6"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/perf_group_owner_abi_witness.c.inc",
+      "retained": "source/perf-descriptor-participants-2/perf_group_owner_abi_witness.c.inc",
+      "bytes": 2740,
+      "sha256": "372f5997ea529ac94c8ee9ef0ade3d72c03dda8dfcfc7ef3fd8eb3cf848551a0"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-descriptor-participants-2/regression.rs.inc",
+      "retained": "source/perf-descriptor-participants-2/regression.rs.inc",
+      "bytes": 11941,
+      "sha256": "61fad9b47a0944c29fc3f9a9bab98d87be93dff36525c4c4d5ea140c0644260f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-participants-independent-review-1/RESULT.md",
+      "retained": "source/perf-participants-independent-review-1/RESULT.md",
+      "bytes": 6755,
+      "sha256": "8fa1a6627f54d1b58cd1e53db698441d4705ca638537cfe2cab1bc8b5f9dbd6e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/perf-participants-independent-review-2/RESULT.md",
+      "retained": "source/perf-participants-independent-review-2/RESULT.md",
+      "bytes": 3772,
+      "sha256": "a9d9910ace8f0d7b042233c5776a7da97cd24c49f1e228031970ed2c1b2d418d"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/SOURCE-CHECKPOINT.md",
+      "retained": "source/child-callback-expert-1/SOURCE-CHECKPOINT.md",
+      "bytes": 3445,
+      "sha256": "fe068682638c7078ad4c3305572b4baba734504f4d33b6251e85e606b849b6ea"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/SOURCE-DELTA.patch",
+      "retained": "source/child-callback-expert-1/SOURCE-DELTA.patch",
+      "bytes": 28747,
+      "sha256": "d310b9b0ad385430844b25385bfc883cc47d9a20d2f5602600b9df180b9427fc"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/SOURCE-MANIFEST.json",
+      "retained": "source/child-callback-expert-1/SOURCE-MANIFEST.json",
+      "bytes": 1873,
+      "sha256": "dc95927633174fcd5e17151da8b67688bbd9908e1a3fcd88331b4b4d64d2e72c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/adapter.py",
+      "retained": "source/child-callback-expert-1/adapter.py",
+      "bytes": 14593,
+      "sha256": "6a9d2da8e345502e5789d50afcd05d69275dac2e7081adf8cf964c8ab69dcc93"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/compositor.py",
+      "retained": "source/child-callback-expert-1/compositor.py",
+      "bytes": 8364,
+      "sha256": "1216868bc7d1ea2a7daa322ce7a2d58173ec5c99befa553c0f789bcef84918a3"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/deferred_fork.py",
+      "retained": "source/child-callback-expert-1/deferred_fork.py",
+      "bytes": 7440,
+      "sha256": "6dfe920a25dbc09f0ced7bafd9b5ba949c9d5c7b608ae4e66c0923d4eabd7675"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/operation_supervisor.py",
+      "retained": "source/child-callback-expert-1/operation_supervisor.py",
+      "bytes": 9775,
+      "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/operation_watchdog.py",
+      "retained": "source/child-callback-expert-1/operation_watchdog.py",
+      "bytes": 8257,
+      "sha256": "6f1ddee0c59588413f5c8a70600f2d24ad2131684228ba8c71bffe4a7442183c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/ownership_latch.py",
+      "retained": "source/child-callback-expert-1/ownership_latch.py",
+      "bytes": 4183,
+      "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/pidfd_compat.py",
+      "retained": "source/child-callback-expert-1/pidfd_compat.py",
+      "bytes": 3875,
+      "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/pidfd_custody.py",
+      "retained": "source/child-callback-expert-1/pidfd_custody.py",
+      "bytes": 5371,
+      "sha256": "74e5f4b4f62a255fd66fecda8eb17ab4d78731f370e50f9e98177b15bb3162d0"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/root_bootstrap.py",
+      "retained": "source/child-callback-expert-1/root_bootstrap.py",
+      "bytes": 14541,
+      "sha256": "25c31cb155ba7be687d297cbda98296dc7f493fd5c99c270276d4cb6dffa2da4"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/runtime_binding.py",
+      "retained": "source/child-callback-expert-1/runtime_binding.py",
+      "bytes": 3350,
+      "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/supervisor_entry.py",
+      "retained": "source/child-callback-expert-1/supervisor_entry.py",
+      "bytes": 10458,
+      "sha256": "e85c03563699d3ea08d1f3b3eaaaa56c6cf47f59a6aeead43ec1f1951d99ab4c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/test_callback_handoff.py",
+      "retained": "source/child-callback-expert-1/test_callback_handoff.py",
+      "bytes": 5120,
+      "sha256": "c529a06971df496c733ae9c5dc5662f1a71f7e40cd2ffa1bf547823406434859"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/test_child_restore.py",
+      "retained": "source/child-callback-expert-1/test_child_restore.py",
+      "bytes": 2541,
+      "sha256": "003cbb276d0848e11323a66420b71a12282b451aebeb8fbaacfdb98b47a7bfaf"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/test_pidfd_custody.py",
+      "retained": "source/child-callback-expert-1/test_pidfd_custody.py",
+      "bytes": 5038,
+      "sha256": "ea4165151fa88e66ca4de2eadd74feb611eabc791e55cf99fedc8f306748de4e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/test_pidfd_self.py",
+      "retained": "source/child-callback-expert-1/test_pidfd_self.py",
+      "bytes": 1079,
+      "sha256": "fb8ccdcd7145ba6c86a90b3f7f0a8c44c1d4f46973b4216d8ac722d8a4677923"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-1/validator_entry.py",
+      "retained": "source/child-callback-expert-1/validator_entry.py",
+      "bytes": 1131,
+      "sha256": "7c166a39dccf1458cc395ca3d3f8bb538bcba4975cb182bf99f5da3d5341f19c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/child-callback-expert-independent-review-1/RESULT.md",
+      "retained": "source/child-callback-expert-independent-review-1/RESULT.md",
+      "bytes": 4904,
+      "sha256": "a1d735ddcaee8b004ec25d537a81b57e270ce452a72b79ce398f40eae5f7579c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/close-state-independent-review-1/RESULT.md",
+      "retained": "source/close-state-independent-review-1/RESULT.md",
+      "bytes": 4689,
+      "sha256": "429cca018c4e7baf6609272414b578b829a9de28d94cf83adea5fc1872e5a88f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/GRAPH-CONTRACT.json",
+      "retained": "source/expert-disposition-source-1/GRAPH-CONTRACT.json",
+      "bytes": 21623,
+      "sha256": "d4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/SOURCE-CHECKPOINT.md",
+      "retained": "source/expert-disposition-source-1/SOURCE-CHECKPOINT.md",
+      "bytes": 3311,
+      "sha256": "53f3765a8adc324bffca682718383f891237620b2f52fa69c1ea82e6dde7077b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/SOURCE-DELTA.patch",
+      "retained": "source/expert-disposition-source-1/SOURCE-DELTA.patch",
+      "bytes": 39471,
+      "sha256": "72fa7e0c2e7fec40cd9f76ba6e88b6e25feca3c64ac3818262117b49171e3d4f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/SOURCE-MANIFEST.json",
+      "retained": "source/expert-disposition-source-1/SOURCE-MANIFEST.json",
+      "bytes": 2263,
+      "sha256": "56c3d171f0cef67c8b035cb9bbff623492355670ec96e130708bad07a77d832c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/adapter.py",
+      "retained": "source/expert-disposition-source-1/adapter.py",
+      "bytes": 17048,
+      "sha256": "7371d35001a65b42c168f9700e2186bcbd9c579530c224b3b79addedc77ac1d9"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/compositor.py",
+      "retained": "source/expert-disposition-source-1/compositor.py",
+      "bytes": 10404,
+      "sha256": "b06705c0b35119125a7d08381bc409bc31bffbb1ad6903252c8cfb9a1927f5f4"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/custody_protocol_v2.py",
+      "retained": "source/expert-disposition-source-1/custody_protocol_v2.py",
+      "bytes": 4452,
+      "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/deferred_fork.py",
+      "retained": "source/expert-disposition-source-1/deferred_fork.py",
+      "bytes": 12001,
+      "sha256": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/graph_observations.py",
+      "retained": "source/expert-disposition-source-1/graph_observations.py",
+      "bytes": 9624,
+      "sha256": "a0c5c4d0222fac7906a1591449efefab36d9f97a076a9cc47c913de06614ea1b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/operation_supervisor.py",
+      "retained": "source/expert-disposition-source-1/operation_supervisor.py",
+      "bytes": 9775,
+      "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/operation_watchdog.py",
+      "retained": "source/expert-disposition-source-1/operation_watchdog.py",
+      "bytes": 8257,
+      "sha256": "6f1ddee0c59588413f5c8a70600f2d24ad2131684228ba8c71bffe4a7442183c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/ownership_latch.py",
+      "retained": "source/expert-disposition-source-1/ownership_latch.py",
+      "bytes": 4183,
+      "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/pidfd_compat.py",
+      "retained": "source/expert-disposition-source-1/pidfd_compat.py",
+      "bytes": 3875,
+      "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/pidfd_custody.py",
+      "retained": "source/expert-disposition-source-1/pidfd_custody.py",
+      "bytes": 10423,
+      "sha256": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/root_bootstrap.py",
+      "retained": "source/expert-disposition-source-1/root_bootstrap.py",
+      "bytes": 14922,
+      "sha256": "66b8aba3242efb03b52badee7a10bb3dd304bceeff94e12bc95bca9f7b55461b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/runtime_binding.py",
+      "retained": "source/expert-disposition-source-1/runtime_binding.py",
+      "bytes": 3350,
+      "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/supervisor_entry.py",
+      "retained": "source/expert-disposition-source-1/supervisor_entry.py",
+      "bytes": 10458,
+      "sha256": "e85c03563699d3ea08d1f3b3eaaaa56c6cf47f59a6aeead43ec1f1951d99ab4c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/test_actual_close.py",
+      "retained": "source/expert-disposition-source-1/test_actual_close.py",
+      "bytes": 8633,
+      "sha256": "afd1ae2693155ebdfd0ee023bec8c5e360ddf46c89f904641abdb76cea63a906"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/test_callback_handoff.py",
+      "retained": "source/expert-disposition-source-1/test_callback_handoff.py",
+      "bytes": 5120,
+      "sha256": "c529a06971df496c733ae9c5dc5662f1a71f7e40cd2ffa1bf547823406434859"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/test_validator_consumer.py",
+      "retained": "source/expert-disposition-source-1/test_validator_consumer.py",
+      "bytes": 6997,
+      "sha256": "293e667db1126ff89bbe5776671e223c3976d4168bd511bcc2841e46f431132e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/validator_consumer.py",
+      "retained": "source/expert-disposition-source-1/validator_consumer.py",
+      "bytes": 1906,
+      "sha256": "81ba58db539eb35651bd8cfe284d0f5d558a12d2a6308c76d66a1d88f40dc0cd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-source-1/validator_entry.py",
+      "retained": "source/expert-disposition-source-1/validator_entry.py",
+      "bytes": 2468,
+      "sha256": "94ab9992b574d472ed47186d122668e436cf80c31cfc81440be84bc8b8047290"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/expert-disposition-independent-review-1/RESULT.md",
+      "retained": "source/expert-disposition-independent-review-1/RESULT.md",
+      "bytes": 5147,
+      "sha256": "20198aba5d7911ba5b007ace705fd5c4685384c432e721147db879e9485e2d4a"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/GRAPH-CONTRACT.json",
+      "retained": "source/lock-order-correction-1/GRAPH-CONTRACT.json",
+      "bytes": 21623,
+      "sha256": "d4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/SOURCE-CHECKPOINT.md",
+      "retained": "source/lock-order-correction-1/SOURCE-CHECKPOINT.md",
+      "bytes": 2375,
+      "sha256": "aa8ae75e798c4378c9fc3cea7caa527a4b21e5c4dcb4d7b0122b5233304a4ddf"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/SOURCE-DELTA.patch",
+      "retained": "source/lock-order-correction-1/SOURCE-DELTA.patch",
+      "bytes": 5610,
+      "sha256": "290b971a199432bcef4b0c421d4365c7f60a674bf7369bee7edfd86b1a2a6408"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/SOURCE-MANIFEST.json",
+      "retained": "source/lock-order-correction-1/SOURCE-MANIFEST.json",
+      "bytes": 2387,
+      "sha256": "9e643192dec39fb7ce5f3f9c020a1e3d1063688be1d8aa3599fc9fe5f267d407"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/adapter.py",
+      "retained": "source/lock-order-correction-1/adapter.py",
+      "bytes": 18394,
+      "sha256": "c15978cbfa06921bd3bb6c4e6cf49827e7032fe8536646590945cc000a1711e9"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/compositor.py",
+      "retained": "source/lock-order-correction-1/compositor.py",
+      "bytes": 10404,
+      "sha256": "b06705c0b35119125a7d08381bc409bc31bffbb1ad6903252c8cfb9a1927f5f4"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/custody_protocol_v2.py",
+      "retained": "source/lock-order-correction-1/custody_protocol_v2.py",
+      "bytes": 4452,
+      "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/deferred_fork.py",
+      "retained": "source/lock-order-correction-1/deferred_fork.py",
+      "bytes": 12001,
+      "sha256": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/graph_observations.py",
+      "retained": "source/lock-order-correction-1/graph_observations.py",
+      "bytes": 9624,
+      "sha256": "a0c5c4d0222fac7906a1591449efefab36d9f97a076a9cc47c913de06614ea1b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/operation_supervisor.py",
+      "retained": "source/lock-order-correction-1/operation_supervisor.py",
+      "bytes": 9775,
+      "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/operation_watchdog.py",
+      "retained": "source/lock-order-correction-1/operation_watchdog.py",
+      "bytes": 8257,
+      "sha256": "6f1ddee0c59588413f5c8a70600f2d24ad2131684228ba8c71bffe4a7442183c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/ownership_latch.py",
+      "retained": "source/lock-order-correction-1/ownership_latch.py",
+      "bytes": 4183,
+      "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/pidfd_compat.py",
+      "retained": "source/lock-order-correction-1/pidfd_compat.py",
+      "bytes": 3875,
+      "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/pidfd_custody.py",
+      "retained": "source/lock-order-correction-1/pidfd_custody.py",
+      "bytes": 10423,
+      "sha256": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/root_bootstrap.py",
+      "retained": "source/lock-order-correction-1/root_bootstrap.py",
+      "bytes": 14922,
+      "sha256": "66b8aba3242efb03b52badee7a10bb3dd304bceeff94e12bc95bca9f7b55461b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/runtime_binding.py",
+      "retained": "source/lock-order-correction-1/runtime_binding.py",
+      "bytes": 3350,
+      "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/supervisor_entry.py",
+      "retained": "source/lock-order-correction-1/supervisor_entry.py",
+      "bytes": 10458,
+      "sha256": "e85c03563699d3ea08d1f3b3eaaaa56c6cf47f59a6aeead43ec1f1951d99ab4c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/test_actual_close.py",
+      "retained": "source/lock-order-correction-1/test_actual_close.py",
+      "bytes": 8633,
+      "sha256": "afd1ae2693155ebdfd0ee023bec8c5e360ddf46c89f904641abdb76cea63a906"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/test_callback_handoff.py",
+      "retained": "source/lock-order-correction-1/test_callback_handoff.py",
+      "bytes": 5120,
+      "sha256": "c529a06971df496c733ae9c5dc5662f1a71f7e40cd2ffa1bf547823406434859"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/test_lock_order.py",
+      "retained": "source/lock-order-correction-1/test_lock_order.py",
+      "bytes": 4974,
+      "sha256": "217345fa2efe050633a58d6713f2db128ec0d1c08c8ef84bb38246ce1cbff8a8"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/test_validator_consumer.py",
+      "retained": "source/lock-order-correction-1/test_validator_consumer.py",
+      "bytes": 6997,
+      "sha256": "293e667db1126ff89bbe5776671e223c3976d4168bd511bcc2841e46f431132e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/validator_consumer.py",
+      "retained": "source/lock-order-correction-1/validator_consumer.py",
+      "bytes": 1906,
+      "sha256": "81ba58db539eb35651bd8cfe284d0f5d558a12d2a6308c76d66a1d88f40dc0cd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-correction-1/validator_entry.py",
+      "retained": "source/lock-order-correction-1/validator_entry.py",
+      "bytes": 2468,
+      "sha256": "94ab9992b574d472ed47186d122668e436cf80c31cfc81440be84bc8b8047290"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/lock-order-independent-review-1/RESULT.md",
+      "retained": "source/lock-order-independent-review-1/RESULT.md",
+      "bytes": 4472,
+      "sha256": "d2b69cd13d4a38f4dc6e043417794f12bc8ee3bb6e41b66397c56f03a2f00f46"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/ACTUAL-TOOLCHAIN-CLOSURE-REVIEW.md",
+      "retained": "ACTUAL-TOOLCHAIN-CLOSURE-REVIEW.md",
+      "bytes": 5011,
+      "sha256": "62cb1c4b4cbe5a653639bede65eaa247517edfd6fb999b2380ac366c80d58f7b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/ACTUAL-OUTER-ARGV.json",
+      "retained": "runs/host-rust-0001/ACTUAL-OUTER-ARGV.json",
+      "bytes": 579,
+      "sha256": "d24311e95a06ae004f524f7e41fe97a2fe6eacf195bee28c12239df4c41d97ce"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/ADMISSION.json",
+      "retained": "runs/host-rust-0001/ADMISSION.json",
+      "bytes": 4004,
+      "sha256": "800f453c10d9cd1a5a4f4536025629c0f76d99ba9789901f78c10994aa69feb6"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/COMPILER-OBSERVATION-1.json",
+      "retained": "runs/host-rust-0001/COMPILER-OBSERVATION-1.json",
+      "bytes": 1041,
+      "sha256": "cf905c61866212f4c3342aff248bc56e8c18cd0c0be78a0cdb0f6bbe7cb71f6b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/DEPINFO-LITERAL-CHECK.RETAINED.json",
+      "retained": "runs/host-rust-0001/DEPINFO-LITERAL-CHECK.RETAINED.json",
+      "bytes": 701,
+      "sha256": "561aed42ff6d9bfe33668fe78a64e6d80b483e5f878738cbead60636384170c6"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/DEPINFO-NORMALIZED-IDENTITY-CHECK.json",
+      "retained": "runs/host-rust-0001/DEPINFO-NORMALIZED-IDENTITY-CHECK.json",
+      "bytes": 90227,
+      "sha256": "947661a38bc1eed365518edf77551db1de7a5680bfc54132da66ee1072a3a27d"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/PROCESS-OWNER.json",
+      "retained": "runs/host-rust-0001/PROCESS-OWNER.json",
+      "bytes": 318,
+      "sha256": "7165c2b7e0a036e5125bfd7ab8d130dcf79665fe143082d24ece42937136f3a1"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/RESULT.json",
+      "retained": "runs/host-rust-0001/RESULT.json",
+      "bytes": 4926,
+      "sha256": "9045fd4f51520eb198d828b8a5779c4229a074af7580fb5c2f9c1dcd54a6ccdd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/outer-time.txt",
+      "retained": "runs/host-rust-0001/outer-time.txt",
+      "bytes": 779,
+      "sha256": "44d91534df48ab85f67748a5acd2986ada79a523bc06118ed03bf6f10f2bac8b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/stderr.txt",
+      "retained": "runs/host-rust-0001/stderr.txt",
+      "bytes": 93229,
+      "sha256": "808a1e6cf4aba565fa7d01e047b57451289193f04574e16b4a6041ac5b6b70ed"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/host-rust-0001/stdout.txt",
+      "retained": "runs/host-rust-0001/stdout.txt",
+      "bytes": 611,
+      "sha256": "dc8b53cdc347b25b280fc5ea83268e5ec68a0f7695f7c06d58540a4ae19fb36e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/ADMISSION.json",
+      "retained": "runs/mckfd-header-0001/ADMISSION.json",
+      "bytes": 12857,
+      "sha256": "defdeed221f03c72cc8aeedce3030648c319c2edc5633ff9820686f2862b1a05"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/DEPINFO-FIRST-ROOT-CHECK.RETAINED.json",
+      "retained": "runs/mckfd-header-0001/DEPINFO-FIRST-ROOT-CHECK.RETAINED.json",
+      "bytes": 738,
+      "sha256": "7b9f9fb01547649d45d2fca98f6f1f40fb99327877b1e0883a27124e8b1c9d5f"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/HEADER-DEPENDENCIES.json",
+      "retained": "runs/mckfd-header-0001/HEADER-DEPENDENCIES.json",
+      "bytes": 48229,
+      "sha256": "62ff8ba6938606880a8e0fd6cc8ccae2040ba5aab5f03bf6f25d7b91b7728e24"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/PROCESS-OWNER.json",
+      "retained": "runs/mckfd-header-0001/PROCESS-OWNER.json",
+      "bytes": 281,
+      "sha256": "7e1591a0ff16e0202623b7a55c2dba65193e26a3f6639afb1a9caa5e0aa13ca2"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/RESULT.json",
+      "retained": "runs/mckfd-header-0001/RESULT.json",
+      "bytes": 1559,
+      "sha256": "63252ff4cd3f2be0680edd2fbbb664445c72a780f0ae05ecc244c8b50c2c4476"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/stderr.txt",
+      "retained": "runs/mckfd-header-0001/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/stdout.txt",
+      "retained": "runs/mckfd-header-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/mckfd-header-0001/time.txt",
+      "retained": "runs/mckfd-header-0001/time.txt",
+      "bytes": 8159,
+      "sha256": "a21756749e837d57bcf54a86eca68a2b7c8ed8903dd879a40093d23aa726a78e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/ACTUAL-OUTER-ARGV.json",
+      "retained": "runs/perf-typecheck-0001/ACTUAL-OUTER-ARGV.json",
+      "bytes": 584,
+      "sha256": "9b5f22b36e3bbf913751aee630d989135a98ee81996a21d8166ad7ca818d7a19"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/ADMISSION.json",
+      "retained": "runs/perf-typecheck-0001/ADMISSION.json",
+      "bytes": 4077,
+      "sha256": "c78b354e0132e1aad8c3b8cca09b6a7f2c467a97325e244cd9c069af796345d2"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/DEPINFO-NORMALIZED-IDENTITY-CHECK.json",
+      "retained": "runs/perf-typecheck-0001/DEPINFO-NORMALIZED-IDENTITY-CHECK.json",
+      "bytes": 92051,
+      "sha256": "2bc789b58001bc25d79b1119f39c087d00cd5d5143ebeb95cdf29ed6a2486ee1"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/PROCESS-OWNER.json",
+      "retained": "runs/perf-typecheck-0001/PROCESS-OWNER.json",
+      "bytes": 321,
+      "sha256": "d1269f779accd4ab002fc0e0bf100f318ef19f352eed6d29ae451e92275540cb"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/RESULT.json",
+      "retained": "runs/perf-typecheck-0001/RESULT.json",
+      "bytes": 3238,
+      "sha256": "cdb23c07cfef9a935a0b8470ffd81acf3e8f94b06d9a150b56ed1a8e65eca302"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/outer-time.txt",
+      "retained": "runs/perf-typecheck-0001/outer-time.txt",
+      "bytes": 778,
+      "sha256": "2b8f6930c35d7be544e8f4d52e6addde7e35cc7f78f2c39f177f88097417c0d1"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/stderr.txt",
+      "retained": "runs/perf-typecheck-0001/stderr.txt",
+      "bytes": 126693,
+      "sha256": "d354410a737d2b4c44a6af681d7dd0df4ede1ca89b6b1bfa47063f125516e812"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0001/stdout.txt",
+      "retained": "runs/perf-typecheck-0001/stdout.txt",
+      "bytes": 613,
+      "sha256": "d3782b34213b2e0964580e860b03e3784845169da91b3e97ea787751a1f4cd26"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/ACTUAL-OUTER-ARGV.json",
+      "retained": "runs/perf-typecheck-0002/ACTUAL-OUTER-ARGV.json",
+      "bytes": 584,
+      "sha256": "e117a3ab169b950c6b4477f5c1ce71397fed31916a9df4875ea080a2e3654be9"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/ADMISSION.json",
+      "retained": "runs/perf-typecheck-0002/ADMISSION.json",
+      "bytes": 4049,
+      "sha256": "8963a91de78e75b7265ccfc5973657def90b0663701482afc85173a2d3df8c81"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/DEPINFO-NORMALIZED-IDENTITY-CHECK.json",
+      "retained": "runs/perf-typecheck-0002/DEPINFO-NORMALIZED-IDENTITY-CHECK.json",
+      "bytes": 92051,
+      "sha256": "f4577b755a648de50420fc5c2bcb1152cef3644684c8c3f07686182fb4252a56"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/PROCESS-OWNER.json",
+      "retained": "runs/perf-typecheck-0002/PROCESS-OWNER.json",
+      "bytes": 281,
+      "sha256": "32182479f7df113da042a39182a22b77747a21d98c3f020dd72830b373930322"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/RESULT.json",
+      "retained": "runs/perf-typecheck-0002/RESULT.json",
+      "bytes": 2087,
+      "sha256": "5c70c7d8c6d67ded460d758613bf13845081065b3601f960d0c5f5869ac804ee"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/outer-time.txt",
+      "retained": "runs/perf-typecheck-0002/outer-time.txt",
+      "bytes": 776,
+      "sha256": "2f0183a47529344fa6af4c69a7d2f04fc054bb0aaf5cafd8ff65acf667d2bc0b"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/stderr.txt",
+      "retained": "runs/perf-typecheck-0002/stderr.txt",
+      "bytes": 130539,
+      "sha256": "b6c61d7bc6dbc97a6decb503b21addb1b783b8957e909697b2a1d196536949e6"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/perf-typecheck-0002/stdout.txt",
+      "retained": "runs/perf-typecheck-0002/stdout.txt",
+      "bytes": 613,
+      "sha256": "ab08a4d05ea65837caac419e107cc4851aa7e99edc8f6672eba0225040c3b83d"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0001/ABORTED-PREFLIGHT.json",
+      "retained": "runs/callback-0001/ABORTED-PREFLIGHT.json",
+      "bytes": 902,
+      "sha256": "2cd6b7624ba210ccca9656878972bc6c27471f7b21a76f90dae5972160a6dba1"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/ADMISSION.json",
+      "retained": "runs/callback-0002/ADMISSION.json",
+      "bytes": 5695,
+      "sha256": "ab5c5f31667455d9f6357db0ec4a3652dd88c84b679c0aff6837d53e0471875e"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/GROUP-CENSUS.json",
+      "retained": "runs/callback-0002/GROUP-CENSUS.json",
+      "bytes": 181,
+      "sha256": "479807f8f98874024a6157bff5a9b2b138ddbc4718fce50233d57a64885e1787"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/PROCESS-OWNER.json",
+      "retained": "runs/callback-0002/PROCESS-OWNER.json",
+      "bytes": 180,
+      "sha256": "bc9c12e04323395fd569031d7a1495b61a31869051463931b0de2b2114dedddd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/RESULT.json",
+      "retained": "runs/callback-0002/RESULT.json",
+      "bytes": 1447,
+      "sha256": "96b5e99ae5b87cb10314f406ca1805cd15a3884c91805067ba9eaa9e81895ef1"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/preflight_exec.py",
+      "retained": "runs/callback-0002/preflight_exec.py",
+      "bytes": 9750,
+      "sha256": "2046847f2b5dbbcc972edb0724eae810243b99fa85658b63656c0d8926c0456a"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/stderr.txt",
+      "retained": "runs/callback-0002/stderr.txt",
+      "bytes": 669,
+      "sha256": "8d27b24382b4095ccfb96bdfdee9f80c4f412183d9be89866058dc16d1971745"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/stdout.txt",
+      "retained": "runs/callback-0002/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/callback-0002/time.txt",
+      "retained": "runs/callback-0002/time.txt",
+      "bytes": 781,
+      "sha256": "c0eae709b74c5672dd40d3c7e78177db84c6f07d42a37d2a7b2ea0dfb6cefe0d"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/ADMISSION.json",
+      "retained": "runs/disposition-0001/ADMISSION.json",
+      "bytes": 6361,
+      "sha256": "cce9304ffa100dcbba0687d38ffcd5c4ed805f0d98e1a24e35721d2a607b10ac"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/GROUP-CENSUS.json",
+      "retained": "runs/disposition-0001/GROUP-CENSUS.json",
+      "bytes": 181,
+      "sha256": "323768240f6b581471d16de146c03b5838dfb83717c92c4ea8fa1485c4e3de38"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/PROCESS-OWNER.json",
+      "retained": "runs/disposition-0001/PROCESS-OWNER.json",
+      "bytes": 179,
+      "sha256": "796a980d310ad867de2a9f0e55fcd73db37963fcf2a5afdc43374ad0dec940c0"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/RESULT.json",
+      "retained": "runs/disposition-0001/RESULT.json",
+      "bytes": 1566,
+      "sha256": "bd0a25d3189c021b25f1d6801e91683e063357d16c7bf7d95871e6aa6420535d"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/preflight_exec.py",
+      "retained": "runs/disposition-0001/preflight_exec.py",
+      "bytes": 10259,
+      "sha256": "afa06b46c24eabb28f6fe822ff8953e63af8e8e3382bd33124de3eda3fefa589"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/stderr.txt",
+      "retained": "runs/disposition-0001/stderr.txt",
+      "bytes": 2198,
+      "sha256": "d34bcfe0e9a1b400c3fd374f4b5c23414a9ce7ccdef9c33fe6fe05d1189b9fd8"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/stdout.txt",
+      "retained": "runs/disposition-0001/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/disposition-0001/time.txt",
+      "retained": "runs/disposition-0001/time.txt",
+      "bytes": 819,
+      "sha256": "3a55201d9412b785686484c21d504f3c72fc3817ededd49c9613ebf3978020e3"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/exec-intent.json",
+      "retained": "artifacts/m14-host-compile-preparation-1/exec-intent.json",
+      "bytes": 8251,
+      "sha256": "c7fabc47b03a6b5c669abfdfb59e23d1889162fbb2990abf9492dc2e2e1cf411"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/staged-readback.json",
+      "retained": "artifacts/m14-host-compile-preparation-1/staged-readback.json",
+      "bytes": 67643,
+      "sha256": "4712c14e74c1f075d6feaf1fbe9516d8a2f903901e64e2868411f82334b0d9ea"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/time.txt",
+      "retained": "artifacts/m14-host-compile-preparation-1/time.txt",
+      "bytes": 5000,
+      "sha256": "6660dd4f5649a7fd212ad21f087bc3ef1a4eb12d888ae6dc309c2ea873708a0c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-compile-preparation-1/work-1/out/mckernel.d",
+      "retained": "artifacts/m14-host-compile-preparation-1/mckernel.d",
+      "bytes": 92572,
+      "sha256": "fb685733767f6765be9a8447de9e79772d0bc08104a92edc7548a68dd21a29a6"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/work-1/out/exec-intent.json",
+      "retained": "artifacts/m14-perf-typecheck-integration-1/exec-intent.json",
+      "bytes": 8321,
+      "sha256": "747c37008bdbb60fd0a7c9308be9900b9588652d8bf4868e7a7868b2168ff7eb"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/work-1/out/staged-readback.json",
+      "retained": "artifacts/m14-perf-typecheck-integration-1/staged-readback.json",
+      "bytes": 68485,
+      "sha256": "e1c7af4518fafbaa25af12b67be1733f52fba5ca41c0e916c1a1033ee40df6f8"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/work-1/out/time.txt",
+      "retained": "artifacts/m14-perf-typecheck-integration-1/time.txt",
+      "bytes": 5043,
+      "sha256": "008f3df5513095765d8b280fc1499e301fbf60cca52351caadf53998ffcff41c"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-1/work-1/out/mckernel.d",
+      "retained": "artifacts/m14-perf-typecheck-integration-1/mckernel.d",
+      "bytes": 94751,
+      "sha256": "0a50deea7906a805b0bf59a7663750414d2702afe9168e86ad8095f3e4766137"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/work-1/out/exec-intent.json",
+      "retained": "artifacts/m14-perf-typecheck-integration-2/exec-intent.json",
+      "bytes": 8321,
+      "sha256": "9c05574b5f6ea8e09bb91eff53fc06da4cfd97289bad3dc88830ec2adb3b3350"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/work-1/out/staged-readback.json",
+      "retained": "artifacts/m14-perf-typecheck-integration-2/staged-readback.json",
+      "bytes": 68485,
+      "sha256": "96b45032e26103191f0c8ed830810f9ee26a000e53640b49130df1cd9d247024"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/work-1/out/time.txt",
+      "retained": "artifacts/m14-perf-typecheck-integration-2/time.txt",
+      "bytes": 5043,
+      "sha256": "95732e713ee8d1685374e804ab3758410a753c6dd35a2687567ca738bff07197"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-perf-typecheck-integration-2/work-1/out/mckernel.d",
+      "retained": "artifacts/m14-perf-typecheck-integration-2/mckernel.d",
+      "bytes": 94751,
+      "sha256": "34a203ce10eacc8f52c593cb2f12e68fcf52b510ed401ff5106d640d47bd95e4"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/work-1/out/mckfd_layout_witness.o",
+      "retained": "artifacts/mckfd/mckfd_layout_witness.o",
+      "bytes": 42176,
+      "sha256": "b59c8606bb9910878b027224508794405f35083c18ea2bf12fb130ce5fad17d0"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-host-c-link-preparation-1/work-1/out/mckfd_layout_witness.d",
+      "retained": "artifacts/mckfd/mckfd_layout_witness.d",
+      "bytes": 29999,
+      "sha256": "5840e27f09be46f3c5be2a8a323afba61e9a55eb29bf6a761492e89314fe43fd"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-compositor-source-1/FUNCTION-STATE.SOURCE-ONLY.json",
+      "retained": "FUNCTION-STATE.SOURCE-ONLY.SNAPSHOT.json",
+      "bytes": 68710,
+      "sha256": "ae86ea60c8e8950b05c137df4c0c7401538095d9069587acbd97d4e62e339b2e"
+    }
+  ]
+}

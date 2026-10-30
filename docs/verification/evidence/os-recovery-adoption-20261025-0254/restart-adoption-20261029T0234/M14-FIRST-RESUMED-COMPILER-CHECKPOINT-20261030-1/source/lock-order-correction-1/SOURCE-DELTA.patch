@@ -1,0 +1,95 @@
+--- expert-disposition-source-1/adapter.py	2026-10-30 13:03:03.279641685 -0700
++++ lock-order-correction-1/adapter.py	2026-10-30 13:11:13.938738980 -0700
+@@ -151,17 +151,35 @@
+     it is not permission to launch or proof of custody after this channel ends.
+     """
+     def __init__(self, fd, pidfd_record, owner):
+-        if type(pidfd_record) is not PidfdCustodyRecord or pidfd_record.state!='REGISTERED':
+-            fail('caller-owned pre-registered pidfd custody required')
+-        if (getattr(owner,'session',None) is not self or getattr(owner,'record',None) is not pidfd_record or
+-            type(getattr(owner,'duplicate',None)) is not SocketDupRecord):
+-            fail('pre-owned operation and duplicate record required')
+-        self.pidfd_record=pidfd_record;self.owner=owner;self.duplicate=owner.duplicate
+-        self.closed=False;self.close_state='OPEN';self.sock=None;self.session_lock=threading.RLock()
++        # All session construction/progression uses operation -> session -> record.
+         with owner.lock:
+-            if owner.state=='UNKNOWN_RETAINED':fail('operation already unknown')
+-            with deferred_fork.DeferredFork() as guard:
+-                self.sock=guard.duplicate_and_adopt(self.duplicate,fd)
++            if type(pidfd_record) is not PidfdCustodyRecord or pidfd_record.state!='REGISTERED':
++                fail('caller-owned pre-registered pidfd custody required')
++            if (getattr(owner,'session',None) is not self or getattr(owner,'record',None) is not pidfd_record or
++                type(getattr(owner,'duplicate',None)) is not SocketDupRecord or owner.state!='REGISTERED'):
++                fail('pre-owned live operation and duplicate record required')
++            self.pidfd_record=pidfd_record;self.owner=owner;self.duplicate=owner.duplicate
++            self.closed=False;self.close_state='OPEN';self.sock=None;self.session_lock=threading.RLock()
++            with self.session_lock:
++                self._initialize(fd,pidfd_record,owner)
++
++    def _require_owner_live(self,before_pidfd=False):
++        if (self.owner.state!='REGISTERED' or self.owner.session is not self or
++            self.owner.record is not self.pidfd_record or self.owner.duplicate is not self.duplicate or
++            self.close_state!='OPEN'):
++            fail('operation or session is no longer live')
++        if before_pidfd:
++            if self.pidfd_record.state!='REGISTERED' or self.duplicate.state not in ('REGISTERED','ADOPTED'):
++                fail('constructor custody changed')
++        elif self.pidfd_record.state!='VERIFIED_HELD' or self.duplicate.state!='ADOPTED':
++            fail('session custody changed')
++
++    def _initialize(self,fd,pidfd_record,owner):
++        self._require_owner_live(before_pidfd=True)
++        with deferred_fork.DeferredFork() as guard:
++            self._require_owner_live(before_pidfd=True)
++            self.sock=guard.duplicate_and_adopt(self.duplicate,fd)
++        self._require_owner_live(before_pidfd=True)
+         self.wire = load_wire()
+         try:
+             if self.sock.family != socket.AF_UNIX or self.sock.getsockopt(socket.SOL_SOCKET, socket.SO_TYPE) != socket.SOCK_STREAM:
+@@ -172,7 +190,9 @@
+             self.pid, self.uid, self.gid = pid, uid, gid
+             self.parent, self.birth = proc_identity(pid)
+             with deferred_fork.DeferredFork() as guard:
++                self._require_owner_live(before_pidfd=True)
+                 self.pidfd = guard.acquire_and_pin(pidfd_record,pid,self.birth)
++            self._require_owner_live()
+             self.bootstrap = json.loads(trusted_file(BOOTSTRAP), object_pairs_hook=unique)
+             shape(self.bootstrap, 'version supervisor_source supervisor_sha256 interpreter_sha256 argv contract_sha256 lease_sha256 custody_sha256 nonce caps boot_id max_age_seconds max_step_seconds')
+             b = self.bootstrap
+@@ -233,8 +253,10 @@
+                 fail('candidate custody differs')
+             if self._pid_exited() or proc_identity(pid) != (self.parent, self.birth):
+                 fail('supervisor identity changed')
++            self._require_owner_live()
+             self.data, self.expires_boot = data, expires
+             self.candidate_sha256, self.custody_sha256 = digest(raw), reply['custody_sha256']
++            self._require_owner_live()
+         except BaseException:
+             # Caller owns disposition; no constructor-side disposal.
+             raise
+@@ -247,9 +269,12 @@
+     def revalidate(self):
+         """Require a new same-channel custody assertion immediately before use."""
+         # Failure transfers to the pre-registered caller-owned operation.
+-        with self.session_lock:
+-            if self.close_state!='OPEN':fail('session close begun')
+-            return self._revalidate()
++        with self.owner.lock:
++            with self.session_lock:
++                self._require_owner_live()
++                data=self._revalidate()
++                self._require_owner_live()
++                return data
+ 
+     def _revalidate(self):
+         if self.closed:
+@@ -280,7 +305,9 @@
+             not request_boot <= t <= now[1] or now[1] - t > self.max_age or now[1] >= self.expires_boot or not now[1] < end <= t + self.max_age or
+             end > self.bootstrap['caps']['boot'] or self._pid_exited() or proc_identity(self.pid) != (self.parent, self.birth)):
+             fail('custody revalidation rejected')
++        self._require_owner_live()
+         self.expires_boot = end
++        self._require_owner_live()
+         return self.data
+ 
+     def close(self,owner):
