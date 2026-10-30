@@ -1,0 +1,21 @@
+# Independent source review: nonheld generic and four architecture bridges
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Decision: **CONDITIONAL SOURCE PASS**. No concrete source ABI or compile blocker was found in the proposed four-bridge selection. This is a source decision, not compiler/link, original metadata, native or M14 acceptance. No compiler, preprocessor, test, linker, native operation or physical workload was run in this review.
+
+The bound profile is SHA-256 `042b48800c94e70c2b799724f6e5df5b6b83ba735a83cc2e9909c26c03f14e03`; the architecture delta patch is `c7fb234385e98ae219defd61dd3d193f6e906d6bb47197a403867f02b9cc0249`. The 12 recorded postimage hashes, all seven bound generic preimages and the architecture preimages match their source descriptors. The prior generic-eight source reviews and actual 46-value HOST geometry review `c9769495…` retain their original narrow scopes.
+
+## Disabled whole-signal ABI
+
+The postimage's `arch_do_signal_core_terminate_result`, its changed `*const AtomicU64` parameter, both call sites and the `f06_signal_log_budget` static/module are inside `#[cfg(f06_do_signal_whole_candidate)] mod f06_do_signal_whole_candidate`. The approved SIGTRAP constructor is separately gated by that same whole-signal cfg. The proposed Rust argv selects neither that cfg nor the partial core/trap cfgs; the C argv omits `MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE`, retaining C `do_signal`. Thus this proposed configuration does not emit the changed whole-module helper or atomic storage, and no unconditional change to an active old-`*mut CInt` helper export was found. Actual object and linked-provider inspection remains necessary to establish emitted symbols and consumers. This conclusion does not approve the later atomic reservation behavior, storage/caller ABI or whole-signal cutover.
+
+## Selected bridges and source bindings
+
+The proposed narrow C macros select XRSTOR leaf, native bad-frame leaf, signal context and defined regset diagnostic; corresponding Rust cfgs select the leaf-adapter module, context module and regset logger. The native bad-frame Rust function additionally requires the selected native Linux6.12 cfg. The reviewed source signatures match their corresponding C declarations: pointer-to-state/void; C long to long; thread/context/int output pointers to void; and int/long to void. The sibling context helper is `pub(super)` and the existing xstate restore is `pub(crate)`; the selected adapters' referenced mask getter and parent imports are present. These source relationships do not establish generated code, GS/TSS or xstate lifetime/exclusion, actual callback ABI, or unique linked providers. Native checked FP restore and the non-native raw XRSTOR bridge remain distinct.
+
+The C origin assertion and generated-header binding remain in the source. The proposed file-scoped macro map names the exact private architecture C operand and maps it to `/src/arch/x86_64/kernel/syscall.c`, matching the retained logical guard; the Rust origin environment uses that logical string. The old `b5e9…` full-source receipt does not bind the changed architecture C postimage. Of the inherited Rust policy source-location macro coordinates, 94 remain unchanged and 12 are intentionally replaced by the retained architecture tuple scheme; actual preprocessing, original 389 registry and emitted metadata remain unproved.
+
+The proposed flags and raw-link vector contain no witness gate or witness object, FULL28, held whole-function selector, or whole `do_signal` selector. Actual final object identities and symbol/section exclusion remain future checks. The proposed Rust `lib.rs` operand belongs to an overlay-only tree that has not yet been assembled: construct and bind the fresh full source closure and external inputs before executing it. That stated materialization prerequisite is not an identified Rust type error.
+
+Current source/caller contracts, generated headers, exact C/Rust emitted flags and provider uniqueness, all held generic-C direct-TID/terminate-host and execve transfer/ACK exclusions, resource/custody controls and operation-specific release remain applicable. The HOST 46 geometry result does not establish native behavior. Absence of later native proof does not itself block this source candidate from a properly admitted compile.

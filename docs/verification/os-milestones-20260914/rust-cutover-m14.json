@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-30T04:59:36.188874+00:00",
+  "as_of": "2026-10-30T05:40:39.551244+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -1355,11 +1355,9 @@
       },
       "current_diagnostic_cursor": {
         "owner": "/root",
-        "source_compositor": "/root/composition completed",
-        "arch_source": "/root/arch_source completed source/correction",
-        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-HOST-COMPILE-LINK-CHECKPOINT-20261030-1/CHANGED-ROWS.ACTUAL.json",
-        "default_native_acceptance": "unchanged; diagnosticHOSTresults are separate",
-        "status": "partial"
+        "source_compositor": "/root/composition",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-ARCH4-ABI-CHECKPOINT-20261030-1/CHANGED-ROWS.ACTUAL.json",
+        "status": "HOSTpartial12Rustproviders/46geometry/5ABIonly; defaultnativeunchanged"
       }
     },
     {
@@ -2777,11 +2775,9 @@
       },
       "current_diagnostic_cursor": {
         "owner": "/root",
-        "source_compositor": "/root/composition completed",
-        "arch_source": "/root/arch_source completed source/correction",
-        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-HOST-COMPILE-LINK-CHECKPOINT-20261030-1/CHANGED-ROWS.ACTUAL.json",
-        "default_native_acceptance": "unchanged; diagnosticHOSTresults are separate",
-        "status": "partial"
+        "source_compositor": "/root/composition",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-ARCH4-ABI-CHECKPOINT-20261030-1/CHANGED-ROWS.ACTUAL.json",
+        "status": "HOSTpartial12Rustproviders/46geometry/5ABIonly; defaultnativeunchanged"
       }
     }
   ],
@@ -3910,6 +3906,16 @@
       ],
       "new_production_native_file_credit": 0,
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-HOST-COMPILE-LINK-CHECKPOINT-20261030-1"
+    },
+    {
+      "at": "2026-10-30T05:40:39.551244+00:00",
+      "actual_progress": "HOST signal-return ABI: all46 real geometry values match. All5 constructors pass C header/type and partial-relocation checks. New HOST image bd1ef83d has12 unique Rust providers and retains C do_signal; inactive atomic helper/witnesses excluded. Matching SDK21/GCC14 three-object build source profile c888 reviewed; fresh physical/noninterference admission unreleased. No production, native, C-retirement or file credit; qualified1cd7/23+5 and M14 4/6 unchanged.",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-ARCH4-ABI-CHECKPOINT-20261030-1"
     }
   ],
   "latest_dispatcher_checkpoint": {

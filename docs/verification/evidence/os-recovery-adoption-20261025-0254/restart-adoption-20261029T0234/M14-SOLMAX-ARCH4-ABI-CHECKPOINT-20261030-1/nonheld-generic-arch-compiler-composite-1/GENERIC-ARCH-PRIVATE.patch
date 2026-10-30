@@ -1,0 +1,627 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -146,6 +146,9 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_entry_candidate.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_group_cleanup.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_defined_candidate.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_regset_defined_logger.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_signal_leaf_adapters.rs"
++		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_log_budget.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_request_constructors.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_perf_open_forward.rs"
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_terminate_mcexec_forward.rs"
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -29850,7 +29850,7 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
++pub(super) unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+     let top: CULong;
+     let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+         + offset_of!(crate::abi::Tss64, rsp0);
+@@ -30199,9 +30199,9 @@
+ /// The caller has already consumed/transferred pending and released sigcommon.
+ /// `thread` is the current live thread and `regs` its readable, complete kernel
+ /// context. Their existing lifecycle remains valid through the synchronous dump
+-/// call. `log_count` addresses the original initialized C diagnostic counter;
+-/// no exclusive Rust reference or new synchronization is invented for it. The
+-/// original unsynchronized counter race is outside this body proof's domain.
++/// call. `log_state` addresses the live aligned atomic diagnostic budget;
++/// all accesses to that state use the atomic protocol. The slot is claimed
++/// before logging to make the concurrent bound well-defined.
+ /// `pid` and `fault_address` are the caller's snapshots taken before pending free.
+ #[no_mangle]
+ pub unsafe extern "C" fn arch_do_signal_core_terminate_result(
+@@ -30210,11 +30210,11 @@
+     sig: CInt,
+     pid: CInt,
+     fault_address: CULong,
+-    log_count: *mut CInt,
++    log_state: *const core::sync::atomic::AtomicU64,
+ ) {
+-    // SAFETY: the initialized diagnostic counter has the original C lifetime;
+-    // no borrowed reference survives the formatter or its possible callbacks.
+-    if unsafe { *log_count } < 64 {
++    // SAFETY: log_state points to the live atomic budget. Its shared borrow
++    // ends at the claim; no lock is held over the formatter or its callbacks.
++    if f06_signal_log_budget::f06_log_claim(unsafe { &*log_state }) {
+         // SAFETY: the live context and thread are the original do_signal inputs.
+         // Literal formatting bytes and argument widths match the C diagnostic.
+         unsafe {
+@@ -30232,9 +30232,9 @@
+                 (*regs).gpr.rsp,
+                 fault_address,
+             );
+-            // Preserve the original post-formatter reread/increment, not a
+-            // pre-call cached count or a newly introduced atomic log ticket.
+-            *log_count = (*log_count).wrapping_add(1);
++            // The slot was atomically claimed before this formatting call.
++            // No lock is held across the callback and no post-call write occurs.
++
+         }
+     }
+ 
+@@ -30327,28 +30327,28 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2081,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_SLEEP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2106,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_WAKE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2109,
+ };
+ 
+ /// Return zero for the original untraced `goto core`, one after traced sleep.
+@@ -30357,10 +30357,10 @@
+ /// The live thread and process are the caller's original borrowed inputs; their
+ /// process/parent/report references remain valid through synchronous notify,
+ /// waitq wake and schedule. Pending is already consumed and sigcommon unlocked.
+-/// `info` is forwarded without reading, initializing or retaining it here. For a
+-/// defined execution, its bytes must be valid for the existing do_kill consumer.
+-/// The C caller's original SIGTRAP branch may supply uninitialized local info;
+-/// that remains an explicit caller debt, not permission to assume_init or zero it.
++/// Traced info is aligned writable complete caller-owned SigInfo storage, live
++/// through synchronous do_kill consumption. The approved EOF constructor fully
++/// initializes it after SIGTRAP state stores; untraced return never touches it.
++/// Original thread/parent/report lifetimes and CPU/IRQ exclusions still apply.
+ #[no_mangle]
+ pub unsafe extern "C" fn arch_do_signal_trap_stop_result(
+     thread: *mut Thread,
+@@ -30385,7 +30385,7 @@
+     // matching the C fork-tree publication order rather than widening its lock.
+     unsafe {
+         (*thread).exit_status = SIGTRAP;
+-        (*thread).status = PS_TRACED;
++        (*thread).status = PS_TRACED; super::f06_construct_trap_notification(info, thread);
+     }
+     // SAFETY: proc remains live across the borrowed main-thread comparison.
+     if thread == unsafe { (*proc).main_thread } {
+@@ -30449,9 +30449,9 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_STOP_WAKE_DEBUG: crate::debug::Ddebug=crate::debug::Ddebug {
+-    file:concat!(file!(),"\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func:b"do_signal\0".as_ptr().cast(),fmt:core::ptr::null(),
+-    line_flags:line!()&0x00ff_ffff,
++    line_flags: 2077,
+ };
+ 
+ /// Called only for the four original default stop-action switch labels, AFTER
+@@ -30958,24 +30958,24 @@
+ type F06SignalFrame = F06LegacySignalFrame;
+ 
+ const SIGSEGV: CInt = 11;
+-static mut F06_SIGNAL_LOGS: CInt = 0;
+-static mut F06_SIGNAL_LOG_PID: CInt = -1;
++mod f06_signal_log_budget { include!("f06_signal_log_budget.rs"); }
++
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_ENTRY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 1778,
+ };
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TERMINATE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2162,
+ };
+ unsafe extern "C" {
+     #[link_name = "terminate"]
+@@ -30988,22 +30988,22 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+-    let top: CULong;
+-    let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+-        + offset_of!(crate::abi::Tss64, rsp0);
+-    // SAFETY: exact original GS memory load; MOV preserves flags and does not
+-    // touch stack. No privileged instruction is executed during preparation.
+-    unsafe {
+-        core::arch::asm!(
+-            "mov {top}, gs:[{offset}]",
+-            top = out(reg) top,
+-            offset = in(reg) offset,
+-            options(nostack, readonly, preserves_flags),
+-        );
+-        (top as *mut X86UserContext).sub(1)
+-    }
+-}
++use super::f06_signal_context_candidate::f06_signal_syscall_context;
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ 
+ /// Deliver one detached pending node with the original complete C entry rules.
+ ///
+@@ -31013,11 +31013,11 @@
+ /// mask selects a valid action in the actual64-entry table. Original object and
+ /// callback lifetimes/IRQ/scheduling preconditions apply, including XSAVE CPU
+ /// exclusion. Kernel and frame layouts must match native_linux_irq_work_v6_12.
+-/// The original traced default-SIGTRAP info bytes are uninitialized caller debt;
+-/// that branch remains OUTSIDE this port's defined qualification domain. This
+-/// source does not zero or assume_init them. C stays selected until root resolves
+-/// that debt and qualifies complete ownership/default/native behavior. Counter
+-/// races and overwritten old core slots are also preserved, not silently fixed.
++/// Default traced-SIGTRAP uses the approved initialized parent notification.
++/// Whole selection remains OFF pending ABI/ownership/codegen/native proof.
++/// The caller-owned info lives through synchronous consumer copies; no pending
++/// payload is read after transfer/free. Diagnostic budget claims are atomic;
++/// overwritten old core slots remain independent existing debt.
+ #[no_mangle]
+ pub unsafe extern "C" fn do_signal(
+     mut result: CULong,
+@@ -31048,14 +31048,14 @@
+         fault_addr
+     };
+     let pid = if proc.is_null() { -1 } else { unsafe { (*proc).pid } };
+-    // SAFETY: preserve two unsynchronized C statics and reset/store order. Raw
+-    // pointers avoid inventing an exclusive Rust reference across callbacks.
+-    unsafe {
+-        if pid != *addr_of!(F06_SIGNAL_LOG_PID) {
+-            *addr_of_mut!(F06_SIGNAL_LOG_PID) = pid;
+-            *addr_of_mut!(F06_SIGNAL_LOGS) = 0;
+-        }
+-    }
++    // Atomically reset the shared diagnostic epoch at the original entry point.
++    // No logger callback occurs while the state operation is in progress.
++    f06_signal_log_budget::f06_log_observe_pid(&f06_signal_log_budget::F06_SIGNAL_LOG_STATE, pid);
++
++
++
++
++
+     let mut ptraceflag = 0;
+     // SAFETY: original ptrace remap before context acquisition and action lookup.
+     if unsafe { ((*thread).ptrace & PT_TRACED) != 0 && (*pending).ptracecont == 0 }
+@@ -31195,14 +31195,14 @@
+         unsafe { (user_sp as *mut CULong).write((*action).sa.sa_restorer as CULong) };
+         // SAFETY: original handler diagnostic before register/action commit.
+         unsafe {
+-            if *addr_of!(F06_SIGNAL_LOGS) < 64 {
++            if f06_signal_log_budget::f06_log_claim(&f06_signal_log_budget::F06_SIGNAL_LOG_STATE) {
+                 kprintf(concat!("mcexec_v10: signal_handler pid=%d tid=%d sig=%d ",
+                     "handler=0x%lx restorer=0x%lx old_rip=0x%lx old_sp=0x%lx ",
+                     "new_sp=0x%lx si_addr=0x%lx\n\0").as_ptr().cast(), pid,
+                     if thread.is_null() { -1 } else { (*thread).tid }, signal,
+                     (*action).sa.sa_handler as CULong, (*action).sa.sa_restorer as CULong,
+                     (*regs).gpr.rip, (*regs).gpr.rsp, user_sp, fault);
+-                *addr_of_mut!(F06_SIGNAL_LOGS) = (*addr_of!(F06_SIGNAL_LOGS)).wrapping_add(1);
++
+             }
+             arch_do_signal_handler_commit_result(thread, regs, action, pending, signal,
+                 user_frame, offset_of!(F06SignalFrame, info), user_sp, node.as_mut_ptr());
+@@ -31210,8 +31210,8 @@
+         return restart;
+     }
+ 
+-    // Native C declares this storage uninitialized before pending disposal. Do
+-    // NOT assume_init/zero: traced SIGTRAP remains a qualified-execution HOLD.
++    // Aligned caller-owned storage; traced helper initializes all bytes before
++    // synchronous notify. Never reread transferred/freed pending payload.
+     let mut trap_info = MaybeUninit::<SigInfo>::uninit();
+     // SAFETY: complete default ownership helper caches ptracecont before free,
+     // transfers ptrace nodes or consumes pending, then releases the original lock.
+@@ -31227,21 +31227,21 @@
+             );
+         },
+         SIGTRAP => {
+-            // SAFETY: full-defined qualification explicitly EXCLUDES the traced
+-            // branch's uninitialized-info consumer. This preserves original C
+-            // source debt, not a new validity claim or zero-initialization repair.
++            // SAFETY: aligned stack storage remains live through synchronous
++            // notify copies; approved helper constructs every byte before use.
++            // Original thread/parent/report lifetime preconditions still apply.
+             let handled = unsafe {
+                 arch_do_signal_trap_stop_result(thread, proc, trap_info.as_mut_ptr())
+             };
+             if handled == 0 {
+                 unsafe { arch_do_signal_core_terminate_result(thread, regs, signal, pid, fault,
+-                    addr_of_mut!(F06_SIGNAL_LOGS)) };
++                    core::ptr::addr_of!(f06_signal_log_budget::F06_SIGNAL_LOG_STATE)) };
+             }
+         }
+         // SIGQUIT/ILL/ABRT/FPE/SEGV/BUS/SYS/XCPU/XFSZ: original nine core labels.
+         3 | 4 | 6 | 8 | 11 | 7 | 31 | 24 | 25 => unsafe {
+             arch_do_signal_core_terminate_result(thread, regs, signal, pid, fault,
+-                addr_of_mut!(F06_SIGNAL_LOGS));
++                core::ptr::addr_of!(f06_signal_log_budget::F06_SIGNAL_LOG_STATE));
+         },
+         // SIGCONT, SIGCHLD, SIGURG, SIGWINCH: exact original no-action labels.
+         SIGCONT | SIGCHLD | SIGURG | 28 => {}
+@@ -36934,3 +36934,55 @@
+ #[cfg(all(f03_request_constructors_candidate, target_arch = "x86_64"))]
+ #[path = "f03_request_constructors.rs"]
+ mod f03_request_constructors;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// EOF placement preserves every inherited source-location macro coordinate.
++#[cfg(f06_signal_context_candidate)]
++const _: () = {
++    assert!(core::mem::offset_of!(crate::abi::X86CpuLocalVariables, tss)
++        + core::mem::offset_of!(crate::abi::Tss64, rsp0) == 180);
++    assert!(core::mem::size_of::<crate::abi::CInt>() == 4);
++    assert!(core::mem::size_of::<crate::abi::CULong>() == 8);
++};
++
++/// # Safety
++/// info covers aligned writable complete SigInfo through synchronous consumers;
++/// thread is live and exit_status/status already hold the original SIGTRAP state.
++/// This approved constructor establishes no thread/parent/report/CPU lifetime.
++#[cfg(f06_do_signal_whole_candidate)]
++unsafe fn f06_construct_trap_notification(info: *mut SigInfo, thread: *mut Thread) {
++    // Root-approved defined notification; initialize complete caller-owned storage
++    // before any reference or synchronous consumer. Never read the old pending.
++    // SAFETY: info is aligned writable SigInfo storage kept live through do_kill.
++    // Every byte, including union extent and padding, is initialized first. This
++    // is the existing ptrace_report_signal_body_result writer/layout pattern.
++    unsafe {
++        let raw = info.cast::<u8>();
++        let mut offset = 0;
++        while offset < size_of::<SigInfo>() {
++            raw.add(offset).write_volatile(0);
++            offset += 1;
++        }
++        let info_ref = &mut *info;
++        info_ref.si_signo = SIGCHLD;
++        info_ref.si_code = CLD_TRAPPED;
++        let sigchld = (&mut info_ref.sifields as *mut crate::abi::SigInfoFields)
++            .cast::<crate::abi::SigInfoChild>();
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_pid), (*thread).tid,
++        );
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_status),
++            core::ptr::read_volatile(core::ptr::addr_of!((*thread).exit_status)),
++        );
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// ARCH5 imports stay at EOF to preserve all inherited source-location macros.
++#[cfg(f06_regset_defined_diagnostic_candidate)]
++#[path = "syscall_regset_defined_logger.rs"]
++mod syscall_regset_defined_logger;
++#[cfg(f06_signal_leaf_adapters_candidate)]
++#[path = "syscall_signal_leaf_adapters.rs"]
++mod syscall_signal_leaf_adapters;
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -452,6 +452,10 @@
+ 
+ #endif
+ #line 394
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_XRSTOR_LEAF)
++extern void arch_rt_sigreturn_xrstor_bridge(void *fpregs);
++#else
++#line 394
+ void
+ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
+ {
+@@ -462,6 +466,8 @@
+ 
+ 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
+ }
++#endif
++#line 404
+ 
+ #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+ extern long native_xstate_buffer_size_result(int provided, int configured);
+@@ -507,12 +513,18 @@
+ }
+ #endif /* selected signal-return FP lifecycle is Rust-owned */
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_BAD_FRAME_LEAF)
++extern long arch_native_signal_bad_frame_bridge(long error);
++#else
++#line 449
+ long arch_native_signal_bad_frame_bridge(long error)
+ {
+ 	kprintf("native signal return rejected: %ld\n", error);
+ 	terminate(0, SIGSEGV);
+ 	return -EFAULT;
+ }
++#endif
++#line 455
+ #endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+@@ -1622,6 +1634,10 @@
+ #endif
+ #line 1446
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC)
++extern void arch_ptrace_regset_log_bridge(int event, long type);
++#else
++#line 1447
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)
+ {
+@@ -1632,6 +1648,8 @@
+ 		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+ 	}
+ }
++#endif
++#line 1457
+ #endif
+ #line 1458
+ 
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -354,7 +354,7 @@
+ /// effect prevents memory reordering across restore. FP/SIMD registers are not
+ /// Rust operands: the entire kernel build excludes their compiler-generated use.
+ #[inline(always)]
+-unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
++pub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
+     unsafe {
+         core::arch::asm!(
+             "xrstor [{state}]",
+--- /dev/null
++++ b/kernel/rust/syscall_regset_defined_logger.rs
+@@ -0,0 +1,18 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Root-approved defined diagnostic correction; no parity claim for old long/%x.
++
++use super::{kprintf, CInt, CLong, CULong};
++
++/// Preserve the public callback ABI; render the complete unsigned long bit value.
++#[no_mangle]
++pub(super) extern "C" fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong) {
++    let format = match event {
++        1 => c"ptrace_read_regset: not supported type 0x%lx\n",
++        2 => c"ptrace_write_regset: not supported type 0x%lx\n",
++        _ => return,
++    };
++    // SAFETY: immutable NUL-terminated format has one %lx slot. CULong is the
++    // actual u64 unsigned long variadic type. Conversion preserves all 64 bits,
++    // including negative CLong values. No pointer/object lifetime crosses here.
++    unsafe { kprintf(format.as_ptr().cast(), type_ as CULong); }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_signal_leaf_adapters.rs
+@@ -0,0 +1,36 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Rebased existing private adapters. Instruction and destructive native proof OPEN.
++use core::ffi::c_void;
++use super::{kprintf, CInt, CLong, EFAULT};
++
++unsafe extern "C" {
++    #[link_name = "terminate"]
++    fn f06_signal_adapter_terminate(status: CInt, signal: CInt);
++}
++
++/// # Safety
++/// Exact original raw XRSTOR contract: aligned valid standard state, boot mask,
++/// intended CPU and exclusion; all code/callees obey the no-FP/SIMD profile.
++/// Fault behavior stays raw; never substitute native_xrstor_checked or HOST-run.
++#[no_mangle]
++pub unsafe extern "C" fn arch_rt_sigreturn_xrstor_bridge(state: *mut c_void) {
++    // SAFETY: complete existing Rust instruction body and actual boot-mask getter.
++    unsafe {
++        let mask = crate::x86_cpu_helpers::get_xsave_mask();
++        crate::x86_cpu_helpers::x86_restore_xstate(state.cast_const(), mask);
++    }
++}
++
++/// # Safety
++/// Original native disposition: logger is available and genuine terminate owns
++/// the current process lifetime. The original void call may return in a fixture.
++#[cfg(native_linux_irq_work_v6_12)]
++#[no_mangle]
++pub unsafe extern "C" fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong {
++    // SAFETY: exact diagnostic, then original void terminate and constant result.
++    unsafe {
++        kprintf(b"native signal return rejected: %ld\n\0".as_ptr().cast(), error);
++        f06_signal_adapter_terminate(0, 11); // SIGSEGV, actual header witness.
++    }
++    -(EFAULT as CLong)
++}
+--- /dev/null
++++ b/kernel/rust/f06_signal_log_budget.rs
+@@ -0,0 +1,135 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Private candidate: PID epoch and reserved diagnostic slots share one atomic word.
++use core::sync::atomic::{AtomicU64, Ordering};
++
++const F06_LOG_LIMIT: u32 = 64;
++pub(super) static F06_SIGNAL_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
++
++// Called once at the original do_signal entry reset point, even for signals that
++// do not ultimately log. The high word contains the bit representation of pid.
++pub(super) fn f06_log_observe_pid(state: &AtomicU64, pid: i32) {
++    let pid_bits = (pid as u32 as u64) << 32;
++    let mut seen = state.load(Ordering::Relaxed);
++    loop {
++        if seen & 0xffff_ffff_0000_0000 == pid_bits { return; }
++        match state.compare_exchange_weak(seen, pid_bits, Ordering::Relaxed, Ordering::Relaxed) {
++            Ok(_) => return,
++            Err(next) => seen = next,
++        }
++    }
++}
++
++// Claim against the CURRENT epoch at the original log site. A different PID can
++// have entered since this invocation began; do not reset to this caller's PID.
++// Claim precedes kprintf so simultaneous or reentrant calls cannot exceed 64.
++pub(super) fn f06_log_claim(state: &AtomicU64) -> bool {
++    let mut seen = state.load(Ordering::Relaxed);
++    loop {
++        let count = seen as u32;
++        if count >= F06_LOG_LIMIT { return false; }
++        match state.compare_exchange_weak(seen, seen + 1, Ordering::Relaxed, Ordering::Relaxed) {
++            Ok(_) => return true,
++            Err(next) => seen = next,
++        }
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use std::sync::{Arc, Barrier};
++    use std::thread;
++
++    #[test]
++    fn limit_reset_and_delayed_invocation_use_current_epoch() {
++        let state = AtomicU64::new((u32::MAX as u64) << 32);
++        f06_log_observe_pid(&state, 17);
++        assert!((0..64).all(|_| f06_log_claim(&state)));
++        assert!(!f06_log_claim(&state));
++        f06_log_observe_pid(&state, 17);
++        assert!(!f06_log_claim(&state));
++        f06_log_observe_pid(&state, 18); // entry without a log resets too
++        assert!(f06_log_claim(&state)); // delayed PID 17 claims current epoch
++        assert_eq!(state.load(Ordering::Relaxed), (18u64 << 32) | 1);
++        f06_log_observe_pid(&state, -1);
++        assert!(f06_log_claim(&state));
++        assert_eq!(state.load(Ordering::Relaxed), ((u32::MAX as u64) << 32) | 1);
++    }
++
++    #[test]
++    fn simultaneous_claims_never_exceed_limit() {
++        let state = Arc::new(AtomicU64::new(0));
++        f06_log_observe_pid(&state, 91);
++        let barrier = Arc::new(Barrier::new(16));
++        let handles: Vec<_> = (0..16).map(|_| {
++            let state = Arc::clone(&state);
++            let barrier = Arc::clone(&barrier);
++            thread::spawn(move || {
++                barrier.wait();
++                (0..32).filter(|_| f06_log_claim(&state)).count()
++            })
++        }).collect();
++        assert_eq!(handles.into_iter().map(|h| h.join().unwrap()).sum::<usize>(), 64);
++        assert_eq!(state.load(Ordering::Relaxed), (91u64 << 32) | 64);
++    }
++
++    #[test]
++    fn serial_schedule_matches_original_counter() {
++        // Original reset happens on every entry, including nonlogging signals.
++        // In the non-reentrant serial domain original increment follows logging.
++        let state = AtomicU64::new((u32::MAX as u64) << 32);
++        let (mut old_pid, mut old_count) = (-1i32, 0u32);
++        let events = [(-1, false), (1, false), (1, true), (2, false),
++                      (1, true), (1, true), (-1, true)];
++        let mut sequence = events.to_vec();
++        sequence.extend((0..70).map(|_| (-1, true)));
++        sequence.extend([(4, false), (4, true), (1, true)]);
++        for (pid, logs) in sequence {
++            if pid != old_pid { old_pid = pid; old_count = 0; }
++            f06_log_observe_pid(&state, pid);
++            if logs {
++                let original_logs = old_count < 64;
++                if original_logs { old_count += 1; }
++                assert_eq!(f06_log_claim(&state), original_logs);
++            }
++            assert_eq!(state.load(Ordering::Relaxed),
++                       ((old_pid as u32 as u64) << 32) | u64::from(old_count));
++        }
++    }
++
++    #[test]
++    fn logger_reentry_cannot_overbook_last_slot() {
++        let state = AtomicU64::new(0);
++        f06_log_observe_pid(&state, 7);
++        assert!((0..63).all(|_| f06_log_claim(&state)));
++        // Outer logger reserves slot 64 before a reentrant logger is called.
++        assert!(f06_log_claim(&state));
++        assert!(!f06_log_claim(&state));
++        assert_eq!(state.load(Ordering::Relaxed), (7u64 << 32) | 64);
++    }
++
++    #[test]
++    fn concurrent_pid_switches_keep_a_valid_bounded_epoch() {
++        let state = Arc::new(AtomicU64::new(0));
++        let barrier = Arc::new(Barrier::new(8));
++        let handles: Vec<_> = (0..8).map(|i| {
++            let state = Arc::clone(&state);
++            let barrier = Arc::clone(&barrier);
++            thread::spawn(move || {
++                barrier.wait();
++                for n in 0..500 {
++                    let pid = 1 + ((i + n) & 1);
++                    f06_log_observe_pid(&state, pid);
++                    let _ = f06_log_claim(&state);
++                    let observed = state.load(Ordering::Relaxed);
++                    assert!((1..=2).contains(&(observed >> 32)));
++                    assert!((observed as u32) <= 64);
++                }
++            })
++        }).collect();
++        for handle in handles { handle.join().unwrap(); }
++        f06_log_observe_pid(&state, 42);
++        assert_eq!(state.load(Ordering::Relaxed), 42u64 << 32);
++        assert!(f06_log_claim(&state));
++    }
++}

@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T05:05:31.161548+00:00",
+  "owner": "/root",
+  "operation": "Read-only exact isolated ELF sections via trusted readelf plus full46u64 comparison; no output code invoked, input files immutable",
+  "input_objects": [
+    {
+      "language": "C",
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/c/arch46-witness.o",
+      "section": ".sigreturn_extra_c",
+      "sha256": "9cd9acc6e11bc9fa4e22c2eeb551c2e8773543709adbaf2faedf4bf3c9c5aaca"
+    },
+    {
+      "language": "Rust",
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-dq82fjgc/rust/mckernel-arch46-witness.o",
+      "section": ".sigreturn_extra_rust",
+      "sha256": "e6795a9fdfa7636b049910cbd72c90e124c52e525d4e9b4065850e83b9ce54db"
+    }
+  ],
+  "readelf": {
+    "path": "/usr/bin/x86_64-linux-gnu-readelf",
+    "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+  },
+  "resources": {
+    "cpu": [
+      0
+    ],
+    "role": "coordination/data-analysis reserve",
+    "max_AS_bytes": 536870912,
+    "CPU_seconds": 30,
+    "timeout_seconds": 30
+  },
+  "no_kernel_link_or_native": true
+}

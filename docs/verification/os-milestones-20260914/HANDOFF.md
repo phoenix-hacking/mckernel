@@ -1,3 +1,49 @@
+## M14 HOST architecture and ABI checkpoint — 2026-10-30T05:41Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The same Root remains active with Sol/max. Last actual admission recorded 64%
+weekly use; included-only and the original UTC/tighter clock caps remain.
+M14 stays 4/6, practical checks 35/35 separately, and M15 is queued. Selected
+image 1cd7e4e6 still has 23 generic and five architecture C definitions.
+
+Diagnostic HOST image bd1ef83d (10420016 bytes) has twelve unique strong Rust
+providers: eight generic and four architecture functions. Its architecture C
+object defines only do_signal. The whole-signal/AtomicU64 module is inactive.
+Rust compilation: 18.75s wall, 18.74s CPU, peak 598004 KiB. Architecture C: .10s;
+link: .11s. Actual dependencies (142 Rust, 70 C) and all eleven link inputs passed
+independent HOST review ad2aa409. Eight qualified objects and the generic C
+object were reused; the old architecture object and all witnesses were excluded.
+
+All 46 real C/Rust signal-return geometry values match (independent c9769495).
+The original filename guard failure remains retained; one exact-file compiler
+mapping fixed it without changing source, header, assertion or expected values.
+All five request constructors also pass real C header/type assertions and exact
+partial-link relocation checks (independent 01e07fc6), including two alias pairs.
+These are HOST results. No new guest behavior, production link, native acceptance,
+C retirement or file closure is claimed.
+
+Matching SDK21/GCC14 source profile c88825ef rebuilds Rust, generic C and
+architecture C, retaining eight qualified objects and the original 389-entry
+oracle. Docker execution remains unreleased: the old CPU6 admission is P12
+specific. Exact current identity/configuration, writable roots, noninterference
+and sealed admission need a reviewed successor. Reserving Root70's 12 GiB and
+CPUs 2–5 alone does not supply clearance. Composition is preparing a bounded
+read-only successor; Root owns any later operation review and admission.
+
+Root70 retirement 69216 remains accepted at its exact scope; current-free and
+the intervening custody assertion remain open. Preserve OCI ownership, consumed
+nonce 4709, mutex 27:4, scratch21 and every UNKNOWN. The generic_c/direct-TID/
+terminate_host and execve transfer/ACK holds remain excluded. No FULL28, paid
+fallback, controller restart, cleanup or goal-completion claim.
+
+Evidence and per-function states:
+`../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-ARCH4-ABI-CHECKPOINT-20261030-1/`.
+The twenty-minute buckets remain adjacent 1200s; the original thirty-minute
+baseline remains. Immediate status-to-validation delays were .079/.081/.113s,
+compared with the prior 181s marker proxy; no broad speedup or 95% claim.
+NEXT: review the exact read-only SDK21 admission successor. No matching SDK or
+native command is currently released.
+
 ## M14 HOST diagnostic compile/link checkpoint — 2026-10-30T04:58Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
