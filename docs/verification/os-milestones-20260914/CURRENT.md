@@ -1,3 +1,21 @@
+## M14 ownership contract cursor — 2026-10-30T10:54Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued. No new build, behavior/native test, production
+link, C retirement or file closure. A new XPMEM partition owner also needs a
+lookup-time descriptor pin: ioctl ATTACH reads the descriptor after the process
+lock is dropped, while close and VM teardown may finalize it. No complete safe
+candidate was selected. Perf open, monitored target thread/CPU and closer can be
+different; a single opener-owned counter is insufficient. C and Rust both ignore
+perf start configuration errors; partial group and hardware state need rollback
+and an error-delivery contract before changing that behavior. These are source
+findings, not reproduced native failures. No test or physical operation was run.
+
+Fresh supervisor health and Root current ownership/admission remain prerequisites
+for the integrated M14 configure/compiler lane. Evidence: ../evidence/
+os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-OWNER-CONTRACT-CHECKPOINT-20261030-1/.
+
 ## M14 perf failure ownership cursor — 2026-10-30T10:51Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

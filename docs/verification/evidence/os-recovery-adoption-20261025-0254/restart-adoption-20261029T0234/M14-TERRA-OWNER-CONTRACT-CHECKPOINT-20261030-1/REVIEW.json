@@ -1,0 +1,6 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "result": "No safe complete patch under proven contracts. XPMEM ioctl callback is looked up without a retained descriptor pin and ATTACH reads that descriptor later; close and VM teardown need compatible finalization. Perf open, monitored target CPU/thread, and closer differ; counter owner requires migration and lifecycle protocol. Rust and C both ignore start configuration errors; partial group and hardware side effects require rollback and error delivery before a change.",
+  "limitations": "Source findings only; no runtime race reproduction, compiler, native, guest or acceptance. No claimed repair.",
+  "next": "External capacity supervisor health and Root ownership/admission remain critical for combined M14 compiler candidate. Continue only dependency-ready source work; no duplicate ports."
+}
