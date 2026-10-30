@@ -1,0 +1,67 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -186,6 +186,46 @@
+ 
+ # define MAP_KERNEL_START
+ 
++# M14_GUARD_PREFLIGHT_BEGIN
++# The execution owner must already have established a fresh exclusive build
++# root before CMake entry; checks below do not supply that ownership proof.
++if (MCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL)
++    if (NOT CMAKE_GENERATOR STREQUAL "Unix Makefiles")
++        message(FATAL_ERROR "M14 configure requires the Unix Makefiles generator")
++    endif()
++    if (NOT IS_ABSOLUTE "${CMAKE_MAKE_PROGRAM}" OR NOT EXISTS "${CMAKE_MAKE_PROGRAM}" OR
++        NOT DEFINED MCKERNEL_M14_EXPECTED_MAKE_SHA256)
++        message(FATAL_ERROR "M14 configure requires a bound absolute make executable")
++    endif()
++    string(LENGTH "${MCKERNEL_M14_EXPECTED_MAKE_SHA256}" MCKERNEL_M14_MAKE_HASH_LENGTH)
++    if (NOT MCKERNEL_M14_MAKE_HASH_LENGTH EQUAL 64 OR
++        NOT MCKERNEL_M14_EXPECTED_MAKE_SHA256 MATCHES "^[0-9a-f]+$")
++        message(FATAL_ERROR "M14 configure requires an exact make SHA256")
++    endif()
++    file(SHA256 "${CMAKE_MAKE_PROGRAM}" MCKERNEL_M14_ACTUAL_MAKE_SHA256)
++    if (NOT MCKERNEL_M14_ACTUAL_MAKE_SHA256 STREQUAL MCKERNEL_M14_EXPECTED_MAKE_SHA256)
++        message(FATAL_ERROR "M14 configure make executable hash mismatch")
++    endif()
++    set(MCKERNEL_M14_PRE_VERIFIER "${PROJECT_SOURCE_DIR}/scripts/verify_m14_configure_probe.py")
++    set(MCKERNEL_M14_ELF_VERIFIER "${PROJECT_SOURCE_DIR}/scripts/verify_m14_elf.py")
++    if (NOT EXISTS "${MCKERNEL_M14_PRE_VERIFIER}" OR NOT EXISTS "${MCKERNEL_M14_ELF_VERIFIER}")
++        message(FATAL_ERROR "M14 configure verifier sources are missing")
++    endif()
++    file(SHA256 "${MCKERNEL_M14_PRE_VERIFIER}" MCKERNEL_M14_PRE_SHA256)
++    file(SHA256 "${MCKERNEL_M14_ELF_VERIFIER}" MCKERNEL_M14_ELF_SHA256)
++    if (NOT MCKERNEL_M14_PRE_SHA256 STREQUAL "fa9bd547813bdad6848ff58fed7b48686af0fcf2cd50197a6866338d6ebe9902" OR
++        NOT MCKERNEL_M14_ELF_SHA256 STREQUAL "157e2bd952f07c70a867fa9bd78165ac364c21d87f7dc32e3ecc482c191f7ca7")
++        message(FATAL_ERROR "M14 configure verifier source hash mismatch")
++    endif()
++    execute_process(COMMAND "${CMAKE_MAKE_PROGRAM}" --version
++        RESULT_VARIABLE MCKERNEL_M14_MAKE_VERSION_RESULT
++        OUTPUT_VARIABLE MCKERNEL_M14_MAKE_VERSION_OUTPUT TIMEOUT 5)
++    if (NOT MCKERNEL_M14_MAKE_VERSION_RESULT STREQUAL "0" OR
++        NOT MCKERNEL_M14_MAKE_VERSION_OUTPUT MATCHES "^GNU Make")
++        message(FATAL_ERROR "M14 configure requires a bound GNU Make executable")
++    endif()
++endif()
++# M14_GUARD_PREFLIGHT_END
+ set(tmpdir ${CMAKE_CURRENT_BINARY_DIR}/tmp.resolve_MODULES_END)
+ file(REMOVE_RECURSE ${tmpdir})
+ file(MAKE_DIRECTORY ${tmpdir})
+@@ -204,7 +244,7 @@
+     endif()
+     find_package(Python3 REQUIRED COMPONENTS Interpreter)
+     set(MCKERNEL_M14_PROBE_VERIFIER "${PROJECT_SOURCE_DIR}/scripts/verify_m14_configure_probe.py")
+-    execute_process(COMMAND "${Python3_EXECUTABLE}" "${MCKERNEL_M14_PROBE_VERIFIER}"
++    execute_process(COMMAND "${Python3_EXECUTABLE}" -I -B "${MCKERNEL_M14_PROBE_VERIFIER}"
+         --phase identity --kernel-dir "${KERNEL_DIR}" --uname-r "${MCKERNEL_M14_EXPECTED_UNAME_R}"
+         --expected-map "${MCKERNEL_M14_EXPECTED_MAP_KERNEL_START}"
+         RESULT_VARIABLE MCKERNEL_M14_PROBE_IDENTITY_RESULT)
+@@ -217,7 +257,7 @@
+     if (NOT MCKERNEL_M14_PROBE_MAKE_RESULT STREQUAL "0")
+         message(FATAL_ERROR "M14 configure probe make failed: ${MCKERNEL_M14_PROBE_MAKE_RESULT}")
+     endif()
+-    execute_process(COMMAND "${Python3_EXECUTABLE}" "${MCKERNEL_M14_PROBE_VERIFIER}"
++    execute_process(COMMAND "${Python3_EXECUTABLE}" -I -B "${MCKERNEL_M14_PROBE_VERIFIER}"
+         --phase probe --kernel-dir "${KERNEL_DIR}" --uname-r "${MCKERNEL_M14_EXPECTED_UNAME_R}"
+         --expected-map "${MCKERNEL_M14_EXPECTED_MAP_KERNEL_START}"
+         --build-dir "${CMAKE_CURRENT_BINARY_DIR}" --make-status "${MCKERNEL_M14_PROBE_MAKE_RESULT}"

@@ -1,0 +1,40 @@
+{
+  "scope": "exact extracted CMake with fake make and synthetic ELF only",
+  "fake_make_sha256": "33de68cd69115c24f04de003e88a23adce72ac2d6377f3be1dde7701ae2084e2",
+  "cases": [
+    {
+      "case": "valid_kbuild",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-flags/valid_kbuild/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-flags/valid_kbuild",
+      "exit": 0,
+      "expected_match": true,
+      "script_sha256": "48e1e127a97971add1a2ce2db91a4a1d4b30a96b139c34e2d4fd74146e319132",
+      "stdout_sha256": "c4d9fb914f28bc0f9fc2e7c458ec5ff8232908d5cf760d5f4209d00691833aba",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preentry_sentinel_preserved": false,
+      "version_called": true,
+      "probe_called": true
+    },
+    {
+      "case": "bad_expansion",
+      "argv": [
+        "/usr/bin/cmake",
+        "-P",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-flags/bad_expansion/run.cmake"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/checks-flags/bad_expansion",
+      "exit": 1,
+      "expected_match": true,
+      "script_sha256": "96390e5b132803443eb634a5c19437095773fc4f49882ff50d03354142c8cc00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "15e8deff29608bebf429504fb54a7f36a667c13348221752948337b8d26a68d3",
+      "preentry_sentinel_preserved": true,
+      "version_called": false,
+      "probe_called": false
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REVIEWED_SOURCE_BEHAVIOR_PROFILE_UNRELEASED_DO_NOT_EXECUTE",
+  "authority": null,
+  "prior_profile_sha256": "a20a8bf81aaf632376a6a1b1c3d39189f227adce431e9cac01d6b27108902dcd",
+  "complete_original_patch_sha256": "01f3d94dab8afb03b51de1723de1501e4e45845e439096538ed3a332f18508b4",
+  "sdk_profile_sha256": "e6a8462b10b409e86a7192d34328de33307cccd5c8e53d75b6312c85042c1ec3",
+  "sdk_source_map_sha256": "4172db42e65b1e30ccfbb86a86c0df1746eb9605ee3497e5a968db0fe16cdd1e",
+  "toolchain_lock_sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802",
+  "readonly_source_mounts_candidate": {
+    "/src": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source",
+    "/src/kernel/rust": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust",
+    "/src/kernel/syscall.c": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-generic-arch-host-preparation-1/src/kernel/syscall.c",
+    "/src/kernel/CMakeLists.txt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/kernel/CMakeLists.txt",
+    "/src/arch/x86_64/kernel/syscall.c": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-guard-successor-1/postimage/arch/x86_64/kernel/syscall.c",
+    "/src/kernel/process.c": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/candidate/kernel/process.c",
+    "/nightly": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+    "/src/host-kernel/native-rust/abi/vdso.rs": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-generic-arch-host-preparation-1/src/host-kernel/native-rust/abi/vdso.rs",
+    "/src/host-kernel/native-rust/zero_pages.rs": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-generic-arch-host-preparation-1/src/host-kernel/native-rust/zero_pages.rs",
+    "/src/scripts/derive_f06_origin_e6a_guarded.py": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/scripts/derive_f06_origin_e6a_guarded.py",
+    "/src/scripts/f06_origin_command_profile_e6a_guarded.json": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-f06-origin-route-successor-1/postimage/scripts/f06_origin_command_profile_e6a_guarded.json",
+    "/src/CMakeLists.txt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/postimage/CMakeLists.txt",
+    "/src/scripts/verify_m14_configure_probe.py": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/postimage/scripts/verify_m14_configure_probe.py",
+    "/src/scripts/verify_m14_elf.py": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-cmake-probe-bound-successor-1/postimage/scripts/verify_m14_elf.py"
+  },
+  "new_root_overlay_sha256": {
+    "/src/CMakeLists.txt": "439642a3215a05f9ace7a9e3443e1b5acfdcf6565e1342e28e8d254281706729",
+    "/src/scripts/verify_m14_configure_probe.py": "fa9bd547813bdad6848ff58fed7b48686af0fcf2cd50197a6866338d6ebe9902",
+    "/src/scripts/verify_m14_elf.py": "157e2bd952f07c70a867fa9bd78165ac364c21d87f7dc32e3ecc482c191f7ca7"
+  },
+  "earlier_route_overlay_sha256": {
+    "/src/kernel/CMakeLists.txt": "f34958844cf2a16d25244a3acc7c9610f262bc9cc64aba2db9706cc64a2a2655",
+    "/src/arch/x86_64/kernel/syscall.c": "9a356317ff621decba53a11fe0967ae9eee1bb5059d262e6b2402f90042a4a25",
+    "/src/scripts/derive_f06_origin_e6a_guarded.py": "0eecb12a434415523b744b73f1704f7cc68693ab3a28a328a3e354bf43c83f3c",
+    "/src/scripts/f06_origin_command_profile_e6a_guarded.json": "7b60afe60f069bb863e7c38ca8c28abe8ea682814d0207e54663572adfde7dca"
+  },
+  "configure_argv_items": [
+    {
+      "value": "/usr/bin/cmake"
+    },
+    {
+      "value": "-S"
+    },
+    {
+      "value": "/src"
+    },
+    {
+      "value": "-B"
+    },
+    {
+      "value": "/work/output/build"
+    },
+    {
+      "value": "-G"
+    },
+    {
+      "value": "Unix Makefiles"
+    },
+    {
+      "value": "-DCMAKE_BUILD_TYPE=Debug"
+    },
+    {
+      "value": "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    },
+    {
+      "value": "-DCMAKE_C_COMPILER=/usr/bin/cc"
+    },
+    {
+      "value": "-DCMAKE_ASM_COMPILER=/usr/bin/cc"
+    },
+    {
+      "value": "-DCMAKE_LINKER=/usr/bin/ld"
+    },
+    {
+      "value": "-DCMAKE_MAKE_PROGRAM=/usr/bin/make"
+    },
+    {
+      "value": "-DRUSTC=/nightly/bin/rustc"
+    },
+    {
+      "value": "-DBUILD_TARGET=smp-x86"
+    },
+    {
+      "value": "-DKERNEL_DIR=/out/build"
+    },
+    {
+      "value": "-DENABLE_RUST_KERNEL=ON"
+    },
+    {
+      "value": "-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON"
+    },
+    {
+      "value": "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12"
+    },
+    {
+      "value": "-DENABLE_PERF=ON"
+    },
+    {
+      "value": "-DPROFILE_ENABLE=ON"
+    },
+    {
+      "value": "-DENABLE_RUSAGE=ON"
+    },
+    {
+      "value": "-DENABLE_UBSAN=OFF"
+    },
+    {
+      "value": "-DENABLE_TOFU=OFF"
+    },
+    {
+      "value": "-DENABLE_PER_CPU_ALLOC_CACHE=OFF"
+    },
+    {
+      "value": "-DENABLE_FUGAKU_HACKS=OFF"
+    },
+    {
+      "value": "-DENABLE_NATIVE_SYSFS_VERIFY=OFF"
+    },
+    {
+      "value": "-DENABLE_NATIVE_FORK_OWNED_TRANSACTION=ON"
+    },
+    {
+      "value": "-DENABLE_RUST_PROCESS_VERBOSE_DATA=ON"
+    },
+    {
+      "value": "-DENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS=ON"
+    },
+    {
+      "value": "-DENABLE_PROCESS_DEBUG_PRINT=OFF"
+    },
+    {
+      "flag": "-DUNAME_R",
+      "value": null
+    },
+    {
+      "flag": "-DMCKERNEL_M14_EXPECTED_UNAME_R",
+      "value": null
+    },
+    {
+      "flag": "-DMCKERNEL_M14_EXPECTED_MAP_KERNEL_START",
+      "value": null
+    },
+    {
+      "flag": "-DMCKERNEL_M14_EXPECTED_MAKE_SHA256",
+      "value": null
+    },
+    {
+      "flag": "-DKBUILD_MAKE_FLAGS",
+      "value": null
+    },
+    {
+      "flag": "-DMCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS",
+      "value": null
+    }
+  ],
+  "required_actual_values": {
+    "UNAME_R": null,
+    "MCKERNEL_M14_EXPECTED_UNAME_R": null,
+    "MCKERNEL_M14_EXPECTED_MAP_KERNEL_START": null,
+    "make_executable_sha256": null,
+    "KBUILD_MAKE_FLAGS": null,
+    "MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS": null,
+    "python_executable_sha256": null,
+    "gcc14_executable_sha256": null,
+    "kbuild_cc_sha256": null,
+    "kbuild_ld_sha256": null,
+    "kernel_release_file_sha256": null,
+    "utsrelease_header_sha256": null,
+    "kernel_config_sha256": null,
+    "kernel_build_identity": null,
+    "full_source_membership_and_quiescence": null,
+    "fresh_work_root_identity": null,
+    "fresh_build_root_identity": null,
+    "safe_ancestor_identity_and_no_alias_proof": null,
+    "actual_make_wait_receipt": null
+  },
+  "historical_observations_not_defaults": {
+    "previous_make_flags": "CC=/usr/bin/clang;LD=/usr/bin/ld.lld",
+    "previous_probe_map": "0xfffffffffe800000",
+    "old_cmake_cache_uname_r": "5.15.0-139-generic",
+    "rocky_source_nvr": "6.12.0-211.44.1.el10_2"
+  },
+  "unresolved_mounts": {
+    "/out/build": null,
+    "/work": null
+  },
+  "proposed_environment": {
+    "MAKEFLAGS": "",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+    "PATH": "/nightly/bin:/usr/bin:/bin"
+  },
+  "mandatory_pre_entry": [
+    "Fresh exclusive /work and /work/output/build before entering any CMake code; retained root source calls file(REMOVE_RECURSE) inside build tree",
+    "Bind safe ancestors and no alias/symlink relationship to existing retained paths; root and tmpdir exact identities",
+    "Fresh actual source/tool/environment membership and quiescence, exact executable hashes and Linux generated header/config/UTS identities",
+    "Independently reviewed no-Docker unprivileged isolation and resource classification including make --version and Kbuild probe tree",
+    "Live controllers, ownership, one-shot admission and exact safe timeout/interruption process retention"
+  ],
+  "post_generation_check": {
+    "automatic": false,
+    "status": "REQUIRED_SEPARATE_NOT_RELEASED",
+    "script_target": "/src/scripts/verify_m14_elf.py",
+    "script_sha256": "157e2bd952f07c70a867fa9bd78165ac364c21d87f7dc32e3ecc482c191f7ca7",
+    "argv_template": [
+      null,
+      "/src/scripts/verify_m14_elf.py",
+      "--make-status",
+      null,
+      "--module",
+      "/work/output/build/tmp.resolve_MODULES_END/driver.ko",
+      "--kernel-release",
+      "/out/build/include/config/kernel.release",
+      "--uts-release-header",
+      "/out/build/include/generated/utsrelease.h",
+      "--uname-r",
+      null,
+      "--expected-map",
+      null,
+      "--cmake-cache",
+      "/work/output/build/CMakeCache.txt",
+      "--compile-commands",
+      "/work/output/build/compile_commands.json",
+      "--expected-kernel-dir",
+      "/out/build",
+      "--expected-build-dir",
+      "/work/output/build"
+    ],
+    "actual_interpreter": null,
+    "note": "Template is not executable authority; interpreter path is illustrative only and must be replaced by independently bound actual interpreter. Exact real make child status requires owner receipt; supplied scalar is not proof. Verify emitted flags, actual source origin and complete include/dependency closure; original389 and provider/link review remain separate."
+  },
+  "exclusions": [
+    "later ptrace wakeup/free logger",
+    "direct TID and terminate_host holds",
+    "execve transfer/ACK and equivalents"
+  ],
+  "no_effects": [
+    "No CMake configure",
+    "No make or module probe",
+    "No compiler",
+    "No native guest Docker or privilege",
+    "No owner/controller/cleanup action"
+  ]
+}
