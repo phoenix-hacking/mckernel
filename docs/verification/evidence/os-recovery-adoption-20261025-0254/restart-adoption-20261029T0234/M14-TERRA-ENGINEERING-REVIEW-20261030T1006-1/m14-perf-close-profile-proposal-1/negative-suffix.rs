@@ -1,0 +1,16 @@
+#[repr(C)] struct ThreadMaps {pmc:u64,extra:u64}
+fn main(){unsafe{
+ let mut leader=new_event();let head=core::ptr::addr_of_mut!(leader.siblings);(*head).next=head;(*head).prev=head;
+ let mut fd=Fd{next:core::ptr::null_mut(),fd:42,_pad:0,data:(&mut leader as *mut Event) as i64};let mut proc=Proc{head:&mut fd};let mut first=new_event();let mut second=new_event();let mut thread=ThreadMaps{pmc:1u64<<3,extra:0};FREES=0;FREEPTR=0;
+ let off=(offset_of!(Proc,head),offset_of!(Fd,next),offset_of!(Fd,fd),offset_of!(Fd,data),offset_of!(Event,leader),offset_of!(Event,siblings),offset_of!(Event,entry),offset_of!(Event,nr),offset_of!(Event,status));
+ let first_ptr=(&mut first as *mut Event).cast();let second_ptr=(&mut second as *mut Event).cast();let proc_ptr=(&mut proc as *mut Proc).cast();
+ assert_eq!(perf_event_open_group_body_result(first_ptr,proc_ptr,42,3,off.0,off.1,off.2,off.3,off.4,off.5,off.6,off.7,off.8),0);
+ let first_link=core::ptr::addr_of_mut!(first.entry);assert_eq!((*head).prev,first_link);assert_eq!(leader.nr,1);
+ // Synthetic counterfactual: detach before the mocked close. This is not a kernel repair.
+ (*head).next=head;(*head).prev=head;leader.nr=0;
+ first.counter=3;assert_eq!(perf_close_body_result(first_ptr,(&mut thread as *mut ThreadMaps).cast(),offset_of!(Event,counter),offset_of!(Event,extra_reg),offset_of!(Event,extra_idx),offset_of!(ThreadMaps,pmc),offset_of!(ThreadMaps,extra),Some(perf_event_alloc_free_bridge)),0);
+ assert_eq!(FREES,1);assert_eq!(FREEPTR,first_ptr as usize);assert_eq!((*head).prev,head);assert_eq!(leader.nr,0);
+ assert_eq!(perf_event_open_group_body_result(second_ptr,proc_ptr,42,4,off.0,off.1,off.2,off.3,off.4,off.5,off.6,off.7,off.8),0);
+ let second_link=core::ptr::addr_of_mut!(second.entry);assert_eq!((*head).prev,second_link);assert_eq!((*head).next,second_link);assert_eq!((*first_link).next,head);assert_eq!(leader.nr,1);assert_eq!(FREES,1);
+ println!("PASS synthetic detached-link control");
+}}

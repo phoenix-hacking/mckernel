@@ -1,3 +1,34 @@
+## M14 engineering review — 2026-10-30T10:06Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 09:46:29.892–10:06:29.892 bucket: zero current-candidate kernel builds,
+production links, native qualifications, guest apps, retired C boundaries or file
+closures. M14 4/6, practical 35/35, M15 queued. Three perf group-failure mocked
+actual-body cases pass; C/Rust group error matches, Rust performs intentional one
+mock free. The CPU0/nightly execution limits were recorded but a reusable reviewed
+profile was not established; no actual ABI/native claim. Independent source review
+finds conditional group close leaves freed member linked and leader-first close can
+leave members referencing freed leader; real success/overlap/link remains unproved.
+Grouped failure rollback, host FD outcome and close concurrency are held.
+
+Private standalone group_fd==-1/negative-host cleanup source patch is reviewed at
+source scope and composed in private Rust overlay; fixture NOT_RUN. The exact nested
+mount, full parent/effective view, toolchain and reviewed light process owner/profile
+remain open. An accidental local replay of the prior perf fixture at 09:50:20 returned
+zero and contents match old hashes; old metadata and replay process identities are
+unavailable. Incident preserved; no further replay and no kernel/native action.
+Disabled signal owner and mount graph remain NO-GO; no process/mount/configure ran.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance UNKNOWN; BUILD3/CID5487 and consumed nonces not replayed. Root owns fresh
+health/admission, m14_arch host-light source owner, m14_generic exact perf mount.
+Compiler queue/first start, blocked time, overlap, CPU/peak and failure-to-validated-
+kernel-fix unmeasured; prior 418.778s first-stream proxy, 491.317s handoff and
+original30-minute baseline retained, no95% claim. At 10:07:31 host/scratch free
+143413264384 / 47613485056 bytes; weekly82% used, weekly-only. Evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-ENGINEERING-REVIEW-20261030T1006-1/REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T09:46Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

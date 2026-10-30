@@ -1,0 +1,17 @@
+--- a/kernel/rust/f03_perf_group_cleanup.rs
++++ b/kernel/rust/f03_perf_group_cleanup.rs
+@@ -108,6 +108,14 @@
+         syscall_fn,
+     );
+     if fd < 0 {
++        // Only a standalone event is still private: its leader points to
++        // itself and no sibling/descriptor published it. The selected counter
++        // provider has only scanned the allocation map, and the host helper
++        // returns before setting that map on this branch. Grouped events need
++        // a separately reviewed leader/reader lifetime and are left unchanged.
++        if group_fd == -1 {
++            unsafe { super::perf_event_alloc_free_bridge(event) };
++        }
+         return fd;
+     }
+ 

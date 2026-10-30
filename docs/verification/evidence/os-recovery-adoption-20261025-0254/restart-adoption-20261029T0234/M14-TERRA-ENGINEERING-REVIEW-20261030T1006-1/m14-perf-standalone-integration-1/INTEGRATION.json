@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing",
+  "status": "SOURCE_ONLY_UNRELEASED",
+  "authority": null,
+  "base_nonheld_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-nonheld-composition-1/MANIFEST.json",
+    "sha256": "ad611913d8965e1140443c29678c2e1180a90a91095ea0141929b8767a92ada7"
+  },
+  "base_composite_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-root-and-nonheld-composite-1/MOUNT-MANIFEST.json",
+    "sha256": "8cb23a435a512bff5cc8a80d28fe9c70764ef047918c60722e535fa721738593"
+  },
+  "source_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-standalone-host-failure-1/candidate.patch",
+    "sha256": "2bd0c4921601bb6fed64e05cd91762947277fc7dbc9a6469239af1176e890fd4"
+  },
+  "preimage": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/f03_perf_group_cleanup.rs",
+    "sha256": "0dc2c777c39a9b2f31bc5e3d80badd2d3de8db35bcd0adba205776bb58517293"
+  },
+  "private_postimage": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-standalone-integration-1/postimage/kernel/rust/f03_perf_group_cleanup.rs",
+    "sha256": "7b13e1975636f0c496394e4fb6b0243ae926837a03099a498a69b9c3ab04b8b1"
+  },
+  "prospective_on_mount_delta": {
+    "target": "/src/kernel/rust/f03_perf_group_cleanup.rs",
+    "host_candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-standalone-integration-1/postimage/kernel/rust/f03_perf_group_cleanup.rs",
+    "mode": "ro",
+    "live_identity": null,
+    "parent_target": "/src/kernel/rust",
+    "parent_host_candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust",
+    "requires": "existing file mountpoint, parent-before-child, separately authenticated source identity and mount review"
+  },
+  "paired_selection": {
+    "cmake": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-root-and-nonheld-composite-1/postimage/kernel/CMakeLists.txt",
+    "cmake_sha256": "f34958844cf2a16d25244a3acc7c9610f262bc9cc64aba2db9706cc64a2a2655",
+    "C": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/nonheld-generic-arch-host-preparation-1/src/kernel/syscall.c",
+    "C_sha256": "4af4524be701ecdbaae09fba906c99bd065364c4caefdcf007820f463773eaf4",
+    "Rust_policy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+    "Rust_policy_sha256": "11d9d9e14c6c4ee3d593083ce18137414a7780c23507a44fb0834937fa9618e4",
+    "Rust_entry": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/f03_perf_entry_candidate.rs",
+    "Rust_entry_sha256": "d542c9f0a1793c8140f38c3d4439a9176742c420f94f792f76eafeb3981f82a5",
+    "option": "MCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL",
+    "default": "OFF",
+    "cfg": "f03_perf_entry_candidate",
+    "C_define": "MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL",
+    "scope": "source selectors only, actual generated flags/ABI/link not established"
+  },
+  "unchanged_grouped_path": "entire file difference is the guarded group_fd == -1 insertion; this is a static source result, not proof of grouped lifetime safety",
+  "open": [
+    "host FD result or rollback semantics",
+    "group and close lifetime and concurrency",
+    "source and mount identity/quiescence",
+    "test admission, compile/link/default/native qualification and independent review"
+  ]
+}

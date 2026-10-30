@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/test_graph_driver.py", line 29, in <module>
+    try:v._check_composite_proposal(p,rows)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/validator.py", line 201, in _check_composite_proposal
+    proposal, ref = _document(path, COMPOSITE_PROPOSAL_SHA, 'ON composite source proposal')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/validator.py", line 70, in _document
+    _require(ref['sha256']==sha, label+' digest mismatch')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/validator.py", line 28, in _require
+    raise ValueError(why)
+ValueError: ON composite source proposal digest mismatch
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-realgraph-failclosed-1/test_graph_driver.py", line 30, in <module>
+    except ValueError as e:assert reason in str(e),(case,str(e));out.append({'case':case,'outcome':'rejected','error':str(e)})
+AssertionError: ('wrong_parent_hash', 'ON composite source proposal digest mismatch')

@@ -1,0 +1,34 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-C",
+        "opt-level=0",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-group-actual-body-correction-1/c_actual.o",
+        "main.rs",
+        "-o",
+        "fixture"
+      ],
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-group-actual-body-rust-correction-1/fixture"
+      ],
+      "exit": 0,
+      "stdout_sha256": "00b3b48db9ee519335913d3dc3f67bb7b378270c9692a34343f7aaa270decb15",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
