@@ -1,0 +1,139 @@
+{
+  "task_id": "M14-FULL28-PRODUCER-PREPARATION-1/METADATA-CORRECTION-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_DATA_READY_FOR_REVIEW_ROOT_MUST_BIND_FRESH_ACTUAL74_INPUTS",
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-COMBINED-BATCH-1/full-cutover-successor-1/complete-input-integration-1/final-profile-1/uti-desc-rust-owner-successor-1/SOURCE-READY.json",
+    "bytes": 6600,
+    "sha256": "8b738728d75f7df09c99629711a02c0107a21af42392eb2f1968861729097d0c"
+  },
+  "source_files": 166,
+  "rust_files": 155,
+  "external_modules": 3,
+  "ordered_commands": 4,
+  "rebuilt_objects": 3,
+  "retained_objects": 8,
+  "command_argv_hashes": [
+    {
+      "id": "0",
+      "stage": "full current default Rust object",
+      "argv_sha256": "424796cf14af8ded9c0d87f1847f00f1fce9a8e583bdb48929f9bf2f28df302c",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/rust/mckernel_rust.o"
+    },
+    {
+      "id": "1",
+      "stage": "selected kernel syscall object",
+      "argv_sha256": "9696e83b802a90e66ee8d39e50db7b5b83927882083453236f0dabb81c1de068",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+    },
+    {
+      "id": "2",
+      "stage": "selected x86 syscall object",
+      "argv_sha256": "b4355547dcdc8c5a965b4388ca012b4690c4999b6951af22445ad4d5481d1203",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+    },
+    {
+      "id": "3",
+      "stage": "exact eleven-input raw link",
+      "argv_sha256": "14c988484795330d38bd9b5a476e4edf20500ed7af150c9d038527b179cd1d92",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/mckernel.img"
+    }
+  ],
+  "files": {
+    "format_full28_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/format_full28_source.py",
+      "bytes": 10543,
+      "sha256": "6feec800bc55499bb4dfe5a978d4edfea73819f58ea326b3d8ab41729fb880b2"
+    },
+    "FOUR-COMMANDS.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/FOUR-COMMANDS.SOURCE-ONLY.json",
+      "bytes": 29868,
+      "sha256": "60f8905e05952dc52e11847179664d402de151cead912d93580640f3f2e8f0d0"
+    },
+    "NEXT-ARGV.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/NEXT-ARGV.SOURCE-ONLY.json",
+      "bytes": 20022,
+      "sha256": "f0a6eee123192bbaa65d606406b35df5c66909b80cd36ad73e1870e32671a45b"
+    },
+    "SNAPSHOT-INPUT-MAP.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/SNAPSHOT-INPUT-MAP.SOURCE-ONLY.json",
+      "bytes": 70294,
+      "sha256": "a6b2f5967ede0c6bd4f04464a6c7fbebc4bff5f4ae509dfec6cbde3703dcb74c"
+    },
+    "run_build_only.template.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/run_build_only.template.py",
+      "bytes": 26313,
+      "sha256": "fe06b606b4e79dca4cc3c285636ed2abd597a59a63953c27c2c07dee115c64b3"
+    },
+    "build_only_worker.template.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/build_only_worker.template.py",
+      "bytes": 4112,
+      "sha256": "d3806c4d579ec3ad05efad71d0d0b1ad8c4c2cc8ad262117a42038030fca1ac9"
+    },
+    "SOURCE-FACTORY-PARAMETERS.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/SOURCE-FACTORY-PARAMETERS.NOT-AUTHORITY.json",
+      "bytes": 3358,
+      "sha256": "b94156831397bbfab3c09f2f6d7459043d840dc12a9fbeee9b131276525dd07c"
+    },
+    "PROFILE-INPUTS.SOURCE-ONLY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/PROFILE-INPUTS.SOURCE-ONLY.json",
+      "bytes": 54298,
+      "sha256": "6aebb302e81842999fd08071e36be56bc5b30196e6bae533d01de5c222899a13"
+    },
+    "ROOT-CURRENT-FRONTIER.PARAMETERS.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/ROOT-CURRENT-FRONTIER.PARAMETERS.NOT-AUTHORITY.json",
+      "bytes": 1570,
+      "sha256": "6a9465a6022b8e052c0476cf1a4eb478c2f19c11fe46edf76c14bb836e9bf993"
+    },
+    "ROOT-SEALER-DATA-PARAMETERS.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/ROOT-SEALER-DATA-PARAMETERS.NOT-AUTHORITY.json",
+      "bytes": 4427,
+      "sha256": "8fbe7255a4fcfa1bf270e25f86931c94072918a0750af58d1e445c0dffd1c3fe"
+    },
+    "REUSED-PRODUCER-BASES.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/REUSED-PRODUCER-BASES.json",
+      "bytes": 2454,
+      "sha256": "22ced63aae103bf3a68eebcfed7fb5ba978a01cb5c10fdf8e922649766880abe"
+    },
+    "PURE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/PURE-CHECKS.json",
+      "bytes": 1256,
+      "sha256": "2b9d2941a8d2b721f5fb91fcd3c25a21ed37658fa331fddc96db79d0e524e4d2"
+    },
+    "CONTROLS-SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/CONTROLS-SOURCE-CHECKS.json",
+      "bytes": 828,
+      "sha256": "b7ef3eac6a58689720ef1595f5f8bc17b08cfd16a9c24cbaf3291e697660f5a0"
+    },
+    "CORRECTION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/CORRECTION.json",
+      "bytes": 968,
+      "sha256": "60e9c44447952d262a1f353c5a13615e637602389c6507811e2466eb5f199c4e"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/ROOT-NEXT.md",
+      "bytes": 3366,
+      "sha256": "9e0adb16ef8e7d1edabb41ef63c7c343c609d95e7f85a2f8e379b198b02b6320"
+    },
+    "check_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/check_source.py",
+      "bytes": 7059,
+      "sha256": "fb8f2670eed0f72d1f0c0cd427093efb67ec8f5a3a899ed6135e85dc7be2b851"
+    }
+  },
+  "first_failure_retained": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/FIRST-SOURCE-CHECK-FAILURE.json",
+    "bytes": 925,
+    "sha256": "e96a4e2c18db4787b18134ed4deff6f723c0341d12c1e637665882cc82067d29"
+  },
+  "correction": "Exactly ordered ids/auxiliary canonical argv hash metadata and corresponding stronger source validator; executable argv unchanged. First failure/source unchanged.",
+  "checks": "PASS166+3 refs,4commands/8retained3rebuilt,8negative plan/hash/id/order/source cases, original4worker exact,6operation bodies exact, holder exact, original cutoffs source unchanged.",
+  "missing_actual_evidence": "Fresh actual Root74-or-later frontier/controls/current-free/nonce/guard/origin/export/sourceSnapshot/admission and all actual compile/artifact/native results remain unbound. No source or execution authority inferred from this data.",
+  "next_task": "Root independent source review, exact existing-sealer source/data parameter adoption and fresh current74 operational bindings; then one admitted4command producer to obtain real compiler feedback.",
+  "guard_export_compiler_native_calls": 0,
+  "runtime_authority": null
+}

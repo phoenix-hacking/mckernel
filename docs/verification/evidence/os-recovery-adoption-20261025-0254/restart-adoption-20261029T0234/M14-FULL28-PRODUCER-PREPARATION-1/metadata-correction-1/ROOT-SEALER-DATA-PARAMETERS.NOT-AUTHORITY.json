@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_ONLY_EXISTING_SEALER_SOURCE_DATA_PARAMETERS_NO_NEW_CONTROLLER",
+  "existing_reviewed_sealer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-PRODUCER-BINDING-1/current-frontier-successor-1/seal_root_conversion_inputs.py",
+    "bytes": 20912,
+    "sha256": "6e8cc5d4ee3dc2c4f9a29390aa57520eaff221b2084849e5ed4994868cf7c50d"
+  },
+  "new_source_constants": {
+    "CANDIDATE": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-COMBINED-BATCH-1/full-cutover-successor-1/complete-input-integration-1/final-profile-1/uti-desc-rust-owner-successor-1/SOURCE-READY.json",
+      "bytes": 6600,
+      "sha256": "8b738728d75f7df09c99629711a02c0107a21af42392eb2f1968861729097d0c"
+    },
+    "AFFECTED": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-COMBINED-BATCH-1/full-cutover-successor-1/complete-input-integration-1/final-profile-1/uti-desc-rust-owner-successor-1/AFFECTED-UNIT-CANDIDATE-INPUTS.json",
+      "bytes": 68727,
+      "sha256": "78981e18d80a2cae009e729fec68fe3749a68547f145ea5ac54ebc57e7eb7ef7"
+    },
+    "RECIPE": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/FOUR-COMMANDS.SOURCE-ONLY.json",
+      "bytes": 29868,
+      "sha256": "60f8905e05952dc52e11847179664d402de151cead912d93580640f3f2e8f0d0"
+    },
+    "SNAPSHOT_MAP": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/SNAPSHOT-INPUT-MAP.SOURCE-ONLY.json",
+      "bytes": 70294,
+      "sha256": "a6b2f5967ede0c6bd4f04464a6c7fbebc4bff5f4ae509dfec6cbde3703dcb74c"
+    }
+  },
+  "source_manifest_count": 166,
+  "rust_file_count": 155,
+  "retained_count": 8,
+  "replaced_count": 3,
+  "new_objects": [
+    "rust/mckernel_rust.o",
+    "CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+  ],
+  "postimage_policy": "Existing full28 affected map46 targets is exact source allowlist for Root publication only. Override or append all its non-kernel/rust targets in readonly producer postimages, including changed arch TU and actual witness include (probe disabled in production). Closed Rust166map replaces subtree sources; preserve external3 exactrefs. Do not only replace generic C/CMake as oldthree sealer did.",
+  "origin_policy": {
+    "virtual_source": "/src/arch/x86_64/kernel/syscall.c",
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-COMBINED-BATCH-1/full-cutover-successor-1/complete-input-integration-1/postimage/arch/x86_64/kernel/syscall.c",
+      "bytes": 122070,
+      "sha256": "322b35b6adf268b12f5e42435ac3e830efb6f061914be2fe77d33337517f2dcd"
+    },
+    "arch_argv_sha256": "b4355547dcdc8c5a965b4388ca012b4690c4999b6951af22445ad4d5481d1203",
+    "required": "Root generates/authenticates genuine fresh changed-source origin/profile using this exact arch argv/source. Existing119sourcehash/profilehash assertions must be updated by exact new evidence, never removed or old119 receipt reused as current. Preserve genuine file/function/line metadata389 and retained original source-location identities, toolchain/derivation predicates."
+  },
+  "preserve_existing_validation_functions": [
+    "validate_latest_frontier",
+    "validate_root",
+    "cutoffs",
+    "accepted accepted_chain/metadata/review_binds_guard; actualpositive current controls and earliest included-only cap"
+  ],
+  "fresh_frontier": "Actual complete74-or-later current frontier with latest caller/actorclosure/currentfree/ledger/independent review/newnonce; Root68/73 and Root69sourceinput remain historical only.",
+  "execution_scope": "Source/data parameter adaptation only. Root performs actual snapshot/export/origin/control/sealer/guard/admission separately; this packet did none.",
+  "runtime_authority": null
+}

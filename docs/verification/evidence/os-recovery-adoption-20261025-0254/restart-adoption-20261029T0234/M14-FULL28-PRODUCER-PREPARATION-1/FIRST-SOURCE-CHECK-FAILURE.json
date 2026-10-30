@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_SOURCE_CHECK_FAILURE_PRESERVED_NOT_READY",
+  "command": "python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/check_source.py",
+  "environment": {
+    "cwd": "/home/holden/mckernel",
+    "compiler_native": false
+  },
+  "traceback": "check_source.py:20 assert recipe[ordered_commands][3]==oldprofile[exact_commands][2]==original4[ordered_commands][3] AssertionError",
+  "counterexample": {
+    "argv_sha256": {
+      "new": null,
+      "source3": null,
+      "original4": "14c988484795330d38bd9b5a476e4edf20500ed7af150c9d038527b179cd1d92"
+    },
+    "id": {
+      "new": "2",
+      "source3": "2",
+      "original4": "3"
+    }
+  },
+  "candidate_sha256": "8b738728d75f7df09c99629711a02c0107a21af42392eb2f1968861729097d0c"
+}

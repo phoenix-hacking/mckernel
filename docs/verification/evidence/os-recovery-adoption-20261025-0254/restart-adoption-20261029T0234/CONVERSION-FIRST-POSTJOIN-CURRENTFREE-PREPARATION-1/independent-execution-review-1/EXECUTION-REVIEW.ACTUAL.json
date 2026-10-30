@@ -1,0 +1,105 @@
+{
+  "schema": "mckernel.independent-exact-conversion-postjoin-readonly-execution-review.v1",
+  "decision": "PASS_EXACT_CONVERSION_POSTJOIN_READONLY_CAPTURE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/recovery_review",
+  "recorded_at": 1793323357.8748538,
+  "release_payload": {
+    "author": "/root",
+    "decision": "AUTHORIZE_ONE_CONVERSION_POSTJOIN_READONLY_CAPTURE",
+    "maximum_invocations": 1,
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/observe_conversion_postjoin.py",
+      "bytes": 32774,
+      "sha256": "c6f23355826df398e250030c3834e871f86303cb7b9b588a8cf4c7315e635a62"
+    },
+    "bindings": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/ROOT-ACTUAL-FRONTIER-OBSERVER-BINDING.json",
+      "bytes": 2484,
+      "sha256": "6c4655d716b3b1d75479628969dff9aa70d3b76ea7d15a41c2181dc908809f16"
+    },
+    "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/actual-frontier-1/OBSERVATION.json",
+    "native_authority": null,
+    "runtime_authority": null
+  },
+  "release_payload_file": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/RELEASE-PAYLOAD.ACTUAL.json",
+    "bytes": 1073,
+    "sha256": "eccaf76e83839af986fdb7f2f8534e841e1f0471e9814d120444735826f5321e"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/independent-source-review-1/SOURCE-REVIEW.ACTUAL.json",
+    "bytes": 12662,
+    "sha256": "43868aed5935250867e4b981b1b614af0572cad67e9db206c281a98449888ff2"
+  },
+  "observer_binding_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/actual-independent-runtime-binding-review-1/OBSERVER-BINDING-REVIEW.ACTUAL.json",
+    "bytes": 5736,
+    "sha256": "33114a143fcf2bfdc05f32bbccc3b7c61726ce123d6f4d7c11a534363ead1f08"
+  },
+  "parent_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/root_capture_parent.py",
+    "bytes": 4953,
+    "sha256": "f71d0820520b70cd0b3309624741c16c777b6aa0391355b64880c44b0df98af0"
+  },
+  "expected_parent_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/root_capture_parent.py"
+  ],
+  "child_argv_template": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/observe_conversion_postjoin.py",
+    "--bindings",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/ROOT-ACTUAL-FRONTIER-OBSERVER-BINDING.json",
+    "--release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/RELEASE.ACTUAL.json",
+    "--release-sha256",
+    "SHA256_OF_EXACT_FINAL_RELEASE_COMPUTED_BY_REVIEWED_PARENT",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/CONVERSION-FIRST-POSTJOIN-CURRENTFREE-PREPARATION-1/actual-frontier-1/OBSERVATION.json"
+  ],
+  "profile": {
+    "uid": 1000,
+    "affinity": [
+      0
+    ],
+    "jobs": 1,
+    "address_space_hard_soft": 2147483648,
+    "CPU_seconds_hard_soft": 60,
+    "core_hard_soft": 0,
+    "observer_wall_seconds_maximum": 120,
+    "no_signals_or_retry": true,
+    "owned_direct_wait4": true,
+    "regular_capture_streams": true,
+    "dedicated_child_session": true,
+    "atomic_no_overwrite_parent_proof": true
+  },
+  "pre_capture_actor_rows": 230,
+  "pre_capture_distinct_identities": 225,
+  "conditions": [
+    "Root must seal exactly this payload plus this independent_execution_review ref, publish/fetch and verify the required exact source/runtime bindings before launch. Publication is pending here and is not falsely asserted complete.",
+    "Fresh actual weekly guard/identity/usage/current three-clock minimum checks remain mandatory at entry and immediately before every Popen. Unknown usage,100percent or changed actual reset must refuse. Included-only/no paidfallback unchanged.",
+    "Exactly one reviewed readonly observer, original full physical probes and three owned raw query clients. No stopped-container mutation, signals, native/guest/compiler/cleanup or workload grant.",
+    "All old UNKNOWNs and history remain;5326 is historical provenance only. Actual new free requires completed observation, exact positive parent/client joins and independent acceptance.",
+    "Root owns caller custody and evidence errors; any evidence/query failure remains retained with no retry under this receipt."
+  ],
+  "query_directory_verified_created_empty": true,
+  "output_and_parent_capture_paths_verified_absent": true,
+  "publication_verified_at_review": false,
+  "actual_new_current_free": false,
+  "native_acceptance": false,
+  "runtime_authority": null
+}

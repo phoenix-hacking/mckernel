@@ -1,3 +1,40 @@
+## Steering checkpoint — 2026-10-30T01:40:33+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The 01:20:28–01:40:33 UTC bucket produced zero new compiled or linked functions,
+native results, C retirements or file closures, and no new guest app results.
+The earlier first batch remains 19 compiled/linked functions: 20.113176 s wall,
+20.136898 s CPU, 596788 KiB peak child RSS, and 0.587572 s from GO file mtime
+to the first recorded compiler-command start. M14 remains 4/6; M15 is paused.
+
+The exact conversion container retirement was independently accepted in
+`CONVERSION-FIRST-NORMAL-RETIREMENT-PREPARATION-1/actual-independent-retirement-review-1/RETIREMENT-ACCEPTANCE.ACTUAL.json`
+(SHA256 `69216fdba1acbe6a1cde3aa996534ed863deb57a5fd0bf64a05242d68bc9b894`).
+Fresh current-free acceptance remains absent, and the outer parent birth remains
+UNKNOWN. The postjoin read-only release has an execution review with publication
+unverified and no observation. Preserve the consumed retirement attempt; do not
+replay it. Actual controls, publication, fresh admission and the applicable
+one-shot release remain prerequisites to the next physical operation.
+
+The fresh full-28 candidate selects real implementations; the stack provider and
+mutation coverage remain unresolved. Separate range-provider analysis from the
+continuing source lanes. Compile the coherent full-28 candidate only after current
+clearance and the correct exact release. No source selection, this checkpoint or
+a capacity snapshot is acceptance.
+
+At 01:40 UTC the sampled included weekly usage was 45%; host free was
+145064460288 bytes, scratch free 47862128640 bytes, and available memory
+26923220 KiB. These are snapshots, not fresh admission. No prepaid fallback;
+the fixed cutoff and inherited clocks remain in force.
+
+Adopted policy SHA256: `CONVERGENCE.md`
+`72a39e06a1f72f37c0fc22f96754cfafaff0d888520b0dea53e0a185fc3d0326`,
+`GOAL.md` `183b4fe6c7470d43e0e10bf840cfc5f1efd3aa2ae4a30dd69818f85af7f7c328`,
+`HANDOFF.md` `022c21467e5bd67b42c8486d41336462997686206d2058704449dfe202f12439`,
+and `START.md` `5e82e288f7059ad73e01f49956a16039040c3c448b098e4f45dc917cf4620341`.
+These identify the invocation's adopted policy inputs, not the subsequently
+updated handoff file.
+
 ## Full 28-function cutover target and qualified build — 2026-10-30T00:48:28.539819+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
