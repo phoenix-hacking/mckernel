@@ -1,0 +1,176 @@
+--- prior/do_fork-lifetime.PRIVATE.rs.inc
++++ successor/do_fork-quarantine.PRIVATE.rs.inc
+@@ -129,15 +129,89 @@
+     /// this checked RMW; earlier TID-slot publication remains a separate review.
+     /// This is a new pin, never a guessed constructor or scheduler credit.
+     unsafe fn pin_child_before_graph_publication(child: *mut Thread) -> Result<(), CInt> {
+-        use core::sync::atomic::{AtomicI32, Ordering};
+-        let counter = unsafe { AtomicI32::from_ptr(addr_of_mut!((*child).refcount.counter)) };
++        let counter = unsafe {
++            core::sync::atomic::AtomicI32::from_ptr(addr_of_mut!((*child).refcount.counter))
++        };
++        pin_live_counter(counter)
++    }
++
++    // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++    fn pin_live_counter(counter: &core::sync::atomic::AtomicI32) -> Result<(), CInt> {
++        use core::sync::atomic::Ordering;
+         let mut old = counter.load(Ordering::SeqCst);
+         loop {
++            // These classifications return without touching the counter. The
++            // caller must quarantine UNKNOWN ownership; it cannot reset refs.
+             if old <= 0 { return Err(-super::EINVAL); }
+-            if old == i32::MAX { return Err(-75); } // Linux EOVERFLOW, CInt result.
++            if old == i32::MAX { return Err(-75); } // EOVERFLOW.
+             match counter.compare_exchange_weak(old, old + 1, Ordering::SeqCst, Ordering::SeqCst) {
+                 Ok(_) => return Ok(()),
+                 Err(actual) => old = actual,
++            }
++        }
++    }
++
++    // Retained owner records are preallocated BEFORE CPU/child construction.
++    // There is no reap/retry/free API: UNKNOWN records preserve every captured
++    // handle and obligation for separate owner review. Numeric fields are not
++    // evidence that the retained objects remain safe to dereference.
++    #[repr(C)]
++    struct UnknownCloneRecord {
++        next: *mut UnknownCloneRecord,
++        disposition: CInt, // 1 == UNKNOWN; no successful pin exists.
++        reason: CInt,
++        child: *mut Thread,
++        process: *mut Process,
++        vm: *mut crate::abi::ProcessVm,
++        cpu: CInt,
++        cpu_reservation_obtained: CInt,
++        child_tid: CInt,
++        tid_table_created: CInt,
++        tid_table: *mut c_void,
++        tid_count: CInt,
++    }
++
++    #[used]
++    static UNKNOWN_CLONES: core::sync::atomic::AtomicPtr<UnknownCloneRecord> =
++        core::sync::atomic::AtomicPtr::new(null_mut());
++
++    struct PendingCloneQuarantine { record: *mut UnknownCloneRecord }
++    impl PendingCloneQuarantine {
++        unsafe fn reserve(needed: bool) -> Result<Self, CInt> {
++            if !needed { return Ok(Self { record: null_mut() }); }
++            let record = unsafe {
++                crate::mem_helpers::kmalloc(size_of::<UnknownCloneRecord>() as CInt, 0)
++            }.cast::<UnknownCloneRecord>();
++            if record.is_null() { return Err(-super::ENOMEM); }
++            // Slot owns only its private allocation until an UNKNOWN transfer.
++            Ok(Self { record })
++        }
++
++        unsafe fn retain_unknown(mut self, mut snapshot: UnknownCloneRecord) {
++            use core::sync::atomic::Ordering;
++            // The caller reserves this slot before construction on every
++            // CLONE_VM route. This transfer is infallible and allocation-free.
++            let record = self.record;
++            self.record = null_mut();
++            snapshot.disposition = 1;
++            unsafe { record.write(snapshot) };
++            let mut head = UNKNOWN_CLONES.load(Ordering::Acquire);
++            loop {
++                unsafe { (*record).next = head };
++                match UNKNOWN_CLONES.compare_exchange_weak(
++                    head, record, Ordering::AcqRel, Ordering::Acquire,
++                ) {
++                    Ok(_) => return,
++                    Err(actual) => head = actual,
++                }
++            }
++        }
++    }
++    impl Drop for PendingCloneQuarantine {
++        fn drop(&mut self) {
++            // Frees only an unused record. Never touches child/VM/TID/CPU refs.
++            if !self.record.is_null() {
++                unsafe { crate::mem_helpers::kfree(self.record.cast()) };
+             }
+         }
+     }
+@@ -194,6 +268,11 @@
+             }
+             return error as CLong as CULong;
+         }
++        // Reserve retained UNKNOWN storage before any CPU or child obligation.
++        let quarantine = match unsafe { PendingCloneQuarantine::reserve(flags & CLONE_VM != 0) } {
++            Ok(slot) => slot,
++            Err(error) => return error as CLong as CULong,
++        };
+         unsafe {
+             if (*old_process).uti_thread_rank != 0 {
+                 (*old).mod_clone = if (*old_process).clone_count.wrapping_add(1)
+@@ -355,9 +434,29 @@
+                 {
+                     break 'prepared true;
+                 }
++                // Capture handles while the caller still has its preexisting
++                // borrowed constructor/pool context, BEFORE classifying the ref.
++                // A bad ref does not grant any subsequent object dereference.
++                let mut unknown_node = MaybeUninit::<crate::lock_helpers::McsRwlockNodeIrqsave>::uninit();
++                crate::lock_helpers::__mcs_rwlock_reader_lock(
++                    addr_of_mut!((*new_process).threads_lock).cast(), unknown_node.as_mut_ptr(),
++                );
++                let mut unknown = UnknownCloneRecord {
++                    next: null_mut(), disposition: 0, reason: 0,
++                    child: new, process: new_process, vm: (*new).vm,
++                    cpu, cpu_reservation_obtained: (!helper) as CInt,
++                    child_tid: (*new).tid, tid_table_created: table_created,
++                    tid_table: (*new_process).tids.cast(), tid_count: (*new_process).nr_tids,
++                };
++                crate::lock_helpers::__mcs_rwlock_reader_unlock(
++                    addr_of_mut!((*new_process).threads_lock).cast(), unknown_node.as_mut_ptr(),
++                );
+                 if let Err(value) = pin_child_before_graph_publication(new) {
+-                    error = value;
+-                    break 'prepared true;
++                    unknown.reason = value;
++                    // UNKNOWN transfer: no ref reset/decrement, TID release,
++                    // CPU release, destructor, callback or second pin attempt.
++                    quarantine.retain_unknown(unknown);
++                    return -super::EBUSY as CLong as CULong;
+                 }
+                 // The new pin keeps child/VM/process storage through publication,
+                 // ptrace callbacks, report attachment, enqueue and optional schedule.
+@@ -412,10 +511,18 @@
+         error as CLong as CULong
+     }
+ 
++    const _: () = {
++        assert!(size_of::<crate::abi::IhkAtomic>() == size_of::<core::sync::atomic::AtomicI32>());
++        assert!(core::mem::align_of::<crate::abi::IhkAtomic>() == core::mem::align_of::<core::sync::atomic::AtomicI32>());
++        assert!(core::mem::offset_of!(crate::abi::IhkAtomic, counter) == 0);
++        assert!(size_of::<crate::abi::McsRwlockLock>() == size_of::<crate::lock_helpers::McsRwlockLock>());
++        assert!(core::mem::align_of::<crate::abi::McsRwlockLock>() == core::mem::align_of::<crate::lock_helpers::McsRwlockLock>());
++    };
++
+     // Compiler-only real C/Rust layout view; no runtime ownership getter.
+     #[no_mangle]
+     #[used]
+-    pub static f03_do_fork_Rust_ABI_v1: [CULong; 35] = [
++    pub static f03_do_fork_Rust_ABI_v1: [CULong; 46] = [
+         size_of::<crate::abi::Thread>() as CULong,
+         core::mem::align_of::<crate::abi::Thread>() as CULong,
+         core::mem::offset_of!(crate::abi::Thread, proc) as CULong,
+@@ -451,5 +558,16 @@
+         core::mem::offset_of!(crate::fork_child_credits::CallerForkOutcome, disposition) as CULong,
+         core::mem::offset_of!(crate::fork_child_credits::CallerForkOutcome, error) as CULong,
+         core::mem::offset_of!(crate::fork_child_credits::CallerForkOutcome, handle) as CULong,
++        core::mem::offset_of!(crate::abi::Process, update_lock) as CULong,
++        size_of::<crate::abi::McsRwlockLock>() as CULong,
++        core::mem::align_of::<crate::abi::McsRwlockLock>() as CULong,
++        size_of::<crate::abi::IhkAtomic>() as CULong,
++        core::mem::align_of::<crate::abi::IhkAtomic>() as CULong,
++        core::mem::offset_of!(crate::abi::IhkAtomic, counter) as CULong,
++        (core::mem::offset_of!(crate::abi::Thread, refcount) + core::mem::offset_of!(crate::abi::IhkAtomic, counter)) as CULong,
++        size_of::<CInt>() as CULong,
++        core::mem::align_of::<CInt>() as CULong,
++        size_of::<core::sync::atomic::AtomicI32>() as CULong,
++        core::mem::align_of::<core::sync::atomic::AtomicI32>() as CULong,
+     ];
+ }

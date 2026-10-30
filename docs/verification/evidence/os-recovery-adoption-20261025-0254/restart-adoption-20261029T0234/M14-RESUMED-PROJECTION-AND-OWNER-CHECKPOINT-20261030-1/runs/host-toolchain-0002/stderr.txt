@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "collect_host_toolchain_v7.py", line 177, in <module>
+    if __name__=='__main__':main()
+  File "collect_host_toolchain_v7.py", line 170, in main
+    inventory(grant,caps)
+  File "collect_host_toolchain_v7.py", line 120, in inventory
+    meta=elf_dynamic(p)
+  File "collect_host_toolchain_v7.py", line 49, in elf_dynamic
+    st=os.fstat(fd); require(stat.S_ISREG(st.st_mode) and 64<=st.st_size<=MAX_ELF_BYTES,'ELF input size/type')
+  File "collect_host_toolchain_v7.py", line 21, in require
+    if not x: raise RuntimeError(m)
+RuntimeError: ELF input size/type

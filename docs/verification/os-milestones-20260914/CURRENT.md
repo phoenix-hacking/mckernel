@@ -1,3 +1,33 @@
+## M14 projection, owner and toolchain checkpoint — 2026-10-30T19:33Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same manually resumed Root01a18bc3 remains active, weekly-only controls retained.
+M14 stays4/6; practical35/35 separate; M15 paused. Retained1cd7/0633 rebind
+confirms23generic C definitions; arch5 remains historical, live selection unknown.
+No resumed kernel compile, behavior/native/default link or C/file retirement yet.
+
+New actual results:17projection regression cases and exact7C/2host-hunk source
+projection pass. Guarded owner16cases pass after2retained fixture failures;
+failure-to-validated fixture fix233.735s. Collector3tiny cases pass; v8 finite
+HOST toolchain observation exit0/wall0.87s/user0.73s/peak21812KiB, output awaits
+runtime-closure review. Both earlier collector failures/nonces remain retained;
+positive terminal and emptyPGID retire ordinary shares only. CPU6/job1; original
+native/scratch21/mutex27:4 ownership and2GiB V2UNKNOWN reservation unchanged.
+
+Perf typedowner3 source transitions pass scoped independent review; providers and
+ABI remain unwired. Credential, mmap/fork and dispatch private patches are saved,
+unselected/uncompiled; XPMEM and held callers remain held. Authenticated supervisor
+has concrete child signal-restoration and errorFD-custody defects under correction.
+Root currentfree/later-operation no-unlisted custody/effective source-view remain
+unknown; accepted normal retirement is historical, never permission to replay.
+
+Adjacent closed20min buckets through19:14:56 are recorded without overlap; original
+30min baseline retained, no95% claim. First resumed compiler not reached; queue
+latency and largest handoff duration unmeasured. Scheduling change: keep direct
+HOST compile independent of SDK/native; start idle deliverable owners with followup.
+NEXT Root:review actual tool manifest then one CPU6/4GiB Rust diagnostic compile.
+Checkpoint evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-RESUMED-PROJECTION-AND-OWNER-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 resumed review and protocol-test cursor — 2026-10-30T18:28Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

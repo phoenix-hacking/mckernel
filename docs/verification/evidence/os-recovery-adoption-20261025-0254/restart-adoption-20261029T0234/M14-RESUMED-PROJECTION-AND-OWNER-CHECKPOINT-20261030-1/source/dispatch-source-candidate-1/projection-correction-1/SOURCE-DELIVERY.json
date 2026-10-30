@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "owner": "/root/dispatch_source",
+  "successor_only": true,
+  "earlier_oracle_preserved": true,
+  "source_tests_run": false,
+  "compiler_or_workload_run": false,
+  "source_only": true,
+  "full_lifetime_or_default_acceptance": false,
+  "next_argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_exact_projection.py"
+  ],
+  "second_argv": [
+    "python3",
+    "-B",
+    "check_source_projection.py"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/projection-correction-1",
+  "proposed_profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "memory_MiB": 512,
+    "requires_fresh_owner_grant": true
+  },
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 4054,
+      "sha256": "4a2aa4023ba1219e0b1b4f4e9158affd311677f9c790e6d2136e2c82ceb27798"
+    },
+    {
+      "path": "INPUTS.json",
+      "bytes": 4624,
+      "sha256": "16d131f8dcadc839b4c5b23f16949a8aaa282e2491754847647e346d5751f718"
+    },
+    {
+      "path": "check_source_projection.py",
+      "bytes": 5266,
+      "sha256": "e331d2bff9d8fea2e2c98b0f172579922bd09b918811dfc36ff80db49b2aafeb"
+    },
+    {
+      "path": "exact_projection.py",
+      "bytes": 7301,
+      "sha256": "242179cd0c4fe7cc67588711aa2892c545797b02c3253d460b0e6dccfe9b07fb"
+    },
+    {
+      "path": "test_exact_projection.py",
+      "bytes": 5272,
+      "sha256": "3e22aecad4a3822bcd4bd06554ef3eb7c278fe9e78689edd0c4a21844968cb99"
+    }
+  ]
+}

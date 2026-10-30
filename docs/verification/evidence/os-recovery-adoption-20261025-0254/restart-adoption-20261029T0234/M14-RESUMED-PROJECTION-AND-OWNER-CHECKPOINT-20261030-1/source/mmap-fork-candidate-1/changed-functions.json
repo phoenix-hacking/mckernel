@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "retirement_count": 0,
+  "rows": [
+    {
+      "original": "do_mmap",
+      "language": "Rust private successor reused",
+      "delta": "range writer retained atomically as reader through XPMEM; straight prephase moved under writer; scalar return retained",
+      "status": "source implemented; review/compile/native pending; XPMEM contract unresolved"
+    },
+    {
+      "original": "do_fork",
+      "language": "Rust private successor reused",
+      "delta": "parent flags scalar copied under process update_lock; checked extra child ref before publication released after existing TID-before-enqueue helper",
+      "status": "source implemented; independent review/compile/native pending"
+    },
+    {
+      "original": null,
+      "new_rust_provider": "__ihk_rwspinlock_write_downgrade",
+      "delta": "release-store one reader while owning writer; no unlocked state",
+      "status": "source only; representation/ordering review pending"
+    },
+    {
+      "original": null,
+      "new_rust_provider": "ihk_rwspinlock_write_downgrade_noirq",
+      "delta": "preserve original preempt-disable obligation until reader unlock",
+      "status": "source only; review pending"
+    }
+  ]
+}

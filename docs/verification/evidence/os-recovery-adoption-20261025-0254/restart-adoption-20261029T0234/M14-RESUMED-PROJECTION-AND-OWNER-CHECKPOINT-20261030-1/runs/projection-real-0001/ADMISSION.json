@@ -1,0 +1,303 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "grant": {
+    "cpu": [
+      6
+    ],
+    "jobs": 1,
+    "max_address_space_bytes": 536870912,
+    "cpu_seconds": 30,
+    "wall_seconds": 45,
+    "native_access": false,
+    "heavy_lease": false
+  },
+  "tools": {
+    "/usr/bin/env": {
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "device": 66306,
+      "inode": 1048858,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/taskset": {
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "device": 66306,
+      "inode": 1052691,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/prlimit": {
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "device": 66306,
+      "inode": 1052683,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/timeout": {
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "device": 66306,
+      "inode": 1049784,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/time": {
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "device": 66306,
+      "inode": 1049782,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/python3.8": {
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "device": 66306,
+      "inode": 1048651,
+      "mode": "0o100755",
+      "uid": 0
+    }
+  },
+  "status": "ROOT_ADMITS_ONE_EXACT_REAL_SOURCE_PROJECTION",
+  "author": "/root",
+  "at": 1793385984.0456977,
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/projection-correction-1",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=128",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/projection-real-0001/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "check_source_projection.py"
+  ],
+  "sources": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/projection-correction-1/exact_projection.py": {
+      "sha256": "242179cd0c4fe7cc67588711aa2892c545797b02c3253d460b0e6dccfe9b07fb",
+      "bytes": 7301
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/projection-correction-1/check_source_projection.py": {
+      "sha256": "e331d2bff9d8fea2e2c98b0f172579922bd09b918811dfc36ff80db49b2aafeb",
+      "bytes": 5266
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/projection-correction-1/INPUTS.json": {
+      "sha256": "16d131f8dcadc839b4c5b23f16949a8aaa282e2491754847647e346d5751f718",
+      "bytes": 4624
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/RUST-BODY.REUSED.rs.inc": {
+      "sha256": "a0614f264e6f629f7536a1308242265ae8614a49c9aa1f3076f266cc9b254d8e",
+      "bytes": 9594,
+      "device": 66306,
+      "inode": 1213055
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/RUST-BODY.REUSED.rs.inc": {
+      "sha256": "c8b878e0e9ff5d1818dcb4888aafa1412fa287c8f211c5921cc766ae0eca3783",
+      "bytes": 13972,
+      "device": 66306,
+      "inode": 1213059
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/syscall.PRIVATE.c": {
+      "sha256": "45a649278de750af1d371c211e6afa3f54e36627275637ddd76b6ce8c3587ae0",
+      "bytes": 930548,
+      "device": 66306,
+      "inode": 1213045
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/syscall.PRIVATE.c": {
+      "sha256": "6ec6ce5c852b1917ed11e6975ad3a0f1c9c0fc47eca63bd3f07cd7d2e279660d",
+      "bytes": 931177,
+      "device": 66306,
+      "inode": 1213057
+    },
+    "/home/holden/mckernel/kernel/syscall.c": {
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "bytes": 928517,
+      "device": 66306,
+      "inode": 47469129
+    },
+    "/home/holden/mckernel/kernel/rust/syscall_policy.rs": {
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb",
+      "bytes": 1301841,
+      "device": 66306,
+      "inode": 47485212
+    },
+    "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs": {
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d",
+      "bytes": 255596,
+      "device": 66306,
+      "inode": 47468664
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/natural-alignment-correction-1/postimage/kernel/rust/f03_request_constructors.rs": {
+      "sha256": "d1e40575145b827d7a48cbdc874aee3c3cc510d623d3eecb0c974073b1c3d070",
+      "bytes": 3673,
+      "device": 66306,
+      "inode": 1213513
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-CONTRACT.REFINED-APPROVED.json": {
+      "sha256": "ca85a6c4de8c6e09f03039ffd7fc8d3c9aa3803ea94dcea21e0d52de11905ed0",
+      "bytes": 3258,
+      "device": 66306,
+      "inode": 1213160
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-F03-REQUEST-CONSTRUCTOR-CONTRACT-1/ROOT-ALIGNMENT-CORRECTION.APPROVED.json": {
+      "sha256": "f8479b1667b67cca136322427b5999f1aaebff2c95ee1dfd430157103facb1d9",
+      "bytes": 1240,
+      "device": 66306,
+      "inode": 1213467
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/INPUTS.json": {
+      "sha256": "85717629be4c47147aeb1b5fc4af2886ddbfcfd1a2fd29dba2aba08117948b6a",
+      "bytes": 2719,
+      "device": 66306,
+      "inode": 1336650
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/UTI-PREACTIVATION-PUBLICATION.PRIVATE-NOT-APPLIED.patch": {
+      "sha256": "27066511e82b54f279329d9e088838b86c1eae85ec5e2b488348449a38edb51e",
+      "bytes": 685,
+      "device": 66306,
+      "inode": 1336649
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-DO-SYSCALL-REUSE-1/CURRENT119-PRIVATE-REBASE.patch": {
+      "sha256": "ed313820d52cba3001b41bfcd4598e73105ff22e3e09a217cd30d3b968b7fe84",
+      "bytes": 12499,
+      "device": 66306,
+      "inode": 1213056
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/CURRENT119-PRIVATE-REBASE.patch": {
+      "sha256": "1f6c7edc7916aa4cc100e3a48172ed74211ff899b171cdea08ffca09ff0989a3",
+      "bytes": 17490,
+      "device": 66306,
+      "inode": 1213060
+    },
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-UPGRADED-F03-REQUEST-CONSTRUCTORS-1/REQUEST-CONSTRUCTORS.ON-TEN.PRIVATE-NOT-APPLIED.patch": {
+      "sha256": "7b1eb5ed277fd091c5ff42b0755f3b37f98ba49792cd450ae49a95241891cc7a",
+      "bytes": 11166,
+      "device": 66306,
+      "inode": 1213179
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/postimage/kernel/syscall.c": {
+      "sha256": "50d6451e672b542747e7c335b864be9ae8483a2a791cb41a1a2c379960b1a929",
+      "bytes": 933660
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/postimage/kernel/rust/syscall_policy.rs": {
+      "sha256": "f57e7d481aa1c49e8d5e32de4ec86e3cdbdffe97f699be72cc6fed5d38dd07e9",
+      "bytes": 1325552
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/postimage/kernel/rust/f03_request_constructors.rs": {
+      "sha256": "d1e40575145b827d7a48cbdc874aee3c3cc510d623d3eecb0c974073b1c3d070",
+      "bytes": 3673
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/COMBINED-RUST-BODIES.rs.inc": {
+      "sha256": "739aedb211c3c8cce1271fb4177a95577dc1f0a3e3f0051d2d27b37a400b7ca1",
+      "bytes": 23710
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/mcexec_util_thread_body.PRIVATE.rs.inc": {
+      "sha256": "2781fe8c6878f8695d930595cd2344a5e8247ad76f35c9cd417228f3938662f4",
+      "bytes": 3983
+    }
+  },
+  "input_bytes": 4423975,
+  "controls": {
+    "ACTUAL-CONTROLS-ARMED.json": {
+      "sha256": "a3335ac6e6751f5816d25cd85579958f5c34007e090ff9d5306d0f3a3e6eb1dc",
+      "binding": {
+        "guardian": {
+          "pid": 2996157,
+          "ppid": 2995936,
+          "start": "118034389",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2996160,
+          "ppid": 2995936,
+          "start": "118034501",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2996005,
+          "ppid": 2996003,
+          "start": "118034116",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2996001,
+          "ppid": 2995936,
+          "start": "118034086",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2996003,
+          "ppid": 2996001,
+          "start": "118034102",
+          "state": "S"
+        }
+      },
+      "caps": {
+        "boot_deadline": 1571567.6959065471,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "deadline": 1793774133,
+        "monotonic_deadline": 1556229.568859425
+      }
+    },
+    "ACTUAL-CAPACITY-FALLBACK-ARMED.json": {
+      "sha256": "08571e7f2d326484d9471838e60462553a9d59e756321d70328a9a20988beae6",
+      "binding": {
+        "guardian": {
+          "pid": 2996157,
+          "ppid": 2995936,
+          "start": "118034389",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2996160,
+          "ppid": 2995936,
+          "start": "118034501",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2996005,
+          "ppid": 2996003,
+          "start": "118034116",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2996001,
+          "ppid": 2995936,
+          "start": "118034086",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2996003,
+          "ppid": 2996001,
+          "start": "118034102",
+          "state": "S"
+        }
+      },
+      "caps": {
+        "boot_deadline": 1571567.6959065471,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "deadline": 1793774133,
+        "monotonic_deadline": 1556229.568859425
+      }
+    }
+  },
+  "weekly_used_percent": 87,
+  "review": "Root independent full5266Bchecker+7301Blinear bounded16-hunk module review; exact15inputs<=32MiB and5small stagedfiles, stdlibreadonly, no subprocess/native/mount/currentfree.17syntheticunitcases alreadypassed. Scope exact sourcebytes only, no actual apply/compiler/acceptance.",
+  "share_retirement": "pendingpositivejoin; uncertaintyretainsshare"
+}

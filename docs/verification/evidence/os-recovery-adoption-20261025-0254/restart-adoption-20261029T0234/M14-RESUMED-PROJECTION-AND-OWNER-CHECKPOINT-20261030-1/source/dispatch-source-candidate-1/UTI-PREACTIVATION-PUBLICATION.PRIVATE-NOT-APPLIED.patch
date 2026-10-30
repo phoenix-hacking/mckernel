@@ -1,0 +1,20 @@
+--- a/executer/user/rust/mcexec_helpers.rs
++++ b/executer/user/rust/mcexec_helpers.rs
+@@ -1602,7 +1602,6 @@
+         (*uti_desc).key = get_ctx_desc.key;
+         (*uti_desc).pid = getpid();
+         (*uti_desc).tid = gettid();
+-        (*uti_desc).uti_info = uti_info;
+     }
+ 
+     if core::mem::size_of::<McexecSyscallStruct>() * 11 > unsafe { MCEXEC_PAGE_SIZE as usize } {
+@@ -1638,6 +1637,9 @@
+     }
+ 
+     unsafe {
++        // Publish the borrowed guest-info span only after all preactivation
++        // size/attribute checks succeed. This is not a host-drain acknowledgement.
++        (*uti_desc).uti_info = uti_info;
+         (*uti_desc).start_syscall_intercept = 1;
+     }
+ 
