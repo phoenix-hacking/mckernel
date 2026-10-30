@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "retired_original_C_functions": 0,
+  "rows": [
+    {
+      "body": "pin_live_counter",
+      "change": "existing checked child pin reused for actual VM.refcount as well as Thread.refcount; no reset or bad-ref retry"
+    },
+    {
+      "body": "PreparedSharedChild::adopt",
+      "change": "transfer all original obligations into reserved record; actual VM pin then child pin; every validation/pin failure retains UNKNOWN"
+    },
+    {
+      "body": "PreparedSharedChild::quarantine/Drop",
+      "change": "all pre-enqueue failure/drop retains immutable record; no unsupported destructor or CPU/TID release"
+    },
+    {
+      "body": "PreparedSharedChild::range_writer / VmRangeWriter::Drop",
+      "change": "live VM ref plus borrowed lifetime guards existing range writer and pairs noirq unlock with teardown lock"
+    },
+    {
+      "body": "PreparedSharedChild::finish_existing_enqueue",
+      "change": "exact prior TID helper once; explicitly consume only two added refs through checked providers; original graph/CPU/TID disposition retained UNKNOWN because void enqueue lacks receipt"
+    }
+  ]
+}

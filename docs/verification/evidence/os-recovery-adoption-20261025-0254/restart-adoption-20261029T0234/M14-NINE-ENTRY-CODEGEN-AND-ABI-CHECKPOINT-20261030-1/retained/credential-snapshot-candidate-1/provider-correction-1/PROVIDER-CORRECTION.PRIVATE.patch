@@ -1,0 +1,178 @@
+--- a/kernel/rust/f03_credential_snapshot_candidate.rs
++++ b/kernel/rust/f03_credential_snapshot_candidate.rs
+@@ -4,7 +4,7 @@
+ //! Reuses original do_setresuid/do_setresgid field mapping, replacing a returned
+ //! borrowed response pointer with a complete by-value snapshot.
+ use core::{ffi::c_void, mem::MaybeUninit, ptr::{addr_of_mut, read, write}};
+-use crate::abi::{CInt, Process, Thread};
++use crate::abi::{CInt, CLong, Process, Thread, X86UserContext};
+ 
+ pub const UID: CInt = 0;
+ pub const GID: CInt = 1;
+@@ -84,32 +84,103 @@
+         let _ = unsafe { (ops.finish)(acquired.token, UNKNOWN, -EIO) };
+         -EIO
+     } else {
+-        let reply = unsafe { (ops.snapshot)(acquired.token) };
+-        match (reply.outcome, reply.status) {
+-            (READY, 0) => {
+-                // Snapshot is already a local VALUE. No pointer to offload
+-                // storage or user memory is dereferenced in this commit.
+-                let first = if kind == UID { 0 } else { 4 };
+-                let selected = [reply.ids[first], reply.ids[first + 1],
+-                    reply.ids[first + 2], reply.ids[first + 3]];
+-                unsafe { commit(proc, kind, selected) };
+-                let rc = unsafe { (ops.finish)(acquired.token, READY, 0) };
+-                if rc == 0 { 0 } else { -EIO }
+-            }
+-            (FAILED, error) if error < 0 => {
+-                let rc = unsafe { (ops.finish)(acquired.token, FAILED, error) };
+-                if rc == 0 { error } else { -EIO }
+-            }
+-            _ => {
+-                // Includes a positive/negative nonzero READY status, malformed
+-                // outcomes, and explicitly unknown host effects. No field read.
+-                let _ = unsafe { (ops.finish)(acquired.token, UNKNOWN, -EIO) };
+-                -EIO
+-            }
+-        }
++        unsafe { consume_snapshot(proc, kind, acquired.token, ops) }
+     };
+     unsafe { crate::process_helpers::release_process(proc) };
+     status
++}
++
++
++/// Consume the real owner's by-value reply; shared by refresh and the checked
++/// ordinary-setter path so both preserve the same deferred-commit behavior.
++unsafe fn consume_snapshot(proc: *mut Process, kind: CInt,
++    token: *mut c_void, ops: &CredOwnerOps) -> CInt {
++    let reply = unsafe { (ops.snapshot)(token) };
++    match (reply.outcome, reply.status) {
++        (READY, 0) => {
++            // Snapshot is already a local VALUE. No pointer to offload
++            // storage or user memory is dereferenced in this commit.
++            let first = if kind == UID { 0 } else { 4 };
++            let selected = [reply.ids[first], reply.ids[first + 1],
++                reply.ids[first + 2], reply.ids[first + 3]];
++            unsafe { commit(proc, kind, selected) };
++            let rc = unsafe { (ops.finish)(token, READY, 0) };
++            if rc == 0 { 0 } else { -EIO }
++        }
++        (FAILED, error) if error < 0 => {
++            // This proves only the snapshot query failed. The original setter
++            // may already have changed host credentials, so cached guest fields
++            // can be stale. Retain the real owner/gate until reconciliation;
++            // a known query error is not proof that the setter had no effect.
++            let _ = unsafe { (ops.finish)(token, UNKNOWN, error) };
++            error
++        }
++        _ => {
++            // Includes a positive/negative nonzero READY status, malformed
++            // outcomes, and explicitly unknown host effects. No field read.
++            let _ = unsafe { (ops.finish)(token, UNKNOWN, -EIO) };
++            -EIO
++        }
++    }
++}
++
++/// Checked ordinary uid/gid setter body: acquire a real owner before forwarding
++/// the host mutation, and carry the initially pinned process through snapshot.
++/// This is not applicable to setfsuid/setfsgid, whose result is the previous ID.
++///
++/// # Safety
++/// Same process and owner contracts as refresh. The actual owner begin must
++/// acquire/attach the real gate BEFORE forward and exclude every other setter.
++/// The existing forwarding ABI supplies only a scalar result, not provenance
++/// separating a terminal host errno from transport uncertainty. Negative results
++/// therefore retain the real owner while preserving the exact caller result.
++/// Successful mutation followed by failed/unknown refresh still needs external
++/// reconciliation; this checked result does not undo the host credential change.
++pub unsafe fn forward_refresh_ordinary(
++    thread: *mut Thread, kind: CInt, syscall_nr: CInt, ctx: *mut c_void,
++    forward: unsafe extern "C" fn(CInt, *mut c_void) -> CLong,
++    ops: &CredOwnerOps,
++) -> CLong {
++    if thread.is_null() || ctx.is_null() { return -(EFAULT as CLong); }
++    if kind != UID && kind != GID { return -(EINVAL as CLong); }
++    let proc = unsafe { read(core::ptr::addr_of!((*thread).proc)) };
++    if proc.is_null() { return -(EFAULT as CLong); }
++    unsafe { crate::process_helpers::hold_process(proc) };
++    // Validation and capture precede any possible host side effect.
++    let acquired = unsafe { (ops.begin)(proc, kind) };
++    let result = if acquired.token.is_null() {
++        if acquired.status < 0 { acquired.status as CLong } else { -(EIO as CLong) }
++    } else if acquired.status != 0 || acquired.reserved != 0 {
++        let _ = unsafe { (ops.finish)(acquired.token, UNKNOWN, -EIO) };
++        -(EIO as CLong)
++    } else {
++        let host_result = unsafe { forward(syscall_nr, ctx) };
++        if host_result < 0 {
++            // No refresh query or process-field write on a negative result.
++            // This raw scalar cannot prove the original host operation stopped
++            // without effect: a transport failure can hide an applied setter.
++            // Retain the exact owner and preserve the original CLong error.
++            let error = CInt::try_from(host_result).unwrap_or(-EIO);
++            let _ = unsafe { (ops.finish)(acquired.token, UNKNOWN, error) };
++            host_result
++        } else if host_result != 0 {
++            // These ordinary setters can succeed only with zero. A malformed
++            // positive result does not prove a known no-effect failure.
++            let _ = unsafe { (ops.finish)(acquired.token, UNKNOWN, -EIO) };
++            -(EIO as CLong)
++        } else {
++            let rc = unsafe { consume_snapshot(proc, kind, acquired.token, ops) };
++            if rc != 0 {
++                // A host mutation has already succeeded. Do not return normal
++                // success with stale guest fields or claim a host rollback.
++                #[cfg(not(test))]
++                unsafe { f03_cred_refresh_failure_v1(proc, kind, rc) };
++            }
++            rc as CLong
++        }
++    };
++    unsafe { crate::process_helpers::release_process(proc) };
++    result
+ }
+ 
+ unsafe fn commit(proc: *mut Process, kind: CInt, ids: [CInt; 4]) {
+@@ -210,3 +281,39 @@
+     assert!(core::mem::offset_of!(CredBegin, reserved) == 12);
+     assert!(core::mem::offset_of!(CredBegin, status) == 8);
+ };
++
++// Private checked caller candidates. Mangled Rust symbols only: neither replaces
++// the original sys_setresuid/sys_setresgid entry or any production selector.
++#[cfg(not(test))]
++unsafe fn checked_current_setter(kind: CInt, number: CInt,
++    ctx: *mut X86UserContext) -> CLong {
++    let ops = CredOwnerOps {
++        begin: f03_cred_owner_begin_v1,
++        snapshot: f03_cred_owner_snapshot_v1,
++        finish: f03_cred_owner_finish_v1,
++    };
++    unsafe { forward_refresh_ordinary(super::current_thread_ptr(), kind, number,
++        ctx.cast(), super::syscall_policy_forward_context_bridge, &ops) }
++}
++
++#[cfg(not(test))]
++pub unsafe extern "C" fn f03_sys_setresuid_checked_v1(
++    _n: CInt, ctx: *mut X86UserContext) -> CLong {
++    unsafe { checked_current_setter(UID, super::SYS_SETRESUID, ctx) }
++}
++
++#[cfg(not(test))]
++pub unsafe extern "C" fn f03_sys_setresgid_checked_v1(
++    _n: CInt, ctx: *mut X86UserContext) -> CLong {
++    unsafe { checked_current_setter(GID, super::SYS_SETRESGID, ctx) }
++}
++
++#[cfg(not(test))]
++const _: unsafe extern "C" fn(CInt, *mut c_void) -> CLong =
++    super::syscall_policy_forward_context_bridge;
++#[cfg(not(test))]
++const _: unsafe extern "C" fn(CInt, *mut X86UserContext) -> CLong =
++    f03_sys_setresuid_checked_v1;
++#[cfg(not(test))]
++const _: unsafe extern "C" fn(CInt, *mut X86UserContext) -> CLong =
++    f03_sys_setresgid_checked_v1;

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-1/extract.py", line 30, in <module>
+    s=unique(spec['static']);assert s['size']==8;rr=[dict(relocation_section=x['section_name'],**r) for x in section_relocs(s['section']) for r in x['entries'] if s['value']<=r['offset']<s['value']+8];assert len(rr)==1,(spec,rr);r=rr[0];sy=r['symbol'];assert r['type']==1 and r['addend'] is not None
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-1/extract.py", line 26, in unique
+    rows=[s for s in symbols if f in s['name'] and s['section'] not in (0,65521,65522)];assert len(rows)==1,(f,len(rows));return rows[0]
+AssertionError: ('REF_DO_SYSCALL', 3)

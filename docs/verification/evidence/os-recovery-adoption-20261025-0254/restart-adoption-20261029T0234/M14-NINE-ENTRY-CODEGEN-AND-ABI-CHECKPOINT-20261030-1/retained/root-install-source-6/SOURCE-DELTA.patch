@@ -1,0 +1,320 @@
+--- root-install-source-5/install_source_closure.py	2026-10-30 13:59:14.405627025 -0700
++++ root-install-source-6/install_source_closure.py	2026-10-30 14:08:53.750726063 -0700
+@@ -15,8 +15,8 @@
+ import sys
+ import time
+ 
+-CLOSURE_SHA256='12ed16da941feb74d73571d76baa5e17ca7fee6ac3dbc7c25d53d74ad58df2e9'
+-SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-5/package'
++CLOSURE_SHA256='bd6a3390d20f03bad570584d72b39d15ef7a7e968cd28c3278938e65f7348cb6'
++SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-6/package'
+ WEEKLY_UTC_CAP_NS=calendar.timegm((2026,11,4,6,35,33))*1000000000
+ GETFLAGS=0x80086601
+ SETFLAGS=0x40086602
+--- root-install-source-5/install_watchdog.py	2026-10-30 14:00:06.439125919 -0700
++++ root-install-source-6/install_watchdog.py	2026-10-30 14:10:08.652981726 -0700
+@@ -45,38 +45,50 @@
+         raise TimeoutError('insufficient reserved stop and join grace before launch')
+ 
+ 
+-def watch_owned_child(install,release,pid,pidfd,journal_fd):
+-    """Pidfd-only TERM/KILL with time reserved for positive direct-child wait."""
+-    total=reserved_grace(release)
+-    threshold=total+250000000  # scheduler margin within existing deadline
++def watch_owned_child(install,release,pid,pidfd,journal_fd,events):
++    """Stop by pidfd and join before any potentially blocking journal write."""
++    total=reserved_grace(release);threshold=total+250000000
+     poll=select.poll();poll.register(pidfd,select.POLLIN)
++    def sent(sig,label):
++        # In-memory latch precedes syscall. A journal/fsync cannot delay stop.
++        item={'state':label+'_ATTEMPT','pid':pid};events.append(item)
++        try:pidfd_compat.send_signal(pidfd,sig)
++        except ProcessLookupError:
++            item['result']='ESRCH'
++            if poll.poll(0):return False
++            raise
++        except BaseException:
++            item['result']='ERROR';raise
++        item['result']='SENT';return True
+     def ready_until(stage_boot_ns):
+         while True:
+             left=remaining_ns(release)
+-            if left<=0:raise TimeoutError('operation deadline before child join')
+             if poll.poll(0):return True
++            if left<=0:return False
+             stage_left=stage_boot_ns-time.clock_gettime_ns(time.CLOCK_BOOTTIME)
+             if stage_left<=0:return False
+             poll.poll(max(1,min(100,stage_left//1000000,left//1000000)))
+     while True:
+         left=remaining_ns(release)
+-        if left<=0:raise TimeoutError('operation deadline before stop')
+         if poll.poll(0):break
+         if left<=threshold:
+-            if left<total:raise TimeoutError('insufficient reserved stop and join grace')
+-            pidfd_compat.send_signal(pidfd,signal.SIGTERM)
+-            install.journal(journal_fd,{'state':'CHILD_TERM_PIDFD','pid':pid})
+-            end=time.clock_gettime_ns(time.CLOCK_BOOTTIME)+release['term_grace_ns']
+-            if not ready_until(end):
+-                pidfd_compat.send_signal(pidfd,signal.SIGKILL)
+-                install.journal(journal_fd,{'state':'CHILD_KILL_PIDFD','pid':pid})
+-                end=time.clock_gettime_ns(time.CLOCK_BOOTTIME)+release['kill_grace_ns']
+-                if not ready_until(end):
+-                    end=time.clock_gettime_ns(time.CLOCK_BOOTTIME)+release['join_grace_ns']
++            # If there is no full TERM+KILL+join reservation, prefer KILL now.
++            if left<total:
++                sent(signal.SIGKILL,'CHILD_KILL_PIDFD')
++                if left<=0:raise TimeoutError('deadline passed; pidfd kill attempted')
++                end=time.clock_gettime_ns(time.CLOCK_BOOTTIME)+max(0,left-release['join_grace_ns'])
++                if not ready_until(end):raise TimeoutError('child not terminal after immediate pidfd kill')
++            else:
++                term_failed=False
++                try:sent(signal.SIGTERM,'CHILD_TERM_PIDFD')
++                except BaseException:term_failed=True
++                end=time.clock_gettime_ns(time.CLOCK_BOOTTIME)+release['term_grace_ns']
++                if term_failed or not ready_until(end):
++                    sent(signal.SIGKILL,'CHILD_KILL_PIDFD')
++                    end=time.clock_gettime_ns(time.CLOCK_BOOTTIME)+release['kill_grace_ns']
+                     if not ready_until(end):raise TimeoutError('child not terminal after pidfd kill')
+             break
+         poll.poll(max(1,min(100,(left-threshold)//1000000)))
+-    # WNOHANG avoids blocking beyond the admitted clocks; exact child remains owned.
+     while remaining_ns(release)>0:
+         reaped,status=os.waitpid(pid,os.WNOHANG)
+         if reaped==pid:return status
+@@ -98,13 +110,14 @@
+         if hashlib.sha256(install.read_stable(fd,install.MAX_SOURCE)).hexdigest()!=release[key]:
+             raise ValueError('receipt bytes differ')
+     check_time(install,release)
++    if os.getpgid(os.getppid())!=os.getpgrp():raise ValueError('issuer/watchdog process group differs')
+     require_launch_grace(release)
+     install.dir_identity(root_fd,release['operation_root'],True)
+     lease=os.fstat(lease_fd)
+     if not stat.S_ISREG(lease.st_mode) or lease.st_uid!=0 or install.ident(lease)!=release['lease']:
+         raise ValueError('lease identity')
+     latch=CustodyLatch('WATCHDOG_HELD');latch.retain(root_fd,lease_fd,release_fd,source_fd,code_fd,closure_fd,controls_fd,capacity_fd,host_custody_fd,owner_release_fd)
+-    journal_fd=None;record=None
++    journal_fd=None;record=None;stop_events=[]
+     try:
+         def child_exec():
+             try:
+@@ -124,8 +137,10 @@
+             install.journal(journal_fd,{'state':'BEFORE_FORK','nonce':release['nonce']})
+             require_launch_grace(release)
+             pid,pidfd,birth=guard.fork_and_pin(record,child_exec)
++        if os.getpgid(pid)!=os.getpgrp():raise ValueError('installer escaped timeout process group')
+         install.journal(journal_fd,{'state':'CHILD_BOUND','pid':pid,'birth':birth,'pidfd':pidfd,'lease':install.ident(lease)})
+-        status=watch_owned_child(install,release,pid,pidfd,journal_fd)
++        status=watch_owned_child(install,release,pid,pidfd,journal_fd,stop_events)
++        for event in stop_events:install.journal(journal_fd,event)
+         install.journal(journal_fd,{'state':'CHILD_TERMINAL','pid':pid,'birth':birth,'wait_status':status})
+         if not os.WIFEXITED(status) or os.WEXITSTATUS(status)!=0:raise RuntimeError('installer non-success terminal')
+         # SOURCE_INSTALLED is data in the child journal, never admission/acceptance.
+@@ -135,6 +150,8 @@
+         if record is not None:record.unknown(error)
+         else:latch.fail(error)
+         if journal_fd is not None:
+-            try:install.journal(journal_fd,{'state':'UNKNOWN_RETAINED','error_type':type(error).__name__})
++            try:
++                for event in stop_events:install.journal(journal_fd,event)
++                install.journal(journal_fd,{'state':'UNKNOWN_RETAINED','error_type':type(error).__name__})
+             except BaseException:pass
+         raise WatchdogUnknown(latch) from error
+--- root-install-source-5/install_issuer.py	2026-10-30 14:00:06.439125919 -0700
++++ root-install-source-6/install_issuer.py	2026-10-30 14:10:28.081567853 -0700
+@@ -4,6 +4,8 @@
+ import hashlib
+ import json
+ import os
++import resource
++from pathlib import Path
+ import select
+ import signal
+ import stat
+@@ -40,19 +42,72 @@
+         raise ValueError('start/operation cap')
+ 
+ 
+-def fresh_controls(prelim,template,install,deadline):
++def verify_timeout_group(prelim,install,template,intent,controls,capacity):
++    for parent in ('/','/usr','/usr/bin'):
++        st=os.stat(parent)
++        if st.st_uid!=0 or not stat.S_ISDIR(st.st_mode) or stat.S_IMODE(st.st_mode)&0o022:
++            raise ValueError('tool path ancestry')
++    for path,key in (('/usr/bin/sudo','sudo_sha256'),('/usr/bin/taskset','taskset_sha256'),('/usr/bin/prlimit','prlimit_sha256')):
++        fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)
++        try:
++            st=os.fstat(fd)
++            if (not stat.S_ISREG(st.st_mode) or st.st_uid!=0 or stat.S_IMODE(st.st_mode)&0o022 or
++                not install.hex64(intent[key]) or hashlib.sha256(install.read_stable(fd,128*1024*1024)).hexdigest()!=intent[key]):
++                raise ValueError('root-owned launch tool differs')
++        finally:os.close(fd)
++    if os.sched_getaffinity(0)!={6}:raise ValueError('operation CPU6 binding')
++    limits={resource.RLIMIT_AS:(1073741824,1073741824),resource.RLIMIT_CPU:(60,60),
++            resource.RLIMIT_FSIZE:(33554432,33554432),resource.RLIMIT_NOFILE:(256,256),resource.RLIMIT_CORE:(0,0)}
++    if any(resource.getrlimit(key)!=value for key,value in limits.items()):raise ValueError('operation resource profile')
++    pgid=os.getpgrp()
++    if pgid<=1 or os.getppid()!=pgid:raise ValueError('timeout direct-parent group')
++    identity=prelim.identity(pgid)
++    if identity['pgrp']!=pgid:raise ValueError('timeout not group leader')
++    if (type(intent['timeout_seconds']) is not int or intent['timeout_seconds']!=60 or
++        type(intent['timeout_kill_grace_seconds']) is not int or intent['timeout_kill_grace_seconds']!=5):raise ValueError('timeout bounds')
++    if min(template['deadline_boot_ns']-time.clock_gettime_ns(time.CLOCK_BOOTTIME),
++           template['deadline_mono_ns']-time.monotonic_ns(),template['utc_cap_ns']-time.time_ns())<=65000000000:
++        raise ValueError('external timeout extends beyond original caps')
++    before=prelim.identity(pgid)
++    with open('/proc/%d/cmdline'%pgid,'rb') as stream:cmd=stream.read(131073)
++    if len(cmd)>131072 or not cmd.endswith(b'\0'):raise ValueError('timeout argv bounded')
++    args=cmd[:-1].split(b'\0')
++    if args[:5]!=[b'/usr/bin/timeout',b'--signal=TERM',b'--kill-after=5s',b'60s',b'/usr/bin/python3']:
++        raise ValueError('timeout executable argv')
++    if not install.hex64(intent['timeout_argv_sha256']) or hashlib.sha256(cmd).hexdigest()!=intent['timeout_argv_sha256']:
++        raise ValueError('timeout argv digest')
++    exe=os.open('/proc/%d/exe'%pgid,os.O_RDONLY|os.O_CLOEXEC)
++    try:
++        st=os.fstat(exe);named=os.stat('/usr/bin/timeout')
++        if (not stat.S_ISREG(st.st_mode) or st.st_uid!=0 or stat.S_IMODE(st.st_mode)&0o022 or
++            (st.st_dev,st.st_ino)!=(named.st_dev,named.st_ino) or
++            not install.hex64(intent['timeout_exe_sha256']) or
++            hashlib.sha256(install.read_stable(exe,128*1024*1024)).hexdigest()!=intent['timeout_exe_sha256']):
++            raise ValueError('root-owned timeout binary binding')
++    finally:os.close(exe)
++    actor_rows=list(controls['binding'].values())+[capacity['supervisor']]
++    if (len(actor_rows)!=6 or any(os.getpgid(row['pid'])==pgid for row in actor_rows) or
++        os.getpgid(intent['outer_pid'])==pgid):
++        raise ValueError('campaign actor or outer owner inside timeout group')
++    if prelim.identity(pgid)!=before or before!=identity:raise ValueError('timeout identity drift')
++    return identity
++
++
++def fresh_controls(prelim,template,install,deadline,intent):
+     bounds(install,template,deadline)
+     c,cref=prelim.read_bound(prelim.CONTROLS,1<<20)
+     p,pref=prelim.read_bound(prelim.CAPACITY,1<<20)
+     if (hashlib.sha256(c).hexdigest()!=template['controls_sha256'] or
+         hashlib.sha256(p).hexdigest()!=template['capacity_sha256']):raise ValueError('current control bytes changed')
+-    caps=prelim.controller_checks(prelim.strict_json(c),prelim.strict_json(p),time.time())
++    controls=prelim.strict_json(c);capacity=prelim.strict_json(p)
++    caps=prelim.controller_checks(controls,capacity,time.time())
++    group=verify_timeout_group(prelim,install,template,intent,controls,capacity)
+     ns=lambda value:int(Decimal(str(value))*Decimal(1000000000))
+     if (caps['boot_id']!=template['boot_id'] or template['deadline_boot_ns']>ns(caps['boot_deadline']) or
+         template['deadline_mono_ns']>ns(caps['monotonic_deadline']) or template['utc_cap_ns']>ns(caps['deadline'])):
+         raise ValueError('operation cap looser than current control')
+     bounds(install,template,deadline)
+-    return cref,pref
++    return cref,pref,group
+ 
+ 
+ def require_outer_ancestor(prelim,expected_pid,expected_birth):
+@@ -77,7 +132,9 @@
+     if not install.hex64(intent_sha) or hashlib.sha256(raw).hexdigest()!=intent_sha:raise ValueError('start intent digest')
+     intent=json.loads(raw,object_pairs_hook=install.unique)
+     keys={'version','purpose','nonce','outer_pid','outer_birth','boot_id','phase1_deadline_boot_ns',
+-          'receipt_expires_boot_ns','weekly_used_percent','weekly_observed_utc_ns','service_status','release_template'}
++          'receipt_expires_boot_ns','weekly_used_percent','weekly_observed_utc_ns','service_status',
++          'timeout_exe_sha256','timeout_argv_sha256','timeout_seconds','timeout_kill_grace_seconds',
++          'sudo_sha256','taskset_sha256','prlimit_sha256','release_template'}
+     if (type(intent) is not dict or set(intent)!=keys or type(intent['version']) is not int or intent['version']!=1 or
+         intent['purpose']!='source-install-start-intent-v1' or not install.hex64(intent['nonce'])):
+         raise ValueError('start intent/outer owner')
+@@ -101,7 +158,7 @@
+                    (host_custody_fd,'host_install_custody_sha256'),(owner_release_fd,'owner_release_sha256')):
+         install.root_file(fd)
+         if hashlib.sha256(install.read_stable(fd,install.MAX_SOURCE)).hexdigest()!=template[key]:raise ValueError('receipt hash')
+-    fresh_controls(prelim,template,install,deadline)
++    _,_,initial_group=fresh_controls(prelim,template,install,deadline,intent)
+     latch=CustodyLatch('ISSUER_HELD');latch.retain(intent_fd,source_fd,root_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_custody_fd,owner_release_fd)
+     journal_fd=None;record=None
+     try:
+@@ -135,9 +192,10 @@
+         if ready!={'pid':pid,'birth':birth,'parent_pid':os.getpid(),'boot_id':boot_id,'nonce':intent['nonce']}:
+             raise ValueError('READY identity')
+         identity=prelim.identity(pid)
+-        if identity['ppid']!=os.getpid() or str(identity['birth'])!=birth:raise ValueError('READY process changed')
++        if identity['ppid']!=os.getpid() or str(identity['birth'])!=birth or identity['pgrp']!=initial_group['pgrp']:
++            raise ValueError('READY process or timeout group changed')
+         install.journal(journal_fd,{'state':'READY_CAPTURED','ready':ready,'pidfd':pidfd})
+-        fresh_controls(prelim,template,install,deadline)
++        if fresh_controls(prelim,template,install,deadline,intent)[2]!=initial_group:raise ValueError('timeout group changed')
+         install.verify_base_runtime(template['interpreter'])
+         install.verify_host_receipt(host_custody_fd,template)
+         watchdog.require_launch_grace(template)
+@@ -169,7 +227,8 @@
+         os.fsync(rfd);os.fsync(root_fd)
+         if hashlib.sha256(install.read_stable(rfd,install.MAX_SOURCE)).hexdigest()!=release_sha:raise ValueError('sealed release changed')
+         install.journal(journal_fd,{'state':'RELEASE_SEALED','name':name,'sha256':release_sha,'pid':pid,'birth':birth})
+-        fresh_controls(prelim,template,install,deadline)
++        install.journal(journal_fd,{'state':'BEFORE_GO','pid':pid,'birth':birth,'release_sha256':release_sha})
++        if fresh_controls(prelim,template,install,deadline,intent)[2]!=initial_group:raise ValueError('timeout group changed')
+         install.verify_base_runtime(template['interpreter'])
+         install.verify_host_receipt(host_custody_fd,template)
+         watchdog.require_launch_grace(template)
+--- root-install-source-5/BOOTSTRAP-CODE.py	2026-10-30 14:00:06.467126728 -0700
++++ root-install-source-6/BOOTSTRAP-CODE.py	2026-10-30 14:10:28.109568698 -0700
+@@ -1,7 +1,7 @@
+ import hashlib,os,stat,sys,types,signal
+-EXPECTED_INSTALL='dfbc4dc4390d5e5cbd327b7b9dbcedeaad6c1c39035aaaf93532d939974f0f48'
+-EXPECTED_WATCHDOG='993dd216470808c08794d7cd10727739f2fe949af5644de01032c11b1d279b56'
+-EXPECTED_ISSUER='0c3ab035e6b3ed7fcbc6b14d7aeeb5c6f203b1ef274789bdeccc062cdf4b84fc'
++EXPECTED_INSTALL='c2f9e47d4024173318f8bd4affd89fda259b845d3d1ba4bfdef9f5edf1100ee1'
++EXPECTED_WATCHDOG='ae55b5bd1075d758bfec2d6d8ff68a4142cb15f1b5d2b12f6dd257b200a0afdf'
++EXPECTED_ISSUER='ce90133851c51cd6a750b177ffd9ae6ffbd9b11ff9c6b1fb2dc96f3b6c3dd0e0'
+ EXPECTED_PRELIM='de6de10ff79d07281e95216a5ecf751d03bade1d75445c87abd8a2e0405e124d'
+ PINS=(('ownership_latch','fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390'),('graph_observations','df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed'),('pidfd_compat','068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'),('pidfd_custody','3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'),('deferred_fork','b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'))
+ if len(sys.argv)!=16:raise ValueError('exact bootstrap arguments required')
+--- root-install-source-5/test_host_runtime_deadline.py	2026-10-30 13:59:39.970362186 -0700
++++ root-install-source-6/test_host_runtime_deadline.py	2026-10-30 14:09:40.940146397 -0700
+@@ -40,16 +40,16 @@
+                 self.count+=1
+                 return [1] if self.count>=3 else []
+         release={'term_grace_ns':1000000000,'kill_grace_ns':1000000000,'join_grace_ns':1000000000}
+-        times=iter((0,2000000000,4000000000))
++        times=iter((0,2000000000,4000000000));events=[]
+         with patch.object(watchdog,'remaining_ns',return_value=3100000000),\
+              patch.object(watchdog.select,'poll',return_value=Poll()),\
+              patch.object(watchdog.time,'clock_gettime_ns',side_effect=lambda *args:next(times)),\
+              patch.object(watchdog.pidfd_compat,'send_signal') as send,\
+              patch.object(watchdog.os,'waitpid',return_value=(55,0)),\
+-             patch.object(install,'journal'):
+-            self.assertEqual(watchdog.watch_owned_child(install,release,55,77,9),0)
++             patch.object(install,'journal',side_effect=AssertionError('journal must not precede join')):
++            self.assertEqual(watchdog.watch_owned_child(install,release,55,77,9,events),0)
+         self.assertEqual([x.args for x in send.call_args_list],[(77,watchdog.signal.SIGTERM),(77,watchdog.signal.SIGKILL)])
+-    def test_insufficient_grace_keeps_unknown_without_numeric_signal(self):
++    def test_insufficient_grace_attempts_pidfd_kill_then_unknown(self):
+         class Poll:
+             def register(self,*args):pass
+             def poll(self,timeout):return []
+@@ -57,7 +57,7 @@
+         with patch.object(watchdog,'remaining_ns',return_value=100),\
+              patch.object(watchdog.select,'poll',return_value=Poll()),\
+              patch.object(watchdog.pidfd_compat,'send_signal') as send:
+-            with self.assertRaises(TimeoutError):watchdog.watch_owned_child(install,release,55,77,9)
+-        send.assert_not_called()
++            with self.assertRaises(TimeoutError):watchdog.watch_owned_child(install,release,55,77,9,[])
++        send.assert_called_once_with(77,watchdog.signal.SIGKILL)
+ 
+ if __name__=='__main__':unittest.main()
+--- root-install-source-5/test_watchdog_ofd.py	2026-10-30 14:00:06.439125919 -0700
++++ root-install-source-6/test_watchdog_ofd.py	2026-10-30 14:10:15.349183693 -0700
+@@ -37,7 +37,8 @@
+             def poll(self,*args):return [1]
+         fake_stat=types.SimpleNamespace(st_mode=stat.S_IFREG|0o600,st_uid=0)
+         with patch.object(subject.os,'getuid',return_value=0),patch.object(subject.os,'geteuid',return_value=0),\
+-             patch.object(subject.os,'getpid',return_value=88),patch.object(subject.os,'fstat',return_value=fake_stat),\
++             patch.object(subject.os,'getpid',return_value=88),patch.object(subject.os,'getppid',return_value=87),\
++             patch.object(subject.os,'getpgrp',return_value=20),patch.object(subject.os,'getpgid',return_value=20),patch.object(subject.os,'fstat',return_value=fake_stat),\
+              patch.object(subject.os,'open',return_value=44),patch.object(subject.os,'fsync'),\
+              patch.object(subject.os,'waitpid',return_value=(100,0)),patch.object(subject.os,'_exit',side_effect=ChildExit),\
+              patch.object(subject.fcntl,'flock') as flock,patch.object(subject.obs,'process',return_value=('123',1,2)),\
+--- root-install-source-5/test_ready_go.py	2026-10-30 13:58:34.008470616 -0700
++++ root-install-source-6/test_ready_go.py	2026-10-30 14:09:40.940146397 -0700
+@@ -37,7 +37,7 @@
+         template={'controls_sha256':hashlib.sha256(a).hexdigest(),'capacity_sha256':'0'*64,
+                   'boot_id':'boot','deadline_boot_ns':10,'deadline_mono_ns':10,'utc_cap_ns':10}
+         with patch.object(subject,'bounds'):
+-            with self.assertRaisesRegex(ValueError,'control bytes changed'):subject.fresh_controls(prelim,template,install,10)
++            with self.assertRaisesRegex(ValueError,'control bytes changed'):subject.fresh_controls(prelim,template,install,10,{})
+ 
+ 
+ if __name__=='__main__':unittest.main()

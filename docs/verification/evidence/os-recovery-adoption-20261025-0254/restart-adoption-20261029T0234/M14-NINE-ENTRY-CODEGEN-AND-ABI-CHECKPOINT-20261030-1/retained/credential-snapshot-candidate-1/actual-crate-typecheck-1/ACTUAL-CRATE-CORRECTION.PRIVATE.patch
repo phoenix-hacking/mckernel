@@ -1,0 +1,95 @@
+--- a/kernel/rust/f03_credential_snapshot_candidate.rs
++++ b/kernel/rust/f03_credential_snapshot_candidate.rs
+@@ -1,5 +1,6 @@
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! Private source candidate. No owner adapter is supplied or admitted here.
++//! Actual-crate typecheck successor. No owner adapter is supplied or admitted here.
++//! f03_credential_snapshot_typecheck retains mangled entries and changes no selector.
+ //! Reuses original do_setresuid/do_setresgid field mapping, replacing a returned
+ //! borrowed response pointer with a complete by-value snapshot.
+ use core::{ffi::c_void, mem::MaybeUninit, ptr::{addr_of_mut, read, write}};
+@@ -62,7 +63,18 @@
+     if thread.is_null() { return -EFAULT; }
+     if kind != UID && kind != GID { return -EINVAL; }
+     let proc = unsafe { read(core::ptr::addr_of!((*thread).proc)) };
++    unsafe { refresh_process(proc, kind, ops) }
++}
++
++/// Refresh a captured process. The caller owns a live reference throughout;
++/// this helper takes its own pin until its local commit/finish work completes.
++/// No current-thread lookup or thread.proc reload occurs in this body.
++///
++/// # Safety
++/// proc is null or an already-owned process; all CredOwnerOps contracts apply.
++unsafe fn refresh_process(proc: *mut Process, kind: CInt, ops: &CredOwnerOps) -> CInt {
+     if proc.is_null() { return -EFAULT; }
++    if kind != UID && kind != GID { return -EINVAL; }
+     unsafe { crate::process_helpers::hold_process(proc) };
+     let acquired = unsafe { (ops.begin)(proc, kind) };
+     let status = if acquired.token.is_null() {
+@@ -102,7 +114,8 @@
+ 
+ unsafe fn commit(proc: *mut Process, kind: CInt, ids: [CInt; 4]) {
+     let mut node = MaybeUninit::<crate::lock_helpers::McsRwlockNodeIrqsave>::uninit();
+-    let lock = unsafe { addr_of_mut!((*proc).update_lock).cast() };
++    let lock: *mut crate::lock_helpers::McsRwlockLock =
++        unsafe { addr_of_mut!((*proc).update_lock).cast() };
+     unsafe { crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr()) };
+     if kind == UID {
+         unsafe {
+@@ -148,22 +161,52 @@
+         snapshot: f03_cred_owner_snapshot_v1,
+         finish: f03_cred_owner_finish_v1,
+     };
+-    let rc = unsafe { refresh(thread, kind, &ops) };
++    let rc = unsafe { refresh_process(proc, kind, &ops) };
+     if rc != 0 { unsafe { f03_cred_refresh_failure_v1(proc, kind, rc) }; }
+     unsafe { crate::process_helpers::release_process(proc) };
+ }
+ 
+ #[cfg(not(test))]
+-#[no_mangle]
++#[cfg_attr(not(f03_credential_snapshot_typecheck), no_mangle)]
+ pub unsafe extern "C" fn do_setresuid() { unsafe { current_refresh(UID) }; }
+ #[cfg(not(test))]
+-#[no_mangle]
++#[cfg_attr(not(f03_credential_snapshot_typecheck), no_mangle)]
+ pub unsafe extern "C" fn do_setresgid() { unsafe { current_refresh(GID) }; }
+ 
++// Bind actual crate function types rather than synthetic bridge declarations.
++const _: unsafe extern "C" fn(*mut Process) = crate::process_helpers::hold_process;
++const _: unsafe extern "C" fn(*mut Process) = crate::process_helpers::release_process;
++const _: unsafe extern "C" fn(
++    *mut crate::lock_helpers::McsRwlockLock,
++    *mut crate::lock_helpers::McsRwlockNodeIrqsave,
++) = crate::lock_helpers::__mcs_rwlock_writer_lock;
++const _: unsafe extern "C" fn(
++    *mut crate::lock_helpers::McsRwlockLock,
++    *mut crate::lock_helpers::McsRwlockNodeIrqsave,
++) = crate::lock_helpers::__mcs_rwlock_writer_unlock;
++#[cfg(not(test))]
++const _: unsafe extern "C" fn() = do_setresuid;
++#[cfg(not(test))]
++const _: unsafe extern "C" fn() = do_setresgid;
++
+ const _: () = {
++    assert!(core::mem::size_of::<CInt>() == 4);
++    assert!(core::mem::size_of::<*mut Process>() == 8);
++    // Process stores the ABI mirror; the genuine Rust lock helper accepts its
++    // own matching definition. Keep this cast tied to both actual layouts.
++    assert!(core::mem::size_of::<crate::abi::McsRwlockLock>() ==
++        core::mem::size_of::<crate::lock_helpers::McsRwlockLock>());
++    assert!(core::mem::align_of::<crate::abi::McsRwlockLock>() ==
++        core::mem::align_of::<crate::lock_helpers::McsRwlockLock>());
++    assert!(core::mem::size_of::<crate::abi::McsRwlockLock>() == 64);
++    assert!(core::mem::align_of::<crate::abi::McsRwlockLock>() == 64);
++    assert!(core::mem::align_of::<crate::lock_helpers::McsRwlockNodeIrqsave>() == 64);
+     assert!(core::mem::size_of::<CredReply>() == 40);
+     assert!(core::mem::align_of::<CredReply>() == 4);
+     assert!(core::mem::offset_of!(CredReply, ids) == 8);
+     assert!(core::mem::size_of::<CredBegin>() == 16);
++    assert!(core::mem::align_of::<CredBegin>() == 8);
++    assert!(core::mem::offset_of!(CredBegin, token) == 0);
++    assert!(core::mem::offset_of!(CredBegin, reserved) == 12);
+     assert!(core::mem::offset_of!(CredBegin, status) == 8);
+ };

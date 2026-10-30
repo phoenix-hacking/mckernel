@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "permissions": {
+    "sandbox_mode": "danger-full-access",
+    "approval_policy": "never"
+  },
+  "test_or_compiler_executed": false,
+  "source_inputs": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs": "11d9d9e14c6c4ee3d593083ce18137414a7780c23507a44fb0834937fa9618e4",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/credential-snapshot-candidate-1/CREDENTIAL-SNAPSHOT.PRIVATE.patch": "a7697f3bb08857733b228e7cb345dc58dcb962f0b6fc13b1587a055f675e1dd2",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/credential-snapshot-candidate-1/postimage/kernel/rust/f03_credential_snapshot_candidate.rs": "2955b004d0bb819503054a6cd3854db63c927d40e10c2a9db3a40e79b4b30b18",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/lock_helpers.rs": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+  },
+  "outputs": {
+    "ACTUAL-CRATE-CORRECTION.PRIVATE.patch": "3ed5bfe41e5976f597ed80bbd0e75d93e875146f079543d2bcef35697ddf3979",
+    "MODULE-ADD.PRIVATE.patch": "9e67b9336d3c355145f7d3ff692724910991dfb23f59dc2bbde311cc3e40fec3",
+    "TYPECHECK-WIRING.PRIVATE.patch": "0230f8623d4e858bd1767df9ed6500833eb83a2c987b13f3df6d973fc7a3156c",
+    "per-function-ready-blocked.json": "0ce8843be4d7e4eab3e323b28133c611f87e15e2a15f8f781275b33bb001e73c",
+    "postimage/kernel/rust/f03_credential_snapshot_candidate.rs": "702d402f3ba4b423972cc02321866f4eeda6a2d32f84e9e4eeef98cc015542e0",
+    "preimage/kernel/rust/f03_credential_snapshot_candidate.rs": "2955b004d0bb819503054a6cd3854db63c927d40e10c2a9db3a40e79b4b30b18",
+    "HANDOFF.md": "30a5461f56c1941733a62c8b2cd43d749dc9a6001841487224aa51a2e47d08b8"
+  },
+  "cfg": "f03_credential_snapshot_typecheck",
+  "module_parent": "crate::syscall_policy",
+  "unresolved_real_provider_prototypes": {
+    "f03_cred_owner_begin_v1": "unsafe extern C fn(*mut crate::abi::Process, CInt) -> CredBegin",
+    "f03_cred_owner_snapshot_v1": "unsafe extern C fn(*mut core::ffi::c_void) -> CredReply",
+    "f03_cred_owner_finish_v1": "unsafe extern C fn(*mut core::ffi::c_void, CInt, CInt) -> CInt",
+    "f03_cred_refresh_failure_v1": "unsafe extern C fn(*mut crate::abi::Process, CInt, CInt)"
+  }
+}

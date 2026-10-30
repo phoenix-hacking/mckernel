@@ -1,0 +1,42 @@
+[
+  {
+    "original_function": "do_setresuid",
+    "kind": "UID",
+    "ready": "ACTUAL_CRATE_SOURCE_READY_FRONTEND_PENDING",
+    "predecessor_frontend": "PASS module702d402f metadataf182bc70",
+    "body_delta": "known failed snapshot retains original owner; exact query error preserved; existing by-value snapshot/locked commit reused",
+    "provider_status": "BLOCKED_UNSUPPORTED_EXISTING_OWNER_CONTRACT",
+    "production_selected": false,
+    "new_C_retirement_credit": 0,
+    "native_credit": 0
+  },
+  {
+    "original_function": "do_setresgid",
+    "kind": "GID",
+    "ready": "ACTUAL_CRATE_SOURCE_READY_FRONTEND_PENDING",
+    "predecessor_frontend": "PASS module702d402f metadataf182bc70",
+    "body_delta": "known failed snapshot retains original owner; exact query error preserved; existing by-value snapshot/locked commit reused",
+    "provider_status": "BLOCKED_UNSUPPORTED_EXISTING_OWNER_CONTRACT",
+    "production_selected": false,
+    "new_C_retirement_credit": 0,
+    "native_credit": 0
+  },
+  {
+    "private_candidate": "f03_sys_setresuid_checked_v1",
+    "original_setter": "sys_setresuid",
+    "ready": "ACTUAL_CRATE_SOURCE_READY_FRONTEND_PENDING",
+    "body": "capture/pin process; owner-before-host-forward; exact negative scalar propagation with owner retention; common successful snapshot/commit",
+    "caller_gap": "original live entry still forwards then invokes void callback; this mangled checked entry is not selected",
+    "new_C_retirement_credit": 0,
+    "native_credit": 0
+  },
+  {
+    "private_candidate": "f03_sys_setresgid_checked_v1",
+    "original_setter": "sys_setresgid",
+    "ready": "ACTUAL_CRATE_SOURCE_READY_FRONTEND_PENDING",
+    "body": "capture/pin process; owner-before-host-forward; exact negative scalar propagation with owner retention; common successful snapshot/commit",
+    "caller_gap": "original live entry still forwards then invokes void callback; this mangled checked entry is not selected",
+    "new_C_retirement_credit": 0,
+    "native_credit": 0
+  }
+]

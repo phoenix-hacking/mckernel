@@ -1,3 +1,44 @@
+## M14 nine-entry codegen and ABI checkpoint — 2026-10-30T21:39Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same manually resumed Root active; included92% used, no credits/API fallback.
+M14 remains4/6; practical35/35 separate; M15 paused. Retained image1cd7/generic0633
+still has23original C names; arch5 historical. No new selected production image.
+
+Actual diagnostic Rust object4ae emits nine private entry references at seven
+nonempty body locations (two bridge alias pairs): credential uid/gid, supported
+do_syscall, util_thread, two syscall2 and two syscall3 bridges, wait4 bridge.
+This is machinecode proof, not execution or nine original-C retirements.
+Object18,948,144B; outer19.59wall/19.41CPU/613244KiB peak;173source/154depinfo.
+Two earlier symbol-extractor failures are retained; expert exact Rustv0 matching
+and actual relocations pass. C-only header witness39960B/0runtimeFUNC plus actual
+comparator pass all46Thread/Process and10VM layout words. Isolated profiles only.
+
+Credential actual body frontendf182 and combined dispatch/clone frontendda85
+pass without compiler errors, outer3.42/3.40wall and472788/475336KiB peak.
+27already-passing callback/disposition source regressions remain coverage;
+they are not C retirements and were not rerun. New OS behavior, production-link,
+native-qualified, C-retired and file-accepted deltas0. Retained generic0633 and
+CURRENT119b426 compiler argv both enabled heldEXEC_DEFINED_TAIL; an eligible
+held-selector-off link provider is not established. No rejected work replay.
+
+Native lane unreleased1200s in each adjacent bucket through21:34:56. Original
+30min baseline retained,95% target not achieved. First resumed compiler observed
+6101.410s afterresume; grant-observe<=9.652s, processbirthproxy0.43s, exactqueue
+latency unknown. New compiler failure-to-fix n/a; parser failure-fix timing unknown.
+Largest avoidable handoff:Root coupled cheap compiler to SDK/native; duration
+unmeasured. Scheduling change:ready source followups+one compositor whileRoot
+checkpoints, CPU6 compile independent of native, execute+postflight together.
+Combined finish-to-result mtimeproxy0.151s; codegen26.341s, not scheduler latency.
+
+NEXT m14_arch:integrate credential fc53/error retention, VM added-ref teardown/
+typing and kernel-only signalfd request patch, then affected frontend after focused
+changed-source review. Root/sdk_owner:implement real installer success/join proof;
+v7 alwaysreturnedUNKNOWN. Currentfree/V2birth/source exclusion/effectiveview stay
+UNKNOWN; V2reserved2GiB/native12GiB/scratch21/permanent27:4 unchanged. No sudo,
+mount, cleanup, kernel/native/app launch occurred in these checks.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NINE-ENTRY-CODEGEN-AND-ABI-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 actual compiler and disposition checkpoint — 2026-10-30T20:16Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

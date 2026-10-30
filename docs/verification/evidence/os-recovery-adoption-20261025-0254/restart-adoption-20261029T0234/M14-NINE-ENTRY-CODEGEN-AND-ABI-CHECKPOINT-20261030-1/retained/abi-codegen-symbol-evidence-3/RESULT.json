@@ -1,0 +1,141 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_FIXED9_RUST_CODEGEN_AND_ABI_DATA_OBSERVED",
+  "grant": "ROOT_FIXED9_EXPERT_20261030",
+  "at": 1793395505.5234735,
+  "exit_code": 0,
+  "object_sha256": "4ae88ea95ad229725334df27fe4bd0e10c4dbe04ca5109212e578bed4e18da6e",
+  "object_bytes": 18948144,
+  "entry_count": 9,
+  "unique_body_count": 7,
+  "actual_alias_groups": [
+    {
+      "section_and_offset": [
+        494,
+        0
+      ],
+      "reference_identifiers": [
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy24m14_private_codegen_refs15REF_DO_SYSCALL2",
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy24m14_private_codegen_refs19REF_POLICY_SYSCALL2"
+      ],
+      "target_symbols": [
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy32m14_private_request_constructors26syscall_do_syscall2_bridge",
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy32m14_private_request_constructors33syscall_policy_do_syscall2_bridge"
+      ]
+    },
+    {
+      "section_and_offset": [
+        496,
+        0
+      ],
+      "reference_identifiers": [
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy24m14_private_codegen_refs15REF_DO_SYSCALL3",
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy24m14_private_codegen_refs19REF_POLICY_SYSCALL3"
+      ],
+      "target_symbols": [
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy32m14_private_request_constructors26syscall_do_syscall3_bridge",
+        "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy32m14_private_request_constructors33syscall_policy_do_syscall3_bridge"
+      ]
+    }
+  ],
+  "abi_arrays": [
+    {
+      "identifier": "f03_do_fork_Rust_ABI_v1",
+      "raw_symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust18f03_clone_lifetime23f03_do_fork_Rust_ABI_v1",
+      "words": [
+        5568,
+        64,
+        4304,
+        4200,
+        16,
+        4296,
+        5200,
+        5212,
+        24,
+        4656,
+        20,
+        4628,
+        1728,
+        64,
+        1648,
+        1416,
+        1424,
+        1420,
+        1152,
+        280,
+        456,
+        192,
+        264,
+        256,
+        16,
+        8,
+        0,
+        8,
+        128,
+        8,
+        24,
+        8,
+        0,
+        4,
+        8,
+        64,
+        64,
+        64,
+        4,
+        4,
+        0,
+        4628,
+        4,
+        4,
+        4,
+        4
+      ],
+      "whole_section_relocations": 0
+    },
+    {
+      "identifier": "f03_clone_lifetime_vm_Rust_ABI_v1",
+      "raw_symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust18f03_clone_lifetime33f03_clone_lifetime_vm_Rust_ABI_v1",
+      "words": [
+        304,
+        8,
+        188,
+        188,
+        180,
+        4,
+        4,
+        192,
+        136,
+        4
+      ],
+      "whole_section_relocations": 0
+    }
+  ],
+  "symtab_index": 6379,
+  "undefined_count": 124,
+  "metrics": {
+    "wall_seconds": 0.51,
+    "user_seconds": 0.43,
+    "system_seconds": 0.05,
+    "max_rss_kib": 137880
+  },
+  "closure_status": "PASS_OBSERVED_GROUPS_EMPTY",
+  "observed_empty_groups": [
+    3071292,
+    3071293
+  ],
+  "files_sha256": {
+    "extract.py": "0e5d2cea3987f17b4a84b2e2739b17eb0cdc17e1ae23e8780faeee3282ebf384",
+    "ADMISSION.json": "2582cf9c017f870d78332bb085e558859109b366bfa817063f4083bb66e824fa",
+    "PROGRESS.json": "1ece92975c2bdf8b1e873b4db7ac4d71cfc25675487bc03e5b7dfbfe25d5bb40",
+    "stdout": "323e61031906d5cf7774c0e73a22eb4de7d1de4dd95ba95d9f2787f7c017280a",
+    "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "time.txt": "cb694a8c7dce5e14bfae5070ad3db75dca8ad061599c4d3fb2a5a86f44f6d4de",
+    "CLOSURE.json": "ce0ee14ab274fd2ae48169bdd9e9502551d9c837bd8ec10e518d18ca52ffc257"
+  },
+  "limits": [
+    "Rust symbol names and section+offset relocations are observed; source typed signatures are not independently proven by ELF.",
+    "C witness values have not been compared in this job; no ABI equality claim.",
+    "No emitted code executed, no runtime/default/production link/native/C retirement claim.",
+    "Observed process group and recorded identity census is empty; no generic claim for unobserved escaped processes, and this fixed extractor has no subprocess code."
+  ]
+}

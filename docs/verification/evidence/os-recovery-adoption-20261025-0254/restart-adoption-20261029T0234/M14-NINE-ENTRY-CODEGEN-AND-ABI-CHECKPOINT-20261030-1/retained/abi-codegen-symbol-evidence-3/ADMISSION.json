@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "grant": "ROOT_FIXED9_EXPERT_20261030",
+  "at": 1793395466.7390943,
+  "source_sha256": "0e5d2cea3987f17b4a84b2e2739b17eb0cdc17e1ae23e8780faeee3282ebf384",
+  "argv": [
+    "/usr/bin/setsid",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "HOME=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-3",
+    "TMPDIR=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-3/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--nofile=128",
+    "--core=0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-3/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/abi-codegen-symbol-evidence-3/extract.py"
+  ],
+  "cpu": [
+    6
+  ],
+  "jobs": 1,
+  "as_bytes": 536870912,
+  "cpu_seconds": 30,
+  "wall_seconds": 45,
+  "weekly": {
+    "source": "fresh_read",
+    "used_percent": 91,
+    "reset": 1793774133,
+    "at": "2026-10-30T21:24:10.415695+00:00",
+    "age_seconds": 16.323399305343628
+  },
+  "memavailable": 27411681280,
+  "disk_free": {
+    "/home/holden/mckernel": 142357520384,
+    "/home/holden/mckernel-work/scratch": 47613485056
+  },
+  "caps": {
+    "boot_deadline": 1571567.6959065471,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "deadline": 1793774133,
+    "monotonic_deadline": 1556229.568859425
+  },
+  "binding": {
+    "guardian": {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    "server": {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "supervisor": {
+    "pid": 2996161,
+    "ppid": 2995936,
+    "start": "118034604",
+    "state": "R"
+  },
+  "controls_sha256": "a3335ac6e6751f5816d25cd85579958f5c34007e090ff9d5306d0f3a3e6eb1dc",
+  "capacity_sha256": "08571e7f2d326484d9471838e60462553a9d59e756321d70328a9a20988beae6",
+  "ownership": "unknown until positive terminal and process-group checks"
+}

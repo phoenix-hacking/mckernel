@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "rows": [
+    {
+      "original_c_function": "do_syscall",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_do_syscall.rs",
+      "private_module_sha256": "fd436c73f54afd0d0b3a11ba85f5e72f2acfafd73168a3ddc984c9b5905fea4e",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "C metadata extern providers unresolved until a separately admitted link; local pre-send rollback newly added",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "util_thread",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_util_thread.rs",
+      "private_module_sha256": "53634a8a4d9c689243afc904a00b7506e06924a02234d1c6a36932741d21547e",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "original do_syscall/exit/terminate providers retained; context/host/current caller lifetimes remain open",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_do_syscall2_bridge",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_request_constructors.rs",
+      "private_module_sha256": "32a26b9d540ac1453bce8215d8845fd9e78b786d9de1d5701b2868a80093d63a",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "calls existing do_syscall; reviewed number/callgraph still required for global selection",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_policy_do_syscall2_bridge",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_request_constructors.rs",
+      "private_module_sha256": "32a26b9d540ac1453bce8215d8845fd9e78b786d9de1d5701b2868a80093d63a",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "same original provider; six defined argument writes",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_do_syscall3_bridge",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_request_constructors.rs",
+      "private_module_sha256": "32a26b9d540ac1453bce8215d8845fd9e78b786d9de1d5701b2868a80093d63a",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "same original provider; six defined argument writes",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "syscall_policy_do_syscall3_bridge",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_request_constructors.rs",
+      "private_module_sha256": "32a26b9d540ac1453bce8215d8845fd9e78b786d9de1d5701b2868a80093d63a",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "same original provider; six defined argument writes",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    },
+    {
+      "original_c_function": "wait_host_wait4_bridge",
+      "original_source_path": "/home/holden/mckernel/kernel/syscall.c",
+      "original_source_sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0",
+      "private_module": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/dispatch-source-candidate-1/frontend-overlay-1/postimage/kernel/rust/m14_private_request_constructors.rs",
+      "private_module_sha256": "32a26b9d540ac1453bce8215d8845fd9e78b786d9de1d5701b2868a80093d63a",
+      "source_status": "REUSED_ACTUAL_CRATE_PRIVATE_FRONTEND_READY_UNCOMPILED",
+      "callable_provider_gap": "same original provider; signed arguments and int return ABI retained",
+      "new_retirement_credit": 0,
+      "default_selected": false,
+      "native_accepted": false
+    }
+  ],
+  "current_candidate_build_delta": 0,
+  "guest_app_delta": 0
+}

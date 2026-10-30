@@ -1,0 +1,74 @@
+[
+  {
+    "original_c_function": "do_setresuid",
+    "body_source": "postimage/kernel/rust/f03_credential_snapshot_candidate.rs",
+    "body_ready_for_actual_crate_frontend": true,
+    "frontend_result": "NOT_RUN",
+    "typecheck_cfg": "f03_credential_snapshot_typecheck",
+    "entry_abi": "unsafe extern C fn() -> ()",
+    "symbol_export_under_typecheck": false,
+    "original_callers": [
+      "sys_setresuid",
+      "sys_setreuid",
+      "sys_setuid",
+      "sys_setfsuid"
+    ],
+    "caller_helpers": [
+      "syscall_forward_refresh_cred_body_result",
+      "syscall_setfsid_body_result"
+    ],
+    "ready_body": [
+      "original UID/GID index mapping",
+      "captured process held through offload and failure reporting",
+      "no thread.proc reload after offload",
+      "by-value snapshot and actual update_lock deferred commit",
+      "no field writes on failed/malformed/UNKNOWN host outcome"
+    ],
+    "blocked": [
+      "f03_cred_owner_begin_v1 actual process-wide owner; must attach already-held original host setter transaction",
+      "f03_cred_owner_snapshot_v1 genuine live immutable completed eight-ID by-value snapshot",
+      "f03_cred_owner_finish_v1 actual terminal release versus UNKNOWN retention",
+      "f03_cred_refresh_failure_v1 host-success/query-failure reconciliation and legacy void caller handling",
+      "all setters serialize host mutation through refresh/commit; original wrappers forward before refresh",
+      "readers requiring coherent four-field values must participate in update_lock"
+    ],
+    "production_selected": false,
+    "native_acceptance": false
+  },
+  {
+    "original_c_function": "do_setresgid",
+    "body_source": "postimage/kernel/rust/f03_credential_snapshot_candidate.rs",
+    "body_ready_for_actual_crate_frontend": true,
+    "frontend_result": "NOT_RUN",
+    "typecheck_cfg": "f03_credential_snapshot_typecheck",
+    "entry_abi": "unsafe extern C fn() -> ()",
+    "symbol_export_under_typecheck": false,
+    "original_callers": [
+      "sys_setresgid",
+      "sys_setregid",
+      "sys_setgid",
+      "sys_setfsgid"
+    ],
+    "caller_helpers": [
+      "syscall_forward_refresh_cred_body_result",
+      "syscall_setfsid_body_result"
+    ],
+    "ready_body": [
+      "original UID/GID index mapping",
+      "captured process held through offload and failure reporting",
+      "no thread.proc reload after offload",
+      "by-value snapshot and actual update_lock deferred commit",
+      "no field writes on failed/malformed/UNKNOWN host outcome"
+    ],
+    "blocked": [
+      "f03_cred_owner_begin_v1 actual process-wide owner; must attach already-held original host setter transaction",
+      "f03_cred_owner_snapshot_v1 genuine live immutable completed eight-ID by-value snapshot",
+      "f03_cred_owner_finish_v1 actual terminal release versus UNKNOWN retention",
+      "f03_cred_refresh_failure_v1 host-success/query-failure reconciliation and legacy void caller handling",
+      "all setters serialize host mutation through refresh/commit; original wrappers forward before refresh",
+      "readers requiring coherent four-field values must participate in update_lock"
+    ],
+    "production_selected": false,
+    "native_acceptance": false
+  }
+]
