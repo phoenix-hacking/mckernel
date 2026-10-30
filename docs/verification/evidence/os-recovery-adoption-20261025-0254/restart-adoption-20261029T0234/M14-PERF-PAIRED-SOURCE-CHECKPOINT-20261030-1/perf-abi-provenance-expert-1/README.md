@@ -1,0 +1,11 @@
+# Perf witness contract provenance expert successor
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Status: private source-only candidate. Nothing here has been executed, compiled, linked or admitted. The original candidate and bounded correction remain unchanged.
+
+The bounded correction's `prepare.py` emits its predecessor's contract schema despite the separately corrected contract. This generator instead captures and hashes exact corrected `TARGET-CONTRACT.json` (`248c016333908972adb21538e5d2daf4a6b8705783da3d4a2fce7f29ae8c4dc1`), captures the bound candidate/source/review/patch inputs and exact comparator, rejects aliases and mismatches, and verifies all 31 scalar expressions and 13 callback slot/type/expression rows against that contract. It independently regenerates the witness and witness-only patch and requires the corrected packet's exact `632d3ce6...` and `cb71f19e...` hashes. Its output contract retains the corrected scalar/witness expression, callback rows, 13-relocation limitations, checks and default-off selection; it updates output paths and binds the actual successor generator/comparator hashes and corrected-contract provenance. Fresh output directory creation is exclusive; errors preserve any partial output and never claim success.
+
+The accompanying unexecuted unit tests exercise two independent output generations, byte identity with corrected artifacts, normalized contract reproducibility, preserved corrected fields and checks, generator/comparator bindings, wrong template/comparator/source hashes, output no-clobber and field/callback drift rejection. They invoke no compiler or ELF comparator. Independent source review, a suitable approved profile and coordinator resource share are required before running either generator or tests. No generated outputs are present in this packet.
+
+Comparator remains byte-identical to the bounded correction and produces only the 31-word comparison and raw inventory of 13 relocations; it does not resolve targets or establish C/Rust callback type equivalence, selected production link, ownership, native behavior or M14 acceptance. Full independent checks and admission in the corrected contract remain mandatory.

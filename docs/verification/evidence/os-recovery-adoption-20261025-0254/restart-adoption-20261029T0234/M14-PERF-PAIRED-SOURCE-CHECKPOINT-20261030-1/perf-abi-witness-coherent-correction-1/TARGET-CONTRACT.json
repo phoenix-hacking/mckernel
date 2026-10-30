@@ -1,0 +1,293 @@
+{
+  "authority": null,
+  "callbacks": [
+    {
+      "c_expression": "syscall_copy_from_user_bridge",
+      "rust_binding_expression": "Some(syscall_copy_from_user_bridge)",
+      "rust_type_alias": "SyscallCopyFromUserFn",
+      "slot": "copy_from"
+    },
+    {
+      "c_expression": "perf_event_open_attr_freq_bridge",
+      "rust_binding_expression": "Some(f03_perf_attr_frequency_v1)",
+      "rust_type_alias": "PerfAttrFreqFn",
+      "slot": "attr_freq"
+    },
+    {
+      "c_expression": "perf_event_open_alloc_event_bridge",
+      "rust_binding_expression": "Some(f03_perf_event_allocate_v1)",
+      "rust_type_alias": "PerfOpenAllocEventFn",
+      "slot": "event_alloc"
+    },
+    {
+      "c_expression": "perf_event_open_counter_alloc_bridge",
+      "rust_binding_expression": "Some(perf_entry_counter_alloc_or_release)",
+      "rust_type_alias": "PerfCounterAllocFn",
+      "slot": "counter_alloc"
+    },
+    {
+      "c_expression": "perf_event_open_do_syscall_bridge",
+      "rust_binding_expression": "Some(perf_event_open_do_syscall_bridge)",
+      "rust_type_alias": "PerfOpenSyscallFn",
+      "slot": "syscall"
+    },
+    {
+      "c_expression": "perf_event_alloc_kmalloc_bridge",
+      "rust_binding_expression": "Some(perf_event_alloc_kmalloc_bridge)",
+      "rust_type_alias": "SyscallPolicyAllocFn",
+      "slot": "allocate"
+    },
+    {
+      "c_expression": "perf_read",
+      "rust_binding_expression": "Some(f03_perf_read_v1)",
+      "rust_type_alias": "SyscallMckfdLongFn",
+      "slot": "read"
+    },
+    {
+      "c_expression": "perf_ioctl",
+      "rust_binding_expression": "Some(f03_perf_ioctl_v1)",
+      "rust_type_alias": "SyscallMckfdIntFn",
+      "slot": "ioctl"
+    },
+    {
+      "c_expression": "perf_mmap",
+      "rust_binding_expression": "Some(f03_perf_mmap_v1)",
+      "rust_type_alias": "SyscallMckfdLongFn",
+      "slot": "mmap"
+    },
+    {
+      "c_expression": "perf_close",
+      "rust_binding_expression": "Some(f03_perf_close_v1)",
+      "rust_type_alias": "SyscallMckfdIntFn",
+      "slot": "close"
+    },
+    {
+      "c_expression": "perf_fcntl",
+      "rust_binding_expression": "Some(f03_perf_fcntl_v1)",
+      "rust_type_alias": "SyscallMckfdIntFn",
+      "slot": "fcntl"
+    },
+    {
+      "c_expression": "syscall_mckfd_lock_bridge",
+      "rust_binding_expression": "Some(syscall_mckfd_lock_bridge)",
+      "rust_type_alias": "SyscallMckfdLockFn",
+      "slot": "lock"
+    },
+    {
+      "c_expression": "syscall_mckfd_unlock_bridge",
+      "rust_binding_expression": "Some(syscall_mckfd_unlock_bridge)",
+      "rust_type_alias": "SyscallMckfdUnlockFn",
+      "slot": "unlock"
+    }
+  ],
+  "compiler_or_native_run": false,
+  "correction": "Witness generator and witness use one extra super for the policy constant; all remaining 30 expressions and 13 aliases remain unchanged. Inputs are captured once from file descriptors, SHA verified, parsed from those exact bytes, and hardlink aliases rejected by device/inode. Comparator does not resolve targets or accept C types/ABI.",
+  "fields": [
+    {
+      "index": 0,
+      "name": "attr_size",
+      "rust_expression": "(size_of::<PerfEventAttr>()) as CULong"
+    },
+    {
+      "index": 1,
+      "name": "attr_type",
+      "rust_expression": "(offset_of!(PerfEventAttr, type_)) as CULong"
+    },
+    {
+      "index": 2,
+      "name": "attr_read_format",
+      "rust_expression": "(offset_of!(PerfEventAttr, read_format)) as CULong"
+    },
+    {
+      "index": 3,
+      "name": "attr_sample_period",
+      "rust_expression": "(offset_of!(PerfEventAttr, sampling)) as CULong"
+    },
+    {
+      "index": 4,
+      "name": "raw_type",
+      "rust_expression": "(4) as CULong"
+    },
+    {
+      "index": 5,
+      "name": "hardware_type",
+      "rust_expression": "(0) as CULong"
+    },
+    {
+      "index": 6,
+      "name": "cache_type",
+      "rust_expression": "(3) as CULong"
+    },
+    {
+      "index": 7,
+      "name": "unsupported_format",
+      "rust_expression": "(7) as CULong"
+    },
+    {
+      "index": 8,
+      "name": "sign_bit",
+      "rust_expression": "(1u64 << 63) as CULong"
+    },
+    {
+      "index": 9,
+      "name": "syscall_number",
+      "rust_expression": "(298) as CULong"
+    },
+    {
+      "index": 10,
+      "name": "mckfd_size",
+      "rust_expression": "(size_of::<Mckfd>()) as CULong"
+    },
+    {
+      "index": 11,
+      "name": "allocation_flags",
+      "rust_expression": "(super::IHK_MC_AP_NOWAIT) as CULong",
+      "rust_witness_expression": "(super::super::IHK_MC_AP_NOWAIT) as CULong"
+    },
+    {
+      "index": 12,
+      "name": "event_pid",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, pid)) as CULong"
+    },
+    {
+      "index": 13,
+      "name": "event_counter_id",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, counter_id)) as CULong"
+    },
+    {
+      "index": 14,
+      "name": "proc_mckfd",
+      "rust_expression": "(offset_of!(Process, mckfd)) as CULong"
+    },
+    {
+      "index": 15,
+      "name": "mckfd_next",
+      "rust_expression": "(offset_of!(Mckfd, next)) as CULong"
+    },
+    {
+      "index": 16,
+      "name": "mckfd_fd",
+      "rust_expression": "(offset_of!(Mckfd, fd)) as CULong"
+    },
+    {
+      "index": 17,
+      "name": "mckfd_data",
+      "rust_expression": "(offset_of!(Mckfd, data)) as CULong"
+    },
+    {
+      "index": 18,
+      "name": "event_group_leader",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, group_leader)) as CULong"
+    },
+    {
+      "index": 19,
+      "name": "event_sibling_list",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, sibling_list)) as CULong"
+    },
+    {
+      "index": 20,
+      "name": "event_group_entry",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, group_entry)) as CULong"
+    },
+    {
+      "index": 21,
+      "name": "event_nr_siblings",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, nr_siblings)) as CULong"
+    },
+    {
+      "index": 22,
+      "name": "event_pmc_status",
+      "rust_expression": "(offset_of!(FullMcPerfEvent, pmc_status)) as CULong"
+    },
+    {
+      "index": 23,
+      "name": "thread_pmc_alloc_map",
+      "rust_expression": "(offset_of!(Thread, pmc_alloc_map)) as CULong"
+    },
+    {
+      "index": 24,
+      "name": "proc_mckfd_lock",
+      "rust_expression": "(offset_of!(Process, mckfd_lock)) as CULong"
+    },
+    {
+      "index": 25,
+      "name": "mckfd_sig_no",
+      "rust_expression": "(offset_of!(Mckfd, padding)) as CULong"
+    },
+    {
+      "index": 26,
+      "name": "mckfd_read_cb",
+      "rust_expression": "(offset_of!(Mckfd, read_cb)) as CULong"
+    },
+    {
+      "index": 27,
+      "name": "mckfd_ioctl_cb",
+      "rust_expression": "(offset_of!(Mckfd, ioctl_cb)) as CULong"
+    },
+    {
+      "index": 28,
+      "name": "mckfd_mmap_cb",
+      "rust_expression": "(offset_of!(Mckfd, mmap_cb)) as CULong"
+    },
+    {
+      "index": 29,
+      "name": "mckfd_close_cb",
+      "rust_expression": "(offset_of!(Mckfd, close_cb)) as CULong"
+    },
+    {
+      "index": 30,
+      "name": "mckfd_fcntl_cb",
+      "rust_expression": "(offset_of!(Mckfd, fcntl_cb)) as CULong"
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/nonheld-signal-perf-group-compositor-1/NONHELD-SIGNAL-PERF-GROUP.PRIVATE.patch": "595d137bcaba9b4ce85361623edd5a12c174dc3baa53670bda5352ce80dd1d1a",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-group-failure-source-1/f03_perf_entry_candidate.rs": "d542c9f0a1793c8140f38c3d4439a9176742c420f94f792f76eafeb3981f82a5",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-paired-selector-private-1/PERF-PAIRED-SELECTOR.PRIVATE.patch": "7aaa310aaa15d12b0ce3a4c49a48f40e3a0e23a2d14c134b264935fbed93f345",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-paired-selector-private-1/REAL-HEADER-ABI-WITNESS.c.inc": "212fbf03425ea1e883f01cd4132b3821cca224a015890cabeaf3fda95e80d8c0",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-selector-independent-review-1/REVIEW.md": "daaa6ff29143c886683d0519ead33ec84724cb54cc4208707f8a3f5b486cfee3"
+  },
+  "outputs": {
+    "comparator": {
+      "dependency": "Independently pin and review pyelftools; no implicit installation.",
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-abi-witness-coherent-correction-1/compare_elf.py",
+      "scope": "Hash and parse one immutable in-memory byte capture per single-open input, require distinct device/inode, 31-word comparison and raw 13-slot relocation inventory only.",
+      "sha256": "baa35735e39207dfc3772b88c82fc5b380695599003a01d709ef2bbe96d08d1a",
+      "status": "CORRECTED_UNREVIEWED_UNEXECUTED"
+    },
+    "generator": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-abi-witness-coherent-correction-1/prepare.py",
+      "sha256": "d9d20d06b3289f6d0d0b8f8a07fed50c0ee15af290edf181bfc5b0add831313f",
+      "status": "CORRECTED_UNEXECUTED"
+    },
+    "rust_witness": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-abi-witness-coherent-correction-1/f03_perf_entry_abi_witness.rs",
+      "sha256": "632d3ce6039f26c4995034798e30465f54ba36c1d5af0da2299bf98ff2021e0c"
+    },
+    "witness_only_entry_patch": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-abi-witness-coherent-correction-1/RUST-WITNESS-ONLY.PRIVATE.patch",
+      "sha256": "cb71f19e839df9f039b0e816c8e34220055413586576fa81f0557f1fb02f7c1a"
+    }
+  },
+  "required_independent_checks": [
+    "Review exact witness addition and comparator and actual toolchain behavior; source preparation does not authorize execution",
+    "C and Rust witnesses compile as separate objects from identical bound config/source/profile; no witness object in any final link",
+    "actual compiled C witness 31 values equal actual Rust witness 31 AND the first 31 values of actual production Rust binding, all word-by-word",
+    "evaluate actual callback ABI types and actual preprocessed C declarations including erased pointer semantics and calling conventions; Rust type checks alone do not compare C",
+    "require all 13 actual production binding relocations and inspect exact targets/aliases, section-symbol addends and final resolved link; counter slot points to local wrapper and wrapper calls counter/free as reviewed",
+    "compare exact generated config.h include resolution and ENABLE_PERF, paired actual flags, scalar endianness/size and complete original metadata/link oracle",
+    "selected real provider ownership/functional/native checks remain separate"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selection": "Default remains OFF. Appending witness patch and cfg is permitted only for a separate unlinked Rust witness object; original selected production object never includes witness cfg or witness patch.",
+  "status": "PRIVATE_SOURCE_CORRECTION_ONLY_NOT_EXECUTED_OR_RELEASED",
+  "structure": {
+    "binding_symbol": "f03_perf_entry_binding_v1",
+    "callback_count": 13,
+    "endianness": "read from actual ELF; require little-endian x86_64",
+    "pointer_bytes": 8,
+    "scalar_bytes": 248,
+    "scalar_count": 31,
+    "total_bytes": 352
+  }
+}

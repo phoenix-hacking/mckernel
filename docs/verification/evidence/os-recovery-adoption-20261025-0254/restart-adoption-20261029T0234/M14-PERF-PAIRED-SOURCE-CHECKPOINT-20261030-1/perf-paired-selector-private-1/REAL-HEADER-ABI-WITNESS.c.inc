@@ -1,0 +1,93 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#if defined(ENABLE_PERF) && defined(MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL)
+_Static_assert(sizeof(struct perf_event_attr) == 104 && _Alignof(struct perf_event_attr) == 8, "perf attribute ABI");
+_Static_assert(__builtin_offsetof(struct perf_event_attr, type) == 0 && __builtin_offsetof(struct perf_event_attr, read_format) == 32 && __builtin_offsetof(struct perf_event_attr, sample_period) == 16, "perf field ABI");
+_Static_assert(sizeof(struct syscall_request) == 72 && _Alignof(struct syscall_request) == 8, "request ABI");
+_Static_assert(sizeof(unsigned long) == 8 && sizeof(void (*)(void)) == 8, "binding scalar and callback ABI");
+struct f03_perf_entry_binding_v1_type {
+	unsigned long attr_size;
+	unsigned long attr_type;
+	unsigned long attr_read_format;
+	unsigned long attr_sample_period;
+	unsigned long raw_type;
+	unsigned long hardware_type;
+	unsigned long cache_type;
+	unsigned long unsupported_format;
+	unsigned long sign_bit;
+	unsigned long syscall_number;
+	unsigned long mckfd_size;
+	unsigned long allocation_flags;
+	unsigned long event_pid;
+	unsigned long event_counter_id;
+	unsigned long proc_mckfd;
+	unsigned long mckfd_next;
+	unsigned long mckfd_fd;
+	unsigned long mckfd_data;
+	unsigned long event_group_leader;
+	unsigned long event_sibling_list;
+	unsigned long event_group_entry;
+	unsigned long event_nr_siblings;
+	unsigned long event_pmc_status;
+	unsigned long thread_pmc_alloc_map;
+	unsigned long proc_mckfd_lock;
+	unsigned long mckfd_sig_no;
+	unsigned long mckfd_read_cb;
+	unsigned long mckfd_ioctl_cb;
+	unsigned long mckfd_mmap_cb;
+	unsigned long mckfd_close_cb;
+	unsigned long mckfd_fcntl_cb;
+	__typeof__(&syscall_copy_from_user_bridge) copy_from;
+	__typeof__(&perf_event_open_attr_freq_bridge) attr_freq;
+	__typeof__(&perf_event_open_alloc_event_bridge) event_alloc;
+	__typeof__(&perf_event_open_counter_alloc_bridge) counter_alloc;
+	__typeof__(&perf_event_open_do_syscall_bridge) syscall;
+	__typeof__(&perf_event_alloc_kmalloc_bridge) allocate;
+	__typeof__(&perf_read) read;
+	__typeof__(&perf_ioctl) ioctl;
+	__typeof__(&perf_mmap) mmap;
+	__typeof__(&perf_close) close;
+	__typeof__(&perf_fcntl) fcntl;
+	__typeof__(&syscall_mckfd_lock_bridge) lock;
+	__typeof__(&syscall_mckfd_unlock_bridge) unlock;
+};
+_Static_assert(sizeof(struct f03_perf_entry_binding_v1_type) == 352 && _Alignof(struct f03_perf_entry_binding_v1_type) == 8, "binding layout ABI");
+extern const struct f03_perf_entry_binding_v1_type f03_perf_entry_binding_v1;
+_Static_assert(__builtin_offsetof(struct mckfd, sig_no) == 12, "mckfd sig_no slot ABI");
+#endif
+
+#if defined(ENABLE_PERF) && defined(MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL) && defined(MCKERNEL_F03_PERF_ENTRY_ABI_WITNESS)
+_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_perf_event_open), long (*)(int, ihk_mc_user_context_t *)), "perf entry function type");
+__attribute__((used)) static const unsigned long f03_perf_entry_c_header_witness_v1[31] = {
+    sizeof(struct perf_event_attr),
+    __builtin_offsetof(struct perf_event_attr, type),
+    __builtin_offsetof(struct perf_event_attr, read_format),
+    __builtin_offsetof(struct perf_event_attr, sample_period),
+    PERF_TYPE_RAW,
+    PERF_TYPE_HARDWARE,
+    PERF_TYPE_HW_CACHE,
+    PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING | PERF_FORMAT_ID,
+    1UL << 63,
+    __NR_perf_event_open,
+    sizeof(struct mckfd),
+    IHK_MC_AP_NOWAIT,
+    __builtin_offsetof(struct mc_perf_event, pid),
+    __builtin_offsetof(struct mc_perf_event, counter_id),
+    __builtin_offsetof(struct process, mckfd),
+    __builtin_offsetof(struct mckfd, next),
+    __builtin_offsetof(struct mckfd, fd),
+    __builtin_offsetof(struct mckfd, data),
+    __builtin_offsetof(struct mc_perf_event, group_leader),
+    __builtin_offsetof(struct mc_perf_event, sibling_list),
+    __builtin_offsetof(struct mc_perf_event, group_entry),
+    __builtin_offsetof(struct mc_perf_event, nr_siblings),
+    __builtin_offsetof(struct mc_perf_event, pmc_status),
+    __builtin_offsetof(struct thread, pmc_alloc_map),
+    __builtin_offsetof(struct process, mckfd_lock),
+    __builtin_offsetof(struct mckfd, sig_no),
+    __builtin_offsetof(struct mckfd, read_cb),
+    __builtin_offsetof(struct mckfd, ioctl_cb),
+    __builtin_offsetof(struct mckfd, mmap_cb),
+    __builtin_offsetof(struct mckfd, close_cb),
+    __builtin_offsetof(struct mckfd, fcntl_cb),
+};
+#endif

@@ -1,3 +1,37 @@
+## M14 paired-perf source cursor — 2026-10-30T03:58Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The exact qualified artifact remains image 1cd7e4e6 with 23 generic and five
+architecture C functions; no new candidate image, native result or C retirement.
+M14 remains 4/6 and practical 35/35; M15 remains paused.
+
+For `sys_perf_event_open`, non-held source batch 595d137b plus private paired
+selector 7aaa310a and experimental profile e3982185 have independent source
+review 370544bd. This selects the paired perf entry only in the experimental
+profile; original default stays off, and its signal edits are cfg-inactive.
+The exact source/profile/reviews are retained under
+`../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PERF-PAIRED-SOURCE-CHECKPOINT-20261030-1/`.
+The next producer must bind real generated config.h/ENABLE_PERF, C and Rust flags,
+31 scalar values, 13 callback targets and the nine retained objects. Rebuild the
+Rust crate and generic syscall object, then link only after fresh Root70 custody,
+resource and exact one-shot release. Separate witness objects never enter link.
+No producer, witness or native command has run.
+
+For `do_fork`, a private pre-chain shared-VM abort pin has conditional review;
+normal parent-thread VM ownership is supported but stable identity, shared TID
+visibility, checked hold, forced refcount reset and ignored chain status remain
+open. Its prepared reference-accounting fixture is unrun. For `util_thread`,
+existing source traces 4096-byte context transfer and host descriptor lifetime;
+selected host/module and interception quiescence remain unproved. Credential
+mutation/snapshot worker ownership and cancellation outcomes remain open.
+The generic_c rejected request and separate execve transfer/ACK hold stay excluded.
+
+Root70 postjoin current-free remains unaccepted: no truthful complete intervening
+custody assertion or current-control operation release exists. The old predecessor
+formatter/observer must not be run. Next owner Root reconciles actual custody and
+uses a fresh reviewed current-control operation only when its exact fields pass.
+No new build/native/C-retirement count or elapsed latency is inferred.
+
 ## Artifact-specific M14 cursor — 2026-10-30T03:47Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
