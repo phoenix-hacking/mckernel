@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY_PENDING_REVIEW_AND_EXECUTION_PROFILE",
+  "preimage_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/rust/f03_request_constructors.rs",
+  "preimage_sha256": "d1e40575145b827d7a48cbdc874aee3c3cc510d623d3eecb0c974073b1c3d070",
+  "successor_sha256": "759818c4bbf907f988b0e6a349221ec8356e8b2b6863ce36071d2fa8ca9b35a1",
+  "patch_sha256": "98080439ffcf0a009cd21cbf4913613b703329e2902ae6b4b7918dfc9f9c23b0",
+  "change": "Wrap MaybeUninit<SyscallRequest> in repr(C, align(64)) stack storage; project only its field pointer and preserve original number/six slot stores, CPU lookup and result conversions. Assert request type remains 72 bytes/alignment8 and wrapper alignment64/size128/field offset0.",
+  "source_line_conservation": "No lines added or removed; existing selected file/line! and macro source coordinates are unchanged. Debug-record object inspection remains an actual-build obligation.",
+  "alignment_distinction": "x86 IHK_DMA_ALIGN macro is empty; original C spelling does not prove 64-byte object alignment. This private successor honors the separately retained ca85 64-byte request-object requirement without changing the request struct ABI.",
+  "limits": "The same existing selector covers five constructors; selected actual C/Rust header ABI, provider uniqueness and host/request lifetime remain unresolved. This source does not select FULL28, any held work, or authorize a workload.",
+  "tests_compiler_native_executed": false,
+  "all_five_c_witness_sha256": "5c8f8550f97498b58d72bc12f05aafccdd80d749498bff7dc8a2eaf37b69b8fe",
+  "all_five_link_plan_sha256": "79740956c643591d0da70f75e9294e96f149c37a4ffa5751233d7875db0c4320",
+  "pending_paired_link": "C assertions/reference slots cover all five symbol names; actual single strong Rust provider per name requires admitted object/archival/link-map verification. No local extern declaration proves a provider.",
+  "fixture_sha256": "65052b04c27f597611b67b0b737c5c6e784376e47fd9bb9bc16f1ccbdb2d588a"
+}

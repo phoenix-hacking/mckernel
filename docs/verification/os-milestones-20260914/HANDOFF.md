@@ -1,3 +1,29 @@
+## Dispatcher model handoff checkpoint — 2026-10-30T04:08Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Foreground requested same-Root dispatcher transfer to gpt-6.1-sol/max; foreground
+owns model/controller handoff. No new build, guest or cleanup is admitted during
+transfer. M14 remains exclusive at 4/6, practical 35/35, M15 paused. The actual
+qualified image 1cd7e4e6 still has 23 generic and five architecture C functions;
+no new selected build, native qualification or C retirement has occurred.
+
+Five non-held request constructors now have a private 64-byte stack-storage
+successor, conditional independent source review and all-five ABI witness binding,
+retained in `../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REQUEST-BRIDGE-ALIGN64-CHECKPOINT-20261030-1/`.
+The SyscallRequest remains 72-byte/8-aligned; 64 is the approved storage contract,
+not a claim that the x86 C macro supplies it. Actual compiler/address, C/Rust
+provider/ABI and final caller-graph proof remain open; no test or compile ran.
+FULL28 separately selects held paths and is not a non-held build profile.
+
+Root70 actual retirement 69216 remains narrowly accepted, current-free absent;
+old Q and parent bind predecessor controls. Root must establish an evidence-backed
+intervening custody record, fresh current-control bindings and independently
+reviewed operation/admission before any physical command. No currently eligible
+postjoin formatter/capture/build command is released. The generic_c rejected turn
+and separate execve transfer/ACK service holds remain excluded from reassignment.
+Private signal/perf paired source, sigreturn witness, conditional fork pin and
+their exact limitations are preserved in the compact foreground handoff.
+
 ## Twenty-minute M14 steering — 2026-10-30T04:06:29Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

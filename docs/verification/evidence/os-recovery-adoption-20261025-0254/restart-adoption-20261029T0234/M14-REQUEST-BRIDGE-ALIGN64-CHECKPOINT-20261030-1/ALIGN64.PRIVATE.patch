@@ -1,0 +1,29 @@
+--- a/kernel/rust/f03_request_constructors.rs
++++ b/kernel/rust/f03_request_constructors.rs
+@@ -4,11 +4,11 @@
+ use core::ptr::addr_of_mut;
+ use crate::abi::{CInt, CLong, CULong, SyscallRequest};
+ 
+-// The selected x86 request has its own natural C type alignment.
++#[repr(C, align(64))] struct AlignedRequest { request: MaybeUninit<SyscallRequest> } // Align storage without changing the C request type.
+ const _: () = {
+     assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
+     assert!(offset_of!(SyscallRequest, number) == 16 && offset_of!(SyscallRequest, args) == 24);
+-    assert!(align_of::<MaybeUninit<SyscallRequest>>() == 8);
++    assert!(align_of::<MaybeUninit<SyscallRequest>>() == 8); assert!(align_of::<AlignedRequest>() == 64 && size_of::<AlignedRequest>() == 128 && offset_of!(AlignedRequest, request) == 0);
+ };
+ 
+ /// Construct only the approved wire fields; IDs and valid belong to the callee.
+@@ -18,9 +18,9 @@
+ /// endpoint and caller-specific number/argument preconditions must all hold.
+ /// The current CPU and helper must be usable in the calling context.
+ unsafe fn forward(number: CInt, args: [CULong; 6]) -> CLong {
+-    let mut storage = MaybeUninit::<SyscallRequest>::uninit();
+-    let request = storage.as_mut_ptr();
+-    // SAFETY: Aligned live storage. Raw field pointers never form a reference to
++    let mut storage = AlignedRequest { request: MaybeUninit::<SyscallRequest>::uninit() };
++    let request = storage.request.as_mut_ptr();
++    // SAFETY: 64-byte aligned live storage. Raw field pointers never form a reference to
+     // the incomplete request. Only approved number and six wire slots are set;
+     // the existing helper owns sender IDs and valid before their first read.
+     unsafe {
