@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_VECTOR_AND_FIELD_WRITER_TRACE_ONLY",
+  "signal_source_vector_mutations_refused": 4,
+  "declared_edge_vectors": 4,
+  "signal_mask_args": [
+    "sigmask",
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "signal_action_args": [
+    "sig",
+    "handler",
+    "flags",
+    0,
+    0,
+    0
+  ],
+  "actual_writer_sources": {
+    "syscall_policy": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "host_mcctrl_rust": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "bytes": 403227,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    },
+    "host_mcctrl_c_dispatch": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/control.c",
+      "bytes": 147514,
+      "sha256": "00d83f9ad7cf6c7bd263a33933aa3f5b89e4e399c2245b86ff90be87d1be3221"
+    },
+    "executor_rust": {
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "bytes": 255596,
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "executor_c_bridge": {
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "bytes": 221546,
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    }
+  },
+  "actual_writer_findings": [
+    "perf body writes request number and all six args before do_syscall; offload helper writes rtid/ttid and response req_thread_status/pde_data; send helper writes request.valid and response.status",
+    "getcred existing request is whole-zeroed in predecessor, then number,args0,args1 written; selected host getcred maps physical scratch and writes eight current IDs in order",
+    "mcexec credential bridge ignores ioctl result; act_setfsuid replies zero on this branch, so source alone cannot establish valid initialized output on failure",
+    "response completion and memory mapping/visibility/lifetime remain real runtime proof obligations; no ACK, zero-fill or new error policy proposed"
+  ],
+  "no_behavior_execution": true,
+  "runtime_authority": null
+}

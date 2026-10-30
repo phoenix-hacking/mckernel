@@ -1,0 +1,85 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_B_COMPILE_SELECTION_NO_COMPILE_OR_RUNTIME",
+  "symbols": [
+    {
+      "symbol": "do_syscall",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    },
+    {
+      "symbol": "util_thread",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    },
+    {
+      "symbol": "syscall_do_syscall2_bridge",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    },
+    {
+      "symbol": "syscall_policy_do_syscall2_bridge",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    },
+    {
+      "symbol": "syscall_do_syscall3_bridge",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    },
+    {
+      "symbol": "syscall_policy_do_syscall3_bridge",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    },
+    {
+      "symbol": "wait_host_wait4_bridge",
+      "implemented": true,
+      "selected_in_private_compile_candidate": true,
+      "compiled": false,
+      "validated": false,
+      "source": "reused source2 body and approved constructor; independent combined source/ABI review pending"
+    }
+  ],
+  "original_6_queue_symbols": "do_syscall, util_thread, syscall_policy_do_syscall2_bridge, syscall_do_syscall3_bridge, syscall_policy_do_syscall3_bridge, wait_host_wait4_bridge",
+  "supplemental_helper": "syscall_do_syscall2_bridge retained as constructor dependency; not new worklist symbol",
+  "named_caller_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-CALLER-EXTENSION-2/ROOT-CONTRACTS.APPROVED-INTENT.json",
+    "bytes": 1767,
+    "sha256": "adf6bbb7c1ae16bf8f8edae8d24a7a221a8d34f3c4ae059c167e6267e4b5a1e4"
+  },
+  "independent_contract_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-CALLER-EXTENSION-2/independent-review-1/REVIEW.ACTUAL.json",
+    "bytes": 1573,
+    "sha256": "4ffa6ae38d3c25c13e762aabda123d500f5820cb31daff78d98a41b4f965e82e"
+  },
+  "selection": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/caller-metadata-successor-3/QUEUE-B.COMPILE-ONLY-SELECTION.json",
+    "bytes": 1408,
+    "sha256": "df5c5974f706be7fecba0c7dc00677ef7f4e97bdbe7005be82190426fd2424a0"
+  },
+  "warnings": [
+    "Host completion/thread/monitor/IKC and UTI stack/descriptor/host mapping lifetime must be independently reviewed.",
+    "Phase0 legacy clone and coredump defined-slot intent plus independent review do not decide cleanup kill semantics or broader callgraph; preserve original cleanup behavior.",
+    "29-word/23-word/16-word real-header comparisons, packet ABI, compiler/link and original debug-record binary projection remain unexecuted."
+  ],
+  "runtime_authority": null
+}

@@ -1,0 +1,78 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -8002,6 +8002,12 @@
+ 			syscall_execveat_bridge);
+ }
+ #endif
++#ifdef MCKERNEL_RUST_F03_CLONE_REQUEST_DEFINED
++extern void f03_clone_request_define_unused45(struct syscall_request *);
++#define F03_CLONE_REQUEST_DEFINED(request) f03_clone_request_define_unused45(request)
++#else
++#define F03_CLONE_REQUEST_DEFINED(request) ((void)0)
++#endif
+ #line 7721
+ 
+ #ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+@@ -8298,7 +8304,7 @@
+ 			       virt_to_phys(new->vm->address_space->page_table);
+ 		request1.args[0] = clone_host_parent_flags_result(clone_flags,
+ 				oldproc->ppid_parent->pid);
+-		newproc->pid = do_syscall(&request1, ihk_mc_get_processor_id());
++		F03_CLONE_REQUEST_DEFINED(&request1); newproc->pid = do_syscall(&request1, ihk_mc_get_processor_id());
+ 		if (newproc->pid < 0) {
+ 			kprintf("ERROR: forking host process\n");
+ 			err = newproc->pid;
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -37357,3 +37357,18 @@
+ #[cfg(all(f03_request_constructors_candidate, target_arch = "x86_64"))]
+ #[path = "f03_request_constructors.rs"]
+ mod f03_request_constructors;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact Root named legacy clone first-phase slot contract; no ID/valid or other
++// argument ownership is transferred. A caller must not have published the request.
++#[cfg(f03_clone_request_defined_candidate)]
++#[no_mangle]
++pub unsafe extern "C" fn f03_clone_request_define_unused45(request: *mut crate::abi::SyscallRequest) {
++    // SAFETY: Original local request is naturally aligned, alive, exclusively
++    // owned and not yet sent. Raw field addresses do not form a reference to
++    // the partially initialized whole struct.
++    unsafe {
++        core::ptr::addr_of_mut!((*request).args[4]).write(0);
++        core::ptr::addr_of_mut!((*request).args[5]).write(0);
++    }
++}
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -11097,7 +11097,7 @@
+                     args.add(0).write(chunks.assume_init() as CULong);
+                     args.add(1).write(mem_virt_to_phys_bridge(table.cast()));
+                     args.add(2).write(mem_virt_to_phys_bridge((*(*thread).proc).saved_cmdline.cast()));
+-                    args.add(3).write((*(*thread).proc).saved_cmdline_len as CULong);
++                    args.add(3).write((*(*thread).proc).saved_cmdline_len as CULong); args.add(4).write(0); args.add(5).write(0);
+                     result = mem_core_syscall(request, (*thread).cpu_id) as CInt;
+                     if result == 0 {
+                         kprintf(
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -232,6 +232,9 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				if (MCKERNEL_F03_CLONE_REQUEST_DEFINED_EXPERIMENTAL)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f03_clone_request_defined_candidate")
++				endif()
+ 				# Queue B is opt-in and remains subject to the documented source contracts.
+ 				if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
+ 					if (NOT MCKERNEL_F03_DEFINED_ALL_REQUEST_CALLERS_REVIEWED)
+@@ -630,6 +633,9 @@
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++			if (MCKERNEL_F03_CLONE_REQUEST_DEFINED_EXPERIMENTAL)
++				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_CLONE_REQUEST_DEFINED)
++			endif()
+ 			if (MCKERNEL_F03_DO_SYSCALL_SUPPORTED_EXPERIMENTAL)
+ 				set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL_SUPPORTED)
+ 			endif()

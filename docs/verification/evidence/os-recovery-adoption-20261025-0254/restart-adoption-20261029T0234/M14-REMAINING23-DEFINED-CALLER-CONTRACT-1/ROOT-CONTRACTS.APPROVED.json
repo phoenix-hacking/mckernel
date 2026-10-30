@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "APPROVE_DEFINED_NAMED_CALLER_SOURCE_CONTRACTS",
+  "recorded_utc": "2026-10-30T00:21:00.067489+00:00",
+  "contracts": [
+    {
+      "id": "EXEC-PHASE-ARG5",
+      "owner": "/root/f03_mmap_fork_terra",
+      "definition": "Phase1 preserves existing syscall number and args0..4 exactly; explicitly writes args5=0. Phase2 rewrites only original args0..2, preserving initialized phase1 args3,4 and defined-zero arg5. Preserve helper-owned ID/valid writes and original publication/response order. No blanket request initialization or invented transport seed. No mutation while prior request borrowed.",
+      "limits": "No response/ACK synthesis, descriptor/flattened-argument/filename lifetime decision or endpoint/service clearance. Actual selected consumer semantic arity and raw field initialization must be independently checked."
+    },
+    {
+      "id": "INTERRUPT-ARG3-5",
+      "owner": "/root/f03_kfree_terra",
+      "definition": "Preserve original process pid, thread tid, sig conversions in x86 argument fields0..2; explicitly set argument fields3..5=0 before existing __NR_kill generic forwarding. Use raw MaybeUninit context and initialize only the six argument fields; no whole-context initialized reference or aggregate zero.",
+      "limits": "Keep original target/thread lifetime, lock, send/reply, logger and errno ordering; no transport-owned field or UTI initialization."
+    },
+    {
+      "id": "SIGNAL-FORWARD-UNUSED-SLOTS",
+      "owner": "/root/f03_munmap_terra",
+      "definition": "For syscall_forward_rt_sigprocmask_bridge preserve exactly original arg0=sigmask; define transmitted args1..5=0. For syscall_forward_sigaction_update_bridge preserve arg0=sig, arg1=act->sa.sa_handler, arg2=act->sa.sa_flags; define args3..5=0. Write six argument fields through raw uninitialized context storage, without whole-context reference/zero.",
+      "limits": "These are existing custom selected executor payload shapes, not replacements of the Linux APIs. Require exact selected semantic consumers to use the original initialized payload fields; any consumer assigning semantic meaning to additional slots must be explicitly dispositioned before selection. Keep current validation, action/mask semantics, ordering and all genuine restrictions."
+    },
+    {
+      "id": "PTRACE-WAKEUP-DEFINED-HEX",
+      "owner": "/root/f03_kfree_terra",
+      "definition": "Event4 retains same prefix,newline,logical C source tuple24429 and value as signed32 %d. Render result as unsigned32 lower hexadecimal with minimum width8 and zero padding, passing actual u32/CUInt to %08x. Thus -1 is explicitly ffffffff. Other events produce no output.",
+      "limits": "Intentional defined diagnostic correction; no claim of parity for an invalid signed variadic argument. No ptrace action, signal, errno, synchronization or lifetime change."
+    },
+    {
+      "id": "EXEC-LONG-DIAGNOSTICS",
+      "owner": "/root/f03_mmap_fork_terra",
+      "definition": "Two original long-valued exec diagnostics use %ld with the same CLong signed values, events and source metadata; no truncation or semantic action change.",
+      "limits": "Defined diagnostic correction, not undefined C variadic parity."
+    }
+  ],
+  "unchanged": "ca85 named2/3/wait wire contract and f847 natural request alignment remain. No service/account/rejected-operation hold is cleared, no general packet/response/UTI zero or unsupported exclusion. No runtime/build/native grant.",
+  "abi_codegen_lifetime_validation": "OPEN",
+  "runtime_authority": null,
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-DEFINED-CALLER-CONTRACT-1/independent-review-1/CONTRACT-REVIEW.ACTUAL.json",
+    "bytes": 12204,
+    "sha256": "776d9ce095932811212c2e80bb46af195bc067a3d3d7821ada79593885c0f9d0"
+  }
+}

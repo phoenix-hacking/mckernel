@@ -1,0 +1,95 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/recovery_receipts",
+  "independent": true,
+  "implementation_ownership": false,
+  "approved_intent": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-CALLER-EXTENSION-2/ROOT-CONTRACTS.APPROVED-INTENT.json",
+    "bytes": 1767,
+    "sha256": "adf6bbb7c1ae16bf8f8edae8d24a7a221a8d34f3c4ae059c167e6267e4b5a1e4"
+  },
+  "trace": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/whole-abi-and-callers-2/CALLER-AND-LIFETIME-TRACE.json",
+    "bytes": 6441,
+    "sha256": "662e1fdb7170b4d882f353d2817f5efa50824f4e078bfb8f2eab3686c3482667"
+  },
+  "trace_subjects": {
+    "source2_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/postimage/kernel/syscall.c",
+      "bytes": 935691,
+      "sha256": "fe852e4a9b2d5d58ca38cf51181a5291719d1eadfd7cab0d7621272bda29d93c"
+    },
+    "source2_Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-LARGE-COMPOSITION-2/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1328583,
+      "sha256": "c3daed2f58bf070b1ca98a493ae5b1faad85996a2e0d6f8e327a423744e1bac2"
+    },
+    "snapshot_mem_helpers": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-ACTUAL-SNAPSHOT-1/rust-subtree/mem_helpers.rs",
+      "bytes": 444772,
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    },
+    "host_dispatcher": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "bytes": 403227,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    }
+  },
+  "source_bindings": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "executer/user/mcexec.c": {
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "bytes": 221546,
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    },
+    "executer/user/rust/mcexec_helpers.rs": {
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "bytes": 255596,
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "executer/kernel/mcctrl/rust/mcctrl_helpers.rs": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs",
+      "bytes": 403227,
+      "sha256": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14"
+    },
+    "executer/kernel/mcctrl/syscall.c": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/syscall.c",
+      "bytes": 88788,
+      "sha256": "6b769f9433be6c03dea41e5962d8ac44ce7c0903fe417d43eff7581ab2591450"
+    },
+    "executer/user/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+      "bytes": 28027,
+      "sha256": "a77da8f2ccaf54997c043cf30c22c8e67fedd3b7b318b54709df2820f29f5e4b"
+    }
+  },
+  "compiler": 0,
+  "native": 0,
+  "guard": 0,
+  "proc": 0,
+  "runtime_authority": null,
+  "implementation_review": null,
+  "case": "LEGACY-CLONE-UNUSED4-5",
+  "decision": "PASS_NARROW_DEFINED_UNUSED_SLOT_CONTRACT_WITH_EXPLICIT_EXISTING_SEMANTIC_LIMITS",
+  "findings": [
+    "Source2/C fallback request1 first writes numberclone and args0..3 (0 overwritten by original clone_host_parent_flags_result;1userstart,2userextent,3page-tablephysical). Phase1 rewrites numberclone,args0=1,args1=newtid. Cleanupkill rewrites numberkill,args0=newproc.pid,args1=SIGKILL. Proposed args4/5 zero before firstsend leaves every original assignment and reused2/3 unchanged.",
+    "Selected host mcctrl dispatcher takes req.number and copies all6words before number-specific routing; unhandled clone reaches mcexec selected Rust SYS_CLONE handler (or equivalent C fallback). Selected act_clone_start first checks private selectors2/3; ordinary legacy phase0 has arg0=0 or originalflags containingCLONE_PARENT, so that branch does not consume args5. Clone child bridge uses1/2/3 for PPD; phase1 complete consumes1 only. No ordinary phase0/1 semantic use of4/5 identified in these exact providers.",
+    "Important retained cleanupkill limit: selected SYS_KILL/act_kill consumes args1 and2; legacycaller writes0 and1 and retains2 from clone extent. This review does not bless/fix that existing mapping, signal or cleanup semantics. Defining4/5 does not alter those semantic inputs.",
+    "Existing fullrequest copier transmits size_ofSyscallRequest72bytes; send_prepare writesvalid0 and response.status; offload_prepare writesrtid/ttid and response bookkeeping; publish release-storesvalid1. Constructor owns only number/args. Do not zero or set IDs/valid or infer response ACK."
+  ],
+  "implementation_conditions": [
+    "Rust provider must write exactly args4=0,args5=0 at first legacy clone send after preservednumber/args0..3; no whole-object zero or generic caller widening. Retained C fallback may only call declared Rustprovider; preserve logical Csource origins.",
+    "Both phase1 and cleanupkill must preserve remaining now-initialized2..5, retaining exactnumber/0/1 rewrite order. CLONE_VM TID-only errorpaths do not send request1 cleanupkill; retain original reachability.",
+    "Request1 stack, newthread/process/VM/page-table, hostforksync/thread descriptors and real offload response lifetime remain unresolved actual selected obligations. No hostACK, senderstatus, cleanupkill behavior, forkdefault, native or service clearance.",
+    "Candidate selection must bind exacthostproducer route/profile and ABI/fullcallgraph proof, preserve metadata389 and original held evidence. Sourcecontract approval is not wholefork acceptance."
+  ]
+}

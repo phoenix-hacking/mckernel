@@ -1,0 +1,147 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -29860,50 +29860,6 @@
+ 	__typeof__(&syscall_mckfd_unlock_bridge) unlock;
+ };
+ _Static_assert(sizeof(struct f03_perf_entry_binding_v1_type) == 352 && _Alignof(struct f03_perf_entry_binding_v1_type) == 8, "binding layout ABI");
+-const struct f03_perf_entry_binding_v1_type f03_perf_entry_binding_v1 = {
+-	.attr_size = sizeof(struct perf_event_attr),
+-	.attr_type = __builtin_offsetof(struct perf_event_attr, type),
+-	.attr_read_format = __builtin_offsetof(struct perf_event_attr, read_format),
+-	.attr_sample_period = __builtin_offsetof(struct perf_event_attr, sample_period),
+-	.raw_type = PERF_TYPE_RAW,
+-	.hardware_type = PERF_TYPE_HARDWARE,
+-	.cache_type = PERF_TYPE_HW_CACHE,
+-	.unsupported_format = PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING | PERF_FORMAT_ID,
+-	.sign_bit = 1UL << 63,
+-	.syscall_number = __NR_perf_event_open,
+-	.mckfd_size = sizeof(struct mckfd),
+-	.allocation_flags = IHK_MC_AP_NOWAIT,
+-	.event_pid = __builtin_offsetof(struct mc_perf_event, pid),
+-	.event_counter_id = __builtin_offsetof(struct mc_perf_event, counter_id),
+-	.proc_mckfd = __builtin_offsetof(struct process, mckfd),
+-	.mckfd_next = __builtin_offsetof(struct mckfd, next),
+-	.mckfd_fd = __builtin_offsetof(struct mckfd, fd),
+-	.mckfd_data = __builtin_offsetof(struct mckfd, data),
+-	.event_group_leader = __builtin_offsetof(struct mc_perf_event, group_leader),
+-	.event_sibling_list = __builtin_offsetof(struct mc_perf_event, sibling_list),
+-	.event_group_entry = __builtin_offsetof(struct mc_perf_event, group_entry),
+-	.event_nr_siblings = __builtin_offsetof(struct mc_perf_event, nr_siblings),
+-	.event_pmc_status = __builtin_offsetof(struct mc_perf_event, pmc_status),
+-	.thread_pmc_alloc_map = __builtin_offsetof(struct thread, pmc_alloc_map),
+-	.proc_mckfd_lock = __builtin_offsetof(struct process, mckfd_lock),
+-	.mckfd_sig_no = __builtin_offsetof(struct mckfd, sig_no),
+-	.mckfd_read_cb = __builtin_offsetof(struct mckfd, read_cb),
+-	.mckfd_ioctl_cb = __builtin_offsetof(struct mckfd, ioctl_cb),
+-	.mckfd_mmap_cb = __builtin_offsetof(struct mckfd, mmap_cb),
+-	.mckfd_close_cb = __builtin_offsetof(struct mckfd, close_cb),
+-	.mckfd_fcntl_cb = __builtin_offsetof(struct mckfd, fcntl_cb),
+-	.copy_from = syscall_copy_from_user_bridge,
+-	.attr_freq = perf_event_open_attr_freq_bridge,
+-	.event_alloc = perf_event_open_alloc_event_bridge,
+-	.counter_alloc = perf_event_open_counter_alloc_bridge,
+-	.syscall = perf_event_open_do_syscall_bridge,
+-	.allocate = perf_event_alloc_kmalloc_bridge,
+-	.read = perf_read,
+-	.ioctl = perf_ioctl,
+-	.mmap = perf_mmap,
+-	.close = perf_close,
+-	.fcntl = perf_fcntl,
+-	.lock = syscall_mckfd_lock_bridge,
+-	.unlock = syscall_mckfd_unlock_bridge,
+-};
+-#endif
++extern const struct f03_perf_entry_binding_v1_type f03_perf_entry_binding_v1;
++_Static_assert(__builtin_offsetof(struct mckfd, sig_no) == 12, "mckfd sig_no slot ABI");
++#endif
+--- a/kernel/rust/f03_perf_entry_candidate.rs
++++ b/kernel/rust/f03_perf_entry_candidate.rs
+@@ -1,7 +1,8 @@
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ //! Default-off entry binding to the existing Rust perf body and C metadata.
+ use core::{ffi::c_void, mem::{align_of, offset_of, size_of, MaybeUninit}};
+-use crate::abi::{CInt, CLong, CULong, SyscallRequest, X86UserContext};
++use crate::abi::{CInt, CLong, CULong, Mckfd, Process, Thread, SyscallRequest, X86UserContext};
++use super::f03_sync_child_layout_v2::FullMcPerfEvent;
+ use crate::f03_perf_attr_callbacks::PerfEventAttr;
+ use crate::x86_cpu_helpers::{ihk_mc_syscall_arg0, ihk_mc_syscall_arg1, ihk_mc_syscall_arg2, ihk_mc_syscall_arg3, ihk_mc_syscall_arg4};
+ use super::{PerfAttrFreqFn,PerfCounterAllocFn,PerfOpenAllocEventFn,PerfOpenSyscallFn,SyscallCopyFromUserFn,SyscallMckfdIntFn,SyscallMckfdLockFn,SyscallMckfdLongFn,SyscallMckfdUnlockFn,SyscallPolicyAllocFn};
+@@ -52,7 +53,69 @@
+     lock: Option<SyscallMckfdLockFn>,
+     unlock: Option<SyscallMckfdUnlockFn>,
+ }
+-unsafe extern "C" { static f03_perf_entry_binding_v1: PerfEntryBinding; }
++unsafe extern "C" {
++    fn syscall_copy_from_user_bridge(dst: *mut u8, src: CULong, size: usize) -> CLong;
++    fn f03_perf_attr_frequency_v1(attr: *const c_void) -> CInt;
++    fn f03_perf_event_allocate_v1(out: *mut *mut c_void, attr: *mut c_void) -> CInt;
++    fn f03_perf_counter_allocate_v1(thread: *mut c_void, event: *mut c_void) -> CInt;
++    fn perf_event_open_do_syscall_bridge(request: *mut SyscallRequest, cpu: CInt) -> CLong;
++    fn perf_event_alloc_kmalloc_bridge(size: usize, flags: CULong) -> *mut c_void;
++    fn f03_perf_read_v1(fd: *mut c_void, ctx: *mut c_void) -> CLong;
++    fn f03_perf_ioctl_v1(fd: *mut c_void, ctx: *mut c_void) -> CInt;
++    fn f03_perf_mmap_v1(fd: *mut c_void, ctx: *mut c_void) -> CLong;
++    fn f03_perf_close_v1(fd: *mut c_void, ctx: *mut c_void) -> CInt;
++    fn f03_perf_fcntl_v1(fd: *mut c_void, ctx: *mut c_void) -> CInt;
++    fn syscall_mckfd_lock_bridge(lock: *mut c_void) -> CLong;
++    fn syscall_mckfd_unlock_bridge(lock: *mut c_void, irq: CLong);
++}
++// Exact current selected Rust providers; paired C declaration carries no runtime data.
++#[no_mangle]
++pub(super) static f03_perf_entry_binding_v1: PerfEntryBinding = PerfEntryBinding {
++    attr_size: (size_of::<PerfEventAttr>()) as CULong,
++    attr_type: (offset_of!(PerfEventAttr, type_)) as CULong,
++    attr_read_format: (offset_of!(PerfEventAttr, read_format)) as CULong,
++    attr_sample_period: (offset_of!(PerfEventAttr, sampling)) as CULong,
++    raw_type: (4) as CULong,
++    hardware_type: (0) as CULong,
++    cache_type: (3) as CULong,
++    unsupported_format: (7) as CULong,
++    sign_bit: (1u64 << 63) as CULong,
++    syscall_number: (298) as CULong,
++    mckfd_size: (size_of::<Mckfd>()) as CULong,
++    allocation_flags: (super::IHK_MC_AP_NOWAIT) as CULong,
++    event_pid: (offset_of!(FullMcPerfEvent, pid)) as CULong,
++    event_counter_id: (offset_of!(FullMcPerfEvent, counter_id)) as CULong,
++    proc_mckfd: (offset_of!(Process, mckfd)) as CULong,
++    mckfd_next: (offset_of!(Mckfd, next)) as CULong,
++    mckfd_fd: (offset_of!(Mckfd, fd)) as CULong,
++    mckfd_data: (offset_of!(Mckfd, data)) as CULong,
++    event_group_leader: (offset_of!(FullMcPerfEvent, group_leader)) as CULong,
++    event_sibling_list: (offset_of!(FullMcPerfEvent, sibling_list)) as CULong,
++    event_group_entry: (offset_of!(FullMcPerfEvent, group_entry)) as CULong,
++    event_nr_siblings: (offset_of!(FullMcPerfEvent, nr_siblings)) as CULong,
++    event_pmc_status: (offset_of!(FullMcPerfEvent, pmc_status)) as CULong,
++    thread_pmc_alloc_map: (offset_of!(Thread, pmc_alloc_map)) as CULong,
++    proc_mckfd_lock: (offset_of!(Process, mckfd_lock)) as CULong,
++    mckfd_sig_no: (offset_of!(Mckfd, padding)) as CULong,
++    mckfd_read_cb: (offset_of!(Mckfd, read_cb)) as CULong,
++    mckfd_ioctl_cb: (offset_of!(Mckfd, ioctl_cb)) as CULong,
++    mckfd_mmap_cb: (offset_of!(Mckfd, mmap_cb)) as CULong,
++    mckfd_close_cb: (offset_of!(Mckfd, close_cb)) as CULong,
++    mckfd_fcntl_cb: (offset_of!(Mckfd, fcntl_cb)) as CULong,
++    copy_from: Some(syscall_copy_from_user_bridge),
++    attr_freq: Some(f03_perf_attr_frequency_v1),
++    event_alloc: Some(f03_perf_event_allocate_v1),
++    counter_alloc: Some(f03_perf_counter_allocate_v1),
++    syscall: Some(perf_event_open_do_syscall_bridge),
++    allocate: Some(perf_event_alloc_kmalloc_bridge),
++    read: Some(f03_perf_read_v1),
++    ioctl: Some(f03_perf_ioctl_v1),
++    mmap: Some(f03_perf_mmap_v1),
++    close: Some(f03_perf_close_v1),
++    fcntl: Some(f03_perf_fcntl_v1),
++    lock: Some(syscall_mckfd_lock_bridge),
++    unlock: Some(syscall_mckfd_unlock_bridge),
++};
+ const _: () = {
+     assert!(size_of::<CULong>() == 8 && size_of::<usize>() == 8);
+     assert!(size_of::<PerfEventAttr>() == 104 && align_of::<PerfEventAttr>() == 8);
+@@ -60,6 +123,7 @@
+     assert!(offset_of!(PerfEventAttr, sampling) == 16);
+     assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
+     assert!(size_of::<PerfEntryBinding>() == 352 && align_of::<PerfEntryBinding>() == 8);
++    assert!(offset_of!(Mckfd, padding) == 12);
+ };
+ /// Reuse the original perf entry provider, field and callback bindings.
+ ///

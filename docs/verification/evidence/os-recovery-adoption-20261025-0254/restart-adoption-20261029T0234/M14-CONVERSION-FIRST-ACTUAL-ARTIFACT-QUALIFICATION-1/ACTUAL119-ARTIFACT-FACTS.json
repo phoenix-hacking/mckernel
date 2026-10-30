@@ -1,0 +1,3497 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL119_BOUNDED_ARTIFACT_FACTS_FULL_QUALIFICATION_OPEN",
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-PRODUCER-BINDING-1/current-frontier-successor-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 132553,
+    "sha256": "8ab49c299dfc9218ddcf8df3cf71474d51e87167abe4cd166841ea47c3a32e2d"
+  },
+  "worker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 12442,
+    "sha256": "c2fc6b6eab1a0e208a650416cdf1af74b03fc2cd56c29e6c8c5eae406835527a"
+  },
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 21341,
+    "sha256": "fa275bbc05e0198118c5091014b520535233e0bd7931f2fec38b5cb911ab80bb"
+  },
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18483968,
+      "sha256": "52f739f3aeaba14db37bff8d466ab377fddaaccce40a4006f0219917a10a4ef9"
+    },
+    "generic_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 324088,
+      "sha256": "0633c5248eb68a59c1920799ad1ef1040e27f8733b074fbeea1fc58289eb398c"
+    },
+    "arch_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 77736,
+      "sha256": "30bddb4cf0e8083fcce83fe691410b6d4a0e8eabec3cb6ce3b6ab190be8ab3da"
+    },
+    "process_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 2864,
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10303496,
+      "sha256": "1cd7e4e66bdbd7d34bcca2e7cb698da814df470ffd726270a612a2d92faf8c38"
+    }
+  },
+  "counts": {
+    "generic_C": {
+      "FUNC": 23,
+      "OBJECT": 144
+    },
+    "arch_C": {
+      "FUNC": 5,
+      "OBJECT": 10
+    },
+    "process_C": {
+      "FUNC": 0,
+      "OBJECT": 0
+    },
+    "selected_C_functions": 28,
+    "qualified_new_Rust_functions_observed": 20,
+    "process_nonNOTE_ALLOC_bytes": 0,
+    "process_GNU_property_NOTE_bytes": 48
+  },
+  "function_deltas": {
+    "generic": {
+      "removed": [
+        "clear_host_pte",
+        "clear_host_pte_log_bridge",
+        "do_munmap",
+        "do_munmap_clear_host_bridge",
+        "do_munmap_log_bridge",
+        "do_munmap_set_host_bridge",
+        "do_wait_log_bridge",
+        "exit_group_current_pid_bridge",
+        "exit_group_log_bridge",
+        "exit_group_terminate_bridge",
+        "mprotect_set_host_vma_bridge",
+        "perf_event_open_alloc_event_bridge",
+        "perf_event_open_attr_freq_bridge",
+        "perf_event_open_counter_alloc_bridge",
+        "perf_event_open_do_syscall_bridge",
+        "perf_mmap",
+        "ptrace_detach_wakeup_bridge",
+        "ptrace_report_clone_log_bridge",
+        "ptrace_report_clone_noirq_lock_bridge",
+        "ptrace_report_clone_noirq_unlock_bridge",
+        "ptrace_wakeup_update_lock_bridge",
+        "ptrace_wakeup_update_unlock_bridge",
+        "syscall_forward_context_bridge",
+        "syscall_policy_forward_context_bridge",
+        "syscall_settid_log_bridge",
+        "syscall_util_indicate_clone_disabled_bridge",
+        "syscall_util_register_desc_log_bridge",
+        "syscall_vm_policy_insert_log_bridge",
+        "terminate_mcexec_do_syscall_bridge",
+        "util_show_syscall_profile",
+        "wait_zombie_log_bridge"
+      ],
+      "added": []
+    },
+    "arch": {
+      "removed": [
+        "arch_native_signal_restore_fp_bridge",
+        "arch_prctl_log_bridge",
+        "arch_ptrace_read_gpregs_bridge",
+        "arch_ptrace_read_user_bridge",
+        "arch_ptrace_write_gpregs_bridge",
+        "arch_ptrace_write_user_bridge",
+        "arch_ptrace_xstate_copy_from_bridge",
+        "arch_ptrace_xstate_copy_to_bridge",
+        "arch_vdso_map_log_bridge",
+        "arch_vdso_setup_log_bridge",
+        "arch_vdso_state_bridge",
+        "vdso_get_vdso_info"
+      ],
+      "added": []
+    }
+  },
+  "unique_new_provider_proofs": [
+    {
+      "name": "arch_native_signal_restore_fp_bridge",
+      "input": {
+        "index": 4599,
+        "name": "arch_native_signal_restore_fp_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 814,
+        "value": 0,
+        "size": 683
+      },
+      "final": {
+        "name": "arch_native_signal_restore_fp_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684615680,
+        "size": 683
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 31,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990420",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_size",
+          "addend": 0
+        },
+        {
+          "offset": 109,
+          "type": 1,
+          "input_addend": 5003,
+          "actual_final_address": "0xfffffffffe909265",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f6e61746976655f7369676e616c5f726573746f72655f66702e727300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 119,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe833250",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "addend": 0
+        },
+        {
+          "offset": 164,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841ae0",
+          "kind": "NAMED",
+          "target": "copy_from_user",
+          "addend": 0
+        },
+        {
+          "offset": 196,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990418",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_mask",
+          "addend": 0
+        },
+        {
+          "offset": 311,
+          "type": 1,
+          "input_addend": 5003,
+          "actual_final_address": "0xfffffffffe909265",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f6e61746976655f7369676e616c5f726573746f72655f66702e727300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 321,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe832da0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "addend": 0
+        },
+        {
+          "offset": 349,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990414",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_available",
+          "addend": 0
+        },
+        {
+          "offset": 361,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990400",
+          "kind": "NAMED",
+          "target": "x86_cpu_initial_fp_regs_available",
+          "addend": 0
+        },
+        {
+          "offset": 373,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe990418",
+          "kind": "NAMED",
+          "target": "x86_cpu_xsave_mask",
+          "addend": 0
+        },
+        {
+          "offset": 386,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe98f400",
+          "kind": "NAMED",
+          "target": "x86_cpu_initial_fp_regs",
+          "addend": 0
+        },
+        {
+          "offset": 396,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8afdf0",
+          "kind": "NAMED",
+          "target": "rust_x86_native_signal_reset_fp",
+          "addend": 0
+        },
+        {
+          "offset": 430,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 455,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 490,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        },
+        {
+          "offset": 529,
+          "type": 1,
+          "input_addend": 18785,
+          "actual_final_address": "0xfffffffffe90c7e6",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 539,
+          "type": 1,
+          "input_addend": 5003,
+          "actual_final_address": "0xfffffffffe909265",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f6e61746976655f7369676e616c5f726573746f72655f66702e727300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 549,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 662,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe808430",
+          "kind": "NAMED",
+          "target": "native_xrstor_checked",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_prctl_log_bridge",
+      "input": {
+        "index": 4603,
+        "name": "arch_prctl_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 821,
+        "value": 0,
+        "size": 54
+      },
+      "final": {
+        "name": "arch_prctl_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684616608,
+        "size": 54
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 14,
+          "type": 1,
+          "input_addend": 27,
+          "actual_final_address": "0xfffffffffe8ff19b",
+          "kind": "NAMED",
+          "target": "mckernel_f06_arch_prctl_debug",
+          "addend": 27
+        },
+        {
+          "offset": 29,
+          "type": 1,
+          "input_addend": 11335,
+          "actual_final_address": "0xfffffffffe90ab0d",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "5b25645d20617263685f707263746c3a20415243485f5345545f46533a203078256c580a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 39,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_ptrace_read_gpregs_bridge",
+      "input": {
+        "index": 4619,
+        "name": "arch_ptrace_read_gpregs_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 846,
+        "value": 0,
+        "size": 394
+      },
+      "final": {
+        "name": "arch_ptrace_read_gpregs_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684621248,
+        "size": 394
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 28,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe87e800",
+          "kind": "NAMED",
+          "target": "memset",
+          "addend": 0
+        },
+        {
+          "offset": 66,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 83,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 93,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_ptrace_read_user_bridge",
+      "input": {
+        "index": 4622,
+        "name": "arch_ptrace_read_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 850,
+        "value": 0,
+        "size": 17
+      },
+      "final": {
+        "name": "arch_ptrace_read_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684622256,
+        "size": 17
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 6,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8a7920",
+          "kind": "NAMED",
+          "target": "ptrace_read_user",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_ptrace_write_gpregs_bridge",
+      "input": {
+        "index": 4631,
+        "name": "arch_ptrace_write_gpregs_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 862,
+        "value": 0,
+        "size": 90
+      },
+      "final": {
+        "name": "arch_ptrace_write_gpregs_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684622864,
+        "size": 90
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 36,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8aa1d0",
+          "kind": "NAMED",
+          "target": "ptrace_write_user",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_ptrace_write_user_bridge",
+      "input": {
+        "index": 4635,
+        "name": "arch_ptrace_write_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 866,
+        "value": 0,
+        "size": 17
+      },
+      "final": {
+        "name": "arch_ptrace_write_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684623712,
+        "size": 17
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 6,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8aa1d0",
+          "kind": "NAMED",
+          "target": "ptrace_write_user",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_ptrace_xstate_copy_from_bridge",
+      "input": {
+        "index": 4636,
+        "name": "arch_ptrace_xstate_copy_from_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 868,
+        "value": 0,
+        "size": 40
+      },
+      "final": {
+        "name": "arch_ptrace_xstate_copy_from_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684623744,
+        "size": 40
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 18,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841ae0",
+          "kind": "NAMED",
+          "target": "copy_from_user",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_ptrace_xstate_copy_to_bridge",
+      "input": {
+        "index": 4637,
+        "name": "arch_ptrace_xstate_copy_to_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 870,
+        "value": 0,
+        "size": 46
+      },
+      "final": {
+        "name": "arch_ptrace_xstate_copy_to_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684623792,
+        "size": 46
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 18,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe841ea0",
+          "kind": "NAMED",
+          "target": "copy_to_user",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "arch_vdso_state_bridge",
+      "input": {
+        "index": 4681,
+        "name": "arch_vdso_state_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 928,
+        "value": 0,
+        "size": 60
+      },
+      "final": {
+        "name": "arch_vdso_state_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684635616,
+        "size": 60
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 11,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f938",
+          "kind": "NAMED",
+          "target": "mckernel_f06_vdso_state",
+          "addend": 0
+        },
+        {
+          "offset": 29,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f928",
+          "kind": "NAMED",
+          "target": "mckernel_f06_vdso_container_size",
+          "addend": 0
+        },
+        {
+          "offset": 47,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f930",
+          "kind": "NAMED",
+          "target": "mckernel_f06_vdso_offset",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "clear_host_pte",
+      "input": {
+        "index": 4745,
+        "name": "clear_host_pte",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1014,
+        "value": 0,
+        "size": 318
+      },
+      "final": {
+        "name": "clear_host_pte",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684648896,
+        "size": 318
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 27,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 40,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 100,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        },
+        {
+          "offset": 180,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9032d0",
+          "kind": "NAMED",
+          "target": "f03_clear_host_pte_binding_v1",
+          "addend": 0
+        },
+        {
+          "offset": 192,
+          "type": 1,
+          "input_addend": 8,
+          "actual_final_address": "0xfffffffffe9032d8",
+          "kind": "NAMED",
+          "target": "f03_clear_host_pte_binding_v1",
+          "addend": 8
+        },
+        {
+          "offset": 205,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe9032e0",
+          "kind": "NAMED",
+          "target": "f03_clear_host_pte_binding_v1",
+          "addend": 16
+        }
+      ]
+    },
+    {
+      "name": "do_munmap",
+      "input": {
+        "index": 4856,
+        "name": "do_munmap",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1128,
+        "value": 0,
+        "size": 459
+      },
+      "final": {
+        "name": "do_munmap",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684680112,
+        "size": 459
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 45,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95f920",
+          "kind": "NAMED",
+          "target": "locals",
+          "addend": 0
+        },
+        {
+          "offset": 70,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9009d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "addend": 0
+        },
+        {
+          "offset": 105,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe95a0f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "addend": 0
+        },
+        {
+          "offset": 147,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9032a0",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_binding_v1",
+          "addend": 0
+        },
+        {
+          "offset": 160,
+          "type": 1,
+          "input_addend": 8,
+          "actual_final_address": "0xfffffffffe9032a8",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_binding_v1",
+          "addend": 8
+        },
+        {
+          "offset": 173,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe9032b0",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_binding_v1",
+          "addend": 16
+        },
+        {
+          "offset": 190,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe9032b8",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_binding_v1",
+          "addend": 24
+        },
+        {
+          "offset": 207,
+          "type": 1,
+          "input_addend": 32,
+          "actual_final_address": "0xfffffffffe9032c0",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_binding_v1",
+          "addend": 32
+        },
+        {
+          "offset": 220,
+          "type": 1,
+          "input_addend": 40,
+          "actual_final_address": "0xfffffffffe9032c8",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_binding_v1",
+          "addend": 40
+        }
+      ]
+    },
+    {
+      "name": "f03_do_munmap_log_v1",
+      "input": {
+        "index": 4919,
+        "name": "f03_do_munmap_log_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1198,
+        "value": 0,
+        "size": 70
+      },
+      "final": {
+        "name": "f03_do_munmap_log_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684699232,
+        "size": 70
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 6,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8fe8d8",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_log_debug_v1",
+          "addend": 24
+        },
+        {
+          "offset": 36,
+          "type": 1,
+          "input_addend": 14470,
+          "actual_final_address": "0xfffffffffe90b70b",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a203078256c783a256c752c206572726f723a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 46,
+          "type": 1,
+          "input_addend": 14496,
+          "actual_final_address": "0xfffffffffe90b725",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "646f5f6d756e6d617000",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 56,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "f03_perf_attr_frequency_v1",
+      "input": {
+        "index": 4940,
+        "name": "f03_perf_attr_frequency_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1241,
+        "value": 0,
+        "size": 15
+      },
+      "final": {
+        "name": "f03_perf_attr_frequency_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684705616,
+        "size": 15
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": []
+    },
+    {
+      "name": "f03_perf_counter_allocate_v1",
+      "input": {
+        "index": 4945,
+        "name": "f03_perf_counter_allocate_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1244,
+        "value": 0,
+        "size": 57
+      },
+      "final": {
+        "name": "f03_perf_counter_allocate_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684705920,
+        "size": 57
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 6,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe9482cc",
+          "kind": "NAMED",
+          "target": "NUM_PERF_COUNTERS",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "f03_perf_event_allocate_v1",
+      "input": {
+        "index": 4947,
+        "name": "f03_perf_event_allocate_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1247,
+        "value": 0,
+        "size": 402
+      },
+      "final": {
+        "name": "f03_perf_event_allocate_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684706048,
+        "size": 402
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 65,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe902ec0",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 0
+        },
+        {
+          "offset": 78,
+          "type": 1,
+          "input_addend": 96,
+          "actual_final_address": "0xfffffffffe902f20",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 96
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "input_addend": 104,
+          "actual_final_address": "0xfffffffffe902f28",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 104
+        },
+        {
+          "offset": 98,
+          "type": 1,
+          "input_addend": 112,
+          "actual_final_address": "0xfffffffffe902f30",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 112
+        },
+        {
+          "offset": 108,
+          "type": 1,
+          "input_addend": 120,
+          "actual_final_address": "0xfffffffffe902f38",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 120
+        },
+        {
+          "offset": 118,
+          "type": 1,
+          "input_addend": 128,
+          "actual_final_address": "0xfffffffffe902f40",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 128
+        },
+        {
+          "offset": 161,
+          "type": 1,
+          "input_addend": 88,
+          "actual_final_address": "0xfffffffffe902f18",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 88
+        },
+        {
+          "offset": 173,
+          "type": 1,
+          "input_addend": 80,
+          "actual_final_address": "0xfffffffffe902f10",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 80
+        },
+        {
+          "offset": 185,
+          "type": 1,
+          "input_addend": 72,
+          "actual_final_address": "0xfffffffffe902f08",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 72
+        },
+        {
+          "offset": 197,
+          "type": 1,
+          "input_addend": 64,
+          "actual_final_address": "0xfffffffffe902f00",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 64
+        },
+        {
+          "offset": 209,
+          "type": 1,
+          "input_addend": 56,
+          "actual_final_address": "0xfffffffffe902ef8",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 56
+        },
+        {
+          "offset": 221,
+          "type": 1,
+          "input_addend": 48,
+          "actual_final_address": "0xfffffffffe902ef0",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 48
+        },
+        {
+          "offset": 233,
+          "type": 1,
+          "input_addend": 40,
+          "actual_final_address": "0xfffffffffe902ee8",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 40
+        },
+        {
+          "offset": 245,
+          "type": 1,
+          "input_addend": 32,
+          "actual_final_address": "0xfffffffffe902ee0",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 32
+        },
+        {
+          "offset": 257,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe902ed8",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 24
+        },
+        {
+          "offset": 269,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902ed0",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 16
+        },
+        {
+          "offset": 281,
+          "type": 1,
+          "input_addend": 8,
+          "actual_final_address": "0xfffffffffe902ec8",
+          "kind": "NAMED",
+          "target": "f03_perf_allocation_binding_v1",
+          "addend": 8
+        },
+        {
+          "offset": 370,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88b0c0",
+          "kind": "NAMED",
+          "target": "perf_event_alloc_body_result",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "f03_perf_mmap_v1",
+      "input": {
+        "index": 4954,
+        "name": "f03_perf_mmap_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1253,
+        "value": 0,
+        "size": 199
+      },
+      "final": {
+        "name": "f03_perf_mmap_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684707136,
+        "size": 199
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 62,
+          "type": 1,
+          "input_addend": 32,
+          "actual_final_address": "0xfffffffffe902fa0",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 32
+        },
+        {
+          "offset": 90,
+          "type": 1,
+          "input_addend": 8,
+          "actual_final_address": "0xfffffffffe902f88",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 8
+        },
+        {
+          "offset": 103,
+          "type": 1,
+          "input_addend": 16,
+          "actual_final_address": "0xfffffffffe902f90",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 16
+        },
+        {
+          "offset": 116,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe902f98",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 24
+        },
+        {
+          "offset": 129,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe902f80",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 0
+        },
+        {
+          "offset": 139,
+          "type": 1,
+          "input_addend": 4,
+          "actual_final_address": "0xfffffffffe902f84",
+          "kind": "NAMED",
+          "target": "f03_perf_mmap_binding_v1",
+          "addend": 4
+        }
+      ]
+    },
+    {
+      "name": "f03_vm_policy_insert_log_v1",
+      "input": {
+        "index": 5032,
+        "name": "f03_vm_policy_insert_log_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1367,
+        "value": 0,
+        "size": 203
+      },
+      "final": {
+        "name": "f03_vm_policy_insert_log_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684726464,
+        "size": 203
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 54,
+          "type": 1,
+          "input_addend": 16354,
+          "actual_final_address": "0xfffffffffe90be67",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25732825702c256c782d256c7820286e6f64656d61736b29256c782028706f6c696379292564293a206f7665726c617020256c782d256c7820286e6f64656d61736b29256c782028706f6c6963792925640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "input_addend": 16337,
+          "actual_final_address": "0xfffffffffe90be56",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "766d5f706f6c6963795f696e7365727400",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 74,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 111,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8fe3f8",
+          "kind": "NAMED",
+          "target": "f03_vm_policy_insert_log_debug_v1",
+          "addend": 24
+        },
+        {
+          "offset": 153,
+          "type": 1,
+          "input_addend": 16292,
+          "actual_final_address": "0xfffffffffe90be29",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a2025702c25703a20256c782d256c7820286e6f64656d61736b29256c782028706f6c6963792925640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 163,
+          "type": 1,
+          "input_addend": 16337,
+          "actual_final_address": "0xfffffffffe90be56",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "766d5f706f6c6963795f696e7365727400",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 173,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "f03_wait_zombie_log_v1",
+      "input": {
+        "index": 5042,
+        "name": "f03_wait_zombie_log_v1",
+        "bind": 1,
+        "type": 2,
+        "shndx": 1383,
+        "value": 0,
+        "size": 134
+      },
+      "final": {
+        "name": "f03_wait_zombie_log_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684727872,
+        "size": 134
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 21,
+          "type": 1,
+          "input_addend": 16773,
+          "actual_final_address": "0xfffffffffe90c00a",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "5741524e494e473a20686f73742077616974706964206661696c65643f0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 31,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 46,
+          "type": 1,
+          "input_addend": 56,
+          "actual_final_address": "0xfffffffffe8fea58",
+          "kind": "NAMED",
+          "target": "f03_wait_zombie_log_debug_v1",
+          "addend": 56
+        },
+        {
+          "offset": 65,
+          "type": 1,
+          "input_addend": 16734,
+          "actual_final_address": "0xfffffffffe90bfe3",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "776169745f7a6f6d6269652c6368696c642d3e7069643d25642c7374617475733d253038780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 90,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8fea38",
+          "kind": "NAMED",
+          "target": "f03_wait_zombie_log_debug_v1",
+          "addend": 24
+        },
+        {
+          "offset": 111,
+          "type": 1,
+          "input_addend": 16693,
+          "actual_final_address": "0xfffffffffe90bfba",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "776169745f7a6f6d6269652c666f756e642050535f5a4f4d4249452070726f636573733a2025640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 121,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "syscall_util_register_desc_log_bridge",
+      "input": {
+        "index": 7196,
+        "name": "syscall_util_register_desc_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4535,
+        "value": 0,
+        "size": 66
+      },
+      "final": {
+        "name": "syscall_util_register_desc_log_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685239152,
+        "size": 66
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 6,
+          "type": 1,
+          "input_addend": 24,
+          "actual_final_address": "0xfffffffffe8ff178",
+          "kind": "NAMED",
+          "target": "f03_util_register_desc_debug_v1",
+          "addend": 24
+        },
+        {
+          "offset": 32,
+          "type": 1,
+          "input_addend": 37289,
+          "actual_final_address": "0xfffffffffe910ffa",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "25733a207469643d25642c7574695f646573633d256c780a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 42,
+          "type": 1,
+          "input_addend": 37314,
+          "actual_final_address": "0xfffffffffe911013",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "7379735f7574696c5f72656769737465725f6465736300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 52,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "util_show_syscall_profile",
+      "input": {
+        "index": 7317,
+        "name": "util_show_syscall_profile",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4699,
+        "value": 0,
+        "size": 193
+      },
+      "final": {
+        "name": "util_show_syscall_profile",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685268432,
+        "size": 193
+      },
+      "unique_Rust_provider": true,
+      "full_final_instruction_and_relocation_bytes": true,
+      "relocations": [
+        {
+          "offset": 13,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe948058",
+          "kind": "NAMED",
+          "target": "uti_desc",
+          "addend": 0
+        },
+        {
+          "offset": 26,
+          "type": 1,
+          "input_addend": 38147,
+          "actual_final_address": "0xfffffffffe911348",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "53797363616c6c20737461747320666f72206f66666c6f61646564207468726561643a0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 36,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe874350",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "addend": 0
+        },
+        {
+          "offset": 51,
+          "type": 1,
+          "input_addend": 38218,
+          "actual_final_address": "0xfffffffffe91138f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6e723d2564202363616c6c65643d256c640a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "input_addend": 38184,
+          "actual_final_address": "0xfffffffffe91136d",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "53797363616c6c20737461747320666f72206f7468657220746872656164733a0a00",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 119,
+          "type": 1,
+          "input_addend": 38218,
+          "actual_final_address": "0xfffffffffe91138f",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "6e723d2564202363616c6c65643d256c640a00",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    }
+  ],
+  "new_storage_proofs": [
+    {
+      "name": "f03_util_register_desc_debug_v1",
+      "input": {
+        "index": 7107,
+        "name": "f03_util_register_desc_debug_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5724,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "f03_util_register_desc_debug_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685430624,
+        "size": 32
+      },
+      "unique_Rust_data_owner": true,
+      "full_final_bytes_and_relocations": true,
+      "relocations": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 9753,
+          "actual_final_address": "0xfffffffffe90a4e3",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 16254,
+          "actual_final_address": "0xfffffffffe90be03",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "73797363616c6c5f7574696c5f72656769737465725f646573635f6c6f675f62726964676500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "mckernel_f06_arch_prctl_debug",
+      "input": {
+        "index": 4604,
+        "name": "mckernel_f06_arch_prctl_debug",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5756,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "mckernel_f06_arch_prctl_debug",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685430656,
+        "size": 32
+      },
+      "unique_Rust_data_owner": true,
+      "full_final_bytes_and_relocations": true,
+      "relocations": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 9530,
+          "actual_final_address": "0xfffffffffe90a404",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 19037,
+          "actual_final_address": "0xfffffffffe90c8e2",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "617263685f707263746c5f6c6f675f62726964676500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "mckernel_f06_vdso_container_size",
+      "input": {
+        "index": 4581,
+        "name": "mckernel_f06_vdso_container_size",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5758,
+        "value": 0,
+        "size": 8
+      },
+      "final": {
+        "name": "mckernel_f06_vdso_container_size",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 261,
+        "value": 18446744073685825832,
+        "size": 8
+      },
+      "unique_Rust_data_owner": true,
+      "full_final_bytes_and_relocations": true,
+      "relocations": []
+    },
+    {
+      "name": "mckernel_f06_vdso_map_debug",
+      "input": {
+        "index": 4584,
+        "name": "mckernel_f06_vdso_map_debug",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5759,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "mckernel_f06_vdso_map_debug",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685430688,
+        "size": 32
+      },
+      "unique_Rust_data_owner": true,
+      "full_final_bytes_and_relocations": true,
+      "relocations": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 9530,
+          "actual_final_address": "0xfffffffffe90a404",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+          "canonical_FILE_context_only": false
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 19059,
+          "actual_final_address": "0xfffffffffe90c8f8",
+          "kind": "EXACT_INPUT_NUL_STRING",
+          "literal_hex": "617263685f7664736f5f6d61705f6c6f675f62726964676500",
+          "canonical_FILE_context_only": false
+        }
+      ]
+    },
+    {
+      "name": "mckernel_f06_vdso_offset",
+      "input": {
+        "index": 4583,
+        "name": "mckernel_f06_vdso_offset",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5761,
+        "value": 0,
+        "size": 8
+      },
+      "final": {
+        "name": "mckernel_f06_vdso_offset",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 261,
+        "value": 18446744073685825840,
+        "size": 8
+      },
+      "unique_Rust_data_owner": true,
+      "full_final_bytes_and_relocations": true,
+      "relocations": []
+    },
+    {
+      "name": "mckernel_f06_vdso_state",
+      "input": {
+        "index": 4582,
+        "name": "mckernel_f06_vdso_state",
+        "bind": 1,
+        "type": 1,
+        "shndx": 5762,
+        "value": 0,
+        "size": 88
+      },
+      "final": {
+        "name": "mckernel_f06_vdso_state",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 261,
+        "value": 18446744073685825848,
+        "size": 88
+      },
+      "unique_Rust_data_owner": true,
+      "full_final_bytes_and_relocations": true,
+      "relocations": []
+    }
+  ],
+  "C_readonly_binding_proofs": [
+    {
+      "name": "f03_perf_allocation_binding_v1",
+      "role": "generic",
+      "input": {
+        "index": 395,
+        "name": "f03_perf_allocation_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 1408,
+        "size": 136
+      },
+      "final": {
+        "name": "f03_perf_allocation_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685446336,
+        "size": 136
+      },
+      "actual_input_hex": "02000000000000000000000000000000030000000000000004000000000000000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "relocations": [
+        {
+          "offset": 40,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88b6c0",
+          "kind": "NAMED",
+          "target": "perf_event_alloc_kmalloc_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe88b490",
+          "kind": "NAMED",
+          "target": "perf_event_alloc_free_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 56,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe852c10",
+          "kind": "NAMED",
+          "target": "f03_sync_child_count_set_v2",
+          "addend": 0
+        },
+        {
+          "offset": 64,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869670",
+          "kind": "NAMED",
+          "target": "ihk_mc_hw_event_map",
+          "addend": 0
+        },
+        {
+          "offset": 72,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8695b0",
+          "kind": "NAMED",
+          "target": "ihk_mc_hw_cache_event_map",
+          "addend": 0
+        },
+        {
+          "offset": 80,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe869610",
+          "kind": "NAMED",
+          "target": "ihk_mc_hw_cache_extra_reg_map",
+          "addend": 0
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8644d0",
+          "kind": "NAMED",
+          "target": "ihk_mc_raw_event_map",
+          "addend": 0
+        },
+        {
+          "offset": 96,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe82e150",
+          "kind": "NAMED",
+          "target": "ihk_mc_validate_event",
+          "addend": 0
+        },
+        {
+          "offset": 104,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe868d90",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_extra_reg_id",
+          "addend": 0
+        },
+        {
+          "offset": 112,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe868e10",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_extra_reg_msr",
+          "addend": 0
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe868df0",
+          "kind": "NAMED",
+          "target": "ihk_mc_get_extra_reg_idx",
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8644e0",
+          "kind": "NAMED",
+          "target": "perf_event_alloc_hw_init_bridge",
+          "addend": 0
+        }
+      ],
+      "full_final_bytes_and_relocations": true
+    },
+    {
+      "name": "f03_perf_mmap_binding_v1",
+      "role": "generic",
+      "input": {
+        "index": 414,
+        "name": "f03_perf_mmap_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 1600,
+        "size": 40
+      },
+      "final": {
+        "name": "f03_perf_mmap_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685446528,
+        "size": 40
+      },
+      "actual_input_hex": "20000000020000000004000000000000280000000000000004000000000000000000000000000000",
+      "relocations": [
+        {
+          "offset": 32,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe801170",
+          "kind": "NAMED",
+          "target": "do_mmap",
+          "addend": 0
+        }
+      ],
+      "full_final_bytes_and_relocations": true
+    },
+    {
+      "name": "f03_do_munmap_binding_v1",
+      "role": "generic",
+      "input": {
+        "index": 451,
+        "name": "f03_do_munmap_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 2400,
+        "size": 48
+      },
+      "final": {
+        "name": "f03_do_munmap_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685447328,
+        "size": 48
+      },
+      "actual_input_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "relocations": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe83d1b0",
+          "kind": "NAMED",
+          "target": "f03_unmap_begin",
+          "addend": 0
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe852fa0",
+          "kind": "NAMED",
+          "target": "f03_unmap_remove",
+          "addend": 0
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe8480a0",
+          "kind": "NAMED",
+          "target": "do_munmap_clear_host_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 24,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe881be0",
+          "kind": "NAMED",
+          "target": "mprotect_set_host_vma_bridge",
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe852ef0",
+          "kind": "NAMED",
+          "target": "f03_unmap_finish",
+          "addend": 0
+        },
+        {
+          "offset": 40,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe84c860",
+          "kind": "NAMED",
+          "target": "f03_do_munmap_log_v1",
+          "addend": 0
+        }
+      ],
+      "full_final_bytes_and_relocations": true
+    },
+    {
+      "name": "f03_clear_host_pte_binding_v1",
+      "role": "generic",
+      "input": {
+        "index": 458,
+        "name": "f03_clear_host_pte_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 2448,
+        "size": 24
+      },
+      "final": {
+        "name": "f03_clear_host_pte_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685447376,
+        "size": 24
+      },
+      "actual_input_hex": "0b0000000000000000000000000000000000000000000000",
+      "relocations": [
+        {
+          "offset": 8,
+          "type": 1,
+          "input_addend": 9616,
+          "actual_final_address": "0xfffffffffe803590",
+          "kind": "EXACT_INPUT_SECTION_OWNER",
+          "owners": [
+            "syscall_do_syscall3_bridge"
+          ],
+          "delta": 0
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe840570",
+          "kind": "NAMED",
+          "target": "clear_host_pte_log_bridge",
+          "addend": 0
+        }
+      ],
+      "full_final_bytes_and_relocations": true
+    },
+    {
+      "name": "f03_syscall_dispatch_binding_v1",
+      "role": "generic",
+      "input": {
+        "index": 476,
+        "name": "f03_syscall_dispatch_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "shndx": 8,
+        "value": 2576,
+        "size": 16
+      },
+      "final": {
+        "name": "f03_syscall_dispatch_binding_v1",
+        "bind": 1,
+        "type": 1,
+        "other": 0,
+        "shndx": 37,
+        "value": 18446744073685447504,
+        "size": 16
+      },
+      "actual_input_hex": "0000000000000000b90f000000000000",
+      "relocations": [
+        {
+          "offset": 0,
+          "type": 1,
+          "input_addend": 0,
+          "actual_final_address": "0xfffffffffe913020",
+          "kind": "NAMED",
+          "target": "f03_syscall_handler_table_v1",
+          "addend": 0
+        }
+      ],
+      "full_final_bytes_and_relocations": true
+    }
+  ],
+  "inherited_function_proofs": [
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers19xpmem_detach_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers22xpmem_vm_munmap_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers23xpmem_release_ap_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers23xpmem_remove_seg_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug24dynamic_debug_sysfs_show",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug25dynamic_debug_sysfs_store",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust7gencore27gencore_lookup_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "__runq_add_thread",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "__sched_wakeup_thread",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "add_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_clone_reader_lock_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_clone_reader_unlock_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_copy_from_user_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_copy_to_user_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_do_mmap_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_do_shmget_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_mmap_error_flags_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_mmap_ignored_flags_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_mmap_supported_flags_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_prctl_get_register_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_prctl_set_register_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_ptrace_alloc_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_ptrace_find_thread_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_ptrace_lookup_user_context_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_ptrace_thread_unlock_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_rt_sigreturn_alloc_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_rt_sigreturn_check_signal_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_rt_sigreturn_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_rt_sigreturn_set_signal_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_rt_sigreturn_syscall_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_syscall_forward_context_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_vdso_add_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "arch_vdso_set_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "atomic_cmpxchg_ulong",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "change_prot_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "copy_user_pte",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "copy_user_ranges",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "create_address_space",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "create_thread",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "destroy_thread",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "detach_address_space",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "do_process_vm_read_writev",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "exit_do_exit_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "extend_process_region",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "extend_up_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_do_exit_supported_v2",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_do_mmap_smaller_page_v2",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_exec_report_signal_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_execveat_filename_admission_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_execveat_finish_switch_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_execveat_install_user_context_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_exit_notify_wake",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_mprotect_lookup_bridge_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_munmap_all_current_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_perf_counter_attr_flags_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_perf_read_attr_flags_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_prlimit_forward_request_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_ptrace_io_find",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_ptrace_io_unlock",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_ptrace_setsiginfo_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_search_free_space_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_terminate_host_refcount_set_v1",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_unmap_begin",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_unmap_finish",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_unmap_remove",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_wait_release_process",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "f03_wait_release_thread",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "flush_process_memory",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "gencore",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "init_process_stack",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "join_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "lookup_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "mckernel_allocate_aligned_pages_node",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "mem_lookup_memory_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "memlock_lookup_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "memset_smp_handler",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "msync_lookup_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "new_resource_set",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "next_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "obtain_clone_cpuid",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "page_fault_handler",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "page_fault_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_counter_extra_set_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_counter_init_raw_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_counter_mask_check_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_counter_start_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_counter_stop_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_event_alloc_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_event_alloc_hw_init_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_event_alloc_kmalloc_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_event_set_period_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "perf_event_update_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "previous_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "print_region",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "proc_init",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_add_range_alloc_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_add_range_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_add_range_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_add_range_memclear_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_alloc_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_change_prot_public_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_thread_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_range_lookup_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_create_cpu_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_create_thread_alloc_pages_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_create_thread_release_address_space_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_extend_region_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_flush_memory_debug_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_free_thread_pages_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_free_vm_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_idle_entry",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_alloc_aligned_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_free_pages_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_join_range_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_mckfd_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_memory_range_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_memset_smp_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_memset_smp_memset_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_optional_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_anon_allocate_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_cow_allocate_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_entry_log_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_install_finish_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_page_state_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_prepare_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_pte_state_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_policy_free_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_ptrace_traceme_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_range_kfree_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_range_public_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_release_address_space_action_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_release_sigcommon_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remove_range_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remove_region_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_do_migrate_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_migrate_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_runq_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_rusage_debug_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_timer_init_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_split_range_alloc_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_split_range_public_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_traceme",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_clear_saved_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_pending_take_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_set_single_step_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "ptrace_wakeup_trace_syscall_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "release_address_space",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "release_process",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "release_process_checked",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "release_process_vm",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "release_process_vm_checked",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "release_sigcommon",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "remap_one_page",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "remove_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "remove_process_region",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "reset_cputime",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sched_request_migrate",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sched_schedule_prepare_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "schedule",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "set_cputime",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "set_timer",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "spin_sleep_or_schedule",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "split_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sync_child_event",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sync_one_page",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sys_mincore",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sys_msync",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "sys_shmdt",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "syscall_atomic64_read_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "syscall_copy_from_user_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "syscall_do_prlimit64_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "syscall_get_mempolicy_lookup_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "syscall_mbind_lookup_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "timer_set_timer_body_result",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "unhandled_page_fault",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "vm_range_insert",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "vm_range_insert_dump_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "vm_range_insert_log_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "xpmem_ensure_valid_page_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "xpmem_lookup_range_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "xpmem_pin_page_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "xpmem_remove_process_memory_range",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "xpmem_vaddr_to_pte_bridge",
+      "all_nonrelocated_and_target_bytes_equal116": true,
+      "full_current_final_bytes": true
+    }
+  ],
+  "inherited_data_proofs": [
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_config",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_ranges_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_ranges_ok_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_sigcommon_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_sigshared_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_clone_vm_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_entry_config",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_pte_allocated_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_pte_copied_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_pte_found_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_pte_installed_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_pte_size_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_copy_pte_zeroed_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_create_cpu_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_dump_tree_enabled",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_extend_region_alloc_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_extend_region_exists_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_extend_region_success_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_free_range_body_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_idle_offsets",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_idle_values",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_log_ap_user_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_log_size_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_init_stack_user_category",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_memset_smp_fast_word_pattern",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_anon_clear_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_anon_clear_profile_event",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_anon_map_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_cow_copy_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_cow_rss_add_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_cow_rss_sub_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_entry_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_out_return_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_out_rss_sub_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_out_stray_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_page_state_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_prepare_bounds_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_profile_path_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_pte_state_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_set_pte_attr_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_set_pte_rss_add_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_page_fault_set_pte_rss_skip_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_ptrace_traceme_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remaining_memory_log_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remaining_range_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remaining_range_scheduler_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remap_free_file",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remap_free_line",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remap_one_page_entry_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remap_one_page_exit_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_remap_one_page_rss_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_migrate_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_runqueue_offsets",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_schedule_exit_debug_input",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_schedule_switch_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sync_one_page_entry_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_sync_one_page_exit_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_timer_runtime_offsets",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    },
+    {
+      "name": "process_vm_range_insert_debug",
+      "all_data_bytes_and_targets_equal116": true,
+      "full_current_final_bytes": true
+    }
+  ],
+  "failures": [
+    {
+      "group": "new_provider",
+      "name": "arch_vdso_map_log_bridge",
+      "error": "AssertionError(('arch_vdso_map_log_bridge', 9, 'unresolved anonymous target', '.lrodata.arch_vdso_map_log_bridge', 0))"
+    },
+    {
+      "group": "new_provider",
+      "name": "arch_vdso_setup_log_bridge",
+      "error": "AssertionError(('arch_vdso_setup_log_bridge', 13, 'unresolved anonymous target', '.lrodata.arch_vdso_setup_log_bridge', 0))"
+    },
+    {
+      "group": "new_provider",
+      "name": "f03_wait_log_v1",
+      "error": "AssertionError(('f03_wait_log_v1', 17, 'unresolved anonymous target', '.lrodata.f03_wait_log_v1', 0))"
+    },
+    {
+      "group": "new_provider",
+      "name": "vdso_get_vdso_info",
+      "error": "AssertionError()"
+    }
+  ],
+  "original389": {
+    "count": 389,
+    "complete_multiset_equal": true,
+    "oracle": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F03-cumulative-next-source-1/CURRENT116-REGISTRY-REFERENCE.json",
+      "bytes": 84536,
+      "sha256": "af46e443770080fa9712c196233517bf7a9a8363d3d82659bd2ec4964d2402a2"
+    }
+  },
+  "warnings": {
+    "0": {
+      "actual_stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+        "bytes": 56930,
+        "sha256": "ac57fe7469b340b09bdf4d28e050e66663d55fe65072ec1709099abd7f754896"
+      },
+      "prior_stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+        "bytes": 56443,
+        "sha256": "36f855e1b3d830098834dcefdf22184034377b8462f0ada1c1f5c3ae7c872011"
+      },
+      "messages_added": [
+        "unused imports: `CLong` and `SizeT`",
+        "unnecessary `unsafe` block",
+        "145 warnings emitted"
+      ],
+      "messages_removed": [
+        "143 warnings emitted"
+      ],
+      "raw_equal": false
+    },
+    "1": {
+      "actual_stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+        "bytes": 1881,
+        "sha256": "fa6cd905512aa29b4340f2bb94cb48de9cba3e48f70155237a8ba8980bbfec33"
+      },
+      "prior_stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+        "bytes": 1849,
+        "sha256": "ae7a6baa568598ea85cd81355f04c70f2dadb26b2482db32d1850463a2f9e7ec"
+      },
+      "messages_added": [],
+      "messages_removed": [],
+      "raw_equal": false
+    },
+    "2": {
+      "actual_stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/evidence/02.stderr",
+        "bytes": 75,
+        "sha256": "12809099aa45e66d7b33bf89517b78afdca620d7fab03922318e6758282b2f69"
+      },
+      "prior_stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT116-F03SEVEN-SHM-BUILD-ADMISSION-1/OUTPUT/work/evidence/03.stderr",
+        "bytes": 75,
+        "sha256": "12809099aa45e66d7b33bf89517b78afdca620d7fab03922318e6758282b2f69"
+      },
+      "messages_added": [],
+      "messages_removed": [],
+      "raw_equal": true
+    }
+  },
+  "imports_added": [
+    "f03_clear_host_pte_binding_v1",
+    "f03_do_munmap_binding_v1",
+    "f03_do_munmap_log_debug_v1",
+    "f03_perf_allocation_binding_v1",
+    "f03_perf_mmap_binding_v1",
+    "f03_vm_policy_insert_log_debug_v1",
+    "f03_wait_log_debug_v1",
+    "f03_wait_zombie_log_debug_v1"
+  ],
+  "imports_removed": [
+    "arch_native_signal_restore_fp_bridge",
+    "arch_prctl_log_bridge",
+    "arch_ptrace_read_gpregs_bridge",
+    "arch_ptrace_read_user_bridge",
+    "arch_ptrace_write_gpregs_bridge",
+    "arch_ptrace_write_user_bridge",
+    "arch_ptrace_xstate_copy_from_bridge",
+    "arch_ptrace_xstate_copy_to_bridge",
+    "arch_vdso_map_log_bridge",
+    "arch_vdso_setup_log_bridge",
+    "arch_vdso_state_bridge",
+    "clear_host_pte",
+    "do_munmap",
+    "exit_group_current_pid_bridge",
+    "exit_group_log_bridge",
+    "exit_group_terminate_bridge",
+    "syscall_policy_forward_context_bridge",
+    "syscall_util_indicate_clone_disabled_bridge",
+    "syscall_util_register_desc_log_bridge"
+  ],
+  "final_GLOBAL_undefined": 0,
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "wholefile_acceptance": false,
+  "runtime_authority": null,
+  "compiler_HOST_Docker_native_cleanup_calls": 0
+}

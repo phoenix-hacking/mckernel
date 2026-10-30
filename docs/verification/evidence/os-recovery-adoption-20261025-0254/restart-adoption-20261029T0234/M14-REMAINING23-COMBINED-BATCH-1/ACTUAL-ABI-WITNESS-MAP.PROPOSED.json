@@ -1,0 +1,353 @@
+{
+  "status": "SOURCE_PREPARED_ACTUAL_COMPILATION_AND_ELF_COMPARE_UNRUN",
+  "witnesses": [
+    {
+      "name": "ARCH5_C",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/postimage/arch/x86_64/kernel/include/arch5-abi-witness.inc",
+        "bytes": 5212,
+        "sha256": "9d5e3bc096be5c69d4631d544ae760ccada6e1f00b8a2f71135784e79be2dec9"
+      },
+      "selected_inclusion": "append after actual local sigsp definition and actual selected arch syscall headers; MCKERNEL_ARCH5_ABI_WITNESS=ON only in separate probe object",
+      "C_array": "arch5_c_abi_geometry",
+      "Rust_array": "arch5_rust_abi_geometry",
+      "ordered_slots": 61,
+      "keymap": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/ABI-GEOMETRY-KEYS.json",
+        "bytes": 7752,
+        "sha256": "8d86757df54bbb1382b13449aca42284257efe053d5add9153f08d720f1072df"
+      },
+      "production_link": false
+    },
+    {
+      "name": "request_packet_witness",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/REQUEST-PACKET-ABI-WITNESS.c.inc",
+        "bytes": 1623,
+        "sha256": "1c9b170a5a038aac5b71fcabd99ad95e578156f517650c26c630e3df36c955ef"
+      },
+      "selected_inclusion": "actual selected generic syscall TU and real headers, isolated probe; exact selectors recorded, no HOST struct substitute",
+      "production_link": false,
+      "execute": false
+    },
+    {
+      "name": "do_abi_witness",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-syscall-supported-orchestration-source-1/REAL-HEADER-ABI-AND-ALLOCATED-CONSUMER.c.inc",
+        "bytes": 1949,
+        "sha256": "00be811f66a9894a0dbde6ed78c8f40e2d0fa57f72da79dbeb236d5d2a80561e"
+      },
+      "selected_inclusion": "actual selected generic syscall TU and real headers, isolated probe; exact selectors recorded, no HOST struct substitute",
+      "production_link": false,
+      "execute": false
+    },
+    {
+      "name": "util_abi_witness",
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-util-thread-whole-owned-source-1/REAL-HEADER-ABI-WITNESS.c.inc",
+        "bytes": 1539,
+        "sha256": "779e770db6a2404f1580bb685755fdd29607909d3264cbb13ea2d1ddb21deecf"
+      },
+      "selected_inclusion": "actual selected generic syscall TU and real headers, isolated probe; exact selectors recorded, no HOST struct substitute",
+      "production_link": false,
+      "execute": false
+    },
+    {
+      "name": "paired_consumer",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/whole-abi-and-callers-2/REAL-HEADER-PAIRED-ABI-CONSUMER.c.inc",
+        "bytes": 1975,
+        "sha256": "02b6b8132426ed3f8a59cfbc3ba8fe6de319e52d494e50e35ef3a41d2d3ad5c5"
+      },
+      "selected_inclusion": "actual selected generic syscall TU and real headers, isolated probe; exact selectors recorded, no HOST struct substitute",
+      "production_link": false,
+      "execute": false
+    },
+    {
+      "name": "perf_actual_compile_time_asserts",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/SOURCE-CHECKS.json",
+        "bytes": 1988,
+        "sha256": "fc7bdb84e545c0a55c5ab0f0c74872ae6ad4c04b8aed79e8a32db93ceb301c09"
+      },
+      "selected_inclusion": "real mc_perf_event.h, request and binding headers in actual generic C TU; Rust reprC assertions exact source",
+      "production_link": "assertions only: no allocated C vector permitted"
+    }
+  ],
+  "method": "Compare ordered u64 arrays from isolated genuine C/Rust probe objects with exact actual SDK/selected flags, genuine object SHA and key order; do not call witness functions or execute HOST substitute",
+  "C_probe_objects_in_production_rawlink": [],
+  "production_witness_option": "OFF",
+  "actual_result": null,
+  "interface_obligations": [
+    {
+      "symbol": "do_syscall",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/SOURCE-READY.json",
+        "bytes": 2728,
+        "sha256": "8b9ec87390f8082a755410451c1b9b6e295ac7da6fb8d2877a506195d3e58602"
+      },
+      "state": "SOURCE_COMPOSED_WHOLE_OFF",
+      "exact_unmet": "all direct caller initialized wire fields incl clone/coredump/init; thread/endpoint/response lifetime; actual29 geometry and C metadata ownership",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "util_thread",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/SOURCE-READY.json",
+        "bytes": 2728,
+        "sha256": "8b9ec87390f8082a755410451c1b9b6e295ac7da6fb8d2877a506195d3e58602"
+      },
+      "state": "SOURCE_COMPOSED_WHOLE_OFF",
+      "exact_unmet": "actual23 geometry and partial host-info initialization/ownership/lifetime; args5 Root intended zero alone insufficient",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "wait_host_wait4_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/SOURCE-READY.json",
+        "bytes": 2728,
+        "sha256": "8b9ec87390f8082a755410451c1b9b6e295ac7da6fb8d2877a506195d3e58602"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "natural request72/align8 exact ca85 six slots; actual29 packet ABI, callgraph and synchronous lifetime remain",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "syscall_do_syscall3_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/SOURCE-READY.json",
+        "bytes": 2728,
+        "sha256": "8b9ec87390f8082a755410451c1b9b6e295ac7da6fb8d2877a506195d3e58602"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "same declared arity natural request; no all-caller proof",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "syscall_policy_do_syscall2_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/SOURCE-READY.json",
+        "bytes": 2728,
+        "sha256": "8b9ec87390f8082a755410451c1b9b6e295ac7da6fb8d2877a506195d3e58602"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "same declared arity natural request; no all-caller proof",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "syscall_policy_do_syscall3_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-B-1/SOURCE-READY.json",
+        "bytes": 2728,
+        "sha256": "8b9ec87390f8082a755410451c1b9b6e295ac7da6fb8d2877a506195d3e58602"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "same declared arity natural request; no all-caller proof",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "syscall_execveat_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-A-1/bridge-selection-first20.patch",
+        "bytes": 1120,
+        "sha256": "92080c09f79cc09cd62af782a89ef9be89bea006b3936353d34e611c0d7283a5"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "wrapper forwards C do_execveat; line-family actualCPP feedback required; no ACK or whole exec lifetime claim",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "do_execveat",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-A-1/defined-callers-correction-1/do_execveat.defined-arity.PRIVATE.rs.inc",
+        "bytes": 11000,
+        "sha256": "a0b05dee9be70766f1a58634bfbb7e1b6fbc6febb3e44eaa32a75479686546b3"
+      },
+      "state": "WHOLE_SOURCE_FRAGMENT_COMPOSED_OFF",
+      "exact_unmet": "approved phase1six/phase2three fields; selected metadata/descriptor/transport/ACK/full lifetime and actualABI29 open",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "ptrace_detach_do_kill_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/SOURCE-PREPARATION.json",
+        "bytes": 3935,
+        "sha256": "0bc7aeaed8f9f3b9ba31a7c59e3968954f3aa28d91693dfdae1ebaf84c48edc2"
+      },
+      "state": "COMPILE_ONLY_EXISTING_LEAF_PAIR",
+      "exact_unmet": "existing do_kill provider pointer/borrow lifetime; actual selected ABI review",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "ptrace_detach_kfree_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/SOURCE-PREPARATION.json",
+        "bytes": 3935,
+        "sha256": "0bc7aeaed8f9f3b9ba31a7c59e3968954f3aa28d91693dfdae1ebaf84c48edc2"
+      },
+      "state": "OFF_EXISTING_RUST_METADATA_REUSED",
+      "exact_unmet": "actual profile/source origin and ownership proof required; no activation",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "interrupt_syscall",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/SOURCE-PREPARATION.json",
+        "bytes": 3367,
+        "sha256": "13e84c079a127810cf08f022fbe913f9c5ea31d9f6b2f63abf074ce0d1331220"
+      },
+      "state": "COMPILE_ONLY_APPROVED_DEFINED_PROFILE",
+      "exact_unmet": "Root approved three arguments plus unusedzero fields; original lifetime/transport/tuple matching remains",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "ptrace_wakeup_log_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/defined-callers-correction-1/SOURCE-PREPARATION.json",
+        "bytes": 3367,
+        "sha256": "13e84c079a127810cf08f022fbe913f9c5ea31d9f6b2f63abf074ce0d1331220"
+      },
+      "state": "COMPILE_ONLY_APPROVED_DEFINED_PROFILE",
+      "exact_unmet": "Root approved low32 unsignedhex diagnostic; exact original389 profile and logger context remains",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "terminate",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/SOURCE-PREPARATION.json",
+        "bytes": 3935,
+        "sha256": "0bc7aeaed8f9f3b9ba31a7c59e3968954f3aa28d91693dfdae1ebaf84c48edc2"
+      },
+      "state": "WHOLE_SOURCE_LEAF_OFF",
+      "exact_unmet": "original389 source profile/ownership/lifetime and actualC/Rust ABI; no host ACK inferred",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "terminate_mcexec",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/SOURCE-PREPARATION.json",
+        "bytes": 3935,
+        "sha256": "0bc7aeaed8f9f3b9ba31a7c59e3968954f3aa28d91693dfdae1ebaf84c48edc2"
+      },
+      "state": "WHOLE_SOURCE_LEAF_OFF",
+      "exact_unmet": "actual ABI/atomic/lifetime+metadata ownership",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "terminate_host",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/SOURCE-PREPARATION.json",
+        "bytes": 3935,
+        "sha256": "0bc7aeaed8f9f3b9ba31a7c59e3968954f3aa28d91693dfdae1ebaf84c48edc2"
+      },
+      "state": "WHOLE_SOURCE_LEAF_OFF",
+      "exact_unmet": "actual ABI/refcount/threadprocess lifetime",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "sys_perf_event_open",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/SOURCE-READY.json",
+        "bytes": 4982,
+        "sha256": "2978f40ade182c0e5ebfec209df6a7df9db4c38197771515f66a7bc300979372"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "real perf104/request72/binding352 compile asserts; provider/ioctl/borrow lifetime remains",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "do_setresuid",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/SOURCE-READY.json",
+        "bytes": 5504,
+        "sha256": "6c83b3456106d26a5ceda3969c21f20c663a57ac6fe308a04ad45734869b13aa"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "original ignored ioctl failure does not prove initialized output; preserve intended original semantics and host contract",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "do_setresgid",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/SOURCE-READY.json",
+        "bytes": 5504,
+        "sha256": "6c83b3456106d26a5ceda3969c21f20c663a57ac6fe308a04ad45734869b13aa"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "same ignored ioctl output/lifetime limitation",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "syscall_forward_rt_sigprocmask_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/SOURCE-READY.json",
+        "bytes": 4982,
+        "sha256": "2978f40ade182c0e5ebfec209df6a7df9db4c38197771515f66a7bc300979372"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "approved six scratch registers and exact meaningful volatile order; actual wire/context lifetime remains",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "syscall_forward_sigaction_update_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/SOURCE-READY.json",
+        "bytes": 4982,
+        "sha256": "2978f40ade182c0e5ebfec209df6a7df9db4c38197771515f66a7bc300979372"
+      },
+      "state": "COMPILE_ONLY_EXPERIMENTAL_COHORT",
+      "exact_unmet": "approved six scratch registers and ordered action store/read; actual wire/context lifetime remains",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "arch_rt_sigreturn_xrstor_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/SOURCE-READY.json",
+        "bytes": 6625,
+        "sha256": "f7f48fba2887ca70be291149996e38f9824189d1b66a52040344c91576fd6f0a"
+      },
+      "state": "61_SLOT_MATCHED_REAL_HEADER_PROBE_PROPOSED",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "arch_native_signal_bad_frame_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/SOURCE-READY.json",
+        "bytes": 6625,
+        "sha256": "f7f48fba2887ca70be291149996e38f9824189d1b66a52040344c91576fd6f0a"
+      },
+      "state": "61_SLOT_MATCHED_REAL_HEADER_PROBE_PROPOSED",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "arch_rt_sigreturn_context_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/SOURCE-READY.json",
+        "bytes": 6625,
+        "sha256": "f7f48fba2887ca70be291149996e38f9824189d1b66a52040344c91576fd6f0a"
+      },
+      "state": "61_SLOT_MATCHED_REAL_HEADER_PROBE_PROPOSED",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "do_signal",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/SOURCE-READY.json",
+        "bytes": 6625,
+        "sha256": "f7f48fba2887ca70be291149996e38f9824189d1b66a52040344c91576fd6f0a"
+      },
+      "state": "61_SLOT_MATCHED_REAL_HEADER_PROBE_PROPOSED",
+      "actual_ABI_result": null
+    },
+    {
+      "symbol": "arch_ptrace_regset_log_bridge",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARCH5-CUTOVER-1/SOURCE-READY.json",
+        "bytes": 6625,
+        "sha256": "f7f48fba2887ca70be291149996e38f9824189d1b66a52040344c91576fd6f0a"
+      },
+      "state": "61_SLOT_MATCHED_REAL_HEADER_PROBE_PROPOSED",
+      "actual_ABI_result": null
+    }
+  ]
+}

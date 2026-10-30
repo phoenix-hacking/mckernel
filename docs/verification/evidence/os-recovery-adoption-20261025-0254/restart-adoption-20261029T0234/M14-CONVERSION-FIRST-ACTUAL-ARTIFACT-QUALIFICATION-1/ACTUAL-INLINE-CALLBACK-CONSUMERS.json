@@ -1,0 +1,769 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CONVERSION-FIRST-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18483968,
+    "sha256": "52f739f3aeaba14db37bff8d466ab377fddaaccce40a4006f0219917a10a4ef9"
+  },
+  "selected_function_DIEs": [
+    {
+      "offset": 659771,
+      "tag": "DW_TAG_subprogram",
+      "parent": 659672,
+      "name": "(indirect string, offset: 0x79201): exit_group_log_bridge",
+      "decl_file": "30",
+      "decl_line": "29"
+    },
+    {
+      "offset": 672328,
+      "tag": "DW_TAG_subprogram",
+      "parent": 672217,
+      "low_pc": "0x0",
+      "high_pc": "0x7f",
+      "name": "(indirect string, offset: 0x8d412): ptrace_report_clone_log_bridge",
+      "decl_file": "32",
+      "decl_line": "48"
+    },
+    {
+      "offset": 775359,
+      "tag": "DW_TAG_subprogram",
+      "parent": 775354,
+      "low_pc": "0x0",
+      "high_pc": "0x20",
+      "name": "(indirect string, offset: 0x89ae5): clear_host_pte_log_bridge",
+      "decl_file": "147",
+      "decl_line": "8"
+    },
+    {
+      "offset": 785626,
+      "tag": "DW_TAG_subprogram",
+      "parent": 785621,
+      "low_pc": "0x0",
+      "high_pc": "0x11",
+      "name": "(indirect string, offset: 0x89eca): do_munmap_clear_host_bridge",
+      "decl_file": "148",
+      "decl_line": "25",
+      "type": 3109671
+    },
+    {
+      "offset": 810437,
+      "tag": "DW_TAG_subprogram",
+      "parent": 810071,
+      "name": "(indirect string, offset: 0x791e3): exit_group_current_pid_bridge",
+      "decl_file": "150",
+      "decl_line": "23",
+      "type": 2860401
+    },
+    {
+      "offset": 810566,
+      "tag": "DW_TAG_subprogram",
+      "parent": 810527,
+      "name": "(indirect string, offset: 0x7922e): exit_group_terminate_bridge",
+      "decl_file": "151",
+      "decl_line": "16"
+    },
+    {
+      "offset": 981003,
+      "tag": "DW_TAG_subprogram",
+      "parent": 980998,
+      "low_pc": "0x0",
+      "high_pc": "0x74",
+      "name": "(indirect string, offset: 0x8c26b): mprotect_set_host_vma_bridge",
+      "decl_file": "159",
+      "decl_line": "33",
+      "type": 2860401
+    },
+    {
+      "offset": 1016551,
+      "tag": "DW_TAG_subprogram",
+      "parent": 1016546,
+      "low_pc": "0x0",
+      "high_pc": "0x11",
+      "name": "(indirect string, offset: 0x8c6c7): perf_event_open_do_syscall_bridge",
+      "decl_file": "161",
+      "decl_line": "10",
+      "type": 3109671
+    },
+    {
+      "offset": 1047340,
+      "tag": "DW_TAG_subprogram",
+      "parent": 1047335,
+      "low_pc": "0x0",
+      "high_pc": "0x13",
+      "name": "(indirect string, offset: 0x8d3d6): ptrace_detach_wakeup_bridge",
+      "decl_file": "167",
+      "decl_line": "10"
+    },
+    {
+      "offset": 1130657,
+      "tag": "DW_TAG_subprogram",
+      "parent": 1130652,
+      "name": "(indirect string, offset: 0x7902a): syscall_policy_forward_context_bridge",
+      "decl_file": "172",
+      "decl_line": "26",
+      "type": 3109671
+    },
+    {
+      "offset": 1244218,
+      "tag": "DW_TAG_subprogram",
+      "parent": 1244213,
+      "name": "(indirect string, offset: 0x7c925): syscall_util_indicate_clone_disabled_bridge",
+      "decl_file": "173",
+      "decl_line": "8"
+    },
+    {
+      "offset": 1287207,
+      "tag": "DW_TAG_subprogram",
+      "parent": 1287202,
+      "low_pc": "0x0",
+      "high_pc": "0x1f",
+      "name": "(indirect string, offset: 0x8e881): syscall_settid_log_bridge",
+      "decl_file": "174",
+      "decl_line": "8"
+    },
+    {
+      "offset": 2858389,
+      "tag": "DW_TAG_subprogram",
+      "parent": 2858384,
+      "low_pc": "0x0",
+      "high_pc": "0x9b",
+      "name": "(indirect string, offset: 0x8d431): ptrace_report_clone_noirq_lock_bridge",
+      "decl_file": "168",
+      "decl_line": "13"
+    },
+    {
+      "offset": 2859128,
+      "tag": "DW_TAG_subprogram",
+      "parent": 2858384,
+      "low_pc": "0x0",
+      "high_pc": "0x82",
+      "name": "(indirect string, offset: 0x8d457): ptrace_report_clone_noirq_unlock_bridge",
+      "decl_file": "168",
+      "decl_line": "23"
+    }
+  ],
+  "actual_inlined_consumers": [
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1133534,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1131992,
+        "abstract_origin": 1130657,
+        "low_pc": "0x282",
+        "high_pc": "0x1b",
+        "call_file": "10",
+        "call_line": "0"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_close_body_result",
+          "linkage_name": null,
+          "offset": 1131076
+        },
+        {
+          "name": "sys_close",
+          "linkage_name": null,
+          "offset": 1130693
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1134139,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1134045,
+        "abstract_origin": 1130657,
+        "low_pc": "0xd9",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "1718"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_temp_sigmask_body_result",
+          "linkage_name": null,
+          "offset": 1133958
+        },
+        {
+          "name": "sys_epoll_pwait",
+          "linkage_name": null,
+          "offset": 1133569
+        }
+      ]
+    },
+    {
+      "callback": "exit_group_current_pid_bridge",
+      "DIE": {
+        "offset": 1135975,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1135921,
+        "abstract_origin": 810437,
+        "low_pc": "0x16",
+        "high_pc": "0x7f",
+        "call_file": "10",
+        "call_line": "13035"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "sys_exit_group",
+          "linkage_name": null,
+          "offset": 1135921
+        }
+      ]
+    },
+    {
+      "callback": "exit_group_log_bridge",
+      "DIE": {
+        "offset": 1136375,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1136338,
+        "abstract_origin": 659771,
+        "low_pc": "0x95",
+        "high_pc": "0x21",
+        "call_file": "10",
+        "call_line": "19040"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "exit_group_body_result",
+          "linkage_name": null,
+          "offset": 1136338
+        },
+        {
+          "name": "sys_exit_group",
+          "linkage_name": null,
+          "offset": 1135921
+        }
+      ]
+    },
+    {
+      "callback": "exit_group_terminate_bridge",
+      "DIE": {
+        "offset": 1136451,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1136338,
+        "abstract_origin": 810566,
+        "low_pc": "0xb6",
+        "high_pc": "0x15",
+        "call_file": "10",
+        "call_line": "19043"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "exit_group_body_result",
+          "linkage_name": null,
+          "offset": 1136338
+        },
+        {
+          "name": "sys_exit_group",
+          "linkage_name": null,
+          "offset": 1135921
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1139355,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1139337,
+        "abstract_origin": 1130657,
+        "low_pc": "0x19e",
+        "high_pc": "0x1b",
+        "call_file": "10",
+        "call_line": "3621"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_fcntl_body_result",
+          "linkage_name": null,
+          "offset": 1137068
+        },
+        {
+          "name": "sys_fcntl",
+          "linkage_name": null,
+          "offset": 1136685
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1153534,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1153454,
+        "abstract_origin": 1130657,
+        "low_pc": "0x1c3",
+        "high_pc": "0x1b",
+        "call_file": "10",
+        "call_line": "3593"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_ioctl_body_result",
+          "linkage_name": null,
+          "offset": 1151813
+        },
+        {
+          "name": "sys_ioctl",
+          "linkage_name": null,
+          "offset": 1151422
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1155851,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1155816,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x12",
+        "call_file": "10",
+        "call_line": "14520"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "linux_spawn_body_result",
+          "linkage_name": null,
+          "offset": 1155816
+        },
+        {
+          "name": "sys_linux_spawn",
+          "linkage_name": null,
+          "offset": 1155764
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1181891,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1181656,
+        "abstract_origin": 1130657,
+        "low_pc": "0x179",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "14656"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "open_common_body_result",
+          "linkage_name": null,
+          "offset": 1181081
+        },
+        {
+          "name": "sys_open",
+          "linkage_name": null,
+          "offset": 1181027
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1182920,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1182685,
+        "abstract_origin": 1130657,
+        "low_pc": "0x179",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "14656"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "open_common_body_result",
+          "linkage_name": null,
+          "offset": 1182110
+        },
+        {
+          "name": "sys_openat",
+          "linkage_name": null,
+          "offset": 1182056
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1184168,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1184074,
+        "abstract_origin": 1130657,
+        "low_pc": "0xd6",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "1718"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_temp_sigmask_body_result",
+          "linkage_name": null,
+          "offset": 1183987
+        },
+        {
+          "name": "sys_ppoll",
+          "linkage_name": null,
+          "offset": 1183598
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1187800,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1187712,
+        "abstract_origin": 1130657,
+        "low_pc": "0x115",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "1718"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_temp_sigmask_body_result",
+          "linkage_name": null,
+          "offset": 1187628
+        },
+        {
+          "name": "pselect6_sigmask_body_result",
+          "linkage_name": null,
+          "offset": 1187497
+        },
+        {
+          "name": "sys_pselect6",
+          "linkage_name": null,
+          "offset": 1187106
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1191364,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1191346,
+        "abstract_origin": 1130657,
+        "low_pc": "0x19e",
+        "high_pc": "0x18",
+        "call_file": "10",
+        "call_line": "3554"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_read_body_result",
+          "linkage_name": null,
+          "offset": 1189077
+        },
+        {
+          "name": "sys_read",
+          "linkage_name": null,
+          "offset": 1188696
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1215902,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1215865,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x13",
+        "call_file": "10",
+        "call_line": "2170"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_forward_refresh_cred_body_result",
+          "linkage_name": null,
+          "offset": 1215865
+        },
+        {
+          "name": "sys_setgid",
+          "linkage_name": null,
+          "offset": 1215811
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1218820,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1218796,
+        "abstract_origin": 1130657,
+        "low_pc": "0xd5",
+        "high_pc": "0x17",
+        "call_file": "10",
+        "call_line": "3264"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_setpgid_body_result",
+          "linkage_name": null,
+          "offset": 1218543
+        },
+        {
+          "name": "sys_setpgid",
+          "linkage_name": null,
+          "offset": 1218093
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1220315,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1220278,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x13",
+        "call_file": "10",
+        "call_line": "2170"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_forward_refresh_cred_body_result",
+          "linkage_name": null,
+          "offset": 1220278
+        },
+        {
+          "name": "sys_setregid",
+          "linkage_name": null,
+          "offset": 1220224
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1220527,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1220490,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x13",
+        "call_file": "10",
+        "call_line": "2170"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_forward_refresh_cred_body_result",
+          "linkage_name": null,
+          "offset": 1220490
+        },
+        {
+          "name": "sys_setresgid",
+          "linkage_name": null,
+          "offset": 1220436
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1220739,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1220702,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x13",
+        "call_file": "10",
+        "call_line": "2170"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_forward_refresh_cred_body_result",
+          "linkage_name": null,
+          "offset": 1220702
+        },
+        {
+          "name": "sys_setresuid",
+          "linkage_name": null,
+          "offset": 1220648
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1220951,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1220914,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x13",
+        "call_file": "10",
+        "call_line": "2170"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_forward_refresh_cred_body_result",
+          "linkage_name": null,
+          "offset": 1220914
+        },
+        {
+          "name": "sys_setreuid",
+          "linkage_name": null,
+          "offset": 1220860
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1225343,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1223490,
+        "abstract_origin": 1130657,
+        "low_pc": "0x1ff",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "9439"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "settimeofday_body_result",
+          "linkage_name": null,
+          "offset": 1222548
+        },
+        {
+          "name": "sys_settimeofday",
+          "linkage_name": null,
+          "offset": 1222494
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1226076,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1223490,
+        "abstract_origin": 1130657,
+        "low_pc": "0x3c8",
+        "high_pc": "0x14",
+        "call_file": "10",
+        "call_line": "9439"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "settimeofday_body_result",
+          "linkage_name": null,
+          "offset": 1222548
+        },
+        {
+          "name": "sys_settimeofday",
+          "linkage_name": null,
+          "offset": 1222494
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1226790,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1226753,
+        "abstract_origin": 1130657,
+        "low_pc": "0x4",
+        "high_pc": "0x13",
+        "call_file": "10",
+        "call_line": "2170"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "syscall_forward_refresh_cred_body_result",
+          "linkage_name": null,
+          "offset": 1226753
+        },
+        {
+          "name": "sys_setuid",
+          "linkage_name": null,
+          "offset": 1226699
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1237259,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1237233,
+        "abstract_origin": 1130657,
+        "low_pc": "0xde",
+        "high_pc": "0x18",
+        "call_file": "10",
+        "call_line": "14554"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "swapout_body_result",
+          "linkage_name": null,
+          "offset": 1237140
+        },
+        {
+          "name": "sys_swapout",
+          "linkage_name": null,
+          "offset": 1236672
+        }
+      ]
+    },
+    {
+      "callback": "syscall_policy_forward_context_bridge",
+      "DIE": {
+        "offset": 1237327,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1237140,
+        "abstract_origin": 1130657,
+        "low_pc": "0x10e",
+        "high_pc": "0x18",
+        "call_file": "10",
+        "call_line": "14539"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "swapout_body_result",
+          "linkage_name": null,
+          "offset": 1237140
+        },
+        {
+          "name": "sys_swapout",
+          "linkage_name": null,
+          "offset": 1236672
+        }
+      ]
+    },
+    {
+      "callback": "syscall_util_indicate_clone_disabled_bridge",
+      "DIE": {
+        "offset": 1244966,
+        "tag": "DW_TAG_inlined_subroutine",
+        "parent": 1244938,
+        "abstract_origin": 1244218,
+        "low_pc": "0xb6",
+        "high_pc": "0x35",
+        "call_file": "10",
+        "call_line": "13109"
+      },
+      "consumer_ancestry": [
+        {
+          "name": "sys_util_indicate_clone",
+          "linkage_name": null,
+          "offset": 1244577
+        }
+      ]
+    }
+  ],
+  "readelf_returncode": 0,
+  "stderr": ""
+}

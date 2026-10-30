@@ -1,0 +1,11 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -33,7 +33,7 @@
+ 
+ option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
+ # Functional OS source candidate; Root explicitly selects the next admitted compile.
+-option(MCKERNEL_ARCH5_CUTOVER_CANDIDATE "Select reviewed ARCH5 source candidate" OFF)
++option(MCKERNEL_ARCH5_CUTOVER_CANDIDATE "Select reviewed ARCH5 source candidate" ON)
+ option(MCKERNEL_ARCH5_ABI_WITNESS "Emit compile-only ARCH5 ABI witness arrays" OFF)
+ # Functional OS migration: paired typed Rust storage for 32 public debug objects.
+ # Internal descriptors and their three configs use a separate atomic selector.

@@ -1,0 +1,268 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_EXPERIMENTAL_PERF_ENTRY_SOURCE_BINDING_ONLY",
+  "composition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CONVERSION-FIRST-COMPOSITION-1/SOURCE-READY.json",
+    "bytes": 4755,
+    "sha256": "caef14198a096315e21380de49982772d8070a6489ec91d4d2f0c4d2dde3473e"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/PERF-ENTRY.ON-FIRST20.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 13786,
+    "sha256": "617305190d63b325a737e5cdaa9fcd371741cb8f7f942f5a8a85b1d3a2559d2b"
+  },
+  "files": [
+    {
+      "path": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/preimage/kernel/syscall.c",
+        "bytes": 930548,
+        "sha256": "3388adb79adff66eb85ae65a443af2c18e7b2057dd76d0ec99b531d62a36cab3"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/postimage/kernel/syscall.c",
+        "bytes": 934872,
+        "sha256": "10be1f57f207ae282db6b72c68f47a6443b9fa83e45c6650202cdfd18e313d3a"
+      }
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/preimage/kernel/CMakeLists.txt",
+        "bytes": 44891,
+        "sha256": "30e3a04bf48777d4891f7390804e574ca221e4234e9a8d7879bb068910a13fbd"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/postimage/kernel/CMakeLists.txt",
+        "bytes": 45314,
+        "sha256": "cb90d1f9e8d7e066b7fce31cbe89c87f533413afbb36fce50535b7c7c8d79b53"
+      }
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/preimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1304786,
+        "sha256": "14881100a803a90b25950b0c56d6fff6642a4cc8614c895a87418c6b7540dc50"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/postimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1305018,
+        "sha256": "282b62fa5374ca8c3ac372480ec567261504e5a80d751b6b0b7c8b4185e5d570"
+      }
+    },
+    {
+      "path": "kernel/rust/f03_perf_entry_candidate.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/postimage/kernel/rust/f03_perf_entry_candidate.rs",
+        "bytes": 5166,
+        "sha256": "f319c87fc330729570da45465e1bd30871374858ab18ae6578b9a696c4f11f3b"
+      }
+    }
+  ],
+  "argument_binding_values": [
+    [
+      "attr_size",
+      "sizeof(struct perf_event_attr)"
+    ],
+    [
+      "attr_type",
+      "__builtin_offsetof(struct perf_event_attr, type)"
+    ],
+    [
+      "attr_read_format",
+      "__builtin_offsetof(struct perf_event_attr, read_format)"
+    ],
+    [
+      "attr_sample_period",
+      "__builtin_offsetof(struct perf_event_attr, sample_period)"
+    ],
+    [
+      "raw_type",
+      "PERF_TYPE_RAW"
+    ],
+    [
+      "hardware_type",
+      "PERF_TYPE_HARDWARE"
+    ],
+    [
+      "cache_type",
+      "PERF_TYPE_HW_CACHE"
+    ],
+    [
+      "unsupported_format",
+      "PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING | PERF_FORMAT_ID"
+    ],
+    [
+      "sign_bit",
+      "1UL << 63"
+    ],
+    [
+      "syscall_number",
+      "__NR_perf_event_open"
+    ],
+    [
+      "mckfd_size",
+      "sizeof(struct mckfd)"
+    ],
+    [
+      "allocation_flags",
+      "IHK_MC_AP_NOWAIT"
+    ],
+    [
+      "event_pid",
+      "__builtin_offsetof(struct mc_perf_event, pid)"
+    ],
+    [
+      "event_counter_id",
+      "__builtin_offsetof(struct mc_perf_event, counter_id)"
+    ],
+    [
+      "proc_mckfd",
+      "__builtin_offsetof(struct process, mckfd)"
+    ],
+    [
+      "mckfd_next",
+      "__builtin_offsetof(struct mckfd, next)"
+    ],
+    [
+      "mckfd_fd",
+      "__builtin_offsetof(struct mckfd, fd)"
+    ],
+    [
+      "mckfd_data",
+      "__builtin_offsetof(struct mckfd, data)"
+    ],
+    [
+      "event_group_leader",
+      "__builtin_offsetof(struct mc_perf_event, group_leader)"
+    ],
+    [
+      "event_sibling_list",
+      "__builtin_offsetof(struct mc_perf_event, sibling_list)"
+    ],
+    [
+      "event_group_entry",
+      "__builtin_offsetof(struct mc_perf_event, group_entry)"
+    ],
+    [
+      "event_nr_siblings",
+      "__builtin_offsetof(struct mc_perf_event, nr_siblings)"
+    ],
+    [
+      "event_pmc_status",
+      "__builtin_offsetof(struct mc_perf_event, pmc_status)"
+    ],
+    [
+      "thread_pmc_alloc_map",
+      "__builtin_offsetof(struct thread, pmc_alloc_map)"
+    ],
+    [
+      "proc_mckfd_lock",
+      "__builtin_offsetof(struct process, mckfd_lock)"
+    ],
+    [
+      "mckfd_sig_no",
+      "__builtin_offsetof(struct mckfd, sig_no)"
+    ],
+    [
+      "mckfd_read_cb",
+      "__builtin_offsetof(struct mckfd, read_cb)"
+    ],
+    [
+      "mckfd_ioctl_cb",
+      "__builtin_offsetof(struct mckfd, ioctl_cb)"
+    ],
+    [
+      "mckfd_mmap_cb",
+      "__builtin_offsetof(struct mckfd, mmap_cb)"
+    ],
+    [
+      "mckfd_close_cb",
+      "__builtin_offsetof(struct mckfd, close_cb)"
+    ],
+    [
+      "mckfd_fcntl_cb",
+      "__builtin_offsetof(struct mckfd, fcntl_cb)"
+    ]
+  ],
+  "callback_binding_names": [
+    [
+      "copy_from",
+      "syscall_copy_from_user_bridge",
+      "SyscallCopyFromUserFn"
+    ],
+    [
+      "attr_freq",
+      "perf_event_open_attr_freq_bridge",
+      "PerfAttrFreqFn"
+    ],
+    [
+      "event_alloc",
+      "perf_event_open_alloc_event_bridge",
+      "PerfOpenAllocEventFn"
+    ],
+    [
+      "counter_alloc",
+      "perf_event_open_counter_alloc_bridge",
+      "PerfCounterAllocFn"
+    ],
+    [
+      "syscall",
+      "perf_event_open_do_syscall_bridge",
+      "PerfOpenSyscallFn"
+    ],
+    [
+      "allocate",
+      "perf_event_alloc_kmalloc_bridge",
+      "SyscallPolicyAllocFn"
+    ],
+    [
+      "read",
+      "perf_read",
+      "SyscallMckfdLongFn"
+    ],
+    [
+      "ioctl",
+      "perf_ioctl",
+      "SyscallMckfdIntFn"
+    ],
+    [
+      "mmap",
+      "perf_mmap",
+      "SyscallMckfdLongFn"
+    ],
+    [
+      "close",
+      "perf_close",
+      "SyscallMckfdIntFn"
+    ],
+    [
+      "fcntl",
+      "perf_fcntl",
+      "SyscallMckfdIntFn"
+    ],
+    [
+      "lock",
+      "syscall_mckfd_lock_bridge",
+      "SyscallMckfdLockFn"
+    ],
+    [
+      "unlock",
+      "syscall_mckfd_unlock_bridge",
+      "SyscallMckfdUnlockFn"
+    ]
+  ],
+  "checks": [
+    "31 original C expressions and 13 callback names found in original call order",
+    "unchanged fallback tokens and physical/#line origins; new C data appended after old source",
+    "unchanged existing Rust body and preimage; 53 line/file/column macro sites unchanged",
+    "request/attr are uninitialized typed storage without whole references or extra zeroing",
+    "experimental paired ENABLE_PERF selectors disabled by default"
+  ],
+  "actual_abi_compile_link_native": false,
+  "default_selection_authorized": false,
+  "held_request_endpoint_release": false,
+  "runtime_authority": null
+}

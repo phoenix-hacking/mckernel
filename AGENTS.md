@@ -18,6 +18,15 @@ and reserve full matching native qualification for the integrated image. Preserv
 all existing holds, evidence, resource/ownership checks and final acceptance
 criteria. Follow [dispatcher priorities](docs/verification/os-milestones-20260914/DISPATCHER-VELOCITY-20261029.md).
 
+Latest batching direction — 2026-10-30 UTC: target all23 remaining generic and
+all5 architecture functions in one coherent Rust cutover candidate. Use parallel
+private implementation and one compositor/profile, then compile the full candidate
+and fix real compiler/linker failures. Cheap ABI/type checks remain appropriate;
+full functional/native qualification follows the integrated result. An isolated
+compile-only candidate is not production/default/native acceptance. Missing future
+native proof alone does not block its source preparation or compilation. Genuine
+restrictions, known source/ABI requirements and physical execution controls remain.
+
 --- Superseded earlier window ---
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](docs/verification/os-milestones-20260914/RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.

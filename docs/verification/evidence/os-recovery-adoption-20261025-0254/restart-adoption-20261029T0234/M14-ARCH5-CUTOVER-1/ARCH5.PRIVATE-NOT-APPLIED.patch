@@ -1,0 +1,614 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -29850,7 +29850,7 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
++pub(super) unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+     let top: CULong;
+     let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+         + offset_of!(crate::abi::Tss64, rsp0);
+@@ -30327,28 +30327,28 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2081,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_SLEEP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2106,
+ };
+ 
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TRAP_WAKE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2109,
+ };
+ 
+ /// Return zero for the original untraced `goto core`, one after traced sleep.
+@@ -30357,10 +30357,10 @@
+ /// The live thread and process are the caller's original borrowed inputs; their
+ /// process/parent/report references remain valid through synchronous notify,
+ /// waitq wake and schedule. Pending is already consumed and sigcommon unlocked.
+-/// `info` is forwarded without reading, initializing or retaining it here. For a
+-/// defined execution, its bytes must be valid for the existing do_kill consumer.
+-/// The C caller's original SIGTRAP branch may supply uninitialized local info;
+-/// that remains an explicit caller debt, not permission to assume_init or zero it.
++/// Traced info is aligned writable complete caller-owned SigInfo storage, live
++/// through synchronous do_kill consumption. The approved EOF constructor fully
++/// initializes it after SIGTRAP state stores; untraced return never touches it.
++/// Original thread/parent/report lifetimes and CPU/IRQ exclusions still apply.
+ #[no_mangle]
+ pub unsafe extern "C" fn arch_do_signal_trap_stop_result(
+     thread: *mut Thread,
+@@ -30385,7 +30385,7 @@
+     // matching the C fork-tree publication order rather than widening its lock.
+     unsafe {
+         (*thread).exit_status = SIGTRAP;
+-        (*thread).status = PS_TRACED;
++        (*thread).status = PS_TRACED; super::f06_construct_trap_notification(info, thread);
+     }
+     // SAFETY: proc remains live across the borrowed main-thread comparison.
+     if thread == unsafe { (*proc).main_thread } {
+@@ -30449,9 +30449,9 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_STOP_WAKE_DEBUG: crate::debug::Ddebug=crate::debug::Ddebug {
+-    file:concat!(file!(),"\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func:b"do_signal\0".as_ptr().cast(),fmt:core::ptr::null(),
+-    line_flags:line!()&0x00ff_ffff,
++    line_flags: 2077,
+ };
+ 
+ /// Called only for the four original default stop-action switch labels, AFTER
+@@ -30964,18 +30964,18 @@
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_ENTRY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 1778,
+ };
+ #[used]
+ #[link_section = "__verbose"]
+ static mut F06_SIGNAL_TERMINATE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+-    file: concat!(file!(), "\0").as_ptr().cast(),
++    file: b"/src/arch/x86_64/kernel/syscall.c\0".as_ptr().cast(),
+     func: b"do_signal\0".as_ptr().cast(),
+     fmt: core::ptr::null(),
+-    line_flags: line!() & 0x00ff_ffff,
++    line_flags: 2162,
+ };
+ unsafe extern "C" {
+     #[link_name = "terminate"]
+@@ -30988,22 +30988,22 @@
+ /// Native kernel GS base and current TSS/rsp0 must be installed, with the complete
+ /// saved X86UserContext immediately below rsp0. Never call this HOST-side. The
+ /// original C used this same GS load and context subtraction, without recovery.
+-unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
+-    let top: CULong;
+-    let offset = offset_of!(crate::abi::X86CpuLocalVariables, tss)
+-        + offset_of!(crate::abi::Tss64, rsp0);
+-    // SAFETY: exact original GS memory load; MOV preserves flags and does not
+-    // touch stack. No privileged instruction is executed during preparation.
+-    unsafe {
+-        core::arch::asm!(
+-            "mov {top}, gs:[{offset}]",
+-            top = out(reg) top,
+-            offset = in(reg) offset,
+-            options(nostack, readonly, preserves_flags),
+-        );
+-        (top as *mut X86UserContext).sub(1)
+-    }
+-}
++use super::f06_signal_context_candidate::f06_signal_syscall_context;
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ 
+ /// Deliver one detached pending node with the original complete C entry rules.
+ ///
+@@ -31013,11 +31013,11 @@
+ /// mask selects a valid action in the actual64-entry table. Original object and
+ /// callback lifetimes/IRQ/scheduling preconditions apply, including XSAVE CPU
+ /// exclusion. Kernel and frame layouts must match native_linux_irq_work_v6_12.
+-/// The original traced default-SIGTRAP info bytes are uninitialized caller debt;
+-/// that branch remains OUTSIDE this port's defined qualification domain. This
+-/// source does not zero or assume_init them. C stays selected until root resolves
+-/// that debt and qualifies complete ownership/default/native behavior. Counter
+-/// races and overwritten old core slots are also preserved, not silently fixed.
++/// Default traced-SIGTRAP uses the approved initialized parent notification.
++/// Whole selection remains OFF pending ABI/ownership/codegen/native proof.
++/// The caller-owned info lives through synchronous consumer copies; no pending
++/// payload is read after transfer/free. Counter races and overwritten old core
++/// slots remain independent existing debt, not silently fixed here.
+ #[no_mangle]
+ pub unsafe extern "C" fn do_signal(
+     mut result: CULong,
+@@ -31210,8 +31210,8 @@
+         return restart;
+     }
+ 
+-    // Native C declares this storage uninitialized before pending disposal. Do
+-    // NOT assume_init/zero: traced SIGTRAP remains a qualified-execution HOLD.
++    // Aligned caller-owned storage; traced helper initializes all bytes before
++    // synchronous notify. Never reread transferred/freed pending payload.
+     let mut trap_info = MaybeUninit::<SigInfo>::uninit();
+     // SAFETY: complete default ownership helper caches ptracecont before free,
+     // transfers ptrace nodes or consumes pending, then releases the original lock.
+@@ -31227,9 +31227,9 @@
+             );
+         },
+         SIGTRAP => {
+-            // SAFETY: full-defined qualification explicitly EXCLUDES the traced
+-            // branch's uninitialized-info consumer. This preserves original C
+-            // source debt, not a new validity claim or zero-initialization repair.
++            // SAFETY: aligned stack storage remains live through synchronous
++            // notify copies; approved helper constructs every byte before use.
++            // Original thread/parent/report lifetime preconditions still apply.
+             let handled = unsafe {
+                 arch_do_signal_trap_stop_result(thread, proc, trap_info.as_mut_ptr())
+             };
+@@ -37357,3 +37357,58 @@
+ #[cfg(all(f03_request_constructors_candidate, target_arch = "x86_64"))]
+ #[path = "f03_request_constructors.rs"]
+ mod f03_request_constructors;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// EOF placement preserves every inherited source-location macro coordinate.
++#[cfg(f06_signal_context_candidate)]
++const _: () = {
++    assert!(core::mem::offset_of!(crate::abi::X86CpuLocalVariables, tss)
++        + core::mem::offset_of!(crate::abi::Tss64, rsp0) == 180);
++    assert!(core::mem::size_of::<crate::abi::CInt>() == 4);
++    assert!(core::mem::size_of::<crate::abi::CULong>() == 8);
++};
++
++/// # Safety
++/// info covers aligned writable complete SigInfo through synchronous consumers;
++/// thread is live and exit_status/status already hold the original SIGTRAP state.
++/// This approved constructor establishes no thread/parent/report/CPU lifetime.
++#[cfg(f06_do_signal_whole_candidate)]
++unsafe fn f06_construct_trap_notification(info: *mut SigInfo, thread: *mut Thread) {
++    // Root-approved defined notification; initialize complete caller-owned storage
++    // before any reference or synchronous consumer. Never read the old pending.
++    // SAFETY: info is aligned writable SigInfo storage kept live through do_kill.
++    // Every byte, including union extent and padding, is initialized first. This
++    // is the existing ptrace_report_signal_body_result writer/layout pattern.
++    unsafe {
++        let raw = info.cast::<u8>();
++        let mut offset = 0;
++        while offset < size_of::<SigInfo>() {
++            raw.add(offset).write_volatile(0);
++            offset += 1;
++        }
++        let info_ref = &mut *info;
++        info_ref.si_signo = SIGCHLD;
++        info_ref.si_code = CLD_TRAPPED;
++        let sigchld = (&mut info_ref.sifields as *mut crate::abi::SigInfoFields)
++            .cast::<crate::abi::SigInfoChild>();
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_pid), (*thread).tid,
++        );
++        core::ptr::write_volatile(
++            core::ptr::addr_of_mut!((*sigchld).si_status),
++            core::ptr::read_volatile(core::ptr::addr_of!((*thread).exit_status)),
++        );
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// ARCH5 imports stay at EOF to preserve all inherited source-location macros.
++#[cfg(f06_regset_defined_diagnostic_candidate)]
++#[path = "syscall_regset_defined_logger.rs"]
++mod syscall_regset_defined_logger;
++#[cfg(f06_signal_leaf_adapters_candidate)]
++#[path = "syscall_signal_leaf_adapters.rs"]
++mod syscall_signal_leaf_adapters;
++#[cfg(arch5_abi_witness_candidate)]
++#[path = "arch5_abi_witness.rs"]
++mod arch5_abi_witness;
+--- /dev/null
++++ b/kernel/rust/syscall_regset_defined_logger.rs
+@@ -0,0 +1,18 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Root-approved defined diagnostic correction; no parity claim for old long/%x.
++
++use super::{kprintf, CInt, CLong, CULong};
++
++/// Preserve the public callback ABI; render the complete unsigned long bit value.
++#[no_mangle]
++pub(super) extern "C" fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong) {
++    let format = match event {
++        1 => c"ptrace_read_regset: not supported type 0x%lx\n",
++        2 => c"ptrace_write_regset: not supported type 0x%lx\n",
++        _ => return,
++    };
++    // SAFETY: immutable NUL-terminated format has one %lx slot. CULong is the
++    // actual u64 unsigned long variadic type. Conversion preserves all 64 bits,
++    // including negative CLong values. No pointer/object lifetime crosses here.
++    unsafe { kprintf(format.as_ptr().cast(), type_ as CULong); }
++}
+--- /dev/null
++++ b/kernel/rust/syscall_signal_leaf_adapters.rs
+@@ -0,0 +1,36 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Rebased existing private adapters. Instruction and destructive native proof OPEN.
++use core::ffi::c_void;
++use super::{kprintf, CInt, CLong, EFAULT};
++
++unsafe extern "C" {
++    #[link_name = "terminate"]
++    fn f06_signal_adapter_terminate(status: CInt, signal: CInt);
++}
++
++/// # Safety
++/// Exact original raw XRSTOR contract: aligned valid standard state, boot mask,
++/// intended CPU and exclusion; all code/callees obey the no-FP/SIMD profile.
++/// Fault behavior stays raw; never substitute native_xrstor_checked or HOST-run.
++#[no_mangle]
++pub unsafe extern "C" fn arch_rt_sigreturn_xrstor_bridge(state: *mut c_void) {
++    // SAFETY: complete existing Rust instruction body and actual boot-mask getter.
++    unsafe {
++        let mask = crate::x86_cpu_helpers::get_xsave_mask();
++        crate::x86_cpu_helpers::x86_restore_xstate(state.cast_const(), mask);
++    }
++}
++
++/// # Safety
++/// Original native disposition: logger is available and genuine terminate owns
++/// the current process lifetime. The original void call may return in a fixture.
++#[cfg(native_linux_irq_work_v6_12)]
++#[no_mangle]
++pub unsafe extern "C" fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong {
++    // SAFETY: exact diagnostic, then original void terminate and constant result.
++    unsafe {
++        kprintf(b"native signal return rejected: %ld\n\0".as_ptr().cast(), error);
++        f06_signal_adapter_terminate(0, 11); // SIGSEGV, actual header witness.
++    }
++    -(EFAULT as CLong)
++}
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -354,7 +354,7 @@
+ /// effect prevents memory reordering across restore. FP/SIMD registers are not
+ /// Rust operands: the entire kernel build excludes their compiler-generated use.
+ #[inline(always)]
+-unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
++pub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
+     unsafe {
+         core::arch::asm!(
+             "xrstor [{state}]",
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -452,6 +452,10 @@
+ 
+ #endif
+ #line 394
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_XRSTOR_LEAF)
++extern void arch_rt_sigreturn_xrstor_bridge(void *fpregs);
++#else
++#line 394
+ void
+ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
+ {
+@@ -462,6 +466,8 @@
+ 
+ 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
+ }
++#endif
++#line 404
+ 
+ #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+ extern long native_xstate_buffer_size_result(int provided, int configured);
+@@ -507,12 +513,18 @@
+ }
+ #endif /* selected signal-return FP lifecycle is Rust-owned */
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_BAD_FRAME_LEAF)
++extern long arch_native_signal_bad_frame_bridge(long error);
++#else
++#line 449
+ long arch_native_signal_bad_frame_bridge(long error)
+ {
+ 	kprintf("native signal return rejected: %ld\n", error);
+ 	terminate(0, SIGSEGV);
+ 	return -EFAULT;
+ }
++#endif
++#line 455
+ #endif
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+@@ -1622,6 +1634,10 @@
+ #endif
+ #line 1446
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC)
++extern void arch_ptrace_regset_log_bridge(int event, long type);
++#else
++#line 1447
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)
+ {
+@@ -1632,6 +1648,8 @@
+ 		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+ 	}
+ }
++#endif
++#line 1457
+ #endif
+ #line 1458
+ 
+@@ -4354,3 +4372,9 @@
+ }
+ #endif /* public arch_ptrace_syscall_event is owned by Rust */
+ /*** End of File ***/
++
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++/* ABI witness only: not selected into the normal production image. */
++#ifdef MCKERNEL_ARCH5_ABI_WITNESS
++#include <arch5-abi-witness.inc>
++#endif
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -32,6 +32,9 @@
+ endif()
+ 
+ option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
++# Functional OS source candidate; Root explicitly selects the next admitted compile.
++option(MCKERNEL_ARCH5_CUTOVER_CANDIDATE "Select reviewed ARCH5 source candidate" OFF)
++option(MCKERNEL_ARCH5_ABI_WITNESS "Emit compile-only ARCH5 ABI witness arrays" OFF)
+ # Functional OS migration: paired typed Rust storage for 32 public debug objects.
+ # Internal descriptors and their three configs use a separate atomic selector.
+ option(ENABLE_RUST_PROCESS_VERBOSE_DATA "Use typed Rust process debug globals" ON)
+@@ -51,6 +54,14 @@
+ option(ENABLE_NATIVE_FORK_OWNED_TRANSACTION "Enable the existing native owned-fork transaction" OFF)
+ set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
+ set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
++if (MCKERNEL_ARCH5_CUTOVER_CANDIDATE AND
++    (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
++     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))
++    message(FATAL_ERROR "ARCH5 requires paired Rust x86_64 Linux6.12 non-UBSAN profile")
++endif()
++if (MCKERNEL_ARCH5_ABI_WITNESS AND NOT MCKERNEL_ARCH5_CUTOVER_CANDIDATE)
++    message(FATAL_ERROR "ARCH5 ABI witness requires the paired ARCH5 candidate")
++endif()
+ if (NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "legacy" AND
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+ 	message(FATAL_ERROR "MCKERNEL_HOST_IRQ_ABI must be legacy or linux-6.12")
+@@ -265,6 +276,23 @@
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_syscall_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_set_signal_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_check_signal_candidate")
++                if (MCKERNEL_ARCH5_CUTOVER_CANDIDATE)
++                    list(APPEND RUST_KERNEL_CFG
++                        "--cfg" "f06_regset_defined_diagnostic_candidate"
++                        "--cfg" "f06_signal_leaf_adapters_candidate"
++                        "--cfg" "f06_signal_context_candidate"
++                        "--cfg" "f06_do_signal_whole_candidate"
++                        "--cfg" "f06_do_signal_reuse_qualified_context")
++                    list(APPEND RUST_KERNEL_SRCS
++                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_regset_defined_logger.rs"
++                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_signal_leaf_adapters.rs")
++                    if (MCKERNEL_ARCH5_ABI_WITNESS)
++                        list(APPEND RUST_KERNEL_CFG "--cfg" "arch5_abi_witness_candidate")
++                        list(APPEND RUST_KERNEL_SRCS
++                            "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch5_abi_witness.rs"
++                            "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/arch5-abi-witness.inc")
++                    endif()
++                endif()
+ 				# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ 				# Source-only default OFF. Root inserts only in existing selected
+ 				# linux-6.12/x86_64/NOT ENABLE_UBSAN branch, alongside exact F06 providers.
+@@ -631,6 +659,14 @@
+ 			endif()
+ 			set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
+ 				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS;MCKERNEL_RUST_F06_PRCTL_SET_REGISTER;MCKERNEL_RUST_F06_PRCTL_GET_REGISTER;MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE;MCKERNEL_RUST_F06_PTRACE_CONTEXT;MCKERNEL_RUST_F06_PTRACE_ALLOC;MCKERNEL_RUST_F06_VDSO_ADD_RANGE;MCKERNEL_RUST_F06_VDSO_SET_RANGE;MCKERNEL_RUST_F06_PROCESS_VM_ENTRY;MCKERNEL_RUST_F06_COPY_TO_USER;MCKERNEL_RUST_F06_COPY_FROM_USER;MCKERNEL_RUST_F06_FORWARD_CONTEXT;MCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL;MCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL;MCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL")
++            if (MCKERNEL_ARCH5_CUTOVER_CANDIDATE)
++                set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++                    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC;MCKERNEL_RUST_F06_XRSTOR_LEAF;MCKERNEL_RUST_F06_BAD_FRAME_LEAF;MCKERNEL_RUST_F06_SIGNAL_CONTEXT;MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE")
++                if (MCKERNEL_ARCH5_ABI_WITNESS)
++                    set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++                        COMPILE_DEFINITIONS MCKERNEL_ARCH5_ABI_WITNESS)
++                endif()
++            endif()
+ 		endif()
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PTRACE_ENTRY;MCKERNEL_RUST_F03_SYSCALL_TABLE;MCKERNEL_RUST_F03_SYSCALL_ENTRY;MCKERNEL_RUST_F03_FUTEX_ATOMIC")
+--- /dev/null
++++ b/arch/x86_64/kernel/include/arch5-abi-witness.inc
+@@ -0,0 +1,80 @@
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++/* Appended to actual selected arch TU ONLY for compile-only ABI qualification.
++ * Do not link this witness build as production acceptance. No fake headers. */
++extern void arch_rt_sigreturn_xrstor_bridge(void *);
++extern long arch_native_signal_bad_frame_bridge(long);
++extern void arch_rt_sigreturn_context_bridge(struct thread **, struct x86_user_context **, int *);
++extern int do_signal(unsigned long, void *, struct thread *, struct sig_pending *, int);
++extern void arch_ptrace_regset_log_bridge(int, long);
++#define ARCH5_TYPE(fn, type) _Static_assert(__builtin_types_compatible_p(__typeof__(&(fn)), type), #fn " ABI")
++ARCH5_TYPE(arch_rt_sigreturn_xrstor_bridge, void (*)(void *));
++ARCH5_TYPE(arch_native_signal_bad_frame_bridge, long (*)(long));
++ARCH5_TYPE(arch_rt_sigreturn_context_bridge, void (*)(struct thread **,struct x86_user_context **,int *));
++ARCH5_TYPE(do_signal, int (*)(unsigned long,void *,struct thread *,struct sig_pending *,int));
++ARCH5_TYPE(arch_ptrace_regset_log_bridge, void (*)(int,long));
++_Static_assert(sizeof(long)==8 && sizeof(unsigned long)==8 && sizeof(int)==4,"LP64");
++_Static_assert(__builtin_offsetof(struct x86_cpu_local_variables,tss.rsp0)==180,"actual GS180");
++const unsigned long arch5_c_abi_geometry[] __attribute__((used,section(".arch5_abi_c"))) = {
++    sizeof(int), /* 0 int.size */
++    __alignof__(int), /* 1 int.align */
++    sizeof(long), /* 2 long.size */
++    __alignof__(long), /* 3 long.align */
++    sizeof(unsigned long), /* 4 ulong.size */
++    __alignof__(unsigned long), /* 5 ulong.align */
++    sizeof(void *), /* 6 pointer.size */
++    __alignof__(void *), /* 7 pointer.align */
++    sizeof(siginfo_t), /* 8 siginfo.size */
++    __alignof__(siginfo_t), /* 9 siginfo.align */
++    sizeof(struct thread), /* 10 thread.size */
++    __alignof__(struct thread), /* 11 thread.align */
++    sizeof(struct sig_pending), /* 12 pending.size */
++    __alignof__(struct sig_pending), /* 13 pending.align */
++    sizeof(struct process), /* 14 process.size */
++    __alignof__(struct process), /* 15 process.align */
++    sizeof(struct sig_common), /* 16 sigcommon.size */
++    __alignof__(struct sig_common), /* 17 sigcommon.align */
++    sizeof(struct x86_user_context), /* 18 context.size */
++    __alignof__(struct x86_user_context), /* 19 context.align */
++    sizeof(struct xsave_struct), /* 20 xsave.size */
++    __alignof__(struct xsave_struct), /* 21 xsave.align */
++    sizeof(struct sigsp), /* 22 frame.size */
++    __alignof__(struct sigsp), /* 23 frame.align */
++    __builtin_offsetof(struct thread,tid), /* 24 thread.tid */
++    __builtin_offsetof(struct thread,exit_status), /* 25 thread.exit_status */
++    __builtin_offsetof(struct thread,status), /* 26 thread.status */
++    __builtin_offsetof(struct thread,proc), /* 27 thread.proc */
++    __builtin_offsetof(struct thread,report_proc), /* 28 thread.report_proc */
++    __builtin_offsetof(struct thread,sigcommon), /* 29 thread.sigcommon */
++    __builtin_offsetof(struct thread,sigmask), /* 30 thread.sigmask */
++    __builtin_offsetof(struct thread,sigstack), /* 31 thread.sigstack */
++    __builtin_offsetof(struct thread,ptrace), /* 32 thread.ptrace */
++    __builtin_offsetof(struct thread,coredump_regs), /* 33 thread.coredump_regs */
++    __builtin_offsetof(struct sig_pending,info), /* 34 pending.info */
++    __builtin_offsetof(struct sig_pending,ptracecont), /* 35 pending.ptracecont */
++    __builtin_offsetof(struct process,parent), /* 36 process.parent */
++    __builtin_offsetof(struct process,main_thread), /* 37 process.main_thread */
++    __builtin_offsetof(struct process,update_lock), /* 38 process.update_lock */
++    __builtin_offsetof(struct process,pid), /* 39 process.pid */
++    __builtin_offsetof(struct process,status), /* 40 process.status */
++    __builtin_offsetof(struct process,group_exit_status), /* 41 process.group_exit_status */
++    __builtin_offsetof(struct sig_common,lock), /* 42 sigcommon.lock */
++    __builtin_offsetof(struct sig_common,action), /* 43 sigcommon.action */
++    __builtin_offsetof(struct sigsp,info), /* 44 frame.info */
++    __builtin_offsetof(struct sigsp,fpregs), /* 45 frame.fpregs */
++    __builtin_offsetof(struct sigsp,sigstack), /* 46 frame.sigstack */
++    __builtin_offsetof(siginfo_t,si_signo), /* 47 siginfo.si_signo */
++    __builtin_offsetof(siginfo_t,si_code), /* 48 siginfo.si_code */
++    __builtin_offsetof(siginfo_t,_sifields), /* 49 siginfo._sifields */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_pid), /* 50 siginfo.child.si_pid */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_status), /* 51 siginfo.child.si_status */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_uid), /* 52 siginfo.child.si_uid */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_utime), /* 53 siginfo.child.si_utime */
++    __builtin_offsetof(siginfo_t,_sifields._sigchld.si_stime), /* 54 siginfo.child.si_stime */
++    __builtin_offsetof(struct x86_cpu_local_variables,tss.rsp0), /* 55 GS.rsp0 */
++    SIGCHLD, /* 56 SIGCHLD */
++    CLD_TRAPPED, /* 57 CLD_TRAPPED */
++    SIGTRAP, /* 58 SIGTRAP */
++    SIGSEGV, /* 59 SIGSEGV */
++    EFAULT, /* 60 EFAULT */
++};
++#undef ARCH5_TYPE
+--- /dev/null
++++ b/kernel/rust/arch5_abi_witness.rs
+@@ -0,0 +1,76 @@
++//! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Compile-only actual shared Rust types; compare against same ordered C array.
++use core::mem::{size_of, align_of, offset_of};
++use crate::abi::{CInt, CLong, CULong, SigInfo, SigInfoChild, Thread, SigPending,
++    Process, SigCommon, X86UserContext, XsaveStruct, X86CpuLocalVariables, Tss64};
++const _: unsafe extern "C" fn(*mut core::ffi::c_void) = super::syscall_signal_leaf_adapters::arch_rt_sigreturn_xrstor_bridge;
++const _: unsafe extern "C" fn(CLong)->CLong = super::syscall_signal_leaf_adapters::arch_native_signal_bad_frame_bridge;
++const _: unsafe extern "C" fn(*mut *mut Thread,*mut *mut X86UserContext,*mut CInt) = super::f06_signal_context_candidate::arch_rt_sigreturn_context_bridge;
++const _: unsafe extern "C" fn(CULong,*mut core::ffi::c_void,*mut Thread,*mut SigPending,CInt)->CInt = super::f06_do_signal_whole_candidate::do_signal;
++const _: extern "C" fn(CInt,CLong) = super::syscall_regset_defined_logger::arch_ptrace_regset_log_bridge;
++#[used]
++#[no_mangle]
++#[link_section = ".arch5_abi_rust"]
++pub static arch5_rust_abi_geometry: [u64; 61] = [
++    (size_of::<CInt>()) as u64, // 0 int.size
++    (align_of::<CInt>()) as u64, // 1 int.align
++    (size_of::<CLong>()) as u64, // 2 long.size
++    (align_of::<CLong>()) as u64, // 3 long.align
++    (size_of::<CULong>()) as u64, // 4 ulong.size
++    (align_of::<CULong>()) as u64, // 5 ulong.align
++    (size_of::<*mut core::ffi::c_void>()) as u64, // 6 pointer.size
++    (align_of::<*mut core::ffi::c_void>()) as u64, // 7 pointer.align
++    (size_of::<SigInfo>()) as u64, // 8 siginfo.size
++    (align_of::<SigInfo>()) as u64, // 9 siginfo.align
++    (size_of::<Thread>()) as u64, // 10 thread.size
++    (align_of::<Thread>()) as u64, // 11 thread.align
++    (size_of::<SigPending>()) as u64, // 12 pending.size
++    (align_of::<SigPending>()) as u64, // 13 pending.align
++    (size_of::<Process>()) as u64, // 14 process.size
++    (align_of::<Process>()) as u64, // 15 process.align
++    (size_of::<SigCommon>()) as u64, // 16 sigcommon.size
++    (align_of::<SigCommon>()) as u64, // 17 sigcommon.align
++    (size_of::<X86UserContext>()) as u64, // 18 context.size
++    (align_of::<X86UserContext>()) as u64, // 19 context.align
++    (size_of::<XsaveStruct>()) as u64, // 20 xsave.size
++    (align_of::<XsaveStruct>()) as u64, // 21 xsave.align
++    (size_of::<crate::native_signal::Frame>()) as u64, // 22 frame.size
++    (align_of::<crate::native_signal::Frame>()) as u64, // 23 frame.align
++    (offset_of!(Thread,tid)) as u64, // 24 thread.tid
++    (offset_of!(Thread,exit_status)) as u64, // 25 thread.exit_status
++    (offset_of!(Thread,status)) as u64, // 26 thread.status
++    (offset_of!(Thread,proc)) as u64, // 27 thread.proc
++    (offset_of!(Thread,report_proc)) as u64, // 28 thread.report_proc
++    (offset_of!(Thread,sigcommon)) as u64, // 29 thread.sigcommon
++    (offset_of!(Thread,sigmask)) as u64, // 30 thread.sigmask
++    (offset_of!(Thread,sigstack)) as u64, // 31 thread.sigstack
++    (offset_of!(Thread,ptrace)) as u64, // 32 thread.ptrace
++    (offset_of!(Thread,coredump_regs)) as u64, // 33 thread.coredump_regs
++    (offset_of!(SigPending,info)) as u64, // 34 pending.info
++    (offset_of!(SigPending,ptracecont)) as u64, // 35 pending.ptracecont
++    (offset_of!(Process,parent)) as u64, // 36 process.parent
++    (offset_of!(Process,main_thread)) as u64, // 37 process.main_thread
++    (offset_of!(Process,update_lock)) as u64, // 38 process.update_lock
++    (offset_of!(Process,pid)) as u64, // 39 process.pid
++    (offset_of!(Process,status)) as u64, // 40 process.status
++    (offset_of!(Process,group_exit_status)) as u64, // 41 process.group_exit_status
++    (offset_of!(SigCommon,lock)) as u64, // 42 sigcommon.lock
++    (offset_of!(SigCommon,action)) as u64, // 43 sigcommon.action
++    (offset_of!(crate::native_signal::Frame,info)) as u64, // 44 frame.info
++    (offset_of!(crate::native_signal::Frame,fpregs)) as u64, // 45 frame.fpregs
++    (offset_of!(crate::native_signal::Frame,sigstack)) as u64, // 46 frame.sigstack
++    (offset_of!(SigInfo,si_signo)) as u64, // 47 siginfo.si_signo
++    (offset_of!(SigInfo,si_code)) as u64, // 48 siginfo.si_code
++    (offset_of!(SigInfo,sifields)) as u64, // 49 siginfo._sifields
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_pid)) as u64, // 50 siginfo.child.si_pid
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_status)) as u64, // 51 siginfo.child.si_status
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_uid)) as u64, // 52 siginfo.child.si_uid
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_utime)) as u64, // 53 siginfo.child.si_utime
++    (offset_of!(SigInfo,sifields)+offset_of!(SigInfoChild,si_stime)) as u64, // 54 siginfo.child.si_stime
++    (offset_of!(X86CpuLocalVariables,tss)+offset_of!(Tss64,rsp0)) as u64, // 55 GS.rsp0
++    (17) as u64, // 56 SIGCHLD
++    (4) as u64, // 57 CLD_TRAPPED
++    (5) as u64, // 58 SIGTRAP
++    (11) as u64, // 59 SIGSEGV
++    (14) as u64, // 60 EFAULT
++];

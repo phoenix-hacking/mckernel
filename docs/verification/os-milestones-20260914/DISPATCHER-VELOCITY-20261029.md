@@ -6,6 +6,84 @@ The user directs the dispatcher to maximize useful engineering throughput. Keep
 M14 exclusive until original-scope acceptance, then shift automatically to M15.
 Use the active weekly-only window and actual controls; stop at weekly exhaustion.
 
+## Target all remaining functions in one coherent candidate
+
+Latest user instruction — 2026-10-30 UTC: "push many C functions at once like
+many (all the rest of them) and then do verification work." The target is the
+complete23-generic plus5-architecture cutover in one coherent candidate, rather
+than another sequence of small independently native-qualified releases.
+
+Keep the four disjoint generic queues and architecture lane implementing their
+existing Rust replacements in parallel. One compositor owns the combined source
+and paired C/Rust profile. Fold approved field initialization, error propagation,
+signal publication and lifetime fixes into that same candidate. Reuse the prepared
+combined batch and actual-header witnesses; do not start the existing ports over.
+
+Prepare an isolated compile-only profile that selects every completed replacement
+together. Missing future native evidence alone is not a reason to keep a completed
+port off in that experimental profile. Make incomplete bodies and unresolved
+providers explicit blockers, and turn concrete type, layout and link failures
+into bounded implementation fixes. Do not invent an ABI, add dummy providers,
+stub behavior, route substantive work back through C or disable a supported path
+to obtain a zero-C number. Genuine service/account restrictions remain enforced.
+
+Run cheap focused compile/ABI feedback while implementation continues, then the
+coherent full candidate compile/link through the sole authorized executor. Reuse
+matching SDKs and unaffected objects; rebuild both changed C units and the Rust
+crate, with ABI probes excluded from the production link. Ordinary build feedback
+does not require a native cycle for each function. Preserve prior good artifacts
+and failed attempts so actual compiler diagnostics can guide correction.
+
+After the integrated source builds, verify actual zero supported compute-C
+implementation, unique Rust/assembly owners, original metadata and required ABI,
+then run the matching functional/application/lifecycle/native validation and fix
+failures. An experimental profile/image or default-OFF source packet does not
+close a file or M14. Resource/identity/release controls, one physical executor,
+weekly-only limits and retained evidence remain unchanged. M15 stays paused.
+
+## Immediate target: the remaining 23 generic syscall functions
+
+Latest user direction — 2026-10-30 UTC: keep pushing to remove the remaining23.
+The actual conversion-first build compiled and linked in20.113s. Its generic C
+object has23 defined functions, down from42; the retained architecture object
+still has5. This is candidate build feedback, not final native/file acceptance.
+Complete the23 generic replacements while the existing artifact reviewer finishes
+qualification. Keep the5 architecture functions on their separate active lane.
+
+Use the following disjoint assignment plan after Root's single ownership check.
+These are proposed queues, not claims that a turn is already running. Reuse each
+owner's existing private candidates; use actual followup turns and confirm once.
+
+| Existing owner | Exact generic C function queue |
+| --- | --- |
+| `f03_mmap_fork_terra` | `do_mmap`, `do_fork`, `do_execveat`, `syscall_execveat_bridge` |
+| `m14_integration_terra` | `do_syscall`, `syscall_do_syscall3_bridge`, `syscall_policy_do_syscall2_bridge`, `syscall_policy_do_syscall3_bridge`, `wait_host_wait4_bridge`, `util_thread` |
+| `f03_kfree_terra` | `terminate`, `terminate_host`, `terminate_mcexec`, `interrupt_syscall`, `ptrace_detach_do_kill_bridge`, `ptrace_detach_kfree_bridge`, `ptrace_wakeup_sig`, `ptrace_wakeup_log_bridge` |
+| `f03_munmap_terra` | `do_setresuid`, `do_setresgid`, `sys_perf_event_open`, `syscall_forward_rt_sigprocmask_bridge`, `syscall_forward_sigaction_update_bridge` |
+
+Root may adjust an exact owner to avoid an existing reservation; keep symbol
+ownership disjoint. Use GPT-6.1/xhigh for these substantive implementation queues.
+One compositor integrates compatible private results. Keep the architecture owner
+and independent artifact reviewer separate, within the existing10-thread limit.
+Do not let artifact qualification, normal stopped-container retirement or a
+pending compiler slot leave released source queues idle.
+
+Prioritize the actual implementation/selection fixes and concrete initialization,
+ABI or lifetime decisions needed to activate each existing Rust body. Reuse large
+fragments and focused proof. Any genuine restriction remains enforced; isolate
+the precise blocked row and prerequisite while advancing eligible rows. Missing
+future native proof alone is not a private implementation prerequisite. Do not
+weaken behavior, disable a supported path or relabel a C callback as Rust.
+
+Return coherent small batches from each queue instead of stopping after each
+leaf. Preserve current compiled outputs and the accepted baseline. Recompile
+changed dependencies and relink when the next compatible batch is ready, then
+continue the remaining conversion. Full matching functional/native validation
+follows the coherent final cutover. Track source-ready, compiled/linked and
+native-validated counts separately in the existing47-symbol queue. Zero remaining
+generic functions does not itself close M14: architecture, data/header ownership,
+final image and application/lifecycle proof retain their original requirements.
+
 ## Complete the remaining conversion, then validate the combined image
 
 Latest explicit user direction — 2026-10-29 UTC: "convert all of them and then

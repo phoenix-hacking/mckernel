@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_SELECTED_SOURCE_ONLY",
+  "checks": [
+    "All three incremental private patches apply in order to exact isolated source2 + Queue B wiring/snapshot preimages; final four files equal postimages.",
+    "Clone C fallback uses only a line-neutral call to the Rust provider before first phase0 send; Rust writes exactly args4/5, before publication; all other original fields/phase1 and cleanup body are preserved.",
+    "Coredump Rust source adds only args4/5 raw zero writes on existing line; no whole-object initialization or ID/valid modification.",
+    "All inherited Rust line!/file!/column! locations and bytes preserved; 16 synthetic clone phase and cleanup argument-state vectors preserve inherited args2..5.",
+    "The seven doSys/util selected binding objects are Rust-owned, C retains extern declarations and real-header static assertions; typed UTI layout has expected selected x86 field offsets and is consumed by a separate real-header 16-word comparison fixture.",
+    "The selected compile-only profile enables both whole Rust providers, all five named request constructors, and clone initializer; it does not assert runtime readiness or fabricate all-callers review."
+  ],
+  "limitations": [
+    "Host completion/thread/monitor/IKC and UTI stack/descriptor/host mapping lifetime must be independently reviewed.",
+    "Phase0 legacy clone and coredump defined-slot intent plus independent review do not decide cleanup kill semantics or broader callgraph; preserve original cleanup behavior.",
+    "29-word/23-word/16-word real-header comparisons, packet ABI, compiler/link and original debug-record binary projection remain unexecuted."
+  ],
+  "runtime_authority": null,
+  "actual_compiler": false,
+  "native_execution": false
+}

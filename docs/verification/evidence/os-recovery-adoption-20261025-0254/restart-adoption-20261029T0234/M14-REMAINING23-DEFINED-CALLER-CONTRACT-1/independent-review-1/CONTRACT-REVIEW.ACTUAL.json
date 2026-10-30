@@ -1,0 +1,225 @@
+{
+  "schema": "mckernel.independent-named-defined-caller-contract-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_FIVE_NAMED_DEFINED_CALLER_CONTRACTS_ONLY",
+  "reviewer": "/root/recovery_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": 1793319611.8606958,
+  "Root_intent": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-DEFINED-CALLER-CONTRACT-1/ROOT-CONTRACTS.APPROVED-INTENT.json",
+    "bytes": 3693,
+    "sha256": "a9a7cf55d410db89f767aa80db01b940b61905ef9181ac9c4a92c1e195a544dc"
+  },
+  "cases": [
+    {
+      "id": "EXEC-PHASE-ARG5",
+      "decision": "PASS_NAMED_DEFINED_SOURCE_CONTRACT",
+      "semantic_fields": {
+        "phase1": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "phase2": [
+          0,
+          1,
+          2
+        ]
+      },
+      "required_definition": "Phase1 number=existing execve number, args=[1, sign-extended dirfd, unchanged filename address, descriptor physical address, sign-extended flags,0]. Phase2 rewrites number and args0=2,args1=descriptor physical address,args2=descriptor byte length only; args3,4 retain prior initialized values and args5 retains0.",
+      "transport": "Write individual raw fields of MaybeUninit<SyscallRequest>; do not materialize/write a whole SyscallRequest before helper-owned rtid/ttid/valid initialization. Retain original offload/send/publish order and ordinary phase1 completion boundary before phase2 mutation.",
+      "proposal_status": "Existing ExecPhase1TransportSeed/aggregate-write proposal is NOT APPROVED: replace it, removing invented ID/valid/unused-slot seeds. Whole exec-body selection remains outside this review."
+    },
+    {
+      "id": "INTERRUPT-ARG3-5",
+      "decision": "PASS_NAMED_DEFINED_SOURCE_CONTRACT",
+      "semantic_fields": [
+        1,
+        2
+      ],
+      "required_definition": "Initialize exactly x86 six argument fields: rdi=original thread.proc.pid converted as original C to CULong; rsi=original tid likewise; rdx=original signed CInt sig converted to CULong; r10/r8/r9=0. Preserve arg0 even though current host kill handler semantically uses only1/2. Forward unchanged __NR_kill62.",
+      "transport": "Raw MaybeUninit<X86UserContext> storage and raw addr_of_mut field writes. After all six fields initialized, selected generic forwarding only scalar-reads those fields. Do not form a whole context reference/assume_init/copy whole context; preserve current thread/process/lock/send/error/logging lifetime and ordering."
+    },
+    {
+      "id": "SIGNAL-FORWARD-UNUSED-SLOTS",
+      "decision": "PASS_NAMED_DEFINED_SOURCE_CONTRACT",
+      "semantic_fields": {
+        "mask": [
+          0
+        ],
+        "action": [
+          0,
+          1
+        ]
+      },
+      "required_definition": "Mask: six context argument fields [original CULong sigmask,0,0,0,0,0], unchanged custom __NR_rt_sigprocmask14. Action: [original signed sig converted to CULong, unchanged handler bit/address representation, original flags,0,0,0], unchanged custom __NR_rt_sigaction13. Preserve arg2 flags despite current selected handler ignoring it.",
+      "transport": "Use raw MaybeUninit context, initialize all six scalar fields before forwarding; do not create whole-context initialized references. Preserve valid/aligned borrowed action and original handler-before-flags reads. Preserve validation and action/mask publication order; no Linux syscall argument-shape substitution.",
+      "proposal_status": "Current initialized-context prefix candidate does not implement this newly authorized constructor; fresh raw-six-field successor required before selection."
+    },
+    {
+      "id": "PTRACE-WAKEUP-DEFINED-HEX",
+      "decision": "PASS_NAMED_DEFINED_SOURCE_CONTRACT",
+      "required_definition": "Event4 only and existing dynamic debug enabled: exact prefix ptrace_wakeup_sig,pid=%d,data=%08x\\n; first variadic value is signed32 CInt, second is result as u32/CUInt, lower hexadecimal width minimum8 zero padded; -1\u2192ffffffff. Other events emit nothing. Retain logical /src/kernel/syscall.c, ptrace_wakeup_log_bridge, line24429, original metadata/flag/read order.",
+      "limits": "This intentionally defines a previously mismatched signed variadic argument; no undefined C-output parity assertion or ptrace/signal/action change. No additional cast through signed64/usize."
+    },
+    {
+      "id": "EXEC-LONG-DIAGNOSTICS",
+      "decision": "PASS_NAMED_DEFINED_SOURCE_CONTRACT",
+      "required_definition": "Only host-failed-to-load-ELF errno and preparing-ranges/args/envs/stack ret diagnostics change %d\u2192%ld, each with the same existing signed CLong ret, event and logical source metadata. Preserve text/newline otherwise, no i32 truncation, no return/errno/negation/kill/control-flow change.",
+      "limits": "Existing ret is C long, including the range-preparation int widened by original assignment; x86_64 CLong i64 is the correct vararg domain. No undefined variadic parity claim."
+    }
+  ],
+  "actual_selected_semantic_consumer_source_checks": [
+    {
+      "function": "act_execve",
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "line": 2440,
+      "source_segment_sha256": "090f939df84aaacf3f36e8974c6f976ab3ac11227cbeba039bf4db058200be96",
+      "semantic_argument_indices": [
+        0
+      ]
+    },
+    {
+      "function": "act_execve_phase1",
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "line": 2191,
+      "source_segment_sha256": "9c4b59bee6c0c215d5e43748770b1b488d1b871eac40bcd1656ba33970104c16",
+      "semantic_argument_indices": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "function": "act_execve_phase2",
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "line": 2340,
+      "source_segment_sha256": "5e3ccda3478d281d3e5c9ed41843afe2de8401b0ffcaa0014a2ad9f5b63d1259",
+      "semantic_argument_indices": [
+        1,
+        2
+      ]
+    },
+    {
+      "function": "act_kill",
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "line": 1745,
+      "source_segment_sha256": "a02f5bca5a6835b9726405e551967e36ea3db8e54f7536dc5d083b97464e4b6c",
+      "semantic_argument_indices": [
+        1,
+        2
+      ]
+    },
+    {
+      "function": "act_sigaction",
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "line": 1410,
+      "source_segment_sha256": "def5fc80764a3e22213a1ac3b8d872f1b71791dd6312001381a6b0c768ce4271",
+      "semantic_argument_indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "function": "act_sigprocmask",
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "line": 1425,
+      "source_segment_sha256": "9223a93476c65973fcc3a7dc1d706220b381ac1fdc6ae30841aa246c806bc54c",
+      "semantic_argument_indices": [
+        0
+      ]
+    }
+  ],
+  "sources": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 928517,
+      "sha256": "7b33e5de55ddba41036a57ddba3694c51afe7153ca7d779ceec0206734a15fd0"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1301841,
+      "sha256": "07cb4bff5a0a9a0d582ebc18e344e5cf06ccd6fc37005292c757ef0501ea50eb"
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 255992,
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    },
+    "executer/user/rust/mcexec_helpers.rs": {
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "bytes": 255596,
+      "sha256": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d"
+    },
+    "executer/user/mcexec.c": {
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "bytes": 221546,
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    },
+    "executer/kernel/mcctrl/syscall.c": {
+      "path": "/home/holden/mckernel/executer/kernel/mcctrl/syscall.c",
+      "bytes": 88788,
+      "sha256": "6b769f9433be6c03dea41e5962d8ac44ce7c0903fe417d43eff7581ab2591450"
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "ihk/cokernel/smp/x86_64/include/ihk/memconst.h": {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    }
+  },
+  "private_proposals": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-A-1/exec-request-arity.PROPOSED.rs.inc",
+      "bytes": 3391,
+      "sha256": "849e95576b72a907d28608333f8e5ead029ebe06bd66a806e24a9e02794cb06b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-A-1/do_execveat.whole.PRIVATE.rs.inc",
+      "bytes": 10492,
+      "sha256": "424bd90cc4b64f24e07ba5e9e1cadaeea1b53dbef5baf1c9b11e45046a895567"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/rust/syscall_interrupt_arity3.rs",
+      "bytes": 2624,
+      "sha256": "c5c33714855e6417a8a40823c302e368fd1681eef9342bed0d6cfce787387251"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/contract-proposals/ptrace_wakeup_log.UNSELECTED.rs.inc",
+      "bytes": 1689,
+      "sha256": "55e13d33c95e85bd71c7a530a9d7056fa5c2c66f26412d5aa7906b087fa47886"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/signal-forward-defined-prefix-1/postimage/kernel/rust/f03_signal_forward_initialized_contract_candidate.rs",
+      "bytes": 1765,
+      "sha256": "d228bd15b4b20d9b3a37dba1489c41d47935943c0548374089ad7e4adf2e1145"
+    }
+  ],
+  "shared_constraints": [
+    "The byte transport and diagnostic/marshal layers may inspect/copy all six initialized slots; PASS does not mean they never read semantically unused slots.",
+    "Existing helpers retain rtid/ttid writes, caller valid0 and copied-packet Release valid1 publication. No new whole request/packet/context/UTI/response zero, ACK, identity seed, response status or endpoint assumption.",
+    "Request72/align8 and packet128 are retained source ABI facts. Stack/wire-copy/lifetime alignment and pending ABI29/codegen proof remain separate.",
+    "Raw argument projection references are permitted only after those scalar fields are initialized. No whole partially initialized aggregate reference or typed load is approved.",
+    "Phase2 mutation needs the same genuine existing completion and exclusive-borrow lifetime as the original code. No new ACK inference or descriptor/filename/argv/envp/VM/thread lifetime closure is supplied.",
+    "C fallback and Rust helper host handlers were checked at their actual narrow semantic fields; concrete selected runtime/source provenance and build/default/native gates must still bind the final implementation.",
+    "This source decision neither proves undefined parity nor clears a genuine service/account/rejected-operation hold. Missing provenance is not clearance."
+  ],
+  "source_implementation_authorized_by_Root_intent": true,
+  "implementation_selection": false,
+  "compiler_execution": false,
+  "ABI29_codegen": false,
+  "lifetime_acceptance": false,
+  "service_clearance": false,
+  "default_adoption": false,
+  "native_acceptance": false,
+  "C_retirement": false,
+  "runtime_authority": null
+}

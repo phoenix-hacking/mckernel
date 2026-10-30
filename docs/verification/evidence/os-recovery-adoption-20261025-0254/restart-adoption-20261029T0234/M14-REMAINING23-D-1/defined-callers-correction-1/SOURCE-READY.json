@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_APPROVED_DEFINED_SIGNAL_CALLERS_AND_PERF_ABI_SOURCE_READY_DEFAULT_OFF",
+  "files": {
+    "prepare_signal.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/prepare_signal.py",
+      "bytes": 9563,
+      "sha256": "241d7f428f67966dfa84d2ef91b4baa8d5cd97d1b0db93fac795d5578ffd19d8"
+    },
+    "SIGNAL-DEFINED-CALLERS.ON-FIRST20.PRIVATE-NOT-APPLIED.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/SIGNAL-DEFINED-CALLERS.ON-FIRST20.PRIVATE-NOT-APPLIED.patch",
+      "bytes": 7818,
+      "sha256": "13d4813e5c8be05a33908e8c252f22bb7596e43ae55bf9390817feb3af118b2f"
+    },
+    "SIGNAL-SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/SIGNAL-SOURCE-CHECKS.json",
+      "bytes": 4646,
+      "sha256": "d6e91a2ce04463693534b3f8c6aba16b2d43c84fec3492f134ac5463a980aa7d"
+    },
+    "postimage/kernel/rust/f03_signal_forward_defined_candidate.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/postimage/kernel/rust/f03_signal_forward_defined_candidate.rs",
+      "bytes": 2907,
+      "sha256": "fa55a0ca4436c8b330221865db8ebe0a8481886a88a4212c817a197199b0c392"
+    },
+    "check_contracts.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/check_contracts.py",
+      "bytes": 6279,
+      "sha256": "a987d171fddcc26757a9f7b2e89c7e3c588ed4eecb2963ec629ebee887afe12f"
+    },
+    "FIELD-WRITER-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/FIELD-WRITER-CHECKS.json",
+      "bytes": 2295,
+      "sha256": "b7b6d09945a52c62c5a33cfcba9c806b8d99e332de763369c2a7148e4639f2f9"
+    },
+    "perf-abi-correction-1/prepare.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/prepare.py",
+      "bytes": 5232,
+      "sha256": "96e1900c9520dfc74d43ebca8057e3893e67a1dceafad812c8b2d7721a5cae01"
+    },
+    "perf-abi-correction-1/PERF-ABI-CORRECTION.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/PERF-ABI-CORRECTION.patch",
+      "bytes": 2851,
+      "sha256": "eec5b60d38cc996796d97a8aea5e443cb20d941901964ba042edc4a7b1264153"
+    },
+    "perf-abi-correction-1/PERF-ENTRY-ABI.ON-FIRST20.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/PERF-ENTRY-ABI.ON-FIRST20.patch",
+      "bytes": 14945,
+      "sha256": "dde53ee3e6725943baf699ba02ceab16effccee20835580c865f7ed6abb1629e"
+    },
+    "perf-abi-correction-1/SOURCE-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/perf-abi-correction-1/SOURCE-CHECKS.json",
+      "bytes": 1988,
+      "sha256": "fc7bdb84e545c0a55c5ab0f0c74872ae6ad4c04b8aed79e8a32db93ceb301c09"
+    },
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/defined-callers-correction-1/ROOT-NEXT.md",
+      "bytes": 3835,
+      "sha256": "b8742d5fc8e1a00c6cb8d743c5c0707a9f16acfc5465628a370a612e000f83e0"
+    }
+  },
+  "signal_callers": [
+    "syscall_forward_rt_sigprocmask_bridge",
+    "syscall_forward_sigaction_update_bridge"
+  ],
+  "prior_queue_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-D-1/SOURCE-READY.json",
+    "bytes": 5504,
+    "sha256": "6c83b3456106d26a5ceda3969c21f20c663a57ac6fe308a04ad45734869b13aa"
+  },
+  "patch_apply_check": "PASS_SIGNAL_DELTA_AND_PERF_DELTA_AND_COMPLETE",
+  "default_selection_authorized": false,
+  "independent_candidate_review": null,
+  "actual_compile_link_native": false,
+  "runtime_authority": null,
+  "C_retirement": false
+}

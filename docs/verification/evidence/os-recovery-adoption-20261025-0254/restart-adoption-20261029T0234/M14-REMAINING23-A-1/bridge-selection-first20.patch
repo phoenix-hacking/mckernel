@@ -1,0 +1,42 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -7690,7 +7690,17 @@
+ extern long f03_execveat_finish_switch_v1(struct thread *, long);
+ #endif
+ 
+-static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXECVEAT_BRIDGE)
++int
++#else
++static int
++#endif
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#line 7528
++#else
++#line 7537
++#endif
++do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
+ 		const char *filename, char **argv, char **envp, int flags)
+ {
+ 	int error;
+@@ -7930,6 +7940,10 @@
+ }
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#ifdef MCKERNEL_RUST_F03_EXECVEAT_BRIDGE
++extern int syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
++		char **argv, char **envp, int flags);
++#else
+ int
+ syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
+ 		char **argv, char **envp, int flags)
+@@ -7937,7 +7951,8 @@
+ 	return do_execveat((ihk_mc_user_context_t *)ctx, dirfd, filename,
+ 			argv, envp, flags);
+ }
+-
++#endif
++#line 7779
+ long sys_execve(int n, ihk_mc_user_context_t *ctx);
+ #else
+ #line 7705

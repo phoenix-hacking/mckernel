@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY",
+  "rows": [
+    {
+      "symbol": "terminate",
+      "source": "reused family 878c",
+      "next_requirement": "current-stack and Process/VM edge; ptrace progress; profile and ABI review",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "terminate_host",
+      "source": "reused family 878c",
+      "next_requirement": "detached-thread reset authority, Process lifetime, lock/provider ownership",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "terminate_mcexec",
+      "source": "reused family 878c",
+      "next_requirement": "all request bytes initialized before copy, natural alignment, synchronous provider lifetime",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "interrupt_syscall",
+      "source": "separate opt-in arity3 Rust implementation",
+      "next_requirement": "Root defined kill args 3\u20135 zero contract, real layout/profile and selected forwarding ABI",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "ptrace_detach_do_kill_bridge",
+      "source": "leaf/x86 Rust implementation",
+      "next_requirement": "independent raw pointer, C unsigned-to-long provider ABI and source review",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "ptrace_detach_kfree_bridge",
+      "source": "exact 7777 Rust profile-gated reuse",
+      "next_requirement": "actual __FILE__/__LINE__ and paired profile binding",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "ptrace_wakeup_sig",
+      "source": "retained technical initialization hold",
+      "next_requirement": "failed copy published sendsig has potentially uninitialized info; decide publication/ownership before resume",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    },
+    {
+      "symbol": "ptrace_wakeup_log_bridge",
+      "source": "unselected u32 formatting proposal",
+      "next_requirement": "Root chooses defined unsigned hex contract and binds ddebug metadata",
+      "compiled": false,
+      "linked": false,
+      "native": false,
+      "retirement": false
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/QUEUE-C.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 9369,
+    "sha256": "1b33bc15d911d69cea668bc32e5593664f78ab94539d9aa1be598247a1a982bf"
+  },
+  "source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/SOURCE-CHECKS.json",
+    "bytes": 4072,
+    "sha256": "0d9d1b41f395ba557007dba2ac7842c89f5a6a2767b37ea76393d693b3025341"
+  },
+  "logger_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/contract-proposals/ptrace_wakeup_log.UNSELECTED.rs.inc",
+    "bytes": 1689,
+    "sha256": "55e13d33c95e85bd71c7a530a9d7056fa5c2c66f26412d5aa7906b087fa47886"
+  },
+  "logger_source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/contract-proposals/SOURCE-CHECKS.json",
+    "bytes": 1046,
+    "sha256": "52d6c18b7d2ce0f7dd9329fd49bb9242367536d11160afb55fc9633e4af2448a"
+  },
+  "applicability": {
+    "command": "git apply --check --directory=docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-TERMINATION-FAMILY-COMPOSITION-1/postimage docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/QUEUE-C.PRIVATE-NOT-APPLIED.patch",
+    "exit_code": 0,
+    "output": ""
+  }
+}

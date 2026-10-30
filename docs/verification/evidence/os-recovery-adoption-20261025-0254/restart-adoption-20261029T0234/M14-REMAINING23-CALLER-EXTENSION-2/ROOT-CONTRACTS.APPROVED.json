@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "APPROVE_REVIEWED_NAMED_UNUSED_SLOT_SOURCE_CONTRACTS",
+  "recorded_utc": "2026-10-30T00:41:05.196468+00:00",
+  "contracts": [
+    {
+      "id": "LEGACY-CLONE-UNUSED4-5",
+      "definition": "Preserve original clone request number and original args0..3 assignments exactly. Before its first send define only previously indeterminate args4 and5 as zero. Later phase1 and cleanup-kill rewrites retain original number/args0..1 changes, preserving all other now-initialized fields. No other cleanup-kill or clone semantic change is approved.",
+      "implementation": "New initialization logic in Rust provider; any retained C fallback uses only a declaration/call to that Rust provider, with original logical source locations preserved. Root owns shared ABI/canonical integration."
+    },
+    {
+      "id": "COREDUMP-UNUSED4-5",
+      "definition": "In selected Rust mem_helpers coredump retain number and args0..3 exactly; initialize only args4 and5 to zero before mem_core_syscall. Preserve every source field conversion, error convention and descriptor/table lifetime.",
+      "implementation": "Private Root-owned mem_helpers patch may be prepared by Queue B; no whole-request zero, no helper-owned ID/valid writes. Preserve existing file/line macro identities."
+    }
+  ],
+  "limits": "These are intentional defined transmitted-slot corrections. Selected host semantic consumers must independently be checked. No ACK, signal, lifetime, service/account/old rejected-native-operation clearance, native or build grant. Existing caller-order, whole-producer coverage and ABI proof remain.",
+  "runtime_authority": null,
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-CALLER-EXTENSION-2/independent-review-1/REVIEW.ACTUAL.json",
+    "bytes": 1573,
+    "sha256": "4ffa6ae38d3c25c13e762aabda123d500f5820cb31daff78d98a41b4f965e82e"
+  }
+}

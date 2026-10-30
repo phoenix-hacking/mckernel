@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY_CONTRACTS_OPEN",
+  "checks": [
+    "reverse all three C changes to exact family C preimage",
+    "exact previously prepared tracked-free code and provenance reused",
+    "direct kill ABI, raw forwarding, signed conversion provider, original fallback",
+    "interrupt defined zero-unused-args proposal, original fallback and Rust-owned debug row",
+    "both selected/fallback branches and dispatch line origins modeled",
+    "termination family Rust code unchanged",
+    "held ptrace wakeup/logger C source unchanged",
+    "all new modules paired with dependencies; contract-gated candidates default off"
+  ],
+  "model": {
+    "kill:dispatch=False:selected=False": {
+      "fallback_start": 4697,
+      "next_line": 4704
+    },
+    "kill:dispatch=False:selected=True": {
+      "selected_decl": 4698,
+      "next_line": 4704
+    },
+    "kill:dispatch=True:selected=False": {
+      "fallback_start": 4690,
+      "next_line": 4697
+    },
+    "kill:dispatch=True:selected=True": {
+      "selected_decl": 4691,
+      "next_line": 4697
+    },
+    "interrupt:dispatch=False:selected=False": {
+      "fallback_start": 5663,
+      "debug": 5669,
+      "next_line": 5681
+    },
+    "interrupt:dispatch=False:selected=True": {
+      "selected_decl": 5664,
+      "next_line": 5681
+    },
+    "interrupt:dispatch=True:selected=False": {
+      "fallback_start": 5656,
+      "debug": 5662,
+      "next_line": 5674
+    },
+    "interrupt:dispatch=True:selected=True": {
+      "selected_decl": 5657,
+      "next_line": 5674
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/QUEUE-C.PRIVATE-NOT-APPLIED.patch",
+    "bytes": 9369,
+    "sha256": "1b33bc15d911d69cea668bc32e5593664f78ab94539d9aa1be598247a1a982bf"
+  },
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/syscall.c",
+      "bytes": 932879,
+      "sha256": "7a4856dbba4f9a43a179f5403223e787627912a859d8c047e95041194a8c2e85"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 44592,
+      "sha256": "83ba6cf1069f723e3aded8b373739a8952a7679f1a5b065953c31326048758a3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/rust/syscall_policy.rs",
+      "bytes": 1304848,
+      "sha256": "a0d8a8c51f3c6ac56f66228012660aba4553c4cd959942bae4f5c75bdc8ffb65"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/rust/syscall_ptrace_detach_kfree.rs",
+      "bytes": 1181,
+      "sha256": "b5793ef0ee2b837e356917c070a8931de5f893463190deea469641dd1e38e0f0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/rust/syscall_ptrace_detach_kill.rs",
+      "bytes": 875,
+      "sha256": "6e6659fc62a3a2df73a4c40aeaaa57e77aaf30415eded759c9640128f6e67b54"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REMAINING23-C-1/postimage/kernel/rust/syscall_interrupt_arity3.rs",
+      "bytes": 2624,
+      "sha256": "c5c33714855e6417a8a40823c302e368fd1681eef9342bed0d6cfce787387251"
+    }
+  ],
+  "limitations": "Source-only. No preprocessor, compiler, link, runtime, actual 389 readback or retirement claim. Interrupt zero-unused-argument contract and exact C/Rust source-profile pairing require Root decision/review."
+}

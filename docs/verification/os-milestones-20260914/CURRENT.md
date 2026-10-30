@@ -1,3 +1,45 @@
+## Full 28-function cutover target and qualified build — 2026-10-30T00:48:28.539819+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Latest user004446 is applied: all23 remaining generic plus5 architecture functions
+form ONE experimental integration target. Completed real Rust bodies are selected
+together for compile feedback; genuinely missing providers/contracts stay explicit.
+No unqualified native execution, stubs, feature removal or C forwarding to force0.
+M14 remains4/6; M15 paused. Weekly usage as sampled: 42% of10080min,
+reset1793774133, included-only with no prepaid fallback.
+
+Actual first batch: Rust and generic C compiled; image linked; all3commands0.
+Build wall20.113176s, CPU20.136898s, cumulative peak childRSS596788KiB. Reused SDK21
+and9objects. GO filemtime to first recorded compiler-command start0.587572s; exact
+Popen timestamp unmeasured. Image1cd7e4e, Rust52f739f3, generic0633c524 preserved.
+Independent artifact2565c3fe passes unchanged389 oracle,18unique Rust providers
+for19removed C definitions, inherited/current consumer and selected ABI/link proof.
+Qualified candidate has23generic+5arch C functions. Original119 retained. Native
+qualification, default activation, accepted C retirement and new file closures0.
+
+Root owns stopped container a7fe0b67d129afc3868d329d65f68317b6aadee6bedd7bc76330a52cdd0ae7ef.
+Holder2623592/b111558755 and runner2624628/b111575974 joined0; tool74525 terminal0.
+Nonce4709c9fae2c743a7acd662e93a663358 consumed once,74-heavy-nonce Root70 ledger2a8f
+is PENDING current clearance. Root69/free5326 are historical after this build.
+No holder/runner/guest is live. Exact normal retirement source5180318f has focused
+prepublication review95b6; publish/fetch, final source receipt and execution release
+are next. No cleanup replay, native release or current-free claim follows from exit0.
+
+Actual A/B/C/D and ARCH5 implementation turns plus compositor were all verified
+running once after user004446 followups. A owns4 mmap/fork/exec rows; B6 syscall/
+constructor/util rows; C8 termination/ptrace rows; D5 credential/perf/signal rows.
+ARCH5 owns its5; Root is sole canonical/shared-ABI and physical writer. Compositor
+folds prepared37target base and the current ownership/caller fixes into all28.
+Exact pending work: mmap reservation mutators/child pins; clone+coredump slots4/5;
+credential ioctl-failure scratch validity with matching host prerequisite; pending
+signal staged copy and complete slot exclusion. Approved fixes and Rust-owned
+binding tables are reused. The real current compiler result above supersedes older
+no-compiler entries below. Existing queue records19compiled/linked separately from
+native0; final coherent ownership/ABI/application/lifecycle/native proof remains open.
+
+Requests000022/002023/004025 and foreground000118/000817/003246/004446 acknowledged.
+Fixed20minute buckets and original30minute baseline retained; no95%/speedup claim.
+
 ## Conversion build holder admission ready — 2026-10-29T23:54:21.603350+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
