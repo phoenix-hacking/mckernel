@@ -1,0 +1,203 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_ADMITS_ONE_PURE_SOURCE_TEST",
+  "author": "/root",
+  "at": 1793383955.6334112,
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-compositor-source-1",
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=128",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/compile-argv-0001/time.txt",
+    "/usr/bin/python3",
+    "-s",
+    "-E",
+    "-S",
+    "-B",
+    "test_compile_argv_gate.py"
+  ],
+  "controls": {
+    "ACTUAL-CONTROLS-ARMED.json": {
+      "sha256": "a3335ac6e6751f5816d25cd85579958f5c34007e090ff9d5306d0f3a3e6eb1dc",
+      "binding": {
+        "guardian": {
+          "pid": 2996157,
+          "ppid": 2995936,
+          "start": "118034389",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2996160,
+          "ppid": 2995936,
+          "start": "118034501",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2996005,
+          "ppid": 2996003,
+          "start": "118034116",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2996001,
+          "ppid": 2995936,
+          "start": "118034086",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2996003,
+          "ppid": 2996001,
+          "start": "118034102",
+          "state": "S"
+        }
+      },
+      "caps": {
+        "boot_deadline": 1571567.6959065471,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "deadline": 1793774133,
+        "monotonic_deadline": 1556229.568859425
+      }
+    },
+    "ACTUAL-CAPACITY-FALLBACK-ARMED.json": {
+      "sha256": "08571e7f2d326484d9471838e60462553a9d59e756321d70328a9a20988beae6",
+      "binding": {
+        "guardian": {
+          "pid": 2996157,
+          "ppid": 2995936,
+          "start": "118034389",
+          "state": "R"
+        },
+        "monitor": {
+          "pid": 2996160,
+          "ppid": 2995936,
+          "start": "118034501",
+          "state": "R"
+        },
+        "server": {
+          "pid": 2996005,
+          "ppid": 2996003,
+          "start": "118034116",
+          "state": "S"
+        },
+        "watcher": {
+          "pid": 2996001,
+          "ppid": 2995936,
+          "start": "118034086",
+          "state": "S"
+        },
+        "worker": {
+          "pid": 2996003,
+          "ppid": 2996001,
+          "start": "118034102",
+          "state": "S"
+        }
+      },
+      "caps": {
+        "boot_deadline": 1571567.6959065471,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "deadline": 1793774133,
+        "monotonic_deadline": 1556229.568859425
+      }
+    }
+  },
+  "weekly_used_percent": 86,
+  "sources": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-compositor-source-1/test_compile_argv_gate.py": {
+      "sha256": "3e74973ad907bbc0da69f6a6fed922362db349791e15c1d0177683d6e287da25",
+      "bytes": 2211
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-compositor-source-1/compile_argv_gate.py": {
+      "sha256": "00faf046833016d024720884d81d45731f8fe0816f8b4b6e8d233853d71c1cd5",
+      "bytes": 4279
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/m14-compositor-source-1/COMMANDS.SOURCE-ONLY.json": {
+      "sha256": "82ae9b201c56d7f4a3d1d6f142222a34d16b1e0d56c1d90d103d7ad85c1f5572",
+      "bytes": 35335
+    }
+  },
+  "tools": {
+    "/usr/bin/env": {
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc",
+      "device": 66306,
+      "inode": 1048858,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/taskset": {
+      "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "device": 66306,
+      "inode": 1052691,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/prlimit": {
+      "sha256": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "device": 66306,
+      "inode": 1052683,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/timeout": {
+      "sha256": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "device": 66306,
+      "inode": 1049784,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/time": {
+      "sha256": "f3c4104d963b00e1b3a3dcf80722fea57f15f67b57a512cc30adc434b60e6e03",
+      "device": 66306,
+      "inode": 1049782,
+      "mode": "0o100755",
+      "uid": 0
+    },
+    "/usr/bin/python3.8": {
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "device": 66306,
+      "inode": 1048651,
+      "mode": "0o100755",
+      "uid": 0
+    }
+  },
+  "capacity": {
+    "/home/holden/mckernel": 142567473152,
+    "/home/holden/mckernel-work/scratch": 47613485056
+  },
+  "grant": {
+    "cpu": [
+      6
+    ],
+    "jobs": 1,
+    "max_address_space_bytes": 536870912,
+    "cpu_seconds": 30,
+    "wall_seconds": 45,
+    "native_access": false,
+    "heavy_lease": false
+  },
+  "independent_profile_review": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-profile-review-1/RESULT.md",
+  "currentfree": "NOT_ACCESSED_OR_ASSERTED_BY_THIS_PURE_SOURCE_FAMILY",
+  "native_owners": "preserved; no native API, container, module or scratch mutation",
+  "outputs": {
+    "stdout.txt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/compile-argv-0001/stdout.txt",
+    "stderr.txt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/compile-argv-0001/stderr.txt",
+    "time.txt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/source-test-runs/compile-argv-0001/time.txt"
+  },
+  "share_retirement": "pending positive terminal; unknown retains share"
+}

@@ -1,3 +1,34 @@
+## M14 manual resume and source-test checkpoint — 2026-10-30T18:13Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Explicit manual launcher20261030T175456Z-0e492844 resumed same Root01a18bc3;
+new control/capacity receipts and live PID/birth matches observed. Included-only
+86% last observed; fixed UTC1793774133 and tighter BOOT1571567.6959065471 /
+MONO1556229.568859425 retained. M14 remains4/6, practical35/35 separate, M15 queued.
+Historical23generic+5arch C names are not a newly joined selected-artifact count.
+
+Actual new result:6 pure compile-argv DATA unit tests pass under independently
+reviewed CPU6/512MiB/30CPU/45wall profile, clean environment and Python-s-E-S-B.
+Wall0.06s, userCPU0.05s, peak17900KiB; positive tool exit0 and timeout group empty;
+ordinary share released. No kernel compile/link, production/native, guest,
+C-boundary retirement or file closure credit. Exact argv/source/tool/control
+bindings and raw streams/timing retained in evidence below.
+
+Source lanes: sdk_owner implements authenticated root producer/shared protocol;
+observer_caller scripts-union/freeze/inventories successor is unrun; m14_arch is
+single compositor/shared-ABI owner; m14_generic corrects reviewed perf owner
+pin/rollback/registry/ABI defects. No source selected. Real supervisor bootstrap,
+union/split custody and mounted view, original389 and native acceptance remain.
+Root postjoin path ROOT-NEXT has old actual custody/intent/release and an empty
+prepared actual-frontier-1/commands; emptiness does not authorize replay. New
+Root custody must enumerate later operations, bind current controls/fresh nonce
+and obtain reviewed observer release; currentfree staysUNKNOWN. No cleanup replay.
+
+Original30min baseline retained; stopped/unobserved gap is not a velocity bucket.
+New resumed measurement17:54:56–18:14:56Z; no95% claim. Evidence: ../evidence/
+os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-MANUAL-RESUME-SOURCE-TEST-CHECKPOINT-20261030-1/.
+
 ## Foreground dispatcher repair — 2026-10-30T17:48Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
