@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing",
+  "status": "SOURCE_ONLY_UNRELEASED_NOT_A_MOUNT_OR_BUILD",
+  "base_composite_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-root-and-nonheld-composite-1/composite.patch",
+    "sha256": "fc64348e49fca0891bb53d8545e61a331199bf60ccd22a97e13203fbc37c7aac"
+  },
+  "base_composite_mount_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-root-and-nonheld-composite-1/MOUNT-MANIFEST.json",
+    "sha256": "8cb23a435a512bff5cc8a80d28fe9c70764ef047918c60722e535fa721738593"
+  },
+  "nonheld13_data32_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-nonheld-composition-1/MANIFEST.json",
+    "sha256": "ad611913d8965e1140443c29678c2e1180a90a91095ea0141929b8767a92ada7"
+  },
+  "xpmem_delta_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-xpmem-tg-publish-order-1/publish-order.patch",
+    "sha256": "a8f4e33cff2cafac59acbbc28b125ad916840b8ae615714a56d78f55611935ab"
+  },
+  "xpmem_preimage": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/xpmem_helpers.rs",
+    "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255"
+  },
+  "xpmem_postimage": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-xpmem-tg-publish-order-1/xpmem_helpers.rs",
+    "sha256": "8a88864073aec2d288297893da072bc26ba34773405bedb09f7c981a0c398892"
+  },
+  "prior_perf_separate_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-perf-standalone-integration-1/INTEGRATION.json",
+    "sha256": "cb63bb9c156525c0a70ee3b4ff3cd29a0b7356dd1a928ac33398a534f567bc5d"
+  },
+  "historical_on_map": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-on-mount-map-1/ON-MOUNT-MAP.NOT-RELEASED.json",
+    "sha256": "d2b20bfe7ea3579798a81820c5ac0e6fa94fa17dc1ad82674c3dc77ccbb8d7cd"
+  },
+  "composite_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-xpmem-nonheld-composite-delta-1/composite-plus-xpmem.patch",
+    "sha256": "84f9215d480c906c31505c3592fc1a94ae2d2bd00530647860b0f13af5b8dea7",
+    "ordering": "base root/kernel/arch patch followed by XPMEM patch; requires prior exact per-target source composition including Rust overlay"
+  },
+  "proposed_leaf_source_view": {
+    "parent_target": "/src/kernel/rust",
+    "parent_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust",
+    "parent_manifest": "ad611913d8965e1140443c29678c2e1180a90a91095ea0141929b8767a92ada7",
+    "child_target": "/src/kernel/rust/xpmem_helpers.rs",
+    "child_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-xpmem-tg-publish-order-1/xpmem_helpers.rs",
+    "expected_parent_file_sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+    "expected_effective_file_sha256": "8a88864073aec2d288297893da072bc26ba34773405bedb09f7c981a0c398892",
+    "proposed_only": true,
+    "actual_mount_mechanism": null,
+    "parent_inode": null,
+    "preimage_inode": null,
+    "child_inode": null,
+    "effective_mount_id": null,
+    "quiescence_receipt": null
+  },
+  "held_disposition": "All existing holds remain; source names or patches do not prove indirect reachability exclusion. Standalone perf proposal is separately retained, not selected by this delta.",
+  "off_pairing": "Existing OFF predecessor producer/profile and predecessor architecture source must be separately rebound; this does not make OFF viable.",
+  "open_requirements": [
+    "independent review of exact composite delta",
+    "full source-map membership and complete Rust tree binding",
+    "actual overlay mechanism and nested precedence including held earlier script-target issue",
+    "live source/file/ancestor identities, non-aliasing, quiescence and mount graph",
+    "selector, compiler/link, default and native validation",
+    "fresh operation controls and admission"
+  ],
+  "operation_release": null,
+  "live_source_identity": null,
+  "selection_receipt": null,
+  "build_receipt": null,
+  "native_receipt": null
+}

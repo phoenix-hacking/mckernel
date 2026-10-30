@@ -1,3 +1,26 @@
+## M14 XPMEM publication cursor — 2026-10-30T10:42Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued. No new configured/link/native/guest, C-retirement
+or file credit. Private Rust patch a8f4e33 moves xpmem_open_tg group_leader store
+before hash-list insertion/unlock. Independent source review confirms this closes
+the specific publication window for readers using the same correct bucket lock;
+raw thread/VM lifetime, duplicate TG creation, partition/open/fork/host rollback
+and actual lock semantics remain open. No candidate source has been selected.
+
+Private composite delta 84f9215d binds reviewed nonheld composite and XPMEM patch.
+The Rust XPMEM module is not gated by the nonheld option, so using the changed leaf
+also changes Rust-enabled OFF profile behavior. Current mount validator rejects that
+nested XPMEM child; source/mount closure, effective view and OFF pairing remain open.
+Actual-body original-negative/patched-positive fixture and bounded dirfd generator
+are source-only, unrun/uncompiled. No applicable reviewed reusable light profile or
+fresh owner/admission yet; output custody, source/tool identity and watchdog remain
+required. Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and
+physical clearance UNKNOWN. Preserve all native owners, used nonces, scratch21,
+27:4, fixed/tighter clocks, held paths and weekly-only allowance. Evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-XPMEM-PUBLISH-CHECKPOINT-20261030-1/REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T10:26Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,10 @@
+--- a/kernel/rust/xpmem_helpers.rs
++++ b/kernel/rust/xpmem_helpers.rs
+@@ -7780,3 +7780,7 @@
+     }
+     0
+ }
++
++#[cfg(test)]
++#[path = "xpmem_tg_publication_tests.rs"]
++mod xpmem_tg_publication_tests;
