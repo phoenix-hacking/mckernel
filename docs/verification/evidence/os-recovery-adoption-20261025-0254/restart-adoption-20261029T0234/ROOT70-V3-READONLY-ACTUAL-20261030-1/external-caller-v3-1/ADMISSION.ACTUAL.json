@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T06:11:35.649449+00:00",
+  "status": "ADMIT_EXACT_V3_READONLY_ONCE",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--foreground",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "60s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root_observer_direct_parent_v3.py"
+  ],
+  "packet_sha256": "461fa35d541719aab23b73974ff965a513a5adf6b93065dbe291631c76cf2a5a",
+  "independent_review": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/INDEPENDENT-DIRECT-PARENT-V3-REVIEW.md",
+  "release_sha256": "3b9ce21f18716fc96556d982670dfce1c15edb4df2334266e791e239e51a27b5",
+  "controllers": {
+    "guardian": {
+      "pid": 2727507,
+      "start": "113108156"
+    },
+    "monitor": {
+      "pid": 2727509,
+      "start": "113108266"
+    },
+    "server": {
+      "pid": 2727360,
+      "start": "113107784"
+    },
+    "watcher": {
+      "pid": 2727356,
+      "start": "113107752"
+    },
+    "worker": {
+      "pid": 2727358,
+      "start": "113107768"
+    },
+    "capacity": {
+      "pid": 2727510,
+      "start": "113108369"
+    }
+  },
+  "weekly": {
+    "at": "2026-10-30T06:11:16.103361+00:00",
+    "primary": {
+      "resetsAt": 1793774133,
+      "usedPercent": 67,
+      "windowDurationMins": 10080
+    }
+  },
+  "resource_plan_GiB": {
+    "old_native_reserved": 12,
+    "v2_early_parent_UNKNOWN_reserved": 2,
+    "v3_parent_soft_AS_limit": 1,
+    "observer": 2,
+    "serial_query": 2,
+    "outer": 0.75,
+    "daemon": 1,
+    "controls": 1,
+    "unmeasured_pure_share_retained": 0.5,
+    "total": 22.25,
+    "ceiling": 22.3811
+  },
+  "parent_AS_detail": "Reviewed source parent soft1GiB/hard2GiB; source never raises its own soft AS, observer child separately accounted2GiB. No limit changed.",
+  "control_RSS_bytes": 428634112,
+  "MemAvailable_bytes": 28508098560,
+  "free_bytes": {
+    "/home/holden/mckernel": 144193822720,
+    "/home/holden/mckernel-work/scratch": 47696433152
+  },
+  "no_concurrent_compiler": true,
+  "current_free": false,
+  "historical_and_held_ownership_preserved": true
+}

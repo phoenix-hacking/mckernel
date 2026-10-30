@@ -1,0 +1,15 @@
+# Private F06 `debug_constants` alignment successor
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The independent actual ABI12 observation `271dd18e...` found all 12 words and all 96 bytes of the first Rust object equal to both retained C references, with no owning relocations. The selected HOST13 C and older SDK14 C reference sections each have alignment 32; the first Rust object section has alignment 8. These are observations about those exact objects, not a universal claim about every build or consumer.
+
+`ALIGN32.PRIVATE.patch` changes only `kernel/rust/f06_debug_constants.rs`: a `#[repr(C, align(32))]` wrapper contains the same `[usize; 12]` initializer at offset zero. Compile-time assertions require wrapper size 96, alignment 32 and words offset 0. The external name remains `debug_constants`, the static remains writable and constant-initialized, the twelve source expressions and all-ones sentinel are byte-for-byte unchanged, and no Rust reference to the static or runtime initializer is added. C source, lib wiring, selector defaults, ABI types, original source locations and prior evidence are untouched. The first candidate and actual objects are preserved. Actual compiler emission is unmeasured.
+
+## Next exact object check
+
+After independent source review and a fresh applicable compiler/resource admission, stage the same previously observed non-held HOST configuration and source tuple, replace only the exact hash-bound module with this successor, preserve `f06_debug_constants_candidate` and its paired C selector, and compile the Rust object once to a fresh output. Bind actual compiler/toolchain/config/source hashes and depinfo. The previously selected C object `173c7e9a...` can be reused only if its exact source/profile binding remains valid; its independent observation found no FUNC or OBJECT definitions. The retained HOST13 original C object is `b1512d15...` and the prior SDK14 original C object is `30bddb4c...`.
+
+Independently extract the new Rust `debug_constants` symbol's **exact 96 bytes** from its actual ELF section and compare byte-for-byte and as twelve little-endian u64s against each retained C symbol, preserving object/section offsets, hashes, raw bytes and any mismatches. Require exactly one `GLOBAL STT_OBJECT` provider, 96-byte symbol size, a writable allocated section, no owning relocations, section alignment at least 32 and symbol offset divisible by 32. Check the same ordered twelve values and `usize::MAX` sentinel; do not replace expected values. This would close only the new matching object-byte/alignment observation. The previous SDK14 byte equality did not establish complete source/config/layout identity, and must remain scoped accordingly.
+
+Before any later link or retirement claim, prove the actual selected gate-off C object and Rust provider identities, final symbol/address alignment and existing consumers, original 389 metadata, default selection and applicable matched SDK/native behavior. No compiler, test, link, guest or native action was run in this source-only turn.

@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_MAPPING_ONLY_NO_COMPARISON",
+  "rows": [
+    {"index": 0, "C": "sizeof(struct cpu_local_var)", "Rust": "size_of::<CpuLocalVar>()"},
+    {"index": 1, "C": "offsetof(struct cpu_local_var, current)", "Rust": "offset_of!(CpuLocalVar, current)"},
+    {"index": 2, "C": "offsetof(struct cpu_local_var, runq)", "Rust": "offset_of!(CpuLocalVar, runq)"},
+    {"index": 3, "C": "offsetof(struct cpu_local_var, status)", "Rust": "offset_of!(CpuLocalVar, status)"},
+    {"index": 4, "C": "offsetof(struct cpu_local_var, idle)", "Rust": "offset_of!(CpuLocalVar, idle)"},
+    {"index": 5, "C": "offsetof(struct thread, ctx)", "Rust": "offset_of!(Thread, ctx)"},
+    {"index": 6, "C": "offsetof(struct thread, sched_list)", "Rust": "offset_of!(Thread, sched_list)"},
+    {"index": 7, "C": "offsetof(struct thread, proc)", "Rust": "offset_of!(Thread, proc)"},
+    {"index": 8, "C": "offsetof(struct thread, status)", "Rust": "offset_of!(Thread, status)"},
+    {"index": 9, "C": "offsetof(struct process, pid)", "Rust": "offset_of!(Process, pid)"},
+    {"index": 10, "C": "offsetof(struct thread, tid)", "Rust": "offset_of!(Thread, tid)"},
+    {"index": 11, "C": "(uintptr_t)-1", "Rust": "usize::MAX"}
+  ],
+  "historic_HOST13_C_reference": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-arch-signal-postformat-20261030-1/arch_syscall.o",
+    "sha256": "b1512d15e141a661298ff8c0304f77581dafbe923c57f5f0dedf101bce74a3e8",
+    "retained_observation": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/arch-signal-postformat-host-link-1/INDEPENDENT-ACTUAL-ARTIFACT-REVIEW.md",
+    "scope": "Previously compiled C data provider, not a result for this Rust candidate. Bind exact target, config and type source before comparison."
+  },
+  "historic_CURRENT119_SDK14_C_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/ROOT-CURRENT119-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "sha256": "30bddb4cf0e8083fcce83fe691410b6d4a0e8eabec3cb6ce3b6ab190be8ab3da",
+    "scope": "Retained historical selected x86 C object, not automatically a matching-layout reference. Confirm actual symbol, bytes, target/config/header and object hash before comparison."
+  },
+  "measured_12_values": null,
+  "actual_comparison": null,
+  "authority": null
+}

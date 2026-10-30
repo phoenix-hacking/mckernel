@@ -1,0 +1,40 @@
+{
+  "parent": {
+    "pid": 2766309,
+    "birth": "113814020",
+    "ppid": 2766308,
+    "pgid": 2766308,
+    "sid": 2766308
+  },
+  "sudo_child": {
+    "pid": 2766316,
+    "birth": "113814045",
+    "ppid": 2766309,
+    "pgid": 2766316,
+    "sid": 2766316
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/timeout",
+    "--foreground",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "60s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-root70-readonly-admission-source-1/root_observer_direct_parent_v3.py"
+  ],
+  "started_epoch": 1793340695.7592816
+}

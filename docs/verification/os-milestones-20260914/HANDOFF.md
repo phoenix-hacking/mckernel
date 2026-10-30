@@ -1,3 +1,36 @@
+## M14 data and SDK checkpoint — 2026-10-30T06:47Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same Root remains active; M14 4/6, practical35/35 separate, M15 queued. Selected
+qualified1cd7e4e6 still owns23generic+5arch C names. No new production/default,
+native, guest, accepted C retirement or file closure. Last fetched checkpoint f5d0e82a.
+
+New F06 Rust debug_constants matches all12 original96-byte values and now preserves
+both C references'32-byte storage alignment. New selected HOST C object173c has
+no FUNC/OBJECT and only empty runtime sections plus .note.gnu.property. Rust-only
+align32 compilefbfa passed; C was reused. Raw HOST link87a23acd (10485936B) passed
+at06:46:37, with independent final provider/address proof. Native/SDK/original389,
+default/source ownership and real consumer qualification remain open.
+
+Root70 removal was already accepted in69216/bc2df. V3's redundant0611 CID query
+returned No such object; new client joins and numeric-group samples are retained.
+No more a7fe query/removal, no consumed nonce replay. Historical current-free/
+no-unlisted and v2 parent birth remain UNKNOWN, with reserved resources retained.
+
+SDK13 owner v3 addresses mount-view/environment/daemon-birth source findings;
+actual execution still unreleased. Pure owner7/7 and input5/5 pass. The lockfile
+fd3d digest is proven. Source6153's single required current pass matched6104 files
+and49 symlinks (105803732B), with measured identity/closure/resource evidence.
+Nightly's earlier single669MB pass lacks total resource metrics; retain that limit.
+NEXT: finish per-attempt unchanged-input cache/ledger conversion and independent
+source-map/owner review, bind actual daemon/image/CPU6/mount separation facts and
+fresh SDK-only release. No global native-free inference or repeated hash loops.
+
+Adjacent20minute buckets06:06:29.892–06:26:29.892 and06:26:29.892–06:46:29.892
+are recorded separately. The new link is after the latter cutoff. Original30min
+baseline remains; exact queue/blocked times unknown,95% not achieved/claimed.
+Evidence: ROOT70-V3-READONLY-ACTUAL-20261030-1 and current private F06/SDK packets.
+
 ## M14 signal implementation checkpoint — 2026-10-30T06:08Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

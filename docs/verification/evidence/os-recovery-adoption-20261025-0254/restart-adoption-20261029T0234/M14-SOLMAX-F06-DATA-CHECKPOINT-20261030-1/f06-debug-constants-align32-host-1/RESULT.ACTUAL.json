@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T06:39:10.447452+00:00",
+  "status": "PASS_HOST_ALIGN32_COMPILE_PENDING_ABI",
+  "compiler_exit": 0,
+  "files": {
+    "RUNNER.pid": {
+      "bytes": 8,
+      "sha256": "202b699258ec04b70937fbe659517b37f01b7d68dbaaa3f8f564426a602b34c3",
+      "mtime_ns": 1793342331607061367
+    },
+    "RUNNER.proc-stat": {
+      "bytes": 322,
+      "sha256": "060bf71d93a5960f0aa1ef38cba38eaba131cf615cd6347512cbcdd49341a7c1",
+      "mtime_ns": 1793342331607061367
+    },
+    "RUNNER.identity": {
+      "bytes": 34,
+      "sha256": "78b9ad12bc18d984b0d0b55b1181d5f94a18d311030542d92f9d7bbe7638c2fd",
+      "mtime_ns": 1793342331615061625
+    },
+    "run.sh": {
+      "bytes": 4941,
+      "sha256": "68d873044913c11092865823bde8a58f0994b8c1984892d23970b14ef54defc1",
+      "mtime_ns": 1793342231699836524
+    },
+    "rust.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mtime_ns": 1793342331615061625
+    },
+    "rust.stderr": {
+      "bytes": 91501,
+      "sha256": "7fc80887bdc94b1873b7c69da00722a708eca99264febd9755d3e1b020f6bec6",
+      "mtime_ns": 1793342350335664996
+    },
+    "rust.time": {
+      "bytes": 4809,
+      "sha256": "0837f7c7d476265b146506917ce08a63a4d91d0f8a4046d179c74a531990ef40",
+      "mtime_ns": 1793342350363665898
+    },
+    "rust.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "mtime_ns": 1793342350363665898
+    },
+    "mckernel_rust.o": {
+      "bytes": 18794592,
+      "sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+      "mtime_ns": 1793342350331664867
+    },
+    "mckernel.d": {
+      "bytes": 88493,
+      "sha256": "1d4b7473ae61d40384f919f5f499bc22a3f8d36acf3529c5598cef3188c05aac",
+      "mtime_ns": 1793342332067076196
+    }
+  },
+  "time": "\tCommand being timed: \"/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc --crate-name mckernel_rust --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=2 -C code-model=large -C relocation-model=static -C no-redzone=yes -C force-frame-pointers=yes -C overflow-checks=off -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma --cfg f03_io_diagnostic_callbacks_candidate --cfg f03_mincore_candidate --cfg f03_move_pages_candidate --cfg f03_sched_bridges_candidate --cfg f03_signal_process_bridges_candidate --cfg f03_dispatch_context_candidate --cfg f03_leaf_callbacks_candidate --cfg native_linux_irq_work_v6_12 --cfg f03_syscall_entry_candidate --cfg f03_futex_atomic_candidate --cfg f03_futex_no_uaccess_candidate --cfg process_global_storage_candidate --cfg f03_syscall_table_candidate --cfg f03_ptrace_entry_candidate --cfg f03_syscall_table_clone3 --cfg enable_profile --cfg enable_perf --cfg enable_rusage --cfg f03_prlimit_body_candidate --cfg f03_do_exit_supported_candidate --cfg f03_unmap_begin_selected_candidate --cfg f03_unmap_remove_selected_candidate --cfg f03_unmap_finish_selected_candidate --cfg f03_mmap_page_callback_candidate --cfg f03_wait_release_selected_candidate --cfg f06_mmap_flag_providers --cfg f06_prctl_set_register_candidate --cfg f06_prctl_get_register_candidate --cfg f06_mmap_dispatch_bridge_candidate --cfg f03_wait_process_release_selected_candidate --cfg f03_terminate_refcount_selected_candidate --cfg f03_ptrace_io_find_selected_candidate --cfg f03_ptrace_io_unlock_selected_candidate --cfg f06_ptrace_context_candidate --cfg f06_ptrace_alloc_candidate --cfg f06_vdso_add_range_candidate --cfg f06_vdso_set_range_candidate --cfg f03_sync_child_event_candidate --cfg f06_process_vm_entry_candidate --cfg f03_exit_waitq_wake_selected_candidate --cfg f06_copy_to_user_candidate --cfg f06_copy_from_user_candidate --cfg f06_forward_context_candidate --cfg f03_perf_alloc_bridges_selected_candidate --cfg f06_rt_sigreturn_syscall_candidate --cfg f06_rt_sigreturn_set_signal_candidate --cfg f06_rt_sigreturn_check_signal_candidate --cfg f03_perf_counter_control_bridges_selected_candidate --cfg f03_perf_event_provider_bridges_selected_candidate --cfg f06_rt_sigreturn_alloc_candidate --cfg f06_rt_sigreturn_free_candidate --cfg f06_clone_reader_lock_candidate --cfg f06_clone_reader_unlock_candidate --cfg f06_ptrace_find_thread_candidate --cfg f06_ptrace_thread_unlock_candidate --cfg f03_perf_provider_next3_bridges_selected_candidate --emit=obj=/home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-align32-20261030-1/mckernel_rust.o,dep-info=/home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-align32-20261030-1/mckernel.d --cfg process_verbose_data --cfg process_verbose_local_companions --cfg f06_obtain_clone_cpuid_candidate --cfg f06_shmget_dispatch_candidate --cfg f06_vdso_info_candidate --cfg f06_native_signal_restore_fp_candidate --cfg f06_ptrace_xstate_copy_to_candidate --cfg f06_ptrace_xstate_copy_from_candidate --cfg f06_vdso_setup_log_candidate --cfg f06_vdso_state_candidate --cfg f06_vdso_storage_candidate --cfg f06_ptrace_user_bridges_candidate --cfg f06_ptrace_gpregs_bridges_candidate --cfg f06_prctl_log_candidate --cfg f06_prctl_log_storage_candidate --cfg f06_vdso_map_log_candidate --cfg f03_ptrace_clone_noirq_candidate --cfg f03_context_forward_pair_candidate --cfg f03_wakeup_writer_pair_candidate --cfg f03_perf_entry_candidate --cfg f03_signal_forward_defined_candidate --cfg f03_request_constructors_candidate --cfg f06_signal_leaf_adapters_candidate --cfg f06_signal_context_candidate --cfg f06_regset_defined_diagnostic_candidate --cfg f06_do_signal_whole_candidate --cfg f06_do_signal_reuse_qualified_context /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/lib.rs --cfg f06_debug_constants_candidate\"\n\tUser time (seconds): 18.42\n\tSystem time (seconds): 0.32\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:18.74\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 601216\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 199825\n\tVoluntary context switches: 16\n\tInvoluntary context switches: 153\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 88640\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+  "stderr_if_fail": null,
+  "runner": {
+    "pid": 2775497,
+    "birth": "113977630",
+    "pgid": 2775496,
+    "identity": [
+      "2775497",
+      "2775496",
+      "2775496",
+      "2775496",
+      "S"
+    ]
+  },
+  "postterminal_group": {
+    "members": [],
+    "errors": [],
+    "absent": true,
+    "epoch": 1793342350.4475274
+  },
+  "resource_share_released": {
+    "cpu": [
+      6
+    ],
+    "planning_bytes": 4294967296
+  },
+  "reused_C_object": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-20261030-1/arch_syscall.o",
+    "sha256": "173c7e9add4afcb48e5a889064bdf4d7ff888ce43f807dee15ee84f7df380dfa",
+    "scope": "Prior exact paired C selectors/config/header binding; no FUNC/OBJECT, note only, unchanged."
+  },
+  "actual_ABI12_alignment_provider": "pending",
+  "link_executed": false,
+  "production_default_native_Cretirement_credit": false
+}

@@ -1,0 +1,24 @@
+# Private F06 `debug_constants` Rust provider
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The selected HOST13 architecture C object still owns one writable global data symbol, `debug_constants`. Searches of the current architecture/kernel Rust sources found no existing Rust provider. This private patch adds a default-off Rust provider using the existing actual `crate::abi::{CpuLocalVar, Thread, Process}` types, without changing those types or any consumer. It exports the exact C symbol name using a writable `pub static mut [usize; 12]`; it has constant initialization and forms no Rust reference to that static. External users retain their existing synchronization and lifetime obligations: Rust must not form references while external mutation can occur. Source assertions require 64-bit `usize`, eight-byte alignment and 96-byte array size; real ELF emission, section flags and linker retention remain unproved.
+
+The original C `uintptr_t debug_constants[]` initializer remains byte-for-byte intact in the selector-off branch. A C selector without the existing Rust syscall-policy configuration triggers a compile error. The private Rust module is included only with `f06_debug_constants_candidate`, x86-64 and 64-bit pointers; unsupported target selection triggers a compile error. Neither selector is enabled by this patch. The exact proposed paired profile additions are:
+
+```text
+arch C TU: -DMCKERNEL_RUST_F06_DEBUG_CONSTANTS
+Rust crate: --cfg f06_debug_constants_candidate
+```
+
+The existing coherent x86/native Linux6.12, real generated configuration and matching Rust feature cfgs still apply. A C-only or Rust-only flag is not an acceptable pairing: it could remove the provider or create duplicate definitions. Future composition owns these flags and does not select any additional whole-body, FULL28 or held request.
+
+`SOURCE-BOUND.json` binds the exact private preimage and postimage hashes. A source-only comparison checked every one of 4,374 unchanged C lines retains its original logical line, including the existing `obtain_clone_cpuid` fallback/body/selector guard and logical debug locations 898 and 908. The old C fallback is bracketed by `#line 829` and `#line 843`. The separate C filename assertion remains unchanged; `syscall_policy.rs` is untouched, including its 94 source-location macro sites. The modified complete C file has a different hash; no new full-source origin receipt has been generated. HOST compilation needs an exact source-path filename mapping that satisfies the existing guard, without modifying it; actual CPP/source-origin evidence remains required.
+
+## Required real-type and 12-value check
+
+`ABI-12-MAP.json` specifies the original C expression and exact Rust `size_of`/`offset_of` expression for each ordered word. After independent source/selection/ABI review and an admitted actual compile, bind the exact C and Rust configuration and source depfiles, including all feature-sensitive fields in `CpuLocalVar`, `Thread` and `Process`. Read the actual `debug_constants` symbol from the selected Rust object and the retained HOST13 C reference object `b1512d15...`; require the correct global object symbol, writable storage, 96-byte size, at least eight-byte alignment, no unexpected relocations and the twelve little-endian 64-bit values. Extract **exactly the symbol's 96 bytes**, not an entire containing section, and compare all twelve words in `ABI-12-MAP.json` order including the all-ones sentinel. Preserve raw objects, bytes, actual hashes, parsed section/symbol offsets and every mismatch. Also prove the selected C arch object no longer defines the symbol and the final selected raw link has exactly one compatible Rust definition and the existing consumers bind to it. Prove selector-off C fallback and gate-off Rust selection separately when required by the accepted profile.
+
+The retained CURRENT119 SDK14 C object `30bddb4c...` is a second possible reference only after confirming its actual symbol, 96-byte contents and source/config/type-layout identity match the intended candidate. Do not infer that correspondence or silently treat HOST GCC9 as SDK14. A separate independent real-type/offset witness or exact object-byte comparison is required; old host46 signal-frame geometry does not cover all twelve values. For original 389 metadata, link, default, matching SDK/native behavior and M14 retirement, apply the original acceptance criteria independently.
+
+No compiler, test, tool query, guest or native operation was run to prepare this source. The next step is compositor integration and independent ABI/selection/ownership review, followed by a freshly admitted minimal object comparison. This source-only patch does not claim a working provider, default adoption, C data retirement or M14 closure.

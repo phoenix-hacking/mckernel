@@ -1,0 +1,110 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T06:26:21.679615+00:00",
+  "status": "PASS_HOST_COMPILE_PENDING_ABI12",
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-20261030-1",
+  "phases": {
+    "rust": {
+      "exit": 0,
+      "time": "\tCommand being timed: \"/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc --crate-name mckernel_rust --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=2 -C code-model=large -C relocation-model=static -C no-redzone=yes -C force-frame-pointers=yes -C overflow-checks=off -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma --cfg f03_io_diagnostic_callbacks_candidate --cfg f03_mincore_candidate --cfg f03_move_pages_candidate --cfg f03_sched_bridges_candidate --cfg f03_signal_process_bridges_candidate --cfg f03_dispatch_context_candidate --cfg f03_leaf_callbacks_candidate --cfg native_linux_irq_work_v6_12 --cfg f03_syscall_entry_candidate --cfg f03_futex_atomic_candidate --cfg f03_futex_no_uaccess_candidate --cfg process_global_storage_candidate --cfg f03_syscall_table_candidate --cfg f03_ptrace_entry_candidate --cfg f03_syscall_table_clone3 --cfg enable_profile --cfg enable_perf --cfg enable_rusage --cfg f03_prlimit_body_candidate --cfg f03_do_exit_supported_candidate --cfg f03_unmap_begin_selected_candidate --cfg f03_unmap_remove_selected_candidate --cfg f03_unmap_finish_selected_candidate --cfg f03_mmap_page_callback_candidate --cfg f03_wait_release_selected_candidate --cfg f06_mmap_flag_providers --cfg f06_prctl_set_register_candidate --cfg f06_prctl_get_register_candidate --cfg f06_mmap_dispatch_bridge_candidate --cfg f03_wait_process_release_selected_candidate --cfg f03_terminate_refcount_selected_candidate --cfg f03_ptrace_io_find_selected_candidate --cfg f03_ptrace_io_unlock_selected_candidate --cfg f06_ptrace_context_candidate --cfg f06_ptrace_alloc_candidate --cfg f06_vdso_add_range_candidate --cfg f06_vdso_set_range_candidate --cfg f03_sync_child_event_candidate --cfg f06_process_vm_entry_candidate --cfg f03_exit_waitq_wake_selected_candidate --cfg f06_copy_to_user_candidate --cfg f06_copy_from_user_candidate --cfg f06_forward_context_candidate --cfg f03_perf_alloc_bridges_selected_candidate --cfg f06_rt_sigreturn_syscall_candidate --cfg f06_rt_sigreturn_set_signal_candidate --cfg f06_rt_sigreturn_check_signal_candidate --cfg f03_perf_counter_control_bridges_selected_candidate --cfg f03_perf_event_provider_bridges_selected_candidate --cfg f06_rt_sigreturn_alloc_candidate --cfg f06_rt_sigreturn_free_candidate --cfg f06_clone_reader_lock_candidate --cfg f06_clone_reader_unlock_candidate --cfg f06_ptrace_find_thread_candidate --cfg f06_ptrace_thread_unlock_candidate --cfg f03_perf_provider_next3_bridges_selected_candidate --emit=obj=/home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-20261030-1/mckernel_rust.o,dep-info=/home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-20261030-1/mckernel.d --cfg process_verbose_data --cfg process_verbose_local_companions --cfg f06_obtain_clone_cpuid_candidate --cfg f06_shmget_dispatch_candidate --cfg f06_vdso_info_candidate --cfg f06_native_signal_restore_fp_candidate --cfg f06_ptrace_xstate_copy_to_candidate --cfg f06_ptrace_xstate_copy_from_candidate --cfg f06_vdso_setup_log_candidate --cfg f06_vdso_state_candidate --cfg f06_vdso_storage_candidate --cfg f06_ptrace_user_bridges_candidate --cfg f06_ptrace_gpregs_bridges_candidate --cfg f06_prctl_log_candidate --cfg f06_prctl_log_storage_candidate --cfg f06_vdso_map_log_candidate --cfg f03_ptrace_clone_noirq_candidate --cfg f03_context_forward_pair_candidate --cfg f03_wakeup_writer_pair_candidate --cfg f03_perf_entry_candidate --cfg f03_signal_forward_defined_candidate --cfg f03_request_constructors_candidate --cfg f06_signal_leaf_adapters_candidate --cfg f06_signal_context_candidate --cfg f06_regset_defined_diagnostic_candidate --cfg f06_do_signal_whole_candidate --cfg f06_do_signal_reuse_qualified_context /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-host-1/src/kernel/rust/lib.rs --cfg f06_debug_constants_candidate\"\n\tUser time (seconds): 18.61\n\tSystem time (seconds): 0.31\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:18.93\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 603460\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 202078\n\tVoluntary context switches: 16\n\tInvoluntary context switches: 132\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 88608\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+      "files": {
+        "rust.stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mtime_ns": 1793341562613925123
+        },
+        "rust.stderr": {
+          "bytes": 89965,
+          "sha256": "c0d7281a1be11ebac0032f5102ef775d7d257f7bc1d48df567608481d7074d81",
+          "mtime_ns": 1793341581526522239
+        },
+        "rust.time": {
+          "bytes": 4785,
+          "sha256": "6416a0e36ddf18d2fe33941addea74094d17abba7fb0c6cf969f1b3431f47553",
+          "mtime_ns": 1793341581550522996
+        },
+        "rust.exit": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "mtime_ns": 1793341581550522996
+        },
+        "mckernel_rust.o": {
+          "bytes": 18794472,
+          "sha256": "700a56d2c29d5a1307ecbd36101232a05ec1bd33962dec3591e8d149f4e4205d",
+          "mtime_ns": 1793341581522522112
+        },
+        "mckernel.d": {
+          "bytes": 85013,
+          "sha256": "1356fb72a85c07cdc69f65b45c86be5d80f09099a778f29641856212bc241131",
+          "mtime_ns": 1793341563053939015
+        }
+      },
+      "stderr_if_fail": null
+    },
+    "arch_C": {
+      "exit": 0,
+      "time": "\tCommand being timed: \"/usr/bin/cc -DMCKERNEL_RUST_F06_DEBUG_CONSTANTS -DMCKERNEL_RUST_F06_PRCTL_LOG -DMCKERNEL_RUST_F06_PRCTL_LOG_STORAGE -DMCKERNEL_RUST_F06_VDSO_MAP_LOG -DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_TO -DMCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM -DMCKERNEL_RUST_F06_VDSO_SETUP_LOG -DMCKERNEL_RUST_F06_VDSO_STATE -DMCKERNEL_RUST_F06_VDSO_STORAGE -DMCKERNEL_RUST_F06_PTRACE_USER_BRIDGES -DMCKERNEL_RUST_F06_PTRACE_GPREGS_BRIDGES -DMCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP -DMCKERNEL_RUST_F06_VDSO_INFO -DMCKERNEL_RUST_F06_SHMGET_DISPATCH -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -DMCKERNEL_RUST_X86_CPU_HELPERS -DMCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS -DMCKERNEL_RUST_F06_PRCTL_SET_REGISTER -DMCKERNEL_RUST_F06_PRCTL_GET_REGISTER -DMCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE -DMCKERNEL_RUST_F06_PTRACE_CONTEXT -DMCKERNEL_RUST_F06_PTRACE_ALLOC -DMCKERNEL_RUST_F06_VDSO_ADD_RANGE -DMCKERNEL_RUST_F06_VDSO_SET_RANGE -DMCKERNEL_RUST_F06_PROCESS_VM_ENTRY -DMCKERNEL_RUST_F06_COPY_TO_USER -DMCKERNEL_RUST_F06_COPY_FROM_USER -DMCKERNEL_RUST_F06_FORWARD_CONTEXT -DMCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL -DMCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL -DMCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL -DMCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC -DMCKERNEL_RUST_F06_RT_SIGRETURN_FREE -DMCKERNEL_RUST_F06_CLONE_READER_LOCK -DMCKERNEL_RUST_F06_CLONE_READER_UNLOCK -DMCKERNEL_RUST_F06_PTRACE_FIND_THREAD -DMCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK -DMCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID -I/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT119-JOINT-M14-REGISTRY-REPAIR-SOURCE-1/m14-exclusive-producer-binding-1/ROOT-ACTUAL-ORIGIN119-1 -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel/smp/x86_64 -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/ikc/include -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux/include -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/lib/include -I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-linux-gnu/9/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o /home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-20261030-1/arch_syscall.o -c -MD -MF /home/holden/mckernel-work/scratch/native-cheap-f06-debug-constants-20261030-1/arch_syscall.d -DMCKERNEL_RUST_F06_XRSTOR_LEAF -DMCKERNEL_RUST_F06_BAD_FRAME_LEAF -DMCKERNEL_RUST_F06_SIGNAL_CONTEXT -DMCKERNEL_RUST_F06_REGSET_DEFINED_DIAGNOSTIC -fmacro-prefix-map=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-host-1/src/arch/x86_64/kernel/syscall.c=/src/arch/x86_64/kernel/syscall.c -DMCKERNEL_RUST_F06_DO_SIGNAL_WHOLE /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-host-1/src/arch/x86_64/kernel/syscall.c\"\n\tUser time (seconds): 0.02\n\tSystem time (seconds): 0.01\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.03\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 22848\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 3854\n\tVoluntary context switches: 9\n\tInvoluntary context switches: 6\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 416\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+      "files": {
+        "arch_C.stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mtime_ns": 1793341581550522996
+        },
+        "arch_C.stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mtime_ns": 1793341581550522996
+        },
+        "arch_C.time": {
+          "bytes": 7977,
+          "sha256": "db27383f548c4c1b7c6f1eb0ddba9c83b5cc5db23635cc8e2858dd0bb48d3a5f",
+          "mtime_ns": 1793341581590524260
+        },
+        "arch_C.exit": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "mtime_ns": 1793341581590524260
+        },
+        "arch_syscall.o": {
+          "bytes": 46856,
+          "sha256": "173c7e9add4afcb48e5a889064bdf4d7ff888ce43f807dee15ee84f7df380dfa",
+          "mtime_ns": 1793341581590524260
+        },
+        "arch_syscall.d": {
+          "bytes": 27772,
+          "sha256": "305720334cae781b156a05507d04b03b70e7cd889543861d53de351125ed2635",
+          "mtime_ns": 1793341581582524007
+        }
+      },
+      "stderr_if_fail": null
+    }
+  },
+  "first_error": null,
+  "runner": {
+    "pid": 2770891,
+    "birth": "113900730",
+    "pgid": 2770890,
+    "identity": [
+      "2770891",
+      "2770890",
+      "2770890",
+      "2770890",
+      "S"
+    ]
+  },
+  "postterminal_group": {
+    "members": [],
+    "errors": [],
+    "absent": true,
+    "epoch": 1793341581.6796315
+  },
+  "resource_share_released": {
+    "cpu": [
+      6
+    ],
+    "planning_bytes": 4294967296
+  },
+  "ABI12_pass": false,
+  "link_executed": false,
+  "production_default_native_Cretirement_credit": false
+}
