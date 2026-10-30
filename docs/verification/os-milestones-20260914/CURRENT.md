@@ -1,3 +1,32 @@
+## M14 engineering review — 2026-10-30T08:26Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 08:06:29.892–08:26:29.892 bucket adds zero current-candidate kernel
+builds, production links, native qualifications, guest apps, retired C boundaries
+or file closures. M14 4/6, practical 35/35; M15 queued. F06 origin routing and
+credential actual-body host fixtures pass at their stated source/mock scopes.
+
+Unwired private GET_CRED mailbox source authenticates request/worker/physical span
+in a model, but independent review NO-GO: pre-copy cancellation can permanently
+strand response and quarantine mailbox; failed copy can occupy the payload claim
+without retry. Legacy guest ignores return status; guest error-aware pairing,
+known-failure versus partial/unknown transitions, coherent publication and post-host-
+mutation reconciliation remain unresolved. No physical transport or module ran.
+The separate tracked-free CMake profile remains private; caller ownership, pending
+concurrency and exact 4657 actual TU origin remain open. No kill/logger selected.
+
+Root70 bc2df accepted only at its exact scope; current-free/no-unlisted/v2birth
+and physical clearance UNKNOWN. BUILD3/CID5487 and consumed nonces not replayed.
+Root owns current supervisor-health facts and fresh SDK admission; m14_arch owns
+credential failure/liveness source and m14_generic tracks kfree ownership. No
+physical command released. Exact current compiler queue, blocked duration, overlap
+and failure-to-validated-kernel-fix remain unmeasured. Prior 418.778s first-stream
+proxy, 491.317s handoff and original 30-minute baseline retained; no 95% claim.
+At 08:27:29 host/scratch free 143597105152 / 47613485056 bytes; weekly 77% used,
+weekly-only. Evidence: ../evidence/os-recovery-adoption-20261025-0254/
+restart-adoption-20261029T0234/M14-TERRA-ENGINEERING-REVIEW-20261030T0826-1/
+REVIEW.json.
+
 ## M14 F06 origin and credential cursor — 2026-10-30T08:22Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
