@@ -1,3 +1,33 @@
+## M14 engineering review — 2026-10-30T09:26Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 09:06:29.892–09:26:29.892 bucket: zero current-candidate kernel builds,
+production links, native qualifications, guest apps, retired C boundaries or file
+closures. M14 remains 4/6, practical 35/35, M15 queued. Existing Rust eventfd and
+original C match nine mocked actual-body cases; independent packet/call oracle
+passes. Real IKC, CPU layout, link and guest/native are untested. Scripts-view
+verifier passes14 local fixtures; original already rejected duplicate JSON keys,
+new negatives establish coverage. External custody and manifest authority remain.
+
+Disabled configure owner compares full ordered argv, permits matched empty flags,
+and stops before stage2/acceptance on UNKNOWN descendant closure; five mock tests
+and independent review pass. Host subreaper proof assumes host /proc/PID1 and cannot
+be used as an inner observer unchanged. No positive inner custody, current health,
+source/mount/quiescence or operation release exists. Scripts-only RO view remains a
+source proposal; no copy or mount. The corrected F03 source checker confirms three
+set_host_vma calls in held do_mmap; later C forwarding is unreachable, while Rust
+host-PTE forwarding depends on cfg and ownership. No held attempt replayed.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance UNKNOWN; BUILD3/CID5487 and consumed nonces not replayed. Root owns fresh
+facts/admission; disjoint F03 behavior and source-view work continue. Exact current
+compiler queue/first start, blocked time, overlap, CPU/peak and failure-to-validated-
+kernel-fix unmeasured; prior 418.778s first-stream proxy, 491.317s handoff and
+original30-minute baseline retained, no95% claim. At 09:27:27 host/scratch free
+143469957120 / 47613485056 bytes; weekly80% used, weekly-only. Evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-ENGINEERING-REVIEW-20261030T0926-1/REVIEW.json.
+
 ## M14 eventfd and configure custody cursor — 2026-10-30T09:20Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
