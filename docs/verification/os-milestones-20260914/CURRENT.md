@@ -1,3 +1,29 @@
+## M14 resumed review and protocol-test cursor — 2026-10-30T18:28Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Completed resumed bucket17:54:56–18:14:56 adds6pure argv tests; zero kernel builds,
+production/native/guest, C-retirement or file closure. Native/build lane unreleased
+for1200s in that bucket; exact cumulative/transport blocked time unmeasured. No new
+compiler reached. Historical418.778s proxy/491.317s handoff and original30min
+baseline retained; gap since11:06 is stopped/unobserved, no95% claim.
+
+After that cutoff,6local AF_UNIX protocol tests pass: wall0.11s,userCPU0.05s,
+peak18428KiB,tool exit0,timeout group empty,CPU6share released. No root producer,
+freeze/mount or currentfree effect. This belongs to the NEXT20minute bucket.
+Source readiness fixes are active: HELD-ready after durable receipt, source inode
+journal/scan errors, bounded reads and acquisition/immutable-epoch verification.
+Unwired perf registry failed its bounded source review; typed ownership and
+non-losing finalization are escalated for focused correction. Credential/mmap/
+fork private patches are source-only; dispatch_source reuses eligible do_syscall/
+util_thread bodies, all held callers excluded. m14_arch remains sole compositor.
+
+M14 four accepted files; practical35/35 separate; M15 queued. Historical23+5C
+counts not rejoined to a new selected artifact. Root currentfree/custody/fresh
+observer admission remain open; old receipts/nonces and cleanup not replayed.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-
+20261029T0234/M14-MANUAL-RESUME-ENGINEERING-REVIEW-20261030T1814-1/REVIEW.json
+and M14-MANUAL-RESUME-PROTOCOL-TEST-CHECKPOINT-20261030-1/.
+
 ## M14 manual resume and source-test checkpoint — 2026-10-30T18:13Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
