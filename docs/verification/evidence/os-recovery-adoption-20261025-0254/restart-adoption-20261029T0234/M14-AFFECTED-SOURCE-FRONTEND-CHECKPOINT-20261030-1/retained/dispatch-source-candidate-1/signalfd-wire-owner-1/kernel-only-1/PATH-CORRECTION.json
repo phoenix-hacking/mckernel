@@ -1,0 +1,8 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure": "FileNotFoundError Errno2 before any postimage/source output",
+  "cause": "source preparation parent traversal used D.parents[3] (weekly root) instead of D.parents[2] (dispatcher root)",
+  "failing_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/m14-combined-frontend-candidate-2/work-1/src/kernel/rust/syscall_policy.rs",
+  "bounded_correction": "D.parents[2]; exact compositor-supplied source root; no permission or ownership change",
+  "original_script_retained": true
+}

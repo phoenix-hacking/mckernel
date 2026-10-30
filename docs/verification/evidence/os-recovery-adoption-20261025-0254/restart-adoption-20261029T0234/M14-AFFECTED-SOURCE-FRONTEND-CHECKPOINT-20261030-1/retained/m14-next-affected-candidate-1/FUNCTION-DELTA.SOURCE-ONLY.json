@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY",
+  "profile_sha256": "5ed0676fc9c8a787aed2b9cb7784f29f37817e26c5c445e14dd2325413c85752",
+  "actual_updated_source_function_names": {
+    "f03_credential_snapshot_candidate.rs": [
+      "refresh",
+      "refresh_process",
+      "consume_snapshot",
+      "forward_refresh_ordinary",
+      "commit",
+      "f03_cred_owner_begin_v1",
+      "f03_cred_owner_snapshot_v1",
+      "f03_cred_owner_finish_v1",
+      "f03_cred_refresh_failure_v1",
+      "current_refresh",
+      "do_setresuid",
+      "do_setresgid",
+      "checked_current_setter",
+      "f03_sys_setresuid_checked_v1",
+      "f03_sys_setresgid_checked_v1"
+    ],
+    "f03_clone_lifetime.rs": [
+      "pin_live_counter",
+      "retain_record",
+      "reserve",
+      "drop",
+      "drop",
+      "adopt",
+      "range_writer",
+      "quarantine",
+      "quarantine_after_releasing_added_refs",
+      "finish_existing_enqueue",
+      "lookup_bounds",
+      "drop"
+    ],
+    "f03_fork_namespace.rs": [
+      "snapshot_host_parent_flags"
+    ]
+  },
+  "affected_existing_bridge": "syscall_signalfd_create_bridge",
+  "limitations": "Names are extracted from source and do not mean all functions are changed, emitted, selected or qualified; see source_candidates in bound profile for exact changed bodies."
+}

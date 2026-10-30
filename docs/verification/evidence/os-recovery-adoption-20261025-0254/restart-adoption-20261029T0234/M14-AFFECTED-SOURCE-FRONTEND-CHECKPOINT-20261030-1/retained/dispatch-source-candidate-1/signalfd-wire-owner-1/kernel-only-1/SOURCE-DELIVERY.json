@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "owner": "/root/dispatch_source",
+  "milestone": "M14_ONLY",
+  "source_only": true,
+  "host_runtime_changes_included": false,
+  "M15_draft_preserved_deferred": true,
+  "tests_compiler_workload_or_native_run": false,
+  "new_retirement_credit": 0,
+  "only_changed_function": "syscall_signalfd_create_bridge",
+  "next_actual_frontend": "Root-owned actual kernel Rust frontend, same passed cfg/environment/tool tuple, fresh output after exact source/function binding",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "55444272f1ce0c66edf444ef256846d298294fd6369dce02db65f028e06427ff",
+      "bytes": 5577
+    },
+    {
+      "path": "INPUTS.json",
+      "sha256": "cb694bf0c25b02971897d80feac712db665c23c8939ac3d9b372ef1cbba2b4c5",
+      "bytes": 1786
+    },
+    {
+      "path": "KERNEL-FUNCTION.NEW.rs.inc",
+      "sha256": "992e54553c00b817f89a0e741f5997ac1946fee645814604513c78a585e3a0d6",
+      "bytes": 872
+    },
+    {
+      "path": "KERNEL-FUNCTION.OLD.rs.inc",
+      "sha256": "51eb544714c24f2e1fffe42aec22fff553b24767db59f11d3f6f5ab924f0a1bd",
+      "bytes": 418
+    },
+    {
+      "path": "PATH-CORRECTION.json",
+      "sha256": "4b5180fac0a0f73806e93cc27fcef6442bb7dbe194d8067a257a4d734f51de65",
+      "bytes": 646
+    },
+    {
+      "path": "READINESS-ROWS.json",
+      "sha256": "69949e77ded98155043f9ef186afa68a3f108216c7c2e305909f68f0f65cd5ba",
+      "bytes": 1969
+    },
+    {
+      "path": "SIGNALFD-EXPLICIT-WIRE.M14-ONLY.PRIVATE-NOT-APPLIED.patch",
+      "sha256": "059e16fb78465115ea906f6113441124978fc6483e6e8da9eff66fad0be871ce",
+      "bytes": 1420
+    },
+    {
+      "path": "prepare_kernel_source.ORIGINAL-PATH-FAILURE.py",
+      "sha256": "c66ec1320e95d741dff60102399d74364c95559173913cf786727f2e23837ce9",
+      "bytes": 4631
+    },
+    {
+      "path": "prepare_kernel_source.py",
+      "sha256": "05efb99b93422a75ff9681d63ca556e9b0a27f8c432a934a0691fc9dd8a507fa",
+      "bytes": 4631
+    }
+  ]
+}

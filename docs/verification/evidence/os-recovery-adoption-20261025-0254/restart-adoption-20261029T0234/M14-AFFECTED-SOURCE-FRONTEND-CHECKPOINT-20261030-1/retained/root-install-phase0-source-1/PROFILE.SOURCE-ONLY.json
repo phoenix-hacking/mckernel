@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "# Functional M14 install-only phase zero: exact source literal, reviewed separately.\nimport hashlib, json, os, stat, sys\nBASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'\nV8=BASE+'/root-install-source-8'\nP0=BASE+'/root-install-phase0-source-1/phase0.py'\nPRELIM=BASE+'/postjoin-daemon-metadata-observer-source-1/root_parent_preliminary.py'\nPHASE_SHA='38a6722ff303af6b44e38759e06592f525da26faeda5abad76555a764475e320'\nBOOT_SHA='543c004b46540c2c794bb69f6641e60fa07876e47283971cb5096a6dfabfcc62'\nCLOSURE_SHA='2896c543fc9fa36f33730d7846c053de7977ae8838b92295366cd23094a5a02f'\n\ndef load(path, expected):\n    fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)\n    try:\n        a=os.fstat(fd)\n        if not stat.S_ISREG(a.st_mode) or a.st_size>2097152:raise ValueError('bounded source required')\n        data=b''\n        while len(data)<=2097152:\n            chunk=os.read(fd,min(65536,2097153-len(data)))\n            if not chunk:break\n            data+=chunk\n        b=os.fstat(fd)\n        if ((a.st_dev,a.st_ino,a.st_size,a.st_mtime_ns,a.st_ctime_ns)!=(b.st_dev,b.st_ino,b.st_size,b.st_mtime_ns,b.st_ctime_ns) or len(data)!=a.st_size or hashlib.sha256(data).hexdigest()!=expected):raise ValueError('source changed')\n        return data\n    finally:os.close(fd)\n\ndef unique(pairs):\n    out={}\n    for key,value in pairs:\n        if key in out:raise ValueError('duplicate admission key')\n        out[key]=value\n    return out\n\nif len(sys.argv)!=2 or len(sys.argv[1])!=64 or any(c not in '0123456789abcdef' for c in sys.argv[1]):raise ValueError('exact admission digest required')\nrequest_raw=sys.stdin.buffer.read(2097153)\nif len(request_raw)>2097152 or hashlib.sha256(request_raw).hexdigest()!=sys.argv[1]:raise ValueError('actual admission bytes differ')\nrequest=json.loads(request_raw,object_pairs_hook=unique,parse_constant=lambda x: (_ for _ in ()).throw(ValueError('nonfinite')))\nbootstrap=load(V8+'/BOOTSTRAP-CODE.py',BOOT_SHA)\nsource=load(P0,PHASE_SHA)\nclosure=load(V8+'/SOURCE-CLOSURE.json',CLOSURE_SHA)\nmarker=b'intent=opened(intent_path,os.O_RDONLY)'\nif bootstrap.count(marker)!=1:raise ValueError('reviewed bootstrap boundary differs')\n# Reuse the exact v8 verified-byte loaders and pins, without entering its issuer yet.\nsys.argv=['<v8-prelude>',V8+'/install_source_closure.py',V8+'/install_issuer.py',V8+'/install_completion.py',PRELIM,V8+'/WAIT-INSTALL-CODE.py','unused','unused',V8+'/package','unused','unused','unused','unused','unused','unused','unused','unused']\ncontext={'__name__':'__phase0_loader__'}\nexec(compile(bootstrap.split(marker,1)[0],'<v8-reviewed-prelude>','exec'),context)\nphase={'__name__':'__phase0__'}\nexec(compile(source,P0,'exec'),phase)\nphase['run'](request,context['install'],context['issuer'],context['prelim'],context['completion'],closure,context['wait_raw'])\n",
+    "<ROOT_REVIEWED_ADMISSION_SHA256>"
+  ],
+  "entry_sha256": "d9e2f01e3b6ee1a6fef6dee8ffc5780f3ae9138cb0184304d76b5cf53b3152d1",
+  "phase0_sha256": "38a6722ff303af6b44e38759e06592f525da26faeda5abad76555a764475e320",
+  "requires_external_owner_and_bounded_watchdog": true,
+  "scope": "ROOT_CODE_INSTALL_ONLY",
+  "status": "SOURCE_ONLY_UNREVIEWED_NOT_RELEASED",
+  "stdin": "exact separately reviewed actual admission JSON bytes",
+  "v8_bootstrap_sha256": "543c004b46540c2c794bb69f6641e60fa07876e47283971cb5096a6dfabfcc62"
+}

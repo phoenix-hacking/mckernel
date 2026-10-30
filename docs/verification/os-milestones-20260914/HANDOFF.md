@@ -1,3 +1,38 @@
+## M14 affected source compiler checkpoint — 2026-10-30T21:51Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 remains4/6, practical35/35 separate, M15 paused. Same manually resumed Root.
+Actual174-file/155-dependency Rust frontend aab0f9d0 PASS: credential failed-query/
+host-error owner retention, added child/VM reference release with original obligations
+quarantined, real host-flags widening/private namespaces, kernel-only signalfd wire.
+3.55wall/3.38CPU/476792KiB peak, compilererror none; toolterminal0/ownedgroups empty
+release4GiB ordinaryCPU6 share. Eight exactv8 mocked installer source cases pass
+0.08wall/0.07CPU/20704KiB; they do not clear its three execution-review defects.
+
+Changed rows record frontend only; prior4ae9entries/7bodies and56ABI proof remain
+exactpredecessor evidence. No new machinecode/default/OS-behavior/native/C-retirement
+or file acceptance. All5F06 bodies already included; no duplicate port. Retained
+image1cd7/generic0633 still23C; arch5 historical. HeldEXEC_DEFINED_TAIL generic
+objects cannot enter the11-input link; candidate XPMEM selection remains held.
+
+Root source path: v8 proof-after-close, process-census and timer-reserve failures
+retained. v9 fixes fullproof ordering/full65s reserve at source; expert permits
+known-role-only retirement if exact GNUtimeout one-child/wait behavior is bound.
+An invented liveUID0holder is not evidence. NEXT root_history_audit exacttimeout
+91db/package8.30-3ubuntu2 linkage; sdk_owner binds accepted model; observer_caller
+fixes receiptwriter ownership in separate phase0 successor. Root then reviews
+actualprofile/tests/admission. No root/install/native/cleanup action occurred.
+
+Native unreleased220minutes across closed nonoverlapping buckets through21:34:56;
+next21:34:56–21:54:56 still measured separately. Queue-to-compiler latency unknown;
+firstresumedcompiler6101.410s, old30minbaseline preserved, no95%claim. Largest
+avoidablehandoff Rootcoupledordinarycompiler/SDK durationunknown. Adjustment:
+freeze announced source, keep disjoint source/onecompositor/compiler queue independent
+while Root checkpoints. Currentfree/V2birth/effectivemountedview UNKNOWN;
+V2reserved2GiB/native12/scratch21/permanent27:4 andallcaps preserved.
+Verified push cece58443 and exactfetchedcheckpoint34646642; this is next coherentWIP.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-AFFECTED-SOURCE-FRONTEND-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 nine-entry codegen and ABI checkpoint — 2026-10-30T21:39Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

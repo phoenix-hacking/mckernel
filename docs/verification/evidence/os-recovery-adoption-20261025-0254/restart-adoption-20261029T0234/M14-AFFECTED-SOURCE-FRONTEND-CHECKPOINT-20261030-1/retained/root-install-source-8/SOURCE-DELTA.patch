@@ -1,0 +1,251 @@
+--- root-install-source-7/install_source_closure.py	2026-10-30 14:13:28.223019510 -0700
++++ root-install-source-8/install_source_closure.py	2026-10-30 14:37:47.067203737 -0700
+@@ -15,8 +15,8 @@
+ import sys
+ import time
+ 
+-CLOSURE_SHA256='1f2e75e61aa70a0c51d82d18b19b407141c0de9cc5d5dc9ddeda56b4246cdf05'
+-SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-7/package'
++CLOSURE_SHA256='2896c543fc9fa36f33730d7846c053de7977ae8838b92295366cd23094a5a02f'
++SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-8/package'
+ WEEKLY_UTC_CAP_NS=calendar.timegm((2026,11,4,6,35,33))*1000000000
+ GETFLAGS=0x80086601
+ SETFLAGS=0x40086602
+@@ -147,13 +147,14 @@
+           'operation_path','operation_ancestors','code_path','code_ancestors','code_parent','source_dir','source_ancestors','lease','installer_sha256',
+           'interpreter','closure_sha256','issued_boot_ns','deadline_boot_ns','deadline_mono_ns','utc_cap_ns',
+           'one_shot_admission_id','controls_sha256','capacity_sha256','host_install_custody_sha256','owner_release_sha256',
+-          'term_grace_ns','kill_grace_ns','join_grace_ns','installer_pid','installer_birth','keeper_pid','keeper_birth'}
++          'term_grace_ns','kill_grace_ns','join_grace_ns','retire_operation_only','installer_pid','installer_birth','keeper_pid','keeper_birth'}
+     if type(release) is not dict or set(release)!=keys or type(release['version']) is not int or release['version']!=1 or release['purpose']!='root-install-source-closure-v1':fail('admission schema')
+     for key in ('nonce','installer_sha256','closure_sha256','one_shot_admission_id','controls_sha256','capacity_sha256','host_install_custody_sha256','owner_release_sha256'):
+         if not hex64(release[key]):fail('missing actual admission binding '+key)
+     if release['closure_sha256']!=CLOSURE_SHA256:fail('closure binding')
+     for key in ('issued_boot_ns','deadline_boot_ns','deadline_mono_ns','utc_cap_ns','controller_pid','installer_pid','keeper_pid','term_grace_ns','kill_grace_ns','join_grace_ns'):
+         if type(release[key]) is not int or release[key]<=0:fail('admission integer '+key)
++    if type(release['retire_operation_only']) is not bool:fail('retirement intent')
+     if type(release['controller_birth']) is not str or not release['controller_birth'].isdigit():fail('controller birth')
+     actual_controller=os.getpid() if controller_is_self else os.getppid()
+     if release['controller_pid']!=actual_controller or proc_birth(actual_controller)!=release['controller_birth']:fail('direct parent identity')
+--- root-install-source-7/install_issuer.py	2026-10-30 14:15:46.087208537 -0700
++++ root-install-source-8/install_issuer.py	2026-10-30 14:42:09.135182017 -0700
+@@ -14,6 +14,7 @@
+ from decimal import Decimal
+ import deferred_fork
+ import graph_observations as obs
++import install_completion as completion
+ from ownership_latch import CustodyLatch
+ from pidfd_custody import PidfdCustodyRecord
+ 
+@@ -62,7 +63,15 @@
+     raise ValueError('outer owner absent')
+ 
+ 
+-def verify_tools(install,intent,template):
++def remaining_timeout_budget(timer_started_boot,now_boot):
++    if type(timer_started_boot) is not int or type(now_boot) is not int or now_boot<timer_started_boot:
++        raise ValueError('timer clock sequence')
++    elapsed=now_boot-timer_started_boot
++    if elapsed>=60000000000:raise TimeoutError('private timeout already expired before GO')
++    return 65000000000-elapsed
++
++
++def verify_tools(install,intent,template,timer_started_boot=None):
+     for parent in ('/','/usr','/usr/bin'):
+         st=os.stat(parent)
+         if st.st_uid!=0 or not stat.S_ISDIR(st.st_mode) or stat.S_IMODE(st.st_mode)&0o022:raise ValueError('tool ancestry')
+@@ -76,7 +85,11 @@
+     limits={resource.RLIMIT_AS:(1073741824,1073741824),resource.RLIMIT_CPU:(60,60),resource.RLIMIT_FSIZE:(33554432,33554432),resource.RLIMIT_NOFILE:(256,256),resource.RLIMIT_CORE:(0,0)}
+     if any(resource.getrlimit(key)!=value for key,value in limits.items()):raise ValueError('resource profile')
+     if intent['timeout_seconds']!=60 or intent['timeout_kill_grace_seconds']!=5:raise ValueError('timeout profile')
+-    if min(template['deadline_boot_ns']-time.clock_gettime_ns(time.CLOCK_BOOTTIME),template['deadline_mono_ns']-time.monotonic_ns(),template['utc_cap_ns']-time.time_ns())<=65000000000:raise ValueError('timeout exceeds caps')
++    reserve=intent['join_capture_reserve_ns']
++    if type(reserve) is not int or not 1000000000<=reserve<=30000000000:raise ValueError('positive join/capture reserve')
++    now=time.clock_gettime_ns(time.CLOCK_BOOTTIME)
++    timer_remaining=65000000000 if timer_started_boot is None else remaining_timeout_budget(timer_started_boot,now)
++    if completion.remaining(template)<=timer_remaining+reserve:raise ValueError('timeout and join/capture reserve exceed caps')
+ 
+ 
+ def fresh_controls(prelim,install,template,deadline):
+@@ -108,27 +121,29 @@
+     return timer,child,hashlib.sha256(actual).hexdigest()
+ 
+ 
+-def monitor_owned(latch,install,journal_fd,timer_pid,timer_fd,child_pid,child_fd,template):
++def monitor_owned(latch,install,journal_fd,timer_pid,timer_fd,child_pid,child_fd,template,reserve):
+     poll=select.poll();poll.register(timer_fd,select.POLLIN);poll.register(child_fd,select.POLLIN)
+     timer_status=None;child_status=None;child_terminal=False
+-    while (time.clock_gettime_ns(time.CLOCK_BOOTTIME)<template['deadline_boot_ns'] and
+-           time.monotonic_ns()<template['deadline_mono_ns'] and time.time_ns()<template['utc_cap_ns']):
++    while completion.remaining(template)>reserve:
+         events=dict(poll.poll(100))
+-        if child_fd in events:child_terminal=True
+-        if timer_fd in events and timer_status is None:
++        if any(mask&(select.POLLERR|select.POLLNVAL) for mask in events.values()):raise IssuerUnknown(latch)
++        if events.get(child_fd,0)&(select.POLLIN|select.POLLHUP):child_terminal=True
++        if events.get(timer_fd,0)&select.POLLHUP and timer_status is None:raise IssuerUnknown(latch)
++        if events.get(timer_fd,0)&select.POLLIN and timer_status is None:
+             pid,status=os.waitpid(timer_pid,os.WNOHANG)
+-            if pid==timer_pid:timer_status=status
++            if pid==timer_pid:
++                timer_status=status;poll.unregister(timer_fd)
+         if child_terminal:
+             try:
+                 pid,status=os.waitpid(child_pid,os.WNOHANG)
+                 if pid==child_pid:child_status=status
+             except ChildProcessError:pass
+         if timer_status is not None and child_terminal:break
+-    # Independent observations, not inference from timer exit.
+-    install.journal(journal_fd,{'state':'TERMINALS_OBSERVED','timer_direct_wait_status':timer_status,
+-        'installer_pidfd_terminal':child_terminal,'installer_direct_wait_status':child_status,
+-        'private_group_empty':False,'complete_install_proof':False,'retirement':False})
+-    raise IssuerUnknown(latch)
++    if (timer_status is None or not os.WIFEXITED(timer_status) or os.WEXITSTATUS(timer_status)!=0 or not child_terminal or
++        (child_status is not None and (not os.WIFEXITED(child_status) or os.WEXITSTATUS(child_status)!=0))):
++        raise IssuerUnknown(latch)
++    return {'timer_direct_wait_status':timer_status,'installer_pidfd_terminal':True,
++            'installer_direct_wait_status':child_status}
+ 
+ 
+ def run(install,prelim,intent_fd,intent_sha,source_fd,root_fd,code_fd,lease_path,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd,wait_literal):
+@@ -136,7 +151,7 @@
+     install.root_file(intent_fd);raw=install.read_stable(intent_fd,install.MAX_SOURCE)
+     if not install.hex64(intent_sha) or hashlib.sha256(raw).hexdigest()!=intent_sha:raise ValueError('start intent digest')
+     intent=json.loads(raw,object_pairs_hook=install.unique)
+-    keys={'version','purpose','nonce','outer_pid','outer_birth','boot_id','phase1_deadline_boot_ns','receipt_expires_boot_ns','weekly_used_percent','weekly_observed_utc_ns','service_status','timeout_exe_sha256','timeout_seconds','timeout_kill_grace_seconds','sudo_sha256','taskset_sha256','prlimit_sha256','wait_literal_sha256','release_template'}
++    keys={'version','purpose','nonce','outer_pid','outer_birth','boot_id','phase1_deadline_boot_ns','receipt_expires_boot_ns','weekly_used_percent','weekly_observed_utc_ns','service_status','timeout_exe_sha256','timeout_seconds','timeout_kill_grace_seconds','sudo_sha256','taskset_sha256','prlimit_sha256','wait_literal_sha256','join_capture_reserve_ns','proc_scope','release_template'}
+     if type(intent) is not dict or set(intent)!=keys or type(intent['version']) is not int or intent['version']!=1 or intent['purpose']!='source-install-start-intent-v1' or not install.hex64(intent['nonce']):raise ValueError('start intent')
+     require_outer_ancestor(prelim,intent['outer_pid'],intent['outer_birth'])
+     if hashlib.sha256(wait_literal.encode()).hexdigest()!=intent['wait_literal_sha256']:raise ValueError('waiting code binding')
+@@ -160,9 +175,11 @@
+         install.root_file(fd)
+         if hashlib.sha256(install.read_stable(fd,install.MAX_SOURCE)).hexdigest()!=template[key]:raise ValueError('receipt hash')
+     fresh_controls(prelim,install,template,deadline)
++    proc_fd=os.open('/proc',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
++    completion.verify_proc_scope(proc_fd,intent['proc_scope'])
+     if type(lease_path) is not str or os.path.dirname(lease_path)!=template['operation_path'] or os.path.basename(lease_path) in ('','.','..'):
+         raise ValueError('lease must be under admitted private root')
+-    latch=CustodyLatch('KEEPER_HELD');latch.retain(intent_fd,source_fd,root_fd,code_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd)
++    latch=CustodyLatch('KEEPER_HELD');latch.retain(intent_fd,source_fd,root_fd,code_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd,proc_fd)
+     journal_fd=None;timer_record=None;child_record=None;lease_fd=None
+     try:
+         with deferred_fork.DeferredFork() as guard:
+@@ -173,13 +190,23 @@
+             journal_fd=os.open('INSTALL-START-'+intent['nonce']+'.jsonl',os.O_WRONLY|os.O_APPEND|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd);latch.retain(journal_fd);os.fsync(root_fd)
+             install.journal(journal_fd,{'state':'START_CONSUMED','nonce':intent['nonce'],'intent_sha256':intent_sha,'keeper_pid':os.getpid(),'keeper_birth':obs.process(os.getpid())[0]})
+             install.journal(journal_fd,{'state':'BEFORE_SUBREAPER'});set_subreaper();install.journal(journal_fd,{'state':'SUBREAPER_HELD'})
++            captures=[]
++            for stream in ('stdout','stderr'):
++                name='INSTALL-CAPTURE-'+intent['nonce']+'-'+stream
++                install.journal(journal_fd,{'state':'BEFORE_CAPTURE_CREATE','name':name})
++                fd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd)
++                latch.retain(fd);os.fchmod(fd,0o600);os.fsync(fd);os.fsync(root_fd)
++                captures.append((name,fd));install.journal(journal_fd,{'state':'CAPTURE_CREATED','name':name,'identity':install.ident(os.fstat(fd))})
+             rr,rw=os.pipe2(os.O_CLOEXEC);gr,gw=os.pipe2(os.O_CLOEXEC);latch.retain(rr,rw,gr,gw)
+             inherited=[install._BOOTSTRAP_SOURCE_FD,rw,gr,root_fd,source_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd]
+             for fd in inherited:os.set_inheritable(fd,True)
+             timer_argv=['/usr/bin/timeout','--signal=TERM','--kill-after=5s','60s','/usr/bin/python3','-I','-B','-c',wait_literal]+[str(fd) for fd in inherited]+[intent['nonce'],str(deadline),install.__file__,boot]
+-            def timeout_exec():os.execve('/usr/bin/timeout',timer_argv,{})
+-            timer_record=latch.reserve_child('timeout',root_fd,lease_fd,rr,rw,gr,gw)
++            def timeout_exec():
++                os.dup2(captures[0][1],1);os.dup2(captures[1][1],2)
++                os.execve('/usr/bin/timeout',timer_argv,{})
++            timer_record=latch.reserve_child('timeout',root_fd,lease_fd,rr,rw,gr,gw,captures[0][1],captures[1][1])
+             install.journal(journal_fd,{'state':'BEFORE_TIMER_FORK'})
++            timer_started_boot=time.clock_gettime_ns(time.CLOCK_BOOTTIME)
+             timer_pid,timer_fd,timer_birth=guard.fork_and_pin(timer_record,timeout_exec)
+         size=struct.unpack('!I',read_exact(rr,4,deadline,template))[0]
+         if not 0<size<=4092:raise ValueError('READY size')
+@@ -217,14 +244,26 @@
+         os.fsync(rfd);os.fsync(root_fd)
+         if hashlib.sha256(install.read_stable(rfd,install.MAX_SOURCE)).hexdigest()!=digest:raise ValueError('release changed')
+         install.journal(journal_fd,{'state':'RELEASE_SEALED','sha256':digest});install.journal(journal_fd,{'state':'BEFORE_GO'})
+-        actors=fresh_controls(prelim,install,template,deadline);verify_tools(install,intent,template)
++        actors=fresh_controls(prelim,install,template,deadline);verify_tools(install,intent,template,timer_started_boot)
+         install.verify_base_runtime(template['interpreter']);install.verify_host_receipt(host_fd,template)
+         if not 0<=time.time_ns()-intent['weekly_observed_utc_ns']<=30000000000:raise ValueError('usage observation stale')
+         verify_private_group(prelim,install,intent,timer_pid,timer_birth,ready,timer_argv,actors)
+         if os.write(gw,b'G'+digest.encode())!=65:raise OSError('GO short')
+         if read_exact(rr,1,deadline,template)!=b'L':raise ValueError('lease acknowledgement')
+         install.journal(journal_fd,{'state':'GO_AND_LEASE_HELD','installer_pid':ready['pid'],'timer_pid':timer_pid})
+-        monitor_owned(latch,install,journal_fd,timer_pid,timer_fd,ready['pid'],child_fd,template)
++        terminals=monitor_owned(latch,install,journal_fd,timer_pid,timer_fd,ready['pid'],child_fd,template,intent['join_capture_reserve_ns'])
++        census=completion.census_empty(proc_fd,intent['proc_scope'],os.getpid(),timer_pid,template)
++        proof=completion.install_proof(install,root_fd,code_fd,closure_fd,intent['nonce'],digest,template,latch.retained)
++        capture_results=[completion.close_capture(install,latch,timer_record,journal_fd,root_fd,fd,name,template) for name,fd in captures]
++        census=completion.census_empty(proc_fd,intent['proc_scope'],os.getpid(),timer_pid,template)
++        completion.need_time(template)
++        result={'status':'INSTALL_ONLY_COMPLETE_PENDING_UID1000_READ','nonce':intent['nonce'],'authority':None,
++                'native_release':False,'native_currentfree':None,'terminals':terminals,'census':census,
++                'install_proof':proof,'captures':capture_results,'operation_lease_fd_closed':False}
++        install.journal(journal_fd,{'state':'INSTALL_ONLY_COMPLETE_PENDING_UID1000_READ','nonce':intent['nonce'],
++            'closure_sha256':install.CLOSURE_SHA256,'native_release':False})
++        result['operation_lease_fd_closed']=completion.retire_lease_if_authorized(install,latch,timer_record,journal_fd,lease_fd,owner_fd,release,result)
++        return result,latch
+     except BaseException as error:
+         if timer_record is not None:timer_record.unknown(error)
+         else:latch.fail(error)
+--- root-install-source-7/BOOTSTRAP-CODE.py	2026-10-30 14:15:46.115209389 -0700
++++ root-install-source-8/BOOTSTRAP-CODE.py	2026-10-30 14:42:09.159182748 -0700
+@@ -1,11 +1,12 @@
+ import hashlib,os,stat,sys,types,signal
+-EXPECTED_INSTALL='1949cbd455e8e9da223cf3d2f0d5d4f25299bef860771b7cc250707483079879'
+-EXPECTED_ISSUER='c179b6de5b91d1b6dc7cf4645378c6a5c0c562a6af1266d2142c93734da6a4b1'
++EXPECTED_INSTALL='f347c6d5650a88756176526b1a7751b9e0a76768b4d51241844598b206b8e07b'
++EXPECTED_ISSUER='2e1692241d40d473daa7ced0ed1113e065f50017e51aadf217187caede58a5a4'
+ EXPECTED_PRELIM='de6de10ff79d07281e95216a5ecf751d03bade1d75445c87abd8a2e0405e124d'
+-EXPECTED_WAIT='5b60a0150b6a7edf6401e48287a1c4b56f16b70ab823cbd8249fa7f5e6f3b5d1'
++EXPECTED_WAIT='e0c482277186aecc7e1b2912e9060bcf82fe8825657a973a991073189f74fa0b'
++EXPECTED_COMPLETION='ce03649dfcd544abf434c8b7a2da9820bc363e50215d880585e9d49f41a10eb7'
+ PINS=(('ownership_latch','fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390'),('graph_observations','df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed'),('pidfd_compat','068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'),('pidfd_custody','3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'),('deferred_fork','b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'))
+-if len(sys.argv)!=16:raise ValueError('exact bootstrap arguments required')
+-installer_path,issuer_path,prelim_path,wait_path,intent_path,intent_sha,source_path,root_path,code_path,lease_path,closure_path,controls_path,capacity_path,host_custody_path,owner_path=sys.argv[1:]
++if len(sys.argv)!=17:raise ValueError('exact bootstrap arguments required')
++installer_path,issuer_path,completion_path,prelim_path,wait_path,intent_path,intent_sha,source_path,root_path,code_path,lease_path,closure_path,controls_path,capacity_path,host_custody_path,owner_path=sys.argv[1:]
+ hold=[]
+ def opened(path,flags):
+  if not path.startswith('/') or '//' in path:raise ValueError('absolute path')
+@@ -30,6 +31,7 @@
+ installer_fd=opened(installer_path,os.O_RDONLY);installer_raw=verified(installer_fd,EXPECTED_INSTALL)
+ wait_fd=opened(wait_path,os.O_RDONLY);wait_raw=verified(wait_fd,EXPECTED_WAIT)
+ issuer_fd=opened(issuer_path,os.O_RDONLY);issuer_raw=verified(issuer_fd,EXPECTED_ISSUER)
++completion_fd=opened(completion_path,os.O_RDONLY);completion_raw=verified(completion_fd,EXPECTED_COMPLETION)
+ prelim_fd=opened(prelim_path,os.O_RDONLY);prelim_raw=verified(prelim_fd,EXPECTED_PRELIM)
+ source=opened(source_path,os.O_RDONLY|os.O_DIRECTORY)
+ for name,digest in PINS:
+@@ -42,6 +44,8 @@
+ exec(compile(installer_raw,installer_path,'exec'),install.__dict__)
+ prelim=types.ModuleType('reviewed_controller_reader');prelim.__file__=prelim_path;sys.modules[prelim.__name__]=prelim
+ exec(compile(prelim_raw,prelim_path,'exec'),prelim.__dict__)
++completion=types.ModuleType('install_completion');completion.__file__=completion_path;sys.modules[completion.__name__]=completion
++exec(compile(completion_raw,completion_path,'exec'),completion.__dict__)
+ issuer=types.ModuleType('install_issuer');issuer.__file__=issuer_path;sys.modules[issuer.__name__]=issuer
+ exec(compile(issuer_raw,issuer_path,'exec'),issuer.__dict__)
+ intent=opened(intent_path,os.O_RDONLY)
+@@ -53,7 +57,16 @@
+ host_custody=opened(host_custody_path,os.O_RDONLY)
+ owner=opened(owner_path,os.O_RDONLY)
+ try:
+- issuer.run(install,prelim,intent,intent_sha,source,root,code,lease_path,closure,controls,capacity,host_custody,owner,wait_raw.decode('utf-8'))
++ result,latch=issuer.run(install,prelim,intent,intent_sha,source,root,code,lease_path,closure,controls,capacity,host_custody,owner,wait_raw.decode('utf-8'))
++ try:
++  import json
++  raw=(json.dumps(result,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
++  if os.write(1,raw)!=len(raw):raise OSError('short result capture')
++ except BaseException as error:
++  latch.fail(error)
++  while True:signal.pause()
++ if not result['operation_lease_fd_closed']:
++  while True:signal.pause()
+ except issuer.IssuerUnknown as failure:
+  # Hold the actual latch/FD references; an external Root owner owns retirement.
+  while True:signal.pause()
+--- root-install-source-7/WAIT-INSTALL-CODE.py	2026-10-30 14:13:45.515544248 -0700
++++ root-install-source-8/WAIT-INSTALL-CODE.py	2026-10-30 14:40:28.004100843 -0700
+@@ -1,5 +1,5 @@
+ import fcntl,hashlib,json,os,select,signal,struct,sys,time,types
+-EXPECTED='1949cbd455e8e9da223cf3d2f0d5d4f25299bef860771b7cc250707483079879'
++EXPECTED='f347c6d5650a88756176526b1a7751b9e0a76768b4d51241844598b206b8e07b'
+ if len(sys.argv)!=17:raise ValueError('exact waiting-installer argv required')
+ source_fd,ready_fd,go_fd,root_fd,package_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd=map(int,sys.argv[1:13])
+ nonce,deadline,installer_path,boot_id=sys.argv[13:17];deadline=int(deadline)
