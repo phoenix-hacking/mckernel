@@ -1,3 +1,35 @@
+## M14 engineering review — 2026-10-30T08:46Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 08:26:29.892–08:46:29.892 bucket adds zero current-candidate kernel
+builds, production links, native qualifications, guest apps, retired C boundaries
+or file closures. M14 remains 4/6, practical 35/35; M15 queued.
+
+Private original-baseline root CMake patch 01f3d94d captures make child status,
+checks explicit kernel release and probe ELF/map, and binds GNU Make for outer and
+inner calls. Independent source review accepts 36 verifier and 11+2 fake-make
+checks at mock scope. No Kbuild or configure ran. Exact exclusive root before
+recursive removal, kernel tree/paths, all tool/env and Kbuild writes, actual status,
+post-generation flags/objects, fresh admission and independent release remain open.
+Historical 5.15 cache is not evidence for 6.12.
+
+Guest status is exposed to host UTI/futex paths; strict235 static mcctrl rejects
+three legacy UTI ioctls, but combined host selection/overlap remain unproved. No
+runtime race is claimed. Public release_thread uses legacy helper, not the separately
+checked helper cited in the earlier trace. Pending ownership and all held paths stay
+open. Root70 bc2df accepted only at its scope; current-free/no-unlisted/v2birth,
+physical clearance and fresh supervisor health remain UNKNOWN. No BUILD3/CID5487
+or nonce replay. Root owns fresh facts/admission, m14_arch configure profile,
+m14_generic source composition. No physical command released.
+
+Exact queue, first compiler, blocked duration, overlap, CPU/peak and failure-to-
+validated-kernel-fix remain unmeasured; earlier 418.778s first-stream proxy, 491.317s
+handoff and original30-minute baseline retained, no95% claim. At 08:47:23 host/
+scratch free 143467724800 / 47613485056 bytes, sampled load 7.21/3.68/1.82;
+weekly78% used, weekly-only. Evidence: ../evidence/os-recovery-adoption-20261025-
+0254/restart-adoption-20261029T0234/M14-TERRA-ENGINEERING-REVIEW-20261030T0846-1/
+REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T08:26Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
