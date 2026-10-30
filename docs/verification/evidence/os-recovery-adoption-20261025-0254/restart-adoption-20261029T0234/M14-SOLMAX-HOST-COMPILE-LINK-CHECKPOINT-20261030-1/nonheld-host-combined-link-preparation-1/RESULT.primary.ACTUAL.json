@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T04:44:31.620830+00:00",
+  "observed_epoch": 1793335471.6208498,
+  "attempt": "primary",
+  "status": "FAIL_HOST_LD_UNSUPPORTED_DEPENDENCY_FILE",
+  "linker_exit": 1,
+  "stderr": "/usr/bin/ld: unrecognized option '--dependency-file=/home/holden/mckernel-work/scratch/native-cheap-nonheld-host-link-20261030-1/link.d'\n/usr/bin/ld: use the --help option for usage information\n",
+  "first_meaningful_error": "/usr/bin/ld: unrecognized option '--dependency-file=/home/holden/mckernel-work/scratch/native-cheap-nonheld-host-link-20261030-1/link.d'",
+  "files": {
+    "run.sh": {
+      "bytes": 5056,
+      "sha256": "faf0db27cd833bff38b0d51c92b7dfa83685d4736b9a83b363022394360c4a30"
+    },
+    "RUNNER.pid": {
+      "bytes": 8,
+      "sha256": "3bb858ea12230477f9ed15d15bf697e14d28578ebac8c5b14aeafb90f04e891c"
+    },
+    "RUNNER.proc-stat": {
+      "bytes": 322,
+      "sha256": "0a917776df16365160b5fd8a569ea96e1de0d062a5a5229a361935361cf9fe53"
+    },
+    "RUNNER.identity": {
+      "bytes": 34,
+      "sha256": "628d801644a72fd3ef461c8801dc71ad1a44722224edb0eaa2dff322b4416c2e"
+    },
+    "linker.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "linker.stderr": {
+      "bytes": 194,
+      "sha256": "0c73d3d7f50c1991a6503e414f106a6c1c545caf0100eb0bcc55218207aea3b0"
+    },
+    "linker.exit": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "linker.time": {
+      "bytes": 5389,
+      "sha256": "f20127f9f908d44afe68c323211a6c0701f5925922594acea6684a222c0e6483"
+    }
+  },
+  "runner": {
+    "pid": 2738457,
+    "birth": "113289730",
+    "pgid": 2738456,
+    "identity": [
+      "2738457",
+      "2738456",
+      "2738456",
+      "2738456",
+      "S"
+    ]
+  },
+  "postterminal_group": {
+    "members": [],
+    "read_errors": [],
+    "absent": true
+  },
+  "resource_share_released": {
+    "cpu": [
+      6
+    ],
+    "planning_ram_bytes": 4294967296
+  },
+  "tool_terminal": {
+    "chunk": "106fe7",
+    "exit_code": 1
+  },
+  "approved_next": "One fresh-root compatibility command omitting only unsupported dependency-file option, same script/11input order/entry/map/buildid. Current control/resource/input admission still required.",
+  "native_or_production_credit": false
+}

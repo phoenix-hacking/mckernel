@@ -1,3 +1,44 @@
+## M14 HOST diagnostic compile/link checkpoint — 2026-10-30T04:58Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same-Root Sol/max remains active; weekly included-only62%, original UTC and tighter
+BOOT/MONO ceilings retained. M14 remains4/6; practical35/35 separate; M15 paused.
+Selected qualified1cd7e4e6 and its23generic+5arch C definitions are unchanged.
+
+Actual combined nonheld Rust typecheck/object and paired HOST GCC9 C compilation
+passed. Eight Rust global FUNC names (six linked addresses, including two arity
+alias pairs) each have one strong provider across the exact11-input diagnostic
+link. New image8522c371 is10406608B; it is not selected/default/native accepted.
+Rust object18.56s wall/18.55s CPU/599100KiB peak; C0.46s/.45s/48816KiB; link0.10s/
+.09s/26680KiB. Metadata2.80s/2.79s/462488KiB. C's76actual dependencies matched;
+Rust's140actual paths matched, including all five changed files. No new guest,
+production link, native qualification, accepted C retirement or file closure.
+
+Host ld2.34 first rejected --dependency-file. Exact preapproved fresh-root
+correction omitted only that unsupported option; original failure retained,
+missing link.d explicit, all eleven input/map/provider and group checks passed.
+Failure-observation to full validated compatibility fix194.124s. The largest
+measured scheduling gap was181.048s from successful status marker to validation.
+Immediate terminal validation is now used: first ARCH46 failure/groupclosure took
+.075s after its status marker; this is not a claimed95% result or broad speedup.
+
+ARCH46 real-type C/Rust source passed independent review. First C compilation
+stopped at preserved filename-origin assertion; Rust did not run, no ABI values
+measured. One exact-file GCC macro-prefix mapping correction has independent
+source review; it keeps guards, source/header bytes and all46values unchanged.
+NEXT Root: fresh admission under existing bounded paired profile, one corrected
+compile, then real46-value extraction/comparison. Repeated family failure goes
+expert. Witness objects never enter any kernel link. All existing sources,
+original failure, known artifact and operation evidence are retained in
+`../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-HOST-COMPILE-LINK-CHECKPOINT-20261030-1/`.
+
+Root70 exact retirement69216 remains accepted; current-free and truthful
+intervening-custody assertion remain open. No physical/native/cleanup command is
+released. Keep old nonces/OCI owners/mutex27:4/scratch21/UNKNOWN unchanged.
+Generic_c direct-TID/terminate_host and execve transfer/ACK holds remain excluded;
+no FULL28, policy retry, controller restart, paid fallback or goal-completion claim.
+Twenty-minute buckets remain adjacent exact1200s; original30min baseline retained.
+
 ## Sol/max M14 source and compiler checkpoint — 2026-10-30T04:24Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

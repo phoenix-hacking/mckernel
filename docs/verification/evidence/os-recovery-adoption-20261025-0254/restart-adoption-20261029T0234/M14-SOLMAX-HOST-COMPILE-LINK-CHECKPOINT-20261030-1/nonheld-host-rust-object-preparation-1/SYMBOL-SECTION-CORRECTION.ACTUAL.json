@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T04:36:41.011781+00:00",
+  "prior_result_sha256": "e936c2cd64148a0dba74a49c7010f8918d864c4bdfb2f5585867907a6f127781",
+  "correction": "nm values in relocatable per-function sections are offsets; the prior one raw-value count cannot establish aliases or function-body count. Use section index + value with ELF FUNC/GLOBAL type instead. Original result retained.",
+  "symbols": {
+    "sys_perf_event_open": {
+      "section_index": "4271",
+      "value_hex": "0000000000000000",
+      "size_bytes": 1570,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "syscall_forward_rt_sigprocmask_bridge": {
+      "section_index": "4424",
+      "value_hex": "0000000000000000",
+      "size_bytes": 88,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "syscall_forward_sigaction_update_bridge": {
+      "section_index": "4426",
+      "value_hex": "0000000000000000",
+      "size_bytes": 90,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "syscall_do_syscall2_bridge": {
+      "section_index": "4414",
+      "value_hex": "0000000000000000",
+      "size_bytes": 161,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "syscall_policy_do_syscall2_bridge": {
+      "section_index": "4414",
+      "value_hex": "0000000000000000",
+      "size_bytes": 161,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "syscall_do_syscall3_bridge": {
+      "section_index": "4416",
+      "value_hex": "0000000000000000",
+      "size_bytes": 157,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "syscall_policy_do_syscall3_bridge": {
+      "section_index": "4416",
+      "value_hex": "0000000000000000",
+      "size_bytes": 157,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    },
+    "wait_host_wait4_bridge": {
+      "section_index": "4778",
+      "value_hex": "0000000000000000",
+      "size_bytes": 168,
+      "binding": "GLOBAL",
+      "type": "FUNC"
+    }
+  },
+  "section_value_groups": {
+    "4271:0000000000000000": [
+      "sys_perf_event_open"
+    ],
+    "4424:0000000000000000": [
+      "syscall_forward_rt_sigprocmask_bridge"
+    ],
+    "4426:0000000000000000": [
+      "syscall_forward_sigaction_update_bridge"
+    ],
+    "4414:0000000000000000": [
+      "syscall_do_syscall2_bridge",
+      "syscall_policy_do_syscall2_bridge"
+    ],
+    "4416:0000000000000000": [
+      "syscall_do_syscall3_bridge",
+      "syscall_policy_do_syscall3_bridge"
+    ],
+    "4778:0000000000000000": [
+      "wait_host_wait4_bridge"
+    ]
+  },
+  "actual_section_value_groups_for_eight_names": 6,
+  "limits": "Object-only provider evidence; not final linked address/alias/ABI/native or C retirement proof."
+}
