@@ -1,3 +1,30 @@
+## M14 eventfd and configure custody cursor — 2026-10-30T09:20Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical 35/35; M15 queued. No production/default/native/C-retirement
+or file credit. Original C and existing Rust eventfd bodies match nine local mock
+cases; independent oracle checks 128 packet bytes, channel, CPU, option and one
+send. Actual IKC, CPU layout, configured link and guest behavior remain open.
+`interrupt_syscall` stays held: C initializes args0–2 but forwarding reads args0–5,
+and can reach direct-TID; no separate Rust definition was established.
+
+Disabled v8 source correction compares full ordered configure argv, accepts matched
+empty flags and unconditionally defers stage2/acceptance while descendant closure
+UNKNOWN; source review confirms five synthetic checks. Host subreaper producer has
+a host /proc/PID1 contract and cannot be treated as an inner container observer.
+No positive inner process-tree/output-writer closure or live release exists. All
+entry, collect and lease guards remain. Scripts-only RO overlay proposal requires
+fresh owned copy, exact union and effective mount; private verifier passed14 temp
+fixture checks and duplicate-key cases, but external manifest authority, global
+quiescence, ancestor/mount identity, aliases and ownership remain open. No view,
+mount, configure, Kbuild, transport or native operation ran.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance remain UNKNOWN. Preserve all held paths, native owners, scratch21, 27:4,
+consumed nonces, original/tighter clocks and weekly-only allowance. Evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-EVENTFD-SOURCE-CHECKPOINT-20261030-1/REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T09:06Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,10 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-sdk-v8-source-1/owner.successor.py
++++ owner.corrected.py
+@@ -2317,6 +2317,7 @@
+     return created
+ 
+ def _sdk13_driver_result(bound,request,manifest):
++    raise OwnerError('SOURCE_ONLY: positive descendant quiescence and acceptance are unbound')
+     evidence=Path(bound['work'])/'sdk13-driver-evidence'
+     proof=_load_json(_safe_regular(evidence/'precompiler-view.json','configure mounted view proof'),'configure mounted view proof')
+     _fail(proof.get('status')=='PASS_EFFECTIVE_MOUNTS_SOURCE_ENV' and

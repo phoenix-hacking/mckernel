@@ -1,0 +1,15 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/driver.closure.py
++++ driver.corrected.py
+@@ -277,6 +277,12 @@
+             write_new(EVIDENCE / 'result.json', {'status': 'FAIL_OR_UNKNOWN', 'last_stage': i,
+                                                   'container_retirement': 'OWNER_REQUIRED'})
+             return 1
++        if i == 1:
++            # Direct wait alone cannot establish that configure's descendants stopped.
++            # No reviewed observer is yet bound, so this successor always defers.
++            write_new(EVIDENCE / 'result.json', {'status':'DEFERRED_DESCENDANT_QUIESCENCE_UNKNOWN',
++                                                  'last_stage':i, 'container_retirement':'OWNER_REQUIRED'})
++            return 1
+     write_new(EVIDENCE / 'result.json', {'status': 'COMMANDS_EXITED_ZERO',
+                                           'artifact_validation': 'POST_GENERATION_STAGE_EXITED_ZERO_ONLY',
+                                           'container_retirement': 'OWNER_REQUIRED'})
