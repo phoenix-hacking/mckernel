@@ -1,0 +1,67 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_four_command_driver.v4.py
++++ driver.successor.py
+@@ -13,11 +13,10 @@
+ import time
+ 
+ PROFILE = Path('/work/sdk13-profile.json')
+-PROFILE_SHA256 = 'e6a8462b10b409e86a7192d34328de33307cccd5c8e53d75b6312c85042c1ec3'
++PROFILE_SHA256 = None  # SOURCE ONLY: must be replaced by independently reviewed profile hash
+ EVIDENCE = Path('/work/sdk13-driver-evidence')
+ CWD = '/work/output/build/kernel'
+-STAGES = ('Rust object plus depinfo', 'GCC14 generic C object plus depfile',
+-          'GCC14 architecture C object plus depfile', 'GNU ld 2.41 raw eleven-input image')
++STAGES = ('Configure ON composite', 'Post-generation verification')
+ PER_STAGE_TIMEOUT = 600
+ 
+ 
+@@ -40,9 +39,9 @@
+             raise ValueError('profile hash mismatch')
+         value = json.loads(data)
+         commands = value['commands']
+-        if len(commands) != 4 or tuple(x['stage'] for x in commands) != STAGES:
++        if PROFILE_SHA256 is None or len(commands) != 2 or tuple(x['stage'] for x in commands) != STAGES:
+             raise ValueError('wrong command stages')
+-        if any(x['cwd'] != CWD or not isinstance(x['argv'], list) or not x['argv'] or
++        if any(x['cwd'] != '/work' or not isinstance(x['argv'], list) or not x['argv'] or
+                not all(isinstance(a, str) and '\0' not in a for a in x['argv']) for x in commands):
+             raise ValueError('wrong command schema')
+         return value,commands
+@@ -225,7 +224,11 @@
+             'mount_manifest_sha256':manifest_sha,'driver_sha256':driver_sha}
+ 
+ 
++def require_source_binding():
++    raise RuntimeError('SOURCE_ONLY: successor profile, mount validation and owner admission are unbound')
++
+ def main():
++    require_source_binding()
+     if len(sys.argv)!=7 or any(re.fullmatch(r'[0-9a-f]{64}',x) is None for x in (sys.argv[1],sys.argv[2],sys.argv[6])):
+         raise ValueError('SDK13 authenticated driver arguments missing')
+     ident=tuple(int(x) for x in sys.argv[3:6])
+@@ -238,7 +241,7 @@
+                                         'per_stage_timeout': PER_STAGE_TIMEOUT})
+     for i, command in enumerate(commands, 1):
+         stamp = time.time()
+-        write_new(EVIDENCE / ('stage-%d-intent.json' % i), {'argv': command['argv'], 'cwd': CWD,
++        write_new(EVIDENCE / ('stage-%d-intent.json' % i), {'argv': command['argv'], 'cwd': command['cwd'],
+                                                             'start_utc': stamp})
+         child = None
+         status = {'stage': command['stage'], 'returncode': None, 'timed_out': False,
+@@ -246,7 +249,7 @@
+         try:
+             with (EVIDENCE / ('stage-%d.stdout' % i)).open('xb') as out, \
+                  (EVIDENCE / ('stage-%d.stderr' % i)).open('xb') as err:
+-                child = subprocess.Popen(command['argv'], cwd=CWD, stdin=subprocess.DEVNULL,
++                child = subprocess.Popen(command['argv'], cwd=command['cwd'], stdin=subprocess.DEVNULL,
+                                          stdout=out, stderr=err, start_new_session=True,
+                                          env=dict(CLEAN_ENV))
+                 status['child_pid'] = child.pid
+@@ -275,7 +278,7 @@
+                                                   'container_retirement': 'OWNER_REQUIRED'})
+             return 1
+     write_new(EVIDENCE / 'result.json', {'status': 'COMMANDS_EXITED_ZERO',
+-                                          'artifact_validation': 'NOT_PERFORMED',
++                                          'artifact_validation': 'POST_GENERATION_STAGE_EXITED_ZERO_ONLY',
+                                           'container_retirement': 'OWNER_REQUIRED'})
+     return 0
+ 

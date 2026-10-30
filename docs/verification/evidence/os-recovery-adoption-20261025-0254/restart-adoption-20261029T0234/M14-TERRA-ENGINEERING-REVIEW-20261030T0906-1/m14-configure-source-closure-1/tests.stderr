@@ -1,0 +1,23 @@
+test_document_hash_mismatch (__main__.Closure) ... ERROR
+test_exact_source_proposal_accepts_and_does_not_authorize (__main__.Closure) ... ok
+test_missing_changed_extra_reordered_or_writable_fails (__main__.Closure) ... ok
+test_out_mount_and_nested_shadow (__main__.Closure) ... ok
+
+======================================================================
+ERROR: test_document_hash_mismatch (__main__.Closure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/test_closure.py", line 37, in test_document_hash_mismatch
+    with self.assertRaises(ValueError):v._check_composite_proposal(p/'not-a-manifest.json',self.rows())
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/validator.closure.py", line 163, in _check_composite_proposal
+    proposal, ref = _document(path, COMPOSITE_PROPOSAL_SHA, 'ON composite source proposal')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/validator.closure.py", line 69, in _document
+    p=_safe_parents(path); ref=_file(p)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/validator.closure.py", line 52, in _file
+    fd=os.open(str(path), os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-source-closure-1/not-a-manifest.json'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.018s
+
+FAILED (errors=1)

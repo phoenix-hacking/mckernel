@@ -1,3 +1,34 @@
+## M14 engineering review — 2026-10-30T09:06Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 08:46:29.892–09:06:29.892 bucket: zero current-candidate kernel builds,
+production links, native qualifications, guest apps, retired C boundaries or file
+closures. M14 4/6, practical 35/35, M15 queued. The reviewed private nonheld13/
+data32 composite applies exact preimages; actual configuration/link remains open.
+A disabled v8 owner successor adds configure and post-generation stages, synthetic
+7+3+1 checks pass, but run/collect/lease-release remain blocked and no physical
+operation ran. Current supervisor health, source/lease/output/tool/input identity and
+independent fresh execution admission remain open.
+
+After bucket, an ON source-only map accounts for 20 historical work overlays as
+not reused and proposes 19 targets, all live identities null. Independent review
+found six nested script targets absent from the read-only /src parent; lexical
+mount ordering does not create them. Fresh assembled source view, exact mount
+precedence/types/quiescence, RO /out source+build, exclusive /work and Kbuild
+isolation require separate review/admission. No source copying or mount executed.
+All held generic/direct-TID/terminate_host/execve and logger/pending concerns stay.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and fresh
+physical clearance UNKNOWN. BUILD3/CID5487 and consumed nonces not replayed; native
+attempt3 expired before claim. Root owns current facts/admission, m14_arch disabled
+owner closure and m14_generic source mount mapping. Exact queue/first compiler,
+blocked time, overlap, CPU/peak and failure-to-validated-kernel-fix unmeasured;
+prior 418.778s first-stream proxy, 491.317s handoff and original30-minute baseline
+retained, no95% claim. At 09:07:27 host/scratch free 143542181888 / 47613485056
+bytes; weekly79% used, weekly-only. Evidence: ../evidence/os-recovery-adoption-
+20261025-0254/restart-adoption-20261029T0234/M14-TERRA-ENGINEERING-REVIEW-
+20261030T0906-1/REVIEW.json.
+
 ## M14 composite and Kbuild isolation cursor — 2026-10-30T09:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

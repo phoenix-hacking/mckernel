@@ -1,0 +1,79 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_image_owner.v8.py
++++ owner.successor.py
+@@ -2318,34 +2318,29 @@
+ 
+ def _sdk13_driver_result(bound,request,manifest):
+     evidence=Path(bound['work'])/'sdk13-driver-evidence'
+-    proof=_load_json(_safe_regular(evidence/'precompiler-view.json','SDK13 mounted view proof'),'SDK13 mounted view proof')
++    proof=_load_json(_safe_regular(evidence/'precompiler-view.json','configure mounted view proof'),'configure mounted view proof')
+     _fail(proof.get('status')=='PASS_EFFECTIVE_MOUNTS_SOURCE_ENV' and
+           proof.get('profile_sha256')==SDK13_PROFILE_SHA and proof.get('driver_sha256')==SDK13_DRIVER_SHA and
+           proof.get('source_map_sha256')==request['source_map_sha256'] and
+-          proof.get('mount_manifest_sha256')==manifest['sha256'], 'SDK13 precompiler mounted view mismatch')
+-    result=_load_json(_safe_regular(evidence/'result.json','SDK13 driver result'),'SDK13 driver result')
+-    _fail(result.get('status')=='COMMANDS_EXITED_ZERO' and result.get('artifact_validation')=='NOT_PERFORMED',
+-          'SDK13 driver did not report four zero exits')
+-    for i in range(1,5):
+-        intent=_load_json(_safe_regular(evidence/('stage-%d-intent.json'%i),'SDK13 intent'),'SDK13 intent')
+-        row=_load_json(_safe_regular(evidence/('stage-%d-result.json'%i),'SDK13 stage'),'SDK13 stage')
+-        _fail(intent.get('argv')==bound['commands'][i-1]['argv'] and
+-              intent.get('cwd')==bound['commands'][i-1]['cwd'] and
+-              row.get('stage')==bound['commands'][i-1]['stage'] and
+-              row.get('returncode')==0 and row.get('direct_wait_completed') is True and
+-              row.get('timed_out') is False and not row.get('error'),'SDK13 stage or command differs')
++          proof.get('mount_manifest_sha256')==manifest['sha256'], 'configure mounted view differs')
++    result=_load_json(_safe_regular(evidence/'result.json','configure driver result'),'configure driver result')
++    _fail(result.get('status')=='COMMANDS_EXITED_ZERO' and
++          result.get('artifact_validation')=='POST_GENERATION_STAGE_EXITED_ZERO_ONLY', 'configure stages incomplete')
++    _fail(len(bound['commands'])==2, 'configure stage count differs')
++    for i,command in enumerate(bound['commands'],1):
++        intent=_load_json(_safe_regular(evidence/('stage-%d-intent.json'%i),'configure intent'),'configure intent')
++        row=_load_json(_safe_regular(evidence/('stage-%d-result.json'%i),'configure stage'),'configure stage')
++        _fail(intent.get('argv')==command['argv'] and intent.get('cwd')==command['cwd'] and
++              row.get('stage')==command['stage'] and row.get('returncode')==0 and
++              row.get('direct_wait_completed') is True and row.get('timed_out') is False and
++              not row.get('error'), 'configure stage result differs')
+         for suffix in ('stdout','stderr'):
+-            _safe_regular(evidence/('stage-%d.%s'%(i,suffix)),'SDK13 stage capture')
++            _safe_regular(evidence/('stage-%d.%s'%(i,suffix)),'configure capture')
+     outputs=[]
+-    depfiles=['/work/output/build/kernel/rust/mckernel_rust.d',
+-              '/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d',
+-              '/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d',
+-              '/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.d',
+-              '/work/output/build/kernel/mckernel.img.map']
+-    for raw in bound['outputs']+depfiles:
+-        host=Path(bound['work']) / Path(raw).relative_to('/work')
+-        path=_safe_regular(host,'SDK13 actual output')
+-        _fail(path.stat().st_size>0,'SDK13 output empty')
++    for raw in ('/work/output/build/tmp.resolve_MODULES_END/driver.ko',
++                '/work/output/build/CMakeCache.txt','/work/output/build/compile_commands.json'):
++        path=_safe_regular(Path(bound['work'])/Path(raw).relative_to('/work'),'configure output')
++        _fail(path.stat().st_size>0,'configure output empty')
+         outputs.append({'path':str(path),'bytes':path.stat().st_size,'sha256':_sha256(path)})
+     return outputs
+ 
+@@ -2493,6 +2488,7 @@
+     def __init__(self,request,validator,signals):
+         self.request=request;self.validator=validator;self.signals=signals
+     def run(self):
++        raise OwnerError('SOURCE_ONLY: configure successor has no release or live bindings')
+         r=self.request
+         _fail('physical_acceptance' not in r,'SDK13 launch request must not contain future physical acceptance')
+         _fail(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000,'SDK13 ordinary owner required')
+@@ -2622,6 +2618,7 @@
+     return rows,(identity,daemon)
+ 
+ def _sdk13_release_accepted_lease(request,validator,signals):
++    raise OwnerError('SOURCE_ONLY: lease retirement disabled')
+     _fail(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000,'SDK13 ordinary release owner required')
+     core_request={k:v for k,v in request.items() if k!='physical_acceptance'}
+     # The initial validator correctly requires a fresh, absent work/evidence
+@@ -2672,6 +2669,7 @@
+ 
+ 
+ def main(argv=None):
++    raise OwnerError('SOURCE_ONLY: launch and lease retirement disabled')
+     parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. SDK13 compile owner.")
+     parser.add_argument("action", choices=("run", "release-accepted-lease"))
+     parser.add_argument("request", type=Path)

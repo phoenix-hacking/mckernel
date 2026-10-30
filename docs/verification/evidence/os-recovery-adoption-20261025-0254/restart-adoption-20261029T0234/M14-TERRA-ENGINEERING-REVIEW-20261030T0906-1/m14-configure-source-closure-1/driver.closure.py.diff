@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/attempt-0002/m14-configure-sdk-v8-source-1/driver.successor.py
++++ driver.closure.py
+@@ -122,7 +122,7 @@
+         if opts is None or ('ro' not in opts if readonly else 'rw' not in opts):
+             raise ValueError('missing or wrong effective mount: '+target)
+     for target in seen:
+-        if (target=='/src' or target.startswith('/src/') or target=='/work' or target.startswith('/work/') or target=='/nightly' or target.startswith('/nightly/')) and target not in expected:
++        if (target=='/src' or target.startswith('/src/') or target=='/work' or target.startswith('/work/') or target=='/nightly' or target.startswith('/nightly/') or target=='/out' or target.startswith('/out/')) and target not in expected:
+             raise ValueError('unexpected nested mount: '+target)
+     return len(seen)
+ 

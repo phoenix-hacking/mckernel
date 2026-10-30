@@ -1,0 +1,78 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-input-validation-source-1/sdk13_data32_input_validation.py
++++ validator.successor.py
+@@ -111,35 +111,53 @@
+ 
+ 
+ def _mount_graph(mounts):
+-    _require(isinstance(mounts,list) and len(mounts)==30, 'SDK13 mount count')
++    _require(isinstance(mounts,list) and len(mounts)>=4, 'mount count')
+     targets=[]
+-    for i,(host,target,readonly) in enumerate(mounts):
+-        _require(isinstance(host,str) and isinstance(target,str) and isinstance(readonly,bool), 'mount row shape')
+-        p=PurePosixPath(target); _require(p.is_absolute() and str(p)==target and '..' not in p.parts, 'mount target invalid')
+-        _require(target not in targets, 'duplicate mount target: '+target)
+-        _require((i==0 and target==WORK_TARGET and not readonly) or (i>0 and readonly), 'unexpected writable mount')
++    for i,row in enumerate(mounts):
++        _require(isinstance(row,(tuple,list)) and len(row)==3, 'mount shape')
++        host,target,readonly=row
++        _require(isinstance(host,str) and isinstance(target,str) and type(readonly) is bool, 'mount row shape')
++        p=PurePosixPath(target)
++        _require(p.is_absolute() and str(p)==target and '..' not in p.parts, 'mount target invalid')
++        _require(target not in targets, 'duplicate mount target')
++        _require((i==0 and target=='/work' and not readonly) or (i>0 and readonly), 'unexpected writable mount')
+         for prior in targets:
+-            _require(not (PurePosixPath(prior) in p.parents and prior not in ('/src','/work')),
+-                     'unsupported overlapping mount targets')
+-            _require(not (p in PurePosixPath(prior).parents), 'mount order masks child target')
++            _require(not (PurePosixPath(prior) in p.parents and prior not in ('/src','/work')), 'unsupported overlap')
++            _require(not (p in PurePosixPath(prior).parents), 'mount parent masks child')
+         targets.append(target)
+-
++    _require({'/work','/src','/src/kernel/rust','/nightly','/out'}<=set(targets), 'required mount absent')
+ 
+ def _selectors(profile, proposal):
+-    commands=profile['commands']; _require(commands==proposal['compiler_commands'] and len(commands)==4, 'command proposal differs')
+-    rust=commands[0]['argv']; c=commands[2]['argv']
+-    cfg=[rust[i+1] for i,x in enumerate(rust[:-1]) if x=='--cfg']
+-    _require(len(cfg)==len(set(cfg)), 'duplicate Rust cfg')
+-    _require({'f06_do_signal_whole_candidate','f06_do_signal_reuse_qualified_context'} <= set(cfg), 'SDK13 signal cfg missing')
+-    _require(not (HELD|PARTIAL)&set(cfg), 'held or overlapping Rust selector')
+-    _require(c.count('-DMCKERNEL_RUST_F06_DO_SIGNAL_WHOLE')==1, 'paired C selector missing')
+-    _require(cfg.count('f06_debug_constants_candidate')==1 and c.count('-DMCKERNEL_RUST_F06_DEBUG_CONSTANTS')==1, 'paired debug constants selector missing')
+-    _require(not any(('FULL28' in x or 'WITNESS' in x or 'EXECVE_TRANSFER' in x or 'TERMINATE_HOST' in x or 'DIRECT_TID' in x) for command in commands for x in command['argv']), 'held C selector')
+-    _require([x for x in commands[3]['argv'] if x.endswith('.o')]==profile['link']['order'], 'link object list differs')
+-    _require(len(profile['link']['order'])==11 and len(profile['link']['retained_8'])==8 and len(profile['link']['rebuild'])==3, 'link composition differs')
+-
++    commands=profile['commands']
++    _require(commands==proposal['commands'] and len(commands)==2, 'command proposal differs')
++    _require([c['stage'] for c in commands]==['Configure ON composite','Post-generation verification'], 'stage order differs')
++    _require(all(c.get('cwd')=='/work' and isinstance(c.get('argv'),list) and c['argv'] and
++                 all(isinstance(x,str) and x and '\0' not in x for x in c['argv']) for c in commands), 'bad command schema')
++    a=commands[0]['argv']
++    _require(a[:7]==['/usr/bin/cmake','-S','/src','-B','/work/output/build','-G','Unix Makefiles'], 'configure argv differs')
++    _require([x for x in a if x.startswith('-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=')]==['-DMCKERNEL_M14_NONHELD13_DATA32_EXPERIMENTAL=ON'] and
++             [x for x in a if x.startswith('-DKERNEL_DIR=')]==['-DKERNEL_DIR=/out/build'], 'ON or kernel selector differs')
++    for flag in ('UNAME_R','MCKERNEL_M14_EXPECTED_UNAME_R','MCKERNEL_M14_EXPECTED_MAP_KERNEL_START',
++                 'MCKERNEL_M14_EXPECTED_MAKE_SHA256','KBUILD_MAKE_FLAGS','MCKERNEL_M14_EXPECTED_KBUILD_MAKE_FLAGS'):
++        values=[x for x in a if x.startswith('-D'+flag+'=')]
++        _require(len(values)==1 and len(values[0])>len('-D'+flag+'='), 'missing or duplicate '+flag)
++    v=commands[1]['argv']
++    _require(v[:4]==['/usr/bin/python3','-I','-B','/src/scripts/verify_m14_elf.py'], 'separate verifier differs')
++    def cvalue(flag): return next(x.split('=',1)[1] for x in a if x.startswith('-D'+flag+'='))
++    expected={'--make-status':'0','--module':'/work/output/build/tmp.resolve_MODULES_END/driver.ko',
++              '--kernel-release':'/out/build/include/config/kernel.release',
++              '--uts-release-header':'/out/build/include/generated/utsrelease.h',
++              '--uname-r':cvalue('UNAME_R'),'--expected-map':cvalue('MCKERNEL_M14_EXPECTED_MAP_KERNEL_START'),
++              '--cmake-cache':'/work/output/build/CMakeCache.txt','--compile-commands':'/work/output/build/compile_commands.json',
++              '--expected-kernel-dir':'/out/build','--expected-build-dir':'/work/output/build'}
++    _require(cvalue('UNAME_R')==cvalue('MCKERNEL_M14_EXPECTED_UNAME_R'), 'uname mismatch')
++    _require(len(v)==4+2*len(expected), 'verifier argv length differs')
++    for flag,value in expected.items():
++        _require(v.count(flag)==1 and v[v.index(flag)+1]==value, 'verifier flag differs: '+flag)
++    _require(not any(any(x in arg for x in ('FULL28','WITNESS','EXECVE_TRANSFER','TERMINATE_HOST','DIRECT_TID')) for c in commands for arg in c['argv']), 'held selector')
+ 
+ def _collect(request, profile_path, request_path, source_map_path):
++    raise ValueError('SOURCE_ONLY: configure source closure and live bindings are unbound')
+     profile,pref=_document(profile_path,PROFILE_SHA,'SDK13 profile')
+     proposal,qref=_document(request_path,PROPOSAL_SHA,'SDK13 proposal')
+     _require(isinstance(request,dict),'request must be object')
