@@ -1,3 +1,50 @@
+## Sol/max M14 source and compiler checkpoint — 2026-10-30T04:24Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Explicit same-Root Sol/max resume is active. Current Sol/max control receipts
+and live identities verified; all four recovered engineering/review threads
+confirmed danger-full-access/never before assignment. Weekly included-only is
+60% used in the latest observed notification, original UTC1793774133 and tighter
+BOOT1571569.6959267766/MONO1556231.5688797957 retained. No paid fallback.
+
+Actual new result: pinned Rust1.92 compiled the private aligned request leaf and
+one host-mock test passed all five exports: 64-aligned storage, mock wire72/align8,
+all six defined arguments, CPU/number and return/narrowing checks. Compiler wall
+0.34s, CPU0.11s, peak120348KiB; fixture wall<0.01s, peak2740KiB. Tool terminal0;
+runner2730585/start113149646, PGID2730584 observed empty after completion. The
+CPU6/2GiB ordinary share was released. Admission-to-compiler-stream creation
+12.992s is a timestamp proxy; exact compiler start and queue latency are unknown.
+No compiler failure occurred; failure-to-validated-fix is not applicable here.
+No actual C-header ABI, production/default link, native or C-retirement credit.
+
+Compositor produced seven-file private combined perf/two signal-forward/five
+request-constructor candidate537257ef/profileb3ebd2e2. Independent conditional
+source review d7534c52 confirms the two corrected multiline C fallbacks and
+logical-line resets; actual preprocessing/object metadata and ABI/provider/caller
+proof remain open. Bound canonical preimages differ, so no automatic canonical
+overwrite was performed. Arch46 gated witness hooks/command pairs ec1e4f94 are
+source-ready; they do not select whole do_signal or prove measured ABI.
+Retained source, reviews, runtime streams, resource/ownership records and exact
+private paths: `../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-SOURCE-AND-MICROTEST-CHECKPOINT-20261030-1/`.
+
+M14 remains4/6, practical35/35 separate, M15 paused. Image1cd7e4e6 and its23generic+
+5arch C definitions are unchanged; qualified19-definition static batch retained.
+New current-candidate builds/production-links/native/guest apps/retirements:0.
+Root70 exact retirement69216 remains accepted; the intervening no-unlisted-custody
+field and fresh current-free remain open. Old observer/Q/nonces are not released.
+Generic_c/direct-TID terminate_host and execve transfer/ACK holds remain excluded;
+FULL28 stays off. No native, cleanup, Docker or controller action was launched.
+
+Scheduling adjustment: disjoint reviewed Layer-B compiler checks now advance on
+CPU6 while native custody remains held, with one private compositor. The largest
+identified avoidable handoff was treating the retained native predicate as a
+blanket compiler stop; its exact duration is unmeasured. Next owner arch_source
+prepares exact HOST nightly --emit=metadata inputs/argv for the coherent Rust
+candidate; Root obtains its matching finite profile/resource admission and runs
+it. Root separately owns the missing historical custody record; no physical
+command is currently released. Preserve original thirty-minute baseline and
+nonoverlapping twenty-minute review cursor; no95% or speedup claim.
+
 ## Dispatcher model handoff checkpoint — 2026-10-30T04:08Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

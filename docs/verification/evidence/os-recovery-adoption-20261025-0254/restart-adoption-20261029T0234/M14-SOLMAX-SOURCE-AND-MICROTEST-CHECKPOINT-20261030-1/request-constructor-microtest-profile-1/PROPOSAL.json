@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_RELEASED",
+  "owner": "/root",
+  "output_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph",
+  "files": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/constructor_alignment_fixture.rs",
+      "source": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REQUEST-BRIDGE-ALIGN64-CHECKPOINT-20261030-1/constructor_alignment_fixture.rs",
+      "sha256": "65052b04c27f597611b67b0b737c5c6e784376e47fd9bb9bc16f1ccbdb2d588a",
+      "bytes": 3073
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/f03_request_constructors.rs",
+      "source": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-REQUEST-BRIDGE-ALIGN64-CHECKPOINT-20261030-1/f03_request_constructors.rs",
+      "sha256": "759818c4bbf907f988b0e6a349221ec8356e8b2b6863ce36071d2fa8ca9b35a1",
+      "bytes": 3917
+    }
+  ],
+  "run_script": {
+    "path": "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/run.sh",
+    "sha256": "626b09456a312670a883182a4e0a23e955c0ab913b9116fe2697dc68cd8b1e3d"
+  },
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "HOME=/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/home",
+    "TMPDIR=/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/tmp",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=150",
+    "--nofile=256",
+    "--fsize=67108864",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "180s",
+    "/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph/run.sh",
+    "/home/holden/mckernel-work/scratch/native-cheap-20261017-5nwobsph"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "profile_base": "docs/verification/evidence/native-cheap-profile-review-20261017.json",
+  "delta": "Admit exact fixture/leaf, standard shell serial compiler/test and /usr/bin/time; existing two named entrypoints do not cover this. No new reusable runner.",
+  "resources": {
+    "cpu": [
+      6
+    ],
+    "planning_share_bytes": 2147483648,
+    "cpu_shares": 1,
+    "wall_seconds": 180,
+    "kill_after_seconds": 5,
+    "max_processes": 8,
+    "serial_compiler_then_fixture": true,
+    "host_free_floor_bytes": 17179869184,
+    "scratch_free_floor_bytes": 12884901888
+  },
+  "control_envelope": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1",
+  "execution_release": null,
+  "physical_ownership": "No Docker/modules/guest/root/native cleanup/production mutation/service retry. Retain Root70 UNKNOWN. Tool terminal closure and postcommand group absence required; on uncertainty preserve identity/root.",
+  "expected": "One Rust test of all five actual exports with mocked do_syscall: request address mod64=0, wire72/align8, six defined slots, exact number/cpu and returns/narrowing. Not production/native ABI proof.",
+  "compiler_or_fixture_executed": false
+}
