@@ -1,3 +1,35 @@
+## M14 installer source and host dependency checkpoint — 2026-10-30T22:02Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 stays4/6, practical35/35 separate; M15paused. Latestsourceaab0f9 frontend and
+old4ae9entries/7bodies/56ABI remain exactscope; no new selecteddefault/nativeimage,
+OS behavior, C-retirement or file acceptance. Heldexec/XPMEM boundaries unchanged.
+
+New actualchecks:21distinctsource10/phase0cases verified (20initialPASS plus1
+boundedfixturefixPASS); initialnestedPoll attributeerror retained. Fix63.572s,
+correctedrun0.07wall/0.07CPU/20456KiB. Onlyfailedcase rerun. RealPython3.8pidfd
+fallback opens disposable selfpidfd and signal0/self(no delivery), verifies self
+fdinfo andcloses;0.02wall/12840KiB. Positive toolterminals/emptygroups release
+ordinary512MiB shares. No root/installer/kernel/guest/otherprocess signal occurred.
+
+Source10knownrole model nowbinds actualtimeout91db equalofficialUbuntu8.30-3ubuntu2
+payload and reviewedonefork/exec+normalchildwaitsource. Trustedplatform assumptions
+explicit; no globaldescendant/currentfree claim. Source/profile reviewdca2 accepts
+scopeddesign. Originalbroken taskset/Python argv retained, separatefcf171 correction
+passes. Phase0d1e70e tracks writer/lease FDacquisition/close failures and sealsactual
+Rootselectedreview/intent; journalFD remainsopen until actualprocessjoint provesclose.
+
+NEXT sdk_owner actualstrictRootrequest/driver/resource andexternalowner-watchdog
+binding, thenRootindependentreviewed one-shot admission andexactsudo-A install-only
+command. No imaginaryholder/receipt or newframework. Rootcurrentfree/V2birth/source
+exclusion/effectiveview UNKNOWN; native12+V2reserved2GiB/scratch21/27:4 unchanged.
+Closed20minbucket through21:54:56:1affectedfrontend+8mocksourcecases,0retirement;
+nativeunreleased240minutesacrossclosedbuckets. Newchecks belongnextopenbucket.
+Firstcompiler6101.410s; exactqueuelatencyunknown; baseline30min retained/no95%claim.
+Scheduling:readycompiler independent, frozenchangedsource/test only, now actualadmission.
+Verifiedpushed97c2adaa1/fetchedblob79cb04c6; thischeckpointcontinuesactivework.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-INSTALLER-KNOWN-ROLE-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 affected source compiler checkpoint — 2026-10-30T21:51Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

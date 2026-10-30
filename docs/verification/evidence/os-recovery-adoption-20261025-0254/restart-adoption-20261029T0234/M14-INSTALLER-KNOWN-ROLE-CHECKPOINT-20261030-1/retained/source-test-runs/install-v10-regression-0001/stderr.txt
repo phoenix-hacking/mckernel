@@ -1,0 +1,38 @@
+test_complete_stdout_follows_durable_proof (test_v10_model.DurableHandoffCases) ... ok
+test_short_stdout_keeps_durable_proof_and_lease (test_v10_model.DurableHandoffCases) ... ok
+test_model_binds_actual_timeout_source_proof (test_v10_model.KnownRoleModelCases) ... ok
+test_reviewed_exact_known_roles_do_not_require_new_root_holder (test_v10_model.KnownRoleModelCases) ... ok
+test_unverified_toolproof_pin_fails_even_with_matching_receipt (test_v10_model.KnownRoleModelCases) ... ok
+test_wrong_timeout_binary_or_global_claim_fails (test_v10_model.KnownRoleModelCases) ... ok
+test_full_timeout_and_positive_reserve_required_at_go (test_v10_model.ReserveCases) ... ok
+test_adopted_installer_nonzero_is_unknown (test_profile_and_monitor.MonitorCases) ... ok
+test_nonzero_timer_is_unknown (test_profile_and_monitor.MonitorCases) ... ok
+test_pidfd_poll_error_never_performs_wait (test_profile_and_monitor.MonitorCases) ... ERROR
+test_signaled_timer_is_unknown (test_profile_and_monitor.MonitorCases) ... ok
+test_timer_zero_and_same_installer_terminal_with_echild (test_profile_and_monitor.MonitorCases) ... ok
+test_complete_argv_and_exact_pinned_python_literal (test_profile_and_monitor.ProfileCases) ... ok
+test_changed_postseal_readback_rejected (test_phase0.Phase0Custody) ... ok
+test_close_failure_is_unknown_and_never_retried (test_phase0.Phase0Custody) ... ok
+test_extra_or_missing_admission_fields_rejected (test_phase0.Phase0Custody) ... ok
+test_lease_open_registers_before_stops_resume (test_phase0.Phase0Custody) ... ok
+test_nan_cannot_be_serialized_into_receipt (test_phase0.Phase0Custody) ... ok
+test_unknown_native_state_cannot_be_promoted (test_phase0.Phase0Custody) ... ok
+test_write_failure_retains_registered_writer (test_phase0.Phase0Custody) ... ok
+test_writer_closed_before_immutable_and_readback (test_phase0.Phase0Custody) ... ok
+
+======================================================================
+ERROR: test_pidfd_poll_error_never_performs_wait (test_profile_and_monitor.MonitorCases)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-10/profile-argv-correction-1/test_profile_and_monitor.py", line 95, in test_pidfd_poll_error_never_performs_wait
+    self.subject.monitor_owned(latch,object(),9,50,71,60,72,{},10)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-10/install_issuer.py", line 134, in monitor_owned
+    events=dict(poll.poll(100))
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-10/profile-argv-correction-1/test_profile_and_monitor.py", line 89, in poll
+    def poll(self,*args):return [(72,self.subject.select.POLLERR)]
+AttributeError: 'Poll' object has no attribute 'subject'
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.021s
+
+FAILED (errors=1)
