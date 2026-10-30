@@ -1,3 +1,59 @@
+## Manual resume 2 steering — 2026-10-30T03:26 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual same-Root invocation 20261030T032622Z-ad43fe10 is active. Its own actual
+controls and capacity-fallback receipts record the guardian, sole steering monitor
+and included-only supervisor; tighter UTC1793774133/BOOT1571570.695938624/
+MONO1556232.5688914557 remain ceilings. The foreground readback reports 52%
+weekly used. It grants no native execution or physical clearance. The prior manual1
+HOLD/USER-STOP and drain evidence remains retained.
+
+The generic_c rejected turn 01a18a83-c803-7e63-9aa4-8c54e013c7e5 remains held;
+no replay or equivalent reassignment. M14 remains 4/6, M15 paused; prior qualified
+19-definition compiled/linked batch remains scoped to its artifact. No new guest,
+current-candidate build, native qualification, retired C boundary or file closure
+is recorded in this invocation. The previous controller snapshot is unavailable,
+so a complete 20-minute delta and failure-to-validated-fix time are unmeasured.
+Prior batch wall 20.113176s, CPU 20.136898s, peak child RSS 596788 KiB and GO
+mtime to first recorded compiler start 0.587572s remain historical.
+
+Root owns the next physical critical path: reconcile Root70 and the consumed
+conversion retirement/caller/current-free evidence, preserving all UNKNOWNs,
+then use fresh operation-specific review and admission. Do not replay any old
+cleanup, nonce or build. Independent source lanes cover architecture diagnostic
+counter, credential snapshot ownership and mmap/XPMEM lifetime, excluding the
+held work. Their outputs are not selected build or native acceptance. Scheduling
+adjustment: keep these disjoint lanes running while the independent current-custody
+review determines the actual next operation; do not wait on unrelated source work.
+At snapshot, host available 144829874176B, scratch 47849582592B, available memory
+27552932KiB; these are sampled values, not admission. Queue-to-compiler latency,
+blocked duration and current-run CPU/peak are unmeasured; no 95% claim.
+
+## Explicit manual same-Root recovery preparation — 2026-10-30T03:21 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The foreground user explicitly requests restarting the campaign to close M14,
+then M15 after original-scope M14 acceptance. Same Root
+01a18a76-4f1e-7900-8ed6-127394e93689, Terra/xhigh dispatcher and the original
+included-only weekly period are retained; latest fresh reading51%used. Tightest
+inherited UTC1793774133/BOOT1571572.6959598332/MONO1556234.56891299 remain ceilings.
+Historical credit ledger7f4af94a83b14cc08f97401f5891d965 is unchanged.
+
+The generic_c rejected request remains held: child
+01a18a76-b017-76b3-9755-b812d0f923ed, turn01a18a83-c803-7e63-9aa4-8c54e013c7e5.
+Do not resume it or assign an equivalent replay elsewhere. Distinct independent
+M14 work may continue after actual recovery controls; no supported service/account
+resolution is established. Preserve the original service notice and stop records.
+
+Exact private recovery packet is under host-preparation/velocity-intervention-
+20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-1. Initial failed source
+reviews and pre-submission phone-identity type failure are retained. No new
+campaign/model turn, build, guest, native cleanup, C retirement or M14 closure has
+occurred at this preparation checkpoint. Source/review only until that directory's
+ACTUAL-CONTROLS-ARMED.json and ACTUAL-CAPACITY-FALLBACK-ARMED.json are both live.
+No model restart clears Root70 pending native custody, the owned stopped container,
+consumed nonces, mutex27:4, scratch21 or physical workload/resource requirements.
+
 ## Current M14 source and admission cursor — 2026-10-30T01:50:44+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
