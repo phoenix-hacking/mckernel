@@ -1,3 +1,18 @@
+## M14 perf ENOMEM fixture cursor — 2026-10-30T11:05Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued. An unrun fixture imports the exact combined
+perf Rust body and selected extracted helpers. It specifies standalone descriptor
+ENOMEM with one local event free and no publication, and a grouped control with
+no free. After independent review, it poisons six request arguments and checks
+clearing and both member/head links; corrected source review passes. This fixture
+is not compiled or executed and mocks do not prove host, counter or concurrency
+behavior. Toolchain, profile, source custody and valid crate-name remain open.
+No production/native/guest, C-retirement or file credit. Existing health, physical
+ownership, admission, perf and XPMEM holds remain. Evidence: ../evidence/
+os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-PERF-ENOMEM-FIXTURE-CHECKPOINT-20261030-1/.
+
 ## M14 XPMEM and perf composite cursor — 2026-10-30T11:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

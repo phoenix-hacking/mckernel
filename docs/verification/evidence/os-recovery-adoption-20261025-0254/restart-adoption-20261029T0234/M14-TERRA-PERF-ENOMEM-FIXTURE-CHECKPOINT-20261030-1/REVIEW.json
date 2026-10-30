@@ -1,0 +1,7 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "fixture_sha256": "36848e707ecbd57e0eff920749b82f6fb669e42a9dc19993d0a82fb5f83c6aed",
+  "outcome": "Unrun fixture imports combined actual Rust body and source-extracted helpers. Standalone NULL descriptor allocation expects ENOMEM, one local event free and no publish; grouped control expects no free and validates links. Six nonzero host request arguments are checked cleared. Independent source review confirms corrected assertions.",
+  "limitations": "Not compiled or executed; mocks prove no real allocation, host transport, concurrency, FD or counter retirement. Compiler, edition, target, actual profile and immutable read-time binding remain open. Dotted source name requires a reviewed explicit valid rustc crate-name or bound alternative.",
+  "next": "Bind a reviewed light execution profile and exact source/tool/custody, then run fixture once under fresh admission; separately advance integrated M14 configure/compiler under supervisor health and Root ownership clearance."
+}
