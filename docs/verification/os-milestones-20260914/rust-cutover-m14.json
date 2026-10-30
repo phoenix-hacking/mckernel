@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-30T22:43:46.217911+00:00",
+  "as_of": "2026-10-30T23:17:28.141794+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -4006,13 +4006,23 @@
       ],
       "new_production_native_file_credit": 0,
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1"
+    },
+    {
+      "at": "2026-10-30T23:17:28.141794+00:00",
+      "actual_progress": "Parent4/caller15 + DATA helper9 PASS; partial role FD132/120/96 and fixture4 PASS. Bounded wait-variable correction1a42 newcasePASS. No new kernel compiler, production/native/C/file credit. Exact changed-source operation binding/fresh actual resources and Root callerjoin next; physical UNKNOWN holds persist.",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1"
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-30T22:43:46.217911+00:00",
-    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/CHECKPOINT.json",
-    "status": "ACTIVE_SOURCE_FIX_NOT_NATIVE_ACCEPTANCE",
-    "next": "read-onlyroleFD-budgetexercise +exactsource/resource/sudocalleradmission"
+    "at": "2026-10-30T23:17:28.141794+00:00",
+    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1",
+    "next": "Root fresh actual control/resource/usage binding and exact reviewed caller1a42 install-only invocation; native remains held",
+    "native_release": false
   },
   "campaign_scheduling_override": {
     "state": "exclusive_active_engineering_objective",

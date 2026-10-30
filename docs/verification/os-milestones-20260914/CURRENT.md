@@ -1,3 +1,40 @@
+## M14 caller proof checkpoint — 2026-10-30T23:18Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 remains 4/6; practical 35/35 is separate and M15 remains paused. Selected
+image1cd7/generic0633 still establishes 23 original C names; arch5 is historical.
+Latest aab0f9 frontend and older 4ae codegen/56 ABI checks remain exact-scope proof.
+No new kernel compilation, production link, OS behavior, native qualification,
+C retirement or file acceptance this bucket. The 27 passing source regressions
+remain coverage, not retirements.
+
+Nine DATA helper/order cases and 15 integrated Parent4/caller cases pass:
+0.09/0.11 wall seconds, 21048/21748 KiB peak. They check early capture binding,
+full proof before one lease-close attempt, capture/role mismatches, partial output
+and UNKNOWN handling with mocked root effects. Partial role FD exercises observed
+132/120/96 descriptors for parent/keeper/installer, plus one observer; production
+peak is unmeasured and the 256 operation limit is unchanged. The installer fixture
+fix passed four cases and its affected role exercise, 202.433 seconds to validation.
+
+Parent4 source and install-only operation reviews passed. Root found the caller
+wait-result variable shadowed its actual resource-input mapping. A separate1a42
+successor corrects three references; its single new regression passes0.06wall,
+20020KiB without replaying the prior15+9. Exact changed-driver operation review
+and fresh actual usage/control/resource inputs precede the Root-owned sudo-A
+install-only invocation and positive caller session join. No privileged operation
+has run. Full DATA is not current-free evidence: V2 birth, source exclusion and
+effective mounted view remain UNKNOWN. Native12GiB, V2 UNKNOWN2GiB, scratch21 and
+permanent27:4 stay held; no completed operation or consumed nonce is replayed.
+
+Closed22:54:56–23:14:56 bucket:24 source cases; zero compiler/link/native/C delta.
+New wait regression belongs the next bucket. Native unreleased320minutes across
+closed buckets. First resumed compiler6101.410s; exact queue latency and avoidable
+handoff portion unknown. Original30-minute baseline retained;95%target not achieved.
+Scheduling change: changed caller work/review and checkpoint advance together;
+unchanged kernel/compiler and passing regressions are reused. Weekly95%used,
+no prepaid/API fallback. Last verified push da90401423288c99b721bb29a489c70567c2955e.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 direct-parent loader fix checkpoint — 2026-10-30T22:42Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
