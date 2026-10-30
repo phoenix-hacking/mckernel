@@ -1,3 +1,31 @@
+## M14 perf descriptor lifetime cursor — 2026-10-30T10:24Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued. No new kernel build, production/native,
+guest, C-retirement or file credit. Private Rust perf descriptor initialization
+patch ad7bba95 on standalone preimage 7b13 initializes opt and dup_cb before
+publication with C/Rust ABI witnesses. Source review confirms layout; poisoned
+fixture is uncompiled/unrun. Null dup_cb removes stale callback but does not solve
+shallow cloned event ownership; candidate remains unselected.
+
+Independent source review: mckfd lookup returns unpinned pointer after unlock,
+read/ioctl/fcntl/mmap use it while close can detach and free. No descriptor refcount
+exists in 80-byte ABI; sig_no is not padding. XPMEM callback/clone/teardown and IRQ
+participants complicate generic pinning. Perf group links before host/FD publication,
+close does not unlink, and raw monitoring_event is consumed by scheduler/exit with
+no established shared event pin. Conditional lifetime hazards are not native
+reproductions. Owned-fork option is requested ON in proposed profile, actual emitted
+flags/inheritance remain unproved. No speculative group/sidecar patch is selected.
+
+NEXT: source-bound descriptor/event/group/monitor/clone/teardown and counter-owner
+contract plus independently reviewed applicable light profile for real-body tests;
+continue F06 composite and exact fresh operation admission separately. Root70 bc2df
+accepted exact scope; current-free/no-unlisted/v2birth and physical clearance UNKNOWN.
+Preserve all held paths, native owners, scratch21, 27:4, consumed nonces, original/
+tighter clocks and weekly-only allowance. Evidence: ../evidence/os-recovery-adoption-
+20261025-0254/restart-adoption-20261029T0234/M14-TERRA-PERF-LIFETIME-CHECKPOINT-
+20261030-1/REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T10:06Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
