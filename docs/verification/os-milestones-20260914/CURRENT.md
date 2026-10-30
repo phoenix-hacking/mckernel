@@ -1,3 +1,31 @@
+## M14 source behavior and ownership — 2026-10-30T08:04Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 remains 4/6 and selected 1cd7 retains 23 generic plus five arch C names;
+practical 35/35 separate, M15 queued. No new production/native/C-retirement or
+file credit. FP restore actual Rust-body mock fixture passes ten paths, including
+positive validator result; C control flow independently reviewed, real hardware
+and providers open. Ptrace same-Ddebug/from_ptr private successor passes 2/2
+accessor/logger and 1/1 real sysfs-body mocked tests on CPU0. Independent NO-GO
+persists for linker-section traversal provenance, all-access and registry/link
+proof. Retained source is not integrated.
+
+shmdt actual-body fixture shows registry-check omission for synthetic XPMEM plus
+SHMDT flags with active token, not demonstrated runtime reachability. Normal
+fresh XPMEM attach and indexed SHM creation set flags on separate objects; later
+aliases/lifetimes remain open. Reviewed mremap passes NOPHYS, so it does not
+invoke the XPMEM marker; do not claim that route makes both bits. Continue source-
+bound ownership proof before any wait/retry fix.
+
+Current observer source reuse correction preserves prior unknown ownership; 40
+mocked tests and independent review do not constitute a physical owner or release.
+Fresh authenticated post-decision guardian/monitor health is not provided by
+existing journals; the external supervisor owns those global controllers. Existing
+health hold, watchdog/admission/unknown defects and all native reservations remain.
+No live observer, guest or SDK operation ran. Evidence: ../evidence/
+os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-SOURCE-REVIEW-20261030-1/REVIEW.json.
+
 ## M14 Terra engineering review — 2026-10-30T07:46Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

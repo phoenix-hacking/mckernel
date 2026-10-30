@@ -1,0 +1,15 @@
+warning: type `VmRange` is more private than the item `process_add_range_mark_xpmem_bridge`
+ --> actual-bodies.rs:1:1
+  |
+1 | pub unsafe extern "C" fn process_add_range_mark_xpmem_bridge(range: *mut VmRange) {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `process_add_range_mark_xpmem_bridge` is reachable at visibility `pub`
+  |
+note: but type `VmRange` is only usable at visibility `pub(crate)`
+ --> test.rs:6:12
+  |
+6 | #[repr(C)] struct VmRange { memobj:*mut c_void }
+  |            ^^^^^^^^^^^^^^
+  = note: `#[warn(private_interfaces)]` on by default
+
+warning: 1 warning emitted
+
