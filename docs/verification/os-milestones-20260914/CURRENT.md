@@ -1,3 +1,41 @@
+## Twenty-minute M14 steering — 2026-10-30T04:06:29Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+For 03:46:28–04:06:29 UTC, new current-candidate builds, production links, native
+qualifications, accepted C retirements, file closures, guest apps and newly executed
+behavior tests were zero. M14 remains 4/6 and practical 35/35; M15 is paused.
+The prior qualified 19-definition build remains historical: 20.113176s wall,
+20.136898s CPU, 596788KiB peak child RSS and 0.587572s GO-mtime to first recorded
+compiler start. Current queue-to-compiler latency, failure-to-validated-fix, job CPU
+and peak remain unmeasured; no 95% or speedup claim.
+
+The combined non-held paired perf and two signal-forward bridges profile 5da2c29c
+passed conditional source review and was retained in pushed/fetched commit
+4167d71ec. Actual generated config, flags, ABI/provider/link and native remain
+open; C bodies remain selected in the latest artifact. do_fork's CLONE_VM abort
+pin is private and conditional on unresolved shared-owner, force-reset and
+publication contracts. A separate five-constructor source review found approved
+64-byte request-storage alignment not guaranteed by its Rust leaf and incomplete
+C witness signatures; private successor 759818c4 is awaiting independent review.
+Do not claim the x86 C macro guarantees 64-byte alignment. The FULL28 flag also
+enables held conversions and must not be used as a non-held shortcut.
+
+Root70 retirement 69216 remains accepted only at its typed scope; current-free
+is absent in both observations. Root owns the historical no-unlisted-operation
+attestation and current-controller binding; it cannot truthfully fill the field
+from the prior assertion alone. Old Q and parent bind predecessor controls; no
+current capture/build command is released. Next is evidence-backed custody
+reconciliation or a separately reviewed additive history, followed by exact
+operation/physical/observer reviews and fresh admission. Exact blocked duration
+is unmeasured. Scheduling adjustment: review the five-constructor correction and
+continue disjoint non-held source while keeping the one physical lane unclaimed;
+do not recycle failed runner/retirement attempts. Prior 30-minute baseline and
+all service/account holds remain intact.
+
+At 04:06:29 the included weekly snapshot was 59%; host available 144531931136B,
+scratch 47849582592B and MemAvailable 27816416KiB. Snapshot is not admission;
+UTC1793774133 and current tighter BOOT/MONO caps remain, no paid fallback.
+
 ## M14 perf and forwarding source cursor — 2026-10-30T04:02Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
