@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-30T22:06:20.856909+00:00",
+  "as_of": "2026-10-30T22:43:46.217911+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -3996,13 +3996,23 @@
       ],
       "new_production_native_file_credit": 0,
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-INSTALLER-KNOWN-ROLE-CHECKPOINT-20261030-1"
+    },
+    {
+      "at": "2026-10-30T22:43:46.217911+00:00",
+      "actual_progress": "Actual30parent/childcases+realreadonlyloader128PASS;14leaves/repeat0newFD,overall5to33FD(twoindependentcontexts).0.20wall/0.20CPU/24148KiB, EMFILEfix469.746s. Allfailures/corrections retained; firstrootoperationunstarted/fullroles256FDpeakUNKNOWN. Actualdirectrootparent/keeper/installer source replacesuninstantiatedwatchdog andGNUtimer; remainingrolebudget/executionadmissionnext. No newRustcompile/default/native/OSbehavior/Cretirement/filecredit;4/6,35/35separate,M15paused.",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1"
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-30T22:06:20.856909+00:00",
-    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-INSTALLER-KNOWN-ROLE-CHECKPOINT-20261030-1/CHECKPOINT.json",
-    "status": "ACTIVE_NOT_NATIVE_ACCEPTANCE",
-    "next": "actualRootinstall-only resource/owner/watchdog admission andexactcommand"
+    "at": "2026-10-30T22:43:46.217911+00:00",
+    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/CHECKPOINT.json",
+    "status": "ACTIVE_SOURCE_FIX_NOT_NATIVE_ACCEPTANCE",
+    "next": "read-onlyroleFD-budgetexercise +exactsource/resource/sudocalleradmission"
   },
   "campaign_scheduling_override": {
     "state": "exclusive_active_engineering_objective",

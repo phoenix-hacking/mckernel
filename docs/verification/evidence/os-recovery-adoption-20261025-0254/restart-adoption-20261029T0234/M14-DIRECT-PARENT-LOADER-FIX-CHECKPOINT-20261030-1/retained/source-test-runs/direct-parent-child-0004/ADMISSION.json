@@ -1,0 +1,81 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793400052.006928,
+  "status": "ROOT_ADMITS_PARENT3_CHILD4_SOURCE_AND_REAL_READONLY_LOADER_REGRESSION",
+  "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "source_pins": {
+    "root-install-parent-successor-3/FROZEN-SOURCE.json": "e1ccd682987ee66ed4bf98648b86877edefbd6fceb6f342caa274d6762821f27",
+    "root-install-parent-successor-2/root_parent.py": "7d97d9f905f50e0cb4308411a1786d37361356afd2e104b2b1fc063cd854f74d",
+    "root-install-parent-successor-3/BOOTSTRAP.py": "7b09acf2907df26cbc66b9b1e4acd3edc99e8bbb80fe286d3f6a82df3c0bf486",
+    "root-install-parent-successor-3/test_bootstrap_fd.py": "e4974c4395998feeae222997de213ffa4e23b012a3aa223e10ac557a3ae7b86c",
+    "root-install-parent-successor-2/test-fixture-correction-1/test_parent_source.py": "20d188e1997546f394d83bbcb477fb5b3949b8e00d05f6830992a84d11c70696",
+    "root-install-direct-child-successor-4/SOURCE-BOUND.json": "5cc545b852a95ff9504baac5a97a6936c0647127691908fd88ac52934ea256b8",
+    "root-install-direct-child-successor-4/direct_entry.py": "7ac4718a01be185cc1d816bf5c91e84960b73ca51209d7c3b909cda354ccfcea",
+    "root-install-direct-child-successor-4/test_loader_budget.py": "f788d2673b1d14d587be898b0ed86436e588a94093235f16ce1c08ba5a0b7e42",
+    "root-install-parent-successor-3/test_parent_source.py": "20d188e1997546f394d83bbcb477fb5b3949b8e00d05f6830992a84d11c70696",
+    "root-install-parent-successor-3/PROFILE.SOURCE-ONLY.json": "d47a1fc052f64a593dce937d4789e02b55a96a106ecfd53ba6250a480d0849c3",
+    "root-install-direct-child-successor-4/WAIT-INSTALL-CODE.py": "f635e2c1daf9942b830a3aed3e8fdff2a8abe13096256a886193f5d4773354a2",
+    "root-install-direct-child-successor-4/install_completion.py": "dbb97b2423be0d4ed69dd10ebe5b60275e9e4dee6043c253165fb7a296659f0a",
+    "root-install-direct-child-successor-4/install_issuer.py": "69866d0f643679ba5178d09e9e2300b99456f421016aed9ba70d3e743a4e2afa",
+    "root-install-direct-child-successor-4/install_source_closure.py": "6fa1cca87cb3e5b2cfdfc746875dd3909bfa084052b9344d48931de959e68888",
+    "root-install-direct-child-successor-4/phase0.py": "71924a45f37d9b440eb4e398899f0336a9c2ab5414bffc9d02d24ec907811777",
+    "root-install-direct-child-successor-4/test_direct_ack.py": "59d8ba3cc1560630b84526337eca11ee16ae9f8e514e9d21442f9674809717f9",
+    "root-install-direct-child-successor-4/test_direct_model.py": "04dfd3bfba69170e25b3147252e0e81ea94cec61f6d633ece2d2c0129b250d80",
+    "root-install-direct-child-successor-4/DIRECT-MODEL.json": "98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04"
+  },
+  "runner_sha256": "cb975691700d163f58d4503e8751b61e6a070d49049871f5660caa871e973946",
+  "cpu": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 536870912,
+  "cpu_seconds": 30,
+  "wall_seconds": 45,
+  "kill_after_seconds": 5,
+  "native_root_fork_pidfd_signal_immutable": false,
+  "actual_effects": "pinned source reads/14retainedreadonlysourceleaves/signal-mask only; mockRootstop/control/closefaults",
+  "unchanged5_protocolcases_not_replayed": true,
+  "production_parent_body": "7d97unchangedparent2/3; correctedExitStacktestreadsparent2exactbody; newbootstraptestsreadparent3",
+  "weekly_used_percent": 94,
+  "weekly_observed_at": 1793400044.518058,
+  "controllers": {
+    "guardian": {
+      "pid": 2996157,
+      "ppid": 2995936,
+      "start": "118034389",
+      "state": "R"
+    },
+    "monitor": {
+      "pid": 2996160,
+      "ppid": 2995936,
+      "start": "118034501",
+      "state": "R"
+    },
+    "server": {
+      "pid": 2996005,
+      "ppid": 2996003,
+      "start": "118034116",
+      "state": "S"
+    },
+    "watcher": {
+      "pid": 2996001,
+      "ppid": 2995936,
+      "start": "118034086",
+      "state": "S"
+    },
+    "worker": {
+      "pid": 2996003,
+      "ppid": 2996001,
+      "start": "118034102",
+      "state": "S"
+    }
+  },
+  "capacity": {
+    "MemAvailable_bytes": 27459653632,
+    "free_bytes": {
+      "/home/holden/mckernel": 142240411648,
+      "/home/holden/mckernel-work/scratch": 47613485056
+    }
+  },
+  "nonce": "1a022600e07919ce5275d6ede4674e55ac0e2944ba00042d1a18e014770cf718"
+}

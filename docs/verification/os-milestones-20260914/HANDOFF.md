@@ -1,3 +1,38 @@
+## M14 direct-parent loader fix checkpoint — 2026-10-30T22:42Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 remains4/6; practical35/35 separate, M15paused. Qualified1cd7/generic0633 still
+23originalC, arch5historical. No newselectedimage, productionlink, OS behavior,
+nativequalification, C-boundaryretirement or fileclosure. LatestRustsourceaab0f9
+174/155frontend andolder4ae9entries/7bodies/56ABI remainexactscope, notnewretirement.
+
+Actualnewresult:30parent/childsource/controlcases PASS plusactualread-onlyloader
+withinunchanged128FDlimit. Rollingtraversalcloses temporaryancestors, retains14
+verifiedsourceleaves; repeatcalls0newFD. Overalltestprocess5→33FDacrosstwoindependent
+contexts,0.20wall/0.20CPU/24148KiB. EMFILEfailure→validatedfix469.746s; original
+failure retained. EarlierPython3.8fixture22withblocksfailedbeforetests; ExitStack
+correctionpreservesassertions. Onepathpreflight usedwrongsuccessorlocation andwas
+correctedfromactualmanifest. No root/privateinstall/fork/pidfd/signal/module/guest
+operation occurred inthesechecks; ordinary512MiBsharepositivejoin/emptygroup released.
+
+ConcreteRootpathnowuses actualdirectparent→keeper→installer source model, replacing
+GNUtimeoutrole. SharedOFD/pidfdhandoffbeforeREADY, actualcredentials/strictACK and
+verified-onlystop targets are implementedinsuccessors. FiveIPCmockcases retained;
+productiondelimiterwasalreadynewline, independentreviewwithdrawal preserved.
+FULLper-role256FDpeak remainsUNKNOWN: NEXT sdk_owner existingfunction-based read-only
+budgetexercise, thenSource/resource/SUDOtree/calleradmission beforeactualsudo-A.
+No imaginaryUID0holder, no newframework orlimitincrease. Rootcurrentfree/V2birth/
+sourceexclusion/effectiveviewUNKNOWN; native12+V2reserved2GiB/scratch21/27:4 untouched.
+
+Closed22:14:56–22:34:56bucket:5sourcecases, 1syntaxpreflight+1loaderEMFILEfailure,
+0newcompiler/link/native/retirement. New30PASS belongsopen22:34:56–22:54:56bucket.
+Nativeunreleased280minutesacrossclosedbuckets. Firstcompiler6101.410s; exactqueuelatency
+unknown; compilererrornone. Original30minbaseline retained;95%targetnotachieved.
+LargestavoidableRootordinarycompiler/SDKhandoff portionunmeasured. Schedulingchange:
+realbudgetedloaderfeedbackbeforeprivilegedrun, repairFDlifetimesratherthanraiselimits.
+Verifiedpushede19bf5ecb andexactfetchedblob99d670ca; currentcheckpointkeepsworkactive.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-DIRECT-PARENT-LOADER-FIX-CHECKPOINT-20261030-1/CHECKPOINT.json
+
 ## M14 installer source and host dependency checkpoint — 2026-10-30T22:02Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
