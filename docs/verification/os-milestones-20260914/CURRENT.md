@@ -1,3 +1,26 @@
+## M14 engineering review — 2026-10-30T11:06Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 10:46:29.892–11:06:29.892 bucket: zero compiled kernel candidates, new
+behavior tests, production links, native qualifications, guest apps, retired C
+boundaries or file closures. M14 4/6, practical35/35, M15 queued. Source composite
+5aa4827f and perf ENOMEM fixture 36848e70 received independent source review;
+neither was selected, compiled or run. Grouped descriptor initialization changes
+and host/FD/counter/monitor/XPMEM lifetimes remain unqualified.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance UNKNOWN. BUILD3/CID5487 and consumed nonce not replayed. External
+supervisor owns fresh health; Root owns current ownership and operation-specific
+admission. Bind real scripts union, split output and work roots and validator, then
+exact configure/compiler command; no command is yet released. Schedule the combined
+candidate and existing fixture into their admitted profiles after health/custody,
+without duplicate ports. Candidate blocked time, queue-to-compiler, CPU/wall/peak,
+overlap and validated-fix time unknown. Historical 418.778s first-stream proxy,
+491.317s handoff and original30-minute baseline retained; no95% claim. At11:06 host/
+scratch free 143352221696 / 47613485056 bytes; weekly83% used, weekly-only.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-
+20261029T0234/M14-TERRA-ENGINEERING-REVIEW-20261030T1106-1/REVIEW.json.
+
 ## M14 perf ENOMEM fixture cursor — 2026-10-30T11:05Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
