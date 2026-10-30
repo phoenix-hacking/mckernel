@@ -1,3 +1,25 @@
+## M14 perf and forwarding source cursor — 2026-10-30T04:02Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Private combined patch a5fb519d and experimental profile 5da2c29c pair the
+existing Rust `syscall_forward_rt_sigprocmask_bridge` and
+`syscall_forward_sigaction_update_bridge` with the reviewed perf source. An
+independent conditional source review passed; original default remains off and
+the actual qualified 0633c524 object still defines both C bridges. Generated
+Linux6.12/x86/non-UBSAN config, emitted paired flags, real signal/perf ABI,
+provider uniqueness, metadata, host transport lifetime and matching native proof
+remain open. Rust crate and generic C object need fresh build and matched link
+after Root70 custody, operation review and resource admission. No new build or
+retirement occurred.
+
+The `do_fork` CLONE_VM abort-pin candidate remains unselected and uncompiled.
+Its checked shared-VM owner, child credits, callback lifetime, forced reset and
+partial-publication disposition remain open. Exact changed rows, owners and next
+checks are in `../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CHANGED-ROWS-20261030T0402.json`.
+Private patch/profile, conditional review and fork/UTI traces are retained under
+`../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-PERF-SIGNAL-SELECTED-SOURCE-20261030-1/`.
+All generic_c and execve transfer/ACK holds remain; no runtime clearance follows.
+
 ## M14 paired-perf source cursor — 2026-10-30T03:58Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

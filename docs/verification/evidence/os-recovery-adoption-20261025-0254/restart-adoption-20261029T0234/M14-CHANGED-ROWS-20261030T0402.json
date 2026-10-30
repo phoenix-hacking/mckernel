@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at_utc": "2026-10-30T04:02Z",
+  "base_cursor": "M14-ARTIFACT-CURSOR-20261030T0347.json",
+  "rows": [
+    {
+      "function": "syscall_forward_rt_sigprocmask_bridge",
+      "c_path": "kernel/syscall.c",
+      "rust_path": "f03_signal_forward_defined_candidate / existing retained leaf",
+      "owners": "cred_source, composition, custody_review; completed turns",
+      "implemented": "existing Rust body composed in private profile 5da2c29c",
+      "selected": "C in actual 0633c524; paired Rust/C flags proposed only",
+      "compiled_linked": "private profile not materialized or compiled",
+      "native_retired": false,
+      "blocker": "actual emitted flags/config, real signal ABI, executor/transport lifetime and unique linked provider",
+      "next_check": "fresh Root70 admission and independently reviewed paired Rust/C compile/link with isolated ABI witness"
+    },
+    {
+      "function": "syscall_forward_sigaction_update_bridge",
+      "c_path": "kernel/syscall.c",
+      "rust_path": "f03_signal_forward_defined_candidate / existing retained leaf",
+      "owners": "cred_source, composition, custody_review; completed turns",
+      "implemented": "existing Rust body composed in private profile 5da2c29c",
+      "selected": "C in actual 0633c524; paired Rust/C flags proposed only",
+      "compiled_linked": "private profile not materialized or compiled",
+      "native_retired": false,
+      "blocker": "actual emitted flags/config, real signal ABI, executor/transport lifetime and unique linked provider",
+      "next_check": "fresh Root70 admission and independently reviewed paired Rust/C compile/link with isolated ABI witness"
+    },
+    {
+      "function": "do_fork",
+      "c_path": "kernel/syscall.c",
+      "rust_path": "private do_fork.VM-ABORT-PIN.PRIVATE.rs.inc",
+      "owners": "mmap_source, signal_review; completed turns",
+      "implemented": "conditional abort VM pin source; shared VM owner design only",
+      "selected": "C in actual 0633c524",
+      "compiled_linked": "private candidate uncompiled",
+      "native_retired": false,
+      "blocker": "checked parent/VM identity, shared child credits, force-reset, checked chain and retained uncertain outcome",
+      "next_check": "reviewed actual-body reference-accounting fixture under an applicable profile; resolve owner contract before selection"
+    }
+  ],
+  "unchanged_rows": "Preserve previous artifact cursor and historical queue; no restart of inventory.",
+  "held": "generic_c rejected request/equivalent and separate execve transfer/ACK remain excluded.",
+  "current_candidate_builds": 0,
+  "native_retirements": 0,
+  "runtime_authority": null
+}

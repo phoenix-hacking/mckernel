@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_TRACE_BLOCKED_HOST_LIFETIME_AND_CONTEXT_BYTES",
+  "input_sha256": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/rust/syscall_policy.rs": "7a86da31eba184380922a624c8e9ac562c58c7086f1b6f1d9183fe2d7a44b063",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/syscall.c": "819eb6a81a6565057213f0c90a2b42868e2b9beed09811596d7cab6394c1ecca",
+    "/home/holden/mckernel/executer/include/uti.h": "0787fcf51f5c5f5a702196e891cede5e570bb472e2b0a1a1041566b59e784fb7",
+    "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs": "d786abc498f5951c65b28246071fcbbe8023392f2cf7a372902fa76b259ed73d",
+    "/home/holden/mckernel/executer/user/rust/syscall_intercept.rs": "9a3ccdb0241db7ed69e83f34a0d0d9b7f997bde042e528bc57e67380524e335f",
+    "/home/holden/mckernel/executer/user/arch/x86_64/archdep.S": "d74337112b88fbf842e4503cea72b81c4c29df69243ebd4fa97ef9d16214dd86",
+    "/home/holden/mckernel/executer/kernel/mcctrl/rust/mcctrl_helpers.rs": "abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14",
+    "/home/holden/mckernel/executer/kernel/mcctrl/control.c": "00d83f9ad7cf6c7bd263a33933aa3f5b89e4e399c2245b86ff90be87d1be3221",
+    "/home/holden/mckernel/kernel/include/syscall.h": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LARGE-UTIL-THREAD-REUSE-1/independent-contract-review-1/CONTRACT-REVIEW.ACTUAL.json": "39288ed2cde8d93ca9fdce0f08f18f3e4aa300194a968317b4de7e043fffcadf"
+  },
+  "wire": [
+    "Selected util_thread writes request number and args0-5, including the prior separately approved arg5 zero, before do_syscall. Offload prepare writes rtid/ttid and sender valid before the full request copy; no whole-object request reference is formed.",
+    "Guest context allocation is 4096 bytes; save_uctx writes TransUctx scalar fields including cond=0 and fregsize=0. The mcctrl get-context implementation copies the entire 4096-byte guest context to host before it writes refill_tid on the successful path; remaining guest context bytes are not established initialized. x86 switch consumes selected register offsets from host copy, but source-only inspection does not approve the other copied bytes.",
+    "Guest info allocation is 160 bytes: guest writes physical and scalar fields, while mcctrl uti_info_p2v constructs the host virtual pointer fields and writes os only when processing a futex request. It must not be modeled as a fully initialized Rust value or zeroed without a distinct valid source/ABI contract."
+  ],
+  "lifetime": [
+    "Host util thread creates a worker, invokes GET_CTX and retains uti_info in the actual shared descriptor; start_syscall_intercept is set before switching context. The syscall interception path propagates descriptor uti_info to MCEXEC_UP_SYSCALL_THREAD and the futex handler maps/uses its physical-pointer fields.",
+    "Both host early failures before GET_CTX and later failures exist; if switch_ctx fails after intercept activation, current source returns an error without a shown reset of the descriptor state. Guest candidate then observes offload result, reads refill slot and frees context/info in the legacy order. Source inspection alone does not prove interception is quiesced, that no host user keeps info/descriptor/context or that completion covers all mappings.",
+    "Refill slot is initialized to zero by save_uctx before host GET_CTX, and successful GET_CTX overwrites it with worker TID after both copies succeed; error does not independently prove a worker or context retirement."
+  ],
+  "next_check": "Independently bind actual selected host executable, mcctrl module and descriptor identity, then trace GET_CTX/switch/error/termination and interception quiescence against the guest free point and prove precisely which of the 4096 context bytes each consumer observes. Any real operation needs its own reviewed release and resource/ownership admission; do not invent an ACK, clear intercept state or zero bytes without approved behavior.",
+  "correction": "None: neither host lifetime nor whole-context consumer contract is established; prior selectors and evidence remain unchanged.",
+  "test_compiler_native_executed": false
+}
