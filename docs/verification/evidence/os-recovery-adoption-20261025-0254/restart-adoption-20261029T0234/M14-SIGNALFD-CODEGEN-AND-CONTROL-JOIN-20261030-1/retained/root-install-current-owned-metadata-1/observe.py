@@ -1,0 +1,44 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Read-only diagnosis of the exact failed install-only operation. No authority.
+"""
+import os,json,time,stat
+from pathlib import Path
+TARGETS={3109447:('119988700',1000,2996005),3109448:('119988718',0,3109447),3109451:('119988726',0,3109448)}
+NONCE='dfd0a93f86905adc253dff7a4c83df722e498ba61d96c8fe524a6b7c3f2dacf0'
+BASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/'
+def identity(pid):
+ p=Path('/proc',str(pid));raw=(p/'stat').read_text();f=raw.rsplit(')',1)[1].split()
+ return {'pid':pid,'birth':f[19],'ppid':int(f[1]),'pgrp':int(f[2]),'state':f[0],'uid':p.stat().st_uid}
+def observed(pid,expected):
+ before=identity(pid)
+ if (before['birth'],before['uid'],before['ppid'])!=expected:raise ValueError('target identity differs')
+ p=Path('/proc',str(pid));children=(p/'task'/str(pid)/'children').read_text().strip();tasks=sorted(x.name for x in (p/'task').iterdir())
+ if len(tasks)>4:raise ValueError('unexpected target thread count')
+ before.update(children=children,tasks=tasks,comm=(p/'comm').read_text().strip(),wchan=(p/'wchan').read_text().strip())
+ if pid==3109451 and children:raise ValueError('Root has live children; diagnosis resource admission fails')
+ fds=[]
+ if pid==3109451:
+  items=sorted((p/'fd').iterdir(),key=lambda x:int(x.name))
+  if len(items)>256:raise ValueError('descriptor bound')
+  for item in items:
+   target=os.readlink(item);s=item.stat();info=(p/'fdinfo'/item.name).read_text()
+   if len(info)>65536:raise ValueError('fdinfo bound')
+   fields={}
+   for line in info.splitlines():
+    key,sep,value=line.partition(':')
+    if sep and key in ('pos','flags','mnt_id','ino','Pid','NSpid'):fields[key]=value.strip()
+   allowed=target.startswith(BASE) or target.startswith('/var/lib/mckernel-install-'+NONCE) or target.startswith('/var/lib/mckernel-code-'+NONCE) or target.startswith('anon_inode:') or target.startswith('socket:') or target.startswith('pipe:')
+   fds.append({'fd':int(item.name),'target':target if allowed else '<unlisted path redacted>','device':s.st_dev,'inode':s.st_ino,'mode':stat.S_IFMT(s.st_mode),'fdinfo':fields})
+ before['fd_metadata']=fds
+ after=identity(pid)
+ if any(before[k]!=after[k] for k in ('pid','birth','ppid','pgrp','uid')):raise ValueError('target changed')
+ return before
+if os.getuid()!=0 or os.geteuid()!=0 or os.sched_getaffinity(0)!={6}:raise ValueError('exact root/CPU6 profile required')
+rows=[observed(pid,expected) for pid,expected in TARGETS.items()]
+outputs=[]
+for prefix in ('mckernel-install-','mckernel-code-'):
+ p=Path('/var/lib')/(prefix+NONCE)
+ try:
+  s=p.lstat();outputs.append({'path':str(p),'device':s.st_dev,'inode':s.st_ino,'uid':s.st_uid,'mode':stat.S_IMODE(s.st_mode)})
+ except FileNotFoundError:outputs.append({'path':str(p),'status':'ABSENT_AT_OBSERVATION'})
+print(json.dumps({'scope':__doc__,'at':time.time(),'diagnostic_pid':identity(os.getpid()),'nonce':NONCE,'status':'READ_ONLY_METADATA_ONLY','targets':rows,'outputs':outputs,'native_release':False,'native_currentfree':None,'reservation_release':False},sort_keys=True),flush=True)

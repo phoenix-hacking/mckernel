@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nRoot exact current-operation read-only diagnosis under its retained reservation.\n",
+  "at": 1793402866.0247355,
+  "status": "ROOT_ADMITS_EXACT_READONLY_CURRENT_CONTROL_DIAGNOSIS",
+  "review_sha256": "df947bc208721c467bd4c283e23b0327deece5a0b060e6ab171f0c4d52486b67",
+  "profile_sha256": "195abe64c570bf6e1a8d9f62eb67f158810a812d41f4d59ac5ac6abded06d4ec",
+  "owner": {
+    "pid": 3111784,
+    "ppid": 2996005,
+    "pgid": 3111784,
+    "birth": "120031066"
+  },
+  "observed_current_targets": [
+    {
+      "pid": 3109447,
+      "birth": "119988700",
+      "ppid": 2996005,
+      "children": "3109448"
+    },
+    {
+      "pid": 3109448,
+      "birth": "119988718",
+      "ppid": 3109447,
+      "children": "3109451"
+    },
+    {
+      "pid": 3109451,
+      "birth": "119988726",
+      "ppid": 3109448,
+      "children": ""
+    }
+  ],
+  "controller_RSS": [
+    {
+      "role": "guardian",
+      "pid": 2996157,
+      "rss_bytes": 17620992
+    },
+    {
+      "role": "monitor",
+      "pid": 2996160,
+      "rss_bytes": 23089152
+    },
+    {
+      "role": "server",
+      "pid": 2996005,
+      "rss_bytes": 368242688
+    },
+    {
+      "role": "watcher",
+      "pid": 2996001,
+      "rss_bytes": 23318528
+    },
+    {
+      "role": "worker",
+      "pid": 2996003,
+      "rss_bytes": 25849856
+    },
+    {
+      "role": "capacity_supervisor",
+      "pid": 2996161,
+      "rss_bytes": 22638592
+    }
+  ],
+  "caller_sudo_RSS": [
+    {
+      "pid": 3109447,
+      "rss_bytes": 19820544
+    },
+    {
+      "pid": 3109448,
+      "rss_bytes": 4902912
+    }
+  ],
+  "MemAvailable_bytes": 27427319808,
+  "free_bytes": {
+    "/var/lib": 142237511680,
+    "/home/holden/mckernel-work/scratch": 47613485056
+  },
+  "weekly_used_percent": 95,
+  "weekly_observed_at": "2026-10-30T23:27:32.569778+00:00",
+  "retained_operation_reservation_bytes": 4294967296,
+  "original_operation_reservation_released": false,
+  "diagnostic_charge_inside_existing_reservation_bytes": 67108864,
+  "root_operation_jobs": 3,
+  "native_reserved_jobs": 4,
+  "joint_jobs": 7,
+  "native_currentfree": null,
+  "native_release": false
+}

@@ -1,3 +1,49 @@
+## M14 isolated codegen and control join — 2026-10-30T23:56Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 remains4/6; practical35/35 separate; M15paused. Selected image1cd7/generic0633
+still establishes23original C names; arch5 remains historical. No new default
+image, production link, OS behavior, native qualification, C retirement or file
+acceptance. The27passing source regressions remain preserved coverage.
+
+New real compiler result: unchanged corrected syscall_signalfd_create_bridge
+compiled from three genuine Rust sources without held XPMEM/exec/TID imports.
+Object a93caecb is6712B with one98B GLOBAL function and two real undefined
+providers, ihk_mc_get_processor_id/do_syscall.0.09wall/.08CPU/101424KiB peak;
+positive terminal/group retirement releases only its4GiB compiler share. Inherited
+SSE2/default-target ABI warning is retained. Actual provider link, synchronous
+request lifetime and matching native proof remain open. Whole-crate codegen is
+blocked by its unconditional held XPMEM import; retained objects are not rlibs.
+
+First install-only attempt dfd0a93f reached root, then lost its custody channel
+before first LEASE. Keeper cause and historical birth remain UNKNOWN. A scoped
+read-only diagnosis observed no current children/no nonce output directories;
+it did not retire historical ownership. Separately reviewed pidfd TERM stopped
+only rootPython3109451 (KILLfalse), helper closed its pidfd, caller94281 joined,
+and sudo direct wait256 was retained. All known control processes are joined;
+the failed operation remains UNKNOWN with4GiB reserved and nonce never replayed.
+Native12GiB, V2 UNKNOWN2GiB, scratch21 and permanent27:4 remain held.
+
+Source fixes preserve bounded failure DATA and correct sudo/Python matching.
+New seven mock checks and one actual UID1000 child restoration probe pass. The
+child had a verified early pidfd/birth, restored mask/handlers, direct wait0 and
+one close; temporary512MiB released. This does not establish the old keeper cause.
+Parent5/R3 source and exact install-only review are ready. NEXT Root binds fresh
+actual controls/usage/resources and one new diagnostic nonce after this pushed
+checkpoint. R3 retains oldUNKNOWN4GiB; total22GiB and native4+newop3jobs7, with no
+capacity expansion or native/source-binding gate release. SDK owns composition.
+
+Closed23:14:56–23:34:56:8source cases, read-only source verifier/Root diagnosis,
+1failed install start;0new compiler/native/C. Closed23:34:56–23:54:56:7source
+cases,1real host fork,1known-control stop/join,1corrected bridge object;0link/
+native/C/file credit. Native lane unreleased360minutes across closed buckets.
+First resumed compiler6101.410s; exact queue latency and validated keeper-fix time
+unknown. Original30-minute baseline retained;95%target not achieved. Scheduling:
+use true small ABI-bound units in the CPU6 compiler queue while Root repairs
+custody, reusing passing artifacts/tests and excluding held bodies. Included
+allowance96%used at checkpoint; no paid/API fallback. Last verified push26e9a4a33.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1/CHECKPOINT.json
+
 ## M14 caller proof checkpoint — 2026-10-30T23:18Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

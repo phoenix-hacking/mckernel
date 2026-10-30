@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-30T23:17:28.141794+00:00",
+  "as_of": "2026-10-30T23:57:58.973926+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -4016,12 +4016,23 @@
       ],
       "new_production_native_file_credit": 0,
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1"
+    },
+    {
+      "at": "2026-10-30T23:57:58.973926+00:00",
+      "actual_progress": "Real isolated signalfd6712B/98B codegenPASS, two genuine providers unresolved; no heldwholecrate compile. OnehostchildrestorePASS/7mockcases. Firstinstall custodychannel lost; knowncontrols positivelyjoined, originalUNKNOWN4GiB/nonce retained. Parent5/R3 boundeddiagnostic source/reviewready, total22GiB ifadmitted. No default/OS/native/C/file credit;4/6+35/35separate,M15paused.",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0,
+      "new_corrected_bridge_codegen": 1,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1"
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-30T23:17:28.141794+00:00",
-    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-CALLER-PROOF-CHECKPOINT-20261030-1",
-    "next": "Root fresh actual control/resource/usage binding and exact reviewed caller1a42 install-only invocation; native remains held",
+    "at": "2026-10-30T23:57:58.973926+00:00",
+    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1",
+    "next": "Fresh actual Parent5/R3 one bounded diagnostic after checkpoint; scope install23scripts only, old4GiB retained/newtotal22GiB; no nonce replay/held source/native acceptance",
     "native_release": false
   },
   "campaign_scheduling_override": {
