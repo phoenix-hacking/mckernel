@@ -1,3 +1,28 @@
+## Artifact-specific M14 cursor — 2026-10-30T03:47Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Read-only `nm --defined-only` on the actual qualified generic object SHA256
+0633c5248eb68a59c1920799ad1ef1040e27f8733b074fbeea1fc58289eb398c and architecture
+object SHA256 30bddb4cf0e8083fcce83fe691410b6d4a0e8eabec3cb6ce3b6ab190be8ab3da
+confirmed 23 generic and five architecture C function names. Image identity is
+1cd7e4e66bdbd7d34bcca2e7cb698da814df470ffd726270a612a2d92faf8c38. The exact
+names and changed-row states/owners/next checks are in
+`../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-ARTIFACT-CURSOR-20261030T0347.json`.
+This is the accepted static artifact scope; no newer image or native retirement
+is implied. Four M14 files and practical 35/35 remain separately accepted.
+
+Root's exact physical blocker is the historical postjoin history requirement
+`no_unlisted_physical_or_custody_operations_since_retirement == true`: the
+retained assertion ends at an earlier point, and current intervening ownership is
+not established. The old Q/parent bind predecessor controls and cannot run in
+this invocation. Root must first establish a truthful additive custody record or
+resolve the unknown interval, then obtain independently reviewed current-control
+operation/physical/observer bindings and fresh one-shot admission. No command is
+currently released; do not replay the consumed retirement or use old current-free.
+M14 source owners continue only distinct non-held fork, util, credential, signal
+and perf prerequisites; the rejected generic_c and execve transfer/ACK holds remain.
+No new compile/link/native/C-retirement delta follows from this cursor.
+
 ## Twenty-minute M14 steering — 2026-10-30T03:46:28Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
