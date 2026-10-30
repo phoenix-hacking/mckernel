@@ -1,0 +1,43 @@
+{
+  "status": "SOURCE_ONLY_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing",
+  "layout": {
+    "/out/build": "read-only retained kernel build tree, exact frozen binding pending",
+    "/out/source/linux-6.12.0-211.44.1.el10_2": "read-only matching retained kernel source tree, exact frozen binding pending",
+    "/work/output/build": "fresh exclusively owned writable configure output and safe ancestors, pre-entry requirement",
+    "module_dir": "/work/output/build/tmp.resolve_MODULES_END",
+    "temporary_and_home": "separate exclusively owned writable locations, exact paths and tool effects pending"
+  },
+  "nested_probe_argv_template": [
+    "<reviewed-gnu-make>",
+    "<reviewed-kbuild-flags>",
+    "-C",
+    "/out/build",
+    "M=/work/output/build/tmp.resolve_MODULES_END",
+    "modules"
+  ],
+  "explicitly_unresolved": {
+    "actual_argv_and_flags": null,
+    "actual_mount_and_source_snapshot_identity": null,
+    "toolchain_and_tool_hashes": null,
+    "uname_r_and_kernel_config_identity": null,
+    "expected_map_kernel_start": null,
+    "environment_and_temp_path": null,
+    "owner_quiescence_and_output_exclusivity": null,
+    "resource_and_execution_admission": null,
+    "post_generation_check": null
+  },
+  "rules": [
+    "This is not an executable command or authorization. Bind exact actual generated argv and transitive inputs in a reviewed profile.",
+    "Forbid output-tree redirection via ambient KBUILD_OUTPUT or O; explicitly bind or unset Kbuild environment variables and make/tool paths.",
+    "Read-only /out must cover both build and source at the absolute paths expected by the retained output Makefile.",
+    "Do not run clean, modules_install, prepare_after_cross, internal kernel prepare, or other targets as part of this probe.",
+    "Observe direct make exit and verify the generated driver.ko and exact MAP_KERNEL_START using the previously reviewed source-bound verifier; separately check generated cache and emitted compile flags.",
+    "If read-only access fails, preserve the failure and stop; do not remount writable or retry automatically. A fresh owned snapshot requires separate independent review and admission."
+  ],
+  "side_effects_unproven": [
+    "Subprocesses, compiler, objtool, pahole, resolve_btfids, shell and make may access or write paths not established by the selected source rules.",
+    "Generated dependency/command files and temporary files require observation in the admitted run; output containment and source quiescence are not established.",
+    "The configured BTF path may read the 345265952-byte vmlinux and execute tools; resource and workload classification remain unreviewed."
+  ]
+}

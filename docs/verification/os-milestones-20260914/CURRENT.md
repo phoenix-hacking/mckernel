@@ -1,3 +1,31 @@
+## M14 composite and Kbuild isolation cursor — 2026-10-30T09:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical 35/35; M15 queued. No new production/default/native/C-retirement
+or file credit. Private composite fc64348e applies reviewed root probe and nonheld13/
+data32 F06 source patches to exact preimages; independent source review passes at
+fragment scope. ON guarded arch source and OFF predecessor d060 source require
+separate complete mounts. The full Rust/generic source, producer/profile, effective
+C/Rust cfg, held-path exclusions, actual output/link and original389 remain open.
+
+Seven small retained input reads matched historical inventory; observed kernel release
+6.12.0-211.44.1.el10_2.mckernel1.x86_64 is a point sample, not current tree
+ownership/quiescence. /out/build Makefile includes sibling /out/source. Existing
+external-module Makefile supports a plausible read-only kernel basis with fresh
+writable M; BTF tools and 345MB vmlinux add unmeasured dependencies. COPY6 three
+probe paths were under McKernel build/tmp, not evidence of writes to /out/build;
+no general no-write claim. Fail closed on EROFS; no writable fallback. Fresh root,
+full mount/input/tool/env bindings, current supervisor-health facts, operation-specific
+independent review/admission and process retirement are required. No configure,
+Kbuild, container or native operation ran.
+
+Retained terminate_mcexec remains HELD: real termination path can reach non-sentinel
+TID and its offload/nohost lifetime is unproved. Root70 bc2df remains accepted at
+its scope; current-free/no-unlisted/v2birth and fresh clearance UNKNOWN. Original/
+tighter clocks, 27:4, scratch21, native owners and consumed nonces remain. Evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-COMPOSITE-CHECKPOINT-20261030-1/REVIEW.json.
+
 ## M14 engineering review — 2026-10-30T08:46Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
