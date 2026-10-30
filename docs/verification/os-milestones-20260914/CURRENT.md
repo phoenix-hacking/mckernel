@@ -1,3 +1,40 @@
+## Twenty-minute M14 steering — 2026-10-30T03:46:28Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+For 03:26:26–03:46:28 UTC, new current-candidate builds, production links, native
+qualifications, accepted C retirements, file closures and guest apps were all zero.
+M14 remains 4/6 and M15 paused. Signal extracted-body host-mock checks reported
+6/6, and credential route/worker/copy host-mock checks reported 6/6; these do not
+prove actual kernel ABI or native behavior. Their execution records retain the
+initial compiler failures and unmeasured identity/resource fields. The prior
+qualified 19-definition build remains historical: 20.113176s wall, 20.136898s CPU,
+596788KiB peak child RSS, and 0.587572s GO-mtime to first recorded compiler start.
+No current queue-to-compiler, failure-to-validated-fix, job CPU or peak was measured.
+
+Private non-held signal + perf counter/group-failure source batch 595d137b has
+conditional independent source review. Perf and whole-do_signal selectors remain
+off; no selected-path fix or retirement follows. Its byte-exact retained sources
+and reviews are in `../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-NONHELD-SIGNAL-PERF-CHECKPOINT-20261030-1/`.
+A 46-entry signal-return witness is source-reviewed only and must be isolated from
+production link; real layout/ABI and native checks remain open. Perf test source
+is unrun: the original owner, bounded correction and expert owner all retain
+watchdog/descendant-custody defects; do not replay or claim a pass. Preserve all
+original failures and use an independently released owner if one becomes available.
+
+Root70 actual retirement review 69216 is accepted only at its exact typed closure;
+current-free remains absent at both bucket observations. The intervening custody
+interval is not established by the old Root assertion, and old Q binds predecessor
+controls. Root owns reconciliation and the next independently reviewed fresh
+operation; no capture/build command is currently released. The generic_c rejected
+turn and separate execve transfer/ACK service holds remain excluded from reassignment.
+Scheduling adjustment: keep the reviewed non-held source batch and disjoint M14
+implementation moving while preserving the unresolved custody and test-owner
+records; do not spend another unchanged runner review cycle. No speedup claim.
+
+Snapshot 03:46:28: 55% included weekly used, host available 144646111232B,
+scratch 47849582592B, MemAvailable 27673288KiB. These are samples, not admission.
+Fixed UTC1793774133 and current tighter BOOT/MONO caps remain; no paid fallback.
+
 ## Manual resume 2 steering — 2026-10-30T03:26 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

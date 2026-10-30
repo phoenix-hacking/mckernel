@@ -1,0 +1,13 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -31016,8 +31016,8 @@
+ /// Default traced-SIGTRAP uses the approved initialized parent notification.
+ /// Whole selection remains OFF pending ABI/ownership/codegen/native proof.
+ /// The caller-owned info lives through synchronous consumer copies; no pending
+-/// payload is read after transfer/free. Counter races and overwritten old core
+-/// slots remain independent existing debt, not silently fixed here.
++/// payload is read after transfer/free. Diagnostic budget claims are atomic;
++/// overwritten old core slots remain independent existing debt.
+ #[no_mangle]
+ pub unsafe extern "C" fn do_signal(
+     mut result: CULong,

@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_CORRECTION_NO_TEST_OR_COMPILE",
+  "preimage_sha256": "3806e5a170a00bd4699bc01e500e469cace93c37a187aa7522975f1d42695a63",
+  "corrected_append_sha256": "f3c3de8dc22156f50df2bf3865c228fef12da7996eb04701a9c7f857f7d4a629",
+  "patch_sha256": "222a2fd04ef88e6cdcb685d9fe59b34738529e514a1b59ffe8230dea56669880",
+  "uses_existing_cfgs": [
+    "f03_perf_entry_candidate",
+    "enable_perf",
+    "target_arch = x86_64",
+    "f03_sync_child_event_candidate",
+    "f03_leaf_callbacks_candidate",
+    "f03_perf_alloc_bridges_selected_candidate"
+  ],
+  "behavior": "When the perf entry is selected with any required Rust provider selector missing, compilation fails explicitly. The group module is included only when all required selectors are present. No fallback, new provider, C implementation, request or errno behavior is added.",
+  "integration": "Replace the previous append snippet with this one; keep previous entry rebind, group module and counter fix intact, register module source dependency, and verify actual C/Rust selector pairing and selected provider identities. The guard verifies Rust cfg coherence only; it is not proof of C selector or actual linked provider uniqueness.",
+  "no_tests_compiler_or_native": true
+}

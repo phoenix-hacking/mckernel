@@ -1,0 +1,26 @@
+--- a/SYSCALL-POLICY-APPEND.rs.inc
++++ b/SYSCALL-POLICY-APPEND.rs.inc
+@@ -1,4 +1,22 @@
+ // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-#[cfg(all(f03_perf_entry_candidate, enable_perf, target_arch = "x86_64"))]
++// This selected entry requires its actual matched provider modules. A mismatch
++// is a hard source-selection error, never an alternate provider or fallback.
++#[cfg(all(f03_perf_entry_candidate, any(
++    not(enable_perf),
++    not(target_arch = "x86_64"),
++    not(f03_sync_child_event_candidate),
++    not(f03_leaf_callbacks_candidate),
++    not(f03_perf_alloc_bridges_selected_candidate),
++)))]
++compile_error!("f03 perf entry requires the matching x86 perf, sync-child, leaf and perf allocation providers");
++
++#[cfg(all(
++    f03_perf_entry_candidate,
++    enable_perf,
++    target_arch = "x86_64",
++    f03_sync_child_event_candidate,
++    f03_leaf_callbacks_candidate,
++    f03_perf_alloc_bridges_selected_candidate,
++))]
+ #[path = "f03_perf_group_cleanup.rs"]
+ mod f03_perf_group_cleanup;

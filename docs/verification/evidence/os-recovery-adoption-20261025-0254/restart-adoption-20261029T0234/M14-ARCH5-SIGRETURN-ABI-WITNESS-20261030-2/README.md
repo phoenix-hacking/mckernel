@@ -1,0 +1,15 @@
+# Private gated sigreturn ABI witness successor
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This source-only successor retains the preceding witness's 40 ordered expressions and adds six actual-type expressions for the enclosing `thread.sigmask`, `sigset_t`/`SigSet` size and alignment, first-word offset within the set and thread, and first-word width. C uses `sigset_t.__val[0]` directly; Rust uses its real `SigSet.val[0]`, inferring the element type's width from an actual const `SigSet` value. A future layout change that makes the initializer invalid should fail the witness compile rather than silently compare an assumed type. The generator verifies that its first 40 rows exactly match the prior retained `GEOMETRY.json`. The old packet remains untouched. `RESULT.txt` contains source hashes. No compiler, test, or runtime operation has been performed.
+
+## Isolation and next controlled operation
+
+The C witness array is enclosed in `#ifdef MCKERNEL_SIGRETURN_ABI_WITNESS_ONLY`; the Rust witness module is enclosed by `#![cfg(sigreturn_abi_witness_only)]`. These are new compile-only opt-in gates and must be disabled for all normal/production objects. They do not themselves prevent a mistakenly witness-enabled object from being linked: operation control must enforce the following sequence.
+
+1. Only after applicable physical controls and independent compile review, create a separate temporary witness source/output root bound to the selected native source and actual headers. Append the gated C include after the real `struct sigsp`; load the gated Rust module in the actual crate; enable both witness gates **only in that separate compile-only root**. Capture commands, object identities, compiler/profile and source hashes. Emit objects/sections without linking them into a kernel or any production artifact.
+2. Extract the two 46-entry sections and compare exact ordered LP64 values against `GEOMETRY.json`; retain raw arrays and mismatch positions. A witness compile or comparison is not runtime or ownership proof.
+3. Keep those witness-bearing objects out of every production link. Build any production candidate separately with both gates absent and the original normal source/profile; explicitly inspect its selected objects or final artifact for absence of `sigreturn_extra_c_geometry`, `sigreturn_extra_rust_geometry`, `.sigreturn_extra_c` and `.sigreturn_extra_rust`. A gate-off source claim is not a substitute for this future object/link check. Do not relabel a witness-enabled linked artifact as production.
+
+The preceding packet's [source trace and remaining obligations](../M14-ARCH5-SIGRETURN-ABI-WITNESS-20261030-1/README.md) remain applicable: native signal return uses checked FP restoration, while the raw XRSTOR leaf belongs to the non-native configuration path; the static geometry witness does not establish GS/current-CPU identity, stack lifetime, xstate validity, IRQ/exclusion, generated code, matching native behavior, or acceptance. This candidate may require correction if actual compiler or selected-header behavior differs.

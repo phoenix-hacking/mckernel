@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY_NOT_COMPILED_NOT_ACCEPTED",
+  "source_syscall_policy": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/rust/syscall_policy.rs",
+  "source_syscall_policy_sha256": "7a86da31eba184380922a624c8e9ac562c58c7086f1b6f1d9183fe2d7a44b063",
+  "entry_preimage_sha256": "9f53dceac6e97cf7c961780362de729b13573f547634e9f98859a494fb651bf7",
+  "entry_successor_sha256": "d542c9f0a1793c8140f38c3d4439a9176742c420f94f792f76eafeb3981f82a5",
+  "specialized_module_sha256": "0dc2c777c39a9b2f31bc5e3d80badd2d3de8db35bcd0adba205776bb58517293",
+  "binding_sha256": "3806e5a170a00bd4699bc01e500e469cace93c37a187aa7522975f1d42695a63",
+  "changes": [
+    "Uses source-identical copies of existing Rust entry/body internally, except private names, internal dispatch and one matching tracked-free on nonzero group result. Entry rebind retains previous private counter-failure wrapper.",
+    "Does not alter exported generic helper ABI or generic callback contracts; caller errors and all later failure paths stay unchanged."
+  ],
+  "assumptions": [
+    "Exact selected group helper returns errors before writing external list or leader counters. The event remains unshared despite its own group_leader pointer being populated on one failure branch.",
+    "The selected counter provider only scans, without reservation or publication; matched allocation and free providers and source bindings are those in prior perf-counter-failure-source-1/RESULT.json.",
+    "Caller supplies live synchronized group and descriptor objects as required by the existing group helper; this candidate does not solve existing concurrent traversal/leader ownership.",
+    "Compositor must append binding and register private module as a Rust source dependency; paired ABI, code review, compiler/linker and runtime are unproved."
+  ],
+  "open": "After group success, sibling linkage and leader pmc_status are published. Host failure, allocation failure after host fd success, descriptor lifetime and rollback/host-close require exact independent ownership and synchronization; no cleanup on these branches is proposed.",
+  "tests_compiler_native_executed": false
+}

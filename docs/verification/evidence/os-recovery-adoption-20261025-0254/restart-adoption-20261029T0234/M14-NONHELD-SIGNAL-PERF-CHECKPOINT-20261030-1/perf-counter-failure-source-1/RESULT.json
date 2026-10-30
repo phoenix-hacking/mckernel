@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_CANDIDATE_NOT_COMPILED_NOT_ACCEPTED",
+  "base": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/rust/f03_perf_entry_candidate.rs",
+  "base_sha256": "a4d5450852b27bee664c7bf60ed5633c8dc463ed2ee91e0ca9c9856ca6383de1",
+  "candidate_sha256": "9f53dceac6e97cf7c961780362de729b13573f547634e9f98859a494fb651bf7",
+  "patch_sha256": "86a71b0381d4471b15704fc9b3cfa1494c87173f2bb4a0cbca1502ca2be2c425",
+  "change": "On the selected entry-only counter allocator failure, release the fresh event with its matching provider and return the same negative result. No successful-path change.",
+  "assumptions": [
+    "The paired current x86 perf counter provider only scans thread pmc_alloc_map and publishes no event reference or counter reservation.",
+    "The selected event allocator returns one initialized, live, exclusively owned event; its current hw initializer and mapping providers do not publish that pointer.",
+    "The callback is called only after successful allocation and before group linkage, host offload, pmc map update or fd publication; selected matching free bridge consumes the event exactly once.",
+    "The paired C/Rust selection and function pointer ABI must be reviewed and verified in a reviewed actual build before integration."
+  ],
+  "untouched": "No cleanup after group linkage, Linux fd acquisition, or uncertain host completion; no held request work.",
+  "verification": "Source construction only; no tests, compiler or runtime executed. Independent ownership review required.",
+  "binding": {
+    "status": "SOURCE_RECIPE_ONLY_REQUIRES_MATCHING_ACTUAL_PROFILE_AND_OBJECTS",
+    "inputs": {
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/rust/syscall_policy.rs": "7a86da31eba184380922a624c8e9ac562c58c7086f1b6f1d9183fe2d7a44b063",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/syscall.c": "819eb6a81a6565057213f0c90a2b42868e2b9beed09811596d7cab6394c1ecca",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/recovery-quota-confirmation-1/attempt-0001/m14-full28-procfs-successor-1/postimage/kernel/CMakeLists.txt": "d2e1a3f1dcfaaac263bc759c05d75c302161df6a4014b4459c10b562483f6926",
+      "/home/holden/mckernel/kernel/rust/x86_perfctr.rs": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7",
+      "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-FULL28-PRODUCER-PREPARATION-1/metadata-correction-1/FOUR-COMMANDS.SOURCE-ONLY.json": "60f8905e05952dc52e11847179664d402de151cead912d93580640f3f2e8f0d0"
+    },
+    "required": [
+      "x86_64 with ENABLE_PERF",
+      "f03_perf_entry_candidate and MCKERNEL_RUST_F03_PERF_ENTRY_EXPERIMENTAL",
+      "f03_sync_child_event_candidate and MCKERNEL_RUST_F03_SYNC_CHILD_EVENT",
+      "f03_perf_alloc_bridges_selected_candidate and MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES",
+      "f03_leaf_callbacks_candidate and MCKERNEL_RUST_F03_LEAF_CALLBACKS",
+      "actual matching f03_perf_allocation_binding_v1 and Rust x86 provider symbols"
+    ],
+    "evidence": "syscall_policy.rs event allocator initializes only event-owned data and publishes its pointer to local output; chosen current hw_perf_event_init does not publish. Chosen x86 counter allocator scans thread pmc_alloc_map, returns index or negative without writing map; group setup and host FD call occur only after nonnegative counter result. F03 perf free bridge uses original tracked allocator release."
+  }
+}

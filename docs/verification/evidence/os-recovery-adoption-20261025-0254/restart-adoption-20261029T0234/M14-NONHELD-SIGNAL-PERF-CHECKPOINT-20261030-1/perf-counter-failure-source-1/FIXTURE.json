@@ -1,0 +1,16 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_EXECUTED",
+  "candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/MANUAL-RESUME-M14-20261030-2/perf-counter-failure-source-1/f03_perf_entry_candidate.rs",
+  "candidate_sha256": "9f53dceac6e97cf7c961780362de729b13573f547634e9f98859a494fb651bf7",
+  "extracted_function_sha256": "3450bede2497331ad47debc9f7568b962e4b319fff0b95aa680bda3bf9a90e94",
+  "fixture_sha256": "afc8b3023230ca2bd7f3bccd344b3fbf77270e6aa5fe0f9ff2d5e441f621003f",
+  "oracle": "Independent table: provider result 0 and 7 => one allocation callback and zero frees; -22 and -12 => one callback and exactly one free, preserving return/pointers and no publication. Stub free never actually deallocates, enabling double-free counting.",
+  "limits": "Fixture exercises exact extracted wrapper and C callback signatures with stubs. It cannot prove real allocator unpublished ownership, actual paired C/Rust emitted types, source/profile binding, actual host effects, native behavior, or link uniqueness. PUBLISHED records the fixture state; it is not a proof of real external publication.",
+  "requirements": "Before any execution, verify hash-pinned function extraction and applicable reviewed reusable unprivileged microtest profile and coordinator resource share; use fresh disjoint output. Actual paired C/Rust object ABI and provider uniqueness remain separately required.",
+  "example_after_review": [
+    "rustc --edition=2021 --test counter_wrapper_fixture.rs -o <fresh-reviewed-output>",
+    "<fresh-reviewed-output> --test-threads=1"
+  ],
+  "executed": false
+}
