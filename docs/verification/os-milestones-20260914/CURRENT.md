@@ -1,3 +1,28 @@
+## M14 engineering review — 2026-10-30T10:46Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 10:26:29.892–10:46:29.892 bucket: zero compiled kernel candidates,
+new behavior tests, production links, native qualifications, guest apps, retired C
+boundaries or file closures. M14 4/6, practical35/35, M15 queued. Private XPMEM
+publication patch a8f4e33 and composite 84f9215d remain unselected and unrun.
+A safe TG writer recheck needs partition reservation and destroying-entry handling;
+a fresh unlinked loser has one dereference edge, not the destroy helper's two.
+Retained perf counter-negative wrapper already frees its fresh event before group
+publication; no duplicate fix, fixture execution or runtime claim.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance UNKNOWN. BUILD3/CID5487 and consumed build nonce not replayed. External
+supervisor owns fresh health proof; Root owns current ownership and one-shot SDK
+admission. Exact configure argv/mount identities are not yet bound and no physical
+command is released. Schedule the existing combined candidate directly into that
+compiler queue after health/ownership proof, alongside disjoint ready M14 source.
+Queue time, blocked duration, CPU/wall/peak/overlap and validated-fix time unknown;
+historical 418.778s first-stream proxy and 491.317s handoff and original30-minute
+baseline retained, no95% claim. At10:43 host/scratch free 143314436096 /
+47613485056 bytes; weekly83% used, weekly-only. Evidence: ../evidence/
+os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-ENGINEERING-REVIEW-20261030T1046-1/REVIEW.json.
+
 ## M14 XPMEM publication cursor — 2026-10-30T10:42Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
