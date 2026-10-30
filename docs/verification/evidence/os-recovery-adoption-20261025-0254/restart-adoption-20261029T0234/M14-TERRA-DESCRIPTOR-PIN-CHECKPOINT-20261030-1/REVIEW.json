@@ -1,0 +1,6 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "findings": "General retained host nested-syscall path has no close filter; inspected automatic producers do not show nested close, so same-requester reentrancy remains conditional and unobserved. A synchronous pin drain requires a bound producer exclusion or reentrant finalization. Perf publication has a recognizable callback tuple in inspected producers, but no universal identity and no atomic typed lookup plus pin ABI; a separate check races close. XPMEM anonymous attach dispatch avoids its own descriptor-dispatch recursion, but still reads its original unpinned descriptor after usercopy.",
+  "outcome": "No complete safe Rust fix, test, compilation or physical operation. Existing source candidates and all native ownership remain retained.",
+  "next": "Bind safe descriptor acquire/put/finalization through actual syscall, close, teardown, clone and nested-host paths; Root requires fresh supervisor health and actual ownership admission for integrated compiler candidate."
+}

@@ -1,3 +1,21 @@
+## M14 descriptor pin cursor — 2026-10-30T10:57Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 4/6, practical35/35, M15 queued; no new build, behavior test, production/native,
+guest, C-retirement or file credit. Retained general nested syscall transport has
+no close filter, while inspected automatic producers do not show nested close;
+a same-requester drain deadlock remains conditional, not reproduced. Synchronous
+pin drain needs a proven producer exclusion or reentrant finalization contract.
+Perf publisher callbacks distinguish the inspected producers, but no universal
+identity or atomic typed lookup/pin is bound; a separate check races close. XPMEM
+anonymous attach avoids recursive descriptor dispatch but still reads its unpinned
+descriptor after usercopy. No partial ownership patch selected, test or physical
+operation run. Existing source patches and all native/OCI ownership remain retained.
+
+Root owns integrated compiler admission; external supervisor owns fresh health.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/restart-adoption-
+20261029T0234/M14-TERRA-DESCRIPTOR-PIN-CHECKPOINT-20261030-1/.
+
 ## M14 ownership contract cursor — 2026-10-30T10:54Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
