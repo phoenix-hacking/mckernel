@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NARROW_SOURCE_REVIEW_PASS_CONDITIONAL_DEPENDENCIES_OPEN",
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/procfs.rs",
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "bytes": 36968
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/procfs.c",
+      "sha256": "bed2ba5f5f786d1198c93bcc8d0bb7f608ad0a70e57ab6c3fa0caa99228306da",
+      "bytes": 21605
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "bytes": 618027
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-LOOKUP-LIVE-REF-20261104-1/find_thread_live.rs.inc",
+      "sha256": "95dd0db6041de3e0556db5f9ebce7f4362181eaaf3bddaecd0537df58d124cf9",
+      "bytes": 3091
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/generic-a-procfs-live-thread-20261104-1/procfs_lookup_test.rs",
+      "sha256": "b90628003b272f84370bea6c4538041e1077e30dc850f8d7dc31945bfb54b098",
+      "bytes": 4005
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/generic-a-procfs-live-thread-20261104-2/procfs.rs",
+      "sha256": "aebc47f1961260107316e6cf545c60654a03f25cffd653169d21ab13b421b615",
+      "bytes": 38264
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/generic-a-procfs-live-thread-20261104-2/caller_branch_test.rs",
+      "sha256": "de12bf55a980ff542e1b2b945551dc34f4210a257e6b28eace6ca5d05a8cb46e",
+      "bytes": 2377
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/generic-a-procfs-live-thread-20261104-2/extracted_caller.rs.inc",
+      "sha256": "5e788b67811e6289303768efbe5955a865cd06e8a7b3736a26620020ef355cf4",
+      "bytes": 2144
+    }
+  ],
+  "findings": [
+    "Existing Rust returns an unheld thread after releasing threads_lock, then calls hold_thread; C retains inside the lock. The successor acquires a positive non-overflowing thread ref under threads reader and transfers exactly one ref to existing cleanup. It requires the hash-independent sibling-lock lifetime guarantee and no force-refcount reset.",
+    "Exact live task returns held thread; unavailable task exits with no held thread or process/VM refs, unlocks the process, and nulls borrowed proc before cleanup. Non-task lookup may retain first viable other thread; absent viable thread now continues process/VM-only entries. STATUS and STAT guard the missing thread before dereference and finish the normal error path.",
+    "Successor1 guarded all entries on missing fallback, causing an observable regression to process-only entries. Successor2 corrects this. Baseline C `thread == NULL` after intrusive-list iteration cannot establish intended absent-list behavior because container-of sentinel is not necessarily NULL.",
+    "A comment replacing the removed extern preserves all four preceding allocation/free line! origin lines 153,159,164,169.",
+    "Separate unresolved paths include Process 0-to-1 resurrection by find_process plus hold_process and VM lifetime while acquiring its reference, direct do_kill acquisitions, and force-to-one refcount reset. This review does not declare procfs or general lifecycle acceptance."
+  ],
+  "fixture_scope": "Author reports lookup and caller-slice unit fixtures passed individually 1/1 after rustc 1.85.1 correction; actual extracted candidate bodies with mocked layouts, lock, and callbacks. Lookup fixture does not run real concurrency; caller fixture is sliced, not a full procfs request. Reviewer inspected sources and did not rerun tests. Actual header/layout, true MCS/IRQ, integrated compile and native checks remain open.",
+  "runtime_authority": null,
+  "native_execution": false,
+  "production_acceptance": false
+}

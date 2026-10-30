@@ -1,3 +1,25 @@
+## Current M14 source and admission cursor — 2026-10-30T01:50:44+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The corrected attempt-0001 postjoin source manifest `7f9810d2` has independent
+source-only review `d82004fb`; three freshness and five synthetic binding tests
+passed. No guard or capture was run. Next are exact publication and fetched-byte
+verification, fresh Root custody and an unused nonce, and independently reviewed
+operation, physical, observer and one-shot release bindings. There is no fresh
+current-free clearance or new retirement credit.
+
+The atomic signal state helper passed six tests and is part of a private coherent
+full-28 plus live-reference experimental composition. Conditional try-hold actual
+body tests with mocks and a separate procfs correction source review passed.
+Process/VM and force-reset/direct-acquisition ownership remain open. The private
+credential route remains blocked by stale cache after host mutation despite paired
+error handling. These source results are not native or file acceptance.
+
+This invocation has zero new guest apps and zero current-candidate builds. The
+previous first batch remains 19 compiled and linked functions. M14 remains 4/6;
+M15 is paused. Continue independent M14 source work while preserving all native
+owners, unknown outcomes, historical evidence and the required execution controls.
+
 ## Steering checkpoint — 2026-10-30T01:40:33+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

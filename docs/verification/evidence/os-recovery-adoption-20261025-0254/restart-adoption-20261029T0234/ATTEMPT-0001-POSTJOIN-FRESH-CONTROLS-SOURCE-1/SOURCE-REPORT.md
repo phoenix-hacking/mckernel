@@ -1,0 +1,18 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+# Bounded correction for independently blocked predecessor 7c33
+
+SOURCE ONLY; no Root intent, guard binding, observation, release, capture, build, native acceptance or physical clearance. Prior private 7c33 inputs and their review findings are retained unchanged. This new repo-owned directory is a coherent fresh path/hash closure for future publication and independent review; it is not itself fetched publication or runtime authority.
+
+The retained controller sources show a five-second normal guardian loop writing `last_clock` and journal, a five-second normal supervisor loop atomically writing its journal with current envelope and monotonic-tightening caps, and a fifteen-second monitor loop atomically rewriting its journal. The candidate reads each activity journal through one `O_NOFOLLOW` regular file descriptor; fstat before/after, current path identity, inode, size, mtime and ctime must agree. Guardian journal and last_clock must be less than 30 seconds old; supervisor journal less than 30 seconds old; monitor journal less than 45 seconds old. Future timestamps, missing or replaced files, wrong types, stale activity, holds, uncertain submissions and foreign boot/thread/envelope/actors fail closed. Phone watch status uses the same FD/metadata check with a 180-second bound; an atomically replaced fresh path cannot lend its mtime to older bytes.
+
+For each admission, persisted supervisor caps, its confirmed weekly wall ceiling, guardian UTC/monotonic/boot caps, monitor UTC/boot caps, current weekly state, and the fixed inherited maxima all tighten the effective triplet. The Q adapter returns this current minimum to observer and physical guard before queries. Static original authorization/cutoff minimum still bounds the operation; no rollover or prepaid fallback is authorized. Current actor identity/lease and packet checks are retained. The full historical physical/census/query source and sudo -A invocation remain unchanged; the fresh successor is re-bound by paths and hashes to this directory. Retained historical Root69 free remains historical, Root70 remains pending, and UNKNOWN actors remain UNKNOWN.
+
+CPU0 fixture commands and results:
+
+- `/usr/bin/taskset -c 0 /usr/bin/python3 -B test_freshness.py`: 3 tests PASS, including tighter caps, stale/future/foreign/uncertain control metadata and same-FD stale/future/missing/atomic-replacement cases.
+- `/usr/bin/taskset -c 0 /usr/bin/python3 -B test_binding_closure.py`: 5 tests PASS, exercising synthetic source-only Q context/independent operation, effective dynamic caps, physical binding, observer route and release/output predicates; wrong predecessor guard, guard config, consumed nonce, output and release payload fail. Fixtures use a fabricated custody and review in memory or temporary directories and do not issue authority.
+
+The previous private-candidate test setup path failure and its bounded fixture correction remain recorded in the predecessor report. The freshness correction's tests passed on their actual invocations. No guard, process/lease observation, Docker, capture, privileged command or native operation was run.
+
+Independent source/execution review must still assess clock bounds, supervisor/guardian/monitor ownership and loop semantics, same-FD consistency, dynamic caps, launch-argv assumptions and physical query/teardown bindings. Fresh source publication and fetched-byte proof, exact Root custody and a new unused nonce, independent operation/physical/observer reviews, fresh controller and resource admission, and a one-shot release are still necessary. Tests do not establish live controller health or acceptance.
