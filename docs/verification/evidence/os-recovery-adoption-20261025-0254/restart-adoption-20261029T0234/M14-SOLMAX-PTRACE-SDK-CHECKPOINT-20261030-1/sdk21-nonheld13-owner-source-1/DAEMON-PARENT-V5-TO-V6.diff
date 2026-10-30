@@ -1,0 +1,53 @@
+--- v5/sdk13_daemon_metadata_parent.v5.py
++++ v6/sdk13_daemon_metadata_parent.v6.py
+@@ -2,7 +2,7 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ One root direct parent for the fixed read-only daemon metadata reader; no Docker query.
+ """
+-import ast,base64,fcntl,hashlib,json,os,resource,signal,stat,subprocess,sys,time
++import ast,base64,errno,fcntl,hashlib,json,os,resource,signal,stat,subprocess,sys,time
+ from pathlib import Path
+ 
+ READER=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_daemon_metadata_reader.v4.py')
+@@ -26,13 +26,27 @@
+     global stopping
+     stopping=True
+ 
++
++def root_file_mode(uid,gid,mode,euid):
++    return uid==0 and ((gid==1000 and mode==0o640) or (mode==0o600 and euid==0))
++
++def no_access_acl(fd):
++    try:os.getxattr(fd,'system.posix_acl_access')
++    except OSError as exc:
++        if exc.errno in (errno.ENODATA,errno.ENOTSUP):return
++        raise
++    raise ValueError('root document extended access ACL not allowed')
++
+ def bound_document(path,expected,root=False):
+-    if not isinstance(expected,list) or len(expected)!=8:raise ValueError('sealed identity token malformed')
++    if not isinstance(expected,list) or len(expected)!=10:raise ValueError('sealed identity token malformed')
+     fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)
+     try:
+         a=os.fstat(fd)
+-        if not stat.S_ISREG(a.st_mode) or a.st_nlink!=1 or a.st_size>2**20 or (root and (a.st_uid!=0 or stat.S_IMODE(a.st_mode)&0o077)):
++        if not stat.S_ISREG(a.st_mode) or a.st_nlink!=1 or a.st_size>2**20:
+             raise ValueError('sealed document identity mismatch')
++        if root:
++            if not root_file_mode(a.st_uid,a.st_gid,stat.S_IMODE(a.st_mode),os.geteuid()):raise ValueError('root document UID/GID/mode differs')
++            no_access_acl(fd)
+         chunks=[];size=0
+         while True:
+             z=os.read(fd,65536)
+@@ -40,9 +54,9 @@
+             size+=len(z)
+             if size>2**20:raise ValueError('sealed document growth')
+             chunks.append(z)
+-        c=os.fstat(fd);named=os.lstat(path);keys=('st_dev','st_ino','st_mode','st_uid','st_size','st_mtime_ns','st_ctime_ns')
++        c=os.fstat(fd);named=os.lstat(path);keys=('st_dev','st_ino','st_mode','st_uid','st_gid','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+         if size!=a.st_size or any(getattr(a,k)!=getattr(c,k) or getattr(a,k)!=getattr(named,k) for k in keys):raise ValueError('sealed document changed')
+-        raw=b''.join(chunks);actual=[a.st_dev,a.st_ino,a.st_mode,a.st_uid,a.st_size,a.st_mtime_ns,a.st_ctime_ns,hashlib.sha256(raw).hexdigest()]
++        raw=b''.join(chunks);actual=[a.st_dev,a.st_ino,a.st_mode,a.st_uid,a.st_gid,a.st_nlink,a.st_size,a.st_mtime_ns,a.st_ctime_ns,hashlib.sha256(raw).hexdigest()]
+         if actual!=expected:raise ValueError('sealed document bytes/identity drift')
+         return json.loads(raw)
+     finally:os.close(fd)

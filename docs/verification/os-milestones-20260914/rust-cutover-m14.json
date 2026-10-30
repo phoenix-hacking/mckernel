@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-30T06:54:11.212940+00:00",
+  "as_of": "2026-10-30T07:36:16.538824+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -3946,13 +3946,23 @@
       ],
       "new_production_native_file_credit": 0,
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-F06-DATA-CHECKPOINT-20261030-1"
+    },
+    {
+      "at": "2026-10-30T07:36:16.538824+00:00",
+      "actual_progress": "HOST ptrace free/log paired C+Rust and11input link064d pass with actual4657/4664/log24429/debug0 proof; independent HOST15provider/descriptor/11input/146Rust75Cdep review passes. Final validator6/6 and normalization804e pass, snapshot5/7twofailures retained/cacheineligible/unwired. Ownerv7 timing crossclock source finding remains NO-GO; narrow preliminary daemon/image observer gated-custody correction underway. No SDK/rootquery/native/default/Cretirement/file/app delta. Qualified1cd7/23+5 and M14 4/6 unchanged.",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-PTRACE-SDK-CHECKPOINT-20261030-1"
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-30T06:54:11.212940+00:00",
-    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-F06-DATA-CHECKPOINT-20261030-1",
-    "scope": "HOST F06 function/data diagnostic only; no acceptance",
-    "next": "Review/bind SDK source-map and per-attemptcache/live authority; Root sole compiler/native controller"
+    "at": "2026-10-30T07:36:16.538824+00:00",
+    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SOLMAX-PTRACE-SDK-CHECKPOINT-20261030-1",
+    "next": "Root exact owner/observer source review and actual SDK-only facts/release; no physical SDK action released.",
+    "counts": "4/6 original file scope;35/35 functional separate; qualified1cd7 remains23generic+5arch C; native/default/retirement delta0."
   },
   "campaign_scheduling_override": {
     "state": "exclusive_active_engineering_objective",

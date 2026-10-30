@@ -1,0 +1,264 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-30T07:25:41.654233+00:00",
+  "base_cursor": "M14-ARTIFACT-CURSOR-20261030T0347.json",
+  "selected_artifact_unchanged": "1cd7e4e66bdbd7d34bcca2e7cb698da814df470ffd726270a612a2d92faf8c38",
+  "selected_remaining_original_C_names": {
+    "F03": [
+      "do_execveat",
+      "do_fork",
+      "do_mmap",
+      "do_setresgid",
+      "do_setresuid",
+      "do_syscall",
+      "interrupt_syscall",
+      "ptrace_detach_do_kill_bridge",
+      "ptrace_detach_kfree_bridge",
+      "ptrace_wakeup_log_bridge",
+      "ptrace_wakeup_sig",
+      "sys_perf_event_open",
+      "syscall_do_syscall3_bridge",
+      "syscall_execveat_bridge",
+      "syscall_forward_rt_sigprocmask_bridge",
+      "syscall_forward_sigaction_update_bridge",
+      "syscall_policy_do_syscall2_bridge",
+      "syscall_policy_do_syscall3_bridge",
+      "terminate",
+      "terminate_host",
+      "terminate_mcexec",
+      "util_thread",
+      "wait_host_wait4_bridge"
+    ],
+    "F06": [
+      "arch_native_signal_bad_frame_bridge",
+      "arch_ptrace_regset_log_bridge",
+      "arch_rt_sigreturn_context_bridge",
+      "arch_rt_sigreturn_xrstor_bridge",
+      "do_signal"
+    ]
+  },
+  "changed_rows": [
+    {
+      "function": "arch_native_signal_bad_frame_bridge",
+      "C_path": "arch/x86_64/kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "arch_ptrace_regset_log_bridge",
+      "C_path": "arch/x86_64/kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "arch_rt_sigreturn_context_bridge",
+      "C_path": "arch/x86_64/kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "arch_rt_sigreturn_xrstor_bridge",
+      "C_path": "arch/x86_64/kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "do_signal",
+      "C_path": "arch/x86_64/kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "sys_perf_event_open",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "syscall_do_syscall3_bridge",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "syscall_forward_rt_sigprocmask_bridge",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "syscall_forward_sigaction_update_bridge",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "syscall_policy_do_syscall2_bridge",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "syscall_policy_do_syscall3_bridge",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    },
+    {
+      "function": "wait_host_wait4_bridge",
+      "C_path": "kernel/syscall.c",
+      "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/syscall_policy.rs",
+      "owner": "Root canonical; arch_source/composition completed private body preparation",
+      "implemented": true,
+      "selected": "C in unchanged qualified1cd7 default; Rust in HOST87a diagnostic candidate only",
+      "compiled_linked": {
+        "HOST": true,
+        "SDK": false,
+        "HOST_object_sha256": "fbfa4e9ac742c48f875f9903a65078cd142ceea8f0d9c5f3550d61c9899f0071",
+        "HOST_image_sha256": "87a23acd06af2a9771482281af0820cf817eb72620a9078c414b9ee9a2930641"
+      },
+      "native_retired": false,
+      "exact_blocker": "MatchingSDK21/GCC14 source/build/original389/default ownership and applicable functional/native evidence remain open. Held scopes remain excluded.",
+      "next_executable_check": "Root exact reviewed sdk13 owner run with final e6a8462b13-function+data32 profile after real admission; current v5 NO-GO, v6 correction pending."
+    }
+  ],
+  "additional_HOST_alias_function": "syscall_do_syscall2_bridge (not an extra remaining-name retirement)",
+  "additional_data_row": {
+    "name": "debug_constants",
+    "C_path": "arch/x86_64/kernel/syscall.c",
+    "Rust_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/f06-debug-constants-align32-host-1/src/kernel/rust/f06_debug_constants.rs",
+    "HOST_compiled_linked": true,
+    "words": 12,
+    "bytes": 96,
+    "alignment": 32,
+    "SDK_default_native_retired": false
+  },
+  "unchanged_rows": "Retain base cursor and M14-CHANGED-ROWS-20261030T0402.json; no new inventory, no accepted state overwritten.",
+  "M14_accepted_files": 4,
+  "original_files": 6,
+  "practical_checks": "35/35 separately",
+  "M15": "queued",
+  "counts_scope": "13 HOST Rust function exports include one extra alias name;12 of prior28 original C names have new HOST Rust provider evidence. Selected/default/native remaining count stays28.",
+  "retired_C_boundaries_delta": 0
+}

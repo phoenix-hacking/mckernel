@@ -1,3 +1,30 @@
+## M14 ptrace and SDK checkpoint — 2026-10-30T07:36Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same Root active. M14 stays4/6, practical35/35 separate, M15 queued. Qualified
+1cd7 still selects23generic+5arch C names; no new native/default/C retirement.
+
+Two-adapter candidate reuses tracked-free Rust and adds ptrace wakeup logging.
+Actual C origins4657/4664/log24429, debug-default0, C+Rust compile and11input HOST
+image064d64a5 (10485776B) pass; independent HOST provider/descriptor/dependency review passes. Source
+bindings/commands/streams/timing/group records are retained. SDK/default/389,
+dynamic-debug exclusion and matching functional/native remain open.
+
+Input validator6/6 and evidence-only normalization804e pass. Snapshot5/7 with2
+mutation failures remains ineligible/unwired; full validator remains selected.
+SDK ownerv7 fixes relative timeout reset but source review found cross-clock
+sampling skew; physical use remains NO-GO, bounded expert correction pending.
+Read-only daemon/image successor is source-only, with gated child/outer custody
+correction underway; no SDK/query/native effect. Root70 removal was already
+accepted69216/bc2df; do not replay a7fe inspect/removal or consumed4709. Preserve
+current-free/no-unlisted/v2birth UNKNOWN,27:4/scratch21/resources/held requests.
+
+Last observed included use75%; no credit fallback. New20min buckets through0726
+are adjacent1200s; original30min baseline unchanged, no95% claim. NEXT Root:
+complete exact owner/readonly observer review, actual facts and fresh SDK-only
+admission. Source and compiler lanes proceed independently of CURRENT119 native.
+Evidence: M14-SOLMAX-PTRACE-SDK-CHECKPOINT-20261030-1; changed rows0725.
+
 ## M14 data and SDK checkpoint — 2026-10-30T06:47Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

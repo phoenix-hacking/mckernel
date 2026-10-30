@@ -1,0 +1,259 @@
+--- v5/sdk13_compile_image_owner.v5.py
++++ v6/sdk13_compile_image_owner.v6.py
+@@ -11,6 +11,7 @@
+ 
+ import argparse
+ import base64
++import errno
+ from decimal import Decimal
+ import hashlib
+ import importlib.util
+@@ -33,7 +34,7 @@
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+ EXPECTED_DRIVER_SHA256 = '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0'
+ EXPECTED_PROVENANCE_SHA256 = '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'
+-EXPECTED_HOST_OWNER_SHA256 = '3d6f4edcd1edbb9f19a20755cab1b45267afcd8e708cd92f56f8b74ab8541b45'
++EXPECTED_HOST_OWNER_SHA256 = '443dda3467a667cf742058f0b3ed7b8944315e32fb7c995ee3e66c40fb0644ce'
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+@@ -183,7 +184,7 @@
+         sys.modules.pop(package_name, None)
+ 
+ 
+-_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.v5.py')
++_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-SOL-MAX-20261030-1/sdk21-nonheld13-owner-source-1/sdk13_compile_host_helper.v6.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+     Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py'),
+@@ -1608,7 +1609,7 @@
+         finally:
+             os.close(fd)
+ 
+-    def release_accepted(self, acceptance):
++    def release_accepted(self, acceptance, unlink_gate=None):
+         _fail(acceptance.get("status") == "ACCEPTED_COMPILE_ONLY_PHYSICAL_RETIREMENT" and
+               acceptance.get("operation") == self.record["operation"] and
+               acceptance.get("request_core_sha256") == self.record["request_core_sha256"] and
+@@ -1622,8 +1623,11 @@
+                 raw = os.read(fd, 1 << 20)
+                 _fail(json.loads(raw) == self.record and meta.st_dev == self.record["device"] and
+                       meta.st_ino == self.record["inode"] and meta.st_size == len(raw), "compile lease changed at release")
++                _fail(callable(unlink_gate), 'SDK13 lease unlink gate missing')
++                unlink_boundary=unlink_gate()
+                 os.unlink(self.path.name, dir_fd=parent_fd)
+                 os.fsync(parent_fd)
++                return unlink_boundary
+             finally:
+                 os.close(fd)
+         finally:
+@@ -1958,7 +1962,22 @@
+                    'TMPDIR':'/tmp','HOSTNAME':'mckernel-sdk13'}
+ 
+ 
++
++def _sdk13_root_file_mode(uid,gid,mode,euid):
++    return uid==0 and ((gid==1000 and mode==0o640) or (mode==0o600 and euid==0))
++
++def _sdk13_no_access_acl(fd):
++    try:os.getxattr(fd,'system.posix_acl_access')
++    except OSError as exc:
++        if exc.errno in (errno.ENODATA,errno.ENOTSUP):return
++        raise
++    raise OwnerError('SDK13 root document extended access ACL not allowed')
++
+ def _sdk13_read(path, maximum, expected_sha=None, root=False):
++    path=Path(path)
++    if root:
++        _fail(path.is_absolute() and SDK13_DIR in path.parents,
++              'SDK13 root document must be in the new private SDK namespace')
+     _no_symlink_parents(path,'SDK13 bound input')
+     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+     try:
+@@ -1966,8 +1985,9 @@
+         _fail(stat.S_ISREG(st.st_mode) and st.st_nlink == 1 and st.st_size <= maximum,
+               'SDK13 bounded single-link regular file required: ' + str(path))
+         if root:
+-            _fail(st.st_uid == 0 and not stat.S_IMODE(st.st_mode) & 0o077,
+-                  'SDK13 sealed file must be root-owned and private')
++            _fail(_sdk13_root_file_mode(st.st_uid,st.st_gid,stat.S_IMODE(st.st_mode),os.geteuid()),
++                  'SDK13 root document UID/GID/mode differs')
++            _sdk13_no_access_acl(fd)
+         chunks=[]; total=0
+         while True:
+             block=os.read(fd,65536)
+@@ -1980,7 +2000,7 @@
+               'SDK13 file identity changed: ' + str(path))
+         data=b''.join(chunks); digest=hashlib.sha256(data).hexdigest()
+         if expected_sha is not None: _fail(digest==expected_sha, 'SDK13 hash mismatch: ' + str(path))
+-        return data, (st.st_dev,st.st_ino,st.st_mode,st.st_uid,st.st_size,st.st_mtime_ns,st.st_ctime_ns,digest)
++        return data, (st.st_dev,st.st_ino,st.st_mode,st.st_uid,st.st_gid,st.st_nlink,st.st_size,st.st_mtime_ns,st.st_ctime_ns,digest)
+     finally: os.close(fd)
+ 
+ 
+@@ -2024,6 +2044,7 @@
+           release.get('container_env')==SDK13_CLEAN_ENV and
+           release.get('owner_sha256')==_sha256(Path(__file__)) and
+           release.get('request_core_sha256')==_request_core_hash(request), 'SDK13 release bindings differ')
++    policy=_sdk13_containment_policy(release,request)
+     facts=release.get('admission'); boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+     _validate_sdk13_facts(facts,_boottime_ns(),boot)
+     _fail(boot==SDK13_BOOT_ID and facts.get('service_status')=='NO_NEW_REJECTION' and
+@@ -2031,8 +2052,9 @@
+           0<=facts['weekly_used_percent']<100, 'SDK13 service or weekly allowance not established')
+     now=time.time(); bt=time.clock_gettime(time.CLOCK_BOOTTIME); mono=time.monotonic()
+     _fail(_sdk13_capture_fresh(now,facts.get('weekly_observed_utc'),facts.get('expiry_utc')) and
+-          now<SDK13_UTC and bt<SDK13_BOOT and mono<SDK13_MONO,
+-          'SDK13 usage observation expired or time ceiling reached')
++          now<SDK13_UTC and bt<SDK13_BOOT and mono<SDK13_MONO and
++          now<policy['until_utc'] and bt<policy['until_boot'] and mono<policy['until_mono'],
++          'SDK13 usage, time ceiling or containment authority expired')
+     controls=[]
+     for path,key in ((SDK13_CONTROL,'controls_sha256'),(SDK13_CAPACITY,'capacity_sha256')):
+         data,record=_sdk13_read(path,2**20,facts.get(key));
+@@ -2058,8 +2080,8 @@
+     return {'release':identity,'controls':controls,'evidence':evidence,'daemon':daemon}
+ 
+ 
+-SDK13_DAEMON_PARENT = SDK13_DIR / 'sdk13_daemon_metadata_parent.v5.py'
+-SDK13_DAEMON_PARENT_SHA = 'dd837c547d72324c3a301b234cacb48cd70e825d6827d11488219b24a773a342'
++SDK13_DAEMON_PARENT = SDK13_DIR / 'sdk13_daemon_metadata_parent.v6.py'
++SDK13_DAEMON_PARENT_SHA = 'df90959f8996eeca19f5075e55a0d5b3ec96da42004c77957929712b963ba492'
+ SDK13_DAEMON_READER = SDK13_DIR / 'sdk13_daemon_metadata_reader.v4.py'
+ SDK13_DAEMON_READER_SHA = 'ef5eadb127f024275e10cbe2d4c8b2f2a8cf1a3fe301a20cd7d23a627df1d9f8'
+ SDK13_CAPTURE_SOURCE = SDK13_DIR / 'sdk13_owned_capture.v5.py'
+@@ -2383,6 +2405,83 @@
+                                   current,utc,boot,mono,boot_id,stopped)
+     result['phase']='retirement-'+phase
+     return result
++
++
++# Cleanup authority is sealed with the one SDK release but has a strictly
++# limited purpose: stop only the exact CID created by this owner. It does not
++# authorize create, start, removal, global clearance or lease release.
++SDK13_CONTAINMENT_ACTIONS=('inspect','stop','kill','wait')
++
++
++def _sdk13_containment_policy(release,request):
++    policy=release.get('containment_policy')
++    _fail(isinstance(policy,dict) and set(policy)=={'status','operation','profile_sha256','owner_sha256',
++          'request_core_sha256','owner_nonce','allowed_actions','max_calls','max_wall_seconds',
++          'until_utc','until_boot','until_mono'},'SDK13 sealed containment policy missing')
++    _fail(policy['status']=='EXACT_CREATED_CID_CONTAINMENT_ONLY' and policy['operation']==SDK13_OPERATION and
++          policy['profile_sha256']==SDK13_PROFILE_SHA and policy['owner_sha256']==_sha256(Path(__file__)) and
++          policy['request_core_sha256']==_request_core_hash(request) and policy['owner_nonce']==request.get('owner_nonce') and
++          policy['allowed_actions']==list(SDK13_CONTAINMENT_ACTIONS) and policy['max_calls']==8 and
++          policy['max_wall_seconds']==90 and all(type(policy[k]) in (int,float) and 0<policy[k]<10**12
++          for k in ('until_utc','until_boot','until_mono')),'SDK13 containment scope or bounds differ')
++    return policy
++
++
++def _sdk13_containment_args(args,cid,attested):
++    _fail(isinstance(args,tuple) and re.fullmatch(r'[0-9a-f]{64}',cid or ''),'SDK13 containment CID unavailable')
++    allowed=(('inspect','--format',SDK13_INSPECT_TEMPLATE,cid),('stop','--time','15',cid),('kill',cid),('wait',cid))
++    _fail(args in allowed,'SDK13 containment action or CID differs')
++    _fail(args[0]=='inspect' or attested,'SDK13 containment CID not yet authenticated')
++    return args[0]
++
++
++class SDK13Containment:
++    def __init__(self,request,authority,lease,cid):
++        _fail(isinstance(cid,str) and re.fullmatch(r'[0-9a-f]{64}',cid),'SDK13 created CID unknown')
++        self.request=request;self.authority=authority;self.lease=lease;self.cid=cid
++        self.started=time.monotonic();self.calls=0;self.attested=False
++    def gate(self,args):
++        action=_sdk13_containment_args(args,self.cid,self.attested)
++        release,identity=_sdk13_root(self.request.get('compile_only_release'),SDK13_RELEASE)
++        _fail(identity==self.authority['release'],'SDK13 containment root release changed')
++        policy=_sdk13_containment_policy(release,self.request)
++        raw=self.lease.load_owned()
++        _fail(self.lease.record.get('pid')==os.getpid() and
++              self.lease.record.get('starttime')==_proc_starttime(os.getpid()) and
++              self.lease.record.get('request_core_sha256')==_request_core_hash(self.request),
++              'SDK13 containment owner or lease changed')
++        now=time.time();boot=time.clock_gettime(time.CLOCK_BOOTTIME);mono=time.monotonic()
++        _fail(self.calls<policy['max_calls'] and now<policy['until_utc'] and boot<policy['until_boot'] and
++              mono<policy['until_mono'] and mono-self.started<policy['max_wall_seconds'],
++              'SDK13 containment authority expired')
++        remaining=min(30.0,policy['until_utc']-now,policy['until_boot']-boot,
++                      policy['until_mono']-mono,policy['max_wall_seconds']-(mono-self.started))
++        _fail(remaining>0,'SDK13 containment time unavailable')
++        self.calls+=1
++        return {'phase':'containment-'+action,'cid':self.cid,'call':self.calls,'utc':now,'boot':boot,'mono':mono,
++                'max_call_seconds':remaining,'lease_sha256':hashlib.sha256(raw).hexdigest(),
++                'limited_retirement_only':True}
++    def confirm(self,info):
++        _assert_owned_container(info,self.cid);self.attested=True
++
++
++def _sdk13_contain_created(request,authority,lease,cid,attempt,signals):
++    state=SDK13Containment(request,authority,lease,cid)
++    client=_HOST_OWNER.Docker(Path(attempt)/'containment-docker.log',signals,sudo=True,effect_gate=state.gate)
++    info=_sdk13_own_inspect(client,cid);state.confirm(info)
++    if info.get('State',{}).get('Running') or info.get('State',{}).get('Status') in ('paused','restarting'):
++        client.call(['stop','--time','15',cid],timeout=30,check=False)
++        info=_sdk13_own_inspect(client,cid);state.confirm(info)
++        if info.get('State',{}).get('Running'):
++            client.call(['kill',cid],timeout=30)
++        client.call(['wait',cid],timeout=30)
++        info=_sdk13_own_inspect(client,cid);state.confirm(info)
++    _fail(info.get('State',{}).get('Running') is False and info['State'].get('Pid')==0 and
++          info['State'].get('Status') in ('exited','created','dead') and
++          not client.client_retirement_unproven,'SDK13 exact CID containment remains unknown')
++    return {'status':'EXACT_CID_STOPPED_NOT_RETIRED','container_id':cid,'terminal_state':info['State'],
++            'containment_calls':state.calls,'lease_retained':True,'current_free':False,
++            'physical_retirement_accepted':False}
+ 
+ 
+ class SDK13ImageOwner:
+@@ -2429,7 +2528,7 @@
+             receipt['work_created_identity']=_sdk13_prepare_work(bound,r,self.validator)
+             Path(bound['attempt']).mkdir(mode=0o700); _fsync_dir(Path(bound['owner_evidence']))
+             client=_HOST_OWNER.Docker(Path(bound['attempt'])/'docker.log',self.signals,sudo=True,
+-                    effect_gate=lambda action:_sdk13_effect_gate(r,authority,self.signals,'docker-'+action))
++                    effect_gate=lambda args:_sdk13_effect_gate(r,authority,self.signals,'docker-'+args[0]))
+             image_rows=client.call(['image','inspect','--format','{{json .Id}}\n{{json .Architecture}}',SDK13_IMAGE],timeout=30).stdout.splitlines()
+             _fail(len(image_rows)==2 and json.loads(image_rows[0])==SDK13_IMAGE and
+                   json.loads(image_rows[1])=='amd64','SDK13 image identity differs')
+@@ -2463,8 +2562,18 @@
+         finally:
+             if self.signals:self.signals.cleaning=True
+             if attempted and client is not None:
+-                try:receipt.update(_cleanup_owned_compile(client,Path(bound['attempt']),receipt.get('container_id')))
+-                except BaseException as exc:receipt.update(status='FAIL',cleanup_error=type(exc).__name__+': '+str(exc))
++                cid=receipt.get('container_id')
++                if cid is None:
++                    receipt.update(status='FAIL',cleanup_error='UNKNOWN: create produced no authenticated CID; no containment attempted')
++                else:
++                    try:receipt.update(_cleanup_owned_compile(client,Path(bound['attempt']),cid))
++                    except BaseException as exc:
++                        receipt.update(status='FAIL',cleanup_error=type(exc).__name__+': '+str(exc))
++                        try:
++                            receipt['bounded_containment']=_sdk13_contain_created(r,authority,lease,cid,
++                                                                                 Path(bound['attempt']),self.signals)
++                        except BaseException as containment_error:
++                            receipt['containment_error']=type(containment_error).__name__+': '+str(containment_error)
+             else:receipt['no_container_create_attempted']=True
+             try:self.validator.revalidate(bound,r)
+             except BaseException as exc:receipt.update(status='FAIL',input_revalidation_error=type(exc).__name__+': '+str(exc))
+@@ -2537,7 +2646,7 @@
+           receipt.get('request_core_sha256')==_request_core_hash(core_request),'SDK13 physical retirement missing')
+     retirement_authority=_sdk13_retirement_controls(acceptance)
+     cid=receipt.get('container_id');client=_HOST_OWNER.Docker(Path(bound['attempt'])/'lease-release-docker.log',signals,sudo=True,
+-        effect_gate=lambda action:_sdk13_retirement_effect_gate(request,acceptance_identity,retirement_authority,signals,action))
++        effect_gate=lambda args:_sdk13_retirement_effect_gate(request,acceptance_identity,retirement_authority,signals,args[0]))
+     absence=_own_absence(client,cid)
+     _fail(not client.client_retirement_unproven,'SDK13 lease release client retirement unknown')
+     _fail(_sdk13_retirement_controls(acceptance)==retirement_authority,
+@@ -2549,8 +2658,9 @@
+     _exclusive_json(Path(bound['attempt'])/'accepted-lease-release-intent.json',
+                     {'operation':SDK13_OPERATION,'acceptance':acceptance,'fresh_own_absence':absence,
+                      'lease_sha256':hashlib.sha256(lease.load_owned()).hexdigest()})
+-    lease.release_accepted(acceptance)
+-    result={'status':'PASS_SDK13_COMPILE_ONLY_LEASE_RELEASED','container_id':cid,
++    unlink_boundary=lease.release_accepted(acceptance,unlink_gate=lambda:
++        _sdk13_retirement_effect_gate(request,acceptance_identity,retirement_authority,signals,'lease-unlink'))
++    result={'unlink_boundary':unlink_boundary,'status':'PASS_SDK13_COMPILE_ONLY_LEASE_RELEASED','container_id':cid,
+             'fresh_own_absence':absence,'native_guest_or_heavy_release':False}
+     _exclusive_json(Path(bound['attempt'])/'accepted-lease-release-result.json',result)
+     return result
