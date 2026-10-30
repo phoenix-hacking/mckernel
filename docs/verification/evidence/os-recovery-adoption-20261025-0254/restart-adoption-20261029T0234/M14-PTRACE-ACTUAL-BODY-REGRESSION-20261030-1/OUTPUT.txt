@@ -1,0 +1,18 @@
++ rustc +1.85.1 --edition=2021 --crate-type=lib --emit=obj -Cpanic=abort -Copt-level=2 /tmp/ptrace-body-bspo8znv/wrapper.rs -o /tmp/ptrace-body-bspo8znv/logger.o
++ cc -std=gnu11 -Wall -Wextra -Werror -no-pie -DDEFAULT_ON=0 -DORIGINAL /tmp/ptrace-body-bspo8znv/runner.c -o /tmp/ptrace-body-bspo8znv/c
++ /tmp/ptrace-body-bspo8znv/c
+default=0; descriptor and ordered log sequence PASS
++ cc -std=gnu11 -Wall -Wextra -Werror -no-pie -DDEFAULT_ON=0 /tmp/ptrace-body-bspo8znv/runner.c /tmp/ptrace-body-bspo8znv/logger.o -o /tmp/ptrace-body-bspo8znv/rust
++ /tmp/ptrace-body-bspo8znv/rust
+default=0; descriptor and ordered log sequence PASS
++ rustc +1.85.1 --edition=2021 --crate-type=lib --emit=obj -Cpanic=abort -Copt-level=2 /tmp/ptrace-body-bspo8znv/wrapper.rs -o /tmp/ptrace-body-bspo8znv/logger.o
++ cc -std=gnu11 -Wall -Wextra -Werror -no-pie -DDEFAULT_ON=1 -DORIGINAL /tmp/ptrace-body-bspo8znv/runner.c -o /tmp/ptrace-body-bspo8znv/c
++ /tmp/ptrace-body-bspo8znv/c
+default=1; descriptor and ordered log sequence PASS
++ cc -std=gnu11 -Wall -Wextra -Werror -no-pie -DDEFAULT_ON=1 /tmp/ptrace-body-bspo8znv/runner.c /tmp/ptrace-body-bspo8znv/logger.o -o /tmp/ptrace-body-bspo8znv/rust
++ /tmp/ptrace-body-bspo8znv/rust
+default=1; descriptor and ordered log sequence PASS
+invalid Rust default rejected: '2'
+invalid Rust default rejected: ''
+invalid Rust default rejected: '01'
+PASS: exact C fallback and Rust logger, two defaults, ordered sequential updates, invalid flags

@@ -1,3 +1,37 @@
+## M14 Terra engineering review — 2026-10-30T07:46Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current attempt-0002 guardian/monitor identities live; original and tighter clocks,
+weekly-only limit and all retained ownership/UNKNOWNs remain. M14 4/6, practical
+35/35, M15 queued; selected 1cd7 still owns 23 generic and five arch C names.
+
+The adjacent 07:26:29.892–07:46:29.892 bucket adds one HOST Rust/C compile and
+11-input link 064d64a5, and one actual-body xstate fixture pass covering both
+Rust bridges. No production link, native qualification, guest app, C retirement
+or file closure. Rust compile 18.66s wall/18.65s CPU/601380KiB peak; C .46s/
+.45s/47920KiB; link .10s/.10s/26856KiB. Exact queue and blocked durations remain
+unknown. Prior 491.317s handoff proxy and original 30-minute baseline remain;
+no 95% claim. Fixture E0506-to-correction pass was approximately 5s by timestamps.
+
+After the bucket, the retained detach bridge passed four host mock cases with
+independent source review; sequential ptrace logger C/Rust defaults 0/1 pass
+with invalid defaults rejected. No ABI/native credit. Review found no source-
+established exclusion between logger volatile reads and sysfs writes; hold that
+candidate pending a reviewed complete access strategy. The atomic design is not
+implemented and must preserve all descriptor readers and the compute-C boundary.
+
+SDK owner v8 already has conditional source review and retained 9/9 containment
+plus 5/5 deadline passes; the new BOOTTIME-specific regression is unrun. Old
+observer v3 binds prior controllers and looser clocks; attempt-0002 synthetic
+control comparator passes five methods, but parent/caller custody and actual
+facts are incomplete. Root70 bc2df retirement remains accepted at its scope;
+current-free/no-unlisted/v2birth and fresh physical clearance stay UNKNOWN.
+NEXT Root: finish current-attempt gated observer/custody and independent review,
+then obtain fresh facts and SDK-only admission. No consumed nonce or cleanup replay.
+Host/scratch available at 07:47: 143961772032 / 47613485056 bytes. Evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/
+M14-TERRA-ENGINEERING-REVIEW-20261030T0746-1/REVIEW.json.
+
 ## M14 ptrace and SDK checkpoint — 2026-10-30T07:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
