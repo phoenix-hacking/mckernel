@@ -1,0 +1,76 @@
+[
+  {
+    "case": "positive",
+    "outcome": "source-model-only"
+  },
+  {
+    "case": "unapproved_child",
+    "outcome": "rejected",
+    "error": "unapproved nested shadow"
+  },
+  {
+    "case": "unapproved_grandchild",
+    "outcome": "rejected",
+    "error": "unapproved nested shadow"
+  },
+  {
+    "case": "parent_after_child",
+    "outcome": "rejected",
+    "error": "parent after child"
+  },
+  {
+    "case": "duplicate_target",
+    "outcome": "rejected",
+    "error": "duplicate mount"
+  },
+  {
+    "case": "missing_target",
+    "outcome": "rejected",
+    "error": "successor target count"
+  },
+  {
+    "case": "wrong_child_path",
+    "outcome": "rejected",
+    "error": "perf source path differs"
+  },
+  {
+    "case": "wrong_parent_hash",
+    "outcome": "rejected",
+    "error": "source content binding differs"
+  },
+  {
+    "case": "wrong_child_hash",
+    "outcome": "rejected",
+    "error": "source content binding differs"
+  },
+  {
+    "case": "same_file_inode",
+    "outcome": "rejected",
+    "error": "source inode alias"
+  },
+  {
+    "case": "missing_parent_member",
+    "outcome": "rejected",
+    "error": "parent membership differs"
+  },
+  {
+    "case": "overwritten_parent_hash",
+    "outcome": "rejected",
+    "error": "parent membership differs"
+  },
+  {
+    "case": "invented_live_identity",
+    "outcome": "rejected",
+    "error": "live identity must stay unbound"
+  },
+  {
+    "case": "manifest_tamper",
+    "outcome": "rejected",
+    "error": "source manifest digest mismatch"
+  },
+  {
+    "case": "collect_still_blocked",
+    "outcome": "rejected",
+    "error": "SOURCE_ONLY: configure source closure and live bindings are unbound"
+  }
+]

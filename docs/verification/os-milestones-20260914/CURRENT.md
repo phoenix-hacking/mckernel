@@ -1,3 +1,33 @@
+## M14 engineering review — 2026-10-30T10:26Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 10:06:29.892–10:26:29.892 bucket: zero current-candidate kernel builds,
+production links, native qualifications, guest apps, retired C boundaries or file
+closures. M14 remains 4/6, practical 35/35, M15 queued. Private Rust perf descriptor
+init patch ad7bba95 initializes opt/dup_cb before publication on 7b13 preimage;
+source ABI review passes, poisoned actual-body fixture uncompiled/unrun. Null dup
+alone does not solve shared event/descriptor/group/monitor/clone lifetime.
+
+Source review confirms conditional raw mckfd lookup/close lifetime, perf group stale
+links/rollback and monitoring_event unpinned scheduler/exit concerns; no native race
+is claimed. F_SETSIG updates real descriptor and IRQ later reads it; a copied
+snapshot alone changes behavior. XPMEM source publishes descriptor before open
+count, and TG storage ref does not bind partition membership or safe rollback after
+publication. Host close request exists, but XPMEM lacks bound adapter/unknown-result
+contract. No speculative general sidecar, lock, XPMEM rollback or held path selected.
+
+Root70 bc2df accepted exact scope; current-free/no-unlisted/v2birth and physical
+clearance UNKNOWN. BUILD3/CID5487 and consumed nonces not replayed, native attempt3
+expired before claim. Root owns fresh health/admission; m14_generic traces XPMEM
+ownership and perf source owners retain descriptor/event/group/monitor contracts.
+No physical command released. Exact compiler queue/first start, blocked duration,
+overlap, CPU/peak and failure-to-validated-kernel-fix unmeasured; prior 418.778s
+first-stream proxy, 491.317s handoff and original30-minute baseline retained, no95%
+claim. At 10:27:33 host/scratch free 143325257728 / 47613485056 bytes; weekly82%
+used, weekly-only. Evidence: ../evidence/os-recovery-adoption-20261025-0254/
+restart-adoption-20261029T0234/M14-TERRA-ENGINEERING-REVIEW-20261030T1026-1/
+REVIEW.json.
+
 ## M14 perf descriptor lifetime cursor — 2026-10-30T10:24Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
