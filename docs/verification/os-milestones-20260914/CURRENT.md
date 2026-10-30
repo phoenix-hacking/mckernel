@@ -1,3 +1,34 @@
+## M14 engineering review — 2026-10-30T08:06Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Adjacent 07:46:29.892–08:06:29.892 UTC bucket: zero candidate kernel builds,
+HOST kernel links, production links, native qualifications, guest apps, retired
+C boundaries or file closures. M14 remains 4/6, practical 35/35; M15 queued.
+FP restore ten controlled mock paths, ptrace C/Rust sequential logging, shmdt
+synthetic and flag arithmetic, and same-Ddebug accessor/actual sysfs body fixtures
+passed at their limited host scopes. Same-Ddebug remains NO-GO for registry
+provenance/all-access/link; no runtime exclusion established.
+
+Private default-off nonheld13+data32 CMake patch retains accumulated F06 selectors;
+extracted matrix 9/9, patch and source bindings pass. Independent review notes
+APPEND activates all earlier F06 selectors, not just six new ones. The e6a manual
+argv has these; exact generated command/provider/source and held-exclusion checks
+remain before integration. Newer ptrace free/log bodies are excluded.
+
+Root70 bc2df is accepted at its exact scope; current-free/no-unlisted/v2birth and
+fresh physical clearance remain UNKNOWN. No BUILD3/CID5487 or nonce replay. The
+external supervisor has not provided an authenticated fresh post-decision guardian/
+monitor health receipt; observer and SDK release remain open. Root owns fresh
+facts/admission; m14_arch compares actual CMake selector/cfg/provider bindings;
+m14_generic prepares disjoint eligible F03 integration. Keep logger out while
+registry representation is unresolved. Exact current compiler queue, blocked time,
+overlap and failure-to-kernel-fix time unmeasured; prior 418.778s first-stream
+proxy and 491.317s avoidable handoff retained, original 30-minute baseline unchanged,
+no 95% claim. Host/scratch free at 08:07:25: 143797501952 / 47613485056 bytes;
+weekly used 76%, no credit fallback. Evidence: ../evidence/os-recovery-adoption-
+20261025-0254/restart-adoption-20261029T0234/M14-TERRA-ENGINEERING-REVIEW-
+20261030T0806-1/REVIEW.json.
+
 ## M14 source behavior and ownership — 2026-10-30T08:04Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
