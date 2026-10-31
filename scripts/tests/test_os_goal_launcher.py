@@ -171,6 +171,7 @@ class CampaignTests(unittest.TestCase):
     def test_gpt_61_coordinator_and_worker_defaults_keep_aggressive_limits(self):
         self.assertEqual(self.args.model, "gpt-6.1-sol")
         self.assertEqual(self.args.effort, "max")
+        self.assertTrue(self.args.dispatcher_pinned)
         self.assertIsNone(self.args.token_budget)
         self.assertEqual(self.args.profile, "aggressive")
         self.assertEqual(self.args.stall_seconds, 0)
@@ -264,6 +265,7 @@ class CampaignTests(unittest.TestCase):
             ])
 
     def test_advertised_fallback_resumes_exact_pair_and_preserves_worker_efforts(self):
+        self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
         self.saved(goal("paused"))
         rpc = FakeRPC(self.args, goal("paused"),
                       [lambda r: (r.completed(), r.status("complete"))])
@@ -299,6 +301,7 @@ class CampaignTests(unittest.TestCase):
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
     def test_fallback_with_mismatched_thread_readback_stops(self):
+        self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
         class WrongModelRPC(FakeRPC):
             def call(rpc, method, params, **kwargs):
                 result = super().call(method, params, **kwargs)
@@ -361,44 +364,48 @@ class CampaignTests(unittest.TestCase):
         finally:
             campaign.output.close()
 
-    def test_progress_report_leads_with_practical_checks_and_preserves_live_runner(self):
+    def test_progress_report_uses_one_log_and_preserves_live_runner(self):
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
             campaign.state["thread_id"] = "test-thread"
             campaign.active.update({"test-thread": "turn-1", "child": "turn-2"})
             campaign.save(phase="running", goal=goal(), settings={"resources": {"max_agents": 8}})
-            dashboard = self.directory / launcher.PLAN_REL / "PROGRESS.md"
-            dashboard.parent.mkdir(parents=True)
-            dashboard.write_text("- Dashboard refreshed: yesterday\n"
-                                 "- Native production gates: 6/130\n"
-                                 "| M02 | comparison | partial |\n")
-            tracker = dashboard.with_name("practical-milestones.json")
-            tracker.write_text(json.dumps({
-                "scope_id": "practical-kernel-apps-v1-20261017", "effective_date": "2026-10-17",
-                "milestones": [{"checks": [{"status": status} for status in
-                                            ("complete", "open", "open", "unassessed")]}]}))
-            report = launcher.progress_report(self.directory, self.directory)
-            self.assertTrue(report.startswith("Practical exit checks (recorded): 1 complete, 2 open, 1 unassessed, 4 total."))
-            self.assertIn("recorded active child agents: 1/8", report)
-            self.assertIn("filesystem time; not an evidence date", report)
-            self.assertIn("Source: " + str(tracker), report)
-            self.assertIn("Historical / DEFERRED qualification", report)
-            self.assertNotIn("6/130", report)
-            self.assertNotIn("| M02 | comparison", report)
-            self.assertNotIn("%", report)
-            for contents in (None, "{", json.dumps({"scope_id": "other"}),
-                             json.dumps({"scope_id": "practical-kernel-apps-v1-20261017",
-                                         "milestones": [{"checks": [{"status": "passed"}]}]})):
-                if contents is None:
-                    tracker.unlink()
-                else:
-                    tracker.write_text(contents)
+            original = Path.read_text
+            def current_state_only(path, *args, **kwargs):
+                self.assertEqual(path, self.directory / "state.json")
+                return original(path, *args, **kwargs)
+            with patch.object(Path, "read_text", new=current_state_only):
                 report = launcher.progress_report(self.directory, self.directory)
-                self.assertTrue(report.startswith("Practical exit checks: unavailable"))
-                self.assertIn("recorded active child agents: 1/8", report)
-                self.assertNotIn("6/130", report)
+            self.assertTrue(report.startswith("Campaign log: " + str(self.directory / "CAMPAIGN.md")))
+            self.assertIn("recorded active child agents: 1/8", report)
+            self.assertNotIn("PROGRESS.md", report)
+            self.assertNotIn("practical-milestones.json", report)
         finally:
             campaign.output.close()
+
+    def test_policy_hash_reads_only_the_single_log(self):
+        entrypoint = self.directory / "CAMPAIGN.md"
+        entrypoint.write_text("M14 then M15 then complete supported system.\n")
+        legacy = self.directory / launcher.PLAN_REL
+        legacy.mkdir(parents=True)
+        for name in ("GOAL.md", "START.md", "CONVERGENCE.md", "HANDOFF.md"):
+            (legacy / name).write_text("Archived narrative; must not be opened.\n")
+        original = Path.read_bytes
+        def entrypoint_only(path):
+            self.assertEqual(path, entrypoint)
+            return original(path)
+        with patch.object(Path, "read_bytes", new=entrypoint_only):
+            hashes = launcher.policy_hashes(self.directory)
+        self.assertEqual(hashes, {"CAMPAIGN.md": hashlib.sha256(entrypoint.read_bytes()).hexdigest()})
+
+    def test_default_sol_max_does_not_silently_fall_back(self):
+        rpc = FakeRPC(self.args)
+        rpc.models["gpt-6.1-sol"].remove("max")
+        rpc.models["gpt-6-astra"] = ["max"]
+        with self.assertRaisesRegex(RuntimeError, "Pinned dispatcher"):
+            launcher.preflight(rpc, self.args, self.directory)
+        self.assertEqual((self.args.model, self.args.effort), ("gpt-6.1-sol", "max"))
+        self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
     def test_progress_report_distinguishes_stale_turns_and_real_heartbeat(self):
         state = {"phase": "stopped", "goal": goal("paused"),
@@ -443,7 +450,7 @@ class CampaignTests(unittest.TestCase):
         state = self.run_campaign(rpc, 0)
         params = next(p for m, p in rpc.calls if m == "thread/resume")
         self.assertIn("no time limit", params["developerInstructions"])
-        self.assertIn("historical and do not pause", params["developerInstructions"])
+        self.assertIn("explicit user pause remains authoritative", params["developerInstructions"])
         self.assertIn("Reconcile source changes", params["developerInstructions"])
         self.assertEqual(state["goal"]["objective"], launcher.OBJECTIVE)
         self.assertEqual(state["goal"]["tokensUsed"], 1234)
@@ -471,21 +478,19 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(state["goal"]["objective"], launcher.OBJECTIVE)
         self.assertEqual(state["goal"]["tokensUsed"], 1234)
 
-    def test_instructions_prioritize_diagnostic_app_pilot_without_acceptance_credit(self):
+    def test_instructions_use_one_log_and_retain_execution_and_acceptance_boundaries(self):
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
             instructions = campaign.instructions()
-            for expected in ("functional, stable, app-testable McKernel core",
-                             "fast diagnostic loop", "smallest real McKernel startup app",
-                             "diagnostic result is never formal application",
-                             "already reviewed reusable profile",
-                             "do not create a fresh packet, archive or",
-                             "independent review for each edit or test vector",
-                             "applicable independent execution release",
-                             "isolation, resource lease and cleanup requirements",
-                             "independent kernel/Rust repair, candidate build binding",
-                             "count of real guest apps and current-candidate builds"):
+            for expected in ("CAMPAIGN.md", "SOLE human-readable", "Do not read",
+                             "No source/typecheck/mock result alone retires C",
+                             "disjoint private writers", "one compositor",
+                             "operation-specific execution", "ownership and resource release",
+                             "explicit user pause remains authoritative"):
                 self.assertIn(expected, instructions)
+            for legacy in ("GOAL.md", "START.md", "CONVERGENCE.md", "HANDOFF.md",
+                           "CURRENT.md", "PROGRESS.md", "RECOVERY.md", "SESSION-HANDOFF.md"):
+                self.assertNotIn(legacy, instructions)
             self.assertEqual(launcher.OBJECTIVE, goal()["objective"])
         finally:
             campaign.output.close()
@@ -1071,6 +1076,7 @@ class CampaignTests(unittest.TestCase):
                 self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
 
     def test_missing_gpt_61_refuses_resume_even_with_legacy_models_available(self):
+        self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
         self.saved(goal("paused"))
         rpc = FakeRPC(self.args, goal("paused"))
         rpc.models = {"gpt-5.6-sol": ["low", "medium", "high"],
@@ -1166,7 +1172,7 @@ class CampaignTests(unittest.TestCase):
         rpc = FakeRPC(self.args, dict(saved_goal), [lambda r: (r.completed(), r.status("complete"))])
         state = self.run_campaign(rpc, 0)
         params = next(p for m, p in rpc.calls if m == "thread/resume")
-        for name in ("CONVERGENCE.md", "HANDOFF.md", "disjoint", "failure family"):
+        for name in ("CAMPAIGN.md", "disjoint", "failure family"):
             self.assertIn(name, params["developerInstructions"])
         self.assertEqual(state["settings"]["resources"]["profile"], "aggressive")
         self.assertEqual(params["model"], "gpt-6.1-sol")

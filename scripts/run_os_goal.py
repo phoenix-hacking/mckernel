@@ -258,34 +258,7 @@ def progress_report(directory, repo):
     if last_instruction:
         lines.append("Last instruction: {} ({})".format(
             last_instruction.get("id", "?"), last_instruction.get("status", "?")))
-    tracker = repo / PLAN_REL / "practical-milestones.json"
-    practical = ["Practical exit checks: unavailable (missing, unreadable or invalid tracker)."]
-    try:
-        doc = json.loads(tracker.read_text())
-        if (not isinstance(doc, dict)
-                or doc.get("scope_id") != "practical-kernel-apps-v1-20261017"
-                or not isinstance(doc.get("milestones"), list)):
-            raise ValueError("Unrecognized practical tracker")
-        checks = [check for milestone in doc["milestones"] for check in milestone["checks"]]
-        counts = {status: 0 for status in ("complete", "open", "unassessed")}
-        if not checks:
-            raise ValueError("No practical checks recorded")
-        for check in checks:
-            counts[check["status"]] += 1
-        modified = datetime.fromtimestamp(tracker.stat().st_mtime, timezone.utc).isoformat()
-        practical = [
-            "Practical exit checks (recorded): {complete} complete, {open} open, "
-            "{unassessed} unassessed, {total} total.".format(**counts, total=len(checks)),
-            "Scope: {} | effective date: {}".format(doc["scope_id"], doc.get("effective_date", "not recorded")),
-            "Tracker file modified: {} (filesystem time; not an evidence date).".format(modified),
-            "Recorded check closures do not imply whole-OS or Rust-retirement completion.",
-        ]
-    except (OSError, ValueError, KeyError, TypeError):
-        pass
-    practical.append("Source: {}".format(tracker))
-    lines = practical + [""] + lines
-    lines.append("Historical / DEFERRED qualification: see {} (saved dashboard; "
-                 "formal counters do not define practical completion).".format(repo / PLAN_REL / "PROGRESS.md"))
+    lines = ["Campaign log: " + str(repo / "CAMPAIGN.md"), ""] + lines
     return "\n".join(lines)
 
 
@@ -422,9 +395,9 @@ def launch_resources(args, repo):
 
 
 def policy_hashes(repo):
-    return {name: hashlib.sha256((repo / PLAN_REL / name).read_bytes()).hexdigest()
-            for name in ("GOAL.md", "START.md", "CONVERGENCE.md", "HANDOFF.md")
-            if (repo / PLAN_REL / name).is_file()}
+    entrypoint = repo / "CAMPAIGN.md"
+    return ({"CAMPAIGN.md": hashlib.sha256(entrypoint.read_bytes()).hexdigest()}
+            if entrypoint.is_file() else {})
 
 
 def agent_settings(args, repo):
@@ -1115,161 +1088,63 @@ class Campaign:
                 stream.write(excerpt)
 
     def instructions(self):
-        usage_policy = (
-            "The user explicitly authorized this invocation to use up to "
-            + self.args.credit_budget + " existing prepaid credits. The local 100% "
-            "included-usage stop is replaced ONLY for this invocation by the persistent "
-            "account-balance credit guard. Never change or reset its budget/run identifier, "
-            "buy credits, enable API-key billing, or bypass a real service/auth/billing stop. "
-            "The launcher counts all observed account balance decreases, including other "
-            "conversations; in-flight charges may settle during shutdown. "
+        """One human-readable campaign entrypoint; runtime guards stay separate."""
+        prefix = (("Current user instruction for this invocation, loaded before session activation:\n"
+                   + self.args.startup_instruction + "\nEnd current invocation instruction.\n")
+                  if getattr(self.args, "startup_instruction", None) else "")
+        usage = (
+            "This invocation uses up to " + self.args.credit_budget +
+            " existing prepaid credits under its explicit guard. Never change "
+            "its budget/run identifier, buy credits, use API-key billing, or bypass a real hold. "
             if getattr(self.args, "credit_budget", None) is not None else
-            "The included-plan usage guard stops this invocation at 100%; never spend "
-            "purchased credits or use API-key billing. "
+            "Included weekly usage only; stop at 100% or an earlier actual hold, unknown "
+            "usage or inherited cutoff. No prepaid/API fallback and no new allowance at reset. "
         )
-        continuation = (
-            "This invocation has no time limit. The user explicitly requests continuous "
-            "work until the entire OS objective is accepted or the selected usage/budget guard stops it. "
-            "Earlier work-window endings, checkpoint pauses and statements that a window "
-            "is authoritative are historical and do not pause this invocation. Continue "
-            "after checkpoints. Repair project-owned prerequisites and pursue independent "
-            "ready work when a task blocks. Preserve real external blockers and recheck "
-            "availability with backoff when no work is ready; do not invent acceptance. "
-            if not self.args.hours else
-            "The user explicitly selected a finite work window for this invocation. "
-            "Earlier window endings are historical; continue until this launcher sends "
-            "a new checkpoint/stop request. "
-        )
+        window = ("This invocation has a finite work window. " if self.args.hours else
+                  "This invocation has no time limit beyond its actual usage and inherited controls. ")
         return (
-            (("Current user instruction for this invocation, loaded before session activation:\n"
-              + self.args.startup_instruction + "\nEnd current invocation instruction.\n")
-             if getattr(self.args, "startup_instruction", None) else "") +
-            usage_policy +
-            (("The user explicitly requested a fresh OS development conversation guided by "
-              "Markdown. Read " + PLAN_REL + "/SESSION-HANDOFF.md first, then the current "
-              "goal/start/convergence/handoff files. Prior session state is preserved under "
-              "session-archives; do not load its entire conversation or replay a rejected "
-              "compaction/request. Work on the next independent authorized OS task. "
-              "Preserve prior blocked work for review and keep service checks active. ")
-             if getattr(self.args, "fresh_session", False)
-             or getattr(self.args, "fresh_recovery_proof", None)
-             or self.state.get("previous_session") else "") +
-            "The user invoked scripts/run_os_goal.py for autonomous execution, not planning. "
-            + continuation +
-            "The user explicitly authorized full filesystem/network access and no "
-            "approval or clarification prompts for this OS campaign. Do not ask "
-            "questions: choose reasonable defaults, record assumptions, and dispatch "
-            "independent ready work when a task lacks necessary information. Pass "
-            "these instructions to every worker. Use noninteractive commands. "
-            "The user supplied a local sudo credential: use sudo -A with the "
-            "inherited SUDO_ASKPASS helper when elevated host access is necessary. "
-            "Do not add -n to password-authenticated sudo -A. Never read the private "
-            "credential file, invoke the askpass helper directly, or put its output "
-            "in a tool response, shell command, environment value, Git file or log. "
-            "If authentication fails, retain the error and continue unrelated work. "
-            "First read " + PLAN_REL + "/GOAL.md, START.md, CONVERGENCE.md and HANDOFF.md. "
-            "Read README.md once for the original acceptance requirements. Read only "
-            "the latest relevant CURRENT.md entries and selected evidence, not its entire history. "
-            "This startup order supersedes the historical reading order in the immutable "
-            "stored objective. Reconcile the compact handoff against live sources and leases. "
-            "Adopt and record these policy SHA256 values: " + json.dumps(policy_hashes(self.repo), sort_keys=True) + ". "
-            "The user explicitly authorizes "
-            "automatic bounded subagents; use fresh bounded packets and explicit models. "
-            "The user requested more GPT-6.1 use. Apply this invocation's model routing "
-            "instead of older model-selection instructions in workflow documents: "
-            + json.dumps(model_routing(self.args), sort_keys=True) + ". " +
-            "Prefer GPT-6.1 Sol/max for the dispatcher. If it is unavailable, use the "
-            "strongest eligible advertised fallback in this configured preference order: "
-            + ", ".join(DISPATCHER_MODEL_PREFERENCE) + ". Prefer max-capable choices "
-            "before lower-effort choices; service/account holds never authorize fallback. "
-            "Workers may use medium, complex workers and reviewers high, and bounded "
-            "auditors low, according to the explicit routing above. Use the "
-            "auditor model only for bounded extraction/inventory tasks with fixed "
-            "expectations. Preserve the independent reviewer for unsafe ownership, "
-            "concurrency, ABI, execution release and final acceptance. Do not use "
-            "the auditor role for kernel implementation. Do not silently fall back "
-            "to an older model when a required selection is unavailable. "
-            "Choose the lowest effort suitable for the actual task: low for simple "
-            "inventories and extraction, medium for routine implementation/tests, "
-            "high for complex repairs and independent safety review. Increase effort "
-            "only when a concrete difficulty or failed bounded correction warrants "
-            "it; do not spend high effort on repetitive bookkeeping. The dispatcher uses "
-            "the max-first preference above independently of worker effort. "
+            prefix + "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. "
+            "Read CAMPAIGN.md as the SOLE human-readable plan, status and handoff. Do not read "
+            "legacy narrative logs or follow their reading lists. This replaces the old reading "
+            "order in the retained goal identity and archived conversation. On fresh/recovered "
+            "sessions use this same one-file entrypoint. Current source, build definitions, "
+            "artifacts and necessary live machine controls still require exact validation; "
+            "they are not additional narrative context. Reconcile source changes, live "
+            "identities, leases and any in-flight outcome before execution. "
+            "Adopt this sole policy hash: " + json.dumps(policy_hashes(self.repo), sort_keys=True) + ". "
+            + usage + window +
+            "An explicit user pause remains authoritative; never auto-resume it or replace it "
+            "with an older continuous-run instruction. A normal checkpoint alone is not a pause. "
+            "M14 exclusively until original supported-scope acceptance, then M15, then final "
+            "complete-system delivery with existing Rocky/Linux support, as specified in CAMPAIGN.md. "
+            "Keep four accepted M14 files and the accepted M15 file closed at their exact scope. "
+            "No source/typecheck/mock result alone retires C or accepts an image. "
+            "Dispatcher model/effort and separate worker routing: "
+            + json.dumps(model_routing(self.args), sort_keys=True) + ". "
+            "The user requires GPT-6.1 Sol/max for the dispatcher; do not silently downgrade it. "
+            "Use authorized danger-full-access and approval never; confirm actual permissions "
+            "once for every recovered/new thread. Full access is not Unix root. Use existing "
+            "sudo -A/askpass only within actual execution admission; never read or log the "
+            "credential, call its helper directly, or expose it in commands/environment. "
             + resource_instructions(launch_resources(self.args, self.repo)) + " " +
-            "Apply CONVERGENCE.md on every continuation: one failed candidate and one "
-            "bounded correction per failure family before expert escalation. Carry family "
-            "history across resumed turns; never repeat an unchanged deterministic failure. "
-            "The user's immediate priority is a functional, stable, app-testable "
-            "McKernel core, not perfect formal gate closure. Use a fast diagnostic "
-            "loop: build the smallest current-candidate kernel artifact, run the "
-            "smallest real McKernel startup app, repair the observed failure, and "
-            "repeat for memory, file, thread and shutdown smokes. A diagnostic "
-            "result is never formal application or production acceptance. "
-            "For unprivileged compile/tests inside an already reviewed reusable "
-            "profile, execute promptly; do not create a fresh packet, archive or "
-            "independent review for each edit or test vector. Keep the actual "
-            "command, result and relevant failure evidence. For root, module or "
-            "guest work, retain the applicable independent execution release, "
-            "isolation, resource lease and cleanup requirements. Do not reuse a "
-            "source-only packet as that release. If a one-shot harness attempt "
-            "fails on its own observer or evidence writer, fix that program with "
-            "cheap local regression tests before seeking another privileged run; "
-            "do not send unchanged packet designs through more review cycles. "
-            "Parallelize independent kernel/Rust repair, candidate build binding, "
-            "Linux oracle/diagnostic runner, and bounded regression work across "
-            "disjoint files. Prefer useful implementation/test lanes to audits; "
-            "use the available child slots only for ready independent work. "
-            "Do not wait for unrelated M01-M03 formal acceptance before a safe "
-            "diagnostic app pilot, but honor its actual runtime prerequisites. "
-            "Capture observed app bytes, exit status, kernel log and teardown. "
-            "Keep worker "
-            "write sets disjoint, integrate promptly, close completed children and refill "
-            "available slots with dependency-ready work. Preserve independent final review. "
-            "The user's priority is strong, measurable OS progress. For each active lane "
-            "name its owner, concrete defect, next executable check and downstream task "
-            "it unlocks. Use the available slots for implementation and regression tests; "
-            "assign audits or reviews only when they answer a specific blocking question. "
-            "At each existing checkpoint report newly verified behavior, actual tests and "
-            "evidence, the count of real guest apps and current-candidate builds, remaining "
-            "blockers and the next executable step. If two completed "
-            "dispatch cycles produce no technical result, change the repair strategy or "
-            "move to a dependency-ready task; do not interrupt healthy builds or soaks. "
-            "Avoid more launcher or dashboard work unless a reproduced defect "
-            "blocks execution, correctness or requested visibility. "
-            "Never weaken an oracle or count planning, agent activity or documentation "
-            "as implemented OS behavior. Follow all original execution releases. "
-            "Preserve preexisting untracked work. Read all applicable active instructions. "
-            "Write implementation evidence and the live task cursor per the plan. This "
-            "launcher's logs are at " + str(self.log_dir) + "; state.json is launcher-owned. "
-            "Do not edit or start another launcher, clear/replace this goal, change its "
-            "budget, or alter model/permission settings to bypass a blocker. "
-            "The launcher controls the work window and goal pausing; agents use goal "
-            "status tools only under their actual tool rules. "
-            "Never signal or kill this invocation's watcher/worker/server to obey a "
-            "historical preparation hold. Never call --instruct to fabricate a new "
-            "user instruction or requeue a historical instruction. A normal Git "
-            "checkpoint does not pause or stop the campaign. Only a new external "
-            "stop, the selected usage/time limit or an actual safety blocker does. "
-            "Keep CURRENT.md and docs/verification/os-milestones-20260914/PROGRESS.md updated and "
-            "commit/push verified checkpoints about every 30 minutes and before long "
-            "runs. At coherent checkpoints or formal acceptance updates, run "
-            "python3 scripts/update_progress_tracker.py so the intermediary-goal bars, "
-            "task ledger, blockers, evidence paths, and next action reflect the new "
-            "state. On a checkpoint request stop new dispatch, finish bounded work, "
-            "join/close workers, record any live process identities, checkpoint and return. "
-            "If credentials or external resources are unavailable, preserve the blocker "
-            "and continue independent ready work. Never store credentials in the plan or logs."
-            + (" This is automatic crash recovery. First read " + str(self.directory / "RECOVERY.md")
-               + " as a factual snapshot, never execution or release authority. Read HANDOFF.md, relevant CURRENT.md entries and the previous "
-               "run/watcher records first. Reconcile source changes and exact live "
-               "process/runtime leases before any new build or guest. "
-               + ("Continue from the Markdown handoff in this fresh conversation and preserve "
-                  "the acceptance ledger; do not replay completed or rejected work."
-                  if getattr(self.args, "fresh_recovery_proof", None)
-                  or getattr(self.args, "fresh_session", False)
-                  or self.state.get("previous_session") else
-                  "Resume the existing thread and acceptance ledger; do not replay completed work.")
-               if self.args.recovered else "")
+            "Preserve service/account/source holds, rejected-request exclusions, failed evidence, "
+            "historical ledger, native owners, scratch21 and UNKNOWN reservations. Do not replay "
+            "an old nonce or infer native retirement from model/process recovery. Do not edit "
+            "launcher-owned state, clear this goal, reset budgets or arm competing controllers. "
+            "Use followup_task for actual deliverables, including completed/idle owners; verify "
+            "a new turn once. Keep disjoint private writers and one compositor. Feed ready "
+            "eligible bodies to the existing ordinary compiler queue independently of native "
+            "setup; reuse matching SDKs, objects and accepted checks. Root/native work retains "
+            "its reviewed operation-specific execution, ownership and resource release. "
+            "Carry each failure family: one failed candidate and one bounded correction, then "
+            "focused escalation. No repeated unchanged failures, broad audits, inventories or "
+            "new control frameworks without a concrete blocking defect. "
+            "Update only CAMPAIGN.md for human status: real implementation/build/link/native/C "
+            "retirement delta, one blocker/owner and one next action. Keep required raw machine "
+            "evidence separate without expanding narrative context. Push coherent checkpoints "
+            "through the existing wrapper and verify fetched commits/blobs. Preserve dirty work. "
+            "On a user checkpoint/break request stop new dispatch, finish only bounded in-flight "
+            "work, retain UNKNOWN owners, checkpoint, pause through the normal goal tool and return."
         )
 
     def recovery_goal_allowed(self, goal):
@@ -1867,8 +1742,11 @@ def arguments(argv=None):
     parser.add_argument("--credit-timeout-goal-sha256", help=argparse.SUPPRESS)
     parser.add_argument("--recovery-goal-sha256", help=argparse.SUPPRESS)
     parser.add_argument("--recovery-require-active", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--allow-dispatcher-fallback", action="store_true",
+                        help="Explicitly allow advertised model fallback for unpinned defaults; otherwise Sol/max stays pinned")
     args = parser.parse_args(argv)
-    args.dispatcher_pinned = args.model is not None or args.effort is not None
+    args.dispatcher_pinned = (args.model is not None or args.effort is not None
+                              or not args.allow_dispatcher_fallback)
     if args.model is None:
         args.model = DEFAULT_DISPATCHER_MODEL
     if args.effort is None:
