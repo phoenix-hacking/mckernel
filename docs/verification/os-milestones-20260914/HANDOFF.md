@@ -1,3 +1,14 @@
+## User-requested checkpoint and break — 2026-10-31T00:25Z
+
+New engineering and periodic submissions are stopped. Checkpoint/push/handoff precede
+goal pause; do not resume automatically. M14 remains4/6, practical35/35 separate;
+M15 remains paused. R3 caller/session46406 and Root3121867/birth120224742 remain
+LIVE/UNKNOWN with4GiB charged; olderDFD4GiB/V2/native/scratch21/27:4 retained.
+The prepared R3 stop helper was not invoked. Foreground owns the single Markdown
+consolidation, legacy archive and new entrypoint after pause. Final completion
+includes existing Rocky/Linux support, without a Linux-independent boot requirement.
+User handoff: /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/ONE-LOG-RECENTER-20261031-aesj1i8p/DISPATCHER-STOP-HANDOFF.json
+
 ## M14 isolated codegen and control join — 2026-10-30T23:56Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

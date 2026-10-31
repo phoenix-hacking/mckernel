@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-30T23:57:58.973926+00:00",
+  "as_of": "2026-10-31T00:26:30.169470+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -4027,6 +4027,16 @@
       "new_production_native_file_credit": 0,
       "new_corrected_bridge_codegen": 1,
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/M14-SIGNALFD-CODEGEN-AND-CONTROL-JOIN-20261030-1"
+    },
+    {
+      "at": "2026-10-31T00:26:30.169470+00:00",
+      "actual_progress": "User break: no new engineering. Corrected bridge a93 already compiled; no new production/native/C/file closure. R3 exposed usr/bin0777; reviewed single-inode0755repair and original unchangedguardPASS. R3 liveUNKNOWN/session46406/current4GiB plusolderDFD4GiB allpreserved; stop packetNOTinvoked. Checkpoint thenpause, foreground ownsone-log consolidation.",
+      "supported_file_counts": [
+        4,
+        6
+      ],
+      "new_production_native_file_credit": 0,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261029T0234/USER-BREAK-CHECKPOINT-20261031-1"
     }
   ],
   "latest_dispatcher_checkpoint": {
@@ -4041,5 +4051,11 @@
     "at": "2026-10-29T04:11:39.252803+00:00",
     "next": "AcceptedRoot4cleanup\u2192147actorfullpostjoin/currentfree/Root65\u2192119compiler/original389\u2192remainingownership/originalfinalscope",
     "no_completion_inferred_from_119_or_counts": true
+  },
+  "campaign_pause_request": {
+    "at": "2026-10-31T00:26:30.169470+00:00",
+    "request_id": "20261031T002130096473Z-d95c8aaa167d4804b4573060825b77e6",
+    "reason": "Explicit user checkpoint and break; M14 4/6 does not meet near-closure exception",
+    "M15_implementation_paused": true
   }
 }

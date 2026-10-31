@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1793405822.4288626,
+  "status": "PASS_EXACT_FUNCTIONAL_USR_BIN_MODE_REPAIR",
+  "positive_tool_terminal": true,
+  "exit_status": 0,
+  "owner": {
+    "birth": "120324858",
+    "pgid": 3126673,
+    "pid": 3126673,
+    "ppid": 2996005
+  },
+  "group_members": [],
+  "capture_sha256": "a94639ea29792ceec7b27242127a7f857318474aea26995a75d6c6602d636700",
+  "actual_mode": "0o755",
+  "device": 66306,
+  "inode": 1048578,
+  "ctime_ns": 1793405804071698064,
+  "before_observation_epoch": 1793404999.9329453,
+  "failure_observation_to_verified_repair_seconds": 822.4959297180176,
+  "native_currentfree": null,
+  "native_release": false,
+  "both_failed_reservations_released": false,
+  "metrics_raw": "\tCommand being timed: \"/usr/bin/sudo -A /usr/bin/taskset -c 6 /usr/bin/prlimit --as=67108864:67108864 --cpu=5:5 --nofile=128:128 --fsize=1048576:1048576 --core=0:0 -- /usr/bin/python3 -I -B -c import hashlib,json,os,stat,sys,types\nSOURCE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/mode_repair.py'\nSOURCE_SHA='2d2dc33884f82deca9ad00b37d8d36e0298b282126110c0158e370ef9818287c'\nPRELIM='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/postjoin-daemon-metadata-observer-source-1/root_parent_preliminary.py'\nPRELIM_SHA='de6de10ff79d07281e95216a5ecf751d03bade1d75445c87abd8a2e0405e124d'\nheld=[]\ndef verified(path,expected):\n fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC);held.append(fd)\n st=os.fstat(fd)\n if not stat.S_ISREG(st.st_mode) or st.st_size>2097152:raise ValueError('source bound')\n raw=b''\n while len(raw)<=2097152:\n  b=os.read(fd,min(65536,2097153-len(raw)))\n  if not b:break\n  raw+=b\n after=os.fstat(fd)\n if len(raw)!=st.st_size or len(raw)>2097152 or (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)!=(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns) or hashlib.sha256(raw).hexdigest()!=expected:raise ValueError('source bytes')\n return raw\ndef module(name,path,raw):\n obj=types.ModuleType(name);obj.__file__=path;sys.modules[name]=obj\n exec(compile(raw,path,'exec'),obj.__dict__);return obj\nif len(sys.argv)!=6:raise ValueError('exact repair release arguments')\nrelease_path,release_sha,review_path,capture_device,capture_inode=sys.argv[1:]\nif len(release_sha)!=64 or any(c not in '0123456789abcdef' for c in release_sha) or not capture_device.isdigit() or not capture_inode.isdigit():raise ValueError('actual release/capture binding')\nprelim=module('repair_prelim',PRELIM,verified(PRELIM,PRELIM_SHA))\nrepair=module('functional_mode_repair',SOURCE,verified(SOURCE,SOURCE_SHA))\nraw=repair.read_small(release_path,65536)\nif hashlib.sha256(raw).hexdigest()!=release_sha:raise ValueError('release hash')\nrelease=json.loads(raw,object_pairs_hook=repair.unique)\nif repair.canon(release)!=raw:raise ValueError('canonical release required')\nrepair.guarded_repair(prelim,release,release_sha,int(capture_device),int(capture_inode),review_path)\n /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/usr-bin-functional-mode-repair-1/actual-1/ROOT-ONE-SHOT-RELEASE.json a2df13eabc1a6708d52e7c6b52ec1096a1d2d6f49dc6f431b32a50ef83d14e2e /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-parent-independent-review-1/ACTUAL-USR-BIN-MODE-REPAIR-REVIEW.json 66306 1458577\"\n\tUser time (seconds): 0.08\n\tSystem time (seconds): 0.02\n\tPercent of CPU this job got: 91%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.12\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 14304\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 7215\n\tVoluntary context switches: 20\n\tInvoluntary context switches: 11\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 24\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n"
+}
