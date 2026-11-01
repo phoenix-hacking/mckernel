@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-10-31 UTC. This is the sole active human-readable campaign log.
+Updated: 2026-11-01 UTC. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -10,8 +10,12 @@ debugging checkpoint `0f0fd1a`.** This supersedes the prior M15 scheduling pause
 it changes no acceptance, actual source/service hold or native authorization.
 The retained native pipeline remains blocked at the verified checkpoint below.
 The user has now explicitly requested GitHub publication and continued M15 work.
-The connected account has repository write access; this separate checkout still
-has no access to the original R3 controls or pinned native SDK.
+Draft PR [#2](https://github.com/phoenix-hacking/mckernel/pull/2) contains the
+published source checkpoint `ed2e30b`. The user's earlier commits preserved the
+exact Rust IHK source in tracked Git bundles; that source has now been recovered
+and this branch adds the follow-up fixes and reproduction helper to the same PR.
+This separate checkout still has no access to the original R3 controls or the
+complete pinned native SDK.
 Preserve dirty sources, accepted work, failed evidence and every actual
 owner/reservation. The source work changes no acceptance, service hold or budget.
 
@@ -115,13 +119,12 @@ these eligible-source defects in the same checkout:
   and copy errors. These use observation doubles, not production providers.
   The pinned Rust compiler and CMake versions above were used; `git diff --check`
   passed. No full kernel crate, held input, install or native workload was run.
-- Fresh reproducibility has an additional concrete dependency blocker: fetching
-  the exact IHK gitlink `a7ddca26b0dfb087569d652dce5f4262e1311b70` from the canonical
-  `.gitmodules` upstream returned `not our ref`. Authenticated recovery also
-  found no such commit in the canonical repository or inspected source forks;
-  the connected installation exposes no IHK repository. A possible user fork
-  returns 404. Recover the exact recorded dependency through the original
-  authorized source; do not substitute another commit or guess a submodule URL.
+- The earlier exact-IHK source blocker is resolved through tracked Git bundles
+  from the user's prior commits. Canonical upstream does not advertise the
+  custom `a7ddca26b0dfb087569d652dce5f4262e1311b70` revision, but the committed
+  cache-fix and adoption bundles reproduce it exactly. The M15 source recovery
+  and the successor fixes are recorded below; no alternate source revision or
+  guessed submodule URL was substituted.
 
 These results improve source confidence only. M14 remains 4/6 accepted, with no
 new C retirement, accepted image or native qualification.
@@ -249,11 +252,9 @@ Focused M15 checkpoint, based on `0f0fd1ad22bf9a59d23eec48c4482b20a775487a`:
   `test_m15_bfd_accessors`, `test_m15_user_tool_selection`,
   `test_m15_bfd_profile`. Pinned Rust and CMake versions are recorded above;
   GCC was 13.3.0. Independent changed-path reviews and `git diff --check` passed.
-- Exact-source blockers remain: F05–F08's IHK tree is unavailable. For F03/F04,
-  three official Rocky binutils-devel candidates (2.30-128, -127 and -125.el8_10)
-  did not match the pinned BFD header. No pin or dependency was substituted.
-  Recover the exact SDK inputs and IHK gitlink before actual tool/library links,
-  selected/deployed ownership and matching module/application/lifecycle checks.
+- The initial upstream lookup did not recover F05–F08's custom IHK source, and
+  three guessed Rocky 8 SDK packages did not match the BFD pin. The subsequent
+  committed-source recovery below supersedes those source-availability findings.
 
 Publication follow-up, based on local source checkpoint `3bb8bb8`:
 
@@ -266,21 +267,86 @@ Publication follow-up, based on local source checkpoint `3bb8bb8`:
   remaining value. The two affected test modules pass without skips: 30 observed
   C/Rust cases and eight real ELF/libc/objdump/awk calls. This does not qualify
   whitespace in executable filenames or complete installation-prefix handling.
-- Independent BFD source/ABI review found no further demonstrated defect at the
-  unchanged supported profile. The exact header/library/compiler and actual
-  mcinspect/eclair links remain unqualified here.
-- Publish the reviewed source on `codex/m15-focused-checks-20261030`, targeting
-  `codex/local-native-staging-repair` in a draft PR. Verify the remote tree against
-  the local committed tree. The publication HEAD uses `[skip ci]` because the
-  repository's unfiltered tracker initializes the unavailable IHK revision and
-  discovers unrelated tests. Existing workflows and required merge checks stay
-  intact; skipped CI is not a passing result or acceptance evidence.
+- Published these changes as `ed2e30b561cc329404c171acab462097caffe268` on
+  `codex/m15-focused-checks-20261030`, targeting
+  `codex/local-native-staging-repair` in draft PR #2. All 28 uploaded blob hashes
+  matched the local Git objects. A Git fetch verified the published tree
+  `41693ac0c101c0b19382ec89245342a0719b80fe` against the reviewed local tree.
+
+IHK recovery and focused follow-up:
+
+- The user's prior McKernel commits contain the exact custom Rust IHK history.
+  `IHK-SOURCE-COMMITS-CACHE-FIX-v2.bundle` (blob `35d7d5b0`, added in `c58d68f`)
+  bridges public IHK base `3114d9e` to `7629397`; `IHK-SOURCE-ADOPTION.bundle`
+  (blob `ee86bed2`, added in `59f4dbc`) reaches the original gitlink `a7ddca2`.
+  Both bundles remain in the current parent tree. The upstream development base
+  alone has none of these Rust files; the exact recovered tree does.
+- Fixed an inherited C/Rust CPU-list formatting bug: a standalone CPU 0 before
+  a gap was lost, so `[0, 2]` became `"2"`. The retained C library formatter,
+  shared Rust library formatter and Rust ihkconfig formatter now return `"0,2"`.
+  Focused checks cover independent expected strings, all 255 nonempty subsets
+  of CPUs 0–7, round trips and buffer growth.
+- The IHK CLI build rules now require an existing nondirectory absolute Rust
+  compiler binding and depend on that compiler file. The whole-library rule
+  also tracks its selected Rust and C compiler files. A compiler-replacement
+  observer reproduced stale CLI output before the fix and rebuilt both objects
+  afterward. Actual CLI adapters also emitted ihkconfig/ihkosctl Rust objects
+  under an explicit fixture configuration; no complete library/CLI link or
+  device operation was run.
+- These five IHK source changes are commit
+  `5f43aea5f45359e9e605543fea6362952beac42f`, tree
+  `6c52c505fec71e2cccd8f1dff458884403e412d3`, now the parent gitlink. The incremental
+  bundle `scripts/source-bundles/ihk-m15-focused-fixes.bundle` preserves those
+  commit objects, and its adjacent patch makes the changes directly reviewable.
+- `scripts/ihk_source_bundles.json` and `scripts/restore_ihk_source.py` bind the
+  complete ordered chain to the committed parent manifest, bundle blob IDs,
+  prerequisites, advertised tips and final gitlink. A real three-stage replay
+  using local transport for the exact public base produced the exact successor
+  HEAD/tree and a clean checkout. Independent review found no remaining concrete
+  source-recovery defect after fixing sparse/index-hidden checkout handling and
+  reading the default manifest from the frozen commit.
+- For a fresh checkout with an absent or empty IHK directory, run
+  `python3 -B scripts/restore_ihk_source.py`. The helper imports Git data only and
+  refuses dirty, mismatched, sparse, hidden-index or unrelated destinations.
+  It does not replay archived scripts or native controllers. An existing exact,
+  complete clean checkout is a no-op; `--destination` can select a separate empty
+  location. Canonical `.gitmodules` remains unchanged, so ordinary remote-only
+  submodule initialization still cannot retrieve these custom commits.
+- Recovered the exact pinned BFD header and linker-script bytes from committed
+  selected-source artifacts. The selected package is binutils-devel 2.41-63.el10;
+  its `libbfd.so` script names `/usr/lib64/libbfd.a`, `/usr/lib64/libsframe.a`,
+  `-liberty`, `-lz` and `-ldl`. The committed `SOURCE-LIFETIME-FACTS.json` (blob
+  `391a5331`) records the 18,504,828-byte libbfd.a SHA256
+  `2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e`.
+- Added that recorded libbfd.a pin while preserving the existing header, script
+  and compiler pins. Both directly named archives now trigger configuration and
+  mcinspect/eclair relinking. A clearly labeled temporary-file observer first
+  reproduced the stale-input path, then verified automatic reconfiguration and
+  pin rejection after archive replacement. Generated Makefile prerequisites
+  include both archives. No production BFD witness or substituted SDK was run;
+  libsframe and the remaining library selections still need complete SDK proof.
+- The final combined focused run passed **32 top-level checks, no skips**, in
+  5.864 seconds with the pinned Rust/CMake and GCC 13.3.0. Modules:
+  `test_m15_executor_libdir`, `test_m15_executor_libdir_real`,
+  `test_m15_bfd_accessors`, `test_m15_user_tool_selection`,
+  `test_m15_bfd_profile`, `test_m15_ihklib_cpu_format`, `test_m15_ihk_cli`, and
+  `test_restore_ihk_source` under `scripts.tests`. This includes the 72 synthetic
+  BFD callback cases and eight real ELF/libc/objdump/awk calls described above.
+  The unchanged M14 checkpoint retains its earlier 20 passing checks.
+- The follow-up uses the existing PR branch, with exact remote/local tree
+  verification required at publication. The commits retain `[skip ci]`: the
+  unfiltered tracker uses ordinary remote-only submodule initialization and broad
+  unrelated discovery, and is not wired to this source recovery helper. Existing
+  workflow definitions and required merge checks remain intact. Skipped/pending
+  CI is not a passing result or acceptance evidence.
 
 M15 remains **1/8 accepted**. These fixes and focused results create no additional
 file acceptance, C retirement, production build or native qualification. The
-original native/control holds remain as recorded above. The next closure step
-requires the original IHK object store or a bundle containing the exact gitlink,
-plus the exact BFD SDK, before matched tool/module and native qualification.
+original native/control holds remain as recorded above. Exact IHK source is now
+available. Remaining prerequisites are the selected BFD archive/compiler bytes
+and complete transitive SDK closure, the original native-owner reconciliation,
+then actual matched tool/library/module links, deployed ownership and application/
+resource-restoring lifecycle qualification.
 
 - [ ] M15-I01: complete selected/linked/deployed project-runtime ownership manifest.
 - [ ] M15-I02: all three delivered Linux-loadable modules use Rust/reviewed assembly;

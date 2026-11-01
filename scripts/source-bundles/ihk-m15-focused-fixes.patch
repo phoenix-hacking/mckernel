@@ -1,0 +1,62 @@
+From 5f43aea5f45359e9e605543fea6362952beac42f Mon Sep 17 00:00:00 2001
+From: OpenAI Codex <codex@openai.com>
+Date: Sun, 1 Nov 2026 04:37:16 +0100
+Subject: [PATCH] Preserve CPU zero formatting and bind IHK compiler inputs
+
+---
+ linux/user/CMakeLists.txt                                | 9 +++++----
+ linux/user/ihklib.c                                      | 2 +-
+ linux/user/rust/ihkconfig.rs                             | 2 +-
+ linux/user/rust/whole70/Whole70ProducerQualified.cmake   | 6 ++++--
+ linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs | 2 +-
+ 5 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/linux/user/CMakeLists.txt b/linux/user/CMakeLists.txt
+index 137dd94..5834e77 100644
+--- a/linux/user/CMakeLists.txt
++++ b/linux/user/CMakeLists.txt
+@@ -159,2 +159,3 @@ if(ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-  if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}")
+-    message(FATAL_ERROR "Set absolute IHK_USER_RUSTC from the pinned user toolchain; preserve compute RUSTC")
++  if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}"
++     OR NOT EXISTS "${IHK_USER_RUSTC}" OR IS_DIRECTORY "${IHK_USER_RUSTC}")
++    message(FATAL_ERROR "Set absolute IHK_USER_RUSTC to the existing pinned user compiler file; preserve compute RUSTC")
+@@ -177 +178 @@ if(ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkconfig.rs"
++    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkconfig.rs" "${IHK_USER_RUSTC}"
+@@ -207 +208 @@ if(ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkosctl.rs"
++    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ihkosctl.rs" "${IHK_USER_RUSTC}"
+diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
+index 3d99534..c059b2f 100644
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -597 +597 @@ static char *cpu_array2str(int num_cpus, int *cpus)
+-			if (prev_cpu > 0) {
++			if (prev_cpu >= 0) {
+diff --git a/linux/user/rust/ihkconfig.rs b/linux/user/rust/ihkconfig.rs
+index b55e0e6..9d3102a 100644
+--- a/linux/user/rust/ihkconfig.rs
++++ b/linux/user/rust/ihkconfig.rs
+@@ -302 +302 @@ unsafe fn query_string(cpu: &CpuReq, mem: &MemReq, is_cpu: bool) -> *mut c_char
+-                if previous > 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
++                if previous >= 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
+diff --git a/linux/user/rust/whole70/Whole70ProducerQualified.cmake b/linux/user/rust/whole70/Whole70ProducerQualified.cmake
+index b4d5235..d514a88 100644
+--- a/linux/user/rust/whole70/Whole70ProducerQualified.cmake
++++ b/linux/user/rust/whole70/Whole70ProducerQualified.cmake
+@@ -5,2 +5,3 @@ find_package(PythonInterp 3 REQUIRED)
+-if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}")
+-  message(FATAL_ERROR "Set the pinned supported user Rust compiler; preserve compute RUSTC")
++if(NOT IHK_USER_RUSTC OR NOT IS_ABSOLUTE "${IHK_USER_RUSTC}"
++   OR NOT EXISTS "${IHK_USER_RUSTC}" OR IS_DIRECTORY "${IHK_USER_RUSTC}")
++  message(FATAL_ERROR "Set IHK_USER_RUSTC to the existing pinned supported user compiler file; preserve compute RUSTC")
+@@ -29,0 +31 @@ add_custom_command(
++    "${IHK_USER_RUSTC}" "${CMAKE_C_COMPILER}"
+diff --git a/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs b/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs
+index 7dc6255..620ebdc 100644
+--- a/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs
++++ b/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs
+@@ -155 +155 @@ unsafe fn query_string(cpu: &CpuReq, mem: &MemReq, is_cpu: bool) -> *mut c_char
+-                if previous > 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }
++                if previous >= 0 { n += append(&mut s, &mut capacity, n, 0, previous as usize, 0); }

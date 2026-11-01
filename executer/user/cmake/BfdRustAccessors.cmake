@@ -36,14 +36,21 @@ endif()
 file(SHA256 "/usr/include/bfd.h" _bfd_header_sha)
 file(SHA256 "${LIBBFD}" _bfd_library_sha)
 file(SHA256 "${CMAKE_C_COMPILER}" _bfd_cc_sha)
+# The selected libbfd.so is an ld script. Bind its actual BFD implementation,
+# using the recorded binutils-devel-2.41-63.el10 selected-source manifest.
+# libsframe and the script's -liberty/-lz/-ldl selections still need separate
+# SDK closure; tracking an input below does not qualify its implementation.
+file(SHA256 "/usr/lib64/libbfd.a" _bfd_archive_sha)
 if(NOT _bfd_header_sha STREQUAL "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432" OR
    NOT _bfd_library_sha STREQUAL "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3" OR
-   NOT _bfd_cc_sha STREQUAL "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2")
+   NOT _bfd_cc_sha STREQUAL "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2" OR
+   NOT _bfd_archive_sha STREQUAL "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e")
   message(FATAL_ERROR "BFD Rust accessor: selected Rocky header/library/compiler pin mismatch")
 endif()
 set(_bfd_witness "${CMAKE_CURRENT_SOURCE_DIR}/cmake/bfd_layout_witness.c")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-  "${_bfd_witness}" "/usr/include/bfd.h" "${LIBBFD}" "${CMAKE_C_COMPILER}")
+  "${_bfd_witness}" "/usr/include/bfd.h" "${LIBBFD}" "${CMAKE_C_COMPILER}"
+  "/usr/lib64/libbfd.a" "/usr/lib64/libsframe.a")
 # Do not reuse cached try_run output across header/configuration changes.
 unset(_bfd_run CACHE)
 unset(_bfd_compile CACHE)

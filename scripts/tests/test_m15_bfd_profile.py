@@ -1,9 +1,12 @@
 """Exercise actual BFD configuration guards without selecting a BFD library.
 
-The fixture stops before the exact pinned-file checks. It cannot qualify a
-header/library/compiler, generate a production layout, or build any runtime.
+Profile fixtures stop before the exact pinned-file checks. A separate temporary
+text-file observer exercises invalidation with fixture-only path/hash bindings.
+Neither qualifies a header/library/compiler, generates a production layout,
+or builds any runtime.
 """
 from pathlib import Path
+import hashlib
 import os
 import shutil
 import subprocess
@@ -118,8 +121,56 @@ class M15BfdProfileTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             inputs = (directory / "build/inputs").read_text().split(";")
             for required in ("/fixture/witness.c", "/usr/include/bfd.h",
-                             "/fixture/libbfd.so", "/fixture/selected-cc"):
+                             "/fixture/libbfd.so", "/fixture/selected-cc",
+                             "/usr/lib64/libbfd.a", "/usr/lib64/libsframe.a"):
                 self.assertIn(required, inputs)
+
+    def test_archive_replacement_rechecks_the_actual_pin_guard(self):
+        # TEST ONLY: temporary text files stand in for pinned inputs. No BFD
+        # header/library/compiler is selected, and no witness/compiler is run.
+        source = MODULE.read_text()
+        start = source.index('file(SHA256 "/usr/include/bfd.h"')
+        end = source.index("\n# Do not reuse cached try_run", start)
+        observer = source[start:end]
+        pins = {
+            "/usr/include/bfd.h": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432",
+            "${LIBBFD}": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3",
+            "${CMAKE_C_COMPILER}": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+            "/usr/lib64/libbfd.a": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e",
+        }
+        with tempfile.TemporaryDirectory(prefix="m15-bfd-archive-observer-") as temporary:
+            directory = Path(temporary)
+            files = {}
+            for number, (selector, pin) in enumerate(pins.items()):
+                path = directory / ("input-" + str(number))
+                content = ("nonproduction pin observer " + str(number) + "\n").encode()
+                path.write_bytes(content)
+                files[selector] = path
+                observer = observer.replace(selector, str(path)).replace(
+                    pin, hashlib.sha256(content).hexdigest())
+            sframe = directory / "sframe-observer"
+            sframe.write_text("nonproduction dependency observer\n")
+            observer = observer.replace("/usr/lib64/libsframe.a", str(sframe))
+            (directory / "CMakeLists.txt").write_text("\n".join([
+                "cmake_minimum_required(VERSION 3.16)",
+                "project(m15_bfd_archive_observer NONE)", observer,
+                "add_custom_target(pin_observer)",
+            ]))
+            build = directory / "build"
+            configured = subprocess.run([self.cmake, "-G", "Unix Makefiles", "-S", str(directory),
+                                         "-B", str(build)], capture_output=True, text=True, timeout=20)
+            self.assertEqual(configured.returncode, 0, configured.stdout + configured.stderr)
+            # Change only the archive content and timestamp; the generated build
+            # must reconfigure and refuse the stale selected-archive identity.
+            archive = files["/usr/lib64/libbfd.a"]
+            archive.write_text("replaced nonproduction archive\n")
+            newer = (build / "Makefile").stat().st_mtime + 2
+            os.utime(archive, (newer, newer))
+            rebuilt = subprocess.run([self.cmake, "--build", str(build), "--target", "pin_observer"],
+                                     capture_output=True, text=True, timeout=20)
+            self.assertNotEqual(rebuilt.returncode, 0,
+                                "Changed archive bytes did not invalidate the selected pin")
+            self.assertIn("pin mismatch", rebuilt.stdout + rebuilt.stderr)
 
     def test_actual_probe_preserves_directory_and_configuration_flags(self):
         source = MODULE.read_text()

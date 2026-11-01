@@ -101,7 +101,9 @@ class M15UserToolSelectionTests(unittest.TestCase):
                 observations.extend([
                     f"get_target_property(_sources {target} SOURCES)",
                     f"get_target_property(_deps {target} MANUALLY_ADDED_DEPENDENCIES)",
+                    f"get_target_property(_link_inputs {target} LINK_DEPENDS)",
                     f'file(APPEND "${{CMAKE_BINARY_DIR}}/selection.txt" "{target}.sources=${{_sources}}\\n{target}.deps=${{_deps}}\\n")',
+                    f'file(APPEND "${{CMAKE_BINARY_DIR}}/selection.txt" "{target}.link_inputs=${{_link_inputs}}\\n")',
                 ])
             fixture = "\n".join([
                 "cmake_minimum_required(VERSION 3.16)",
@@ -138,6 +140,11 @@ class M15UserToolSelectionTests(unittest.TestCase):
             for target in custom_targets:
                 path = build / f"CMakeFiles/{target}.dir/build.make"
                 recipes[target] = path.read_text() if path.exists() else ""
+            for target in ("mcinspect", "eclair"):
+                path = build / f"CMakeFiles/{target}.dir/build.make"
+                if path.exists():
+                    observed[f"{target}.link_prerequisites"] = ";".join(re.findall(
+                        rf"(?m)^{target}: (.+)$", path.read_text()))
             return result, observed, recipes, str(qualified), compute_path, str(build)
 
     def assert_rust_selection(self, observed, recipes, qualified, compute_path):
@@ -187,6 +194,18 @@ class M15UserToolSelectionTests(unittest.TestCase):
                 invoked = arguments[arguments.index("--crate-name") - 1]
                 self.assertIn(invoked, object_prerequisites(recipe),
                               "Compiler-file replacement must invalidate its object")
+
+    def test_bfd_consumers_track_the_linker_scripts_absolute_archives(self):
+        result, observed, _, _, _, _ = self.configure()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for target in ("mcinspect", "eclair"):
+            with self.subTest(target=target):
+                inputs = observed[f"{target}.link_inputs"].split(";")
+                self.assertIn("/usr/lib64/libbfd.a", inputs)
+                self.assertIn("/usr/lib64/libsframe.a", inputs)
+                prerequisites = observed[f"{target}.link_prerequisites"].split(";")
+                self.assertIn("/usr/lib64/libbfd.a", prerequisites)
+                self.assertIn("/usr/lib64/libsframe.a", prerequisites)
 
     def test_other_default_tools_use_same_user_compiler_and_file_dependencies(self):
         for compute in ("unrelated", "missing"):
