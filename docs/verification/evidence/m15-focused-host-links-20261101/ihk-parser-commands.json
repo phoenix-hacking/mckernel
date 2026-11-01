@@ -1,0 +1,257 @@
+[
+  {
+    "label": "parser-consumer-compile",
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-user",
+      "--unshare-net",
+      "--ro-bind",
+      "/",
+      "/",
+      "--ro-bind",
+      "/usr",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/host-usr",
+      "--ro-bind",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/usr",
+      "/usr",
+      "--dev",
+      "/dev",
+      "--bind",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--setenv",
+      "PATH",
+      "/usr/bin:/bin",
+      "--setenv",
+      "LD_LIBRARY_PATH",
+      "/usr/lib64:/usr/lib/x86_64-linux-gnu",
+      "--setenv",
+      "TMPDIR",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--",
+      "/usr/bin/env",
+      "LIBRARY_PATH=/usr/lib/x86_64-linux-gnu",
+      "/usr/bin/cc",
+      "-B/usr/lib/x86_64-linux-gnu/",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fvisibility=hidden",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-Wl,--gc-sections",
+      "-I/workspace/scratch/a8bff332f582/mckernel-source/ihk/linux/include",
+      "-isystem",
+      "/usr/include/x86_64-linux-gnu",
+      "-DCONSUMER_LIBRARY=\"/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so\"",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer.c",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so",
+      "-ldl",
+      "-Wl,-rpath,/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link",
+      "-Wl,-z,defs",
+      "-Wl,-Map=/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer.map",
+      "-o",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-compile.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-compile.stderr"
+  },
+  {
+    "label": "parser-consumer-run",
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-user",
+      "--unshare-net",
+      "--ro-bind",
+      "/",
+      "/",
+      "--ro-bind",
+      "/usr",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/host-usr",
+      "--ro-bind",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/usr",
+      "/usr",
+      "--dev",
+      "/dev",
+      "--bind",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--setenv",
+      "PATH",
+      "/usr/bin:/bin",
+      "--setenv",
+      "LD_LIBRARY_PATH",
+      "/usr/lib64:/usr/lib/x86_64-linux-gnu",
+      "--setenv",
+      "TMPDIR",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-run.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-run.stderr"
+  },
+  {
+    "label": "parser-review-library-symbols",
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-user",
+      "--unshare-net",
+      "--ro-bind",
+      "/",
+      "/",
+      "--ro-bind",
+      "/usr",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/host-usr",
+      "--ro-bind",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/usr",
+      "/usr",
+      "--dev",
+      "/dev",
+      "--bind",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--setenv",
+      "PATH",
+      "/usr/bin:/bin",
+      "--setenv",
+      "LD_LIBRARY_PATH",
+      "/usr/lib64:/usr/lib/x86_64-linux-gnu",
+      "--setenv",
+      "TMPDIR",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work",
+      "--",
+      "/usr/bin/readelf",
+      "--dyn-syms",
+      "--wide",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so"
+    ],
+    "returncode": 127,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stderr"
+  },
+  {
+    "label": "parser-review-library-symbols",
+    "argv": [
+      "/usr/bin/readelf",
+      "--dyn-syms",
+      "--wide",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stderr"
+  },
+  {
+    "label": "parser-review-library-symbols",
+    "argv": [
+      "/usr/bin/readelf",
+      "--dyn-syms",
+      "--wide",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stderr"
+  },
+  {
+    "label": "parser-review-consumer-symbols",
+    "argv": [
+      "/usr/bin/nm",
+      "--defined-only",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-symbols.stderr"
+  },
+  {
+    "label": "parser-review-library-symbols",
+    "argv": [
+      "/usr/bin/readelf",
+      "--dyn-syms",
+      "--wide",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stderr"
+  },
+  {
+    "label": "parser-review-consumer-symbols",
+    "argv": [
+      "/usr/bin/nm",
+      "--defined-only",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-symbols.stderr"
+  },
+  {
+    "label": "parser-review-consumer-imports",
+    "argv": [
+      "/usr/bin/nm",
+      "-D",
+      "--undefined-only",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-imports.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-imports.stderr"
+  },
+  {
+    "label": "parser-review-library-symbols",
+    "argv": [
+      "/usr/bin/readelf",
+      "--dyn-syms",
+      "--wide",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/libihk.so"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-library-symbols.stderr"
+  },
+  {
+    "label": "parser-review-consumer-symbols",
+    "argv": [
+      "/usr/bin/nm",
+      "--defined-only",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-symbols.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-symbols.stderr"
+  },
+  {
+    "label": "parser-review-consumer-imports",
+    "argv": [
+      "/usr/bin/nm",
+      "-D",
+      "--undefined-only",
+      "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer"
+    ],
+    "returncode": 0,
+    "stdout": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-imports.stdout",
+    "stderr": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-review-consumer-imports.stderr"
+  }
+]

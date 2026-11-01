@@ -1,0 +1,254 @@
+{
+  "schema": "m15-focused-host-links-batch-v1",
+  "date_utc": "2026-11-01",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual HOST user-source compiles, links, genuine ordinary BFD ELF consumer, parser-only IHK C ABI consumer and reviewed CLI/help preflights.",
+  "status": "REAL_HOST_USER_TOOL_LINKS_AND_BOUNDED_CONSUMERS_PASSED",
+  "records": {
+    "sdk_and_exact_pins": "sdk-recovery.json",
+    "namespace_and_host_inputs": "namespace-selected-inputs.json",
+    "actual_bfd_witness_and_accessor_build": "bfd-source-check-commands.json",
+    "actual_bfd_layout": "bfd-layout-generated.rs",
+    "genuine_bfd_consumer_and_eclair_link": "bfd-consumer-eclair.json",
+    "exact_bundled_dwarf_and_mcinspect_link": "mcinspect-link.json",
+    "dwarf_source_and_config": "libdwarf-source-and-normal-config.json",
+    "ihk_actual_producer": "ihk-producer-receipt.json",
+    "ihk_build_link_and_cli_preflights": "ihk-link-commands.json",
+    "ihk_76_required_exports_and_parser_results": "ihk-parser-results.json",
+    "later_tool_preflights": "tool-preflight-results.json",
+    "failure_metadata": "failed-attempts.json",
+    "passive_validation": "copy-and-hash-validation.json"
+  },
+  "concrete_results": {
+    "production_pins_match": [
+      "bfd_header",
+      "bfd_linker_script",
+      "bfd_static_archive",
+      "gcc_driver"
+    ],
+    "bfd_actual_offsets": [
+      8,
+      504,
+      512
+    ],
+    "bfd_consumer": {
+      "upper_bytes": [
+        280,
+        280,
+        280
+      ],
+      "symbol_counts": [
+        34,
+        34,
+        34
+      ],
+      "four_rust_bridges": 4,
+      "named_global_matches": 1,
+      "close_success": true
+    },
+    "eclair_link": "Actual full Rust body+architecture+BFD accessor objects, no project C objects",
+    "mcinspect_link": "Actual full Rust body+BFD accessors, exact bundled unchanged third-party libdwarf, host libelf/z",
+    "ihk_link": "One actual whole70 Rust static-library producer; libihk.so linked with 76 required function/data roots; actual ihkconfig/ihkosctl/ihkmond links",
+    "ihk_exports": {
+      "function_roots": 70,
+      "data_roots": 6,
+      "header_declared_functions_present": 66,
+      "limit": "Symbol kinds/visibility and header declaration presence do not prove all function signatures or behavior."
+    },
+    "ihk_parser": {
+      "nonempty_small_cpu_subsets": 255,
+      "parser_formatter_round_trips": 257,
+      "provider": "actual shared libihk.so; actual public/private headers; no exported/interposing project provider in consumer"
+    }
+  },
+  "execution_chronology": {
+    "historical_link_records": "NOT_EXECUTED/runtime_executed=false fields in eclair/mcinspect link records describe link completion time and are preserved verbatim.",
+    "later_preflight_only_executions": {
+      "mcinspect_help": 0,
+      "mcinspect_missing_kernel": 1,
+      "mcinspect_no_action": 1,
+      "eclair_help": 2
+    },
+    "later_record": "tool-preflight-results.json",
+    "no_further_behavior_claim": "No Dwarf traversal, dump processing, McKernel device API, eclair debugger/device behavior, full executor/kernel, module/service/native workload, deployment or original SDK qualification."
+  },
+  "provenance_caveats": [
+    "Fixed production header/script/archive/compiler hashes remained unchanged.",
+    "Supplemental HOST headers, glibc/loader/startup/zlib and libelf development/runtime providers are explicitly declared; this does not reproduce the original full SDK.",
+    "Unchanged exact Git-tree-verified third-party libdwarf C is permitted third-party code; it is not a project C retirement.",
+    "Binaries, package archives, giant maps and stage inventories are excluded; hashes and original exact command paths bind the existing artifacts.",
+    "Namespace preparation scripts are omitted. Corrected namespace argv in the machine records actually succeeded; reproduction requires restoring equivalent exact inputs and reviewing scope rather than blindly invoking original absolute scratch paths.",
+    "Missing failed-source snapshot and overwritten raw rc127 static-review diagnostics are identified in failed-attempts.json.",
+    "No new M14/M15 acceptance, default-image acceptance, native qualification, project C retirement or file closure is claimed."
+  ],
+  "validation": {
+    "recorded_hash_checks": 175,
+    "mismatches": 0
+  },
+  "files": [
+    {
+      "file": "bfd-consumer-eclair.json",
+      "bytes": 35247,
+      "sha256": "8e5c1aea0a30e88adc813b0836340de6572604b483fb9a0b2b144c7db9854e52"
+    },
+    {
+      "file": "bfd-consumer-tiny.c",
+      "bytes": 159,
+      "sha256": "91855ccf22d8c62452d9ec87c9e7565ce7cd44c39d8526b0488e4e15d04cce4f"
+    },
+    {
+      "file": "bfd-layout-generated.rs",
+      "bytes": 259,
+      "sha256": "e21b4d9975984b7c14e13760c232dda4e755c5955f1649df77ebdc38e065530b"
+    },
+    {
+      "file": "bfd-layout-witness.c",
+      "bytes": 2115,
+      "sha256": "4fd1248188a4ccf23fa576a9bb849fa5f9bbaa1fee69ad949a9c94b9f95989b9"
+    },
+    {
+      "file": "bfd-real-consumer.c",
+      "bytes": 2941,
+      "sha256": "8086545693f54b0b493875415d9740f362f16224b1d19e6ede4aa4de5e54a30e"
+    },
+    {
+      "file": "bfd-source-check-commands.json",
+      "bytes": 5106,
+      "sha256": "6d5ebb930ab3ad87d5a8d913519d23c038101c58e212620c65a8acd8046f9bf7"
+    },
+    {
+      "file": "copy-and-hash-validation.json",
+      "bytes": 21887,
+      "sha256": "0f1f862f859ded0003a1582b8fa07faa5803cc16e7a22581d1d7a94cfc5229c0"
+    },
+    {
+      "file": "failed-attempts.json",
+      "bytes": 5531,
+      "sha256": "0cc8d683028af43a224e704af469089d18414e265b909994978b688744df5ec2"
+    },
+    {
+      "file": "ihk-artifacts.json",
+      "bytes": 894,
+      "sha256": "b847d02a8f7501eee8f153a9d652ab14157a4782240f36bcd34966dc3cc46e66"
+    },
+    {
+      "file": "ihk-combined_selected_SDK_actual_header_ABI.c",
+      "bytes": 1743,
+      "sha256": "df92feb1f21ae49ce9d8a5c2e5a1fc89ffee61e2aa0c5c6c5c17013e492b3acc"
+    },
+    {
+      "file": "ihk-diagnostic_origins.selected_target_C_witness.c",
+      "bytes": 3783,
+      "sha256": "ba54b173d3e2efec723e8e6b6dec505a97070e1944b8fd03dd1a12a7a9e565c6"
+    },
+    {
+      "file": "ihk-dump_abi_witness.c",
+      "bytes": 5380,
+      "sha256": "e50f855bc3dc7594b852d23255b2daeec338832769cc20f0de74f6176bcbef38"
+    },
+    {
+      "file": "ihk-generated-create_diagnostic_origins.rs",
+      "bytes": 645,
+      "sha256": "122ccbf22a7caebd1839ae81aaac17316890274ae20bf53eacd1938f35f67682"
+    },
+    {
+      "file": "ihk-generated-diagnostic_origins.rs",
+      "bytes": 317,
+      "sha256": "e9629266f254d18c9f03d2357d939348474d646bf9f42833e49a0611fa2affc5"
+    },
+    {
+      "file": "ihk-generated-dump_abi.rs",
+      "bytes": 1543,
+      "sha256": "6ffa00f5ff2eeecc731a4be00a4c45af2c04427e230a0425bfb6e7317b0caf2f"
+    },
+    {
+      "file": "ihk-generated-native-static-libs.rsp",
+      "bytes": 43,
+      "sha256": "736d4bb02335f153ad2eaa134371d085e70599f3538014b37714d7453305f29b"
+    },
+    {
+      "file": "ihk-generated-perf_pages_abi.rs",
+      "bytes": 897,
+      "sha256": "f8c38eb3b4d341b66456a136592f6a7c8f40181b92e42f106015e8c4f680d630"
+    },
+    {
+      "file": "ihk-link-commands.json",
+      "bytes": 24754,
+      "sha256": "1a88ee5b539d06d63e4127b8655258957116e873e572b6205c9b2bf039609ca8"
+    },
+    {
+      "file": "ihk-parser-abi-consumer.c",
+      "bytes": 3808,
+      "sha256": "6c9b782f4340366b0809b5594f9c47de404afc01c3246ce481a2dade59c388ec"
+    },
+    {
+      "file": "ihk-parser-commands.json",
+      "bytes": 10425,
+      "sha256": "7ae2461574460478520b6a329850c22164657dea38af74cb20bed3eceb61a405"
+    },
+    {
+      "file": "ihk-parser-provider-address-failure-commands.json",
+      "bytes": 3973,
+      "sha256": "ed389fa2d8434f06528e865aca197a1c33b228e52f9a882086a1a59927e8a5f6"
+    },
+    {
+      "file": "ihk-parser-results.json",
+      "bytes": 35302,
+      "sha256": "74ec5783ab948d9d3582b9b7c3e5770e0199f449cbf1477985c9ab0c858e5a2c"
+    },
+    {
+      "file": "ihk-perf_pages_abi_witness.c",
+      "bytes": 2209,
+      "sha256": "d5a83d0b6560f063cfa963bbd28dede8a4efc3fc8624142e8795935b02473f08"
+    },
+    {
+      "file": "ihk-producer-command.json",
+      "bytes": 1679,
+      "sha256": "1add5f6b9bb0958e4c5cbea13c02b5df78ed4a82b677ebe6e932fc1e6ab911d8"
+    },
+    {
+      "file": "ihk-producer-receipt.json",
+      "bytes": 7738,
+      "sha256": "774f65b2fe4027e516aea1ecaf6641ee4a7ce000dd0b042a17faf7d9a885df29"
+    },
+    {
+      "file": "ihk-required-exports.json",
+      "bytes": 2137,
+      "sha256": "3698c30c06e7751a78c2dd944169fab14f78d506212bf5b0238435624e83ee2b"
+    },
+    {
+      "file": "ihk-selected-artifacts-and-providers.json",
+      "bytes": 13790,
+      "sha256": "5a2ff9d5fccdcdfdbca2a745bfc740a1b32b114e333e35bea62a5fc9fa483cb4"
+    },
+    {
+      "file": "libdwarf-source-and-normal-config.json",
+      "bytes": 7241,
+      "sha256": "44a21aee1b9ccdf7d8eec1a6bc9c50afff589d9dafbca2d0a6118b355c5b091c"
+    },
+    {
+      "file": "mcinspect-dependency-recovery.json",
+      "bytes": 1312,
+      "sha256": "3248c17a425d119e9a1ffcf0f1f4af934162468ecd9736aa1340509facd87062"
+    },
+    {
+      "file": "mcinspect-link.json",
+      "bytes": 44529,
+      "sha256": "50f61c0ec5da7db516b96a65356aa8c188ba592a1a6e2aa27fdfb1b20c03265a"
+    },
+    {
+      "file": "namespace-selected-inputs.json",
+      "bytes": 10198,
+      "sha256": "7c384edb9ddf44816c2fc3dac3de6e28c009f36eac4d8e9ca583db50cda6bf41"
+    },
+    {
+      "file": "sdk-recovery.json",
+      "bytes": 26110,
+      "sha256": "8c2bbbabd434492b3fd9e497f8ccfdaf3544f3ad3fa5a94bce5a65be8291fde7"
+    },
+    {
+      "file": "tool-preflight-results.json",
+      "bytes": 9296,
+      "sha256": "8ae5ef456a7f2d0a97ecc22bcbfd9a8f0b8efe18992773a1778ecebe1feaa331"
+    }
+  ]
+}

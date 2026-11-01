@@ -1,0 +1,60 @@
+{
+  "scope": "Historical failed attempts retained; these do not replace the later successful records.",
+  "namespace_initial": {
+    "stderr": "bwrap: execvp /usr/bin/python3: No such file or directory\n",
+    "stdout": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/namespace-pins.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_file": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/namespace-pins.stderr",
+      "bytes": 58,
+      "sha256": "fca4e89b2de649a34157973d8c109defd5563418e58b3940baac822b1a028fca"
+    },
+    "failure_before_compiler_or_witness": true,
+    "bounded_correction_defect": "1,245 preexisting shadow symlinks retained obsolete /m15-host-usr prefix while plan binds host /usr only at scratch stage/host-usr. This broke both Python executable lookup and the ELF interpreter alias. Exact libgcc_s stage symlink also retained the obsolete host alias and is now restored from RPM metadata.",
+    "symlink_change_count": 1246,
+    "corrected_plan_used": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/NAMESPACE-PLAN.json",
+      "bytes": 80459,
+      "sha256": "a2fa54c21ed41f4ef536d127cac7a1bafdb10331dde77882df02e026f760cc6b"
+    }
+  },
+  "dwarf_initial": {
+    "command_results": "mcinspect-link.json commands_failed_preserved",
+    "configure_stderr": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-configure.stderr",
+      "bytes": 10905,
+      "sha256": "d6b19dc5300203f0ad1f7e9c449732c45d123a5b16b5b48f6eee4a6ed98256d3"
+    },
+    "build_stderr": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-build.stderr",
+      "bytes": 1815,
+      "sha256": "38b680e24cd668acdec0a5cfd4eb6f88e7cb406a56bbc548c4a1398879f87395"
+    },
+    "build_diagnostic_excerpt": "In file included from /workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-wrapper/libdwarf/libdwarf/dwarf_incl.h:44,\n                 from /workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-wrapper/libdwarf/libdwarf/dwarf_abbrev.c:29:\n/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-wrapper/libdwarf/libdwarf/libdwarfdefs.h:76:19: error: conflicting types for '__int64_t'; have 'long long int'\n   76 | typedef long long __int64_t;\n      |                   ^~~~~~~~~\nIn file included from /usr/include/stdio.h:39,\n                 from /workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-wrapper/libdwarf/libdwarf/dwarf_abbrev.c:28:\n/usr/include/x86_64-linux-gnu/bits/types.h:44:25: note: previous declaration of '__int64_t' with type '__int64_t' {aka 'long int'}\n   44 | typedef signed long int __int64_t;\n      |                         ^~~~~~~~~\n/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/dwarf-wrapper/libdwarf/libdwarf/libdwarfdefs.h:77:28: error: conflicting types for '__uint64_t'; have 'long long unsigned int'\n   77 | typedef unsigned long long __uint64_t;\n      |                            ^~~~~~~~~~\n/usr/include/x86_64-linux-gnu/bits/types.h:45:27: note: previous declaration of '__uint64_t' with type '__uint64_t' {aka 'long unsigned int'}\n   45 | typedef unsigned long int __uint64_t;\n      |                           ^~~~~~~~~~\ngmake[3]: *** [dwarf/CMakeFiles/dwarf.dir/build.make:90: dwarf/CMakeFiles/dwarf.dir/libdwarf/libdwarf/dwarf_abbrev.c.o] Error 1\ngmake[2]: *** [CMakeFiles/Makefile2:126: dwarf/CMakeFiles/dwarf.dir/all] Error 2\ngmake[1]: *** [CMakeFiles/Makefile2:133: dwarf/CMakeFiles/dwarf.dir/rule] Error 2\ngmake: *** [Makefile:137: dwarf] Error 2\n",
+    "correction": "Fresh build with identical declared HOST flags exported through CFLAGS/CXXFLAGS; unchanged source normal feature probes succeeded.",
+    "source_or_feature_forcing": false
+  },
+  "ihk_parser_provider_address": {
+    "commands": "ihk-parser-provider-address-failure-commands.json",
+    "preserved_stderr": "parser-abi-consumer: /workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-abi-consumer.c:45: main: Assertion `strcmp(loaded.dli_fname, CONSUMER_LIBRARY) == 0' failed.\n",
+    "stderr_file": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-run.stderr.provider-address-failure1",
+      "bytes": 209,
+      "sha256": "aa4693354a80a6f164e663c5fef5d8b0c20e1a4b25ed19fa51a312691b1d6935"
+    },
+    "stdout_file": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/namespace-stage-1/work/ihk-source-link/parser-consumer-run.stdout.provider-address-failure1",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "limit": "Failed command record refers to log names subsequently reused; preserved .provider-address-failure1 logs above retain that failed run. The copied parser C source is the corrected successful source; failed-source bytes were not retained here."
+  },
+  "ihk_parser_static_review_tool": {
+    "returncode": 127,
+    "commands": "ihk-parser-commands.json contains failed namespaced readelf then successful host readelf fallback",
+    "limit": "Those duplicate-label raw log names were reused; original rc127 raw diagnostic is unavailable in this package. Exact failed argv and returncode remain recorded."
+  }
+}

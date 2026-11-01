@@ -11,11 +11,14 @@ it changes no acceptance, actual source/service hold or native authorization.
 The retained native pipeline remains blocked at the verified checkpoint below.
 The user has now explicitly requested GitHub publication and continued M15 work.
 Draft PR [#2](https://github.com/phoenix-hacking/mckernel/pull/2) contains the
-published source checkpoint `ed2e30b`. The user's earlier commits preserved the
+published source checkpoints `ed2e30b` and `b66ba1c`. The user's earlier commits preserved the
 exact Rust IHK source in tracked Git bundles; that source has now been recovered
 and this branch adds the follow-up fixes and reproduction helper to the same PR.
-This separate checkout still has no access to the original R3 controls or the
-complete pinned native SDK.
+The next source batch `b3ccdb3` fixes IHK query failures, argument ownership and
+daemon help. Actual HOST builds now link the Rust IHK library, all three IHK
+tools, eclair and mcinspect against the recovered providers. Exact BFD/compiler
+pins are available; the explicitly supplemented HOST profile does not establish
+the complete original native SDK. This checkout still cannot access R3 controls.
 Preserve dirty sources, accepted work, failed evidence and every actual
 owner/reservation. The source work changes no acceptance, service hold or budget.
 
@@ -215,12 +218,12 @@ available; finish a smaller final remainder without padding or delay.
 | --- | --- | --- |
 | M15-F01 / 01-01…03 | `host-kernel/native-rust/mcctrl_vm_write_compat.c` | Accepted original three-wrapper Rust MM lock/unlock/VMA-write scope; preserve proof |
 | M15-F02 / 02-01…03 | `executer/user/mcexec.c` | Remaining executor C bodies, real default/ABI, linked and functional process behavior |
-| M15-F03 / 03-01…02 | `executer/user/mcinspect_bfd_shim.c` | Both BFD upper-bound/canonicalize adapters and real tool/library link |
-| M15-F04 / 04-01…02 | `executer/user/eclair_bfd_shim.c` | Both BFD upper-bound/canonicalize adapters and real tool/library link |
-| M15-F05 / 05-01…03 | `ihk/linux/user/ihklib.c` | Library bodies/default ABI plus deployed/native qualification; reuse real 70-function/six-data Rust link |
-| M15-F06 / 06-01…03 | `ihk/linux/user/ihkconfig.c` | Complete existing partial Rust CLI, real default/library link and native behavior |
-| M15-F07 / 07-01…03 | `ihk/linux/user/ihkosctl.c` | Control CLI bodies, real default/library link and native behavior |
-| M15-F08 / 08-01…03 | `ihk/linux/user/ihkmond.c` | Monitor/event/thread/kmsg ownership, real default and functional behavior |
+| M15-F03 / 03-01…02 | `executer/user/mcinspect_bfd_shim.c` | Both Rust adapters pass real BFD consumption; complete HOST tool links; matched default/deployed qualification remains |
+| M15-F04 / 04-01…02 | `executer/user/eclair_bfd_shim.c` | Both Rust adapters pass real BFD consumption; complete HOST tool links; matched default/deployed qualification remains |
+| M15-F05 / 05-01…03 | `ihk/linux/user/ihklib.c` | Current Rust library links with all 70 function/six data roots and passes real parser consumption; complete ABI/deployed/native qualification remains |
+| M15-F06 / 06-01…03 | `ihk/linux/user/ihkconfig.c` | Query error paths fixed; complete Rust CLI links and argument preflight passes; matched default/native behavior remains |
+| M15-F07 / 07-01…03 | `ihk/linux/user/ihkosctl.c` | Query/release prerequisite errors fixed; complete Rust CLI links and argument preflight passes; matched default/native behavior remains |
+| M15-F08 / 08-01…03 | `ihk/linux/user/ihkmond.c` | Help startup defect fixed; complete Rust daemon links and help exits correctly; monitor/event/thread/kmsg behavior remains |
 
 Focused M15 checkpoint, based on `0f0fd1ad22bf9a59d23eec48c4482b20a775487a`:
 
@@ -291,11 +294,11 @@ IHK recovery and focused follow-up:
   also tracks its selected Rust and C compiler files. A compiler-replacement
   observer reproduced stale CLI output before the fix and rebuilt both objects
   afterward. Actual CLI adapters also emitted ihkconfig/ihkosctl Rust objects
-  under an explicit fixture configuration; no complete library/CLI link or
-  device operation was run.
-- These five IHK source changes are commit
+  under an explicit fixture configuration. Actual library/CLI links followed in
+  the later HOST result below; no device operation was run.
+- The first five IHK source changes are commit
   `5f43aea5f45359e9e605543fea6362952beac42f`, tree
-  `6c52c505fec71e2cccd8f1dff458884403e412d3`, now the parent gitlink. The incremental
+  `6c52c505fec71e2cccd8f1dff458884403e412d3`. The incremental
   bundle `scripts/source-bundles/ihk-m15-focused-fixes.bundle` preserves those
   commit objects, and its adjacent patch makes the changes directly reviewable.
 - `scripts/ihk_source_bundles.json` and `scripts/restore_ihk_source.py` bind the
@@ -323,14 +326,16 @@ IHK recovery and focused follow-up:
   mcinspect/eclair relinking. A clearly labeled temporary-file observer first
   reproduced the stale-input path, then verified automatic reconfiguration and
   pin rejection after archive replacement. Generated Makefile prerequisites
-  include both archives. No production BFD witness or substituted SDK was run;
-  libsframe and the remaining library selections still need complete SDK proof.
-- The final combined focused run passed **32 top-level checks, no skips**, in
-  5.864 seconds with the pinned Rust/CMake and GCC 13.3.0. Modules:
+  include both archives. The actual unchanged witness and genuine selected BFD
+  archive subsequently passed under the explicitly supplemented HOST profile below.
+- The final combined focused run passed **36 top-level checks, no skips**, in
+  6.441 seconds with the pinned Rust/CMake and GCC 13.3.0. Modules:
   `test_m15_executor_libdir`, `test_m15_executor_libdir_real`,
   `test_m15_bfd_accessors`, `test_m15_user_tool_selection`,
-  `test_m15_bfd_profile`, `test_m15_ihklib_cpu_format`, `test_m15_ihk_cli`, and
-  `test_restore_ihk_source` under `scripts.tests`. This includes the 72 synthetic
+  `test_m15_bfd_profile`, `test_m15_ihklib_cpu_format`, `test_m15_ihk_cli`,
+  `test_restore_ihk_source`, `test_m15_ihklib_kargs`,
+  `test_m15_ihk_cli_query_errors`, and `test_m15_ihkmond_help` under `scripts.tests`.
+  This includes the 72 synthetic
   BFD callback cases and eight real ELF/libc/objdump/awk calls described above.
   The unchanged M14 checkpoint retains its earlier 20 passing checks.
 - The follow-up uses the existing PR branch, with exact remote/local tree
@@ -340,13 +345,67 @@ IHK recovery and focused follow-up:
   workflow definitions and required merge checks remain intact. Skipped/pending
   CI is not a passing result or acceptance evidence.
 
+Further M15 fixes and actual HOST userspace links:
+
+- IHK successor `78f731e5eed1abc4faf69e347d48d473a0727935`, tree
+  `84c11f941cba10318be3133839863ff382ea8786`, is now the parent gitlink.
+  The updated incremental bundle and manifest preserve both focused commits;
+  a fresh three-stage replay reproduced this exact clean HEAD/tree.
+- C/Rust ihkconfig and ihkosctl stop after failed CPU/memory counts or payload
+  queries. `release mem all` preserves prerequisite failures instead of issuing
+  a release and masking the error. Twenty-four failing observations became
+  **44 passing behavior cases**, retaining success order and cleanup.
+- C/Rust `ihk_os_kargs` retain the duplicated allocation base separately from
+  the `strsep` cursor, freeing it exactly once on success and error paths while
+  preserving the caller's original ioctl pointer and captured error return.
+  Eighteen failing subcases
+  became **28 passing cases**. Strict source-bound Rust diagnostic qualification
+  remains unchanged and passed during the real library build.
+- C/Rust ihkmond help now returns before daemon startup and recognizes `-?`.
+  The C basename also handles an argv0 without a slash. Sixteen failing help
+  cases became **20 passing cases**. Independent changed-path review passed.
+- Recovered the exact `libbfd.a` and `/usr/bin/cc` pins from official Rocky
+  binutils-devel 2.41-63.el10 and GCC 14.3.1-4.4.el10 packages, with matching
+  CPP/binutils/libgcc and real companion archives. All four production pins
+  matched inside the disposable namespace. The unchanged CMake layout witness
+  and actual Rust BFD accessor object built successfully; no guard was bypassed.
+- The genuine BFD/ELF consumer compared all four Rust bridges with the selected
+  BFD library: upper bounds, 34 symbols, names, values and flags agreed. Complete
+  Rust eclair and mcinspect binaries linked without project C runtime objects.
+  Mcinspect used exact bundled libdwarf commit `ab9230b` (tree `dcc2977`) and
+  matching HOST libelf development/runtime files. The first dwarf configuration
+  failure is preserved; exporting the already declared HOST C/C++ search flags
+  to its nested configuration made the unchanged feature probes/build succeed.
+- The actual whole70 producer and strict qualifier built the current Rust IHK
+  archive. Its shared library link retains all **70 function and six data roots**;
+  independent symbol review confirms their kinds, visibility and definitions.
+  The real linked C ABI parser consumer passed **258 formatting cases and 257
+  nonempty round trips**, including CPU zero, empty formatting and buffer growth.
+  Parser declarations are in the real private header; this is not full public
+  API signature/behavior qualification. The observer supplies no project provider.
+- Complete Rust ihkconfig, ihkosctl and ihkmond linked to that real library.
+  CLI no-argument checks returned their expected error/usage status; both daemon
+  help forms exited successfully. Actual mcinspect help/missing-kernel/no-action
+  preflights and eclair `-h` passed with their existing return contracts. These
+  paths precede device/workload access; dump/Dwarf/monitor behavior remains open.
+- Machine evidence is in
+  `docs/verification/evidence/m15-focused-host-links-20261101/`: source/package/
+  provider/artifact identities, exact commands, selected archive members,
+  producer results, real consumers and preserved failed-attempt metadata.
+  The profile explicitly supplements the exact pins with HOST glibc 2.39,
+  headers/startup objects, zlib, udev and libelf; a host C++ compiler served only
+  the libelf configuration probe. This is neither original complete-SDK identity
+  nor matched native/deployed qualification. No held full kernel/executor source,
+  module/service/install action or native owner was touched.
+
 M15 remains **1/8 accepted**. These fixes and focused results create no additional
-file acceptance, C retirement, production build or native qualification. The
+file acceptance, C retirement, matched production build or native qualification. The
 original native/control holds remain as recorded above. Exact IHK source is now
-available. Remaining prerequisites are the selected BFD archive/compiler bytes
-and complete transitive SDK closure, the original native-owner reconciliation,
-then actual matched tool/library/module links, deployed ownership and application/
-resource-restoring lifecycle qualification.
+available, and the selected BFD/archive/compiler bytes and actual HOST userspace
+links are resolved. Remaining prerequisites are original supported-profile
+transitive SDK qualification and native-owner reconciliation, then a matched
+image/module/tool cohort, deployed ownership and application/resource-restoring
+lifecycle qualification. Reuse these unchanged HOST artifacts/results.
 
 - [ ] M15-I01: complete selected/linked/deployed project-runtime ownership manifest.
 - [ ] M15-I02: all three delivered Linux-loadable modules use Rust/reviewed assembly;

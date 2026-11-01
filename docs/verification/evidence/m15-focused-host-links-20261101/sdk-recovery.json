@@ -1,0 +1,868 @@
+{
+  "scope": "Passive SDK recovery only; no recovered program execution, package installation, witness, native control or repository mutation.",
+  "official_base": "https://dl.rockylinux.org/pub/rocky/10/devel/x86_64/os/Packages/",
+  "machine_provenance_blobs": [
+    "391a53313c57ae11573d79e39ccf4d346b9dce6d",
+    "e9c462356ffc34f7e62c0a88682abbd1d587241d"
+  ],
+  "exact": {
+    "header": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/include/bfd.h",
+      "bytes": 252810,
+      "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432",
+      "verified_exact": true
+    },
+    "linker_script": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/lib64/libbfd.so",
+      "bytes": 382,
+      "sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3",
+      "verified_exact": true
+    },
+    "archive": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/lib64/libbfd.a",
+      "bytes": 18504828,
+      "sha256": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e",
+      "verified_exact": true
+    },
+    "compiler": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/gcc/usr/bin/gcc",
+      "bytes": 1375456,
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "verified_exact": true
+    }
+  },
+  "packages": [
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-2.41-63.el10.x86_64.rpm",
+      "bytes": 6669143,
+      "sha256": "5a9bdb2ce9cfb33c93bc7cebd6993f7d69332a2ed49012ac94dc2f1d99f3a927",
+      "official_url": "https://dl.rockylinux.org/pub/rocky/10/devel/x86_64/os/Packages/b/binutils-2.41-63.el10.x86_64.rpm"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/cpp-14.3.1-4.4.el10.x86_64.rpm",
+      "bytes": 13437017,
+      "sha256": "eb54c6ea8f749dc825b2c39ee0dbe66f10e02492e6425359f32c64114cb1dbd7",
+      "official_url": "https://dl.rockylinux.org/pub/rocky/10/devel/x86_64/os/Packages/c/cpp-14.3.1-4.4.el10.x86_64.rpm"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel-2.41-63.el10.x86_64.rpm",
+      "bytes": 9024880,
+      "sha256": "0907f95d4351afcac619be9aaf398d05389eba037ad5080c09254824e4539d84",
+      "official_url": "https://dl.rockylinux.org/pub/rocky/10/devel/x86_64/os/Packages/b/binutils-devel-2.41-63.el10.x86_64.rpm"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/gcc-14.3.1-4.4.el10.x86_64.rpm",
+      "bytes": 39836892,
+      "sha256": "fdbe80a3814b1826f0e8fd6e8b458f7909bce742924f6095a300e078c594a888",
+      "official_url": "https://dl.rockylinux.org/pub/rocky/10/devel/x86_64/os/Packages/g/gcc-14.3.1-4.4.el10.x86_64.rpm"
+    },
+    {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/libgcc-14.3.1-4.4.el10.x86_64.rpm",
+      "bytes": 143035,
+      "sha256": "6f484aebcfe08bc0218c800019e74b79b326d654a0207fd7f5862583e8aed399",
+      "official_url": "https://dl.rockylinux.org/pub/rocky/10/devel/x86_64/os/Packages/l/libgcc-14.3.1-4.4.el10.x86_64.rpm"
+    }
+  ],
+  "associated_archives": {
+    "binutils-devel/usr/lib64/libsframe.a": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/lib64/libsframe.a",
+      "bytes": 166174,
+      "sha256": "672167bbda65094966dce98fd6ba06a4b421fa20b4c7d05ed73aee2744bad072",
+      "status": "Official same-release package data, no preexisting selected-provider identity pin"
+    },
+    "binutils-devel/usr/lib64/libiberty.a": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/binutils-devel/usr/lib64/libiberty.a",
+      "bytes": 2215908,
+      "sha256": "714cae91080b3c21c127bd7c43330724c1a6397c8f6c3abcf9f91f063e9487a5",
+      "status": "Official same-release package data, no preexisting selected-provider identity pin"
+    },
+    "cpp/usr/libexec/gcc/x86_64-redhat-linux/14/cc1": {
+      "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/cpp/usr/libexec/gcc/x86_64-redhat-linux/14/cc1",
+      "bytes": 38378352,
+      "sha256": "4330e05f8264caeddf3d81c842f5cbd31ab4af1990459f29f1cc46b693a83a77",
+      "status": "Official same-release package data, no preexisting selected-provider identity pin"
+    }
+  },
+  "remaining_requirements": [
+    "Restore recorded symlinks/permissions only inside an isolated SDK tree; passive extractor writes regular data files mode0644 and logs symlinks rather than activating them.",
+    "C frontend runtime: libmpc.so.3, libmpfr.so.6, libgmp.so.10, libz.so.1, libzstd.so.1, libc.so.6, libm.so.6 with GLIBC_2.38.",
+    "Assembler/linker runtime: binutils libbfd-2.41-63.el10.so, libctf.so.0, libsframe.so.1, libjansson.so.4, zlib, libc and any recursively selected dependencies.",
+    "Native C link: glibc-devel system headers and startup objects, libgcc link/runtime objects, Linux headers; exact versions should come from selected SDK metadata.",
+    "BFD link: recovered libbfd.a + libsframe.a + libiberty.a + selected libz and libdl/libc provider closure.",
+    "Absolute path guard and include remain /usr/include/bfd.h and /usr/lib64/libbfd.so; script absolute archives require isolated mount namespace or matching image. Changing production /usr or rewriting pinned script is not equivalent.",
+    "Actual layout witness, four Rust accessors, actual mcinspect/eclair link and functionality remain parent-scoped build work."
+  ],
+  "transitive_rpm_requirements": {
+    "gcc": [
+      {
+        "name": "/usr/bin/sh",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "binutils",
+        "version_constraint_value": "2.31",
+        "rpm_flags": 12
+      },
+      {
+        "name": "cpp",
+        "version_constraint_value": "14.3.1-4.4.el10",
+        "rpm_flags": 8
+      },
+      {
+        "name": "glibc-devel",
+        "version_constraint_value": "2.2.90-12",
+        "rpm_flags": 12
+      },
+      {
+        "name": "libc.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.11)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.14)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.15)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.17)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.2.5)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.25)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3.2)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3.3)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.32)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.33)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.34)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.35)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.36)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.38)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.4)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgcc",
+        "version_constraint_value": "14.3.1-4.4.el10",
+        "rpm_flags": 12
+      },
+      {
+        "name": "libgmp.so.10()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgomp",
+        "version_constraint_value": "14.3.1-4.4.el10",
+        "rpm_flags": 8
+      },
+      {
+        "name": "libgomp.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libm.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libm.so.6(GLIBC_2.2.5)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libmpc.so.3()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libmpfr.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libz.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libzstd.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "make",
+        "version_constraint_value": "",
+        "rpm_flags": 0
+      },
+      {
+        "name": "rpmlib(CompressedFileNames)",
+        "version_constraint_value": "3.0.4-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(FileDigests)",
+        "version_constraint_value": "4.6.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PartialHardlinkSets)",
+        "version_constraint_value": "4.0.4-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadFilesHavePrefix)",
+        "version_constraint_value": "4.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadIsZstd)",
+        "version_constraint_value": "5.4.18-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rtld(GNU_HASH)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      }
+    ],
+    "cpp": [
+      {
+        "name": "filesystem",
+        "version_constraint_value": "3",
+        "rpm_flags": 12
+      },
+      {
+        "name": "libc.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.11)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.14)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.15)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.17)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.2.5)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.25)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3.2)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.32)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.33)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.34)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.35)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.36)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.38)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.4)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgmp.so.10()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libm.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libm.so.6(GLIBC_2.2.5)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libmpc.so.3()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libmpfr.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libz.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libzstd.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "rpmlib(CompressedFileNames)",
+        "version_constraint_value": "3.0.4-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(FileDigests)",
+        "version_constraint_value": "4.6.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadFilesHavePrefix)",
+        "version_constraint_value": "4.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadIsZstd)",
+        "version_constraint_value": "5.4.18-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rtld(GNU_HASH)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      }
+    ],
+    "binutils": [
+      {
+        "name": "/bin/sh",
+        "version_constraint_value": "",
+        "rpm_flags": 1280
+      },
+      {
+        "name": "/bin/sh",
+        "version_constraint_value": "",
+        "rpm_flags": 2304
+      },
+      {
+        "name": "/bin/sh",
+        "version_constraint_value": "",
+        "rpm_flags": 4352
+      },
+      {
+        "name": "/usr/sbin/alternatives",
+        "version_constraint_value": "",
+        "rpm_flags": 1024
+      },
+      {
+        "name": "/usr/sbin/alternatives",
+        "version_constraint_value": "",
+        "rpm_flags": 2048
+      },
+      {
+        "name": "binutils-gold",
+        "version_constraint_value": "2.41",
+        "rpm_flags": 12
+      },
+      {
+        "name": "coreutils",
+        "version_constraint_value": "",
+        "rpm_flags": 1024
+      },
+      {
+        "name": "libbfd-2.41-63.el10.so()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.10)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.11)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.14)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.17)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.2.5)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.27)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3.2)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.3.4)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.33)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.34)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.38)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.4)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.6)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.7)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.8)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_2.9)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libc.so.6(GLIBC_ABI_DT_RELR)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libctf-nobfd.so.0()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libctf-nobfd.so.0(LIBCTF_1.0)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libctf-nobfd.so.0(LIBCTF_1.1)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libctf.so.0()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libctf.so.0(LIBCTF_1.0)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libctf.so.0(LIBCTF_1.1)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libdebuginfod.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libdebuginfod.so.1(ELFUTILS_0.178)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgcc_s.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgcc_s.so.1(GCC_3.0)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgcc_s.so.1(GCC_3.3.1)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libgprofng.so.0()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libjansson.so.4()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libjansson.so.4(libjansson.so.4)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libm.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libopcodes-2.41-63.el10.so()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libsframe.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libsframe.so.1(LIBSFRAME_1.0)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(CXXABI_1.3)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(CXXABI_1.3.15)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(CXXABI_1.3.5)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(CXXABI_1.3.8)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(CXXABI_1.3.9)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.11)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.15)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.18)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.20)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.21)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.29)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.30)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libstdc++.so.6(GLIBCXX_3.4.32)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libz.so.1()(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "libz.so.1(ZLIB_1.2.0)(64bit)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      },
+      {
+        "name": "rpmlib(CompressedFileNames)",
+        "version_constraint_value": "3.0.4-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(FileDigests)",
+        "version_constraint_value": "4.6.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PartialHardlinkSets)",
+        "version_constraint_value": "4.0.4-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadFilesHavePrefix)",
+        "version_constraint_value": "4.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadIsZstd)",
+        "version_constraint_value": "5.4.18-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rtld(GNU_HASH)",
+        "version_constraint_value": "",
+        "rpm_flags": 16384
+      }
+    ],
+    "binutils-devel": [
+      {
+        "name": "binutils",
+        "version_constraint_value": "2.41-63.el10",
+        "rpm_flags": 8
+      },
+      {
+        "name": "coreutils",
+        "version_constraint_value": "",
+        "rpm_flags": 0
+      },
+      {
+        "name": "rpmlib(CompressedFileNames)",
+        "version_constraint_value": "3.0.4-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(FileDigests)",
+        "version_constraint_value": "4.6.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadFilesHavePrefix)",
+        "version_constraint_value": "4.0-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "rpmlib(PayloadIsZstd)",
+        "version_constraint_value": "5.4.18-1",
+        "rpm_flags": 16777226
+      },
+      {
+        "name": "zlib-devel",
+        "version_constraint_value": "",
+        "rpm_flags": 0
+      }
+    ]
+  },
+  "passive_extractor": {
+    "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/rpm_extract.py",
+    "sha256": "edef9f9237f105531f7b7733e9f31b4e349faf0da2e875ef5d6956b46b8074cf",
+    "behavior": "No installation, scripts, recovered binary execution or active symlinks; records cpio metadata; reconstructs hardlink bytes as separate regular data files; all extracted regular files mode0644."
+  },
+  "runtime_elf_dependencies": {
+    "gcc/usr/bin/gcc": [
+      "libm.so.6",
+      "libc.so.6"
+    ],
+    "cpp/usr/libexec/gcc/x86_64-redhat-linux/14/cc1": [
+      "libmpc.so.3",
+      "libmpfr.so.6",
+      "libgmp.so.10",
+      "libz.so.1",
+      "libzstd.so.1",
+      "libm.so.6",
+      "libc.so.6"
+    ],
+    "gcc/usr/libexec/gcc/x86_64-redhat-linux/14/collect2": [
+      "libm.so.6",
+      "libc.so.6"
+    ],
+    "binutils/usr/bin/ld.bfd": [
+      "libbfd-2.41-63.el10.so",
+      "libctf.so.0",
+      "libjansson.so.4",
+      "libc.so.6"
+    ],
+    "binutils/usr/bin/as": [
+      "libbfd-2.41-63.el10.so",
+      "libz.so.1",
+      "libc.so.6"
+    ],
+    "binutils/usr/lib64/libbfd-2.41-63.el10.so": [
+      "libz.so.1",
+      "libsframe.so.1",
+      "libc.so.6"
+    ],
+    "binutils/usr/lib64/libctf.so.0.0.0": [
+      "libbfd-2.41-63.el10.so",
+      "libsframe.so.1",
+      "libz.so.1",
+      "libc.so.6"
+    ]
+  },
+  "transitive_identity_limits": "Only GCC/CPP14.3.1-4.4.el10 and binutils(-devel)2.41-63.el10 release identities are pinned/recovered. The original SDK glibc/zlib/libgcc/GMP/MPFR/MPC/Jansson NEVRAs are not established by these source manifests. Requirements record constraints, not authority to select a replacement provider or claim the original full SDK.",
+  "namespace_plan": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/NAMESPACE-PLAN.json",
+  "exact_release_libgcc": {
+    "path": "/workspace/scratch/a8bff332f582/m15-sdk-recovery/libgcc/lib64/libgcc_s-14-20251022.so.1",
+    "bytes": 186528,
+    "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb"
+  }
+}
