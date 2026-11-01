@@ -23,12 +23,20 @@ int main(void)
 " EXECUTER_BFD_SET_SECTION_NEEDS_BFD)
 set(CMAKE_REQUIRED_LIBRARIES "${_executer_saved_required_libraries}")
 
+option(ENABLE_RUST_USER_TOOLS "Enable Rust helpers in McKernel user tools" ON)
+set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
+if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+	if (NOT MCKERNEL_RUNTIME_TOOL_RUSTC OR NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}"
+		OR NOT EXISTS "${MCKERNEL_RUNTIME_TOOL_RUSTC}" OR IS_DIRECTORY "${MCKERNEL_RUNTIME_TOOL_RUSTC}")
+		message(FATAL_ERROR "User tools require an existing absolute MCKERNEL_RUNTIME_TOOL_RUSTC compiler; no silent C fallback")
+	endif()
+endif()
+
+# Child libraries must see the same user-tool selection on a fresh cache.
 add_subdirectory(lib)
 add_library(libmcexec STATIC arch/${ARCH}/archdep.S)
 SET_TARGET_PROPERTIES(libmcexec PROPERTIES OUTPUT_NAME mcexec)
 set_property(TARGET libmcexec PROPERTY POSITION_INDEPENDENT_CODE ON)
-
-option(ENABLE_RUST_USER_TOOLS "Enable Rust helpers in McKernel user tools" ON)
 
 # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 # F4D's existing Rust main/349-provider composition, with an independent user compiler.
@@ -167,14 +175,13 @@ set_property(TARGET mcexec PROPERTY LINK_FLAGS "-fPIE -pie")
 
 set(MCINSPECT_SRCS mcinspect.c)
 if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-	find_program(RUSTC rustc)
-	if (RUSTC)
+	if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 		include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/BfdRustAccessors.cmake")
 		set(MCINSPECT_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcinspect_helpers.o")
 		add_custom_command(
 			OUTPUT "${MCINSPECT_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 				--crate-name mcinspect_helpers
 				--crate-type lib
 				--edition=2021
@@ -186,6 +193,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				--emit=obj=${MCINSPECT_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcinspect_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcinspect_helpers.rs"
+				"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 			COMMENT "Building Rust mcinspect helpers"
 			VERBATIM
 		)
@@ -219,14 +227,13 @@ set_property(TARGET mcinspect PROPERTY LINK_FLAGS "-fPIE -pie")
 
 set(ECLAIR_SRCS eclair.c arch/${ARCH}/arch-eclair.c)
 if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-	find_program(RUSTC rustc)
-	if (RUSTC)
+	if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 		set(ECLAIR_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/eclair_helpers.o")
 		set(ECLAIR_ARCH_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/arch_eclair_x86_64.o")
 		add_custom_command(
 			OUTPUT "${ECLAIR_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 				--crate-name eclair_helpers
 				--crate-type lib
 				--edition=2021
@@ -238,13 +245,14 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				--emit=obj=${ECLAIR_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/eclair_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/eclair_helpers.rs"
+				"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 			COMMENT "Building Rust eclair helpers"
 			VERBATIM
 		)
 		add_custom_command(
 			OUTPUT "${ECLAIR_ARCH_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 				--crate-name arch_eclair_x86_64
 				--crate-type lib
 				--edition=2021
@@ -255,6 +263,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				--emit=obj=${ECLAIR_ARCH_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_eclair_x86_64.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/arch_eclair_x86_64.rs"
+				"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 			COMMENT "Building Rust x86_64 eclair arch glue"
 			VERBATIM
 		)
@@ -287,13 +296,12 @@ set_property(TARGET eclair PROPERTY LINK_FLAGS "-fPIE -pie")
 
 set(SCHED_YIELD_SRCS libsched_yield.c)
 if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-	find_program(RUSTC rustc)
-	if (RUSTC)
+	if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 		set(SCHED_YIELD_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/libsched_yield.o")
 		add_custom_command(
 			OUTPUT "${SCHED_YIELD_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 				--crate-name libsched_yield
 				--crate-type lib
 				--edition=2021
@@ -305,6 +313,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				--emit=obj=${SCHED_YIELD_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/libsched_yield.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/libsched_yield.rs"
+				"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 			COMMENT "Building Rust sched_yield interposer"
 			VERBATIM
 		)
@@ -329,13 +338,12 @@ if (ENABLE_QLMPI)
 
 	set(QLMPI_SRCS qlmpilib.c)
 	if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-		find_program(RUSTC rustc)
-		if (RUSTC)
+		if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 			set(QLMPI_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/qlmpilib.o")
 			add_custom_command(
 				OUTPUT "${QLMPI_RUST_OBJ}"
 				COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 					--crate-name qlmpilib
 					--crate-type lib
 					--edition=2021
@@ -347,6 +355,7 @@ if (ENABLE_QLMPI)
 					--emit=obj=${QLMPI_RUST_OBJ}
 					"${CMAKE_CURRENT_SOURCE_DIR}/rust/qlmpilib.rs"
 				DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/qlmpilib.rs"
+					"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 				COMMENT "Building Rust qlmpi library body"
 				VERBATIM
 			)
@@ -366,13 +375,12 @@ if (ENABLE_QLMPI)
 
 	set(QLFORT_SRCS libqlfort.c)
 	if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-		find_program(RUSTC rustc)
-		if (RUSTC)
+		if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 			set(QLFORT_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/qlfort.o")
 			add_custom_command(
 				OUTPUT "${QLFORT_RUST_OBJ}"
 				COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 					--crate-name qlfort
 					--crate-type lib
 					--edition=2021
@@ -384,6 +392,7 @@ if (ENABLE_QLMPI)
 					--emit=obj=${QLFORT_RUST_OBJ}
 					"${CMAKE_CURRENT_SOURCE_DIR}/rust/qlfort.rs"
 				DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/qlfort.rs"
+					"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 				COMMENT "Building Rust qlfort interposer"
 				VERBATIM
 			)
@@ -403,13 +412,12 @@ if (ENABLE_QLMPI)
 
 	set(QL_SERVER_SRCS ql_server.c)
 	if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-		find_program(RUSTC rustc)
-		if (RUSTC)
+		if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 			set(QL_SERVER_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/ql_server.o")
 			add_custom_command(
 				OUTPUT "${QL_SERVER_RUST_OBJ}"
 				COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 					--crate-name ql_server
 					--crate-type lib
 					--edition=2021
@@ -420,6 +428,7 @@ if (ENABLE_QLMPI)
 					--emit=obj=${QL_SERVER_RUST_OBJ}
 					"${CMAKE_CURRENT_SOURCE_DIR}/rust/ql_server.rs"
 				DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ql_server.rs"
+					"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 				COMMENT "Building Rust ql_server"
 				VERBATIM
 			)
@@ -436,13 +445,12 @@ if (ENABLE_QLMPI)
 	endif()
 	set(QL_TALKER_SRCS ql_talker.c)
 	if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-		find_program(RUSTC rustc)
-		if (RUSTC)
+		if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 			set(QL_TALKER_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/ql_talker.o")
 			add_custom_command(
 				OUTPUT "${QL_TALKER_RUST_OBJ}"
 				COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 					--crate-name ql_talker
 					--crate-type lib
 					--edition=2021
@@ -453,6 +461,7 @@ if (ENABLE_QLMPI)
 					--emit=obj=${QL_TALKER_RUST_OBJ}
 					"${CMAKE_CURRENT_SOURCE_DIR}/rust/ql_talker.rs"
 				DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ql_talker.rs"
+					"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 				COMMENT "Building Rust ql_talker"
 				VERBATIM
 			)
@@ -487,14 +496,13 @@ if (ENABLE_UTI)
 
 	set(MCK_SYSCALL_INTERCEPT_SRCS syscall_intercept.c arch/${ARCH}/archdep_c.c)
 	if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-		find_program(RUSTC rustc)
-		if (RUSTC)
+		if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 			set(SYSCALL_INTERCEPT_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/syscall_intercept.o")
 			set(UTI_ARCH_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/archdep_uti_x86_64.o")
 			add_custom_command(
 				OUTPUT "${SYSCALL_INTERCEPT_RUST_OBJ}"
 				COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 					--crate-name syscall_intercept
 					--crate-type lib
 					--edition=2021
@@ -506,13 +514,14 @@ if (ENABLE_UTI)
 					--emit=obj=${SYSCALL_INTERCEPT_RUST_OBJ}
 					"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_intercept.rs"
 				DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_intercept.rs"
+					"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 				COMMENT "Building Rust UTI syscall intercept hook"
 				VERBATIM
 			)
 			add_custom_command(
 				OUTPUT "${UTI_ARCH_RUST_OBJ}"
 				COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+				COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 					--crate-name archdep_uti_x86_64
 					--crate-type lib
 					--edition=2021
@@ -524,6 +533,7 @@ if (ENABLE_UTI)
 					--emit=obj=${UTI_ARCH_RUST_OBJ}
 					"${CMAKE_CURRENT_SOURCE_DIR}/rust/archdep_uti_x86_64.rs"
 				DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/archdep_uti_x86_64.rs"
+					"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 				COMMENT "Building Rust x86_64 UTI syscall wrappers"
 				VERBATIM
 			)
@@ -564,13 +574,12 @@ endif()
 
 set(LDUMP2MCDUMP_SRCS ldump2mcdump.c)
 if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-	find_program(RUSTC rustc)
-	if (RUSTC)
+	if (MCKERNEL_RUNTIME_TOOL_RUSTC)
 		set(LDUMP2MCDUMP_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/ldump2mcdump_helpers.o")
 		add_custom_command(
 			OUTPUT "${LDUMP2MCDUMP_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 				--crate-name ldump2mcdump_helpers
 				--crate-type lib
 				--edition=2021
@@ -583,6 +592,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				--emit=obj=${LDUMP2MCDUMP_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs"
+				"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
 			COMMENT "Building Rust ldump2mcdump helpers"
 			VERBATIM
 		)
@@ -615,10 +625,6 @@ if(ENABLE_RUST_USER_TOOLS AND ARCH STREQUAL "x86_64")
      "${MCKERNELDIR}" MATCHES "[^A-Za-z0-9_./:+,@%=-]")
     message(FATAL_ERROR "Review mcps shell-to-Rust semantics for nonliteral configured paths")
   endif()
-  set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
-  if(NOT MCKERNEL_RUNTIME_TOOL_RUSTC OR NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}")
-    message(FATAL_ERROR "Set absolute MCKERNEL_RUNTIME_TOOL_RUSTC from the pinned user toolchain")
-  endif()
   set(MCPS_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcps.o")
   add_custom_command(
     OUTPUT "${MCPS_RUST_OBJ}"
@@ -630,6 +636,7 @@ if(ENABLE_RUST_USER_TOOLS AND ARCH STREQUAL "x86_64")
       -C force-unwind-tables=no "--emit=obj=${MCPS_RUST_OBJ}"
       "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcps.rs"
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcps.rs"
+      "${MCKERNEL_RUNTIME_TOOL_RUSTC}"
     VERBATIM)
   add_custom_target(mcps_rust_main DEPENDS "${MCPS_RUST_OBJ}")
   set_source_files_properties("${MCPS_RUST_OBJ}"

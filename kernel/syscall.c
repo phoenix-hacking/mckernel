@@ -267,6 +267,14 @@ static unsigned long uti_desc; /* Address of struct uti_desc object in syscall_i
 #define PTRACE_DISPATCH_GETREGSET 16
 #define PTRACE_DISPATCH_SETREGSET 17
 #define PTRACE_DISPATCH_GETEVENTMSG 18
+/* Private waitid selector for PGID 1: -1 is reserved for all children. Public
+ * wait4 rejects INT_MIN before dispatch, so it cannot request this encoding. */
+#define WAIT_PGID_ONE INT_MIN
+/* Internal stop cause, confined to do_wait's local status. wait4 restores 0x7f
+ * before copyout; waitid reports CLD_TRAPPED. All event bits stay untouched. */
+#define WAIT_STATUS_PTRACED_STOP 0x7e
+_Static_assert(_NSIG < WAIT_STATUS_PTRACED_STOP,
+		"private wait stop tag must not overlap supported signals");
 #define WAIT_STOP_SOURCE_NONE 0
 #define WAIT_STOP_SOURCE_THREAD 1
 #define WAIT_STOP_SOURCE_PROCESS 2
@@ -1067,10 +1075,19 @@ long syscall_copy_from_user_bridge(void *dst_addr,
 		unsigned long src_addr, size_t bytes);
 long syscall_copy_to_user_bridge(unsigned long dst_addr,
 		const void *src, size_t bytes);
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+		unsigned long arg1);
+extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
+		unsigned long arg1, unsigned long arg2);
+extern long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+		unsigned long arg1);
+#else
 static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1);
 static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1, unsigned long arg2);
+#endif
 long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1, unsigned long arg2);
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -2134,7 +2151,7 @@ extern long wait4_body_result(int pid, unsigned long status_addr, int options,
 		unsigned long rusage_addr, wait4_do_wait_fn_t do_wait_fn,
 		syscall_copy_to_user_fn_t copy_to_fn);
 extern int waitid_siginfo_needed_result(int rc, int has_infop);
-extern void waitid_copy_siginfo_result(int rc, unsigned long infop_addr,
+extern long waitid_copy_siginfo_result(int rc, unsigned long infop_addr,
 		int status, long utime_sec, long utime_usec,
 		long stime_sec, long stime_usec,
 		syscall_copy_to_user_fn_t copy_to_fn);
@@ -3485,7 +3502,7 @@ SYSCALL_POLICY_HELPER_PROTO long wait4_body_result(int pid,
 		syscall_copy_to_user_fn_t copy_to_fn);
 SYSCALL_POLICY_HELPER_PROTO int waitid_siginfo_needed_result(int rc,
 		int has_infop);
-SYSCALL_POLICY_HELPER_PROTO void waitid_copy_siginfo_result(int rc,
+SYSCALL_POLICY_HELPER_PROTO long waitid_copy_siginfo_result(int rc,
 		unsigned long infop_addr, int status, long utime_sec,
 		long utime_usec, long stime_sec, long stime_usec,
 		syscall_copy_to_user_fn_t copy_to_fn);
@@ -4864,6 +4881,9 @@ wait_process_list_add_tail_bridge(void *entry, void *head)
 			(struct list_head *)head);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+extern int wait_host_wait4_bridge(int pid, int options);
+#else
 static int
 wait_host_wait4_bridge(int pid, int options)
 {
@@ -4875,6 +4895,7 @@ wait_host_wait4_bridge(int pid, int options)
 	request.args[2] = options;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
+#endif
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE)
 extern void f03_wait_release_process(void *);
@@ -15267,10 +15288,16 @@ SYSCALL_POLICY_HELPER_SCOPE int
 waitid_to_wait_pid_result(int idtype, int id, int *pidp)
 {
 	if (idtype == P_PID) {
+		if (id <= 0) {
+			return -EINVAL;
+		}
 		*pidp = id;
 	}
 	else if (idtype == P_PGID) {
-		*pidp = -id;
+		if (id < 0) {
+			return -EINVAL;
+		}
+		*pidp = id == 1 ? WAIT_PGID_ONE : -id;
 	}
 	else if (idtype == P_ALL) {
 		*pidp = -1;
@@ -15314,6 +15341,9 @@ SYSCALL_POLICY_HELPER_SCOPE int
 wait_process_pid_matches_result(int pid, int parent_pgid, int child_pgid,
 		int child_pid)
 {
+	if (pid == WAIT_PGID_ONE) {
+		return child_pgid == 1;
+	}
 	if (pid == -1) {
 		return 1;
 	}
@@ -15645,6 +15675,9 @@ wait_process_candidate_body_result(int current_ret, int pid, int *status,
 	if (wait_ptraced_stop_candidate_result(child_ptrace, child_status)) {
 		ret = stopped_fn(thread, child_proc, NULL, status, options);
 		if (ret == child_pid) {
+			if (ret > 0) {
+				*status = (*status & ~0xff) | WAIT_STATUS_PTRACED_STOP;
+			}
 			if (pid == child_tid) {
 				ret = child_tid;
 			}
@@ -15748,6 +15781,9 @@ wait_thread_candidate_body_result(int current_ret, int tid, int *status,
 		ret = stopped_fn(thread, child_proc, child_thread, status,
 				options);
 		if (ret == child_tid) {
+			if (ret > 0) {
+				*status = (*status & ~0xff) | WAIT_STATUS_PTRACED_STOP;
+			}
 			reap_fn(child_thread, thread_signal_flags_offset,
 					options, SIGNAL_STOP_STOPPED);
 			unlock_fn(threads_lock, threads_lock_node);
@@ -16181,6 +16217,9 @@ wait_thread_empty_candidate_result(int is_main_thread, int termsig)
 SYSCALL_POLICY_HELPER_SCOPE int
 waitid_status_code_result(int status)
 {
+	if ((status & 0xff) == WAIT_STATUS_PTRACED_STOP) {
+		return CLD_TRAPPED;
+	}
 	if ((status & 0x000000ff) == 0x0000007f) {
 		return CLD_STOPPED;
 	}
@@ -16188,7 +16227,7 @@ waitid_status_code_result(int status)
 		return CLD_CONTINUED;
 	}
 	else if (status & 0x000000ff) {
-		return CLD_KILLED;
+		return (status & 0x80) ? CLD_DUMPED : CLD_KILLED;
 	}
 	return CLD_EXITED;
 }
@@ -16271,7 +16310,7 @@ wait_thread_reap_action_result(int options, int ptrace)
 SYSCALL_POLICY_HELPER_SCOPE int
 wait_status_copy_needed_result(int rc, int has_status)
 {
-	return rc >= 0 && has_status;
+	return rc > 0 && has_status;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -16285,7 +16324,7 @@ wait4_body_result(int pid, unsigned long status_addr, int options,
 		unsigned long rusage_addr, wait4_do_wait_fn_t do_wait_fn,
 		syscall_copy_to_user_fn_t copy_to_fn)
 {
-	int status;
+	int status = 0;
 	int rc;
 	struct rusage usage;
 
@@ -16293,14 +16332,27 @@ wait4_body_result(int pid, unsigned long status_addr, int options,
 	if (rc) {
 		return rc;
 	}
+	if (pid == INT_MIN) {
+		return -ESRCH;
+	}
 
 	memset(&usage, '\0', sizeof(usage));
 	rc = do_wait_fn(pid, &status, WEXITED | options, &usage);
+	if (rc <= 0) {
+		return rc;
+	}
+	if ((status & 0xff) == WAIT_STATUS_PTRACED_STOP) {
+		status = (status & ~0xff) | 0x7f;
+	}
 	if (wait_status_copy_needed_result(rc, status_addr != 0)) {
-		copy_to_fn(status_addr, &status, sizeof(status));
+		if (copy_to_fn(status_addr, &status, sizeof(status)) != 0) {
+			return -EFAULT;
+		}
 	}
 	if (wait_rusage_copy_needed_result(rusage_addr != 0)) {
-		copy_to_fn(rusage_addr, &usage, sizeof(usage));
+		if (copy_to_fn(rusage_addr, &usage, sizeof(usage)) != 0) {
+			return -EFAULT;
+		}
 	}
 	return rc;
 }
@@ -16308,10 +16360,10 @@ wait4_body_result(int pid, unsigned long status_addr, int options,
 SYSCALL_POLICY_HELPER_SCOPE int
 waitid_siginfo_needed_result(int rc, int has_infop)
 {
-	return rc > 0 && has_infop;
+	return rc >= 0 && has_infop;
 }
 
-SYSCALL_POLICY_HELPER_SCOPE void
+SYSCALL_POLICY_HELPER_SCOPE long
 waitid_copy_siginfo_result(int rc, unsigned long infop_addr, int status,
 		long utime_sec, long utime_usec, long stime_sec,
 		long stime_usec, syscall_copy_to_user_fn_t copy_to_fn)
@@ -16320,18 +16372,35 @@ waitid_copy_siginfo_result(int rc, unsigned long infop_addr, int status,
 	struct timeval utime = { .tv_sec = utime_sec, .tv_usec = utime_usec };
 	struct timeval stime = { .tv_sec = stime_sec, .tv_usec = stime_usec };
 
-	if (!waitid_siginfo_needed_result(rc, infop_addr != 0) || !copy_to_fn) {
-		return;
+	if (!waitid_siginfo_needed_result(rc, infop_addr != 0)) {
+		return 0;
+	}
+	if (!copy_to_fn) {
+		return -EFAULT;
 	}
 
 	memset(&info, '\0', sizeof(info));
-	info.si_signo = SIGCHLD;
-	info._sifields._sigchld.si_pid = rc;
-	info._sifields._sigchld.si_status = status;
-	info._sifields._sigchld.si_utime = timeval_to_jiffy(&utime);
-	info._sifields._sigchld.si_stime = timeval_to_jiffy(&stime);
-	info.si_code = waitid_status_code_result(status);
-	copy_to_fn(infop_addr, &info, sizeof(info));
+	if (rc > 0) {
+		info.si_signo = SIGCHLD;
+		info._sifields._sigchld.si_pid = rc;
+		info.si_code = waitid_status_code_result(status);
+		if (info.si_code == CLD_EXITED) {
+			info._sifields._sigchld.si_status = (status >> 8) & 0xff;
+		}
+		else if (info.si_code == CLD_STOPPED || info.si_code == CLD_TRAPPED) {
+			/* Preserve ptrace event bits above the stop signal byte. */
+			info._sifields._sigchld.si_status = status >> 8;
+		}
+		else if (info.si_code == CLD_CONTINUED) {
+			info._sifields._sigchld.si_status = SIGCONT;
+		}
+		else {
+			info._sifields._sigchld.si_status = status & 0x7f;
+		}
+		info._sifields._sigchld.si_utime = timeval_to_jiffy(&utime);
+		info._sifields._sigchld.si_stime = timeval_to_jiffy(&stime);
+	}
+	return copy_to_fn(infop_addr, &info, sizeof(info)) != 0 ? -EFAULT : 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE long
@@ -16340,7 +16409,7 @@ waitid_body_result(int idtype, int id, unsigned long infop_addr, int options,
 		syscall_copy_to_user_fn_t copy_to_fn)
 {
 	int pid;
-	int status;
+	int status = 0;
 	int rc;
 	struct rusage usage;
 
@@ -16360,11 +16429,10 @@ waitid_body_result(int idtype, int id, unsigned long infop_addr, int options,
 		return rc;
 	}
 
-	waitid_copy_siginfo_result(rc, infop_addr, status,
+	return waitid_copy_siginfo_result(rc, infop_addr, status,
 			usage.ru_utime.tv_sec, usage.ru_utime.tv_usec,
 			usage.ru_stime.tv_sec, usage.ru_stime.tv_usec,
 			copy_to_fn);
-	return 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -19983,7 +20051,7 @@ syscall_process_unlock_bridge(void *proc, void *lock_arg)
 long
 syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask)
 {
-	ihk_mc_user_context_t ctx0;
+	ihk_mc_user_context_t ctx0 = { 0 };
 
 	ihk_mc_syscall_set_arg0(&ctx0, sigmask);
 	return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0);
@@ -20095,7 +20163,7 @@ long
 syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 {
 	const struct k_sigaction *act = actp;
-	ihk_mc_user_context_t ctx0;
+	ihk_mc_user_context_t ctx0 = { 0 };
 
 	ihk_mc_syscall_set_arg0(&ctx0, sig);
 	ihk_mc_syscall_set_arg1(&ctx0,
@@ -20112,7 +20180,7 @@ do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
 	struct thread *thread = get_this_cpu_local_var()->current;
 	struct k_sigaction *k;
 	struct mcs_rwlock_node_irqsave mcs_rw_node;
-	ihk_mc_user_context_t ctx0;
+	ihk_mc_user_context_t ctx0 = { 0 };
 	int error;
 
 	error = sigaction_validate(sig, act != NULL);
@@ -26992,6 +27060,7 @@ syscall_gettime_bridge(void *ts)
 }
 #endif
 
+#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
 static long
 syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1)
@@ -27034,6 +27103,7 @@ syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 	return syscall_do_syscall3_bridge(syscall_nr, arg0, arg1, arg2);
 }
 #endif
+#endif /* C forwarding adapters; Rust owns the explicit candidate selection. */
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static long

@@ -1303,6 +1303,13 @@ const CLD_DUMPED: CInt = 3;
 const CLD_STOPPED: CInt = 5;
 const CLD_CONTINUED: CInt = 6;
 const EXIT_GROUP_STATUS_CONFIRMED: CULong = 0x0000000100000000;
+// Private waitid PGID-1 encoding: -1 already means every child. Public wait4
+// rejects CInt::MIN before dispatch, preserving the existing external ABI.
+const WAIT_PGID_ONE: CInt = CInt::MIN;
+// Private stop cause in do_wait's local status, normalized by wait4 before
+// copyout and decoded by waitid. Preserve all event bits above the low byte.
+const WAIT_STATUS_PTRACED_STOP: CInt = 0x7e;
+const _: () = assert!(NSIG < WAIT_STATUS_PTRACED_STOP);
 const WAIT_STOP_SOURCE_NONE: CInt = 0;
 const WAIT_STOP_SOURCE_THREAD: CInt = 1;
 const WAIT_STOP_SOURCE_PROCESS: CInt = 2;
@@ -15918,6 +15925,11 @@ pub unsafe extern "C" fn ptrace_read_regset(
     iov: *mut Iovec,
 ) -> CLong {
     let mut regs = MaybeUninit::<UserRegsStruct>::uninit();
+    let xstate_size = if type_ == NT_X86_XSTATE {
+        crate::x86_cpu_helpers::get_xsave_size().max(0) as SizeT
+    } else {
+        0
+    };
 
     arch_ptrace_read_regset_body_result(
         thread as CULong,
@@ -15925,7 +15937,7 @@ pub unsafe extern "C" fn ptrace_read_regset(
         iov.cast::<u8>(),
         regs.as_mut_ptr().cast::<u8>(),
         size_of::<UserRegsStruct>(),
-        size_of::<XsaveStruct>(),
+        xstate_size,
         offset_of!(Iovec, iov_base),
         offset_of!(Iovec, iov_len),
         Some(arch_ptrace_read_gpregs_bridge),
@@ -15942,6 +15954,11 @@ pub unsafe extern "C" fn ptrace_write_regset(
     iov: *mut Iovec,
 ) -> CLong {
     let mut regs = MaybeUninit::<UserRegsStruct>::uninit();
+    let xstate_size = if type_ == NT_X86_XSTATE {
+        crate::x86_cpu_helpers::get_xsave_size().max(0) as SizeT
+    } else {
+        0
+    };
 
     arch_ptrace_write_regset_body_result(
         thread as CULong,
@@ -15949,7 +15966,7 @@ pub unsafe extern "C" fn ptrace_write_regset(
         iov.cast::<u8>(),
         regs.as_mut_ptr().cast::<u8>(),
         size_of::<UserRegsStruct>(),
-        size_of::<XsaveStruct>(),
+        xstate_size,
         offset_of!(Iovec, iov_base),
         offset_of!(Iovec, iov_len),
         Some(arch_ptrace_read_gpregs_bridge),
@@ -17450,9 +17467,15 @@ pub unsafe extern "C" fn waitid_to_wait_pid_result(
     pidp: *mut CInt,
 ) -> CInt {
     let pid = if idtype == P_PID {
+        if id <= 0 {
+            return -EINVAL;
+        }
         id
     } else if idtype == P_PGID {
-        id.wrapping_neg()
+        if id < 0 {
+            return -EINVAL;
+        }
+        if id == 1 { WAIT_PGID_ONE } else { id.wrapping_neg() }
     } else if idtype == P_ALL {
         -1
     } else {
@@ -17503,6 +17526,9 @@ pub extern "C" fn wait_process_pid_matches_result(
     child_pgid: CInt,
     child_pid: CInt,
 ) -> CInt {
+    if pid == WAIT_PGID_ONE {
+        return (child_pgid == 1) as CInt;
+    }
     if pid == -1 {
         return 1;
     }
@@ -17992,6 +18018,9 @@ pub unsafe extern "C" fn wait_process_candidate_body_result(
     if wait_ptraced_stop_candidate_result(child_ptrace, child_status) != 0 {
         ret = stopped_fn(thread, child_proc, core::ptr::null_mut(), status, options);
         if ret == child_pid {
+            if ret > 0 {
+                write(status, (*status & !0xff) | WAIT_STATUS_PTRACED_STOP);
+            }
             let out = if pid == child_tid { child_tid } else { ret };
             reap_fn(
                 child_thread,
@@ -18129,6 +18158,9 @@ pub unsafe extern "C" fn wait_thread_candidate_body_result(
     if wait_ptraced_stop_candidate_result(child_ptrace, child_status) != 0 {
         ret = stopped_fn(thread, child_proc, child_thread, status, options);
         if ret == child_tid {
+            if ret > 0 {
+                write(status, (*status & !0xff) | WAIT_STATUS_PTRACED_STOP);
+            }
             reap_fn(
                 child_thread,
                 thread_signal_flags_offset,
@@ -18752,12 +18784,14 @@ pub extern "C" fn wait_thread_empty_candidate_result(is_main_thread: CInt, terms
 
 #[no_mangle]
 pub extern "C" fn waitid_status_code_result(status: CInt) -> CInt {
-    if (status & 0x000000ff) == 0x0000007f {
+    if (status & 0xff) == WAIT_STATUS_PTRACED_STOP {
+        CLD_TRAPPED
+    } else if (status & 0x000000ff) == 0x0000007f {
         CLD_STOPPED
     } else if (status & 0x0000ffff) == 0x0000ffff {
         CLD_CONTINUED
     } else if (status & 0x000000ff) != 0 {
-        CLD_KILLED
+        if status & 0x80 != 0 { CLD_DUMPED } else { CLD_KILLED }
     } else {
         CLD_EXITED
     }
@@ -18865,7 +18899,7 @@ pub extern "C" fn wait_thread_reap_action_result(options: CInt, ptrace: CInt) ->
 
 #[no_mangle]
 pub extern "C" fn wait_status_copy_needed_result(rc: CInt, has_status: CInt) -> CInt {
-    (rc >= 0 && has_status != 0) as CInt
+    (rc > 0 && has_status != 0) as CInt
 }
 
 #[no_mangle]
@@ -18895,6 +18929,9 @@ pub unsafe extern "C" fn wait4_body_result(
     if valid != 0 {
         return valid as CLong;
     }
+    if pid == CInt::MIN {
+        return -(ESRCH as CLong);
+    }
 
     let mut status: CInt = 0;
     let mut usage = MaybeUninit::<RUsage>::uninit();
@@ -18902,19 +18939,29 @@ pub unsafe extern "C" fn wait4_body_result(
     zero_rusage(usage_ptr);
 
     let rc = do_wait_fn(pid, &mut status as *mut CInt, WEXITED | options, usage_ptr);
+    if rc <= 0 {
+        return rc as CLong;
+    }
+    if (status & 0xff) == WAIT_STATUS_PTRACED_STOP {
+        status = (status & !0xff) | 0x7f;
+    }
     if wait_status_copy_needed_result(rc, (status_addr != 0) as CInt) != 0 {
         let src = &status as *const CInt as *const u8;
-        copy_to_fn(status_addr, src, size_of::<CInt>());
+        if copy_to_fn(status_addr, src, size_of::<CInt>()) != 0 {
+            return -(EFAULT as CLong);
+        }
     }
     if wait_rusage_copy_needed_result((rusage_addr != 0) as CInt) != 0 {
-        copy_to_fn(rusage_addr, usage_ptr as *const u8, size_of::<RUsage>());
+        if copy_to_fn(rusage_addr, usage_ptr as *const u8, size_of::<RUsage>()) != 0 {
+            return -(EFAULT as CLong);
+        }
     }
     rc as CLong
 }
 
 #[no_mangle]
 pub extern "C" fn waitid_siginfo_needed_result(rc: CInt, has_infop: CInt) -> CInt {
-    (rc > 0 && has_infop != 0) as CInt
+    (rc >= 0 && has_infop != 0) as CInt
 }
 
 fn timeval_to_jiffy_result(sec: CLong, usec: CLong) -> CLong {
@@ -18931,9 +18978,9 @@ pub unsafe extern "C" fn waitid_copy_siginfo_result(
     stime_sec: CLong,
     stime_usec: CLong,
     copy_to_fn: SyscallCopyToUserFn,
-) {
+) -> CLong {
     if waitid_siginfo_needed_result(rc, (infop_addr != 0) as CInt) == 0 {
-        return;
+        return 0;
     }
 
     let mut info = MaybeUninit::<SigInfo>::uninit();
@@ -18947,19 +18994,31 @@ pub unsafe extern "C" fn waitid_copy_siginfo_result(
         }
 
         let info = &mut *info_ptr;
-        info.si_signo = SIGCHLD;
-        info.si_code = waitid_status_code_result(status);
-        info.sifields.sigchld = ManuallyDrop::new(SigInfoChild {
-            si_pid: rc,
-            si_uid: 0,
-            si_status: status,
-            padding: 0,
-            si_utime: timeval_to_jiffy_result(utime_sec, utime_usec),
-            si_stime: timeval_to_jiffy_result(stime_sec, stime_usec),
-        });
+        if rc > 0 {
+            info.si_signo = SIGCHLD;
+            info.si_code = waitid_status_code_result(status);
+            let decoded_status = match info.si_code {
+                CLD_EXITED => (status >> 8) & 0xff,
+                // Ptrace event bits above the stop signal byte are meaningful.
+                CLD_STOPPED | CLD_TRAPPED => status >> 8,
+                CLD_CONTINUED => SIGCONT,
+                _ => status & 0x7f,
+            };
+            info.sifields.sigchld = ManuallyDrop::new(SigInfoChild {
+                si_pid: rc,
+                si_uid: 0,
+                si_status: decoded_status,
+                padding: 0,
+                si_utime: timeval_to_jiffy_result(utime_sec, utime_usec),
+                si_stime: timeval_to_jiffy_result(stime_sec, stime_usec),
+            });
+        }
         let src = info as *const SigInfo as *const u8;
-        copy_to_fn(infop_addr, src, size_of::<SigInfo>());
+        if copy_to_fn(infop_addr, src, size_of::<SigInfo>()) != 0 {
+            return -(EFAULT as CLong);
+        }
     }
+    0
 }
 
 #[no_mangle]
@@ -19002,8 +19061,7 @@ pub unsafe extern "C" fn waitid_body_result(
         usage.ru_stime.tv_sec,
         usage.ru_stime.tv_usec,
         copy_to_fn,
-    );
-    0
+    )
 }
 
 #[no_mangle]
@@ -29942,6 +30000,9 @@ pub unsafe extern "C" fn arch_rt_sigreturn_context_bridge(
 ))]
 compile_error!("whole signal successor requires the qualified context cohort and reuse marker");
 
+#[cfg(all(f06_do_signal_whole_candidate, not(f06_signal_trap_info_candidate)))]
+compile_error!("whole signal successor requires initialized traced-SIGTRAP notification storage");
+
 // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 // Complete source proposal: OFF by default; original whole C function retained.
 #[cfg(all(f06_do_signal_whole_candidate, any(
@@ -30357,10 +30418,9 @@ static mut F06_SIGNAL_TRAP_WAKE_DEBUG: crate::debug::Ddebug = crate::debug::Ddeb
 /// The live thread and process are the caller's original borrowed inputs; their
 /// process/parent/report references remain valid through synchronous notify,
 /// waitq wake and schedule. Pending is already consumed and sigcommon unlocked.
-/// `info` is forwarded without reading, initializing or retaining it here. For a
-/// defined execution, its bytes must be valid for the existing do_kill consumer.
-/// The C caller's original SIGTRAP branch may supply uninitialized local info;
-/// that remains an explicit caller debt, not permission to assume_init or zero it.
+/// `info` is writable, aligned SigInfo storage. Its full notification is
+/// initialized before either do_kill consumer and is not retained here. The
+/// traced branch still needs matching full-image/native qualification.
 #[no_mangle]
 pub unsafe extern "C" fn arch_do_signal_trap_stop_result(
     thread: *mut Thread,
@@ -30386,6 +30446,11 @@ pub unsafe extern "C" fn arch_do_signal_trap_stop_result(
     unsafe {
         (*thread).exit_status = SIGTRAP;
         (*thread).status = PS_TRACED;
+        crate::f06_signal_trap_info::arch_do_signal_trap_info_bridge(
+            info,
+            (*thread).tid,
+            (*thread).exit_status,
+        );
     }
     // SAFETY: proc remains live across the borrowed main-thread comparison.
     if thread == unsafe { (*proc).main_thread } {
@@ -31013,11 +31078,10 @@ unsafe extern "C" fn f06_signal_syscall_context() -> *mut X86UserContext {
 /// mask selects a valid action in the actual64-entry table. Original object and
 /// callback lifetimes/IRQ/scheduling preconditions apply, including XSAVE CPU
 /// exclusion. Kernel and frame layouts must match native_linux_irq_work_v6_12.
-/// The original traced default-SIGTRAP info bytes are uninitialized caller debt;
-/// that branch remains OUTSIDE this port's defined qualification domain. This
-/// source does not zero or assume_init them. C stays selected until root resolves
-/// that debt and qualifies complete ownership/default/native behavior. Counter
-/// races and overwritten old core slots are also preserved, not silently fixed.
+/// The traced default-SIGTRAP notification is initialized before consumption.
+/// C stays selected until complete ownership/default/native behavior, including
+/// this repaired branch, is qualified. Counter races and overwritten old core
+/// slots remain unchanged. This source repair does not clear any runtime hold.
 #[no_mangle]
 pub unsafe extern "C" fn do_signal(
     mut result: CULong,
@@ -31210,8 +31274,8 @@ pub unsafe extern "C" fn do_signal(
         return restart;
     }
 
-    // Native C declares this storage uninitialized before pending disposal. Do
-    // NOT assume_init/zero: traced SIGTRAP remains a qualified-execution HOLD.
+    // The traced-SIGTRAP helper initializes all bytes before either consumer.
+    // No other branch reads this storage; no assume_init is needed here.
     let mut trap_info = MaybeUninit::<SigInfo>::uninit();
     // SAFETY: complete default ownership helper caches ptracecont before free,
     // transfers ptrace nodes or consumes pending, then releases the original lock.
@@ -31227,9 +31291,9 @@ pub unsafe extern "C" fn do_signal(
             );
         },
         SIGTRAP => {
-            // SAFETY: full-defined qualification explicitly EXCLUDES the traced
-            // branch's uninitialized-info consumer. This preserves original C
-            // source debt, not a new validity claim or zero-initialization repair.
+            // SAFETY: live thread/process and writable aligned storage. The
+            // traced branch initializes it before notify; the untraced branch
+            // returns without reading it. Full native qualification remains open.
             let handled = unsafe {
                 arch_do_signal_trap_stop_result(thread, proc, trap_info.as_mut_ptr())
             };

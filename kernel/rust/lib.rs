@@ -60,6 +60,12 @@ mod smp_ikc;
 mod spinlock_helpers;
 mod string;
 mod syscall_policy;
+#[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+mod f03_forward_adapters;
+#[cfg(f06_signal_ptrace_diagnostics_candidate)]
+mod f06_signal_ptrace_diagnostics;
+#[cfg(f06_signal_trap_info_candidate)]
+mod f06_signal_trap_info;
 #[cfg(native_linux_irq_work_v6_12)]
 mod native_signal;
 #[cfg(native_linux_irq_work_v6_12)]

@@ -507,12 +507,16 @@ out:
 }
 #endif /* selected signal-return FP lifecycle is Rust-owned */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME)
+extern long arch_native_signal_bad_frame_bridge(long error);
+#else
 long arch_native_signal_bad_frame_bridge(long error)
 {
 	kprintf("native signal return rejected: %ld\n", error);
 	terminate(0, SIGSEGV);
 	return -EFAULT;
 }
+#endif
 #endif
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
@@ -1622,16 +1626,20 @@ arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
 #endif
 #line 1446
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_REGSET_LOG
+extern void arch_ptrace_regset_log_bridge(int event, long type);
+#else
 void
 arch_ptrace_regset_log_bridge(int event, long type)
 {
 	if (event == 1) {
-		kprintf("ptrace_read_regset: not supported type 0x%x\n", type);
+		kprintf("ptrace_read_regset: not supported type 0x%x\n", (unsigned int)type);
 	}
 	else if (event == 2) {
-		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+		kprintf("ptrace_write_regset: not supported type 0x%x\n", (unsigned int)type);
 	}
 }
+#endif
 #endif
 #line 1458
 
@@ -1656,15 +1664,23 @@ long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 		}
 		break;
 	}
-	case NT_X86_XSTATE:
+	case NT_X86_XSTATE: {
+		int xstate_size;
+
 		if (thread->fp_regs == NULL) {
 			return -ENOMEM;
 		}
-		if (iov->iov_len > sizeof(fp_regs_struct)) {
-			iov->iov_len = sizeof(fp_regs_struct);
+		/* The boot XSAVE extent, not the legacy struct, owns buffer size. */
+		xstate_size = get_xsave_size();
+		if (xstate_size < 0) {
+			xstate_size = 0;
+		}
+		if (iov->iov_len > (size_t)xstate_size) {
+			iov->iov_len = (size_t)xstate_size;
 		}
 		rc = copy_to_user(iov->iov_base, thread->fp_regs, iov->iov_len);
 		break;
+	}
 	default:
 		kprintf("ptrace_read_regset: not supported type 0x%x\n", type);
 		break;
@@ -1697,15 +1713,22 @@ long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 		}
 		break;
 	}
-	case NT_X86_XSTATE:
+	case NT_X86_XSTATE: {
+		int xstate_size;
+
 		if (thread->fp_regs == NULL) {
 			return -ENOMEM;
 		}
-		if (iov->iov_len > sizeof(fp_regs_struct)) {
-			iov->iov_len = sizeof(fp_regs_struct);
+		xstate_size = get_xsave_size();
+		if (xstate_size < 0) {
+			xstate_size = 0;
+		}
+		if (iov->iov_len > (size_t)xstate_size) {
+			iov->iov_len = (size_t)xstate_size;
 		}
 		rc = copy_from_user(thread->fp_regs, iov->iov_base, iov->iov_len);
 		break;
+	}
 	default:
 		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
 		break;
@@ -1932,6 +1955,10 @@ isrestart(int num, unsigned long rc, int sig, int restart)
 		return 1;
 	return 0;
 }
+
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO)
+extern void arch_do_signal_trap_info_bridge(siginfo_t *info, int tid, int status);
+#endif
 
 #if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE))
 int
@@ -2265,6 +2292,17 @@ native_signal_frame_copied:
 			/* Update thread state in fork tree */
 			thread->exit_status = SIGTRAP;
 			thread->status = PS_TRACED;
+			/* Match ptrace_report_signal's fully initialized notification. */
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO)
+			arch_do_signal_trap_info_bridge(&info, thread->tid,
+						 thread->exit_status);
+#else
+			memset(&info, '\0', sizeof info);
+			info.si_signo = SIGCHLD;
+			info.si_code = CLD_TRAPPED;
+			info._sifields._sigchld.si_pid = thread->tid;
+			info._sifields._sigchld.si_status = thread->exit_status;
+#endif
 			if (thread == proc->main_thread) {
 				mcs_rwlock_writer_lock(&proc->update_lock,
 						       &lock);

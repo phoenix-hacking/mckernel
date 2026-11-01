@@ -4393,6 +4393,10 @@ static ssize_t find_libdir(char *libdir, size_t len)
 	char path[PATH_MAX];
 	char cmd[PATH_MAX];
 
+	if (!libdir || !len) {
+		return -EINVAL;
+	}
+
 	rc = readlink("/proc/self/exe", path, sizeof(path));
 	if (rc < 0) {
 		rc = -errno;
@@ -4404,10 +4408,12 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		path[rc] = '\0';
 	}
 
+	/* A literal library directory can contain whitespace after its tag. */
 	rc = snprintf(cmd, sizeof(cmd),
-		      "objdump -x %s | awk '/RPATH/ { print $2 }'",
+		      "objdump -x %s | awk '$1 ~ /^(RPATH|RUNPATH)$/ { "
+		      "sub(/^[[:space:]]*(RPATH|RUNPATH)[[:space:]]+/, \"\"); print }'",
 		      path);
-	if (rc >= sizeof(cmd)) {
+	if (rc < 0 || rc >= sizeof(cmd)) {
 		rc = -ERANGE;
 		goto out;
 	}
@@ -4419,13 +4425,17 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		goto out;
 	}
 
+	/* EOF need not set errno; do not report success or a stale error. */
+	errno = 0;
 	rc = getline(&line, &linelen, filep);
 	if (rc <= 0) {
-		rc = -errno;
+		rc = -(errno ? errno : ENOENT);
 		fprintf(stderr, "RPATH not found: %ld\n", -rc);
 		goto out;
 	}
-	line[rc - 1] = 0;
+	if (line[rc - 1] == '\n') {
+		line[rc - 1] = 0;
+	}
 
 	slash = strchr(line, '/');
 	if (!slash) {
@@ -4433,12 +4443,12 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		goto out;
 	}
 
-	rc = snprintf(libdir, len, "%s", line);
-
-	if (rc > len) {
+	rc = strlen(line);
+	if ((size_t)rc >= len) {
 		rc = -ERANGE;
 		goto out;
 	}
+	memcpy(libdir, line, rc + 1);
 
 out:
 	if (filep) {

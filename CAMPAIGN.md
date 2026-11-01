@@ -5,10 +5,15 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 ## Current decision
 
-**PAUSED at a verified checkpoint.** The user requested a break and a simpler
-workflow. Start no new engineering work or automatic resume. Preserve dirty
-sources, accepted work, failed evidence and every actual owner/reservation.
-Consolidation changes no acceptance, service hold or budget.
+**Focused M15 source checks resumed by explicit user request after the M14
+debugging checkpoint `0f0fd1a`.** This supersedes the prior M15 scheduling pause;
+it changes no acceptance, actual source/service hold or native authorization.
+The retained native pipeline remains blocked at the verified checkpoint below.
+The user has now explicitly requested GitHub publication and continued M15 work.
+The connected account has repository write access; this separate checkout still
+has no access to the original R3 controls or pinned native SDK.
+Preserve dirty sources, accepted work, failed evidence and every actual
+owner/reservation. The source work changes no acceptance, service hold or budget.
 
 Dispatcher: **`gpt-6.1-sol`, reasoning `max`**. Ordinary workers may use medium;
 complex workers/reviewers high; bounded extraction low. Confirm project-scoped
@@ -22,7 +27,7 @@ Rocky/Linux control plane**. Linux-independent boot is outside this goal.
 | Track | Accepted | Remaining |
 | --- | --- | --- |
 | M14 compute-kernel Rust/assembly | 4/6 file goals | Generic and x86 syscall files, final integrated image and matching validation |
-| M15 project-owned integration runtime | 1/8 file goals | Seven file goals and final delivered-runtime integration; paused until M14 acceptance |
+| M15 project-owned integration runtime | 1/8 file goals | Seven file goals and final delivered-runtime integration; focused source/debugging checks active by user request |
 | Practical functional baseline | 35/35 at its accepted scope | Preserve matching results; qualify changed final artifacts and deliver the complete system |
 
 - Existing accepted files stay accepted at their original supported scope. Stale
@@ -47,6 +52,82 @@ Rocky/Linux control plane**. Linux-independent boot is outside this goal.
   count compiler-elided code as an implemented replacement.
 
 ## Immediate blocker and next action
+
+Source checkpoint based on `5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71`:
+
+- Fixed the final architecture-syscall CMake assignment that erased earlier F06
+  ownership guards; it now appends the base guards. This affects existing default
+  selections as well as the new candidate.
+- Initialized the traced default-SIGTRAP notification before either consumer in
+  C and the existing unselected whole-Rust candidate, preserving notification,
+  lock and wake order. The whole candidate now requires the initializer.
+- Added five Rust forwarding adapters and two signal/ptrace diagnostic adapters,
+  with paired source guards behind `ENABLE_RUST_M14_SYSCALL_ADAPTERS=OFF` by
+  default. Whole-signal/context selection and held source remain unchanged.
+- Isolated tests passed using pinned `rustc 1.95.0-nightly (c04308580 2026-02-18)`
+  and CMake 3.28.3: `test_f03_forward_adapters.py`,
+  `test_f06_signal_adapters.py`, and `test_m14_syscall_selection.py`. The last
+  reproduces the former overwrite and verifies ON/OFF pairing and profile
+  rejection. These are unit/configuration results, not a production kernel
+  build, final-link or native acceptance. M14 remains 4/6; zero new retirements.
+- The earlier Git push dry-run failed for missing credentials. The now-connected
+  GitHub account provides an authenticated source-publication route. The
+  prescribed `scripts/push_os_checkpoint.py` is absent from the tracked tree;
+  publication through GitHub does not replace the original native controls.
+
+The user explicitly requested a further debugging pass. Reproduced and corrected
+these eligible-source defects in the same checkout:
+
+- The preceding architecture edits broke configure-time F06 origin generation.
+  A separately pinned successor-source binding now permits the actual revised
+  bytes while preserving the frozen command profile, source/body/header checks
+  and debug-line identities. All metadata inputs trigger CMake reconfiguration.
+  The generated receipt remains source metadata with no build/runtime authority.
+- Both C and Rust wait helpers now propagate copyout failures, avoid wait4 output
+  copies after errors or WNOHANG/no-result, decode waitid exit/signal/core status,
+  and zero waitid's no-result siginfo. Both C declarations and the Rust definition
+  agree on the siginfo helper's long return. Invalid waitid IDs are rejected.
+  A private selector distinguishes PGID 1 from all children; public wait4 rejects
+  INT_MIN before the backend. Normal process/ptraced lists use the same matcher.
+- Preserved complete ptrace event/SYSGOOD payloads when decoding stopped status,
+  including a truncation error caught in the new tests by independent review.
+  Successful ptraced process/thread candidates now retain their cause in a
+  private local-status tag; waitid reports CLD_TRAPPED, while wait4 restores the
+  public stop encoding before copyout. Both languages assert that supported
+  signals cannot collide with the tag. Function signatures, stored exit state
+  and reap/unlock order are unchanged; the enumerated status consumers are the
+  two syscall result helpers. Independent review found no further blocker in
+  these changed paths at source/unit scope.
+- C and Rust xstate regset paths use the configured XSAVE extent instead of the
+  fixed 1088-byte type, covering both smaller and larger allocated state.
+- Both signal-forwarding bridges and the C sigaction fallback initialize their
+  whole contexts before the forwarding path reads all argument slots.
+- The combined focused run passed **20 top-level unittest checks, no skips**:
+  `test_f03_forward_adapters`, `test_f06_signal_adapters`,
+  `test_m14_syscall_selection`, `test_m14_build_origin`,
+  `test_m14_f03_signal_context`, `test_m14_f03_wait_results`,
+  `test_m14_f03_wait_c`, and `test_m14_f06_xstate_extent` under `scripts.tests`.
+  The wait fixtures run 15 Rust and 13 C behavior cases; C also checks the changed
+  ABI with incompatible-pointer errors and undefined-behavior instrumentation.
+  Traced/ordinary process and thread stop cases cover WNOWAIT, error/no-result,
+  preserved event payloads, callback order and absence of private wait4 output.
+  Xstate fixtures exercise the actual C/Rust functions across configured extents
+  and copy errors. These use observation doubles, not production providers.
+  The pinned Rust compiler and CMake versions above were used; `git diff --check`
+  passed. No full kernel crate, held input, install or native workload was run.
+- Fresh reproducibility has an additional concrete dependency blocker: fetching
+  the exact IHK gitlink `a7ddca26b0dfb087569d652dce5f4262e1311b70` from the canonical
+  `.gitmodules` upstream returned `not our ref`. Authenticated recovery also
+  found no such commit in the canonical repository or inspected source forks;
+  the connected installation exposes no IHK repository. A possible user fork
+  returns 404. Recover the exact recorded dependency through the original
+  authorized source; do not substitute another commit or guess a submodule URL.
+
+These results improve source confidence only. M14 remains 4/6 accepted, with no
+new C retirement, accepted image or native qualification.
+
+The next native action remains reconciliation of the recorded R3 owner on that
+host, followed by the existing changed-unit build/link/consumer qualification.
 
 The build/install ownership channel failed before a usable lease. The operation
 deadline expired. Its caller/control outcome remains UNKNOWN; no further stop,
@@ -115,7 +196,11 @@ Historical architecture cursor (5, current selection must be re-established):
 - [ ] M14-I03: matching useful applications, process/memory/thread/signal behavior
   and native lifecycle/resource restoration on that image. Then accept M14.
 
-## M15 checklist — starts only after M14 acceptance
+## M15 checklist — focused source/debugging checks resumed
+
+The user's explicit M15 request authorizes this focused source work before M14
+acceptance. Final M15 acceptance still needs the matching image/modules/tools
+and evidence below; no M14 acceptance is implied.
 
 Reuse existing Rust IHK, SMP, mcctrl, tools and accepted SDK/library artifacts.
 For each open row finish remaining bodies, select the real Rust default and ABI,
@@ -133,6 +218,69 @@ available; finish a smaller final remainder without padding or delay.
 | M15-F06 / 06-01…03 | `ihk/linux/user/ihkconfig.c` | Complete existing partial Rust CLI, real default/library link and native behavior |
 | M15-F07 / 07-01…03 | `ihk/linux/user/ihkosctl.c` | Control CLI bodies, real default/library link and native behavior |
 | M15-F08 / 08-01…03 | `ihk/linux/user/ihkmond.c` | Monitor/event/thread/kmsg ownership, real default and functional behavior |
+
+Focused M15 checkpoint, based on `0f0fd1ad22bf9a59d23eec48c4482b20a775487a`:
+
+- Corrected C/Rust executor library-directory discovery: EOF no longer reports
+  success or stale errno, newline removal preserves unterminated output, output
+  capacity includes its terminator, and failures preserve the output buffer.
+  Exact first-field RPATH/RUNPATH matching fixes real RUNPATH executables.
+  Thirty observed C/Rust cases and four calls against real host ELF/libc/objdump/
+  awk providers passed. These extracted functions do not prove the full Rust
+  executor's provider closure or execute held source.
+- All four existing Rust BFD adapters passed 72 callback/ABI cases against the
+  actual Rust module and retained C wrappers with explicitly synthetic BFD
+  objects. No adapter body defect was found or new body/retirement claimed.
+- User-tool recipes now use the existing independent runtime compiler binding,
+  reject an invalid binding instead of silently retaining C, and depend on the
+  selected compiler file. The option is declared before child configuration.
+  Actual generated rules check seven ordinary tool/BFD object recipes, source
+  ownership and target dependencies without compiling a held/full crate.
+  Compute RUSTC, the separate mcexec compiler and optional-profile guards remain
+  unchanged. Optional runtime bodies were neither changed nor executed.
+- The BFD witness now receives directory definitions/options and active build
+  configuration flags, restores the caller's probe configuration, and rejects
+  unsupported debug-send, directory generator-expression and multi-config
+  profiles. Its compiler is a configure input. Original header/library/compiler
+  pins and typed ABI assertions remain intact; isolated compile observers test
+  the actual probe command, not a substituted production library.
+- The combined focused run passed **15 top-level checks, no skips** under
+  `scripts.tests`: `test_m15_executor_libdir`, `test_m15_executor_libdir_real`,
+  `test_m15_bfd_accessors`, `test_m15_user_tool_selection`,
+  `test_m15_bfd_profile`. Pinned Rust and CMake versions are recorded above;
+  GCC was 13.3.0. Independent changed-path reviews and `git diff --check` passed.
+- Exact-source blockers remain: F05–F08's IHK tree is unavailable. For F03/F04,
+  three official Rocky binutils-devel candidates (2.30-128, -127 and -125.el8_10)
+  did not match the pinned BFD header. No pin or dependency was substituted.
+  Recover the exact SDK inputs and IHK gitlink before actual tool/library links,
+  selected/deployed ownership and matching module/application/lifecycle checks.
+
+Publication follow-up, based on local source checkpoint `3bb8bb8`:
+
+- Restored both saved patches and reproduced all three original local commit
+  hashes, including `43202ba`, `0f0fd1a` and `3bb8bb8`; the remote base remains
+  `5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71`.
+- Reproduced a further C/Rust libdir defect against real ELF providers: literal
+  RPATH and RUNPATH `/fixture/lib dir` both returned the truncated successful
+  value `/fixture/lib`. Strip the objdump tag prefix and preserve its complete
+  remaining value. The two affected test modules pass without skips: 30 observed
+  C/Rust cases and eight real ELF/libc/objdump/awk calls. This does not qualify
+  whitespace in executable filenames or complete installation-prefix handling.
+- Independent BFD source/ABI review found no further demonstrated defect at the
+  unchanged supported profile. The exact header/library/compiler and actual
+  mcinspect/eclair links remain unqualified here.
+- Publish the reviewed source on `codex/m15-focused-checks-20261030`, targeting
+  `codex/local-native-staging-repair` in a draft PR. Verify the remote tree against
+  the local committed tree. The publication HEAD uses `[skip ci]` because the
+  repository's unfiltered tracker initializes the unavailable IHK revision and
+  discovers unrelated tests. Existing workflows and required merge checks stay
+  intact; skipped CI is not a passing result or acceptance evidence.
+
+M15 remains **1/8 accepted**. These fixes and focused results create no additional
+file acceptance, C retirement, production build or native qualification. The
+original native/control holds remain as recorded above. The next closure step
+requires the original IHK object store or a bundle containing the exact gitlink,
+plus the exact BFD SDK, before matched tool/module and native qualification.
 
 - [ ] M15-I01: complete selected/linked/deployed project-runtime ownership manifest.
 - [ ] M15-I02: all three delivered Linux-loadable modules use Rust/reviewed assembly;
@@ -216,7 +364,7 @@ history. Record only a real implementation/build/test/retirement delta, its exac
 artifact/checkpoint identifier, one blocker/owner and one next action. Preserve raw
 command output as machine evidence when required, without copying it into this log.
 
-## Checkpoint and break
+## Retained checkpoint and break
 
 **PAUSED** at 2026-10-31T00:28:57+00:00. The dispatcher completed and fetched-verified
 checkpoint `7edcb1459d6ba01299c4e161dd7721e9d4b8328f`; every child-agent turn completed.

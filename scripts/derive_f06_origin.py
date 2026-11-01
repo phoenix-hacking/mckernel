@@ -2,7 +2,9 @@
 """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 Source producer only. No subprocesses/compiler or workload authority.
-Support precisely the private cumulative F06-on118 arch profile; reject profile drift.
+Preserve the frozen F06-on118 command/origin contract. A separately reviewed,
+pinned source binding may name a successor source; it grants no build or runtime
+authority. Both paths reject profile, source, body and descriptor drift.
 """
 import argparse
 import hashlib
@@ -11,9 +13,10 @@ from pathlib import Path
 import re
 
 PROFILE_SHA256 = "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
+SOURCE_BINDING_SHA256 = "bf84a86906076ef814d2fef73be5c4fde456382c361a86ef15ffdd5cc7f6876c"
 
 
-def derive(profile_path, source_path):
+def derive(profile_path, source_path, binding_path=None):
     raw = profile_path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != PROFILE_SHA256:
         raise ValueError("unqualified SDK profile bytes; independent rebinding required")
@@ -36,7 +39,22 @@ def derive(profile_path, source_path):
         raise ValueError("SDK selected source origin changed")
     if not re.fullmatch(r"/[A-Za-z0-9_./-]+", origin):
         raise ValueError("unsupported origin bytes; never normalize or shell-escape")
-    if hashlib.sha256(source_path.read_bytes()).hexdigest() != profile["composed_arch_source_sha256"]:
+    expected_source = profile["composed_arch_source_sha256"]
+    if binding_path is not None:
+        binding_raw = binding_path.read_bytes()
+        if hashlib.sha256(binding_raw).hexdigest() != SOURCE_BINDING_SHA256:
+            raise ValueError("unreviewed source binding bytes; independent rebinding required")
+        binding = json.loads(binding_raw)
+        if (binding.get("schema_version") != 1
+                or binding.get("scope") != "SOURCE_METADATA_ONLY_NO_RUNTIME_AUTHORITY"
+                or binding.get("profile_sha256") != PROFILE_SHA256
+                or binding.get("predecessor_arch_source_sha256") != expected_source
+                or binding.get("source_relative") != "arch/x86_64/kernel/syscall.c"):
+            raise ValueError("source binding does not preserve the frozen origin contract")
+        expected_source = binding.get("current_arch_source_sha256", "")
+        if not re.fullmatch(r"[0-9a-f]{64}", expected_source):
+            raise ValueError("source binding requires an exact successor source digest")
+    if hashlib.sha256(source_path.read_bytes()).hexdigest() != expected_source:
         raise ValueError("exact proposed architecture source bytes required")
     source = source_path.read_text()
     if re.search(r'^\s*#\s*(?:line\s+)?\d+\s+"', source, re.M):
@@ -93,9 +111,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", type=Path, required=True)
     parser.add_argument("--source", type=Path, required=True)
+    parser.add_argument("--source-binding", type=Path,
+                        help="Pinned successor source metadata binding; no runtime authority")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    origin, command = derive(args.profile, args.source)
+    origin, command = derive(args.profile, args.source, args.source_binding)
     clone_slots = derive_clone_cpuid(args.profile, args.source, origin)
     args.output.mkdir(parents=True, exist_ok=True)
     # Simple pinned ASCII origin means JSON/C and CMake literals agree exactly.
@@ -121,6 +141,8 @@ def main():
         "scope": __doc__.splitlines()[0],
         "status": "GENERATED_SOURCE_ONLY_NO_COMPILER_RESULT",
         "profile_sha256": PROFILE_SHA256,
+        "source_binding_sha256": (hashlib.sha256(args.source_binding.read_bytes()).hexdigest()
+                                  if args.source_binding is not None else None),
         "source_sha256": hashlib.sha256(args.source.read_bytes()).hexdigest(),
         "source_path": str(args.source),
         "command": command,
@@ -130,6 +152,7 @@ def main():
         "new_C_runtime_objects": 0,
         "clone_cpuid_debug_slots": clone_slots,
         "compiled_Rust_metadata_qualification": None,
+        "runtime_authority": None,
     }, indent=2) + "\n")
 
 

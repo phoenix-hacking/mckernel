@@ -175,7 +175,8 @@ static MCEXEC_ALT_ROOT_ENV: &[u8] = b"MCEXEC_ALT_ROOT\0";
 static MCEXEC_DEFAULT_ALTROOT: &[u8] = b"/usr/linux-k1om-4.7/linux-k1om\0";
 static LD_PRELOAD_ENVNAME_LITERAL: &[u8] = b"ld_preload_envname\0";
 static OBJDUMP_RPATH_PREFIX: &[u8] = b"objdump -x ";
-static OBJDUMP_RPATH_SUFFIX: &[u8] = b" | awk '/RPATH/ { print $2 }'";
+// Preserve whitespace inside the literal library directory after its tag.
+static OBJDUMP_RPATH_SUFFIX: &[u8] = b" | awk '$1 ~ /^(RPATH|RUNPATH)$/ { sub(/^[[:space:]]*(RPATH|RUNPATH)[[:space:]]+/, \"\"); print }'";
 static MCEXEC_USAGE_PREFIX: &[u8] = b"usage: ";
 static MCEXEC_USAGE_WITH_ENVS: &[u8] = b" [-c target_core] [-n nr_partitions] [<-e ENV_NAME=value>...] [--mpol-threshold=N] [--enable-straight-map] [--extend-heap-by=N] [-s (--stack-premap=)[premap_size][,max]] [--mpol-no-heap] [--mpol-no-bss] [--mpol-no-stack] [--mpol-shm-premap] [--disable-sched-yield] [--enable-uti] [--uti-thread-rank=N] [--uti-use-last-cpu] [<mcos-id>] (program) [args...]\n";
 static MCEXEC_USAGE_WITHOUT_ENVS: &[u8] = b" [-c target_core] [-n nr_partitions] [--mpol-threshold=N] [--enable-straight-map] [--extend-heap-by=N] [-s (--stack-premap=)[premap_size][,max]] [--mpol-no-heap] [--mpol-no-bss] [--mpol-no-stack] [--mpol-shm-premap] [--disable-sched-yield]  [--enable-uti] [--uti-thread-rank=N] [--uti-use-last-cpu] [<mcos-id>] (program) [args...]\n";
@@ -6797,9 +6798,12 @@ pub unsafe extern "C" fn mcexec_find_libdir_body(libdir: *mut u8, len: usize) ->
         return -(error as isize);
     }
 
+    // EOF need not set errno; do not report success or a stale error.
+    unsafe { *__errno_location() = 0 };
     rc = unsafe { mcexec_find_libdir_getline_bridge(&mut line, &mut linelen, filep) };
     if rc <= 0 {
         let error = unsafe { *__errno_location() };
+        let error = if error == 0 { ENOENT } else { error };
         unsafe {
             mcexec_find_libdir_rpath_not_found_bridge(error);
             mcexec_find_libdir_pclose_bridge(filep);
@@ -6811,7 +6815,9 @@ pub unsafe extern "C" fn mcexec_find_libdir_body(libdir: *mut u8, len: usize) ->
     }
 
     unsafe {
-        *line.add((rc - 1) as usize) = 0;
+        if *line.add((rc - 1) as usize) == b'\n' {
+            *line.add((rc - 1) as usize) = 0;
+        }
     }
 
     let line_bytes = unsafe { cstr_bytes(line as *const u8) };
