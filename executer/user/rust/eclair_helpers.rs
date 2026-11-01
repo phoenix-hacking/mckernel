@@ -245,12 +245,9 @@ unsafe extern "C" {
 
 #[repr(C)]
 pub struct BfdSection {
-    name: *const u8,
-    id: u32,
-    index: u32,
-    next: *mut BfdSection,
-    prev: *mut BfdSection,
-    flags: u32,
+    // Opaque selected BFD 2.41 prefix, including its packed section flags.
+    // The production typed witness binds the consumed VMA field at byte 48.
+    before_vma: [u8; 48],
     vma: usize,
 }
 
@@ -262,6 +259,21 @@ pub struct BfdSymbol {
     flags: u32,
     section: *mut BfdSection,
 }
+
+// Only these symbol/section fields are read. Bind each repr(C) offset and
+// alignment to the same pinned layout checked by bfd_layout_witness.c.
+const _: [(); 8] = [(); core::mem::align_of::<BfdSymbol>()];
+const _: [(); 8] = [(); core::mem::offset_of!(BfdSymbol, name)];
+const _: [(); 16] = [(); core::mem::offset_of!(BfdSymbol, value)];
+const _: [(); 32] = [(); core::mem::offset_of!(BfdSymbol, section)];
+const _: [(); 8] = [(); core::mem::align_of::<BfdSection>()];
+const _: [(); 48] = [(); core::mem::offset_of!(BfdSection, vma)];
+const _: [(); 8] = [(); core::mem::size_of::<usize>()];
+const _: [(); 8] = [(); core::mem::size_of::<*const u8>()];
+const _: [(); 8] = [(); core::mem::size_of::<*mut BfdSection>()];
+const _: [(); 8] = [(); core::mem::align_of::<usize>()];
+const _: [(); 8] = [(); core::mem::align_of::<*const u8>()];
+const _: [(); 8] = [(); core::mem::align_of::<*mut BfdSection>()];
 
 fn is_space(byte: u8) -> bool {
     matches!(byte, b' ' | b'\t' | b'\n' | b'\r' | 0x0b | 0x0c)

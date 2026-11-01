@@ -1,7 +1,7 @@
 From 5f43aea5f45359e9e605543fea6362952beac42f Mon Sep 17 00:00:00 2001
 From: OpenAI Codex <codex@openai.com>
 Date: Sun, 1 Nov 2026 04:37:16 +0100
-Subject: [PATCH 1/2] Preserve CPU zero formatting and bind IHK compiler inputs
+Subject: [PATCH 1/3] Preserve CPU zero formatting and bind IHK compiler inputs
 
 ---
  linux/user/CMakeLists.txt                                | 9 +++++----
@@ -64,7 +64,7 @@ index 7dc6255..620ebdc 100644
 From 78f731e5eed1abc4faf69e347d48d473a0727935 Mon Sep 17 00:00:00 2001
 From: OpenAI Codex <codex@openai.com>
 Date: Sun, 1 Nov 2026 09:54:30 +0100
-Subject: [PATCH 2/2] Fix IHK query failures, argument ownership, and daemon
+Subject: [PATCH 2/3] Fix IHK query failures, argument ownership, and daemon
  help
 
 ---
@@ -232,3 +232,38 @@ index 294c347..70c1254 100644
 -    unsafe { finish(fd, cursor, result) }
 +    // SAFETY: fd and the unchanged allocation base remain owned by this call.
 +    unsafe { finish(fd, allocation, result) }
+
+From c032c975fdbe17be846bd61cc48cb541e7ab5830 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Sun, 1 Nov 2026 11:00:46 +0100
+Subject: [PATCH 3/3] Stop boot polling at the first terminal result
+
+---
+ linux/user/ihklib.c                            | 2 +-
+ linux/user/rust/whole70/ihklib_os_load_boot.rs | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
+index f767a7d..4bdcc61 100644
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -2975 +2974,0 @@ int ihk_os_boot(int index)
+-
+@@ -2984,0 +2984 @@ int ihk_os_boot(int index)
++		break;
+diff --git a/linux/user/rust/whole70/ihklib_os_load_boot.rs b/linux/user/rust/whole70/ihklib_os_load_boot.rs
+index c372687..88d2d37 100644
+--- a/linux/user/rust/whole70/ihklib_os_load_boot.rs
++++ b/linux/user/rust/whole70/ihklib_os_load_boot.rs
+@@ -2 +2 @@
+-//! Public load/boot source port. Preserve the original polling and error contracts.
++//! Public load/boot source port with bounded polling through the first terminal result.
+@@ -57 +57 @@ pub unsafe extern "C" fn ihk_os_load(index: c_int, filename: *mut c_char) -> c_i
+-/// Issue BOOT and preserve the exact existing fifty-read status-poll behavior.
++/// Issue BOOT and poll at most fifty times, stopping at a terminal status or error.
+@@ -86,0 +87,2 @@ pub unsafe extern "C" fn ihk_os_boot(index: c_int) -> c_int {
++        } else {
++            break;
+@@ -88,2 +89,0 @@ pub unsafe extern "C" fn ihk_os_boot(index: c_int) -> c_int {
+-        // The C switch's default break exits only the switch, not the for loop.
+-        // Preserve all fifty status reads even after RUNNING or an earlier error.

@@ -10178,6 +10178,17 @@ pub unsafe extern "C" fn sigaltstack_body_result(
     let thread_sigstack = field_ptr::<SigStack>(thread, sigstack_offset);
     let stack_size = size_of::<SigStack>();
 
+    // Snapshot the request before copyout: ss and oss may overlap.
+    let mut new_stack = MaybeUninit::<SigStack>::uninit();
+    if ss_addr != 0 {
+        let Some(copy_from) = copy_from_fn else {
+            return -EFAULT as CLong;
+        };
+        if copy_from(new_stack.as_mut_ptr().cast::<u8>(), ss_addr, stack_size) != 0 {
+            return -EFAULT as CLong;
+        }
+    }
+
     if oss_addr != 0 {
         let Some(copy_to) = copy_to_fn else {
             return -EFAULT as CLong;
@@ -10189,14 +10200,6 @@ pub unsafe extern "C" fn sigaltstack_body_result(
 
     if ss_addr == 0 {
         return 0;
-    }
-
-    let Some(copy_from) = copy_from_fn else {
-        return -EFAULT as CLong;
-    };
-    let mut new_stack = MaybeUninit::<SigStack>::uninit();
-    if copy_from(new_stack.as_mut_ptr().cast::<u8>(), ss_addr, stack_size) != 0 {
-        return -EFAULT as CLong;
     }
 
     let new_stack = new_stack.assume_init();
@@ -15999,6 +16002,13 @@ pub unsafe extern "C" fn arch_ptrace_read_regset_body_result(
     let lenp = iovp.wrapping_add(iov_len_offset).cast::<SizeT>();
     let mut len = unsafe { *lenp };
 
+    // Linux regsets require whole register elements before size clamping.
+    if (regset_type == NT_PRSTATUS || regset_type == NT_X86_XSTATE)
+        && len % size_of::<CULong>() != 0
+    {
+        return -(EINVAL as CLong);
+    }
+
     if regset_type == NT_PRSTATUS {
         if scratch.is_null() {
             return -(EFAULT as CLong);
@@ -16057,6 +16067,12 @@ pub unsafe extern "C" fn arch_ptrace_write_regset_body_result(
     let basep = iovp.wrapping_add(iov_base_offset).cast::<CULong>();
     let lenp = iovp.wrapping_add(iov_len_offset).cast::<SizeT>();
     let mut len = unsafe { *lenp };
+
+    if (regset_type == NT_PRSTATUS || regset_type == NT_X86_XSTATE)
+        && len % size_of::<CULong>() != 0
+    {
+        return -(EINVAL as CLong);
+    }
 
     if regset_type == NT_PRSTATUS {
         if scratch.is_null() {

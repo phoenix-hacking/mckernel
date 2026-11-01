@@ -1651,6 +1651,12 @@ long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 {
 	long rc = -EINVAL;
 
+	/* Linux regsets require whole register elements before size clamping. */
+	if ((type == NT_PRSTATUS || type == NT_X86_XSTATE) &&
+			iov->iov_len % sizeof(unsigned long)) {
+		return -EINVAL;
+	}
+
 	switch (type) {
 	case NT_PRSTATUS: {
 		struct user_regs_struct regs;
@@ -1696,6 +1702,11 @@ extern long ptrace_write_regset(struct thread *thread, long type,
 long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 {
 	long rc = -EINVAL;
+
+	if ((type == NT_PRSTATUS || type == NT_X86_XSTATE) &&
+			iov->iov_len % sizeof(unsigned long)) {
+		return -EINVAL;
+	}
 
 	switch (type) {
 	case NT_PRSTATUS: {

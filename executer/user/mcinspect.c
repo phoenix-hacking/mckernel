@@ -412,7 +412,18 @@ int dwarf_walk_tree(Dwarf_Debug dbg,
 					rc = func(dbg, die, arg);
 					/* Stop when DW_DLV_OK reached */
 					if (rc == DW_DLV_OK) {
-						return 0;
+						dwarf_dealloc(dbg, die, DW_DLA_DIE);
+						dwarf_dealloc(dbg, unit, DW_DLA_DIE);
+						/* NO_ENTRY resets this libdwarf CU iterator.
+						 * Finish this stream before another lookup. */
+						do {
+							rc = dwarf_next_cu_header_c(dbg, is_info,
+								&cu_length, &cu_version, &cu_abbrev_offset,
+								&cu_pointer_size, &cu_offset_size,
+								&cu_extension_size, &type_signature,
+								&type_offset, &cu_next_offset, &err);
+						} while (rc == DW_DLV_OK);
+						return rc == DW_DLV_NO_ENTRY ? 0 : -1;
 					}
 				}
 

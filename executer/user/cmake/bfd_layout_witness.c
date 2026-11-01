@@ -18,6 +18,22 @@ _Static_assert(_Generic(((bfd_target *)0)->_bfd_canonicalize_symtab,
                        canonicalize_type: 1, default: 0), "canonicalize callback ABI");
 _Static_assert(sizeof(upper_type) == 8 && sizeof(canonicalize_type) == 8, "function pointer ABI");
 _Static_assert(_Alignof(upper_type) == 8 && _Alignof(canonicalize_type) == 8, "callback alignment");
+/* The tool bodies also read symbol names/values/sections and section VMA.
+ * Their opaque Rust prefixes are valid only for this selected-header layout. */
+#define CHECK_TOOL_FIELD(type, field, offset) \
+    _Static_assert(offsetof(type, field) == (offset), #type "." #field " offset"); \
+    _Static_assert(sizeof(((type *)0)->field) == 8, #type "." #field " width"); \
+    _Static_assert(_Alignof(__typeof__(((type *)0)->field)) == 8, #type "." #field " alignment")
+CHECK_TOOL_FIELD(asymbol, name, 8);
+CHECK_TOOL_FIELD(asymbol, value, 16);
+CHECK_TOOL_FIELD(asymbol, section, 32);
+CHECK_TOOL_FIELD(asection, vma, 48);
+#undef CHECK_TOOL_FIELD
+_Static_assert(_Alignof(asymbol) == 8 && _Alignof(asection) == 8, "tool object alignment");
+_Static_assert(_Generic(((asymbol *)0)->name, const char *: 1, default: 0), "symbol name pointer type");
+_Static_assert(_Generic(((asymbol *)0)->section, asection *: 1, default: 0), "symbol section pointer type");
+_Static_assert(_Generic(((asymbol *)0)->value, unsigned long: 1, default: 0), "symbol value type");
+_Static_assert(_Generic(((asection *)0)->vma, unsigned long: 1, default: 0), "section VMA type");
 _Static_assert(offsetof(bfd, xvec) % 8 == 0, "xvec alignment");
 _Static_assert(offsetof(bfd_target, _bfd_get_symtab_upper_bound) % 8 == 0, "upper alignment");
 _Static_assert(offsetof(bfd_target, _bfd_canonicalize_symtab) % 8 == 0, "canonicalize alignment");

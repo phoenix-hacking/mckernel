@@ -13846,6 +13846,12 @@ sigaltstack_body_result(void *thread, size_t sigstack_offset,
 	stack_t wss;
 	int error;
 
+	/* Snapshot the request before copyout: ss and oss may overlap. */
+	if (ss_addr && (!copy_from_fn ||
+			copy_from_fn(&wss, ss_addr, sizeof(wss)))) {
+		return -EFAULT;
+	}
+
 	if (oss_addr) {
 		if (!copy_to_fn ||
 				copy_to_fn(oss_addr, thread_sigstack,
@@ -13856,10 +13862,6 @@ sigaltstack_body_result(void *thread, size_t sigstack_offset,
 
 	if (!ss_addr) {
 		return 0;
-	}
-
-	if (!copy_from_fn || copy_from_fn(&wss, ss_addr, sizeof(wss))) {
-		return -EFAULT;
 	}
 
 	error = sigaltstack_validate(wss.ss_flags, wss.ss_size);

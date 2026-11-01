@@ -5,6 +5,11 @@ xstate copy modules. It extracts the eligible public regset wrappers/bodies and
 C fallbacks verbatim. Only copy/CPU-size/unused diagnostic or GP-register effects
 are unit-test observation doubles. No XSAVE/XRSTOR or kernel/native execution is
 performed, and successful fixture linkage is not production link acceptance.
+
+The length rule follows Linux ptrace_regset and x86_64 regset element sizes:
+https://github.com/torvalds/linux/blob/master/kernel/ptrace.c
+https://github.com/torvalds/linux/blob/master/arch/x86/kernel/ptrace.c
+Both supported regsets have eight-byte elements; validate before clamping.
 """
 
 import json
@@ -66,7 +71,7 @@ type PtraceUserCopyToFn = unsafe extern "C" fn(u64, *const u8, usize) -> i64;
 type PtraceUserCopyFromFn = unsafe extern "C" fn(*mut u8, u64, usize) -> i64;
 type ArchPtraceXstateIoFn = unsafe extern "C" fn(u64, u64, usize) -> i64;
 type ArchPtraceRegsetLogFn = unsafe extern "C" fn(i32, i64);
-unsafe extern "C" fn arch_ptrace_read_gpregs_bridge(_:u64, _: *mut u8) -> i64 { panic!("unexpected GP read") }
+unsafe extern "C" fn arch_ptrace_read_gpregs_bridge(_:u64, _: *mut u8) -> i64 { -999 }
 unsafe extern "C" fn arch_ptrace_write_gpregs_bridge(_:u64, _: *const u8) -> i64 { panic!("unexpected GP write") }
 unsafe extern "C" fn arch_copy_to_user_bridge(_:u64, _: *const u8, _:usize) -> i64 { panic!("unexpected GP copy") }
 unsafe extern "C" fn arch_copy_from_user_bridge(_: *mut u8, _:u64, _:usize) -> i64 { panic!("unexpected GP copy") }
@@ -82,7 +87,7 @@ fn actual_wrappers_use_boot_extent_for_read_and_write() {
     let target = thread.as_mut_ptr();
     for configured in [576usize, 832, 2688, 11008] {
         CONFIGURED.store(configured as i32, Ordering::Relaxed);
-        for requested in [0usize, 48, configured, usize::MAX] {
+        for requested in [0usize, 48, configured, usize::MAX & !7] {
             for writing in [false, true] {
                 for error in [0i32, -4095] {
                     // The complete buffer includes guards beyond every admitted
@@ -126,13 +131,40 @@ fn actual_wrappers_use_boot_extent_for_read_and_write() {
     unsafe { core::ptr::addr_of_mut!((*target).fp_regs).write(core::ptr::null_mut()) };
     for writing in [false, true] {
         COPY_BYTES.store(usize::MAX, Ordering::Relaxed);
-        let mut iov = Iovec { iov_base: core::ptr::null_mut(), iov_len: 1 };
+        let mut iov = Iovec { iov_base: core::ptr::null_mut(), iov_len: 8 };
         let result = unsafe {
             if writing { ptrace_write_regset(target, NT_X86_XSTATE, &mut iov) }
             else { ptrace_read_regset(target, NT_X86_XSTATE, &mut iov) }
         };
         assert_eq!(result, -12);
         assert_eq!(COPY_BYTES.load(Ordering::Relaxed), usize::MAX);
+    }
+}
+#[test]
+fn nonintegral_register_lengths_fail_before_provider_or_length_changes() {
+    let mut thread = MaybeUninit::<Thread>::zeroed();
+    let target = thread.as_mut_ptr();
+    let mut fp = [0xa5u8; 16384];
+    let mut user = [0x5au8; 16384];
+    unsafe { core::ptr::addr_of_mut!((*target).fp_regs).write(fp.as_mut_ptr().cast()) };
+    CONFIGURED.store(832, Ordering::Relaxed);
+    COPY_ERROR.store(0, Ordering::Relaxed);
+    for type_ in [NT_PRSTATUS, NT_X86_XSTATE] {
+        for requested in [1usize, 7, 9, 215, 217, 833, usize::MAX] {
+            for writing in [false, true] {
+                COPY_BYTES.store(usize::MAX, Ordering::Relaxed);
+                let mut iov = Iovec { iov_base: user.as_mut_ptr().cast(), iov_len: requested };
+                let result = unsafe {
+                    if writing { ptrace_write_regset(target, type_, &mut iov) }
+                    else { ptrace_read_regset(target, type_, &mut iov) }
+                };
+                assert_eq!(result, -22, "type={type_} requested={requested} write={writing}");
+                assert_eq!(iov.iov_len, requested);
+                assert_eq!(COPY_BYTES.load(Ordering::Relaxed), usize::MAX);
+                assert!(fp.iter().all(|byte| *byte == 0xa5));
+                assert!(user.iter().all(|byte| *byte == 0x5a));
+            }
+        }
     }
 }
 '''
@@ -173,7 +205,7 @@ int main(void) {
     const size_t sizes[]={576,832,2688,11008};
     for (unsigned s=0;s<4;s++) {
         configured_size=(int)sizes[s];
-        const size_t requests[]={0,48,sizes[s],SIZE_MAX};
+        const size_t requests[]={0,48,sizes[s],SIZE_MAX & ~(size_t)7};
         for (unsigned r=0;r<4;r++) for (unsigned writing=0;writing<2;writing++)
         for (unsigned failure=0;failure<2;failure++) {
             _Alignas(64) unsigned char fp[16384],user[16384],old_fp[16384],old_user[16384];
@@ -199,10 +231,27 @@ int main(void) {
         }
     }
     struct thread missing={.fp_regs=NULL};
-    struct iovec iov={.iov_base=NULL,.iov_len=1};
+    struct iovec iov={.iov_base=NULL,.iov_len=8};
     copy_bytes=SIZE_MAX;
     if (ptrace_read_regset(&missing,NT_X86_XSTATE,&iov)!=-ENOMEM ||
         ptrace_write_regset(&missing,NT_X86_XSTATE,&iov)!=-ENOMEM || copy_bytes!=SIZE_MAX) return 3;
+    const long types[]={NT_PRSTATUS,NT_X86_XSTATE};
+    const size_t invalid[]={1,7,9,215,217,833,SIZE_MAX};
+    unsigned char fp[16384],user[16384];
+    memset(fp,0xa5,sizeof fp); memset(user,0x5a,sizeof user);
+    struct thread thread={.fp_regs=(fp_regs_struct *)fp};
+    configured_size=832; copy_error=0;
+    for (unsigned t=0;t<2;t++) for (unsigned r=0;r<7;r++) for (unsigned writing=0;writing<2;writing++) {
+        iov.iov_base=user; iov.iov_len=invalid[r]; copy_bytes=SIZE_MAX;
+        long result=writing ? ptrace_write_regset(&thread,types[t],&iov)
+                            : ptrace_read_regset(&thread,types[t],&iov);
+        if (result!=-EINVAL || iov.iov_len!=invalid[r] || copy_bytes!=SIZE_MAX) {
+            fprintf(stderr,"C invalid regset length accepted type=%ld requested=%zu write=%u result=%ld\n",
+                    types[t],invalid[r],writing,result);
+            return 4;
+        }
+        for (size_t i=0;i<sizeof fp;i++) if (fp[i]!=0xa5 || user[i]!=0x5a) return 5;
+    }
     puts("C configured-xstate read/write cases passed");
     return 0;
 }
@@ -247,6 +296,7 @@ class F06XstateExtentTests(unittest.TestCase):
                                   for name,result in zip(("Rust","C"),results))
             self.assertTrue(all(result.returncode == 0 for result in results), evidence)
             print(evidence)
+
 
 
 if __name__ == "__main__":

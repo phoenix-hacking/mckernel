@@ -21,7 +21,16 @@ HEADER = r"""
 #define TEST_BFD_H
 #include <stdint.h>
 typedef struct bfd bfd;
-typedef struct asymbol { uintptr_t value; } asymbol;
+/* Only data consumed by the expanded typed witness use the pinned prefix.
+ * Callback table/object positions below remain explicitly synthetic. */
+typedef struct bfd_section { unsigned char prefix[48]; unsigned long vma; } asection;
+typedef struct asymbol {
+    void *the_bfd;
+    const char *name;
+    uintptr_t value;
+    unsigned int flags;
+    asection *section;
+} asymbol;
 typedef struct bfd_target {
     uintptr_t prefix[5];
     long (*_bfd_canonicalize_symtab)(bfd *, asymbol **);

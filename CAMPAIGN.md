@@ -5,22 +5,24 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 ## Current decision
 
-**Focused M15 source checks resumed by explicit user request after the M14
-debugging checkpoint `0f0fd1a`.** This supersedes the prior M15 scheduling pause;
+**Focused M14 and M15 work is active by the user's explicit request to finish
+both and continue publishing to GitHub.** This supersedes the scheduling pause;
 it changes no acceptance, actual source/service hold or native authorization.
-The retained native pipeline remains blocked at the verified checkpoint below.
-The user has now explicitly requested GitHub publication and continued M15 work.
-Draft PR [#2](https://github.com/phoenix-hacking/mckernel/pull/2) contains the
-published source checkpoints `ed2e30b` and `b66ba1c`. The user's earlier commits preserved the
-exact Rust IHK source in tracked Git bundles; that source has now been recovered
-and this branch adds the follow-up fixes and reproduction helper to the same PR.
-The next source batch `b3ccdb3` fixes IHK query failures, argument ownership and
-daemon help. Actual HOST builds now link the Rust IHK library, all three IHK
-tools, eclair and mcinspect against the recovered providers. Exact BFD/compiler
-pins are available; the explicitly supplemented HOST profile does not establish
+Draft PR [#2](https://github.com/phoenix-hacking/mckernel/pull/2) contains the prior
+published checkpoint `17d0f2b97b707cff2c11d19f7fede22ee6d453d9`, fetched and
+verified at tree `cabcf93b6fd60ae46ee98ddb1e7abca72f68bde2`. The current source
+checkpoint `1b82d6b87a0c905d231ec0e69318ebd146f6b327` adds the paired M14 fixes,
+IHK boot polling, repeated DWARF lookup and real BFD layout corrections below.
+Its final combined run passes 64 focused checks with no skips. Publication uses
+the same PR branch with a non-forced expected-head lease and fetched-tree check.
+The user's prior commits preserve the exact Rust IHK history in tracked Git
+bundles; fresh recovery now reproduces successor `c032c975` exactly.
+Actual HOST builds link the Rust IHK library, all three IHK tools, eclair and
+mcinspect. Real offline diagnostic and supervisor consumers pass. Exact
+BFD/compiler pins are available; explicit HOST supplementation does not establish
 the complete original native SDK. This checkout still cannot access R3 controls.
-Preserve dirty sources, accepted work, failed evidence and every actual
-owner/reservation. The source work changes no acceptance, service hold or budget.
+Preserve accepted work, failed evidence and every actual owner/reservation. The
+source work changes no acceptance, service hold or budget.
 
 Dispatcher: **`gpt-6.1-sol`, reasoning `max`**. Ordinary workers may use medium;
 complex workers/reviewers high; bounded extraction low. Confirm project-scoped
@@ -36,6 +38,69 @@ Rocky/Linux control plane**. Linux-independent boot is outside this goal.
 | M14 compute-kernel Rust/assembly | 4/6 file goals | Generic and x86 syscall files, final integrated image and matching validation |
 | M15 project-owned integration runtime | 1/8 file goals | Seven file goals and final delivered-runtime integration; focused source/debugging checks active by user request |
 | Practical functional baseline | 35/35 at its accepted scope | Preserve matching results; qualify changed final artifacts and deliver the complete system |
+
+### Latest combined M14/M15 debugging and HOST results
+
+- M14-F03: C and Rust `sigaltstack_body_result` now snapshot the new request
+  before writing the old stack back. The former order silently discarded an
+  installation when input and output overlapped. Actual source fixtures pass
+  **19 C and 19 Rust cases**, including identical/partially overlapping buffers,
+  disable/query, invalid requests and copy errors; the same-buffer behavior also
+  agrees with an ordinary Linux `sigaltstack` control.
+- M14-F06: C and Rust GETREGSET/SETREGSET now reject lengths that are not whole
+  eight-byte register elements before clamping, copying or invoking providers.
+  **28 invalid-length cases per language** cover both supported regsets and both
+  directions, alongside the existing configured-XSAVE and copy-error cases.
+  The revised architecture source is pinned by the successor binding; frozen
+  profile, predecessor, body/header and origin rejection checks remain intact.
+  An owned-child Linux ptrace control was unavailable and was not retried; these
+  results do not claim host ptrace runtime parity or a full kernel build.
+- M15-F05: the C/Rust boot loops stop at the first RUNNING, error or other
+  terminal status. Previously they continued all 50 polls and could overwrite
+  success or the original error. BOOTING/BOOTED/READY retain their existing wait
+  behavior. **34 behavior cases** cover transitions, timeout, descriptor zero,
+  captured errno and cleanup; actual device boot was not executed.
+- IHK successor `c032c975fdbe17be846bd61cc48cb541e7ab5830`, tree
+  `fac3185fb76c9170452af25b8268fb3729699441`, is the current gitlink. Incremental
+  bundle blob `7a9fdf2577b13778aad334dee990385eb6507b1e` and the committed manifest
+  preserve the complete chain. A fresh three-stage replay from the exact public
+  base reproduced that HEAD/tree with a clean checkout.
+- The actual unchanged IHK userspace CMake recipes build **ihklib, ihkconfig,
+  ihkosctl and ihkmond** with the strict whole70 qualifier and all 76 required
+  roots. Generated rules select no project C runtime source. The initial scratch
+  driver policy failure and one correction to the actual parent minimum 3.11 are
+  preserved locally; production recipes, compiler pins and qualifiers are unchanged.
+- Actual Rust ihkmond supervision passes four ordinary HOST startup/stop cases:
+  idle, waiting kmsg worker, waiting hung-up monitor, and both workers. Real
+  epoll/eventfd/signalfd, threads and libudev are used; each case returns `Ok(())`
+  and restores the observed descriptor count from five to five. The consumer
+  bypasses `daemon()` and issues no mcos event or device request; active native
+  monitoring and installed-service behavior remain open.
+- C/Rust mcinspect now finish the selected libdwarf compilation-unit stream on
+  a successful lookup so the next independent query starts at its first unit.
+  Before the fix, repeated real queries alternated success and failure. Both
+  implementations pass eight queries across two real DWARF compilation units,
+  including a missing type followed by a successful retry, against the exact
+  bundled libdwarf and genuine libelf/BFD providers.
+- Both Rust diagnostic tools used an obsolete section layout, reading BFD VMA
+  at byte 40 rather than byte 48. Real eclair symbol lookup returned 1041 instead
+  of 4202512. The corrected opaque prefix and typed witness bind every consumed
+  symbol/section field's offset, width, alignment and C type. All four existing
+  header/script/archive/compiler pins and build/profile guards remain unchanged.
+  Actual full Rust tool objects and complete diagnostic PIE links succeed.
+  Genuine BFD consumers now agree on data/function symbol addresses; eclair
+  reads both BFD-written dump chunks and exact boundaries and rejects unmapped
+  addresses. Tool mains, GDB and device paths are not invoked by these consumers.
+- The final integrated run at source `1b82d6b` passes **64 top-level checks, zero
+  skips, in 11.312 seconds**: 22 M14 checks and 42 M15 checks across 23 named modules.
+  Real-provider diagnostic modules are rerunnable with
+  `M15_DIAGNOSTIC_PROFILE`. The public summary and module list are in
+  `docs/verification/m14-m15-focused-results-20261101.json`. Detailed machine
+  records remain local: automatic publication review requires separate approval
+  to export their workspace/toolchain locations and failed-run metadata. The
+  published batch contains the source fixes, regressions and bounded summary.
+  Independent changed-path review passed; no new file acceptance, C retirement,
+  matched production image or native lifecycle qualification is asserted.
 
 - Existing accepted files stay accepted at their original supported scope. Stale
   internal subrows do not reopen a closed file or create new qualification quotas.
@@ -218,12 +283,12 @@ available; finish a smaller final remainder without padding or delay.
 | --- | --- | --- |
 | M15-F01 / 01-01…03 | `host-kernel/native-rust/mcctrl_vm_write_compat.c` | Accepted original three-wrapper Rust MM lock/unlock/VMA-write scope; preserve proof |
 | M15-F02 / 02-01…03 | `executer/user/mcexec.c` | Remaining executor C bodies, real default/ABI, linked and functional process behavior |
-| M15-F03 / 03-01…02 | `executer/user/mcinspect_bfd_shim.c` | Both Rust adapters pass real BFD consumption; complete HOST tool links; matched default/deployed qualification remains |
-| M15-F04 / 04-01…02 | `executer/user/eclair_bfd_shim.c` | Both Rust adapters pass real BFD consumption; complete HOST tool links; matched default/deployed qualification remains |
-| M15-F05 / 05-01…03 | `ihk/linux/user/ihklib.c` | Current Rust library links with all 70 function/six data roots and passes real parser consumption; complete ABI/deployed/native qualification remains |
+| M15-F03 / 03-01…02 | `executer/user/mcinspect_bfd_shim.c` | Rust adapters and corrected full tool pass real BFD symbols/repeated DWARF queries; complete HOST link; matched default/deployed qualification remains |
+| M15-F04 / 04-01…02 | `executer/user/eclair_bfd_shim.c` | Rust adapters and corrected full tool pass real BFD symbols/offline dump reads; complete HOST link; matched default/deployed qualification remains |
+| M15-F05 / 05-01…03 | `ihk/linux/user/ihklib.c` | Actual CMake target links all 70 function/six data roots; parser and boot-result checks pass; complete ABI/deployed/native qualification remains |
 | M15-F06 / 06-01…03 | `ihk/linux/user/ihkconfig.c` | Query error paths fixed; complete Rust CLI links and argument preflight passes; matched default/native behavior remains |
 | M15-F07 / 07-01…03 | `ihk/linux/user/ihkosctl.c` | Query/release prerequisite errors fixed; complete Rust CLI links and argument preflight passes; matched default/native behavior remains |
-| M15-F08 / 08-01…03 | `ihk/linux/user/ihkmond.c` | Help startup defect fixed; complete Rust daemon links and help exits correctly; monitor/event/thread/kmsg behavior remains |
+| M15-F08 / 08-01…03 | `ihk/linux/user/ihkmond.c` | Actual Rust CMake target links; help and four idle/waiting-worker stop cases pass; active device/event/kmsg and native qualification remain |
 
 Focused M15 checkpoint, based on `0f0fd1ad22bf9a59d23eec48c4482b20a775487a`:
 
@@ -347,8 +412,9 @@ IHK recovery and focused follow-up:
 
 Further M15 fixes and actual HOST userspace links:
 
-- IHK successor `78f731e5eed1abc4faf69e347d48d473a0727935`, tree
-  `84c11f941cba10318be3133839863ff382ea8786`, is now the parent gitlink.
+- At the preceding HOST checkpoint, IHK successor
+  `78f731e5eed1abc4faf69e347d48d473a0727935`, tree
+  `84c11f941cba10318be3133839863ff382ea8786`, was the parent gitlink.
   The updated incremental bundle and manifest preserve both focused commits;
   a fresh three-stage replay reproduced this exact clean HEAD/tree.
 - C/Rust ihkconfig and ihkosctl stop after failed CPU/memory counts or payload
@@ -387,7 +453,8 @@ Further M15 fixes and actual HOST userspace links:
   CLI no-argument checks returned their expected error/usage status; both daemon
   help forms exited successfully. Actual mcinspect help/missing-kernel/no-action
   preflights and eclair `-h` passed with their existing return contracts. These
-  paths precede device/workload access; dump/Dwarf/monitor behavior remains open.
+  paths precede device/workload access. The latest combined results above add
+  bounded real dump/DWARF and supervisor checks; native behavior remains open.
 - Machine evidence is in
   `docs/verification/evidence/m15-focused-host-links-20261101/`: source/package/
   provider/artifact identities, exact commands, selected archive members,

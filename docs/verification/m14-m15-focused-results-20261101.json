@@ -1,0 +1,144 @@
+{
+  "schema": "m14-m15-public-functional-results-v1",
+  "date_utc": "2026-11-01",
+  "scope": "Focused M14 source checks and actual ordinary HOST M15 builds/consumers for the source changes in this batch. No matched native/deployed acceptance.",
+  "combined_regression_run": {
+    "top_level_tests": 64,
+    "M14_tests": 22,
+    "M15_tests": 42,
+    "skips": 0,
+    "seconds": 11.312,
+    "result": "PASS",
+    "modules": [
+      "scripts.tests.test_f03_forward_adapters",
+      "scripts.tests.test_f06_signal_adapters",
+      "scripts.tests.test_m14_syscall_selection",
+      "scripts.tests.test_m14_build_origin",
+      "scripts.tests.test_m14_f03_signal_context",
+      "scripts.tests.test_m14_f03_wait_results",
+      "scripts.tests.test_m14_f03_wait_c",
+      "scripts.tests.test_m14_f06_xstate_extent",
+      "scripts.tests.test_m14_f03_sigaltstack_alias",
+      "scripts.tests.test_m15_executor_libdir",
+      "scripts.tests.test_m15_executor_libdir_real",
+      "scripts.tests.test_m15_bfd_accessors",
+      "scripts.tests.test_m15_user_tool_selection",
+      "scripts.tests.test_m15_bfd_profile",
+      "scripts.tests.test_m15_ihklib_cpu_format",
+      "scripts.tests.test_m15_ihk_cli",
+      "scripts.tests.test_restore_ihk_source",
+      "scripts.tests.test_m15_ihklib_kargs",
+      "scripts.tests.test_m15_ihk_cli_query_errors",
+      "scripts.tests.test_m15_ihkmond_help",
+      "scripts.tests.test_m15_ihklib_boot_poll",
+      "scripts.tests.test_m15_diagnostic_dwarf",
+      "scripts.tests.test_m15_diagnostic_bfd"
+    ]
+  },
+  "rerun": {
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_f03_forward_adapters",
+      "scripts.tests.test_f06_signal_adapters",
+      "scripts.tests.test_m14_syscall_selection",
+      "scripts.tests.test_m14_build_origin",
+      "scripts.tests.test_m14_f03_signal_context",
+      "scripts.tests.test_m14_f03_wait_results",
+      "scripts.tests.test_m14_f03_wait_c",
+      "scripts.tests.test_m14_f06_xstate_extent",
+      "scripts.tests.test_m14_f03_sigaltstack_alias",
+      "scripts.tests.test_m15_executor_libdir",
+      "scripts.tests.test_m15_executor_libdir_real",
+      "scripts.tests.test_m15_bfd_accessors",
+      "scripts.tests.test_m15_user_tool_selection",
+      "scripts.tests.test_m15_bfd_profile",
+      "scripts.tests.test_m15_ihklib_cpu_format",
+      "scripts.tests.test_m15_ihk_cli",
+      "scripts.tests.test_restore_ihk_source",
+      "scripts.tests.test_m15_ihklib_kargs",
+      "scripts.tests.test_m15_ihk_cli_query_errors",
+      "scripts.tests.test_m15_ihkmond_help",
+      "scripts.tests.test_m15_ihklib_boot_poll",
+      "scripts.tests.test_m15_diagnostic_dwarf",
+      "scripts.tests.test_m15_diagnostic_bfd"
+    ],
+    "required_environment": {
+      "RUSTC": "Path to the qualified Rust compiler",
+      "CMAKE": "Path to the qualified CMake executable",
+      "M15_DIAGNOSTIC_PROFILE": "JSON identifying the genuine qualified HOST namespace and BFD/libdwarf/libelf providers"
+    },
+    "diagnostic_profile_fields": [
+      "namespace_argv",
+      "work_root",
+      "rustc",
+      "dwarf_build",
+      "dwarf_source",
+      "elf_prefix",
+      "bfd_accessors"
+    ],
+    "note": "The genuine diagnostic modules require this explicit provider profile; absent-profile skips are not equivalent to the recorded no-skip run."
+  },
+  "fixed_defects": [
+    {
+      "area": "M14 sigaltstack",
+      "change": "Snapshot input before copying the previous stack out so identical and overlapping input/output buffers work.",
+      "regression": "19 C plus 19 Rust behavior cases; same-buffer behavior agrees with an ordinary Linux sigaltstack control."
+    },
+    {
+      "area": "M14 x86 regsets",
+      "change": "Reject lengths that are not whole register elements before clamping, copying or invoking providers.",
+      "regression": "28 invalid-length cases in each language, plus existing configured-XSAVE extent and copy-error checks. No host ptrace runtime parity claim."
+    },
+    {
+      "area": "M15 IHK boot polling",
+      "change": "Stop at the first RUNNING, error or other terminal result while retaining existing waits for BOOTING, BOOTED and READY.",
+      "regression": "17 C plus 17 Rust cases covering transitions, timeout, descriptor zero, errno and cleanup."
+    },
+    {
+      "area": "M15 mcinspect DWARF",
+      "change": "Finish the current compilation-unit stream after a successful search so a later independent query starts at the first unit.",
+      "regression": "Eight queries across two genuine DWARF units in both C and Rust, including missing-type then successful retry."
+    },
+    {
+      "area": "M15 diagnostic BFD layout",
+      "change": "Read section VMA at byte 48 under the selected BFD layout; bind consumed field offsets, widths, alignments and C types in Rust and the typed witness.",
+      "regression": "Actual Rust tool symbol addresses agree with genuine BFD. Eclair reads two BFD-written dump chunks and their boundaries and rejects unmapped addresses. Existing production pins and guards remain enforced."
+    }
+  ],
+  "actual_HOST_builds_and_consumers": {
+    "IHK_CMake_targets": [
+      "ihklib",
+      "ihkconfig",
+      "ihkosctl",
+      "ihkmond"
+    ],
+    "IHK_selection": "Actual generated recipes select Rust runtime objects; strict whole70 qualification passes with all 70 function and six data roots.",
+    "diagnostic_tools": "Complete current Rust eclair and mcinspect objects link with genuine qualified BFD and bundled libdwarf/libelf providers.",
+    "supervisor": "Four actual Rust supervisor cases cover idle, waiting kmsg worker, waiting hung-up monitor and both workers. Each returns Ok and restores the observed descriptor count from five to five.",
+    "consumer_limits": "Diagnostic consumers wrap tool mains and use ordinary generated ELF/DWARF/dump fixtures. Supervisor consumers bypass daemonization and issue no mcos event or device request."
+  },
+  "IHK_source_recovery": {
+    "gitlink": "c032c975fdbe17be846bd61cc48cb541e7ab5830",
+    "result": "Fresh three-stage recovery from the committed manifest reproduced the exact gitlink and a clean checkout.",
+    "helper": "scripts/restore_ihk_source.py",
+    "note": "The tracked bundles preserve custom Rust IHK history that ordinary upstream-only submodule initialization cannot fetch."
+  },
+  "acceptance": {
+    "M14_accepted_files": 4,
+    "M14_total_files": 6,
+    "M15_accepted_files": 1,
+    "M15_total_files": 8,
+    "new_file_acceptances": 0,
+    "matched_native_acceptance": false
+  },
+  "remaining_requirements": [
+    "Reconcile the original native owner through the existing reviewed control path.",
+    "Qualify the original supported native profile and matched image, modules and installed tools.",
+    "Complete ownership/ABI, actual application/device and resource-restoring lifecycle qualification."
+  ],
+  "evidence_handling": "This public record contains source-level results and reproducible test entrypoints. Detailed local machine records were excluded from publication because their environment metadata requires separate approval."
+}
