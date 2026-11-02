@@ -30,6 +30,7 @@ NEW_CFG = {
 }
 NEW_MODULES = {
     "f03_forward_adapters.rs",
+    "f03_ptrace_adapters.rs",
     "f06_signal_ptrace_diagnostics.rs",
     "f06_signal_trap_info.rs",
 }

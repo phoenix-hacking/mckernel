@@ -4737,6 +4737,11 @@ ptrace_detach_thread_exit_signal_bridge(void *thread)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS
+extern long ptrace_detach_do_kill_bridge(void *, int, int, int,
+		const void *, int);
+extern void ptrace_detach_wakeup_bridge(void *, int);
+#else
 static long
 ptrace_detach_do_kill_bridge(void *current_thread, int pid, int tid,
 		int sig, const void *info, int ptracecont)
@@ -4750,6 +4755,7 @@ ptrace_detach_wakeup_bridge(void *thread, int valid_states)
 {
 	sched_wakeup_thread((struct thread *)thread, valid_states);
 }
+#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
@@ -5747,7 +5753,7 @@ void eventfd(int type)
 void
 interrupt_syscall(struct thread *thread, int sig)
 {
-	ihk_mc_user_context_t ctx;
+	ihk_mc_user_context_t ctx = { 0 };
 	long lerror;
 
 	dkprintf("interrupt_syscall pid=%d tid=%d sig=%d\n", thread->proc->pid,
@@ -21094,8 +21100,24 @@ static long
 perf_read(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
 	char *buf  = (char *)ihk_mc_syscall_arg1(ctx);
+	unsigned long count = ihk_mc_syscall_arg2(ctx);
 	struct mc_perf_event *event = (struct mc_perf_event*)sfd->data;
 	unsigned long read_format = event->attr.read_format;
+	size_t required = sizeof(unsigned long);
+
+	if (read_format & PERF_FORMAT_GROUP) {
+		struct mc_perf_event *leader = event->group_leader;
+		int nr_siblings;
+
+		if (!leader || (nr_siblings = leader->nr_siblings) < 0) {
+			return -EINVAL;
+		}
+		/* Widen before adding the group header and leader value. */
+		required = ((size_t)nr_siblings + 2) * sizeof(unsigned long);
+	}
+	if (count < required) {
+		return -EINVAL;
+	}
 
 	return perf_read_body_result(event, (unsigned long)buf,
 			read_format, PERF_FORMAT_GROUP,

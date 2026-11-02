@@ -1198,6 +1198,29 @@ long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 	if(copy_from_user(&ksigsp, sigsp, sizeof ksigsp))
 		return -EFAULT;
 
+	if(ksigsp.fpregs && xsavesize){
+		void *fpregs = kmalloc_tracked(xsavesize + 64, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
+
+		if (!fpregs)
+			return -ENOMEM;
+		{
+			uint64_t xsave_mask = get_xsave_mask();
+			unsigned int low = (unsigned int)xsave_mask;
+			unsigned int high = (unsigned int)(xsave_mask >> 32);
+			struct xsave_struct *kfpregs;
+
+			kfpregs = (void *)((((unsigned long)fpregs) + 63) & ~63);
+
+			if(copy_from_user(kfpregs, ksigsp.fpregs, xsavesize)) {
+				kfree_tracked(fpregs, __FILE__, __LINE__);
+				return -EFAULT;
+			}
+			asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
+			kfree_tracked(fpregs, __FILE__, __LINE__);
+		}
+	}
+
+	/* Commit the saved continuation only after fallible FP preparation. */
 	regs->gpr.r15 = ksigsp._r15;
 	regs->gpr.r14 = ksigsp._r14;
 	regs->gpr.r13 = ksigsp._r13;
@@ -1220,13 +1243,14 @@ long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 	thread->sigmask.__val[0] = ksigsp._oldmask;
 
 	memcpy(&thread->sigstack, &ksigsp.sigstack, sizeof(stack_t));
-	if(sigsp->restart){
-		return syscall(sigsp->num, (ihk_mc_user_context_t *)regs);
+	/* FP state must be restored before restart or tracing callbacks. */
+	if(ksigsp.restart){
+		return syscall(ksigsp.num, (ihk_mc_user_context_t *)regs);
 	}
 	if(regs->gpr.rflags & RFLAGS_TF){
 		struct siginfo info;
 
-		regs->gpr.rax = sigsp->sigrc;
+		regs->gpr.rax = ksigsp.sigrc;
 		memset(&info, '\0', sizeof info);
 		regs->gpr.rflags &= ~RFLAGS_TF;
 		info.si_code = TRAP_TRACE;
@@ -1235,25 +1259,7 @@ long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 		check_signal(0, regs, -1);
 	}
 
-	if(ksigsp.fpregs && xsavesize){
-		void *fpregs = kmalloc_tracked(xsavesize + 64, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
-
-		if(fpregs){
-			uint64_t xsave_mask = get_xsave_mask();
-			unsigned int low = (unsigned int)xsave_mask;
-			unsigned int high = (unsigned int)(xsave_mask >> 32);
-			struct xsave_struct *kfpregs;
-
-			kfpregs = (void *)((((unsigned long)fpregs) + 63) & ~63);
-
-			if(copy_from_user(kfpregs, ksigsp.fpregs, xsavesize))
-				return -EFAULT;
-			asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
-			kfree_tracked(fpregs, __FILE__, __LINE__);
-		}
-	}
-
-	return sigsp->sigrc;
+	return ksigsp.sigrc;
 }
 #endif
 
@@ -1939,8 +1945,6 @@ isrestart(int num, unsigned long rc, int sig, int restart)
 		return 0;
 	if (num < 0 || rc != (unsigned long)-EINTR)
 		return 0;
-	if (sig == SIGCHLD)
-		return 1;
 	switch (num) {
 	    case __NR_pause:
 	    case __NR_rt_sigsuspend:
@@ -2122,7 +2126,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 				goto native_bad_signal_frame;
 #else
 				kfree_tracked(pending, __FILE__, __LINE__);
-				kfree_tracked(_kfpregs, __FILE__, __LINE__);
+				mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 				kprintf("do_signal,no space available\n");
 				terminate(0, sig);
 				goto out;
@@ -2139,6 +2143,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 #else
 				kfree_tracked(pending, __FILE__, __LINE__);
 				kfree_tracked(_kfpregs, __FILE__, __LINE__);
+				mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 				kprintf("do_signal,write_process_vm failed\n");
 				terminate(0, sig);
 				goto out;

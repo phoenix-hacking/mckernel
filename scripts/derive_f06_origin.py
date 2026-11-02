@@ -13,7 +13,7 @@ from pathlib import Path
 import re
 
 PROFILE_SHA256 = "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
-SOURCE_BINDING_SHA256 = "dee3f952f1273d276652029db51b7e879f20c03a938a6db6a79635f7f0cbea65"
+SOURCE_BINDING_SHA256 = "6e6b44ef337a6ce015b4c8d2b9a9edb06797a9066ad4f8b81f07e7dd5c34859a"
 
 
 def derive(profile_path, source_path, binding_path=None):

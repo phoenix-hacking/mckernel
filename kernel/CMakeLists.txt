@@ -81,6 +81,9 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 	if (NOT RUSTC)
 		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires rustc")
 	endif()
+	if (NOT IS_ABSOLUTE "${RUSTC}" OR NOT EXISTS "${RUSTC}" OR IS_DIRECTORY "${RUSTC}")
+		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires an existing nondirectory absolute Rust compiler path")
+	endif()
 	execute_process(
 		COMMAND ${RUSTC} --version
 		OUTPUT_VARIABLE RUSTC_VERSION
@@ -182,6 +185,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 				"--cfg" "f06_signal_trap_info_candidate")
 			list(APPEND RUST_KERNEL_SRCS
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_forward_adapters.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_ptrace_adapters.rs"
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_ptrace_diagnostics.rs"
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_trap_info.rs")
 		endif()
@@ -477,7 +481,8 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			${RUST_KERNEL_CFG}
 			--emit=obj=${RUST_KERNEL_OBJ}
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
-		DEPENDS ${RUST_KERNEL_SRCS}
+		# Replacing the selected compiler must not silently reuse an old object.
+		DEPENDS ${RUST_KERNEL_SRCS} "${RUSTC}"
 		COMMENT "Building Rust kernel object"
 		VERBATIM
 	)

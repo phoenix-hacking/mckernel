@@ -10995,10 +10995,40 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
         return -(EFAULT as CLong);
     }
     let frame = &*frame_storage.as_ptr();
-    // Native consumers never re-read a userspace frame after the checked copy.
-    #[cfg(native_linux_irq_work_v6_12)]
-    let sigsp = frame as *const RtSigreturnFrame;
 
+    if !frame.fpregs.is_null() && xsave_size != 0 {
+        let Some(alloc) = alloc_fn else {
+            return -(EFAULT as CLong);
+        };
+        let Some(free) = free_fn else {
+            return -(EFAULT as CLong);
+        };
+        let Some(xrstor) = xrstor_fn else {
+            return -(EFAULT as CLong);
+        };
+
+        let fpregs = alloc((xsave_size as SizeT).wrapping_add(64), nowait_flag);
+        if fpregs.is_null() {
+            return -(ENOMEM as CLong);
+        }
+        {
+            let aligned = (((fpregs as usize) + 63) & !63usize) as *mut c_void;
+
+            if copy_from(
+                aligned.cast::<u8>(),
+                frame.fpregs as CULong,
+                xsave_size as SizeT,
+            ) != 0
+            {
+                free(fpregs);
+                return -(EFAULT as CLong);
+            }
+            xrstor(aligned);
+            free(fpregs);
+        }
+    }
+
+    // Commit continuation state only after the fallible FP preparation.
     let gpr = &mut (*regs).gpr;
     gpr.r15 = frame.regs[RTSIG_REG_R15];
     gpr.r14 = frame.regs[RTSIG_REG_R14];
@@ -11041,11 +11071,12 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
     }
     }
 
-    if (*sigsp).restart != 0 {
+    // Restore FP state before a restarted syscall or signal/tracing callback.
+    if frame.restart != 0 {
         let Some(call_syscall) = syscall_fn else {
             return -(EFAULT as CLong);
         };
-        return call_syscall((*sigsp).num, regs.cast::<c_void>());
+        return call_syscall(frame.num, regs.cast::<c_void>());
     }
 
     if ((*regs).gpr.rflags & RFLAGS_TF) != 0 {
@@ -11061,7 +11092,7 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
         let mut info_storage = MaybeUninit::<SigInfo>::uninit();
         let info = info_storage.as_mut_ptr();
 
-        (*regs).gpr.rax = (*sigsp).sigrc;
+        (*regs).gpr.rax = frame.sigrc;
         (*regs).gpr.rflags &= !RFLAGS_TF;
         rt_sigreturn_zero_siginfo(info);
         (*info).si_code = TRAP_TRACE;
@@ -11070,37 +11101,7 @@ pub unsafe extern "C" fn arch_rt_sigreturn_body_result(
         check_signal(0, regs.cast::<c_void>(), -1);
     }
 
-    if !frame.fpregs.is_null() && xsave_size != 0 {
-        let Some(alloc) = alloc_fn else {
-            return -(EFAULT as CLong);
-        };
-        let Some(free) = free_fn else {
-            return -(EFAULT as CLong);
-        };
-        let Some(xrstor) = xrstor_fn else {
-            return -(EFAULT as CLong);
-        };
-
-        let fpregs = alloc((xsave_size as SizeT).wrapping_add(64), nowait_flag);
-        if !fpregs.is_null() {
-            let aligned = (((fpregs as usize) + 63) & !63usize) as *mut c_void;
-
-            if copy_from(
-                aligned.cast::<u8>(),
-                frame.fpregs as CULong,
-                xsave_size as SizeT,
-            ) != 0
-            {
-                #[cfg(native_linux_irq_work_v6_12)]
-                free(fpregs);
-                return -(EFAULT as CLong);
-            }
-            xrstor(aligned);
-            free(fpregs);
-        }
-    }
-
-    (*sigsp).sigrc as CLong
+    frame.sigrc as CLong
 }
 
 #[no_mangle]
@@ -26595,11 +26596,35 @@ mod f03_perf_read_entries_v1 {
     ) -> CLong {
         // SAFETY: Same actual register/long descriptor storage as the C entry.
         let buf_addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+        let count = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) };
         let event = unsafe { (*sfd).data } as *mut c_void;
         // SAFETY: Genuine C header offset into the initialized event attr field.
         let read_format = unsafe {
             event.cast::<u8>().add(f03_perf_read_layout_v1.read_format).cast::<CULong>().read()
         };
+        let mut required = core::mem::size_of::<CULong>() as CULong;
+        if read_format & f03_perf_read_layout_v1.group_flag != 0 {
+            // SAFETY: The same live leader/count fields used by the group reader.
+            let leader = unsafe {
+                event.cast::<u8>().add(f03_perf_read_layout_v1.group_leader)
+                    .cast::<*mut c_void>().read()
+            };
+            if leader.is_null() {
+                return -super::EINVAL as CLong;
+            }
+            let nr_siblings = unsafe {
+                leader.cast::<u8>().add(f03_perf_read_layout_v1.nr_siblings)
+                    .cast::<CInt>().read()
+            };
+            if nr_siblings < 0 {
+                return -super::EINVAL as CLong;
+            }
+            // Widen before adding the group header and leader value.
+            required = (nr_siblings as CULong + 2) * core::mem::size_of::<CULong>() as CULong;
+        }
+        if count < required {
+            return -super::EINVAL as CLong;
+        }
         unsafe {
             perf_read_body_result(
                 event, buf_addr, read_format, f03_perf_read_layout_v1.group_flag,
@@ -30123,8 +30148,6 @@ type F06SignalCopyXstate=unsafe extern "C" fn(*mut c_void,*const c_void,SizeT)->
 unsafe extern "C" {
     #[link_name="copy_to_user"]
     fn f06_signal_xsave_copy_to_user(dst:*mut c_void,src:*const c_void,n:SizeT)->CInt;
-    #[link_name="terminate"]
-    fn f06_signal_xsave_terminate(status:CInt,sig:CInt);
 }
 unsafe extern "C" fn f06_signal_xsave_capture(buffer:*mut c_void,mask:CULong) {
     // Existing exact EDX:EAX standard-XSAVE instruction body; visibility-only
@@ -30136,12 +30159,11 @@ unsafe extern "C" fn f06_signal_xsave_capture(buffer:*mut c_void,mask:CULong) {
 /// XSAVE and public usercopy adapters below. A HOST controlled fixture may drive
 /// only these two explicit architectural effect endpoints, never claim native
 /// instruction/usercopy execution or replace allocator/free/panic providers.
-/// Return0 continues. Native errors return-ENOMEM/-EFAULT to original C badframe
-/// label; legacy error returns1 to original C out label AFTER exact cleanup and
-/// terminate call. No new IRQ/lock action is introduced on either error path.
+/// Return zero continues; errors release only the private FP buffer and retain
+/// pending/lock ownership for the caller to free and unlock before termination.
 #[no_mangle]
 pub unsafe extern "C" fn arch_do_signal_xsave_copy_body_result(
-    size:CInt,user_fp:CULong,pending:*mut crate::abi::SigPending,sig:CInt,
+    size:CInt,user_fp:CULong,_pending:*mut crate::abi::SigPending,_sig:CInt,
     frame_fpregs:*mut *mut c_void,save:F06SignalSaveXstate,copy:F06SignalCopyXstate,
 )->CInt {
     if size == 0 {return 0;}
@@ -30151,39 +30173,15 @@ pub unsafe extern "C" fn arch_do_signal_xsave_copy_body_result(
     let base=crate::mem_helpers::kmalloc_tracked(size.wrapping_add(64),IHK_MC_AP_NOWAIT,
         concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
     if base.is_null() {
-        #[cfg(native_linux_irq_work_v6_12)]
-        {return -ENOMEM;}
-        #[cfg(not(native_linux_irq_work_v6_12))]
-        {
-            crate::mem_helpers::kfree_tracked(pending.cast(),
-                concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
-            crate::mem_helpers::kfree_tracked(base,
-                concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
-            kprintf(b"do_signal,no space available\n\0".as_ptr().cast());
-            f06_signal_xsave_terminate(0,sig);
-            return 1;
-        }
+        return -ENOMEM;
     }
     let aligned=((base as CULong).wrapping_add(63)&!63) as *mut c_void;
     crate::string::__inline_memset(aligned,0,size as SizeT);
     save(aligned,mask);
     if copy(user_fp as *mut c_void,aligned.cast_const(),size as SizeT) != 0 {
-        #[cfg(native_linux_irq_work_v6_12)]
-        {
-            crate::mem_helpers::kfree_tracked(base,
-                concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
-            return -EFAULT;
-        }
-        #[cfg(not(native_linux_irq_work_v6_12))]
-        {
-            crate::mem_helpers::kfree_tracked(pending.cast(),
-                concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
-            crate::mem_helpers::kfree_tracked(base,
-                concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
-            kprintf(b"do_signal,write_process_vm failed\n\0".as_ptr().cast());
-            f06_signal_xsave_terminate(0,sig);
-            return 1;
-        }
+        crate::mem_helpers::kfree_tracked(base,
+            concat!(file!(),"\0").as_ptr().cast_mut().cast(),line!() as CInt);
+        return -EFAULT;
     }
     *frame_fpregs=user_fp as *mut c_void;
     crate::mem_helpers::kfree_tracked(base,
@@ -31236,8 +31234,22 @@ pub unsafe extern "C" fn do_signal(
                     thread, pending, node.as_mut_ptr(), error,
                 );
             }
-            // Legacy XSAVE helper already consumed pending/temporary/terminate;
-            // its original missing unlock is preserved, not silently added.
+            #[cfg(not(native_linux_irq_work_v6_12))]
+            unsafe {
+                // The caller still owns pending and the signal writer lock.
+                crate::mem_helpers::kfree_tracked(pending.cast(),
+                    concat!(file!(), "\0").as_ptr().cast_mut().cast(), line!() as CInt);
+                crate::lock_helpers::__mcs_rwlock_writer_unlock(
+                    addr_of_mut!((*(*thread).sigcommon.cast::<SigCommon>()).lock).cast(),
+                    node.as_mut_ptr(),
+                );
+                if error == -ENOMEM {
+                    kprintf(b"do_signal,no space available\n\0".as_ptr().cast());
+                } else {
+                    kprintf(b"do_signal,write_process_vm failed\n\0".as_ptr().cast());
+                }
+                f06_signal_dispatch_terminate(0, signal);
+            }
             return restart;
         }
         let error = unsafe {
@@ -31355,16 +31367,16 @@ pub unsafe extern "C" fn do_signal(
 }
 
 // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
-// Genuine previously qualified restart policy, selected only with its whole-signal consumer.
+// Checked restart policy, selected only with its whole-signal consumer.
 #[cfg(f06_do_signal_whole_candidate)]
 mod f06_whole_signal_restart_provider {
     use crate::abi::{CInt, CLong, CULong};
 
-    use super::{EINTR, SIGCHLD, SIGKILL, SIGSTOP, SYS_EPOLL_WAIT, SYS_NANOSLEEP,
+    use super::{EINTR, SIGKILL, SIGSTOP, SYS_EPOLL_WAIT, SYS_NANOSLEEP,
                 SYS_PPOLL, SYS_PSELECT6};
 
 // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
-// F06: complete live signal restart policy; preserve the legacy/native config
+// F06: checked signal restart policy; retain the legacy/native config
 // distinction at the existing C call sites through an explicit literal flag.
 const F06_SIGNAL_RESTART_NEVER: [CInt; 16] = [
     34, // __NR_pause,
@@ -31402,10 +31414,6 @@ pub extern "C" fn arch_signal_restart_result(
     }
     if num < 0 || rc != (-(EINTR as CLong)) as CULong {
         return 0;
-    }
-    // Preserve this shortcut before the non-restarting syscall set.
-    if sig == SIGCHLD {
-        return 1;
     }
     if F06_SIGNAL_RESTART_NEVER.contains(&num) {
         return 0;
