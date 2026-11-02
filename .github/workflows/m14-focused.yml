@@ -6,6 +6,7 @@ on:
       - 'kernel/**'
       - 'arch/x86_64/kernel/**'
       - 'lib/**'
+      - 'cmake/**'
       - 'scripts/**'
       - 'executer/user/mcexec.c'
       - 'executer/user/rust/mcexec_helpers.rs'
@@ -17,6 +18,7 @@ on:
       - 'kernel/**'
       - 'arch/x86_64/kernel/**'
       - 'lib/**'
+      - 'cmake/**'
       - 'scripts/**'
       - 'executer/user/mcexec.c'
       - 'executer/user/rust/mcexec_helpers.rs'
@@ -47,6 +49,7 @@ jobs:
             /kernel/
             /arch/
             /lib/
+            /cmake/
             /scripts/
             /executer/user/mcexec.c
             /executer/user/rust/mcexec_helpers.rs
@@ -65,7 +68,8 @@ jobs:
           compiler=$(rustup which --toolchain nightly-2026-02-19 rustc)
           test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
           python3 -m venv "$RUNNER_TEMP/m14-tools"
-          "$RUNNER_TEMP/m14-tools/bin/python" -m pip install --disable-pip-version-check cmake==3.28.3
+          "$RUNNER_TEMP/m14-tools/bin/python" -m pip install --disable-pip-version-check cmake==3.28.3 ninja==1.13.0
+          echo "$RUNNER_TEMP/m14-tools/bin" >> "$GITHUB_PATH"
           echo "RUSTC=$compiler" >> "$GITHUB_ENV"
           echo "CMAKE=$RUNNER_TEMP/m14-tools/bin/cmake" >> "$GITHUB_ENV"
           echo "CC=$(command -v gcc)" >> "$GITHUB_ENV"

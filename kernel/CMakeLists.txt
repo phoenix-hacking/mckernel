@@ -77,6 +77,10 @@ if (ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
 endif()
 set(RUST_KERNEL_ENABLED OFF)
 if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
+	# Makefile depfiles require 3.20; the supported native SDK uses 3.28.3.
+	if (CMAKE_VERSION VERSION_LESS "3.20")
+		message(FATAL_ERROR "The Rust kernel requires CMake 3.20 or newer for compiler dependency tracking")
+	endif()
 	find_program(RUSTC rustc)
 	if (NOT RUSTC)
 		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires rustc")
@@ -84,15 +88,20 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 	if (NOT IS_ABSOLUTE "${RUSTC}" OR NOT EXISTS "${RUSTC}" OR IS_DIRECTORY "${RUSTC}")
 		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires an existing nondirectory absolute Rust compiler path")
 	endif()
+	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RUSTC}")
 	execute_process(
-		COMMAND ${RUSTC} --version
+		COMMAND "${RUSTC}" --version
+		RESULT_VARIABLE RUSTC_VERSION_RESULT
 		OUTPUT_VARIABLE RUSTC_VERSION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
-	if (NOT RUSTC_VERSION MATCHES "nightly")
+	if (NOT RUSTC_VERSION_RESULT EQUAL 0 OR NOT RUSTC_VERSION MATCHES "nightly")
 		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires nightly rustc; found ${RUSTC_VERSION}")
 	endif()
 	set(RUST_KERNEL_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.o")
+	set(RUST_KERNEL_DEPFILE "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.d")
+	set(RUST_KERNEL_RAW_DEPFILE "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.raw.d")
+	set(MCKERNEL_RUST_DEPFILE_NORMALIZER "${PROJECT_SOURCE_DIR}/cmake/NormalizeRustDepfile.cmake")
 	set(RUST_KERNEL_SRCS
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/abi.rs"
@@ -462,7 +471,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
             "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
 			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
 			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
-			${RUSTC}
+			"${RUSTC}"
 			--crate-name mckernel_rust
 			--crate-type lib
 			--edition=2021
@@ -478,11 +487,17 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			-C no-vectorize-loops
 			-C no-vectorize-slp
 			-C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma
+			-Z dep-info-omit-d-target
+			-Z binary-dep-depinfo
 			${RUST_KERNEL_CFG}
-			--emit=obj=${RUST_KERNEL_OBJ}
+			"--emit=obj=${RUST_KERNEL_OBJ},dep-info=${RUST_KERNEL_RAW_DEPFILE}"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
+		COMMAND "${CMAKE_COMMAND}" "-DINPUT=${RUST_KERNEL_RAW_DEPFILE}"
+			"-DOUTPUT=${RUST_KERNEL_DEPFILE}" -P "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
 		# Replacing the selected compiler must not silently reuse an old object.
-		DEPENDS ${RUST_KERNEL_SRCS} "${RUSTC}"
+		DEPENDS ${RUST_KERNEL_SRCS} "${RUSTC}" "${MCKERNEL_RUST_DEPFILE_NORMALIZER}"
+		DEPFILE "${RUST_KERNEL_DEPFILE}"
+		BYPRODUCTS "${RUST_KERNEL_DEPFILE}" "${RUST_KERNEL_RAW_DEPFILE}"
 		COMMENT "Building Rust kernel object"
 		VERBATIM
 	)

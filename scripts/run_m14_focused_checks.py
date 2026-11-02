@@ -40,7 +40,7 @@ SOURCE_PATHS = (
     "kernel/rust/syscall_policy.rs", "kernel/rust/abi.rs", "kernel/rust/lib.rs",
     "kernel/rust/f03_forward_adapters.rs", "kernel/rust/f03_ptrace_adapters.rs",
     "kernel/rust/f06_signal_ptrace_diagnostics.rs", "kernel/rust/f06_signal_trap_info.rs",
-    "kernel/CMakeLists.txt", "scripts/derive_f06_origin.py",
+    "kernel/CMakeLists.txt", "cmake/NormalizeRustDepfile.cmake", "scripts/derive_f06_origin.py",
     "scripts/f06_origin_command_profile.json", "scripts/f06_origin_source_binding.json",
     "scripts/run_m14_focused_checks.py",
 )

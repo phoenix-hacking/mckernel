@@ -7,6 +7,7 @@ does not replace compilation with a fabricated output.
 """
 
 import importlib.util
+import hashlib
 import os
 from pathlib import Path
 import re
@@ -40,7 +41,11 @@ def actual_statements():
                          if name == "add_custom_target"
                          and "mckernel_rust_obj" in text],
                         "kernel Rust object target")
-    return checks, parsed[finish][1], rule, target
+    sources = next(index for index in range(finish + 1, len(parsed))
+                   if parsed[index][0] == "set"
+                   and re.search(r"\(\s*RUST_KERNEL_SRCS\s", parsed[index][1]))
+    outputs = "\n".join(text for _, text in parsed[finish:sources])
+    return checks, outputs, rule, target
 
 
 class RustRebuildTests(unittest.TestCase):
@@ -59,13 +64,19 @@ class RustRebuildTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         return result
 
-    def write_fixture(self, root, *, historical=False):
+    def write_fixture(self, root, *, historical=False, unlisted=False):
         source, build = root / "source", root / "build"
         (source / "rust").mkdir(parents=True)
         (source / "rust/lib.rs").write_text(
             '#![no_std]\nmod nested;\n'
-            '#[no_mangle]\npub extern "C" fn observed_value() -> u64 { nested::value() }\n')
+            'static DATA: &[u8] = include_bytes!("payload.bin");\n'
+            '#[no_mangle]\npub extern "C" fn observed_value() -> u64 { nested::value() + DATA[0] as u64'
+            ' + env!("MCKERNEL_RUST_VERSION").len() as u64 }\n')
         (source / "rust/nested.rs").write_text('pub fn value() -> u64 { 31 }\n')
+        (source / "rust/payload.bin").write_bytes(b"\x21")
+        (source / "cmake").mkdir()
+        shutil.copyfile(ROOT / "cmake/NormalizeRustDepfile.cmake",
+                        source / "cmake/NormalizeRustDepfile.cmake")
         checks, output, rule, target = self.statements
         if historical:
             # Remove only the corrected compiler prerequisite in this isolated
@@ -75,11 +86,11 @@ class RustRebuildTests(unittest.TestCase):
                 r'\1', rule, count=1)
             self.assertEqual(count, 1, "Expected the selected compiler prerequisite")
         (source / "CMakeLists.txt").write_text("\n".join([
-            "cmake_minimum_required(VERSION 3.11)",
+            "cmake_minimum_required(VERSION 3.20)",
             "project(m14_rust_rebuild_fixture LANGUAGES NONE)",
             checks, output,
-            'set(RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"',
-            '    "${CMAKE_CURRENT_SOURCE_DIR}/rust/nested.rs")',
+            'set(RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"'
+            + (')' if unlisted else ' "${CMAKE_CURRENT_SOURCE_DIR}/rust/nested.rs")'),
             rule, target,
         ]) + "\n")
         return source, build
@@ -93,10 +104,10 @@ class RustRebuildTests(unittest.TestCase):
             f'exec {shlex.quote(str(self.rustc))} "$@"\n')
         path.chmod(0o755)
 
-    def configure(self, source, build, compiler):
+    def configure(self, source, build, compiler, generator="Unix Makefiles"):
         return self.checked([
             self.cmake, "-S", str(source), "-B", str(build),
-            "-G", "Unix Makefiles", f"-DRUSTC={compiler}",
+            "-G", generator, f"-DRUSTC={compiler}",
         ])
 
     def build(self, build):
@@ -164,6 +175,49 @@ class RustRebuildTests(unittest.TestCase):
                     self.assertNotEqual(result.returncode, 0)
                     self.assertIn("nondirectory absolute Rust compiler path",
                                   " ".join((result.stdout + result.stderr).split()))
+
+    def test_unlisted_modules_and_binary_includes_rebuild_on_make_and_ninja(self):
+        self.assertIsNotNone(shutil.which("ninja"), "Ninja is required for this qualified generator case")
+        for generator in ("Unix Makefiles", "Ninja"):
+            with self.subTest(generator=generator), tempfile.TemporaryDirectory(prefix="m14-depfile-") as tmp:
+                root = Path(tmp)
+                source, build = self.write_fixture(root, unlisted=True)
+                compiler, log = root / "selected-rustc", root / "compilations.txt"
+                self.write_compiler_observer(compiler, log, "compile")
+                self.configure(source, build, compiler, generator=generator)
+                self.build(build)
+                obj = build / "rust/mckernel_rust.o"
+                before = hashlib.sha256(obj.read_bytes()).hexdigest()
+                self.build(build)
+                self.assertEqual(log.read_text().splitlines(), ["compile"])
+                (source / "rust/nested.rs").write_text('pub fn value() -> u64 { 99 }\n')
+                self.build(build)
+                after_module = hashlib.sha256(obj.read_bytes()).hexdigest()
+                self.assertNotEqual(after_module, before, "unlisted module edit reused a stale object")
+                (source / "rust/payload.bin").write_bytes(b"\x63")
+                self.build(build)
+                after_payload = hashlib.sha256(obj.read_bytes()).hexdigest()
+                self.assertNotEqual(after_payload, after_module, "binary include edit reused a stale object")
+                self.assertEqual(log.read_text().splitlines(), ["compile"] * 3)
+                self.build(build)
+                self.assertEqual(log.read_text().splitlines(), ["compile"] * 3)
+                # Reproduce the same object from scratch within the same declared
+                # path/toolchain profile; this is not whole-image reproducibility.
+                obj.unlink()
+                self.build(build)
+                self.assertEqual(hashlib.sha256(obj.read_bytes()).hexdigest(), after_payload)
+
+    def test_failed_version_probe_is_not_accepted_as_nightly(self):
+        with tempfile.TemporaryDirectory(prefix="m14-version-probe-") as tmp:
+            root = Path(tmp)
+            source, build = self.write_fixture(root)
+            compiler = root / "failed-rustc"
+            compiler.write_text("#!/bin/sh\necho 'rustc fixture-nightly'\nexit 9\n")
+            compiler.chmod(0o755)
+            result = subprocess.run([self.cmake, "-S", str(source), "-B", str(build),
+                                     f"-DRUSTC={compiler}"], capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("requires nightly rustc", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":
