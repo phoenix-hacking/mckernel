@@ -16,7 +16,6 @@ import os
 from pathlib import Path
 import re
 import subprocess
-import sys
 import tempfile
 import urllib.request
 
@@ -34,7 +33,7 @@ def run(argv, **kwargs):
     result = subprocess.run([str(arg) for arg in argv], cwd=ROOT, text=True,
                             capture_output=True, timeout=120, **kwargs)
     if result.returncode:
-        raise RuntimeError(f'{argv[0]} failed ({result.returncode})\n{result.stdout}\n{result.stderr}')
+        raise RuntimeError(f'{argv[0]} failed ({result.returncode})\n{result.stdout[-10000:]}\n{result.stderr[-10000:]}')
     return result.stdout
 
 
@@ -70,21 +69,19 @@ def item_end(text, start):
 
 def prepare():
     for name, sha in RECOVERED.items():
-        path = ROOT / name
-        path.write_bytes(blob(sha))
+        (ROOT / name).write_bytes(blob(sha))
     cmake_path = ROOT / 'kernel/CMakeLists.txt'
     with tempfile.TemporaryDirectory() as temporary:
         base, candidate, current = (Path(temporary) / name for name in ('base', 'candidate', 'current'))
-        base.write_bytes(blob('051fce73aa3dc5c3be81dd605b24e01e85f1e52a'))
-        proposal = blob('cc14ef45983b1226c55215a71e6b26576aa8315e').decode()
-        # The newer branch quotes the compiler path. Preserve that repair while
-        # inserting the adjacent F06 metadata environment variable.
-        proposal = replace_once(proposal, '\t\t\t${RUSTC}\n\t\t\t--crate-name',
+        # Normalize the common ancestor and proposal to the branch's already
+        # accepted quoted compiler spelling before merging independent edits.
+        for path, sha in ((base, '051fce73aa3dc5c3be81dd605b24e01e85f1e52a'),
+                          (candidate, 'cc14ef45983b1226c55215a71e6b26576aa8315e')):
+            text = replace_once(blob(sha).decode(), '\t\t\t${RUSTC}\n\t\t\t--crate-name',
                                 '\t\t\t"${RUSTC}"\n\t\t\t--crate-name')
-        candidate.write_text(proposal)
+            path.write_text(text)
         current.write_bytes(cmake_path.read_bytes())
         merged = run(['git', 'merge-file', '-p', current, base, candidate])
-    # No default cutover without a matching production link and native proof.
     merged = replace_once(merged,
         'option(ENABLE_RUST_F06_SYSCALL_WHOLE "Select complete x86 syscall Rust/assembly ownership in the supported profile" ${MCKERNEL_RUST_F06_WHOLE_DEFAULT})',
         'option(ENABLE_RUST_F06_SYSCALL_WHOLE "Build the complete F06 ownership candidate; production qualification pending" OFF)')
@@ -101,14 +98,12 @@ def prepare():
     policy = policy_path.read_text()
     anchor = '// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n// Reuse existing context entry independently of unqualified whole-signal bodies.'
     start = policy.index(anchor)
-    final_module = policy.index('mod f06_whole_signal_restart_provider {', start)
-    end = item_end(policy, final_module)
+    end = item_end(policy, policy.index('mod f06_whole_signal_restart_provider {', start))
     policy_path.write_text(policy[:start] + '#[path = "f06_signal_tail.rs"]\nmod f06_signal_tail;\n' + policy[end:])
     for name in ('test_m14_f06_signal_restart.py', 'test_m14_f06_signal_xsave_cleanup.py'):
         path = ROOT / 'scripts/tests' / name
-        content = path.read_text()
-        content = content.replace("(ROOT/'kernel/rust/syscall_policy.rs').read_text()",
-                                  "(ROOT/'kernel/rust/f06_signal_tail.rs').read_text()")
+        content = path.read_text().replace("(ROOT/'kernel/rust/syscall_policy.rs').read_text()",
+                                           "(ROOT/'kernel/rust/f06_signal_tail.rs').read_text()")
         if name == 'test_m14_f06_signal_xsave_cleanup.py':
             old = "            (path/'test.rs').write_text(prefix+RUST+error+RUST_CASES+body)"
             new = "\n".join([
@@ -118,8 +113,7 @@ def prepare():
                 "            prefix += f'const F06_SIGNAL_ORIGIN: &[u8] = b\"{origin}\\\\0\";\\n'",
                 "            for name, value in fields.items():",
                 "                kind = 'u32' if name.endswith('FLAGS') else 'i32'",
-                "                prefix += f'const {name}: {kind} = {value};\\n'",
-                old,
+                "                prefix += f'const {name}: {kind} = {value};\\n'", old,
             ])
             content = replace_once(content, old, new)
         path.write_text(content)
@@ -140,10 +134,11 @@ def prepare():
         '        write_signal_metadata(args.source, origin, args.output)')
     origin_path.write_text(origin)
     runner_path = ROOT / 'scripts/run_m14_focused_checks.py'
-    runner = runner_path.read_text()
-    runner = replace_once(runner, 'SOURCE_PATHS = (',
+    runner = replace_once(runner_path.read_text(), 'SOURCE_PATHS = (',
         'SOURCE_PATHS = (\n    "kernel/rust/f06_signal_tail.rs", "kernel/rust/f06_rt_sigreturn_xrstor.rs",\n'
         '    "scripts/derive_f06_signal_metadata.py",')
+    runner = replace_once(runner, 'MODULES = (',
+                          'MODULES = (\n    "scripts.tests.test_m14_f06_tail_codegen",')
     runner_path.write_text(runner)
     print('Prepared recovered F06 candidate; selector remains OFF.', flush=True)
 
@@ -198,13 +193,11 @@ add_subdirectory("@ROOT@/kernel" "${PROJECT_BINARY_DIR}/kernel")
                 argv = [arg for arg in original if not re.fullmatch('-O[0-9sg]', arg)]
                 argv[argv.index('-o') + 1] = str(obj)
                 argv += ['-' + level, '-fno-lto', f'-fmacro-prefix-map={ROOT}=/src']
-                # HOST compiler/path mapping is explicit and does not alter the frozen SDK profile.
                 run(argv)
                 defined = run(['nm', '--defined-only', '--format=posix', obj]).splitlines()
                 undefined = run(['nm', '--undefined-only', '--format=posix', obj]).splitlines()
-                sections = run(['readelf', '-SW', obj])
                 allocated = []
-                for line in sections.splitlines():
+                for line in run(['readelf', '-SW', obj]).splitlines():
                     match = re.match(r'\s*\[\s*\d+\]\s+(\S+)\s+\S+\s+[0-9a-f]+\s+[0-9a-f]+\s+([0-9a-f]+)\s+[0-9a-f]+\s+(\S+)', line)
                     if match and 'A' in match[3] and int(match[2], 16) and not match[1].startswith('.note'):
                         allocated.append({'name': match[1], 'bytes': int(match[2], 16)})
