@@ -6,10 +6,11 @@ on:
     paths:
       - '.github/workflows/m14-f06-qualification.yml'
       - 'scripts/m14_f06_qualify.py'
+      - 'scripts/derive_f06_signal_metadata.py'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   f06:
@@ -34,32 +35,73 @@ jobs:
             /CMakeLists.txt
             /executer/user/mcexec.c
             /executer/user/rust/mcexec_helpers.rs
-      - name: Inspect F06 integration inputs without native operations
-        shell: bash
+      - name: Pin ordinary HOST tools and retain predecessor control
+        run: |
+          set -euo pipefail
+          rustup toolchain install nightly-2026-02-19 --profile minimal
+          compiler=$(rustup which --toolchain nightly-2026-02-19 rustc)
+          test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
+          python3 -m venv "$RUNNER_TEMP/f06-tools"
+          "$RUNNER_TEMP/f06-tools/bin/pip" install --disable-pip-version-check cmake==3.28.3 ninja==1.11.1.1
+          echo "RUSTC=$compiler" >> "$GITHUB_ENV"
+          echo "CMAKE=$RUNNER_TEMP/f06-tools/bin/cmake" >> "$GITHUB_ENV"
+          echo "NINJA=$RUNNER_TEMP/f06-tools/bin/ninja" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/f06-tools/bin" >> "$GITHUB_PATH"
+          echo "CC=$(command -v gcc)" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71
+      - name: Recover interrupted source proposal without a branch update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -B scripts/m14_f06_qualify.py --prepare
+      - name: Run source regressions with no skipped checks
+        run: python3 -B scripts/run_m14_focused_checks.py --json-output "$RUNNER_TEMP/f06-regressions.json"
+      - name: Compile actual F06 ownership and default negative control
+        run: |
+          set -euo pipefail
+          python3 -B scripts/restore_ihk_source.py --destination "$RUNNER_TEMP/f06-ihk"
+          python3 -B scripts/m14_f06_qualify.py --ihk-source "$RUNNER_TEMP/f06-ihk" --output "$RUNNER_TEMP/f06-ownership.json"
+      - name: Stage verified source objects for explicit review, not branch publication
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json, pathlib, re, subprocess
-          p = pathlib.Path('kernel/rust/syscall_policy.rs')
-          lines = p.read_text().splitlines()
-          needles = ('mod f06_signal_context_candidate', 'mod f06_do_signal_whole_candidate', 'mod f06_whole_signal_restart_provider', 'F06_SIGNAL_RESTART_NEVER', 'MCKERNEL_F06_SIGNAL_METADATA', 'pub unsafe extern "C" fn arch_rt_sigreturn_body_result')
-          print('POLICY_LINES', len(lines))
-          for i, line in enumerate(lines):
-              if any(n in line for n in needles):
-                  print('POLICY_MARKER', i + 1)
-                  print('\n'.join(f'{j + 1}: {lines[j]}' for j in range(max(0, i - 12), min(len(lines), i + 8))))
-          print('POLICY_FINAL_LINES\n' + '\n'.join(lines[-12:]))
-          for path in ('scripts/f06_origin_command_profile.json', 'config.h.in'):
-              print('INPUT', path)
-              if path.endswith('.json'):
-                  profile = json.loads(pathlib.Path(path).read_text())
-                  print(json.dumps({k: v for k, v in profile.items() if k in ('exact_commands', 'clone_cpuid_origin_reference')}, indent=2))
-              else:
-                  print(pathlib.Path(path).read_text())
-          print('F06_MODULES', '\n'.join(str(p) for p in sorted(pathlib.Path('kernel/rust').glob('*f06*'))))
-          paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD'], text=True).splitlines()
-          matches = [p for p in paths if p.endswith(('mckernel.img', 'mckernel_rust.o'))]
-          print('TRACKED_IMAGE_OBJECT_COUNT', len(matches))
-          print('\n'.join(matches[-30:]))
-          print('F06_QUALIFIERS', '\n'.join(p for p in paths if p.startswith('scripts/') and ('f06' in p.lower() or 'ownership' in p.lower())))
+          import hashlib, json, os, pathlib, subprocess, urllib.request
+          allowed = [
+              'arch/x86_64/kernel/syscall.c', 'kernel/CMakeLists.txt',
+              'kernel/rust/lib.rs', 'kernel/rust/syscall_policy.rs',
+              'kernel/rust/f06_signal_tail.rs', 'kernel/rust/f06_rt_sigreturn_xrstor.rs',
+              'scripts/derive_f06_origin.py', 'scripts/f06_origin_source_binding.json',
+              'scripts/run_m14_focused_checks.py',
+              'scripts/tests/test_m14_f06_signal_restart.py',
+              'scripts/tests/test_m14_f06_signal_xsave_cleanup.py',
+          ]
+          entries = []
+          for name in allowed:
+              data = pathlib.Path(name).read_bytes()
+              expected = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+              request = urllib.request.Request('https://api.github.com/repos/phoenix-hacking/mckernel/git/blobs',
+                  data=json.dumps({'content': data.decode(), 'encoding': 'utf-8'}).encode(),
+                  headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Content-Type': 'application/json'}, method='POST')
+              with urllib.request.urlopen(request, timeout=60) as response:
+                  observed = json.load(response)['sha']
+              if observed != expected:
+                  raise RuntimeError('uploaded source identity mismatch')
+              entries.append({'path': name, 'mode': '100644', 'type': 'blob', 'sha': observed})
+          record = {'base': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+                    'entries': entries, 'file_accepted': False, 'native_qualified': False}
+          print('VERIFIED_SOURCE_OBJECTS', json.dumps(record))
+          pathlib.Path(os.environ['RUNNER_TEMP'], 'f06-source-objects.json').write_text(json.dumps(record, indent=2))
+          subprocess.run(['git', 'diff', '--stat'], check=True)
           PY
+      - name: Preserve bounded results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m14-f06-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/f06-regressions.json
+            ${{ runner.temp }}/f06-ownership.json
+            ${{ runner.temp }}/f06-source-objects.json
+          if-no-files-found: warn
+          retention-days: 14
