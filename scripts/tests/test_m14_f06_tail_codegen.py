@@ -51,7 +51,7 @@ def build_fixture(directory, native=True):
     write_signal_metadata(ROOT / 'arch/x86_64/kernel/syscall.c',
                           '/src/arch/x86_64/kernel/syscall.c', output)
     pieces = ['#![no_std]\n#![allow(dead_code,unused_imports,unused_variables)]',
-              'use core::{ffi::c_void,mem::{size_of,offset_of},ptr::write_volatile};',
+              'use core::{ffi::{c_char,c_void},mem::{size_of,offset_of},ptr::write_volatile};',
               f'#[path="{RUST / "abi.rs"}"] mod abi;', 'use abi::*;']
     for module, types, names in (
         ('cls', (), ('get_this_cpu_local_var',)),
@@ -77,7 +77,6 @@ def build_fixture(directory, native=True):
     debug = (RUST / 'debug.rs').read_text()
     pieces.append('mod debug { use super::*;\n#[repr(C)]\n' + definition(debug, 'Ddebug', 'struct') + '\n}')
     cpu = (RUST / 'x86_cpu_helpers.rs').read_text()
-    # Retain the actual instruction functions, not substituted HOST observers.
     instructions = '\n'.join(definition(cpu, name) for name in ('x86_save_xstate', 'x86_restore_xstate'))
     declarations = '\n'.join(provider(cpu, name) for name in ('get_xsave_size', 'get_xsave_mask'))
     pieces.append('mod x86_cpu_helpers { use super::*; use core::arch::asm;\n'
@@ -93,15 +92,19 @@ def build_fixture(directory, native=True):
         pieces.append(matches[0])
     for name in ('rt_sigreturn_zero_siginfo', 'sigmask_to_signal_number'):
         pieces.append(definition(policy, name))
-    # Bind declarations copied from the actual policy's foreign blocks.
     foreign = []
     for name in ('arch_copy_from_user_bridge', 'arch_copy_to_user_bridge', 'kprintf',
                  'ptrace_report_signal', 'schedule'):
         matches = re.findall(r'(?m)^\s*(?:pub\s+)?fn\s+' + name + r'\([^;{}]*\)[^;{}]*;', policy)
         signatures = list(dict.fromkeys(match.strip() for match in matches))
-        if len(signatures) != 1:
-            raise ValueError(f'expected one genuine policy foreign signature for {name}: {len(signatures)}')
-        foreign.append(signatures[0])
+        if len(signatures) == 1:
+            foreign.append(signatures[0])
+        elif not signatures:
+            # Some policy dependencies are already actual Rust implementations,
+            # not foreign declarations. Derive their declaration from that body.
+            foreign.append(provider(policy, name))
+        else:
+            raise ValueError('ambiguous genuine policy provider: ' + name)
     pieces.append('unsafe extern "C" {\n' + '\n'.join(foreign) + '\n}')
     if native:
         pieces.append(f'#[path="{RUST / "native_signal.rs"}"] mod native_signal;')
