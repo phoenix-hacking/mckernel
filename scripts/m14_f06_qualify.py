@@ -76,7 +76,12 @@ def prepare():
     with tempfile.TemporaryDirectory() as temporary:
         base, candidate, current = (Path(temporary) / name for name in ('base', 'candidate', 'current'))
         base.write_bytes(blob('051fce73aa3dc5c3be81dd605b24e01e85f1e52a'))
-        candidate.write_bytes(blob('cc14ef45983b1226c55215a71e6b26576aa8315e'))
+        proposal = blob('cc14ef45983b1226c55215a71e6b26576aa8315e').decode()
+        # The newer branch quotes the compiler path. Preserve that repair while
+        # inserting the adjacent F06 metadata environment variable.
+        proposal = replace_once(proposal, '\t\t\t${RUSTC}\n\t\t\t--crate-name',
+                                '\t\t\t"${RUSTC}"\n\t\t\t--crate-name')
+        candidate.write_text(proposal)
         current.write_bytes(cmake_path.read_bytes())
         merged = run(['git', 'merge-file', '-p', current, base, candidate])
     # No default cutover without a matching production link and native proof.
@@ -104,6 +109,19 @@ def prepare():
         content = path.read_text()
         content = content.replace("(ROOT/'kernel/rust/syscall_policy.rs').read_text()",
                                   "(ROOT/'kernel/rust/f06_signal_tail.rs').read_text()")
+        if name == 'test_m14_f06_signal_xsave_cleanup.py':
+            old = "            (path/'test.rs').write_text(prefix+RUST+error+RUST_CASES+body)"
+            new = "\n".join([
+                "            from scripts.derive_f06_signal_metadata import derive_signal_metadata",
+                "            origin = '/src/arch/x86_64/kernel/syscall.c'",
+                "            fields = derive_signal_metadata((ROOT/'arch/x86_64/kernel/syscall.c').read_text(), origin)",
+                "            prefix += f'const F06_SIGNAL_ORIGIN: &[u8] = b\"{origin}\\\\0\";\\n'",
+                "            for name, value in fields.items():",
+                "                kind = 'u32' if name.endswith('FLAGS') else 'i32'",
+                "                prefix += f'const {name}: {kind} = {value};\\n'",
+                old,
+            ])
+            content = replace_once(content, old, new)
         path.write_text(content)
     binding_path = ROOT / 'scripts/f06_origin_source_binding.json'
     binding = json.loads(binding_path.read_text())
