@@ -55,7 +55,18 @@ jobs:
         id: prepare
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 -B scripts/m14_f06_qualify.py --prepare
+        run: |
+          set -euo pipefail
+          python3 -B scripts/m14_f06_qualify.py --prepare
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('kernel/rust/x86_cpu_helpers.rs')
+          source = path.read_text()
+          old = '\nunsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {'
+          if source.count(old) != 1:
+              raise RuntimeError('expected the genuine private XRSTOR implementation')
+          path.write_text(source.replace(old, '\npub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {', 1))
+          PY
       - name: Run source regressions with no skipped checks
         id: regressions
         run: python3 -B scripts/run_m14_focused_checks.py --json-output "$RUNNER_TEMP/f06-regressions.json"
@@ -76,6 +87,7 @@ jobs:
               'arch/x86_64/kernel/syscall.c', 'kernel/CMakeLists.txt',
               'kernel/rust/lib.rs', 'kernel/rust/syscall_policy.rs',
               'kernel/rust/f06_signal_tail.rs', 'kernel/rust/f06_rt_sigreturn_xrstor.rs',
+              'kernel/rust/x86_cpu_helpers.rs',
               'scripts/derive_f06_origin.py', 'scripts/f06_origin_source_binding.json',
               'scripts/run_m14_focused_checks.py',
               'scripts/tests/test_m14_f06_signal_restart.py',
