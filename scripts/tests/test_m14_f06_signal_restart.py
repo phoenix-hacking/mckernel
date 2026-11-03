@@ -74,7 +74,7 @@ class F06SignalRestartTests(unittest.TestCase):
         if rustc is None:
             self.skipTest('rustc required for the isolated fixture')
         c=(ROOT/'arch/x86_64/kernel/syscall.c').read_text()
-        rust=(ROOT/'kernel/rust/syscall_policy.rs').read_text()
+        rust=(ROOT/'kernel/rust/f06_signal_tail.rs').read_text()
         cbody=item(c,'static int\nisrestart(')
         definitions='#include <errno.h>\n#define SIGKILL 9\n#define SIGSTOP 19\n#define SIGCHLD 17\n#define __NR_rt_sigreturn 15\n'
         definitions+=''.join(f'#define __NR_{name} {number}\n' for name,number in NEVER.items())

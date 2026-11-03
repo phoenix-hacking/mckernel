@@ -354,7 +354,7 @@ pub unsafe extern "C" fn rust_x86_restore_fp_regs(
 /// effect prevents memory reordering across restore. FP/SIMD registers are not
 /// Rust operands: the entire kernel build excludes their compiler-generated use.
 #[inline(always)]
-unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
+pub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
     unsafe {
         core::arch::asm!(
             "xrstor [{state}]",

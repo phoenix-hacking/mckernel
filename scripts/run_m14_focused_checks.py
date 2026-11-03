@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the bounded M14 source/ABI/build regressions; a skip is not a pass.
+"""Run bounded M14 source/ABI/build regressions; a skip is not a pass.
 
 This allowlist does not build a full kernel, initialize submodules, load modules,
 install tools, or invoke native/resource controllers. It grants no file closure.
@@ -15,9 +15,9 @@ import sys
 import time
 import unittest
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = (
+    "scripts.tests.test_m14_f06_tail_codegen",
     "scripts.tests.test_f03_forward_adapters",
     "scripts.tests.test_f06_signal_adapters",
     "scripts.tests.test_m14_syscall_selection",
@@ -36,10 +36,16 @@ MODULES = (
     "scripts.tests.test_m14_rust_rebuild",
 )
 SOURCE_PATHS = (
+    "kernel/rust/f06_signal_tail.rs", "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+    "scripts/derive_f06_signal_metadata.py",
     "kernel/syscall.c", "arch/x86_64/kernel/syscall.c",
     "kernel/rust/syscall_policy.rs", "kernel/rust/abi.rs", "kernel/rust/lib.rs",
     "kernel/rust/f03_forward_adapters.rs", "kernel/rust/f03_ptrace_adapters.rs",
     "kernel/rust/f06_signal_ptrace_diagnostics.rs", "kernel/rust/f06_signal_trap_info.rs",
+    "kernel/rust/x86_cpu_helpers.rs", "kernel/rust/native_signal.rs",
+    "kernel/rust/cls.rs", "kernel/rust/debug.rs", "kernel/rust/lock_helpers.rs",
+    "kernel/rust/mem_helpers.rs", "kernel/rust/sched_helpers.rs",
+    "kernel/rust/string.rs", "kernel/rust/waitq.rs",
     "kernel/CMakeLists.txt", "cmake/NormalizeRustDepfile.cmake", "scripts/derive_f06_origin.py",
     "scripts/f06_origin_command_profile.json", "scripts/f06_origin_source_binding.json",
     "scripts/run_m14_focused_checks.py",
@@ -95,9 +101,11 @@ def main():
                        "establishes_c_retirement": False,
                        "establishes_native_qualification": False},
         "limitations": [
-            "Extracted production bodies and explicit observation providers; not a full kernel link.",
-            "Instruction observations do not execute or qualify GS, XSAVE or XRSTOR.",
-            "Ptrace adapter selection remains opt-in pending matching image/provider qualification.",
+            "Focused production-body fixtures and complete F06 module code generation; not a full kernel link.",
+            "Complete F06 code generation leaves genuine provider declarations unresolved.",
+            "GS, XSAVE and XRSTOR instructions are emitted but not executed or natively qualified.",
+            "F03 ptrace adapters and F06 whole ownership remain opt-in pending matching image qualification.",
+            "The separate C-ownership check does not establish final-image ownership or native acceptance.",
             "Perf group/descriptor concurrency and open-error ownership remain unqualified.",
             "No original native-host ownership, device or lifecycle action is performed.",
         ],

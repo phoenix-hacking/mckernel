@@ -4,23 +4,38 @@ on:
   push:
     branches: [codex/m15-focused-checks-20261030]
     paths:
+      - 'kernel/**'
+      - 'arch/x86_64/kernel/**'
+      - 'lib/**'
+      - 'cmake/**'
+      - 'scripts/**'
+      - 'config.h.in'
       - '.github/workflows/m14-f06-qualification.yml'
-      - 'scripts/m14_f06_qualify.py'
-      - 'scripts/derive_f06_signal_metadata.py'
-      - 'scripts/tests/test_m14_f06_tail_codegen.py'
+  pull_request:
+    paths:
+      - 'kernel/**'
+      - 'arch/x86_64/kernel/**'
+      - 'lib/**'
+      - 'cmake/**'
+      - 'scripts/**'
+      - 'config.h.in'
+      - '.github/workflows/m14-f06-qualification.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   f06:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    env:
+      EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
           fetch-depth: 1
           persist-credentials: false
           submodules: false
@@ -36,9 +51,10 @@ jobs:
             /CMakeLists.txt
             /executer/user/mcexec.c
             /executer/user/rust/mcexec_helpers.rs
-      - name: Pin ordinary HOST tools and retain predecessor control
+      - name: Verify source and pin ordinary HOST tools
         run: |
           set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
           rustup toolchain install nightly-2026-02-19 --profile minimal
           compiler=$(rustup which --toolchain nightly-2026-02-19 rustc)
           test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
@@ -51,83 +67,21 @@ jobs:
           echo "CC=$(command -v gcc)" >> "$GITHUB_ENV"
           git fetch --no-tags --depth=1 origin 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71
           git show 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71:arch/x86_64/kernel/syscall.c > /dev/null
-      - name: Recover interrupted source proposal without a branch update
-        id: prepare
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          python3 -B scripts/m14_f06_qualify.py --prepare
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path('kernel/rust/x86_cpu_helpers.rs')
-          source = path.read_text()
-          old = '\nunsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {'
-          if source.count(old) != 1:
-              raise RuntimeError('expected the genuine private XRSTOR implementation')
-          path.write_text(source.replace(old, '\npub(crate) unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {', 1))
-          PY
-      - name: Run source regressions with no skipped checks
-        id: regressions
+      - name: Run committed-source regressions and reject skips
         run: python3 -B scripts/run_m14_focused_checks.py --json-output "$RUNNER_TEMP/f06-regressions.json"
-      - name: Compile actual F06 ownership and default negative control
-        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+      - name: Verify actual C ownership and debugger data ABI
         run: |
           set -euo pipefail
           python3 -B scripts/restore_ihk_source.py --destination "$RUNNER_TEMP/f06-ihk"
           python3 -B scripts/m14_f06_qualify.py --ihk-source "$RUNNER_TEMP/f06-ihk" --output "$RUNNER_TEMP/f06-ownership.json"
-      - name: Stage verified source objects for explicit review, not branch publication
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib, json, os, pathlib, subprocess, urllib.request
-          allowed = [
-              'arch/x86_64/kernel/syscall.c', 'kernel/CMakeLists.txt',
-              'kernel/rust/lib.rs', 'kernel/rust/syscall_policy.rs',
-              'kernel/rust/f06_signal_tail.rs', 'kernel/rust/f06_rt_sigreturn_xrstor.rs',
-              'kernel/rust/x86_cpu_helpers.rs',
-              'scripts/derive_f06_origin.py', 'scripts/f06_origin_source_binding.json',
-              'scripts/run_m14_focused_checks.py',
-              'scripts/tests/test_m14_f06_signal_restart.py',
-              'scripts/tests/test_m14_f06_signal_xsave_cleanup.py',
-          ]
-          entries = []
-          for name in allowed:
-              data = pathlib.Path(name).read_bytes()
-              expected = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
-              request = urllib.request.Request('https://api.github.com/repos/phoenix-hacking/mckernel/git/blobs',
-                  data=json.dumps({'content': data.decode(), 'encoding': 'utf-8'}).encode(),
-                  headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Content-Type': 'application/json'}, method='POST')
-              with urllib.request.urlopen(request, timeout=60) as response:
-                  observed = json.load(response)['sha']
-              if observed != expected:
-                  raise RuntimeError('uploaded source identity mismatch')
-              entries.append({'path': name, 'mode': '100644', 'type': 'blob', 'sha': observed})
-          record = {'base': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
-                    'entries': entries, 'file_accepted': False, 'native_qualified': False}
-          print('VERIFIED_SOURCE_OBJECTS', json.dumps(record))
-          pathlib.Path(os.environ['RUNNER_TEMP'], 'f06-source-objects.json').write_text(json.dumps(record, indent=2))
-          subprocess.run(['git', 'diff', '--stat'], check=True)
-          PY
-      - name: Preserve prepared public source inputs for review
-        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
-        run: |
-          tar --exclude='__pycache__' -czf "$RUNNER_TEMP/f06-source.tar.gz" \
-            kernel arch lib cmake config.h.in scripts/tests \
-            scripts/derive_f06_origin.py scripts/derive_f06_signal_metadata.py \
-            scripts/f06_origin_source_binding.json scripts/f06_origin_command_profile.json \
-            scripts/run_m14_focused_checks.py scripts/m14_f06_qualify.py
+          git diff --exit-code
       - name: Preserve bounded results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: m14-f06-${{ github.sha }}
+          name: m14-f06-${{ env.EXPECTED_HEAD_SHA }}
           path: |
             ${{ runner.temp }}/f06-regressions.json
             ${{ runner.temp }}/f06-ownership.json
-            ${{ runner.temp }}/f06-source-objects.json
-            ${{ runner.temp }}/f06-source.tar.gz
           if-no-files-found: warn
           retention-days: 14

@@ -152,7 +152,7 @@ class F06SignalXsaveCleanupTests(unittest.TestCase):
         rustc=os.environ.get('RUSTC') or shutil.which('rustc')
         if rustc is None:
             self.skipTest('rustc required for the isolated fixture')
-        source=(ROOT/'kernel/rust/syscall_policy.rs').read_text()
+        source=(ROOT/'kernel/rust/f06_signal_tail.rs').read_text()
         body=item(source,'pub unsafe extern "C" fn arch_do_signal_xsave_copy_body_result(')
         signal=item(source,'pub unsafe extern "C" fn do_signal(')
         tail=signal[signal.index('arch_do_signal_xsave_copy_result('):]
@@ -161,6 +161,13 @@ class F06SignalXsaveCleanupTests(unittest.TestCase):
             path=Path(tmp)
             prefix='#![allow(dead_code,unused_imports,unused_variables,static_mut_refs)]\n'
             prefix+=f'#[path={json.dumps(str(ROOT/"kernel/rust/abi.rs"))}] mod abi;\n'
+            from scripts.derive_f06_signal_metadata import derive_signal_metadata
+            origin = '/src/arch/x86_64/kernel/syscall.c'
+            fields = derive_signal_metadata((ROOT/'arch/x86_64/kernel/syscall.c').read_text(), origin)
+            prefix += f'const F06_SIGNAL_ORIGIN: &[u8] = b"{origin}\\0";\n'
+            for name, value in fields.items():
+                kind = 'u32' if name.endswith('FLAGS') else 'i32'
+                prefix += f'const {name}: {kind} = {value};\n'
             (path/'test.rs').write_text(prefix+RUST+error+RUST_CASES+body)
             self.checked([rustc,'--edition=2021','--test',str(path/'test.rs'),'-o',str(path/'test')])
             print(self.checked([str(path/'test'),'--test-threads=1']).stdout)

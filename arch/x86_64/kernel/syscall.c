@@ -452,6 +452,9 @@ arch_rt_sigreturn_free_bridge(void *ptr)
 
 #endif
 #line 394
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR)
+extern void arch_rt_sigreturn_xrstor_bridge(void *fpregs);
+#else
 void
 arch_rt_sigreturn_xrstor_bridge(void *fpregs)
 {
@@ -462,6 +465,8 @@ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
 
 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
 }
+
+#endif /* selected XRSTOR boundary is Rust/assembly-owned */
 
 #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
 extern long native_xstate_buffer_size_result(int provided, int configured);
@@ -957,6 +962,9 @@ arch_shmget_log_bridge(int event, long key, size_t size, int shmflg0,
 #define DDEBUG_DEFAULT DDEBUG_PRINT
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_DEBUG_CONSTANTS)
+extern uintptr_t debug_constants[12];
+#else
 uintptr_t debug_constants[] = {
 	sizeof(struct cpu_local_var),
 	offsetof(struct cpu_local_var, current),
@@ -971,6 +979,8 @@ uintptr_t debug_constants[] = {
 	offsetof(struct thread, tid),
 	-1,
 };
+
+#endif /* exact debugger ABI constants are Rust-owned */
 
 #define VDSO_MAXPAGES 2
 struct vdso {
@@ -1933,6 +1943,8 @@ arch_ptrace(long request, int pid, long addr, long data)
 }
 #endif
 
+#if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE))
+#line 1743
 static int
 isrestart(int num, unsigned long rc, int sig, int restart)
 {
@@ -1971,11 +1983,14 @@ isrestart(int num, unsigned long rc, int sig, int restart)
 	return 0;
 }
 
+#endif /* restart policy follows the complete signal owner */
+
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO)
 extern void arch_do_signal_trap_info_bridge(siginfo_t *info, int tid, int status);
 #endif
 
 #if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE))
+#line 1786
 int
 do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pending *pending, int num)
 {

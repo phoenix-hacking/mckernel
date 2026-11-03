@@ -13,7 +13,7 @@ from pathlib import Path
 import re
 
 PROFILE_SHA256 = "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1"
-SOURCE_BINDING_SHA256 = "6e6b44ef337a6ce015b4c8d2b9a9edb06797a9066ad4f8b81f07e7dd5c34859a"
+SOURCE_BINDING_SHA256 = "2f27bbfeed79d85867565118474bd83f7679b3cb294338009dddf6b884315471"
 
 
 def derive(profile_path, source_path, binding_path=None):
@@ -117,6 +117,9 @@ def main():
     args = parser.parse_args()
     origin, command = derive(args.profile, args.source, args.source_binding)
     clone_slots = derive_clone_cpuid(args.profile, args.source, origin)
+    if args.source_binding is not None:
+        from derive_f06_signal_metadata import write_signal_metadata
+        write_signal_metadata(args.source, origin, args.output)
     args.output.mkdir(parents=True, exist_ok=True)
     # Simple pinned ASCII origin means JSON/C and CMake literals agree exactly.
     literal = json.dumps(origin)

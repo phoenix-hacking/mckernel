@@ -52,6 +52,20 @@ option(ENABLE_NATIVE_FORK_OWNED_TRANSACTION "Enable the existing native owned-fo
 option(ENABLE_RUST_M14_SYSCALL_ADAPTERS "Build the unqualified M14 forwarding/signal adapter candidate" OFF)
 set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
 set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
+# Complete F06 candidate is opt-in until matched image/native qualification.
+# The supported profile is checked below; no new runtime authority is granted.
+set(MCKERNEL_RUST_F06_WHOLE_DEFAULT OFF)
+if (ENABLE_RUST_KERNEL AND ARCH STREQUAL "x86_64" AND
+    MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND NOT ENABLE_UBSAN)
+    set(MCKERNEL_RUST_F06_WHOLE_DEFAULT ON)
+endif()
+option(ENABLE_RUST_F06_SYSCALL_WHOLE "Build the complete F06 ownership candidate; production qualification pending" OFF)
+if (ENABLE_RUST_F06_SYSCALL_WHOLE AND
+    (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
+     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))
+    message(FATAL_ERROR "Complete F06 ownership requires the x86_64 Rust kernel, linux-6.12 IRQ ABI and UBSAN disabled")
+endif()
+
 if (NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "legacy" AND
     NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
 	message(FATAL_ERROR "MCKERNEL_HOST_IRQ_ABI must be legacy or linux-6.12")
@@ -220,6 +234,25 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 "${MCKERNEL_PROCESS_C_FILE}"
                 "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
         endif()
+		if (ENABLE_RUST_F06_SYSCALL_WHOLE)
+			list(APPEND RUST_KERNEL_CFG
+				"--cfg" "f06_signal_context_candidate"
+				"--cfg" "f06_do_signal_whole_candidate"
+				"--cfg" "f06_do_signal_reuse_qualified_context"
+				"--cfg" "f06_rt_sigreturn_xrstor_candidate"
+				"--cfg" "f06_debug_constants_candidate")
+			list(APPEND RUST_KERNEL_SRCS
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_rt_sigreturn_xrstor.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_tail.rs")
+			if (NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS)
+				list(APPEND RUST_KERNEL_CFG
+					"--cfg" "f06_signal_ptrace_diagnostics_candidate"
+					"--cfg" "f06_signal_trap_info_candidate")
+				list(APPEND RUST_KERNEL_SRCS
+					"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_ptrace_diagnostics.rs"
+					"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_trap_info.rs")
+			endif()
+		endif()
 		# Pair the existing F03 Rust providers with syscall.c source selectors below.
 		list(APPEND RUST_KERNEL_CFG
 			"--cfg" "f03_io_diagnostic_callbacks_candidate"
@@ -304,6 +337,8 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 				endif()
 				find_package(Python3 REQUIRED COMPONENTS Interpreter)
 				set(MCKERNEL_F06_ORIGIN_PRODUCER "${PROJECT_SOURCE_DIR}/scripts/derive_f06_origin.py")
+				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+				    "${PROJECT_SOURCE_DIR}/scripts/derive_f06_signal_metadata.py")
 				set(MCKERNEL_F06_C_SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c")
 				set(MCKERNEL_F06_ORIGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/rust/f06-origin")
 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
@@ -324,6 +359,13 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 				    message(FATAL_ERROR "F06 source origin producer rejected the profile/source")
 				endif()
 				include("${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake")
+				if (ENABLE_RUST_F06_SYSCALL_WHOLE)
+					set(MCKERNEL_F06_SIGNAL_METADATA_RS "${MCKERNEL_F06_ORIGIN_DIR}/f06_signal_metadata.rs")
+					list(APPEND RUST_KERNEL_SRCS "${MCKERNEL_F06_SIGNAL_METADATA_RS}")
+					set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+						COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR;MCKERNEL_RUST_F06_DEBUG_CONSTANTS;MCKERNEL_RUST_F06_SIGNAL_CONTEXT;MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE;MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME;MCKERNEL_RUST_F06_PTRACE_REGSET_LOG;MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO")
+				endif()
+
 				# Existing supported x86/linux6.12/non-UBSAN branch only; no new native profile.
 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_obtain_clone_cpuid_candidate")
 				list(APPEND RUST_KERNEL_SRCS
@@ -471,6 +513,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
             "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
 			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
 			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
+			"MCKERNEL_F06_SIGNAL_METADATA_RS=${MCKERNEL_F06_SIGNAL_METADATA_RS}"
 			"${RUSTC}"
 			--crate-name mckernel_rust
 			--crate-type lib
