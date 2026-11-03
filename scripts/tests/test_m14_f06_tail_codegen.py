@@ -42,6 +42,9 @@ def provider(source, name):
     signature = signature.replace('unsafe extern "C" fn ', 'pub fn ', 1)
     if signature.startswith('extern "C" fn '):
         signature = signature.replace('extern "C" fn ', 'pub fn ', 1)
+    # Parameter binding mutability is an implementation pattern, not ABI. A
+    # foreign declaration cannot contain patterns; pointer mutability is kept.
+    signature = re.sub(r'\bmut\s+([A-Za-z_][A-Za-z_0-9]*\s*:)', r'\1', signature)
     return signature + ';'
 
 
@@ -100,8 +103,6 @@ def build_fixture(directory, native=True):
         if len(signatures) == 1:
             foreign.append(signatures[0])
         elif not signatures:
-            # Some policy dependencies are already actual Rust implementations,
-            # not foreign declarations. Derive their declaration from that body.
             foreign.append(provider(policy, name))
         else:
             raise ValueError('ambiguous genuine policy provider: ' + name)
