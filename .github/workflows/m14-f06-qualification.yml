@@ -1,0 +1,65 @@
+name: M14 F06 qualification
+
+on:
+  push:
+    branches: [codex/m15-focused-checks-20261030]
+    paths:
+      - '.github/workflows/m14-f06-qualification.yml'
+      - 'scripts/m14_f06_qualify.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  f06:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /kernel/
+            /arch/
+            /lib/
+            /scripts/
+            /config/
+            /cmake/
+            /config.h.in
+            /CMakeLists.txt
+            /executer/user/mcexec.c
+            /executer/user/rust/mcexec_helpers.rs
+      - name: Inspect F06 integration inputs without native operations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, re, subprocess
+          p = pathlib.Path('kernel/rust/syscall_policy.rs')
+          lines = p.read_text().splitlines()
+          needles = ('mod f06_signal_context_candidate', 'mod f06_do_signal_whole_candidate', 'mod f06_whole_signal_restart_provider', 'F06_SIGNAL_RESTART_NEVER', 'MCKERNEL_F06_SIGNAL_METADATA', 'pub unsafe extern "C" fn arch_rt_sigreturn_body_result')
+          print('POLICY_LINES', len(lines))
+          for i, line in enumerate(lines):
+              if any(n in line for n in needles):
+                  print('POLICY_MARKER', i + 1)
+                  print('\n'.join(f'{j + 1}: {lines[j]}' for j in range(max(0, i - 12), min(len(lines), i + 8))))
+          print('POLICY_FINAL_LINES\n' + '\n'.join(lines[-12:]))
+          for path in ('scripts/f06_origin_command_profile.json', 'config.h.in'):
+              print('INPUT', path)
+              if path.endswith('.json'):
+                  profile = json.loads(pathlib.Path(path).read_text())
+                  print(json.dumps({k: v for k, v in profile.items() if k in ('exact_commands', 'clone_cpuid_origin_reference')}, indent=2))
+              else:
+                  print(pathlib.Path(path).read_text())
+          print('F06_MODULES', '\n'.join(str(p) for p in sorted(pathlib.Path('kernel/rust').glob('*f06*'))))
+          paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD'], text=True).splitlines()
+          matches = [p for p in paths if p.endswith(('mckernel.img', 'mckernel_rust.o'))]
+          print('TRACKED_IMAGE_OBJECT_COUNT', len(matches))
+          print('\n'.join(matches[-30:]))
+          print('F06_QUALIFIERS', '\n'.join(p for p in paths if p.startswith('scripts/') and ('f06' in p.lower() or 'ownership' in p.lower())))
+          PY
