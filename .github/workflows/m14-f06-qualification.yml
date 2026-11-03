@@ -7,6 +7,7 @@ on:
       - '.github/workflows/m14-f06-qualification.yml'
       - 'scripts/m14_f06_qualify.py'
       - 'scripts/derive_f06_signal_metadata.py'
+      - 'scripts/tests/test_m14_f06_tail_codegen.py'
   workflow_dispatch:
 
 permissions:
@@ -49,13 +50,17 @@ jobs:
           echo "$RUNNER_TEMP/f06-tools/bin" >> "$GITHUB_PATH"
           echo "CC=$(command -v gcc)" >> "$GITHUB_ENV"
           git fetch --no-tags --depth=1 origin 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71
+          git show 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71:arch/x86_64/kernel/syscall.c > /dev/null
       - name: Recover interrupted source proposal without a branch update
+        id: prepare
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 -B scripts/m14_f06_qualify.py --prepare
       - name: Run source regressions with no skipped checks
+        id: regressions
         run: python3 -B scripts/run_m14_focused_checks.py --json-output "$RUNNER_TEMP/f06-regressions.json"
       - name: Compile actual F06 ownership and default negative control
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
         run: |
           set -euo pipefail
           python3 -B scripts/restore_ihk_source.py --destination "$RUNNER_TEMP/f06-ihk"
@@ -94,6 +99,14 @@ jobs:
           pathlib.Path(os.environ['RUNNER_TEMP'], 'f06-source-objects.json').write_text(json.dumps(record, indent=2))
           subprocess.run(['git', 'diff', '--stat'], check=True)
           PY
+      - name: Preserve prepared public source inputs for review
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          tar --exclude='__pycache__' -czf "$RUNNER_TEMP/f06-source.tar.gz" \
+            kernel arch lib cmake config.h.in scripts/tests \
+            scripts/derive_f06_origin.py scripts/derive_f06_signal_metadata.py \
+            scripts/f06_origin_source_binding.json scripts/f06_origin_command_profile.json \
+            scripts/run_m14_focused_checks.py scripts/m14_f06_qualify.py
       - name: Preserve bounded results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -103,5 +116,6 @@ jobs:
             ${{ runner.temp }}/f06-regressions.json
             ${{ runner.temp }}/f06-ownership.json
             ${{ runner.temp }}/f06-source-objects.json
+            ${{ runner.temp }}/f06-source.tar.gz
           if-no-files-found: warn
           retention-days: 14
