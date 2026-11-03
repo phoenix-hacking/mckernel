@@ -49,12 +49,27 @@ def symbol_bytes(obj, name, directory):
     return data[offset:offset + size]
 
 
+def inherited_definitions():
+    """Retain the actual top-level C defines that the kernel subdir inherits."""
+    source = (ROOT / 'CMakeLists.txt').read_text()
+    profile = json.loads((ROOT / 'scripts/f06_origin_command_profile.json').read_text())
+    commands = [row for row in profile['exact_commands'] if row['stage'] == 'selected x86 syscall object']
+    if len(commands) != 1:
+        raise ValueError('missing exact reference C profile')
+    definitions = ('-DPROFILE_ENABLE', '-DIHK_IKC_USE_LINUX_WORK_IRQ')
+    for definition in definitions:
+        if source.count('add_definitions(' + definition + ')') != 1 or definition not in commands[0]['argv']:
+            raise ValueError('top-level inherited ABI definition drift: ' + definition)
+    return definitions
+
+
 def inspect_c(ihk, output):
     cc, cmake, rustc = (os.environ.get(name, fallback) for name, fallback in
                         (('CC', 'gcc'), ('CMAKE', 'cmake'), ('RUSTC', 'rustc')))
     if run(['git', '-C', ihk, 'status', '--porcelain']).strip():
         raise ValueError('IHK header source must have a clean working tree')
-    source_paths = ('arch/x86_64/kernel/syscall.c', 'kernel/CMakeLists.txt',
+    inherited = inherited_definitions()
+    source_paths = ('CMakeLists.txt', 'arch/x86_64/kernel/syscall.c', 'kernel/CMakeLists.txt',
                     'kernel/rust/abi.rs', 'kernel/rust/f06_rt_sigreturn_xrstor.rs',
                     'kernel/rust/f06_signal_tail.rs', 'kernel/rust/x86_cpu_helpers.rs',
                     'scripts/derive_f06_origin.py', 'scripts/derive_f06_signal_metadata.py',
@@ -63,6 +78,7 @@ def inspect_c(ihk, output):
               'file_accepted': False, 'native_qualified': False,
               'selector_default': 'OFF', 'compiler': run([cc, '--version']).splitlines()[0],
               'rustc': run([rustc, '--version']).strip(),
+              'inherited_abi_definitions': list(inherited),
               'ihk_commit': run(['git', '-C', ihk, 'rev-parse', 'HEAD']).strip(),
               'source_base_commit': run(['git', 'rev-parse', 'HEAD']).strip(),
               'source_files_sha256': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
@@ -88,11 +104,12 @@ set(ENABLE_PERF ON)
 set(ENABLE_RUSAGE ON)
 set(ENABLE_MEMDUMP ON)
 set(PROFILE_ENABLE ON)
+add_definitions(@INHERITED@)
 set(MCKERNEL_HOST_IRQ_ABI linux-6.12 CACHE STRING "")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 configure_file("@ROOT@/config.h.in" "${PROJECT_BINARY_DIR}/config.h")
 add_subdirectory("@ROOT@/kernel" "${PROJECT_BINARY_DIR}/kernel")
-'''.replace('@ROOT@', str(ROOT)).replace('@IHK@', str(ihk))
+'''.replace('@ROOT@', str(ROOT)).replace('@IHK@', str(ihk)).replace('@INHERITED@', ' '.join(inherited))
         (fixture / 'CMakeLists.txt').write_text(driver)
         controls = []
         for selected in (False, True):
@@ -106,6 +123,8 @@ add_subdirectory("@ROOT@/kernel" "${PROJECT_BINARY_DIR}/kernel")
             if len(matches) != 1:
                 raise ValueError('expected one actual F06 compile command')
             original = shlex.split(matches[0]['command'])
+            if any(definition not in original for definition in inherited):
+                raise ValueError('actual F06 command lost its inherited ABI definitions')
             row_results = {}
             for level in ('O0', 'O2'):
                 obj = root / f'{selected}-{level}.o'
@@ -145,12 +164,14 @@ add_subdirectory("@ROOT@/kernel" "${PROJECT_BINARY_DIR}/kernel")
         for cfg in ('f06_signal_context_candidate', 'f06_do_signal_whole_candidate',
                     'f06_do_signal_reuse_qualified_context', 'f06_signal_trap_info_candidate',
                     'f06_rt_sigreturn_xrstor_candidate', 'f06_debug_constants_candidate',
-                    'native_linux_irq_work_v6_12'):
+                    'native_linux_irq_work_v6_12', 'enable_profile', 'enable_perf', 'enable_rusage'):
             args += ['--cfg', cfg]
         run(args, env=dict(os.environ, MCKERNEL_F06_SIGNAL_METADATA_RS=str(metadata)))
         rust_data = symbol_bytes(rust_obj, 'debug_constants', root)
         if len(rust_data) != 96 or any(data != rust_data for data in controls):
-            raise ValueError('Rust debug_constants does not match both actual C data objects')
+            raise ValueError('debug_constants mismatch: ' + json.dumps({
+                'C': [list(struct.unpack('<' + 'Q' * (len(data) // 8), data)) for data in controls],
+                'Rust': list(struct.unpack('<' + 'Q' * (len(rust_data) // 8), rust_data))}))
         report['debug_constants'] = {'matches_C_O0_and_O2': True, 'bytes': len(rust_data),
                                      'values': list(struct.unpack('<12Q', rust_data))}
         report['status'] = 'PASS'
