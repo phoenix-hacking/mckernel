@@ -1,28 +1,30 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-01 UTC. This is the sole active human-readable campaign log.
+Updated: 2026-11-05 UTC. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Focused M14 and M15 work is active by the user's explicit request to finish
-both and continue publishing to GitHub.** This supersedes the scheduling pause;
-it changes no acceptance, actual source/service hold or native authorization.
-Draft PR [#2](https://github.com/phoenix-hacking/mckernel/pull/2) contains the prior
-published checkpoint `17d0f2b97b707cff2c11d19f7fede22ee6d453d9`, fetched and
-verified at tree `cabcf93b6fd60ae46ee98ddb1e7abca72f68bde2`. The current source
-checkpoint `1b82d6b87a0c905d231ec0e69318ebd146f6b327` adds the paired M14 fixes,
-IHK boot polling, repeated DWARF lookup and real BFD layout corrections below.
-Its final combined run passes 64 focused checks with no skips. Publication uses
-the same PR branch with a non-forced expected-head lease and fetched-tree check.
-The user's prior commits preserve the exact Rust IHK history in tracked Git
-bundles; fresh recovery now reproduces successor `c032c975` exactly.
-Actual HOST builds link the Rust IHK library, all three IHK tools, eclair and
-mcinspect. Real offline diagnostic and supervisor consumers pass. Exact
-BFD/compiler pins are available; explicit HOST supplementation does not establish
-the complete original native SDK. This checkout still cannot access R3 controls.
-Preserve accepted work, failed evidence and every actual owner/reservation. The
-source work changes no acceptance, service hold or budget.
+**M14 work resumed on 2026-11-05 at the user's explicit request.** GitHub's
+19 newer source commits through `146dcd18766404a75a762dab4a8dc4b234c42903`
+are fast-forwarded into the local campaign branch; pre-existing dirty work is
+preserved. The exact IHK gitlink `c032c975fdbe17be846bd61cc48cb541e7ab5830`
+was recovered from the committed bundles and the clean local IHK checkout updated.
+
+The new `f03_host_cleanup.rs` ports `terminate_host` through its existing real
+Rust lookup/unlock, refcount, release and signal providers. It is paired with the
+C exclusion under the existing opt-in syscall-adapter selector. The focused run
+passes **39 checks with zero failures, errors or skips**, including 256 C and
+256 Rust cleanup cases and the compiler-observed C/Rust entry selector. The
+bounded result is `docs/verification/m14-host-cleanup-results-20261105.json`.
+M14 remains **4/6 accepted**; no new final image or native acceptance is claimed.
+
+The SDK/build containers, previous linked images and source snapshot are on this
+machine. The retained scratch disk is accessible through a separate read-only
+view with journal replay disabled. The current host boot differs from the saved
+R3 boot; all four recorded R3 PIDs are absent. These observations do not release
+any UNKNOWN reservation, retire an owner or authorize a replay of its operation.
+Existing holds, 22-GiB aggregate reservation and original control records remain.
 
 Dispatcher: **`gpt-6.1-sol`, reasoning `max`**. Ordinary workers may use medium;
 complex workers/reviewers high; bounded extraction low. Confirm project-scoped
@@ -125,98 +127,29 @@ Rocky/Linux control plane**. Linux-independent boot is outside this goal.
 
 ## Immediate blocker and next action
 
-Source checkpoint based on `5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71`:
+The saved native/install controller is bound to the previous boot, expired
+cutoffs and old Root process ancestry. Its frozen R3 stop packet is not a valid
+post-reboot control action. The old controller was not restarted and no consumed
+nonce, stop packet, UNKNOWN reservation or persistent mutex was cleared.
 
-- Fixed the final architecture-syscall CMake assignment that erased earlier F06
-  ownership guards; it now appends the base guards. This affects existing default
-  selections as well as the new candidate.
-- Initialized the traced default-SIGTRAP notification before either consumer in
-  C and the existing unselected whole-Rust candidate, preserving notification,
-  lock and wake order. The whole candidate now requires the initializer.
-- Added five Rust forwarding adapters and two signal/ptrace diagnostic adapters,
-  with paired source guards behind `ENABLE_RUST_M14_SYSCALL_ADAPTERS=OFF` by
-  default. Whole-signal/context selection and held source remain unchanged.
-- Isolated tests passed using pinned `rustc 1.95.0-nightly (c04308580 2026-02-18)`
-  and CMake 3.28.3: `test_f03_forward_adapters.py`,
-  `test_f06_signal_adapters.py`, and `test_m14_syscall_selection.py`. The last
-  reproduces the former overwrite and verifies ON/OFF pairing and profile
-  rejection. These are unit/configuration results, not a production kernel
-  build, final-link or native acceptance. M14 remains 4/6; zero new retirements.
-- The earlier Git push dry-run failed for missing credentials. The now-connected
-  GitHub account provides an authenticated source-publication route. The
-  prescribed `scripts/push_os_checkpoint.py` is absent from the tracked tree;
-  publication through GitHub does not replace the original native controls.
+The first native action remains a fresh scoped disposition of R3 through the
+existing reviewed ownership path, followed by supported SDK/source exclusion and
+resource admission. Do not infer release from absent processes or exited build
+containers. Preserve both UNKNOWN 4-GiB install reservations, V2's UNKNOWN 2 GiB,
+native CPU2–5/12 GiB, scratch21, permanent mutex27:4, and all service/source holds.
 
-The user explicitly requested a further debugging pass. Reproduced and corrected
-these eligible-source defects in the same checkout:
+The eligible HOST queue remains independent of privileged setup. Its latest
+`terminate_host` source candidate preserves lookup/unlock-before-kill, an already
+nohost process's no-kill path, and process capture before detached-thread release.
+Every required provider has one genuine definition in retained image
+`064d64a50a22fbee4b394720df429ab8918508aed01e9a33b0e5064d518d556f`.
+That is provider-presence evidence, not a matching link of the new source.
 
-- The preceding architecture edits broke configure-time F06 origin generation.
-  A separately pinned successor-source binding now permits the actual revised
-  bytes while preserving the frozen command profile, source/body/header checks
-  and debug-line identities. All metadata inputs trigger CMake reconfiguration.
-  The generated receipt remains source metadata with no build/runtime authority.
-- Both C and Rust wait helpers now propagate copyout failures, avoid wait4 output
-  copies after errors or WNOHANG/no-result, decode waitid exit/signal/core status,
-  and zero waitid's no-result siginfo. Both C declarations and the Rust definition
-  agree on the siginfo helper's long return. Invalid waitid IDs are rejected.
-  A private selector distinguishes PGID 1 from all children; public wait4 rejects
-  INT_MIN before the backend. Normal process/ptraced lists use the same matcher.
-- Preserved complete ptrace event/SYSGOOD payloads when decoding stopped status,
-  including a truncation error caught in the new tests by independent review.
-  Successful ptraced process/thread candidates now retain their cause in a
-  private local-status tag; waitid reports CLD_TRAPPED, while wait4 restores the
-  public stop encoding before copyout. Both languages assert that supported
-  signals cannot collide with the tag. Function signatures, stored exit state
-  and reap/unlock order are unchanged; the enumerated status consumers are the
-  two syscall result helpers. Independent review found no further blocker in
-  these changed paths at source/unit scope.
-- C and Rust xstate regset paths use the configured XSAVE extent instead of the
-  fixed 1088-byte type, covering both smaller and larger allocated state.
-- Both signal-forwarding bridges and the C sigaction fallback initialize their
-  whole contexts before the forwarding path reads all argument slots.
-- The combined focused run passed **20 top-level unittest checks, no skips**:
-  `test_f03_forward_adapters`, `test_f06_signal_adapters`,
-  `test_m14_syscall_selection`, `test_m14_build_origin`,
-  `test_m14_f03_signal_context`, `test_m14_f03_wait_results`,
-  `test_m14_f03_wait_c`, and `test_m14_f06_xstate_extent` under `scripts.tests`.
-  The wait fixtures run 15 Rust and 13 C behavior cases; C also checks the changed
-  ABI with incompatible-pointer errors and undefined-behavior instrumentation.
-  Traced/ordinary process and thread stop cases cover WNOWAIT, error/no-result,
-  preserved event payloads, callback order and absence of private wait4 output.
-  Xstate fixtures exercise the actual C/Rust functions across configured extents
-  and copy errors. These use observation doubles, not production providers.
-  The pinned Rust compiler and CMake versions above were used; `git diff --check`
-  passed. No full kernel crate, held input, install or native workload was run.
-- The earlier exact-IHK source blocker is resolved through tracked Git bundles
-  from the user's prior commits. Canonical upstream does not advertise the
-  custom `a7ddca26b0dfb087569d652dce5f4262e1311b70` revision, but the committed
-  cache-fix and adoption bundles reproduce it exactly. The M15 source recovery
-  and the successor fixes are recorded below; no alternate source revision or
-  guessed submodule URL was substituted.
-
-These results improve source confidence only. M14 remains 4/6 accepted, with no
-new C retirement, accepted image or native qualification.
-
-The next native action remains reconciliation of the recorded R3 owner on that
-host, followed by the existing changed-unit build/link/consumer qualification.
-
-The build/install ownership channel failed before a usable lease. The operation
-deadline expired. Its caller/control outcome remains UNKNOWN; no further stop,
-repair, install or retry is authorized by this consolidation. Preserve both 4-GiB
-failed-operation reservations, V2's UNKNOWN 2 GiB, native CPU2–5/12 GiB, scratch21
-and permanent mutex27:4. Absence of a process/output is not ownership retirement.
-
-At the checkpoint record exact live identities and final pause here. On a later
-explicit resume, the first owner must reconcile those live controls through their
-normal reviewed path. Never replay a consumed nonce or treat model shutdown as
-native cleanup. Do not start another root-control framework or diagnostic solely
-to obtain another source-only report.
-
-Then use one compositor to integrate eligible existing Rust replacements, compile
-only affected units with the existing SDK/unaffected objects, link the candidate,
-and validate its real consumers. Keep the ordinary admitted HOST compiler queue
-independent of unfinished privileged/native setup. A specific held input still
-blocks its own command; do not route around or relabel that rejected work.
+After ownership/admission is established, integrate the eligible syscall
+replacements with the existing unaffected SDK objects, compile affected units,
+link the coherent image and validate its real consumers and native restoration.
+Keep accepted files closed and reuse unchanged passing results. Held exec/ACK,
+TID/XPMEM and undefined-response inputs remain excluded from equivalent retries.
 
 ## M14 checklist — compute kernel
 
@@ -512,9 +445,12 @@ the delivered profile; disabling or relocating an owned runtime does not port it
 
 - Keep the same saved Root/ownership and historical credit ledger; never edit
   launcher-owned state by hand. A new model conversation is not native retirement.
-- Included weekly usage only: last confirmed 96% used; stop at 100%, an earlier
-  actual hold/unknown usage or inherited cutoff. Original reset upper bound is
-  `2026-11-04T06:35:33Z`; it grants no new allowance. No prepaid/API fallback.
+- Included weekly usage only. This explicit 2026-11-05 resume must obtain a
+  fresh account/usage observation before any model turn; stop at 100% or an
+  earlier actual hold/unknown usage. No prepaid/API fallback. The previous 96%
+  observation and `2026-11-04T06:35:33Z` cutoff remain historical constraints of
+  the old operation; this resume does not revive any expired execution packet,
+  widen its deadlines, reset its ledger or clear a service/source hold.
 - Existing native one-heavy/four-CPU/12-GiB envelope, ordinary compiler grants,
   aggregate reservations and host/scratch floors stay in force. Model parallelism
   creates no workload grant. No overlapping owners, lock unlink, broad chmod/chown,

@@ -5714,6 +5714,9 @@ int process_cleanup_before_terminate(int pid)
 #endif
 
 
+#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS
+extern void terminate_host(int pid, struct thread *thread);
+#else
 void
 terminate_host(int pid, struct thread *thread)
 {
@@ -5728,6 +5731,7 @@ terminate_host(int pid, struct thread *thread)
 			wait_thread_release_bridge, wait_process_release_bridge,
 			syscall_do_kill_thread_bridge);
 }
+#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int syscall_ikc_send_bridge(void *channel, void *packet, int opt)

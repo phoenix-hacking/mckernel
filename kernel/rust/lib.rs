@@ -66,6 +66,8 @@ mod f06_rt_sigreturn_xrstor;
 mod f03_forward_adapters;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
 mod f03_ptrace_adapters;
+#[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+mod f03_host_cleanup;
 #[cfg(f06_signal_ptrace_diagnostics_candidate)]
 mod f06_signal_ptrace_diagnostics;
 #[cfg(f06_signal_trap_info_candidate)]

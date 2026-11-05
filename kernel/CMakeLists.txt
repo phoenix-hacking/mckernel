@@ -209,6 +209,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			list(APPEND RUST_KERNEL_SRCS
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_forward_adapters.rs"
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_ptrace_adapters.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_host_cleanup.rs"
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_ptrace_diagnostics.rs"
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_trap_info.rs")
 		endif()
