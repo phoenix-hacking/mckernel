@@ -609,7 +609,7 @@ unsafe extern "C" {
         mode: c_ulong,
     ) -> c_long;
     fn mcexec_path_open_bridge(path: *const u8, flags: c_ulong, mode: c_ulong) -> c_long;
-    fn mcexec_cred_get_bridge(fd: c_int, arg: c_ulong);
+    fn mcexec_cred_get_bridge(fd: c_int, arg: c_ulong) -> c_long;
     fn mcexec_cred_setfsuid_bridge(uid: c_ulong) -> c_long;
     fn mcexec_cred_setresuid_bridge(ruid: c_ulong, euid: c_ulong, suid: c_ulong) -> c_long;
     fn mcexec_cred_setreuid_bridge(ruid: c_ulong, euid: c_ulong) -> c_long;
@@ -1461,8 +1461,8 @@ pub unsafe extern "C" fn act_rt_sigprocmask(
 #[no_mangle]
 pub unsafe extern "C" fn act_setfsuid(w: *const McexecSyscallWaitDesc, fd: c_int, cpu: c_int) {
     let ret = if mcexec_setfsuid_needs_cred_result(unsafe { (*w).sr.args[1] }) != 0 {
-        unsafe { mcexec_cred_get_bridge(fd, (*w).sr.args[0]) };
-        0
+        // Report the actual synchronous GET_CRED status to the error-aware guest.
+        unsafe { mcexec_cred_get_bridge(fd, (*w).sr.args[0]) }
     } else {
         unsafe { mcexec_cred_setfsuid_bridge((*w).sr.args[0]) }
     };

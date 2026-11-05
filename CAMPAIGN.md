@@ -1,59 +1,70 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-05 UTC. This is the sole active human-readable campaign log.
+Updated: 2026-11-05T23:40Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**M14 work resumed on 2026-11-05 at the user's explicit request.** GitHub's
-19 newer source commits through `146dcd18766404a75a762dab4a8dc4b234c42903`
-are fast-forwarded into the local campaign branch; pre-existing dirty work is
-preserved. The exact IHK gitlink `c032c975fdbe17be846bd61cc48cb541e7ab5830`
-was recovered from the committed bundles and the clean local IHK checkout updated.
+**M14 is active under the explicit November 5 resume.** Dispatcher:
+`gpt-6.1-sol`, reasoning `max`; one disjoint light child, one shared HOST compiler
+job on CPU6 within the initial 2 GiB phase. The existing timer steers every
+15 minutes. The 01:14–02:14Z November 6 target is an aim, not acceptance.
+After genuine original-scope M14 acceptance and a published verified matching
+proof checkpoint, continue M15 automatically. Final delivery retains Rocky/Linux.
 
-The new `f03_host_cleanup.rs` ports `terminate_host` through its existing real
-Rust lookup/unlock, refcount, release and signal providers. It is paired with the
-C exclusion under the existing opt-in syscall-adapter selector. The focused run
-passes **39 checks with zero failures, errors or skips**, including 256 C and
-256 Rust cleanup cases and the compiler-observed C/Rust entry selector. The
-bounded result is `docs/verification/m14-host-cleanup-results-20261105.json`.
-M14 remains **4/6 accepted**; no new final image or native acceptance is claimed.
+M14 remains **4/6 accepted**; all three integration gates remain open.
+Checkpoint **`735ea9e3309f799d3464c9c059d12e5468127bbf`** is pushed and fetched/blob
+verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
+pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
-At 22:26Z, two credential helper corrections were integrated: both
-`syscall_forward_refresh_cred_body_result` and `syscall_setfsid_body_result` now
-validate the refresh provider before a host setter can mutate credentials. The
-retained SDK compiler reproduced two failures on the old source; the correction
-passes all five affected regressions. Results and exact commands are in
-`docs/verification/m14-credential-preflight-results-20261105.json`. Genuine
-snapshot-provider/error propagation remains open; this fix claims no retirement.
+The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
+`do_setresgid`, with paired opt-in C exclusions and genuine current ABI/providers.
+The real host ioctl/action now propagates snapshot errors; guest scratch/request
+are initialized and failed/partial responses publish no credential fields.
+Five producer/consumer checks pass, including actual libc EBADF. The ten-entry
+F03 unit compiles with the retained SDK into **5,672 bytes**, object
+`fc5f0385167262654aabedbceb6d1aa24e3ce143db80dc6eb39fea5f511a8725`.
+Its two new entries each contain 173 bytes of code. Default activation, host/guest
+cohort linkage and matching native credential behavior remain open.
 
-The eligible eight-entry F03 adapter unit compiled into the reusable 3,720-byte
-object `e4eaa18c16e29ba25fae6df96730706d1d489ba3e1892e1a2b36dfd47fbae47f`
-under `docs/verification/m14-f03-adapters-unit-20261105-1/`. All eight entry bodies
-are present; genuine providers remain unresolved. HOST CPU6 compilation took
-0.37 seconds wall, 0.13 seconds CPU and 85.8 MiB peak RSS. Full-crate held source
-was excluded and unchanged passing checks were reused.
+The `munmap_body_result` writer transaction now requires lock, unlock and mutator
+before acquisition. The previous source fails six cases; the correction passes
+all twelve, preserving normal order, range validation and error propagation.
+The earlier two credential preflight fixes pass all five affected regressions.
+These are meaningful source regressions, not C retirement or image acceptance.
 
-**Steering:** the existing `mckernel-m14-steering-20261105.timer` reviews progress
-every 15 minutes, first at 22:33:45Z. The 01:14–02:14Z target on November 6 is an
-engineering aim, not acceptance. After original-scope M14 acceptance and a
-published, verified matching proof checkpoint, proceed automatically to M15.
-Root owns shared integration/physical admission; the one child supplies disjoint
-eligible fixes, with bounded ownership review only for a concrete release decision.
+The five-entry F06 unit and five genuine native-signal providers compile and
+partially link without the former duplicate providers. The **27,200-byte** partial
+object is `f76b95e0fe3e58851ec7c9ce90da9dcd044c9235f35c44b59a9e40987be746f9`.
+The actual F06 C translation unit also compiles under the explicitly admitted
+HOST flags with **zero C text definitions** and zero `.text/.data/.bss` bytes;
+object `590dc309d4179428f3e57f0c4a7831bca0a3d97176176c786f25d81c18fdd8c6`.
+Proof is under `docs/verification/m14-f06-eligible-units-20261105-1/`.
+This HOST mapping is explicit; SDK/default selection and native acceptance are
+unproven. unproven. The F06 partial link still needs 22 genuine kernel providers.
+The composed F03/F06 relocatable unit now links **15 unique original entries**;
+its 32,288-byte object is
+`1cb113db2d8a107549658321d89cfbd6b7490a7c3e7f96806864e134e045026e`,
+under `docs/verification/m14-combined-eligible-unit-20261105-1/`.
+The combined unit still needs 35 real providers and is not a full image.
 
-The SDK/build containers, previous linked images and source snapshot are on this
-machine. The retained scratch disk is accessible through a separate read-only
-view with journal replay disabled. The current host boot differs from the saved
-R3 boot; all four recorded R3 PIDs are absent. These observations do not release
-any UNKNOWN reservation, retire an owner or authorize a replay of its operation.
-Existing holds, 22-GiB aggregate reservation and original control records remain.
+**R3 process custody transition completed:** an independent review accepted the
+source-bound pre-publication failure plus verified ended boot epoch. The bounded
+owner validator passed, and Root appended
+`docs/verification/m14-r3-reboot-process-memory-disposition-20261105.json`.
+Only R3's 4 GiB process-memory charge is retired; historical direct wait and
+install outcome remain UNKNOWN. The other **18 GiB** (original install 4 GiB,
+V2 2 GiB, native 12 GiB), persistent/native/source holds, scratch21 and mutex27:4
+remain. No native admission, old-packet replay or launcher-state change occurred.
+HOST checks still conservatively budget against the original 22 GiB plus 2 GiB
+and the 4 GiB memory floor; resource grants have not been expanded.
 
-Dispatcher: **`gpt-6.1-sol`, reasoning `max`**. Ordinary workers may use medium;
-complex workers/reviewers high; bounded extraction low. Confirm project-scoped
-`danger-full-access` and approval `never` once per new/recovered thread.
-
-Final delivery means a complete, reproducible McKernel system **using the existing
-Rocky/Linux control plane**. Linux-independent boot is outside this goal.
+New checks use the existing read-only retained February 18 Rust 1.95 SDK.
+The old default Rust 1.60 shim is excluded from this queue. Compilation/partial
+linking is under a second with roughly 85–130 MiB peak RSS per command; exact
+CPU/wall/RSS, commands and retained failures are in the machine receipts. No new
+production image, matching native validation, C retirement or accepted-file delta
+is claimed. The historical 30-minute velocity baseline is unchanged.
 
 ## Status and useful results
 
@@ -149,38 +160,47 @@ Rocky/Linux control plane**. Linux-independent boot is outside this goal.
 
 ## Immediate blocker and next action
 
-The saved native/install controller is bound to the previous boot, expired
-cutoffs and old Root process ancestry. Its frozen R3 stop packet is not a valid
-post-reboot control action. The old controller was not restarted and no consumed
-nonce, stop packet, UNKNOWN reservation or persistent mutex was cleared.
-The 22:23Z bounded observation is
-`docs/verification/m14-post-reboot-observation-20261105.json`: current boot
-`3ba4f2ca-4323-433d-bfb8-7859268121b6`, four old R3 controls absent, both
-nonce-specific install output paths absent, no loaded McKernel/IHK modules and
-retained containers at PID zero. These are observations; direct waits, native
-current-free and all reservation releases remain UNKNOWN/unissued.
+**Single blocker/owner: Root — fresh native/SDK execution admission remains
+unproven after the host reboot.** R3 process-only custody is disposed; its lost
+wait/install result is not reconstructed. The original UNKNOWN install and V2
+parent/source custody, native current-free and authenticated effective SDK/source
+view still cannot be asserted from absent processes or terminal containers.
+The old Root transaction, nonces, grants and deadlines remain historical only.
 
-**Single blocker/owner:** Root, with the bounded `protocol_review` child, must
-establish the source-bound R3 failure-before-publication disposition across the
-boot change. The frozen stop command has no supported post-reboot transition.
-The next deliverable is the smallest reviewed correction to the existing owner
-path, separating ended process custody from UNKNOWN waits and persistent/native
-holds; only then may actual SDK/source exclusion and resource admission advance. Do not infer release from absent processes or exited build
-containers. Preserve both UNKNOWN 4-GiB install reservations, V2's UNKNOWN 2 GiB,
-native CPU2–5/12 GiB, scratch21, permanent mutex27:4, and all service/source holds.
+The retained source/profile references include zero-byte placeholders at some
+old worker-result paths; these are not matching artifacts. The admitted HOST C
+check instead used its genuine nonempty retained headers and recorded the actual
+70-header closure. Do not substitute the held whole-crate Rust object in a new
+link. Reuse accepted CURRENT119 artifacts only after their exact source/selection
+and actual bytes are established; source holds and native restoration stay gated.
 
-The eligible HOST queue remains independent of privileged setup. Its latest
-`terminate_host` source candidate preserves lookup/unlock-before-kill, an already
-nohost process's no-kill path, and process capture before detached-thread release.
-Every required provider has one genuine definition in retained image
-`064d64a50a22fbee4b394720df429ab8918508aed01e9a33b0e5064d518d556f`.
-That is provider-presence evidence, not a matching link of the new source.
+**Exact admission result:** NO-GO for publication within the initial 2 GiB
+HOST phase: the existing installer requires three distinct live roles and a
+4 GiB reservation. Its current-boot source copies now bind the new Root and
+invocation and provide publication-only supervision; their caller/profile and
+actual one-shot owner cap remain unadmitted. A fresh protocol-derived usage
+observation reports 2% used with no rejection. The launcher's old-boot weekly
+fields remain untouched; they do not revive an old operation. New bounded
+operation authorization must be explicit and separately reviewed, not inferred
+from the account reset time or model liveness. Native guardian requirements,
+`_collect`, profile, source-exclusion and effective-view refusals remain intact.
 
-After ownership/admission is established, integrate the eligible syscall
-replacements with the existing unaffected SDK objects, compile affected units,
-link the coherent image and validate its real consumers and native restoration.
-Keep accepted files closed and reuse unchanged passing results. Held exec/ACK,
-TID/XPMEM and undefined-response inputs remain excluded from equivalent retries.
+The exact old native nonce is `b1229b4ab9124964b917c06202e408c2` (entry4), not
+Resource2's earlier `a876915e19964ad8978887961e630f65` (entry3). Its retained entry4
+claim/grant/spawn paths and read-only-volume attempt path are absent, and the
+current Root census has no heavy/project owner and no process races. Independent
+review supports current occupancy assessment only; it releases no native or
+persistent reservation. The new publication proposal must allocate within the
+existing 12 GiB envelope, retain the other charges and bar native/other compiler
+work until publication custody closes. No additional allowance is implied.
+
+**Next deliverable/owner:** Root tests and independently admits or rejects the
+complete current-boot publication source/profile with an explicit owner-issued
+one-shot cap; the child implements the scoped existing supervisor correction.
+Then perform at most that admitted publication operation and return to the
+coherent image/provider link. If an actual current controller fact is unavailable,
+record its exact field/owner; do not substitute a new sentinel or repeat a census.
+
 
 ## M14 checklist — compute kernel
 

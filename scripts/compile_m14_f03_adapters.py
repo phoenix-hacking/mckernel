@@ -24,6 +24,7 @@ ENTRIES = (
     "syscall_policy_do_syscall2_bridge", "syscall_policy_do_syscall3_bridge",
     "wait_host_wait4_bridge", "ptrace_detach_do_kill_bridge",
     "ptrace_detach_wakeup_bridge", "terminate_host",
+    "do_setresuid", "do_setresgid",
 )
 
 
@@ -41,6 +42,7 @@ def prepare(directory):
     aliases = (
         "SyscallFindProcessFn", "SyscallProcessUnlockFn", "TerminateHostRefSetFn",
         "WaitThreadSideEffectFn", "SyscallDoKillThreadFn", "SyscallRequestCallFn",
+        "SyscallGetcredFn",
     )
     declarations = []
     for name in aliases:
@@ -49,7 +51,8 @@ def prepare(directory):
             raise ValueError("ambiguous genuine provider type: " + name)
         declarations.append(matches[0])
     signatures = [provider(policy, name) for name in (
-        "syscall_generic_forwarding_body_result", "terminate_host_body_result")]
+        "syscall_generic_forwarding_body_result", "terminate_host_body_result",
+        "syscall_refresh_cred_fields_body_result", "getcred")]
     cpu = (RUST / "x86_local.rs").read_text()
     cpu_signatures = set(re.findall(
         r'pub unsafe extern "C" fn ihk_mc_get_processor_id\([^{};]*\)[^{};]*', cpu))
@@ -69,7 +72,8 @@ def prepare(directory):
         + "\n".join(declarations) + '\nunsafe extern "C" {\n'
         + "\n".join(signatures) + "\n}}",
     ]
-    modules = ("f03_forward_adapters", "f03_ptrace_adapters", "f03_host_cleanup")
+    modules = ("f03_forward_adapters", "f03_ptrace_adapters", "f03_host_cleanup",
+               "f03_credential_refresh")
     for name in modules:
         pieces.append(f'#[path="{RUST / (name + ".rs")}"] mod {name};')
     source = directory / "f03_adapters.rs"

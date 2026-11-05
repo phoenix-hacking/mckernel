@@ -2228,6 +2228,10 @@ pub unsafe extern "C" fn getcred_body_result(
         return null_mut();
     };
 
+    // The existing caller supplies sixteen writable CInt slots. Initialize
+    // both possible eight-int spans; only a successful genuine producer grants
+    // permission to consume the selected span. Zero fill is not completion proof.
+    core::ptr::write_bytes(raw_buf, 0, 16);
     let alternate_buf = raw_buf.add(8);
     let selected_buf = if ((raw_buf as CULong) ^ (alternate_buf as CULong)) & page_mask != 0 {
         alternate_buf
@@ -2240,7 +2244,11 @@ pub unsafe extern "C" fn getcred_body_result(
     (*requestp).number = syscall_nr as CULong;
     (*requestp).args[0] = virt_to_phys(selected_buf.cast::<c_void>());
     (*requestp).args[1] = 1;
-    do_syscall(requestp, processor_id());
+    if do_syscall(requestp, processor_id()) != 0 {
+        // A failed/partial response is not a credential snapshot. The existing
+        // refresh helper checks NULL before reading scratch or writing fields.
+        return null_mut();
+    }
 
     selected_buf
 }
@@ -4224,17 +4232,22 @@ pub unsafe extern "C" fn munmap_body_result(
     let mut len: SizeT = 0;
     let mut error = munmap_prepare_range(addr, len0, user_start, user_end, &mut len);
     if error == 0 {
-        if let Some(lock) = lock_fn {
-            lock(range_lock);
-        }
-        error = if let Some(do_munmap) = do_munmap_fn {
-            do_munmap(addr as *mut c_void, len, 1)
-        } else {
-            -EINVAL
+        // The mutator receives holding_memory_range_lock=1. Require the whole
+        // writer transaction before acquisition: missing either lock half must
+        // never permit unprotected removal or leave a held writer/preempt count.
+        error = match (lock_fn, unlock_fn, do_munmap_fn) {
+            (Some(lock), Some(unlock), Some(do_munmap)) => {
+                // SAFETY: the caller supplies the current VM's matching writer
+                // providers; the mutator runs only while that writer is held.
+                unsafe {
+                    lock(range_lock);
+                    let result = do_munmap(addr as *mut c_void, len, 1);
+                    unlock(range_lock);
+                    result
+                }
+            }
+            _ => -EINVAL,
         };
-        if let Some(unlock) = unlock_fn {
-            unlock(range_lock);
-        }
     }
 
     if let Some(log) = log_fn {
@@ -30573,12 +30586,15 @@ pub unsafe extern "C" fn utilthr_migrate() {
 /// read credential values. Its callers MUST separately establish that the genuine
 /// response producer initialized every consumed value. This entry cannot supply
 /// that missing authority, turn an ignored endpoint error into success, or justify
-/// reading failed/uninitialized output. No new zero-fill or ACK is introduced.
+/// reading failed/uninitialized output. Scratch initialization is defensive;
+/// only the genuine complete producer plus zero return permits consumption.
+/// Nonzero synchronous results return NULL; no new ACK or owner is introduced.
 #[no_mangle]
 pub unsafe extern "C" fn getcred(raw_buf: *mut CInt) -> *mut CInt {
     // SAFETY: Reuse the exact existing selected algorithm, including its full
-    // zeroed REQUEST (not response buffer), page-span choice and ignored syscall
-    // result. Three source18 adapters resolve to genuine mapping/CPU/do_syscall.
+    // zeroed request and page-span choice. Scratch is initialized before the
+    // synchronous call and nonzero completion returns no snapshot. The three
+    // existing adapters resolve to genuine mapping/CPU/do_syscall.
     unsafe {
         getcred_body_result(
             raw_buf, PAGE_MASK, SYS_SETFSUID,

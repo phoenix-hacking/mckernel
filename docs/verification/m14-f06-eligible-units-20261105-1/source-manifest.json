@@ -1,0 +1,121 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY_UNCOMPILED_NO_RELEASE",
+  "source_inputs": [
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_m14_f06_tail_codegen.py",
+      "sha256": "dfa3520654151c0aa14a62113c37f314885afc5f0242a24dbffc0a7ca04323db",
+      "bytes": 9074
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/derive_f06_signal_metadata.py",
+      "sha256": "e16933f24378ddc7ab936924b3679cda189ed227a498b9e70e8027123954d937",
+      "bytes": 4561
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "sha256": "4f6ea41af837748aae2d9581c7c45963c5cd5367093c8aebb1e62b12f75994ca",
+      "bytes": 123719
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "b2247f46fdfe72c6b4f3eec2d3162f3c91c9e7d82413f01ed0038b19ea2f19ed",
+      "bytes": 1240331
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      "bytes": 7877
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "bytes": 444772
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "bytes": 186213
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      "bytes": 13172
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "bytes": 12202
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      "bytes": 10868
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "bytes": 256003
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/native_signal.rs",
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250",
+      "bytes": 12106
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_trap_info.rs",
+      "sha256": "5de3c390c2b3883e173aa694bd9d925dc6bc8fa5903bb5eea35215403b0d6440",
+      "bytes": 2124
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "sha256": "a10a52d734bb494c1f0f6a84585d8f028ea44c386e3eaf10e8da12060a11134f",
+      "bytes": 2153
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+      "sha256": "988cbe82d0db23fb8702990da1a758005aeba5bd19a2c3630d10e647983c7ae0",
+      "bytes": 66891
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1",
+      "bytes": 1597
+    }
+  ],
+  "generated": [
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/f06.rs",
+      "sha256": "21dd4c6771b9e97ca8d466e91b709fc090cbce6dd544d003530ff88cecd7b08b",
+      "bytes": 6381
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/unit/metadata/f06_signal_metadata.rs",
+      "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58",
+      "bytes": 1248
+    }
+  ],
+  "provider_declarations": [
+    "native_signal_entry_targets_result",
+    "native_signal_context_prepare_result",
+    "native_signal_action_mask_result",
+    "native_signal_stack_prepare_result",
+    "native_signal_stack_publish_result",
+    "kprintf"
+  ],
+  "limitations": [
+    "Native provider object must be independently matched, declared and eligible; retained whole Rust object contains held scopes and is not an eligible link input.",
+    "ABI witnesses and exact generated C selection remain unproven.",
+    "This source generation does not compile, link, run kernel code or retire any C."
+  ]
+}

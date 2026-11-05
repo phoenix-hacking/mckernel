@@ -19857,6 +19857,9 @@ getcred(int *_buf)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+extern void do_setresuid(void);
+#else
 void
 do_setresuid()
 {
@@ -19884,7 +19887,11 @@ do_setresuid()
 	proc->fsuid = buf[3];
 #endif
 }
+#endif
 
+#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+extern void do_setresgid(void);
+#else
 void
 do_setresgid()
 {
@@ -19912,6 +19919,7 @@ do_setresgid()
 	proc->fsgid = buf[7];
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_setresuid(int n, ihk_mc_user_context_t *ctx);

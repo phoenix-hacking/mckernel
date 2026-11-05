@@ -96,8 +96,10 @@ pub unsafe extern "C" fn mcexec_path_open_bridge(path:*const u8,flags:c_ulong,mo
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn mcexec_cred_get_bridge(fd:c_int,arg:c_ulong) {
- super::ioctl(fd,0x30a0290a as c_ulong,arg);
+pub unsafe extern "C" fn mcexec_cred_get_bridge(fd:c_int,arg:c_ulong) -> c_long {
+ // Preserve the real ioctl failure as the existing negative errno convention.
+ // The synchronous ioctl owns the same original eight-int physical destination.
+ converted(super::ioctl(fd,0x30a0290a as c_ulong,arg) as c_long)
 }
 
 #[no_mangle]
