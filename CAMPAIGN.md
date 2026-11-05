@@ -19,6 +19,28 @@ passes **39 checks with zero failures, errors or skips**, including 256 C and
 bounded result is `docs/verification/m14-host-cleanup-results-20261105.json`.
 M14 remains **4/6 accepted**; no new final image or native acceptance is claimed.
 
+At 22:26Z, two credential helper corrections were integrated: both
+`syscall_forward_refresh_cred_body_result` and `syscall_setfsid_body_result` now
+validate the refresh provider before a host setter can mutate credentials. The
+retained SDK compiler reproduced two failures on the old source; the correction
+passes all five affected regressions. Results and exact commands are in
+`docs/verification/m14-credential-preflight-results-20261105.json`. Genuine
+snapshot-provider/error propagation remains open; this fix claims no retirement.
+
+The eligible eight-entry F03 adapter unit compiled into the reusable 3,720-byte
+object `e4eaa18c16e29ba25fae6df96730706d1d489ba3e1892e1a2b36dfd47fbae47f`
+under `docs/verification/m14-f03-adapters-unit-20261105-1/`. All eight entry bodies
+are present; genuine providers remain unresolved. HOST CPU6 compilation took
+0.37 seconds wall, 0.13 seconds CPU and 85.8 MiB peak RSS. Full-crate held source
+was excluded and unchanged passing checks were reused.
+
+**Steering:** the existing `mckernel-m14-steering-20261105.timer` reviews progress
+every 15 minutes, first at 22:33:45Z. The 01:14–02:14Z target on November 6 is an
+engineering aim, not acceptance. After original-scope M14 acceptance and a
+published, verified matching proof checkpoint, proceed automatically to M15.
+Root owns shared integration/physical admission; the one child supplies disjoint
+eligible fixes, with bounded ownership review only for a concrete release decision.
+
 The SDK/build containers, previous linked images and source snapshot are on this
 machine. The retained scratch disk is accessible through a separate read-only
 view with journal replay disabled. The current host boot differs from the saved
@@ -38,7 +60,7 @@ Rocky/Linux control plane**. Linux-independent boot is outside this goal.
 | Track | Accepted | Remaining |
 | --- | --- | --- |
 | M14 compute-kernel Rust/assembly | 4/6 file goals | Generic and x86 syscall files, final integrated image and matching validation |
-| M15 project-owned integration runtime | 1/8 file goals | Seven file goals and final delivered-runtime integration; focused source/debugging checks active by user request |
+| M15 project-owned integration runtime | 1/8 file goals | Seven file goals and final delivered-runtime integration; resume after genuine M14 acceptance and published proof |
 | Practical functional baseline | 35/35 at its accepted scope | Preserve matching results; qualify changed final artifacts and deliver the complete system |
 
 ### Latest combined M14/M15 debugging and HOST results
@@ -131,10 +153,19 @@ The saved native/install controller is bound to the previous boot, expired
 cutoffs and old Root process ancestry. Its frozen R3 stop packet is not a valid
 post-reboot control action. The old controller was not restarted and no consumed
 nonce, stop packet, UNKNOWN reservation or persistent mutex was cleared.
+The 22:23Z bounded observation is
+`docs/verification/m14-post-reboot-observation-20261105.json`: current boot
+`3ba4f2ca-4323-433d-bfb8-7859268121b6`, four old R3 controls absent, both
+nonce-specific install output paths absent, no loaded McKernel/IHK modules and
+retained containers at PID zero. These are observations; direct waits, native
+current-free and all reservation releases remain UNKNOWN/unissued.
 
-The first native action remains a fresh scoped disposition of R3 through the
-existing reviewed ownership path, followed by supported SDK/source exclusion and
-resource admission. Do not infer release from absent processes or exited build
+**Single blocker/owner:** Root, with the bounded `protocol_review` child, must
+establish the source-bound R3 failure-before-publication disposition across the
+boot change. The frozen stop command has no supported post-reboot transition.
+The next deliverable is the smallest reviewed correction to the existing owner
+path, separating ended process custody from UNKNOWN waits and persistent/native
+holds; only then may actual SDK/source exclusion and resource admission advance. Do not infer release from absent processes or exited build
 containers. Preserve both UNKNOWN 4-GiB install reservations, V2's UNKNOWN 2 GiB,
 native CPU2–5/12 GiB, scratch21, permanent mutex27:4, and all service/source holds.
 
@@ -492,7 +523,7 @@ history. Record only a real implementation/build/test/retirement delta, its exac
 artifact/checkpoint identifier, one blocker/owner and one next action. Preserve raw
 command output as machine evidence when required, without copying it into this log.
 
-## Retained checkpoint and break
+## Historical checkpoint and break
 
 **PAUSED** at 2026-10-31T00:28:57+00:00. The dispatcher completed and fetched-verified
 checkpoint `7edcb1459d6ba01299c4e161dd7721e9d4b8328f`; every child-agent turn completed.

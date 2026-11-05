@@ -2174,11 +2174,13 @@ pub unsafe extern "C" fn syscall_forward_refresh_cred_body_result(
     let Some(forward) = forward_fn else {
         return -(EINVAL as CLong);
     };
+    // Validate the required refresh callback before changing host credentials.
+    // Its absence cannot be repaired after a successful host setter.
+    let Some(refresh) = refresh_fn else {
+        return -(EINVAL as CLong);
+    };
     let rc = forward(syscall_nr, ctx);
     if syscall_refresh_cred_needed_result(rc) != 0 {
-        let Some(refresh) = refresh_fn else {
-            return -(EINVAL as CLong);
-        };
         refresh();
     }
     rc
@@ -2194,10 +2196,12 @@ pub unsafe extern "C" fn syscall_setfsid_body_result(
     let Some(do_syscall) = do_syscall_fn else {
         return (-(EINVAL as CLong)) as CULong;
     };
-    let new_id = do_syscall(syscall_nr, id as CULong, 0) as CULong;
+    // setfsid returns the previous ID, so keep that contract and reject a
+    // missing refresh callback before invoking the host operation.
     let Some(refresh) = refresh_fn else {
         return (-(EINVAL as CLong)) as CULong;
     };
+    let new_id = do_syscall(syscall_nr, id as CULong, 0) as CULong;
     refresh();
     new_id
 }
