@@ -1,0 +1,64 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/eventfd.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Exact selected C data declaration, supplied from the bound production source. */
+__LOGLEVEL_DECL__
+/* These local callbacks never open an IHK device or read sysfs. All successful
+ * allocations and descriptor operations reach genuine ordinary HOST libc. */
+static void *owned[16];
+static int attempted,failed_at,allocated,released,live,opens,closes,fd,shape,api_kind;
+static int checks,false_successes;
+static const char *allocation_kinds[8];
+static int allocation_failure(const char *kind) {
+ assert(attempted<8);allocation_kinds[attempted++]=kind;
+ if(attempted==failed_at){errno=ENOMEM;return 1;}return 0;
+}
+static void *record(void *pointer) {
+ assert(pointer);for(int i=0;i<16;i++)if(!owned[i]){owned[i]=pointer;++allocated;++live;return pointer;}abort();
+}
+void *observation_calloc(size_t n,size_t size) { if(allocation_failure("calloc"))return NULL;return record(calloc(n,size)); }
+char *observation_strdup(const char *text) { if(allocation_failure("strdup"))return NULL;return record(strdup(text)); }
+void observation_free(void *pointer) {
+ if(pointer){int found=0;for(int i=0;i<16;i++)if(owned[i]==pointer){owned[i]=NULL;--live;++released;found=1;break;}assert(found);}free(pointer);
+}
+int observation_open(int index) { assert(index==0&&opens==0);fd=eventfd(0,EFD_CLOEXEC);assert(fd>=0);++opens;return fd; }
+int observation_close(int descriptor) { assert(opens==1&&closes==0&&descriptor==fd);++closes;int result=close(descriptor);assert(result==0);return result; }
+int observation_sysfs(int index,char *output,ssize_t capacity,const char *kind) {
+ assert(index==0&&opens==1&&closes==0);assert(!strcmp(kind,api_kind==0?"MemTotal":"MemFree"));
+ const char *text=shape==1?(api_kind==0?"16384@0":"2048@0"):(api_kind==0?"4096@1,8192@0":"1024@1,2048@0");
+ assert(capacity>(ssize_t)strlen(text));memset(output,0,(size_t)capacity);memcpy(output,text,strlen(text)+1);return 0;
+}
+static void reset(int kind,int record_shape,int failure) {
+ assert(live==0);for(int i=0;i<16;i++)assert(!owned[i]);attempted=allocated=released=opens=closes=0;fd=-1;api_kind=kind;shape=record_shape;failed_at=failure;
+}
+typedef int (*MemoryAPI)(int,unsigned long *,int);
+static void check(MemoryAPI function,int kind,int record_shape,int failure,int baseline) {
+ reset(kind,record_shape,failure);
+ const unsigned long sentinel0=0x1122334455667788UL,sentinel1=0x8877665544332211UL;
+ unsigned long result[2]={sentinel0,sentinel1};int count=record_shape==1?1:2;
+ int returned=function(0,result,count);
+ assert(opens==1&&closes==1);errno=0;assert(fcntl(fd,F_GETFD)==-1&&errno==EBADF);assert(live==0&&allocated==released);
+ const char *expected_kinds[]={"strdup","strdup","calloc","calloc","strdup"};
+ assert(attempted==(failure?failure:5));for(int i=0;i<attempted;i++)assert(!strcmp(allocation_kinds[i],expected_kinds[i]));assert(allocated==(failure?failure-1:5));
+ if(!failure){assert(returned==0);if(record_shape==1){assert(result[0]==(kind==0?16384UL:2048UL)&&result[1]==sentinel1);}else{assert(result[0]==(kind==0?8192UL:2048UL)&&result[1]==(kind==0?4096UL:1024UL));}}
+ else if(failure==1){assert(returned==-EINVAL&&result[0]==sentinel0&&result[1]==sentinel1);}
+ else if(baseline){assert(returned==0&&result[0]==0&&result[1]==sentinel1);++false_successes;}
+ else{assert(returned==-ENOMEM&&result[0]==sentinel0&&result[1]==sentinel1);}
+ ++checks;
+}
+int observation_run(int baseline,MemoryAPI total,MemoryAPI available) {
+ assert(getuid()==1000&&geteuid()==1000);
+ MemoryAPI functions[]={total,available};
+ for(int kind=0;kind<2;kind++){check(functions[kind],kind,1,0,baseline);check(functions[kind],kind,2,0,baseline);for(int fail=1;fail<=5;fail++)check(functions[kind],kind,2,fail,baseline);}
+ assert(checks==14);assert(false_successes==(baseline?8:0));
+ if(baseline)puts("baseline checks=14 defined-false-successes=8 all-owned-fds-once-closed all-blocks-freed");
+ else puts("candidate checks=14 allocation-errors-propagated converter-error-outputs-unchanged all-owned-fds-once-closed all-blocks-freed");
+ return 0;
+}

@@ -1,0 +1,39 @@
+// Exact selected production memory parser/converter/query/public wrappers.
+// Local callbacks supply records/open boundary only; no IHK/sysfs/native proof.
+use core::ffi::{c_char,c_int,c_long,c_ulong,c_void};
+use core::ptr::null_mut;
+macro_rules! c {($s:literal)=>{concat!($s,"\0").as_ptr().cast::<c_char>()};}
+unsafe extern "C" {
+ static mut loglevel:c_int;
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_strdup"]fn strdup(text:*const c_char)->*mut c_char;
+ #[link_name="observation_free"]fn free(pointer:*mut c_void);
+ #[link_name="observation_close"]fn close(fd:c_int)->c_int;
+ fn strcmp(first:*const c_char,second:*const c_char)->c_int;
+ fn strsep(cursor:*mut *mut c_char,delimiter:*const c_char)->*mut c_char;
+ fn strtol(text:*const c_char,end:*mut *mut c_char,base:c_int)->c_long;
+ fn snprintf(output:*mut c_char,size:usize,format:*const c_char,...)->c_int;
+ fn geteuid()->u32;
+ fn open(path:*const c_char,flags:c_int,...)->c_int;
+ fn strnlen(text:*const c_char,maximum:usize)->usize;
+ fn write(fd:c_int,bytes:*const c_void,size:usize)->isize;
+ fn observation_open(index:c_int)->c_int;
+ fn observation_sysfs(index:c_int,output:*mut c_char,capacity:isize,kind:*const c_char)->c_int;
+ fn observation_run(baseline:c_int,total:unsafe extern "C" fn(c_int,*mut c_ulong,c_int)->c_int,available:unsafe extern "C" fn(c_int,*mut c_ulong,c_int)->c_int)->c_int;
+}
+mod ihklib_mcstat{use super::*;pub unsafe fn ihklib_os_open(index:c_int)->c_int{unsafe{observation_open(index)}}}
+mod ihklib_cli_parsers{
+ use super::*;
+ const EINVAL:c_int=22;
+__PARSER__
+}
+mod actual{
+ use super::*;
+ use super::ihklib_cli_parsers::mem_array;
+__MEM_CHUNK_TYPE__
+__LOGGING__
+ unsafe fn ihklib_os_query_mem_sysfs(index:c_int,output:*mut c_char,capacity:isize,kind:*const c_char)->c_int{unsafe{observation_sysfs(index,output,capacity,kind)}}
+__QUERY_AND_PUBLIC_WRAPPERS__
+}
+fn main(){let baseline=std::env::var("M15_MEMORY_ERROR_BASELINE_ONLY").as_deref()==Ok("1");std::process::exit(unsafe{observation_run(baseline as c_int,actual::ihk_os_query_total_mem,actual::ihk_os_query_free_mem)});}

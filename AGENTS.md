@@ -32,3 +32,11 @@ Checkpoint incrementally; no prepaid/API fallback or artificial quota consumptio
 Current source, artifacts and live machine controls remain usable for necessary
 execution checks; they are not extra narrative entrypoints. Historical originals
 stay intact where frozen bindings require them and are archived separately.
+
+The latest user priority is confirmed bug fixes and meaningful functional tests.
+Reuse qualified producer, ABI, provider and unchanged test results. Keep only
+necessary checks for changed source/library/ownership inputs, collected with the
+real build/test batch; avoid repeated hash inventories, proof wrappers and green
+reruns. Pipeline independent source, test preparation and result analysis; actual
+compiler/native execution remains within the existing single-slot aggregate grant.
+Net-conversion LOC accounting stays bounded and behind ready engineering work.

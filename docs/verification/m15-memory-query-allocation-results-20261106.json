@@ -1,0 +1,144 @@
+{
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "actual_changed_library": {
+    "aggregate": {
+      "direct_wait_wall_seconds": 0.939196353,
+      "max_RSS_KiB": 136360,
+      "time_v_CPU_seconds_rounded_sum": 0.85
+    },
+    "all8_waits_joined": true,
+    "archive": {
+      "bytes": 21933306,
+      "path": "/home/holden/mckernel-work/resume-20261106T094634Z-e32bb1d4/memory-error-implementation-1/genuine-producer-1/output/libihklib_whole70.a",
+      "sha256": "017dbb3844db6cb257493c7fbec1d995272937499215b66c883ba35ee32f6f47"
+    },
+    "library": {
+      "bytes": 5403760,
+      "path": "/home/holden/mckernel-work/resume-20261106T094634Z-e32bb1d4/memory-error-implementation-1/genuine-producer-1/output/libihk.so",
+      "sha256": "c874d47c968687c7784321c3ed7602b6c87abd37351adebeb74b47276c8bf3e5"
+    },
+    "receipt_sha256": "f279ccb2b7f1ddbaeaa82d37ee08b20bed5ab8d4782e6c625b517fa623f5d1be",
+    "roots": {
+      "SONAME": "libihk.so",
+      "data_count": 6,
+      "data_widths_match_retained_actual_symbols": true,
+      "function_count": 70,
+      "proof": "/home/holden/mckernel-work/resume-20261106T094634Z-e32bb1d4/memory-error-implementation-1/genuine-producer-1/SYMBOL-PROOF.json",
+      "unique_count": 76
+    },
+    "strict_qualifier": {
+      "exact7warning_names_locations_snippets_and_native_order": true,
+      "only_reviewed6_actual_source_fingerprints_changed": true,
+      "sha256": "f06e9a14d96ee197814fb8f880c6ff2176670de8b2b428f96c2dd2527889b5f2",
+      "status": "PASS"
+    },
+    "unchanged_checks_reused": "Accepted layout/type/perf/dump/stat witnesses and compiler/provider/native-order profile; only changed19C source origins regenerated."
+  },
+  "change": "Paired C/Rust shared query returns the exact converter error before the first caller-output store; existing temporary allocation frees and one owned descriptor close remain.",
+  "functional": {
+    "all_nested_returncodes": 0,
+    "all_outer_waits_joined": true,
+    "callbacks": "Only local open/sysfs record boundaries; real calloc/strdup/free and ordinary HOST eventfd/close/fcntl. No real IHK backend/device/sysfs/native operation.",
+    "candidate": {
+      "APIs": [
+        "ihk_os_query_total_mem",
+        "ihk_os_query_free_mem"
+      ],
+      "C_cases_passed": 14,
+      "Rust_cases_passed": 14,
+      "converter_failure_returns_ENOMEM_and_output_unchanged": true,
+      "later_invalid_node_transaction_guarantee_claimed": false,
+      "outer_count_copy_failure_preserves_existing_EINVAL": true,
+      "per_API_per_language": {
+        "ordinary_allocation_failure_points": 5,
+        "success_records": 2
+      },
+      "total_passed": 28,
+      "valid_record_order_mapping_preserved": true
+    },
+    "compiler_stderr_empty": true,
+    "defined_baseline": {
+      "C_cases": 14,
+      "C_false_successes": 8,
+      "C_zero_initialization_source_asserted": true,
+      "Rust_cases": 14,
+      "Rust_false_successes": 8,
+      "failure_effect": "Converterallocationerrorignored;returns0andwriteszeroednode0whileothercalleroutputremainsunchanged.",
+      "total_defined_bad_observations": 16
+    },
+    "metrics": {
+      "baseline-c": [
+        "User time (seconds): 0.11",
+        "System time (seconds): 0.02",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.14",
+        "Maximum resident set size (kbytes): 28060",
+        "Exit status: 0"
+      ],
+      "baseline-rust": [
+        "User time (seconds): 0.16",
+        "System time (seconds): 0.05",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.22",
+        "Maximum resident set size (kbytes): 110672",
+        "Exit status: 0"
+      ],
+      "candidate-c": [
+        "User time (seconds): 0.12",
+        "System time (seconds): 0.02",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.14",
+        "Maximum resident set size (kbytes): 28116",
+        "Exit status: 0"
+      ],
+      "candidate-rust": [
+        "User time (seconds): 0.14",
+        "System time (seconds): 0.08",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.22",
+        "Maximum resident set size (kbytes): 110504",
+        "Exit status: 0"
+      ]
+    },
+    "nested_wait_basis": "Frozenrunners usesynchronoussubprocess.run; nestedPID/startnotexposed, no inventedvalues. OuterPID/startticks andallnestedargv/statusretainedRUNS.",
+    "receipt_sha256": "28584a1cdbee96d34f32dce8a32b00653671ffe904175242fad7adc85a95d9d3",
+    "resource_proof": {
+      "all_real_libc_returned_blocks_freed": true,
+      "each_call_closes_once_with_real_close": true,
+      "each_call_owns_real_HOST_eventfd": true,
+      "fcntl_after_return_EBADF": true,
+      "no_allocator_exhaustion": true
+    }
+  },
+  "invocation": "20261106T094634Z-e32bb1d4",
+  "outcomes": {
+    "C_retirements": 0,
+    "M14_accepted_file_delta": 0,
+    "M15_accepted_file_delta": 0,
+    "changed_C_bodies": 1,
+    "changed_Rust_bodies": 1,
+    "native_qualifications": 0,
+    "new_HOST_SONAME_links": 1,
+    "new_real_Rust_compilations": 1,
+    "production_images": 0
+  },
+  "problem": "Both supported total/free-memory APIs ignored conversion allocation errors and published zero chunks as success.",
+  "remaining": "Held universal generic/exec full-image provider and original SDK/source-view/native admission are unchanged. This HOST fix accepts no original file/image/native gate. EOF cleanup remains a separate private candidate.",
+  "review": {
+    "durable_default_wrapper": "Source-only argument/path defaults; exact fixture vectors retained; no passing cases rerun or double-counted.",
+    "semantic_GO": "f5512226976e10dc40a7bcfd024c07e470d1a3a7d854ee53f8bed36ca165a9ec"
+  },
+  "source": {
+    "IHK_commit": "516d173b5896be4fc3a2b5688dcdd7600d5d3055",
+    "IHK_tree": "fd493c198d0cdd7c28c1745c13512d465a387ba2",
+    "bundle": {
+      "blob": "b3a1e86bebcb66ade7a51436aae388bf5ceba7bf",
+      "path": "/home/holden/mckernel/scripts/source-bundles/ihk-m15-abi-cli-20261106.bundle",
+      "sha256": "803730824529d9c4027a7b98fc4b26cec3736870367f122330e3f625a8dfede8",
+      "tip": "516d173b5896be4fc3a2b5688dcdd7600d5d3055"
+    },
+    "changed_C_function": "ihklib_os_query_mem",
+    "changed_Rust_function": "query_mem",
+    "public_consumers": [
+      "ihk_os_query_total_mem",
+      "ihk_os_query_free_mem",
+      "mcstat memory summaries"
+    ]
+  }
+}
