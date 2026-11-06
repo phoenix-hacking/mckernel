@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T03:35Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T03:40Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -36,7 +36,7 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`eb541d4f7f937b2b8f61a1971596f385a75edb74`** is pushed and fetched/blob
+Checkpoint **`0c302a7407c75585d5dc86a35dad9c9592119ef5`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -341,6 +341,17 @@ entry also stays unselected pending its actual ownership contract; no filler
 review, repeated green test or alternative-image workaround is queued. All child
 source turns are at bounded completion with WIP retained. M14 remains4/6 and all
 three integration gates open; M15 remains queued for genuine accepted M14 proof.
+
+The blocked audit now has three consecutive goal turns with this same service/
+source exclusion. The first published the final eligible batch; the next made
+no progress after revalidating the original held record; the third revalidated
+its identical SHA`4f6777a4fd0b1d85c25607f02170317118436d26bd9a7e3756c7964d7e62e96d`,
+held=true, replay=false and equivalent-reassignment=false, with no new disposition.
+No live job/control join or dependency-ready approved implementation remains in
+the assigned lanes. Root will record the goal as blocked through the normal goal
+tool after this handoff is pushed and fetched/blob-verified. This is an external
+service/source impasse, not acceptance, a budget reset or native retirement.
+No automatic retry, new model, account change or M15 launch is authorized.
 
 ## Net implementation debt — separate from C references and acceptance
 
