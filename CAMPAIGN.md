@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T22:08Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T22:24Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -11,7 +11,7 @@ resume supplies concrete independent userspace error-handling inputs and a fresh
 audit, without releasing any old scope. Worker409240/server409242 birth8782946 are
 current; Root Sol/MAX and six actual direct Sol/HIGH owners are observed in this
 invocation's `CURRENT-PHASE.json`. Unrestricted/approval never, Unix UID1000.
-Fresh included guard is16%used/84%remaining; no stop/usage-unknown restriction.
+Fresh included guard is17%used/83%remaining; no stop/usage-unknown restriction.
 
 New input is`m14-m15-manual-resume-20261106T214520Z/new-functional-input.json`,
 joining exact IHK`b7293d23`. Creation C/Rust stored unchecked per-entry duplicates;
@@ -36,8 +36,27 @@ archive`3e39743d…`, SONAME library`271a0649…`; actual19Csites, unchanged str
 CPU0.81s, peak136,988KiB. Source is clean/committed IHK
 `793ae4530fe90a93afb23d65b7f486bdebc024e0`,
 tree`3c379d5f4b803395ff060172ff15789b64af9365`; one changed source bundle and
-three meaningful durable regressions are retained. Parent publication follows.
+three meaningful durable regressions are retained. Parent checkpoint
+`6312974fe313af9859f75804e7f4c52855a1e8d8` is pushed/fetched, all12changed entries
+verified, and the changed committed IHK bundle replays exactly once.
 Bounded exact result: `docs/verification/m15-environment-allocation-results-20261106.json`.
+
+**Six-consumer cleanup and affected library PASS:** all six actual C public
+parse_env consumers leaked transferred arrays/strings after their last provider
+borrow. Reviewed C`9006570a…` adds one errno-preserving ownership helper at the
+six common exits. Defined baseline24cases safely observed/reclaimed108retained
+blocks; candidate24cases passed with13live provider borrows,18completed owner
+cleanups, six parse-failure controls and borrowed default-kargs preservation.
+All four commands and driver joined; CPU6released, no retries or Rust green replay.
+Root composed the exact reviewed candidate and six actual diagnostic-line changes.
+One standard producer passed6phases+2reads: archive`5ff02578…`, SONAME library
+`f74bd48c…`, wall0.931517s/CPU0.83s/peak136,896KiB. All8waits joined and CPU6/source
+freeze released;19actualorigins and unchanged strict7warnings/70+6roots pass.
+IHK`b6f986776be1b6cb3caadaa6671e042f7ef30801` is clean/committed and bundled.
+The meaningful current-C candidate regression is retained without a green replay.
+Functional receipt`9f1eb336…`; producer`fb11b7c1…`; parent publication follows.
+Bounded result:`docs/verification/m15-public-env-consumer-lifetime-results-20261106.json`.
+Original file/native gates remain open.
 
 Ordinary HOST uses CPUs0,6,7/max3aggregate light jobs/4GiBTOTAL with all overhead;
 fresh batches require18GiBretained+4GiBHOST+4GiBfloor=26GiBavailable and existing
@@ -64,23 +83,24 @@ The nine-hour soft target is03:41:32–12:41:32Z November6 (04:41Pacific end).
 It supersedes the02:57Z three–four-hour planning window. The earlier missed target
 and approximately01:34–02:51Z outage remain recorded, with no acceptance change.
 The existing foreground-owned15-minute steering monitor is rebound separately;
-Root does not edit it. AGENTS.md's latest three-worker/parallel-preparation
-instruction is preserved and published in the coherent checkpoint.
+Root does not edit it. AGENTS.md's six-child/three-light-job parallel authorization
+is preserved; only genuinely ready disjoint work is assigned.
 
-| HIGH owner / actual thread / turn | Current deliverable/result |
+| HIGH owner / actual thread / new turn | Current deliverable/result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` / `01a1b2d4-6ba6-7371-8258-8bf132f0d464` | CreationC/Rust per-entryguard plus Crollbacklist parity; finalv2 reviewed |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` / `01a1b2d4-8f6b-7723-8f06-a948723ad2c5` | Independent defined creation allocator-failure tests and positive rollbackcount |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` / `01a1b2d4-d31f-7360-81a1-c5e660326511` | PublicCparse_env transactional parity sourceGO; unchangedRust reused |
-| `memory_error_cleanup_high` / `01a1b070-46d7-7ac1-9e14-7d1f390c0751` / `01a1b2d5-1a75-73a2-96a3-18027b7075ee` | Focused material ownership review; rederive final composed C origins |
-| `memory_error_cleanup_witness_high` / `01a1b070-8040-7fb2-b4b1-7810bac365ff` / `01a1b2d4-f6d0-7141-8ec7-ffe4b84995ee` | PublicC13baseline+13candidatechecks PASS; all4waits joined |
-| `create_empty_entry_parity_high` / `01a1b2d8-359e-7bf3-b724-988d8fc445e2` / `01a1b2d8-35a8-7bf0-b36e-b3082107974e` | NarrowCempty-entryscratch parity + safe two-shape witness |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` / `01a1b2f3-7c34-7991-8736-04edfed9c53d` | Standard affected realRust/library producer PASS; all8waits joined, released |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` / `01a1b2f0-2b60-7a42-a2de-18d584b5bc73` | Cconsumer24baseline+24candidate PASS; all waits joined; durable candidate retained |
+| `memory_error_cleanup_high` / `01a1b070-46d7-7ac1-9e14-7d1f390c0751` / `01a1b2f0-926d-7281-8bef-ce7f43889cea` | Focused sourceGO and final19actualsite join complete; six lines changed |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Reviewed private Cconsumer helper patch complete, consumed by Root |
+
+Actual new turn model/effort is Sol/HIGH in `public-env-consumer-lifetime-1/FOLLOWUP-ROUTES.json`.
+All six owners have contributed; completed prior observer/empty-entry work is reused.
 
 Initial actual HIGH turns were`01a1b041-44ca-7612-8c6b-bcbc58e41419`,
 `01a1b041-672b-7792-86c8-74374cd15f06`, and
 `01a1b041-88bd-7a82-baf1-03cd9beb2ed9` respectively (actual initial routing proof).
 
-**Primary source integration:** independent final review `f5512226…` accepts exact
+**Retained primary memory-query integration:** independent final review `f5512226…` accepts exact
 conversion-error propagation before the first output write, temporary frees and
 one owned descriptor close. Root integrated only the paired guard, six actual
 Rust source fingerprints and the19actual C-origin rows. Canonical C`11c0e67b…`,
@@ -110,29 +130,22 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** confirmed fixes/meaningful behavior first. Only necessary
-changed-input source/library/ownership checks accompany their actual batch.
-No repeated hash inventory, extra proof wrapper, unchanged suite or approval round.
-A prepares the affected EOF producer; C prepares genuine EOF tests; B retains the
-requested bounded LOC assessment behind ready functional work. Net untranslated
-M14/M15 LOC remains unmeasured where helper/branch coverage is unresolved.
-
-**Separate EOF lane:** C's source review`befa3511…` accepts paired private terminal
-buffer cleanup`18c7445e…` with entry-errno preservation and one existing fclose.
-Actual libc allocation/free behavior is not yet observed. C prepares an initialized
-provider probe, exact Rust baseline and C/Rust candidates; original uninitialized-
-capacity C execution stays excluded. A prepares only the changed follow-on
-producer/metadata inputs. No EOF patch is in the primary library or frozen batch.
+**Current priority:** publish the passing Cconsumer lifetime result, affected
+producer and durable regression as one coherent checkpoint. Reuse
+all unchanged Rust parser/ABI/provider results. The earlier primary memory and EOF
+reader cleanups are already published, including checkpoint`22cedb5e5`; their green
+behavior suites remain closed at their exact scopes. Net untranslated M14/M15 LOC
+remains unmeasured where helper/branch coverage is unresolved.
 
 The current prerequisite queue is:
 
 | Prerequisite | Actual consumers / gates | Owner / next concrete deliverable |
 | --- | --- | --- |
-| Publish completed allocation batch — READY | M15 library/error/ownership source | Root push/fetch-verifies coherent source/tests, reproduces changed committed IHK bundle once |
+| Six Cconsumer ownership cleanup — source/tests/library PASS | Six public parser consumers / M15 library lifetime | Root publishes/fetch-verifies completed batch and replays only the changed committed bundle |
 | Original universal generic/exec disposition — BLOCKED | M14-F03/F06/fullimage/integration | Original service/hold authority supplies a valid scoped disposition; no replay/equivalent reassignment |
 | Original SDK/source-custody/native binding — BLOCKED | Matching original M14/M15 lifecycle/native | Original authority supplies actual reviewed one-shot bindings/current-free; diagnostic outermapping remains UNKNOWN |
 
-M14 stays4/6 and M15 1/8. New HOST source/build/test work is complete, not a
+M14 stays4/6 and M15 1/8. New HOST source/test/library work is passing; this is not
 native/fullimage/file acceptance. Critical-path completion ETA remains unknown
 while actual external scope/admission fields remain held/unbound. All historical
 UNKNOWN owners,18GiBcharges,mutex27:4,scratch21,attempts/nonces/dirtywork remain.

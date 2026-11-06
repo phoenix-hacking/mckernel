@@ -1,0 +1,87 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Genuine successful libc allocations, local synchronous borrow-only observers.
+ * No IHK device/reservation/provider/backend/native operation is performed. */
+struct Block{void *pointer;char kind;};
+static struct Block blocks[32];
+static int live,allocated,released,dups,parse_failure,selected,mode;
+static int provider_calls,provider_active,provider_returned,cleanup_after_provider;
+static int checks,baseline_leaks,reclaimed;
+static uintptr_t borrowed_address;
+static const char default_kargs[]="default";
+static const char *keys[]={"IHK_CPUS","IHK_RESERVE_MEM_MIN_CHUNK_SIZE","IHK_MEM","IHK_CPUS","IHK_IKC_MAP","IHK_KARGS"};
+static const char *values[]={"2","7","4K@0","2","2:0","chosen"};
+static int is_owned(const void *pointer){for(int i=0;i<32;i++)if(blocks[i].pointer==pointer)return 1;return 0;}
+static int address_owned(uintptr_t address){for(int i=0;i<32;i++)if(blocks[i].pointer&&(uintptr_t)blocks[i].pointer==address)return 1;return 0;}
+static int count_kind(char kind){int n=0;for(int i=0;i<32;i++)if(blocks[i].pointer&&blocks[i].kind==kind)++n;return n;}
+static void *record(void *pointer,char kind){assert(pointer);for(int i=0;i<32;i++)if(!blocks[i].pointer){blocks[i]=(struct Block){pointer,kind};++allocated;++live;return pointer;}abort();}
+void *observation_calloc(size_t n,size_t size){return record(calloc(n,size),'A');}
+char *observation_strndup(const char *text,size_t size){return record(strndup(text,size),'S');}
+char *observation_strdup(const char *text){++dups;if(parse_failure&&dups==2){errno=ENOMEM;return NULL;}return record(strdup(text),'D');}
+void observation_free(void *pointer){
+ assert(!provider_active);assert(pointer!=default_kargs);
+ if(provider_returned&&!cleanup_after_provider){assert(errno==EAGAIN);cleanup_after_provider=1;}
+ if(pointer){int found=0;for(int i=0;i<32;i++)if(blocks[i].pointer==pointer){blocks[i].pointer=NULL;--live;++released;found=1;break;}assert(found);}
+ free(pointer);errno=EIO; /* Observe local cleanup's effect, without inventing final libc errno rules. */
+}
+static int observe_string(int index,char *value,char *error,int which){
+ assert(selected==which&&index==17&&error==NULL&&!parse_failure&&provider_calls==0);
+ provider_active=1;assert(live==6&&count_kind('A')==2&&count_kind('D')==4&&count_kind('S')==0);
+ if(selected==5&&mode==2){assert(value==default_kargs&&!is_owned(value)&&!strcmp(value,"default"));}
+ else{assert(is_owned(value)&&!strcmp(value,values[selected]));}
+ borrowed_address=(uintptr_t)value;++provider_calls;errno=EAGAIN;provider_active=0;provider_returned=1;return mode==1?-53:0;
+}
+int observation_reserve_cpu(int index,char *value,char *error){return observe_string(index,value,error,0);}
+int observation_reserve_mem(int index,char *value,char *error){return observe_string(index,value,error,2);}
+int observation_assign_cpu(int index,char *value,char *error){return observe_string(index,value,error,3);}
+int observation_set_ikc(int index,char *value,char *error){return observe_string(index,value,error,4);}
+int observation_kargs(int index,char *value){return observe_string(index,value,NULL,5);}
+int observation_mem_conf(int index,int key,void *value){
+ assert(selected==1&&index==17&&key==IHK_RESERVE_MEM_MIN_CHUNK_SIZE&&!parse_failure&&provider_calls==0);
+ provider_active=1;assert(live==6&&count_kind('A')==2&&count_kind('D')==4&&count_kind('S')==0);
+ assert(value&&!is_owned(value)&&*(int *)value==7);++provider_calls;errno=EAGAIN;provider_active=0;provider_returned=1;return mode==1?-53:0;
+}
+static void reset(int function,int test_mode){
+ assert(live==0&&!provider_active);for(int i=0;i<32;i++)assert(!blocks[i].pointer);
+ allocated=released=dups=provider_calls=provider_returned=cleanup_after_provider=0;borrowed_address=0;selected=function;mode=test_mode;parse_failure=mode==3;
+}
+static int reclaim(void){
+ int n=0;for(int i=0;i<32;i++)if(blocks[i].pointer){free(blocks[i].pointer);blocks[i].pointer=NULL;--live;++released;++n;}
+ assert(live==0);return n;
+}
+typedef int (*Consumer)(int,const char *,int);
+static void check(Consumer consumer,int function,int test_mode,int baseline){
+ reset(function,test_mode);char env[256];memset(env,0,sizeof(env));
+ if(mode==2){memcpy(env,"UNUSED=x\0IGNORED=y\0",19);}
+ else{int n=snprintf(env,sizeof(env),"%s=%s",keys[selected],values[selected]);assert(n>0&&(size_t)n+11<sizeof(env));memcpy(env+n+1,"UNUSED=x\0",9);}
+ char before[256];memcpy(before,env,sizeof(env));errno=ERANGE;
+ int result=consumer(17,env,2);int returned_errno=errno;
+ int calls=mode==3?0:(mode==2&&selected!=5?0:1);
+ assert(provider_calls==calls&&!provider_active&&!memcmp(env,before,sizeof(env)));
+ assert(result==(mode==3?-ENOMEM:mode==1?-53:0));
+ assert(returned_errno==(mode==3?ENOMEM:calls?EAGAIN:EIO));
+ if(parse_failure){assert(live==0&&allocated==4&&released==4&&cleanup_after_provider==0);}
+ else{
+  assert(allocated==8);
+  if(baseline){assert(live==6&&released==2&&count_kind('A')==2&&count_kind('D')==4&&cleanup_after_provider==0);baseline_leaks+=live;}
+  else{assert(live==0&&released==8&&cleanup_after_provider==calls);}
+  if(borrowed_address&&!(selected==5&&mode==2))assert(address_owned(borrowed_address)==baseline);
+ }
+ int observed_live=live;int actual_reclaimed=reclaim();reclaimed+=actual_reclaimed;
+ assert(actual_reclaimed==((baseline&&!parse_failure)?6:0)&&allocated==released);
+ printf("CASE function=%d mode=%d result=%d errno=%d provider-calls=%d observed-live=%d actual-reclaimed=%d remaining-live=%d\n",selected,mode,result,returned_errno,provider_calls,observed_live,actual_reclaimed,live);++checks;
+}
+int observation_run(int baseline,Consumer *consumers){
+ assert(getuid()==1000&&geteuid()==1000);for(int function=0;function<6;function++)for(int test_mode=0;test_mode<4;test_mode++)check(consumers[function],function,test_mode,baseline);
+ assert(checks==24&&live==0&&reclaimed==(baseline?108:0)&&baseline_leaks==reclaimed);
+ if(baseline)puts("baseline public-consumers cases=24 retained-published-blocks=108 genuine-reclaimed=108 live=0");
+ else puts("candidate public-consumers cases=24 providers-borrow-live=13 after-return-cleanup=18 parse-failure-no-double-free=6 borrowed-default-not-freed=1 live=0");
+ return 0;
+}
