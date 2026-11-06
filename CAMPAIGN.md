@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T00:38Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T00:52Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -13,7 +13,7 @@ After genuine original-scope M14 acceptance and a published verified matching
 proof checkpoint, continue M15 automatically. Final delivery retains Rocky/Linux.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`f0124bca88207e48ea8d811fee357f3733d0179b`** is pushed and fetched/blob
+Checkpoint **`db5c5d6fe3b448568d90debf6e2edbc24e160470`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -160,53 +160,58 @@ is claimed. The historical 30-minute velocity baseline is unchanged.
 
 ## Immediate blocker and next action
 
-**Single blocker/owner: Root — the immutable publication waiting loader must bind
-the corrected installer bytes before a fresh publication admission.** Current2
-failed before READY because its literal still pinned `6fa1cca8…` instead of
-`d87594a0…`. Its parent then stopped/reaped both known children and retained the
-operation lease. The reviewed root-only stop verified no children, exact source,
-request/captures and two reaped pidfds; its owned Root pidfd became terminal,
-and the original caller was joined with sudo direct wait9 and both captures
-VERIFIED_CLOSED. No publication was accepted. Process-only closure is in
-`docs/verification/m14-publication-current2-process-closure-20261106.json`.
-The other 18 GiB historical charges, UNKNOWN old outcomes, persistent operation
-paths, scratch21, mutex27:4 and native/source/service holds remain unchanged.
+**Single blocker: no eligible universal generic provider cohort for a new image.**
+Both retained generic C objects, `0633c524…` and `b4260267…`, were actually built
+with `MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL`; the inherited exec-tail/generic_c hold
+excludes both from a new link. The existing private supported `do_syscall` body
+excludes held partial-exec requests and cannot serve as its universal provider.
+Root is the integration owner; the original hold retains its release authority.
+No alternate artifact, model, symbol rewrite or wrapper may bypass that scope.
+The full-image command remains unset. Native ownership/source-view admission and
+matching validation also remain open; local sudo does not clear either gate.
 
-The active `protocol_review` child owns the one bounded waiting-loader correction
-in private current3 source copies and a real unprivileged source-FD/READY test.
-It must bind every changed loader hash and exclude both consumed publication
-nonces. Root owns review and any actual admission; expired install/stop caps
-cannot be extended or replayed. The shared ordinary CPU6 HOST queue is available.
+**Actual control-path closure:** current3 publication succeeded after the waiting
+literal was bound to the actual installer. Installer, keeper and sudo direct
+waits returned0; the lease and caller captures closed. UID1000 read back all23
+installed files, matched producer inode/hash proofs and verified root ownership
+and immutable flags. The accepted code root and exact proof are in
+`docs/verification/m14-current-code-publication-20261106.json`.
+This accepts code publication only. All old18 GiB charges, historical UNKNOWN
+outcomes, persistent failed paths, scratch21, mutex27:4 and service/source holds
+remain. No active current-publication controls need a future stop/join.
 
-**New behavior evidence:** the actual `do_fork` constructor-null C branch passes
-16 cases after the three-line CPU-credit correction; the predecessor fails four.
-A helper selected its current CPU without obtaining a credit, so failed creation
-now preserves that credit and returns ENOMEM. Ordinary acquired credits release
-once. The focused compile/check took 0.09 s wall / 0.088 s CPU with about22 MiB
-peak RSS. The private Rust candidate remains unwired. Later enqueue, TID, exec,
-ACK and XPMEM paths are unchanged; no complete fork/native acceptance is claimed.
+**New link feedback:** one actual ordinary HOST `ld -r` combined the eight
+matching unaffected objects, zero-text F06 C object, accepted `c205` core and new
+five-entry F06 object. It passed in0.062 s wall /0.061 s CPU with no stderr and
+produced18,647,032 bytes, SHA
+`f290a6abd9782d426d63b3a7115bc5287ab49f66536a37a32515702eaecfb503`.
+All five original F06 entries have unique nonempty Rust definitions, using real
+matched signal providers. The110 unresolved generic/provider/linker symbols
+remain explicit in `docs/verification/m14-f06-real-provider-composition-20261106.json`.
+No held generic object or `52f` was included. This relocatable is not a full image
+or default/native qualification. The old core also cannot provide the two new
+credential entries' error-aware getter; those entries remain unselected there.
 
-**Reusable link inputs:** all nine canonical retained-object paths in the
-conversion REUSE-DESCRIPTOR now match their recorded sizes and hashes. The zero
-aliases considered earlier are not substitutes. The retained `c205` core's
-signal source and ABI also match the F06 caller/provider inputs. Its getter still
-ignores host errors, so the two new credential entries remain unselected when
-that core is reused. The proposed extra selector gate remains unapplied. Held
-`52f`/exec-tail source cannot enter a new link; full selection/ABI proof is required.
+The committed `do_fork` constructor correction passes16 actual-branch cases;
+the predecessor fails4. The active `dispatch_source` owner is preparing one
+eligible `util_thread` wire correction: argument5 is currently unset while the
+retained Rust body already sets0. Its exact source/fixture binding is pending
+before the shared CPU6 compile check; universal dispatch, global UTI/drain and
+all held exec/ACK/TID/XPMEM domains remain excluded. No duplicate port is started.
 
 M14 delta remains **0 accepted files, 0 production images, 0 native-qualified
-cohorts and 0 C retirements**. The 15-entry relocatable unit and F06 HOST zero-C
-text evidence are retained. Current2 held the control path for 23.2 minutes;
-its final reviewed stop took3.14 s. Queue-to-compiler timing remains unrecorded.
-The avoidable handoff was the missing real waiting-loader byte/READY check.
-Scheduling change: run that actual unprivileged handshake before any next sudo
-publication, then use the matching retained objects for compiler/link feedback.
+cohorts and 0 C retirements**. Four accepted files remain closed. Current2's
+23.2-minute control blockage ended; corrected current3 publication took under
+one second. The four-hour target is at risk because the new image is blocked by
+an explicit source hold. The scheduling change is now applied: actual source-FD
+READY feedback preceded sudo publication, and ready source immediately returned
+to the ordinary compiler queue. Exact queue latency remains unrecorded.
 
-**Next deliverable:** child returns corrected frozen loader/profile plus real
-pre-READY proof; Root reviews the exact failure correction and performs only a
-freshly admitted next operation. Eligible F06/provider composition proceeds with
-matching unheld inputs, then the coherent image and application/native lifecycle
-proof required for M14. M15 stays queued until genuine M14 acceptance.
+**Next deliverable:** `dispatch_source` returns the one-store wire correction and
+real-source regression; Root compiles that eligible changed body and checkpoints
+its result. Root retains the precise generic-provider/exec-tail obstruction;
+a full link/native run requires an eligible original-scope cohort, not a relabelled
+held candidate. M15 remains queued until genuine M14 acceptance and published proof.
 
 ## M14 checklist — compute kernel
 
