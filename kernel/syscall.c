@@ -29040,6 +29040,8 @@ int util_thread(struct uti_attr *arg)
 	request.args[3] = (unsigned long)uti_info;
 	request.args[4] = uti_desc;
 	thread->uti_state = UTI_STATE_RUNNING_IN_LINUX;
+	/* Defined unused wire slot; transport copies all six arguments. */
+	request.args[5] = 0;
 	rc = do_syscall(&request, ihk_mc_get_processor_id());
 	dkprintf("%s: returned from do_syscall,tid=%d,rc=%lx\n", __FUNCTION__, thread->tid, rc);
 

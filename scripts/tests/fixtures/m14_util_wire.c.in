@@ -1,0 +1,191 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * The complete actual util_thread body and actual declaration/header inputs are
+ * inserted by the runner. External endpoints are observing HOST fixtures only.
+ */
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <errno.h>
+@REAL_DECLARATIONS@
+#include "@UTI_HEADER@"
+#include "@MEMCONST_HEADER@"
+@REAL_CONSTANTS@
+#define IHK_MC_AP_NOWAIT 0x51
+#define ERESTARTSYS 512
+#define FIXTURE_POISON 0xd15ea5e5a55aa55aUL
+_Static_assert(sizeof(void *) == 8, "fixture requires x86_64 HOST");
+_Static_assert(sizeof(struct syscall_request) == 72, "real request declaration changed");
+_Static_assert(_Alignof(struct syscall_request) == 8, "real request alignment changed");
+struct process { int pid, nohost; };
+/* Addressed runtime fields are test objects, not a guest layout witness. */
+struct thread {
+    struct process *proc;
+    int tid, uti_state, parent_cpuid, uti_refill_tid;
+    int status, spin_sleep_lock, spin_sleep;
+    void *vm;
+    int futex_q;
+};
+struct local { struct thread *current; void *uti_futex_resp, *ikc2linux; };
+static struct process process;
+static struct thread thread;
+static struct local local;
+static int response_slot, channel_slot, vm_slot, queues;
+static int idle_halt = 3;
+static unsigned long uti_desc = 0x13579bdfUL;
+static struct uti_ctx *context;
+static struct uti_info *info;
+static struct uti_attr argument;
+static int fail_allocation, allocations, live_context, live_info;
+static int transactions, profiles, exits, terminates;
+static int errors, wire_errors, other_errors, cases;
+static int wants_attribute, expected_refill;
+static long result;
+static char frees[8];
+static int free_count;
+static void bad(void) { ++other_errors; }
+static struct local *get_this_cpu_local_var(void) { return &local; }
+static int ihk_mc_get_processor_id(void) { return 3; }
+static unsigned long virt_to_phys(void *p) { return (unsigned long)(uintptr_t)p; }
+static void *get_futex_queues(void) { return &queues; }
+#define dkprintf(...) ((void)0)
+#define kprintf(...) ((void)0)
+static void *kmalloc_tracked(size_t size, unsigned long flags, const char *file, int line)
+{
+    (void)file; (void)line;
+    if (flags != IHK_MC_AP_NOWAIT || thread.uti_state != UTI_STATE_PROLOGUE) bad();
+    ++allocations;
+    if (allocations == fail_allocation) return NULL;
+    void *p = malloc(size);
+    if (!p) exit(90);
+    memset(p, 0xa5, size);
+    if (allocations == 1) {
+        if (size != sizeof(struct uti_ctx)) bad();
+        context = p; live_context = 1;
+    } else if (allocations == 2) {
+        if (size != sizeof(struct uti_info)) bad();
+        info = p; live_info = 1;
+    } else bad();
+    return p;
+}
+static void save_uctx(void *p, void *regs)
+{
+    if (!live_context || p != context->ctx || regs != NULL) bad();
+    /* The existing saved-context provider defines cond/refill low-int first. */
+    int initial = 0;
+    memcpy(p, &initial, sizeof(initial));
+}
+static void kfree_tracked(void *p, const char *file, int line)
+{
+    (void)file; (void)line;
+    if (free_count >= 8) { bad(); return; }
+    if (!p) { frees[free_count++] = 'n'; return; }
+    if (p == context) {
+        if (!live_context) { bad(); return; }
+        if (transactions && (thread.uti_refill_tid != expected_refill || profiles != 1)) bad();
+        live_context = 0; frees[free_count++] = 'c';
+    } else if (p == info) {
+        if (!live_info || live_context) { bad(); return; }
+        live_info = 0; frees[free_count++] = 'i';
+    } else { bad(); return; }
+    free(p);
+}
+static int util_show_syscall_profile(void)
+{
+    if (thread.uti_state != UTI_STATE_EPILOGUE || !live_context || !live_info) bad();
+    ++profiles; return 0;
+}
+static int syscall_proxy_dead_result(long rc) { return rc == -ERESTARTSYS; }
+static void do_exit(int rc)
+{
+    if (live_context || live_info || rc != (int)result) bad();
+    ++exits;
+}
+static void terminate(int rc, int sig)
+{
+    if (live_context || live_info || rc != ((result >> 8) & 255) || sig != (result & 255)) bad();
+    ++terminates;
+}
+static void check_partial_info(void)
+{
+    if (info->thread_va != (unsigned long)&thread || info->tid != thread.tid || info->cpu != 3 ||
+        info->uti_futex_resp_pa != (unsigned long)&response_slot ||
+        info->ikc2linux_pa != (unsigned long)&channel_slot ||
+        info->status_pa != (unsigned long)&thread.status ||
+        info->spin_sleep_lock_pa != (unsigned long)&thread.spin_sleep_lock ||
+        info->spin_sleep_pa != (unsigned long)&thread.spin_sleep ||
+        info->vm_pa != (unsigned long)&vm_slot ||
+        info->futex_q_pa != (unsigned long)&thread.futex_q ||
+        info->mc_idle_halt != idle_halt || info->futex_queue_pa != (unsigned long)&queues) bad();
+    /* Only guest-written byte ranges may change; never read an unassigned pointer. */
+    unsigned char mask[sizeof(struct uti_info)] = {0};
+#define MARK(field) memset(mask + offsetof(struct uti_info, field), 1, sizeof(info->field))
+    MARK(thread_va); MARK(uti_futex_resp_pa); MARK(ikc2linux_pa);
+    MARK(tid); MARK(cpu); MARK(status_pa); MARK(spin_sleep_lock_pa);
+    MARK(spin_sleep_pa); MARK(vm_pa); MARK(futex_q_pa);
+    MARK(mc_idle_halt); MARK(futex_queue_pa);
+#undef MARK
+    const unsigned char *bytes = (const unsigned char *)info;
+    for (size_t i = 0; i < sizeof(mask); ++i)
+        if (!mask[i] && bytes[i] != 0xa5) bad();
+}
+static long do_syscall(struct syscall_request *request, int cpu)
+{
+    ++transactions;
+    if (cpu != 3 || thread.uti_state != UTI_STATE_RUNNING_IN_LINUX || !live_context || !live_info) bad();
+    if (request->number != __NR_sched_setaffinity || request->args[0] != 0 ||
+        request->args[1] != (unsigned long)context || request->args[3] != (unsigned long)info ||
+        request->args[4] != uti_desc) bad();
+    if (request->args[5] != 0) ++wire_errors;
+    if (wants_attribute) {
+        struct observed_attr { long parent_cpuid; struct uti_attr attr; };
+        const struct observed_attr *seen = (const void *)(uintptr_t)request->args[2];
+        if (!seen || seen->parent_cpuid != thread.parent_cpuid || memcmp(&seen->attr, &argument, sizeof(argument))) bad();
+    } else if (request->args[2] != 0) bad();
+    check_partial_info();
+    /* No request ID/valid or incompletely initialized whole request is read. */
+    if (expected_refill) context->uti_refill_tid = expected_refill;
+    return result;
+}
+@ACTUAL_UTIL_THREAD_BODY@
+static void reset_case(int fail, int attr, long rc)
+{
+    process = (struct process){.pid = 71};
+    thread = (struct thread){.proc = &process, .tid = 72, .parent_cpuid = 2,
+                            .uti_refill_tid = -777, .vm = &vm_slot};
+    local = (struct local){.current = &thread, .uti_futex_resp = &response_slot, .ikc2linux = &channel_slot};
+    memset(&argument, 0x39, sizeof(argument));
+    context = NULL; info = NULL; live_context = live_info = 0;
+    fail_allocation = fail; allocations = transactions = profiles = exits = terminates = 0;
+    free_count = 0; memset(frees, 0, sizeof(frees));
+    wants_attribute = attr; result = rc; expected_refill = rc == -EINVAL ? 0 : 73;
+}
+static void allocation_failure(int fail)
+{
+    reset_case(fail, 0, -EINVAL);
+    int rc = util_thread(NULL); ++cases;
+    if (rc != -ENOMEM || allocations != fail || transactions || profiles || exits || terminates ||
+        live_context || live_info || thread.uti_state != UTI_STATE_PROLOGUE || thread.uti_refill_tid != -777) bad();
+    if (fail == 1 && (free_count != 2 || memcmp(frees, "nn", 2))) bad();
+    if (fail == 2 && (free_count != 2 || memcmp(frees, "cn", 2))) bad();
+}
+int main(void)
+{
+    allocation_failure(1); allocation_failure(2);
+    const long results[] = {-EINVAL, -ERESTARTSYS, 0, 0x100001234L};
+    for (int attr = 0; attr < 2; ++attr)
+    for (unsigned i = 0; i < sizeof(results)/sizeof(results[0]); ++i) {
+        reset_case(0, attr, results[i]);
+        int rc = util_thread(attr ? &argument : NULL); ++cases;
+        if (rc != (int)results[i] || allocations != 2 || transactions != 1 || profiles != 1 ||
+            live_context || live_info || thread.uti_state != UTI_STATE_EPILOGUE ||
+            thread.uti_refill_tid != expected_refill || free_count != 4 || memcmp(frees, "cinn", 4)) bad();
+        int wants_exit = results[i] == -ERESTARTSYS || results[i] == 0;
+        int wants_terminate = results[i] == 0x100001234L;
+        if (exits != wants_exit || terminates != wants_terminate ||
+            process.nohost != (results[i] == -ERESTARTSYS || wants_terminate)) bad();
+    }
+    printf("{\"cases\":%d,\"wire_errors\":%d,\"other_errors\":%d}\n", cases, wire_errors, other_errors);
+    return other_errors ? 2 : wire_errors ? 1 : 0;
+}

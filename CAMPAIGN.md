@@ -13,7 +13,7 @@ After genuine original-scope M14 acceptance and a published verified matching
 proof checkpoint, continue M15 automatically. Final delivery retains Rocky/Linux.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`db5c5d6fe3b448568d90debf6e2edbc24e160470`** is pushed and fetched/blob
+Checkpoint **`21f1de927a9f1dbcc5395f6693eb0b5b17b23970`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -193,11 +193,16 @@ or default/native qualification. The old core also cannot provide the two new
 credential entries' error-aware getter; those entries remain unselected there.
 
 The committed `do_fork` constructor correction passes16 actual-branch cases;
-the predecessor fails4. The active `dispatch_source` owner is preparing one
-eligible `util_thread` wire correction: argument5 is currently unset while the
-retained Rust body already sets0. Its exact source/fixture binding is pending
-before the shared CPU6 compile check; universal dispatch, global UTI/drain and
-all held exec/ACK/TID/XPMEM domains remain excluded. No duplicate port is started.
+the predecessor fails4. The `util_thread` wire correction is now integrated and
+checked: argument5 is set0 before offload, matching the prepared Rust body. The
+predecessor fails8 wire predicates; the corrected complete extracted function
+passes all10 allocation/attribute/error cases with no other failures. The durable
+actual-source regression also passes. This took0.12 s wall with24,500 KiB peak
+RSS; callbacks/thread objects are HOST observers, not lifetime/native proof.
+Evidence is `docs/verification/m14-util-wire-results-20261106.json`. Universal
+dispatch, global UTI/drain and held exec/ACK/TID/XPMEM domains remain excluded.
+The active `m14_generic` lane reuses the eligible signal forwarding bodies and
+returns their exact missing selector/provider binding, without a duplicate port.
 
 M14 delta remains **0 accepted files, 0 production images, 0 native-qualified
 cohorts and 0 C retirements**. Four accepted files remain closed. Current2's
@@ -207,11 +212,11 @@ an explicit source hold. The scheduling change is now applied: actual source-FD
 READY feedback preceded sudo publication, and ready source immediately returned
 to the ordinary compiler queue. Exact queue latency remains unrecorded.
 
-**Next deliverable:** `dispatch_source` returns the one-store wire correction and
-real-source regression; Root compiles that eligible changed body and checkpoints
-its result. Root retains the precise generic-provider/exec-tail obstruction;
-a full link/native run requires an eligible original-scope cohort, not a relabelled
-held candidate. M15 remains queued until genuine M14 acceptance and published proof.
+**Next deliverable:** `m14_generic` returns the dependency-ready signal bridge
+composition/provider edge; Root feeds only eligible changed units to the ordinary
+CPU6 compiler. The source hold on the universal generic cohort is the critical
+full-link obstruction and is not cleared by sudo, code publication or model
+recovery. M15 remains queued until genuine M14 acceptance and published proof.
 
 ## M14 checklist — compute kernel
 
