@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T07:04Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T07:19Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,17 +34,46 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | SDK metadata consumed once: original diagnostic prefix remains unbound; new turn `01a1afa9-b9f8-7e01-b38f-ff467122e9f8` prepares eligible perf kind/reference/close contract and interleavings |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Twelve actual ihkconfig/ihkosctl main preflights PASS; new turn `01a1afaa-506c-7041-8c0f-fdcd4e04f38a` reviews distinct `ihk_create_os_str` allocation/publication/unwind contract |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Turn `01a1afa9-8cba-7bc2-8450-15da70c36bd0` ran all three actual ihkmond main preflights PASS; waits joined and shared slot released; next independent review waits for a ready source candidate |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Perf design/9interleavings yields exact shared-lifetime scope NO-GO; turn `01a1afb8-a7fe-72c1-92d2-7c3822ff8564` now reviews create-OS device/OS routing |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Two source frees pass11cases; turn `01a1afb8-4650-75c2-953c-eef570ad89e4` completes actual changed-library compile/76-root SONAME link PASS and releases slot |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Independent two-free source/witness review GO; turn `01a1afb8-c7f8-7221-acfb-df3d94fee0c0` retains the passing test against canonical source without replay |
 
 The short ranked queue consumes passed shared results before new work:
 
 | Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Matching three-tool process proof | ihkconfig/ihkosctl/ihkmond; M15-F06…08/I03 | Root publishes the checked 12+3 actual main batch now; no recompilation or unchanged test replay |
-| 2. Defined perf event lifetime | `sys_perf_event_open`, grouped events and both close contexts; M14-F03/I01 | Public ABI owner returns one eligible source-bound kind/pin/close candidate plus adversarial interleavings, then independent review before changed-unit qualification |
-| 3. Create-OS transactional ownership | `ihk_create_os_str` public configuration and rollback paths; M15-F05/I03 | CLI owner reviews this separate parser's actual allocation/output/unwind contract, returning a precise defect and private fix/witness request or bounded NO-GO |
+| 1. Checked create-OS allocation cleanup | `ihk_create_os_str` parser/rollback plus real whole70 library; M15-F05/I03 | Root checkpoints the two checked frees, durable source regression and exact new archive/SONAME link after slot release |
+| 2. Device/OS index routing contract | Create/CPU/memory assignment on device0 with OSindex1; M15-F05/I03 | Public ABI owner checks actual provider/header domains and returns a defined defect/private correction or exact scope NO-GO |
+| 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority needs actual implemented/reviewed one-shot gates and corroborated source binding; no ready executable command or SDK remap exists |
+
+**07:19Z engineering delta:** `ihk_create_os_str` now frees the owned scratch
+string on an empty-entry error and the owned OS-index list after rollback's last
+borrow. Each new free preserves its entry errno; distinct parser semantics,
+primary result/diagnostics, early index publication and broad serialized rollback
+stay as before. The baseline observes/reclaims2leaks; the correction passes11
+source-bound ownership/parser cases, with genuine libc allocation and explicitly
+local callback observations. A witness errno-predicate error was corrected before
+execution; the original unrun request is retained. Both actual witness compiles
+pass with `-Dwarnings`. Final result SHA`6114e4525fa4dfe26eeea6c04a16a11854f3526f563fcb80dee0087fd508fa24`.
+The changed real Rust whole70 compile and genuine76-root SONAME link also pass,
+with the unchanged strict diagnostic qualifier and reused accepted C metadata.
+All four direct waits joined and the shared slot is released. New archive SHA`e3d52f567564e4d1883a57e7c2e491144af52154a9996263574c6568392b1393`;
+new SONAME library SHA`5925bb23378436bc8d7d0fa3c207875bac5387cfe308f15391b33e24af42eeec`.
+Compilation0.64s wall/136,484KiB peak; link0.14s/28,744KiB. Exact receipts, independent review
+and canonical-source regression are in `docs/verification/m15-create-os-owned-cleanup-results-20261106.json`.
+IHK source is now`1ee08429338ea1693f75d279d41b76496e1da96f`, tree`be8adb7210a2d43f6d68cc105689190777832fbb`;
+new bundle blob`47b2313632e5293da2e6c7b5dc369faa9e71ef9b` retains the same prior three stages. **Acceptance delta remains0/0; full-image,
+native-qualified and C-retirement deltas remain0.**
+
+The perf owner completed one design and nine interleavings: a callback-only pin
+cannot protect descriptor reads after shared lookup unlocks, and fork copies the
+parent descriptor before its optional duplicate callback while locking the child.
+A complete fix requires actual shared lookup/free/copy participation whose eligible
+scope is not bound; the original rejected payload remains unknown. This is an
+activation/changed-unit NO-GO, not a claim that every source line is held. No patch,
+selector or compiler command was issued. Evidence is retained in `docs/verification/m14-perf-lifetime-design-results-20261106.json`.
+The owner moves to the independent create-OS routing contract instead of repeating
+perf or generic/exec work.
 
 The SDK provenance lane is blocked on a **new corroborated original outer binding**
 for `/workspace/scratch/a8bff332f582`; the returned three-container metadata covers
@@ -83,8 +112,8 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Current published source checkpoint **`9f70668c6985dbf0085f5511f0eb87df075b0dbe`** is pushed and fetched/all9changed-object
-verified. Its IHK source is`0a1061a334dfaf1d0182aaddcc511113fde4f897`, tree`5e395fe45ced5474cd87145f468c253ec9cbf367`, independently bundle-replayed clean. This next checkpoint adds the actual process proof and current status. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
+Current published checkpoint **`79f496b7be7c8145a68f468976ac6b749be9fd92`** is pushed and fetched/both changed-blob
+verified; source predecessor`9f70668c6` remains all9changed-object verified. Its IHK source is`0a1061a334dfaf1d0182aaddcc511113fde4f897`, tree`5e395fe45ced5474cd87145f468c253ec9cbf367`, independently bundle-replayed clean. Checkpoint`79f496b7b` contains the actual15-process proof and current status; the next coherent source checkpoint contains the two checked create-OS frees. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
