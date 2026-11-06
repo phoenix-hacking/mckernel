@@ -1,0 +1,1954 @@
+{
+  "C_retirements": 0,
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "Rust_functions_changed": [
+    "cpu_all",
+    "memory_all",
+    "ihk_create_os_str"
+  ],
+  "accepted_file_delta": {
+    "M14": 0,
+    "M15": 0
+  },
+  "at_utc_ns": 1793951506272475830,
+  "durable_regression": {
+    "scripts/tests/fixtures/m15-create-os-routing/observations.c": "41ee014aa40a0e21d59dff6777b244ba90bced01e52a8dadc036735140eb4ded",
+    "scripts/tests/fixtures/m15-create-os-routing/rust.rs.in": "727961a7be2a2b90c8df79a5730084be7e27f79fb8392433bb63202e560d030b",
+    "scripts/tests/fixtures/m15_create_os_owned_cleanup.rs.in": "c55e3c3b5692223bb9a959ff93a701092d1763e9458316e1b8d5c295692cae16",
+    "scripts/tests/test_m15_create_os_routing.py": "9c2a1fef3a4378ba455d770f638e4963d0bdd9b100a7eb9327ef9f402a4d5caa"
+  },
+  "new_C_origin_site_bindings": 19,
+  "new_native_qualified_cohorts": 0,
+  "new_production_images": 0,
+  "original_C_functions_changed": [
+    "os_assign_cpu_all",
+    "os_assign_mem_all",
+    "ihk_create_os_str"
+  ],
+  "receipts": {
+    "actual_C_source_contract": {
+      "content": {
+        "C_function_bodies_emitted": false,
+        "metadata_only": true,
+        "original_C": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+        "sha256": "2d7b37e847b0f79af8e28d4dc1148950732d0aae2179384104aa77d25c062dd5",
+        "snippets": [
+          {
+            "end": 86151,
+            "kind": "function_definition_header",
+            "start": 86083,
+            "symbol": "_ihk_os_assign_cpu_str",
+            "text": "int _ihk_os_assign_cpu_str(int os_index, char *list, char *err_msg)"
+          },
+          {
+            "end": 86768,
+            "kind": "function_definition_header",
+            "start": 86699,
+            "symbol": "_ihk_os_set_ikc_map_str",
+            "text": "int _ihk_os_set_ikc_map_str(int os_index, char *list, char *err_msg)"
+          },
+          {
+            "end": 91218,
+            "kind": "function_definition_header",
+            "start": 91142,
+            "symbol": "parse_env",
+            "text": "int parse_env(const char *envp, int num_env, char ***_name, char ***_value)"
+          },
+          {
+            "end": 22296,
+            "kind": "function_definition_header",
+            "start": 22263,
+            "symbol": "dump_reserve_mem_conf",
+            "text": "void dump_reserve_mem_conf(void)"
+          },
+          {
+            "end": 686,
+            "kind": "data_definition",
+            "start": 675,
+            "symbol": "__argc",
+            "text": "int __argc;"
+          },
+          {
+            "end": 701,
+            "kind": "data_definition",
+            "start": 687,
+            "symbol": "__argv",
+            "text": "char **__argv;"
+          },
+          {
+            "end": 2213,
+            "kind": "data_definition",
+            "start": 1665,
+            "symbol": "namespace_files",
+            "text": "struct namespace_file namespace_files[] = {\n\t{ .nstype = CLONE_NEWUSER,\t.name = \"ns/user\", .fd = -1 },\n#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)\n\t{ .nstype = CLONE_NEWCGROUP,\t.name = \"ns/cgroup\", .fd = -1 },\n#endif\n\t{ .nstype = CLONE_NEWIPC,\t.name = \"ns/ipc\", .fd = -1 },\n\t{ .nstype = CLONE_NEWUTS,\t.name = \"ns/uts\", .fd = -1 },\n\t{ .nstype = CLONE_NEWNET,\t.name = \"ns/net\", .fd = -1 },\n\t{ .nstype = CLONE_NEWPID,\t.name = \"ns/pid\", .fd = -1 },\n\t{ .nstype = CLONE_NEWNS,\t.name = \"ns/mnt\", .fd = -1 },\n\t{ .nstype = 0, .name = NULL, .fd = -1 }\n};"
+          }
+        ]
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/source-export-contracts.json",
+      "sha256": "451784b40c7cc1b78e3678df7d1b0f45b1fd7c74fda8d93965537d2f453e1792"
+    },
+    "actual_commands": {
+      "content": {
+        "all_started_direct_waits_joined": true,
+        "completed": true,
+        "rows": [
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c.metrics",
+              "/usr/bin/python3",
+              "-B",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/test_m15_create_os_routing.py"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {
+              "CC": "/usr/bin/cc",
+              "M15_REPO": "/home/holden/mckernel",
+              "M15_ROUTING_BASELINE_ONLY": "1",
+              "M15_ROUTING_C_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/ihklib.before.c",
+              "M15_ROUTING_LANGUAGE": "c",
+              "M15_ROUTING_OBSERVER": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/observations.c",
+              "M15_ROUTING_RECEIPT_DIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts",
+              "M15_ROUTING_RUST_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/create_os.before.rs",
+              "M15_ROUTING_RUST_TEMPLATE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/rust.rs.in",
+              "RUSTC": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "TMPDIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1"
+            },
+            "environment_unset": [],
+            "index": 0,
+            "label": "baseline-c",
+            "pid": 187409,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-c.stderr",
+            "stderr_sha256": "412fbac06d9d5c5a43d5cbc7140a2e7e1666408565f390acfd8ae465689519f7",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-c.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 127724354
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust.metrics",
+              "/usr/bin/python3",
+              "-B",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/test_m15_create_os_routing.py"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {
+              "CC": "/usr/bin/cc",
+              "M15_REPO": "/home/holden/mckernel",
+              "M15_ROUTING_BASELINE_ONLY": "1",
+              "M15_ROUTING_C_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/ihklib.before.c",
+              "M15_ROUTING_LANGUAGE": "rust",
+              "M15_ROUTING_OBSERVER": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/observations.c",
+              "M15_ROUTING_RECEIPT_DIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts",
+              "M15_ROUTING_RUST_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/create_os.before.rs",
+              "M15_ROUTING_RUST_TEMPLATE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/rust.rs.in",
+              "RUSTC": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "TMPDIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1"
+            },
+            "environment_unset": [],
+            "index": 1,
+            "label": "baseline-rust",
+            "pid": 187418,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-rust.stderr",
+            "stderr_sha256": "d8a654efe02190d0bf0abeca2bd2028f36c7cf315e0f22deb78edb1dbdf3b46d",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-rust.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 188593506
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c.metrics",
+              "/usr/bin/python3",
+              "-B",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/test_m15_create_os_routing.py"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {
+              "CC": "/usr/bin/cc",
+              "M15_REPO": "/home/holden/mckernel",
+              "M15_ROUTING_C_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/ihklib.c",
+              "M15_ROUTING_LANGUAGE": "c",
+              "M15_ROUTING_OBSERVER": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/observations.c",
+              "M15_ROUTING_RECEIPT_DIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts",
+              "M15_ROUTING_RUST_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+              "M15_ROUTING_RUST_TEMPLATE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/rust.rs.in",
+              "RUSTC": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "TMPDIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1"
+            },
+            "environment_unset": [
+              "M15_ROUTING_BASELINE_ONLY"
+            ],
+            "index": 2,
+            "label": "candidate-c",
+            "pid": 187436,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-c.stderr",
+            "stderr_sha256": "d0f1e19a9fc2c6be1d6fe29c0bad01f1e99e75f01cc9cf013d7dc82a760babb7",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-c.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 126722574
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust.metrics",
+              "/usr/bin/python3",
+              "-B",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/test_m15_create_os_routing.py"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {
+              "CC": "/usr/bin/cc",
+              "M15_REPO": "/home/holden/mckernel",
+              "M15_ROUTING_C_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/ihklib.c",
+              "M15_ROUTING_LANGUAGE": "rust",
+              "M15_ROUTING_OBSERVER": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/observations.c",
+              "M15_ROUTING_RECEIPT_DIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts",
+              "M15_ROUTING_RUST_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+              "M15_ROUTING_RUST_TEMPLATE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/rust.rs.in",
+              "RUSTC": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "TMPDIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1"
+            },
+            "environment_unset": [
+              "M15_ROUTING_BASELINE_ONLY"
+            ],
+            "index": 3,
+            "label": "candidate-rust",
+            "pid": 187445,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-rust.stderr",
+            "stderr_sha256": "d1d57d8773ac1c264229bc97a83e6b5d053c848949f2d0a74ef839954447b00e",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-rust.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 185832184
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=2s",
+              "58s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate.metrics",
+              "/usr/bin/python3",
+              "-B",
+              "/home/holden/mckernel/scripts/tests/test_m15_create_os_owned_cleanup.py"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {
+              "CC": "/usr/bin/cc",
+              "M15_CREATE_OS_RECEIPT_DIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts",
+              "M15_CREATE_OS_SOURCE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+              "M15_CREATE_OS_TEMPLATE": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/scripts/tests/fixtures/m15_create_os_owned_cleanup.rs.in",
+              "M15_REPO": "/home/holden/mckernel",
+              "RUSTC": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "TMPDIR": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1"
+            },
+            "environment_unset": [
+              "M15_CREATE_OS_BASELINE_ONLY"
+            ],
+            "index": 4,
+            "label": "updated-create-os-cleanup-candidate",
+            "pid": 187463,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/updated-create-os-cleanup-candidate.stderr",
+            "stderr_sha256": "a52c1ff8889b999d6fe8749db50643a0137218a538230cf4806a56ad932bd101",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/updated-create-os-cleanup-candidate.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 229530681
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-metadata-compile.metrics",
+              "/usr/bin/cc",
+              "-std=gnu11",
+              "-O0",
+              "-Wall",
+              "-Wextra",
+              "-Werror",
+              "-I/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output",
+              "-I/home/holden/mckernel/ihk/linux/include",
+              "-I/home/holden/mckernel/ihk/linux/include/ihk/arch/x86_64",
+              "-I/usr/include/x86_64-linux-gnu",
+              "-I/usr/include",
+              "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/origins-witness"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {},
+            "environment_unset": [],
+            "index": 5,
+            "label": "origin-metadata-compile",
+            "pid": 187479,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-metadata-compile.stderr",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-metadata-compile.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 31326083
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-raw.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/origins-witness",
+              "raw"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {},
+            "environment_unset": [],
+            "index": 6,
+            "label": "origin-raw",
+            "pid": 187486,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-raw.stderr",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/diagnostic_origins.rs",
+            "stdout_sha256": "75988d5cc44b4d90ea3333b623ca622d4091ff5df5dfb4e34804b24124d24b31",
+            "wall_ns": 3494298
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-create.metrics",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/origins-witness",
+              "create"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {},
+            "environment_unset": [],
+            "index": 7,
+            "label": "origin-create",
+            "pid": 187489,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-create.stderr",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/create_diagnostic_origins.rs",
+            "stdout_sha256": "be4a862131dfe19471f3ba76983b99e2fc2e4592b43ac3a90b467b580a490b0e",
+            "wall_ns": 3468306
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/actual-source-contract-refresh.metrics",
+              "/usr/bin/python3",
+              "-B",
+              "-c",
+              "import sys; from pathlib import Path; sys.path.insert(0, '/home/holden/mckernel/ihk/linux/user/rust/whole70'); from build_whole70_qualified import source_export_contracts; source_export_contracts(Path('/home/holden/mckernel/ihk/linux/user/rust/whole70'), Path('/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output'))"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {},
+            "environment_unset": [],
+            "index": 8,
+            "label": "actual-source-contract-refresh",
+            "pid": 187492,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/actual-source-contract-refresh.stderr",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/actual-source-contract-refresh.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 46110921
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--signal=TERM",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/rust.metrics",
+              "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+              "--edition=2021",
+              "--crate-name",
+              "ihklib_supported_whole70_host",
+              "--crate-type",
+              "staticlib",
+              "--cfg",
+              "ihklib_host_std_runtime",
+              "--cfg",
+              "ihklib_stat_abi_stat",
+              "-C",
+              "panic=abort",
+              "-C",
+              "codegen-units=1",
+              "-C",
+              "relocation-model=pic",
+              "-C",
+              "opt-level=2",
+              "--print",
+              "native-static-libs",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihklib_whole70.a",
+              "/home/holden/mckernel/ihk/linux/user/rust/whole70/libihklib_whole70.rs"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {
+              "MCKERNEL_DUMP_ABI_RS": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/output/dump_abi.rs",
+              "MCKERNEL_IHKLIB_CREATE_DIAGNOSTIC_ORIGINS_RS": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/create_diagnostic_origins.rs",
+              "MCKERNEL_IHKLIB_DIAGNOSTIC_ORIGINS_RS": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/diagnostic_origins.rs",
+              "MCKERNEL_PERF_PAGES_ABI_RS": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/output/perf_pages_abi.rs"
+            },
+            "environment_unset": [],
+            "index": 9,
+            "label": "changed-rust-only-codegen",
+            "pid": 187893,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/changed-rust-only-codegen.stderr",
+            "stderr_sha256": "500924744bb86858e69fcce5c87ecfa3b80e10255e6d51a1b0d9120f539b2246",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/changed-rust-only-codegen.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 608535634
+          },
+          {
+            "argv": [
+              "/usr/bin/taskset",
+              "-c",
+              "6",
+              "/usr/bin/timeout",
+              "--foreground",
+              "--kill-after=5s",
+              "60s",
+              "/usr/bin/prlimit",
+              "--as=1073741824:1073741824",
+              "--cpu=45:45",
+              "--fsize=67108864:67108864",
+              "--core=0:0",
+              "--",
+              "/usr/bin/time",
+              "-v",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/link.metrics",
+              "/usr/bin/cc",
+              "-shared",
+              "-Wl,-soname,libihk.so",
+              "-Wl,--gc-sections",
+              "-Wl,-z,defs",
+              "-Wl,--undefined=__argc",
+              "-Wl,--undefined=__argv",
+              "-Wl,--undefined=_ihk_os_assign_cpu_str",
+              "-Wl,--undefined=_ihk_os_set_ikc_map_str",
+              "-Wl,--undefined=_ihk_reserve_cpu_str",
+              "-Wl,--undefined=_ihk_reserve_mem_str",
+              "-Wl,--undefined=cpu_req2str",
+              "-Wl,--undefined=cpu_str2count",
+              "-Wl,--undefined=cpu_str2req",
+              "-Wl,--undefined=dump_reserve_mem_conf",
+              "-Wl,--undefined=ihk_create_os",
+              "-Wl,--undefined=ihk_create_os_str",
+              "-Wl,--undefined=ihk_destroy_os",
+              "-Wl,--undefined=ihk_get_num_os_instances",
+              "-Wl,--undefined=ihk_get_num_reserved_cpus",
+              "-Wl,--undefined=ihk_get_num_reserved_mem_chunks",
+              "-Wl,--undefined=ihk_get_os_instances",
+              "-Wl,--undefined=ihk_os_assign_cpu",
+              "-Wl,--undefined=ihk_os_assign_cpu_str",
+              "-Wl,--undefined=ihk_os_assign_mem",
+              "-Wl,--undefined=ihk_os_boot",
+              "-Wl,--undefined=ihk_os_clear_kmsg",
+              "-Wl,--undefined=ihk_os_freeze",
+              "-Wl,--undefined=ihk_os_get_eventfd",
+              "-Wl,--undefined=ihk_os_get_ikc_map",
+              "-Wl,--undefined=ihk_os_get_kmsg_size",
+              "-Wl,--undefined=ihk_os_get_num_assigned_cpus",
+              "-Wl,--undefined=ihk_os_get_num_assigned_mem_chunks",
+              "-Wl,--undefined=ihk_os_get_num_numa_nodes",
+              "-Wl,--undefined=ihk_os_get_num_pagesizes",
+              "-Wl,--undefined=ihk_os_get_pagesizes",
+              "-Wl,--undefined=ihk_os_get_status",
+              "-Wl,--undefined=ihk_os_getperfevent",
+              "-Wl,--undefined=ihk_os_getrusage",
+              "-Wl,--undefined=ihk_os_kargs",
+              "-Wl,--undefined=ihk_os_kargs_str",
+              "-Wl,--undefined=ihk_os_kmsg",
+              "-Wl,--undefined=ihk_os_load",
+              "-Wl,--undefined=ihk_os_makedumpfile",
+              "-Wl,--undefined=ihk_os_perfctl",
+              "-Wl,--undefined=ihk_os_query_cpu",
+              "-Wl,--undefined=ihk_os_query_free_mem",
+              "-Wl,--undefined=ihk_os_query_mem",
+              "-Wl,--undefined=ihk_os_query_total_mem",
+              "-Wl,--undefined=ihk_os_release_cpu",
+              "-Wl,--undefined=ihk_os_release_mem",
+              "-Wl,--undefined=ihk_os_set_ikc_map",
+              "-Wl,--undefined=ihk_os_set_ikc_map_str",
+              "-Wl,--undefined=ihk_os_setperfevent",
+              "-Wl,--undefined=ihk_os_shutdown",
+              "-Wl,--undefined=ihk_os_thaw",
+              "-Wl,--undefined=ihk_query_cpu",
+              "-Wl,--undefined=ihk_query_mem",
+              "-Wl,--undefined=ihk_release_cpu",
+              "-Wl,--undefined=ihk_release_mem",
+              "-Wl,--undefined=ihk_reserve_cpu",
+              "-Wl,--undefined=ihk_reserve_cpu_str",
+              "-Wl,--undefined=ihk_reserve_mem",
+              "-Wl,--undefined=ihk_reserve_mem_conf",
+              "-Wl,--undefined=ihk_reserve_mem_conf_str",
+              "-Wl,--undefined=ihk_reserve_mem_str",
+              "-Wl,--undefined=ihk_set_loglevel",
+              "-Wl,--undefined=ihklib_device_open",
+              "-Wl,--undefined=ihklib_os_open",
+              "-Wl,--undefined=ihklib_os_query_mem_sysfs",
+              "-Wl,--undefined=ihklib_os_query_mem_type_str",
+              "-Wl,--undefined=ikc_req2str",
+              "-Wl,--undefined=ikc_str2count",
+              "-Wl,--undefined=ikc_str2req",
+              "-Wl,--undefined=loglevel",
+              "-Wl,--undefined=mem_req2str",
+              "-Wl,--undefined=mem_str2count",
+              "-Wl,--undefined=mem_str2req",
+              "-Wl,--undefined=namespace_files",
+              "-Wl,--undefined=parse_env",
+              "-Wl,--undefined=reserve_mem_conf",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihklib_whole70.a",
+              "/usr/lib/x86_64-linux-gnu/libbfd.so",
+              "-lgcc_s",
+              "-lutil",
+              "-lrt",
+              "-lpthread",
+              "-lm",
+              "-ldl",
+              "-lc",
+              "-Wl,-Map,/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.map",
+              "-o",
+              "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.so"
+            ],
+            "cwd": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1",
+            "direct_wait_returncode": 0,
+            "environment_overrides": {},
+            "environment_unset": [],
+            "index": 10,
+            "label": "genuine76root-SONAME-link",
+            "pid": 187902,
+            "stderr": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/genuine76root-SONAME-link.stderr",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/genuine76root-SONAME-link.stdout",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wall_ns": 134763378
+          }
+        ]
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/RUNS.json",
+      "sha256": "367bc2015015eb49f78310b038081e3f0b43fd53b51bcd65df1f6fe51a836a5d"
+    },
+    "batch": {
+      "content": {
+        "admission": {
+          "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/ROOT-ADMISSION-1.json",
+          "sha256": "73465b01b300745bfc36c1113394b9181268452982698e0ff68e906b37f47ee5"
+        },
+        "aggregate": {
+          "direct_wait_wall_seconds": 1.709179068,
+          "max_RSS_KiB": 136492,
+          "time_v_CPU_seconds_rounded_sum": 1.56
+        },
+        "all11_admitted_commands_return0": true,
+        "all13_direct_waits_joined": true,
+        "artifacts": {
+          "create_diagnostic_origins.rs": {
+            "bytes": 645,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/create_diagnostic_origins.rs",
+            "sha256": "be4a862131dfe19471f3ba76983b99e2fc2e4592b43ac3a90b467b580a490b0e"
+          },
+          "diagnostic_origins.rs": {
+            "bytes": 317,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/diagnostic_origins.rs",
+            "sha256": "75988d5cc44b4d90ea3333b623ca622d4091ff5df5dfb4e34804b24124d24b31"
+          },
+          "libihk.map": {
+            "bytes": 2412761,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.map",
+            "sha256": "4ccdb047aa4ce53d639187007eb5cf0708a3edef6c2f44a51795d6dcc7ed5cbd"
+          },
+          "libihk.so": {
+            "bytes": 5403760,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.so",
+            "sha256": "dd974858229722f1e8d4a232b93f98e84ddc7a883b30e485dbc16ca961da9385"
+          },
+          "libihklib_whole70.a": {
+            "bytes": 21933274,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihklib_whole70.a",
+            "sha256": "7b604f4b4b0f6ab640ec54710c55615d249be16a967e416846bd4c2f57bc2143"
+          },
+          "native-static-libs.rsp": {
+            "bytes": 43,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/native-static-libs.rsp",
+            "sha256": "736d4bb02335f153ad2eaa134371d085e70599f3538014b37714d7453305f29b"
+          },
+          "origins-witness": {
+            "bytes": 17088,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/origins-witness",
+            "sha256": "c6e622104b84057f4eead63759b345f7afc26fedf4dee6e6d5aec57215a0a81e"
+          },
+          "producer-receipt.json": {
+            "bytes": 16563,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/producer-receipt.json",
+            "sha256": "44d461d6889f0dfb4d17ac35b69b62dd4cfef71137d4ec3976023f2effb0d6fc"
+          },
+          "source-export-contracts.json": {
+            "bytes": 2097,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/source-export-contracts.json",
+            "sha256": "451784b40c7cc1b78e3678df7d1b0f45b1fd7c74fda8d93965537d2f453e1792"
+          },
+          "source_export_actual_contracts.inc": {
+            "bytes": 920,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/source_export_actual_contracts.inc",
+            "sha256": "6a27b701d4b7475125b56a99d9d73b3d0e29d76116f30fa51dec340617655eed"
+          }
+        },
+        "canonical_source_read_hold_released": true,
+        "changed_artifact_comparison": {
+          "archive_after": "7b604f4b4b0f6ab640ec54710c55615d249be16a967e416846bd4c2f57bc2143",
+          "archive_before": "e3d52f567564e4d1883a57e7c2e491144af52154a9996263574c6568392b1393",
+          "meaningful_changed_inputs": "Device/OS routing Rustbody and19actualCdiagnosticlineconstants changed; nooldcohortbehaviorproofreused.",
+          "shared_after": "dd974858229722f1e8d4a232b93f98e84ddc7a883b30e485dbc16ca961da9385",
+          "shared_before": "5925bb23378436bc8d7d0fa3c207875bac5387cfe308f15391b33e24af42eeec"
+        },
+        "files": {
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/POSTLINK-RUNS.json": {
+            "bytes": 2330,
+            "sha256": "b8e402eb67e74a2300f8a087e2accbfdc566bb8e81d2e819dd1810fbe32aaee6"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/PRE-CORRECTION-RECEIPT-ERROR.json": {
+            "bytes": 380,
+            "sha256": "c0565f4e4181502908faf3c9200d1dcab593f1a914d0c032caaba94f1bc784a0"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/PRE-RUST-CHECKS.json": {
+            "bytes": 1458,
+            "sha256": "ef9b556b8f4805cbfdf4d271e119d4bdc436696ffc42609c3fb3e726b2c3e6ab"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/ROOT-ADMISSION-1.json": {
+            "bytes": 80955,
+            "sha256": "73465b01b300745bfc36c1113394b9181268452982698e0ff68e906b37f47ee5"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/RUNS.json": {
+            "bytes": 29290,
+            "sha256": "367bc2015015eb49f78310b038081e3f0b43fd53b51bcd65df1f6fe51a836a5d"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/SONAME.metrics": {
+            "bytes": 864,
+            "sha256": "b7f684a9b757d311ac0183a8d10073ae4e6f1ed54dcf8bed04607dd0235cd2a7"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/SONAME.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/SONAME.stdout": {
+            "bytes": 1765,
+            "sha256": "14cd9ecea182d04451718b34e30f3dac282038f9b5ccc36f4535a3eceef06222"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/STRICT-QUALIFIER.json": {
+            "bytes": 371,
+            "sha256": "26cbc4e62fa6f8cb4c7bedee098fe4274a56228e8613817a2925cf98a4fc83e1"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/SYMBOL-PROOF.json": {
+            "bytes": 6076,
+            "sha256": "8dc2711eee143652eda3ca5563cabad303e23d7a865c53ea42071f970ad9eef7"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/VERIFIED-INPUTS.json": {
+            "bytes": 9638,
+            "sha256": "62ddc4ef950a972321229e60207ede58e56019fca9d96eaff1bcceef913b7d6e"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-c.stderr": {
+            "bytes": 98,
+            "sha256": "412fbac06d9d5c5a43d5cbc7140a2e7e1666408565f390acfd8ae465689519f7"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-c.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-rust.stderr": {
+            "bytes": 98,
+            "sha256": "d8a654efe02190d0bf0abeca2bd2028f36c7cf315e0f22deb78edb1dbdf3b46d"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/baseline-rust.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-c.stderr": {
+            "bytes": 98,
+            "sha256": "d0f1e19a9fc2c6be1d6fe29c0bad01f1e99e75f01cc9cf013d7dc82a760babb7"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-c.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-rust.stderr": {
+            "bytes": 98,
+            "sha256": "d1d57d8773ac1c264229bc97a83e6b5d053c848949f2d0a74ef839954447b00e"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/candidate-rust.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/defined-symbols.metrics": {
+            "bytes": 897,
+            "sha256": "9c2599c2fae84c17f6b6b758ade52de697c98c893c4ca21524cda2052e204ebc"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/defined-symbols.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/defined-symbols.stdout": {
+            "bytes": 170121,
+            "sha256": "3d6e71f4abb3514fd1b5057a4362d000ca9c37cc6e854513a83da12a959adfd0"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/updated-create-os-cleanup-candidate.stderr": {
+            "bytes": 98,
+            "sha256": "a52c1ff8889b999d6fe8749db50643a0137218a538230cf4806a56ad932bd101"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/updated-create-os-cleanup-candidate.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/artifacts.json": {
+            "bytes": 167,
+            "sha256": "fdb35fa8f27840ec4073da0351ffc6d63504f61d84bed55a1ac5dd0ae186b301"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/c-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/c-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/commands.json": {
+            "bytes": 785,
+            "sha256": "bafcb1939cc349afe54adb76bd36da733f1e70fcb92c50e8e66127a35634dabd"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/routing": {
+            "bytes": 17552,
+            "sha256": "7998b92ebe6364a857383ac9c547b550fbbfdb51e81878ff5f5e569e1f3a236b"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/routing-run.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/routing-run.stdout": {
+            "bytes": 56,
+            "sha256": "acd6aa12b7fb9c115a92fb771e499bd22c79ece594b7cac579db246741804322"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c-artifacts/routing.c": {
+            "bytes": 5662,
+            "sha256": "eef123dc5926b51ddac5ad5f41b2db2c1aac0197702e48e66014efacf2f6dc75"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-c.metrics": {
+            "bytes": 868,
+            "sha256": "e0da9a6e26fa41472966cfaf130b8a2681de1b617c11b030d16eccf7e7135b39"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/artifacts.json": {
+            "bytes": 256,
+            "sha256": "ac484d0a8046b4dd1266476b31917a59d596b3d477ff63a45bb01c252c4bf0ee"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/commands.json": {
+            "bytes": 1546,
+            "sha256": "6ebd8cea8dc76ed0f4aa329b228094b02f40228163bf9401e56948d320f74813"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/observations.o": {
+            "bytes": 8552,
+            "sha256": "4723367ecbf0fc1f7830aaf7375e9fa6a522e0cbd7581b7bb0d6f2388aacaf60"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/observer-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/observer-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/routing": {
+            "bytes": 4341512,
+            "sha256": "2b37f557051212aa2b154e707d9482f5cef3d332455575115186fb82699a1b7d"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/routing-run.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/routing-run.stdout": {
+            "bytes": 56,
+            "sha256": "acd6aa12b7fb9c115a92fb771e499bd22c79ece594b7cac579db246741804322"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/routing.rs": {
+            "bytes": 5859,
+            "sha256": "0a0e61308ec4c5431ec9086692ff11c1a5c8a033f335658a1d5a2e44dea33c6d"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/rust-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust-artifacts/rust-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/baseline-rust.metrics": {
+            "bytes": 874,
+            "sha256": "ab876133e3ed49d9c65eebc1db34e07b5bd78f2d719a415a00bbf9c2e6186e11"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/artifacts.json": {
+            "bytes": 167,
+            "sha256": "a23643c8e4c1dd075500768abe3720451546b0769354a29d14d657a2b4666319"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/c-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/c-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/commands.json": {
+            "bytes": 785,
+            "sha256": "6ce86b6fafb0146ea907a4812f10e731ae04eaeb8cc1ebd738ede6bdd4545c20"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/routing": {
+            "bytes": 17552,
+            "sha256": "74d0843a9be33e110e96080f208f4b5b5f361d837148957e7fe3c42d0148ddd9"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/routing-run.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/routing-run.stdout": {
+            "bytes": 81,
+            "sha256": "c5ba8de91cb56217b1b29d175c7187817f27029931da50fc232c83e2d3d1ba47"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/routing.c": {
+            "bytes": 5735,
+            "sha256": "c2a38436a5d67f0a25bec78cc271df193820ab2b1c8c8ae1e68efaa54d74cd00"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c.metrics": {
+            "bytes": 867,
+            "sha256": "5b9c97d8095fe465a36e22e42ee7426310901eedf1b63b18e8957ef517f67846"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/artifacts.json": {
+            "bytes": 256,
+            "sha256": "fb96e53e393b821922709e4039e88e420849458fd2598fe7c91718ebe4540c65"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/commands.json": {
+            "bytes": 1546,
+            "sha256": "1bb5265a43fea5e0f982ee2d63a5d2bbcfb3753bb5f6be6a5be7b2cec51d9569"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/observations.o": {
+            "bytes": 8552,
+            "sha256": "4723367ecbf0fc1f7830aaf7375e9fa6a522e0cbd7581b7bb0d6f2388aacaf60"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/observer-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/observer-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/routing": {
+            "bytes": 4341696,
+            "sha256": "cdec21f8a60d9c540a3b093dcb1029a0298b6ca6aea7a4ae95b52bc182c8f298"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/routing-run.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/routing-run.stdout": {
+            "bytes": 81,
+            "sha256": "c5ba8de91cb56217b1b29d175c7187817f27029931da50fc232c83e2d3d1ba47"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/routing.rs": {
+            "bytes": 5980,
+            "sha256": "56db4e38bad02549f82ca60343c4f734e5082334946764561bd638bc341d3275"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/rust-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/rust-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust.metrics": {
+            "bytes": 872,
+            "sha256": "b6d8531a722e1c4bd45e261c33bcd6936db3c39c215038f0c64b3d5fe5d833a3"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/REQUEST.json": {
+            "bytes": 24379,
+            "sha256": "c76c862ca6927c7c452bb09893dc395386ca29b5e8ccdc1452905b32ba0c7011"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/actual-source-contract-refresh.metrics": {
+            "bytes": 1125,
+            "sha256": "9b5a0f2e07ab90b7c2127e7b34c82db439b6188bf0d5bc5561ad30c8ac3aef45"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/actual-source-contract-refresh.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/actual-source-contract-refresh.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/changed-rust-only-codegen.stderr": {
+            "bytes": 1875,
+            "sha256": "500924744bb86858e69fcce5c87ecfa3b80e10255e6d51a1b0d9120f539b2246"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/changed-rust-only-codegen.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/genuine76root-SONAME-link.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/genuine76root-SONAME-link.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/link.metrics": {
+            "bytes": 3882,
+            "sha256": "af365aac074e4e8ef020bbffdf481a4515627f794258f44fe0f8531d003e6df9"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-create.metrics": {
+            "bytes": 856,
+            "sha256": "c49b893b08c4a6cf8eec57ba4885c34fdca6d51811e2422c7dde5c211118168b"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-create.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-metadata-compile.metrics": {
+            "bytes": 1281,
+            "sha256": "f575074114b7a3571d9a92f0fcff3ed175ec53480c30d357f6183679d12606d4"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-metadata-compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-metadata-compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-raw.metrics": {
+            "bytes": 853,
+            "sha256": "2f9c5cf40eca93fca1db0c34c4fe5d6b0634cd26460a3a80dd1000bfe4ef1ac9"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/origin-raw.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/create_diagnostic_origins.rs": {
+            "bytes": 645,
+            "sha256": "be4a862131dfe19471f3ba76983b99e2fc2e4592b43ac3a90b467b580a490b0e"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/diagnostic_origins.rs": {
+            "bytes": 317,
+            "sha256": "75988d5cc44b4d90ea3333b623ca622d4091ff5df5dfb4e34804b24124d24b31"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.map": {
+            "bytes": 2412761,
+            "sha256": "4ccdb047aa4ce53d639187007eb5cf0708a3edef6c2f44a51795d6dcc7ed5cbd"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.so": {
+            "bytes": 5403760,
+            "sha256": "dd974858229722f1e8d4a232b93f98e84ddc7a883b30e485dbc16ca961da9385"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihklib_whole70.a": {
+            "bytes": 21933274,
+            "sha256": "7b604f4b4b0f6ab640ec54710c55615d249be16a967e416846bd4c2f57bc2143"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/native-static-libs.rsp": {
+            "bytes": 43,
+            "sha256": "736d4bb02335f153ad2eaa134371d085e70599f3538014b37714d7453305f29b"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/origins-witness": {
+            "bytes": 17088,
+            "sha256": "c6e622104b84057f4eead63759b345f7afc26fedf4dee6e6d5aec57215a0a81e"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/producer-receipt.json": {
+            "bytes": 16563,
+            "sha256": "44d461d6889f0dfb4d17ac35b69b62dd4cfef71137d4ec3976023f2effb0d6fc"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/source-export-contracts.json": {
+            "bytes": 2097,
+            "sha256": "451784b40c7cc1b78e3678df7d1b0f45b1fd7c74fda8d93965537d2f453e1792"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/source_export_actual_contracts.inc": {
+            "bytes": 920,
+            "sha256": "6a27b701d4b7475125b56a99d9d73b3d0e29d76116f30fa51dec340617655eed"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/rust.metrics": {
+            "bytes": 1346,
+            "sha256": "6060d91877515cdc87c290c48211dcaf580b6442604a314a35f08ae0a99749aa"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/artifacts.json": {
+            "bytes": 168,
+            "sha256": "79266fa64b39b4d7a45056acb21b7201a573d3786c7fd416c23c5fb9199a4e0a"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/commands.json": {
+            "bytes": 827,
+            "sha256": "8c8342e7340cbe9093c01259bddf3a99dd363b3e46f206fc457591d166ee055d"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/compile.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/compile.stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/witness": {
+            "bytes": 4445656,
+            "sha256": "487e606fc206aa39d21c2d9fbb686bf828a9e07ed9edd39bda2c1c737dedddf6"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/witness.rs": {
+            "bytes": 12467,
+            "sha256": "07f438e8ba334bcb20b6da14800516d7c8962d747bbbb89044ea09847fa7289a"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/witness.stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate-artifacts/witness.stdout": {
+            "bytes": 74,
+            "sha256": "8a20749aa0a5d1f4432f5034e71194e2c62e1055f7fcb80c8bcc67485570fa08"
+          },
+          "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/cleanup-candidate.metrics": {
+            "bytes": 817,
+            "sha256": "30392fa5d3135985c455c6b1465e8d024c753e5b83f2c814b1ea8c34895e69a3"
+          }
+        },
+        "fullSDK_or_native_or_Cretirement_claim": false,
+        "metadata": {
+          "actual19source_location_joins": "PASS actualCgeneratedraw/create exactlymatchactualcandidateC sites",
+          "actual_C_sha256": "2d7b37e847b0f79af8e28d4dc1148950732d0aae2179384104aa77d25c062dd5",
+          "refreshed_source_contract": "PASS exactnewCsha/noCfunctionbodies; header/data declarationsinclude byteidentical",
+          "selected_logical_path": "/src/ihk/linux/user/ihklib.c"
+        },
+        "metrics": {
+          "SONAME": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "2872",
+            "System time (seconds)": "0.00",
+            "User time (seconds)": "0.00"
+          },
+          "actual-source-contract-refresh": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.04",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "13904",
+            "System time (seconds)": "0.00",
+            "User time (seconds)": "0.03"
+          },
+          "baseline-c": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.12",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "26332",
+            "System time (seconds)": "0.02",
+            "User time (seconds)": "0.10"
+          },
+          "baseline-rust": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.18",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "98920",
+            "System time (seconds)": "0.04",
+            "User time (seconds)": "0.14"
+          },
+          "candidate-c": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.12",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "26440",
+            "System time (seconds)": "0.02",
+            "User time (seconds)": "0.09"
+          },
+          "candidate-rust": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.18",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "98312",
+            "System time (seconds)": "0.04",
+            "User time (seconds)": "0.13"
+          },
+          "changed-rust-only-codegen": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.60",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "136492",
+            "System time (seconds)": "0.04",
+            "User time (seconds)": "0.55"
+          },
+          "defined-symbols": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.01",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "56740",
+            "System time (seconds)": "0.00",
+            "User time (seconds)": "0.00"
+          },
+          "genuine76root-SONAME-link": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.13",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "28648",
+            "System time (seconds)": "0.05",
+            "User time (seconds)": "0.08"
+          },
+          "origin-create": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "1500",
+            "System time (seconds)": "0.00",
+            "User time (seconds)": "0.00"
+          },
+          "origin-metadata-compile": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.02",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "22468",
+            "System time (seconds)": "0.00",
+            "User time (seconds)": "0.02"
+          },
+          "origin-raw": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "1408",
+            "System time (seconds)": "0.00",
+            "User time (seconds)": "0.00"
+          },
+          "updated-create-os-cleanup-candidate": {
+            "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.22",
+            "Exit status": "0",
+            "Maximum resident set size (kbytes)": "125516",
+            "System time (seconds)": "0.04",
+            "User time (seconds)": "0.17"
+          }
+        },
+        "new_file_or_milestone_acceptance": false,
+        "provider": {
+          "BFD": {
+            "path": "/usr/lib/x86_64-linux-gnu/libbfd.so",
+            "sha256": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a"
+          },
+          "Rustarchive": {
+            "bytes": 21933274,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihklib_whole70.a",
+            "sha256": "7b604f4b4b0f6ab640ec54710c55615d249be16a967e416846bd4c2f57bc2143"
+          },
+          "actual_map": {
+            "bytes": 2412761,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/genuine-producer-1/output/libihk.map",
+            "sha256": "4ccdb047aa4ce53d639187007eb5cf0708a3edef6c2f44a51795d6dcc7ed5cbd"
+          },
+          "projectCfunction_bodies_linked": false
+        },
+        "receipt_only_failure": {
+          "actual_retained_nm_bytes": 192,
+          "correction": "Compareallsixsizes with retainedactualcleanup SYMBOL-PROOF; namespace192 andreserve_mem_conf24. Existing13commandoutputs reused; no workloadreplay.",
+          "incorrect_expected_namespace_files_bytes": 320,
+          "retained": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/PRE-CORRECTION-RECEIPT-ERROR.json"
+        },
+        "shared_slot_released": true,
+        "source_index_writes": false,
+        "status": "PASS_SOURCE_BOUND_ROUTING_C_AND_RUST_REFRESHED19_C_ORIGINS_CHANGED_REAL_RUST_LIBRARY",
+        "strict_Rust_qualifier": "PASS unchangedexact7warnings/sourcepins/nativeflagorder",
+        "symbols": {
+          "SONAME": "libihk.so",
+          "actual_six_data_sizes": [
+            4,
+            8,
+            16,
+            4,
+            192,
+            24
+          ],
+          "data_roots": 6,
+          "function_roots": 70,
+          "proof": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/SYMBOL-PROOF.json",
+          "unique_defined_roots": 76
+        },
+        "tests": {
+          "candidate_cleanup_observations": 11,
+          "candidate_routing_local_observations": 18,
+          "defined_baseline_wrong_device_observations": 4,
+          "real_IHK_backend_runtime_calls": 0,
+          "real_device_or_native_operations": 0,
+          "release_route": "Sourcecallproof None/device retained; no extraunchangedruntimevector"
+        }
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/RESULT.json",
+      "sha256": "dbfb1c4a29bb371ea60d97dd08448d1807f895d0f5e89c9315e44ad8bcc642c2"
+    },
+    "default_wiring": {
+      "content": {
+        "admission_sha256": "b52e4bf53e145a8a168cab927d0db0ce799e01444fb9e6b9b6ea42ad010710e7",
+        "all_direct_waits_joined": true,
+        "baseline_or_old_cleanup_mains_ABI_library_replays": 0,
+        "canonical_write_hold_released": true,
+        "compiled_artifact_sha256": {
+          "c": {
+            "routing": "ea375d975a3ef9e256377b12c489bfba5373cd0125beb121a0d5e5f2b03a7fed",
+            "routing.c": "c2a38436a5d67f0a25bec78cc271df193820ab2b1c8c8ae1e68efaa54d74cd00"
+          },
+          "rust": {
+            "observations.o": "f8527936d8f84f1318c5405f0c804452aa9db84e8456db6249980180e03fdeb7",
+            "routing": "ae3ec8f8d21d6c1fedd8240b5453afd94710d1547cda7a0f38646149d67beef0",
+            "routing.rs": "56db4e38bad02549f82ca60343c4f734e5082334946764561bd638bc341d3275"
+          }
+        },
+        "files": {
+          "INTEGRATION.PRIVATE.patch": "d2c1b75998b2b3ed0843413126878b3cea2d5616b2427f6b245fcf7beed8e873",
+          "REQUEST.json": "2a6a89e99c2f2d3702f679eb52a7a5e21115b2f9a7e521e824fd874e87b226a7",
+          "ROOT-ADMISSION-1.json": "b52e4bf53e145a8a168cab927d0db0ce799e01444fb9e6b9b6ea42ad010710e7",
+          "RUN.json": "6242fbe83809b168d030b48415967cf9a967e9d612b4c3d26413b443aaf7d02e",
+          "SOURCE-PROOF.json": "90306a9f93cddf1fb568ad82b518dc31c20824f0d74e307d57b1f2f9ad5a10d1",
+          "default-artifacts/c/artifacts.json": "0c2737e9f36a9824710499e579a8270b6506d64bab1541f8c47f7e7d28e32743",
+          "default-artifacts/c/c-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/c/c-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/c/commands.json": "f420b68ed6fbae8ded736d63057bb1fcfe61dc7a4133bdb127d60845006e415f",
+          "default-artifacts/c/routing": "ea375d975a3ef9e256377b12c489bfba5373cd0125beb121a0d5e5f2b03a7fed",
+          "default-artifacts/c/routing-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/c/routing-run.stdout": "c5ba8de91cb56217b1b29d175c7187817f27029931da50fc232c83e2d3d1ba47",
+          "default-artifacts/c/routing.c": "c2a38436a5d67f0a25bec78cc271df193820ab2b1c8c8ae1e68efaa54d74cd00",
+          "default-artifacts/rust/artifacts.json": "ce0e37f6d63a0a5feefe2b5d2c6072a62ffc9dcd9df33a49e89a70f3e87b2070",
+          "default-artifacts/rust/commands.json": "7708fbd130d986247c22b3361bd3ad1abc6d57f6357a6133c3cb17c949e45ea9",
+          "default-artifacts/rust/observations.o": "f8527936d8f84f1318c5405f0c804452aa9db84e8456db6249980180e03fdeb7",
+          "default-artifacts/rust/observer-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/rust/observer-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/rust/routing": "ae3ec8f8d21d6c1fedd8240b5453afd94710d1547cda7a0f38646149d67beef0",
+          "default-artifacts/rust/routing-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/rust/routing-run.stdout": "c5ba8de91cb56217b1b29d175c7187817f27029931da50fc232c83e2d3d1ba47",
+          "default-artifacts/rust/routing.rs": "56db4e38bad02549f82ca60343c4f734e5082334946764561bd638bc341d3275",
+          "default-artifacts/rust/rust-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-artifacts/rust/rust-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "default-wiring.metrics": "06efee8b4592b72402346ca26b0efa169c0953b08566192703c83d7094347ac6",
+          "default-wiring.stderr": "0a8b6e4da6781683fcc6e305b54222b6ea488f0cad35f6fffbcfba2e9fd754ef",
+          "default-wiring.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "scripts/tests/fixtures/m15-create-os-routing/observations.c": "41ee014aa40a0e21d59dff6777b244ba90bced01e52a8dadc036735140eb4ded",
+          "scripts/tests/fixtures/m15-create-os-routing/rust.rs.in": "727961a7be2a2b90c8df79a5730084be7e27f79fb8392433bb63202e560d030b",
+          "scripts/tests/test_m15_create_os_routing.py": "9c2a1fef3a4378ba455d770f638e4963d0bdd9b100a7eb9327ef9f402a4d5caa"
+        },
+        "generated_inputs_still_byte_identical_to_prior_pass": true,
+        "language_order": [
+          "c",
+          "rust"
+        ],
+        "metrics": [
+          "User time (seconds): 0.20",
+          "System time (seconds): 0.03",
+          "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.24",
+          "Maximum resident set size (kbytes): 98276",
+          "Exit status: 0"
+        ],
+        "native_device_backend_operation": false,
+        "new_checks_qualified": [
+          "Defaultbothserialdispatch/failfirstsequencing",
+          "ExplicitexistingabsoluteCC/RUSTC bindings",
+          "CurrentcanonicalproductionC/Rustanddefaultretainedfixturelookup",
+          "Perlanguageoptionalrawreceipt/artifactpathwiring"
+        ],
+        "new_routing_case_acceptance_delta": 0,
+        "shared_slot_released": true,
+        "skips": 0,
+        "status": "PASS_ONCE_CANONICAL_DEFAULT_RETENTION_WIRING",
+        "test_returncode": 0,
+        "top_level_tests": 1
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-retention-1/RESULT.json",
+      "sha256": "09c795831e6c34680c9a246130e7260d8c54cabb8cc985dea37276c52fbacb96"
+    },
+    "joint_review": {
+      "content": {
+        "dependent_retention": {
+          "fixture_delta": "Only cpu_all private observer bool->Option<c_int>, assert is_none. Same11candidate vectors, all original leaked-baseline evidence retained.",
+          "generation": "07f438e8... generated routing source plus updated observer reduces exactly to old passed6d43ff... bytes by inverse observer-type/None replacements, recorded in SOURCE-CHECKS.",
+          "patch": {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/CLEANUP-OBSERVER-OPTION.PRIVATE.patch",
+            "sha256": "7a44e6d2dfeeee6393b12fadb0298c5f7a55f33be0823888088f6898234fce8e"
+          },
+          "single_cleanup_request": {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/CLEANUP-REQUEST.json",
+            "sha256": "841f2408ec08ea69e26ea19ed763827699d423184d93c4c8fb28d17da16e5b04"
+          },
+          "test_python_unchanged": {
+            "path": "/home/holden/mckernel/scripts/tests/test_m15_create_os_owned_cleanup.py",
+            "sha256": "e275d6cc2894e06c0276fb38295cd098e11403d2ae209edb5270d7efcae45ddd"
+          }
+        },
+        "disposition": "GO for the exact four-file source/metadata/observer integration and corresponding Root-controlled combined serial admission. Runtime proof and current metadata generation remain required gates. This reviewer ran no compiler/test/native workload.",
+        "inputs": [
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/CREATE-OS-ROUTING.PRIVATE.patch",
+            "sha256": "09b2bf797722528f3f7da7c55aafb7d2c9fde6144b875df48dac2ab77c8f04fa"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/ihklib.c",
+            "sha256": "2d7b37e847b0f79af8e28d4dc1148950732d0aae2179384104aa77d25c062dd5"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+            "sha256": "cd88e0c3c7529b9ea985ef4c4dceda09faf52b07d333f4c7dc48eaa78e94947c"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/DIAGNOSTIC-ORIGIN-REBIND.PRIVATE.patch",
+            "sha256": "41a1bf31d737d9804add4ffad051caa5369953f5acb04fe8843cedf895ecad47"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+            "sha256": "62034e30b02e627cde63b7d001f97ab4c2b175c7a7a4a64ee0a5d609c994a211"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/DIAGNOSTIC-ORIGIN-SOURCE-JOIN.json",
+            "sha256": "107669a33eedc16b9f0a27b06d08a57ef5cb7e69bce108d2ac8e0eddd3aa4b92"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/REQUEST.json",
+            "sha256": "c18235deeeea5313617d160115192151142ddc1b16602a6d82b211fa8794e015"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/observations.c",
+            "sha256": "41ee014aa40a0e21d59dff6777b244ba90bced01e52a8dadc036735140eb4ded"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/rust.rs.in",
+            "sha256": "727961a7be2a2b90c8df79a5730084be7e27f79fb8392433bb63202e560d030b"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/test_m15_create_os_routing.py",
+            "sha256": "f3f519207415c3a76e0234f1d1b0104468a32ab4ca7aab9c6ac737a243a1f95c"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/CLEANUP-OBSERVER-OPTION.PRIVATE.patch",
+            "sha256": "7a44e6d2dfeeee6393b12fadb0298c5f7a55f33be0823888088f6898234fce8e"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/scripts/tests/fixtures/m15_create_os_owned_cleanup.rs.in",
+            "sha256": "c55e3c3b5692223bb9a959ff93a701092d1763e9458316e1b8d5c295692cae16"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/CLEANUP-REQUEST.json",
+            "sha256": "841f2408ec08ea69e26ea19ed763827699d423184d93c4c8fb28d17da16e5b04"
+          },
+          {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/SOURCE-CHECKS.json",
+            "sha256": "cd49b71205df44fae727efa8bb622f9e14649ce3184ea75d10f1cb9b5016ea6f"
+          }
+        ],
+        "origin_metadata_findings": {
+          "actual_definitions_and_macro_sites_independently_joined": 19,
+          "correction": "Only19#line integers corrected; all operation strings/logical /src/ihk/linux/user/ihklib.c paths and all other witness bytes unchanged. No blind pin relaxation.",
+          "method": "Verified each exact function definition and unique operation diagnostic excerpt; byteoffset points to actual __FILE__, __LINE__, ret; physical line derives from actual candidateC bytes; matched corrected origin row/path/operation.",
+          "required_next_gate": "Root must admit selected actual C witness compile and raw/create outputs once, compare FILE/LINES/OPERATIONS with the actual19row join, update actualC source hash/offset receipts, then compile/link changedRust. Do not use stale origin outputs. Reuse unchanged typed/layout/perf/dump witnesses.",
+          "retained_preexisting_failure": "All19old static line rows predate current C physical macro sites by5; source-location mismatch, not a compiler/runtime failure.",
+          "routing_C_delta": "8same-line edits,5212lines unchanged; all actual macro-site positions unchanged by routing.",
+          "source_checks": {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/SOURCE-CHECKS.json",
+            "sha256": "cd49b71205df44fae727efa8bb622f9e14649ce3184ea75d10f1cb9b5016ea6f"
+          }
+        },
+        "reviewer": {
+          "effort": "high",
+          "model": "gpt-6.1-sol",
+          "thread": "01a1aefa-b384-7602-bdfd-8e2ee023c9e5"
+        },
+        "routing_findings": [
+          "CPU reservation count/query now consistently use creating device; assignment alone uses returned OS. Private Option<c_int> distinguishes assignmentSome(OS) from device releaseNone; it is not a public FFI enum.",
+          "Memory reservation count/query now use creating device, assignment alone returned OS. Defaultdevice0/OS0 still routes every call to0, preserving previous behavior.",
+          "C static helper arity/callsite changes pair dev_index with os_index; public signatures/layout unchanged.",
+          "Count/zero/query/assign errors, selected error-site indices/text, original allocated-array cleanup, primary returns and output-index publication are unchanged.",
+          "Distinct environment parser/order/default and accepted pair/list base frees plus their local errno preservation are unchanged. Broad rollback and original ignored cleanup errors stay unchanged."
+        ],
+        "routing_witness_review": {
+          "cases": "C andRust each2definedbaselinewrong-deviceobservations +9candidatecases (device0->OS1fullroute,6providererrorpositions,default0->OS0,memory-only0->OS1).",
+          "provider_scope": "Explicit observation_* callbacks; real calloc/free and real C/Rust helper/callsite slices, no IHK/backend/native behavior or actual diagnostic strings claimed. NULLoutput diagnostic observer matches actual helper guard; public full-function mandatory-buffer precondition is not relaxed.",
+          "request": {
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/REQUEST.json",
+            "sha256": "c18235deeeea5313617d160115192151142ddc1b16602a6d82b211fa8794e015"
+          },
+          "resource_behavior": "At most one tracked allocation live; all helper returns free it; callback arrays/events bounded; no allocation exhaustion or undefined lateNULL/string domain."
+        },
+        "scope": "Independent source/domain/routing/19-site-origin and dependent observer wiring review only; no runtime/compiler execution or canonical/index writes",
+        "supported_domain": {
+          "facts": [
+            "Public ihklib.h111+ accepts device index and separate writable output OS index; no device==OS constraint.",
+            "Current public specification ihk.tex1310-1345 describes privileged create/configure on dev_index, returnOSindex, reserving resources and assigning them to new OS; no no-existing-OS precondition. Its broad all-OS rollback policy is explicit.",
+            "Current C/Rust choreography checks/releases device reserved resources before environment validation, reserves requested free resources, then creates an OS without a no-existing-OS test. Existing assigned resources on OS0 are not those device reserved resources.",
+            "SMP backend create allocates a new per-OS object and preserves parent device; it does not reject an occupied OS0. Host allocator uses global first-freeOSslot, stores parent dev_data and returns minor, max64.",
+            "Therefore device0 with OS0 occupied and available disjoint resources may create globalOS1 under existing privileged/exclusive serialization contract. This needs no multiple-device or cross-device ABI assumption."
+          ],
+          "scope_limit": "Source-supported case only; no native resource setup, service action or lifecycle execution is authorized or claimed."
+        },
+        "verdict": "GO"
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/create-os-routing-review-1/REVIEW.json",
+      "sha256": "76b8d1574db8f279eade707768a839c4aeaffe686e8f58bdb7cb926f4ca71473"
+    },
+    "origin_source_join": {
+      "content": {
+        "all_non_line_number_bytes_unchanged": true,
+        "candidate_C": {
+          "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/ihklib.c",
+          "sha256": "2d7b37e847b0f79af8e28d4dc1148950732d0aae2179384104aa77d25c062dd5"
+        },
+        "candidate_witness": {
+          "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+          "sha256": "62034e30b02e627cde63b7d001f97ab4c2b175c7a7a4a64ee0a5d609c994a211"
+        },
+        "existing_witness": {
+          "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+          "sha256": "ba54b173d3e2efec723e8e6b6dec505a97070e1944b8fd03dd1a12a7a9e565c6"
+        },
+        "join_method": "Each actual candidateC function definition selected by exactfunctionname; operation diagnostic literal uniquely selected within it; macro physical line derived from byteoffset in actual candidateC. No arithmetic offset used to derive replacement.",
+        "next_check": "Root exact existing originmetadata C witness compile, execute raw/create generators once, compare emittedFILE/LINES/OPERATIONS with this actual19row join; reuse unchanged perf/dump/headerABI metadata; then changedRust archive+76root SONAMElink under separate exactadmission.",
+        "no_claim": "No native/SDK/source-view admission; logical file remains existing /src/ihk/linux/user/ihklib.c; actual HOST provenance/sourcebinding must remain explicit.",
+        "operation_strings_and_logical_paths_unchanged": true,
+        "private_patch": {
+          "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/DIAGNOSTIC-ORIGIN-REBIND.PRIVATE.patch",
+          "sha256": "41a1bf31d737d9804add4ffad051caa5369953f5acb04fe8843cedf895ecad47"
+        },
+        "retained_failure": {
+          "execution_failure": false,
+          "kind": "PREEXISTING_SELECTED_SOURCE_LOCATION_MISMATCH",
+          "mismatching_rows": 19,
+          "preserved_original_witness_path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c"
+        },
+        "rows": [
+          {
+            "actual_C_macro_line": 4271,
+            "byte_end": 85208,
+            "byte_start": 85185,
+            "function": "_ihk_reserve_cpu_str",
+            "function_start_line": 4242,
+            "match_count_within_function": 1,
+            "new_witness_line": 4271,
+            "operation": "ihk_reserve_cpu",
+            "origin": 0,
+            "previous_mismatch": true,
+            "previous_witness_line": 4266,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_reserve_cpu failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "a3e4490157a596bc093b88ee4faa6cedd6c58fd884fdddc7c4eb4c165b758f6f"
+          },
+          {
+            "actual_C_macro_line": 4317,
+            "byte_end": 86025,
+            "byte_start": 86002,
+            "function": "_ihk_reserve_mem_str",
+            "function_start_line": 4280,
+            "match_count_within_function": 1,
+            "new_witness_line": 4317,
+            "operation": "ihk_reserve_mem",
+            "origin": 1,
+            "previous_mismatch": true,
+            "previous_witness_line": 4312,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_reserve_mem failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "778c99cad3b87c39b37885c2ed514122972fa840e98d888e4aec06415084305e"
+          },
+          {
+            "actual_C_macro_line": 4356,
+            "byte_end": 86642,
+            "byte_start": 86619,
+            "function": "_ihk_os_assign_cpu_str",
+            "function_start_line": 4327,
+            "match_count_within_function": 1,
+            "new_witness_line": 4356,
+            "operation": "ihk_os_assign_cpu",
+            "origin": 2,
+            "previous_mismatch": true,
+            "previous_witness_line": 4351,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_os_assign_cpu failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "f1652772c27fe3c07e8790ae669909dcf7545e9172f20813522e69e98c2b3112"
+          },
+          {
+            "actual_C_macro_line": 4415,
+            "byte_end": 87751,
+            "byte_start": 87728,
+            "function": "_ihk_os_set_ikc_map_str",
+            "function_start_line": 4365,
+            "match_count_within_function": 1,
+            "new_witness_line": 4415,
+            "operation": "ihk_os_set_ikc_map",
+            "origin": 3,
+            "previous_mismatch": true,
+            "previous_witness_line": 4410,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_os_set_ikc_map failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "0ccea78390ca2b6729c88936bb3a8a90e37570857bd66c50f2bc91508851588e"
+          },
+          {
+            "actual_C_macro_line": 4439,
+            "byte_end": 88147,
+            "byte_start": 88124,
+            "function": "os_assign_cpu_all",
+            "function_start_line": 4428,
+            "match_count_within_function": 1,
+            "new_witness_line": 4439,
+            "operation": "ihk_get_num_reserved_cpus",
+            "origin": 4,
+            "previous_mismatch": true,
+            "previous_witness_line": 4434,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_get_num_reserved_cpus failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "006ade73396d107471e14262be29da424ee1bd33cb676a521303eb4be3bd8fc8"
+          },
+          {
+            "actual_C_macro_line": 4462,
+            "byte_end": 88549,
+            "byte_start": 88526,
+            "function": "os_assign_cpu_all",
+            "function_start_line": 4428,
+            "match_count_within_function": 1,
+            "new_witness_line": 4462,
+            "operation": "ihk_query_cpu",
+            "origin": 5,
+            "previous_mismatch": true,
+            "previous_witness_line": 4457,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_query_cpu failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "7d55ab03700afa7a740cbbed05cbf6812a30eaa5702a805a5c7cb0402d133c20"
+          },
+          {
+            "actual_C_macro_line": 4472,
+            "byte_end": 88749,
+            "byte_start": 88726,
+            "function": "os_assign_cpu_all",
+            "function_start_line": 4428,
+            "match_count_within_function": 1,
+            "new_witness_line": 4472,
+            "operation": "ihk_os_assign_cpu",
+            "origin": 6,
+            "previous_mismatch": true,
+            "previous_witness_line": 4467,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_os_assign_cpu failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "f1652772c27fe3c07e8790ae669909dcf7545e9172f20813522e69e98c2b3112"
+          },
+          {
+            "actual_C_macro_line": 4493,
+            "byte_end": 89143,
+            "byte_start": 89120,
+            "function": "os_assign_mem_all",
+            "function_start_line": 4482,
+            "match_count_within_function": 1,
+            "new_witness_line": 4493,
+            "operation": "ihk_get_num_reserved_cpus",
+            "origin": 7,
+            "previous_mismatch": true,
+            "previous_witness_line": 4488,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_get_num_reserved_cpus failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "006ade73396d107471e14262be29da424ee1bd33cb676a521303eb4be3bd8fc8"
+          },
+          {
+            "actual_C_macro_line": 4514,
+            "byte_end": 89541,
+            "byte_start": 89518,
+            "function": "os_assign_mem_all",
+            "function_start_line": 4482,
+            "match_count_within_function": 1,
+            "new_witness_line": 4514,
+            "operation": "ihk_query_mem",
+            "origin": 8,
+            "previous_mismatch": true,
+            "previous_witness_line": 4509,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_query_mem failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "035d846720b360f894a5f86ff30fab63e2c4399ddd64d9c1549b965cf5d53c66"
+          },
+          {
+            "actual_C_macro_line": 4579,
+            "byte_end": 90581,
+            "byte_start": 90558,
+            "function": "release_cpu_all",
+            "function_start_line": 4568,
+            "match_count_within_function": 1,
+            "new_witness_line": 4579,
+            "operation": "ihk_get_num_reserved_cpus",
+            "origin": 9,
+            "previous_mismatch": true,
+            "previous_witness_line": 4574,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_get_num_reserved_cpus failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "006ade73396d107471e14262be29da424ee1bd33cb676a521303eb4be3bd8fc8"
+          },
+          {
+            "actual_C_macro_line": 4596,
+            "byte_end": 90877,
+            "byte_start": 90854,
+            "function": "release_cpu_all",
+            "function_start_line": 4568,
+            "match_count_within_function": 1,
+            "new_witness_line": 4596,
+            "operation": "ihk_query_cpu",
+            "origin": 10,
+            "previous_mismatch": true,
+            "previous_witness_line": 4591,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_query_cpu failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "7d55ab03700afa7a740cbbed05cbf6812a30eaa5702a805a5c7cb0402d133c20"
+          },
+          {
+            "actual_C_macro_line": 4606,
+            "byte_end": 91074,
+            "byte_start": 91051,
+            "function": "release_cpu_all",
+            "function_start_line": 4568,
+            "match_count_within_function": 1,
+            "new_witness_line": 4606,
+            "operation": "ihk_release_cpu",
+            "origin": 11,
+            "previous_mismatch": true,
+            "previous_witness_line": 4601,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_release_cpu failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "b7afe50a74a14973a00458ee7da61102b5eb27411015311f80baf65f36e765aa"
+          },
+          {
+            "actual_C_macro_line": 4524,
+            "byte_end": 89753,
+            "byte_start": 89730,
+            "function": "os_assign_mem_all",
+            "function_start_line": 4482,
+            "match_count_within_function": 1,
+            "new_witness_line": 4524,
+            "operation": "ihk_os_assign_mem",
+            "origin": 12,
+            "previous_mismatch": true,
+            "previous_witness_line": 4519,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_os_assign_mem failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "2b5a29324a198424c16c87fdfab42bf40277a9c919e1d0d91e05f11a981c87e3"
+          },
+          {
+            "actual_C_macro_line": 4955,
+            "byte_end": 98217,
+            "byte_start": 98194,
+            "function": "ihk_create_os_str",
+            "function_start_line": 4934,
+            "match_count_within_function": 1,
+            "new_witness_line": 4955,
+            "operation": "ihk_get_num_reserved_cpus",
+            "origin": 13,
+            "previous_mismatch": true,
+            "previous_witness_line": 4950,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_get_num_reserved_cpus failed with %d\\n\",\n\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "0d48844ef1a92b2daca7028b8b54dbe0ad4ffc72c09623f0694a5565ad01d4c8"
+          },
+          {
+            "actual_C_macro_line": 4973,
+            "byte_end": 98639,
+            "byte_start": 98616,
+            "function": "ihk_create_os_str",
+            "function_start_line": 4934,
+            "match_count_within_function": 1,
+            "new_witness_line": 4973,
+            "operation": "ihk_get_num_reserved_mem_chunks",
+            "origin": 14,
+            "previous_mismatch": true,
+            "previous_witness_line": 4968,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_get_num_reserved_mem_chunks failed with %d\\n\",\n\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "5b68f0ab403dfbb111d9b27f1515c611960d75c98ac7fb2f396efcdc2c333850"
+          },
+          {
+            "actual_C_macro_line": 4982,
+            "byte_end": 98832,
+            "byte_start": 98809,
+            "function": "ihk_create_os_str",
+            "function_start_line": 4934,
+            "match_count_within_function": 1,
+            "new_witness_line": 4982,
+            "operation": "ihk_release_mem",
+            "origin": 15,
+            "previous_mismatch": true,
+            "previous_witness_line": 4977,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_release_mem failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "61addca8a78c9f38500cd8a612c1a5b94190081aa190fd96482a83ca90a991a7"
+          },
+          {
+            "actual_C_macro_line": 5119,
+            "byte_end": 101827,
+            "byte_start": 101804,
+            "function": "ihk_create_os_str",
+            "function_start_line": 4934,
+            "match_count_within_function": 1,
+            "new_witness_line": 5119,
+            "operation": "ihk_create_os",
+            "origin": 16,
+            "previous_mismatch": true,
+            "previous_witness_line": 5114,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_create_os failed with %d\\n\",\n\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "700af0921f17fd962fe9b68f26c580b889dd8a516bb27413f66c75caa231adf7"
+          },
+          {
+            "actual_C_macro_line": 5158,
+            "byte_end": 102723,
+            "byte_start": 102700,
+            "function": "ihk_create_os_str",
+            "function_start_line": 4934,
+            "match_count_within_function": 1,
+            "new_witness_line": 5158,
+            "operation": "ihk_os_load",
+            "origin": 17,
+            "previous_mismatch": true,
+            "previous_witness_line": 5153,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_os_load failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "b9f905951a7998cb4ccecb04eab6246f1725d9a71b07180f0fc5a0de39103464"
+          },
+          {
+            "actual_C_macro_line": 5168,
+            "byte_end": 102904,
+            "byte_start": 102881,
+            "function": "ihk_create_os_str",
+            "function_start_line": 4934,
+            "match_count_within_function": 1,
+            "new_witness_line": 5168,
+            "operation": "ihk_os_kargs",
+            "origin": 18,
+            "previous_mismatch": true,
+            "previous_witness_line": 5163,
+            "retained_logical_file": "/src/ihk/linux/user/ihklib.c",
+            "source_site_excerpt": "\"%s:%d: ihk_os_kargs failed with %d\\n\",\n\t\t\t\t__FILE__, __LINE__, ret",
+            "source_site_sha256": "5afa588345b6e63192cfa81d894409b7c19c9828ba2f23ad5cbaf5b4c7653cdf"
+          }
+        ],
+        "status": "READY_SOURCE_ONLY_NOT_COMPILED"
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/create-os-routing-1/DIAGNOSTIC-ORIGIN-SOURCE-JOIN.json",
+      "sha256": "107669a33eedc16b9f0a27b06d08a57ef5cb7e69bce108d2ac8e0eddd3aa4b92"
+    },
+    "receipt_only_failure": {
+      "content": {
+        "cause": "Postlinkreceiptvalidator guessed320; actualnm namespace_filesc0/192. All11admittedcommands+2metadatareads alreadyexit0/directwaitjoined. No workloadrerun permitted orneeded. Correctonlyagainstretainedactualsizes.",
+        "error": "AssertionError: ('namespace_files', ['namespace_files', 'D', '12f070', 'c0'], 320)",
+        "status": "RETAINED_RECEIPT_ONLY_VALIDATOR_ERROR"
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/create-os-routing-serial-batch-1/PRE-CORRECTION-RECEIPT-ERROR.json",
+      "sha256": "c0565f4e4181502908faf3c9200d1dcab593f1a914d0c032caaba94f1bc784a0"
+    },
+    "retention_source_proof": {
+      "content": {
+        "AST_read_order": "check_language firstselectssources(baseline),thenread_textonbothc_pathandrustomainpath; calledfreshinside seriallanguage loop.",
+        "compilers_or_tests_run": 0,
+        "current_production_bindings": {
+          "/home/holden/mckernel/ihk/linux/user/ihklib.c": "2d7b37e847b0f79af8e28d4dc1148950732d0aae2179384104aa77d25c062dd5",
+          "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_create_os_environment.rs": "cd88e0c3c7529b9ea985ef4c4dceda09faf52b07d333f4c7dc48eaa78e94947c"
+        },
+        "default_dispatch_source_check": "Absent languageoverride selectsCthenRust; explicitcompilerfilesrequired; no subtest/except absorbsfirstfailure.",
+        "external_programs_during_proof": 0,
+        "fixture_files": {
+          "scripts/tests/fixtures/m15-create-os-routing/observations.c": {
+            "canonical_existing": false,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-retention-1/scripts/tests/fixtures/m15-create-os-routing/observations.c",
+            "sha256": "41ee014aa40a0e21d59dff6777b244ba90bced01e52a8dadc036735140eb4ded"
+          },
+          "scripts/tests/fixtures/m15-create-os-routing/rust.rs.in": {
+            "canonical_existing": false,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-retention-1/scripts/tests/fixtures/m15-create-os-routing/rust.rs.in",
+            "sha256": "727961a7be2a2b90c8df79a5730084be7e27f79fb8392433bb63202e560d030b"
+          },
+          "scripts/tests/test_m15_create_os_routing.py": {
+            "canonical_existing": false,
+            "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-retention-1/scripts/tests/test_m15_create_os_routing.py",
+            "sha256": "9c2a1fef3a4378ba455d770f638e4963d0bdd9b100a7eb9327ef9f402a4d5caa"
+          }
+        },
+        "fixtures_byte_identical_to_passed_inputs": {
+          "observations.c": true,
+          "rust.rs.in": true
+        },
+        "fresh_default_wrapper_status": "NOT_EXECUTED; changeddefaultorchestrationwiringrequiresoneboundeddefaultbothrunafterRootadmission.",
+        "generated_input_equality": {
+          "C": {
+            "byte_equal": true,
+            "passing_artifact": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-c-artifacts/routing.c",
+            "sha256": "c2a38436a5d67f0a25bec78cc271df193820ab2b1c8c8ae1e68efaa54d74cd00"
+          },
+          "Rust": {
+            "byte_equal": true,
+            "passing_artifact": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-witness-1/candidate-rust-artifacts/routing.rs",
+            "sha256": "56db4e38bad02549f82ca60343c4f734e5082334946764561bd638bc341d3275"
+          }
+        },
+        "path_normalizations": 0,
+        "request_basis": "Puregenerationoutputsarebyteidenticaltoactualpassingcandidate-artifacts; defaultbothserialloop/fixturelookup/compilerbinding/receiptlanguagepathsare newlywiredandnotclaimedruntimepassed.",
+        "source_selection_check": "Normalmodeignoreshistoricalsourceoverrides andreadsselectedrepoactualC/Rustinsideeachlanguageinvocation. Baselinesnapshotsoverrideonlywithexplicitbaselineflag.",
+        "status": "PASS_AST_AND_GENERATED_SOURCE_EQUALITY_ONLY"
+      },
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/create-os-routing-retention-1/SOURCE-PROOF.json",
+      "sha256": "90306a9f93cddf1fb568ad82b518dc31c20824f0d74e307d57b1f2f9ad5a10d1"
+    }
+  },
+  "schema_version": 1,
+  "scope": "Actual source-bound device0/returnedOS1 routing correction in C/Rust + actual C-origin metadata/current-source join + changed genuine HOST library link. Local callback observations and HOST link do not accept devices/native/full SDK or retire C.",
+  "source": {
+    "at_utc_ns": 1793951089541404288,
+    "bundle_sha256": "07cb06f5ed1bc035049da8f1b149cc863b0731a3a61bd2a2939c9e865a9b40d9",
+    "first_three_bundle_entries_unchanged": true,
+    "ihk_head": "b723bcf1b662710ae835765ef1b8735044586e24",
+    "ihk_tree": "cad32c3aece8ddc2f2a948ba396830deed026292",
+    "new_last_bundle": {
+      "blob": "12d200c6e9809771aed6388fdd340148e368cd27",
+      "path": "scripts/source-bundles/ihk-m15-abi-cli-20261106.bundle",
+      "tip": "b723bcf1b662710ae835765ef1b8735044586e24"
+    },
+    "previous_last_bundle": {
+      "blob": "47b2313632e5293da2e6c7b5dc369faa9e71ef9b",
+      "path": "scripts/source-bundles/ihk-m15-abi-cli-20261106.bundle",
+      "tip": "1ee08429338ea1693f75d279d41b76496e1da96f"
+    }
+  }
+}

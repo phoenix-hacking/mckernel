@@ -32,7 +32,7 @@ unsafe fn ihk_get_num_os_instances(_:c_int)->c_int{event("count".into());OBS.loc
 unsafe fn ihk_get_os_instances(_:c_int,list:*mut c_int,n:c_int)->c_int{event("list".into());let error=OBS.lock().unwrap().list_error;if error==0{for i in 0..n as usize{unsafe{list.add(i).write(7+(i as c_int)*2)};}}unsafe{*__errno_location()=23};error}
 unsafe fn release_assigned_cpu(index:c_int)->c_int{event(format!("cpu:{index}"));unsafe{*__errno_location()=31};-71}
 unsafe fn ihk_destroy_os(_:c_int,index:c_int)->c_int{event(format!("destroy:{index}"));unsafe{*__errno_location()=33};-73}
-unsafe fn cpu_all(device:c_int,output:*mut c_char,assign:bool)->c_int{assert!(output.is_null()&&!assign);event(format!("device_cpu:{device}:{}",unsafe{*__errno_location()}));unsafe{*__errno_location()=44};-74}
+unsafe fn cpu_all(device:c_int,output:*mut c_char,assign_to:Option<c_int>)->c_int{assert!(output.is_null()&&assign_to.is_none());event(format!("device_cpu:{device}:{}",unsafe{*__errno_location()}));unsafe{*__errno_location()=44};-74}
 unsafe fn ihk_release_mem(index:c_int,p:*mut IhkMemChunk,n:c_int)->c_int{unsafe{accepted_cpu_memory::ihklib_memory_os::ihk_os_release_mem(index,p,n)}}
 mod actual {
 use super::*;

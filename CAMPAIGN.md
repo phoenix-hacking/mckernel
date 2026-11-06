@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T07:19Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T07:51Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,17 +34,44 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Perf design/9interleavings yields exact shared-lifetime scope NO-GO; turn `01a1afb8-a7fe-72c1-92d2-7c3822ff8564` now reviews create-OS device/OS routing |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Two source frees pass11cases; turn `01a1afb8-4650-75c2-953c-eef570ad89e4` completes actual changed-library compile/76-root SONAME link PASS and releases slot |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Independent two-free source/witness review GO; turn `01a1afb8-c7f8-7221-acfb-df3d94fee0c0` retains the passing test against canonical source without replay |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Routing/19origins/real-library batch PASS; turn `01a1afd0-a882-72a2-9350-8c768b63f5e5` independently reviews the future existing-builder stale-origin preflight |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Source-bound routing18cases PASS; durable canonical C→Rust wrapper passes once and releases slot; no extra acceptance count |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Routing/19site joint review GO; turn `01a1afce-10c3-7042-b0e7-3524f4f03f77` privately prepares the focused stale-origin preflight and pure-Python proof |
 
 The short ranked queue consumes passed shared results before new work:
 
 | Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Checked create-OS allocation cleanup | `ihk_create_os_str` parser/rollback plus real whole70 library; M15-F05/I03 | Root checkpoints the two checked frees, durable source regression and exact new archive/SONAME link after slot release |
-| 2. Device/OS index routing contract | Create/CPU/memory assignment on device0 with OSindex1; M15-F05/I03 | Public ABI owner checks actual provider/header domains and returns a defined defect/private correction or exact scope NO-GO |
-| 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority needs actual implemented/reviewed one-shot gates and corroborated source binding; no ready executable command or SDK remap exists |
+| 1. Checked routing/current-origin checkpoint | Create-OS CPU/memory assignment and19diagnostics; M15-F05/I03 | Root publishes the passed C/Rust/metadata/real-library batch and durable regression; no unrelated worker wait |
+| 2. Existing-builder stale-origin rejection | Every future whole70 producer and its callers; M15-F05/I03 | Supervisor privately adds the focused19site preflight to the existing helper; ABI owner reviews it; then one pure-Python stale/current regression request |
+| 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority still needs real one-shot gates and corroborated original SDK binding; no ready command/remap exists |
+
+**07:51Z closed routing batch:** C and Rust now query reservations using the
+creating device and assign them to the returned OS. Four defined baseline
+wrong-device observations are retained; **9 corrected cases per language** pass,
+including the supported device0/OS1 case, first provider errors and unchanged0/0.
+The affected cleanup observer passes its11cases after the private Option update.
+One actual C metadata compile produces all19correct source-location bindings;
+source contracts bind current C and preserve the exact declaration/data include.
+One changed real Rust library compile passes the unchanged strict diagnostics;
+the genuine SONAME link retains all70function/sixdata roots and widths.
+All13direct waits joined and slot released: **1.709179068s measured command wall,
+1.56s rounded CPU sum,136,492KiB peak RSS**. Queue-to-compiler latency and exact
+external-source-hold duration remain unmeasured. A receipt-only320-versus192byte
+expectation was corrected against retained actual symbols, with no command replay.
+The newly rewritten default test wrapper then passed once for canonical C→Rust
+paths/receipts; those repeated vectors add no new routing acceptance count.
+Exact receipts and retained error: `docs/verification/m15-create-os-routing-results-20261106.json`.
+New library SHA`dd974858229722f1e8d4a232b93f98e84ddc7a883b30e485dbc16ca961da9385`,
+archive SHA`7b604f4b4b0f6ab640ec54710c55615d249be16a967e416846bd4c2f57bc2143`.
+This is a HOST library; production-image/native/C-retirement and accepted-file
+deltas remain0. Matching original source/SDK/default/native lifecycle remains open.
+
+| Changed C / Rust function | Paths | Actual owner / implementation state | Blocking condition / next check |
+| --- | --- | --- | --- |
+| `os_assign_cpu_all` / `cpu_all` | IHK`linux/user/ihklib.c` / `linux/user/rust/whole70/ihklib_create_os_environment.rs` | ABI HIGH owner; Root compositor; implemented and HOST compiled/linked, no native retirement | Matching original module/library/device0→OS1 assignment and restoration after actual admission; no current native argv |
+| `os_assign_mem_all` / `memory_all` | Same C/Rust files | Same owner and state; device-count/query and OS-assignment domains distinct | Matching memory/resource consumer and restoration on the admitted original cohort |
+| `ihk_create_os_str` / `ihk_create_os_str` | Same C/Rust files | Same owner and state; post-create calls preserve parser/primary error/cleanup contracts | Final matching creation/load/kargs/lifecycle proof; source-only callbacks do not close it |
 
 **07:19Z engineering delta:** `ihk_create_os_str` now frees the owned scratch
 string on an empty-entry error and the owned OS-index list after rollback's last
@@ -75,6 +102,22 @@ selector or compiler command was issued. Evidence is retained in `docs/verificat
 The owner moves to the independent create-OS routing contract instead of repeating
 perf or generic/exec work.
 
+**07:31Z next coherent batch:** public specification and actual providers confirm
+separate device/OS domains; device0 can create OS1 while OS0 exists. The current
+CPU helper queries reserved device1 and the memory helper mixes count-device0 with
+query-device1. A's private paired C/Rust correction queries the creating device
+and assigns to the returned OS. C's independent source/domain review passes;
+CLI prepares the smallest source-bound C/Rust routing checks. No device was run.
+A also found19 stale diagnostic-origin rows, each five lines before the current C
+macro site after an earlier initializer change. Each replacement is independently
+joined to its actual C function/diagnostic literal/`__LINE__`; no blind offset or
+pin relaxation. The next library must use freshly compiled C-origin metadata,
+while unchanged layout/type/perf/dump witnesses remain reusable. Old HOST results
+retain their recorded scope; stale origins are not accepted for the new source.
+The existing cleanup observer also needs its private `cpu_all` argument changed
+from false to None; that actual changed call justifies one affected11case check,
+without repeating its old leak baseline,15mains or70type checks.
+
 The SDK provenance lane is blocked on a **new corroborated original outer binding**
 for `/workspace/scratch/a8bff332f582`; the returned three-container metadata covers
 only `/out` and `/nightly`. The four diagnostic pins remain unchecked. This is
@@ -99,7 +142,7 @@ Root `gpt-6.1-sol`/MAX, all three existing workers `gpt-6.1-sol`/HIGH, approval
 never and filesystem unrestricted. New turn IDs above were read from the actual
 guard; fresh worker source output and the completed batch are observed, not a
 heartbeat-only claim. UID1000 is not Unix root. No new model/controller/resource
-owner was created. Current guard `last_rate_limits` reports9%used/91%remaining,
+owner was created. Current guard `last_rate_limits` reports10%used/90%remaining,
 reset1794518606; older weekly ledger observations remain untouched.
 
 The foreground's isolated HIGH-floor patch (SHA`95f56039adf2938862ef0adad257edf15eaebe9eb2acc397a98714f29bcfe722`)
@@ -112,8 +155,13 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Current published checkpoint **`79f496b7be7c8145a68f468976ac6b749be9fd92`** is pushed and fetched/both changed-blob
-verified; source predecessor`9f70668c6` remains all9changed-object verified. Its IHK source is`0a1061a334dfaf1d0182aaddcc511113fde4f897`, tree`5e395fe45ced5474cd87145f468c253ec9cbf367`, independently bundle-replayed clean. Checkpoint`79f496b7b` contains the actual15-process proof and current status; the next coherent source checkpoint contains the two checked create-OS frees. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
+Published checkpoint **`59ec5de2a07d9fb8c34ca34d6e381e214d06c282`** is pushed and
+fetched/all8changed-object verified; its clean four-bundle source replay matches
+IHK`1ee08429338ea1693f75d279d41b76496e1da96f`/tree`be8adb7210a2d43f6d68cc105689190777832fbb`.
+This next checked routing checkpoint contains IHK`b723bcf1b662710ae835765ef1b8735044586e24`,
+tree`cad32c3aece8ddc2f2a948ba396830deed026292`, bundle blob`12d200c6e9809771aed6388fdd340148e368cd27`.
+Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
+GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
