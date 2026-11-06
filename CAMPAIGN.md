@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T08:46Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T09:01Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -42,19 +42,31 @@ The short ranked queue consumes passed shared results before new work:
 
 | Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Publish current public-consumer proof | Shared43public APIs/loglevel; M15-F05/I03 | Root checkpoints actual126pre-access+5pure-case/44provider PASS on current library; completed scoped batches are consumed |
-| 2. Eligible universal generic/exec cohort | Full McKernel image; M14-F03/F06/I01–03 | Original service/hold authority must supply a valid scoped disposition; rejected payload/release conditions remain unknown and Root has no executable image argv |
-| 3. Original SDK/source-view/native binding | M14/M15 original integration/lifecycle gates | Original producer/operation authority must supply corroborated outer SDK mapping and genuine reviewed operation gates; old18GiB UNKNOWN/native holds remain |
+| 1. Eligible universal generic/exec cohort — BLOCKED | Full McKernel image; M14-F03/F06/I01–03 | Original service/hold authority must supply a valid scoped disposition; current replay/equivalent-reassignment flags remain false |
+| 2. Original SDK/source-view/native admission — BLOCKED | Original M14/M15 integration/lifecycle | Root/original operation authority must provide real reviewed gates and bindings; installed verifier still refuses before launch |
+| 3. Diagnostic SDK producer binding — BLOCKED | mcinspect/eclair; M15-F03/F04/I03 | Original namespace authority must corroborate the outer mapping for `/workspace/scratch/a8bff332f582`; no guessed remap or repeated query |
 
-The ready HOST source/consumer batches in this cursor are now consumed. No new
-independent task is currently identified from existing exact inputs; blocked rows
-are not runnable assignments. The new descriptor-cleanup candidate was assessed
-at its requested scope and deferred below. Further source work needs a concrete
-eligible defect/input, and full-image/native work needs the actual outstanding
-authority/binding. This is a fresh no-ready observation after productive work in
-Root turn`01a1aef7-8297-7d82-8b25-a5051909a3e3`; it is not three goal turns and
-periodic reminders do not count as blocked-audit turns. The goal remains active;
-no pause, completion, hold release or worker retry is issued by this checkpoint.
+The ready HOST source/consumer batches in this cursor are consumed. No new
+independent task is identified from existing exact inputs; blocked rows are not
+runnable assignments. The requested negative-FD candidate was scoped/deferred.
+
+**Continuation audit 2/3:** previous turn`01a1aef7-8297-7d82-8b25-a5051909a3e3`
+made real source/compiled/consumer progress and ended at the first no-ready
+boundary. Current turn`01a1b011-4f61-7eb2-af5f-27f92a843b0d` is **no progress**,
+not a verified wait: no live admitted handle remains. Fresh tracked-source/index
+checks and GitHub fetch show no new inputs; HEAD/FETCH_HEAD remain`7cfe524e0`.
+The original hold remains held/replay=false/equivalent=false (record`4f6777a4…`).
+The actual four installed SDK gate/graph source hashes still match the accepted
+NO-GO: `verify_actual_operation_gates` unconditionally refuses; profile/adapter/
+pidfd/source-view bindings remain unselected. The original SDK outer mapping is
+still null. No Docker query, guessed remap, compiler/test, install/native action,
+worker reassignment, nonce or hold release was replayed. All18GiB prior charges
+and native/source/service holds remain. Guard is running,11%used/89%remaining,
+no quota/usage-unknown restriction. The goal stays active because three actual
+consecutive goal turns have not yet been observed; reminders do not count.
+A valid disposition/binding or a concrete eligible new source defect is the
+next needed external input; there is presently no admissible full-image argv.
+
 
 **Latest public consumer PASS:** the unchanged real C consumer now compiles/links
 to`dd974858…` and verifies43typedimports,44actualprovider/global bindings,
@@ -94,7 +106,7 @@ The prelaunch output-directory error is retained with Root's bounded correction;
 no test had run before that setup correction. Exact evidence:
 `docs/verification/m15-origin-source-preflight-results-20261106.json`.
 
-**Next matching consumer batch:** the earlier15-main cohort binds provider
+**Historical 08:09Z consumer scheduling, completed above:** the earlier15-main cohort binds provider
 `314beee5…`; the corrected runtime library is`dd974858…`. The next genuinely
 changed cohort must link that new provider, with two actual unchanged object
 reuses and one justified supervisor codegen where no object was retained. Source
@@ -144,7 +156,7 @@ All four direct waits joined and the shared slot is released. New archive SHA`e3
 new SONAME library SHA`5925bb23378436bc8d7d0fa3c207875bac5387cfe308f15391b33e24af42eeec`.
 Compilation0.64s wall/136,484KiB peak; link0.14s/28,744KiB. Exact receipts, independent review
 and canonical-source regression are in `docs/verification/m15-create-os-owned-cleanup-results-20261106.json`.
-IHK source is now`1ee08429338ea1693f75d279d41b76496e1da96f`, tree`be8adb7210a2d43f6d68cc105689190777832fbb`;
+That checkpoint used IHK source`1ee08429338ea1693f75d279d41b76496e1da96f`, tree`be8adb7210a2d43f6d68cc105689190777832fbb`;
 new bundle blob`47b2313632e5293da2e6c7b5dc369faa9e71ef9b` retains the same prior three stages. **Acceptance delta remains0/0; full-image,
 native-qualified and C-retirement deltas remain0.**
 
@@ -158,7 +170,7 @@ selector or compiler command was issued. Evidence is retained in `docs/verificat
 The owner moves to the independent create-OS routing contract instead of repeating
 perf or generic/exec work.
 
-**07:31Z next coherent batch:** public specification and actual providers confirm
+**Historical 07:31Z preparation, completed above:** public specification and actual providers confirm
 separate device/OS domains; device0 can create OS1 while OS0 exists. The current
 CPU helper queries reserved device1 and the memory helper mixes count-device0 with
 query-device1. A's private paired C/Rust correction queries the creating device
@@ -211,13 +223,13 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Published checkpoint **`d8224c35e73e10e56142ee7ac504d19ba042b19d`** is pushed
-and fetched/both changed-blob verified. It retains the matching3-tool/6loader/15main
-cohort against library`dd974858…`. Source checkpoint`311159ec0` is fetched/all7object
-verified, with a clean four-bundle replay of IHK`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`,
-tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`. Current public-consumer proof is
-this next evidence checkpoint; no source/runtime change or compiler/library replay
-is being invented for publication.
+Latest verified engineering/evidence checkpoint **`7cfe524e07bb67701f314534b66656c4c9fea586`**
+is pushed and fetched/both changed-blob verified. It contains the current public
+consumer PASS and scoped lifecycle assessment. Matching-tool checkpoint`d8224c35e`
+is also fetched/both changed-blob verified. Source checkpoint`311159ec0` remains
+fetched/all7object verified with a clean four-bundle replay of IHK
+`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`, tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`.
+The post-push cursor in this working log changes no source, artifact or admission.
 Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
 GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
