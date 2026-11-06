@@ -18,6 +18,11 @@ build and native jobs remain serialized. Honor any later user pause or stop. Pre
 every native/resource owner, UNKNOWN outcome, service/account hold, original
 weekly-only limit and dirty edit.
 
+Prioritize shared dependencies and work that unlocks parallel lanes. Finish
+shared provider, ABI, ownership and cleanup contracts before isolated leaf work.
+Batch compatible short checks under one reviewed serial build admission, then
+promptly hand the released slot to the next ready worker.
+
 Current source, artifacts and live machine controls remain usable for necessary
 execution checks; they are not extra narrative entrypoints. Historical originals
 stay intact where frozen bindings require them and are archived separately.

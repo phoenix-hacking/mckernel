@@ -1,0 +1,255 @@
+{
+  "IHK_source": {
+    "IHK_commit": "05f265d73245f214e72d77f004989fe3384631db",
+    "IHK_tree": "d5e1a798098a2b91795ad1c250f2d5e1f10a5df8",
+    "bundle_blob": "187e6aec0a42a16c029631e58a8741e386b7f8d4",
+    "bundle_create_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--foreground",
+      "--kill-after=5s",
+      "60s",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=45:45",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "git",
+      "-C",
+      "/home/holden/mckernel/ihk",
+      "bundle",
+      "create",
+      "/home/holden/mckernel/scripts/source-bundles/ihk-m15-abi-cli-20261106.bundle",
+      "c032c975fdbe17be846bd61cc48cb541e7ab5830..HEAD"
+    ],
+    "bundle_path": "/home/holden/mckernel/scripts/source-bundles/ihk-m15-abi-cli-20261106.bundle",
+    "bundle_sha256": "04d3958e6aa21d3236a45a74fd69ce50f73e2145dac929be44ddaf59dce21fbb",
+    "bundle_verified": true,
+    "changed_paths": [
+      "linux/include/ihk/ihklib_private.h",
+      "linux/user/ihklib.c",
+      "linux/user/rust/whole70/Whole70ProducerQualified.cmake",
+      "linux/user/rust/whole70/build_whole70_qualified.py",
+      "linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs",
+      "linux/user/rust/whole70/ihklib_environment.rs",
+      "linux/user/rust/whole70/ihklib_runtime_state.rs",
+      "linux/user/rust/whole70/libihklib_whole70.rs",
+      "linux/user/rust/whole70/public_export_signatures.rs",
+      "linux/user/rust/whole70/private_export_signatures.rs",
+      "linux/user/rust/whole70/abi/combined_selected_SDK_actual_header_ABI.c",
+      "linux/user/rust/whole70/abi/public_export_signatures_witness.c",
+      "linux/user/rust/whole70/abi/private_export_signatures_witness.c"
+    ],
+    "native": false,
+    "new_file_acceptance": 0,
+    "verification": "The bundle contains this ref:\n05f265d73245f214e72d77f004989fe3384631db HEAD\nThe bundle requires this ref:\nc032c975fdbe17be846bd61cc48cb541e7ab5830"
+  },
+  "acceptance": {
+    "C_retirements": 0,
+    "M14_files": "4/6",
+    "M15_files": "1/8",
+    "new_file_acceptances": 0,
+    "new_native_qualified_cohorts": 0,
+    "new_production_images": 0
+  },
+  "all_required_export_roots": {
+    "data": 6,
+    "functions": 70,
+    "unique_defined_global_default_nonempty": true
+  },
+  "current_archive": {
+    "bytes": 21932938,
+    "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/whole70-host-producer-4/output/libihklib_whole70.a",
+    "sha256": "5762bee344fe3c8c1cfe460d7e5c007bd0f932c43585b70843ca5e86edce161a"
+  },
+  "current_library": {
+    "bytes": 5403664,
+    "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/whole70-host-producer-4/output/libihk.so",
+    "sha256": "c11a46b8d31d88225b64caadc6dd91042015f0d30a61baf4872e25f1dde2d69f"
+  },
+  "distinct_create_os_parser_unchanged": true,
+  "downstream_public_environment_consumers": [
+    "ihk_reserve_cpu_str",
+    "ihk_reserve_mem_str",
+    "ihk_os_assign_cpu_str",
+    "ihk_os_set_ikc_map_str",
+    "ihk_reserve_mem_conf_str",
+    "ihk_os_kargs_str"
+  ],
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/public-export-batch-3/root-enum-witness-1/RESULT.json",
+      "sha256": "4429848335162c04aabcec8ee3612fac09f94f58435fe96fe225ae2917255da0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/public-export-batch-3/CONSUMER-RESULT.json",
+      "sha256": "ca92d9ff6db64655ec079228078ee066e02348c3243aa1c9950ca38455e84619"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/public-export-batch-3/CONSUMER-ARTIFACTS.json",
+      "sha256": "303e62b32814c511f9c988ccae2f4eb4da721a8b69278681fbed5e75dc0b0665"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/loglevel-opaque-review-1/review.json",
+      "sha256": "455ac3efbbbdfd84e4acfc592a7bea9333a586ff7ad1bab2a1fb82c473796aa5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/whole70-host-producer-3/RESULT.json",
+      "sha256": "53536d0b6ceb7d7505198bebc307c042493027709869e4a835cbf8f622a468d4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/whole70-host-producer-3/LINK-RESULT.json",
+      "sha256": "176df2b4bd0f3c929b161945ff69763a09aec919e417aad4cf37cc2787c682f7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/RESULT.json",
+      "sha256": "eab46182de41e32da781bb85465b001be75fb8a34dbd318ecbfc985a0fb2bd28"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/RUNS.json",
+      "sha256": "2be17dce63981160ab1d1c107295e23e3549f41499d9d8cd8213cb4afebae4ca"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/parse-env-candidate-review-1/review.json",
+      "sha256": "d465de4313bdeb4ec510688b9851251517db63a986ff6b87100845be499f5898"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/whole70-host-producer-4/RESULT.json",
+      "sha256": "3b8904d2876885980f7b57c048af2d654964828633c99aa84772eced8fa5d841"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/whole70-host-producer-4/LINK-RESULT.json",
+      "sha256": "9989eca3d4ea56010f7c12e6ca7e7163375ae86962f3c6be5987a90513211300"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/genuine-archive-consumer-1/FIRST-FAILURE.json",
+      "sha256": "c444af7ecb68529fa8bb93be8693d69b86a7327349be1af917f2bd32f2c8b69f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/ABI4-RESULT.json",
+      "sha256": "d2ffd2f2a92193a1737eb94caa1dbfabbcc56f3751853472fa3f54900c5af109"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/RESULT.json",
+      "sha256": "1811d62c696cc3a3c18d960b87f04bd0680570d5fb254c453fc7b21871ba13a1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/RUNS.json",
+      "sha256": "5fd88c87e3ed87b2f93e90bacbff1fe1b77b60b86309eb5d1dadc2b353c19a2e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/ROOT-DEFINITIONS.json",
+      "sha256": "b0b0063ef6afcdfe110a4019417f131c5971c9d1b60414688053c6afe9ae716c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/output/source-export-contracts.json",
+      "sha256": "0f023c6c276c47f620fe4e7ab900c27043ba754e927c08de38b0064f891c6aeb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/producer5/output/producer-receipt.json",
+      "sha256": "4a48cc0de4b6bd0c9091b7bbb7b174191c6fb31b4f09d3abd1637cbbef155daa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/genuine-archive-consumer-1/CORRECTION-1/RESULT.json",
+      "sha256": "46718f448ed544f29149ce48738f78cf7af65a929e9a3c2846c2875a8c600e0a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/genuine-archive-consumer-1/CORRECTION-1/RUNS.json",
+      "sha256": "6fdd887c292ce10f61673f1dfa39d4297c5ea9f77436737b51f9ae2b28df970b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/genuine-archive-consumer-1/CORRECTION-1/PROOF.json",
+      "sha256": "e35543323d2d8a1702f98c0adaac3e0072660fc97de6384de0ab780c521efbd2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/genuine-archive-consumer-1/CORRECTION-1/VERIFIED-INPUTS.json",
+      "sha256": "b0109227343e1ad187d8cdc6b003223fdb345ca587ab4f4a8da757610468c4b6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-public-abi-1/private-and-source-export-4/header-data-ownership-correction-1/REVIEW.json",
+      "sha256": "af80f694e1ad50df6888b6e440aa339f94c9fce36ddb5eadae898a7eccdd83b6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/source-checkpoint-2/IHK-CHECKPOINT.json",
+      "sha256": "df6d69c3fbca305d8262b0f2e62c52c106e40153fbe71f60d9441344f74dc0df"
+    }
+  ],
+  "genuine_archive_corrected_proof": {
+    "all_direct_waits_joined": true,
+    "allocator_cases": 18,
+    "commands": 7,
+    "device_backend_native_operations": 0,
+    "parser_provider": "actual qualified Rust archive, trace/map and unique executable definition verified",
+    "result": {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-cli-1/parse-env/genuine-archive-consumer-1/CORRECTION-1/RESULT.json",
+      "sha256": "46718f448ed544f29149ce48738f78cf7af65a929e9a3c2846c2875a8c600e0a"
+    },
+    "shared_public_consumer": {
+      "exact_providers": 44,
+      "pre_access_errors": 126,
+      "pure_logging_setters": 5
+    }
+  },
+  "genuine_archive_first_failure": {
+    "observed": "duplicate strong ihklib_os_query_mem_type_str definition supplied by actual private header in Cconsumer.o and actual Rust archive",
+    "request_failed_then_one_correction_pending": true,
+    "runtime_cases_executed": 0
+  },
+  "header_data_ownership_correction": {
+    "C_fallback": "unchanged initializer moved from header to original C library provider",
+    "C_observer_project_runtime_or_data_definitions": 0,
+    "Rust_data_storage_unchanged": true,
+    "header": "extern const char *ihklib_os_query_mem_type_str[2]",
+    "one_bounded_correction_used": true,
+    "original_link_failure_preserved": true
+  },
+  "invocation": "20261106T034657Z-2c795952",
+  "native": false,
+  "one_shared_HOST_job": true,
+  "parser": {
+    "allocation_failure_ordinals": 8,
+    "baseline": "one actual second-calloc leak observed, genuinely reclaimed, output slots unchanged",
+    "candidate_cases": 18,
+    "function": "parse_env",
+    "genuine_current_unit_producer_link": "PASS; actual genuine archive ownership consumer and matching shared-library public consumer PASS after one reviewed header-owner correction",
+    "output_publication": "only fullsuccess; all partial allocations reclaimed on errors",
+    "review": "independent ownership GO; baseline accounting correction caught before execution; original unrun bytes preserved"
+  },
+  "prior_reserved_bytes": 19327352832,
+  "private_and_source_only_signature_slice": {
+    "consumed_helper_fields": 20,
+    "consumed_helper_structs": 5,
+    "original_C_function_bodies_emitted": false,
+    "private_header_data": 2,
+    "private_header_functions": 14,
+    "public_ABI_claim_for_private_source_exports": false,
+    "source_definition_only_data": 3,
+    "source_definition_only_functions": 4,
+    "static_Rust_and_actual_C_contracts": "PASS"
+  },
+  "public_signature_slice": {
+    "functions": 52,
+    "genuine_provider_identity_checks": 44,
+    "opaque_perf_pointer": "only forwarded, no fabricated Rust bitfield layout",
+    "pre_access_error_calls": 126,
+    "public_data": 1,
+    "pure_logging_calls": 5,
+    "remaining_43_imports_and_public_data_actual_consumer": "PASS",
+    "selected_C_enum": "unsigned-int-compatible actual C9 witness PASS; explicit stored int conversion; public loglevel storage unchanged"
+  },
+  "scope": "M15_SHARED_PUBLIC_ABI_AND_TRANSACTIONAL_ENVIRONMENT_PREREQUISITES",
+  "source_checkpoint_pending": false,
+  "source_replay": {
+    "clean": true,
+    "head": "05f265d73245f214e72d77f004989fe3384631db",
+    "receipt": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/source-replay-2/RESULT.json",
+    "receipt_sha256": "e786276b483ba62ecea475807da680e10271a02e99cd6c44975a631c7363341a",
+    "status": "PASS_FRESH_COMMITTED_MANIFEST_GITLINK_REPLAY",
+    "tree": "d5e1a798098a2b91795ad1c250f2d5e1f10a5df8",
+    "wall_seconds": 0.9085331079986645
+  },
+  "source_service_native_holds_unchanged": true
+}

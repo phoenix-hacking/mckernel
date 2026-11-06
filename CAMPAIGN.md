@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T04:43Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T05:19Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -19,13 +19,21 @@ It supersedes the02:57Z three–four-hour planning window. The earlier missed ta
 and approximately01:34–02:51Z outage remain recorded, with no acceptance change.
 The existing foreground-owned15-minute steering monitor is rebound separately;
 Root does not edit it. AGENTS.md's latest three-worker/parallel-preparation
-instruction is preserved and will be included in the coherent checkpoint.
+instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Public rusage12-field/signature/layout and33 actual linked pre-open calls PASS; now preparing memory/IKC descriptor/function ABI slice |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Four parser corrections checked; durable6tests/80cases PASS; full current Rust CLI programs compile and genuinely link |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Two actual partial-startup rollback cases PASS; each joins one real worker and restores descriptor/task/mask state |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | All52 public function signatures plus public data now have actual selected-header/Rust guards; remaining43-signature consumer passes126 pre-access errors+5logging calls; preparing actual private/source-definition ABI slice |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Four parser corrections published,6tests/80cases PASS; canonical parse_env fix passes18cases; predecessor leak observed/reclaimed; preparing actual qualified-archive/shared-provider proof |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Two partial-startup rollback cases PASS; parse_env ownership review GO; preparing six dependent callers’ success/error cleanup after actual provider-lifetime review |
+
+Ready prerequisites are ranked by shared consumers and original gates, not slot occupancy:
+
+| Rank / prerequisite | Consumers and gate advanced | Owner / smallest next proof |
+| --- | --- | --- |
+| 1. Shared whole70 ABI/provider cohort | All52 public APIs; library plus ihkconfig/ihkosctl/ihkmond, M15-F05…08 and I03 | Root integrates passed public batch; ABI owner prepares actual18private/source-only function +5data guards; one changed-unit producer |
+| 2. Transactional environment ownership | Six public environment APIs share parse_env; M15-F05 and dependent CLI paths | CLI owner passed18allocation cases; Root's genuine library link passes; one serial actual-archive/public-consumer proof batch next |
+| 3. Environment callers release successful results | Reserve CPU/memory, assign CPU, set IKC, memory policy and kargs | Supervisor owner prepares caller-only cleanup with actual synchronous provider lifetimes; preserve separate create_os parser |
 
 Routing is machine-observed in this invocation's `ROUTING.json`: Root
 `gpt-6.1-sol`/MAX, all three `gpt-6.1-sol`/HIGH, approval never, filesystem
@@ -44,8 +52,8 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Prior verified checkpoint **`0e4d2ae4d20cda7390b4ecdaa4db6d013d69781f`** is pushed and fetched/blob
-verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
+Previous published checkpoint **`faf7654e32fea363a92bb73f39f01b2669c550f9`** is pushed and fetched/all10changed-blob
+verified. Its IHK source is`70f1c8e384f2cb67a42ee58a9fb3d51c714326b9`, independently bundle-replayed clean. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
@@ -361,28 +369,61 @@ Run1.50 s wall/1.47 s CPU,153,704 KiB peak RSS; all handles joined. No daemon,
 mcos event, device/ioctl, install or native operation occurred. Existing four
 idle/worker-stop green cases were reused without rerunning.
 
-**Next15-minute deliverable:** Root checkpoints the checked80-case CLI batch, public ABI slices and real
-rollback proof; IHK commit`70f1c8e384f2cb67a42ee58a9fb3d51c714326b9` is bundled.
-Fresh four-bundle replay matched that exact clean IHK commit/tree in0.89 s.
-Push and fetch/blob-verify the coherent parent checkpoint next. Public-ABI worker
-prepares the next descriptor/signature slice while the supervisor slot is refilled
-only with a concrete missing supported-profile contract. No overlapping compiler.
-M14 stays4/6,M15 stays1/8; all final integration gates remain open. The single
-full-image critical dependency remains the original generic/exec service/source
-hold and its missing scoped disposition; Root cannot issue a full-image/native
-command or substitute a different artifact for it. The prior invocation's blocked
-audit and verified handoff remain historical; this explicit resume opens the new
-independent M15 lanes without clearing that hold or resetting any ledger.
+**Latest ABI delta:** all52 actual public function signatures and the writable
+public`loglevel` definition now have selected C-header/Rust type guards. The
+remaining43-function/one-data linked consumer passes44 exact provider bindings,
+126 pre-access error calls and five pure logging calls, including output/errno
+and global-state restoration. The opaque perf pointer remains forwarded without
+inventing a Rust bitfield layout. Selected C9 enum checks justify`c_uint` for
+`ihk_set_loglevel`; explicit conversion preserves the existing stored C int.
+The changed whole70 producer and real76-root link pass in0.84/0.14 s and emit the
+same5,403,664-byte library`54ded4c…`, allowing unchanged content-bound proof reuse.
+Consumer compile/run0.116/0.004 s, peak32,060 KiB, no stderr or device calls;
+consumer SHA`130500e5d22882f4b14c4b74d45922904b2bebf8a9b5cf514ab943a52a2e9fc3`.
+These are HOST ABI/error results, not complete behavior/native/file acceptance.
 
-The integrated IHK batch changes10source/qualification files, with four corrected
-original CLI functions and three checked-conversion helpers. All three complete
-current Rust tools compile and link with the real library/providers. The new
-parent regressions pass6top-level tests/80candidate cases in0.59 s; no old green
-suite was rerun. Actual source, consumer, build, retained failure and profile
-receipts are bound in `docs/verification/m15-parallel-host-results-20261106.json`.
-The remaining-public ABI batch is private/uncompiled and is not included in these
-claims. Acceptance deltas remain zero; full-image/native and original SDK gates
-remain open. Net unconverted C LOC remains unmeasured for both milestones.
+**Shared prerequisite checked and checkpointed:** IHK source
+`05f265d73245f214e72d77f004989fe3384631db` now contains the13-file export-ABI,
+header-owner and transactional-parser batch. Actual selected C/Rust checks pass
+all70 exported function and six data types, including the private/source-only
+categories and five helper layouts/20fields. Both strict producer/76-root link
+pass0.83/0.14 s; archive`5762bee…` and library`c11a46b…` match the already checked
+parser cohort byte-for-byte. Public/private status is kept explicit.
+
+The actual archive consumer first failed because the private header defined
+`ihklib_os_query_mem_type_str`. One reviewed correction makes it an extern
+array[2] and keeps the unchanged initializer in the C fallback; Rust storage is
+unchanged. The corrected C observer defines zero project runtime/data providers.
+All seven serial commands then pass: map/trace and unique symbol bind`parse_env`
+to the real archive, all18 ownership cases pass, and the matching shared-library
+consumer passes126 pre-access errors/five logging calls and44 exact providers.
+The first failure remains preserved. No device/backend/native work occurred.
+
+Fresh four-bundle replay reproduced exact IHK`05f265d`/tree`d5e1a798…` with a
+clean checkout in0.91 s, from the committed manifest/gitlink.
+
+**Next15-minute deliverable:** Root publishes and fetch/blob-verifies this checked
+source/bundle/regression/proof checkpoint. HIGH workers review and prepare the
+six callers’ success/error cleanup using the passed shared parser/ABI contract;
+only Root integrates, and one bounded serial admission supplies their next proof.
+The create_os parser keeps its distinct semantics. No unchanged green suite is
+replayed. Raw commands/artifacts/reviews and retained first failure are bound in
+`docs/verification/m15-shared-abi-environment-results-20261106.json`.
+All compilers remain serialized. The already published batch includes four
+original CLI corrections,6tests/80cases, full three-tool HOST links, public
+rusage/memory/IKC slices and real supervisor rollback. Matching raw commands,
+retained failures and profiles are bound in
+`docs/verification/m15-parallel-host-results-20261106.json`.
+
+Acceptance deltas remain zero: M14 stays4/6 and M15 stays1/8; all final integration
+gates remain open. The single full-image critical dependency remains the original
+generic/exec service/source hold and missing scoped disposition, owned by its
+original release authority with Root as integration owner. No admissible full-image
+command or unconditional completion ETA exists while that dependency is held.
+The nine-hour target remains12:41:32Z; independent ready M15 work continues.
+Native/source-view admission and matching restoration also remain open. No hold,
+reservation, historical failed attempt, ledger or deadline was reset. Net
+unconverted C LOC remains unmeasured for both milestones.
 
 ## Net implementation debt — separate from C references and acceptance
 
