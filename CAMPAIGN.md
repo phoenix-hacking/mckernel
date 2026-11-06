@@ -1,16 +1,16 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T11:09Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T11:14Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit same-Root coordinated resume `20261106T103153Z-e5bed1f2`.**
+**BLOCKED after the three-turn exhausted-ready-work audit for resume `20261106T103153Z-e5bed1f2`.**
 The10:28Z shutdown and checkpoint`cdfeff3de` are historical. The normal supported
 transition retired the old launcher and started worker237571/server237574,
-server birth4738164. Saved goal is active; actual Root is Sol/MAX, reused/new
+server birth4738164. The original goal is retained; actual Root is Sol/MAX, reused/new
 owners Sol/HIGH, unrestricted/approval never, UID1000. Fresh included guard is
-13%used/87%remaining; no stop or usage-unknown restriction. Native/source/service
+14%used/86%remaining; no stop or usage-unknown restriction. Native/source/service
 holds and18GiB retained charges remain unchanged; image argv stays unavailable.
 
 Actual child ceiling is6; five HIGH owners have useful assignments/results, with
@@ -44,7 +44,7 @@ retains1getline buffer; C/Rust candidates each free it before one existing fclos
 preserve`-1`, zero output and local free-entry errno. Seven commands pass once,
 all joined/released, receipt`1fac86ee…`. Public callers use short fixed labels;
 no public reachability, fuzz/OOB/security or native claim. That paired patch is
-still private pending final source metadata/build integration.
+included in the published coherent source/library checkpoint below.
 
 **Final coherent reader source/build PASS:** paired EOF+private-error cleanup is
 committed as IHK`b7293d23da2140a3a77438d258912476baa7429c`,
@@ -65,6 +65,33 @@ engineering prerequisite is the actual universal generic/exec disposition and
 original SDK/source-view/native bindings, owned by their original authorities.
 M14 remains4/6 and M15 1/8; image/native/C-retirement deltas0. No deadline/model
 capacity can replace that evidence or authorize equivalent held work.
+
+**Current continuation audit 3/3 — BLOCKED:**
+- Root`01a1b06a-3f82-7873-b83e-88f9336c954d` completed source fixes, new functional
+  cases, genuine builds and verified publication, then exhausted the ready queue.
+- Root`01a1b08d-d11e-7810-b351-fb7b46bbf99c` made no engineering progress: same
+  actual source hold and installed refusing SDK gate, clean IHK and unchanged GitHub.
+- Root`01a1b090-1203-7aa0-b992-2690ed9f81ce` again finds all five owners completed, all admitted
+  HOST waits joined/released, no new code/input/operation and the same actual
+  `held=true`, `replay_authorized=false`, `equivalent_reassignment_authorized=false`.
+  Installed `verify_actual_operation_gates` still refuses at line55.
+
+These are actual Root goal turns, not timer messages or model heartbeats. No new
+functional, build/link, image, native or C-retirement delta occurs in the last two
+turns. A source/admission barrier is not a live-operation wait or technical stall.
+The original hold authority must provide a valid scoped disposition; the original
+SDK/source-view authority must supply actual reviewed one-shot source/custody
+bindings. No current universal full-image/native argv exists, and Root cannot
+substitute another model/thread/artifact, wrapper, mock or invented current-free.
+
+Root checkpoints and verifies this blocked handoff, then sets the existing goal
+blocked. This is not completion, a quota stop or user pause. Included usage is
+14%used/86%remaining; allowance remains for genuinely ready original work. All18GiB
+charges, UNKNOWN native/source/service owners, scratch21,mutex27:4, failed attempts,
+nonces, original accepted scopes and dirty work remain. No old query, nonce,
+install/native operation, unchanged suite or held request is replayed. Resumption
+requires actual new eligible functional input or changed authoritative bindings;
+no automatic controller/restart or source-hold bypass is authorized.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
