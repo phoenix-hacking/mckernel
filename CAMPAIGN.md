@@ -1,30 +1,38 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T03:40Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T04:43Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**M14 full-image work is blocked by the retained service/source hold.** The
-explicit November5 resume and same Root are retained; this is not completion or
-a user pause. Dispatcher:
-`gpt-6.1-sol`, reasoning `max`; every worker/reviewer/auditor uses HIGH or above.
-One disjoint light child, one shared HOST compiler
-job on CPU6 within the initial 2 GiB phase. The existing timer steers every
-15 minutes. The 01:14–02:14Z November 6 target was missed; acceptance is unchanged.
-After genuine original-scope M14 acceptance and a published verified matching
-proof checkpoint, continue M15 automatically. Final delivery retains Rocky/Linux.
+**Active under manual same-Root resume `20261106T034657Z-2c795952`.** Prepare
+independent eligible M14/M15 source and qualification in parallel; retain
+M14-before-M15 acceptance order. Root is the only compositor/index/publisher.
+Dispatcher Sol/MAX; up to three explicitly routed Sol/HIGH light workers share
+one CPU6 compiler/job and the initial2 GiB HOST phase including overhead. All
+18 GiB prior reservations,4 GiB host floor, scratch21,mutex27:4 and service/source
+holds remain. The generic/exec full-image command is still UNSET; this resume
+supplies no rejected-work retry or native release.
 
-The new approximately02:57Z user direction renews the aggressive3–4-hour planning
-window to approximately05:57–06:57Z. It changes no acceptance, workload, source
-hold or budget. The old missed target and outage stay recorded. Read-only local
-Codex metadata confirms Root `gpt-6.1-sol`/MAX and the current child
-`01a18e0c-63a3-7741-9867-a385669f4d07`, `/root/mmap_source`,
-`gpt-6.1-sol`/HIGH. Its WIP was saved before continuing; no lower-effort turn was
-continued. Every new spawn must pass an explicit HIGH-or-above override; use no
-fixed LOW/MEDIUM role. Evidence:
-`docs/verification/m14-high-effort-routing-20261106.json`. No server/controller
-restart or native ownership change occurred.
+The nine-hour soft target is03:41:32–12:41:32Z November6 (04:41Pacific end).
+It supersedes the02:57Z three–four-hour planning window. The earlier missed target
+and approximately01:34–02:51Z outage remain recorded, with no acceptance change.
+The existing foreground-owned15-minute steering monitor is rebound separately;
+Root does not edit it. AGENTS.md's latest three-worker/parallel-preparation
+instruction is preserved and will be included in the coherent checkpoint.
+
+| HIGH worker / actual thread | Current deliverable and fresh result |
+| --- | --- |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Public rusage12-field/signature/layout and33 actual linked pre-open calls PASS; now preparing memory/IKC descriptor/function ABI slice |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Four parser corrections checked; durable6tests/80cases PASS; full current Rust CLI programs compile and genuinely link |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Two actual partial-startup rollback cases PASS; each joins one real worker and restores descriptor/task/mask state |
+
+Routing is machine-observed in this invocation's `ROUTING.json`: Root
+`gpt-6.1-sol`/MAX, all three `gpt-6.1-sol`/HIGH, approval never, filesystem
+unrestricted; UID1000 is not Unix root. Children write private/disjoint outputs,
+request the shared build slot and never multiply resource grants. The completed
+M14 perf result is an exact ownership NO-GO, so the third ready slot was assigned
+to the independently authorized M15 CLI work rather than retrying that entry.
 
 The foreground's isolated HIGH-floor patch (SHA`95f56039adf2938862ef0adad257edf15eaebe9eb2acc397a98714f29bcfe722`)
 passed index applicability checking and was staged only from that patch. It updates
@@ -36,7 +44,7 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`0c302a7407c75585d5dc86a35dad9c9592119ef5`** is pushed and fetched/blob
+Prior verified checkpoint **`0e4d2ae4d20cda7390b4ecdaa4db6d013d69781f`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -97,7 +105,7 @@ is claimed. The historical 30-minute velocity baseline is unchanged.
 | Track | Accepted | Remaining |
 | --- | --- | --- |
 | M14 compute-kernel Rust/assembly | 4/6 file goals | Generic and x86 syscall files, final integrated image and matching validation |
-| M15 project-owned integration runtime | 1/8 file goals | Seven file goals and final delivered-runtime integration; resume after genuine M14 acceptance and published proof |
+| M15 project-owned integration runtime | 1/8 file goals | Seven file goals; independent source/HOST qualification active, milestone acceptance follows genuine M14 proof |
 | Practical functional baseline | 35/35 at its accepted scope | Preserve matching results; qualify changed final artifacts and deliver the complete system |
 
 ### Latest combined M14/M15 debugging and HOST results
@@ -328,30 +336,53 @@ reviewed kind/reference/group/close contract is required; no new ABI or restrict
 `group_fd=-1` entry was implemented. Exact participating source and decision:
 `docs/verification/m14-perf-group-ownership-decision-20261106.json`.
 
-**Critical path / next action:** Root checkpoints these finished eligible fixes,
-proof and bounded LOC assessment, then verifies the fetched commit/blobs. The
-same full-image exclusion has persisted across successive reviews, including
-03:04,03:19 and03:34Z. All currently assigned dependency-ready work is now checked
-or has a precise source/ABI NO-GO; no child workload or control join is pending. The
-full-image command remains UNSET: the original service/hold authority must supply
-a scoped disposition of the retained generic/exec request. There is no authorized
-local replay, appeal or release command in the current record. Newly checked
-independent work does not resolve that external dependency. The complete perf
-entry also stays unselected pending its actual ownership contract; no filler
-review, repeated green test or alternative-image workaround is queued. All child
-source turns are at bounded completion with WIP retained. M14 remains4/6 and all
-three integration gates open; M15 remains queued for genuine accepted M14 proof.
+**Current independent M15 results:** the unchanged strict whole70 producer built
+current source with actual HOST C9/glibc2.31 and retained Rust1.95 in0.85 s. Its
+new genuine5,403,664-byte library is
+`54ded4c03bf48edc0b90108432d740562047ab1cf316838b8e77626d3ca879ac`;
+all70function/sixdata roots survive the real shared link. Root's first manual
+link omitted the CMake BFD dependency; one bounded correction bound real HOST
+BFD2.34 and passed in0.14 s. Both attempts are retained. This is an explicit
+current HOST profile, not the old namespace, original complete SDK or native proof.
 
-The blocked audit now has three consecutive goal turns with this same service/
-source exclusion. The first published the final eligible batch; the next made
-no progress after revalidating the original held record; the third revalidated
-its identical SHA`4f6777a4fd0b1d85c25607f02170317118436d26bd9a7e3756c7964d7e62e96d`,
-held=true, replay=false and equivalent-reassignment=false, with no new disposition.
-No live job/control join or dependency-ready approved implementation remains in
-the assigned lanes. Root will record the goal as blocked through the normal goal
-tool after this handoff is pushed and fetched/blob-verified. This is an external
-service/source impasse, not acceptance, a budget reset or native retirement.
-No automatic retry, new model, account change or M15 launch is authorized.
+The canonical public-rusage Rust/C guards now bind all12field types/offsets,
+array extents, size/alignment and function signature. A genuine linked C consumer
+passes33 pre-open null/size rejections, preserving output/errno and verifying its
+actual library provider. Compile0.07 s,29,252 KiB peak RSS; runtime under0.01 s.
+The dump parser correction uses the actual subcommand argv slice: GNU/POSIX libc
+option parsing now passes12 cases; the predecessor fails5. Neither result enters
+a device or accepts a file/milestone.
+
+Actual unchanged ihkmond plus real libc threads/eventfd/epoll and declared
+libudev1.6.17 passes two newly required rollback cases: failure of second-worker
+eventfd or pthread_create after one real worker enters. Each returnsErr255,
+joins that worker and restores exact fd/task sets and caller/inherited masks.
+Run1.50 s wall/1.47 s CPU,153,704 KiB peak RSS; all handles joined. No daemon,
+mcos event, device/ioctl, install or native operation occurred. Existing four
+idle/worker-stop green cases were reused without rerunning.
+
+**Next15-minute deliverable:** Root checkpoints the checked80-case CLI batch, public ABI slices and real
+rollback proof; IHK commit`70f1c8e384f2cb67a42ee58a9fb3d51c714326b9` is bundled.
+Fresh four-bundle replay matched that exact clean IHK commit/tree in0.89 s.
+Push and fetch/blob-verify the coherent parent checkpoint next. Public-ABI worker
+prepares the next descriptor/signature slice while the supervisor slot is refilled
+only with a concrete missing supported-profile contract. No overlapping compiler.
+M14 stays4/6,M15 stays1/8; all final integration gates remain open. The single
+full-image critical dependency remains the original generic/exec service/source
+hold and its missing scoped disposition; Root cannot issue a full-image/native
+command or substitute a different artifact for it. The prior invocation's blocked
+audit and verified handoff remain historical; this explicit resume opens the new
+independent M15 lanes without clearing that hold or resetting any ledger.
+
+The integrated IHK batch changes10source/qualification files, with four corrected
+original CLI functions and three checked-conversion helpers. All three complete
+current Rust tools compile and link with the real library/providers. The new
+parent regressions pass6top-level tests/80candidate cases in0.59 s; no old green
+suite was rerun. Actual source, consumer, build, retained failure and profile
+receipts are bound in `docs/verification/m15-parallel-host-results-20261106.json`.
+The remaining-public ABI batch is private/uncompiled and is not included in these
+claims. Acceptance deltas remain zero; full-image/native and original SDK gates
+remain open. Net unconverted C LOC remains unmeasured for both milestones.
 
 ## Net implementation debt — separate from C references and acceptance
 
@@ -422,11 +453,11 @@ Historical architecture cursor (5, current selection must be re-established):
 - [ ] M14-I03: matching useful applications, process/memory/thread/signal behavior
   and native lifecycle/resource restoration on that image. Then accept M14.
 
-## M15 checklist — queued after M14 acceptance
+## M15 checklist — independent preparation active; acceptance follows M14
 
-Earlier focused M15 source/debugging results are retained below. Current
-implementation scheduling is M14 exclusively; resume M15 after genuine M14
-acceptance and a published matching proof checkpoint.
+Earlier focused M15 results are retained below. The current explicit manual
+resume authorizes independent M14/M15 source and qualification in parallel.
+Milestone acceptance order remains M14, then M15, then complete supported system.
 
 Reuse existing Rust IHK, SMP, mcctrl, tools and accepted SDK/library artifacts.
 For each open row finish remaining bodies, select the real Rust default and ABI,

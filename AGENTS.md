@@ -9,8 +9,12 @@ startup/read-order instructions, including references in the retained goal ident
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 Dispatcher: `gpt-6.1-sol`, reasoning `max`; every worker, auditor and reviewer
 uses reasoning `high` or above under the user's November 5 instruction.
-Engineering is active under the user's explicit November 5 resume. Complete
-M14 before proceeding to M15, and honor any later user pause or stop. Preserve
+Engineering is active under the user's explicit November 5 resume. The latest
+user direction targets M14 and M15 within nine hours and requests maximum useful
+parallelism. Prepare independent eligible M14/M15 source and qualification work
+in parallel; retain M14-before-M15 acceptance order and one shared compositor.
+Use up to three HIGH-or-above light workers under the existing shared budgets;
+build and native jobs remain serialized. Honor any later user pause or stop. Preserve
 every native/resource owner, UNKNOWN outcome, service/account hold, original
 weekly-only limit and dirty edit.
 
