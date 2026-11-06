@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T08:27Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T08:46Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,17 +34,45 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Corrected-library three-tool links PASS; prepares the retained genuine public API consumer against the changed runtime in `updated-public-consumer-1` |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | New-cohort15actual early mains PASS; all waits joined and slot released; source/error contracts reused unchanged |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Exact changed-cohort6ELF/loader/provider checks PASS; current interpreter/provider paths and hashes bound; slot released |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Current-library genuine public API consumer PASS; both waits joined and slot released; no pending runnable request |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | New-cohort15actual early mains PASS; all waits joined and slot released; no pending runnable request |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Six loader checks PASS; requested negative-FD finish review DEFER at exact scope; no patch/test request pending |
 
 The short ranked queue consumes passed shared results before new work:
 
 | Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Publish matched tool-cohort proof | ihkconfig/ihkosctl/ihkmond; M15-F06…08/I03 | Root publishes actual3build+6loader+15main PASS against corrected library; no old-cohort replay |
-| 2. Match retained public API consumer to corrected runtime | Shared43public APIs/loglevel; M15-F05/I03 | ABI owner prepares exact retained genuine consumer compile/link+run against`dd974`; existing pre-access/pure-operation contracts reused, no valid backend calls |
-| 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority still needs real one-shot gates and corroborated original SDK binding; no ready native command/remap exists |
+| 1. Publish current public-consumer proof | Shared43public APIs/loglevel; M15-F05/I03 | Root checkpoints actual126pre-access+5pure-case/44provider PASS on current library; completed scoped batches are consumed |
+| 2. Eligible universal generic/exec cohort | Full McKernel image; M14-F03/F06/I01–03 | Original service/hold authority must supply a valid scoped disposition; rejected payload/release conditions remain unknown and Root has no executable image argv |
+| 3. Original SDK/source-view/native binding | M14/M15 original integration/lifecycle gates | Original producer/operation authority must supply corroborated outer SDK mapping and genuine reviewed operation gates; old18GiB UNKNOWN/native holds remain |
+
+The ready HOST source/consumer batches in this cursor are now consumed. No new
+independent task is currently identified from existing exact inputs; blocked rows
+are not runnable assignments. The new descriptor-cleanup candidate was assessed
+at its requested scope and deferred below. Further source work needs a concrete
+eligible defect/input, and full-image/native work needs the actual outstanding
+authority/binding. This is a fresh no-ready observation after productive work in
+Root turn`01a1aef7-8297-7d82-8b25-a5051909a3e3`; it is not three goal turns and
+periodic reminders do not count as blocked-audit turns. The goal remains active;
+no pause, completion, hold release or worker retry is issued by this checkpoint.
+
+**Latest public consumer PASS:** the unchanged real C consumer now compiles/links
+to`dd974858…` and verifies43typedimports,44actualprovider/global bindings,
+126pre-access errors and5purelogging cases. Source branches remain before
+allocation/provider/device access; no valid device/backend path is run. Both waits
+joined, slot released: wall0.118965s/CPU0.10s/peak32,124KiB. Consumer ELF SHA
+`b57c6ff3589e1e1245c64577ba248db3d079054ca36d0acb225876120e7b4d49`.
+Evidence: `docs/verification/m15-current-public-consumer-results-20261106.json`.
+
+**Requested lifecycle candidate: DEFER.** Encoded negative open errors can cause
+`finish(fd != -1)` to issue a superfluous invalid close and change TLS errno.
+The inspected public functions retain their captured negative return, release no
+owned descriptor on that branch, and retain the original C behavior. No required
+errno-preservation contract or affected required caller was established. The
+existing eventfd successor does not establish such a contract for every caller.
+Review`61285d73…` binds the inspected scope; no mechanical patch or speculative
+test was made. A specific errno-dependent functional consumer would be new input.
+**M14/M15 acceptance remains4/6 and1/8; production/native/C-retirement deltas0.**
 
 **08:27Z matching tool cohort closed at HOST scope:** two unchanged actual Rust
 CLI objects are reused, and one supervisor codegen/link is justified by no retained
@@ -183,11 +211,13 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Published checkpoint **`311159ec0f09818c963c0642b28ccc36a4b0a35c`** is pushed and
-fetched/all7changed-object verified. Fresh four-bundle replay exactly reproduces
-IHK`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`/tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc` clean.
-The matched corrected-library/tool proof is the next coherent evidence checkpoint;
-source/runtime/ABI inputs are unchanged from that verified source checkpoint.
+Published checkpoint **`d8224c35e73e10e56142ee7ac504d19ba042b19d`** is pushed
+and fetched/both changed-blob verified. It retains the matching3-tool/6loader/15main
+cohort against library`dd974858…`. Source checkpoint`311159ec0` is fetched/all7object
+verified, with a clean four-bundle replay of IHK`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`,
+tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`. Current public-consumer proof is
+this next evidence checkpoint; no source/runtime change or compiler/library replay
+is being invented for publication.
 Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
 GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
