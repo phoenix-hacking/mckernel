@@ -50,8 +50,9 @@ DEFAULT_DISPATCHER_EFFORT = "max"
 DISPATCHER_MODEL_PREFERENCE = (
     "gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra", "gpt-6-sol", "gpt-6-luna",
 )
-DISPATCHER_EFFORT_PREFERENCE = ("max", "ultra", "xhigh", "high", "medium", "low")
+DISPATCHER_EFFORT_PREFERENCE = ("max", "ultra", "xhigh", "high")
 DEFAULT_WORKER_MODEL = "gpt-6.1-sol"
+MINIMUM_WORKER_EFFORT = "high"
 AUDIT_MODEL = "gpt-6.1-sol"
 REVIEW_MODEL = "gpt-6.1-sol"
 OBJECTIVE = (
@@ -404,7 +405,7 @@ def agent_settings(args, repo):
     return {"enabled": True,
             "max_concurrent_threads_per_session": launch_resources(args, repo)["max_agents"],
             "max_depth": 1, "default_subagent_model": DEFAULT_WORKER_MODEL,
-            "default_subagent_reasoning_effort": "medium"}
+            "default_subagent_reasoning_effort": MINIMUM_WORKER_EFFORT}
 
 
 def dispatcher_candidates(catalog, unavailable=()):
@@ -450,10 +451,10 @@ def model_routing(args):
     """One source for model admission, dispatcher guidance and preview output."""
     return {
         "dispatcher": {"model": args.model, "effort": args.effort},
-        "default_worker": {"model": DEFAULT_WORKER_MODEL, "effort": "medium"},
-        "complex_worker": {"model": DEFAULT_WORKER_MODEL, "effort": "high"},
-        "auditor": {"model": AUDIT_MODEL, "effort": "low"},
-        "reviewer": {"model": REVIEW_MODEL, "effort": "high"},
+        "default_worker": {"model": DEFAULT_WORKER_MODEL, "effort": MINIMUM_WORKER_EFFORT},
+        "complex_worker": {"model": DEFAULT_WORKER_MODEL, "effort": MINIMUM_WORKER_EFFORT},
+        "auditor": {"model": AUDIT_MODEL, "effort": MINIMUM_WORKER_EFFORT},
+        "reviewer": {"model": REVIEW_MODEL, "effort": MINIMUM_WORKER_EFFORT},
     }
 
 

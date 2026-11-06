@@ -1,19 +1,40 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T02:59Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T03:10Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
 **M14 is active under the explicit November 5 resume.** Dispatcher:
-`gpt-6.1-sol`, reasoning `max`; one disjoint light child, one shared HOST compiler
+`gpt-6.1-sol`, reasoning `max`; every worker/reviewer/auditor uses HIGH or above.
+One disjoint light child, one shared HOST compiler
 job on CPU6 within the initial 2 GiB phase. The existing timer steers every
 15 minutes. The 01:14–02:14Z November 6 target was missed; acceptance is unchanged.
 After genuine original-scope M14 acceptance and a published verified matching
 proof checkpoint, continue M15 automatically. Final delivery retains Rocky/Linux.
 
+The new approximately02:57Z user direction renews the aggressive3–4-hour planning
+window to approximately05:57–06:57Z. It changes no acceptance, workload, source
+hold or budget. The old missed target and outage stay recorded. Read-only local
+Codex metadata confirms Root `gpt-6.1-sol`/MAX and the current child
+`01a18e0c-63a3-7741-9867-a385669f4d07`, `/root/mmap_source`,
+`gpt-6.1-sol`/HIGH. Its WIP was saved before continuing; no lower-effort turn was
+continued. Every new spawn must pass an explicit HIGH-or-above override; use no
+fixed LOW/MEDIUM role. Evidence:
+`docs/verification/m14-high-effort-routing-20261106.json`. No server/controller
+restart or native ownership change occurred.
+
+The foreground's isolated HIGH-floor patch (SHA`95f56039adf2938862ef0adad257edf15eaebe9eb2acc397a98714f29bcfe722`)
+passed index applicability checking and was staged only from that patch. It updates
+project defaults, the active AGENTS entrypoint, launcher routing and focused policy
+test hunks; pre-existing transport/watchdog WIP remains unstaged. The foreground's
+110 launcher and11 steering checks and read-only routing preview pass and are
+reused. Future-launch configuration is not a live server restart: explicit HIGH
+spawn overrides remain required. Proof:
+`docs/verification/m14-high-effort-policy-results-20261106.json`.
+
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`1a14dee2bba45eac0c8823e46195ae8e5ae4f48e`** is pushed and fetched/blob
+Checkpoint **`59741f7e73fbf6bde102c649a4f95e7c94e58e0e`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -56,8 +77,11 @@ Only R3's 4 GiB process-memory charge is retired; historical direct wait and
 install outcome remain UNKNOWN. The other **18 GiB** (original install 4 GiB,
 V2 2 GiB, native 12 GiB), persistent/native/source holds, scratch21 and mutex27:4
 remain. No native admission, old-packet replay or launcher-state change occurred.
-HOST checks still conservatively budget against the original 22 GiB plus 2 GiB
-and the 4 GiB memory floor; resource grants have not been expanded.
+Earlier HOST checks conservatively charged the original22 GiB. A bounded HIGH
+review now applies the accepted4 GiB disposition to fresh ordinary HOST admission:
+18 GiB prior +2 GiB HOST (including overhead) +4 GiB floor =24 GiB. All18 GiB
+UNKNOWN/native charges remain. This changes no grant, ledger, nonce or native
+release; the current exact-input admission and review are retained with the link.
 
 New checks use the existing read-only retained February 18 Rust 1.95 SDK.
 The old default Rust 1.60 shim is excluded from this queue. Compilation/partial
@@ -213,6 +237,36 @@ witness pass; actual CMake on/off pairing and unsupported-profile rejection pass
 The canonical formatted source was compiled without suppressing compiler warnings.
 This is an opt-in relocatable cohort, with no supported-default or native claim.
 
+**Ready adapter batch now joined:** the previously compiled eight-entry F03
+object links once with that real provider cohort, without recompiling unchanged
+sources or adding either incompatible credential entry. The output is18,649,640
+bytes, SHA`e43ac6a0db326acdc1f85d80321b654aefaf325eab9cb4e91c46e3538d25bf54`;
+105 symbols remain unresolved, including`do_syscall`. Actual command: CPU6,
+`ld -r eligible-cohort.o f03_adapters.o -o eligible-f03-signal-f06.o`, with the
+existing1 GiB address/45 s CPU/60 s wall/64 MiB output limits. It passed in0.069 s
+wall/0.068 s CPU, peak36,160 KiB RSS, no stderr. Twelve of13 adapter imports bind
+real definitions; three prior cohort references now resolve. Receipt:
+`docs/verification/m14-f03-real-provider-composition-20261106.json`.
+This adds eight relocatably linked existing entries, zero newly compiled bodies,
+zero full images, zero native qualification and zero C retirements.
+
+All eight rows below share C path`kernel/syscall.c`, Root as compositor/owner,
+implemented/previously compiled/opt-in paired/now relocatably linked state, and
+unaccepted default/native state. Their next check is the source-admissible full
+image followed by matching application/lifetime/native proof; that check is held
+at the universal dispatch/exec provider.
+
+| Original function | Rust path |
+| --- | --- |
+| `ptrace_detach_do_kill_bridge` | `kernel/rust/f03_ptrace_adapters.rs` |
+| `ptrace_detach_wakeup_bridge` | `kernel/rust/f03_ptrace_adapters.rs` |
+| `syscall_do_syscall2_bridge` | `kernel/rust/f03_forward_adapters.rs` |
+| `syscall_do_syscall3_bridge` | `kernel/rust/f03_forward_adapters.rs` |
+| `syscall_policy_do_syscall2_bridge` | `kernel/rust/f03_forward_adapters.rs` |
+| `syscall_policy_do_syscall3_bridge` | `kernel/rust/f03_forward_adapters.rs` |
+| `wait_host_wait4_bridge` | `kernel/rust/f03_forward_adapters.rs` |
+| `terminate_host` | `kernel/rust/f03_host_cleanup.rs` |
+
 | Changed original function | C / Rust path | Owner and state | Remaining condition / next check |
 | --- | --- | --- | --- |
 | `syscall_forward_rt_sigprocmask_bridge` | `kernel/syscall.c` / `kernel/rust/f03_signal_forward_defined_candidate.rs` | Root compositor; implemented, opt-in paired, compiled and relocatably linked | Default full-image binding and matching native signal-mask behavior; no retirement |
@@ -240,15 +294,14 @@ applications and resource restoration**. Four accepted files and35/35 historical
 functional closure retain their exact separate scopes. The23+5 C cursor remains
 historical; no fresh final-image count is claimed.
 
-**Next15-minute deliverable:** Root publishes this checked signal batch and
-verifies the fetched commit/blobs. The disjoint light child binds the existing
-eight-entry F03 adapter object to this actual provider cohort and proposes one
-bounded CPU6 relocatable link, excluding the two incompatible credential entries.
-Root executes only after exact compatibility/resource checks. No unchanged tests
-or full crate are recompiled. The scheduling adjustment replaces the blocked
-mmap caller lane with this ready compiled-unit integration; full-image and native
-execution remain gated by the source hold and actual native admission. M15 stays
-queued until genuine M14 acceptance and published matching proof.
+**Next15-minute deliverable:** the current HIGH child binds the original
+machine-recorded generic/exec hold to its issuing authority, exact request scope
+and stated release conditions (UNKNOWN where absent), without reopening rejected
+implementation. Root preserves that disposition, publishes this coherent provider
+join plus the isolated foreground HIGH-floor patch, then verifies fetched commit
+and blobs. No alternative-artifact search or repeated green checks is scheduled.
+This targets the actual full-image obstruction; another partial link cannot clear
+it. M15 remains queued until genuine M14 acceptance and published matching proof.
 
 ## M14 checklist — compute kernel
 

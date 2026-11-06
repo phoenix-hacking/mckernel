@@ -45,7 +45,7 @@ class FakeRPC:
         self.bad_config = False
         self.bad_environment = False
         self.worker_model = "gpt-6.1-sol"
-        self.worker_effort = "medium"
+        self.worker_effort = "high"
         self.models = {"gpt-6.1-sol": ["low", "medium", "high", "max"]}
         self.account_type = "chatgpt"
         self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
@@ -183,7 +183,7 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('model="gpt-6.1-sol"', command)
         self.assertIn('model_reasoning_effort="max"', command)
         self.assertIn('agents.default_subagent_model="gpt-6.1-sol"', command)
-        self.assertIn('agents.default_subagent_reasoning_effort="medium"', command)
+        self.assertIn('agents.default_subagent_reasoning_effort="high"', command)
         self.assertIn('sandbox_mode="danger-full-access"', command)
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
@@ -192,9 +192,9 @@ class CampaignTests(unittest.TestCase):
         routing = launcher.model_routing(self.args)
         self.assertEqual(routing, {
             "dispatcher": {"model": "gpt-6.1-sol", "effort": "max"},
-            "default_worker": {"model": "gpt-6.1-sol", "effort": "medium"},
+            "default_worker": {"model": "gpt-6.1-sol", "effort": "high"},
             "complex_worker": {"model": "gpt-6.1-sol", "effort": "high"},
-            "auditor": {"model": "gpt-6.1-sol", "effort": "low"},
+            "auditor": {"model": "gpt-6.1-sol", "effort": "high"},
             "reviewer": {"model": "gpt-6.1-sol", "effort": "high"},
         })
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol" for selection in routing.values()))
@@ -212,8 +212,17 @@ class CampaignTests(unittest.TestCase):
         with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
             launcher.arguments(["--effort", "unknown"])
 
+    def test_high_floor_rejects_lower_dispatcher_overrides_and_fallbacks(self):
+        for effort in ("low", "medium"):
+            with self.subTest(effort=effort), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                launcher.arguments(["--effort", effort])
+        self.assertEqual(launcher.dispatcher_candidates([
+            {"model": "gpt-6.1-sol", "efforts": ["low", "medium"]},
+            {"model": "gpt-6-astra", "efforts": ["medium"]},
+        ]), [])
+
     def test_coordinator_effort_override_keeps_all_roles_on_gpt_61(self):
-        for effort in ("low", "high"):
+        for effort in ("high", "max"):
             with self.subTest(effort=effort):
                 self.args = launcher.arguments(["--model", "gpt-6.1-sol", "--effort", effort,
                                                 "--agent-windows", "off"])
@@ -224,7 +233,7 @@ class CampaignTests(unittest.TestCase):
                 self.assertEqual(settings["model_routing"]["dispatcher"],
                                  {"model": "gpt-6.1-sol", "effort": effort})
                 self.assertEqual(settings["model_routing"]["default_worker"],
-                                 {"model": "gpt-6.1-sol", "effort": "medium"})
+                                 {"model": "gpt-6.1-sol", "effort": "high"})
                 self.assertEqual(settings["agents"]["default_subagent_model"], "gpt-6.1-sol")
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
@@ -282,7 +291,7 @@ class CampaignTests(unittest.TestCase):
         params = next(p for m, p in rpc.calls if m == "thread/resume")
         self.assertEqual(params["model"], "gpt-6-astra")
         self.assertEqual(params["config"]["model_reasoning_effort"], "max")
-        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "medium")
+        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "high")
         self.assertEqual(settings["model_routing"]["reviewer"],
                          {"model": "gpt-6.1-sol", "effort": "high"})
 
@@ -1065,7 +1074,8 @@ class CampaignTests(unittest.TestCase):
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
 
     def test_misconfigured_worker_model_or_effort_fails_before_resume(self):
-        for attribute, value in (("worker_model", "gpt-5.6-luna"), ("worker_effort", "low")):
+        for attribute, value in (("worker_model", "gpt-5.6-luna"),
+                                 ("worker_effort", "low"), ("worker_effort", "medium")):
             with self.subTest(attribute=attribute):
                 self.saved(goal("paused"))
                 rpc = FakeRPC(self.args, goal("paused"))
@@ -1083,12 +1093,12 @@ class CampaignTests(unittest.TestCase):
                       "gpt-5.6-luna": ["low", "medium", "high"],
                       "gpt-6-astra": ["low", "medium", "high"]}
         state = self.run_campaign(rpc, 1)
-        self.assertIn("gpt-6.1-sol/medium", state["last_error"])
+        self.assertIn("gpt-6.1-sol/high", state["last_error"])
         self.assertEqual(rpc.goal["status"], "paused")
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
 
     def test_unadvertised_routed_effort_refuses_resume_without_fallback(self):
-        for effort in ("low", "medium", "high"):
+        for effort in ("high",):
             with self.subTest(effort=effort):
                 self.saved(goal("paused"))
                 rpc = FakeRPC(self.args, goal("paused"))
@@ -1102,7 +1112,7 @@ class CampaignTests(unittest.TestCase):
         rpc = FakeRPC(self.args)
         settings = launcher.preflight(rpc, self.args, self.directory)
         self.assertEqual(settings["model_routing"]["auditor"],
-                         {"model": "gpt-6.1-sol", "effort": "low"})
+                         {"model": "gpt-6.1-sol", "effort": "high"})
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol"
                             for selection in settings["model_routing"].values()))
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
