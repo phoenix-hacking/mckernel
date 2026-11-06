@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T03:10Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T03:17Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,7 +34,7 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`59741f7e73fbf6bde102c649a4f95e7c94e58e0e`** is pushed and fetched/blob
+Checkpoint **`12a44befb0a375e33e2b042ed7230390abc0266e`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -294,14 +294,26 @@ applications and resource restoration**. Four accepted files and35/35 historical
 functional closure retain their exact separate scopes. The23+5 C cursor remains
 historical; no fresh final-image count is claimed.
 
-**Next15-minute deliverable:** the current HIGH child binds the original
-machine-recorded generic/exec hold to its issuing authority, exact request scope
-and stated release conditions (UNKNOWN where absent), without reopening rejected
-implementation. Root preserves that disposition, publishes this coherent provider
-join plus the isolated foreground HIGH-floor patch, then verifies fetched commit
-and blobs. No alternative-artifact search or repeated green checks is scheduled.
-This targets the actual full-image obstruction; another partial link cannot clear
-it. M15 remains queued until genuine M14 acceptance and published matching proof.
+**Original hold is now bound to machine evidence:** the rejected `generic_c`
+turn is `failed` with service code`cyberPolicy`; held=true, replay=false and
+equivalent reassignment=false. The record contains no loaded request items, named
+issuer or scoped release condition. The cited old notice line is a different
+goal event. Account prerequisites in the actual service notice are not release
+authority; no account change, appeal or retry occurred. Bounded proof:
+`docs/verification/m14-generic-source-hold-binding-20261106.json`.
+The original service/hold authority is the required external dependency; Root
+owns integration but has no authorized local full-image command for this cohort.
+Restored networking, sudo, HIGH routing and the renewed target clear none of it.
+
+**Next15-minute deliverable:** the confirmed HIGH child composes the separately
+permitted existing`sys_perf_event_open` Rust entry/provider binding, reusing the
+existing body, exact ABI and retained metadata. It must return an eligible private
+patch and the smallest changed-unit check, or one precise NO-GO if a held or
+undefined contract is necessary. Root remains sole compositor and issues no
+compiler command before that binding. This independent source work does not
+release the universal generic/exec cohort or promise full-image/native closure.
+No new framework, alternate-artifact search or repeated green test is scheduled.
+M15 remains queued until genuine M14 acceptance and published matching proof.
 
 ## M14 checklist — compute kernel
 
