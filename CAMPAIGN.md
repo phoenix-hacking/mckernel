@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T07:51Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T08:09Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,17 +34,33 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Routing/19origins/real-library batch PASS; turn `01a1afd0-a882-72a2-9350-8c768b63f5e5` independently reviews the future existing-builder stale-origin preflight |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Source-bound routing18cases PASS; durable canonical C→Rust wrapper passes once and releases slot; no extra acceptance count |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Routing/19site joint review GO; turn `01a1afce-10c3-7042-b0e7-3524f4f03f77` privately prepares the focused stale-origin preflight and pure-Python proof |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Routing/19origins/library and preflight review PASS; prepares corrected-library three-tool relink request in `updated-tool-cohort-1` |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Prior source/main contracts reused; prepares whitelisted actual mains for the changed provider cohort, pending real artifact hashes |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Preflight six checks PASS/direct wait joined; prepares exact changed-cohort ELF/loader/provider binding after real links |
 
 The short ranked queue consumes passed shared results before new work:
 
 | Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Checked routing/current-origin checkpoint | Create-OS CPU/memory assignment and19diagnostics; M15-F05/I03 | Root publishes the passed C/Rust/metadata/real-library batch and durable regression; no unrelated worker wait |
-| 2. Existing-builder stale-origin rejection | Every future whole70 producer and its callers; M15-F05/I03 | Supervisor privately adds the focused19site preflight to the existing helper; ABI owner reviews it; then one pure-Python stale/current regression request |
-| 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority still needs real one-shot gates and corroborated original SDK binding; no ready command/remap exists |
+| 1. Publish checked producer preflight | Future whole70 builds; M15-F05/I03 | Root checkpoints six pure-Python checks and exact source bundle; no library/compiler replay |
+| 2. Match corrected library to real tools | ihkconfig/ihkosctl/ihkmond; M15-F06…08/I03 | ABI owner prepares new coherent links to library`dd974858…`, reusing two unchanged Rust objects; supervisor prepares changed-cohort loader binding; CLI prepares exact early-main cases |
+| 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority still needs real one-shot gates and corroborated original SDK binding; no ready native command/remap exists |
+
+**08:09Z producer preflight closed:** the existing helper now validates its19
+actual source locations before output creation or compiler calls. Six pure-Python
+checks pass once, including all19retained stale offsets and refusal before any
+subprocess. Wall0.155453s, peak20,576KiB; zero compiler/library/native calls.
+The prelaunch output-directory error is retained with Root's bounded correction;
+no test had run before that setup correction. Exact evidence:
+`docs/verification/m15-origin-source-preflight-results-20261106.json`.
+
+**Next matching consumer batch:** the earlier15-main cohort binds provider
+`314beee5…`; the corrected runtime library is`dd974858…`. The next genuinely
+changed cohort must link that new provider, with two actual unchanged object
+reuses and one justified supervisor codegen where no object was retained. Source
+contracts/ABI reviews remain reusable; new binary/library/loader bindings precede
+any whitelisted non-device main execution. No old cohort is rerun to publish the
+preflight, and original SDK/native/source holds remain untouched.
 
 **07:51Z closed routing batch:** C and Rust now query reservations using the
 creating device and assign them to the returned OS. Four defined baseline
@@ -155,11 +171,12 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Published checkpoint **`59ec5de2a07d9fb8c34ca34d6e381e214d06c282`** is pushed and
-fetched/all8changed-object verified; its clean four-bundle source replay matches
-IHK`1ee08429338ea1693f75d279d41b76496e1da96f`/tree`be8adb7210a2d43f6d68cc105689190777832fbb`.
-This next checked routing checkpoint contains IHK`b723bcf1b662710ae835765ef1b8735044586e24`,
-tree`cad32c3aece8ddc2f2a948ba396830deed026292`, bundle blob`12d200c6e9809771aed6388fdd340148e368cd27`.
+Published checkpoint **`fa7410fe75ea10252829e5f6efbdef4408a0b6be`** is pushed and
+fetched/all9changed-object verified. Fresh four-bundle replay exactly reproduces
+IHK`b723bcf1b662710ae835765ef1b8735044586e24`/tree`cad32c3aece8ddc2f2a948ba396830deed026292` clean.
+The next checked metadata-only source checkpoint contains IHK`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`,
+tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`, bundle blob`3c5d7d07090736941851333d92211b0df8356976`.
+Its runtime C/Rust and diagnostic-witness bytes match the passed routing library.
 Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
 GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
