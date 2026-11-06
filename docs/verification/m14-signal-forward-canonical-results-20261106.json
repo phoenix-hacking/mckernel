@@ -1,0 +1,250 @@
+{
+  "C_retirement_delta": 0,
+  "artifact": {
+    "bytes": 18647680,
+    "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/eligible-cohort.o",
+    "sha256": "6337be3aa294a9a3ec535ef4ab52928162b44f67ae563cd2517cbe8679170c03"
+  },
+  "canonical_selection_check": {
+    "argv": [
+      "taskset",
+      "-c",
+      "6",
+      "prlimit",
+      "--as=1073741824",
+      "--cpu=45",
+      "--core=0",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "scripts.tests.test_m14_syscall_selection.M14SignalForwardSelectionTests",
+      "-v"
+    ],
+    "exit_code": 0,
+    "scope": "Actual CMake signal option/guard/selector blocks, on/off Rust cfg and source dependency, unsupported Rust-OFF and ARM64 profile rejection. Previously run on these unchanged sources; not rerun for this receipt.",
+    "source_files": [
+      {
+        "path": "kernel/CMakeLists.txt",
+        "sha256": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057"
+      },
+      {
+        "path": "kernel/syscall.c",
+        "sha256": "dd699f8149afa2d98aafa940997d971889d330c0715d227821268db137370674"
+      },
+      {
+        "path": "kernel/rust/syscall_policy.rs",
+        "sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e"
+      },
+      {
+        "path": "scripts/tests/test_m14_syscall_selection.py",
+        "sha256": "c4b63e3e3499e06be3eac0e471517da94ae9035f5bc8ce5b25d1994880b5d306"
+      }
+    ],
+    "wall_seconds": 0.055
+  },
+  "compile_argv": [
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--crate-type=lib",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-avx,-avx2",
+    "--emit=obj=/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/signal-forward.o",
+    "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/unit.rs"
+  ],
+  "cpu_seconds": 0.055649,
+  "exit_code": 0,
+  "file_acceptance_delta": 0,
+  "link_argv": [
+    "/usr/bin/ld",
+    "-r",
+    "/home/holden/mckernel-work/m14-resume-20261105-1/f06-linkage-private-1/f06-first-source-1/work-1/f06-unresolved.o",
+    "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/signal-forward.o",
+    "-o",
+    "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/eligible-cohort.o"
+  ],
+  "link_exit_code": 0,
+  "link_wall_seconds": 0.05884049599990249,
+  "matched_real_providers": {
+    "memset": [
+      "T",
+      "0",
+      "82"
+    ],
+    "syscall_generic_forwarding": [
+      "T",
+      "0",
+      "1c0"
+    ]
+  },
+  "native_qualified_delta": 0,
+  "native_release": false,
+  "production_image_delta": 0,
+  "remaining_undefined": [
+    "__start___verbose",
+    "__stop___verbose",
+    "_end",
+    "_head",
+    "do_fork",
+    "do_mmap",
+    "do_setresgid",
+    "do_setresuid",
+    "do_syscall",
+    "exit_group_current_pid_bridge",
+    "exit_group_log_bridge",
+    "exit_group_terminate_bridge",
+    "f03_brk_debug_v1",
+    "f03_check_signal_empty_debug",
+    "f03_clear_host_pte_binding_v1",
+    "f03_do_exit_debug_v2",
+    "f03_do_munmap_binding_v1",
+    "f03_do_munmap_log_debug_v1",
+    "f03_exit_notify_debug",
+    "f03_futex_log_debug_v2",
+    "f03_futex_retained_providers_v1",
+    "f03_kill_log_debug_v1",
+    "f03_mbind_alloc_source_file_v1",
+    "f03_mbind_alloc_source_line_v1",
+    "f03_mckfd_alloc_origin_file_v1",
+    "f03_mckfd_alloc_origin_line_v1",
+    "f03_mckfd_free_origin_file_v1",
+    "f03_mckfd_free_origin_line_v1",
+    "f03_memlock_debug_v1",
+    "f03_mincore_debug_v1",
+    "f03_mprotect_debug_v1",
+    "f03_mprotect_providers_v1",
+    "f03_mremap_debug_v1",
+    "f03_msync_debug_v1",
+    "f03_munmap_public_debug_v1",
+    "f03_perf_allocation_binding_v1",
+    "f03_perf_counter_providers_v1",
+    "f03_perf_descriptor_layout_v1",
+    "f03_perf_event_layout_v1",
+    "f03_perf_ioctl_data_v1",
+    "f03_perf_mmap_binding_v1",
+    "f03_perf_read_layout_v1",
+    "f03_perf_read_providers_v1",
+    "f03_process_cleanup_missing_debug_v1",
+    "f03_ptrace_attach_parent_debug",
+    "f03_ptrace_control_debug",
+    "f03_ptrace_detach_source_file",
+    "f03_ptrace_entry_debug_v1",
+    "f03_ptrace_entry_ops_v1",
+    "f03_ptrace_text_debug",
+    "f03_remap_file_debug_v1",
+    "f03_rt_sigtimedwait_source_file",
+    "f03_sched_setparam_debug_v1",
+    "f03_search_debug_v1",
+    "f03_settimeofday_debug_v1",
+    "f03_shmat_data_v1",
+    "f03_shmat_log_bridge_debug_v1",
+    "f03_shmctl_log_bridge_debug_v1",
+    "f03_shmctl_offsets_v1",
+    "f03_shmctl_providers_v1",
+    "f03_shmdt_data_v1",
+    "f03_shmdt_debug_v1",
+    "f03_shmdt_log_bridge_debug_v1",
+    "f03_shmget_constants_v1",
+    "f03_shmget_debug_v1",
+    "f03_shmobj_lookup_data_v1",
+    "f03_swapout_callback_debug_v1",
+    "f03_syscall_dispatch_binding_v1",
+    "f03_syscall_entry_config_v1",
+    "f03_syscall_entry_debug_v1",
+    "f03_syscall_get_mempolicy_log_bridge_debug_v1",
+    "f03_syscall_madvise_log_bridge_debug_v1",
+    "f03_syscall_mbind_entry_log_bridge_debug_v1",
+    "f03_syscall_mbind_log_bridge_debug_v1",
+    "f03_syscall_migrate_pages_log_bridge_debug_v1",
+    "f03_syscall_set_mempolicy_log_bridge_debug_v1",
+    "f03_vm_policy_clear_alloc_debug_v1",
+    "f03_vm_policy_clear_alloc_line_v1",
+    "f03_vm_policy_clear_free_line_v1",
+    "f03_vm_policy_clear_source_file_v1",
+    "f03_vm_policy_insert_log_debug_v1",
+    "f03_vm_policy_insert_log_provider_v1",
+    "f03_wait_c_dependencies",
+    "f03_wait_log_debug_v1",
+    "f03_wait_state_debug",
+    "f03_wait_zombie_log_debug_v1",
+    "interrupt_syscall",
+    "kds_list",
+    "linux_clock_gettime",
+    "linux_printk",
+    "linux_wait_event",
+    "shmid_index",
+    "sys_perf_event_open",
+    "syscall_execveat_bridge",
+    "syscall_name",
+    "syscall_policy_do_syscall2_bridge",
+    "syscall_policy_do_syscall3_bridge",
+    "syscall_policy_forward_context_bridge",
+    "syscall_util_indicate_clone_disabled_bridge",
+    "terminate",
+    "terminate_host",
+    "terminate_mcexec",
+    "the_shm_info",
+    "the_shminfo",
+    "tod_data_lock",
+    "uti_desc",
+    "util_thread",
+    "vsyscall_page"
+  ],
+  "remaining_undefined_count": 108,
+  "retained_first_formatter_failure": "256MiB AS could not map LLVM; no source change occurred; corrected to existing1GiB ordinary bound, no new resource grant.",
+  "reused_functional_checks": {
+    "format_only_canonical_change": true,
+    "manifest": {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/CHECK-MANIFEST.json",
+      "sha256": "b283601335bb54029b5000e91bbc88ddd060b0d7925de8ed297cd5f23c4423fa"
+    },
+    "result": {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/run-1/RESULT.json",
+      "sha256": "95448f6234e6e1a01e58c48cd4cacd8c86768aec282b47b6543c14a613041048"
+    },
+    "scope": "Two actual C/Rust signal forwarding bodies, seven payload vectors/fourteen calls; real fourteen-field C/Rust ABI witness; extracted C selector on/off symbol ownership. No native execution."
+  },
+  "scope": "CANONICAL_TWO_SIGNAL_FORWARDERS_GENUINE_ABI_HOST_UNIT_ONLY",
+  "source_post": {
+    "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/unit.rs": "f7f4f2c084c1c2873c6d58b338a310e97c0fef2ddea68bf79b5e96c36a320922",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/f03_signal_forward_defined_candidate.rs": "df163e6947b063a3bd3db891c1c809a16ef57f9fec203a54864faae8a300a0de"
+  },
+  "source_pre": {
+    "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/unit.rs": "f7f4f2c084c1c2873c6d58b338a310e97c0fef2ddea68bf79b5e96c36a320922",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/f03_signal_forward_defined_candidate.rs": "df163e6947b063a3bd3db891c1c809a16ef57f9fec203a54864faae8a300a0de"
+  },
+  "standalone_object": {
+    "path": "/home/holden/mckernel-work/m14-resume-20261105-1/signal-forward-private-1/root-canonical-1/signal-forward.o",
+    "sha256": "0acb45822deb35750c3e63ecd909f598d7b3d9e5b92b582b4fc3a64e9975f37a"
+  },
+  "started_utc_ns": 1793927924762615138,
+  "two_original_entries": {
+    "syscall_forward_rt_sigprocmask_bridge": [
+      "T",
+      "0",
+      "88"
+    ],
+    "syscall_forward_sigaction_update_bridge": [
+      "T",
+      "0",
+      "89"
+    ]
+  },
+  "wall_seconds": 0.05641225500039582
+}

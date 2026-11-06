@@ -115,6 +115,66 @@ def selection_statements():
     return option, guard, blocks, early, base
 
 
+class M14SignalForwardSelectionTests(unittest.TestCase):
+    def test_signal_pair_tracks_c_selection_and_rust_inputs(self):
+        option_name = "MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL"
+        parsed = commands(CMAKE_SOURCE.read_text())
+        option = one([text for name, text in parsed if name == "option"
+                      and re.search(r"\(\s*" + option_name + r"\s", text)],
+                     "signal-forward option")
+        guard = one([if_block(parsed, index) for index, (name, text) in enumerate(parsed)
+                     if name == "if" and re.search(r"\(\s*" + option_name + r"\s+AND\b", text)],
+                    "signal-forward supported-profile guard")
+        blocks = [if_block(parsed, index) for index, (name, text) in enumerate(parsed)
+                  if name == "if" and re.search(r"\(\s*" + option_name + r"\s*\)", text)]
+        self.assertEqual(len(blocks), 2)
+        cmake = os.environ.get("CMAKE") or shutil.which("cmake")
+        self.assertIsNotNone(cmake, "CMake is required")
+        fixture = "\n".join([
+            "cmake_minimum_required(VERSION 3.16)",
+            "project(signal_pair_selection LANGUAGES NONE)", option, guard,
+            'set(RUST_KERNEL_CFG BASE_CFG)',
+            'set(RUST_KERNEL_SRCS base.rs)',
+            'set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" PROPERTY',
+            '    COMPILE_DEFINITIONS MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)',
+            *blocks,
+            'get_source_file_property(defs "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" COMPILE_DEFINITIONS)',
+            'file(WRITE "${CMAKE_BINARY_DIR}/selection.txt"',
+            '    "defs=${defs}\\ncfg=${RUST_KERNEL_CFG}\\nsrcs=${RUST_KERNEL_SRCS}\\n")',
+        ])
+        for enabled in (False, True):
+            with self.subTest(enabled=enabled), tempfile.TemporaryDirectory(prefix="m14-signal-selection-") as temp:
+                source, build = Path(temp) / "source", Path(temp) / "build"
+                source.mkdir()
+                (source / "CMakeLists.txt").write_text(fixture)
+                result = subprocess.run([cmake, "-S", str(source), "-B", str(build),
+                                         "-DENABLE_RUST_KERNEL=ON", "-DARCH=x86_64",
+                                         "-D" + option_name + "=" + ("ON" if enabled else "OFF")],
+                                        capture_output=True, text=True, timeout=30)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                observed = dict(line.split("=", 1) for line in
+                                (build / "selection.txt").read_text().splitlines())
+                self.assertCountEqual(observed["defs"].split(";"),
+                                      ["MCKERNEL_RUST_SYSCALL_POLICY_HELPERS"] +
+                                      (["MCKERNEL_RUST_F03_SIGNAL_FORWARD"] if enabled else []))
+                self.assertEqual(observed["cfg"].split(";"), ["BASE_CFG"] +
+                                 (["--cfg", "f03_signal_forward_defined_candidate"] if enabled else []))
+                self.assertCountEqual([Path(path).name for path in observed["srcs"].split(";")],
+                                      ["base.rs"] +
+                                      (["f03_signal_forward_defined_candidate.rs"] if enabled else []))
+        for profile in (("OFF", "x86_64"), ("ON", "arm64")):
+            with self.subTest(unsupported=profile), tempfile.TemporaryDirectory(prefix="m14-signal-profile-") as temp:
+                source, build = Path(temp) / "source", Path(temp) / "build"
+                source.mkdir()
+                (source / "CMakeLists.txt").write_text(fixture)
+                result = subprocess.run([cmake, "-S", str(source), "-B", str(build),
+                                         "-DENABLE_RUST_KERNEL=" + profile[0], "-DARCH=" + profile[1],
+                                         "-D" + option_name + "=ON"],
+                                        capture_output=True, text=True, timeout=30)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("M14 signal forwarding requires", result.stdout + result.stderr)
+
+
 class M14SyscallSelectionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

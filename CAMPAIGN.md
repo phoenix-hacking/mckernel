@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T00:52Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T02:59Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -8,12 +8,12 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 **M14 is active under the explicit November 5 resume.** Dispatcher:
 `gpt-6.1-sol`, reasoning `max`; one disjoint light child, one shared HOST compiler
 job on CPU6 within the initial 2 GiB phase. The existing timer steers every
-15 minutes. The 01:14–02:14Z November 6 target is an aim, not acceptance.
+15 minutes. The 01:14–02:14Z November 6 target was missed; acceptance is unchanged.
 After genuine original-scope M14 acceptance and a published verified matching
 proof checkpoint, continue M15 automatically. Final delivery retains Rocky/Linux.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`21f1de927a9f1dbcc5395f6693eb0b5b17b23970`** is pushed and fetched/blob
+Checkpoint **`1a14dee2bba45eac0c8823e46195ae8e5ae4f48e`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -193,30 +193,62 @@ or default/native qualification. The old core also cannot provide the two new
 credential entries' error-aware getter; those entries remain unselected there.
 
 The committed `do_fork` constructor correction passes16 actual-branch cases;
-the predecessor fails4. The `util_thread` wire correction is now integrated and
-checked: argument5 is set0 before offload, matching the prepared Rust body. The
-predecessor fails8 wire predicates; the corrected complete extracted function
-passes all10 allocation/attribute/error cases with no other failures. The durable
-actual-source regression also passes. This took0.12 s wall with24,500 KiB peak
-RSS; callbacks/thread objects are HOST observers, not lifetime/native proof.
-Evidence is `docs/verification/m14-util-wire-results-20261106.json`. Universal
+the predecessor fails4. Checkpoint `1a14dee2b` also sets `util_thread` argument5
+to0 before offload. Its complete extracted function passes10 allocation/attribute/
+error cases; the predecessor fails8 wire predicates. Existing checks are reused.
+Evidence: `docs/verification/m14-util-wire-results-20261106.json`. Universal
 dispatch, global UTI/drain and held exec/ACK/TID/XPMEM domains remain excluded.
-The active `m14_generic` lane reuses the eligible signal forwarding bodies and
-returns their exact missing selector/provider binding, without a duplicate port.
+
+**New eligible signal integration:** the paired opt-in C/Rust selectors now wire
+`syscall_forward_rt_sigprocmask_bridge` and
+`syscall_forward_sigaction_update_bridge` to the existing real generic-forwarding
+provider. The canonical Rust unit compiles in0.056 s; its `ld -r` with the real
+F06/core cohort passes in0.059 s, producing18,647,680 bytes, SHA
+`6337be3aa294a9a3ec535ef4ab52928162b44f67ae563cd2517cbe8679170c03`.
+Both original entries have unique nonempty definitions; real `memset` and
+`syscall_generic_forwarding` resolve. The108 remaining unresolved symbols are
+recorded in `docs/verification/m14-signal-forward-canonical-results-20261106.json`.
+Seven payload vectors/fourteen C/Rust calls and the fourteen-field real ABI
+witness pass; actual CMake on/off pairing and unsupported-profile rejection pass.
+The canonical formatted source was compiled without suppressing compiler warnings.
+This is an opt-in relocatable cohort, with no supported-default or native claim.
+
+| Changed original function | C / Rust path | Owner and state | Remaining condition / next check |
+| --- | --- | --- | --- |
+| `syscall_forward_rt_sigprocmask_bridge` | `kernel/syscall.c` / `kernel/rust/f03_signal_forward_defined_candidate.rs` | Root compositor; implemented, opt-in paired, compiled and relocatably linked | Default full-image binding and matching native signal-mask behavior; no retirement |
+| `syscall_forward_sigaction_update_bridge` | Same C / Rust paths | Root compositor; implemented, opt-in paired, compiled and relocatably linked | Default full-image binding and matching native action update; no retirement |
+
+The retained mmap downgrade helper has **no eligible nonheld caller**: its
+intended private `f03_do_mmap_supported_v1` caller still has XPMEM lock-order and
+descriptor-lifetime NO-GO conditions. It remains private, uncompiled and
+unselected. No unused helper was added. This does not reopen accepted F01/F02.
+
+**Elapsed time and ETA:** the four-hour target was missed. The foreground
+reported repeated upstream timeouts from approximately01:34–02:51Z (77 minutes),
+with fresh model output at02:52Z and HTTPS recovery. Record this as an observed
+connectivity interruption, separate from productive engineering time; exact
+queue-to-compiler and source-hold onset timings remain unknown. Recovery neither
+clears the generic source hold nor supplies image/native proof. No defensible
+completion ETA exists until the original source/hold authority supplies an
+eligible universal dispatch/exec cohort or an authorized disposition; image
+linkage, actual native admission and matching applications/restoration follow.
 
 M14 delta remains **0 accepted files, 0 production images, 0 native-qualified
-cohorts and 0 C retirements**. Four accepted files remain closed. Current2's
-23.2-minute control blockage ended; corrected current3 publication took under
-one second. The four-hour target is at risk because the new image is blocked by
-an explicit source hold. The scheduling change is now applied: actual source-FD
-READY feedback preceded sudo publication, and ready source immediately returned
-to the ordinary compiler queue. Exact queue latency remains unrecorded.
+cohorts and 0 C retirements**. Exact open gates: **F03, F06, I01 supported-default
+ownership/zero-C/ABI, I02 reproducible matched image/modules, I03 matching native
+applications and resource restoration**. Four accepted files and35/35 historical
+functional closure retain their exact separate scopes. The23+5 C cursor remains
+historical; no fresh final-image count is claimed.
 
-**Next deliverable:** `m14_generic` returns the dependency-ready signal bridge
-composition/provider edge; Root feeds only eligible changed units to the ordinary
-CPU6 compiler. The source hold on the universal generic cohort is the critical
-full-link obstruction and is not cleared by sudo, code publication or model
-recovery. M15 remains queued until genuine M14 acceptance and published proof.
+**Next15-minute deliverable:** Root publishes this checked signal batch and
+verifies the fetched commit/blobs. The disjoint light child binds the existing
+eight-entry F03 adapter object to this actual provider cohort and proposes one
+bounded CPU6 relocatable link, excluding the two incompatible credential entries.
+Root executes only after exact compatibility/resource checks. No unchanged tests
+or full crate are recompiled. The scheduling adjustment replaces the blocked
+mmap caller lane with this ready compiled-unit integration; full-image and native
+execution remain gated by the source hold and actual native admission. M15 stays
+queued until genuine M14 acceptance and published matching proof.
 
 ## M14 checklist — compute kernel
 
@@ -267,11 +299,11 @@ Historical architecture cursor (5, current selection must be re-established):
 - [ ] M14-I03: matching useful applications, process/memory/thread/signal behavior
   and native lifecycle/resource restoration on that image. Then accept M14.
 
-## M15 checklist — focused source/debugging checks resumed
+## M15 checklist — queued after M14 acceptance
 
-The user's explicit M15 request authorizes this focused source work before M14
-acceptance. Final M15 acceptance still needs the matching image/modules/tools
-and evidence below; no M14 acceptance is implied.
+Earlier focused M15 source/debugging results are retained below. Current
+implementation scheduling is M14 exclusively; resume M15 after genuine M14
+acceptance and a published matching proof checkpoint.
 
 Reuse existing Rust IHK, SMP, mcctrl, tools and accepted SDK/library artifacts.
 For each open row finish remaining bodies, select the real Rust default and ABI,

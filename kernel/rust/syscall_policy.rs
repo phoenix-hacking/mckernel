@@ -35446,3 +35446,8 @@ mod f03_util_register_desc_debug_storage_v1 {
 mod f06_vdso_info;
 #[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
 use self::f06_vdso_info::vdso_get_vdso_info;
+
+// Private opt-in signal-forward pair; current supported x86_64 ABI only.
+#[cfg(all(f03_signal_forward_defined_candidate, target_arch = "x86_64"))]
+#[path = "f03_signal_forward_defined_candidate.rs"]
+mod f03_signal_forward_defined_candidate;

@@ -20071,6 +20071,9 @@ syscall_process_unlock_bridge(void *proc, void *lock_arg)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD)
+extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
+#else
 long
 syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask)
 {
@@ -20079,6 +20082,7 @@ syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask)
 	ihk_mc_syscall_set_arg0(&ctx0, sigmask);
 	return syscall_generic_forwarding(__NR_rt_sigprocmask, &ctx0);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_getresuid(int n, ihk_mc_user_context_t *ctx);
@@ -20182,6 +20186,9 @@ long sys_set_robust_list(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_F03_SIGNAL_FORWARD
+extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
+#else
 long
 syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 {
@@ -20194,6 +20201,7 @@ syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 	ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags);
 	return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
 }
+#endif
 
 int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
 #else

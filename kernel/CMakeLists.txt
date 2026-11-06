@@ -50,6 +50,11 @@ endif()
 option(ENABLE_NATIVE_SYSFS_VERIFY "Enable guest sysfs verification with a Linux test controller" OFF)
 option(ENABLE_NATIVE_FORK_OWNED_TRANSACTION "Enable the existing native owned-fork transaction" OFF)
 option(ENABLE_RUST_M14_SYSCALL_ADAPTERS "Build the unqualified M14 forwarding/signal adapter candidate" OFF)
+option(MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL "Pair the unqualified x86 Rust signal forwarding bridges" OFF)
+if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
+        (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64"))
+    message(FATAL_ERROR "M14 signal forwarding requires an enabled x86_64 Rust kernel")
+endif()
 set(MCKERNEL_HOST_IRQ_ABI "legacy" CACHE STRING "Linux control-kernel IRQ-work ABI")
 set_property(CACHE MCKERNEL_HOST_IRQ_ABI PROPERTY STRINGS legacy linux-6.12)
 # Complete F06 candidate is opt-in until matched image/native qualification.
@@ -200,6 +205,10 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_xstate.rs"
 	)
 		set(RUST_KERNEL_CFG)
+		if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_defined_candidate")
+			list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_defined_candidate.rs")
+		endif()
 		if (ENABLE_RUST_M14_SYSCALL_ADAPTERS)
 			# Keep paired ownership opt-in until matching image/native qualification.
 			list(APPEND RUST_KERNEL_CFG
@@ -682,6 +691,10 @@ if (RUST_KERNEL_ENABLED)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
 		PROPERTIES COMPILE_DEFINITIONS
 		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_OFFLOAD;MCKERNEL_RUST_SIGNAL_HELPERS;MCKERNEL_RUST_F03_IO_DIAGNOSTICS;MCKERNEL_RUST_F03_MINCORE;MCKERNEL_RUST_F03_MOVE_PAGES;MCKERNEL_RUST_F03_SCHED_BRIDGES;MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES;MCKERNEL_RUST_F03_DISPATCH_CONTEXT;MCKERNEL_RUST_F03_LEAF_CALLBACKS")
+	if (MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL)
+		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+			COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD)
+	endif()
 	if (MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
 		# Pair the existing Rust process_global_storage_candidate provider above.
 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
