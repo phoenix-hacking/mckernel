@@ -1,13 +1,15 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T09:01Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T09:07Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Active under manual same-Root resume `20261106T034657Z-2c795952`.** Prepare
-independent eligible M14/M15 source and qualification in parallel; retain
-M14-before-M15 acceptance order. Root is the only compositor/index/publisher.
+**BLOCKED after the three-turn audit under same-Root resume `20261106T034657Z-2c795952`.**
+All current eligible source/HOST/consumer batches are consumed; no admitted
+compiler/native operation or unjoined new HOST handle is pending. Independent
+M14/M15 preparation remains the authorized scope when genuine new input becomes
+ready; retain M14-before-M15 acceptance order and Root as sole compositor/publisher.
 Dispatcher Sol/MAX; up to three explicitly routed Sol/HIGH light workers share
 one CPU6 compiler/job and the initial2 GiB HOST phase including overhead. All
 18 GiB prior reservations,4 GiB host floor, scratch21,mutex27:4 and service/source
@@ -50,22 +52,34 @@ The ready HOST source/consumer batches in this cursor are consumed. No new
 independent task is identified from existing exact inputs; blocked rows are not
 runnable assignments. The requested negative-FD candidate was scoped/deferred.
 
-**Continuation audit 2/3:** previous turn`01a1aef7-8297-7d82-8b25-a5051909a3e3`
-made real source/compiled/consumer progress and ended at the first no-ready
-boundary. Current turn`01a1b011-4f61-7eb2-af5f-27f92a843b0d` is **no progress**,
-not a verified wait: no live admitted handle remains. Fresh tracked-source/index
-checks and GitHub fetch show no new inputs; HEAD/FETCH_HEAD remain`7cfe524e0`.
-The original hold remains held/replay=false/equivalent=false (record`4f6777a4…`).
-The actual four installed SDK gate/graph source hashes still match the accepted
-NO-GO: `verify_actual_operation_gates` unconditionally refuses; profile/adapter/
-pidfd/source-view bindings remain unselected. The original SDK outer mapping is
-still null. No Docker query, guessed remap, compiler/test, install/native action,
-worker reassignment, nonce or hold release was replayed. All18GiB prior charges
-and native/source/service holds remain. Guard is running,11%used/89%remaining,
-no quota/usage-unknown restriction. The goal stays active because three actual
-consecutive goal turns have not yet been observed; reminders do not count.
-A valid disposition/binding or a concrete eligible new source defect is the
-next needed external input; there is presently no admissible full-image argv.
+**Continuation audit 3/3 — BLOCKED:**
+- `01a1aef7-8297-7d82-8b25-a5051909a3e3`: real source/compiled/consumer progress,
+  then the first exhausted-ready-queue boundary with the remaining external holds.
+- `01a1b011-4f61-7eb2-af5f-27f92a843b0d`: no progress; actual holds/gate code,
+  tracked source and GitHub fetch unchanged, no live admitted handle to poll.
+- `01a1b018-b00a-76f0-ac6d-046ce3e9d21d`: no progress; fresh revalidation again
+  finds the same held/replay=false/equivalent=false record`4f6777a4…`, unchanged
+  installed refusing gate`e85c0356…`, no runtime-source changes and no new input.
+
+These are actual Root goal turns, not timer reminders. The original generic/exec
+service/hold authority must supply a valid scoped disposition before Root has an
+eligible universal provider/full-image command. The original SDK/source-view
+operation authority still owes a reviewed actual one-shot gate and source/custody
+bindings; diagnostic namespace provenance still has a null original outer mapping
+for `/workspace/scratch/a8bff332f582`. No guessed remap, wrapper, alternate artifact,
+new thread/model, dummy provider or source-only test can substitute for those facts.
+Current SDK/code publication remains ROOT_CODE_INSTALL_ONLY, not SDK/native admission.
+
+M14 remains4/6 and M15 remains1/8; original integration/native gates remain open.
+All18GiB retained charges, scratch21, mutex27:4, failed attempts/nonces and every
+UNKNOWN native/source/service owner remain. No Docker query, compiler/test,
+install/native operation, worker retry or hold release was replayed in these
+no-progress turns. Included guard remains11%used/89%remaining with no quota/unknown
+usage condition; this is a source/admission impasse. Root records this handoff and
+verified push, then sets the existing goal blocked. It is not complete or paused;
+no automatic resume, launcher/controller restart or native cleanup is authorized.
+A real scoped disposition/binding or concrete eligible new functional source input
+is required to make the next engineering action executable under user direction.
 
 
 **Latest public consumer PASS:** the unchanged real C consumer now compiles/links
@@ -229,7 +243,7 @@ consumer PASS and scoped lifecycle assessment. Matching-tool checkpoint`d8224c35
 is also fetched/both changed-blob verified. Source checkpoint`311159ec0` remains
 fetched/all7object verified with a clean four-bundle replay of IHK
 `89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`, tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`.
-The post-push cursor in this working log changes no source, artifact or admission.
+The latest engineering/evidence cursor changes no source, artifact or admission; subsequent status-only commits preserve this handoff.
 Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
 GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
