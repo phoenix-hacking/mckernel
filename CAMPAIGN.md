@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T22:24Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T22:27Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -54,7 +54,9 @@ One standard producer passed6phases+2reads: archive`5ff02578…`, SONAME library
 freeze released;19actualorigins and unchanged strict7warnings/70+6roots pass.
 IHK`b6f986776be1b6cb3caadaa6671e042f7ef30801` is clean/committed and bundled.
 The meaningful current-C candidate regression is retained without a green replay.
-Functional receipt`9f1eb336…`; producer`fb11b7c1…`; parent publication follows.
+Functional receipt`9f1eb336…`; producer`fb11b7c1…`; parent checkpoint
+`dae7c1935760fe39145bf8814355a990947aaaaf` is pushed/fetched/all7changed-entry
+verified. The changed committed bundle replays exactly once to IHK`b6f98677…`.
 Bounded result:`docs/verification/m15-public-env-consumer-lifetime-results-20261106.json`.
 Original file/native gates remain open.
 
@@ -130,8 +132,9 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** publish the passing Cconsumer lifetime result, affected
-producer and durable regression as one coherent checkpoint. Reuse
+**Current priority:** the Cconsumer source, affected library and durable regression
+are now published and verified. No further dependency-ready local functional batch
+is established; the two original external conditions below remain unresolved. Reuse
 all unchanged Rust parser/ABI/provider results. The earlier primary memory and EOF
 reader cleanups are already published, including checkpoint`22cedb5e5`; their green
 behavior suites remain closed at their exact scopes. Net untranslated M14/M15 LOC
@@ -141,7 +144,7 @@ The current prerequisite queue is:
 
 | Prerequisite | Actual consumers / gates | Owner / next concrete deliverable |
 | --- | --- | --- |
-| Six Cconsumer ownership cleanup — source/tests/library PASS | Six public parser consumers / M15 library lifetime | Root publishes/fetch-verifies completed batch and replays only the changed committed bundle |
+| Six Cconsumer ownership cleanup — PUBLISHED | Six public parser consumers / M15 library lifetime | Consumed checkpoint`dae7c1935`; all new waits joined; no unchanged suite replay |
 | Original universal generic/exec disposition — BLOCKED | M14-F03/F06/fullimage/integration | Original service/hold authority supplies a valid scoped disposition; no replay/equivalent reassignment |
 | Original SDK/source-custody/native binding — BLOCKED | Matching original M14/M15 lifecycle/native | Original authority supplies actual reviewed one-shot bindings/current-free; diagnostic outermapping remains UNKNOWN |
 
@@ -150,6 +153,16 @@ native/fullimage/file acceptance. Critical-path completion ETA remains unknown
 while actual external scope/admission fields remain held/unbound. All historical
 UNKNOWN owners,18GiBcharges,mutex27:4,scratch21,attempts/nonces/dirtywork remain.
 No old query, expired operation, unchanged suite or held request is replayed.
+
+**Fresh resumed audit boundary1/3:** actual Root turn`01a1b2d3-6e9f-7433-887c-e0bf88f6b493` made the above
+engineering progress and now has no established ready independent batch. All six
+children are completed and all new HOST operations are joined. The old audits stay
+history; timer reminders/tool calls are not extra Root turns. No genuine service
+disposition, SDKoutermapping or reviewed native binding was newly supplied. Next
+15-minute deliverable is conditional on such actual input; no compiler/native
+command is presently eligible. Preserve the existing goal active at this first
+boundary and apply the required blocked status if the same impasse repeats over
+three consecutive actual Root turns. No controller restart or held task replay.
 
 **Historical prior-resume continuation audit 3/3 — BLOCKED (superseded by explicit 09:46Z manual resume):**
 - `01a1aef7-8297-7d82-8b25-a5051909a3e3`: real source/compiled/consumer progress,
