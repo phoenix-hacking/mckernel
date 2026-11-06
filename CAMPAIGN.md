@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T06:12Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T07:04Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,30 +34,44 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | HOST70function/sixdata/SONAME prerequisites PASS; exact SDK gate identified: published fresh-operation verifier still unimplemented/refuses |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Four parser corrections published,6tests/80cases PASS; matched three-tool HOSTcohort PASS with two objectreuses; now deriving exact pinned diagnosticSDK namespace mapping after first declared remap was absent |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Two partial-startup rollback cases PASS; sixcaller cleanup passes10genuine predevice+7callbackcases; durable canonical-source regression passes; allslot handles joined |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | SDK metadata consumed once: original diagnostic prefix remains unbound; new turn `01a1afa9-b9f8-7e01-b38f-ff467122e9f8` prepares eligible perf kind/reference/close contract and interleavings |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Twelve actual ihkconfig/ihkosctl main preflights PASS; new turn `01a1afaa-506c-7041-8c0f-fdcd4e04f38a` reviews distinct `ihk_create_os_str` allocation/publication/unwind contract |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Turn `01a1afa9-8cba-7bc2-8450-15da70c36bd0` ran all three actual ihkmond main preflights PASS; waits joined and shared slot released; next independent review waits for a ready source candidate |
 
-The ranked queue follows actual dependencies; passed work is consumed:
+The short ranked queue consumes passed shared results before new work:
 
-| Rank / prerequisite | Consumers / original gates | Owner / next proof |
+| Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Exact source/bundle publication | Six environment APIs plus matched three management tools; M15-F05…08/I03 | Root fresh-replays IHK`0a1061a`, pushes and fetch/blob-verifies the checked caller/cohort checkpoint |
-| 2. Retained diagnostic SDK binding | mcinspect/eclair; M15-F03/F04/I03 | CLI owner verifies actual old bind-root mapping for pinned RockyBFD2.41/GCC14, without substituting HOST2.34 or scanning artifacts |
-| 3. Original SDK/source-view admission | Original supported builds across M14/M15 | Root owns actual gates: published supervisor still refuses before launch; no admitted SDK command until reviewed actual one-shot/source-custody facts exist |
+| 1. Matching three-tool process proof | ihkconfig/ihkosctl/ihkmond; M15-F06…08/I03 | Root publishes the checked 12+3 actual main batch now; no recompilation or unchanged test replay |
+| 2. Defined perf event lifetime | `sys_perf_event_open`, grouped events and both close contexts; M14-F03/I01 | Public ABI owner returns one eligible source-bound kind/pin/close candidate plus adversarial interleavings, then independent review before changed-unit qualification |
+| 3. Create-OS transactional ownership | `ihk_create_os_str` public configuration and rollback paths; M15-F05/I03 | CLI owner reviews this separate parser's actual allocation/output/unwind contract, returning a precise defect and private fix/witness request or bounded NO-GO |
 
-Shared HOST type contracts pass70function/sixdata roots; caller cleanup passes10
-genuine pre-device plus7source-bound callback observations. All three current HOST
-tools resolve the exact checked SONAME provider. No program main/native path ran.
-The third row is a real blocked prerequisite, not a ready job or permission to
-create a controller. No filler assignment is created to occupy a slot.
+The SDK provenance lane is blocked on a **new corroborated original outer binding**
+for `/workspace/scratch/a8bff332f582`; the returned three-container metadata covers
+only `/out` and `/nightly`. The four diagnostic pins remain unchecked. This is
+`UNKNOWN_OUTER_BIND_MAPPING`, not global SDK absence; no repeat Docker query,
+guessed remap or compiler substitution is queued. Separately, the published
+original SDK/source-view entrypoint still refuses in `verify_actual_operation_gates`;
+publication and ordinary HOST permission do not implement/admit its one-shot gate.
+The universal generic/exec source hold remains the external full-image dependency.
 
-Routing is machine-observed in this invocation's `ROUTING.json`: Root
-`gpt-6.1-sol`/MAX, all three `gpt-6.1-sol`/HIGH, approval never, filesystem
-unrestricted; UID1000 is not Unix root. Children write private/disjoint outputs,
-request the shared build slot and never multiply resource grants. The completed
-M14 perf result is an exact ownership NO-GO, so the third ready slot was assigned
-to the independently authorized M15 CLI work rather than retrying that entry.
+New actual behavior proof: **12 ihkconfig/ihkosctl +3 ihkmond main executions PASS**
+on the exact existing three-tool/SONAME cohort. CLI usage/malformed/negative/overflow
+indices return before IHK dispatch. Supervisor help/invalid/missing interval paths
+return before `daemon()`; at actual UID1000 error logging returns before `/dev/kmsg`.
+All15 direct waits joined, one serial HOST slot released; no compiler, daemon,
+worker, device, native, new image or C retirement. ihkmond's three measured walls
+sum0.010376s with3,964KiB peak RSS; centisecond CPU counters round to0.00.
+Raw commands/env/status/output/provider hashes and retained SDK NO-GO are bound in
+`docs/verification/m15-matched-tool-main-results-20261106.json`.
+
+Routing is machine-observed in this invocation's `ROUTING-20261106T0653.json`:
+Root `gpt-6.1-sol`/MAX, all three existing workers `gpt-6.1-sol`/HIGH, approval
+never and filesystem unrestricted. New turn IDs above were read from the actual
+guard; fresh worker source output and the completed batch are observed, not a
+heartbeat-only claim. UID1000 is not Unix root. No new model/controller/resource
+owner was created. Current guard `last_rate_limits` reports9%used/91%remaining,
+reset1794518606; older weekly ledger observations remain untouched.
 
 The foreground's isolated HIGH-floor patch (SHA`95f56039adf2938862ef0adad257edf15eaebe9eb2acc397a98714f29bcfe722`)
 passed index applicability checking and was staged only from that patch. It updates
@@ -69,8 +83,8 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Current published checkpoint **`bcd404028e884b112b535e4c6560d108eab0d6d4`** is pushed and fetched/all9changed-object
-verified. Its IHK source is`05f265d73245f214e72d77f004989fe3384631db`, independently bundle-replayed clean. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
+Current published source checkpoint **`9f70668c6985dbf0085f5511f0eb87df075b0dbe`** is pushed and fetched/all9changed-object
+verified. Its IHK source is`0a1061a334dfaf1d0182aaddcc511113fde4f897`, tree`5e395fe45ced5474cd87145f468c253ec9cbf367`, independently bundle-replayed clean. This next checkpoint adds the actual process proof and current status. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
@@ -155,7 +169,7 @@ is claimed. The historical 30-minute velocity baseline is unchanged.
   behavior. **34 behavior cases** cover transitions, timeout, descriptor zero,
   captured errno and cleanup; actual device boot was not executed.
 - IHK successor `c032c975fdbe17be846bd61cc48cb541e7ab5830`, tree
-  `fac3185fb76c9170452af25b8268fb3729699441`, is the current gitlink. Incremental
+  `fac3185fb76c9170452af25b8268fb3729699441`, was the recovered checkpoint gitlink. Incremental
   bundle blob `7a9fdf2577b13778aad334dee990385eb6507b1e` and the committed manifest
   preserve the complete chain. A fresh three-stage replay from the exact public
   base reproduced that HEAD/tree with a clean checkout.
