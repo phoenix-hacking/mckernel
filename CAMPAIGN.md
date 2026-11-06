@@ -1,11 +1,11 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T10:21Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T10:28Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Goal ACTIVE; quiescent handoff for the user-authorized 10:19Z capacity change.**
+**PAUSED by launcher shutdown; quiescent capacity handoff preserved.**
 Current same-Root manual invocation is`20261106T094634Z-e32bb1d4`. The primary
 memory allocation-error fix is published/fetched at
 `208d61882e396974f13ea2ece4d1f4edb5ca90e8`; all9changed entries verify and its
@@ -15,11 +15,12 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`. Its28candidate behavior cases,
 once. No unchanged passing suite was rerun. The separate EOF pair, metadata,
 fixture and request are frozen/private and UNADMITTED; no EOF behavior has run.
 
-No new compiler/native batch starts after this handoff. Current owners report
-pending paths and become idle/completed; Root keeps the goal active and preserves
-all real holds. Foreground alone verifies quiescence and retires/relaunches the
+No new task dispatch or compiler/native batch starts during shutdown. All three
+children are completed, and all this invocation's new HOST waits are joined. The
+normal saved goal is already paused; a subsequent authorized launcher invocation
+may continue. Root preserves every real hold and active control identity. Foreground alone verifies quiescence and retires/relaunches the
 existing controller through its supported same-Root path, then verifies actual
-expanded routing. No goal reset, artificial blocked/paused status or native cleanup.
+expanded routing. No goal reset, completion claim, native cleanup or automatic resume is authorized.
 The machine handoff is
 `/home/holden/mckernel-work/m14-m15-parallel-scale-20261106T101916Z/READY-FOR-SCALE.json`.
 
@@ -121,7 +122,8 @@ command is admitted. The held universal generic/exec cohort, refusing original
 SDK/source-view entrypoint and unknown diagnostic outer mapping remain external
 dependencies, not runnable assignments. M14/M15 acceptance stays4/6 and1/8;
 production-image/native/C-retirement deltas remain0. The previous blocked audit
-below remains history; a capacity handoff is not a new blocked audit or pause.
+below remains history. This later launcher shutdown paused continuations; it
+does not release source/native owners or accept an unfinished gate.
 
 
 **Historical prior-resume continuation audit 3/3 — BLOCKED (superseded by explicit 09:46Z manual resume):**
