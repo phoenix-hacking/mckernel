@@ -14,7 +14,8 @@ Prepare independent eligible M14/M15 source and qualification work in parallel;
 retain M14-before-M15 acceptance order and one shared compositor. The latest user
 capacity change authorizes up to six actual Sol/HIGH children through the normal
 same-Root launcher/server transition, with no recursive spawning or state edits.
-Until that transition is verified, retain the current actual server ceiling.
+The normal same-Root transition is verified in invocation20261106T103153Z-e5bed1f2;
+the actual current ceiling is six direct HIGH owners. Use only ready disjoint work.
 
 After fresh admission, ordinary HOST work may use CPUs0,6,7 with up to three
 aggregate light compile/test jobs and4 GiB TOTAL including all worker/controller
@@ -27,8 +28,9 @@ weekly-only limit and dirty edit.
 
 Prioritize shared dependencies and work that unlocks parallel lanes. Finish
 shared provider, ABI, ownership and cleanup contracts before isolated leaf work.
-Batch compatible short checks under one reviewed serial build admission, then
-promptly hand the released slot to the next ready worker.
+Batch compatible short checks under one reviewed shared HOST admission, respecting
+actual dependencies and aggregate limits; promptly hand released resources to the
+next ready worker.
 
 The latest user instruction authorizes continued useful campaign work beyond
 the soft time target until the objective is complete or the included weekly

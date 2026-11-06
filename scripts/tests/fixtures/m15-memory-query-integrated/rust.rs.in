@@ -1,0 +1,49 @@
+// Actual selected reader/converter/query/public wrappers plus actual shared parser.
+use core::ffi::{c_char,c_int,c_long,c_ulong,c_void};
+use core::ptr::null_mut;
+macro_rules! c {($s:literal)=>{concat!($s,"\0").as_ptr().cast::<c_char>()};}
+__STAT_STORAGE__
+unsafe extern "C" {
+ static mut loglevel:c_int;
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_stat"]fn stat(path:*const c_char,out:*mut StatStorage)->c_int;
+ #[link_name="observation_fopen"]fn fopen(path:*const c_char,mode:*const c_char)->*mut c_void;
+ #[link_name="observation_fclose"]fn fclose(file:*mut c_void)->c_int;
+ #[link_name="observation_getline"]fn getline(line:*mut *mut c_char,capacity:*mut usize,file:*mut c_void)->isize;
+ #[link_name="observation_calloc"]fn calloc(n:usize,size:usize)->*mut c_void;
+ #[link_name="observation_strdup"]fn strdup(text:*const c_char)->*mut c_char;
+ #[link_name="observation_free"]fn free(pointer:*mut c_void);
+ #[link_name="observation_close"]fn close(fd:c_int)->c_int;
+ fn strcmp(a:*const c_char,b:*const c_char)->c_int;
+ fn strsep(cursor:*mut *mut c_char,delimiter:*const c_char)->*mut c_char;
+ fn strtol(text:*const c_char,end:*mut *mut c_char,base:c_int)->c_long;
+ fn snprintf(out:*mut c_char,size:usize,format:*const c_char,...)->c_int;
+ fn sscanf(input:*const c_char,format:*const c_char,...)->c_int;
+ fn memset(out:*mut c_void,byte:c_int,size:usize)->*mut c_void;
+ fn geteuid()->u32;
+ fn open(path:*const c_char,flags:c_int,...)->c_int;
+ fn strnlen(text:*const c_char,maximum:usize)->usize;
+ fn write(fd:c_int,text:*const c_void,size:usize)->isize;
+ fn observation_open(index:c_int)->c_int;
+ fn observation_run(total:unsafe extern "C" fn(c_int,*mut c_ulong,c_int)->c_int,available:unsafe extern "C" fn(c_int,*mut c_ulong,c_int)->c_int,directory:*const c_char)->c_int;
+}
+mod ihklib_mcstat{use super::*;pub unsafe fn ihklib_os_open(index:c_int)->c_int{unsafe{observation_open(index)}}}
+mod ihklib_cli_parsers{
+ use super::*;
+ const EINVAL:c_int=22;
+__PARSER__
+}
+mod actual{
+ use super::*;
+ use super::ihklib_cli_parsers::mem_array;
+__MEM_CHUNK_TYPE__
+__LOGGING__
+__STAT_PATH__
+__MEM_PATH__
+__READER__
+__QUERY_AND_PUBLIC_WRAPPERS__
+}
+fn main(){
+ let directory=std::ffi::CString::new(std::env::args().nth(1).expect("ordinary text directory")).unwrap();
+ std::process::exit(unsafe{observation_run(actual::ihk_os_query_total_mem,actual::ihk_os_query_free_mem,directory.as_ptr())});
+}

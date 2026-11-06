@@ -1,0 +1,86 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+__LOGLEVEL_DECL__
+/* Reuse the EOF fixture's local path/stat/fopen seams and genuine libc owner
+ * boundaries. This separate vector returns after the FIRST successful getline;
+ * no terminal EOF, allocation failure, sysfs, device, or native path is run. */
+static const char *text_directory;
+static FILE *active_file;
+static void *active_line;
+static unsigned long generation;
+static int calls, line_frees, closes, stat_calls, close_exit_errno;
+static char mapped_path[PATH_MAX];
+static const char *ordinary_path(const char *source_path) {
+ const char *expected="/sys/devices/virtual/mcos/mcos17/sys/devices/system/node/node0/meminfo";
+ assert(!strcmp(source_path,expected));
+ int n=snprintf(mapped_path,sizeof(mapped_path),"%s/node0.txt",text_directory);
+ assert(n>0&&(size_t)n<sizeof(mapped_path));return mapped_path;
+}
+int observation_stat(const char *path,struct stat *storage) {
+ ++stat_calls;assert(stat_calls==1);return stat(ordinary_path(path),storage);
+}
+FILE *observation_fopen(const char *path,const char *mode) {
+ assert(!active_file&&!active_line&&!strcmp(mode,"r"));
+ active_file=fopen(ordinary_path(path),mode);assert(active_file);return active_file;
+}
+ssize_t observation_getline(char **line,size_t *capacity,FILE *file) {
+ assert(file==active_file&&!*line&&!*capacity&&!active_line&&calls==0);
+ ssize_t result=getline(line,capacity,file);int actual_errno=errno;++calls;
+ assert(result==22&&*line&&*capacity>=(size_t)result+1);
+ assert(!strcmp(*line,"Node 0 MemTotal: 4 kB\n"));
+ active_line=*line;++generation;
+ printf("GETLINE generation=%lu pointer=%p result=%zd capacity=%zu actual-errno=%d\n",
+        generation,active_line,result,*capacity,actual_errno);
+ errno=EAGAIN; /* Explicit local errno seam after genuine successful getline. */
+ return result;
+}
+void observation_free(void *pointer) {
+ int entry_errno=errno;assert(pointer&&pointer==active_line&&line_frees==0);
+ assert(entry_errno==EAGAIN&&closes==0);
+ printf("FREE generation=%lu pointer=%p entry-errno=%d\n",generation,pointer,entry_errno);
+ active_line=NULL;++line_frees;free(pointer);
+ errno=EIO; /* Forward genuine free, then expose a cleanup-local side effect. */
+}
+int observation_fclose(FILE *file) {
+ assert(file==active_file&&closes==0&&errno==EAGAIN);
+ printf("FCLOSE entry-errno=%d line-live=%d\n",errno,active_line!=NULL);
+ int fd=fileno(file);assert(fd>=0);int result=fclose(file);close_exit_errno=errno;
+ assert(result==0);active_file=NULL;++closes;
+ assert(fcntl(fd,F_GETFD)==-1&&errno==EBADF);
+ printf("FCLOSE result=%d exit-errno=%d descriptor-closed=1\n",result,close_exit_errno);
+ errno=close_exit_errno;return result;
+}
+typedef int (*Reader)(int,char *,ssize_t,const char *);
+int observation_run(int baseline,int probe,Reader reader,const char *directory) {
+ assert(getuid()==1000&&geteuid()==1000&&probe==0);loglevel=0;
+ text_directory=directory;assert(text_directory&&strlen(text_directory)<PATH_MAX-32);
+ char path[PATH_MAX];int n=snprintf(path,sizeof(path),"%s/node0.txt",text_directory);
+ assert(n>0&&(size_t)n<sizeof(path));FILE *file=fopen(path,"w");assert(file);
+ const char *text="Node 0 MemTotal: 4 kB\n";size_t length=strlen(text);
+ assert(length==22&&fwrite(text,1,length,file)==length&&fclose(file)==0);
+ char kind[1008];memset(kind,'A',sizeof(kind)-1);kind[sizeof(kind)-1]='\0';
+ assert(snprintf(NULL,0,"Node %%d %s:%%16lu kB",kind)==1024);
+ char output[128];memset(output,0x5a,sizeof(output));errno=0;
+ int result=reader(17,output,sizeof(output),kind);int return_errno=errno;
+ assert(result==-1&&return_errno==close_exit_errno);
+ for(size_t i=0;i<sizeof(output);++i)assert(output[i]==0);
+ assert(calls==1&&stat_calls==1&&generation==1&&closes==1&&!active_file);
+ if(baseline){
+  assert(active_line&&line_frees==0);
+  printf("RECLAIM generation=%lu pointer=%p expected-baseline-early-error-leak=1\n",generation,active_line);
+  free(active_line);active_line=NULL;
+ }else{assert(!active_line&&line_frees==1);}
+ printf("%s queries=1 kind-bytes=1007 return=%d output-zero-bytes=128 return-errno=%d line-frees=%d baseline-reclaims=%d file-closes=%d live=0\n",
+        baseline?"baseline":"candidate",result,return_errno,line_frees,baseline,closes);
+ return 0;
+}
