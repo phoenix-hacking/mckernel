@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T00:18Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T00:38Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -160,56 +160,53 @@ is claimed. The historical 30-minute velocity baseline is unchanged.
 
 ## Immediate blocker and next action
 
-**Single blocker/owner: Root — current2 publication refused before installer
-READY and retains live control custody.** The corrected three-actor contract
-passed 19 focused control tests and reached all actual root/keeper/installer
-roles. Its waiting loader then rejected the new installer hash: it still pins
-`6fa1cca8…`, whereas the reviewed installer is `d87594a0…`. The installer was
-observed zombie, the keeper reported EOFError with lease UNLOCKED, and the root
-parent retained UNKNOWN after its configured timeout. No publication succeeded.
+**Single blocker/owner: Root — the immutable publication waiting loader must bind
+the corrected installer bytes before a fresh publication admission.** Current2
+failed before READY because its literal still pinned `6fa1cca8…` instead of
+`d87594a0…`. Its parent then stopped/reaped both known children and retained the
+operation lease. The reviewed root-only stop verified no children, exact source,
+request/captures and two reaped pidfds; its owned Root pidfd became terminal,
+and the original caller was joined with sudo direct wait9 and both captures
+VERIFIED_CLOSED. No publication was accepted. Process-only closure is in
+`docs/verification/m14-publication-current2-process-closure-20261106.json`.
+The other 18 GiB historical charges, UNKNOWN old outcomes, persistent operation
+paths, scratch21, mutex27:4 and native/source/service holds remain unchanged.
 
-Consumed current2 nonce:
-`b3f11a200351e7b1a252e6e609597ff65c8a92a4fbc88f68e63034b481cfb6f3`.
-The original caller/session84730 owns sudo58390; root58393, keeper58394 and
-installer58395 have exact recorded births. Their last point observations and
-source/request/cap bindings are in
-`docs/verification/m14-publication-current2-inflight-failure-20261106.json`.
-Root and the active `protocol_review` child are preparing only the minimal
-current-operation pidfd stop and original caller join. The expired install cap
-is not extended. No PID-number signal, old R3 packet, cleanup or nonce replay.
+The active `protocol_review` child owns the one bounded waiting-loader correction
+in private current3 source copies and a real unprivileged source-FD/READY test.
+It must bind every changed loader hash and exclude both consumed publication
+nonces. Root owns review and any actual admission; expired install/stop caps
+cannot be extended or replayed. The shared ordinary CPU6 HOST queue is available.
 
-The first attempt's six-actor failure was reviewed as occurring before keeper
-creation; its sudo child was positively joined and captures closed. Root recorded
-only that attempt's process-charge closure in
-`docs/verification/m14-publication-failure-before-keeper-20261106.json`.
-All historical UNKNOWN waits/install outcomes and the other 18 GiB remain held.
+**New behavior evidence:** the actual `do_fork` constructor-null C branch passes
+16 cases after the three-line CPU-credit correction; the predecessor fails four.
+A helper selected its current CPU without obtaining a credit, so failed creation
+now preserves that credit and returns ENOMEM. Ordinary acquired credits release
+once. The focused compile/check took 0.09 s wall / 0.088 s CPU with about22 MiB
+peak RSS. The private Rust candidate remains unwired. Later enqueue, TID, exec,
+ACK and XPMEM paths are unchanged; no complete fork/native acceptance is claimed.
 
-The independent provider lane verified that the retained `c205` core's signal
-source and ABI exactly match the F06 inputs and supply 33 of the partial unit's
-35 missing providers. Its private composition omits duplicate native providers.
-The old core's getter ignores host errors, so the two new credential entries
-must remain unselected when that core is reused. The proposed selector patch is
-unapplied; no new policy hold or acceptance is created. A complete image also
-needs genuine unaffected objects and eligible `do_syscall`/`terminate` providers.
+**Reusable link inputs:** all nine canonical retained-object paths in the
+conversion REUSE-DESCRIPTOR now match their recorded sizes and hashes. The zero
+aliases considered earlier are not substitutes. The retained `c205` core's
+signal source and ABI also match the F06 caller/provider inputs. Its getter still
+ignores host errors, so the two new credential entries remain unselected when
+that core is reused. The proposed extra selector gate remains unapplied. Held
+`52f`/exec-tail source cannot enter a new link; full selection/ABI proof is required.
 
-The independent VM lane delivered the three-line C `do_fork` constructor-failure
-CPU-credit correction and an actual-branch regression. They remain untested
-while publication owns the shared queue; the private Rust candidate stays
-unwired. Later enqueue/TID/exec/XPMEM paths are unchanged.
+M14 delta remains **0 accepted files, 0 production images, 0 native-qualified
+cohorts and 0 C retirements**. The 15-entry relocatable unit and F06 HOST zero-C
+text evidence are retained. Current2 held the control path for 23.2 minutes;
+its final reviewed stop took3.14 s. Queue-to-compiler timing remains unrecorded.
+The avoidable handoff was the missing real waiting-loader byte/READY check.
+Scheduling change: run that actual unprivileged handshake before any next sudo
+publication, then use the matching retained objects for compiler/link feedback.
 
-M14 acceptance delta remains **0 files, 0 production images, 0 native-qualified
-cohorts and 0 C retirements**. The 15-entry relocatable link and F06 HOST zero-C
-text proof are retained. Native work has been blocked since at least 22:23Z;
-exact queue latency and failure-to-validated-fix timing remain unknown. The
-avoidable gap was caller/loader integration left outside the synthetic fixtures.
-Scheduling change: test the actual waiting loader's source hash before any next
-publication admission; source bodies continue independently of this control lane.
-
-**Next deliverable:** reviewed stop-only source/profile, bounded current-role
-termination observations and original caller join; then one bounded installer
-pin correction with a real pre-READY loader regression. Only after custody and
-fresh admission permit it may publication or compilation proceed. A coherent
-image and matching applications/native restoration remain mandatory for M14.
+**Next deliverable:** child returns corrected frozen loader/profile plus real
+pre-READY proof; Root reviews the exact failure correction and performs only a
+freshly admitted next operation. Eligible F06/provider composition proceeds with
+matching unheld inputs, then the coherent image and application/native lifecycle
+proof required for M14. M15 stays queued until genuine M14 acceptance.
 
 ## M14 checklist — compute kernel
 

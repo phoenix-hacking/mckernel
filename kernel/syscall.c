@@ -8156,6 +8156,9 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	
 	if (!new) {
 		err =  -ENOMEM;
+		/* Helper selection did not obtain a CPU reservation. */
+		if (helper_thread)
+			return err;
 		goto release_cpuid;
 	}
 
