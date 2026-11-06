@@ -1,97 +1,53 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T11:14Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T22:08Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**BLOCKED after the three-turn exhausted-ready-work audit for resume `20261106T103153Z-e5bed1f2`.**
-The10:28Z shutdown and checkpoint`cdfeff3de` are historical. The normal supported
-transition retired the old launcher and started worker237571/server237574,
-server birth4738164. The original goal is retained; actual Root is Sol/MAX, reused/new
-owners Sol/HIGH, unrestricted/approval never, UID1000. Fresh included guard is
-14%used/86%remaining; no stop or usage-unknown restriction. Native/source/service
-holds and18GiB retained charges remain unchanged; image argv stays unavailable.
+**ACTIVE under explicit manual resume `20261106T214601Z-945b55f2`.**
+The earlier blocked audits/checkpoint`f8995aec9` remain history; this new manual
+resume supplies concrete independent userspace error-handling inputs and a fresh
+audit, without releasing any old scope. Worker409240/server409242 birth8782946 are
+current; Root Sol/MAX and six actual direct Sol/HIGH owners are observed in this
+invocation's `CURRENT-PHASE.json`. Unrestricted/approval never, Unix UID1000.
+Fresh included guard is16%used/84%remaining; no stop/usage-unknown restriction.
 
-Actual child ceiling is6; five HIGH owners have useful assignments/results, with
-current turns in this invocation's `CURRENT-PHASE.json`. Ordinary HOST scheduling
-is CPUs0,6,7, at most3aggregate lightweight jobs and4GiB TOTAL including overhead.
-Fresh memory exceeds26GiB (18retained+4HOST+4floor); host/scratch floors preserved.
-Frozen old requests retain old profiles; current operations use fresh scoped
-admissions. Native remains one owner, CPUs2–5/12GiB and actual unresolved gates.
+New input is`m14-m15-manual-resume-20261106T214520Z/new-functional-input.json`,
+joining exact IHK`b7293d23`. Creation C/Rust stored unchecked per-entry duplicates;
+public C parse_env did likewise while Rust already had transactional handling.
+The distinct bare-entry parsers remain distinct. Root has composed the reviewed
+creation guard/Crollback-list parity, publicCparser parity and narrow Cempty-entry
+scratch parity as private checked source; no canonical concurrent writers exist.
 
-**New functional engineering results:** isolated EOF batch passed once: real
-Rust baseline4terminal buffers observed/reclaimed, C/Rust candidates8terminal
-frees,12queries+1initialized libc probe. All waits joined/released. Eleven actual
-samples observed concurrent Rust compilers on0+7 across63.874ms; wall0.345s,
-maxsingleRSS113,292KiB. The shared observer compiled once/read-only. Source/fixture
-reviews and unchanged ABI/provider metadata were reused; no prior28-case rerun.
+**Current coherent allocation batch PASS:** public C parser13definedbaseline+
+13candidate cases passed once (6false-success/nullslots and4retained-owner cases
+observed safely;38nonnull allocations reclaimed). Creation11C+11Rust candidate
+cases passed:16newduplicate failures, private bare/delimiter controls, positive
+broad rollback with real list cleanup and earlyOS1publication. No failed-pointer
+creation baseline ran. Safe Cempty-entry2baseline+2candidate cases passed; the
+oldpairs were observed/reclaimed and the candidates release them completely.
+All child/outer waits joined; CPU6/7allocations released. Existing accepted Rust
+parser/ABI/provider checks were reused, with no green replay for packaging.
 
-The actual EOF Rust/library producer also passed: archive`2a7aad40…`, SONAME
-library`f3d67026…`, all8waits joined; wall0.943s/CPU0.85s/peak135,840KiB.
-The new full reader→converter→public-query interaction then passed6C+6Rust cases:
-both APIs publish correct values, retain outputs on no-match`-EINVAL` and on a
-converter`-ENOMEM` after actual EOF/fclose, and free every line/parser block and
-owned FILE/eventfd. Its first C fixture compile failed because an object-like
-stat macro renamed`struct stat`; one function-like-alias correction passed the
-four remaining checks while reusing the accepted observer object. First failure
-`001d998c…` and corrected PASS`aeb6da32…` remain separate; no production defect or
-runtime success is claimed for the failed attempt.
+One composed realRust/library producer passed all6phases+2boundedmetadatareads:
+archive`3e39743d…`, SONAME library`271a0649…`; actual19Csites, unchanged strict
+7warnings/native order,70function/sixdata roots and widths pass. Wall0.894508s,
+CPU0.81s, peak136,988KiB. Source is clean/committed IHK
+`793ae4530fe90a93afb23d65b7f486bdebc024e0`,
+tree`3c379d5f4b803395ff060172ff15789b64af9365`; one changed source bundle and
+three meaningful durable regressions are retained. Parent publication follows.
+Bounded exact result: `docs/verification/m15-environment-allocation-results-20261106.json`.
 
-A separate defined PRIVATE-helper error branch was also fixed/tested: a valid
-1007byte field name reaches the intended format-length rejection. Rust baseline
-retains1getline buffer; C/Rust candidates each free it before one existing fclose,
-preserve`-1`, zero output and local free-entry errno. Seven commands pass once,
-all joined/released, receipt`1fac86ee…`. Public callers use short fixed labels;
-no public reachability, fuzz/OOB/security or native claim. That paired patch is
-included in the published coherent source/library checkpoint below.
-
-**Final coherent reader source/build PASS:** paired EOF+private-error cleanup is
-committed as IHK`b7293d23da2140a3a77438d258912476baa7429c`,
-tree`8d457964ae0fbc63f84b6efccb58bdd15ebd5764`. The final genuine Rust/library
-producer passes six unchanged phases plus two metadata reads after its one
-prelaunch receipt-parser correction; all8waits joined/released. Archive`b16ac362…`,
-SONAME library`ba95ce6c…`; wall0.937343s/CPU0.86s/peak136,164KiB. No functional
-suite was replayed because of that parser error. Meaningful default regressions
-are retained in the repository; candidate generation/wiring is source-only checked.
-Exact summary: `docs/verification/m15-memory-reader-cleanup-results-20261106.json`.
-
-The coherent source/evidence checkpoint`22cedb5e5c706252cc03b06e0a0d4ecea938d4af`
-is pushed/fetched with all12changed entries verified. One changed committed
-four-bundle replay reproduces clean IHK`b7293d23`/tree`8d457964…`. All five contributed HIGH owners are complete; no new HOST
-handle remains. Current included guard is14%used/86%remaining. No further concrete
-independent ready code/test batch is identified from these exact inputs. The next
-engineering prerequisite is the actual universal generic/exec disposition and
-original SDK/source-view/native bindings, owned by their original authorities.
-M14 remains4/6 and M15 1/8; image/native/C-retirement deltas0. No deadline/model
-capacity can replace that evidence or authorize equivalent held work.
-
-**Current continuation audit 3/3 — BLOCKED:**
-- Root`01a1b06a-3f82-7873-b83e-88f9336c954d` completed source fixes, new functional
-  cases, genuine builds and verified publication, then exhausted the ready queue.
-- Root`01a1b08d-d11e-7810-b351-fb7b46bbf99c` made no engineering progress: same
-  actual source hold and installed refusing SDK gate, clean IHK and unchanged GitHub.
-- Root`01a1b090-1203-7aa0-b992-2690ed9f81ce` again finds all five owners completed, all admitted
-  HOST waits joined/released, no new code/input/operation and the same actual
-  `held=true`, `replay_authorized=false`, `equivalent_reassignment_authorized=false`.
-  Installed `verify_actual_operation_gates` still refuses at line55.
-
-These are actual Root goal turns, not timer messages or model heartbeats. No new
-functional, build/link, image, native or C-retirement delta occurs in the last two
-turns. A source/admission barrier is not a live-operation wait or technical stall.
-The original hold authority must provide a valid scoped disposition; the original
-SDK/source-view authority must supply actual reviewed one-shot source/custody
-bindings. No current universal full-image/native argv exists, and Root cannot
-substitute another model/thread/artifact, wrapper, mock or invented current-free.
-
-Root checkpoints and verifies this blocked handoff, then sets the existing goal
-blocked. This is not completion, a quota stop or user pause. Included usage is
-14%used/86%remaining; allowance remains for genuinely ready original work. All18GiB
-charges, UNKNOWN native/source/service owners, scratch21,mutex27:4, failed attempts,
-nonces, original accepted scopes and dirty work remain. No old query, nonce,
-install/native operation, unchanged suite or held request is replayed. Resumption
-requires actual new eligible functional input or changed authoritative bindings;
-no automatic controller/restart or source-hold bypass is authorized.
+Ordinary HOST uses CPUs0,6,7/max3aggregate light jobs/4GiBTOTAL with all overhead;
+fresh batches require18GiBretained+4GiBHOST+4GiBfloor=26GiBavailable and existing
+disk floors. Actual available memory28,902,154,240bytes at preparation; no UNKNOWN
+charge was retired. Native still one owner/CPUs2–5/12GiB with original exact gates.
+Generic/exec/ACK/TID/XPMEM/service/source holds, unknown SDKoutermapping and original
+SDK/source-custody/native gate remain binding; no full-image/native argv exists.
+M14 remains4/6 and M15 1/8, all integration gates open. The original nine-hour
+planning target is past and unchanged; critical-path ETA remains unknown while
+these external conditions lack a valid disposition. Root continues ready fixes.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
@@ -111,13 +67,14 @@ The existing foreground-owned15-minute steering monitor is rebound separately;
 Root does not edit it. AGENTS.md's latest three-worker/parallel-preparation
 instruction is preserved and published in the coherent checkpoint.
 
-| HIGH worker / actual thread | Current deliverable/result |
+| HIGH owner / actual thread / turn | Current deliverable/result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | EOF producer passed/released; final early-error source/metadata/producer preparation |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Full public-API interaction12cases pass after one fixture correction; durable regression packaging |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Parallel EOF tests pass; durable private error regression packaging |
-| `memory_error_cleanup_high` / `01a1b070-46d7-7ac1-9e14-7d1f390c0751` | Paired private early-error cleanup completed; no workload |
-| `memory_error_cleanup_witness_high` / `01a1b070-8040-7fb2-b4b1-7810bac365ff` | Genuine early-error witness passed/all7waits joined; no local job |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` / `01a1b2d4-6ba6-7371-8258-8bf132f0d464` | CreationC/Rust per-entryguard plus Crollbacklist parity; finalv2 reviewed |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` / `01a1b2d4-8f6b-7723-8f06-a948723ad2c5` | Independent defined creation allocator-failure tests and positive rollbackcount |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` / `01a1b2d4-d31f-7360-81a1-c5e660326511` | PublicCparse_env transactional parity sourceGO; unchangedRust reused |
+| `memory_error_cleanup_high` / `01a1b070-46d7-7ac1-9e14-7d1f390c0751` / `01a1b2d5-1a75-73a2-96a3-18027b7075ee` | Focused material ownership review; rederive final composed C origins |
+| `memory_error_cleanup_witness_high` / `01a1b070-8040-7fb2-b4b1-7810bac365ff` / `01a1b2d4-f6d0-7141-8ec7-ffe4b84995ee` | PublicC13baseline+13candidatechecks PASS; all4waits joined |
+| `create_empty_entry_parity_high` / `01a1b2d8-359e-7bf3-b724-988d8fc445e2` / `01a1b2d8-35a8-7bf0-b36e-b3082107974e` | NarrowCempty-entryscratch parity + safe two-shape witness |
 
 Initial actual HIGH turns were`01a1b041-44ca-7612-8c6b-bcbc58e41419`,
 `01a1b041-672b-7792-86c8-74374cd15f06`, and
@@ -167,22 +124,19 @@ provider probe, exact Rust baseline and C/Rust candidates; original uninitialize
 capacity C execution stays excluded. A prepares only the changed follow-on
 producer/metadata inputs. No EOF patch is in the primary library or frozen batch.
 
-The current queue has consumed all ready reader work:
+The current prerequisite queue is:
 
-| Prerequisite | Actual consumers / gates | Owner / next executable deliverable |
+| Prerequisite | Actual consumers / gates | Owner / next concrete deliverable |
 | --- | --- | --- |
-| Checked reader cleanup — PUBLISHED | M15 memory-reader/library/error ownership | Root published22cedb5e5, fetched all12changed entries and reproduced changed IHKb7293d23; no further publication test queued |
-| Universal generic/exec provider disposition — BLOCKED | Full image; M14-F03/F06/I01–03 | Original service/hold authority supplies a valid scoped disposition; replay and equivalent reassignment remain false |
-| Original SDK/source-view/native bindings — BLOCKED | Original M14/M15 integration and lifecycle | Original authority provides actual one-shot gates/custody/source bindings; diagnostic namespace authority supplies corroborated outer mapping |
+| Publish completed allocation batch — READY | M15 library/error/ownership source | Root push/fetch-verifies coherent source/tests, reproduces changed committed IHK bundle once |
+| Original universal generic/exec disposition — BLOCKED | M14-F03/F06/fullimage/integration | Original service/hold authority supplies a valid scoped disposition; no replay/equivalent reassignment |
+| Original SDK/source-custody/native binding — BLOCKED | Matching original M14/M15 lifecycle/native | Original authority supplies actual reviewed one-shot bindings/current-free; diagnostic outermapping remains UNKNOWN |
 
-All newly admitted HOST waits are joined; no file/image/native acceptance or
-historical owner retirement is inferred. The14%used/86%remaining included allowance
-is available for genuinely ready work; an external source/admission barrier is not
-a technical stall. Bounded LOC assessment remains unmeasured for unresolved helper/
-branch coverage, and no further census is queued. Preserve historical blocked audits;
-this productive source/build/test turn establishes the first consumed-ready-queue
-boundary for the present scope, not an immediate blocked-status declaration.
-
+M14 stays4/6 and M15 1/8. New HOST source/build/test work is complete, not a
+native/fullimage/file acceptance. Critical-path completion ETA remains unknown
+while actual external scope/admission fields remain held/unbound. All historical
+UNKNOWN owners,18GiBcharges,mutex27:4,scratch21,attempts/nonces/dirtywork remain.
+No old query, expired operation, unchanged suite or held request is replayed.
 
 **Historical prior-resume continuation audit 3/3 — BLOCKED (superseded by explicit 09:46Z manual resume):**
 - `01a1aef7-8297-7d82-8b25-a5051909a3e3`: real source/compiled/consumer progress,

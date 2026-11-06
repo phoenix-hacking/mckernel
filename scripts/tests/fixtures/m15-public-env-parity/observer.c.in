@@ -1,0 +1,129 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Reuses the accepted parse_env_consumer allocator seam: successful operations
+ * delegate to genuine libc; one explicit ordinary allocation ordinal fails.
+ * Only the selected C parse_env function is linked, never a create-OS parser.
+ * parse_env is an exported C root, with no declaration in the private header. */
+extern int parse_env(const char *,int,char ***,char ***);
+extern void *__real_calloc(size_t,size_t);
+extern char *__real_strndup(const char *,size_t);
+extern char *__real_strdup(const char *);
+extern void __real_free(void *);
+enum Kind { ARRAY, SCRATCH, COPY, KINDS };
+static struct {void *pointer;enum Kind kind;} owned[32];
+static int active,attempts,fail_at,live,checks,allocated[KINDS],freed[KINDS];
+static int false_successes,retained_error_owners,reclaimed_total;
+static int fail(void) {
+ if(!active)return 0;
+ ++attempts;if(attempts!=fail_at)return 0;errno=ENOMEM;return 1;
+}
+static void *record(void *pointer,enum Kind kind) {
+ if(active&&pointer){
+  for(int i=0;i<32;++i)if(!owned[i].pointer){
+   owned[i].pointer=pointer;owned[i].kind=kind;++live;++allocated[kind];return pointer;
+  }
+  abort();
+ }
+ return pointer;
+}
+void *__wrap_calloc(size_t count,size_t width) {
+ return fail()?NULL:record(__real_calloc(count,width),ARRAY);
+}
+char *__wrap_strndup(const char *text,size_t length) {
+ return fail()?NULL:record(__real_strndup(text,length),SCRATCH);
+}
+char *__wrap_strdup(const char *text) {
+ return fail()?NULL:record(__real_strdup(text),COPY);
+}
+void __wrap_free(void *pointer) {
+ if(active&&pointer){
+  int found=0;
+  for(int i=0;i<32;++i)if(owned[i].pointer==pointer){
+   ++freed[owned[i].kind];owned[i].pointer=NULL;--live;found=1;break;
+  }
+  assert(found);
+ }
+ __real_free(pointer);
+ errno=EIO; /* Explicit cleanup-local effect; return must retain captured error. */
+}
+static void reset(int ordinal) {
+ assert(live==0);for(int i=0;i<32;++i)assert(!owned[i].pointer);
+ active=1;attempts=0;fail_at=ordinal;
+ memset(allocated,0,sizeof(allocated));memset(freed,0,sizeof(freed));
+}
+static int reclaim(void) {
+ int reclaimed=0;active=0;
+ /* No dereference of a baseline's NULL entry, failed output slot, or freed array. */
+ for(int i=0;i<32;++i)if(owned[i].pointer){
+  __real_free(owned[i].pointer);owned[i].pointer=NULL;++reclaimed;
+ }
+ live=0;reclaimed_total+=reclaimed;return reclaimed;
+}
+__SELECTED_DPRINTF__
+__SELECTED_PARSE_ENV__
+static void allocation_failure(int baseline,const char *text,int count,int ordinal,int bare) {
+ char *first=NULL,*second=NULL;char **names=&first,**values=&second;
+ reset(ordinal);int result=parse_env(text,count,&names,&values);
+ int unchanged=names==&first&&values==&second;
+ int duplicated_failure=ordinal==4||ordinal==5||ordinal==7||ordinal==8;
+ int expected_live=ordinal==1?0:ordinal==2?1:ordinal==3?2:ordinal==6?4:(bare?3:5);
+ int expected_arrays=ordinal==1?0:ordinal==2?1:2;
+ int expected_scratch=ordinal<=3?0:ordinal<=6?1:2;
+ int expected_copies=ordinal<=4?0:ordinal<=5?1:ordinal<=7?2:3;
+ if(baseline){
+  assert(live==expected_live);
+  if(duplicated_failure){
+   assert(result==0&&!unchanged&&names&&values);
+   /* Inspect slot values only. A NULL failed duplicate is never dereferenced. */
+   int missing_name=ordinal==4?0:ordinal==7?1:-1;
+   int missing_value=ordinal==5?0:ordinal==8?1:-1;
+   for(int i=0;i<count;++i){assert((names[i]==NULL)==(i==missing_name));assert((values[i]==NULL)==(i==missing_value));}
+   ++false_successes;
+  }else{assert(result==-ENOMEM&&unchanged);if(live)++retained_error_owners;}
+ }else{
+  assert(result==-ENOMEM&&unchanged&&live==0&&attempts==ordinal);
+  assert(freed[ARRAY]==expected_arrays&&freed[SCRATCH]==expected_scratch&&freed[COPY]==expected_copies);
+  for(int kind=0;kind<KINDS;++kind)assert(allocated[kind]==freed[kind]);
+ }
+ printf("%s allocation count=%d fail=%d return=%d outputs-unchanged=%d live-before-reclaim=%d arrays-freed=%d scratch-freed=%d copies-freed=%d\n",
+        baseline?"baseline":"candidate",count,ordinal,result,unchanged,live,freed[ARRAY],freed[SCRATCH],freed[COPY]);
+ int reclaimed=reclaim();assert(reclaimed==(baseline?expected_live:0));++checks;
+}
+static void empty_second(int baseline) {
+ char *first=NULL,*second=NULL;char **names=&first,**values=&second;
+ reset(0);int result=parse_env("A=one\0\0",2,&names,&values);
+ assert(result==-EINVAL&&names==&first&&values==&second&&attempts==6);
+ if(baseline){assert(live==5);++retained_error_owners;}
+ else{assert(live==0&&freed[ARRAY]==2&&freed[SCRATCH]==2&&freed[COPY]==2);}
+ printf("%s empty-second return=%d outputs-unchanged=1 live-before-reclaim=%d arrays-freed=%d scratch-freed=%d copies-freed=%d\n",
+        baseline?"baseline":"candidate",result,live,freed[ARRAY],freed[SCRATCH],freed[COPY]);
+ int reclaimed=reclaim();assert(reclaimed==(baseline?5:0));++checks;
+}
+static void success(const char *text,int count,int bare) {
+ char **names=NULL,**values=NULL;reset(0);int result=parse_env(text,count,&names,&values);
+ assert(result==0&&names&&values&&names[0]&&values[0]);
+ assert(!strcmp(names[0],bare?"BARE":"A")&&!strcmp(values[0],bare?"":"one"));
+ if(count==2){assert(names[1]&&values[1]);assert(!strcmp(names[1],"B")&&!strcmp(values[1],"two"));}
+ assert(live==2+count*2&&freed[SCRATCH]==count);
+ for(int i=0;i<count;++i){__wrap_free(names[i]);__wrap_free(values[i]);}
+ __wrap_free(names);__wrap_free(values);assert(live==0);
+ for(int kind=0;kind<KINDS;++kind)assert(allocated[kind]==freed[kind]);
+ active=0;++checks;printf("success count=%d bare=%d return=0 arrays-freed=2 scratch-freed=%d copies-freed=%d live=0\n",count,bare,count,count*2);
+}
+int main(void) {
+ assert(getuid()==1000&&geteuid()==1000);int baseline=__BASELINE__;
+ for(int ordinal=1;ordinal<=8;++ordinal)allocation_failure(baseline,"A=one\0B=two",2,ordinal,0);
+ for(int ordinal=4;ordinal<=5;++ordinal)allocation_failure(baseline,"BARE",1,ordinal,1);
+ empty_second(baseline);success("A=one\0B=two",2,0);success("BARE",1,1);
+ assert(checks==13&&live==0);
+ assert(false_successes==(baseline?6:0)&&retained_error_owners==(baseline?4:0));
+ printf("%s checks=13 false-successes=%d retained-error-owners=%d reclaimed=%d live=0\n",
+        baseline?"baseline":"candidate",false_successes,retained_error_owners,reclaimed_total);
+ return 0;
+}
