@@ -18479,6 +18479,12 @@ perf_event_open_linux_fd_body_result(struct syscall_request *request,
 
 	request->number = perf_event_open_nr;
 	request->args[0] = 0;
+	/* The selected executor ignores these slots; define the complete payload. */
+	request->args[1] = 0;
+	request->args[2] = 0;
+	request->args[3] = 0;
+	request->args[4] = 0;
+	request->args[5] = 0;
 	fd = syscall_fn(request, cpu);
 	if (fd < 0) {
 		return fd;

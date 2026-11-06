@@ -1,0 +1,121 @@
+{
+  "C_retirement_delta": 0,
+  "Rust_checks_reused": true,
+  "admission_sha256": "bd6be01e76e30cf3880afa17a2b988265c4420b95e5edf741d844821f014740e",
+  "artifact": {
+    "path": "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/current/perf",
+    "sha256": "5db08659bae1b4fc7f39243f1e270a0e55af80a5655eaeb90a537928f3dcd914"
+  },
+  "baseline": {
+    "cases": 12,
+    "other_errors": 0,
+    "wire_errors": 40
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-g0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/before/perf.c",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/before/perf"
+      ],
+      "cpu_seconds": 0.060439999999999994,
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wall_seconds": 0.061631921998923644
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/before/perf"
+      ],
+      "cpu_seconds": 0.0007339999999999968,
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a52c8255272cce57bdb14f62ad66f41d21bdd3d547ea36ed21b74d3690d818a0",
+      "wall_seconds": 0.0028584190004039556
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-g0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/current/perf.c",
+        "-o",
+        "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/current/perf"
+      ],
+      "cpu_seconds": 0.061905,
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wall_seconds": 0.06341633899864974
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/current/perf"
+      ],
+      "cpu_seconds": 0.0010370000000000153,
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "4b5d46110f4ed5b5d043bcf4353935da08dab4b03b88d3a60c0b6eb8a529fbf1",
+      "wall_seconds": 0.003484838001895696
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "file_acceptance_delta": 0,
+  "metrics": {
+    "path": "/home/holden/mckernel-work/m14-resume-20261105-1/perf-fd-wire-root-1/time.txt",
+    "peak_rss_kib": 26132,
+    "system_seconds": 0.02,
+    "user_seconds": 0.2,
+    "wall_seconds": 0.22
+  },
+  "native_qualified_delta": 0,
+  "passed": true,
+  "production_image_delta": 0,
+  "retained_before_source_sha256": "dd699f8149afa2d98aafa940997d971889d330c0715d227821268db137370674",
+  "scope": "ACTUAL_C_PERF_FD_PAYLOAD_FUNCTIONAL_REGRESSION_ONLY",
+  "selected_consumer_contract": {
+    "C": {
+      "case": "__NR_perf_event_open",
+      "observed_behavior": "opens /dev/null and returns status, without consuming any request argument",
+      "path": "executer/user/mcexec.c"
+    },
+    "Rust": {
+      "function": "act_perf_event_open",
+      "observed_behavior": "ignores the wait request; calls the no-argument platform bridge and returns status",
+      "path": "executer/user/rust/mcexec_helpers.rs"
+    },
+    "consumer_native_execution": false,
+    "matching_existing_Rust_producer": "kernel/rust/syscall_policy.rs::perf_event_open_linux_fd_body_result already initializes args1..5 to zero; unchanged passing Rust checks reused."
+  },
+  "source_post": {
+    "/home/holden/mckernel/kernel/include/syscall.h": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+    "/home/holden/mckernel/kernel/syscall.c": "f313b9f1dada0ed99b86951a1427ef24518d48a5c58faa3f45b6fe764c2f28f2",
+    "/home/holden/mckernel/scripts/tests/fixtures/m14_perf_fd_wire.c.in": "9129111eea8e50e06e52d17948e3e1906210798d4466fcab0523313d4180257f",
+    "/home/holden/mckernel/scripts/tests/test_m14_perf_fd_wire.py": "49214bafdb674a078b59ba176c5e7b32ce7c3d0d50ba4e1a4fd7eac152730805"
+  },
+  "source_pre": {
+    "/home/holden/mckernel/kernel/include/syscall.h": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+    "/home/holden/mckernel/kernel/syscall.c": "f313b9f1dada0ed99b86951a1427ef24518d48a5c58faa3f45b6fe764c2f28f2",
+    "/home/holden/mckernel/scripts/tests/fixtures/m14_perf_fd_wire.c.in": "9129111eea8e50e06e52d17948e3e1906210798d4466fcab0523313d4180257f",
+    "/home/holden/mckernel/scripts/tests/test_m14_perf_fd_wire.py": "49214bafdb674a078b59ba176c5e7b32ce7c3d0d50ba4e1a4fd7eac152730805"
+  },
+  "test_payload": {
+    "cases": 12,
+    "other_errors": 0,
+    "wire_errors": 0
+  },
+  "tests_run": 1
+}

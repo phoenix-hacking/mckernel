@@ -1,11 +1,13 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T03:17Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T03:35Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**M14 is active under the explicit November 5 resume.** Dispatcher:
+**M14 full-image work is blocked by the retained service/source hold.** The
+explicit November5 resume and same Root are retained; this is not completion or
+a user pause. Dispatcher:
 `gpt-6.1-sol`, reasoning `max`; every worker/reviewer/auditor uses HIGH or above.
 One disjoint light child, one shared HOST compiler
 job on CPU6 within the initial 2 GiB phase. The existing timer steers every
@@ -34,7 +36,7 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Checkpoint **`12a44befb0a375e33e2b042ed7230390abc0266e`** is pushed and fetched/blob
+Checkpoint **`eb541d4f7f937b2b8f61a1971596f385a75edb74`** is pushed and fetched/blob
 verified. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
@@ -305,15 +307,60 @@ The original service/hold authority is the required external dependency; Root
 owns integration but has no authorized local full-image command for this cohort.
 Restored networking, sudo, HIGH routing and the renewed target clear none of it.
 
-**Next15-minute deliverable:** the confirmed HIGH child composes the separately
-permitted existing`sys_perf_event_open` Rust entry/provider binding, reusing the
-existing body, exact ABI and retained metadata. It must return an eligible private
-patch and the smallest changed-unit check, or one precise NO-GO if a held or
-undefined contract is necessary. Root remains sole compositor and issues no
-compiler command before that binding. This independent source work does not
-release the universal generic/exec cohort or promise full-image/native closure.
-No new framework, alternate-artifact search or repeated green test is scheduled.
-M15 remains queued until genuine M14 acceptance and published matching proof.
+**New checked source fix:** C`perf_event_open_linux_fd_body_result` now sets
+args1–5 to0, matching the unchanged Rust helper. Both actual selected executor
+branches ignore those argument slots. The actual C function/request declaration
+passes12 wire/identity/error/counter cases; the predecessor has40 wire mismatches
+and no other failures. Invalid inputs preserve the request; negative host returns
+preserve the counter map. The affected run took0.22 s wall,26,132 KiB peak RSS.
+No unchanged Rust tests, full generic unit or full crate were rebuilt. Receipt:
+`docs/verification/m14-perf-fd-wire-results-20261106.json`. Root owns both source
+integration and the checked C correction. This changes no ABI, lifetime contract,
+selector, native qualification or C retirement.
+
+**Perf complete-entry opening:** the HIGH source/ownership review returns NO-GO.
+`perf_event_open_group_body_result` has no typed live descriptor/event pin, kind
+check or compatible close participation. Callback identity is not an established
+type invariant; event`count` is measurement data, not a refcount. Ordinary close
+unlocks before freeing; final VM teardown calls close while holding`mckfd_lock`,
+so blindly adding that lock to close would deadlock. A defined and independently
+reviewed kind/reference/group/close contract is required; no new ABI or restricted
+`group_fd=-1` entry was implemented. Exact participating source and decision:
+`docs/verification/m14-perf-group-ownership-decision-20261106.json`.
+
+**Critical path / next action:** Root checkpoints these finished eligible fixes,
+proof and bounded LOC assessment, then verifies the fetched commit/blobs. The
+same full-image exclusion has persisted across successive reviews, including
+03:04,03:19 and03:34Z. All currently assigned dependency-ready work is now checked
+or has a precise source/ABI NO-GO; no child workload or control join is pending. The
+full-image command remains UNSET: the original service/hold authority must supply
+a scoped disposition of the retained generic/exec request. There is no authorized
+local replay, appeal or release command in the current record. Newly checked
+independent work does not resolve that external dependency. The complete perf
+entry also stays unselected pending its actual ownership contract; no filler
+review, repeated green test or alternative-image workaround is queued. All child
+source turns are at bounded completion with WIP retained. M14 remains4/6 and all
+three integration gates open; M15 remains queued for genuine accepted M14 proof.
+
+## Net implementation debt — separate from C references and acceptance
+
+| Metric | M14 | M15 |
+| --- | --- | --- |
+| Net original C lines still lacking a complete Rust implementation | **Unmeasured** | **Unmeasured** |
+
+No complete function/region-to-Rust implementation map with original C-line
+weights is established in the reused owner/qualification evidence. The source
+retirement audit explicitly measures file/build retirement, not functional helper
+ownership. Retained reference/fallback LOC and the historical function cursor are
+not net conversion debt. A complete implementation map could measure this before
+native acceptance; open acceptance alone does not make a body unconverted.
+The bounded review identifies no specific supported-default M15 original body
+missing a Rust replacement: current mcexec, BFD, whole70 library and CLI/supervisor
+selection and retained genuine HOST proof are present. This is not an exhaustive
+body equivalence audit, a zero-debt claim or new acceptance. No new census,
+compiler, M15 implementation or inventory framework was run for this assessment.
+Machine result: `docs/verification/m14-m15-net-conversion-owner-assessment-20261106.json`.
+The foreground retains ownership of read-only LOC accounting.
 
 ## M14 checklist — compute kernel
 
@@ -379,7 +426,7 @@ available; finish a smaller final remainder without padding or delay.
 | Goal | Target | Required result |
 | --- | --- | --- |
 | M15-F01 / 01-01…03 | `host-kernel/native-rust/mcctrl_vm_write_compat.c` | Accepted original three-wrapper Rust MM lock/unlock/VMA-write scope; preserve proof |
-| M15-F02 / 02-01…03 | `executer/user/mcexec.c` | Remaining executor C bodies, real default/ABI, linked and functional process behavior |
+| M15-F02 / 02-01…03 | `executer/user/mcexec.c` | Supported Rust default and retained HOST provider composition are present; complete behavior/ABI/deployed/native qualification remains open; net unconverted body LOC is unmeasured |
 | M15-F03 / 03-01…02 | `executer/user/mcinspect_bfd_shim.c` | Rust adapters and corrected full tool pass real BFD symbols/repeated DWARF queries; complete HOST link; matched default/deployed qualification remains |
 | M15-F04 / 04-01…02 | `executer/user/eclair_bfd_shim.c` | Rust adapters and corrected full tool pass real BFD symbols/offline dump reads; complete HOST link; matched default/deployed qualification remains |
 | M15-F05 / 05-01…03 | `ihk/linux/user/ihklib.c` | Actual CMake target links all 70 function/six data roots; parser and boot-result checks pass; complete ABI/deployed/native qualification remains |
