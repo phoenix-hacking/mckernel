@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T05:19Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T06:12Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,6 +14,17 @@ one CPU6 compiler/job and the initial2 GiB HOST phase including overhead. All
 holds remain. The generic/exec full-image command is still UNSET; this resume
 supplies no rejected-work retry or native release.
 
+Latest explicit authorization (06:01Z November6) continues USEFUL work until
+the existing supported-system objective is complete or this included weekly
+allowance is exhausted. The soft target is not a stop time. Fresh existing-account
+guard observation at05:59:44Z reports **8%used/92%remaining**, window10080minutes,
+reset1794518606; the user's92% refers to remaining. Sanitized provenance is
+`/home/holden/mckernel-work/m14-m15-nine-hour-push-20261106-1/weekly-allowance-current.json`.
+No historical ledger/allowance was overwritten. Stop new model calls at100%used or
+an earlier actual quota/usage-unknown/service restriction; no prepaid/API fallback
+or busywork to consume tokens. Preserve later stops and the fresh blocked-audit
+rule if actual holds exhaust meaningful eligible work.
+
 The nine-hour soft target is03:41:32–12:41:32Z November6 (04:41Pacific end).
 It supersedes the02:57Z three–four-hour planning window. The earlier missed target
 and approximately01:34–02:51Z outage remain recorded, with no acceptance change.
@@ -23,17 +34,23 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | All52 public function signatures plus public data now have actual selected-header/Rust guards; remaining43-signature consumer passes126 pre-access errors+5logging calls; preparing actual private/source-definition ABI slice |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Four parser corrections published,6tests/80cases PASS; canonical parse_env fix passes18cases; predecessor leak observed/reclaimed; preparing actual qualified-archive/shared-provider proof |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Two partial-startup rollback cases PASS; parse_env ownership review GO; preparing six dependent callers’ success/error cleanup after actual provider-lifetime review |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | HOST70function/sixdata/SONAME prerequisites PASS; exact SDK gate identified: published fresh-operation verifier still unimplemented/refuses |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Four parser corrections published,6tests/80cases PASS; matched three-tool HOSTcohort PASS with two objectreuses; now deriving exact pinned diagnosticSDK namespace mapping after first declared remap was absent |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Two partial-startup rollback cases PASS; sixcaller cleanup passes10genuine predevice+7callbackcases; durable canonical-source regression passes; allslot handles joined |
 
-Ready prerequisites are ranked by shared consumers and original gates, not slot occupancy:
+The ranked queue follows actual dependencies; passed work is consumed:
 
-| Rank / prerequisite | Consumers and gate advanced | Owner / smallest next proof |
+| Rank / prerequisite | Consumers / original gates | Owner / next proof |
 | --- | --- | --- |
-| 1. Shared whole70 ABI/provider cohort | All52 public APIs; library plus ihkconfig/ihkosctl/ihkmond, M15-F05…08 and I03 | Root integrates passed public batch; ABI owner prepares actual18private/source-only function +5data guards; one changed-unit producer |
-| 2. Transactional environment ownership | Six public environment APIs share parse_env; M15-F05 and dependent CLI paths | CLI owner passed18allocation cases; Root's genuine library link passes; one serial actual-archive/public-consumer proof batch next |
-| 3. Environment callers release successful results | Reserve CPU/memory, assign CPU, set IKC, memory policy and kargs | Supervisor owner prepares caller-only cleanup with actual synchronous provider lifetimes; preserve separate create_os parser |
+| 1. Exact source/bundle publication | Six environment APIs plus matched three management tools; M15-F05…08/I03 | Root fresh-replays IHK`0a1061a`, pushes and fetch/blob-verifies the checked caller/cohort checkpoint |
+| 2. Retained diagnostic SDK binding | mcinspect/eclair; M15-F03/F04/I03 | CLI owner verifies actual old bind-root mapping for pinned RockyBFD2.41/GCC14, without substituting HOST2.34 or scanning artifacts |
+| 3. Original SDK/source-view admission | Original supported builds across M14/M15 | Root owns actual gates: published supervisor still refuses before launch; no admitted SDK command until reviewed actual one-shot/source-custody facts exist |
+
+Shared HOST type contracts pass70function/sixdata roots; caller cleanup passes10
+genuine pre-device plus7source-bound callback observations. All three current HOST
+tools resolve the exact checked SONAME provider. No program main/native path ran.
+The third row is a real blocked prerequisite, not a ready job or permission to
+create a controller. No filler assignment is created to occupy a slot.
 
 Routing is machine-observed in this invocation's `ROUTING.json`: Root
 `gpt-6.1-sol`/MAX, all three `gpt-6.1-sol`/HIGH, approval never, filesystem
@@ -52,8 +69,8 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Previous published checkpoint **`faf7654e32fea363a92bb73f39f01b2669c550f9`** is pushed and fetched/all10changed-blob
-verified. Its IHK source is`70f1c8e384f2cb67a42ee58a9fb3d51c714326b9`, independently bundle-replayed clean. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
+Current published checkpoint **`bcd404028e884b112b535e4c6560d108eab0d6d4`** is pushed and fetched/all9changed-object
+verified. Its IHK source is`05f265d73245f214e72d77f004989fe3384631db`, independently bundle-replayed clean. GitHub base `146dcd187` and exact recovered IHK `c032c975` are retained;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
@@ -402,13 +419,65 @@ The first failure remains preserved. No device/backend/native work occurred.
 Fresh four-bundle replay reproduced exact IHK`05f265d`/tree`d5e1a798…` with a
 clean checkout in0.91 s, from the committed manifest/gitlink.
 
-**Next15-minute deliverable:** Root publishes and fetch/blob-verifies this checked
-source/bundle/regression/proof checkpoint. HIGH workers review and prepare the
-six callers’ success/error cleanup using the passed shared parser/ABI contract;
-only Root integrates, and one bounded serial admission supplies their next proof.
-The create_os parser keeps its distinct semantics. No unchanged green suite is
-replayed. Raw commands/artifacts/reviews and retained first failure are bound in
-`docs/verification/m15-shared-abi-environment-results-20261106.json`.
+**New dependent cleanup result:** `ParsedEnvironment` owns only successful
+parser output and releases both arrays/all strings after the synchronous provider
+returns on success, error or missing key. The six original environment consumers
+share it; their return values, borrowed defaults and Drop-entry errno are preserved.
+The distinct create_os parser is unchanged. Independent ownership review passes.
+Only the changed Rust unit compiled in0.607 s, reusing all validated C metadata;
+its genuine76-root link passes0.137 s. Actual archive SHA
+`93c10f7dea9eed11fdd8eef563535f94a3dc034ad604b69a055f93d8b6383021`.
+Ten actual public pre-device calls return with zero retained allocations. Seven
+source-bound callback cases preserve borrowing/defaults/returns/errno; they are
+not actual IHK/backend/native successes. The defined predecessor four-block leak
+is observed and genuinely reclaimed. Nine serial commands pass in0.37 s, peak
+103,240 KiB. One postprocessing counter wrongly double-counted `borrow-ok=1`;
+only receipt parsing was corrected, with original receipt and raw successes
+preserved and no workload replay. The durable test reads current production
+bodies and passes its new seven-case wiring check in0.185 s.
+
+**Shared linking correction:** the manual HOST library lacked SONAME and caused
+absolute dependency paths. One reviewed link-only correction adds the canonical
+CMake Linux basename`libihk.so`; actual ELF SONAME and76roots pass in0.152 s, with
+zero Rust/C recompilation. New5,403,760-byte library SHA
+`314beee5c7b59aab41f5aa6686e5a515e4c7a425067012276d871c36d596b027`.
+The CLI owner reuses actual ihkconfig/ihkosctl objects; ihkmond's successful prior
+build retained only a binary with an absolute old dependency, so one new codegen/
+link is necessary. No source-import defect was found in19used IHK declarations.
+
+**Matched three-tool cohort now passes:** ihkconfig/ihkosctl reuse both existing
+Rust objects; ihkmond builds once with its unchanged source/flags because no object
+was retained. All three name`libihk.so`, and the actual trusted loader resolves
+provider`314beee5…` and records all resolved provider hashes. The first metadata
+predicate required RUNPATH, while actual C9 emits RPATH for the two CLI links;
+only the predicate was corrected to the actual one-tag/path contract. Ihkmond uses
+RUNPATH. The unchanged builds were not repeated; the original failure and existing
+supervisor unused-import warning remain. Tool artifacts are40,088/36,920/5,436,368
+bytes. Program mains/help/parser/device/backend/native paths were not executed.
+
+IHK source`0a1061a334dfaf1d0182aaddcc511113fde4f897`, tree`5e395fe4…`, contains the
+caller-only fix,38insertions/twodeletions. Fresh committed-manifest replay reproduced this exact clean commit/tree
+in1.40 s through the revised four-bundle chain. The new current-source regression
+passed without repeating the accepted10genuine cases. Source/function/link/loader
+and preserved-failure evidence is bound in
+`docs/verification/m15-environment-consumer-cohort-results-20261106.json`.
+
+**Concrete SDK obstruction:** installed current3`supervisor_entry.py` still calls
+`verify_actual_operation_gates()` at91, whose50–55 implementation unconditionally
+refuses. Its compositor retains unset profile/source/pidfd bindings and refuses
+source/effective-view collection. Code publication did not supply an executable
+SDK/source-view admission. Root/original execution-admission authority owns the
+missing actual reviewed one-shot gate; no old packet or unknown owner is revived.
+The diagnostic SDK has UNKNOWN_OUTER_BIND_MAPPING: the suffix-dropped remap and
+one suffix-preserving candidate were absent, while declared records describe only
+inner bwrap mounts. This does not prove global SDK absence. The12hex path component
+is a discovery hint, not a container/source identity. Actual outer mount/source
+metadata must corroborate any mapping before compilation; no start, guessedremap,
+pin relaxation or HOST2.34 substitution is authorized. All four pins remain intact.
+
+**Next15-minute deliverable:** publish/fetch-verify the checked caller/tool cohort
+and exact clean source replay; consume only a genuinely available diagnostic SDK
+binding for the next eligible compiler command. No source/native hold is cleared.
 All compilers remain serialized. The already published batch includes four
 original CLI corrections,6tests/80cases, full three-tool HOST links, public
 rusage/memory/IKC slices and real supervisor rollback. Matching raw commands,

@@ -23,6 +23,12 @@ shared provider, ABI, ownership and cleanup contracts before isolated leaf work.
 Batch compatible short checks under one reviewed serial build admission, then
 promptly hand the released slot to the next ready worker.
 
+The latest user instruction authorizes continued useful campaign work beyond
+the soft time target until the objective is complete or the included weekly
+allowance is exhausted. Use fresh service observations, distinguish percentage
+used from remaining, and stop at the actual usage limit or earlier binding hold.
+Checkpoint incrementally; no prepaid/API fallback or artificial quota consumption.
+
 Current source, artifacts and live machine controls remain usable for necessary
 execution checks; they are not extra narrative entrypoints. Historical originals
 stay intact where frozen bindings require them and are archived separately.
