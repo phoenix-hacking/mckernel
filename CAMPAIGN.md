@@ -1,17 +1,20 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T22:27Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T22:31Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit manual resume `20261106T214601Z-945b55f2`.**
+**BLOCKED after fresh resumed audit3/3 under `20261106T214601Z-945b55f2`.**
 The earlier blocked audits/checkpoint`f8995aec9` remain history; this new manual
 resume supplies concrete independent userspace error-handling inputs and a fresh
 audit, without releasing any old scope. Worker409240/server409242 birth8782946 are
 current; Root Sol/MAX and six actual direct Sol/HIGH owners are observed in this
 invocation's `CURRENT-PHASE.json`. Unrestricted/approval never, Unix UID1000.
-Fresh included guard is17%used/83%remaining; no stop/usage-unknown restriction.
+Current launcher account snapshot is17%used/83%remaining; no quota/usage-unknown restriction.
+This is a source/admission impasse. Completed source/tests/library work and all
+original accepted scopes are retained; the existing goal is being set blocked
+after this verified handoff. No further eligible local operation is established.
 
 New input is`m14-m15-manual-resume-20261106T214520Z/new-functional-input.json`,
 joining exact IHK`b7293d23`. Creation C/Rust stored unchecked per-entry duplicates;
@@ -68,7 +71,7 @@ Generic/exec/ACK/TID/XPMEM/service/source holds, unknown SDKoutermapping and ori
 SDK/source-custody/native gate remain binding; no full-image/native argv exists.
 M14 remains4/6 and M15 1/8, all integration gates open. The original nine-hour
 planning target is past and unchanged; critical-path ETA remains unknown while
-these external conditions lack a valid disposition. Root continues ready fixes.
+these external conditions lack a valid disposition. No ready independent batch remains.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
@@ -154,15 +157,31 @@ while actual external scope/admission fields remain held/unbound. All historical
 UNKNOWN owners,18GiBcharges,mutex27:4,scratch21,attempts/nonces/dirtywork remain.
 No old query, expired operation, unchanged suite or held request is replayed.
 
-**Fresh resumed audit boundary1/3:** actual Root turn`01a1b2d3-6e9f-7433-887c-e0bf88f6b493` made the above
-engineering progress and now has no established ready independent batch. All six
-children are completed and all new HOST operations are joined. The old audits stay
-history; timer reminders/tool calls are not extra Root turns. No genuine service
-disposition, SDKoutermapping or reviewed native binding was newly supplied. Next
-15-minute deliverable is conditional on such actual input; no compiler/native
-command is presently eligible. Preserve the existing goal active at this first
-boundary and apply the required blocked status if the same impasse repeats over
-three consecutive actual Root turns. No controller restart or held task replay.
+**Fresh resumed audit3/3 — BLOCKED:** three distinct actual Root turns:
+- `01a1b2d3-6e9f-7433-887c-e0bf88f6b493`: engineering progress/published source and real library,
+  followed by the first exhausted-ready boundary.
+- `01a1b2f9-b637-7990-a877-4991b254c8e0`: no progress; same held source/service and missing actual
+  SDK/native binding revalidated.
+- `01a1b2fb-7860-7f33-9706-6ab7e071f901`: no progress; held/replay=false/equivalent=false record
+  `4f6777a4…`, refusing actual gate`e85c0356…` and runtime source state remain
+  unchanged. No new scoped disposition, corroborated outer mapping or reviewed
+  native/source-view/current-free binding was supplied.
+
+All six children are completed and all new HOST operations are joined; there is
+no live admitted operation to poll. No compiler/test/native command, Docker query,
+equivalent request or unchanged green suite was replayed during these two
+no-progress turns. Status bookkeeping is not engineering progress or a verified
+wait. The normal goal tool sets the existing objective BLOCKED after this handoff
+is committed/pushed/fetch-verified. The OS objective is incomplete, not paused or
+complete. Timers/model capacity/deadlines do not release the original holds.
+
+Required next engineering input: a valid disposition from the original generic/exec
+service authority and/or actual reviewed original SDK/source-custody/native
+bindings, or a concrete genuinely independent eligible functional source input.
+The diagnostic outer mount remains UNKNOWN. Next15-minute engineering deliverable
+and critical-path ETA cannot be promised without an eligible input. Preserve all
+historical charges/UNKNOWN owners, original acceptance and dirty work; do not
+restart the controller or automatically replay held work to fill capacity.
 
 **Historical prior-resume continuation audit 3/3 — BLOCKED (superseded by explicit 09:46Z manual resume):**
 - `01a1aef7-8297-7d82-8b25-a5051909a3e3`: real source/compiled/consumer progress,
