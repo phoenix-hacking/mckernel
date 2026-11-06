@@ -1,29 +1,40 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T10:15Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T10:21Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit manual same-Root resume `20261106T094634Z-e32bb1d4`.**
-The prior three-turn blocked audit and checkpoint `3ba4b0398c455bb831140cceae3426aadbe63095`
-remain history; this manual resume begins a fresh audit. A new concrete shared
-memory-query candidate is ready: selected Rust `query_mem` and C
-`ihklib_os_query_mem` discard conversion allocation errors, then publish zeroed
-chunks as success. The independent contract review identifies actual mcstat
-callers that rely on a nonzero error. The current C also zeroes its chunks, so
-its bounded allocation-failure baseline is defined. Primary regression is now admitted; no result is claimed until joined.
+**Goal ACTIVE; quiescent handoff for the user-authorized 10:19Z capacity change.**
+Current same-Root manual invocation is`20261106T094634Z-e32bb1d4`. The primary
+memory allocation-error fix is published/fetched at
+`208d61882e396974f13ea2ece4d1f4edb5ca90e8`; all9changed entries verify and its
+four-bundle replay reproduces clean IHK`516d173b5896be4fc3a2b5688dcdd7600d5d3055`,
+tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`. Its28candidate behavior cases,
+16defined false-success baseline observations and genuine library link are consumed
+once. No unchanged passing suite was rerun. The separate EOF pair, metadata,
+fixture and request are frozen/private and UNADMITTED; no EOF behavior has run.
 
-Root is sole compositor/index/publisher. Actual routing is Sol/MAX for Root and
-Sol/HIGH for all three reused owners; permissions are unrestricted/approval never,
-Unix UID1000. Machine proof is this invocation's `ROUTING-INITIAL.json`. All workers
-prepare private disjoint outputs; no compiler/native work starts before Root's
-precise serial admission. Shared CPU6/one-job/initial2 GiB HOST envelope,18 GiB
-retained charges,4 GiB host floor, scratch21,mutex27:4 and all holds remain.
-Fresh existing guard reports **12%used/88%remaining**, window10080minutes,
-reset1794518606, phase running and no stop/usage error. No historical ledger changed.
-The universal generic/exec full-image command remains UNSET; native and original
-SDK/source-view gates are unchanged. This resume releases no held scope.
+No new compiler/native batch starts after this handoff. Current owners report
+pending paths and become idle/completed; Root keeps the goal active and preserves
+all real holds. Foreground alone verifies quiescence and retires/relaunches the
+existing controller through its supported same-Root path, then verifies actual
+expanded routing. No goal reset, artificial blocked/paused status or native cleanup.
+The machine handoff is
+`/home/holden/mckernel-work/m14-m15-parallel-scale-20261106T101916Z/READY-FOR-SCALE.json`.
+
+The user authorizes an ordinary HOST scheduling increase to CPUs0,6,7,
+up to3aggregate light jobs and4 GiB TOTAL including all overhead; up to6HIGH
+children become available only after actual supported server reconfiguration.
+Fresh expanded admission requires26 GiB available, retaining18 GiB prior charges
+and4 GiB host floor plus existing disk floors. Current admitted work used the
+old CPU6/one-job/2 GiB profile and is joined/released. Native stays one owner,
+CPUs2–5/12 GiB with fresh exact gates; those reserved cores are not HOST capacity.
+Root remains sole source/index/compositor/publisher; Sol/MAX with all children
+Sol/HIGH. Included guard last reports12%used/88%remaining, no stop/usage error;
+no historical ledger, allowance, source/service hold or UNKNOWN owner changed.
+The universal generic/exec image argv and original SDK/native admission remain
+unavailable. This scheduling authorization releases none of those conditions.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
@@ -45,9 +56,9 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Primary producer passed/released; separate EOF producer request ready; focused independent EOF fixture review awaiting exact final driver |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Primary28candidate cases passed/released; durable wrapper retained; requested12-entry read-only LOC assessment bounded/behind ready functional work |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | EOF source GO; genuine libc probe/Rust baseline/C+Rust candidate request preparation; no execution yet |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Primary producer passed/released; separate EOF producer request ready; final EOF fixture GO`9f6093e4…` closed; all pending EOF work frozen/unrun; owner completed |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Primary28candidate cases passed/released; durable wrapper retained; bounded12-entry LOC assessment saved, net missing scope/LOC unmeasured; no local handle; owner completed |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | EOF source GO; final7-command EOF request`2eacfe54…` frozen/unadmitted; no local handle; owner completed |
 
 Initial actual HIGH turns were`01a1b041-44ca-7612-8c6b-bcbc58e41419`,
 `01a1b041-672b-7792-86c8-74374cd15f06`, and
@@ -80,7 +91,7 @@ The durable default wrapper adds only relative source/fixture arguments and seri
 C→Rust defaults; its exact passing vectors are retained without a green rerun.
 Source IHK`516d173b5896be4fc3a2b5688dcdd7600d5d3055`,
 tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
-parent publication is in progress. Bounded summary:
+parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
 **Current priority:** confirmed fixes/meaningful behavior first. Only necessary
@@ -97,19 +108,20 @@ provider probe, exact Rust baseline and C/Rust candidates; original uninitialize
 capacity C execution stays excluded. A prepares only the changed follow-on
 producer/metadata inputs. No EOF patch is in the primary library or frozen batch.
 
-The short ranked ready queue is:
+The next ready functional queue is preserved for the resumed, actually admitted envelope:
 
 | Ready prerequisite | Actual consumers / original gates advanced | Owner / smallest next proof |
 | --- | --- | --- |
-| Genuine getline EOF ownership observation | Shared memory-stat parser used by total/free query APIs and mcstat; M15 ownership | C exact meaningful batch; A focused fixture GO; one Root serial admission, no real sysfs/device |
-| Apply qualified EOF cleanup and affected producer | Shared library and all matching dependent consumers; original ABI/link ownership | Root integrates separate reviewed pair after functional observations; A reuses existing metadata/compiler/provider profile for only changed unit/origins/link |
-| Requested net implementation-debt report | User's M14/M15 source-only accounting question | B joins existing12cases to actual Rust helper/bridge coverage; report provable missing scope/LOC and unknowns, behind ready engineering |
+| Genuine getline EOF ownership batch — UNRUN | Shared memory-stat parser used by total/free query APIs and mcstat; M15 ownership | C's final7-command request`2eacfe54…`, final fixture GO`9f6093e4…` and one Root admission after scale; real libc temporary text only |
+| Apply qualified EOF cleanup and changed producer — PRIVATE | Shared library and matching consumers; original ABI/link ownership | Root integrates reviewed EOF pair only after meaningful behavior; A's6-phase request`d0e14a6f…` reuses unchanged ABI/provider profile |
+| Consume bounded net implementation-debt assessment — COMPLETE reporting | User's M14/M15 source-only accounting question | B's12-entry assessment`106b3787…`; semantic/helper uncertainty leaves net LOC unmeasured, no fallback/debt substitution or broader inventory |
 
-The primary allocation-error source/behavior/library batch is consumed once.
-The held universal generic/exec cohort, refusing original SDK/source-view
-entrypoint and unknown diagnostic outer mapping remain external dependencies,
-not runnable assignments. Current M14/M15 acceptance stays4/6 and1/8; no new
-image, native qualification, C retirement or file acceptance is claimed.
+All current new HOST waits are joined; no EOF compiler/probe/library/API/device/native
+command is admitted. The held universal generic/exec cohort, refusing original
+SDK/source-view entrypoint and unknown diagnostic outer mapping remain external
+dependencies, not runnable assignments. M14/M15 acceptance stays4/6 and1/8;
+production-image/native/C-retirement deltas remain0. The previous blocked audit
+below remains history; a capacity handoff is not a new blocked audit or pause.
 
 
 **Historical prior-resume continuation audit 3/3 — BLOCKED (superseded by explicit 09:46Z manual resume):**
@@ -297,16 +309,17 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Latest verified engineering/evidence checkpoint **`7cfe524e07bb67701f314534b66656c4c9fea586`**
-is pushed and fetched/both changed-blob verified. It contains the current public
-consumer PASS and scoped lifecycle assessment. Matching-tool checkpoint`d8224c35e`
-is also fetched/both changed-blob verified. Source checkpoint`311159ec0` remains
-fetched/all7object verified with a clean four-bundle replay of IHK
-`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`, tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`.
-The latest engineering/evidence cursor changes no source, artifact or admission; subsequent status-only commits preserve this handoff.
-Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
-GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
-pre-existing dirty work is preserved. The original 39 focused checks are reused.
+Latest verified engineering/evidence checkpoint is
+**`208d61882e396974f13ea2ece4d1f4edb5ca90e8`**, pushed/fetched with all9changed
+entries verified. It contains the paired memory allocation-error correction,
+meaningful retained regression, affected real library result, source bundle and
+engineering-first policy. The four-bundle replay reproduces clean IHK`516d173b`,
+tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`. Earlier public-consumer/tool
+checkpoints`7cfe524e0`/`d8224c35e` remain frozen to their recorded older library;
+source-preflight`311159ec0` remains valid at its prior scope. Source checkpoints
+and existing passing39focused checks are reused; no old cohort is relabeled as
+current-library/native proof. Subsequent handoff-only commits change no source
+or execution admission. All pre-existing dirty work remains preserved.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
 `do_setresgid`, with paired opt-in C exclusions and genuine current ABI/providers.
