@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T11:07Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T11:09Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -56,8 +56,9 @@ suite was replayed because of that parser error. Meaningful default regressions
 are retained in the repository; candidate generation/wiring is source-only checked.
 Exact summary: `docs/verification/m15-memory-reader-cleanup-results-20261106.json`.
 
-The coherent source/evidence checkpoint is ready for normal push/fetch and new
-source-bundle replay. All five contributed HIGH owners are complete; no new HOST
+The coherent source/evidence checkpoint`22cedb5e5c706252cc03b06e0a0d4ecea938d4af`
+is pushed/fetched with all12changed entries verified. One changed committed
+four-bundle replay reproduces clean IHK`b7293d23`/tree`8d457964…`. All five contributed HIGH owners are complete; no new HOST
 handle remains. Current included guard is14%used/86%remaining. No further concrete
 independent ready code/test batch is identified from these exact inputs. The next
 engineering prerequisite is the actual universal generic/exec disposition and
@@ -143,7 +144,7 @@ The current queue has consumed all ready reader work:
 
 | Prerequisite | Actual consumers / gates | Owner / next executable deliverable |
 | --- | --- | --- |
-| Publish checked reader cleanup — READY | M15 memory-reader/library/error ownership | Root commits/pushes/fetch-verifies this batch and reproduces the changed committed IHK bundle once |
+| Checked reader cleanup — PUBLISHED | M15 memory-reader/library/error ownership | Root published22cedb5e5, fetched all12changed entries and reproduced changed IHKb7293d23; no further publication test queued |
 | Universal generic/exec provider disposition — BLOCKED | Full image; M14-F03/F06/I01–03 | Original service/hold authority supplies a valid scoped disposition; replay and equivalent reassignment remain false |
 | Original SDK/source-view/native bindings — BLOCKED | Original M14/M15 integration and lifecycle | Original authority provides actual one-shot gates/custody/source bindings; diagnostic namespace authority supplies corroborated outer mapping |
 
@@ -342,16 +343,16 @@ spawn overrides remain required. Proof:
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
 Latest verified engineering/evidence checkpoint is
-**`208d61882e396974f13ea2ece4d1f4edb5ca90e8`**, pushed/fetched with all9changed
-entries verified. It contains the paired memory allocation-error correction,
-meaningful retained regression, affected real library result, source bundle and
-engineering-first policy. The four-bundle replay reproduces clean IHK`516d173b`,
-tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`. Earlier public-consumer/tool
-checkpoints`7cfe524e0`/`d8224c35e` remain frozen to their recorded older library;
-source-preflight`311159ec0` remains valid at its prior scope. Source checkpoints
-and existing passing39focused checks are reused; no old cohort is relabeled as
-current-library/native proof. Subsequent handoff-only commits change no source
-or execution admission. All pre-existing dirty work remains preserved.
+**`22cedb5e5c706252cc03b06e0a0d4ecea938d4af`**, pushed/fetched with all12changed
+entries verified. It contains both memory-reader ownership fixes, meaningful
+retained regressions, the final genuine library and reproducible source bundle.
+One changed four-bundle replay reproduces clean IHK`b7293d23`,
+tree`8d457964ae0fbc63f84b6efccb58bdd15ebd5764`. Earlier primary allocation fix
+`208d61882` and shutdown/capacity status`cdfeff3de` remain historical. Older
+public-consumer/tool checkpoints`7cfe524e0`/`d8224c35e` stay bound to their older
+library; no old consumer is relabeled as final-library/native proof. Existing
+accepted files, original39focused checks, dirty work and UNKNOWN holds remain.
+Subsequent status-only handoff changes no code, artifact or execution admission.
 
 The current coherent batch adds two real Rust refresh entries, `do_setresuid` and
 `do_setresgid`, with paired opt-in C exclusions and genuine current ABI/providers.
