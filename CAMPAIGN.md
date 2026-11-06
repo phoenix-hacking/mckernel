@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T08:09Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-06T08:27Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -34,17 +34,29 @@ instruction is preserved and published in the coherent checkpoint.
 
 | HIGH worker / actual thread | Current deliverable and fresh result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Routing/19origins/library and preflight review PASS; prepares corrected-library three-tool relink request in `updated-tool-cohort-1` |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | Prior source/main contracts reused; prepares whitelisted actual mains for the changed provider cohort, pending real artifact hashes |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Preflight six checks PASS/direct wait joined; prepares exact changed-cohort ELF/loader/provider binding after real links |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` | Corrected-library three-tool links PASS; prepares the retained genuine public API consumer against the changed runtime in `updated-public-consumer-1` |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` | New-cohort15actual early mains PASS; all waits joined and slot released; source/error contracts reused unchanged |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Exact changed-cohort6ELF/loader/provider checks PASS; current interpreter/provider paths and hashes bound; slot released |
 
 The short ranked queue consumes passed shared results before new work:
 
 | Rank / prerequisite | Consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| 1. Publish checked producer preflight | Future whole70 builds; M15-F05/I03 | Root checkpoints six pure-Python checks and exact source bundle; no library/compiler replay |
-| 2. Match corrected library to real tools | ihkconfig/ihkosctl/ihkmond; M15-F06…08/I03 | ABI owner prepares new coherent links to library`dd974858…`, reusing two unchanged Rust objects; supervisor prepares changed-cohort loader binding; CLI prepares exact early-main cases |
+| 1. Publish matched tool-cohort proof | ihkconfig/ihkosctl/ihkmond; M15-F06…08/I03 | Root publishes actual3build+6loader+15main PASS against corrected library; no old-cohort replay |
+| 2. Match retained public API consumer to corrected runtime | Shared43public APIs/loglevel; M15-F05/I03 | ABI owner prepares exact retained genuine consumer compile/link+run against`dd974`; existing pre-access/pure-operation contracts reused, no valid backend calls |
 | 3. Original SDK/source-view admission | Matching original builds across M14/M15 | Root/original operation authority still needs real one-shot gates and corroborated original SDK binding; no ready native command/remap exists |
+
+**08:27Z matching tool cohort closed at HOST scope:** two unchanged actual Rust
+CLI objects are reused, and one supervisor codegen/link is justified by no retained
+object. All3links pass against corrected library`dd974858…`: ihkconfig`2a2c2f81…`,
+ihkosctl`b064ee94…`, ihkmond`75d10320…`. Build wall0.813295s/CPU0.78s/peak149,672KiB.
+All6ELF/trusted-loader checks then pass with exact basename dependency, one matching
+RPATH/RUNPATH, actual interpreter and regular non-set-ID providers; driver wall0.134s.
+All15actual mains pass with exact statuses/output under UID1000, before valid device
+or daemon dispatch. Every wait joined and all slots released; no retries/errors.
+Old15-main proof remains frozen to its older library. New proof:
+`docs/verification/m15-corrected-library-tool-cohort-results-20261106.json`.
+**Accepted-file deltas0/0; new production images/native/C retirements0.**
 
 **08:09Z producer preflight closed:** the existing helper now validates its19
 actual source locations before output creation or compiler calls. Six pure-Python
@@ -158,7 +170,7 @@ Root `gpt-6.1-sol`/MAX, all three existing workers `gpt-6.1-sol`/HIGH, approval
 never and filesystem unrestricted. New turn IDs above were read from the actual
 guard; fresh worker source output and the completed batch are observed, not a
 heartbeat-only claim. UID1000 is not Unix root. No new model/controller/resource
-owner was created. Current guard `last_rate_limits` reports10%used/90%remaining,
+owner was created. Current guard `last_rate_limits` reports11%used/89%remaining,
 reset1794518606; older weekly ledger observations remain untouched.
 
 The foreground's isolated HIGH-floor patch (SHA`95f56039adf2938862ef0adad257edf15eaebe9eb2acc397a98714f29bcfe722`)
@@ -171,12 +183,11 @@ spawn overrides remain required. Proof:
 `docs/verification/m14-high-effort-policy-results-20261106.json`.
 
 M14 remains **4/6 accepted**; all three integration gates remain open.
-Published checkpoint **`fa7410fe75ea10252829e5f6efbdef4408a0b6be`** is pushed and
-fetched/all9changed-object verified. Fresh four-bundle replay exactly reproduces
-IHK`b723bcf1b662710ae835765ef1b8735044586e24`/tree`cad32c3aece8ddc2f2a948ba396830deed026292` clean.
-The next checked metadata-only source checkpoint contains IHK`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`,
-tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc`, bundle blob`3c5d7d07090736941851333d92211b0df8356976`.
-Its runtime C/Rust and diagnostic-witness bytes match the passed routing library.
+Published checkpoint **`311159ec0f09818c963c0642b28ccc36a4b0a35c`** is pushed and
+fetched/all7changed-object verified. Fresh four-bundle replay exactly reproduces
+IHK`89e432ab6cfcb0670c19c3f5eac03fcdd9e56192`/tree`c3cb7a8812878e688c7ab870af8b33e46ece41cc` clean.
+The matched corrected-library/tool proof is the next coherent evidence checkpoint;
+source/runtime/ABI inputs are unchanged from that verified source checkpoint.
 Earlier`79f496b7b` actual15-main proof and`9f70668c6` shared-source proofs are reused;
 GitHub base`146dcd187` and recovered IHK`c032c975` remain historical bindings;
 pre-existing dirty work is preserved. The original 39 focused checks are reused.
