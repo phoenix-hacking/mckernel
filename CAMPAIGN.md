@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T01:27Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T01:41Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -16,7 +16,7 @@ new output cleanup preserves only its entry errno. No original hold is released.
 
 Current worker447151/server447153 births9598015/9598023, RootSol/MAX and actual
 HIGH source/test/review turns are recorded in this invocation's CURRENT-PHASE.json.
-Actual danger-full-access/approvalnever, UID1000. Existing guard20%used/80%remaining;
+Actual danger-full-access/approvalnever, UID1000. Existing guard21%used/79%remaining;
 no quota/usage-unknown restriction. Prior17% and historical weekly records remain.
 
 **IKC correction, caller and actual library PASS:** fourteen defined baseline
@@ -94,15 +94,30 @@ sets. EIOis deliberately nonfatal. All3waits joined/CPU0released; wall2.463429s/
 CPU0.46s/peak172,664KiB. Receipt`f39abc2d…`, review`ac7f402f…`; oldthree-seamNO-GO
 is intact. No actual/dev/native/hungup/backend/file acceptance or green replay.
 Bounded result:`docs/verification/m15-active-monitor-results-20261107.json`.
-Durable current-source fixture is retained after generation/AST equivalence; no new runtime. Monitor parent checkpoint publication is next.
+Durable current-source fixture is retained after generation/AST equivalence; no new runtime. Monitor checkpoint`e2da7a9794c5e682ea35707fe184de14458d3dcf` is pushed/fetched/all5changed entries verified.
 
-**Concrete next source input:** Csnprintf_realloc frees/NULLs text on ordinary
-reallocfailure, but CPU/MEM/IKCcaller loops can append again. Actual Rust callers
-already stop onNULL. AnewHIGHsource turn`01a1b39c-b7f0-78a0-9dbb-d23dd34b6c12`
-assesses/prepares the smallest Ccaller guard pair; independentHIGHtest turn
-`01a1b39c-dbcd-78f0-a4fe-e80c4efd149a` prepares valid bounded growth/failure cases.
-No unsafe old Cfailurebaseline runs. Monitor turn`01a1b39b-a302-7252-9783-3acada14a102`
-is complete in runtime and retaining its result. No canonical follow-on is composed yet.
+**Cformatter growth correction, new behavior and affected library PASS:** nine
+reviewed Cguards stop after helper-owned text becomesNULL; selected Rustlogic
+already stops and remains unchanged. New9C+9Rustcases cover6genuine64→128→256
+successes and12ordinary reallocfailures1/2. ExactCPU/MEM/IKCstrings138/141/142bytes,
+borrowedinputs and all48explicit allocationowners pass; failedoldtext is freed
+once by actualhelper, allIKCscratch released. No unsafeoldCfailedbaseline or whole
+TLSerrno promise. MEM125byte prep finding was corrected before execution. All5child/
+outerwaits joined/CPU7released, no retry; wall0.3220s/CPU0.17s/peak106,712KiB.
+
+One affected producer regenerates only changed19C-origin metadata and consumes
+unchanged Rust bodies: actual6phases+2reads PASS/all8joined/CPU6released, strict
+7warnings/nativeorder/70+6roots/SONAME pass. Library`f63f78c7…`, archive`480edd56…`;
+wall0.899300s/CPU0.79s/peak135,844KiB. CleancommittedIHK
+`eea7443c2923470fde51dbc097e8ed4237551a7f`, tree`b2d90ad0…`, is bundled.
+Receipts`36f3ee3a…`/`3a39c12e…`; durable current-source18case fixture matches actual
+passed units with source-generation/AST only. Parent publication is next. Bounded
+result:`docs/verification/m15-formatter-growth-results-20261107.json`.
+
+Actual newHIGHturns: source/producer`01a1b3a1-b836-71d0-831f-123dcb34c5ea`,
+new testpreparation`01a1b39c-dbcd-78f0-a4fe-e80c4efd149a`, monitor
+`01a1b39b-a302-7252-9783-3acada14a102`; normal guard holds the actual execution
+turn IDs and verified savedHIGHrouting. All completed scopes are consumed, not stalls.
 
 Retained completed allocation/source/ABI/HOST results follow; none is rerun merely
 to publish this new batch. M14 remains4/6, M15 1/8, final integration gates open.
@@ -228,23 +243,23 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** retain/publish the passed monitor fixture/result now while
-independent source/test owners prepare the concrete formatter-growth correction.
-Reuse unchanged source/ABI/provider/producer and green checks; no runtime replay.
-Net conversion LOC remains unmeasured.
+**Current priority:** publish the passed formatter source/tests/library correction
+now, then evaluate only a concrete eligible original acceptance dependency. All new
+runtime/producer jobs are joined. Reuse unchanged results; no padding, unsafe
+baseline, green replay or repeated inventories. Net conversion LOC remains unmeasured.
 
-| Ready prerequisite / dependency | Actual consumers / original gates | Owner / smallest next proof |
+| Prerequisite / dependency | Actual consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| Monitor2realHOSTcases PASS, durable fixture retained | Actual ticks/nonfatalstop/cleanup / M15-F08 behavior | Exact passed units retained; Root publishes fixture/results now |
-| Formatter growth failure source contract | CPU/MEM/IKCpublicstring APIs and CLI / M15-F03 behavior | A minimal Cguard/actual Rust NULL join, then focused concrete review |
-| New valid growth/failure regression | Three actualformatter callers/ownership | B bounded new candidate cases/request; no unsafe Cbaseline or oldgreen replay |
+| Formatter source/new18cases/library PASS | CPU/MEM/IKCpublic strings and CLI / M15-F03 behavior | Root changed committed source replay once, publish/fetch coherent checkpoint |
+| Actual remaining ready input | Original M14/M15 qualification | Root considers a concrete eligible dependency; none is invented to fill slots |
 | Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original hold authority supplies valid scoped disposition; no equivalent retry |
 | SDK/source-custody/native binding BLOCKED | Remaining M15-F02–08/I01–04 matched qualification | Original authority supplies reviewed one-shot bindings/current-free; SDK outer mapping UNKNOWN |
 
-The next15minute deliverable is monitor publication and the reviewed formatter
-candidate/new behavior request. Exact original open gates remain M14-F03/F06,
-M14-I01–03, M15-F02–08 and M15-I01–04. The missed nine-hour target is unchanged;
-critical-path ETA is unknown pending external source/service and native admission.
+The next15minute deliverable is formatter publication and honest next-work/blocker
+disposition. Exact original open gates remain M14-F03/F06, M14-I01–03, M15-F02–08
+and M15-I01–04. The missed nine-hour target is unchanged; critical-path ETA is
+unknown pending external source/service and native admission. All accepted scopes,
+UNKNOWN owners and retained reservations remain; these HOST results close no file.
 
 M14 stays4/6 and M15 1/8. New HOST source/test/library work is passing; this is not
 native/fullimage/file acceptance. Critical-path completion ETA remains unknown
