@@ -1,0 +1,93 @@
+{
+  "APIs": [
+    "ihk_get_num_os_instances",
+    "ihk_get_os_instances"
+  ],
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "accepted_delta": {
+    "C_retirements": 0,
+    "M14_files": 0,
+    "M15_files": 0,
+    "native_qualified_cohorts": 0,
+    "production_images": 0
+  },
+  "affected_real_library": {
+    "all8_waits_joined": true,
+    "archive": {
+      "bytes": 21933874,
+      "path": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04/directory-producer-1/output/libihklib_whole70.a",
+      "sha256": "b04b326a558e7788462e54ec8c46850b9a1b2eab231405528cf01cef23349695"
+    },
+    "checks": {
+      "C_function_bodies_linked": false,
+      "SONAME": "libihk.so",
+      "actual19_generated_origins": "PASS",
+      "actual_C_source_contracts_and_19_offsets": "PASS",
+      "data_roots": 6,
+      "function_roots": 70,
+      "six_data_widths_match_prior_actual": true,
+      "unchanged_four_function_three_data_declaration_include": "PASS",
+      "unchanged_strict7warnings_sourcepins_native_order": "PASS"
+    },
+    "metrics": {
+      "maximum_reported_RSS_KiB": 137348,
+      "sum_command_user_system_CPU_seconds": 0.82,
+      "sum_command_wall_seconds": 0.903795286
+    },
+    "shared": {
+      "bytes": 5403760,
+      "path": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04/directory-producer-1/output/libihk.so",
+      "sha256": "3ec0f235dfddaa5cbf7c84c6ce24fafed6980405167aec2f190a6c441b6ee0b8"
+    },
+    "six_phases_two_reads_passed_once": true
+  },
+  "all_directory_HOST_waits_joined_and_released": true,
+  "change": "Public C/Rust count/list clearerrno beforeeveryreaddir, distinguishNULL/EIO fromEOF, capture returnednegativeerror beforeclosedir. Guards/traversal/partialwrites/onceclose preserved.",
+  "creation_rollback_policy": "UNCHANGED in this checkpoint, including retained list_error=-6/index0 parity. Any change is a separately reviewed follow-on.",
+  "durable_regression": "scripts/tests/test_m15_directory_read_errors.py",
+  "functional": {
+    "CPU7_released": true,
+    "CPU_seconds_rounded": 0.27,
+    "actual_observed_order": [
+      1,
+      3
+    ],
+    "all9_child_and_driver_waits_joined": true,
+    "baseline_cases": 14,
+    "candidate_cases": 14,
+    "closedir_errno_poison": 33,
+    "compiler_runtime_retries": 0,
+    "exact_EIO_error_cases": 10,
+    "genuine_DIR_opens_closed_once_EBADF": 40,
+    "max_RSS_KiB": 110940,
+    "normal_EOF_stale_errno_order_controls": 4,
+    "order_assumed_or_sorted": false,
+    "partial_error_output_permitted": true,
+    "prerequisite_error_old_negative22_new_negative5": true,
+    "safe_false_success_count_or_list_observations": 8,
+    "scope": "GenuineprivateHOSTDIRentries with declaredUID/readability/path/readdirEIO seams; no actual/dev/backend/native/creationrollback operation.",
+    "wall_seconds": 0.516614,
+    "whole_TLS_or_unchanged_output_guarantee": false
+  },
+  "holds": "Alloriginalservice/source/SDK/native holds, UNKNOWNoutermapping,18GiBcharges/4GiBfloor/scratch21/mutex27:4 retained.",
+  "invocation": "20261107T000152Z-a458ed04",
+  "receipts": {
+    "functional": {
+      "path": "directory-cases-1/RESULT.json",
+      "sha256": "dc08b3464209a6e455359f6b472e06295d34cbcd849aa0533095b8607d7dd938"
+    },
+    "producer": {
+      "path": "directory-producer-1/RESULT.json",
+      "sha256": "318514899ad83480a9286284c94342e811e9f66b03156cade826fb94d6e22499"
+    }
+  },
+  "retention": "Current-source candidate14 default/explicitCC,RUSTC/relativefixtures. ActualpassingC/observerbytes andRustmodule/bodies matched by sourcegeneration; no runtimegreenreplay. Historicalbaselineprivate.",
+  "source": {
+    "IHK_commit": "8dce62be33b7b2a97cf80476c84accd2dd7a63e6",
+    "IHK_tree": "6a7a5743766fe24ea474a2b68645900bbdf07d5d",
+    "bundle_blob": "ff56b1ff2a2ed83f22de5bcfc4719051af44a6bb",
+    "bundle_sha256": "e8cd0265ca2862574982daf64a8c2634e8e8239d46dc0d50c5facbb61cc39a7f"
+  },
+  "status": "PASS_PAIRED_DIRECTORY_READ_ERROR_FIX_AND_REAL_LIBRARY",
+  "work_root": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04"
+}

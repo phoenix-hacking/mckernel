@@ -1,0 +1,23 @@
+// Actual selected public directory readers and their genuine ABI/readability helpers.
+use core::ffi::{c_char,c_int,c_void};
+__DIRENT__
+unsafe extern "C"{
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_geteuid"]fn geteuid()->u32;
+ #[link_name="observation_access"]fn access(path:*const c_char,mode:c_int)->c_int;
+ #[link_name="observation_opendir"]fn opendir(path:*const c_char)->*mut c_void;
+ #[link_name="observation_readdir"]fn readdir(dir:*mut c_void)->*mut Dirent;
+ #[link_name="observation_closedir"]fn closedir(dir:*mut c_void)->c_int;
+ fn strncmp(a:*const c_char,b:*const c_char,count:usize)->c_int;
+ fn atoi(value:*const c_char)->c_int;
+ fn snprintf(out:*mut c_char,size:usize,format:*const c_char,...)->c_int;
+ fn observation_run(baseline:c_int,count:unsafe extern "C" fn(c_int)->c_int,list:unsafe extern "C" fn(c_int,*mut c_int,c_int)->c_int,directory:*const c_char)->c_int;
+}
+mod actual{
+ use super::*;
+__ERRNO__
+__READABLE__
+__COUNT__
+__LIST__
+}
+fn main(){let directory=std::ffi::CString::new(std::env::args().nth(1).expect("private ordinary directory")).unwrap();std::process::exit(unsafe{observation_run(0,actual::ihk_get_num_os_instances,actual::ihk_get_os_instances,directory.as_ptr())});}

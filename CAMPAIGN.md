@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T00:35Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T00:56Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -33,8 +33,8 @@ One actual producer passes6phases+2reads,19actualorigins and unchangedstrict
 wall0.939222s/CPU0.85s/peak136,064KiB. AllIKCwaits joined/slotsreleased. CleanIHK
 `2417d15733ba024f98dfdd509a108ea3eabe4358`, tree`12391790…`, is committed/bundled.
 Durable candidate-only regression source-generation matches the passing bodies;
-no runtime replay. Receipts`bcc687ea…`/`3fc1897f…`/`202e40dc…`. Parent publication
-follows; bounded result:`docs/verification/m15-ikc-allocation-results-20261107.json`.
+no runtime replay. Receipts`bcc687ea…`/`3fc1897f…`/`202e40dc…`. Parent checkpoint`c70e7a160446c22f6540f451b87fc412c1da0566` is pushed/fetched/all12changed-entry
+verified; the changed committed bundle replays once. Bounded result:`docs/verification/m15-ikc-allocation-results-20261107.json`.
 
 **New real active-supervisor HOST behavior PASS:** both sourceGO cases use actual
 Life/Workers/redirect_kmsg and eventfd-provider bodies, genuine threads/eventfd/
@@ -48,6 +48,32 @@ claimed as a separate runtime byte dump. Receipt`ce756e64…`; durable current-s
 is retained after syntax/generation equivalence, without a runtime replay. No oldidle/startuprollback/fullwrapped suite
 replayed, no native/deployed/provider/file acceptance or historical charge release.
 Bounded result:`docs/verification/m15-active-supervisor-results-20261107.json`.
+
+**Directory-reader correction and actual library PASS:** sourceGO pair`8320643b…`
+now returns captured-EIO for readdir errors instead of count/list false success.
+Fourteen C/Rust baseline cases safely observe8false successes;14candidates pass
+10read/prerequisite-error and4normalEOF/staleerrno/order controls. All40genuine
+DIRhandles close once/EBADF; partial slots/order remain allowed, no output or TLS
+transaction promise. All9child/driver waits joined, CPU7released; wall0.516614s,
+CPU0.27s/peak110,940KiB. No retries, oldgreen suites or actual/dev/native access.
+
+One affected realproducer passes6phases+2reads, actual19origins and unchangedstrict
+7warnings/native order/70+6roots: library`3ec0f235…`, archive`b04b326a…`;
+wall0.903795s/CPU0.82s/peak137,348KiB. All8waits joined/CPU6released. CleanIHK
+`8dce62be33b7b2a97cf80476c84accd2dd7a63e6`, tree`6a7a5743…`, is committed/bundled.
+Durable candidate-only fixture matches actual passing units without a green run.
+Receipts`dc08b346…`/`31851489…`; parent publication follows. Bounded result:
+`docs/verification/m15-directory-read-results-20261107.json`.
+
+**Separate next ownership review GO, private preparation only:** failed list output
+provides no complete valid index sequence; zero-filled slots may masquerade asOS0.
+Assessment and concrete review approve gating ONLYthe existing perOSrollback loop
+on listingstatus==0, preserving broadALLindices on successful listing, primary
+failure/message/earlypublication, listfree and finaldeviceCPU→MEM order. The old
+`list_error=-6`/index0 parity is intentionally changed only in that separate new
+witness; it is unchanged in this directory-reader checkpoint. No fallbackindex,
+partial-prefix contract or ABI is invented. A/B own private pair/tests while this
+checkpoint publishes. Original native/resource restoration gates remain open.
 
 Retained completed allocation/source/ABI/HOST results follow; none is rerun merely
 to publish this new batch. M14 remains4/6, M15 1/8, final integration gates open.
@@ -173,19 +199,10 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** publish the passed IKC source/test/library batch immediately;
-retain the newly passed real active-supervisor fixture without another runtime run.
-The next concrete directory-reader input is under independent source/contract
-review while this checkpoint publishes; prepare private fixes/tests only onGO.
-No follow-on canonical edits precede this source checkpoint.
-All unchanged qualified results/providers remain reused. Net conversion LOC stays
-unmeasured where semantic/helper/branch coverage has not been established.
-
-New independent input:`directory-read-functional-input.json` under the same
-foreground input directory. Current public C/Rust count/list functions conflate
-readdirNULL/EIO with EOF and return false success/partial results. Review owns the
-returned-result contract and realDIR/error plan; no speculative output guarantee,
-invalid-close errno work or creation-rollback list-error behavior is changed.
+**Current priority:** publish the passed directory-reader source/test/library batch.
+Pipeline the separately reviewed failed-list rollback correction privately; no
+canonical follow-on edits before this publication. Reuse all unchanged passing
+checks, ABI/providers and actual bodies. Net conversion LOC remains unmeasured.
 
 The current prerequisite queue is:
 
@@ -193,7 +210,8 @@ The current prerequisite queue is:
 | --- | --- | --- |
 | IKC correction — source/tests/library PASS | Formatter + actual CLIcaller / M15librarybehavior | Root publishes coherent source/tests/results now |
 | Active supervisor — two realHOSTcases PASS | M15-F08 active-worker preparation, no native acceptance | Durable fixture retained; Root consumes passed result, no runtime replay |
-| Directory read errors — new concrete source input | Public count/list APIs / M15 returned-result correctness | ExistingHIGH review owner checks eligibility/contract before privatepairedfix/test prep |
+| Directory read errors — source/tests/library PASS | Public count/list APIs / M15 returned-result correctness | Root publishes current8dce62 source and retained14candidate fixture |
+| Failed-list rollback — separate sourceGO | Shared creation failure/ownership | A/B private pair/tests; explicitly update negative-list parity only after review |
 | Original universal generic/exec disposition — BLOCKED | M14-F03/F06/fullimage/integration | Original service/hold authority supplies a valid scoped disposition; no replay/equivalent reassignment |
 | Original SDK/source-custody/native binding — BLOCKED | Matching original M14/M15 lifecycle/native | Original authority supplies actual reviewed one-shot bindings/current-free; diagnostic outermapping remains UNKNOWN |
 
