@@ -1,0 +1,53 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Exact public/private declarations; all successful allocations/free/formatting
+ * delegate genuine HOST libc. No real IHK/device/backend/native operation. */
+__LOGLEVEL_DECL__
+struct Block{void *pointer;char kind;};
+static struct Block blocks[16];
+static int live,allocated,released,malloc_calls,calloc_calls,format_calls,realloc_calls;
+static int fail_malloc,fail_calloc,checks,observed_false_successes;
+static int inside_formatter,formatter_output_free_seen,formatter_output_free_entry_errno;
+static void *record(void *pointer,char kind){assert(pointer);for(int i=0;i<16;i++)if(!blocks[i].pointer){blocks[i]=(struct Block){pointer,kind};++live;++allocated;return pointer;}abort();}
+void *observation_malloc(size_t size){++malloc_calls;assert(malloc_calls==1&&size==64);if(fail_malloc){errno=ENOMEM;return NULL;}return record(malloc(size),'M');}
+void *observation_calloc(size_t n,size_t size){
+ ++calloc_calls;assert(calloc_calls<=5&&format_calls==0);
+ if(calloc_calls==fail_calloc){errno=ENOMEM;return NULL;}
+ return record(calloc(n,size),'C');
+}
+void observation_free(void *pointer){int output_free=0;if(pointer){int found=0;for(int i=0;i<16;i++)if(blocks[i].pointer==pointer){if(inside_formatter&&blocks[i].kind=='M'){output_free=1;++formatter_output_free_seen;formatter_output_free_entry_errno=errno;}blocks[i].pointer=NULL;--live;++released;found=1;break;}assert(found);}int nonnull=pointer!=NULL;free(pointer);if(nonnull)errno=output_free?EDOM:EIO;}
+void *observation_realloc(void *pointer,size_t size){(void)pointer;(void)size;++realloc_calls;assert(!"reallocation is outside this bounded input domain");return NULL;}
+int observation_vsnprintf(char *out,size_t size,const char *format,va_list arguments){++format_calls;return vsnprintf(out,size,format,arguments);}
+int observation_snprintf(char *out,size_t size,const char *format,...){++format_calls;va_list arguments;va_start(arguments,format);int result=vsnprintf(out,size,format,arguments);va_end(arguments);return result;}
+static int is_live_output(const void *pointer){for(int i=0;i<16;i++)if(blocks[i].pointer==pointer&&blocks[i].kind=='M')return 1;return 0;}
+static void reset(int initial_failure,int scratch_failure){assert(live==0);for(int i=0;i<16;i++)assert(!blocks[i].pointer);allocated=released=malloc_calls=calloc_calls=format_calls=realloc_calls=formatter_output_free_seen=formatter_output_free_entry_errno=0;fail_malloc=initial_failure;fail_calloc=scratch_failure;errno=ERANGE;}
+typedef char *(*Formatter)(struct ihk_ikc_req *);
+static void check(Formatter formatter,int baseline,int initial_failure,int scratch_failure){
+ reset(initial_failure,scratch_failure);int sources[]={2,3,4},destinations[]={0,0,1};int before_sources[3],before_destinations[3];memcpy(before_sources,sources,sizeof(sources));memcpy(before_destinations,destinations,sizeof(destinations));
+ struct ihk_ikc_req request={sources,destinations,3};inside_formatter=1;char *output=formatter(&request);int returned_errno=errno;inside_formatter=0;
+ assert(malloc_calls==1&&realloc_calls==0&&!memcmp(sources,before_sources,sizeof(sources))&&!memcmp(destinations,before_destinations,sizeof(destinations))&&request.src_cpus==sources&&request.dst_cpus==destinations&&request.num_cpus==3);
+ if(initial_failure){assert(!output&&calloc_calls==0&&format_calls==0&&allocated==0&&released==0&&live==0&&formatter_output_free_seen==0&&returned_errno==ENOMEM);}
+ else if(scratch_failure){
+  assert(calloc_calls==scratch_failure&&format_calls==0&&allocated==scratch_failure&&returned_errno==(scratch_failure==1?ENOMEM:EIO));
+  if(baseline){assert(output&&is_live_output(output)&&output[0]=='\0'&&live==1&&released==allocated-1&&formatter_output_free_seen==0);++observed_false_successes;}
+  else{assert(!output&&live==0&&released==allocated&&formatter_output_free_seen==1&&returned_errno==formatter_output_free_entry_errno);}
+ }else{assert(output&&is_live_output(output)&&!strcmp(output,"2,3:0+4:1")&&calloc_calls==5&&allocated==6&&released==5&&live==1&&format_calls==7&&formatter_output_free_seen==0);}
+ int retained=live;if(output)observation_free(output);assert(live==0&&allocated==released);
+ printf("CASE initial-malloc-fail=%d scratch-calloc-fail=%d output=%s retained-before-consumer-free=%d allocations=%d freed=%d format-calls=%d errno=%d\n",initial_failure,scratch_failure,initial_failure||(!baseline&&scratch_failure)?"NULL":scratch_failure?"EMPTY":"2,3:0+4:1",retained,allocated,released,format_calls,returned_errno);++checks;
+}
+int observation_run(int baseline,Formatter formatter){
+ assert(getuid()==1000&&geteuid()==1000);check(formatter,baseline,1,0);for(int failure=1;failure<=5;failure++)check(formatter,baseline,0,failure);check(formatter,baseline,0,0);
+ assert(checks==7&&observed_false_successes==(baseline?5:0)&&live==0);
+ if(baseline)puts("baseline IKC cases=7 defined-empty-false-successes=5 consumer-freed-all-output live=0 realloc-calls=0");
+ else puts("candidate IKC cases=7 scratch-failures-NULL=5 initial-failure-NULL=1 correct-success=1 all-owned-freed-once live=0 realloc-calls=0");
+ return 0;
+}

@@ -1,0 +1,117 @@
+{
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "accepted_delta": {
+    "C_retirements": 0,
+    "M14_files": 0,
+    "M15_files": 0,
+    "native_qualified_cohorts": 0,
+    "production_images": 0
+  },
+  "all_IKC_HOST_waits_joined_and_slots_released": true,
+  "caller": {
+    "actual_Rust_body_cases": 3,
+    "real_anonymous_fd_close_once_EBADF": true,
+    "request_arrays_and_owned_output_freed": true,
+    "returns": [
+      0,
+      -1,
+      0
+    ],
+    "scope": "Declared local open/ioctl/formatter seams; no actual CLI main/device/backend/finalformatter/native proof.",
+    "stdout": [
+      "\n",
+      "do_get_ikc_map,build result string failed\n",
+      "2,3:0+4:1\n"
+    ]
+  },
+  "change": "Five pre-format scratch-allocation failures now free owned text and returnNULL in C/Rust; prior scratch cleanup, initialmalloc/validgrammar/realloc paths retained. Only newfree entryerrno preserved.",
+  "durable_regression": "scripts/tests/test_m15_ikc_formatter_allocations.py",
+  "formatter": {
+    "baseline_cases": 14,
+    "candidate_cases": 14,
+    "candidate_initial_NULL": 2,
+    "candidate_scratch_NULL": 10,
+    "candidate_success": 2,
+    "distinct_outputfree_errno_poison_checked": true,
+    "dst": [
+      0,
+      0,
+      1
+    ],
+    "expected": "2,3:0+4:1",
+    "owned_storage_released_once": true,
+    "realloc_failure_or_invalid_vectors": 0,
+    "safe_empty_false_successes": 10,
+    "src": [
+      2,
+      3,
+      4
+    ]
+  },
+  "holds": "Alloriginalservice/source/SDK/native holds, UNKNOWNoutermapping,18GiBcharges,4GiBfloor,scratch21/mutex27:4 retained.",
+  "invocation": "20261107T000152Z-a458ed04",
+  "library": {
+    "all8_waits_joined": true,
+    "archive": {
+      "bytes": 21933698,
+      "path": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04/ikc-producer-1/output/libihklib_whole70.a",
+      "sha256": "5883aa5e7b6abf9d003d217516a58c8f8af566c88a67d7ac3ee6217b5717ddfb"
+    },
+    "checks": {
+      "C_function_bodies_linked": false,
+      "SONAME": "libihk.so",
+      "actual19_generated_origins": "PASS",
+      "actual_C_source_contracts_and_19_offsets": "PASS",
+      "data_roots": 6,
+      "function_roots": 70,
+      "six_data_widths_match_prior_actual": true,
+      "unchanged_four_function_three_data_declaration_include": "PASS",
+      "unchanged_strict7warnings_sourcepins_native_order": "PASS"
+    },
+    "metrics": {
+      "CPU_seconds_rounded": 0.85,
+      "max_RSS_KiB": 136064,
+      "wall_seconds": 0.939221964
+    },
+    "shared": {
+      "bytes": 5403760,
+      "path": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04/ikc-producer-1/output/libihk.so",
+      "sha256": "eb33547907c21cf68035ac88adb0d1b0c7618aa5b1b9777629ffc100de071b1a"
+    },
+    "six_phases_two_reads_passed_once": true
+  },
+  "receipts": {
+    "caller": {
+      "path": "ikc-caller-1/qualification-1/RESULT.json",
+      "sha256": "3fc1897f7c8987aedbdb934b18d6d4bac635b853d1a44b67699bbb408968b7e5"
+    },
+    "formatter": {
+      "path": "ikc-cases-1/RESULT.json",
+      "sha256": "bcc687eacb733bc1defc8e154c6bd0f4692af6ad1614d1e45e7a180a04a9ec03"
+    },
+    "producer": {
+      "path": "ikc-producer-1/RESULT.json",
+      "sha256": "202e40dc1bb8ffb8bde8fba5e525cacfca8fd8950d256f9f1aa6eddd91dd4b02"
+    }
+  },
+  "retained_failures": {
+    "causes": [
+      "Fixturepub(super) snippetsatcrate root",
+      "GNUtime first-o rewrote metrics instead of rustc last-o output"
+    ],
+    "disposition": "ExactcorrectedELFs and passedCcandidate reused; only3unexecutedbehaviorrows ran. No chmod, blanketcompile or Cbaselinegreen replay.",
+    "paths": [
+      "ikc-cases-1/FIRST-FAILURE.json",
+      "ikc-cases-1/correction-1/FIRST-CORRECTED-FAILURE.json"
+    ]
+  },
+  "retention": "Current-source candidate-only defaults/explicitCC,RUSTC/relativefixtures. PassedC/observerbyteequal and Rustactualbodiesequal; source-generation/syntax only, no runtime replay.",
+  "source": {
+    "IHK_commit": "2417d15733ba024f98dfdd509a108ea3eabe4358",
+    "IHK_tree": "12391790c0d9b7d69887bfbaea19d36b5d88aa2b",
+    "bundle_blob": "7352e2fbb97cbe405378411dbe5fff52176c1fb1",
+    "bundle_sha256": "6d5b7005ce3826e808687f1847a86a43b2d5d9756b560d381499fe37d35b1464"
+  },
+  "status": "PASS_PAIRED_IKC_CORRECTION_CALLER_AND_REAL_LIBRARY",
+  "work_root": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04"
+}

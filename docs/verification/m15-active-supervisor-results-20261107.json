@@ -1,0 +1,51 @@
+{
+  "actual_SUT": "UnchangedRustLife/Workers/Lease/Ring/consume/redirect_kmsg +unchangedactualihk_os_get_eventfd",
+  "actual_fd_task_sets_restored_each_case": true,
+  "all3_waits_joined_and_CPU0_released": true,
+  "cases": {
+    "active_two_generations": {
+      "active_stop": 0,
+      "exact_syslog_lines": 4,
+      "original_epoll_registration_and_eventfd_identity_gone_before_rearm": true,
+      "reads": 6,
+      "releases": 2
+    },
+    "partial_second_REGISTER_failure": {
+      "reads": 0,
+      "real_kmsg_and_failed_status_closed_before_release": true,
+      "release_attempts": 1,
+      "worker_return": -22
+    }
+  },
+  "declared_local_seams": [
+    "IHKdevice/os-open",
+    "GET/READ/RELEASE/REGISTER ioctls",
+    "openlog/syslog/closelog"
+  ],
+  "durable_test_retention": {
+    "AST_source_generation_only_no_runtime_replay": true,
+    "actual_generated_Rust_and_C_units_match_passed_v2": true,
+    "test": "scripts/tests/test_m15_ihkmond_active_workers.py"
+  },
+  "exact_payloads": "22/17bytes compared in successful process; retained sourceassertions/payloadhex, no separate runtime rawbyte dump claimed.",
+  "execution_review": "active-supervisor-review-1/EXECUTION-REVIEW.json e46fedcf",
+  "invocation": "20261107T000152Z-a458ed04",
+  "metrics": {
+    "CPU_seconds_rounded": 0.52,
+    "max_RSS_KiB": 176580,
+    "wall_seconds": 0.580226
+  },
+  "original_4idle_2startup_rollback_or_fullwrapped_suites_replayed": false,
+  "real_primitives": [
+    "threads/mutex/condvar/atomics/join",
+    "eventfd/epoll/read/write/close",
+    "temporaryregularfiles/RingI/O"
+  ],
+  "receipt": {
+    "path": "active-supervisor-cases-1/v2/qualification-1/RESULT.json",
+    "sha256": "ce756e6483809c51e61640ee50ca3d544127a0d3ac8ec9d0bdbe52ff4a27eb9d"
+  },
+  "scope": "HOSTworkerbehavioronly; no daemon/udev/actualIHKdevice/backend/deployed/native/sourceview qualification. No F08/file acceptance or historicalreservationrelease.",
+  "status": "PASS_TWO_NEW_REAL_HOST_ACTIVE_SUPERVISOR_CASES",
+  "work_root": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04"
+}

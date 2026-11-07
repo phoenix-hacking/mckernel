@@ -1,20 +1,56 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-06T22:31Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T00:35Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**BLOCKED after fresh resumed audit3/3 under `20261106T214601Z-945b55f2`.**
-The earlier blocked audits/checkpoint`f8995aec9` remain history; this new manual
-resume supplies concrete independent userspace error-handling inputs and a fresh
-audit, without releasing any old scope. Worker409240/server409242 birth8782946 are
-current; Root Sol/MAX and six actual direct Sol/HIGH owners are observed in this
-invocation's `CURRENT-PHASE.json`. Unrestricted/approval never, Unix UID1000.
-Current launcher account snapshot is17%used/83%remaining; no quota/usage-unknown restriction.
-This is a source/admission impasse. Completed source/tests/library work and all
-original accepted scopes are retained; the existing goal is being set blocked
-after this verified handoff. No further eligible local operation is established.
+**ACTIVE under new same-Root manual resume `20261107T000152Z-a458ed04`.**
+Prior blocked checkpoint`59d87cc23` and all previous audits remain history. New
+eligible input`m14-m15-ikc-functional-resume-20261107T000114Z/new-functional-input.json`
+binds clean IHK`b6f98677`: C/Rust IKC formatter scratch allocation failures return
+nonNULLempty strings and actual callers report false success. Root composed the
+reviewed paired correction`4ee4790f…` (C`6859eba7…`, Rust`e5382667…`) and actual
+19-site witness updates. Success grammar/order and realloc paths stay unchanged;
+new output cleanup preserves only its entry errno. No original hold is released.
+
+Current worker447151/server447153 births9598015/9598023, RootSol/MAX and actual
+HIGH source/test/review turns are recorded in this invocation's CURRENT-PHASE.json.
+Actual danger-full-access/approvalnever, UID1000. Existing guard19%used/81%remaining;
+no quota/usage-unknown restriction. Prior17% and historical weekly records remain.
+
+**IKC correction, caller and actual library PASS:** fourteen defined baseline
+cases safely observe/free10empty false successes;14corrected C/Rust cases pass
+with complete ownership, NULL failure and unchanged map`2,3:0+4:1`. Actual Rust
+caller3paths pass exactstdout/return, request/output cleanup and realanonymousFD
+once-close/EBADF under declared local seams. Both fixture failures are retained:
+module placement, then GNUtime/rustc-o binding. Only3previously unexecuted rows ran
+after focused disposition; passedCbaseline and all produced objects were reused.
+No chmod, blanket recompile, unsafe realloc failure or old61green suite replay.
+
+One actual producer passes6phases+2reads,19actualorigins and unchangedstrict
+7warnings/native order/70+6roots: archive`5883aa5e…`, library`eb335479…`;
+wall0.939222s/CPU0.85s/peak136,064KiB. AllIKCwaits joined/slotsreleased. CleanIHK
+`2417d15733ba024f98dfdd509a108ea3eabe4358`, tree`12391790…`, is committed/bundled.
+Durable candidate-only regression source-generation matches the passing bodies;
+no runtime replay. Receipts`bcc687ea…`/`3fc1897f…`/`202e40dc…`. Parent publication
+follows; bounded result:`docs/verification/m15-ikc-allocation-results-20261107.json`.
+
+**New real active-supervisor HOST behavior PASS:** both sourceGO cases use actual
+Life/Workers/redirect_kmsg and eventfd-provider bodies, genuine threads/eventfd/
+epoll/files, and only declared synchronous local IHK/syslog seams. Two generations
+produce6reads/2releases/4exactlines; actual notification registrations/original
+identities disappear before rearm and active stop returns0. Partial secondREGISTER
+failure returns-22, closes real kmsg/status endpoints and attempts release once.
+Actual fd/tasksets restore in both cases. All3waits joined/CPU0released; wall0.580226s,
+CPU0.52s/peak176,580KiB. Payload bytes are compared in the successful process, not
+claimed as a separate runtime byte dump. Receipt`ce756e64…`; durable current-source fixture
+is retained after syntax/generation equivalence, without a runtime replay. No oldidle/startuprollback/fullwrapped suite
+replayed, no native/deployed/provider/file acceptance or historical charge release.
+Bounded result:`docs/verification/m15-active-supervisor-results-20261107.json`.
+
+Retained completed allocation/source/ABI/HOST results follow; none is rerun merely
+to publish this new batch. M14 remains4/6, M15 1/8, final integration gates open.
 
 New input is`m14-m15-manual-resume-20261106T214520Z/new-functional-input.json`,
 joining exact IHK`b7293d23`. Creation C/Rust stored unchecked per-entry duplicates;
@@ -71,7 +107,7 @@ Generic/exec/ACK/TID/XPMEM/service/source holds, unknown SDKoutermapping and ori
 SDK/source-custody/native gate remain binding; no full-image/native argv exists.
 M14 remains4/6 and M15 1/8, all integration gates open. The original nine-hour
 planning target is past and unchanged; critical-path ETA remains unknown while
-these external conditions lack a valid disposition. No ready independent batch remains.
+these external conditions lack a valid disposition. Eligible IKC and active HOST work continues.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
@@ -91,15 +127,17 @@ The existing foreground-owned15-minute steering monitor is rebound separately;
 Root does not edit it. AGENTS.md's six-child/three-light-job parallel authorization
 is preserved; only genuinely ready disjoint work is assigned.
 
-| HIGH owner / actual thread / new turn | Current deliverable/result |
+| HIGH owner / actual thread / observed current-invocation turn | Deliverable/result |
 | --- | --- |
-| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` / `01a1b2f3-7c34-7991-8736-04edfed9c53d` | Standard affected realRust/library producer PASS; all8waits joined, released |
-| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` / `01a1b2f0-2b60-7a42-a2de-18d584b5bc73` | Cconsumer24baseline+24candidate PASS; all waits joined; durable candidate retained |
-| `memory_error_cleanup_high` / `01a1b070-46d7-7ac1-9e14-7d1f390c0751` / `01a1b2f0-926d-7281-8bef-ce7f43889cea` | Focused sourceGO and final19actualsite join complete; six lines changed |
-| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` | Reviewed private Cconsumer helper patch complete, consumed by Root |
+| `m15_public_abi_high` / `01a1aefa-52af-7e70-bf6e-4fcc59f43aae` / `01a1b350-c6b8-7832-8a86-d0fd251f01fd` | PairedIKCsourceGO+affectedlibrary PASS, released |
+| `m15_cli_high` / `01a1aefa-8217-7003-b4a3-24d19c899ac3` / `01a1b350-f8f2-7c41-8f65-13561bcf51ec` | Formatter28defined/14candidatePASS; bothfailures/durablecandidate retained |
+| `memory_error_cleanup_high` / `01a1b070-46d7-7ac1-9e14-7d1f390c0751` / `01a1b351-1b9a-7b21-ae87-b7be118a2b97` | IKCownershipreview+19actualoriginjoin consumed |
+| `m15_supervisor_high` / `01a1aefa-b384-7602-bdfd-8e2ee023c9e5` / `01a1b35b-add7-73f1-af97-5f8836fe679d` | ActualRustcaller3casePASS, released |
+| `memory_error_cleanup_witness_high` / `01a1b070-8040-7fb2-b4b1-7810bac365ff` / `01a1b354-d468-71e3-973f-08535d5be0f4` | Active-source/fixture executionGO consumed |
+| `create_empty_entry_parity_high` / `01a1b2d8-359e-7bf3-b724-988d8fc445e2` / `01a1b358-cccf-7b20-85ed-8a51af5b63cc` | RealactiveHOST2casePASS, released; durablefixture prep |
 
-Actual new turn model/effort is Sol/HIGH in `public-env-consumer-lifetime-1/FOLLOWUP-ROUTES.json`.
-All six owners have contributed; completed prior observer/empty-entry work is reused.
+ActualSol/HIGHrouting/never/unrestricted proof is this invocation CURRENT-PHASE.json.
+Six owners have contributed; this is not six simultaneous runtime jobs.
 
 Initial actual HIGH turns were`01a1b041-44ca-7612-8c6b-bcbc58e41419`,
 `01a1b041-672b-7792-86c8-74374cd15f06`, and
@@ -135,19 +173,27 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** the Cconsumer source, affected library and durable regression
-are now published and verified. No further dependency-ready local functional batch
-is established; the two original external conditions below remain unresolved. Reuse
-all unchanged Rust parser/ABI/provider results. The earlier primary memory and EOF
-reader cleanups are already published, including checkpoint`22cedb5e5`; their green
-behavior suites remain closed at their exact scopes. Net untranslated M14/M15 LOC
-remains unmeasured where helper/branch coverage is unresolved.
+**Current priority:** publish the passed IKC source/test/library batch immediately;
+retain the newly passed real active-supervisor fixture without another runtime run.
+The next concrete directory-reader input is under independent source/contract
+review while this checkpoint publishes; prepare private fixes/tests only onGO.
+No follow-on canonical edits precede this source checkpoint.
+All unchanged qualified results/providers remain reused. Net conversion LOC stays
+unmeasured where semantic/helper/branch coverage has not been established.
+
+New independent input:`directory-read-functional-input.json` under the same
+foreground input directory. Current public C/Rust count/list functions conflate
+readdirNULL/EIO with EOF and return false success/partial results. Review owns the
+returned-result contract and realDIR/error plan; no speculative output guarantee,
+invalid-close errno work or creation-rollback list-error behavior is changed.
 
 The current prerequisite queue is:
 
 | Prerequisite | Actual consumers / gates | Owner / next concrete deliverable |
 | --- | --- | --- |
-| Six Cconsumer ownership cleanup — PUBLISHED | Six public parser consumers / M15 library lifetime | Consumed checkpoint`dae7c1935`; all new waits joined; no unchanged suite replay |
+| IKC correction — source/tests/library PASS | Formatter + actual CLIcaller / M15librarybehavior | Root publishes coherent source/tests/results now |
+| Active supervisor — two realHOSTcases PASS | M15-F08 active-worker preparation, no native acceptance | Durable fixture retained; Root consumes passed result, no runtime replay |
+| Directory read errors — new concrete source input | Public count/list APIs / M15 returned-result correctness | ExistingHIGH review owner checks eligibility/contract before privatepairedfix/test prep |
 | Original universal generic/exec disposition — BLOCKED | M14-F03/F06/fullimage/integration | Original service/hold authority supplies a valid scoped disposition; no replay/equivalent reassignment |
 | Original SDK/source-custody/native binding — BLOCKED | Matching original M14/M15 lifecycle/native | Original authority supplies actual reviewed one-shot bindings/current-free; diagnostic outermapping remains UNKNOWN |
 
@@ -157,7 +203,7 @@ while actual external scope/admission fields remain held/unbound. All historical
 UNKNOWN owners,18GiBcharges,mutex27:4,scratch21,attempts/nonces/dirtywork remain.
 No old query, expired operation, unchanged suite or held request is replayed.
 
-**Fresh resumed audit3/3 — BLOCKED:** three distinct actual Root turns:
+**Historical 21:46Z resume audit3/3 — BLOCKED (superseded by new 00:01Z manual resume):** three distinct actual Root turns:
 - `01a1b2d3-6e9f-7433-887c-e0bf88f6b493`: engineering progress/published source and real library,
   followed by the first exhausted-ready boundary.
 - `01a1b2f9-b637-7990-a877-4991b254c8e0`: no progress; same held source/service and missing actual
