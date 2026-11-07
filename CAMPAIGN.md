@@ -1,47 +1,88 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T02:12Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T02:16Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit same-Root manual resume `20261107T020116Z-f1b53bfd`.**
-The prior00:01audit3/3 and published checkpoint`3542d87841fcbd8b2b5272fbb23ac45bc07f71fd`
-remain history. New independently confirmed supported runtime-balanced memory
-ownership input binds cleanIHK`eea7443c…`; no held scope is released and the new
-blocked audit has not reached an exhausted-ready boundary.
+**BLOCKED at fresh audit3/3 of manual resume `20261107T020116Z-f1b53bfd`.**
+The new balanced-memory work is complete at its bounded source/HOST scope and
+published as `ec0fa82e9c7fb0eaa60263af1ae425405f444369`; all8changed entries and
+changed committed source replay are verified. Clean IHK is
+`b431d6f54ed492af405fc62043ca9bb389f490b3`, tree`5cac43e4…`.
+Prior00:01audit3/3 and checkpoint`3542d8784` remain history; no budget/goal reset.
 
-**Balanced-memory correction reviewed/composed:** pairedC/Rust`af398d9d…` retains
-old request-array owners across late calloc replacements and frees them plus query
-scratch independently of the one-shot configuration reset. All allocation/order/
-returns/provider-borrow/FDclose/reset-before-rollback/arithmetic remain unchanged.
-CurrentC`18af5ca4…`, Rust`03e7b1b8…`, actual19witness`f73bf088…` are frozen; changed
-Rustchild is notWARNING_SOURCES, so no qualifier fingerprint rewrite. SourceGO
-`060d06f5…` and independent fixtureGO`09ba6930…` bind the exact safe domain.
+**Actual engineering delta:** paired C/Rust cleanup retains original request-array
+owners across late calloc replacements and frees them with query scratch after
+last borrow, independently of the one-shot configuration reset. Allocation order,
+provider request values/lifetimes, exact returned errors, reset-before-rollback,
+owned FD close and balanced arithmetic remain unchanged. SourceGO`060d06f5…`,
+fixtureGO`09ba6930…`, pair`af398d9d…`, C`18af5ca4…`, Rust`03e7b1b8…` and actual
+19-origin witness`f73bf088…` are retained. No strict warning pin rewrite was needed.
 
-Actual newSol/HIGHturns: A`01a1b3bd-a8ae-7591-9188-19bc18e13f63`,
-B`01a1b3be-0453-77b0-bfda-6bb95f08d420`, C`01a1b3be-2ce7-79d3-b2ba-7cd8de96ab44`;
-RootSol/MAX`01a1b3bd-200f-72d1-a902-63d696088cd9`. Current turn_context confirms
-HIGH/MAX and danger-full-access/never, UID1000; fresh machineproof is new
-`resume-20261107T020116Z-f1b53bfd/CURRENT-PHASE.json`.
+**Behavior PASS:**28defined cases=14baseline+14candidate. Baselines safely exposed
+and reclaimed22retained blocks; every candidate had0survivors. All88explicit
+allocation owners free once,24real anonymous HOST FDs close once/EBADF, and20local
+allocation-free{ULONG_MAX,0}rollback borrows observe reset defaults first. Original
+request values remain live through their synchronous borrow and input is unchanged.
+Five balanced failure exits plus nonbalanced-success/alloc2pre-reservation controls
+are covered; late nodeID0/count1/request1MiB/query2MiB exits before compensation
+divisions. No old balanced-success, zero-div, invalid-node, failed-pointer, device,
+backend or native path ran. New cleanup preserves only its entry errno markers;
+there is no whole-function errno promise. All9children/outerwait joined, CPU7released;
+wall0.4981s/CPU0.29s/peak107,292KiB. Receipt`729929cb…`. Durable14candidate fixture
+matches passing units by generation/AST only; no green replay.
 
-Affected real library actual6phases+2reads PASS/all8waits joined/CPU6released:
-library`4fe6bd5f…`, archive`e1669e15…`; unchangedstrict7warnings/nativeorder/70+6roots
-and actual19/sourceexports pass. B's actual9command/28caseCPU7batch PASS/all9child+outerwaits joined/slotreleased:14baselinecases safely observed/reclaimed22retainedblocks;14candidates have0survivors. All88explicitownersfreeonce,24realanonymousFDclose/EBADF and20allocation-free{ULONG_MAX,0}rollbackborrows afterreset pass, with originalrequestvalues/liveborrows/inputs and only newcleanupentrymarkers preserved. It covers only5defined failure exits +nonbalanced-success/alloc2pre-reservationcontrol per mode/language. Latevalidnode0/count1/request1MiB/query2MiB exits atcalloc5/6
-BEFORE compensationdivision; unsafeoldbalanced-success/zero-divregions never run.
-No actualIHK/native/backend or milestone acceptance is claimed. Functional receipt`729929cb…`; wall0.4981s/CPU0.29s/peak107,292KiB. Producer receipt`a037c490…`; wall0.906193s/CPU0.81s/peak136,768KiB. CleanIHK`b431d6f54ed492af405fc62043ca9bb389f490b3`, tree`5cac43e4…`, is committed/bundled. Durable14candidate regression matches passing units by source-generation/AST only; no green replay. Bounded result:`docs/verification/m15-balanced-memory-ownership-results-20261107.json`. Root coherent source/results publication is next.
+**Real changed library PASS:**6standard phases+2reads, all8waits joined/CPU6released.
+Actual19/sourceexports, unchanged strict7warnings/native order/70+6roots/widths/
+SONAME pass. Library`4fe6bd5f…`, archive`e1669e15…`; wall0.906193s/CPU0.81s/
+peak136,768KiB. Receipt`a037c490…`. Bounded result is
+`docs/verification/m15-balanced-memory-ownership-results-20261107.json`.
+No new file, C retirement, production image or native-qualified cohort is accepted.
 
-| Ready prerequisite | Actual consumers / original gate | Owner / smallest next proof |
+Actual new Sol/HIGH source/test/review turns were
+`01a1b3bd-a8ae-7591-9188-19bc18e13f63`, `01a1b3be-0453-77b0-bfda-6bb95f08d420`,
+`01a1b3be-2ce7-79d3-b2ba-7cd8de96ab44`; RootSol/MAX was
+`01a1b3bd-200f-72d1-a902-63d696088cd9`. New turn_context routing, permissions and
+control births are in `resume-20261107T020116Z-f1b53bfd/CURRENT-PHASE.json`.
+Worker484538/server484540 births10314482/10314490 remain recorded; current included
+guard22%used/78%remaining is allowed. This impasse is not quota exhaustion.
+
+**Fresh02:01resume audit3/3:**
+- Productive Rootturn`01a1b3bd-200f-72d1-a902-63d696088cd9` completed/published
+  this source,28case and changed-library work, then exhausted the eligible queue.
+- Rootturn`01a1b3c9-229c-7df0-82a2-2d5b61fbd493` made NO PROGRESS: same held
+  service scope and refusing actual operation gate, no new eligible binding/input.
+- Rootturn`01a1b3ca-159b-7f92-94fd-79793974ce80` revalidated the same impasse:
+  retained service control remains held/replay=false/equivalent=false, and actual
+  installed verify_actual_operation_gates still unconditionally raises
+  "actual fresh operation gates are not implemented". Current source is clean and
+  last functional checkpoint is fetched/matched. No new release or binding exists.
+
+All current source/test/review owners are completed and all new admitted engineering
+HOST waits are joined; no live admitted handle or ready batch exists. These last
+two turns are NO PROGRESS, not verified waits. No new child, compiler/test/native
+operation, source bundle, Docker/declinedmonitor lookup or held request ran.
+Only this final coherent status handoff is published/fetch-verified before the
+normal goal tool records blocked. No automatic held-work or blocked-goal restart.
+
+| Actual missing prerequisite | Original consumers / gates | Required owner/input |
 | --- | --- | --- |
-| Balanced source+ownership GO, composed | Runtimekey0/config/creation reservation / M15-F03 | Root preserves reviewed source; no arithmetic/profile narrowing |
-| New28defined behavior cases admitted | Originalreqborrow/reset/rollback/FD/free contract | PASS28definedcases/all9+outerjoined; Root retains14candidatefixture withoutreplay |
-| Affected qualified library PASS | Changed actualRustlibrary/default metadata | PASSa037c490/all8joined; Root consumes once with newtests and publishes source/results |
+| Universal generic/exec disposition | M14-F03/F06 and I01–03/fullimage | Original service/hold authority supplies valid scoped disposition; no equivalent retry |
+| Actual SDK/source-custody/native/current-free admission | Remaining M15-F02–08/I01–04 matched qualification | Original operation authority supplies reviewed one-shot bindings; diagnostic outer mapping stays UNKNOWN |
+| Optional monitor priorcoverage | Potential M15-F08 post-add HOST cases | Actual original4vectorbody+passingreceipt/sourceidentity; lookup remains closed |
 
-OrdinaryHOST remains0/6/7,max3lightjobs/4GiBTOTAL including all overhead,
-retained18GiB+4GiBfloor and fresh26GiB admission. No nativeCPU/RAM is borrowed.
-Next15minute deliverable: publish/fetch the passed pairedownership correction and consider only genuinely eligible original work. All newengineeringjobs are joined; arithmetic redesign and declinedmonitor lookup remain excluded. Original generic/exec hold and missing actualSDK/native
-admission remain the final critical-path blocker under original release authority;
-M14 4/6/M15 1/8 unchanged, closureETAunknown. Declinedmonitor lookup stays closed.
+Next action requires genuinely changed eligible input or the actual required
+source/service/SDK/native disposition. Balanced arithmetic redesign, old balanced
+success/zero-division regions and declined monitor lookup remain excluded. More
+agents, ordinary source publication, sudo, guessed SDK remaps or remaining included
+allowance cannot replace authority. No filler or repeated green suite is queued.
+
+M14 stays4/6 and M15 1/8; exact original open gates are M14-F03/F06, M14-I01–03,
+M15-F02–08 and M15-I01–04. Critical-path ETA remains unknown. Original missed9h
+soft target/outage, accepted scopes, every UNKNOWN owner/nonce/attempt and all
+18GiBcharges/4GiBfloor/scratch21/mutex27:4 remain. Ordinary HOST0/6/7,max3lightjobs/
+4GiBTOTAL and native one-owner2–5/12GiB are unchanged; no reservation is retired.
 
 **Retained00:01resume engineering and acceptance history:**
 Prior blocked checkpoint`59d87cc23` and all previous audits remain history. New
