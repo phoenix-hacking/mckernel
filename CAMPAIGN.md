@@ -1,11 +1,142 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T02:16Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T03:16Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**BLOCKED at fresh audit3/3 of manual resume `20261107T020116Z-f1b53bfd`.**
+**ACTIVE: same-Root manual invocation `20261107T023815Z-216a194d`.** Root remains
+Sol/MAX, sole source/index/publisher; six new saved-owner Sol/HIGH turns and actual
+never/danger-full-access routing are verified in `FOLLOWUP-ROUTING-0309.json`.
+Fresh included guard24%used/76%remaining allows work. No controller, goal, budget,
+original authority or historical UNKNOWN owner was reset.
+
+**Completed new engineering:** C/Rust root-level dump paths now check parent`/`
+and restore original bytes; both intr routes propagate the captured ioctl result.
+IHK`6abba64bb569c89d2a660c957c8f3d58fe5374c6`/tree`1cba9022…` is committed;
+Root checkpoint/publication is being composed. Last fetched Root remains`93f726833`.
+Dump16cases=8baseline+8candidate PASS: initializedzerochunks, scoped actual Cprefix+
+outtail and full selected Rustmodule, rootpermit/EACCES/nested/relative behavior.
+No realdump/file/BFDobject/NMI/device/native ran. Existing C2buffer survivors were
+observed/reclaimed afterreturn; Rustfinish releases both. Unreachable legacyC
+BFDsuccess code is excluded, not adapted to a guessedSDK.
+
+Intr24cases=12baseline+12candidate PASS after one bounded fixture correction.
+Both fresh actualCobject hook predicates were CALLED and passed before anylink/
+runtime. ExactINT0xf1/0xf2/0x2f3/request0x122a00,19bytestderr, rawmain0/-1 and
+24genuineanonymousFDs once-close/EBADF pass. This is actualmainFUNCTION, not CRT/
+installedexit proof. Initialfixture fortifiedheaderredirect attempted read-only
+`/dev/mcos0`; noIRQioctl observed,0casecredit. Failedcapture retained; badELFs were
+never replayed. Unchanged observer/Rustobjects were reused by the correction.
+
+Changed genuine whole70library PASS3phases+2reads/all5joins: library`53079f63…`,
+archive`79bb2889…`, actual19origins and strict7/nativeorder/70+6roots unchanged.
+Changed ihkosctl object`7eefb9b1…`/tool`6ac515b4…` builds/links against it. First
+codegen controller failed afterwait on an unsupported decoder; actualexit0/object
+remain proven but firstPID/birth/rawstatus stayUNKNOWN. One remaining-link-only
+correction passed/joined; no codegen replay or inferred owner retirement.
+Raw/bounded result: `docs/verification/m15-dump-parent-intr-results-20261107.json`.
+All new execution slots are released; durable candidate packages use generation/
+AST matching only, no green runtime rerun for publication.
+
+| Next ready dependency | Original consumer / scope | Owner / smallest completion proof |
+| --- | --- | --- |
+| Unknown-action pairedsource+8case fixture | ihkconfig/ihkosctl main false success / M15-F06,F07 | A implementation/E sourceGO/B precise hooks+FD fixture; Root composes after current checkpoint, fresh HOST admission |
+| Supported success/error/cleanup scenario contracts | Shared library and both CLI/provider dependencies / M15-F05–F07,I03 | C/D completed bounded machine definitions; original full scenario membership/backend bindings remain open |
+| Separate retained Cdump2buffer cleanup | Unselected/referenceC common-out owners / original library behavior accounting | Reviewed private Apatch/C GO; meaningful affected ownership proof only after current checkpoint, name lifetime remains separate |
+
+Source-derived scenario definitions are retained in `docs/verification/m15-cli-supported-scenarios-20261107.json` and `m15-library-supported-scenarios-20261107.json`; they refine existing open obligations without adding quotas or claiming full inventory/runtime proof.
+
+The user-requested closure ledger is installed below and is included in this
+engineering checkpoint. New confirmed unknown-action work is dated explicitly:
+6checks added (source/behavior/changedtool perCLI), not silently credited or hidden.
+Prior2Cownership findings remain uncounted reference-source tasks. No original
+acceptance criterion or previously accepted scope is changed.
+
+**Completion blocker:** original generic/exec hold prevents an eligible universal
+provider/fullimage; actual SDK/source-custody/native/current-free bindings are also
+unresolved. Root is integration owner; original authorities retain disposition.
+Fullimage argv remainsUNSET; no replay/equivalent work, guessedSDKmap, repeatedDocker/
+closedmonitor lookup, balancedarithmetic/zero-div execution or native action.
+M14remains4/6files+0/3integration; M15remains1/8files+0/4integration. The full exact
+remaining file/integration gates and required inputs are listed below. Critical-path
+ETA isUNKNOWN until those actual external dispositions/bindings exist; the missed
+Nov6 03:41–12:41Z9hsofttarget/outage remain history, not a stop or reset clock.
+
+OrdinaryHOST stays CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL incloverhead, fresh
+26GiB available/18GiBretained+4GiBfloor and host16/scratch12GiBdisk floors. Native
+CPUs2–5/12GiB and allUNKNOWN/scratch21/mutex27:4 remain held. Next15minute deliverable:
+publish this coherent fixed-source/tests/closureledger checkpoint, then consume
+ready unknown-action composition and safe new behavior. TemporaryGitHubtransport
+keeps eligiblelocalwork moving with publicationpending; actualdenial isbinding.
+
+## M14/M15 closure progress — explicit checklist
+
+User-requested scope: **M14 and M15 closure only**, excluding separate S01–S06 final-system requirements.
+Every original requirement and concrete evidence step is defined in [the machine ledger](docs/verification/m14-m15-closure-progress.json); [the full row-by-row CSV](docs/verification/m14-m15-closure-progress.csv) includes percentage, owner, done-when condition, verification method, inputs, dependencies, evidence and unresolved definition.
+
+**Metric:** binary0/100 for exact-scope evidence steps; group percentage is the mean of its listed immediate children. Milestones average their original file/integration gate percentages (M14:9;M15:12). Dependencies/module/API/provider registers are visible but not counted twice. This is checklist progress, not engineering hours, converted LOC or final acceptance. Unknown/in-progress work receives0 credit; that does not mean its code is unimplemented. Accepted original scopes stay100. The original acceptance contracts are unchanged.
+
+| Milestone | Checklist progress | Accepted file goals | Accepted integration gates |
+| --- | ---: | ---: | ---: |
+| M14 | 51.48% | 4/6 | 0/3 |
+| M15 | 46.91% | 1/8 | 0/4 |
+
+| Requirement | Checklist complete | Accepted | Defined scope / remaining obligation |
+| --- | ---: | --- | --- |
+| M14-03-01 | 33.33% | no | Dispatch/offload request ABI, initialization, lifetime and exactly-once completion |
+| M14-03-02 | 33.33% | no | Fork/exec/wait/exit/ptrace and final host/process cleanup; held exec work remains excluded |
+| M14-03-03 | 33.33% | no | mmap/munmap/mprotect/brk/remap, NUMA/process-VM and substantive callbacks |
+| M14-03-04 | 50.00% | no | Signal masks/actions/altstack, futex/robust cleanup, time/wait/wake and restart |
+| M14-03-05 | 50.00% | no | Credentials/limits/scheduling, SHM/perf/file wrappers, validation and forwarding |
+| M14-06-01 | 0.00% | no | Architecture wrappers, TLS/arch_prctl and clone/mmap/shm ABI translation |
+| M14-06-02 | 0.00% | no | Signal/rt_sigreturn frames, alternate stack, context and xstate restoration |
+| M14-06-03 | 33.33% | no | Ptrace registers/debug state and correct stop/wakeup/event ordering |
+| M14-06-04 | 0.00% | no | vDSO/process mappings and time-page/TSC publication |
+| M14-06-05 | 0.00% | no | Cross-process memory/move-pages, target references and NUMA callback lifetime |
+| M14-F01 | 100.00% | yes | Allocator, heap, references, faults/page maintenance, counters/diagnostics |
+| M14-F02 | 100.00% | yes | Creation/unwind, VM ranges, PID/TID lifetime, scheduling, inheritance/publication |
+| M14-F03 | 40.00% | no | Generic compute syscalls |
+| M14-F04 | 100.00% | yes | Primitives, startup/interrupts, context/TLS, FPU/xstate, diagnostics |
+| M14-F05 | 100.00% | yes | Mappings, PTEs, walkers, TLB, usercopy/process-VM supported scope |
+| M14-F06 | 23.33% | no | x86_64 architecture compute syscalls |
+| M14-I01 | 0.00% | no | Account for all emitted supported compute code, including headers, macros/callbacks and unknown owners; zero live project compute-C implementations |
+| M14-I02 | 0.00% | no | Reproducible default source/config/toolchain and matched image/modules |
+| M14-I03 | 0.00% | no | Matching useful applications, process/memory/thread/signal behavior and native lifecycle/resource restoration on that image |
+| M15-F01 | 100.00% | yes | Accepted original MM compatibility wrappers |
+| M15-F02 | 37.50% | no | Rust executor qualification |
+| M15-F03 | 62.50% | no | Rust mcinspect diagnostic qualification |
+| M15-F04 | 62.50% | no | Rust eclair diagnostic qualification |
+| M15-F05 | 81.25% | no | Rust IHK library qualification |
+| M15-F06 | 36.36% | no | Rust ihkconfig CLI qualification |
+| M15-F07 | 50.00% | no | Rust ihkosctl CLI qualification |
+| M15-F08 | 70.00% | no | Rust ihkmond supervisor qualification |
+| M15-I01 | 20.00% | no | Complete project-runtime ownership manifest |
+| M15-I02 | 0.00% | no | Three delivered Linux-loadable Rust/assembly modules |
+| M15-I03 | 42.86% | no | Reproducible Rust userspace and dependency closure |
+| M15-I04 | 0.00% | no | Matched application and restoring lifecycle qualification |
+
+The ledger names 362 concrete rows, including the three exact modules `ihk.ko`, `ihk-smp-x86_64.ko`, `mcctrl.ko`, all70function/sixdata library roots, and105unresolved symbols in the retained partial image link. Those105symbols are unresolved binding obligations, not105unimplemented ports or105new test jobs.
+
+**Required inputs and contracts that still block dependent work:**
+- **HOLD-GENERIC —0%:** Obtain original generic/exec scoped disposition. Owner: Original service/hold authority (identity/scoped release conditions currently UNKNOWN); Root integration owner. Done when: The actual original authority supplies a valid scoped disposition identifying permitted request/source/artifact scope and any retained restrictions; held/replay=false/equivalent=false controls change only by that authority. An unrestricted full-image provider is eligible under that disposition.
+- **SOURCE-SDK-NATIVE —0%:** Bind actual reviewed SDK/source-custody operation. Owner: Root and original execution-admission authority. Done when: A reviewed actual one-shot operation binds the supported source/profile/config/toolchain, effective source view, custody/pidfd and current ownership checks. The installed verify_actual_operation_gates no longer merely refuses; no dummy gate or code-publication-only proof is substituted.
+- **NATIVE_OWNER_AND_CURRENT_FREE —0%:** Reconcile actual native owner and current-free admission. Owner: Original native/resource owner and Root integrator. Done when: The original owner records are reconciled with actual live identities/joins, retained reservations and fresh effective current-free proof, and a valid single-owner native operation is admitted without inferring release of any UNKNOWN outcome or replaying expired packets.
+- **SDK_OUTER_MAPPING —0%:** Bind the actual original diagnostic SDK outer namespace. Owner: Original SDK/namespace operation authority; Root consumes verified mapping. Done when: Actual outer mount/source metadata binds the original namespace and immutable supported SDK identities, including the retained BFD/GCC/transitive pins. No guessed suffix remap, repeated Docker search, relaxed pin or HOST substitute is used.
+- **PROVIDER-CLOSURE —0%:** Resolve genuine final image provider/linker closure. Owner: Saved Root sole source compositor. Done when: An admissible final supported image resolves every required ABI/provider/linker reference to its genuine matching definition, with unique ownership and no held generic object/stub/equivalent workaround. The 105-symbol partial-link register is accounting input, not 105 missing-from-scratch ports.
+- **PERF-LIVE-CONTRACT —0%:** Obtain a reviewed perf descriptor/event lifetime contract. Owner: Root and actual participating source-contract owners. Done when: Reviewed real participating sources define descriptor kind, live lookup/reference/group ownership, fork/copy and close/free lifetime across teardown. Counter values are not refcounts and holding close lock through VM teardown is not substituted for the missing contract. Only eligible original scope can be implemented/tested afterward.
+- **MMAP-XPMEM-CONTRACT —0%:** Resolve mmap/XPMEM caller lock-order and descriptor lifetime. Owner: Root and original participating source/hold authority. Done when: An actual eligible reviewed caller/participant contract resolves the recorded lock-order and descriptor-lifetime NO-GO for the intended mmap caller; held XPMEM or partial-exec behavior is not reassigned, compiled or selected without its authoritative disposition.
+- **CREDENTIAL-COHORT —0%:** Bind compatible credential error-aware getter. Owner: Saved Root source/provider compositor. Done when: New credential refresh entries bind the genuine compatible error-aware host/core getter in the matching source cohort; the incompatible old core is not selected and failed snapshots publish no partial credentials.
+- **HISTORICAL-OWNERSHIP —0%:** Account for retained historical owners in actual admission. Owner: Original per-operation/resource owners; Root integrates valid exact dispositions. Done when: Actual admission accounts for the retained18GiB charges (original install4GiB, V2 2GiB, native12GiB), UNKNOWN outcomes, scratch21/mutex27:4 and source/service exclusions. No absence, reboot or new model is treated as release; any required ownership change has its original valid exact disposition. Preserved charges need not be arbitrarily erased to complete this accounting.
+- **MATCHED_COHORT —0%:** Join exact matching supported image/modules/userspace cohort. Owner: Saved Root sole integration owner. Done when: One coherent supported source/config/toolchain/provider set binds the actual image, ihk.ko, ihk-smp-x86_64.ko, mcctrl.ko, executors, libraries and installed tools, so every required result names the same matching delivered cohort and no stale artifact is substituted.
+- **M14_ACCEPTANCE_ORDER —0%:** Complete original M14 acceptance before M15 final acceptance. Owner: Saved Root original milestone acceptance owner. Done when: All original six M14 file gates and three M14 integration gates are genuinely accepted before final M15 acceptance; this does not prevent independent eligible M15 source/HOST preparation.
+
+Root maintains this ledger from passing, matching engineering evidence at each checkpoint/handoff. A final gate remains unaccepted until its original supported/default/deployed/native requirements pass. Future confirmed integration defects get explicit rows and dated denominator changes; no unchanged green suite rerun is needed for tracker maintenance.
+
+Current refresh: dump/source/library, intr24behavior and changed-tool HOST artifact rows are credited only at completed scope. First CLI codegen PID metadata remainsUNKNOWN and the old failed device-path attempt remains0credit. Existing balanced-full-behavior0condition explicitly includes excluded old-success/arithmetic regions;28ownership cases do not qualify them. Two uncounted Cfindings and six newly confirmed unknown-action checks are dated:156counted checks,362task/binding rows+31groups=393CSVrows. The new pending obligations explain the score change; formulas/original acceptance are unchanged.
+
+**Historical02:01resume completed engineering and audit:**
+**Prior02:01resume audit3/3 was BLOCKED, superseded by new02:38manual resume.**
 The new balanced-memory work is complete at its bounded source/HOST scope and
 published as `ec0fa82e9c7fb0eaa60263af1ae425405f444369`; all8changed entries and
 changed committed source replay are verified. Clean IHK is
