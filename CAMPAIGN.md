@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T01:41Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T01:48Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -111,7 +111,7 @@ unchanged Rust bodies: actual6phases+2reads PASS/all8joined/CPU6released, strict
 wall0.899300s/CPU0.79s/peak135,844KiB. CleancommittedIHK
 `eea7443c2923470fde51dbc097e8ed4237551a7f`, tree`b2d90ad0…`, is bundled.
 Receipts`36f3ee3a…`/`3a39c12e…`; durable current-source18case fixture matches actual
-passed units with source-generation/AST only. Parent publication is next. Bounded
+passed units with source-generation/AST only. Parent`6206de8a810d8bc95e641b783a60b346a846bd10` is pushed/fetched/all8changed entries verified, and the changed committed source replays exactly once. Bounded
 result:`docs/verification/m15-formatter-growth-results-20261107.json`.
 
 Actual newHIGHturns: source/producer`01a1b3a1-b836-71d0-831f-123dcb34c5ea`,
@@ -243,23 +243,40 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** publish the passed formatter source/tests/library correction
-now, then evaluate only a concrete eligible original acceptance dependency. All new
-runtime/producer jobs are joined. Reuse unchanged results; no padding, unsafe
-baseline, green replay or repeated inventories. Net conversion LOC remains unmeasured.
+**Current ready queue exhausted after verified publication.** The optional new
+post-add ENOENT/ENOTDIR monitor lane is DECLINED pending actual prior coverage:
+originalD's bounded known-map lookup and independentHIGHreview could not bind the
+original4vector body/request/passingreceipt/sourceidentity. The summary says4cases/
+FD5→5 but excludes detailedlocalrecords; link-only/lateractive/partialstartup proof
+does not establish post-add coverage. No exclusion or global absence is inferred.
+Disposition`monitor-path-wait-review-1/SOURCE-REVIEW.json` SHA`4938a2a9…` retains the
+exact missing input. No newprofile/fixture/compiler/library/runtime was admitted.
+A permission-denied recursive lookup stopped permanently; no bypass or replay.
 
-| Prerequisite / dependency | Actual consumers / original gates | Owner / smallest next proof |
+| Actual prerequisite / dependency | Original consumers / gates | Owner / smallest next proof |
 | --- | --- | --- |
-| Formatter source/new18cases/library PASS | CPU/MEM/IKCpublic strings and CLI / M15-F03 behavior | Root changed committed source replay once, publish/fetch coherent checkpoint |
-| Actual remaining ready input | Original M14/M15 qualification | Root considers a concrete eligible dependency; none is invented to fill slots |
-| Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original hold authority supplies valid scoped disposition; no equivalent retry |
+| Formatter correction PUBLISHED, all18newcases/library PASS | CPU/MEM/IKC strings / M15-F03 behavior | Completed6206de8a8; consume exact result, no green replay |
+| Optional monitor post-add priorcoverage UNKNOWN | M15-F08 potential2newHOSTcases | Original proof owner supplies actual4vectorbody+passingreceipt/sourceidentity; then review overlap, no newsearch/bypass |
+| Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original service/hold authority supplies valid scoped disposition; no equivalent retry |
 | SDK/source-custody/native binding BLOCKED | Remaining M15-F02–08/I01–04 matched qualification | Original authority supplies reviewed one-shot bindings/current-free; SDK outer mapping UNKNOWN |
 
-The next15minute deliverable is formatter publication and honest next-work/blocker
-disposition. Exact original open gates remain M14-F03/F06, M14-I01–03, M15-F02–08
-and M15-I01–04. The missed nine-hour target is unchanged; critical-path ETA is
-unknown pending external source/service and native admission. All accepted scopes,
-UNKNOWN owners and retained reservations remain; these HOST results close no file.
+**Fresh00:01resume audit1/3:** productive actualRootturn
+`01a1b34f-cdbf-7cd1-9909-08d368370ad5` published the source/behavior/library fixes and
+then reached this first exhausted-ready boundary. All sixHIGHowners are completed;
+all THISinvocation's new HOST/tool waits are joined, with no pending local handle
+or eligible batch. This does not retire historical UNKNOWN/native owners. Goal
+remains active pending the next actual Root audit; scheduled reminders/toolcalls
+are not extra audit turns. After3consecutive actual turns at the same impasse,
+use the normal blocked status. No filler, repeated inventory, held request or
+unchanged suite may replace missing concrete work.
+
+Next15minute action: consume a genuine eligible source input or actual required
+binding/coverage artifact if supplied; otherwise the next actual Root turn records
+the same blocked-path audit without dispatch/replay. Exact original open gates:
+M14-F03/F06, M14-I01–03, M15-F02–08 and M15-I01–04. Critical-path ETA remains unknown
+until the original source/service disposition and actual SDK/native admission
+change. The missed nine-hour target and outage remain unchanged; accepted scope,
+weekly-only allowance, all18GiB/4GiB reservations and every hold remain binding.
 
 M14 stays4/6 and M15 1/8. New HOST source/test/library work is passing; this is not
 native/fullimage/file acceptance. Critical-path completion ETA remains unknown
