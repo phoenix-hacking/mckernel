@@ -55,7 +55,7 @@ __ARRAY_CLEANUP__
 fn check_rollback(result:c_int,count:c_int,list_error:c_int,alloc_fail:bool,baseline:bool){
  reset(count,list_error,alloc_fail);let returned=unsafe{actual::rollback_slice(3,result)};assert_eq!(returned,result);
  let o=OBS.lock().unwrap();let allocated=result!=0&&count>0&&!alloc_fail;assert_eq!(o.owned.len(),usize::from(baseline&&allocated));
- let mut expected=Vec::<String>::new();if result!=0{expected.push("count".into());let entry_errno=if count>0{expected.push("calloc".into());if alloc_fail{12}else{expected.push("list".into());for i in 0..count{let index=if list_error==0{7+i*2}else{0};expected.extend([format!("cpu:{index}"),format!("mem:{index}"),format!("destroy:{index}")]);}if !baseline{expected.push("free".into());}33}}else{11};expected.extend([format!("device_cpu:3:{entry_errno}"),"mem:3".into()]);}
+ let mut expected=Vec::<String>::new();if result!=0{expected.push("count".into());let entry_errno=if count>0{expected.push("calloc".into());if alloc_fail{12}else{expected.push("list".into());let consume_list=baseline||list_error==0;if consume_list{for i in 0..count{let index=if list_error==0{7+i*2}else{0};expected.extend([format!("cpu:{index}"),format!("mem:{index}"),format!("destroy:{index}")]);}}if !baseline{expected.push("free".into());}if consume_list{33}else{23}}}else{11};expected.extend([format!("device_cpu:3:{entry_errno}"),"mem:3".into()]);}
  assert_eq!(o.events,expected);drop(o);assert_eq!(reclaim(),usize::from(baseline&&allocated));
 }
 fn check_parser(input:&str,expected:Result<(&str,&str),c_int>,baseline:bool){

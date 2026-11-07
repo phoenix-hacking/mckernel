@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T00:56Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T01:22Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -16,7 +16,7 @@ new output cleanup preserves only its entry errno. No original hold is released.
 
 Current worker447151/server447153 births9598015/9598023, RootSol/MAX and actual
 HIGH source/test/review turns are recorded in this invocation's CURRENT-PHASE.json.
-Actual danger-full-access/approvalnever, UID1000. Existing guard19%used/81%remaining;
+Actual danger-full-access/approvalnever, UID1000. Existing guard20%used/80%remaining;
 no quota/usage-unknown restriction. Prior17% and historical weekly records remain.
 
 **IKC correction, caller and actual library PASS:** fourteen defined baseline
@@ -62,18 +62,35 @@ One affected realproducer passes6phases+2reads, actual19origins and unchangedstr
 wall0.903795s/CPU0.82s/peak137,348KiB. All8waits joined/CPU6released. CleanIHK
 `8dce62be33b7b2a97cf80476c84accd2dd7a63e6`, tree`6a7a5743…`, is committed/bundled.
 Durable candidate-only fixture matches actual passing units without a green run.
-Receipts`dc08b346…`/`31851489…`; parent publication follows. Bounded result:
+Receipts`dc08b346…`/`31851489…`; parent checkpoint
+`d5050f18fef97ea508bff94574740a55e7e5b105` is pushed/fetched/all8changed-entry
+verified; changed committed source replay matches8dce62/tree6a7a5743 once. Bounded result:
 `docs/verification/m15-directory-read-results-20261107.json`.
 
-**Separate next ownership review GO, private preparation only:** failed list output
-provides no complete valid index sequence; zero-filled slots may masquerade asOS0.
-Assessment and concrete review approve gating ONLYthe existing perOSrollback loop
-on listingstatus==0, preserving broadALLindices on successful listing, primary
-failure/message/earlypublication, listfree and finaldeviceCPU→MEM order. The old
-`list_error=-6`/index0 parity is intentionally changed only in that separate new
-witness; it is unchanged in this directory-reader checkpoint. No fallbackindex,
-partial-prefix contract or ABI is invented. A/B own private pair/tests while this
-checkpoint publishes. Original native/resource restoration gates remain open.
+**Creation failed-list rollback correction and real library PASS:** the reviewed
+C/Rust guard consumes only successful complete lists. Twelve defined tail cases
+are6baseline+6candidate;4candidate failure paths skip every perOScallback, and
+complete7/9lists retain all six broad callbacks in order. All12genuine lists free
+once; entryerrno23/33 and finaldeviceCPU→MEM order are preserved. Primary-5/index1/
+message are MODELED tail contexts; actual upstream creation was not executed.
+All9children/driver joined, CPU7released, no retry. The historical failed-list/
+index0 expectation is explicitly updated; original baseline remains private.
+
+The justified producer runs only3phases+2reads, reusing checked unchanged19origin
+metadata: library`05c93067…`, archive`90d117db…`; strict7warnings/70+6roots/SONAME
+pass. All5waits joined/CPU6released; wall0.838608s/CPU0.79s/peak136,276KiB.
+CleanIHK`baf82aae9caea648728341e1c040bb71904f4bb4`, tree`a8328c53…`, is committed/
+bundled. Durable6candidate regression matches passing units without a green run.
+Receipts`2cc576ca…`/`3f5032d3…`; current parent publication is next. Bounded result:
+`docs/verification/m15-create-list-error-results-20261107.json`. Backend/native
+resource restoration and all original acceptance remain open.
+
+**Next ready functional work:** sixthHIGHowner prepared the separate active-monitor
+2case profile`70139665…`; fifthHIGHowner reviews exact new stat declaration/path
+adapter and scalarDETECTvarargs before admission. It forwards genuine stat of an
+owned regular file only for literal/dev/mcos0, with real timing/threads/FDcleanup;
+normal and EIO ticks retain deliberately nonfatal behavior. Oldthree-seamNO-GO
+and all previous packets remain intact. No monitor compiler/runtime has run.
 
 Retained completed allocation/source/ABI/HOST results follow; none is rerun merely
 to publish this new batch. M14 remains4/6, M15 1/8, final integration gates open.
@@ -133,7 +150,7 @@ Generic/exec/ACK/TID/XPMEM/service/source holds, unknown SDKoutermapping and ori
 SDK/source-custody/native gate remain binding; no full-image/native argv exists.
 M14 remains4/6 and M15 1/8, all integration gates open. The original nine-hour
 planning target is past and unchanged; critical-path ETA remains unknown while
-these external conditions lack a valid disposition. Eligible IKC and active HOST work continues.
+these external conditions lack a valid disposition. Eligible source fixes and active monitor HOST qualification continue.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
@@ -199,21 +216,24 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** publish the passed directory-reader source/test/library batch.
-Pipeline the separately reviewed failed-list rollback correction privately; no
-canonical follow-on edits before this publication. Reuse all unchanged passing
-checks, ABI/providers and actual bodies. Net conversion LOC remains unmeasured.
+**Current priority:** publish the passed creation failed-list correction now,
+independently of the monitor fixture. Then run the newly reviewed active-monitor
+functional cases under one fresh ordinary HOST admission and retain their result.
+Reuse unchanged source/ABI/provider/producer and green checks. Net conversion LOC
+remains unmeasured.
 
-The current prerequisite queue is:
-
-| Prerequisite | Actual consumers / gates | Owner / next concrete deliverable |
+| Ready prerequisite / dependency | Actual consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| IKC correction — source/tests/library PASS | Formatter + actual CLIcaller / M15librarybehavior | Root publishes coherent source/tests/results now |
-| Active supervisor — two realHOSTcases PASS | M15-F08 active-worker preparation, no native acceptance | Durable fixture retained; Root consumes passed result, no runtime replay |
-| Directory read errors — source/tests/library PASS | Public count/list APIs / M15 returned-result correctness | Root publishes current8dce62 source and retained14candidate fixture |
-| Failed-list rollback — separate sourceGO | Shared creation failure/ownership | A/B private pair/tests; explicitly update negative-list parity only after review |
-| Original universal generic/exec disposition — BLOCKED | M14-F03/F06/fullimage/integration | Original service/hold authority supplies a valid scoped disposition; no replay/equivalent reassignment |
-| Original SDK/source-custody/native binding — BLOCKED | Matching original M14/M15 lifecycle/native | Original authority supplies actual reviewed one-shot bindings/current-free; diagnostic outermapping remains UNKNOWN |
+| Creation failed-list source/tests/library PASS | Shared creation cleanup / M15-F03 behavior | Root checkpoint, changed committed bundle replay once and normal push/fetch |
+| Separate active-monitor profile prepared, concrete review pending | Actual monitor ticks/stop/cleanup / M15-F08 behavior | Fifth HIGH review → sixth HIGH exact3command/2case batch |
+| Monitor result retention, conditional on actual PASS | Durable M15-F08 functional regression | Sixth HIGH private fixture package; Root consumes without green replay |
+| Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original hold authority supplies valid scoped disposition; no equivalent retry |
+| SDK/source-custody/native binding BLOCKED | Remaining M15-F02–08/I01–04 matched qualification | Original authority supplies reviewed one-shot bindings/current-free; SDK outer mapping UNKNOWN |
+
+The next15minute deliverable is the creation correction publication and the
+concrete monitor review/batch. Exact original open gates remain M14-F03/F06,
+M14-I01–03, M15-F02–08 and M15-I01–04. The missed nine-hour target is unchanged;
+critical-path ETA is unknown pending external source/service and native admission.
 
 M14 stays4/6 and M15 1/8. New HOST source/test/library work is passing; this is not
 native/fullimage/file acceptance. Critical-path completion ETA remains unknown

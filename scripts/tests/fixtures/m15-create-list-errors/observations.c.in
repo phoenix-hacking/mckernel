@@ -1,0 +1,38 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+/* Local synchronous callbacks only: baseline index0/partial callbacks are safely
+ * observed, never sent to actual IHK lifecycle/device/native providers. */
+struct Event{int op,index,entry_errno;};
+static struct Event events[32];
+static int used,mode,checks,allocated,freed,live;
+static int *owned_list;
+static void event(int op,int index){assert(used<32);events[used++]=(struct Event){op,index,errno};}
+void *observation_calloc(size_t n,size_t size){assert(!owned_list&&live==0&&n==sizeof(int)&&size==2);owned_list=calloc(n,size);assert(owned_list);live=1;++allocated;return owned_list;}
+void observation_free(void *pointer){assert(pointer==owned_list&&live==1);event(3,-1);owned_list=NULL;live=0;++freed;free(pointer);errno=77;}
+int observation_count(int device){assert(device==0&&live==0);event(1,device);return 2;}
+int observation_list(int device,int *list,int count){assert(device==0&&count==2&&list==owned_list&&live==1&&list[0]==0&&list[1]==0);event(2,device);if(mode!=0)list[0]=7;if(mode==2)list[1]=9;errno=23;return mode==2?0:-6;}
+int observation_os_cpu(int index){assert(live==1&&(index==0||index==7||index==9));event(10,index);errno=31;return -71;}
+int observation_os_mem(int index,struct ihk_mem_chunk *chunks,int count){assert(live==1&&(index==0||index==7||index==9)&&count==1&&chunks->size==~0UL&&chunks->numa_node_number==0);event(11,index);errno=32;return -72;}
+int observation_destroy(int device,int index){assert(device==0&&live==1&&(index==0||index==7||index==9));event(12,index);errno=33;return -73;}
+int observation_device_cpu(int device,char *error){assert(device==0&&error==NULL&&live==0);event(4,device);errno=44;return -74;}
+int observation_device_mem(int device,struct ihk_mem_chunk *chunks,int count){assert(device==0&&live==0&&count==1&&chunks->size==~0UL&&chunks->numa_node_number==0);event(5,device);errno=45;return -75;}
+typedef int (*Rollback)(int,int,int *,char *);
+static void check(Rollback rollback,int baseline,int scenario){
+ assert(!owned_list&&live==0);used=allocated=freed=0;mode=scenario;int published_index=1;char message[64]="primary-load-error";char original[64];memcpy(original,message,sizeof(message));errno=EAGAIN;
+ int result=rollback(0,-5,&published_index,message);
+ assert(result==-5&&published_index==1&&!memcmp(message,original,sizeof(message))&&allocated==1&&freed==1&&live==0&&!owned_list);
+ struct Event expected[32];int n=0;expected[n++]=(struct Event){1,0,0};expected[n++]=(struct Event){2,0,0};
+ int consume=baseline||mode==2;
+ if(consume){int indices[2]={mode==0?0:7,mode==2?9:0};for(int i=0;i<2;i++){expected[n++]=(struct Event){10,indices[i],0};expected[n++]=(struct Event){11,indices[i],0};expected[n++]=(struct Event){12,indices[i],0};}}
+ expected[n++]=(struct Event){3,-1,0};expected[n++]=(struct Event){4,0,0};expected[n++]=(struct Event){5,0,0};assert(used==n);
+ for(int i=0;i<n;i++)assert(events[i].op==expected[i].op&&events[i].index==expected[i].index);
+ int free_errno=consume?33:23;assert(events[n-3].entry_errno==free_errno&&events[n-2].entry_errno==free_errno);
+ printf("CASE list=%s status=%d primary=%d published-index=%d per-OS-callbacks=%d list-frees=%d final-CPU-entry-errno=%d message-preserved=1\n",mode==0?"zeroed":mode==1?"partial-7-0":"complete-7-9",mode==2?0:-6,result,published_index,consume?6:0,freed,events[n-2].entry_errno);++checks;
+}
+int observation_run(int baseline,Rollback rollback){assert(getuid()==1000&&geteuid()==1000);for(int scenario=0;scenario<3;scenario++)check(rollback,baseline,scenario);assert(checks==3&&live==0);if(baseline)puts("baseline rollback-list cases=3 failed-zero-slots-consumed=1 failed-partial-slots-consumed=1 complete-broad-control=1 primary-context-and-ownership-preserved");else puts("candidate rollback-list cases=3 failed-lists-skipped=2 complete-broad-control=1 list-freed-once primary-context-and-final-release-order-preserved");return 0;}
