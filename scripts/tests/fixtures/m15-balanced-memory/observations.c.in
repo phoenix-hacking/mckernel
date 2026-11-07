@@ -1,0 +1,57 @@
+#define _GNU_SOURCE
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/eventfd.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <ihk/ihklib_private.h>
+__CONF_GLOBAL__
+struct Owner { void *pointer; int ordinal; size_t bytes; };
+static struct Owner owners[16];
+static int calls,live,freed,case_number,fail_at,fd_owned,opens,closes,ioctls,queries,counts,rollbacks,checks;
+static int balanced,baseline_mode;
+static size_t wanted,available;
+static void *borrow_sizes,*borrow_nodes;
+static int owned(const void *p,int ordinal){for(int i=0;i<16;i++)if(owners[i].pointer==p&&owners[i].ordinal==ordinal)return 1;return 0;}
+void *observation_calloc(size_t count,size_t size){
+ ++calls;assert(calls<=6);if(calls==fail_at){errno=ENOMEM;return NULL;}
+ void *p=calloc(count,size);assert(p);int placed=0;for(int i=0;i<16;i++)if(!owners[i].pointer){owners[i]=(struct Owner){p,calls,count*size};placed=1;break;}assert(placed);++live;return p;
+}
+void observation_free(void *p){
+ if(!p){free(p);return;}int ordinal=0;for(int i=0;i<16;i++)if(owners[i].pointer==p){ordinal=owners[i].ordinal;owners[i].pointer=NULL;break;}assert(ordinal);--live;++freed;free(p);errno=80+ordinal;
+}
+static void config_is_custom(void){assert(reserve_mem_conf.balanced_enable==balanced&&reserve_mem_conf.balanced_best_effort==0&&reserve_mem_conf.balanced_variance_limit==7&&reserve_mem_conf.min_chunk_size==8192&&reserve_mem_conf.max_size_ratio_all==91&&reserve_mem_conf.timeout==17);}
+static void config_is_reset(void){assert(reserve_mem_conf.balanced_enable==0&&reserve_mem_conf.balanced_best_effort==0&&reserve_mem_conf.balanced_variance_limit==0&&reserve_mem_conf.min_chunk_size==4096&&reserve_mem_conf.max_size_ratio_all==98&&reserve_mem_conf.timeout==30);}
+int observation_access(const char *path,int mode){assert(!strcmp(path,"/dev/mcd0")&&mode==R_OK);config_is_custom();return 0;}
+int observation_device_open(int index){assert(index==0&&opens==0&&calls==2&&live==2);config_is_custom();fd_owned=eventfd(0,EFD_CLOEXEC);assert(fd_owned>=0);++opens;return fd_owned;}
+int observation_ioctl(int fd,unsigned long command,...){
+ assert(fd==fd_owned&&fd>=0&&command==IHK_DEVICE_RESERVE_MEM&&ioctls==0);assert(fcntl(fd,F_GETFD)>=0);config_is_custom();va_list args;va_start(args,command);struct ihk_mem_req *req=va_arg(args,struct ihk_mem_req *);va_end(args);
+ assert(req&&req->num_chunks==1&&owned(req->sizes,1)&&owned(req->numa_ids,2));assert(req->sizes[0]==(balanced?ULONG_MAX:wanted)&&req->numa_ids[0]==0&&req->min_chunk_size==8192&&req->max_size_ratio_all==91&&req->timeout==17);borrow_sizes=req->sizes;borrow_nodes=req->numa_ids;++ioctls;return 0;
+}
+int observation_close(int fd){assert(fd==fd_owned&&fd>=0&&opens==1&&closes==0&&ioctls==1);assert(owned(borrow_sizes,1)&&owned(borrow_nodes,2));int result=close(fd);assert(result==0);errno=0;assert(fcntl(fd,F_GETFD)==-1&&errno==EBADF);fd_owned=-1;++closes;return 0;}
+int observation_count(int index){assert(index==0&&balanced&&closes==1&&calls==2&&counts==0);config_is_custom();++counts;return 1;}
+int observation_query(int index,struct ihk_mem_chunk *chunks,int count){assert(index==0&&count==1&&owned(chunks,3)&&closes==1&&queries==0&&counts==1);config_is_custom();assert(owned(borrow_sizes,1)&&owned(borrow_nodes,2));++queries;if(case_number==0){errno=23;return -EIO;}chunks[0].size=available;chunks[0].numa_node_number=0;return 0;}
+int observation_release(int index,struct ihk_mem_chunk *chunks,int count){assert(index==0&&count==1&&chunks&&chunks[0].size==ULONG_MAX&&chunks[0].numa_node_number==0&&rollbacks==0&&closes==1);config_is_reset();int before=calls;++rollbacks;errno=37;assert(calls==before);return -EIO;}
+typedef int (*Reserve)(int,struct ihk_mem_chunk *,int);
+static void one_case(int number,Reserve reserve){
+ assert(live==0);memset(owners,0,sizeof(owners));case_number=number;calls=freed=opens=closes=ioctls=queries=counts=rollbacks=0;fd_owned=-1;borrow_sizes=borrow_nodes=NULL;
+ balanced=number!=5;wanted=number==2?2UL<<20:1UL<<20;available=number>=3?2UL<<20:1UL<<20;fail_at=number==1?4:number==3?5:number==4?6:number==6?2:0;
+ reserve_mem_conf=(struct ihklib_reserve_mem_conf){.balanced_enable=balanced,.balanced_best_effort=0,.balanced_variance_limit=7,.min_chunk_size=8192,.max_size_ratio_all=91,.timeout=17};
+ struct ihk_mem_chunk input={.size=wanted,.numa_node_number=0};errno=19;int ret=reserve(0,&input,1);int after_errno=errno;config_is_reset();assert(input.size==wanted&&input.numa_node_number==0);
+ int expected_result=number==0?-EINVAL:number==5?0:-ENOMEM;int expected_calls[]={3,4,4,5,6,2,2};int survivors[]={1,1,2,3,4,0,0};int expected_errno=number==4?85:number==6?81:82;
+ assert(ret==expected_result&&calls==expected_calls[number]);assert(opens==(number==6?0:1)&&closes==opens&&fd_owned==-1&&ioctls==opens);assert(rollbacks==(number<5?1:0)&&counts==(number<5?1:0)&&queries==counts);assert(after_errno==expected_errno);
+ int expected_live=baseline_mode?survivors[number]:0;assert(live==expected_live);assert(freed+live==calls-(fail_at?1:0));
+ printf("CASE mode=%s path=%d ret=%d calloc-attempts=%d observed-survivors=%d once-freed-before-reclaim=%d fd-opens=%d fd-closes=%d rollbacks=%d local-cleanup-entry-marker=%d input-unchanged=1 reset-before-rollback=1\n",baseline_mode?"baseline":"candidate",number,ret,calls,live,freed,opens,closes,rollbacks,after_errno);
+ /* Defined baseline leaks are observed only after the public function returns;
+  * reclaim each genuine live allocation exactly once, without a second SUT call. */
+ for(int i=0;i<16;i++)if(owners[i].pointer)observation_free(owners[i].pointer);
+ assert(live==0&&freed==calls-(fail_at?1:0));++checks;
+}
+int observation_run(Reserve reserve,int baseline){assert(getuid()==1000&&geteuid()==1000);baseline_mode=baseline;for(int i=0;i<7;i++)one_case(i,reserve);assert(checks==7&&live==0);printf("balanced-memory cases=7 mode=%s defined-balanced-errors=5 controls=2 all-owners-reclaimed all-anonymous-FDs-once-closed\n",baseline?"baseline":"candidate");return 0;}

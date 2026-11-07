@@ -1,0 +1,25 @@
+use core::ffi::{c_char,c_int,c_ulong,c_void};
+__TYPES__
+unsafe extern "C" {
+ static mut reserve_mem_conf:ReserveMemConf;
+ fn __errno_location()->*mut c_int;
+ #[link_name="observation_calloc"] fn calloc(count:usize,size:usize)->*mut c_void;
+ #[link_name="observation_free"] fn free(pointer:*mut c_void);
+ #[link_name="observation_access"] fn access(path:*const c_char,mode:c_int)->c_int;
+ fn snprintf(out:*mut c_char,size:usize,format:*const c_char,...)->c_int;
+ fn printf(format:*const c_char,...)->c_int;
+ #[link_name="observation_ioctl"] fn ioctl(fd:c_int,command:c_ulong,...)->c_int;
+ #[link_name="observation_close"] fn close(fd:c_int)->c_int;
+ #[link_name="observation_device_open"] fn ihklib_device_open(index:c_int)->c_int;
+ #[link_name="observation_count"] fn ihk_get_num_reserved_mem_chunks(index:c_int)->c_int;
+ #[link_name="observation_query"] fn ihk_query_mem(index:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ #[link_name="observation_release"] fn ihk_release_mem(index:c_int,chunks:*mut IhkMemChunk,count:c_int)->c_int;
+ fn observation_run(reserve:unsafe extern "C" fn(c_int,*mut IhkMemChunk,c_int)->c_int,baseline:c_int)->c_int;
+}
+mod actual {use super::*;
+__DEFAULT_CONF__
+__ERRNO__
+__READABLE__
+__RESERVE__
+}
+fn main(){std::process::exit(unsafe{observation_run(actual::ihk_reserve_mem,__BASELINE__)});}

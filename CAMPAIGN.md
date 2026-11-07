@@ -1,11 +1,49 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T01:51Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T02:12Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**BLOCKED at fresh audit3/3 of same-Root manual resume `20261107T000152Z-a458ed04`.**
+**ACTIVE under explicit same-Root manual resume `20261107T020116Z-f1b53bfd`.**
+The prior00:01audit3/3 and published checkpoint`3542d87841fcbd8b2b5272fbb23ac45bc07f71fd`
+remain history. New independently confirmed supported runtime-balanced memory
+ownership input binds cleanIHK`eea7443c…`; no held scope is released and the new
+blocked audit has not reached an exhausted-ready boundary.
+
+**Balanced-memory correction reviewed/composed:** pairedC/Rust`af398d9d…` retains
+old request-array owners across late calloc replacements and frees them plus query
+scratch independently of the one-shot configuration reset. All allocation/order/
+returns/provider-borrow/FDclose/reset-before-rollback/arithmetic remain unchanged.
+CurrentC`18af5ca4…`, Rust`03e7b1b8…`, actual19witness`f73bf088…` are frozen; changed
+Rustchild is notWARNING_SOURCES, so no qualifier fingerprint rewrite. SourceGO
+`060d06f5…` and independent fixtureGO`09ba6930…` bind the exact safe domain.
+
+Actual newSol/HIGHturns: A`01a1b3bd-a8ae-7591-9188-19bc18e13f63`,
+B`01a1b3be-0453-77b0-bfda-6bb95f08d420`, C`01a1b3be-2ce7-79d3-b2ba-7cd8de96ab44`;
+RootSol/MAX`01a1b3bd-200f-72d1-a902-63d696088cd9`. Current turn_context confirms
+HIGH/MAX and danger-full-access/never, UID1000; fresh machineproof is new
+`resume-20261107T020116Z-f1b53bfd/CURRENT-PHASE.json`.
+
+Affected real library actual6phases+2reads PASS/all8waits joined/CPU6released:
+library`4fe6bd5f…`, archive`e1669e15…`; unchangedstrict7warnings/nativeorder/70+6roots
+and actual19/sourceexports pass. B's actual9command/28caseCPU7batch PASS/all9child+outerwaits joined/slotreleased:14baselinecases safely observed/reclaimed22retainedblocks;14candidates have0survivors. All88explicitownersfreeonce,24realanonymousFDclose/EBADF and20allocation-free{ULONG_MAX,0}rollbackborrows afterreset pass, with originalrequestvalues/liveborrows/inputs and only newcleanupentrymarkers preserved. It covers only5defined failure exits +nonbalanced-success/alloc2pre-reservationcontrol per mode/language. Latevalidnode0/count1/request1MiB/query2MiB exits atcalloc5/6
+BEFORE compensationdivision; unsafeoldbalanced-success/zero-divregions never run.
+No actualIHK/native/backend or milestone acceptance is claimed. Functional receipt`729929cb…`; wall0.4981s/CPU0.29s/peak107,292KiB. Producer receipt`a037c490…`; wall0.906193s/CPU0.81s/peak136,768KiB. CleanIHK`b431d6f54ed492af405fc62043ca9bb389f490b3`, tree`5cac43e4…`, is committed/bundled. Durable14candidate regression matches passing units by source-generation/AST only; no green replay. Bounded result:`docs/verification/m15-balanced-memory-ownership-results-20261107.json`. Root coherent source/results publication is next.
+
+| Ready prerequisite | Actual consumers / original gate | Owner / smallest next proof |
+| --- | --- | --- |
+| Balanced source+ownership GO, composed | Runtimekey0/config/creation reservation / M15-F03 | Root preserves reviewed source; no arithmetic/profile narrowing |
+| New28defined behavior cases admitted | Originalreqborrow/reset/rollback/FD/free contract | PASS28definedcases/all9+outerjoined; Root retains14candidatefixture withoutreplay |
+| Affected qualified library PASS | Changed actualRustlibrary/default metadata | PASSa037c490/all8joined; Root consumes once with newtests and publishes source/results |
+
+OrdinaryHOST remains0/6/7,max3lightjobs/4GiBTOTAL including all overhead,
+retained18GiB+4GiBfloor and fresh26GiB admission. No nativeCPU/RAM is borrowed.
+Next15minute deliverable: publish/fetch the passed pairedownership correction and consider only genuinely eligible original work. All newengineeringjobs are joined; arithmetic redesign and declinedmonitor lookup remain excluded. Original generic/exec hold and missing actualSDK/native
+admission remain the final critical-path blocker under original release authority;
+M14 4/6/M15 1/8 unchanged, closureETAunknown. Declinedmonitor lookup stays closed.
+
+**Retained00:01resume engineering and acceptance history:**
 Prior blocked checkpoint`59d87cc23` and all previous audits remain history. New
 eligible input`m14-m15-ikc-functional-resume-20261107T000114Z/new-functional-input.json`
 binds clean IHK`b6f98677`: C/Rust IKC formatter scratch allocation failures return
@@ -14,9 +52,9 @@ reviewed paired correction`4ee4790f…` (C`6859eba7…`, Rust`e5382667…`) and 
 19-site witness updates. Success grammar/order and realloc paths stay unchanged;
 new output cleanup preserves only its entry errno. No original hold is released.
 
-Current worker447151/server447153 births9598015/9598023, RootSol/MAX and actual
+Prior invocation worker447151/server447153 births9598015/9598023, RootSol/MAX and actual
 HIGH source/test/review turns are recorded in this invocation's CURRENT-PHASE.json.
-Actual danger-full-access/approvalnever, UID1000. Existing guard21%used/79%remaining;
+Actual new worker484538/server484540 births10314482/10314490; UID1000, danger-full-access/approvalnever. Fresh guard22%used/78%remaining;
 no quota/usage-unknown restriction. Prior17% and historical weekly records remain.
 
 **IKC correction, caller and actual library PASS:** fourteen defined baseline
@@ -243,7 +281,7 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current ready queue exhausted after verified publication.** The optional new
+**Historical00:01resume ready queue exhausted after verified publication (superseded by new02:01balanced input).** The optional new
 post-add ENOENT/ENOTDIR monitor lane is DECLINED pending actual prior coverage:
 originalD's bounded known-map lookup and independentHIGHreview could not bind the
 original4vector body/request/passingreceipt/sourceidentity. The summary says4cases/
@@ -260,7 +298,7 @@ A permission-denied recursive lookup stopped permanently; no bypass or replay.
 | Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original service/hold authority supplies valid scoped disposition; no equivalent retry |
 | SDK/source-custody/native binding BLOCKED | Remaining M15-F02–08/I01–04 matched qualification | Original authority supplies reviewed one-shot bindings/current-free; SDK outer mapping UNKNOWN |
 
-**Fresh00:01resume audit3/3 — BLOCKED:**
+**Historical00:01resume audit3/3 — BLOCKED, superseded by new02:01manual resume:**
 - Productive actualRootturn`01a1b34f-cdbf-7cd1-9909-08d368370ad5` published the
   source/behavior/library fixes, then reached the first exhausted-ready boundary.
 - ActualRootturn`01a1b3b2-4804-74a2-a5a8-95328b2977e7` made no engineering progress:
