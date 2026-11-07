@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T01:22Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T01:27Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -81,16 +81,28 @@ metadata: library`05c93067…`, archive`90d117db…`; strict7warnings/70+6roots/
 pass. All5waits joined/CPU6released; wall0.838608s/CPU0.79s/peak136,276KiB.
 CleanIHK`baf82aae9caea648728341e1c040bb71904f4bb4`, tree`a8328c53…`, is committed/
 bundled. Durable6candidate regression matches passing units without a green run.
-Receipts`2cc576ca…`/`3f5032d3…`; current parent publication is next. Bounded result:
+Receipts`2cc576ca…`/`3f5032d3…`; parent checkpoint`1850d311859b7a9ed99fe191a1dd24c765a07fa8` is pushed/fetched/all9changed-entry verified; changed committed source replays once. Bounded result:
 `docs/verification/m15-create-list-error-results-20261107.json`. Backend/native
 resource restoration and all original acceptance remain open.
 
-**Next ready functional work:** sixthHIGHowner prepared the separate active-monitor
-2case profile`70139665…`; fifthHIGHowner reviews exact new stat declaration/path
-adapter and scalarDETECTvarargs before admission. It forwards genuine stat of an
-owned regular file only for literal/dev/mcos0, with real timing/threads/FDcleanup;
-normal and EIO ticks retain deliberately nonfatal behavior. Oldthree-seamNO-GO
-and all previous packets remain intact. No monitor compiler/runtime has run.
+**New actual monitor HOST behavior PASS:** the separate fourthstat-path profile
+passes normal/EIOcases with2real interval1ticks each (1.000829684/1.000882344s).
+Genuine stat/metadata/errno are forwarded from an owned regular file only for the
+literal/dev/mcos0 binding; scalarDETECTusesunsignedlong. Real FD8 absence before
+next acquisition defeats numberreuse, and each case returns0/restores exactFDtask
+sets. EIOis deliberately nonfatal. All3waits joined/CPU0released; wall2.463429s/
+CPU0.46s/peak172,664KiB. Receipt`f39abc2d…`, review`ac7f402f…`; oldthree-seamNO-GO
+is intact. No actual/dev/native/hungup/backend/file acceptance or green replay.
+Bounded result:`docs/verification/m15-active-monitor-results-20261107.json`.
+Durable current-source fixture is retained after generation/AST equivalence; no new runtime. Monitor parent checkpoint publication is next.
+
+**Concrete next source input:** Csnprintf_realloc frees/NULLs text on ordinary
+reallocfailure, but CPU/MEM/IKCcaller loops can append again. Actual Rust callers
+already stop onNULL. AnewHIGHsource turn`01a1b39c-b7f0-78a0-9dbb-d23dd34b6c12`
+assesses/prepares the smallest Ccaller guard pair; independentHIGHtest turn
+`01a1b39c-dbcd-78f0-a4fe-e80c4efd149a` prepares valid bounded growth/failure cases.
+No unsafe old Cfailurebaseline runs. Monitor turn`01a1b39b-a302-7252-9783-3acada14a102`
+is complete in runtime and retaining its result. No canonical follow-on is composed yet.
 
 Retained completed allocation/source/ABI/HOST results follow; none is rerun merely
 to publish this new batch. M14 remains4/6, M15 1/8, final integration gates open.
@@ -216,22 +228,21 @@ tree`fd493c198d0cdd7c28c1745c13512d465a387ba2`, is clean/committed and bundled;
 parent checkpoint`208d61882` is pushed, fetched and all9changed-entry verified; fresh committed source replay passes. Bounded summary:
 `docs/verification/m15-memory-query-allocation-results-20261106.json`.
 
-**Current priority:** publish the passed creation failed-list correction now,
-independently of the monitor fixture. Then run the newly reviewed active-monitor
-functional cases under one fresh ordinary HOST admission and retain their result.
-Reuse unchanged source/ABI/provider/producer and green checks. Net conversion LOC
-remains unmeasured.
+**Current priority:** retain/publish the passed monitor fixture/result now while
+independent source/test owners prepare the concrete formatter-growth correction.
+Reuse unchanged source/ABI/provider/producer and green checks; no runtime replay.
+Net conversion LOC remains unmeasured.
 
 | Ready prerequisite / dependency | Actual consumers / original gates | Owner / smallest next proof |
 | --- | --- | --- |
-| Creation failed-list source/tests/library PASS | Shared creation cleanup / M15-F03 behavior | Root checkpoint, changed committed bundle replay once and normal push/fetch |
-| Separate active-monitor profile prepared, concrete review pending | Actual monitor ticks/stop/cleanup / M15-F08 behavior | Fifth HIGH review → sixth HIGH exact3command/2case batch |
-| Monitor result retention, conditional on actual PASS | Durable M15-F08 functional regression | Sixth HIGH private fixture package; Root consumes without green replay |
+| Monitor2realHOSTcases PASS, durable fixture retained | Actual ticks/nonfatalstop/cleanup / M15-F08 behavior | Exact passed units retained; Root publishes fixture/results now |
+| Formatter growth failure source contract | CPU/MEM/IKCpublicstring APIs and CLI / M15-F03 behavior | A minimal Cguard/actual Rust NULL join, then focused concrete review |
+| New valid growth/failure regression | Three actualformatter callers/ownership | B bounded new candidate cases/request; no unsafe Cbaseline or oldgreen replay |
 | Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original hold authority supplies valid scoped disposition; no equivalent retry |
 | SDK/source-custody/native binding BLOCKED | Remaining M15-F02–08/I01–04 matched qualification | Original authority supplies reviewed one-shot bindings/current-free; SDK outer mapping UNKNOWN |
 
-The next15minute deliverable is the creation correction publication and the
-concrete monitor review/batch. Exact original open gates remain M14-F03/F06,
+The next15minute deliverable is monitor publication and the reviewed formatter
+candidate/new behavior request. Exact original open gates remain M14-F03/F06,
 M14-I01–03, M15-F02–08 and M15-I01–04. The missed nine-hour target is unchanged;
 critical-path ETA is unknown pending external source/service and native admission.
 
