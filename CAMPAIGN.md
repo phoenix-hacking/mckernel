@@ -1,11 +1,11 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T01:48Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-07T01:51Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under new same-Root manual resume `20261107T000152Z-a458ed04`.**
+**BLOCKED at fresh audit3/3 of same-Root manual resume `20261107T000152Z-a458ed04`.**
 Prior blocked checkpoint`59d87cc23` and all previous audits remain history. New
 eligible input`m14-m15-ikc-functional-resume-20261107T000114Z/new-functional-input.json`
 binds clean IHK`b6f98677`: C/Rust IKC formatter scratch allocation failures return
@@ -177,7 +177,7 @@ Generic/exec/ACK/TID/XPMEM/service/source holds, unknown SDKoutermapping and ori
 SDK/source-custody/native gate remain binding; no full-image/native argv exists.
 M14 remains4/6 and M15 1/8, all integration gates open. The original nine-hour
 planning target is past and unchanged; critical-path ETA remains unknown while
-these external conditions lack a valid disposition. Eligible source fixes and active monitor HOST qualification continue.
+these external conditions lack a valid disposition. All supplied eligible source fixes and HOST qualification are consumed; fresh audit3/3 records the remaining impasse.
 
 Latest explicit authorization (06:01Z November6) continues USEFUL work until
 the existing supported-system objective is complete or this included weekly
@@ -260,23 +260,40 @@ A permission-denied recursive lookup stopped permanently; no bypass or replay.
 | Universal generic/exec disposition BLOCKED | M14-F03/F06 and I01–03 | Original service/hold authority supplies valid scoped disposition; no equivalent retry |
 | SDK/source-custody/native binding BLOCKED | Remaining M15-F02–08/I01–04 matched qualification | Original authority supplies reviewed one-shot bindings/current-free; SDK outer mapping UNKNOWN |
 
-**Fresh00:01resume audit1/3:** productive actualRootturn
-`01a1b34f-cdbf-7cd1-9909-08d368370ad5` published the source/behavior/library fixes and
-then reached this first exhausted-ready boundary. All sixHIGHowners are completed;
-all THISinvocation's new HOST/tool waits are joined, with no pending local handle
-or eligible batch. This does not retire historical UNKNOWN/native owners. Goal
-remains active pending the next actual Root audit; scheduled reminders/toolcalls
-are not extra audit turns. After3consecutive actual turns at the same impasse,
-use the normal blocked status. No filler, repeated inventory, held request or
-unchanged suite may replace missing concrete work.
+**Fresh00:01resume audit3/3 — BLOCKED:**
+- Productive actualRootturn`01a1b34f-cdbf-7cd1-9909-08d368370ad5` published the
+  source/behavior/library fixes, then reached the first exhausted-ready boundary.
+- ActualRootturn`01a1b3b2-4804-74a2-a5a8-95328b2977e7` made no engineering progress:
+  same actual service hold/refusing operation gate/unknown optional priorcoverage.
+- ActualRootturn`01a1b3b3-7193-7780-8c03-e75d1e946728` revalidated the same impasse:
+  retained service control is held/replay=false/equivalent=false; installed
+  verify_actual_operation_gates still unconditionally raises unimplemented.
+  Current IHK`eea7443c…` remains clean; parent`4f1d8685f…` is fetched/matched.
+  Optional post-add coverage remains UNKNOWN; no new eligible input was supplied.
 
-Next15minute action: consume a genuine eligible source input or actual required
-binding/coverage artifact if supplied; otherwise the next actual Root turn records
-the same blocked-path audit without dispatch/replay. Exact original open gates:
-M14-F03/F06, M14-I01–03, M15-F02–08 and M15-I01–04. Critical-path ETA remains unknown
-until the original source/service disposition and actual SDK/native admission
-change. The missed nine-hour target and outage remain unchanged; accepted scope,
-weekly-only allowance, all18GiB/4GiB reservations and every hold remain binding.
+The preceding turn and this turn are NO PROGRESS, not verified waits. All sixHIGH
+owners are completed; all new admitted engineering HOST waits are joined and no
+live admitted handle or dependency-ready batch exists. No compiler/native job,
+child, test suite, Docker lookup or held request was dispatched on these two
+turns. Status edits are bookkeeping, not engineering progress. Historical UNKNOWN
+native/resource owners and18GiBcharges/4GiBfloor/scratch21/mutex27:4 stay intact.
+This final handoff is published/fetch-verified before the normal goal tool records
+blocked, preserving usage/history. Scheduled reminders are not extra audit turns
+or authority to mechanically resume held work.
+
+**Next action requires changed input:** original service/hold authority supplies
+a valid universal generic/exec disposition, or original operation authority
+supplies reviewed SDK/source-custody/native/current-free bindings. Optional monitor
+review requires the actual original4vectorbody+passingreceipt/sourceidentity.
+These fields are missing; ordinary source publication, local sudo, more agents
+and remaining weekly allowance cannot supply them. No repeated inventory, green
+suite, guessedSDKmapping, equivalent task or new framework is queued.
+
+Exact original open gates remain M14-F03/F06, M14-I01–03, M15-F02–08 and M15-I01–04.
+Critical-path ETA remains unknown until the original source/service disposition
+and actual SDK/native admission change. The missed nine-hour target/outage and
+all accepted scopes remain unchanged. Fresh guard21%used/79%remaining is allowed;
+this is a source/admission impasse, not quota exhaustion or OS completion.
 
 M14 stays4/6 and M15 1/8. New HOST source/test/library work is passing; this is not
 native/fullimage/file acceptance. Critical-path completion ETA remains unknown
