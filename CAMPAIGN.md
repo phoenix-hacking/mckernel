@@ -1,11 +1,75 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-07T03:16Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T16:04Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE: same-Root manual invocation `20261107T023815Z-216a194d`.** Root remains
+**ACTIVE under explicit same-Root manual resume `20261109T155325Z-46b56314`.**
+Nov9manualauthorization revokes the Nov7pause only. RootSol/MAX and actual saved
+Sol/HIGH source/fixture/reviewer turns, never/danger-full-access, UID1000, current
+worker519639/server519641 births32587351/32587358 and included25%used/75%remaining
+are verified in `resume-20261109T155325Z-46b56314/CURRENT-PHASE.json`. Root is sole
+canonical source/index/publisher. No objective, allowance or historical owner reset.
+
+**Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
+commands now return1 after unchanged exact usage/diagnostics and once-close.
+IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed;
+Root checkpoint is being published. Last fetched Root remains`61b10e6ff`.
+Eight actualmainFUNCTION cases PASS=4baseline+4candidate: raw0→1, exact292/499byte
+stderr/empty stdout, zeroioctl,8realanonymousFDs once-close/EBADF and restored
+argv/FDset. All8actualobject predicates were CALLED before anylink/runtime;
+24childbirths/directjoins plus outerwait joined/CPU7released, no failure/retry.
+No actual/dev/backend/native/CRT-exit claim. Prior intrfortifiedheaderdevice-path
+attempt remains0credit. B's durable4candidate package source-generation/AST matches
+passedunits; no greenreplay. Result`m15-unknown-action-results-20261109.json`.
+
+Four actual changedCLI codegen/link commands already PASSed beforeNov7pause, all
+PIDbirths persisted before waits. Nov9source/artifact matching reused them without
+rebuild: ihkconfig`26be5914…`, ihkosctl`57f3f051…`, genuine libihk`53079f63…`.
+**Per-gate checklist delta:** M15-F06 36.36→63.64%; M15-F07 50.00→71.43%, each
+completing its alreadydeclared source/behavior/changedtool leaves. M15 46.91→50.97%;
+M14 stays51.48%. Counted156checks/393CSVrows/formulas are unchanged. Original
+acceptance remains M14 4/6files+0/3integration, M15 1/8files+0/4integration; deployed/
+native/backend conditions are still open. These percentages are evidence checklist
+completion, not engineering hours, convertedLOC or native acceptance.
+
+| Next ready original dependency | Consumer / scope | Owner / smallest proof |
+| --- | --- | --- |
+| Current credential provider partition | M14-03-05/F03/CREDENTIAL-COHORT | A prepares only3genuine getter/helper definitions+actualABI; F independently reviews ABI/uniqueowners/unheldscope before fresh Root compile/partiallink |
+| Explicitly partial credential composition | Existing fc5ten-entry consumer, including both setresuid/setresgid | Root later admits sourceGOunit+fc5 only; c205/old8/oldcohorts excluded, real mapping/CPU/offload imports remain unresolved, prior5behavior cases reused |
+| Actual changedCLI loader/provider binding | Current2ELFs / M15-F06,F07,I03 | E prepares minimal qualified4metadata/loader checks for changedoutputs only; no old3tool/15main replay, fresh admission required |
+
+Foreground independent credential review establishes eligible newpartial source
+preparation, not a drop-in against stalec205 or finalCREDENTIAL-COHORT closure.
+Exact input`m14-m15-home-resume-20261109T155159Z/credential-provider-readonly.json`.
+ReferenceC dump2buffer packet remains private/unexecuted and behind original-gate
+work; BFDname retention and originalfullscenario/backend bindings stay unresolved.
+
+OrdinaryHOST remains CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL including all
+worker/controller overhead, fresh26GiB retaining18GiBcharges+4GiBfloor and host16/
+scratch12GiB diskfloors. Native2–5/12GiB, UNKNOWNowners/outcomes/scratch21/mutex27:4
+and expiredattempts/nonces remain unchanged. Next15minute deliverable: publish
+this coherent unknownCLI checkpoint and advance reviewed M14credential partition.
+Foreground owns monitors; healthy work is preserved, no duplicate investigation.
+
+**Critical-path blocker/owner:** original generic/exec hold still excludes an
+eligible universal provider/fullimage; actual SDK/source-custody/native/current-free
+bindings also remain unresolved. Root consumes only valid original dispositions;
+fullimageargv remainsUNSET. No held-equivalent retry, guessedmapping/Docker/closed
+monitor lookup, balancedarithmetic/zero-div execution or invalid-open contract.
+Exact remaining original gates/inputs stay below. Critical-path ETA remainsUNKNOWN
+until real authority/bindings change; the missed9htarget/outage are history, not a
+new clock or stop. Included-weekly-only controls and later userstops remain binding.
+
+**Historical Nov7 user pause:** at2026-11-07T03:19Z the user went home; the goal
+was paused, oldworker495776/server495778/watcher495774 retired, current turns ended,
+no new-invocation operation remained, and both foreground timers were stopped.
+Pause record: `/home/holden/mckernel-work/m14-m15-user-pause-20261107T031910Z/pause-outcome.json`.
+That pause was honored until the explicit Nov9 manual resume above. Historical
+UNKNOWN reservations and original acceptance never changed during the pause.
+
+**Pre-pause engineering snapshot:** same-Root invocation `20261107T023815Z-216a194d`. Root remains
 Sol/MAX, sole source/index/publisher; six new saved-owner Sol/HIGH turns and actual
 never/danger-full-access routing are verified in `FOLLOWUP-ROUTING-0309.json`.
 Fresh included guard24%used/76%remaining allows work. No controller, goal, budget,
@@ -14,7 +78,7 @@ original authority or historical UNKNOWN owner was reset.
 **Completed new engineering:** C/Rust root-level dump paths now check parent`/`
 and restore original bytes; both intr routes propagate the captured ioctl result.
 IHK`6abba64bb569c89d2a660c957c8f3d58fe5374c6`/tree`1cba9022…` is committed;
-Root checkpoint/publication is being composed. Last fetched Root remains`93f726833`.
+Root`61b10e6ffb1cd2234f921d672babe48a3b85306d` is pushed/fetched; all14changed entries and committed source replay match.
 Dump16cases=8baseline+8candidate PASS: initializedzerochunks, scoped actual Cprefix+
 outtail and full selected Rustmodule, rootpermit/EACCES/nested/relative behavior.
 No realdump/file/BFDobject/NMI/device/native ran. Existing C2buffer survivors were
@@ -41,7 +105,7 @@ AST matching only, no green runtime rerun for publication.
 
 | Next ready dependency | Original consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
-| Unknown-action pairedsource+8case fixture | ihkconfig/ihkosctl main false success / M15-F06,F07 | A implementation/E sourceGO/B precise hooks+FD fixture; Root composes after current checkpoint, fresh HOST admission |
+| Unknown-action pairedsource+8case fixture | ihkconfig/ihkosctl main false success / M15-F06,F07 | A implementation/E sourceGO/B precise hooks+FD fixture; Root composed source after fetched61b10e6ff; precise new fixture/admission next |
 | Supported success/error/cleanup scenario contracts | Shared library and both CLI/provider dependencies / M15-F05–F07,I03 | C/D completed bounded machine definitions; original full scenario membership/backend bindings remain open |
 | Separate retained Cdump2buffer cleanup | Unselected/referenceC common-out owners / original library behavior accounting | Reviewed private Apatch/C GO; meaningful affected ownership proof only after current checkpoint, name lifetime remains separate |
 
@@ -80,7 +144,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 | Milestone | Checklist progress | Accepted file goals | Accepted integration gates |
 | --- | ---: | ---: | ---: |
 | M14 | 51.48% | 4/6 | 0/3 |
-| M15 | 46.91% | 1/8 | 0/4 |
+| M15 | 50.97% | 1/8 | 0/4 |
 
 | Requirement | Checklist complete | Accepted | Defined scope / remaining obligation |
 | --- | ---: | --- | --- |
@@ -108,8 +172,8 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M15-F03 | 62.50% | no | Rust mcinspect diagnostic qualification |
 | M15-F04 | 62.50% | no | Rust eclair diagnostic qualification |
 | M15-F05 | 81.25% | no | Rust IHK library qualification |
-| M15-F06 | 36.36% | no | Rust ihkconfig CLI qualification |
-| M15-F07 | 50.00% | no | Rust ihkosctl CLI qualification |
+| M15-F06 | 63.64% | no | Rust ihkconfig CLI qualification |
+| M15-F07 | 71.43% | no | Rust ihkosctl CLI qualification |
 | M15-F08 | 70.00% | no | Rust ihkmond supervisor qualification |
 | M15-I01 | 20.00% | no | Complete project-runtime ownership manifest |
 | M15-I02 | 0.00% | no | Three delivered Linux-loadable Rust/assembly modules |
@@ -133,7 +197,7 @@ The ledger names 362 concrete rows, including the three exact modules `ihk.ko`, 
 
 Root maintains this ledger from passing, matching engineering evidence at each checkpoint/handoff. A final gate remains unaccepted until its original supported/default/deployed/native requirements pass. Future confirmed integration defects get explicit rows and dated denominator changes; no unchanged green suite rerun is needed for tracker maintenance.
 
-Current refresh: dump/source/library, intr24behavior and changed-tool HOST artifact rows are credited only at completed scope. First CLI codegen PID metadata remainsUNKNOWN and the old failed device-path attempt remains0credit. Existing balanced-full-behavior0condition explicitly includes excluded old-success/arithmetic regions;28ownership cases do not qualify them. Two uncounted Cfindings and six newly confirmed unknown-action checks are dated:156counted checks,362task/binding rows+31groups=393CSVrows. The new pending obligations explain the score change; formulas/original acceptance are unchanged.
+Current Nov9refresh: all six previously declared unknown-action source/behavior/changedtool leaves pass at their exact scope;4producercommands are reused, not rebuilt. Per-gateF06/F07 deltas are above. Counted156checks/362task-binding+31group=393CSVrows and accepted overrides stay fixed. The new credentialpartition is private preparation with0finalCREDENTIAL-COHORT credit; all original provider/native/installed conditions remain open. Historical intrdevice-path0credit/firstPIDUNKNOWN and excludedbalanced-fullbehavior conditions stay preserved.
 
 **Historical02:01resume completed engineering and audit:**
 **Prior02:01resume audit3/3 was BLOCKED, superseded by new02:38manual resume.**
