@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T16:19Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T16:42Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,8 +14,9 @@ canonical source/index/publisher. No objective, allowance or historical owner re
 
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
-IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed;
-Root`6f4c7f244c19cc2492f4a46f09176492a89a442f` is pushed/fetched; all9changed entries and changed committed source replay match.
+IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed.
+Root`126442f85a3b760c940669a07457fc1898379998` is pushed/fetched with all34new
+prerequisite entries matched; priorunknownCLI`6f4c7f244`/all9entries/source replay remainverified.
 Eight actualmainFUNCTION cases PASS=4baseline+4candidate: raw0→1, exact292/499byte
 stderr/empty stdout, zeroioctl,8realanonymousFDs once-close/EBADF and restored
 argv/FDset. All8actualobject predicates were CALLED before anylink/runtime;
@@ -53,22 +54,36 @@ and8qualifiedHOSTproviders bind. All4births/waits joined/CPU7released, no progra
 ABI/old3tool/6loader/15main/compiler/device/native replay. Result is
 `docs/verification/m15-changed-cli-loader-results-20261109.json`.
 
+**Next actual lower-provider batch PASS:**8currentexports+2privatehelpers compile
+and partialjoin ONLYwith currentcredential912e. Provider`3ab80840…`(3592B), newpartial
+`98bd88f4…`(10728B),21uniqueT/19genuineU, prior13sizes and actualrelocs pass. Four
+oldcallableimports resolve;7realstorage/logger imports are exposed. This count
+change is not a regression/completionpercentage. Actual8T/7U/no-data predicate
+was CALLED beforeld-r; all5actualcommands ranonce/allbirths/waits joined/CPU6released.
+One receipt-schema prelaunchfailure had0Popen/commands; originalcapture/admission
+kept, one new flat-review admission corrected it beforetheonlyworkload run.
+No MSR/GS/function/hardware/init/native/greenbehavior ran. Source/rawproof/objects:
+`docs/verification/m14-lower-provider-unit-20261109/`; result
+`m14-lower-provider-partial-results-20261109.json`. No originalgate/score changes.
+
 | Next ready original dependency | Consumer / scope | Owner / smallest proof |
 | --- | --- | --- |
-| Eligible current CPU/local/phys provider chain | Actual16imports/sharedF03/F06/credentialcohort | Released HIGHowners prepare smallest actualsource/objectreuse partition; no wholemodule/heldsource or inventedABI |
-| Independent lowerprovider ABI/uniqueownership | Newpartial912e47f9 and selectedreal lowerendpoints | Separate HIGHreview before exactRootcompile/join; c205/oldcohorts/duplicateowners excluded |
-| Coherent prerequisite checkpoint | CurrentM14source/objectproof +2newCLIloaderbindings | Root publish actualscoped deltas/ledger; retainall16imports and finalhold/nativegaps explicitly |
+| Exact owned storage/logger source | Current21T/19Ucohort/sharedF03/F06 | B private6actualstorage+boundedlogger source, actualinitializers/attrs/Ddebug/descriptors; genuinekprintfU, no inventedstate |
+| Independent actualABI/data/uniqueowner checks | Prospectivecurrentpartial+newstorage unit | E concreteunit/profile/predicate review beforefreshRootadmission; actualbootinit/logging/finalnative contracts remainopen |
+| Coherent lower-provider checkpoint | 8actualsourceexports+old13owners/actual7newU | Root publish source/proof/currentledger beforeadmitting nextbatch; preserveprelaunchfailure/onecorrection and allactualsource boundaries |
 
-Foreground independent source input authorizes only eligible exactlowerprovider
-preparation afterthischeckpoint; unresolveddo_syscall is never treatedasavailable.
-ReferenceC dump2buffer packet stays private/unexecuted behind original-gate work;
-BFDname lifetime and originalfullscenario/backend bindings remain unresolved.
+Source/data contract distinguishes eligible nonexecuted exactdefinitions from
+unqualified runtimeinitialization. Currentclv/locals/num_processors/geometry/logger
+stay realimports in thisbatch. Initialnull/zero/one values are originalsource,
+never fabricated state. Nextstorage proposal does not establish allocation/GS/boot
+geometry or actuallogging completion. Held universaldo_syscall/offload staysU.
+ReferenceC cleanup remainsprivate/unexecuted behind original-gate work.
 
 OrdinaryHOST remains CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL including all
 worker/controller overhead, fresh26GiB retaining18GiBcharges+4GiBfloor and host16/
 scratch12GiB diskfloors. Native2–5/12GiB, UNKNOWNowners/outcomes/scratch21/mutex27:4
 and expiredattempts/nonces remain unchanged. Next15minute deliverable: publish
-currentM14/CLI prerequisite proof, then advance the smallest eligible lowerprovider.
+currentlower-provider proof, then admit only the reviewed exactstorage/logger scope.
 Foreground owns monitors; healthy work is preserved, no duplicate investigation.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
@@ -215,7 +230,7 @@ The ledger names 362 concrete rows, including the three exact modules `ihk.ko`, 
 
 Root maintains this ledger from passing, matching engineering evidence at each checkpoint/handoff. A final gate remains unaccepted until its original supported/default/deployed/native requirements pass. Future confirmed integration defects get explicit rows and dated denominator changes; no unchanged green suite rerun is needed for tracker maintenance.
 
-Current Nov9refresh: six unknown-action leaves pass;4producercommands were reused. Newcredentialpartialunit/join and2changedCLIloaderbindings pass at statedscope. Four explicit partialproofsteps add uncounted registryrows:156countedchecks/366task-binding+31group=397CSVrows. FinalCREDENTIAL-COHORT and all original default/native/provider conditions remainopen; scores51.48/50.97, accepted4/6and1/8 unchanged. Historical intrdevice-path0credit/firstPIDUNKNOWN/excludedbalanced-fullbehavior evidence stays intact.
+Current Nov9refresh: six unknown-action leaves pass;4producercommands were reused. Currentcredential and8functionlower partials plus2changedCLIloaderbindings pass at statedscope. Eight explicit partialproofsteps add uncounted registryrows:156countedchecks/370task-binding+31group=401CSVrows. FinalCREDENTIAL-COHORT and all original default/native/provider conditions remainopen; scores51.48/50.97, accepted4/6and1/8 unchanged. Historical intrdevice-path0credit/firstPIDUNKNOWN/excludedbalanced-fullbehavior evidence stays intact.
 
 **Historical02:01resume completed engineering and audit:**
 **Prior02:01resume audit3/3 was BLOCKED, superseded by new02:38manual resume.**

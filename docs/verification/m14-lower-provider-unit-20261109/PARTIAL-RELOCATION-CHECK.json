@@ -1,0 +1,79 @@
+{
+  "status": "PASS_ELF64_X86_64_REL_CURRENT_LOWER_CREDENTIAL_BINDING",
+  "actual_new_provider_defined_functions": {
+    "get_this_cpu_local_var": {
+      "bytes": 99,
+      "section": "4"
+    },
+    "get_cpu_local_var": {
+      "bytes": 24,
+      "section": "2"
+    },
+    "ihk_mc_get_processor_id": {
+      "bytes": 77,
+      "section": "6"
+    },
+    "virt_to_phys": {
+      "bytes": 165,
+      "section": "8"
+    },
+    "x86_virt_to_phys_body_result": {
+      "bytes": 105,
+      "section": "12"
+    },
+    "x86_user_map_kernel_start_bridge": {
+      "bytes": 14,
+      "section": "10"
+    },
+    "syscall_get_processor_id_bridge": {
+      "bytes": 77,
+      "section": "6"
+    },
+    "syscall_virt_to_phys_bridge": {
+      "bytes": 165,
+      "section": "8"
+    }
+  },
+  "actual_credential_entry_and_getcred_relocations": {
+    ".rela.ltext.do_setresuid": "    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000004e  0000002900000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0\n0000000000000066  0000003300000001 R_X86_64_64            0000000000000000 getcred + 0\n0000000000000070  0000002b00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0",
+    ".rela.ltext.do_setresgid": "    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000004e  0000002900000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0\n0000000000000066  0000003300000001 R_X86_64_64            0000000000000000 getcred + 0\n0000000000000070  0000002b00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0",
+    ".rela.ltext.getcred": "    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n00000000000000b4  0000002500000001 R_X86_64_64            0000000000000000 syscall_virt_to_phys_bridge + 0\n00000000000000d1  0000003500000001 R_X86_64_64            0000000000000000 syscall_get_processor_id_bridge + 0\n00000000000000dd  0000001f00000001 R_X86_64_64            0000000000000000 syscall_do_syscall_request_bridge + 0"
+  },
+  "four_old_lower_targets_now_defined": [
+    "get_this_cpu_local_var",
+    "ihk_mc_get_processor_id",
+    "syscall_get_processor_id_bridge",
+    "syscall_virt_to_phys_bridge"
+  ],
+  "new_actual_data_logger_relocation_targets_remain_U": [
+    "clv",
+    "locals",
+    "num_processors",
+    "x86_map_kernel_start_geometry",
+    "linux_page_offset_base",
+    "x86_kernel_phys_base",
+    "x86_addr_log_bridge"
+  ],
+  "actual_unresolved": [
+    "syscall_find_process_bridge",
+    "clv",
+    "x86_map_kernel_start_geometry",
+    "sched_wakeup_thread",
+    "num_processors",
+    "syscall_do_syscall_request_bridge",
+    "f03_terminate_host_refcount_set_v1",
+    "locals",
+    "do_kill",
+    "x86_kernel_phys_base",
+    "terminate_host_body_result",
+    "syscall_do_kill_thread_bridge",
+    "do_syscall",
+    "syscall_generic_forwarding_body_result",
+    "x86_addr_log_bridge",
+    "syscall_process_unlock_bridge",
+    "linux_page_offset_base",
+    "f03_wait_release_process",
+    "f03_wait_release_thread"
+  ],
+  "no_runtime_or_storage_initialization": true
+}

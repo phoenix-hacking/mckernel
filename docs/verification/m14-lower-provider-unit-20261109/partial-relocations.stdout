@@ -1,0 +1,190 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          8168 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           64 (bytes)
+  Number of section headers:         40
+  Section header string table index: 39
+
+Relocation section '.rela.ltext.get_cpu_local_var' at offset 0x17f8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000001a00000001 R_X86_64_64            0000000000000000 clv + 0
+
+Relocation section '.rela.ltext.get_this_cpu_local_var' at offset 0x1810 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000013  0000002100000001 R_X86_64_64            0000000000000000 locals + 0
+000000000000002c  0000001d00000001 R_X86_64_64            0000000000000000 num_processors + 0
+000000000000004f  0000001a00000001 R_X86_64_64            0000000000000000 clv + 0
+
+Relocation section '.rela.ltext.ihk_mc_get_processor_id' at offset 0x1858 contains 2 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000013  0000002100000001 R_X86_64_64            0000000000000000 locals + 0
+0000000000000025  0000001d00000001 R_X86_64_64            0000000000000000 num_processors + 0
+
+Relocation section '.rela.ltext.syscall_virt_to_phys_bridge' at offset 0x1888 contains 5 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000009  0000001b00000001 R_X86_64_64            0000000000000000 x86_map_kernel_start_geometry + 0
+000000000000001b  0000003c00000001 R_X86_64_64            0000000000000000 linux_page_offset_base + 0
+000000000000003b  0000003900000001 R_X86_64_64            0000000000000000 x86_addr_log_bridge + 0
+000000000000005e  0000002600000001 R_X86_64_64            0000000000000000 x86_kernel_phys_base + 0
+0000000000000071  0000003900000001 R_X86_64_64            0000000000000000 x86_addr_log_bridge + 0
+
+Relocation section '.rela.ltext.x86_user_map_kernel_start_bridge' at offset 0x1900 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000001b00000001 R_X86_64_64            0000000000000000 x86_map_kernel_start_geometry + 0
+
+Relocation section '.rela.ltext.getcred' at offset 0x1918 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+00000000000000b4  0000002500000001 R_X86_64_64            0000000000000000 syscall_virt_to_phys_bridge + 0
+00000000000000d1  0000003500000001 R_X86_64_64            0000000000000000 syscall_get_processor_id_bridge + 0
+00000000000000dd  0000001f00000001 R_X86_64_64            0000000000000000 syscall_do_syscall_request_bridge + 0
+
+Relocation section '.rela.ltext.do_setresgid' at offset 0x1960 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000004e  0000002900000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0
+0000000000000066  0000003300000001 R_X86_64_64            0000000000000000 getcred + 0
+0000000000000070  0000002b00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0
+
+Relocation section '.rela.ltext.do_setresuid' at offset 0x19a8 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000004e  0000002900000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0
+0000000000000066  0000003300000001 R_X86_64_64            0000000000000000 getcred + 0
+0000000000000070  0000002b00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0
+
+Relocation section '.rela.ltext.ptrace_detach_do_kill_bridge' at offset 0x19f0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000002400000001 R_X86_64_64            0000000000000000 do_kill + 0
+
+Relocation section '.rela.ltext.ptrace_detach_wakeup_bridge' at offset 0x1a08 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000001c00000001 R_X86_64_64            0000000000000000 sched_wakeup_thread + 0
+
+Relocation section '.rela.ltext.syscall_do_syscall2_bridge' at offset 0x1a20 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000063  0000003b00000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000006f  0000002d00000001 R_X86_64_64            0000000000000000 do_syscall + 0
+0000000000000079  0000003600000001 R_X86_64_64            0000000000000000 syscall_generic_forwarding_body_result + 0
+
+Relocation section '.rela.ltext.syscall_do_syscall3_bridge' at offset 0x1a68 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000067  0000003b00000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000073  0000002d00000001 R_X86_64_64            0000000000000000 do_syscall + 0
+000000000000007d  0000003600000001 R_X86_64_64            0000000000000000 syscall_generic_forwarding_body_result + 0
+
+Relocation section '.rela.ltext.terminate_host' at offset 0x1ab0 contains 8 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000002900000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0
+0000000000000037  0000002c00000001 R_X86_64_64            0000000000000000 syscall_do_kill_thread_bridge + 0
+0000000000000041  0000003e00000001 R_X86_64_64            0000000000000000 f03_wait_release_process + 0
+000000000000004b  0000004000000001 R_X86_64_64            0000000000000000 f03_wait_release_thread + 0
+0000000000000055  0000002000000001 R_X86_64_64            0000000000000000 f03_terminate_host_refcount_set_v1 + 0
+000000000000005f  0000003a00000001 R_X86_64_64            0000000000000000 syscall_process_unlock_bridge + 0
+0000000000000069  0000001900000001 R_X86_64_64            0000000000000000 syscall_find_process_bridge + 0
+000000000000009a  0000002a00000001 R_X86_64_64            0000000000000000 terminate_host_body_result + 0
+
+Relocation section '.rela.ltext.wait_host_wait4_bridge' at offset 0x1b70 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000005f  0000003b00000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000006b  0000002d00000001 R_X86_64_64            0000000000000000 do_syscall + 0
+0000000000000075  0000003600000001 R_X86_64_64            0000000000000000 syscall_generic_forwarding_body_result + 0
+
+Relocation section '.rela.eh_frame' at offset 0x1bb8 contains 17 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000000200000018 R_X86_64_PC64          0000000000000000 .ltext.get_cpu_local_var + 0
+0000000000000040  0000000300000018 R_X86_64_PC64          0000000000000000 .ltext.get_this_cpu_local_var + 0
+0000000000000060  0000000400000018 R_X86_64_PC64          0000000000000000 .ltext.ihk_mc_get_processor_id + 0
+0000000000000088  0000000500000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_virt_to_phys_bridge + 0
+00000000000000b8  0000000600000018 R_X86_64_PC64          0000000000000000 .ltext.x86_user_map_kernel_start_bridge + 0
+00000000000000d8  0000000700000018 R_X86_64_PC64          0000000000000000 .ltext.x86_virt_to_phys_body_result + 0
+0000000000000120  0000000800000018 R_X86_64_PC64          0000000000000000 .ltext.getcred + 0
+0000000000000150  0000000900000018 R_X86_64_PC64          0000000000000000 .ltext.getcred_body_result + 0
+0000000000000190  0000000a00000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_refresh_cred_fields_body_result + 0
+00000000000001f0  0000000b00000018 R_X86_64_PC64          0000000000000000 .ltext.do_setresgid + 0
+0000000000000228  0000000c00000018 R_X86_64_PC64          0000000000000000 .ltext.do_setresuid + 0
+0000000000000260  0000000d00000018 R_X86_64_PC64          0000000000000000 .ltext.ptrace_detach_do_kill_bridge + 0
+0000000000000280  0000000e00000018 R_X86_64_PC64          0000000000000000 .ltext.ptrace_detach_wakeup_bridge + 0
+00000000000002a0  0000000f00000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_do_syscall2_bridge + 0
+00000000000002e8  0000001000000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_do_syscall3_bridge + 0
+0000000000000338  0000001100000018 R_X86_64_PC64          0000000000000000 .ltext.terminate_host + 0
+0000000000000370  0000001200000018 R_X86_64_PC64          0000000000000000 .ltext.wait_host_wait4_bridge + 0
+
+Symbol table '.symtab' contains 65 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 
+     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 
+     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 
+     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 
+     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 
+     6: 0000000000000000     0 SECTION LOCAL  DEFAULT   10 
+     7: 0000000000000000     0 SECTION LOCAL  DEFAULT   12 
+     8: 0000000000000000     0 SECTION LOCAL  DEFAULT   13 
+     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   15 
+    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   16 
+    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   17 
+    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   19 
+    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 
+    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   23 
+    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   25 
+    16: 0000000000000000     0 SECTION LOCAL  DEFAULT   27 
+    17: 0000000000000000     0 SECTION LOCAL  DEFAULT   29 
+    18: 0000000000000000     0 SECTION LOCAL  DEFAULT   31 
+    19: 0000000000000000     0 SECTION LOCAL  DEFAULT   33 
+    20: 0000000000000000     0 SECTION LOCAL  DEFAULT   35 
+    21: 0000000000000000     0 SECTION LOCAL  DEFAULT   36 
+    22: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS lower_provider_unit.7f603cb001ec0f2e-cgu.0
+    23: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS credential_provider_unit.f5b85a196e9a46cf-cgu.0
+    24: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS f03_adapters.6d8da4dbc4ea2d51-cgu.0
+    25: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_find_process_bridge
+    26: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND clv
+    27: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND x86_map_kernel_start_geometry
+    28: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND sched_wakeup_thread
+    29: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND num_processors
+    30: 0000000000000000    12 FUNC    GLOBAL DEFAULT   23 ptrace_detach_wakeup_bridge
+    31: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_do_syscall_request_bridge
+    32: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f03_terminate_host_refcount_set_v1
+    33: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND locals
+    34: 0000000000000000   105 FUNC    GLOBAL DEFAULT   12 x86_virt_to_phys_body_result
+    35: 0000000000000000   173 FUNC    GLOBAL DEFAULT   17 do_setresgid
+    36: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND do_kill
+    37: 0000000000000000   165 FUNC    GLOBAL DEFAULT    8 syscall_virt_to_phys_bridge
+    38: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND x86_kernel_phys_base
+    39: 0000000000000000   165 FUNC    GLOBAL DEFAULT    8 virt_to_phys
+    40: 0000000000000000   272 FUNC    GLOBAL DEFAULT   15 getcred_body_result
+    41: 0000000000000000    99 FUNC    GLOBAL DEFAULT    4 get_this_cpu_local_var
+    42: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND terminate_host_body_result
+    43: 0000000000000000   163 FUNC    GLOBAL DEFAULT   16 syscall_refresh_cred_fields_body_result
+    44: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_do_kill_thread_bridge
+    45: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND do_syscall
+    46: 0000000000000000   173 FUNC    GLOBAL DEFAULT   19 do_setresuid
+    47: 0000000000000000   167 FUNC    GLOBAL DEFAULT   25 syscall_do_syscall2_bridge
+    48: 0000000000000000   171 FUNC    GLOBAL DEFAULT   27 syscall_do_syscall3_bridge
+    49: 0000000000000000   183 FUNC    GLOBAL DEFAULT   29 terminate_host
+    50: 0000000000000000   167 FUNC    GLOBAL DEFAULT   25 syscall_policy_do_syscall2_bridge
+    51: 0000000000000000   259 FUNC    GLOBAL DEFAULT   13 getcred
+    52: 0000000000000000    14 FUNC    GLOBAL DEFAULT   10 x86_user_map_kernel_start_bridge
+    53: 0000000000000000    77 FUNC    GLOBAL DEFAULT    6 syscall_get_processor_id_bridge
+    54: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_generic_forwarding_body_result
+    55: 0000000000000000   166 FUNC    GLOBAL DEFAULT   31 wait_host_wait4_bridge
+    56: 0000000000000000   171 FUNC    GLOBAL DEFAULT   27 syscall_policy_do_syscall3_bridge
+    57: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND x86_addr_log_bridge
+    58: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_process_unlock_bridge
+    59: 0000000000000000    77 FUNC    GLOBAL DEFAULT    6 ihk_mc_get_processor_id
+    60: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND linux_page_offset_base
+    61: 0000000000000000    12 FUNC    GLOBAL DEFAULT   21 ptrace_detach_do_kill_bridge
+    62: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f03_wait_release_process
+    63: 0000000000000000    24 FUNC    GLOBAL DEFAULT    2 get_cpu_local_var
+    64: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f03_wait_release_thread

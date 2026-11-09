@@ -1,0 +1,82 @@
+{
+  "decision": "NO_ALREADY_QUALIFIED_MATCHING_INDEPENDENT_LOWER_PROVIDER_ESTABLISHED",
+  "owner": "/root/memory_error_cleanup_witness_high",
+  "scope": "Bounded reuse readiness from exact16U current partial, namedF03/F06 proofs and explicit receipt/source references only; not an object/source inventory.",
+  "eligible_objects": [],
+  "symbol_decisions": [
+    {
+      "symbol": "get_this_cpu_local_var",
+      "consumer_ABI": "unsafe extern C fn()->*mut CpuLocalVar (actual abi.rs CpuLocalVar)",
+      "current_partial": "U",
+      "eligible_already_qualified_object": null,
+      "decision": "NOT_ESTABLISHED_FROM_NAMED_INPUT_CHAIN",
+      "evidence": "F03 BINDING-COLLISION reports T/0/0x66 only inside eligible-cohort6337, not a separately bound object."
+    },
+    {
+      "symbol": "ihk_mc_get_processor_id",
+      "consumer_ABI": "unsafe extern C fn()->CInt",
+      "current_partial": "U",
+      "eligible_already_qualified_object": null,
+      "decision": "NOT_ESTABLISHED_FROM_NAMED_INPUT_CHAIN",
+      "evidence": "F03 BINDING-COLLISION reports T/0/0x50 only inside eligible-cohort6337, not a separately bound object."
+    },
+    {
+      "symbol": "syscall_get_processor_id_bridge",
+      "consumer_ABI": "unsafe extern C fn()->CInt",
+      "current_partial": "U",
+      "eligible_already_qualified_object": null,
+      "decision": "NOT_ESTABLISHED_FROM_NAMED_INPUT_CHAIN",
+      "evidence": "Foreground exact source/ABI input identifies current bridge calling crate::x86_local::ihk_mc_get_processor_id. Named F06 binding is a combined input including excluded c205; no current separate bridge artifact/receipt is supplied."
+    },
+    {
+      "symbol": "syscall_virt_to_phys_bridge",
+      "consumer_ABI": "unsafe extern C fn(*mut c_void)->CULong",
+      "current_partial": "U",
+      "eligible_already_qualified_object": null,
+      "decision": "NOT_ESTABLISHED_FROM_NAMED_INPUT_CHAIN",
+      "evidence": "Foreground exact source/ABI input identifies current bridge calling crate::x86_memory_helpers::virt_to_phys. Named F06 binding is a combined input including excluded c205; no current separate bridge/mapping artifact/receipt is supplied."
+    }
+  ],
+  "current_partial": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/output/credential_partial.o",
+    "sha256": "912e47f9b47cf01614852a2d9590941285b3eca58608b43ebf3b51f2d6a27a2c",
+    "definition_count": 13,
+    "unresolved_count": 16,
+    "retained_all_unresolved": [
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "get_this_cpu_local_var",
+      "ihk_mc_get_processor_id",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_get_processor_id_bridge",
+      "syscall_process_unlock_bridge",
+      "syscall_virt_to_phys_bridge",
+      "terminate_host_body_result"
+    ]
+  },
+  "exact_evidence": {
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/RESULT.json": "b606a740de6e391c079db5c1b6ddfecf2d8a60677d0a0c9aeb9a5457150d3440",
+    "/home/holden/mckernel/docs/verification/m14-f03-real-provider-composition-20261106.json": "71fee9eb93319fb43e2449cebef7c9262f5d22215717a9a4b6bb014f3d0a22a6",
+    "/home/holden/mckernel/docs/verification/m14-f06-real-provider-composition-20261106.json": "34472841b5ab3bb619319796dbe065f2bce697bdf25f5fcb2b4a926dce2bcbc4",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json": "4c7f8d0870e24088e92b5c1685c2dcd2b030ff55cf1ee8dac0365b40cd283d2f",
+    "/home/holden/mckernel-work/m14-resume-20261105-1/f03-provider-join-private-1/BINDING-COLLISION.json": "22fb3607fe4d18cc28559a7352cccccc67e0a89f74a8be63997b2f8b27c4a0f9",
+    "/home/holden/mckernel-work/m14-m15-home-resume-20261109T155159Z/credential-provider-readonly.json": "0f0738b5fe48bf7237b1bbaec2d2ae1c2c719b53c65c371f4ebc674d3fab1e93"
+  },
+  "qualified_receipt_scope": [
+    "fc5receipt4c7f8d defines10consumer adapters only; none of these4lowerproviders. Unit source declares get_this_cpu_local_var and ihk_mc_get_processor_id extern with actual abi.rs types. Current f9bced89 provider adds only getter/getter-body/refresh and imports both CPU/phys bridges.",
+    "F03 compositione43ac6a0 is oldeight-adapter+eligible-cohort6337. CPUlocal/CPUid strong symbols are recorded at combined-cohort level with held definitions present; cannot append to current13Tpartial or separate/relabel providers.",
+    "F06 compositionf290a6ab includes multiple legacy C/ASM objects plus excluded oldwhole Rust core and five-entryF06 unit. Its success proves only that historical combined link, not separately source/ABI-qualified ownership of current4lower endpoints. Exact names in C/ASM argv do not establish per-object current Rust source ownership. No nested whole-cohort reuse is selected."
+  ],
+  "exclusions_reused_without_reanalysis": "Known stale c205/getter, oldeight and combinedcohort exclusions remain. No c205/combinedartifact bytes were read/hashed/disassembled, no duplicate allowance/symbolrewrite/sectioncarve/new callback/provider invented.",
+  "do_syscall": "Still unresolved/held; no existing genuine universal do_syscall owner or admission inferred. Closing any4CPU/mapping imports would remain a partial slice and cannot close final credential/native/fullimage gate.",
+  "next_smallest_action": "A may prepare the already named current unheld source lower partition with exact original ABI and genuine lower endpoints; F reviews source/ownership/profile. Only actual new qualified object evidence or an explicitly source-bound independent object receipt can change this reuse decision. No compiler/link/runtime is admitted here.",
+  "qualification_limit": "NOT_ESTABLISHED is bounded to the supplied evidence, not universal object absence or prohibition on independent source preparation. A targeted read-only metadata check of exact named independent F06 inputs, if Root needs it, could refine symbol location but cannot alone supply missing current source/ABI/eligibility qualification.",
+  "operations": "Read exact currentRESULT, namedF03/F06 JSON and their named MANIFEST/BINDING-COLLISION, fc5receipt/unit declarations and currentcredential-unit declarations. Wrote only private readiness JSON. No broadinventory/objectwalk/newnm/hasholdc205/compile/link/runtime/SDK remap/canonical/index operation."
+}
