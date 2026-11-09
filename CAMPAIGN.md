@@ -1,11 +1,12 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T20:41Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T20:45Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit same-Root manual resume `20261109T201010Z-8adf12e8`.**
+**Three-turn impasse confirmed for same-Root resume `20261109T201010Z-8adf12e8`;
+normal blocked stop follows this final checkpoint.**
 The prior invocation stopped properly as blocked/exit20 at19:42 after its actual
 three-turn audit. This new manual instruction supplies a bounded operational
 engineering task: correct recovery handoff plan pointers and current-versus-history
@@ -247,13 +248,28 @@ The previous invocation ended after its third actual Root exhausted-queue
 finding(3/3), and normal Goal control returned blocked. Timer wakes did not count
 or authorize resume. The current explicit201010 manual resume supplies the new
 operational recovery task above; original OS dependency inputs remain absent.
-Fresh post-task impasse finding1/3 is this actual Root turn
-`01a1c1ee-c103-7f03-b165-389874f7a08e`; no timer wake or old blocked turn is counted.
-The saved goal is active, not complete or paused; no new payload is executable.
+Fresh post-task impasse findings:1/3 in actual Root turn
+`01a1c1ee-c103-7f03-b165-389874f7a08e`, then2/3 in actual continuation
+`01a1c20c-2479-7211-8bb0-f4333b54dae6`. The prior turn made real progress through the
+recovery fix and published handoff94927b91c; this continuation finds no changed
+eligible original input. Same live identities/allowance are healthy, so no
+technical recovery is justified. Timer wakes and old blocked turns do not count.
+The third actual continuation `01a1c20d-7dc8-79e2-9aa9-89aecc22b9a2`
+revalidated the same missing input after the20:44scheduled reminder supplied no
+release or new eligible work. This is impasse3/3; the prior turn was no progress,
+not a verified wait or technical crash. The normal goal tool will record blocked
+after this final checkpoint. No completion, pause, automatic blocked-goal resume
+or healthy worker/server restart is authorized.
 Next useful
 deliverable requires an actual scoped source/native/backend input, not a restart. No further reference-C tasks, BFD-name speculation, notification
 retry, negative-open/invalid-capacity tests or green inventory work are queued.
 Original scores51.48/50.97, combined51.225, delta0 remain; no original gate accepted.
+
+**Remaining original gates:** M14-F03,F06,I01–I03; M15-F02–F08,I01–I04.
+Acceptance stays4/6+0/3 and1/8+0/4; checklist51.48/50.97, combined51.225
+(target76.8375), counted delta0. No new image, native proof or C retirement.
+The final impasse proof is retained in
+`docs/verification/os-recovery-handoff-provenance-20261109/GOAL-IMPASSE.json`.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
 eligible universal provider/fullimage; actual SDK/source-custody/native/current-free
