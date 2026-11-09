@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T20:33Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T20:41Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -41,9 +41,12 @@ Its existing exact Git-only restore passed. Root owns the canonical gitlink/bund
 manifest, and qualified results remain retained at their actual scopes; no restore,
 build, inventory or old passing suite is repeated for this ownership note.
 
-Next15-minute deliverable: commit/publish this coherent recovery source/tests/raw
-proof and verify its changed entries once. No original M14/M15 counted check or
-acceptance gate closes from this operational fix. HOST0/6/7,max3lightjobs,4GiB TOTAL
+**Published/fetched:** recovery checkpoint`17ed4779281c8f01c36982bdf5736cfc2ec7687f`,
+all22changed source/test/proof/plan entries match after one normal push/readback.
+Both transport waits joined. The sole ready operational task is complete; next
+useful deliverable needs an actual eligible original source/SDK/native/backend
+input. No original M14/M15 counted check or acceptance gate closes from this fix.
+HOST0/6/7,max3lightjobs,4GiB TOTAL
 including all overhead/fresh26GiB and host16/scratch12GiB floors remain binding;
 retained18GiB/native2–5/12GiB/UNKNOWN/scratch21/mutex27:4 are unchanged.
 
@@ -217,20 +220,37 @@ Existing CLI proof stays bound to53079; no ca484 consumer proof is claimed.
 
 | Current checkpoint / input | Actual consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
-| Recovery source/test proof PASS | Sole-plan recovery and actual diagnostic provenance | A source/B12tests/E exact GO; Root16tests PASS/allwaitsjoined; normal checkpoint publication next |
+| Recovery source/test/publication PASS | Sole-plan recovery and actual diagnostic provenance | A source/B12tests/E exact GO; Root16tests PASS/allwaitsjoined; fetched17ed47792/all22entries |
 | IHK ownership/replay/publication PASS | Current8eb8 component/bundle and qualified reference repair | Foreground tracking verified; existing Git-only replay and fetchedfcbd8f728/all107entries reused |
-| Next original dependency | Universal provider/source-SDK/native/backend contracts | Original authorities supply actual scoped inputs; Root consumes valid dispositions. No held request or replacement job queued |
+| Universal provider disposition | M14-F03/F06 and I01–I03 | Original generic/exec authority supplies actual scoped disposition/eligible universal provider; Root may then compose a reviewed cohort. Retained partials do not satisfy this input |
+| Supported SDK/operation binding | M15-F02–F04,I02,I03 and matching native qualification | Original SDK/source/admission owners bind the exact supported source/config/toolchain, diagnostic outer namespace and actual one-shot custody/current-free operation; no guessed mapping or refusing gate counts |
+| Complete required-set/backend binding | M15-F02-complete-ABI-behavior, F05-original-behavior, F06/F07-device-behavior, F08-installed-service | Original runtime owners supply delivered target/required scenario inventories and exact admitted installed/backend operations; Root joins matching results and restores resources |
+
+**20:39 original-criteria reconciliation:** the current open leaf conditions were
+compared with the retained source-derived library and CLI scenario contracts, not
+with another Git fetch. Their explicit missing inputs remain the original complete
+delivered/required sets, supported SDK identities, installed cohort and real backend
+operation bindings. No new unheld source partition, concrete defect or executable
+required behavior packet was established. Completed query/kmsg/provider/consumer
+proofs and exact notification NO_GO were reused without reopening their sources or
+tests. Two obsolete group notes about pending dump/intr receipts are removed from
+the JSON/CSV handoff; those already proved leaves, weights and percentages do not
+change. This same actual Root turn remains impasse1/3, not another audit turn.
 
 All new payloads and ordinary HOST slots are joined/released. Native2–5/12GiB,
 UNKNOWN owners/outcomes,18GiB charges, scratch21/mutex27:4 and expired packets stay
 preserved. HOST remains CPUs0/6/7,max3 aggregate light jobs,4GiB TOTAL including
 all overhead, fresh26GiB plus host16/scratch12GiB disk floors. Fresh included32%used/
 68%remaining permits work. The original OS ready queue was exhausted before this
-new operational task; its publication remains the current ready deliverable.
+new operational task, whose source/tests and publication are now complete.
 The previous invocation ended after its third actual Root exhausted-queue
 finding(3/3), and normal Goal control returned blocked. Timer wakes did not count
 or authorize resume. The current explicit201010 manual resume supplies the new
-operational recovery task above; original OS dependency inputs remain absent. Next useful
+operational recovery task above; original OS dependency inputs remain absent.
+Fresh post-task impasse finding1/3 is this actual Root turn
+`01a1c1ee-c103-7f03-b165-389874f7a08e`; no timer wake or old blocked turn is counted.
+The saved goal is active, not complete or paused; no new payload is executable.
+Next useful
 deliverable requires an actual scoped source/native/backend input, not a restart. No further reference-C tasks, BFD-name speculation, notification
 retry, negative-open/invalid-capacity tests or green inventory work are queued.
 Original scores51.48/50.97, combined51.225, delta0 remain; no original gate accepted.
