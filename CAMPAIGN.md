@@ -166,8 +166,9 @@ libbfd2.34 is this qualified HOST dependency; original Rocky/BFD2.41 remains ope
 
 Current canonical IHK is `8eb8cdcc651f588d2f8fc1275e49e8fe644f7472`, tree0979fca2:
 only the retained C repair and actual19 witness update, based on b7b7111c. Its
-source bundle/manifest are prepared; committed-source Git-only replay and normal
-publication are the remaining checkpoint work. Raw source, cases and producer
+source bundle/manifest are committed locally. Existing Git-only restore replay
+PASSed fromRooted4ecc35 toexact8eb8/tree0979 andbothchangedfileidentities. No
+archivedscript/build/runtime ran. Normalpublication is the remainingcheckpointwork. Raw source, cases and producer
 proof are in `m15-retained-c-dump-owner-unit-20261109/`; scoped result is
 `m15-retained-c-dump-owner-results-20261109.json`.
 
@@ -180,7 +181,7 @@ Existing CLI proof stays bound to53079; no ca484 consumer proof is claimed.
 
 | Remaining checkpoint / input | Actual consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
-| Committed source replay | Current8eb8 IHK component/bundle | Root existing Git-only restore helper, exact two changed file identities; no archived build/runtime |
+| Committed source replay PASS | Current8eb8 IHK component/bundle | Existing Git-only restore helper returnedexactsource/tree/twofileidentities; no archived build/runtime |
 | Publish source/results/ledger | Qualified C reference repair and affected library | Root normal push wrapper, fetched commit and changed entries; all green executions reused |
 | Next original dependency | Universal provider/source-SDK/native/backend contracts | Original authorities supply actual scoped inputs; Root consumes valid dispositions. No held request or replacement job queued |
 
@@ -189,7 +190,7 @@ UNKNOWN owners/outcomes,18GiB charges, scratch21/mutex27:4 and expired packets s
 preserved. HOST remains CPUs0/6/7,max3 aggregate light jobs,4GiB TOTAL including
 all overhead, fresh26GiB plus host16/scratch12GiB disk floors. Fresh included31%used/
 69%remaining permits work. Next15minute deliverable: finish this coherent source
-replay/publication. After it, the bounded ready queue is exhausted without a new
+publication. After it, the bounded ready queue is exhausted without a new
 eligible input; honor actual three-Root-turn blocked accounting, not timer wakes or
 technical restart. No further reference-C tasks, BFD-name speculation, notification
 retry, negative-open/invalid-capacity tests or green inventory work are queued.
