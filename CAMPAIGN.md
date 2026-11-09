@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T16:04Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T16:19Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -15,7 +15,7 @@ canonical source/index/publisher. No objective, allowance or historical owner re
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
 IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed;
-Root checkpoint is being published. Last fetched Root remains`61b10e6ff`.
+Root`6f4c7f244c19cc2492f4a46f09176492a89a442f` is pushed/fetched; all9changed entries and changed committed source replay match.
 Eight actualmainFUNCTION cases PASS=4baseline+4candidate: raw0→1, exact292/499byte
 stderr/empty stdout, zeroioctl,8realanonymousFDs once-close/EBADF and restored
 argv/FDset. All8actualobject predicates were CALLED before anylink/runtime;
@@ -34,23 +34,41 @@ acceptance remains M14 4/6files+0/3integration, M15 1/8files+0/4integration; dep
 native/backend conditions are still open. These percentages are evidence checklist
 completion, not engineering hours, convertedLOC or native acceptance.
 
+**New shared M14 prerequisite PASS:** exact3current getter/helper definitions
+compiled and partial-linked ONLYwith retainedfc5ten-entry object. Provider`f9bced89…`
+(2512B), partial`912e47f9…`(7848B),13uniqueT/16genuineU; both173byte credential
+entries now bind currentgetcred/refresh. Actualproviderpredicate passed beforeld-r;
+all5births/directjoins joined/CPU6released. Prior5behavior cases reused without
+execution. Stalec205/old8/oldcohorts, wholecrate, symboloverrides and fakecallbacks
+were excluded. Exactsource/ABI/review/objects/rawproof are retained under
+`docs/verification/m14-credential-provider-unit-20261109/`; bounded result is
+`m14-credential-provider-partial-results-20261109.json`. One inheritedSSEABIwarning
+matches the retainedpartialprofile exactly; this is not finalnativeABIacceptance.
+Four user-requested partialsteps are100% uncounted supporting evidence; final
+CREDENTIAL-COHORT remains0 and no original gate/score changes.
+
+**Current changedCLI binding PASS:** only2newELFs had4newmetadata/trustedloader
+checks. BothactualstaticELFgates passed beforeloader; exactRUNPATH/libihk`53079f63…`
+and8qualifiedHOSTproviders bind. All4births/waits joined/CPU7released, no programmain/
+ABI/old3tool/6loader/15main/compiler/device/native replay. Result is
+`docs/verification/m15-changed-cli-loader-results-20261109.json`.
+
 | Next ready original dependency | Consumer / scope | Owner / smallest proof |
 | --- | --- | --- |
-| Current credential provider partition | M14-03-05/F03/CREDENTIAL-COHORT | A prepares only3genuine getter/helper definitions+actualABI; F independently reviews ABI/uniqueowners/unheldscope before fresh Root compile/partiallink |
-| Explicitly partial credential composition | Existing fc5ten-entry consumer, including both setresuid/setresgid | Root later admits sourceGOunit+fc5 only; c205/old8/oldcohorts excluded, real mapping/CPU/offload imports remain unresolved, prior5behavior cases reused |
-| Actual changedCLI loader/provider binding | Current2ELFs / M15-F06,F07,I03 | E prepares minimal qualified4metadata/loader checks for changedoutputs only; no old3tool/15main replay, fresh admission required |
+| Eligible current CPU/local/phys provider chain | Actual16imports/sharedF03/F06/credentialcohort | Released HIGHowners prepare smallest actualsource/objectreuse partition; no wholemodule/heldsource or inventedABI |
+| Independent lowerprovider ABI/uniqueownership | Newpartial912e47f9 and selectedreal lowerendpoints | Separate HIGHreview before exactRootcompile/join; c205/oldcohorts/duplicateowners excluded |
+| Coherent prerequisite checkpoint | CurrentM14source/objectproof +2newCLIloaderbindings | Root publish actualscoped deltas/ledger; retainall16imports and finalhold/nativegaps explicitly |
 
-Foreground independent credential review establishes eligible newpartial source
-preparation, not a drop-in against stalec205 or finalCREDENTIAL-COHORT closure.
-Exact input`m14-m15-home-resume-20261109T155159Z/credential-provider-readonly.json`.
-ReferenceC dump2buffer packet remains private/unexecuted and behind original-gate
-work; BFDname retention and originalfullscenario/backend bindings stay unresolved.
+Foreground independent source input authorizes only eligible exactlowerprovider
+preparation afterthischeckpoint; unresolveddo_syscall is never treatedasavailable.
+ReferenceC dump2buffer packet stays private/unexecuted behind original-gate work;
+BFDname lifetime and originalfullscenario/backend bindings remain unresolved.
 
 OrdinaryHOST remains CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL including all
 worker/controller overhead, fresh26GiB retaining18GiBcharges+4GiBfloor and host16/
 scratch12GiB diskfloors. Native2–5/12GiB, UNKNOWNowners/outcomes/scratch21/mutex27:4
 and expiredattempts/nonces remain unchanged. Next15minute deliverable: publish
-this coherent unknownCLI checkpoint and advance reviewed M14credential partition.
+currentM14/CLI prerequisite proof, then advance the smallest eligible lowerprovider.
 Foreground owns monitors; healthy work is preserved, no duplicate investigation.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
@@ -197,7 +215,7 @@ The ledger names 362 concrete rows, including the three exact modules `ihk.ko`, 
 
 Root maintains this ledger from passing, matching engineering evidence at each checkpoint/handoff. A final gate remains unaccepted until its original supported/default/deployed/native requirements pass. Future confirmed integration defects get explicit rows and dated denominator changes; no unchanged green suite rerun is needed for tracker maintenance.
 
-Current Nov9refresh: all six previously declared unknown-action source/behavior/changedtool leaves pass at their exact scope;4producercommands are reused, not rebuilt. Per-gateF06/F07 deltas are above. Counted156checks/362task-binding+31group=393CSVrows and accepted overrides stay fixed. The new credentialpartition is private preparation with0finalCREDENTIAL-COHORT credit; all original provider/native/installed conditions remain open. Historical intrdevice-path0credit/firstPIDUNKNOWN and excludedbalanced-fullbehavior conditions stay preserved.
+Current Nov9refresh: six unknown-action leaves pass;4producercommands were reused. Newcredentialpartialunit/join and2changedCLIloaderbindings pass at statedscope. Four explicit partialproofsteps add uncounted registryrows:156countedchecks/366task-binding+31group=397CSVrows. FinalCREDENTIAL-COHORT and all original default/native/provider conditions remainopen; scores51.48/50.97, accepted4/6and1/8 unchanged. Historical intrdevice-path0credit/firstPIDUNKNOWN/excludedbalanced-fullbehavior evidence stays intact.
 
 **Historical02:01resume completed engineering and audit:**
 **Prior02:01resume audit3/3 was BLOCKED, superseded by new02:38manual resume.**

@@ -1,0 +1,121 @@
+{
+  "status": "READY_EXACT_CURRENT_THREE_FUNCTION_NO_STD_PARTITION_SOURCE_ONLY",
+  "unit": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/credential-provider-unit-1/credential_provider_unit.rs",
+  "unit_sha256": "e9aa887a78063ed26e81aa8ea5273b76d6567f2279a9b121bf609071770f1288",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/syscall_policy.rs": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/f03_credential_refresh.rs": "9d52bfd14779a4396bf98e20058f8eac5a15ce3da99cdd788f667db6146a0e7c"
+  },
+  "exported_definitions": {
+    "getcred_body_result": {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "start_byte": 79886,
+      "end_byte": 81482,
+      "start_line": 2209,
+      "exact_definition_sha256": "3dc387cc2d5560058649cd60ec08c4345f8f44f176aab2b73eb46b601f64c7bd",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn getcred_body_result(\n    raw_buf: *mut CInt,\n    page_mask: CULong,\n    syscall_nr: CInt,\n    virt_to_phys_fn: Option<SyscallVirtToPhysFn>,\n    processor_id_fn: Option<SyscallGetCpuFn>,\n    do_syscall_fn: Option<SyscallRequestCallFn>,\n) -> *mut CInt {\n    if raw_buf.is_null() {\n        return null_mut();\n    }\n    let Some(virt_to_phys) = virt_to_phys_fn else {\n        return null_mut();\n    };\n    let Some(processor_id) = processor_id_fn else {\n        return null_mut();\n    };\n    let Some(do_syscall) = do_syscall_fn else {\n        return null_mut();\n    };\n\n    // The existing caller supplies sixteen writable CInt slots. Initialize\n    // both possible eight-int spans; only a successful genuine producer grants\n    // permission to consume the selected span. Zero fill is not completion proof.\n    core::ptr::write_bytes(raw_buf, 0, 16);\n    let alternate_buf = raw_buf.add(8);\n    let selected_buf = if ((raw_buf as CULong) ^ (alternate_buf as CULong)) & page_mask != 0 {\n        alternate_buf\n    } else {\n        raw_buf\n    };\n\n    let mut request = MaybeUninit::<SyscallRequest>::zeroed();\n    let requestp = request.as_mut_ptr();\n    (*requestp).number = syscall_nr as CULong;\n    (*requestp).args[0] = virt_to_phys(selected_buf.cast::<c_void>());\n    (*requestp).args[1] = 1;\n    if do_syscall(requestp, processor_id()) != 0 {\n        // A failed/partial response is not a credential snapshot. The existing\n        // refresh helper checks NULL before reading scratch or writing fields.\n        return null_mut();\n    }\n\n    selected_buf\n}\n"
+    },
+    "syscall_refresh_cred_fields_body_result": {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "start_byte": 81484,
+      "end_byte": 82785,
+      "start_line": 2256,
+      "exact_definition_sha256": "f4ff0457d5fab272f1c60209ed522e33a4d2bb4eaead17883963d61402bac090",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn syscall_refresh_cred_fields_body_result(\n    thread: *mut c_void,\n    scratch: *mut CInt,\n    thread_proc_offset: SizeT,\n    field0_offset: SizeT,\n    field1_offset: SizeT,\n    field2_offset: SizeT,\n    field3_offset: SizeT,\n    value0_index: SizeT,\n    value1_index: SizeT,\n    value2_index: SizeT,\n    value3_index: SizeT,\n    getcred_fn: Option<SyscallGetcredFn>,\n) -> CInt {\n    if thread.is_null() || scratch.is_null() {\n        return -EFAULT;\n    }\n    let Some(getcred) = getcred_fn else {\n        return -EINVAL;\n    };\n    let values = getcred(scratch);\n    if values.is_null() {\n        return -EFAULT;\n    }\n\n    let proc = *(thread\n        .cast::<u8>()\n        .add(thread_proc_offset)\n        .cast::<*mut c_void>());\n    if proc.is_null() {\n        return -EFAULT;\n    }\n    let proc_bytes = proc.cast::<u8>();\n    write(\n        proc_bytes.add(field0_offset).cast::<CInt>(),\n        *values.add(value0_index),\n    );\n    write(\n        proc_bytes.add(field1_offset).cast::<CInt>(),\n        *values.add(value1_index),\n    );\n    write(\n        proc_bytes.add(field2_offset).cast::<CInt>(),\n        *values.add(value2_index),\n    );\n    write(\n        proc_bytes.add(field3_offset).cast::<CInt>(),\n        *values.add(value3_index),\n    );\n\n    0\n}\n"
+    },
+    "getcred": {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "start_byte": 1013407,
+      "end_byte": 1014035,
+      "start_line": 30592,
+      "exact_definition_sha256": "22d91d8f90b433e0aec1534c037b53cd6b757801c74594df382f8df9c6a54b18",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn getcred(raw_buf: *mut CInt) -> *mut CInt {\n    // SAFETY: Reuse the exact existing selected algorithm, including its full\n    // zeroed request and page-span choice. Scratch is initialized before the\n    // synchronous call and nonzero completion returns no snapshot. The three\n    // existing adapters resolve to genuine mapping/CPU/do_syscall.\n    unsafe {\n        getcred_body_result(\n            raw_buf, PAGE_MASK, SYS_SETFSUID,\n            Some(syscall_virt_to_phys_bridge), Some(syscall_get_processor_id_bridge),\n            Some(syscall_do_syscall_request_bridge),\n        )\n    }\n}\n"
+    }
+  },
+  "exact_source_constants": [
+    "const EINVAL: CInt = 22;",
+    "const EFAULT: CInt = 14;",
+    "const PAGE_SIZE: CULong = 1 << 12;",
+    "const PAGE_MASK: CULong = !(PAGE_SIZE - 1);",
+    "const SYS_SETFSUID: CInt = 122;"
+  ],
+  "exact_source_callback_aliases": [
+    "type SyscallRequestCallFn = unsafe extern \"C\" fn(*mut SyscallRequest, CInt) -> CLong;",
+    "type SyscallVirtToPhysFn = unsafe extern \"C\" fn(*mut c_void) -> CULong;",
+    "type SyscallGetcredFn = unsafe extern \"C\" fn(*mut CInt) -> *mut CInt;",
+    "type SyscallGetCpuFn = unsafe extern \"C\" fn() -> CInt;"
+  ],
+  "actual_bridge_source_headers": {
+    "syscall_virt_to_phys_bridge": "pub unsafe extern \"C\" fn syscall_virt_to_phys_bridge(addr: *mut c_void) -> CULong",
+    "syscall_get_processor_id_bridge": "pub unsafe extern \"C\" fn syscall_get_processor_id_bridge() -> CInt",
+    "syscall_do_syscall_request_bridge": "pub unsafe extern \"C\" fn syscall_do_syscall_request_bridge(\n    request: *mut SyscallRequest,\n    cpu: CInt,\n) -> CLong"
+  },
+  "unresolved_bridge_declarations": [
+    "fn syscall_virt_to_phys_bridge(addr: *mut c_void) -> CULong;",
+    "fn syscall_get_processor_id_bridge() -> CInt;",
+    "fn syscall_do_syscall_request_bridge(\n    request: *mut SyscallRequest,\n    cpu: CInt,\n) -> CLong;"
+  ],
+  "abi_include": "Actual unchanged pure type/layout abi.rs; no crate dependencies/function implementations",
+  "consumer": {
+    "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/f03_adapters.o",
+    "sha256": "fc5f0385167262654aabedbceb6d1aa24e3ce143db80dc6eb39fea5f511a8725",
+    "receipt": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+    "receipt_sha256": "4c7f8d0870e24088e92b5c1685c2dcd2b030ff55cf1ee8dac0365b40cd283d2f",
+    "unit_source": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/f03_adapters.rs",
+    "unit_source_sha256": "d11e00af0ecd7ebdcc8245ea570f528ab6d102c9c1f700944e8bf650ce932ff8",
+    "retained_definitions": {
+      "do_setresgid": 173,
+      "do_setresuid": 173,
+      "ptrace_detach_do_kill_bridge": 12,
+      "ptrace_detach_wakeup_bridge": 12,
+      "syscall_do_syscall2_bridge": 167,
+      "syscall_do_syscall3_bridge": 171,
+      "syscall_policy_do_syscall2_bridge": 167,
+      "syscall_policy_do_syscall3_bridge": 171,
+      "terminate_host": 183,
+      "wait_host_wait4_bridge": 166
+    },
+    "retained_imports": [
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "get_this_cpu_local_var",
+      "getcred",
+      "ihk_mc_get_processor_id",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "syscall_refresh_cred_fields_body_result",
+      "terminate_host_body_result"
+    ],
+    "credential_entry_ABI": "unsafe extern C fn() / void(void)",
+    "getcred_ABI": "unsafe extern C fn(*mut CInt)->*mut CInt",
+    "refresh_helper_declaration_matches_current_source": true
+  },
+  "five_case_proof_reused": {
+    "receipt": "/home/holden/mckernel/docs/verification/m14-credential-producer-results-20261105.json",
+    "receipt_sha256": "448c8e7c0ae21b7d441cf30f3d59c7d5370b0ae0e957df078c116d4c556f47e5",
+    "retained_fixture": "/home/holden/mckernel-work/m14-resume-20261105-1/credential-producer-check-1/credential_provider.rs",
+    "retained_fixture_sha256": "7df5eb28eed1ba9ba0559d1b27526a0294485b60cc48f3739b469bdebf2545c1",
+    "both_current_helper_definitions_equal_after_whitespace_only_normalization": {
+      "getcred_body_result": true,
+      "syscall_refresh_cred_fields_body_result": true
+    },
+    "scope": "Prior extracted HOST producer/consumer behavior only; no rerun or new native/default/provider acceptance"
+  },
+  "exclusions": [
+    "No entire syscall_policy module or whole kernel crate",
+    "No generic/exec/ACK/TID/XPMEM implementation",
+    "No bridge/provider/callback implementation in unit",
+    "No old c205, old eight-entry object or old combined cohort",
+    "No symbol rewrite/rename/override/multiple-definition option",
+    "No host/native/runtime execution"
+  ],
+  "compiler_or_link_or_tests_executed": false,
+  "canonical_or_index_writes": false
+}

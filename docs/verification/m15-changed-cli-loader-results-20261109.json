@@ -1,0 +1,649 @@
+{
+  "schema": "m15-two-changed-cli-HOST-loader-v1",
+  "at": "2026-11-09T16:18:13.988615+00:00",
+  "original_requirements": [
+    "M15-F06",
+    "M15-F07",
+    "M15-I03"
+  ],
+  "raw_result": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/RESULT.json",
+    "sha256": "57e56226d23e44085acdedbe1ad8240fae5f62239b540a1d7789bf9f47c9f289"
+  },
+  "result": {
+    "status": "PASS_TWO_CHANGED_CLI_ELF_AND_TRUSTED_LOADER_BINDINGS_NO_MAIN",
+    "failure": null,
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/REQUEST.json",
+      "sha256": "f303b7e3bcc3fa8cff5892f956deb6ed899fd277b9576ae5b861c69075c9a841"
+    },
+    "admission": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/ROOT-ADMISSION-1.json",
+      "sha256": "742132f96057629d1006ff886078b3a490b2b1122f9857d965f3992da4b59fa6"
+    },
+    "called_qualified_predicates": {
+      "path": "/home/holden/mckernel-work/resume-20261106T034657Z-2c795952/m15-supervisor-1/updated-cohort-binding-1/verify_cohort.py",
+      "sha256": "8aecd466ae4685108d5e51c04d4959d6fe7b473823cbbfeebd553d531b942b0c",
+      "regular_actual_preflight_and_each_observed_provider": true,
+      "elf_contract_calls": 2,
+      "loader_contract_calls": 2,
+      "prior_main_called": false
+    },
+    "actual_process_identity": {
+      "uid": 1000,
+      "euid": 1000
+    },
+    "changed_tool_actual_bindings": {
+      "ihkconfig": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig",
+        "resolved_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig",
+        "sha256": "26be591441eb0c986919a983af31e51a8a9ca6f5fff3e73cb8d3e32e71674129",
+        "bytes": 40840,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o700",
+        "no_set_id": true
+      },
+      "ihkosctl": {
+        "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl",
+        "resolved_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl",
+        "sha256": "57f3f051f5e083f928af02eda6b6314e5a2a408d7530871f5fddfaaf2338f241",
+        "bytes": 37664,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o700",
+        "no_set_id": true
+      }
+    },
+    "qualified_loader": {
+      "path": "/lib64/ld-linux-x86-64.so.2",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-2.31.so",
+      "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+      "bytes": 191504,
+      "uid": 0,
+      "gid": 0,
+      "mode": "0o755",
+      "no_set_id": true
+    },
+    "qualified_project_provider": {
+      "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+      "resolved_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+      "sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+      "bytes": 5403760,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700",
+      "no_set_id": true
+    },
+    "metadata_loader_proof": {
+      "ihkconfig": {
+        "ELF_pass": true,
+        "PT_INTERP": "/lib64/ld-linux-x86-64.so.2",
+        "DT_NEEDED": [
+          "libihk.so",
+          "libc.so.6"
+        ],
+        "search_path_tag": "RUNPATH",
+        "search_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output",
+        "loader_list_pass": true,
+        "selected_libihk_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+        "selected_libihk_sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+        "resolved_regular_providers": {
+          "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so": {
+            "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+            "resolved_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+            "sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+            "bytes": 5403760,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o700",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libc.so.6": {
+            "path": "/lib/x86_64-linux-gnu/libc.so.6",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+            "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+            "bytes": 2029592,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o755",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libbfd-2.34-system.so": {
+            "path": "/lib/x86_64-linux-gnu/libbfd-2.34-system.so",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libbfd-2.34-system.so",
+            "sha256": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+            "bytes": 1319320,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+            "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "sha256": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+            "bytes": 146000,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libpthread.so.0": {
+            "path": "/lib/x86_64-linux-gnu/libpthread.so.0",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libpthread-2.31.so",
+            "sha256": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+            "bytes": 157224,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o755",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libdl.so.2": {
+            "path": "/lib/x86_64-linux-gnu/libdl.so.2",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libdl-2.31.so",
+            "sha256": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+            "bytes": 18848,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          },
+          "/lib64/ld-linux-x86-64.so.2": {
+            "path": "/lib64/ld-linux-x86-64.so.2",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-2.31.so",
+            "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+            "bytes": 191504,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o755",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libz.so.1": {
+            "path": "/lib/x86_64-linux-gnu/libz.so.1",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11",
+            "sha256": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+            "bytes": 108936,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          }
+        },
+        "program_main_executed": false
+      },
+      "ihkosctl": {
+        "ELF_pass": true,
+        "PT_INTERP": "/lib64/ld-linux-x86-64.so.2",
+        "DT_NEEDED": [
+          "libihk.so",
+          "libc.so.6"
+        ],
+        "search_path_tag": "RUNPATH",
+        "search_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output",
+        "loader_list_pass": true,
+        "selected_libihk_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+        "selected_libihk_sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+        "resolved_regular_providers": {
+          "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so": {
+            "path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+            "resolved_path": "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/output/libihk.so",
+            "sha256": "53079f6306cb54c7d8f420f7db8bbe79e03fcd82ac9ae6cc744aeb2d49f8da0f",
+            "bytes": 5403760,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o700",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libc.so.6": {
+            "path": "/lib/x86_64-linux-gnu/libc.so.6",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+            "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902",
+            "bytes": 2029592,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o755",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libbfd-2.34-system.so": {
+            "path": "/lib/x86_64-linux-gnu/libbfd-2.34-system.so",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libbfd-2.34-system.so",
+            "sha256": "48918a2b081f45a4f8d66364e3127c5f702dc748d075820e23d9314e9b8e043a",
+            "bytes": 1319320,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+            "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "sha256": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e",
+            "bytes": 146000,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libpthread.so.0": {
+            "path": "/lib/x86_64-linux-gnu/libpthread.so.0",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libpthread-2.31.so",
+            "sha256": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5",
+            "bytes": 157224,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o755",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libdl.so.2": {
+            "path": "/lib/x86_64-linux-gnu/libdl.so.2",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libdl-2.31.so",
+            "sha256": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6",
+            "bytes": 18848,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          },
+          "/lib64/ld-linux-x86-64.so.2": {
+            "path": "/lib64/ld-linux-x86-64.so.2",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-2.31.so",
+            "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0",
+            "bytes": 191504,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o755",
+            "no_set_id": true
+          },
+          "/lib/x86_64-linux-gnu/libz.so.1": {
+            "path": "/lib/x86_64-linux-gnu/libz.so.1",
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11",
+            "sha256": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8",
+            "bytes": 108936,
+            "uid": 0,
+            "gid": 0,
+            "mode": "0o644",
+            "no_set_id": true
+          }
+        },
+        "program_main_executed": false
+      }
+    },
+    "commands": [
+      {
+        "label": "ihkconfig-elf",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/timeout",
+          "--foreground",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "58s",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--cpu=45:45",
+          "--fsize=67108864:67108864",
+          "--core=0:0",
+          "--",
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-elf.metrics",
+          "/usr/bin/readelf",
+          "-l",
+          "-d",
+          "-W",
+          "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig"
+        ],
+        "environment_replace": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin"
+        },
+        "start_utc_ns": 1794240730430558051,
+        "start_monotonic_ns": 110803776168773,
+        "prelaunch_MemAvailable_bytes": 29891952640,
+        "direct_wait_joined": true,
+        "pid": 525931,
+        "proc_start_ticks": "32699836",
+        "birth_proc_stat": "525931 (taskset) R 525930 525929 525929 0 -1 4194304 35 0 0 0 0 0 0 0 20 0 1 0 32699836 368640 1 18446744073709551615 94305845665792 94305845682017 140731232613648 0 0 0 0 0 0 0 0 0 17 7 0 0 0 0 0 94305845693168 94305845694484 94305993785344 140731232620027 140731232620484 140731232620484 140731232620519 0\n",
+        "returncode": 0,
+        "finish_monotonic_ns": 110803779339535,
+        "called_predicate": "elf_contract",
+        "validation_passed": true
+      },
+      {
+        "label": "ihkosctl-elf",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/timeout",
+          "--foreground",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "58s",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--cpu=45:45",
+          "--fsize=67108864:67108864",
+          "--core=0:0",
+          "--",
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-elf.metrics",
+          "/usr/bin/readelf",
+          "-l",
+          "-d",
+          "-W",
+          "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl"
+        ],
+        "environment_replace": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin"
+        },
+        "start_utc_ns": 1794240730439016815,
+        "start_monotonic_ns": 110803784627660,
+        "prelaunch_MemAvailable_bytes": 29891952640,
+        "direct_wait_joined": true,
+        "pid": 525934,
+        "proc_start_ticks": "32699837",
+        "birth_proc_stat": "525934 (taskset) R 525930 525929 525929 0 -1 4194304 35 0 0 0 0 0 0 0 20 0 1 0 32699837 368640 1 18446744073709551615 94761152081920 94761152098145 140720668588720 0 0 0 0 0 0 0 0 0 17 7 0 0 0 0 0 94761152109296 94761152110612 94761363976192 140720668593661 140720668594116 140720668594116 140720668594151 0\n",
+        "returncode": 0,
+        "finish_monotonic_ns": 110803787825497,
+        "called_predicate": "elf_contract",
+        "validation_passed": true
+      },
+      {
+        "label": "ihkconfig-loader-list",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/timeout",
+          "--foreground",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "58s",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--cpu=45:45",
+          "--fsize=67108864:67108864",
+          "--core=0:0",
+          "--",
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-loader-list.metrics",
+          "/lib64/ld-linux-x86-64.so.2",
+          "--list",
+          "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig"
+        ],
+        "environment_replace": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin"
+        },
+        "start_utc_ns": 1794240730442981732,
+        "start_monotonic_ns": 110803788592350,
+        "prelaunch_MemAvailable_bytes": 29891952640,
+        "direct_wait_joined": true,
+        "pid": 525937,
+        "proc_start_ticks": "32699837",
+        "birth_proc_stat": "525937 (taskset) R 525930 525929 525929 0 -1 4194304 35 0 0 0 0 0 0 0 20 0 1 0 32699837 368640 1 18446744073709551615 94707182792704 94707182808929 140731716516720 0 0 0 0 0 0 0 0 0 17 7 0 0 0 0 0 94707182820080 94707182821396 94708104085504 140731716521450 140731716521924 140731716521924 140731716521959 0\n",
+        "returncode": 0,
+        "finish_monotonic_ns": 110803791944204,
+        "called_predicate": "loader_contract including inherited regular() for each resolved provider",
+        "validation_passed": true
+      },
+      {
+        "label": "ihkosctl-loader-list",
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/timeout",
+          "--foreground",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "58s",
+          "/usr/bin/prlimit",
+          "--as=1073741824:1073741824",
+          "--cpu=45:45",
+          "--fsize=67108864:67108864",
+          "--core=0:0",
+          "--",
+          "/usr/bin/time",
+          "-v",
+          "-o",
+          "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-loader-list.metrics",
+          "/lib64/ld-linux-x86-64.so.2",
+          "--list",
+          "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl"
+        ],
+        "environment_replace": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin"
+        },
+        "start_utc_ns": 1794240730458617408,
+        "start_monotonic_ns": 110803804228363,
+        "prelaunch_MemAvailable_bytes": 29891436544,
+        "direct_wait_joined": true,
+        "pid": 525940,
+        "proc_start_ticks": "32699839",
+        "birth_proc_stat": "525940 (taskset) R 525930 525929 525929 0 -1 4194304 35 0 0 0 0 0 0 0 20 0 1 0 32699839 368640 1 18446744073709551615 94027052974080 94027052990305 140735664453968 0 0 0 0 0 0 0 0 0 17 7 0 0 0 0 0 94027053001456 94027053002772 94027848261632 140735664459244 140735664459716 140735664459716 140735664459751 0\n",
+        "returncode": 0,
+        "finish_monotonic_ns": 110803807724825,
+        "called_predicate": "loader_contract including inherited regular() for each resolved provider",
+        "validation_passed": true
+      }
+    ],
+    "all_four_PID_births_persisted_before_wait": true,
+    "all_direct_waits_joined": true,
+    "completed_direct_waits": 4,
+    "active_jobs": 0,
+    "CPU7_released_before_packaging": true,
+    "execution_joined": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/EXECUTION-JOINED.json",
+      "sha256": "6ac0c5f2c291aeb52309c8bcc78ce3f44ffe6f04c9bca6b2b0ff1f508f38fa5a"
+    },
+    "resource_metrics": {
+      "ihkconfig-elf": {
+        "Command being timed": "\"/usr/bin/readelf -l -d -W /home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig\"",
+        "User time (seconds)": "0.00",
+        "System time (seconds)": "0.00",
+        "Percent of CPU this job got": "?%",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+        "Average shared text size (kbytes)": "0",
+        "Average unshared data size (kbytes)": "0",
+        "Average stack size (kbytes)": "0",
+        "Average total size (kbytes)": "0",
+        "Maximum resident set size (kbytes)": "2488",
+        "Average resident set size (kbytes)": "0",
+        "Major (requiring I/O) page faults": "0",
+        "Minor (reclaiming a frame) page faults": "103",
+        "Voluntary context switches": "1",
+        "Involuntary context switches": "0",
+        "Swaps": "0",
+        "File system inputs": "0",
+        "File system outputs": "8",
+        "Socket messages sent": "0",
+        "Socket messages received": "0",
+        "Signals delivered": "0",
+        "Page size (bytes)": "4096",
+        "Exit status": "0"
+      },
+      "ihkosctl-elf": {
+        "Command being timed": "\"/usr/bin/readelf -l -d -W /home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl\"",
+        "User time (seconds)": "0.00",
+        "System time (seconds)": "0.00",
+        "Percent of CPU this job got": "?%",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+        "Average shared text size (kbytes)": "0",
+        "Average unshared data size (kbytes)": "0",
+        "Average stack size (kbytes)": "0",
+        "Average total size (kbytes)": "0",
+        "Maximum resident set size (kbytes)": "2400",
+        "Average resident set size (kbytes)": "0",
+        "Major (requiring I/O) page faults": "0",
+        "Minor (reclaiming a frame) page faults": "102",
+        "Voluntary context switches": "1",
+        "Involuntary context switches": "0",
+        "Swaps": "0",
+        "File system inputs": "0",
+        "File system outputs": "8",
+        "Socket messages sent": "0",
+        "Socket messages received": "0",
+        "Signals delivered": "0",
+        "Page size (bytes)": "4096",
+        "Exit status": "0"
+      },
+      "ihkconfig-loader-list": {
+        "Command being timed": "\"/lib64/ld-linux-x86-64.so.2 --list /home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkconfig\"",
+        "User time (seconds)": "0.00",
+        "System time (seconds)": "0.00",
+        "Percent of CPU this job got": "?%",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+        "Average shared text size (kbytes)": "0",
+        "Average unshared data size (kbytes)": "0",
+        "Average stack size (kbytes)": "0",
+        "Average total size (kbytes)": "0",
+        "Maximum resident set size (kbytes)": "896",
+        "Average resident set size (kbytes)": "0",
+        "Major (requiring I/O) page faults": "0",
+        "Minor (reclaiming a frame) page faults": "65",
+        "Voluntary context switches": "1",
+        "Involuntary context switches": "0",
+        "Swaps": "0",
+        "File system inputs": "0",
+        "File system outputs": "8",
+        "Socket messages sent": "0",
+        "Socket messages received": "0",
+        "Signals delivered": "0",
+        "Page size (bytes)": "4096",
+        "Exit status": "0"
+      },
+      "ihkosctl-loader-list": {
+        "Command being timed": "\"/lib64/ld-linux-x86-64.so.2 --list /home/holden/mckernel-work/resume-20261107T023815Z-216a194d/unknown-action-producer-1/ihkosctl\"",
+        "User time (seconds)": "0.00",
+        "System time (seconds)": "0.00",
+        "Percent of CPU this job got": "?%",
+        "Elapsed (wall clock) time (h:mm:ss or m:ss)": "0:00.00",
+        "Average shared text size (kbytes)": "0",
+        "Average unshared data size (kbytes)": "0",
+        "Average stack size (kbytes)": "0",
+        "Average total size (kbytes)": "0",
+        "Maximum resident set size (kbytes)": "896",
+        "Average resident set size (kbytes)": "0",
+        "Major (requiring I/O) page faults": "0",
+        "Minor (reclaiming a frame) page faults": "63",
+        "Voluntary context switches": "1",
+        "Involuntary context switches": "0",
+        "Swaps": "0",
+        "File system inputs": "0",
+        "File system outputs": "8",
+        "Socket messages sent": "0",
+        "Socket messages received": "0",
+        "Signals delivered": "0",
+        "Page size (bytes)": "4096",
+        "Exit status": "0"
+      }
+    },
+    "wall_seconds": 0.050189919,
+    "sum_rounded_CPU_seconds": 0.0,
+    "peak_single_process_RSS_KiB": 2488,
+    "program_main_compiler_IHK_API_device_native_executed": false,
+    "unchanged_ihkmond_old_three_tool_six_loader_fifteen_main_or_ABI_suite_replayed": false,
+    "M14_CREDENTIAL_COHORT_dependency_or_work": false,
+    "scope_limit": "Current two changed actual HOST CLI ELF/interpreter/RPATH-or-RUNPATH/provider binding slice only. No installed/default/native/fullimage/completeABI/originalSDK/M15file or integration/Cretirement acceptance.",
+    "raw_evidence": {
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/EXECUTION-JOINED.json": {
+        "sha256": "6ac0c5f2c291aeb52309c8bcc78ce3f44ffe6f04c9bca6b2b0ff1f508f38fa5a",
+        "size_bytes": 7283
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/PREFLIGHT.json": {
+        "sha256": "396df8585bf70536f13d9716db89cd2fc5870ac442e7e1f672dae147e32f9c79",
+        "size_bytes": 1754
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/PROOF.json": {
+        "sha256": "869cb595817b0836b6661cc898e80449924c2cf154e79bdc452e91e1d1187451",
+        "size_bytes": 7684
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/RUNS.json": {
+        "sha256": "418f1f3bdf754b43712540fb3070dcf96fcabf09be7b9d351b6fe00d41421c11",
+        "size_bytes": 6211
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-elf.PID-BIRTH.json": {
+        "sha256": "48a7ed75a158a16d54f39a9b7f0554c3a677d9dab3b94b37a6889d5378b10453",
+        "size_bytes": 431
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-elf.metrics": {
+        "sha256": "37bd4a7b5d877a983f5faccc870f3a0440b51122fe5844004bb4ba6541f9b787",
+        "size_bytes": 833
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-elf.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-elf.stdout": {
+        "sha256": "d2b36730ef9705fc548a609307fc0cebe6b7383752bf2f01f572987f6ec5df79",
+        "size_bytes": 3300
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-loader-list.PID-BIRTH.json": {
+        "sha256": "6ac75d12f83514a3428647015244a699b146288a63abc352b0f85d398e33ed98",
+        "size_bytes": 431
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-loader-list.metrics": {
+        "sha256": "218500c7b38dde74d7414ee33eb1005ad3661ee934897291868c7dc8be214a82",
+        "size_bytes": 840
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-loader-list.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkconfig-loader-list.stdout": {
+        "sha256": "aaade26a8078e9c1b24c998b6524ddaa280fdee1105a2e4787c7db0a76a4cfd2",
+        "size_bytes": 633
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-elf.PID-BIRTH.json": {
+        "sha256": "ea057acaf3906a47bfbd662f0952c80dda04b4ed01b294e4557347e6761addc7",
+        "size_bytes": 431
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-elf.metrics": {
+        "sha256": "ac802aa3a8798ab3ed5f9f36a589333d3e53f0d74447176cec0c22cef5c5cf23",
+        "size_bytes": 832
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-elf.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-elf.stdout": {
+        "sha256": "05e0c04fbb4d9731c52ad5ea4351d0fc1273bfeccb648715a701c658090bad11",
+        "size_bytes": 3301
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-loader-list.PID-BIRTH.json": {
+        "sha256": "50fbcfe0f7ab5185acd6cc7c15931ff71050b7444a91486afc7c048c46460562",
+        "size_bytes": 431
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-loader-list.metrics": {
+        "sha256": "f5893a11fd23c7b153ada460298877a4e8def6786d96f89fcbf7ff6ea2a98d70",
+        "size_bytes": 839
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-loader-list.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/changed-cli-binding-1/correction-1/qualification-1/ihkosctl-loader-list.stdout": {
+        "sha256": "c3fffb4dd9fc4a1a52d32d61c6c05db81c05d66f06718a547ab3bcc0120e6377",
+        "size_bytes": 633
+      }
+    }
+  },
+  "scope": "Current2changedactualELFs andgenuinequalifiedHOSTproviderbindingonly. No programmain/ABI/old3tool/6loader/15main suite/compiler/device/nativeexecution; M14credential workindependent.",
+  "acceptance_delta": 0
+}
