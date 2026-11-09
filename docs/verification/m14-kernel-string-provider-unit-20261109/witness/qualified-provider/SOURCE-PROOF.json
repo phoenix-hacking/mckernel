@@ -1,0 +1,65 @@
+{
+  "status": "EXACT_TWO_ROOT_KERNEL_STRING_SOURCE_PARTITION_NOT_COMPILED_LINKED_OR_EXECUTED",
+  "owner": "/root/m15_cli_high",
+  "contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-contract-1/CONTRACT.json",
+    "sha256": "1f9e8b06f6414ad26118369a5583cb2dcf6f054d8a2e475a4492bbd884240808"
+  },
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/kernel_string_provider_unit.rs",
+    "sha256": "8c9c1f430df6e649dc007da51e2735dd4b15d2d15b6686827bbf591f9d2a01a5"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/string.rs": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/lib/include/string.h": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636"
+  },
+  "exact_items": {
+    "read_char": {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "start_line": 34,
+      "end_line": 37,
+      "text": "#[inline(always)]\nunsafe fn read_char(ptr: *const i8) -> i8 {\n    read_volatile(ptr)\n}\n",
+      "sha256": "c32989333ff93951b0032df89d8ce2f249292daae3fa061772bf055044247587"
+    },
+    "strnlen": {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "start_line": 60,
+      "end_line": 70,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn strnlen(mut ptr: *const i8, mut maxlen: SizeT) -> SizeT {\n    let head = ptr;\n\n    while read_char(ptr) != 0 && maxlen > 0 {\n        ptr = ptr.add(1);\n        maxlen -= 1;\n    }\n\n    ptr.offset_from(head) as SizeT\n}\n",
+      "sha256": "a5765c9b6e05872292deb7787f35e75e87e087aa29a5b0503c3b2c0920c6bfbc"
+    },
+    "memset": {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "start_line": 271,
+      "end_line": 283,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn memset(s: *mut c_void, c: CInt, mut n: SizeT) -> *mut c_void {\n    let mut ptr = s.cast::<u8>();\n    let byte = c as u8;\n\n    while n > 0 {\n        write_volatile(ptr, byte);\n        ptr = ptr.add(1);\n        n -= 1;\n    }\n\n    s\n}\n",
+      "sha256": "69cd20f99c4a3a9be7775bce28fbd4889cea61a4a981fd412a202f974f679e8e"
+    }
+  },
+  "actual_types": "Unchangedqualifiedabi.rs CInt=i32/SizeT=usize andcorec_void; selectedx86_64LP64 pointers/size_t64. ActualnativeCprototypesunchanged, no newaliases/layout/ABI.",
+  "source_changes": "Private no_std/import/module scaffolding only; all3wholeactualfunctionitems/attrs byte-exact. No no_builtins/linkage/weak/rename/intrinsicreplacement/sourcepolicychange.",
+  "expected_unit": {
+    "strong_T": [
+      "memset",
+      "strnlen"
+    ],
+    "genuine_U": [],
+    "global_data": [],
+    "generated_defined_functions_only": [
+      "memset",
+      "strnlen"
+    ],
+    "no_recursive_self_cross_or_helper_calls": "MustproveactualobjectrelocationsandboundeddisassemblyBEFOREqualification; volatile source alone is not proof."
+  },
+  "functional_domain": "memsetwritableactualallocatednbytes/originalpointerreturn/low8bitstruncation; n0validretainedpointer/no write. strnlenreadableNULterminatedstringretainedforconditionreads, includinginitialmaxlen0/postlimitbyte; originalread_char-firstorderunchanged. No NULL/onepast-inaccessible/nonNULbound/invalidpointer/OOB probes.",
+  "reuse_boundary": "E scopedcontracthasnoexactordinaryCABIbehaviorreceiptestablished; notglobalabsence. AcceptedF04closed/no fulltestinventoryorreplay. NewRootexplicitlyauthorizedpreparingvalidordinaryHOSTwitnessonly, notexecutingit. Existingkprintfsource/objectproofreusedunchanged; futurejoinmustbindactualqualifiedpredecessorartifact.",
+  "prospective_join": "Onlynewtwo-rootobject+actualindividuallyqualifiedkprintfjoinedpredecessor; identity/hashUNSETuntilAprovidesactualresult. Resolveonlymemset/strnlen, preserveallpredecessorowners/bytes/relocations,data, remaininggenuineU; no wholeoldC/Ruststringmodule, aliases/overrides/no-op/libcprovider.",
+  "operations": {
+    "compiler": false,
+    "linker": false,
+    "runtime": false,
+    "canonical_index_writes": false,
+    "recursive_agents": false
+  }
+}

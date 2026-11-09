@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-09T18:18:57.049682+00:00",
+  "updated_at": "2026-11-09T18:36:46.293927+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -6511,7 +6511,9 @@
       },
       "dependencies": [],
       "evidence": [
-        "docs/verification/m14-generic-source-hold-binding-20261106.json"
+        "docs/verification/m14-generic-source-hold-binding-20261106.json",
+        "docs/verification/m14-delay-provider-results-20261109.json",
+        "docs/verification/m14-kernel-notify-source-eligibility-20261109.json"
       ],
       "scope_limit": "No new work authorization or hold release is conveyed.",
       "definition_status": "required input and completion condition explicit; original binding absent",
@@ -6704,13 +6706,15 @@
         "docs/verification/m14-provider-storage-partial-results-20261109.json",
         "docs/verification/m14-kprintf-provider-partial-results-20261109.json",
         "docs/verification/m14-kernel-string-provider-results-20261109.json",
-        "docs/verification/m14-kmsg-lock-provider-results-20261109.json"
+        "docs/verification/m14-kmsg-lock-provider-results-20261109.json",
+        "docs/verification/m14-delay-provider-results-20261109.json",
+        "docs/verification/m14-kernel-notify-source-eligibility-20261109.json"
       ],
       "scope_limit": "No new work authorization or hold release is conveyed.",
       "definition_status": "required input and completion condition explicit; original binding absent",
       "execution_profile": "authority_input",
       "counted_in_requirement_rollup": false,
-      "current_partial_evidence": "Actual346cf6c2 currentpartial60global49T11data/14realU andONELOCALb4KMSG_LOCK qualified; allold/newowners/bytes/relocs preserved. No initializedbuffer/CLV/preempt/IRQ/boot/notification/offload/default/nativecohort proof. Separate11-observation primitivewitness firstbindingfailure beforelink/runtime; onefocusedcorrectionpending. FinalCREDENTIAL-COHORT0."
+      "current_partial_evidence": "Actualaaaf8a1a63global52Tnames11data/13realU plusONELOCALlock qualifies withallsourceowners/aliases/bytes/relocs. Separate11validprimitiveCABIobservationsPASS. ExactnotificationpartitioneligibilityNO_GO: originalholdscope/payloadnotloaded/UNKNOWN, no newsourceprep or equivalentreassignment. Actualoffload/boot/notification/default/matchedSDK/nativecohort remainunbound; finalCREDENTIAL-COHORT0."
     },
     {
       "id": "HISTORICAL-OWNERSHIP",
@@ -14085,9 +14089,9 @@
       "id": "M14-KERNEL-STRING-CABI",
       "parent": "CREDENTIAL-COHORT",
       "title": "Check ordinary valid-domain C ABI string behavior",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary exact explicitly partial supporting evidence",
-      "status": "first_fixture_binding_failure_before_link_runtime_one_focused_correction_pending",
+      "status": "verified_scoped_valid_domain_HOST_C_ABI_only",
       "owner": "Saved Root compositor; B source/fixture/job owner; E independent source/ABI/packet reviewer",
       "done_when": "Reviewed actual caller/object/ELF call binding precedes bounded valid readable empty/abc string and owned16B buffer checks; verify pointer return, low-byte writes and untouched regions, no privileged cohort or invalid/OOB inputs.",
       "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
@@ -14103,8 +14107,8 @@
         "docs/verification/m14-kernel-string-provider-results-20261109.json",
         "docs/verification/m14-kernel-string-provider-unit-20261109"
       ],
-      "definition_status": "defined_pending_scoped_supporting_step",
-      "scope_limit": "Supporting primitive provider proof, not reopening accepted F04 or adding an original test quota. Native/full-cohort/boot conditions remain open. Witness covers only its exact ordinary valid domain. Witness is independent of the privileged partial cohort and does not depend on its link completion. Firstactualcaller lostmemset call underFORTIFY; strictgate stoppedbeforelink/runtime, all11observations unexecuted. Originalcore/joinproof reused.",
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "SupportingordinaryHOSTprimitiveproof, not reopeningF04 oraddingoriginaltestquota. Firstfortifiedcallerbindingfailurestoppedbeforelink/runtime; oneboundedtypedvolatileaddresscorrection preservedFORTIFY/headers/flags/965 and strictactualbindings. Exactly11definedobservationspassed/alljoinsclosed; noinvalid/OOB/privilegedkernelcohort/native/default/scoreclaim.",
       "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
       "counted_in_requirement_rollup": false,
       "required_for_original_acceptance": false,
@@ -14223,6 +14227,120 @@
       "counted_in_requirement_rollup": false,
       "required_for_original_acceptance": false,
       "identified_at": "2026-11-09T18:16:40.836651+00:00"
+    },
+    {
+      "id": "M14-DELAY-SOURCE",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Prepare genuine finite delay source",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_nonexecuted_partial_provider_only",
+      "owner": "Saved Root compositor; A source/jobowner; F independent source/ABI/actualowner reviewer",
+      "done_when": "Onlyexact3ihk_mc_delay_us/arch_delay/rdtsc bodies/attrs/scalars/333wrapping/u64casts/nativeasm, actualcpu_pauseimport, no fakeclock/data/wholemodule.",
+      "verification_method": "Exactsource/contracts/independentreviews/rawcommands/calledobject+uniqueownerpredicates/directjoins retainedin canonicalproof; no hardwareorfunctionexecution.",
+      "required_inputs": [
+        "Actualcurrentfinite3source/type/attribute/profiledefinitions",
+        "Actualqualified346currentpartialandgenuinecpu_pauseowner",
+        "Independentconcretesource/actualemission/joinreviewandfreshRootadmissions"
+      ],
+      "dependencies": [],
+      "evidence": [
+        "docs/verification/m14-delay-provider-results-20261109.json",
+        "docs/verification/m14-delay-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supportingpartialsource/providerproofonly. ActualRDTSCavailability/timing/calibration/boot/hardware/native/default/fullimagegatesremainOPEN; no originalquota/scorechange.",
+      "execution_profile": "ordinary_HOST_CPU6_nonexecuted_codegen_partial_join",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T18:36:46.293927+00:00"
+    },
+    {
+      "id": "M14-DELAY-REVIEW",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Review actual delay emission and unique owner composition",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_nonexecuted_partial_provider_only",
+      "owner": "Saved Root compositor; A source/jobowner; F independent source/ABI/actualowner reviewer",
+      "done_when": "Independent concrete source/profile and actual3T/1U/0data/0privatehelper metadata/arch-wrappercoalescence review binds onlye9d1+346 sources/owners.",
+      "verification_method": "Exactsource/contracts/independentreviews/rawcommands/calledobject+uniqueownerpredicates/directjoins retainedin canonicalproof; no hardwareorfunctionexecution.",
+      "required_inputs": [
+        "Actualcurrentfinite3source/type/attribute/profiledefinitions",
+        "Actualqualified346currentpartialandgenuinecpu_pauseowner",
+        "Independentconcretesource/actualemission/joinreviewandfreshRootadmissions"
+      ],
+      "dependencies": [
+        "M14-DELAY-SOURCE"
+      ],
+      "evidence": [
+        "docs/verification/m14-delay-provider-results-20261109.json",
+        "docs/verification/m14-delay-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supportingpartialsource/providerproofonly. ActualRDTSCavailability/timing/calibration/boot/hardware/native/default/fullimagegatesremainOPEN; no originalquota/scorechange.",
+      "execution_profile": "ordinary_HOST_CPU6_nonexecuted_codegen_partial_join",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T18:36:46.293927+00:00"
+    },
+    {
+      "id": "M14-DELAY-CODEGEN",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Qualify actual three-function delay object",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_nonexecuted_partial_provider_only",
+      "owner": "Saved Root compositor; A source/jobowner; F independent source/ABI/actualowner reviewer",
+      "done_when": "Onecompile+2reads+importedcalledrecord_and_check; exacte9d1 object1472B/rdtsc12B/shared91Barch-wrappercode, exactwarning/all3waitsjoined.",
+      "verification_method": "Exactsource/contracts/independentreviews/rawcommands/calledobject+uniqueownerpredicates/directjoins retainedin canonicalproof; no hardwareorfunctionexecution.",
+      "required_inputs": [
+        "Actualcurrentfinite3source/type/attribute/profiledefinitions",
+        "Actualqualified346currentpartialandgenuinecpu_pauseowner",
+        "Independentconcretesource/actualemission/joinreviewandfreshRootadmissions"
+      ],
+      "dependencies": [
+        "M14-DELAY-REVIEW"
+      ],
+      "evidence": [
+        "docs/verification/m14-delay-provider-results-20261109.json",
+        "docs/verification/m14-delay-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supportingpartialsource/providerproofonly. ActualRDTSCavailability/timing/calibration/boot/hardware/native/default/fullimagegatesremainOPEN; no originalquota/scorechange.",
+      "execution_profile": "ordinary_HOST_CPU6_nonexecuted_codegen_partial_join",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T18:36:46.293927+00:00"
+    },
+    {
+      "id": "M14-DELAY-JOIN",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Join delay into genuine current kernel provider cohort",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_nonexecuted_partial_provider_only",
+      "owner": "Saved Root compositor; A source/jobowner; F independent source/ABI/actualowner reviewer",
+      "done_when": "Calledprejoinbeforeld-r andpostjoin validateonlye9d1+346\u2192aaaf8a1a63global52T11data13U/alloldsourcebytes/relocs/aliases/locals/tables/private4Block;3newwaitsjoined.",
+      "verification_method": "Exactsource/contracts/independentreviews/rawcommands/calledobject+uniqueownerpredicates/directjoins retainedin canonicalproof; no hardwareorfunctionexecution.",
+      "required_inputs": [
+        "Actualcurrentfinite3source/type/attribute/profiledefinitions",
+        "Actualqualified346currentpartialandgenuinecpu_pauseowner",
+        "Independentconcretesource/actualemission/joinreviewandfreshRootadmissions"
+      ],
+      "dependencies": [
+        "M14-DELAY-CODEGEN"
+      ],
+      "evidence": [
+        "docs/verification/m14-delay-provider-results-20261109.json",
+        "docs/verification/m14-delay-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supportingpartialsource/providerproofonly. ActualRDTSCavailability/timing/calibration/boot/hardware/native/default/fullimagegatesremainOPEN; no originalquota/scorechange.",
+      "execution_profile": "ordinary_HOST_CPU6_nonexecuted_codegen_partial_join",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T18:36:46.293927+00:00"
     }
   ],
   "optional_or_deferred_decisions": [
@@ -14292,21 +14410,21 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-09T18:18:57.049682+00:00",
+    "at": "2026-11-09T18:36:46.293927+00:00",
     "invocation": "20261109T155325Z-46b56314",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "task_binding_rows_before": 383,
-    "task_binding_rows_after": 387,
-    "change_reason": "Genuine string uniquejoin and finite19function lock/preempt source/object/uniquejoin completed. Four uncountedsupportingsteps added; primitivewitness stoppedbeforelink/runtime, onefocusedfixturecorrectionpending. No originalcountedscore/acceptance/weight/denominatorchange.",
+    "task_binding_rows_before": 387,
+    "task_binding_rows_after": 391,
+    "change_reason": "Actual11validprimitiveCABIobservations completedafteroneboundedfixturecorrection; genuine3functiondelayobject/uniquejoin completed. Fouruncountedsupportingstepsadded. NotificationeligibilityNO_GObeforeanysourceprep, originalholdbindingsunchanged. No originalcountedscore/acceptance/weight/denominatorchange.",
     "new_supporting_rows": [
-      "M14-KMSG-LOCK-SOURCE",
-      "M14-KMSG-LOCK-REVIEW",
-      "M14-KMSG-LOCK-CODEGEN",
-      "M14-KMSG-LOCK-JOIN"
+      "M14-DELAY-SOURCE",
+      "M14-DELAY-REVIEW",
+      "M14-DELAY-CODEGEN",
+      "M14-DELAY-JOIN"
     ],
-    "publication_status": "Local checkpoint being composed; latestverifiedpublication b4817edca."
+    "publication_status": "Coherentlocalcheckpoint beingcomposed; latestverifiedpublication34f782202."
   },
   "denominator_changes": [
     {

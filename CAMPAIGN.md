@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T18:20Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T18:40Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -15,8 +15,9 @@ canonical source/index/publisher. No objective, allowance or historical owner re
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
 IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed.
-Root`b4817edca93985acabe9aa6a6ef6ffad03f8581a` is pushed/fetched/all89kprintf/string
-entries matched. Earlier e79042ee4/all62storage/target,9c433df68/all36lower-provider,
+Root`34f7822024b0adee57368d86e67e82704a70bc55` is pushed/fetched/all83string/lock
+entries matched. Earlier b4817edca/all89kprintf/string,e79042ee4/all62storage/target,
+9c433df68/all36lower-provider,
 126442f85/all34prerequisites
 and unknownCLI6f4c7f244/all9entries/source replay remainverified.
 Eight actualmainFUNCTION cases PASS=4baseline+4candidate: raw0→1, exact292/499byte
@@ -114,32 +115,54 @@ tables and exact singleton bytes/relocations. All three waits joined; no codegen
 replay, function, IRQ, boot, preemption or native runtime claim.
 Proof: `docs/verification/m14-kmsg-lock-provider-unit-20261109/`.
 
-**Primitive witness first attempt stopped before link/runtime:** real fortified
-headers inlined memset despite fno-builtin; the strict caller gate refused the
-missing kernel call. Its11 observations remain unexecuted. All three started
-commands/waits joined and CPU7 released. One focused typed volatile-address/call
-binding correction is being reviewed, preserving fortification, headers, compiler
-flags and the actual965 provider. No automatic retry or kernel rebuild is admitted.
+**Primitive C ABI witness PASS:** all11 defined observations passed: eight
+readable-NUL strnlen cases and three owned16B memset cases (counts0/5/5, byte/pointer/
+prefix/suffix checks). The first caller attempt stopped before link/runtime because
+FORTIFY inlined memset; it retains0 runtime credit. One bounded typed volatile
+function-address correction preserved headers, fortification, flags and the actual
+965 kernel object. The caller gate passed before link, then exact final function
+bytes, pointer slot and call targets passed before the one run. All six new commands
+and driver joined; CPU7 released. No kernel object rebuild, obsolete caller replay,
+invalid/OOB inputs or native/default acceptance. Full failed/corrected source and raw
+proof are retained under `m14-kernel-string-provider-unit-20261109/witness/`.
 
-| Next ready original dependency | Consumer / scope | Owner / smallest proof |
+**Genuine delay provider and join PASS:** three exact current functions retain the
+original333 factor, wrapping casts/arithmetic, native attributes and RDTSC body.
+Objecte9d1ee97 has three T names over two code ranges (the91B arch_delay/wrapper
+coalescence and12B rdtsc), one real cpu_pause import and no data/private helpers.
+Onlye9d1+346 joined asaaaf8a1a (38904B):63 global owners=52T names+11data,13 real
+imports. Called gates preserve all prior bytes/relocations, compiler alias, formatter
+helpers/tables and one private lock. All three codegen and three join waits closed;
+CPU6 released. No RDTSC, timing, function, boot or native execution occurred. Proof:
+`docs/verification/m14-delay-provider-unit-20261109/` and scoped result.
+
+**Notification source preparation NO_GO:** the original request's payload/scope and
+issuer/release remain UNKNOWN/notLoaded. No valid disposition establishes membership
+for eventfd/syscall_eventfd_send_result/f03_eventfd_send or their direct helpers.
+That exact lane stopped before new source inspection/preparation; no equivalent
+reassignment is queued. `m14-kernel-notify-source-eligibility-20261109.json` records
+the required original scoped input. This is not a blanket hold on every other file.
+
+| Next prerequisite | Actual consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
-| Publish current shared provider cohort | Actual string and lock/preemption results | Root checkpoints matched source/objects/raw joins; no passing command replay |
-| Corrected valid-domain C ABI witness | Genuine kernel memset/strnlen | B one bounded caller correction, E exact relocation/indirect-call/final-address review, then fresh Root admission |
-| Genuine finite delay provider | Current logging delay import | A prepares three-function unit from F contract6d060f73; independent review and fresh admission before codegen, no hardware or timing execution |
+| Publish current verified checkpoint | Shared provider and11 primitive observations | Root exact source/results/ledger publication and fetched entries, without rerunning green commands |
+| One bounded independent original-source readiness check | Remaining M14/M15 functional/provider requirement | Existing HIGH owner identifies one needed unheld source/contract task or its exact missing input; no notification retry or broad audit |
+| Execute only a genuinely ready result | Original supported acceptance dependency | Root reviews actual contract and freshly admits exact work; no slot filling, native substitution or invented quota |
 
-Genuine boot mapping, shared buffer, preemption initialization, notification and
-timing remain open. NULL/zero initializers establish source storage only. No HOST
-buffer, CPU state, eventfd or alternate logger is substituted. Reference-C cleanup
-stays deferred behind these original dependencies.
+Shared packet eligibility, offload completion, boot mapping, shared buffer,
+preemption initialization and actual timing remain open. NULL/zero source storage
+is not runtime initialization. Current source/preparation proofs do not replace the
+original matched image/modules/userspace and restoring native conditions.
 
 Ordinary HOST remains CPUs0/6/7, max3 aggregate light jobs,4GiB TOTAL including all
 worker/controller overhead, fresh26GiB retaining18GiB charges+4GiB floor and host16/
-scratch12GiB disk floors. Native2–5/12GiB, UNKNOWN owners/outcomes, scratch21/mutex27:4
-and expired attempts/nonces remain unchanged. Latest fresh included guard30%used/
-70%remaining permits ordinary work. Next15minute deliverable: publish passed string/
-lock evidence, advance the selected delay source unit, and run only the reviewed new witness
-correction. Foreground owns monitors; healthy owners and completed results remain
-preserved. Original scores51.48/50.97 and combined51.225 stay unchanged.
+scratch12GiB disk floors. All new payloads are joined and slots released. Native
+2–5/12GiB, UNKNOWN owners/outcomes, scratch21/mutex27:4 and expired packets remain.
+Fresh included30%used/70%remaining permits ordinary work. Next15minute deliverable:
+publish this real witness/delay/NO_GO checkpoint, then consume the bounded original
+source check. Foreground owns healthy monitors and recovery; completed owners are
+available for new eligible tasks. Original scores51.48/50.97, combined51.225, delta0
+remain honest; no original file or integration gate was newly accepted.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
 eligible universal provider/fullimage; actual SDK/source-custody/native/current-free
@@ -276,7 +299,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M15-I03 | 42.86% | no | Reproducible Rust userspace and dependency closure |
 | M15-I04 | 0.00% | no | Matched application and restoring lifecycle qualification |
 
-The ledger names 387 concrete rows, including the three exact modules `ihk.ko`, `ihk-smp-x86_64.ko`, `mcctrl.ko`, all70function/sixdata library roots, and105unresolved symbols in the retained partial image link. Those105symbols are unresolved binding obligations, not105unimplemented ports or105new test jobs.
+The ledger names 391 concrete rows, including the three exact modules `ihk.ko`, `ihk-smp-x86_64.ko`, `mcctrl.ko`, all70function/sixdata library roots, and105unresolved symbols in the retained partial image link. Those105symbols are unresolved binding obligations, not105unimplemented ports or105new test jobs.
 
 **Required inputs and contracts that still block dependent work:**
 - **HOLD-GENERIC —0%:** Obtain original generic/exec scoped disposition. Owner: Original service/hold authority (identity/scoped release conditions currently UNKNOWN); Root integration owner. Done when: The actual original authority supplies a valid scoped disposition identifying permitted request/source/artifact scope and any retained restrictions; held/replay=false/equivalent=false controls change only by that authority. An unrestricted full-image provider is eligible under that disposition.

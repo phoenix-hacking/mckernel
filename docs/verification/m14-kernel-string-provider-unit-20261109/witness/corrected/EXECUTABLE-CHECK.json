@@ -1,0 +1,32 @@
+{
+  "status": "PASS_ACTUAL_FINAL_ELF_KERNEL_BINDINGS_BEFORE_RUNTIME",
+  "ELF": "actualordinaryHOSTnonPIEEXEC/x86_64",
+  "actual_Kernel_roots": {
+    "strnlen": {
+      "address": "0x401570",
+      "bytes": 57,
+      "source_object_exact_function_sha256": "ed0e27f32058ee2ae9783b542337955fe4a01e6860656beb22c15c9dd41ecb4a",
+      "unique_global_FUNC_not_U_PLT_or_libc": true
+    },
+    "memset": {
+      "address": "0x4014f0",
+      "bytes": 113,
+      "source_object_exact_function_sha256": "0be4bc92cb70d0556f72a440dedc9359c8bcb05f57034e4d8a042f7ecb6dcf0d",
+      "unique_global_FUNC_not_U_PLT_or_libc": true
+    }
+  },
+  "qualified_provider_sha256": "965850677b2c86c8c0c84fdfae5366e30d92998c5fac7f15699f78428a7a9802",
+  "private_pointer_value_equals_actual_memset_FUNC": "0x4014f0",
+  "actual_final_caller_load_and_indirect_call_bindings": {
+    "fill_case": {
+      "bytes": 202,
+      "nonrelocated_opcode_bytes_preserved": true,
+      "actual_final_pointer_load_target": "0x404058",
+      "actual_final_indirect_call_address": "0x4013df"
+    }
+  },
+  "actual_final_direct_strnlen_targets": [
+    "0x401570"
+  ],
+  "no_kernel_state_native_or_initialization_claim": true
+}

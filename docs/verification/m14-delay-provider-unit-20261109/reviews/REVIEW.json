@@ -1,0 +1,65 @@
+{
+  "status": "GO_EXACT3_DELAY_SOURCE_CODEGEN_AND_TWO_METADATA_COMMANDS_ONLY",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T18:20:55.361881+00:00",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783"
+  },
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/delay_provider_unit.rs",
+    "sha256": "2c7c4eb4a50ab964c51ee62b25e23792d421fae1d30e0ef0aad9604ba9098142"
+  },
+  "source_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/SOURCE-PROOF.json",
+    "sha256": "6ed2a3aaa9eb612b2967c46f8e693ff56eaa8a40fdcf44729bd726a78c7285a5"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/metadata_check.py",
+    "sha256": "0e21621f48b2e982efe456554e4539a8c27cfbed387757ac58f23e5f26a3cf95",
+    "AST_review_only": true
+  },
+  "source_contract_reused": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-contract-1/CONTRACT.json",
+    "sha256": "6d060f735bdbf3301db8945f92ae52fba3ac5f68e23977e0d89c0bd326f24826",
+    "scope": "Unchangedexact3callabledefinition/ABI/selection/arithmetic/ownershipfacts consumed, notoldinventory/native/greencheckreplay."
+  },
+  "exact_unit_review": {
+    "all_request_input_hashes_match_current_files": true,
+    "exact_functions": [
+      "ihk_mc_delay_us",
+      "arch_delay",
+      "rdtsc"
+    ],
+    "definitions": "All3sourceblocks includingattrs/signatures/nativeasm/currentbodybytes matchcanonicalsource andappearonceinunit. Nootherimplementation/data/privatehelper root. Bodystripping leaves onlyno_std/directactualabiinclude/moduleimports/genuineCABIarch_delay+cpu_pausedeclarations.",
+    "ABI": "CInt=i32/CULong=u64 fromactualabi.rs. Bothdelayfunctions originalexternC(CInt)->void; rdtsc originalexternC()->CULong. arch_delaydeclaration matchesactualfunctiondefinedinunit; cpu_pause voidCABI isonlyexternalgenuineprovider, alreadyqualifiedin346cohort.",
+    "native_attrs": "OriginalNoMangle onihk_mc_delay_us/rdtsc; exactcfg_attr(not(mckernel_equivalence),no_mangle) onarch_delay. Noequivalencecfg/alternatebody/suppression/functionrewrite.",
+    "arithmetic": "Exact333u64.wrapping_mul(us asCULong),rdtsc().wrapping_add, unsignedwhilecounter<end andactualcpu_pause callretained. Nocast/sign/validation/factor/comparison/orderchange.",
+    "assembly": "Actualrdtsc asmwithlateoutedx/eax andnomem/nostack/preserves_flags, actual64bitcombinehigh<<32|low. Noaddedserialization/callback/clock/state; sourcecodeonly, neverexecuted.",
+    "ownership": "3sourceCroots,0sourceowneddata/privatehelperdefinitions,1realcpu_pauseimport. NoexistingCPUhelper/getter/lock/state/currentcohortdefinitionscopied. Actualfutureobject/symbolcount/size remainunknownuntiladmittedcodegen."
+  },
+  "profile": {
+    "status": "PASS_EXACT_QUALIFIED_FC5_CODEGEN_PAYLOAD_AND_HOST_LIMITS",
+    "commands": [
+      "provider-compile",
+      "provider-symbols",
+      "provider-elf"
+    ],
+    "payload": "Pinnedrustc70ebcbbaexactfc5flagsthrough-o; onlysource/output differ. No feature/cfg/target/no_builtins/SDK/assemblychanges. SamepartialHOSTprofile, notnativeABIacceptance.",
+    "wrapper": "CPU6one seriallightjob/AS1GiB/CPU45/60+5wall/64MiBFSIZE/core0/time-v/emptyenvoverrides. Actual3commands only compile/nm/readelf. Rootfreshcapacity/aggregate3jobs4GiBTOTAL+retained/floorguardrequired.",
+    "diagnostics": "Compileempty stdout/exactretainedsingleSSEwarningbytes; metadataempty stderr. Anynewdiagnostic/failedcommandfirststop/noautomaticretry. NoSSEfinal/nativeABIclaim."
+  },
+  "actually_called_metadata_gate": {
+    "requirement": "IMPORT frozenmetadata_check.py andCALLrecord_and_check(request) afterall3commands/readbacks; persistactualobjectboundoutput. Definition-onlyscriptexecutionornmexit0 isinsufficient. No reviewerpredicateexecution.",
+    "capture": "ReusesqualifiedImage/parse_nm a4df81bb read-only. Savesallactualsymbols/sections/relocs/imports/allocatedfilebytesandobjecthashwithNOBITSdeclarationsemanticsBEFOREsourceownerassertions. NoELFexecutionloader/newparser.",
+    "owner_assertions": "RequiresactualnmELFagreement,exact3sourceglobalnonzeroT/defaultvisibility,onlycpu_pauseU,noOBJECTdataandnoLOCALfunctionowner. Actualfunctionbytehashesrecorded. Anycore/compiler/private/dataimport/emissionrequiressourcereconciliationbeforefuturejoin, nostub/libc.",
+    "native_code_retention": "Checksactualrdtscopcode0f31inrdtscbytesandactualgenuinecpu_pause relocation. Thisisnonexecutedcodegenretentiononly, notRDTSCavailability/frequency/timingmeasurement.",
+    "future_actual_metadata_review": "Allactualprivate/core/data/section/relocationclassification remainsvisible. Unexpectedemissionorresultstopswithoutretry; separateactualmetadata/uniqueownerGOmustprecedeanynewjoin."
+  },
+  "scope_limits": "No linker/runtime/function/RDTSC/hardware/counter/sleep/timing/privileged/native/boot/initoperation inrequest. Timingaccuracy/calibration/333factorvalidity/counterprogress/synchronization/availability/delaycompletion/default/providerclosure/nativeABI gates remainOPEN. Qualified346cohort isreferenceonly; nojoincommand/identity guessed. No heldgeneric/exec/ACK/TID/XPMEMorwholex86modules/source touched.",
+  "reviewer_compiler_predicate_link_hardware_function_runtime_native_execution": false,
+  "canonical_index_writes": false,
+  "execution_admission": false,
+  "new_quota_gate_score_C_retirement_or_acceptance": false,
+  "decision": "GO exactfa8166313commands/codegenmetadata only withactuallycalledpredicate/firstunexpectedstop. Rootfreshcapacityandexactadmissionrequiredbeforeanycompiler. Futurejoinunselecteduntilactualmetadatareview."
+}

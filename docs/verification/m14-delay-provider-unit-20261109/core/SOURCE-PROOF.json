@@ -1,0 +1,68 @@
+{
+  "status": "READY_EXACT3_NATIVE_DELAY_FUNCTION_SOURCE_ONLY",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/delay_provider_unit.rs",
+  "unit_sha256": "2c7c4eb4a50ab964c51ee62b25e23792d421fae1d30e0ef0aad9604ba9098142",
+  "contract_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-contract-1/CONTRACT.json",
+  "contract_sha256": "6d060f735bdbf3301db8945f92ae52fba3ac5f68e23977e0d89c0bd326f24826",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+    "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+  },
+  "selected3functions": [
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "definition_start_line": 964,
+      "function_line": 965,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_delay_us(us: CInt) {\n    unsafe {\n        arch_delay(us);\n    }\n}",
+      "sha256": "c5f50310e8fc8de23ba3963dcebf51f62283e83a654081aad8b21fef31f7770a",
+      "name": "ihk_mc_delay_us",
+      "byte_offset": 30847
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "definition_start_line": 749,
+      "function_line": 750,
+      "exact_definition": "#[cfg_attr(not(mckernel_equivalence), no_mangle)]\npub unsafe extern \"C\" fn arch_delay(us: CInt) {\n    let tsc = crate::x86_cpu_helpers::rdtsc().wrapping_add(333u64.wrapping_mul(us as CULong));\n    while crate::x86_cpu_helpers::rdtsc() < tsc {\n        cpu_pause();\n    }\n}",
+      "sha256": "e4223e530b91982b7fa60cfc46882af3fc7786a3f8e6e5c3474397d53523dbdc",
+      "name": "arch_delay",
+      "byte_offset": 22394
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "definition_start_line": 183,
+      "function_line": 184,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn rdtsc() -> CULong {\n    let high: u32;\n    let low: u32;\n\n    core::arch::asm!(\n        \"rdtsc\",\n        lateout(\"edx\") high,\n        lateout(\"eax\") low,\n        options(nomem, nostack, preserves_flags),\n    );\n\n    ((high as CULong) << 32) | (low as CULong)\n}",
+      "sha256": "1e7212a59e84d7cf6e318f8d075033ca8c6e34282678343f2463e29f7e2ec943",
+      "name": "rdtsc",
+      "byte_offset": 7684
+    }
+  ],
+  "genuine_unresolved_provider_declaration": "fn cpu_pause();",
+  "defined3_original_C_exports": [
+    "ihk_mc_delay_us",
+    "arch_delay",
+    "rdtsc"
+  ],
+  "original_runtime_data_or_private_helper_definitions": [],
+  "source_scope": "Actualx86_cpu_helpers/x86_setupmodulepaths, actualno_std ABI CInt/CULong andattrs preserved. No wholemodule/getters/locks/global/bootdata/SDK substitute.",
+  "arithmetic": "Exact333u64/wrappingmul-add/i32asCULong/unsignedloop preserved; no validation/calibration claim.",
+  "native_asm": "Exactrdtsc lateoutEDX/EAX andoptions(nomem,nostack,preserves_flags). No counter/hardware/function execution.",
+  "future_qualified_cohort_reference_only": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o",
+    "sha256": "346cf6c2573b302ebc3579c22844289304692d4147b1016907ba7e7b2d7ce9f5",
+    "bytes": 38160,
+    "cpu_pause_genuine_T_bytes": 3,
+    "no_join_selected": true
+  },
+  "original_native_timing_boot_gates_remain_open": [
+    "Original333factor ispreservedliteral, not calibratedmicrosecondsproof. Currentbodydoesnotreadboot_param.ns_per_tsc, a declaredclockprovider, orHOSTwalltime; do notinferconversionaccuracy/frequencyagreement.",
+    "RealRDTSCavailability/privilege/virtualizationpolicy, counterprogress/frequency/skew/wrap/crossCPUconditions, interruptcontext andactuallyelapsedtiming remainunqualified. No RDTSC/CPU/hardware/functionruntime isauthorizedorperformed.",
+    "Nativeboot/sourcecustody/SDK/current-free/generic-offloadholds remain. Sourcepreparation/ordinaryobjectcodegen ornonexecutedpartialjoin cannotestablishdelaycompletion/boot/native/default/providerclosureacceptance.",
+    "No Hostsleep/fakecounter/constanttimestamp/no-opcpu_pause/namespace/equivalence/callbacksubstitute; no change toeventfd/buffer/preempt/heldsourcebody."
+  ]
+}
