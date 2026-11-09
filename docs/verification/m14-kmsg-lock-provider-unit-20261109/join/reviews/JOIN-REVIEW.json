@@ -1,0 +1,181 @@
+{
+  "status": "GO_EXACT_TWO_INPUT_LOCK_PREEMPT_JOIN_AND_TWO_READBACKS",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T18:14:13.450139+00:00",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/REQUEST.json",
+    "sha256": "7679ccbaec57451b32b79bda689eb7958b57bb789abd89f5467aab64eb48903d"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py",
+    "sha256": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "AST_review": "PASS; no predicate execution by reviewer"
+  },
+  "unchanged_actual_source_and_emission_review": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-review-1/ACTUAL-METADATA-REVIEW.json",
+    "sha256": "1790521ef7fe846b6dcbe9094fd3a61ab1f3cbf985af4c520ce54f8a5efe31bc",
+    "scope": "Actual82579 14T/2globalB/oneLOCALb/0localt/2CPUU and41sourceboundrelocs plus qualifiedf6db44owneridentity already reviewed. No repeatedsource/metadata command/inventory."
+  },
+  "qualified_reuse": {
+    "ELF_reader": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+      "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+      "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+      "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+    },
+    "owner_helpers": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+      "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+      "actual_qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json",
+      "reuse": "Image/check_nm/local/compare_owner/reference helpers only; no repeatedkprintfpredicate/codegen/oldmetadata execution."
+    },
+    "scope": "Read-onlyreuseactualImage/parse_nm/check_nm/local/compare_owner/reference helpers; no oldpredicate/codegen/runtime replay and no newELFloader/parser. Bothimportpathhasheschecked."
+  },
+  "exact_command_profile": {
+    "commands": [
+      "partial-join",
+      "joined-symbols",
+      "joined-elf"
+    ],
+    "argv": [
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/partial-join.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/output/kmsg_lock_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/output/kernel_string_kprintf_partial.o"
+      ],
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/joined-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o"
+      ],
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/output/kmsg_string_partial.o"
+      ]
+    ],
+    "object_inputs": [
+      {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/output/kmsg_lock_provider.o",
+        "sha256": "82579b770c4b857bf695b4ae8ca4f52e3ddfe6e64f7322eb222a478b4dd742b8",
+        "bytes": 6128
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/join-1/output/kernel_string_kprintf_partial.o",
+        "sha256": "f6db3c4f06bd4a7733dfb7638a3f756cf0d3211076c726a1df3c08cf174a0e21",
+        "bytes": 32640
+      }
+    ],
+    "input_checks": "Everyrequestinputhash andbothactualobjectpaths/hashes match. ld-r usesONLY82579+f6db inthatorder, oneprivateoutput, no archives/scripts/libc/oldcohorts/symbolrewrite/overrides/sourceflags.",
+    "limits": "CPU6one seriallightjob,AS1GiB/CPU45/60+5wall/FSIZE64MiB/core0/time-v, expected0/emptystderr, emptyenvoverrides. Rootfreshcapacity/shared3jobs4GiBTOTALguard remainsbinding."
+  },
+  "focused_NOBITS_reference_normalization": {
+    "status": "PASS_SOURCE_REVIEW_AGAINST_ACTUAL_LOCAL_LOCK_RELOCATIONS",
+    "material_change": "OnlyLOCALsymbolreference toactualNOBITSsection isnormalizeddifferently frompreviousqualifiedownerhelper. Position=symbolvalue+RELAaddend mustbelongtoexactlyONEactualOBJECTownerinthatsection. Identity retainedas(ownername,binding,size,visibility,offsetwithinowner), neverafakezeroarray.",
+    "actual_scope": "Actualnew82579onlyLOCALNOBITSowner isoriginalKMSG_LOCK4, and3wrapperreferences alltargetitssection+0. Actualprejoinhashes/declaredowners preventotherobjectsfrombeingintroducedasinputs. Old44globals/new16globals andallsourceownerrelocs stillchecked; noreplacementstate/API accepted.",
+    "postjoin_requirement": "Before/afterrelocation signatures mustmatchtheactualsourceowner tuple. private_object requiresuniquenameLOCALOBJECT; compare_owner retainsbinding/type/size/visibility/sectiontype/flags/alignment/bounds. ExactlyoneKMSG_LOCKOBJECT remainsLOCALsize4. No arbitrarybssallocation/init/callback/provider assertion.",
+    "NOBITS_limit": "Declarations/layout only; noHOSTinitializedbytes, bufferownership, flag1/preemptreadiness, bootinit/IRQ/nativebehaviorqualified."
+  },
+  "mandatory_predicate_sequence": [
+    "IMPORT frozenjoin_checks.py andCALLprejoin(request),persistactualobjectboundPASSBEFOREanyld-rPopen. Executingdefinition-onlyfileornmexit0aloneisnotcheck.",
+    "Prejoinrevalidates2exactobjecthashes/nmELFagreement/exact16+44names/kinds/sizes/2+21imports/emptyglobalintersection/oneLOCALlock4/tworetainedLOCALhelpers/60globalunionand14U.",
+    "Executeonly3literalcommandsserialunderRootfreshadmission; captureactualPIDbirths/stdios/directwaits/metrics, stopfirstunexpectedfailure/noautomaticretry.",
+    "CALLpostjoin(request)afteractualnm+ELFreadbacks; persistresultboundtoactualnewobject/readbacks."
+  ],
+  "postjoin_evidence_review": [
+    "Requiresall60actualglobalowners/49T/11data andexact14genuineU, actualnm-toELFagreement. Actualcrossinput7oldloggingIRQ/buffer/lockimports and2newCPUgetterimports resolvetouniquecurrentdefinedproviders.",
+    "Preservesall44prior+16newglobals: kind,binding,type,size,visibility,sectiontype/flags/minimumalignment andallfile-backedbytes; NOBITSdeclarationsbounds only.",
+    "Preservesallsourceownerrelocation signatures throughglobalresolution andLOCALNOBITSprivateowner normalization. All3wrappers keeponeoriginalLOCALKMSG_LOCK viaexactowner+offset reference; noglobalexport/name rewrite.",
+    "PreservestwoactualoldLOCALformatterhelpers names/sizes1190/3395/bytes/visibility/relocations. No privateVaList externalABI.",
+    "Preservesbothactualsource-ownedreadonlyjump-tablebytes andrelocation signatures; previoushelper retainsstringnormalization acrosslegitimateROmerge andreadonlyDIGITSbyteidentity.",
+    "LocalKMSG_LOCK remainsseparatelycountedONE4Bobject, notanextra60thglobaldataowner. FutureoutputhashandactualjoinresultareUNKNOWNuntilnewadmittedbatch."
+  ],
+  "expected_source_derived_result": {
+    "global_strong": 60,
+    "global_T": 49,
+    "global_data": 11,
+    "private_LOCAL_KMSG_LOCK": "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+    "prior_LOCAL_formatter_helpers": {
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": 1190,
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": 3395
+    },
+    "remaining_genuine_U": [
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_delay_us",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ]
+  },
+  "unchanged_open_contracts": "Thisnonexecutedpartialjoinresolveslocalprovideredgesonly. ActualIHKbuffer/map/headerboot, CLV/GS/preemptflag1publication, interrupt/timing/notificationlifetime, helddo_syscall/generic/offload/SDK/custody/native/default/fullimageproviderqualificationremainOPEN. No Cretirement/score/gatecredit.",
+  "reviewer_predicate_compiler_link_function_runtime_native_or_canonical_index_operations": false,
+  "execution_admission": false,
+  "decision": "GO exact7679ccba threecommands only, mandatorycalledpre/postgates andfirstunexpectedstop. Rootfreshadmission/capacityrequired. No unchangedcheckreplay or newprovider/nativeaction."
+}

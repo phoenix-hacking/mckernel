@@ -1,0 +1,248 @@
+{
+  "status": "READY_EXACT15FUNCTION12CEXPORT2ORIGINALDATA_SOURCE_ONLY",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/kmsg_lock_provider_unit.rs",
+  "unit_sha256": "e6aa5872e333330d67307f22f9189ca94a6f542da90ac59c62bb8dfde287de47",
+  "contract_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-init-provider-contract-1/CONTRACT.json",
+  "contract_sha256": "f24c6101d139158fc8bc09df285e3a03b408608fb163e520ccb1d7c471431cd1",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+    "/home/holden/mckernel/kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+    "/home/holden/mckernel/kernel/include/kmsg.h": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5",
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b",
+    "/home/holden/mckernel/lib/include/ihk/lock.h": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f",
+    "/home/holden/mckernel/ihk/linux/include/ihk/ihk_debug.h": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+    "/home/holden/mckernel/ihk/cokernel/smp/x86_64/bootparam.h": "6e72eae27f27625efa66bdf0a76d661cb4a8050ceb117fb75c56ff63678e5da1"
+  },
+  "selected15functions": [
+    {
+      "name": "kprintf_lock",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "function_line": 175,
+      "definition_start_line": 174,
+      "byte_offset": 4629,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kprintf_lock() -> CULong {\n    __ihk_mc_spinlock_lock(&raw mut KMSG_LOCK)\n}",
+      "sha256": "251277be14cec6018285902b2945e8d9d46b25616715951cabd283df1fdf2c86"
+    },
+    {
+      "name": "kprintf_unlock",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "function_line": 180,
+      "definition_start_line": 179,
+      "byte_offset": 4744,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kprintf_unlock(irqflags: CULong) {\n    __ihk_mc_spinlock_unlock(&raw mut KMSG_LOCK, irqflags);\n}",
+      "sha256": "ed27862904bdefd6cf3b324ecde96f901ecc03233d4a9a15a34ea806719095aa"
+    },
+    {
+      "name": "kmsg_init",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "function_line": 257,
+      "definition_start_line": 256,
+      "byte_offset": 6956,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kmsg_init() {\n    ihk_mc_spinlock_init(&raw mut KMSG_LOCK);\n}",
+      "sha256": "26617f826d8e0bbcb158e37b908c8d7477c6c812368fd496bf7ddbef566686e5"
+    },
+    {
+      "name": "ticket_head",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 30,
+      "definition_start_line": 29,
+      "byte_offset": 628,
+      "exact_definition": "#[inline(always)]\nfn ticket_head(value: u32) -> u16 {\n    value as u16\n}",
+      "sha256": "555b3e8a624d41c0c38e777296d22a5cd2fa8c06bc4236b36f540f371c65d496"
+    },
+    {
+      "name": "ticket_tail",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 35,
+      "definition_start_line": 34,
+      "byte_offset": 702,
+      "exact_definition": "#[inline(always)]\nfn ticket_tail(value: u32) -> u16 {\n    (value >> 16) as u16\n}",
+      "sha256": "38f27c003dc72c06305de48b2f64ff485d23467f78f82242e99b560b73e87941"
+    },
+    {
+      "name": "head_atomic",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 45,
+      "definition_start_line": 44,
+      "byte_offset": 892,
+      "exact_definition": "#[inline(always)]\nunsafe fn head_atomic(lock: *mut IhkSpinlock) -> *mut AtomicU16 {\n    lock as *mut AtomicU16\n}",
+      "sha256": "ded17d91e12277eb0aa75083b164ad1bf5a40cbb31729ebd082c1893df464508"
+    },
+    {
+      "name": "ihk_mc_spinlock_init",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 50,
+      "definition_start_line": 49,
+      "byte_offset": 1006,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_spinlock_init(lock: *mut IhkSpinlock) {\n    (*lock).head_tail.store(0, Ordering::SeqCst);\n}",
+      "sha256": "ee9fc3876725fe97ed5690e824d51544354882bb765b5b1b124e6b87ce8fcfd7"
+    },
+    {
+      "name": "__ihk_mc_spinlock_lock_noirq",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 90,
+      "definition_start_line": 89,
+      "byte_offset": 1969,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock) {\n    preempt_disable();\n    let ticket = (*lock).head_tail.fetch_add(TAIL_INC, Ordering::SeqCst);\n    let wait_for = ticket_tail(ticket);\n\n    if ticket_head(ticket) == wait_for {\n        return;\n    }\n\n    loop {\n        if ticket_head((*lock).head_tail.load(Ordering::Acquire)) == wait_for {\n            return;\n        }\n        cpu_pause();\n    }\n}",
+      "sha256": "8a5911c80f88896bb851d9042bcc8b36bff50359fdb72f985ea26e8d15f49d57"
+    },
+    {
+      "name": "__ihk_mc_spinlock_lock",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 108,
+      "definition_start_line": 107,
+      "byte_offset": 2415,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong {\n    let flags = cpu_disable_interrupt_save();\n\n    __ihk_mc_spinlock_lock_noirq(lock);\n    flags\n}",
+      "sha256": "f9e802f6a46d6416513e7fc256f3bb205d52f1d75e7a4e81329b22d7d7b88fab"
+    },
+    {
+      "name": "__ihk_mc_spinlock_unlock_noirq",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 116,
+      "definition_start_line": 115,
+      "byte_offset": 2612,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock) {\n    let _ = (*head_atomic(lock)).fetch_add(TICKET_INC, Ordering::SeqCst);\n    preempt_enable();\n}",
+      "sha256": "8987080d711bceec966997275e40d9e5d4a8d666dbb2577d521e2abbe0aa6538"
+    },
+    {
+      "name": "__ihk_mc_spinlock_unlock",
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "function_line": 122,
+      "definition_start_line": 121,
+      "byte_offset": 2806,
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong) {\n    __ihk_mc_spinlock_unlock_noirq(lock);\n    cpu_restore_interrupt(flags);\n}",
+      "sha256": "1027c182eafde486c0a6a62bcb9dbb0459e39d429ae7f7df5be7cbd34cd939a9"
+    },
+    {
+      "name": "cpu_restore_interrupt",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "function_line": 841,
+      "definition_start_line": 839,
+      "byte_offset": 27900,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_restore_interrupt(flags: CULong) {\n    core::arch::asm!(\"push {flags}\", \"popfq\", flags = in(reg) flags);\n}",
+      "sha256": "712ff18fba8e8a75667daeec5270d63f162407ac798d812fdd800ec71e4878a4"
+    },
+    {
+      "name": "cpu_pause",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "function_line": 847,
+      "definition_start_line": 845,
+      "byte_offset": 28084,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_pause() {\n    core::arch::asm!(\"pause\", options(nomem, nostack, preserves_flags));\n}",
+      "sha256": "290bb7a4cb16c96feae989279527e75e5760902a679a2966cb423e8764615679"
+    },
+    {
+      "name": "cpu_disable_interrupt_save",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "function_line": 853,
+      "definition_start_line": 851,
+      "byte_offset": 28246,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_disable_interrupt_save() -> CULong {\n    let flags: CULong;\n\n    core::arch::asm!(\"pushfq\", \"pop {flags}\", \"cli\", flags = lateout(reg) flags);\n\n    flags\n}",
+      "sha256": "75ff3871917ecbb30bafe01f963af0cba4f2b8aebe7d452f83d0dddecd729ea2"
+    },
+    {
+      "name": "cpu_interrupt_disabled",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "function_line": 873,
+      "definition_start_line": 871,
+      "byte_offset": 28711,
+      "exact_definition": "#[cfg(not(mckernel_equivalence))]\n#[no_mangle]\npub unsafe extern \"C\" fn cpu_interrupt_disabled() -> CInt {\n    let flags: CULong;\n\n    core::arch::asm!(\n        \"pushfq\",\n        \"pop {flags}\",\n        flags = lateout(reg) flags,\n        options(preserves_flags),\n    );\n\n    if flags & 0x200 == 0 {\n        1\n    } else {\n        0\n    }\n}",
+      "sha256": "c797b7d0936d33ab6142a44299b3900b2250cca7954937dc806c2f75e00cd7b3"
+    }
+  ],
+  "types_constants_data_and_context": [
+    {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "role": "IHK_KMSG_SIZE",
+      "exact_definition": "const IHK_KMSG_SIZE: CInt = (4 << 20) - 4096;",
+      "sha256": "1eddf267106b030b8fba86db4d3e6302e494f0c44378f61176f56f04f5025284"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "role": "IhkKmsgBuf type",
+      "exact_definition": "#[repr(C)]\npub struct IhkKmsgBuf {\n    pub lock: CInt,\n    pub tail: CInt,\n    pub len: CInt,\n    pub head: CInt,\n    pub padding: [i8; 4096 - core::mem::size_of::<CInt>() * 4],\n    pub str_: [i8; IHK_KMSG_SIZE as usize],\n}",
+      "sha256": "238c1dfdef2d98b22fbb5a44b0f87d49f53d052923c19439891ddca9886efaa5"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "role": "actual abi separate nominal debugIhkSpinlock selected by modabi",
+      "exact_definition": "#[repr(C)]\n#[derive(Clone, Copy)]\npub struct IhkSpinlock {\n    pub head_tail: u32,\n}",
+      "sha256": "67c3c52aea07cf29d960328ea86ee068139528349ab27543cb8b267021cf7dc9"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "role": "actual spinlock nominal atomic type",
+      "exact_definition": "#[repr(C)]\npub struct IhkSpinlock {\n    head_tail: AtomicU32,\n}",
+      "sha256": "5ea18c32b3ba3474f3ce82bbfc0d16df53b87a40d01834359da29b7e88a8a272"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "role": "original ticket constants",
+      "exact_definition": "const TICKET_INC: u16 = 2;\nconst TAIL_INC: u32 = (TICKET_INC as u32) << 16;",
+      "sha256": "ac53fdcf9fda5b3d2ad956d1ca352ffbf548fb8a56dc77820ca776681af5ab79"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "role": "original spinlock extern declarations",
+      "exact_definition": "extern \"C\" {\n    fn preempt_disable();\n    fn preempt_enable();\n    fn cpu_pause();\n    fn cpu_disable_interrupt_save() -> CULong;\n    fn cpu_restore_interrupt(flags: CULong);\n}",
+      "sha256": "fb5e567a127f744b640e7cbce9a8c8345ce81311651e871d5db1f4d7e29f67d8"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "role": "original spinlock size/align/offset asserts",
+      "exact_definition": "const _: () = {\n    use core::mem::{align_of, offset_of, size_of};\n\n    assert!(size_of::<IhkSpinlock>() == 4);\n    assert!(align_of::<IhkSpinlock>() == 4);\n    assert!(offset_of!(IhkSpinlock, head_tail) == 0);\n};",
+      "sha256": "9e6c75a5bceef74ddaf993c704ba7cb7230007e8762aefbee33929e0a59a97db"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "role": "originaldata",
+      "exact_definition": "#[no_mangle]\npub static mut kmsg_buf: *mut IhkKmsgBuf = null_mut();",
+      "sha256": "61568a077c0c370884807aa5d8a6143c84374db85d2170a29db6a594bfab00df"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "role": "originaldata",
+      "exact_definition": "static mut KMSG_LOCK: IhkSpinlock = IhkSpinlock { head_tail: 0 };",
+      "sha256": "d4ca2f33bc83f517a98cf2f74c6b6bad5a768f059a9377d24b92e266495291be"
+    }
+  ],
+  "expected12_C_exports": [
+    "kprintf_lock",
+    "kprintf_unlock",
+    "kmsg_init",
+    "ihk_mc_spinlock_init",
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock_noirq",
+    "__ihk_mc_spinlock_unlock",
+    "cpu_restore_interrupt",
+    "cpu_pause",
+    "cpu_disable_interrupt_save",
+    "cpu_interrupt_disabled"
+  ],
+  "genuine_unresolved_provider_declarations": [
+    "preempt_disable",
+    "preempt_enable"
+  ],
+  "preserved_original_private_data_name": "debug::KMSG_LOCK",
+  "public_data_name": "kmsg_buf",
+  "private_singleton_emitted_visibility": "Must observe/classify actual compiler emission; no invented export, rename or ignoreddata.",
+  "ABI": "Two separate original nominal IhkSpinlock types kept; same actual4/align4 Cpointer storage. Full actual abi.rs reused, no handwritten ABI.",
+  "native_selection": "Exact #[cfg(not(mckernel_equivalence))] attrs and native asm kept; no equivalencecfg/no-op or hardware execution.",
+  "excluded_bodies": [
+    "ihk_mc_delay_us",
+    "arch_delay",
+    "rdtsc",
+    "eventfd",
+    "preempt_enable",
+    "preempt_disable"
+  ],
+  "whole_module_or_runtime_imported": false,
+  "cohort_join_binding": "UNBOUND_FUTURE_ACTUAL_STRING_COHORT; no guessed object or joinoperation."
+}

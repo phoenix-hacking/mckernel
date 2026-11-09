@@ -1,0 +1,172 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          3952 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           64 (bytes)
+  Number of section headers:         34
+  Section header string table index: 1
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .strtab           STRTAB          0000000000000000 000ca8 0002c2 00      0   0  1
+  [ 2] .text             PROGBITS        0000000000000000 000040 000000 00  AX  0   0  4
+  [ 3] .ltext.__ihk_mc_spinlock_lock PROGBITS        0000000000000000 000040 00006c 00 AXl  0   0 16
+  [ 4] .rela.ltext.__ihk_mc_spinlock_lock RELA            0000000000000000 0008d0 000048 18   I 33   3  8
+  [ 5] .ltext.__ihk_mc_spinlock_lock_noirq PROGBITS        0000000000000000 0000b0 00005b 00 AXl  0   0 16
+  [ 6] .rela.ltext.__ihk_mc_spinlock_lock_noirq RELA            0000000000000000 000918 000048 18   I 33   5  8
+  [ 7] .ltext.__ihk_mc_spinlock_unlock PROGBITS        0000000000000000 000110 00003d 00 AXl  0   0 16
+  [ 8] .rela.ltext.__ihk_mc_spinlock_unlock RELA            0000000000000000 000960 000048 18   I 33   7  8
+  [ 9] .ltext.__ihk_mc_spinlock_unlock_noirq PROGBITS        0000000000000000 000150 00003b 00 AXl  0   0 16
+  [10] .rela.ltext.__ihk_mc_spinlock_unlock_noirq RELA            0000000000000000 0009a8 000048 18   I 33   9  8
+  [11] .ltext.cpu_disable_interrupt_save PROGBITS        0000000000000000 000190 000006 00 AXl  0   0 16
+  [12] .ltext.cpu_interrupt_disabled PROGBITS        0000000000000000 0001a0 000010 00 AXl  0   0 16
+  [13] .ltext.cpu_pause  PROGBITS        0000000000000000 0001b0 000003 00 AXl  0   0 16
+  [14] .ltext.cpu_restore_interrupt PROGBITS        0000000000000000 0001c0 000005 00 AXl  0   0 16
+  [15] .ltext.ihk_mc_spinlock_init PROGBITS        0000000000000000 0001d0 000005 00 AXl  0   0 16
+  [16] .ltext.kmsg_init  PROGBITS        0000000000000000 0001e0 00000f 00 AXl  0   0 16
+  [17] .rela.ltext.kmsg_init RELA            0000000000000000 0009f0 000018 18   I 33  16  8
+  [18] .ltext.kprintf_lock PROGBITS        0000000000000000 0001f0 00006b 00 AXl  0   0 16
+  [19] .rela.ltext.kprintf_lock RELA            0000000000000000 000a08 000060 18   I 33  18  8
+  [20] .ltext.kprintf_unlock PROGBITS        0000000000000000 000260 000047 00 AXl  0   0 16
+  [21] .rela.ltext.kprintf_unlock RELA            0000000000000000 000a68 000060 18   I 33  20  8
+  [22] .ltext.preempt_disable PROGBITS        0000000000000000 0002b0 000036 00 AXl  0   0 16
+  [23] .rela.ltext.preempt_disable RELA            0000000000000000 000ac8 000048 18   I 33  22  8
+  [24] .ltext.preempt_enable PROGBITS        0000000000000000 0002f0 000036 00 AXl  0   0 16
+  [25] .rela.ltext.preempt_enable RELA            0000000000000000 000b10 000048 18   I 33  24  8
+  [26] .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK NOBITS          0000000000000000 000328 000004 00 WAl  0   0  4
+  [27] .lbss.cpu_local_var_initialized NOBITS          0000000000000000 000328 000004 00 WAl  0   0  4
+  [28] .lbss.kmsg_buf    NOBITS          0000000000000000 000328 000008 00 WAl  0   0  8
+  [29] .comment          PROGBITS        0000000000000000 000328 000035 01  MS  0   0  1
+  [30] .note.GNU-stack   PROGBITS        0000000000000000 00035d 000000 00      0   0  1
+  [31] .eh_frame         X86_64_UNWIND   0000000000000000 000360 000210 00   A  0   0  8
+  [32] .rela.eh_frame    RELA            0000000000000000 000b58 000150 18   I 33  31  8
+  [33] .symtab           SYMTAB          0000000000000000 000570 000360 18      1  18  8
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_lock' at offset 0x8d0 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000000c  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+000000000000001b  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000027  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_lock_noirq' at offset 0x918 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000006  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000015  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000021  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_unlock' at offset 0x960 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000000b  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+000000000000001a  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000026  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_unlock_noirq' at offset 0x9a8 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000007  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000017  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000023  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.kmsg_init' at offset 0x9f0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000001100000001 R_X86_64_64            0000000000000000 .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK + 0
+
+Relocation section '.rela.ltext.kprintf_lock' at offset 0xa08 contains 4 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000006  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000015  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000021  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+0000000000000036  0000001100000001 R_X86_64_64            0000000000000000 .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK + 0
+
+Relocation section '.rela.ltext.kprintf_unlock' at offset 0xa68 contains 4 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000003  0000001100000001 R_X86_64_64            0000000000000000 .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK + 0
+0000000000000015  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000024  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000030  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.preempt_disable' at offset 0xac8 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000012  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000001e  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.preempt_enable' at offset 0xb10 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000001300000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000012  0000001400000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000001e  0000001500000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.eh_frame' at offset 0xb58 contains 14 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000000200000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_lock + 0
+0000000000000058  0000000300000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_lock_noirq + 0
+0000000000000080  0000000400000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_unlock + 0
+00000000000000a8  0000000500000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_unlock_noirq + 0
+00000000000000c8  0000000600000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_disable_interrupt_save + 0
+00000000000000e8  0000000700000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_interrupt_disabled + 0
+0000000000000108  0000000800000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_pause + 0
+0000000000000128  0000000900000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_restore_interrupt + 0
+0000000000000148  0000000a00000018 R_X86_64_PC64          0000000000000000 .ltext.ihk_mc_spinlock_init + 0
+0000000000000168  0000000b00000018 R_X86_64_PC64          0000000000000000 .ltext.kmsg_init + 0
+0000000000000188  0000000d00000018 R_X86_64_PC64          0000000000000000 .ltext.kprintf_lock + 0
+00000000000001b0  0000000e00000018 R_X86_64_PC64          0000000000000000 .ltext.kprintf_unlock + 0
+00000000000001d8  0000000f00000018 R_X86_64_PC64          0000000000000000 .ltext.preempt_disable + 0
+00000000000001f8  0000001000000018 R_X86_64_PC64          0000000000000000 .ltext.preempt_enable + 0
+
+Symbol table '.symtab' contains 36 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS kmsg_lock_preempt_provider_unit.29c10e0d983792a6-cgu.0
+     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 
+     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 
+     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 
+     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    9 
+     6: 0000000000000000     0 SECTION LOCAL  DEFAULT   11 
+     7: 0000000000000000     0 SECTION LOCAL  DEFAULT   12 
+     8: 0000000000000000     0 SECTION LOCAL  DEFAULT   13 
+     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   14 
+    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   15 
+    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   16 
+    12: 0000000000000000     4 OBJECT  LOCAL  DEFAULT   26 _RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK
+    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   18 
+    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   20 
+    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   22 
+    16: 0000000000000000     0 SECTION LOCAL  DEFAULT   24 
+    17: 0000000000000000     0 SECTION LOCAL  DEFAULT   26 
+    18: 0000000000000000   108 FUNC    GLOBAL DEFAULT    3 __ihk_mc_spinlock_lock
+    19: 0000000000000000     4 OBJECT  GLOBAL DEFAULT   27 cpu_local_var_initialized
+    20: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND ihk_mc_get_processor_id
+    21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND get_cpu_local_var
+    22: 0000000000000000    91 FUNC    GLOBAL DEFAULT    5 __ihk_mc_spinlock_lock_noirq
+    23: 0000000000000000    61 FUNC    GLOBAL DEFAULT    7 __ihk_mc_spinlock_unlock
+    24: 0000000000000000    59 FUNC    GLOBAL DEFAULT    9 __ihk_mc_spinlock_unlock_noirq
+    25: 0000000000000000     6 FUNC    GLOBAL DEFAULT   11 cpu_disable_interrupt_save
+    26: 0000000000000000    16 FUNC    GLOBAL DEFAULT   12 cpu_interrupt_disabled
+    27: 0000000000000000     3 FUNC    GLOBAL DEFAULT   13 cpu_pause
+    28: 0000000000000000     5 FUNC    GLOBAL DEFAULT   14 cpu_restore_interrupt
+    29: 0000000000000000     5 FUNC    GLOBAL DEFAULT   15 ihk_mc_spinlock_init
+    30: 0000000000000000    15 FUNC    GLOBAL DEFAULT   16 kmsg_init
+    31: 0000000000000000   107 FUNC    GLOBAL DEFAULT   18 kprintf_lock
+    32: 0000000000000000    71 FUNC    GLOBAL DEFAULT   20 kprintf_unlock
+    33: 0000000000000000    54 FUNC    GLOBAL DEFAULT   22 preempt_disable
+    34: 0000000000000000    54 FUNC    GLOBAL DEFAULT   24 preempt_enable
+    35: 0000000000000000     8 OBJECT  GLOBAL DEFAULT   28 kmsg_buf
