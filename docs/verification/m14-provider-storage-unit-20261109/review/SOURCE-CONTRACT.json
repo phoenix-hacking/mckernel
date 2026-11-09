@@ -1,0 +1,105 @@
+{
+  "schema": "bounded-lower-provider-source-contract-v1",
+  "scope": "Seven genuine imports of current eight-function lower_provider_unit; read-only actual source and direct initialization/caller sites only.",
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/lower_provider_unit.rs",
+    "owner_supplied_sha256": "59ceb915804f071291e4197c7bf8bf3ea9efd4bf4a143c40b531a107b744a449",
+    "imports": [
+      "clv",
+      "locals",
+      "num_processors",
+      "x86_map_kernel_start_geometry",
+      "linux_page_offset_base",
+      "x86_kernel_phys_base",
+      "x86_addr_log_bridge"
+    ]
+  },
+  "decisions": {
+    "source_data_partition": "ELIGIBLE_FOR_SEPARATE_ROOT_SCOPED_PREPARATION_NOT_YET_QUALIFIED",
+    "source_logger_partition": "ELIGIBLE_ONLY_AS_EXACT_FUNCTION_HELPER_DESCRIPTOR_CLOSURE_WITH_GENUINE_KPRINTF_UNDEFINED_NOT_YET_QUALIFIED",
+    "existing_independent_initialized_composition": "NOT_ESTABLISHED_IN_INSPECTED_SOURCE_AND_PREVIOUS_RECEIPT_BOUND_REUSE_REVIEW",
+    "host_execution_or_final_closure": "NO_GO_UNBOUND_NATIVE_INITIALIZATION_AND_GENUINE_LOGGING_PROVIDER",
+    "current_unit": "UNCHANGED_EIGHT_FUNCTION_UNIT_RETAINS_ALL_SEVEN_IMPORTS_UNDEFINED"
+  },
+  "endpoints": [
+    {
+      "name": "clv",
+      "decl": "static mut clv: *mut CpuLocalVar",
+      "definition": "kernel/rust/cls.rs:67",
+      "actual_initial_value": "null_mut()",
+      "owner": "cpu_local_var_init at cls.rs:125; allocates rounded pages for num_processors CpuLocalVar objects via genuine _ihk_mc_alloc_aligned_pages_node, assigns clv at140, initializes monitor/rusage/list fields, publishes initialized flag/fence at163-164",
+      "lifetime": "Static pointer slot for image lifetime; pointed-to allocation is boot-owned and must cover the indexed processor for every getter. No destruction was present in the inspected initializer/getters.",
+      "required_runtime_input": "Real final processor count, critical kernel allocation, initialized monitor/rusage storage, actual boot ordering; initial null is not usable CPU-local storage."
+    },
+    {
+      "name": "locals",
+      "decl": "static mut locals: *mut X86CpuLocalVariables",
+      "definition": "kernel/rust/x86_local.rs:16",
+      "actual_initial_value": "core::ptr::null_mut()",
+      "owner": "init_processors_local at90 allocates and zeroes LOCALS_SPAN=16384 bytes per supplied CPU; assign_processor_id at119 installs GS base and id; init_boot_processor_local at129 separately initializes temporary boot CPU state",
+      "lifetime": "Image-long slot plus genuine boot-owned aligned per-CPU allocation; current-CPU consumer requires matching live GS state.",
+      "direct_caller": "kernel/rust/x86_cpu_helpers.rs:5653 ihk_mc_init_ap passes actual init_processors_local/assign_processor_id to actual body2324; body2373-2375 initializes locals then assigns identity then initializes SMP processor.",
+      "required_runtime_input": "Actual CPU-info count, allocator and native GS/MSR initialization; no HOST replacement or equivalence variant."
+    },
+    {
+      "name": "num_processors",
+      "decl": "static mut num_processors: CInt",
+      "definition": "kernel/rust/ap.rs:41",
+      "actual_initial_value": "1",
+      "owner": "ap_init at219 calls ihk_mc_init_ap, obtains real CPU info/BSP identity, requests each other CPU boot, increments at252. init.rs rest_init377 invokes ap_init before cpu_local_var_init379.",
+      "lifetime": "Image static mutable boot-count slot; AP/sysfs users consume the live count. Initial1 does not establish that native startup completed."
+    },
+    {
+      "name": "x86_map_kernel_start_geometry",
+      "decl": "static X86_MAP_KERNEL_START_GEOMETRY: CULong with existing link_name",
+      "definition": "kernel/rust/x86_memory_helpers.rs:9692 inside owned_memory_data",
+      "actual_initial_value": "0xfffffffffe800000",
+      "owner": "Existing immutable no_mangle geometry object; x86_user_map_kernel_start_bridge8949 reads it.",
+      "lifetime": "Immutable image lifetime. No runtime initializer required for this constant; copy only its actual definition in a separately scoped unique-owner partition."
+    },
+    {
+      "name": "linux_page_offset_base",
+      "decl": "static mut LINUX_PAGE_OFFSET_BASE: CULong with existing link_name",
+      "definition": "kernel/rust/x86_setup.rs:216",
+      "actual_initial_value": "0",
+      "owner": "arch_start357 assigns boot_param.page_offset_base at369 after obtaining actual boot_param via phys_to_virt. no_mangle applies to native/non-equivalence build.",
+      "lifetime": "Image static boot geometry, must reflect actual supplied boot parameter before consumers. Zero is only the real preboot initializer, not an invented valid mapping."
+    },
+    {
+      "name": "x86_kernel_phys_base",
+      "decl": "static mut X86_KERNEL_PHYS_BASE: CULong with existing link_name",
+      "definition": "kernel/rust/x86_setup.rs:218",
+      "actual_initial_value": "0",
+      "owner": "arch_start357 assigns actual phys_address argument at362 before converting boot-param physical address. no_mangle applies to native/non-equivalence build.",
+      "lifetime": "Image static boot geometry; actual load address owns its live value."
+    },
+    {
+      "name": "x86_addr_log_bridge",
+      "decl": "fn(CInt,CULong) returning void; caller imports unsafe extern C, actual definition is extern C",
+      "definition": "kernel/rust/x86_memory_logger_bridges.rs:39",
+      "owner": "Exact function plus debug_enabled31; event1 gates actual kernel descriptor and event2 actual straight descriptor, unknown events silent; actual kprintf scalar varargs uses static original format/function strings.",
+      "descriptor_owners": [
+        "kernel/rust/x86_memory_helpers.rs:9655 x86_addr_log_straight_debug, exact Ddebug line_flags3276",
+        "kernel/rust/x86_memory_helpers.rs:9666 x86_addr_log_kernel_debug, exact Ddebug line_flags3272"
+      ],
+      "descriptor_storage": "Both existing no_mangle used __verbose mutable objects reference actual TRACE_FILE/TRACE_FILE_BYTES9533-9566 and static function literal. Preserve exact storage/string bytes and section attributes. Ddebug actual repr(C) at debug.rs:27, size32/align8/line_flags offset24 asserted there.",
+      "lifetime": "Image-long mutable descriptors; debug_enabled reads flags volatile. debug.rs dynamic control413-425 can mutate matching descriptor flags; initial disabled flags do not justify replacing logger with silence.",
+      "remaining_provider": "Keep genuine kprintf undefined unless separately eligible exact provider is established; no no-op callback, whole logger module, whole debug module, or held source needed for this source-only partition."
+    }
+  ],
+  "smallest_possible_next_preparation": {
+    "data": "Exact six existing storage definitions only, preserving actual names/types/attributes/native cfg and original initializers; reuse actual ABI types. No alloc/init/arch_start/ap_init body and no modification of original runtime ownership. Separately prove unique symbol ownership before any future composition; never link these duplicate owners alongside their full original modules.",
+    "logger": "Separate exact x86_addr_log_bridge+debug_enabled and the two exact existing descriptors with only their real static string dependency and exact Ddebug type/layout dependency. Keep genuine kprintf U. This may be prepared without compiling any whole memory/setup/AP/CLS/logger/debug module, but requires Root explicit source scope and independent source/ABI/ownership review.",
+    "acceptance": "Non-executed codegeneration/ld-r, if later admitted and passing, proves scoped symbol/data composition only. It cannot establish initialized hardware, boot geometry, logger availability, HOST execution, final native ABI or C retirement.",
+    "required_before_execution": "Actual binding for kernel allocator/monitor/rusage/CPU info and boot geometry/GS state plus genuine logger chain, with native source/ownership/admission holds satisfied. Ordinary HOST cannot supply fabricated runtime state."
+  },
+  "operations": {
+    "compiler": false,
+    "linker": false,
+    "runtime": false,
+    "fixture_creation": false,
+    "canonical_or_index_writes": false,
+    "recursive_agents": false
+  },
+  "bounds": "No whole crate/module compile; no c205 lookup, broad object inventory, held generic/XPMEM/exec source, guessed type/value, new callback or symbol alias. Source-level partition eligibility is distinct from runtime/final-closure NO_GO. Current eight-function qualification is independent and remains seven-U."
+}

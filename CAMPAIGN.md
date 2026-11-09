@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T16:42Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T17:38Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -15,8 +15,8 @@ canonical source/index/publisher. No objective, allowance or historical owner re
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
 IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed.
-Root`126442f85a3b760c940669a07457fc1898379998` is pushed/fetched with all34new
-prerequisite entries matched; priorunknownCLI`6f4c7f244`/all9entries/source replay remainverified.
+Root`9c433df68c46bac6fcf6109cfedf7593c738468d` is pushed/fetched/all36lower-provider
+entries matched. Earlier126442f85/all34prerequisites and unknownCLI6f4c7f244/all9entries/source replay remainverified.
 Eight actualmainFUNCTION cases PASS=4baseline+4candidate: raw0→1, exact292/499byte
 stderr/empty stdout, zeroioctl,8realanonymousFDs once-close/EBADF and restored
 argv/FDset. All8actualobject predicates were CALLED before anylink/runtime;
@@ -66,24 +66,43 @@ No MSR/GS/function/hardware/init/native/greenbehavior ran. Source/rawproof/objec
 `docs/verification/m14-lower-provider-unit-20261109/`; result
 `m14-lower-provider-partial-results-20261109.json`. No originalgate/score changes.
 
+**Storage/logger qualification PASS:** actualsource13items+exactinitializers,
+Ddebug32/8/24 and__verbose/TRACE ownership qualify in object`b99cb1c9…`; joined
+`1faf0e7f…`(13400B) has31strong=22T+9actualdata/13genuineU. This includes the
+original319BTRACEstatic emittedGLOBALunderitsRustmangledname. Firstcompile+3
+metadata commands passedonce; prejoinexpectation omitted thatrealowner andstopped
+beforelink. Focusedsource/bytes/relocationreview authorized oneexactpredicate
+correction; correctedprejoin passedbeforeANYnewPopen, only3unstartedcommandsran,
+allold+newfunctionbytes/data preserved/all7payloadsjoined/CPU7released. No source/
+attr/symbol change, recompile, boot/init/runtime/native or actualkprintf call.
+OriginalprecompileTRACEextraction and actualpredicatefailure remain preserved.
+Proof:`docs/verification/m14-provider-storage-unit-20261109/`; result
+`m14-provider-storage-partial-results-20261109.json`. Actualdata initializers are
+prebootstate, not initializedkernel/GS/geometry evidence.
+
+**Kprintf source/codegen capture PASS:** finite35exactdefinitions (26actualformatter
+functions+kprintf/8debughelpers),11originalCexports, actualVaList/c_variadiccontext.
+Object`550bf6d7…`(19064B),3commands once/allbirths/waits joined/CPU6released. No linker
+or functionexecution. Actual2localhelpers/literals/relocations and12U are independently
+source-reconciled; addedcompilerUmemset hasactualkernelstringABI, staysunresolved.
+No HOSTlibc formatter/notification/state/lock substitution or wholemoduleimport.
+
 | Next ready original dependency | Consumer / scope | Owner / smallest proof |
 | --- | --- | --- |
-| Exact owned storage/logger source | Current21T/19Ucohort/sharedF03/F06 | B private6actualstorage+boundedlogger source, actualinitializers/attrs/Ddebug/descriptors; genuinekprintfU, no inventedstate |
-| Independent actualABI/data/uniqueowner checks | Prospectivecurrentpartial+newstorage unit | E concreteunit/profile/predicate review beforefreshRootadmission; actualbootinit/logging/finalnative contracts remainopen |
-| Coherent lower-provider checkpoint | 8actualsourceexports+old13owners/actual7newU | Root publish source/proof/currentledger beforeadmitting nextbatch; preserveprelaunchfailure/onecorrection and allactualsource boundaries |
+| Unique currentkprintf join | Current1fafcohort +550bfactualobject / sharedM14providers | A exactjoin-onlypacket/Factualmetadata-ownerreview, Rootfresh3commandadmission; no codegen replay |
+| Genuine kernelstring primitives | Actualstrnlen/memset source/ABI fornewformatter | B2realroots/read_char/source/predicateproposal, Eindependentreview; no fakeHOSTlibc/no inventedno_builtins, safevaliddomain only |
+| Coherent storageproof/target checkpoint | Completed31strong source/data/trace +frozen50%target | Root publishscoped evidence/ledger without scoreinflation; genuineboot/kprintf/IRQ/offload/default/nativeconditions remainopen |
 
-Source/data contract distinguishes eligible nonexecuted exactdefinitions from
-unqualified runtimeinitialization. Currentclv/locals/num_processors/geometry/logger
-stay realimports in thisbatch. Initialnull/zero/one values are originalsource,
-never fabricated state. Nextstorage proposal does not establish allocation/GS/boot
-geometry or actuallogging completion. Held universaldo_syscall/offload staysU.
-ReferenceC cleanup remainsprivate/unexecuted behind original-gate work.
+Next kprintfjoin will preserveall31oldowners; actual12newimports/existingproviders
+are reconciled beforeanylink, no guessedcount.PrivateVaList never crosses invented
+ABI. Genuinekmsg_buf/publiclocks/IRQ/kernel-eventfd/string ownership remainexplicit;
+oneKMSG_LOCK owner is required in its actualfutureunit.ReferenceCwork staysdeferred.
 
 OrdinaryHOST remains CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL including all
 worker/controller overhead, fresh26GiB retaining18GiBcharges+4GiBfloor and host16/
 scratch12GiB diskfloors. Native2–5/12GiB, UNKNOWNowners/outcomes/scratch21/mutex27:4
 and expiredattempts/nonces remain unchanged. Next15minute deliverable: publish
-currentlower-provider proof, then admit only the reviewed exactstorage/logger scope.
+storagequalification/target handoff, then advance reviewedunique kprintf join.
 Foreground owns monitors; healthy work is preserved, no duplicate investigation.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
@@ -169,6 +188,14 @@ keeps eligiblelocalwork moving with publicationpending; actualdenial isbinding.
 
 ## M14/M15 closure progress — explicit checklist
 
+**User target, frozen2026-11-09T16:45Z:** a50%relative increase of the existing
+equal-milestone combined checklist. BaselineM14=51.48%,M15=50.97%,combined51.225%;
+target76.8375%(+25.6125percentagepoints). Currentcombined51.225%,delta0;0counted
+checks closed since thisbaseline. This changes no weights, originalcriteria,
+acceptance, allowance or deadline. Partialprovider proofs get no extra score.
+Actual SDK/source/native/offload authority constraints may prevent reaching it;
+continue readyeligible original dependency work and report that boundary honestly.
+
 User-requested scope: **M14 and M15 closure only**, excluding separate S01–S06 final-system requirements.
 Every original requirement and concrete evidence step is defined in [the machine ledger](docs/verification/m14-m15-closure-progress.json); [the full row-by-row CSV](docs/verification/m14-m15-closure-progress.csv) includes percentage, owner, done-when condition, verification method, inputs, dependencies, evidence and unresolved definition.
 
@@ -230,7 +257,7 @@ The ledger names 362 concrete rows, including the three exact modules `ihk.ko`, 
 
 Root maintains this ledger from passing, matching engineering evidence at each checkpoint/handoff. A final gate remains unaccepted until its original supported/default/deployed/native requirements pass. Future confirmed integration defects get explicit rows and dated denominator changes; no unchanged green suite rerun is needed for tracker maintenance.
 
-Current Nov9refresh: six unknown-action leaves pass;4producercommands were reused. Currentcredential and8functionlower partials plus2changedCLIloaderbindings pass at statedscope. Eight explicit partialproofsteps add uncounted registryrows:156countedchecks/370task-binding+31group=401CSVrows. FinalCREDENTIAL-COHORT and all original default/native/provider conditions remainopen; scores51.48/50.97, accepted4/6and1/8 unchanged. Historical intrdevice-path0credit/firstPIDUNKNOWN/excludedbalanced-fullbehavior evidence stays intact.
+Current Nov9refresh: six unknown-action leaves pass;4producercommands were reused. Currentcredential/lower/storage partials and2changedCLIloaderbindings pass at statedscope. Twelve explicit partialproofsteps add uncounted registryrows:156countedchecks/374task-binding+31group=405CSVrows. FinalCREDENTIAL-COHORT and all original default/native/provider conditions remainopen; scores51.48/50.97, accepted4/6and1/8 unchanged. Historical intrdevice-path0credit/firstPIDUNKNOWN/excludedbalanced-fullbehavior evidence stays intact.
 
 **Historical02:01resume completed engineering and audit:**
 **Prior02:01resume audit3/3 was BLOCKED, superseded by new02:38manual resume.**

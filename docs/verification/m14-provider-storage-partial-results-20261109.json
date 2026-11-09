@@ -1,0 +1,470 @@
+{
+  "schema": "m14-genuine-storage-logger-partial-v1",
+  "at": "2026-11-09T17:25:21.606729+00:00",
+  "original_requirements": [
+    "M14-F03",
+    "M14-F06",
+    "CREDENTIAL-COHORT",
+    "PROVIDER-CLOSURE"
+  ],
+  "source_object_raw_evidence_directory": "docs/verification/m14-provider-storage-unit-20261109",
+  "package_manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/publication-package-1/MANIFEST.json",
+    "sha256": "275a1e0dd6709e32e504989db6e2c411f081d5a2e1036380f8108f6678ceb97e"
+  },
+  "consolidated_actual_result": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/RESULT.json",
+    "sha256": "e051e0e8491747d53846ba23e5ecc78b921b4918cf44c29313788cc658a68532"
+  },
+  "result": {
+    "status": "PASS_SCOPED_CURRENT_STORAGE_AND_BOUNDED_LOGGER_PARTIAL_NONEXECUTED",
+    "owner": "/root/m15_cli_high",
+    "source_unit": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/provider_storage_unit.rs",
+      "sha256": "64116d567d5823556b0e1411683b65271940ffe207d983cb2c5bbe0b807a8c17"
+    },
+    "storage_object": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/provider_storage.o",
+      "sha256": "b99cb1c97e9cb5249357dddf8d55b80c351f86b3bdf0796bf2c6a8905aecf21b",
+      "bytes": 3328,
+      "global_T": 1,
+      "global_data": 9,
+      "genuine_U": [
+        "kprintf"
+      ]
+    },
+    "joined_object": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+      "sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+      "bytes": 13400,
+      "global_T": 22,
+      "global_data": 9,
+      "strong_total": 31,
+      "genuine_U": [
+        "do_kill",
+        "do_syscall",
+        "f03_terminate_host_refcount_set_v1",
+        "f03_wait_release_process",
+        "f03_wait_release_thread",
+        "kprintf",
+        "sched_wakeup_thread",
+        "syscall_do_kill_thread_bridge",
+        "syscall_do_syscall_request_bridge",
+        "syscall_find_process_bridge",
+        "syscall_generic_forwarding_body_result",
+        "syscall_process_unlock_bridge",
+        "terminate_host_body_result"
+      ]
+    },
+    "actual_predecessor": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/output/lower_partial.o",
+      "sha256": "98bd88f49af6d3a6e703f44f66d405937f07db2fc67a970b07fad84dcf17776e",
+      "bytes": 10728,
+      "result": {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/RESULT.json",
+        "sha256": "cb986fcaa014014d84cf77889d6de76d14672385621bb2ed6e4383741ba54fa7"
+      },
+      "actual21T_sizes": {
+        "do_setresgid": 173,
+        "do_setresuid": 173,
+        "get_cpu_local_var": 24,
+        "get_this_cpu_local_var": 99,
+        "getcred": 259,
+        "getcred_body_result": 272,
+        "ihk_mc_get_processor_id": 77,
+        "ptrace_detach_do_kill_bridge": 12,
+        "ptrace_detach_wakeup_bridge": 12,
+        "syscall_do_syscall2_bridge": 167,
+        "syscall_do_syscall3_bridge": 171,
+        "syscall_get_processor_id_bridge": 77,
+        "syscall_policy_do_syscall2_bridge": 167,
+        "syscall_policy_do_syscall3_bridge": 171,
+        "syscall_refresh_cred_fields_body_result": 163,
+        "syscall_virt_to_phys_bridge": 165,
+        "terminate_host": 183,
+        "virt_to_phys": 165,
+        "wait_host_wait4_bridge": 166,
+        "x86_user_map_kernel_start_bridge": 14,
+        "x86_virt_to_phys_body_result": 105
+      },
+      "actual19_genuine_U": [
+        "clv",
+        "do_kill",
+        "do_syscall",
+        "f03_terminate_host_refcount_set_v1",
+        "f03_wait_release_process",
+        "f03_wait_release_thread",
+        "linux_page_offset_base",
+        "locals",
+        "num_processors",
+        "sched_wakeup_thread",
+        "syscall_do_kill_thread_bridge",
+        "syscall_do_syscall_request_bridge",
+        "syscall_find_process_bridge",
+        "syscall_generic_forwarding_body_result",
+        "syscall_process_unlock_bridge",
+        "terminate_host_body_result",
+        "x86_addr_log_bridge",
+        "x86_kernel_phys_base",
+        "x86_map_kernel_start_geometry"
+      ],
+      "all5_waits_joined": true,
+      "CPU6_source_hold_released": true
+    },
+    "executions": {
+      "first4commands_each_once": "compile,nm,readelf,objdump allPASS; firstprejoinfailedbecauseexactoriginalTRACEstaticisGLOBALDEFAULT/R319, nojointhen",
+      "focused3commands_each_once": "Onlyoriginalunstartedld-r,nm,readelfaftercorrectedprejoinPASS; no compile/metadatareplay",
+      "commands_with_PID_birth_before_wait": [
+        {
+          "label": "storage-compile",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/storage-compile.metrics",
+            "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+            "--edition=2021",
+            "--crate-type=lib",
+            "-C",
+            "panic=abort",
+            "-C",
+            "opt-level=2",
+            "-C",
+            "code-model=large",
+            "-C",
+            "relocation-model=static",
+            "-C",
+            "no-redzone=yes",
+            "-C",
+            "no-vectorize-loops",
+            "-C",
+            "no-vectorize-slp",
+            "-C",
+            "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+            "--emit=obj",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/provider_storage.o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/provider_storage_unit.rs"
+          ],
+          "pid": 541437,
+          "proc_start_ticks": "33025980",
+          "returncode": 0,
+          "direct_wait_joined": true
+        },
+        {
+          "label": "storage-symbols",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/storage-symbols.metrics",
+            "/usr/bin/nm",
+            "-S",
+            "--format=posix",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/provider_storage.o"
+          ],
+          "pid": 541446,
+          "proc_start_ticks": "33025987",
+          "returncode": 0,
+          "direct_wait_joined": true
+        },
+        {
+          "label": "storage-elf",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/storage-elf.metrics",
+            "/usr/bin/readelf",
+            "-h",
+            "-SW",
+            "-Ws",
+            "-Wr",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/provider_storage.o"
+          ],
+          "pid": 541449,
+          "proc_start_ticks": "33025988",
+          "returncode": 0,
+          "direct_wait_joined": true
+        },
+        {
+          "label": "storage-bytes",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/storage-bytes.metrics",
+            "/usr/bin/objdump",
+            "-s",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/provider_storage.o"
+          ],
+          "pid": 541452,
+          "proc_start_ticks": "33025988",
+          "returncode": 0,
+          "direct_wait_joined": true
+        },
+        {
+          "label": "unique-partial-join",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/unique-partial-join.metrics",
+            "/usr/bin/ld",
+            "-r",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/provider_storage.o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-unit-1/output/lower_partial.o"
+          ],
+          "pid": 544314,
+          "proc_start_ticks": "33087725",
+          "returncode": 0,
+          "direct_wait_joined": true
+        },
+        {
+          "label": "joined-symbols",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/joined-symbols.metrics",
+            "/usr/bin/nm",
+            "-S",
+            "--format=posix",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o"
+          ],
+          "pid": 544317,
+          "proc_start_ticks": "33087725",
+          "returncode": 0,
+          "direct_wait_joined": true
+        },
+        {
+          "label": "joined-elf",
+          "argv": [
+            "/usr/bin/taskset",
+            "-c",
+            "7",
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5s",
+            "60s",
+            "/usr/bin/prlimit",
+            "--as=1073741824:1073741824",
+            "--cpu=45:45",
+            "--fsize=67108864:67108864",
+            "--core=0:0",
+            "--",
+            "/usr/bin/time",
+            "-v",
+            "-o",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/joined-elf.metrics",
+            "/usr/bin/readelf",
+            "-h",
+            "-SW",
+            "-Ws",
+            "-Wr",
+            "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o"
+          ],
+          "pid": 544320,
+          "proc_start_ticks": "33087727",
+          "returncode": 0,
+          "direct_wait_joined": true
+        }
+      ],
+      "all7_direct_waits_joined": true,
+      "both_outer_waits_joined": true,
+      "CPU7_slot_released": true,
+      "source_input_hold_released": true,
+      "total_child_CPU_seconds": 0.05,
+      "peak_RSS_KiB": 101792,
+      "outer_wall_seconds": {
+        "initial": 0.1293576280004345,
+        "focused": 0.06507208599941805
+      },
+      "metrics": [
+        {
+          "label": "storage-compile",
+          "CPU_seconds": 0.05,
+          "peak_RSS_KiB": 101792
+        },
+        {
+          "label": "storage-symbols",
+          "CPU_seconds": 0.0,
+          "peak_RSS_KiB": 55668
+        },
+        {
+          "label": "storage-elf",
+          "CPU_seconds": 0.0,
+          "peak_RSS_KiB": 2428
+        },
+        {
+          "label": "storage-bytes",
+          "CPU_seconds": 0.0,
+          "peak_RSS_KiB": 4212
+        },
+        {
+          "label": "unique-partial-join",
+          "CPU_seconds": 0.0,
+          "peak_RSS_KiB": 4036
+        },
+        {
+          "label": "joined-symbols",
+          "CPU_seconds": 0.0,
+          "peak_RSS_KiB": 55560
+        },
+        {
+          "label": "joined-elf",
+          "CPU_seconds": 0.0,
+          "peak_RSS_KiB": 2516
+        }
+      ]
+    },
+    "actual_predicates": {
+      "prejoin_called_persisted_before_any_remaining_Popen_ld_r": true,
+      "postjoin_called_and_passed": true,
+      "original21_function_bytes_and_sizes_preserved": true,
+      "new_logger_bytes_and_size_preserved": true,
+      "all_actual_data_and_TRACE319_sourcebytes_descriptor_fields_exactrelocations_preserved": true,
+      "unique_strong_owners": true,
+      "exact_inherited_single_SSE_warning_unchanged": true
+    },
+    "preserved_findings": {
+      "precompile_trace_type_semicolon": "Original5ba sourceunadmitted/uncompiled. Only2completeoriginalTRACEdeclarationsrestoredbeforefirstcompile; PRECOMPILE-FINDING preserved.",
+      "first_actual_failure": {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/FIRST-FAILURE.json",
+        "sha256": "9000de0106d0fb20788256a75dfc1d7e66add52bb35c8565b8f1080caa375407",
+        "actual": "OriginalrequiredTRACE_FILE emitsadditionalcompiler-mangledGLOBALDEFAULTR319; strict9strongsetrejected10strong. No nativefunction/runtime/link hadrun.",
+        "focused_correction": "Exactname/binding/sourcebytes/bothdescriptorfileRELA+0 only. No wildcard/source/attrs/profile/symbol changes or recompilation."
+      }
+    },
+    "remaining_genuine_ownership": "Originalprebootclv/localsNULL,num_processors1,setupmappingcells0 retainactualboot/allocator/monitor/rusage/GS/MSR/arch_start owners. Immutablegeometryconstant and2mutable__verbose descriptors retainexactsource. Genuinekprintf remainsundefined; helddo_syscall/generic/offload andallnative/source/service owners stayunresolved.",
+    "qualification_limits": {
+      "kernel_function_execution": false,
+      "hardware_GS_MSR_boot_init_execution": false,
+      "actual_kprintf_available_or_called": false,
+      "HOST_callback_or_zero_provider_substitutes": false,
+      "whole_original_modules_or_crate_compiled": false,
+      "default_final_native_ABI_image_or_C_retirement_accepted": false,
+      "original_M14_or_M15_score_credit": 0
+    },
+    "focused_result": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+      "sha256": "0e3047ea8d08d3f9ba7837f135142fcd29c14cdb1116e62743f1bd01214136fb"
+    }
+  },
+  "actual_current_partial": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+    "sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+    "bytes": 13400,
+    "function_definitions": 22,
+    "data_definitions": 9,
+    "genuine_unresolved": [
+      "do_kill",
+      "do_syscall",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "kprintf",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ]
+  },
+  "important_scope": "Original6prebootstatevariables+2actual__verbose descriptors+319BTRACEFILE andactualx86_addr_log_bridge. Initialnull/zero/one/geometryconst are exactsourceinitializers only, notboot/GS/mapping/init correctness. One compiledsourceobject reused afterexactTRACEprivate-global accountingcorrection; first4commands passed once andonly3unstartedcommands followed.",
+  "actual_predicate": "Correctedprejoin called/persisted beforeanynewPopen; exactTRACEGLOBALDEFAULT/R319/fullsourcebytes/bothdescriptorfileRELA+0/readonly section only, no wildcard. Actualpostjoin31strong/13U/allold21+loggerbytes/sizes/data preserve.",
+  "preserved_findings": [
+    "Precompileextractionstoppedat[u8;319]semicolon; complete2declarationsrestored beforeanyworkload.",
+    "ActualcompiledoriginalTRACE_FILEemittedRustmangledGLOBAL319 missedby9globalexpectation; failedpredicatecapture retained. Onepredicate-onlycorrection, no source/attr/profile/symbol change or compiler/metadatareplay."
+  ],
+  "acceptance_delta": 0,
+  "measured_target_delta": {
+    "new_counted_checks_closed": 0,
+    "combined_percent": "51.225",
+    "percentage_point_increase_since_frozen_target": "0",
+    "target_combined_percent": "76.8375"
+  },
+  "remaining": "13genuineproviders inclkprintf/do_syscall, actualboot/ring/IRQ/storageinit, finalmatchedsource/image/modules/deployment/nativeoriginalgates remain unresolved. No function/hardware/init/runtime/nativeexecuted."
+}

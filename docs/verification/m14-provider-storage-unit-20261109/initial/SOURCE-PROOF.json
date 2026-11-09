@@ -1,0 +1,202 @@
+{
+  "status": "CORRECTED_PRECOMPILE_TWO_TRACE_DECLARATIONS_ONLY_NOT_COMPILED_LINKED_OR_EXECUTED",
+  "owner": "/root/m15_cli_high",
+  "contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/lower-provider-data-contract-1/SOURCE-CONTRACT.json",
+    "sha256": "5901b5274210207830a691d83c33b53e8e7569b30c16c2d1d0d27448766680a0"
+  },
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/provider_storage_unit.rs",
+    "sha256": "64116d567d5823556b0e1411683b65271940ffe207d983cb2c5bbe0b807a8c17"
+  },
+  "canonical_sources": {
+    "/home/holden/mckernel/kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "/home/holden/mckernel/kernel/rust/x86_local.rs": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f",
+    "/home/holden/mckernel/kernel/rust/ap.rs": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137",
+    "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+    "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68",
+    "/home/holden/mckernel/kernel/rust/x86_memory_logger_bridges.rs": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce",
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "exact_items": {
+    "pub static mut clv:": {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "start_line": 66,
+      "end_line": 67,
+      "sha256": "99c5ac666d623f608d8d7519b6b45782fd84186fdd9ceb5fc03a6514df152a69",
+      "text": "#[no_mangle]\npub static mut clv: *mut CpuLocalVar = null_mut();\n"
+    },
+    "pub static mut locals:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "start_line": 15,
+      "end_line": 16,
+      "sha256": "b574bf815ccaa1c670a91e86e4263587b3d664d55d020871f4eb4c8cefa5c879",
+      "text": "#[no_mangle]\npub static mut locals: *mut X86CpuLocalVariables = core::ptr::null_mut();\n"
+    },
+    "pub static mut num_processors:": {
+      "path": "/home/holden/mckernel/kernel/rust/ap.rs",
+      "start_line": 40,
+      "end_line": 41,
+      "sha256": "4657be662b70ee627de03b26caa712ca6ae7ff9b937737ab50408550d6a283d2",
+      "text": "#[no_mangle]\npub static mut num_processors: CInt = 1;\n"
+    },
+    "pub static mut linux_page_offset_base:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "start_line": 215,
+      "end_line": 216,
+      "sha256": "c4d264d6e584b452ddf9ed39662618f9c230bcdc2fee874c47a8984902bb45b8",
+      "text": "#[cfg_attr(not(mckernel_equivalence), no_mangle)]\npub static mut linux_page_offset_base: CULong = 0;\n"
+    },
+    "pub static mut x86_kernel_phys_base:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "start_line": 217,
+      "end_line": 218,
+      "sha256": "b002b9803bac19f33e8d1e12c44fddd6cd87de17712f3570d1a4e236ca9f7b4e",
+      "text": "#[cfg_attr(not(mckernel_equivalence), no_mangle)]\npub static mut x86_kernel_phys_base: CULong = 0;\n"
+    },
+    "    pub(super) static x86_map_kernel_start_geometry:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_line": 9691,
+      "end_line": 9692,
+      "sha256": "16e27a50ae36d0e956b39fe5c98e9fa91561660709c30931ab7e3bc5add29f96",
+      "text": "    #[no_mangle]\n    pub(super) static x86_map_kernel_start_geometry: CULong = 0xfffffffffe800000;\n"
+    },
+    "    const TRACE_FILE_BYTES:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_line": 9548,
+      "end_line": 9565,
+      "sha256": "d984b6193ca94c946e68ad2720d978a94a889dedf57c3a970e46a70b7b9febc2",
+      "text": "    const TRACE_FILE_BYTES: [u8; 319] = [\n        47, 104, 111, 109, 101, 47, 104, 111, 108, 100, 101, 110, 47, 109, 99, 107, 101, 114, 110, 101,\n        108, 45, 119, 111, 114, 107, 47, 104, 111, 115, 116, 45, 112, 114, 101, 112, 97, 114, 97, 116,\n        105, 111, 110, 47, 118, 101, 108, 111, 99, 105, 116, 121, 45, 105, 110, 116, 101, 114, 118, 101,\n        110, 116, 105, 111, 110, 45, 50, 48, 50, 54, 49, 48, 50, 51, 45, 49, 53, 47, 109, 49,\n        52, 45, 114, 101, 116, 97, 105, 110, 101, 100, 45, 118, 97, 108, 105, 100, 97, 116, 111, 114,\n        45, 99, 111, 110, 116, 105, 110, 117, 97, 116, 105, 111, 110, 45, 49, 47, 119, 104, 111, 108,\n        101, 45, 109, 101, 109, 111, 114, 121, 45, 99, 108, 111, 115, 117, 114, 101, 45, 115, 111, 117,\n        114, 99, 101, 45, 51, 47, 112, 114, 111, 100, 117, 99, 116, 105, 111, 110, 45, 99, 111, 110,\n        115, 117, 109, 101, 114, 45, 112, 114, 101, 112, 97, 114, 97, 116, 105, 111, 110, 45, 49, 47,\n        98, 111, 117, 110, 100, 101, 100, 45, 116, 121, 112, 101, 45, 105, 109, 112, 111, 114, 116, 45,\n        99, 111, 114, 114, 101, 99, 116, 105, 111, 110, 45, 49, 47, 101, 120, 112, 101, 114, 116, 45,\n        111, 117, 116, 101, 114, 45, 98, 114, 97, 99, 101, 45, 99, 111, 114, 114, 101, 99, 116, 105,\n        111, 110, 45, 49, 47, 114, 101, 97, 108, 45, 115, 112, 108, 105, 116, 45, 112, 114, 111, 118,\n        105, 100, 101, 114, 45, 115, 111, 117, 114, 99, 101, 45, 115, 117, 99, 99, 101, 115, 115, 111,\n        114, 45, 49, 47, 115, 111, 117, 114, 99, 101, 47, 97, 114, 99, 104, 47, 120, 56, 54, 95,\n        54, 52, 47, 107, 101, 114, 110, 101, 108, 47, 109, 101, 109, 111, 114, 121, 46, 99, 0,\n    ];\n"
+    },
+    "    static TRACE_FILE:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_line": 9566,
+      "end_line": 9566,
+      "sha256": "fef96ba0bc7951d9bbf2da7827ccf32641e0f9d4a56d40dbe3f38e80f6c48c5e",
+      "text": "    static TRACE_FILE: [u8; 319] = TRACE_FILE_BYTES;\n"
+    },
+    "    pub(super) static mut x86_addr_log_straight_debug:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_line": 9652,
+      "end_line": 9661,
+      "sha256": "69ae3601dde9e8ec195a953c1a9fcf392f162dfc969253a4189313974fee1a5f",
+      "text": "    #[no_mangle]\n    #[used]\n    #[link_section = \"__verbose\"]\n    pub(super) static mut x86_addr_log_straight_debug: crate::debug::Ddebug =\n        crate::debug::Ddebug {\n            file: TRACE_FILE.as_ptr().cast(),\n            func: b\"x86_addr_log_bridge\\0\".as_ptr().cast(),\n            fmt: core::ptr::null(),\n            line_flags: 3276,\n        };\n"
+    },
+    "    pub(super) static mut x86_addr_log_kernel_debug:": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "start_line": 9663,
+      "end_line": 9672,
+      "sha256": "a9000b2820bbf6576028b5c0eb4870feef9617314a0d416027caa910079e90e9",
+      "text": "    #[no_mangle]\n    #[used]\n    #[link_section = \"__verbose\"]\n    pub(super) static mut x86_addr_log_kernel_debug: crate::debug::Ddebug =\n        crate::debug::Ddebug {\n            file: TRACE_FILE.as_ptr().cast(),\n            func: b\"x86_addr_log_bridge\\0\".as_ptr().cast(),\n            fmt: core::ptr::null(),\n            line_flags: 3272,\n        };\n"
+    },
+    "pub struct Ddebug": {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_line": 26,
+      "end_line": 32,
+      "sha256": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952",
+      "text": "#[repr(C)]\npub struct Ddebug {\n    pub file: *const i8,\n    pub func: *const i8,\n    pub fmt: *const i8,\n    pub line_flags: u32,\n}\n"
+    },
+    "unsafe fn debug_enabled(": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_logger_bridges.rs",
+      "start_line": 31,
+      "end_line": 35,
+      "sha256": "4bdd821dbb406fc924f3fff81056a61a1dbd2f4ce0a7eb3b11d04e2a68646da1",
+      "text": "unsafe fn debug_enabled(descriptor: *const Ddebug) -> bool {\n    // SAFETY: the caller supplies live C descriptor storage; the selected C/Rust\n    // layout places the 24-bit line and high 8-bit flags at byte offset 24.\n    unsafe { read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0 }\n}\n"
+    },
+    "pub extern \"C\" fn x86_addr_log_bridge(": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_logger_bridges.rs",
+      "start_line": 38,
+      "end_line": 63,
+      "sha256": "e1f5e4d2412a39cfd3cae49d4ea786e924331738b1835e8d909f108e9de41099",
+      "text": "#[no_mangle]\npub extern \"C\" fn x86_addr_log_bridge(event: CInt, value: CULong) {\n    // SAFETY: descriptor storage is provided by the selected C translation unit;\n    // formats and %s data are static, and value retains its unsigned-long width.\n    unsafe {\n        match event {\n            1 if debug_enabled(addr_of!(x86_addr_log_kernel_debug)) => {\n                kprintf(\n                    b\"%s: MAP_KERNEL_START <= 0x%lx <= linux_page_offset_base\\n\\0\"\n                        .as_ptr()\n                        .cast(),\n                    b\"virt_to_phys\\0\".as_ptr().cast::<c_char>(),\n                    value,\n                );\n            }\n            2 if debug_enabled(addr_of!(x86_addr_log_straight_debug)) => {\n                kprintf(\n                    b\"%s: MAP_ST_START <= 0x%lx <= MAP_FIXED_START\\n\\0\".as_ptr().cast(),\n                    b\"virt_to_phys\\0\".as_ptr().cast::<c_char>(),\n                    value,\n                );\n            }\n            _ => {}\n        }\n    }\n}\n"
+    }
+  },
+  "Ddebug_layout_assertions": {
+    "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+    "exact_lines": [
+      "    assert!(size_of::<Ddebug>() == 32);\n",
+      "    assert!(align_of::<Ddebug>() == 8);\n",
+      "    assert!(offset_of!(Ddebug, line_flags) == 24);\n"
+    ],
+    "size": 32,
+    "alignment": 8,
+    "line_flags_offset": 24
+  },
+  "logger_extern_declarations": {
+    "source": "/home/holden/mckernel/kernel/rust/x86_memory_logger_bridges.rs",
+    "kprintf": "    fn kprintf(format: *const c_char, ...) -> CInt;\n",
+    "two_descriptors": "    static mut x86_addr_log_kernel_debug: Ddebug;\n    static mut x86_addr_log_straight_debug: Ddebug;\n"
+  },
+  "scaffold": "no_std/private module shells/imports only; abi.rs exact qualified type dependency. No function/type/storage initializer body is rewritten. Six storage definitions preserve their original attributes/initializers; two setup cfg_attr native/non-equivalence exports remain exact. Original owned_memory_data is a private module without an outer cfg, retained as a bounded shell.",
+  "expected_unit_global_strong_definitions": {
+    "clv": {
+      "kind": "B",
+      "bytes": 8,
+      "actual_initializer": "null_mut()"
+    },
+    "locals": {
+      "kind": "B",
+      "bytes": 8,
+      "actual_initializer": "core::ptr::null_mut()"
+    },
+    "num_processors": {
+      "kind": "D",
+      "bytes": 4,
+      "actual_initializer": "1"
+    },
+    "linux_page_offset_base": {
+      "kind": "B",
+      "bytes": 8,
+      "actual_initializer": "0",
+      "attribute": "cfg_attr(not(mckernel_equivalence),no_mangle)"
+    },
+    "x86_kernel_phys_base": {
+      "kind": "B",
+      "bytes": 8,
+      "actual_initializer": "0",
+      "attribute": "cfg_attr(not(mckernel_equivalence),no_mangle)"
+    },
+    "x86_map_kernel_start_geometry": {
+      "kind": "R",
+      "bytes": 8,
+      "actual_initializer": "0xfffffffffe800000"
+    },
+    "x86_addr_log_straight_debug": {
+      "kind": "D",
+      "bytes": 32,
+      "section": "__verbose",
+      "line_flags": 3276
+    },
+    "x86_addr_log_kernel_debug": {
+      "kind": "D",
+      "bytes": 32,
+      "section": "__verbose",
+      "line_flags": 3272
+    },
+    "x86_addr_log_bridge": {
+      "kind": "T",
+      "bytes": "actual result to measure after admission"
+    }
+  },
+  "expected_unit_undefined_genuine": [
+    "kprintf"
+  ],
+  "descriptor_dependencies": "Original319-byte TRACE_FILE_BYTES and same static TRACE_FILE; actual functionliteral x86_addr_log_bridge NUL; fmtNULL unchanged. Both __verbose objects retain no_mangle/used/link_section, mutable lifetime and volatile flag access. Source strings/path bytes are not normalized or remapped.",
+  "native_initialization_NOT_ESTABLISHED": "Initialnull/zero/one are actual preboot image storage, not valid usable runtime replacements. cpu_local_var_init/init_processors_local/ap_init/arch_start/GS/MSR/allocator/monitor/rusage ownership and genuine kprintf chain remain separately required and unexecuted. No whole source module/provider callback/no-op/logger silence supplied.",
+  "prospective_join_only": "New storage object may join only separately qualified current21T/19U lower_partial, no fulloriginalCLS/AP/setup/memory/logger/debug object. Expect22T+8globaldata=30strongdefinitions and13genuineU: resolve exactly6storage+logger, add genuinekprintfU, preserve all21existingT sizes/bytes. Actual predecessor artifact and uniqueowner gate remain to bind after A/F qualification.",
+  "operations": {
+    "compiler": false,
+    "linker": false,
+    "runtime": false,
+    "canonical_index_writes": false,
+    "recursive_agents": false
+  },
+  "preserved_original": {
+    "unit_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/provider_storage_unit.rs",
+    "unit_sha256": "5ba49582ebfabb3de2fd3a218739f33315ef7b7d22de841760da515a0f7d5c08",
+    "proof_sha256": "c4bb1eadd32a73f28c689b4c2d713b418fc4ab3829b1b8d206e22ecec897df51",
+    "request_sha256": "1b80ae60fe4bcc0fbabc9523846e9533d8fd7ff0aa0305bc950043fc2f5565bb",
+    "finding": "PRE_EXECUTION_SOURCE_REVIEW: originalcapturestoppedattypesemicolon [u8;319], producingtwoincompleteTRACEdeclarations. No compiler/runtime/test failure occurred."
+  }
+}
