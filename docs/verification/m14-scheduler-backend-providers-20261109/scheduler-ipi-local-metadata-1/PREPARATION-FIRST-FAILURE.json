@@ -1,0 +1,32 @@
+{
+  "status": "PREPARATION_ASSERTION_BEFORE_ANY_PAYLOAD_OR_GATE",
+  "exact_failure": "Traceback (most recent call last):\n  File \"<stdin>\", line 320, in <module>\nAssertionError\n",
+  "cause": "Preparation took retained metadata argv[:18], including nm, then asserted last element was metrics. Correct prefix ends before actual nm at index17.",
+  "failed_prefix": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "60s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=45:45",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/provider-symbols.metrics",
+    "/usr/bin/nm"
+  ],
+  "Popen_compiler_GNU_ELFparser_gate_link_runtime_count": 0,
+  "partial_files_preserved_unchanged": {
+    "metadata_checks.py": "900d116a00423b584ceab20089edfc2200174824a186825d7301bf3793118f67",
+    "run_metadata.py": "17c9227d7fcffbcf8a30b42a72cb958d7028897b8c9b727243e91e4aac137ad8",
+    "SOURCE-EMISSION-CONTRACT.json": "520807580d3c00955194b47a162d186991a54c5cce72d2136e5b28a7cb017347"
+  },
+  "bounded_correction": "Use argv up to index of literal /usr/bin/nm; no source/predicate/driver/producer change."
+}

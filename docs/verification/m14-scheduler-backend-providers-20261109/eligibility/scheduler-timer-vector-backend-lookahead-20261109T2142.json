@@ -1,0 +1,158 @@
+{
+  "kind": "FINITE_REAL_TIMER_VECTOR_BACKEND_SOURCE_LOOKAHEAD",
+  "decision": "GO_FINITE_SOURCE_PREPARATION_ONLY_ROOT_REVIEW_AND_ADMISSION_REQUIRED",
+  "owner": "Existing saved Sol/HIGH read-only lookahead; Root current producers/debugdata/join ownership untouched",
+  "plan": "CAMPAIGN.md updated2026-11-09T21:37Z records ACTIVE sameRoot211917Z; latest assignment reports engine42f177e4 joinPASS/allwaitsjoined. No new engine or existing tenbridge work is duplicated.",
+  "retained_owner_check": {
+    "saved_text": "docs/verification/m14-delay-provider-unit-20261109/join/raw/joined-symbols.stdout",
+    "exact_names_not_present": [
+      "set_timer",
+      "ihk_mc_get_vector",
+      "timer_set_timer_body_result"
+    ],
+    "method": "Read existing saved symbol text only; no nm/hash census or current object execution. Root must reconcile actual latest in-flight cohort before any new unit/join."
+  },
+  "source_boundary": {
+    "timer": "Accepted F02 process/scheduling context; current genuine C process.c6658-6671 set_timer under !MCKERNEL_RUST_PROCESS_HELPERS calls actual timer body/descriptor/bridges. Current Rust sched_helpers.rs1888 supplies matching CInt argument/void result and preserves callback/address semantics.",
+    "vector": "Accepted F04 startup/interrupt and independent selected x86 setup context. Current Rust x86_setup.rs536 matches actual IHK x86setup C231-247 vector mapping. This is selected Rust setup-source ownership, not a new separate accepted-file/native claim.",
+    "selection": [
+      "kernel/rust/lib.rs54 sched_helpers and101 x86_setup",
+      "kernel/CMakeLists.txt174/194 includes genuine source modules;637 removes IHK x86setup C in selected Rust mode;668/670 select PROCESS_HELPERS"
+    ],
+    "held_exclusion": "No generic/exec/notification packet/endpoint body, ACK/TID/XPMEM, perf/mmap, SDK/native/currentfree/UNKNOWN disposition is changed. Source functions and true external declarations only; no wholemodule/wholecrate or held downstream implementation."
+  },
+  "finite_batch": {
+    "public_definitions": [
+      {
+        "name": "set_timer",
+        "source": "kernel/rust/sched_helpers.rs1887-1903",
+        "signature": "unsafe extern C fn(CInt)",
+        "closure": "Reads actual current CPU pointer/time_sharing; passes original immutable offset descriptor and four actual timer bridge addresses into actual timer_set_timer_body_result; intentionally discards body return."
+      },
+      {
+        "name": "timer_set_timer_body_result",
+        "source": "kernel/rust/sched_helpers.rs1905-1992",
+        "signature": "unsafe extern C fn(usize,CInt,CInt,*const TimerRuntimeOffsets,Option<TimerSpinLockFn>,Option<TimerSpinUnlockFn>,Option<TimerLapicEnableFn>,Option<TimerLapicDisableFn>)->CInt",
+        "closure": "Original runqueue/current/backlog offset reads, callback validation, conditional lock ownership, enable/disable/update ordering and num_running result remain exact."
+      },
+      {
+        "name": "ihk_mc_get_vector",
+        "source": "kernel/rust/x86_setup.rs535-543",
+        "signature": "unsafe extern C fn(CInt)->CInt",
+        "closure": "Original cfg_attr(not(mckernel_equivalence),no_mangle), match arms and half-open vector range; no runtime state/import."
+      }
+    ],
+    "private_helpers": [
+      {
+        "name": "list_next",
+        "source": "kernel/rust/sched_helpers.rs439-442",
+        "body": "read_volatile(list_addr as *const usize)"
+      },
+      {
+        "name": "list_empty_addr",
+        "source": "kernel/rust/sched_helpers.rs449-452",
+        "body": "list_next(list_addr)==list_addr"
+      }
+    ],
+    "new_data_definitions": [],
+    "timer_constants": [
+      "EINVAL:CInt=22 at161",
+      "PS_RUNNING:CInt=0x1 at216",
+      "Original literal enable(1_000_000), bookkeeping values0/1 and wrapping address arithmetic"
+    ],
+    "vector_constants": [
+      "ENOENT:CInt=2 atx86_setup10",
+      "IHK_GV_IKC:CInt=1 at22",
+      "IHK_GV_QUERY_FREE_MEM:CInt=2 at23",
+      "IHK_TLB_FLUSH_IRQ_VECTOR_START:CInt=68 at24",
+      "IHK_TLB_FLUSH_IRQ_VECTOR_END:CInt=START+64 at25; range excludes132"
+    ],
+    "no_invented_semantics": "Do not replace actual callback providers, construct synthetic descriptor values, alter runqueue lock/IRQ/time-sharing behavior, or claim missing full runtime contract is supplied by codegen."
+  },
+  "types": {
+    "actual_sources": [
+      "kernel/rust/abi.rs actual CInt=i32,CULong=u64,CpuLocalVar; same retained ff48bc2e profile identity",
+      "kernel/rust/sched_helpers.rs117-123 actual timer callback aliases",
+      "kernel/rust/sched_helpers.rs259-276 actual repr(C) TimerRuntimeOffsets"
+    ],
+    "TimerRuntimeOffsets_fields_in_order": [
+      "thread_status_offset",
+      "thread_sched_list_offset",
+      "thread_spin_sleep_lock_offset",
+      "thread_spin_sleep_offset",
+      "thread_itimer_enabled_offset",
+      "cpu_runq_lock_offset",
+      "cpu_runq_offset",
+      "cpu_runq_len_offset",
+      "cpu_current_offset",
+      "cpu_timer_enabled_offset",
+      "cpu_backlog_list_offset",
+      "timer_timeout_offset",
+      "timer_waitq_offset",
+      "timer_list_offset",
+      "timer_thread_offset"
+    ],
+    "descriptor_layout": "Original15usize repr(C), selected LP64 width8/alignment8; retain all fields even those unused by this body. Actual instance stays genuine external data; do not fabricate an instance/layout.",
+    "callback_aliases": {
+      "TimerSpinLockFn": "unsafe extern C fn(usize)->CULong",
+      "TimerSpinUnlockFn": "unsafe extern C fn(usize,CULong)",
+      "TimerLapicEnableFn": "unsafe extern C fn(u32)",
+      "TimerLapicDisableFn": "unsafe extern C fn()"
+    },
+    "core_imports": [
+      "core::ptr::{read_volatile,write_volatile}; actual addr_of!/read operations"
+    ],
+    "profile": "Same reviewed no_std/nightly1.95/edition2021/large-static/no-redzone/no-vector/no-SSE HOST partial codegen contract and inherited exact warning policy; no optional cfg or mckernel_equivalence added. This is not final native ABI acceptance."
+  },
+  "genuine_remaining_imports": [
+    {
+      "name": "get_this_cpu_local_var",
+      "kind": "function",
+      "signature": "extern C fn()->*mut actual CpuLocalVar"
+    },
+    {
+      "name": "time_sharing",
+      "kind": "mutable data",
+      "type": "CInt; imported only"
+    },
+    {
+      "name": "process_timer_runtime_offsets",
+      "kind": "immutable data",
+      "type": "actual TimerRuntimeOffsets; imported only"
+    },
+    {
+      "name": "process_timer_spin_lock_bridge",
+      "kind": "function",
+      "signature": "extern C fn(usize)->CULong"
+    },
+    {
+      "name": "process_timer_spin_unlock_bridge",
+      "kind": "function",
+      "signature": "extern C fn(usize,CULong)"
+    },
+    {
+      "name": "process_timer_lapic_enable_bridge",
+      "kind": "function",
+      "signature": "extern C fn(u32)"
+    },
+    {
+      "name": "process_timer_lapic_disable_bridge",
+      "kind": "function",
+      "signature": "extern C fn()"
+    }
+  ],
+  "future_composition": "Current tenbridge exports are process_sched_{cpu_local,interrupt,runq_log,rwlock,rwunlock,set_timer,status_set,vector}_bridge plus process_spin_lock/unlock_bridge. They contain NO process_timer_* exports. All four named process_timer callbacks, time_sharing and process_timer_runtime_offsets remain genuine external imports unless actual saved currentpartial symbol proof establishes a matching owner. Source context is not an existing-owner receipt. No partialUcount is inferred.",
+  "smallest_next_source_preparation": "One exact source packet with3publicdefinitions+2privatehelpers, original constants/types and7actual extern declarations; Root can split independent vector from timer if actual disjoint admission warrants. Source-only contracts are not commands or new acceptance quotas.",
+  "future_qualification_limit": "If separately reviewed/admitted, actual object symbol/byte/relocation predicates precede any join; reconcile current exact source/cohort and preserve previous owners. No timer/function/clock/IRQ/boot/native execution, full accepted scheduling behavior or final closure is inferred.",
+  "actions": {
+    "CPU0_read_only": true,
+    "new_unit_generation": false,
+    "canonical_or_index_writes": false,
+    "producer_or_debugdata_files_touched": false,
+    "build_link_test_runtime_native_actions": false,
+    "goal_controls_or_spawn": false,
+    "sole_written_file": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-vector-backend-lookahead-20261109T2142.json"
+  },
+  "acceptance_and_scoring_delta": 0,
+  "correction_note": "Corrected prior unsubstantiated statement that four process_timer bridges belonged to tenbridge. Root exact export list establishes they do not. Source3T/twohelpers eligibility remains unchanged; no callback/body/provider proof is newly claimed."
+}

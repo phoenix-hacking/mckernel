@@ -1,0 +1,1640 @@
+{
+  "schema": "mckernel.exact_current80_timer_CPU_backend_join.v1",
+  "status": "READY_EXACT_CURRENT80_TIMER_CPU_THREE_OBJECT_JOIN_PENDING_CONCRETE_REVIEW_ROOT_ADMISSION",
+  "owner": "/root/m15_cli_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1",
+  "output_directory": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output",
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "label": "partial-link",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/partial-link.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/output/scheduler_primitives_debug_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/output/scheduler_timer_vector_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/partial-link.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/partial-link.stderr"
+    },
+    {
+      "label": "joined-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-symbols.stderr"
+    },
+    {
+      "label": "joined-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-elf.stderr"
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/backend_join_checks.py": "dcfd40e80200d1d920fe6fde702274fa3eb225114e7bbe27d33249df69fb95a2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/run_join.py": "23e87860a3e41d70dce69de636f80f991ccf822bb1e7fd55ef0a8d9ee81e86c2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/output/scheduler_primitives_debug_partial.o": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/output/scheduler_timer_vector_provider.o": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/JOIN-REQUEST.json": "56ab7b29baa986f16cb73cf63069d0234e7366bd699610dbbe25443645fa1a98",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/JOIN-RESULT.json": "89da846100e387f14da95e0c93125c6c6fad64057254bb85119a01bd21899e67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/POSTJOIN-CHECK.json": "143f6068ba7834f77a081fd36c61ec2ad1d5dfdc3a0266abfd360b2c905838e2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/ACTUAL-JOINED-METADATA.json": "d0162ad2cc0a0bc8f455d1b3a21ce4e2d9108303b35b615785029b3282316235",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/joined-symbols.stdout": "b81f130e549fd8e699bdac575e57bfa63bd5670dbe71a955bbb40b383ae3c539",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/join_checks.py": "57d13cedbe79ed62f14da18052297d64f6f84fc91afa872951240bbfa1fc040b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/SOURCE-EMISSION-CONTRACT.json": "138993976bc81d7935ec9b69c1ebb5b3301fa60994dd1ef57f5945da94dd4a67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/correction-1/RESULT.json": "2a7636aedb2d898676cd6eef10fc4c9444cb9abf115d5b9d80f21134f0087181",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/correction-1/OBJECT-CHECK.json": "6d3c28fd0b6409d41a7ce89abc38a407bb8e325e14664f314faed44171a8c02c",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/correction-1/ACTUAL-ELF-METADATA.json": "6378fa51fe65fba1ce4b5b8aabc9eb676fc254f442bfd2ded835f521abda5583",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/timer-vector-correction-root-1/ADMISSION.json": "175121fb3b93c9f2b8dafd25d93af85306b3c13cb403b67d0c44874edb95735d",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/timer-vector-correction-root-1/RESULT.json": "2a7636aedb2d898676cd6eef10fc4c9444cb9abf115d5b9d80f21134f0087181",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-review-1/FINAL-CORRECTION-REVIEW.json": "e36f3dd0d38afdc9ba3c105fb992aeadb2f45433747c51f232fc4f4338e40209",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/REQUEST.json": "6d3e985f63703f0a36f421df1917af8b9d9cb27aea1791d6ee0f506777a381e7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/provider-symbols.stdout": "032a2d0bc8ece1a0a539b8e3c7354ded6990da654cd452d139e224698d6df557",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/provider-elf.stdout": "699da0a2ceba22c1d29f1627d3ebc14f7d33044a722ed55c0941691a16d6bb67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/REQUEST.json": "6c9620dbfb54c4a1fde5f11cce9a9792dd85566deae2ad2be31705cbc191bfc4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/METADATA-EXECUTION.json": "e63619d0f17352d2f79dd693a29aa390842c9cd71d494b1ec8dd08b01dbfec74",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/OBJECT-CHECK.json": "8d09e76bbada7204ed66fbe60ece12b432a4693680aeca70a3898217ebf1854b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/ACTUAL-ELF-METADATA.json": "eafde167c6be57cadc2116b673736a4f00fff4cc9bc45790ead998ad87411eb8",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stdout": "5cebcedef175a743e3462b95c31a26136aa1f132c4ff2a033e38f73eb61cf443",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.stdout": "1e67ba06f547660a0751bcf51f553ae25db7487c8a2ed5eebf3aba0ae0d3c2ad",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-review-1/METADATA-REVIEW.json": "624e81b7d50bfe0618d48c39b306066930f4d106deaabd677918bba782f034d3",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8"
+  },
+  "object_inputs": [
+    {
+      "role": "qualified_current80",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/output/scheduler_primitives_debug_partial.o",
+      "sha256": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241",
+      "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/joined-symbols.stdout",
+      "actual_definitions": {
+        "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": {
+          "kind": "R",
+          "size": 319
+        },
+        "__ihk_mc_spinlock_lock": {
+          "kind": "T",
+          "size": 108
+        },
+        "__ihk_mc_spinlock_lock_noirq": {
+          "kind": "T",
+          "size": 91
+        },
+        "__ihk_mc_spinlock_unlock": {
+          "kind": "T",
+          "size": 61
+        },
+        "__ihk_mc_spinlock_unlock_noirq": {
+          "kind": "T",
+          "size": 59
+        },
+        "__sched_wakeup_thread": {
+          "kind": "T",
+          "size": 634
+        },
+        "arch_delay": {
+          "kind": "T",
+          "size": 91
+        },
+        "clv": {
+          "kind": "B",
+          "size": 8
+        },
+        "cpu_disable_interrupt_save": {
+          "kind": "T",
+          "size": 6
+        },
+        "cpu_interrupt_disabled": {
+          "kind": "T",
+          "size": 16
+        },
+        "cpu_local_var_initialized": {
+          "kind": "B",
+          "size": 4
+        },
+        "cpu_pause": {
+          "kind": "T",
+          "size": 3
+        },
+        "cpu_restore_interrupt": {
+          "kind": "T",
+          "size": 5
+        },
+        "do_setresgid": {
+          "kind": "T",
+          "size": 173
+        },
+        "do_setresuid": {
+          "kind": "T",
+          "size": 173
+        },
+        "format_decode_result": {
+          "kind": "T",
+          "size": 876
+        },
+        "get_cpu_local_var": {
+          "kind": "T",
+          "size": 24
+        },
+        "get_this_cpu_local_var": {
+          "kind": "T",
+          "size": 99
+        },
+        "getcred": {
+          "kind": "T",
+          "size": 259
+        },
+        "getcred_body_result": {
+          "kind": "T",
+          "size": 272
+        },
+        "ihk_mc_delay_us": {
+          "kind": "T",
+          "size": 91
+        },
+        "ihk_mc_get_processor_id": {
+          "kind": "T",
+          "size": 77
+        },
+        "ihk_mc_spinlock_init": {
+          "kind": "T",
+          "size": 5
+        },
+        "kmsg_buf": {
+          "kind": "B",
+          "size": 8
+        },
+        "kmsg_init": {
+          "kind": "T",
+          "size": 15
+        },
+        "kprintf": {
+          "kind": "T",
+          "size": 706
+        },
+        "kprintf_lock": {
+          "kind": "T",
+          "size": 107
+        },
+        "kprintf_unlock": {
+          "kind": "T",
+          "size": 71
+        },
+        "linux_page_offset_base": {
+          "kind": "B",
+          "size": 8
+        },
+        "locals": {
+          "kind": "B",
+          "size": 8
+        },
+        "memset": {
+          "kind": "T",
+          "size": 113
+        },
+        "num_processors": {
+          "kind": "D",
+          "size": 4
+        },
+        "preempt_disable": {
+          "kind": "T",
+          "size": 54
+        },
+        "preempt_enable": {
+          "kind": "T",
+          "size": 54
+        },
+        "printf_copy_literal_result": {
+          "kind": "T",
+          "size": 174
+        },
+        "printf_emit_char_result": {
+          "kind": "T",
+          "size": 14
+        },
+        "printf_terminate_result": {
+          "kind": "T",
+          "size": 19
+        },
+        "printf_write_nchars_result": {
+          "kind": "T",
+          "size": 25
+        },
+        "process_sched_cpu_local_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_interrupt_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_runq_log_bridge": {
+          "kind": "T",
+          "size": 684
+        },
+        "process_sched_rwlock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_rwunlock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_set_timer_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_status_set_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_sched_vector_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_spin_lock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "process_spin_unlock_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "ptrace_detach_do_kill_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "ptrace_detach_wakeup_bridge": {
+          "kind": "T",
+          "size": 12
+        },
+        "put_dec_full_result": {
+          "kind": "T",
+          "size": 174
+        },
+        "put_dec_result": {
+          "kind": "T",
+          "size": 291
+        },
+        "put_dec_trunc_result": {
+          "kind": "T",
+          "size": 214
+        },
+        "rdtsc": {
+          "kind": "T",
+          "size": 12
+        },
+        "sched_wakeup_thread": {
+          "kind": "T",
+          "size": 14
+        },
+        "sched_wakeup_thread_body_result": {
+          "kind": "T",
+          "size": 781
+        },
+        "skip_atoi_result": {
+          "kind": "T",
+          "size": 66
+        },
+        "snprintf": {
+          "kind": "T",
+          "size": 76
+        },
+        "strnlen": {
+          "kind": "T",
+          "size": 57
+        },
+        "syscall_do_syscall2_bridge": {
+          "kind": "T",
+          "size": 167
+        },
+        "syscall_do_syscall3_bridge": {
+          "kind": "T",
+          "size": 171
+        },
+        "syscall_get_processor_id_bridge": {
+          "kind": "T",
+          "size": 77
+        },
+        "syscall_policy_do_syscall2_bridge": {
+          "kind": "T",
+          "size": 167
+        },
+        "syscall_policy_do_syscall3_bridge": {
+          "kind": "T",
+          "size": 171
+        },
+        "syscall_refresh_cred_fields_body_result": {
+          "kind": "T",
+          "size": 163
+        },
+        "syscall_virt_to_phys_bridge": {
+          "kind": "T",
+          "size": 165
+        },
+        "terminate_host": {
+          "kind": "T",
+          "size": 183
+        },
+        "virt_to_phys": {
+          "kind": "T",
+          "size": 165
+        },
+        "wait_host_wait4_bridge": {
+          "kind": "T",
+          "size": 166
+        },
+        "x86_addr_log_bridge": {
+          "kind": "T",
+          "size": 98
+        },
+        "x86_addr_log_kernel_debug": {
+          "kind": "D",
+          "size": 32
+        },
+        "x86_addr_log_straight_debug": {
+          "kind": "D",
+          "size": 32
+        },
+        "x86_kernel_phys_base": {
+          "kind": "B",
+          "size": 8
+        },
+        "x86_map_kernel_start_geometry": {
+          "kind": "R",
+          "size": 8
+        },
+        "x86_user_map_kernel_start_bridge": {
+          "kind": "T",
+          "size": 14
+        },
+        "x86_virt_to_phys_body_result": {
+          "kind": "T",
+          "size": 105
+        },
+        "__mcs_rwlock_writer_lock_noirq": {
+          "kind": "T",
+          "size": 12
+        },
+        "__mcs_rwlock_writer_unlock_noirq": {
+          "kind": "T",
+          "size": 12
+        },
+        "xchg4": {
+          "kind": "T",
+          "size": 5
+        },
+        "process_remaining_range_scheduler_debug": {
+          "kind": "D",
+          "size": 576
+        }
+      },
+      "actual_U": [
+        "do_kill",
+        "do_syscall",
+        "eventfd",
+        "f03_terminate_host_refcount_set_v1",
+        "f03_wait_release_process",
+        "f03_wait_release_thread",
+        "ihk_mc_get_vector",
+        "ihk_mc_interrupt_cpu",
+        "set_timer",
+        "syscall_do_kill_thread_bridge",
+        "syscall_do_syscall_request_bridge",
+        "syscall_find_process_bridge",
+        "syscall_generic_forwarding_body_result",
+        "syscall_process_unlock_bridge",
+        "terminate_host_body_result"
+      ]
+    },
+    {
+      "role": "qualified_timer_vector3",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/output/scheduler_timer_vector_provider.o",
+      "sha256": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6",
+      "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/provider-symbols.stdout",
+      "actual_definitions": {
+        "ihk_mc_get_vector": {
+          "kind": "T",
+          "size": 37
+        },
+        "set_timer": {
+          "kind": "T",
+          "size": 465
+        },
+        "timer_set_timer_body_result": {
+          "kind": "T",
+          "size": 420
+        }
+      },
+      "actual_U": [
+        "get_this_cpu_local_var",
+        "process_timer_lapic_disable_bridge",
+        "process_timer_lapic_enable_bridge",
+        "process_timer_runtime_offsets",
+        "process_timer_spin_lock_bridge",
+        "process_timer_spin_unlock_bridge",
+        "time_sharing"
+      ]
+    },
+    {
+      "role": "qualified_CPU_IPI3",
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o",
+      "sha256": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+      "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stdout",
+      "actual_definitions": {
+        "ihk_mc_interrupt_cpu": {
+          "kind": "T",
+          "size": 142
+        },
+        "x86_get_interrupt_id_result": {
+          "kind": "T",
+          "size": 38
+        },
+        "x86_interrupt_cpu_result": {
+          "kind": "T",
+          "size": 147
+        }
+      },
+      "actual_U": [
+        "get_x86_cpu_local_variable",
+        "num_processors",
+        "x86_interrupt_log_bridge",
+        "x86_issue_ipi_bridge"
+      ]
+    }
+  ],
+  "actual_qualification": {
+    "base_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/JOIN-RESULT.json",
+    "timer_corrected_gate": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/correction-1/OBJECT-CHECK.json",
+    "timer_correction_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/correction-1/RESULT.json",
+    "cpu_gate": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/OBJECT-CHECK.json",
+    "cpu_execution": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/METADATA-EXECUTION.json"
+  },
+  "actual_prospective_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "get_x86_cpu_local_variable",
+    "process_timer_lapic_disable_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_runtime_offsets",
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result",
+    "time_sharing",
+    "x86_interrupt_log_bridge",
+    "x86_issue_ipi_bridge"
+  ],
+  "joined_object": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o",
+  "joined_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-symbols.stdout",
+  "joined_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/joined-elf.stdout",
+  "joined_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/ACTUAL-JOINED-METADATA.json",
+  "debug18_source_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-debug-data-metadata-1/SOURCE-EMISSION-CONTRACT.json",
+  "old2LOCAL_helpers": {
+    "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": 1190,
+    "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": 3395
+  },
+  "old_source_owned_tables": [
+    ".lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+    ".lrodata.format_decode_result"
+  ],
+  "original_LOCAL_KMSG_LOCK": "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+  "delay_alias": [
+    "arch_delay",
+    "ihk_mc_delay_us"
+  ],
+  "qualified_current_join_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/join_checks.py",
+    "sha256": "57d13cedbe79ed62f14da18052297d64f6f84fc91afa872951240bbfa1fc040b",
+    "reuse": "Only qualified()/alias()/retain_capture()/data_fields(); no old prejoin/postjoin or producers/gates/readback program replay."
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "actual_timer_corrected_object": {
+    "status": "PASS_CALLED_ACTUAL_TIMER_VECTOR3_SOURCE_OBJECT_GATE",
+    "object_sha256": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6",
+    "actual3T": {
+      "ihk_mc_get_vector": 37,
+      "set_timer": 465,
+      "timer_set_timer_body_result": 420
+    },
+    "genuine7U": [
+      "get_this_cpu_local_var",
+      "process_timer_lapic_disable_bridge",
+      "process_timer_lapic_enable_bridge",
+      "process_timer_runtime_offsets",
+      "process_timer_spin_lock_bridge",
+      "process_timer_spin_unlock_bridge",
+      "time_sharing"
+    ],
+    "all4_timer_callback_addresses_remain_genuine_U": [
+      "process_timer_spin_lock_bridge",
+      "process_timer_spin_unlock_bridge",
+      "process_timer_lapic_enable_bridge",
+      "process_timer_lapic_disable_bridge"
+    ],
+    "original_descriptor_and_time_sharing_remain_genuine_U": true,
+    "no_data_or_synthetic_offsets_instance": true,
+    "actual_function_and_private_listhelper_owners": {
+      "ihk_mc_get_vector": {
+        "source_owner": "ihk_mc_get_vector",
+        "bytes": 37,
+        "bytes_sha256": "d8d4246327648ba43d39f914d376767f899f88a7fadda19c0571166150d6a650",
+        "actual_source_relocations": []
+      },
+      "set_timer": {
+        "source_owner": "set_timer",
+        "bytes": 465,
+        "bytes_sha256": "96053d91af7920c6c19655282f77665a3ba768b54c187685503267cfced330ff",
+        "actual_source_relocations": [
+          {
+            "section": 4,
+            "offset": 13,
+            "type": 1,
+            "symbol": {
+              "name": "get_this_cpu_local_var",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 4,
+            "offset": 34,
+            "type": 1,
+            "symbol": {
+              "name": "time_sharing",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 4,
+            "offset": 53,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 40
+          },
+          {
+            "section": 4,
+            "offset": 81,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_spin_lock_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 4,
+            "offset": 105,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 48
+          },
+          {
+            "section": 4,
+            "offset": 130,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 8
+          },
+          {
+            "section": 4,
+            "offset": 143,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 4,
+            "offset": 156,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 24
+          },
+          {
+            "section": 4,
+            "offset": 223,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 64
+          },
+          {
+            "section": 4,
+            "offset": 245,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 32
+          },
+          {
+            "section": 4,
+            "offset": 261,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 80
+          },
+          {
+            "section": 4,
+            "offset": 291,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 72
+          },
+          {
+            "section": 4,
+            "offset": 322,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_lapic_disable_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 4,
+            "offset": 348,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 80
+          },
+          {
+            "section": 4,
+            "offset": 371,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_runtime_offsets",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 72
+          },
+          {
+            "section": 4,
+            "offset": 411,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_lapic_enable_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 4,
+            "offset": 440,
+            "type": 1,
+            "symbol": {
+              "name": "process_timer_spin_unlock_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          }
+        ]
+      },
+      "timer_set_timer_body_result": {
+        "source_owner": "timer_set_timer_body_result",
+        "bytes": 420,
+        "bytes_sha256": "2817686811d8f2c07d85a595e330785acd0421203f6c2cc155e56883e9845a2f",
+        "actual_source_relocations": []
+      }
+    },
+    "actual_source_unwind": [
+      {
+        "kind": "retained_profile_unwind_for_selected_source_only",
+        "name": ".eh_frame",
+        "bytes": 256,
+        "actual_source_references": [
+          {
+            "actual_relocation": {
+              "section": 9,
+              "offset": 32,
+              "type": 24,
+              "symbol": {
+                "name": "",
+                "bind": 0,
+                "type": 3,
+                "other": 0,
+                "section": 3,
+                "value": 0,
+                "size": 0
+              },
+              "addend": 0
+            },
+            "source_functions": [
+              "ihk_mc_get_vector"
+            ]
+          },
+          {
+            "actual_relocation": {
+              "section": 9,
+              "offset": 64,
+              "type": 24,
+              "symbol": {
+                "name": "",
+                "bind": 0,
+                "type": 3,
+                "other": 0,
+                "section": 4,
+                "value": 0,
+                "size": 0
+              },
+              "addend": 0
+            },
+            "source_functions": [
+              "set_timer"
+            ]
+          },
+          {
+            "actual_relocation": {
+              "section": 9,
+              "offset": 152,
+              "type": 24,
+              "symbol": {
+                "name": "",
+                "bind": 0,
+                "type": 3,
+                "other": 0,
+                "section": 6,
+                "value": 0,
+                "size": 0
+              },
+              "addend": 0
+            },
+            "source_functions": [
+              "timer_set_timer_body_result"
+            ]
+          }
+        ]
+      }
+    ],
+    "actual_set_timer_CPU_state_descriptor_callback_bindings": [
+      "get_this_cpu_local_var",
+      "time_sharing",
+      "process_timer_runtime_offsets",
+      "process_timer_spin_lock_bridge",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_lapic_disable_bridge",
+      "process_timer_runtime_offsets",
+      "process_timer_runtime_offsets",
+      "process_timer_lapic_enable_bridge",
+      "process_timer_spin_unlock_bridge"
+    ],
+    "actual_descriptor_member_address_bindings": {
+      "status": "EXACT_RETAINED20_RELOCATION_SOURCE_BINDING_FOR_ONE_PREDICATE_CORRECTION",
+      "object_sha256": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6",
+      "original_actual_capture": {
+        "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/ACTUAL-ELF-METADATA.json",
+        "sha256": "6378fa51fe65fba1ce4b5b8aabc9eb676fc254f442bfd2ded835f521abda5583"
+      },
+      "original_failure": {
+        "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/METADATA-FIRST-FAILURE.json",
+        "sha256": "ad26b091941a5b98d8d966be642e794383438420042a420441a15474f7f97fe8"
+      },
+      "full_original15_descriptor_fields": [
+        "thread_status_offset",
+        "thread_sched_list_offset",
+        "thread_spin_sleep_lock_offset",
+        "thread_spin_sleep_offset",
+        "thread_itimer_enabled_offset",
+        "cpu_runq_lock_offset",
+        "cpu_runq_offset",
+        "cpu_runq_len_offset",
+        "cpu_current_offset",
+        "cpu_timer_enabled_offset",
+        "cpu_backlog_list_offset",
+        "timer_timeout_offset",
+        "timer_waitq_offset",
+        "timer_list_offset",
+        "timer_thread_offset"
+      ],
+      "original_descriptor_type_sha256": "ff282acae5b78e1ed66096d3c4477b8c1548a38e677e1abb1da58606c724be41",
+      "selected_layout": "Originalrepr(C)15homogeneoususize fields; retainedx86_64LP64width8, fieldmemberaddress=ordinal*8. No descriptor VALUE/storage/header/provider fabricated.",
+      "actual_set_timer17_R64_edges": [
+        {
+          "owner": "set_timer",
+          "relative_offset": 13,
+          "target_symbol": "get_this_cpu_local_var",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "source_use": {
+            "source_expression": "get_this_cpu_local_var()",
+            "source_function": "set_timer",
+            "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 34,
+          "target_symbol": "time_sharing",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "source_use": {
+            "source_expression": "core::ptr::read(core::ptr::addr_of!(time_sharing))",
+            "source_function": "set_timer",
+            "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 53,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 40,
+          "descriptor_member": {
+            "field_name": "cpu_runq_lock_offset",
+            "ordinal_in_original15": 5,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 40,
+            "source_expression": "offsets.cpu_runq_lock_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1929,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 81,
+          "target_symbol": "process_timer_spin_lock_bridge",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "source_use": {
+            "source_expression": "Some(process_timer_spin_lock_bridge)",
+            "source_function": "set_timer",
+            "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 105,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 48,
+          "descriptor_member": {
+            "field_name": "cpu_runq_offset",
+            "ordinal_in_original15": 6,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 48,
+            "source_expression": "offsets.cpu_runq_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1936,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 130,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 8,
+          "descriptor_member": {
+            "field_name": "thread_sched_list_offset",
+            "ordinal_in_original15": 1,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 8,
+            "source_expression": "offsets.thread_sched_list_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1940,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 143,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "descriptor_member": {
+            "field_name": "thread_status_offset",
+            "ordinal_in_original15": 0,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 0,
+            "source_expression": "offsets.thread_status_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1942,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 156,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 24,
+          "descriptor_member": {
+            "field_name": "thread_spin_sleep_offset",
+            "ordinal_in_original15": 3,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 24,
+            "source_expression": "offsets.thread_spin_sleep_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1945,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 223,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 64,
+          "descriptor_member": {
+            "field_name": "cpu_current_offset",
+            "ordinal_in_original15": 8,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 64,
+            "source_expression": "offsets.cpu_current_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1954,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 245,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 32,
+          "descriptor_member": {
+            "field_name": "thread_itimer_enabled_offset",
+            "ordinal_in_original15": 4,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 32,
+            "source_expression": "offsets.thread_itimer_enabled_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1961,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 261,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 80,
+          "descriptor_member": {
+            "field_name": "cpu_backlog_list_offset",
+            "ordinal_in_original15": 10,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 80,
+            "source_expression": "offsets.cpu_backlog_list_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1966,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 291,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 72,
+          "descriptor_member": {
+            "field_name": "cpu_timer_enabled_offset",
+            "ordinal_in_original15": 9,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 72,
+            "source_expression": "offsets.cpu_timer_enabled_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1968,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 322,
+          "target_symbol": "process_timer_lapic_disable_bridge",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "source_use": {
+            "source_expression": "Some(process_timer_lapic_disable_bridge)",
+            "source_function": "set_timer",
+            "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 348,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 80,
+          "descriptor_member": {
+            "field_name": "cpu_backlog_list_offset",
+            "ordinal_in_original15": 10,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 80,
+            "source_expression": "offsets.cpu_backlog_list_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1966,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 371,
+          "target_symbol": "process_timer_runtime_offsets",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 72,
+          "descriptor_member": {
+            "field_name": "cpu_timer_enabled_offset",
+            "ordinal_in_original15": 9,
+            "declared_type": "usize",
+            "selected_LP64_usize_bytes": 8,
+            "member_byte_offset": 72,
+            "source_expression": "offsets.cpu_timer_enabled_offset",
+            "source_function": "timer_set_timer_body_result",
+            "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_line": 1968,
+            "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+            "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 411,
+          "target_symbol": "process_timer_lapic_enable_bridge",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "source_use": {
+            "source_expression": "Some(process_timer_lapic_enable_bridge)",
+            "source_function": "set_timer",
+            "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+          }
+        },
+        {
+          "owner": "set_timer",
+          "relative_offset": 440,
+          "target_symbol": "process_timer_spin_unlock_bridge",
+          "symbol_bind": 1,
+          "symbol_type": 0,
+          "symbol_section": 0,
+          "relocation_type": 1,
+          "addend": 0,
+          "source_use": {
+            "source_expression": "Some(process_timer_spin_unlock_bridge)",
+            "source_function": "set_timer",
+            "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+            "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+          }
+        }
+      ],
+      "actual_unwind3_PC64_edges": [
+        {
+          "actual_relocation": {
+            "section": 9,
+            "offset": 32,
+            "type": 24,
+            "symbol": {
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "other": 0,
+              "section": 3,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          "actual_source_function": "ihk_mc_get_vector",
+          "source_use": "Retained native eh_frame PC64 points to exact owning source-function start; no runtime/code edge."
+        },
+        {
+          "actual_relocation": {
+            "section": 9,
+            "offset": 64,
+            "type": 24,
+            "symbol": {
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "other": 0,
+              "section": 4,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          "actual_source_function": "set_timer",
+          "source_use": "Retained native eh_frame PC64 points to exact owning source-function start; no runtime/code edge."
+        },
+        {
+          "actual_relocation": {
+            "section": 9,
+            "offset": 152,
+            "type": 24,
+            "symbol": {
+              "name": "",
+              "bind": 0,
+              "type": 3,
+              "other": 0,
+              "section": 6,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          "actual_source_function": "timer_set_timer_body_result",
+          "source_use": "Retained native eh_frame PC64 points to exact owning source-function start; no runtime/code edge."
+        }
+      ],
+      "used_member_set_only": {
+        "cpu_runq_lock_offset": 40,
+        "cpu_runq_offset": 48,
+        "thread_sched_list_offset": 8,
+        "thread_status_offset": 0,
+        "thread_spin_sleep_offset": 24,
+        "cpu_current_offset": 64,
+        "thread_itimer_enabled_offset": 32,
+        "cpu_backlog_list_offset": 80,
+        "cpu_timer_enabled_offset": 72
+      },
+      "other_actual_code_edges": "Vector37/body420havezeroELFcode-relocations; source-privatehelpersNONE. No unclassifiedinternalcodeedge.",
+      "all_remaining_gate_conditions_reviewed_against_retained_capture": "Exact3globalT/7sourceU/no defineddata orprivatefn; readonlyonlyeh_frame256/3source-functionPC64+0 refs; existing7targetnamesandlarge-staticR64types hold. Onlyzero-addendassumptionwaswrongforcompiler-inlineddescriptorfields.",
+      "no_compiler_metadata_disasm_link_or_runtime_operations": true
+    },
+    "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/correction-1/ACTUAL-ELF-METADATA.json",
+    "future_actual_partial_join_unbound": true,
+    "no_timer_vector_list_lock_IRQ_cpu_native_function_runtime": true
+  },
+  "actual_CPU_object": {
+    "status": "PASS_CALLED_FINITE_CPU_IPI_SOURCE_OBJECT_GATE",
+    "object_sha256": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+    "actual3T": {
+      "ihk_mc_interrupt_cpu": 142,
+      "x86_get_interrupt_id_result": 38,
+      "x86_interrupt_cpu_result": 147
+    },
+    "genuine4U": [
+      "get_x86_cpu_local_variable",
+      "num_processors",
+      "x86_interrupt_log_bridge",
+      "x86_issue_ipi_bridge"
+    ],
+    "actual_private_adapter_names": [],
+    "function_owners": {
+      "ihk_mc_interrupt_cpu": {
+        "bytes": 142,
+        "sha256": "40e4483b8d2cdd9bc53a1fcf946c5547c3b4ea17c320ab04ff7faa6c424e235a",
+        "actual_source_relocations": [
+          {
+            "section": 3,
+            "offset": 14,
+            "type": 1,
+            "symbol": {
+              "name": "num_processors",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 3,
+            "offset": 28,
+            "type": 1,
+            "symbol": {
+              "name": "get_x86_cpu_local_variable",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 3,
+            "offset": 64,
+            "type": 1,
+            "symbol": {
+              "name": "x86_interrupt_log_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 3,
+            "offset": 92,
+            "type": 1,
+            "symbol": {
+              "name": "x86_issue_ipi_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          },
+          {
+            "section": 3,
+            "offset": 113,
+            "type": 1,
+            "symbol": {
+              "name": "x86_interrupt_log_bridge",
+              "bind": 1,
+              "type": 0,
+              "other": 0,
+              "section": 0,
+              "value": 0,
+              "size": 0
+            },
+            "addend": 0
+          }
+        ]
+      },
+      "x86_get_interrupt_id_result": {
+        "bytes": 38,
+        "sha256": "6b3945712e094bf51738d76c191db835fc30a5212efd04235d8338b5d8ffcecd",
+        "actual_source_relocations": []
+      },
+      "x86_interrupt_cpu_result": {
+        "bytes": 147,
+        "sha256": "abbfc466a2f70c9d44e8674b545caa65b8b4af7f7196c465b953d2c27619cf7a",
+        "actual_source_relocations": []
+      }
+    },
+    "source_readonly_sections": [
+      {
+        "name": ".eh_frame",
+        "bytes": 208,
+        "sha256": "4abd445bd2bdad3ae215d994e2b2c70f837023ebaedeff86d645b0ca54fa4bb1",
+        "kind": "retained_profile_native_unwind_for_actual_source_functions",
+        "targets": [
+          [
+            "ihk_mc_interrupt_cpu"
+          ],
+          [
+            "x86_get_interrupt_id_result"
+          ],
+          [
+            "x86_interrupt_cpu_result"
+          ]
+        ]
+      }
+    ],
+    "real_num_processors_is_U_not_defined": true,
+    "packed_ABI_APIC_offset8": "Actual repr(C,packed) first2CULong fields, CULong=u64 and unchanged original size_of expression; source/type binding only, no runtime/register-layout substitute",
+    "all_actual_metadata_retained": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/ACTUAL-ELF-METADATA.json",
+    "future_current80_or_later_partial_unbound": true,
+    "no_getter_IPI_logger_body_slot_storage_hardware_function_or_native_execution": true
+  },
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "qualified_owner_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+    "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "actual_qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/RESULT.json",
+    "reuse": "Image/check_nm/local/compare_owner/reference helpers only; no repeatedkprintfpredicate/codegen/oldmetadata execution."
+  },
+  "qualified_lock_relocation_helpers": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/join_checks.py",
+    "sha256": "93a8f429f77664a4df90fafc227801575751138ac32e7c2d3ed46d16a5f462c8",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kmsg-lock-provider-unit-1/expanded-1/join-1/RESULT.json",
+    "reuse": "ActualqualifiedprivateNOBITSownerrelocnormalization+ownerhelpers only; no oldpredicate/metadata/codegenreplay."
+  },
+  "driver_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "200s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=45:45",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/run_join.py",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/JOIN-REQUEST.json"
+  ],
+  "actual_call_order": "CALL actual corrected-timer/CPU/currentbase qualification plus unique-owner/source-partition prejoin and PERSIST before ANY new Popen. Only3 new ld-r/nm/ELF payloads; CALL postjoin after reads, retain actual joined capture before assertions. No compiler/provider-readback/gate replay.",
+  "scope": "Only actual b18current80 +actual7003timer +actual602dCPU operands. Preserve every existing/global/private byte,size,visibility,alignment,normalizedrelocation,NULstring/table, twoformatterhelpers, oneKMSG,delayalias and real18recorddescriptor/data ownership. No new data/default/callbackslot or bridge implementation. Actual imports derive from matching object sets; source/backend count growth is not checklist credit. No function/timer/IRQ/hardware/native/default/C-retirement acceptance.",
+  "not_runnable_until": "Independent concrete composition/controller/prepost GO and fresh exact Root admission. First unexpected failure STOP/preservebirths/directjoins/stdout/stderr/time-v/actualmetadata and escalate; no automaticretry or profile/source/owner weakening.",
+  "no_compiler_metadata_runtime_or_canonical_index_state_changes_in_preparation": true,
+  "original_checklist_credit": 0
+}

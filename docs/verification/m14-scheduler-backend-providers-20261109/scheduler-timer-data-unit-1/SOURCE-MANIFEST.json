@@ -1,0 +1,209 @@
+{
+  "schema": "mckernel.scheduler-timer2data.source-manifest.v1",
+  "status": "EXACT_TWO_EXISTING_GUARDED_DATA_OWNERS_FROZEN_SOURCE_ONLY",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/scheduler_timer_data_unit.rs",
+  "unit_sha256": "718c230ea6a2ff612842c2b199bc47733dc2fc308a1e820e839ec94ec6c90686",
+  "eligibility": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/timer-data-finite-profile-analysis-20261109T2222.json",
+    "sha256": "60c808e3acf4d392ea504a8b8799afc34718ad6badbd8cfd4e7e9966c3e0948c",
+    "decision": "GO_FINITE_RUST_TWO_OWNER_TARGET_PROFILE_PREPARATION_SUBJECT_TO_ORDINARY_ROOT_PACKET_REVIEW_AND_EXECUTION_ADMISSION",
+    "supersedes": "Overly broad external-permission interpretation in2202; original artifacts unedited."
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/sched_helpers.rs": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+  },
+  "exact_source_segments": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 17319,
+      "last_line": 17320,
+      "role": "original time_sharing cfg and module namespace",
+      "segment_sha256": "676c9f14c7ed583f6bcfc3e36169675d61cfe140b613e2bf7dea5745d5585b78"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 17326,
+      "last_line": 17332,
+      "role": "original plainCInt contract and size/alignment assertions",
+      "segment_sha256": "33ced1504f4db40869d2a0814d5fee9ac898ea333c8556349c4c032d7a3ba1fc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 17340,
+      "last_line": 17341,
+      "role": "exact mutable time_sharing initializer/attribute",
+      "segment_sha256": "70b9fd4462a3dd1c561db63ee6d18799f142358803e596a00f864a10180c3296"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 17544,
+      "last_line": 17577,
+      "role": "exact guarded timer descriptor module, assertions,15offset expressions",
+      "segment_sha256": "ede1d013292aef7093cf556a9f9d34d46a9be49ed60c38b5c0089fd4def7ba72"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "first_line": 259,
+      "last_line": 276,
+      "role": "exact reprC15usize TimerRuntimeOffsets type",
+      "segment_sha256": "eda9f864411676ffde983b0364c76d1219d4e14316dce547aabc465a25169696"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 5,
+      "last_line": 7,
+      "role": "actual C ABI aliases",
+      "segment_sha256": "24d812dee2beebc060993d304fc5e4ef04d3b0a0cc6eaf042adb89bea48c15cc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 280,
+      "last_line": 286,
+      "role": "source linux6.12 condition and real Rust data cfg",
+      "segment_sha256": "50d14a527af22357ad2e61133cfc504974acb9260c800439ddb04ca92c529a82"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 698,
+      "last_line": 701,
+      "role": "matching C globalstorage exclusion condition",
+      "segment_sha256": "7efb9132c69c06ab36a65f40c319eb1a78be77abb3d3470cd0210ec16605d3a5"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 667,
+      "last_line": 670,
+      "role": "PROCESS_HELPERS source prerequisite pairing",
+      "segment_sha256": "58ddd97ca182b5d307ae308f62b277e4331504b99e618880dca9563efe882b83"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 785,
+      "last_line": 787,
+      "role": "actual C globalstorage requires processhelpers guard",
+      "segment_sha256": "d15f274d27afa40d4de8047c040ed0c6584cc252356f9bbf8d23bed96b0cbdaf"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 804,
+      "last_line": 813,
+      "role": "C time_sharing ownership alternative",
+      "segment_sha256": "5e0db668e90c018d494d50a1bf16a29998a3cbd1e93b25ef7113bb1ec180b470"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 136,
+      "last_line": 162,
+      "role": "C descriptor ownership alternative and original offsetof fields",
+      "segment_sha256": "2a81219761487c3eea8523f918a2050e674a1e721e5640c5f76d51d2b5b3e942"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 54,
+      "last_line": 64,
+      "role": "enableddebug globalstorage failing supported-config assertion",
+      "segment_sha256": "ec85a3a99ff3d4e6b575567386a23d0769a3dcd1bdeedeca767509f71f54df07"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 85,
+      "last_line": 97,
+      "role": "disableddebug branch original supported-config assertion",
+      "segment_sha256": "0483592e2a29e6b72460a9cd7985a53e12f753f9a99c05dce92e5030dff6a492"
+    }
+  ],
+  "owners": {
+    "time_sharing": {
+      "source_declaration": "#[no_mangle]\n    pub static mut time_sharing: CInt = 1;",
+      "CInt": "actual abi::CInt=i32",
+      "kind": "mutable globalOBJECT",
+      "expected_bytes": 4,
+      "expected_alignment": 4,
+      "initializer": 1,
+      "storage_policy": "Original plain non-atomic Cint and bootinitializer; no AtomicI32/bool/lazy/defaultreplacement."
+    },
+    "process_timer_runtime_offsets": {
+      "kind": "immutable globalOBJECT",
+      "expected_bytes": 120,
+      "expected_alignment": 8,
+      "type": "Exact original reprC TimerRuntimeOffsets15usize fields",
+      "initializer_field_order_and_expressions": [
+        {
+          "field": "thread_status_offset",
+          "expression": "offset_of!(Thread, status)"
+        },
+        {
+          "field": "thread_sched_list_offset",
+          "expression": "offset_of!(Thread, sched_list)"
+        },
+        {
+          "field": "thread_spin_sleep_lock_offset",
+          "expression": "offset_of!(Thread, spin_sleep_lock)"
+        },
+        {
+          "field": "thread_spin_sleep_offset",
+          "expression": "offset_of!(Thread, spin_sleep)"
+        },
+        {
+          "field": "thread_itimer_enabled_offset",
+          "expression": "offset_of!(Thread, itimer_enabled)"
+        },
+        {
+          "field": "cpu_runq_lock_offset",
+          "expression": "offset_of!(CpuLocalVar, runq_lock)"
+        },
+        {
+          "field": "cpu_runq_offset",
+          "expression": "offset_of!(CpuLocalVar, runq)"
+        },
+        {
+          "field": "cpu_runq_len_offset",
+          "expression": "offset_of!(CpuLocalVar, runq_len)"
+        },
+        {
+          "field": "cpu_current_offset",
+          "expression": "offset_of!(CpuLocalVar, current)"
+        },
+        {
+          "field": "cpu_timer_enabled_offset",
+          "expression": "offset_of!(CpuLocalVar, timer_enabled)"
+        },
+        {
+          "field": "cpu_backlog_list_offset",
+          "expression": "offset_of!(CpuLocalVar, backlog_list)"
+        },
+        {
+          "field": "timer_timeout_offset",
+          "expression": "offset_of!(Timer, timeout)"
+        },
+        {
+          "field": "timer_waitq_offset",
+          "expression": "offset_of!(Timer, processes)"
+        },
+        {
+          "field": "timer_list_offset",
+          "expression": "offset_of!(Timer, list)"
+        },
+        {
+          "field": "timer_thread_offset",
+          "expression": "offset_of!(Timer, thread)"
+        }
+      ],
+      "layout_policy": "Original offset_of! over actual abi::{Thread,CpuLocalVar,Timer}; no numeric offset table or substitute layout."
+    }
+  },
+  "source_guard": "Both selected data modules retain exact #[cfg(process_global_storage_candidate)]",
+  "scaffolding_delta": "time_sharing cut keeps original guarded module namespace, comments/assertions/attr/initializer. Imports narrow original CInt+align_of/size_of needs; original unused imports and allotherglobalowners excluded. Exact remaining_process_timer_layout_storage module and TimerRuntimeOffsets type copied unchanged.",
+  "counts": {
+    "global_data_owners": 2,
+    "public_or_private_function_bodies": 0,
+    "genuine_external_U": 0,
+    "offset_fields": 15
+  },
+  "expected_emission": "D4 time_sharing +R120 process_timer_runtime_offsets,0T0U; actual futureobjectbytes/sections/alignments/derivedoffsets require admittedqualification. No guessedflags/relocs/offsetvalues.",
+  "excluded": "Whole process_global_storage module, other globals, held neighboring F03/generic/exec/notification bodies, timer/clock/APIC/IRQ/backend bodies, Ctranslationunit/preprocessor, layout witness/runtime/native/fullimage.",
+  "future_base_and_join": "UNBOUND; exact current owner/C duplicate exclusion required later; no current partial identity/count guessed.",
+  "operations": "Private source/JSON preparation only; no compiler/GNUmetadata/link/test/runtime/canonical/index/state/monitor operation."
+}

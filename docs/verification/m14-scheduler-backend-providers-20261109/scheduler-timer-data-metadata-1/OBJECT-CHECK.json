@@ -1,0 +1,511 @@
+{
+  "status": "PASS_CALLED_ACTUAL_TWO_TIMER_DATA_SOURCE_CONTENT_UNIQUE_OWNERS",
+  "object_sha256": "05be11507024eb5de4c1d368245f8382e1f49c5966222def22d633d08c8957bb",
+  "data_owners": {
+    "time_sharing": {
+      "kind": "D",
+      "bytes": 4,
+      "section": ".ldata.time_sharing"
+    },
+    "process_timer_runtime_offsets": {
+      "kind": "R",
+      "bytes": 120,
+      "section": ".lrodata.process_timer_runtime_offsets"
+    }
+  },
+  "original_time_sharing_plain_CInt1": true,
+  "actual15_descriptor_offsets_bound_to_real_source": [
+    {
+      "ordinal": 0,
+      "descriptor_field": "thread_status_offset",
+      "descriptor_member_byte_offset": 0,
+      "source_expression": "offset_of!(Thread, status)",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "status",
+      "expected_actual_compiled_value": 4184,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "Thread.status selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2364,
+          "exact_source": "    assert_eq_usize(offset_of!(Thread, status), 4184);",
+          "sha256": "5a8d8e551c04fa4fb9138cdcafa3dea9e9b907508a7efc21e7ccd337ab7dd680"
+        }
+      },
+      "actual_ELF_value": 4184,
+      "actual_LE_bytes": "5810000000000000"
+    },
+    {
+      "ordinal": 1,
+      "descriptor_field": "thread_sched_list_offset",
+      "descriptor_member_byte_offset": 8,
+      "source_expression": "offset_of!(Thread, sched_list)",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "sched_list",
+      "expected_actual_compiled_value": 4328,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "Thread.sched_list selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2369,
+          "exact_source": "    assert_eq_usize(offset_of!(Thread, sched_list), 4328);",
+          "sha256": "409900ad9603bc5b4e007ee5267e7c733d67946843d81b1b893c057294ac59a7"
+        }
+      },
+      "actual_ELF_value": 4328,
+      "actual_LE_bytes": "e810000000000000"
+    },
+    {
+      "ordinal": 2,
+      "descriptor_field": "thread_spin_sleep_lock_offset",
+      "descriptor_member_byte_offset": 16,
+      "source_expression": "offset_of!(Thread, spin_sleep_lock)",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "spin_sleep_lock",
+      "expected_actual_compiled_value": 4352,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "Thread.spin_sleep_lock selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2371,
+          "exact_source": "    assert_eq_usize(offset_of!(Thread, spin_sleep_lock), 4352);",
+          "sha256": "27146668ee23aa9c2fb1349bd129ea114bea7ebc63bdd15ba14786930912c49b"
+        }
+      },
+      "actual_ELF_value": 4352,
+      "actual_LE_bytes": "0011000000000000"
+    },
+    {
+      "ordinal": 3,
+      "descriptor_field": "thread_spin_sleep_offset",
+      "descriptor_member_byte_offset": 24,
+      "source_expression": "offset_of!(Thread, spin_sleep)",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "spin_sleep",
+      "expected_actual_compiled_value": 4356,
+      "source_value_proof": {
+        "kind": "source_adjacent_reprC_field",
+        "anchor": {
+          "label": "Thread.spin_sleep_lock selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2371,
+          "exact_source": "    assert_eq_usize(offset_of!(Thread, spin_sleep_lock), 4352);",
+          "sha256": "27146668ee23aa9c2fb1349bd129ea114bea7ebc63bdd15ba14786930912c49b"
+        },
+        "source_adjacency": {
+          "label": "Original adjacent Thread lock and plainCInt",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 1560,
+          "exact_source": "    pub spin_sleep_lock: IhkSpinlock,\n    pub spin_sleep: CInt,",
+          "sha256": "6f5f69ff20c8cac0c7e97a169eb2b1cc7d7718d4d37236826be4fb2a8fda3909"
+        },
+        "size_evidence": {
+          "label": "IhkSpinlock size assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2060,
+          "exact_source": "    assert_eq_usize(size_of::<IhkSpinlock>(), 4);",
+          "sha256": "dcb722b07b12cc989c51252407de5bff3756863f6b9d51748d8d57d604f393f8"
+        },
+        "arithmetic": "asserted4352+actualIhkSpinlock4; CIntalign4 addsnopadding"
+      },
+      "actual_ELF_value": 4356,
+      "actual_LE_bytes": "0411000000000000"
+    },
+    {
+      "ordinal": 4,
+      "descriptor_field": "thread_itimer_enabled_offset",
+      "descriptor_member_byte_offset": 32,
+      "source_expression": "offset_of!(Thread, itimer_enabled)",
+      "actual_abi_type": "Thread",
+      "actual_abi_field": "itimer_enabled",
+      "expected_actual_compiled_value": 5072,
+      "source_value_proof": {
+        "kind": "bounded_actual_reprC_field_walk",
+        "anchor": {
+          "label": "Thread.sigpending selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2381,
+          "exact_source": "    assert_eq_usize(offset_of!(Thread, sigpending), 4864);",
+          "sha256": "a287323baab6fbf78020b60c940e3418cb380655e3c5f699cc57f8866a40097c"
+        },
+        "exact_source_fields": {
+          "label": "Bounded actual reprC Thread field sequence anchored at asserted sigpending",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 1582,
+          "exact_source": "    pub sigpending: AbiListHead,\n    pub sigpendinglock: McsRwlockLock,\n    pub sigevent: CInt,\n    pub pgio_fp: *mut c_void,\n    pub pgio_arg: *mut c_void,\n    pub ptrace_debugreg: *mut CULong,\n    pub ptrace_recvsig: *mut c_void,\n    pub ptrace_sendsig: *mut c_void,\n    pub system_tsc: CULong,\n    pub user_tsc: CULong,\n    pub base_tsc: CULong,\n    pub times_update: CInt,\n    pub in_kernel: CInt,\n    pub itimer_enabled: CInt,",
+          "sha256": "8ee062471dc51b39e7c1cf58d8990f056601bbc09d73af7c4c14f91c35907620"
+        },
+        "steps": [
+          {
+            "field": "sigpending",
+            "actual_declared_type": "AbiListHead",
+            "actual_size": 16,
+            "actual_alignment": 8,
+            "offset": 4864
+          },
+          {
+            "field": "sigpendinglock",
+            "actual_declared_type": "McsRwlockLock",
+            "actual_size": 64,
+            "actual_alignment": 64,
+            "offset": 4928
+          },
+          {
+            "field": "sigevent",
+            "actual_declared_type": "CInt",
+            "actual_size": 4,
+            "actual_alignment": 4,
+            "offset": 4992
+          },
+          {
+            "field": "pgio_fp",
+            "actual_declared_type": "*mut c_void",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5000
+          },
+          {
+            "field": "pgio_arg",
+            "actual_declared_type": "*mut c_void",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5008
+          },
+          {
+            "field": "ptrace_debugreg",
+            "actual_declared_type": "*mut CULong",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5016
+          },
+          {
+            "field": "ptrace_recvsig",
+            "actual_declared_type": "*mut c_void",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5024
+          },
+          {
+            "field": "ptrace_sendsig",
+            "actual_declared_type": "*mut c_void",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5032
+          },
+          {
+            "field": "system_tsc",
+            "actual_declared_type": "CULong",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5040
+          },
+          {
+            "field": "user_tsc",
+            "actual_declared_type": "CULong",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5048
+          },
+          {
+            "field": "base_tsc",
+            "actual_declared_type": "CULong",
+            "actual_size": 8,
+            "actual_alignment": 8,
+            "offset": 5056
+          },
+          {
+            "field": "times_update",
+            "actual_declared_type": "CInt",
+            "actual_size": 4,
+            "actual_alignment": 4,
+            "offset": 5064
+          },
+          {
+            "field": "in_kernel",
+            "actual_declared_type": "CInt",
+            "actual_size": 4,
+            "actual_alignment": 4,
+            "offset": 5068
+          },
+          {
+            "field": "itimer_enabled",
+            "actual_declared_type": "CInt",
+            "actual_size": 4,
+            "actual_alignment": 4,
+            "offset": 5072
+          }
+        ],
+        "actual_size_align_evidence": [
+          {
+            "label": "AbiListHead size assertion",
+            "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+            "line": 2045,
+            "exact_source": "    assert_eq_usize(size_of::<AbiListHead>(), 16);",
+            "sha256": "8f9ef2d75d863f525e847061de8b654a508db544f74699107659c7810205ef7e"
+          },
+          {
+            "label": "AbiListHead alignment assertion",
+            "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+            "line": 2046,
+            "exact_source": "    assert_eq_usize(align_of::<AbiListHead>(), 8);",
+            "sha256": "73b96875f306edf3d4b020ef4e03a57af1e777bd48086b322efc14584d5b99ec"
+          },
+          {
+            "label": "McsRwlockLock size assertion",
+            "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+            "line": 2068,
+            "exact_source": "    assert_eq_usize(size_of::<McsRwlockLock>(), 64);",
+            "sha256": "7dd2aa4fb508062454bdb736ae8327a66dcc7077afc71c058c4eb255399fe96f"
+          },
+          {
+            "label": "McsRwlockLock alignment assertion",
+            "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+            "line": 2069,
+            "exact_source": "    assert_eq_usize(align_of::<McsRwlockLock>(), 64);",
+            "sha256": "704e43ceacccd5c04903724443a36988b85b8405d715080f29a9ad0f5e1a6614"
+          }
+        ],
+        "primitive_profile": "CInt=i32 size4align4; CULong=u64 andpointer selectedLP64size8align8; no optionalTOFUcfg."
+      },
+      "actual_ELF_value": 5072,
+      "actual_LE_bytes": "d013000000000000"
+    },
+    {
+      "ordinal": 5,
+      "descriptor_field": "cpu_runq_lock_offset",
+      "descriptor_member_byte_offset": 40,
+      "source_expression": "offset_of!(CpuLocalVar, runq_lock)",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq_lock",
+      "expected_actual_compiled_value": 7832,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "CpuLocalVar.runq_lock selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2469,
+          "exact_source": "    assert_eq_usize(offset_of!(CpuLocalVar, runq_lock), 7832);",
+          "sha256": "4036585d88ed82034199f19d2b6aa72cba1175e36ea849a6b19bcc43b00c97b6"
+        }
+      },
+      "actual_ELF_value": 7832,
+      "actual_LE_bytes": "981e000000000000"
+    },
+    {
+      "ordinal": 6,
+      "descriptor_field": "cpu_runq_offset",
+      "descriptor_member_byte_offset": 48,
+      "source_expression": "offset_of!(CpuLocalVar, runq)",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq",
+      "expected_actual_compiled_value": 7872,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "CpuLocalVar.runq selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2477,
+          "exact_source": "    assert_eq_usize(offset_of!(CpuLocalVar, runq), 7872);",
+          "sha256": "cd978f58292b07d17e539636a9f6a648eb16545f146bac2bceeb4aebe2879386"
+        }
+      },
+      "actual_ELF_value": 7872,
+      "actual_LE_bytes": "c01e000000000000"
+    },
+    {
+      "ordinal": 7,
+      "descriptor_field": "cpu_runq_len_offset",
+      "descriptor_member_byte_offset": 56,
+      "source_expression": "offset_of!(CpuLocalVar, runq_len)",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "runq_len",
+      "expected_actual_compiled_value": 7888,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "CpuLocalVar.runq_len selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2481,
+          "exact_source": "    assert_eq_usize(offset_of!(CpuLocalVar, runq_len), 7888);",
+          "sha256": "cce9aac02cbeae8736410b923ac0983e8038c71d9f8ef5f0ae104bd5dd7a0b71"
+        }
+      },
+      "actual_ELF_value": 7888,
+      "actual_LE_bytes": "d01e000000000000"
+    },
+    {
+      "ordinal": 8,
+      "descriptor_field": "cpu_current_offset",
+      "descriptor_member_byte_offset": 64,
+      "source_expression": "offset_of!(CpuLocalVar, current)",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "current",
+      "expected_actual_compiled_value": 7848,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "CpuLocalVar.current selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2473,
+          "exact_source": "    assert_eq_usize(offset_of!(CpuLocalVar, current), 7848);",
+          "sha256": "6860eba8d2af73dfe8c514a2887fba4c4192aa8ed7590c3d5f3003d487a2f640"
+        }
+      },
+      "actual_ELF_value": 7848,
+      "actual_LE_bytes": "a81e000000000000"
+    },
+    {
+      "ordinal": 9,
+      "descriptor_field": "cpu_timer_enabled_offset",
+      "descriptor_member_byte_offset": 72,
+      "source_expression": "offset_of!(CpuLocalVar, timer_enabled)",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "timer_enabled",
+      "expected_actual_compiled_value": 7980,
+      "source_value_proof": {
+        "kind": "source_adjacent_reprC_field",
+        "anchor": {
+          "label": "CpuLocalVar.no_preempt selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2505,
+          "exact_source": "    assert_eq_usize(offset_of!(CpuLocalVar, no_preempt), 7976);",
+          "sha256": "491a90e6965a724834f2b0882fb1fa4e7b15ce9f3270f1c9885dc7c150c48db3"
+        },
+        "source_adjacency": {
+          "label": "Original adjacent CpuLocalVar atomic and timer state",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 1812,
+          "exact_source": "    pub no_preempt: IhkAtomic,\n    pub timer_enabled: CInt,",
+          "sha256": "8ee13df25d7f6744c81327cf56d0e5d67fc1999b798a1df9108c3d08ecad09f5"
+        },
+        "size_evidence": {
+          "label": "IhkAtomic size assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2054,
+          "exact_source": "    assert_eq_usize(size_of::<IhkAtomic>(), 4);",
+          "sha256": "62abcb80c687da19aa33e5d76f647044fe5479a825748f6f78953a22aac7432a"
+        },
+        "arithmetic": "asserted7976+actualIhkAtomic4; CIntalign4 addsnopadding"
+      },
+      "actual_ELF_value": 7980,
+      "actual_LE_bytes": "2c1f000000000000"
+    },
+    {
+      "ordinal": 10,
+      "descriptor_field": "cpu_backlog_list_offset",
+      "descriptor_member_byte_offset": 80,
+      "source_expression": "offset_of!(CpuLocalVar, backlog_list)",
+      "actual_abi_type": "CpuLocalVar",
+      "actual_abi_field": "backlog_list",
+      "expected_actual_compiled_value": 8056,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "CpuLocalVar.backlog_list selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2521,
+          "exact_source": "    assert_eq_usize(offset_of!(CpuLocalVar, backlog_list), 8056);",
+          "sha256": "cee17628488b56d95a6c7bd82c4f4616e49044f9f05ef00ba178a0ae2c5b034d"
+        }
+      },
+      "actual_ELF_value": 8056,
+      "actual_LE_bytes": "781f000000000000"
+    },
+    {
+      "ordinal": 11,
+      "descriptor_field": "timer_timeout_offset",
+      "descriptor_member_byte_offset": 88,
+      "source_expression": "offset_of!(Timer, timeout)",
+      "actual_abi_type": "Timer",
+      "actual_abi_field": "timeout",
+      "expected_actual_compiled_value": 0,
+      "source_value_proof": {
+        "kind": "original_reprC_first_member",
+        "source_evidence": {
+          "label": "Original Timer reprC firstfieldtimeout not a default zero",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 760,
+          "exact_source": "#[repr(C)]\npub struct Timer {\n    pub timeout: CULong,",
+          "sha256": "9354baf16aa55b09e169be391c447cab7954981f15d2c261d5f0d247ecab4864"
+        },
+        "meaning": "Firstmemberoffset0byactualreprCdefinition, not guesseddefault/zero-filleddescriptor."
+      },
+      "actual_ELF_value": 0,
+      "actual_LE_bytes": "0000000000000000"
+    },
+    {
+      "ordinal": 12,
+      "descriptor_field": "timer_waitq_offset",
+      "descriptor_member_byte_offset": 96,
+      "source_expression": "offset_of!(Timer, processes)",
+      "actual_abi_type": "Timer",
+      "actual_abi_field": "processes",
+      "expected_actual_compiled_value": 8,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "Timer.processes selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2096,
+          "exact_source": "    assert_eq_usize(offset_of!(Timer, processes), 8);",
+          "sha256": "8b4f035105886af93cbd5c8ee610f5b5ce7e67f22c5f22bbb69fd69a68f51e46"
+        }
+      },
+      "actual_ELF_value": 8,
+      "actual_LE_bytes": "0800000000000000"
+    },
+    {
+      "ordinal": 13,
+      "descriptor_field": "timer_list_offset",
+      "descriptor_member_byte_offset": 104,
+      "source_expression": "offset_of!(Timer, list)",
+      "actual_abi_type": "Timer",
+      "actual_abi_field": "list",
+      "expected_actual_compiled_value": 32,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "Timer.list selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2097,
+          "exact_source": "    assert_eq_usize(offset_of!(Timer, list), 32);",
+          "sha256": "81110221161bbaef84d8a453d57b882887c22fa753c856df3eefd1fb31c6ffcf"
+        }
+      },
+      "actual_ELF_value": 32,
+      "actual_LE_bytes": "2000000000000000"
+    },
+    {
+      "ordinal": 14,
+      "descriptor_field": "timer_thread_offset",
+      "descriptor_member_byte_offset": 112,
+      "source_expression": "offset_of!(Timer, thread)",
+      "actual_abi_type": "Timer",
+      "actual_abi_field": "thread",
+      "expected_actual_compiled_value": 48,
+      "source_value_proof": {
+        "kind": "actual_selected_ABI_offset_assertion",
+        "source_evidence": {
+          "label": "Timer.thread selected actualABI assertion",
+          "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+          "line": 2098,
+          "exact_source": "    assert_eq_usize(offset_of!(Timer, thread), 48);",
+          "sha256": "01592a5aba101d771ead8690ba4d8e1b58016b8d6a5e1983c039501cfe4f6428"
+        }
+      },
+      "actual_ELF_value": 48,
+      "actual_LE_bytes": "3000000000000000"
+    }
+  ],
+  "function_T": 0,
+  "genuine_U": [],
+  "private_data_or_extra_readonly": [],
+  "unique_two_original_data_owners_only": true,
+  "declared_cfg_and_intended_linux612_Rust_profile_only": true,
+  "full_C_guard_duplicate_ownership_native_lifecycle_remain_pending": true,
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-metadata-1/ACTUAL-ELF-METADATA.json",
+  "no_function_boot_runtime_or_native_acceptance": true
+}

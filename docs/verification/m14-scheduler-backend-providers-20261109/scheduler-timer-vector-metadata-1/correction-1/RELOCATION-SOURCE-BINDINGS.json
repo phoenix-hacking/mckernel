@@ -1,0 +1,455 @@
+{
+  "status": "EXACT_RETAINED20_RELOCATION_SOURCE_BINDING_FOR_ONE_PREDICATE_CORRECTION",
+  "object_sha256": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6",
+  "original_actual_capture": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/ACTUAL-ELF-METADATA.json",
+    "sha256": "6378fa51fe65fba1ce4b5b8aabc9eb676fc254f442bfd2ded835f521abda5583"
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/METADATA-FIRST-FAILURE.json",
+    "sha256": "ad26b091941a5b98d8d966be642e794383438420042a420441a15474f7f97fe8"
+  },
+  "full_original15_descriptor_fields": [
+    "thread_status_offset",
+    "thread_sched_list_offset",
+    "thread_spin_sleep_lock_offset",
+    "thread_spin_sleep_offset",
+    "thread_itimer_enabled_offset",
+    "cpu_runq_lock_offset",
+    "cpu_runq_offset",
+    "cpu_runq_len_offset",
+    "cpu_current_offset",
+    "cpu_timer_enabled_offset",
+    "cpu_backlog_list_offset",
+    "timer_timeout_offset",
+    "timer_waitq_offset",
+    "timer_list_offset",
+    "timer_thread_offset"
+  ],
+  "original_descriptor_type_sha256": "ff282acae5b78e1ed66096d3c4477b8c1548a38e677e1abb1da58606c724be41",
+  "selected_layout": "Originalrepr(C)15homogeneoususize fields; retainedx86_64LP64width8, fieldmemberaddress=ordinal*8. No descriptor VALUE/storage/header/provider fabricated.",
+  "actual_set_timer17_R64_edges": [
+    {
+      "owner": "set_timer",
+      "relative_offset": 13,
+      "target_symbol": "get_this_cpu_local_var",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "source_use": {
+        "source_expression": "get_this_cpu_local_var()",
+        "source_function": "set_timer",
+        "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 34,
+      "target_symbol": "time_sharing",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "source_use": {
+        "source_expression": "core::ptr::read(core::ptr::addr_of!(time_sharing))",
+        "source_function": "set_timer",
+        "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 53,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 40,
+      "descriptor_member": {
+        "field_name": "cpu_runq_lock_offset",
+        "ordinal_in_original15": 5,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 40,
+        "source_expression": "offsets.cpu_runq_lock_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1929,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 81,
+      "target_symbol": "process_timer_spin_lock_bridge",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "source_use": {
+        "source_expression": "Some(process_timer_spin_lock_bridge)",
+        "source_function": "set_timer",
+        "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 105,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 48,
+      "descriptor_member": {
+        "field_name": "cpu_runq_offset",
+        "ordinal_in_original15": 6,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 48,
+        "source_expression": "offsets.cpu_runq_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1936,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 130,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 8,
+      "descriptor_member": {
+        "field_name": "thread_sched_list_offset",
+        "ordinal_in_original15": 1,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 8,
+        "source_expression": "offsets.thread_sched_list_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1940,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 143,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "descriptor_member": {
+        "field_name": "thread_status_offset",
+        "ordinal_in_original15": 0,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 0,
+        "source_expression": "offsets.thread_status_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1942,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 156,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 24,
+      "descriptor_member": {
+        "field_name": "thread_spin_sleep_offset",
+        "ordinal_in_original15": 3,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 24,
+        "source_expression": "offsets.thread_spin_sleep_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1945,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 223,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 64,
+      "descriptor_member": {
+        "field_name": "cpu_current_offset",
+        "ordinal_in_original15": 8,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 64,
+        "source_expression": "offsets.cpu_current_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1954,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 245,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 32,
+      "descriptor_member": {
+        "field_name": "thread_itimer_enabled_offset",
+        "ordinal_in_original15": 4,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 32,
+        "source_expression": "offsets.thread_itimer_enabled_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1961,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 261,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 80,
+      "descriptor_member": {
+        "field_name": "cpu_backlog_list_offset",
+        "ordinal_in_original15": 10,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 80,
+        "source_expression": "offsets.cpu_backlog_list_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1966,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 291,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 72,
+      "descriptor_member": {
+        "field_name": "cpu_timer_enabled_offset",
+        "ordinal_in_original15": 9,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 72,
+        "source_expression": "offsets.cpu_timer_enabled_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1968,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 322,
+      "target_symbol": "process_timer_lapic_disable_bridge",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "source_use": {
+        "source_expression": "Some(process_timer_lapic_disable_bridge)",
+        "source_function": "set_timer",
+        "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 348,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 80,
+      "descriptor_member": {
+        "field_name": "cpu_backlog_list_offset",
+        "ordinal_in_original15": 10,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 80,
+        "source_expression": "offsets.cpu_backlog_list_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1966,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 371,
+      "target_symbol": "process_timer_runtime_offsets",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 72,
+      "descriptor_member": {
+        "field_name": "cpu_timer_enabled_offset",
+        "ordinal_in_original15": 9,
+        "declared_type": "usize",
+        "selected_LP64_usize_bytes": 8,
+        "member_byte_offset": 72,
+        "source_expression": "offsets.cpu_timer_enabled_offset",
+        "source_function": "timer_set_timer_body_result",
+        "exact_source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_line": 1968,
+        "source_body_sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+        "meaning": "Address of this descriptor member, NOT a fabricated value for the thread/CPU offset stored there."
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 411,
+      "target_symbol": "process_timer_lapic_enable_bridge",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "source_use": {
+        "source_expression": "Some(process_timer_lapic_enable_bridge)",
+        "source_function": "set_timer",
+        "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+      }
+    },
+    {
+      "owner": "set_timer",
+      "relative_offset": 440,
+      "target_symbol": "process_timer_spin_unlock_bridge",
+      "symbol_bind": 1,
+      "symbol_type": 0,
+      "symbol_section": 0,
+      "relocation_type": 1,
+      "addend": 0,
+      "source_use": {
+        "source_expression": "Some(process_timer_spin_unlock_bridge)",
+        "source_function": "set_timer",
+        "source_path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "source_body_sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5"
+      }
+    }
+  ],
+  "actual_unwind3_PC64_edges": [
+    {
+      "actual_relocation": {
+        "section": 9,
+        "offset": 32,
+        "type": 24,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 3,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "actual_source_function": "ihk_mc_get_vector",
+      "source_use": "Retained native eh_frame PC64 points to exact owning source-function start; no runtime/code edge."
+    },
+    {
+      "actual_relocation": {
+        "section": 9,
+        "offset": 64,
+        "type": 24,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 4,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "actual_source_function": "set_timer",
+      "source_use": "Retained native eh_frame PC64 points to exact owning source-function start; no runtime/code edge."
+    },
+    {
+      "actual_relocation": {
+        "section": 9,
+        "offset": 152,
+        "type": 24,
+        "symbol": {
+          "name": "",
+          "bind": 0,
+          "type": 3,
+          "other": 0,
+          "section": 6,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "actual_source_function": "timer_set_timer_body_result",
+      "source_use": "Retained native eh_frame PC64 points to exact owning source-function start; no runtime/code edge."
+    }
+  ],
+  "used_member_set_only": {
+    "cpu_runq_lock_offset": 40,
+    "cpu_runq_offset": 48,
+    "thread_sched_list_offset": 8,
+    "thread_status_offset": 0,
+    "thread_spin_sleep_offset": 24,
+    "cpu_current_offset": 64,
+    "thread_itimer_enabled_offset": 32,
+    "cpu_backlog_list_offset": 80,
+    "cpu_timer_enabled_offset": 72
+  },
+  "other_actual_code_edges": "Vector37/body420havezeroELFcode-relocations; source-privatehelpersNONE. No unclassifiedinternalcodeedge.",
+  "all_remaining_gate_conditions_reviewed_against_retained_capture": "Exact3globalT/7sourceU/no defineddata orprivatefn; readonlyonlyeh_frame256/3source-functionPC64+0 refs; existing7targetnamesandlarge-staticR64types hold. Onlyzero-addendassumptionwaswrongforcompiler-inlineddescriptorfields.",
+  "no_compiler_metadata_disasm_link_or_runtime_operations": true
+}

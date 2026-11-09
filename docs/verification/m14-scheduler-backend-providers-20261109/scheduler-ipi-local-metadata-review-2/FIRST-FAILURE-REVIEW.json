@@ -1,0 +1,117 @@
+{
+  "schema": "mckernel.ipi-metadata.first-actual-failure-source-review.v1",
+  "decision": "ELIGIBLE_ONE_EXACT_SOURCE_BOUND_IPI_PREDICATE_ONLY_CORRECTION_PENDING_FROZEN_BYTES_REVIEW",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH, no recursion; source/read-existing-captures only",
+  "reviewed_inputs_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/REQUEST.json": "8a15ffadc6408be34f3c509c4db8ddef33a37e702bd06151a5dd1a668b170374",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/metadata_checks.py": "900d116a00423b584ceab20089edfc2200174824a186825d7301bf3793118f67",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/SOURCE-EMISSION-CONTRACT.json": "520807580d3c00955194b47a162d186991a54c5cce72d2136e5b28a7cb017347",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/IPI-ACTUAL-ELF-METADATA.json": "8aeec422ab8e650a127723d7776190e6eb6bde2f15fd23fe04592764f48202f8",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/METADATA-FIRST-FAILURE.json": "b958006a8dfccc4a0f3212555d7bd1b274ed505ea4d3b42700048a7d4866e4ec",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/ipi-symbols.stdout": "6585d3d3bc700b38a01121d2dbb893c30cdef486d6e057e18ebab453e09bae12",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/ipi-elf.stdout": "97276882b979f8bb22a948285d2d59076917421df29fec1b993829b9a8251103"
+  },
+  "actual_object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/output/scheduler_ipi_log_provider.o",
+    "sha256": "830ddbb5029b8d2dbd88b9d0b78a5e8cea9b2c7448d5867f1870573c856056c6",
+    "bytes": 2344
+  },
+  "source_bindings": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/scheduler_ipi_log_provider_unit.rs": "f75b44a0014d637b685e27b6b7dfdc6662782225271dbc8a0cfb4283cae3af75",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/x86_interrupt_logger.rs": "519efca6a910fe2aab8e6ba9ad08cadddfc2e4974d7697bf16bf1f5b9a18d53e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/ipi_callback.rs": "1486008d0d2d15b13a2117d645fda4814692338d846e2f49c7cf4968e58f44a7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/debug_type.rs": "0fea20d992b34b3a27838d87f05f42cef8c7576d852b913ee674f6b752c54681",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/cpu_verbose_record.rs": "a9a1311204fda8ceaab51f467d7f066dfc71f98a23ea30790363c45ceb6f1a29",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/SOURCE-MANIFEST.json": "0b0f41a9a0c691526aa18add1bf0f1e30fd275787e03063693545e91596a75ef",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/CONFIG-PROOF.json": "6c0f58c604470046e35ef4734b857c13202aefda0f0951775f5f5cb8554fc8b9",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/REQUEST.json": "53d41ae5f8649ab2f4b105b7771ebdf8e501dd221ce995d0de3a4b54f3cfad61",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-review-1/REVIEW.json": "597dd401facacbaff0aad146cc7f67b9032cea4527f644f99ee716b2420c3daf",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "failure_scope": "All4 IPI/local GNU reads actual status0/direct waits joined; original called IPI gate exclusively captured830d then failed line167 zero-addend assumption. No IPI object qualification yet; local gate uncalled at that failure. Neither readbacks nor controller/compiler may replay.",
+  "exact_cause": "Logger code owner+15 R_X86_64_64 references x86_interrupt_log_debug+24. Original source volatile addr_of!(...line_flags), original repr(C) Ddebug field offset24 asserted in actual debug_type.rs. This defined member-address relocation is legitimate; requiring every global addend0 is a predicate defect, not source ABI/body defect.",
+  "finite_source_reference_map": {
+    "logger_globals_R64": [
+      [
+        15,
+        "x86_interrupt_log_debug",
+        24
+      ],
+      [
+        56,
+        "kprintf",
+        0
+      ],
+      [
+        73,
+        "ihk_mc_get_processor_id",
+        0
+      ],
+      [
+        95,
+        "kprintf",
+        0
+      ]
+    ],
+    "ipi_globals_R64": [
+      [
+        2,
+        "x86_issue_ipi",
+        0
+      ]
+    ],
+    "logger_local_string_R64": [
+      [
+        36,
+        0,
+        "%s: invalid CPU id: %d\\n NUL"
+      ],
+      [
+        46,
+        24,
+        "ihk_mc_interrupt_cpu NUL"
+      ],
+      [
+        85,
+        45,
+        "[%d] ihk_mc_interrupt_cpu: %d\\n NUL"
+      ]
+    ],
+    "descriptor_R64": [
+      [
+        0,
+        76,
+        "exact selected CPU source filename NUL"
+      ],
+      [
+        8,
+        123,
+        "x86_interrupt_log_bridge NUL"
+      ]
+    ],
+    "unwind_PC64": [
+      [
+        32,
+        "logger code section",
+        0
+      ],
+      [
+        80,
+        "IPI code section",
+        0
+      ]
+    ]
+  },
+  "remaining_actual_capture_source_findings": [
+    "Exactly GLOBAL DEFAULT T logger112 and IPI15; Ddebug32 __verbose GLOBAL DEFAULT D, exact flags0x200003/align8. Three genuine U only: x86_issue_ipi,kprintf,ihk_mc_get_processor_id; no private FUNC/OBJECT.",
+    "All8 source code relocations are R64. Logger7 includes exact debug-member edge, two kprintf references, late getter, three original strings; IPI1 addresses genuine existing Option callback slot. Descriptor2 R64 and unwind2 PC64 are the only other relocations.",
+    "Ddebug raw fmtNULL at16, line_flags3140 at24, original file/func pointer contents resolve to exact source NUL strings. Source Ddebug size32/align8/asserted field24 preserved; no arbitrary padding-value claim required.",
+    "Only nonempty allocated sections: original two source .ltext sections flags0x10000006/align16,148B original five-NUL-string pool flags0x10000032,32B descriptor and104B eh_frame flags2/align8 with two source section+0 PC64 references. No unknown readonly table/state/helper/intrinsic found in retained capture.",
+    "Original allowed set/source literal/descriptor/function/allocated-section/unwind checks were inspected against actual capture; no additional concrete mismatch identified by this source review. This is not an executed predicate PASS."
+  ],
+  "required_correction": "Exact finite source-owned tuple set by owner-relative code offset, symbol identity/binding/type/source member, relocation type and addend. Permit only descriptor line_flags+24 there; genuine provider references remain0. Preserve full actual remaining IPI checks, original failed request/raw/capture/history, source/object/profile, genuine U. New corrected capture path only if capture routine is called.",
+  "next_action": "Review frozen correction request/gate/source-binding; Root may make one separately admitted direct gate call on retained object/readbacks only. Any further unexpected failure STOP/escalate; no new source/attrs/metadata/compiler/controller/link/runtime or broadened allowance.",
+  "operations": "CPU0 read-only source/hash/JSON inspection and this private review write. No ELF parser/predicate import/call, compiler/GNU/link/runtime, canonical/index/state changes.",
+  "defects_beyond_zero_addend_assumption_identified": []
+}

@@ -1,0 +1,58 @@
+{
+  "status": "ROOT_FRESH_SHARED_FOUR_BACKEND_METADATA_READS_AND_TWO_CALLED_GATES",
+  "at": "2026-11-09T22:36:52.061211+00:00",
+  "steps": [
+    {
+      "label": "timer-vector",
+      "request_sha256": "6d3e985f63703f0a36f421df1917af8b9d9cb27aea1791d6ee0f506777a381e7",
+      "review_sha256": "e3cba8d303820b312e9088536a0477cc17848808a9170c097dddbf9f5d5aae45",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/REQUEST.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1"
+    },
+    {
+      "label": "cpu-ipi",
+      "request_sha256": "6c9620dbfb54c4a1fde5f11cce9a9792dd85566deae2ad2be31705cbc191bfc4",
+      "review_sha256": "624e81b7d50bfe0618d48c39b306066930f4d106deaabd677918bba782f034d3",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/REQUEST.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1"
+    }
+  ],
+  "MemAvailable": 29739995136,
+  "disk_free": {
+    "/home/holden/mckernel": 132144349184,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132144349184
+  },
+  "usage_normal_guard": {
+    "at": "2026-11-09T22:24:17.777900+00:00",
+    "used_percent": 36,
+    "remaining_percent": 64,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "current_service_holds": {
+    "rateLimitReachedType": null,
+    "spendControlReached": null
+  },
+  "current_source_and_objects": "Exactpassed7003/602d reused; no compiler/providerreadback replay",
+  "aggregate_HOST": "CPUs0/6/7,max3LIGHTjobs,4GiBTOTALalloverhead; serialoneCPU6outer+payload",
+  "all_actual_model_routes_verified": "RootMAX/childrenHIGH never/danger-full-access",
+  "no_kernel_function_native_or_hold_release": true
+}

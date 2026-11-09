@@ -1,0 +1,122 @@
+{
+  "status": "PASS_CALLED_ACTUAL_FOUR_TIMER_CALLBACK_FORWARDING_OBJECT_GATE",
+  "object_sha256": "9f620be402611667f7e4a833523dbac9b4ca38f6795eb61409682c75e6fc64d1",
+  "actual4T": {
+    "process_timer_lapic_disable_bridge": 12,
+    "process_timer_lapic_enable_bridge": 12,
+    "process_timer_spin_lock_bridge": 12,
+    "process_timer_spin_unlock_bridge": 12
+  },
+  "genuine4U": [
+    "lapic_timer_disable",
+    "lapic_timer_enable",
+    "process_spin_lock_bridge",
+    "process_spin_unlock_bridge"
+  ],
+  "exact_function_forwarding": {
+    "process_timer_lapic_disable_bridge": {
+      "bytes": 12,
+      "actual_function_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "actual_function_bytes_hex": "48b80000000000000000ffe0",
+      "genuine_import": "lapic_timer_disable",
+      "exact_actual_address_relocation": {
+        "section": 3,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "lapic_timer_disable",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "source_ABI": "unsafe extern C fn()"
+    },
+    "process_timer_lapic_enable_bridge": {
+      "bytes": 12,
+      "actual_function_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "actual_function_bytes_hex": "48b80000000000000000ffe0",
+      "genuine_import": "lapic_timer_enable",
+      "exact_actual_address_relocation": {
+        "section": 5,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "lapic_timer_enable",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "source_ABI": "unsafe extern C fn(u32); original CUInt=u32 provider interface"
+    },
+    "process_timer_spin_lock_bridge": {
+      "bytes": 12,
+      "actual_function_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "actual_function_bytes_hex": "48b80000000000000000ffe0",
+      "genuine_import": "process_spin_lock_bridge",
+      "exact_actual_address_relocation": {
+        "section": 7,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "process_spin_lock_bridge",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "source_ABI": "unsafe extern C fn(CULong=u64)->CULong=u64"
+    },
+    "process_timer_spin_unlock_bridge": {
+      "bytes": 12,
+      "actual_function_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "actual_function_bytes_hex": "48b80000000000000000ffe0",
+      "genuine_import": "process_spin_unlock_bridge",
+      "exact_actual_address_relocation": {
+        "section": 9,
+        "offset": 2,
+        "type": 1,
+        "symbol": {
+          "name": "process_spin_unlock_bridge",
+          "bind": 1,
+          "type": 0,
+          "other": 0,
+          "section": 0,
+          "value": 0,
+          "size": 0
+        },
+        "addend": 0
+      },
+      "source_ABI": "unsafe extern C fn(CULong=u64,CULong=u64)"
+    }
+  },
+  "source_owned_unwind": [
+    {
+      "name": ".eh_frame",
+      "bytes": 152,
+      "selected_function_targets": [
+        "process_timer_lapic_disable_bridge",
+        "process_timer_lapic_enable_bridge",
+        "process_timer_spin_lock_bridge",
+        "process_timer_spin_unlock_bridge"
+      ]
+    }
+  ],
+  "data_or_private_helpers": [],
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-metadata-1/ACTUAL-ELF-METADATA.json",
+  "future_base_and_join_unbound": true,
+  "no_lock_LAPIC_timer_IRQ_scheduling_boot_native_or_function_runtime": true
+}

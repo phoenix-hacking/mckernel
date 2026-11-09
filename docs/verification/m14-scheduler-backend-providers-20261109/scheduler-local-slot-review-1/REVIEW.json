@@ -1,0 +1,55 @@
+{
+  "decision": "GO_EXACT_SOURCE_ABI_OWNERSHIP_PROFILE_AND_LITERAL_COMPILE_PROPOSAL_ONLY",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/REQUEST.json",
+    "sha256": "1146f9aa071e72465a5c8e27d185e9eced4ccef67e248ec67374197af0b5ae84"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/SOURCE-MANIFEST.json",
+    "sha256": "dba611d35b5e753a715939f0a13b819a105b6300aa3061fe0aa2eb2d19a43cf2"
+  },
+  "profile_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/PROFILE-PROOF.json",
+    "sha256": "d5e132aa5af25f0eec86955a693ac11618322f20843082638bec79e854e0ba48"
+  },
+  "source_files": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/scheduler_local_slot_unit.rs": "8fa3b8cd56b96b93c5ee7e459b5064e51938bd75da7f4a268c81aa9b42e0768e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/local_accessor.rs": "c66384a24b4aa3db25a5c524a3603d8b5eb1aa6059e018d1a9589bc4ba766ac3",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/ipi_slot.rs": "44c3c07953eda4ae89e346682e662b513585ce8f2362ba8e7fd4012185fb673e"
+  },
+  "affirmative_contract": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-callback-local-owner-lookahead-20261109T2222.json",
+    "sha256": "84078b7db561f28af0d5594730570e5c354ce6a31a65e4fca3c9de45b7be9459"
+  },
+  "exact_source_check": {
+    "inputs_verified": 10,
+    "named_segments_verified": 17,
+    "method": "Compared all provided canonical line-bounded slices and SHA values; selected original constants/helper/export/alias/slot/assertion lines occur byte-exact in finite files. Complete three-file source reviewed. Source helper actual complete lines84-87 preserve preceding inline(always) attribute; lookahead approximate line numbers do not authorize extra code.",
+    "finite_definitions": "One original C export get_x86_cpu_local_variable, private inline(always) local_addr, PAGE_SIZE4096 and LOCALS_SPAN4*PAGE_SIZE, one original mutable x86_issue_ipi slot and alias/layout assertions. No whole module or other storage."
+  },
+  "ABI": {
+    "actual_module_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "accessor": "unsafe extern C fn(CInt)->*mut actual complete repr(C,packed) X86CpuLocalVariables; CInt=i32, exact nested actual ABI types retained.",
+    "locals_import": "extern static mut *mut actual X86CpuLocalVariables; genuine existing pointer owner, no initializer or replacement map.",
+    "slot": "Original type IssueIpi=unsafe extern C fn(u32,u32); Option<IssueIpi> exact existing size8/align8 assertions retained, nullable C function-pointer ABI."
+  },
+  "semantics": "Exact (locals as *mut u8).add(LOCALS_SPAN.wrapping_mul(id as usize)) cast and exported local_addr(id) preserved. Pointer.add valid allocation/id-domain and live original mapping remain required; no dereference or altered null/bounds policy, no valid/invalid-id execution.",
+  "slot_initialization": "Exact original #[no_mangle] pub(crate) static mut x86_issue_ipi:Option<IssueIpi>=None. Expected BSS/NOBITS8 align8 and no target relocation must be observed by later gate. This is real original preboot NULL state only, not a fabricated target or evidence of callback readiness. Excluded actual boot selector must publish a valid genuine target before existing unwrap_unchecked bridge use; no read/write/call/publication executed.",
+  "unique_ownership": {
+    "named_existing_record": {
+      "result_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/JOIN-RESULT.json",
+      "symbol_text": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/joined-symbols.stdout",
+      "sha256": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241",
+      "owners": "80globals68T12data",
+      "target_observation": "Same: accessor not alreadyprovided, callback slot not owned; genuine locals B8 retained. No standalone x86_cpu_local_variables_span owner is needed for this accessor."
+    },
+    "narrow_observation": [
+      "locals B 0 8"
+    ],
+    "result": "Existing saved actual b18 retains locals B8 and has no accessor/slot owner among these3names; reused positive contract observations, no census or tool metadata replay. New unit defines no second locals, span/debug/CPUboot/map/backend owner. Future actual latest matching cohort must be bound and collision-checked independently, not inferred from old b18 identity."
+  },
+  "profile": "Pinned70eb rustc and every payload option through -o match qualified delayfa816631 profile. Only private source/output/metrics/capture paths change; no environment override, optional cfg, equivalence, feature/lint or no_builtins changes. Original4096/16384 source constants and matching C/header expressions checked, no Fugaku/SDK/fullCPU scope expansion. Exact retained singleSSE ABI warning52aa and empty stdout required.",
+  "admission_and_next_gate": "One CPU6 compile proposal only, AS1GiB/CPU45/wall60+5/FSIZE64MiB/core0/time-v; fresh exact Root admission within aggregate3jobs4GiB inclusive required. Actual emitted1T/one originalB8/localsU, private helper optimization and source-owned unwind/data/relocations require separate called object gate. Unknown emission/import/owner stops before separately reviewed current-cohort join; no predicted final count.",
+  "operations": "Read/hash/source/profile comparisons and narrow3name lookup in already-qualified symbol text only; wrote this authorized private review. No compiler/preprocessor/GNU metadata/gate/link/test/function/CPUlocal/APIC/MSR/IRQ/boot/native runtime, canonical/index/state edits or recursive delegation. All original holds remain binding."
+}

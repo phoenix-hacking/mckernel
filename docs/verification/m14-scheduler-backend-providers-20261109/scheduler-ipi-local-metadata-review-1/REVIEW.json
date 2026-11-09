@@ -1,0 +1,71 @@
+{
+  "decision": "GO_EXACT_FOUR_METADATA_READBACKS_AND_TWO_CALLED_FINITE_OBJECT_GATES_PENDING_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/REQUEST.json",
+    "sha256": "8a15ffadc6408be34f3c509c4db8ddef33a37e702bd06151a5dd1a668b170374"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/metadata_checks.py",
+    "sha256": "900d116a00423b584ceab20089edfc2200174824a186825d7301bf3793118f67"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/run_metadata.py",
+    "sha256": "17c9227d7fcffbcf8a30b42a72cb958d7028897b8c9b727243e91e4aac137ad8"
+  },
+  "source_emission_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/SOURCE-EMISSION-CONTRACT.json",
+    "sha256": "520807580d3c00955194b47a162d186991a54c5cce72d2136e5b28a7cb017347"
+  },
+  "input_binding_check": "All32 frozen input hashes verified; parsed controller/predicate AST only, no imports or calls. Producer result9c0ad008 has both exact successful objects/labels, direct waits joined and CPU6released. No producer/source review replay.",
+  "actual_objects": {
+    "ipi": {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/output/scheduler_ipi_log_provider.o",
+      "sha256": "830ddbb5029b8d2dbd88b9d0b78a5e8cea9b2c7448d5867f1870573c856056c6",
+      "bytes": 2344,
+      "pid": 641064,
+      "birth_ticks": "35099485",
+      "returncode": 0,
+      "joined": true,
+      "reused_source_GO": "597dd401facacbaff0aad146cc7f67b9032cea4527f644f99ee716b2420c3daf"
+    },
+    "local": {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/output/scheduler_local_slot_provider.o",
+      "sha256": "65499b6bfb5acccf886e6080d92c1fe524092f63749fdc49a79f630e66d67591",
+      "bytes": 1280,
+      "pid": 641073,
+      "birth_ticks": "35099492",
+      "returncode": 0,
+      "joined": true,
+      "reused_source_GO": "3a20031387d5a1ea24155ea88bf1578b772f6bba2ef144bf46d52277555a3aab"
+    }
+  },
+  "common_gate_review": {
+    "provenance": "Rechecks source binding hashes, exact source GO decision/request hash, retained producer status/join/release and unique producer label/object path/SHA/size. Qualified a4df Image/parse_nm/pointer_target APIs reused; no new parser/loader.",
+    "capture_first": "Each gate exclusively captures all symbols/sections/relocations and allocated file bytes or NOBITS declarations before owner/import/content assertions, retaining unexpected emission on failure. Object SHA/size and nm/ELF owners/imports/kind/size/default visibility agree.",
+    "functions": "Only selected public T FUNC owners in exact large-code .ltext.export PROGBITS/0x10000006/align16, symbol value0 and section size equal positive function size. No defined private FUNC/OBJECT, unowned executable section, unsupported relocation type or additional allocated section.",
+    "unwind": "One original profile .eh_frame/type0x70000001/ALLOC2/align8 with exactly one PC64 local SECTION reference at function start per selected function. All relocation source sections must be source-accounted; unknown intrinsic/private/data/read-only variation stops before any join."
+  },
+  "IPI_gate_review": {
+    "owners": "Exactly two T exports x86_issue_ipi_bridge/x86_interrupt_log_bridge and one global32B descriptor x86_interrupt_log_debug. Exactly real U x86_issue_ipi,kprintf,ihk_mc_get_processor_id; no callback slot owner here.",
+    "descriptor": "Original32B/align8 PROGBITS __verbose exact flags0x200003 WRITE|ALLOC|GNU_RETAIN; no wildcard flag acceptance. Original used attribute and retained qualified flag provenance7f173860 justify GNU_RETAIN. Checks exactly2 R64 relocations at offsets0/8 to exact NUL source filename/function strings, fmt bytes16:24 zero, line_flags3140 at24. Records actual trailing padding without a semantic padding assertion.",
+    "strings": "Only exact5source NUL literals in .lrodata.str1.1/PROGBITS/0x10000032/align1/entsize1 and legitimate suffix pooling; each source literal present, every actual pool part bound, no pool relocation. Exact absolute CPU_C_FILE remains deliberate faithful partial configuration, not observed default/native qualification.",
+    "code_refs": "IPI bridge references only real slot; logger includes all real descriptor/kernel kprintf/currentCPU globals and exact3original format/argument string targets. All R64 global refs require addend0. Source hash binds unchanged u32casts/unchecked read/volatile guard/late getter/full branches; gate does not claim instruction-flow or runtime proof.",
+    "retention": "Only function sections, exact descriptor/string pool and owned unwind may be nonempty allocated sections. Unknown section or owner stops for focused review."
+  },
+  "local_gate_review": {
+    "owners": "Exactly get_x86_cpu_local_variable T + x86_issue_ipi B8, genuine locals U only; no second locals owner.",
+    "slot": "Exact .bss.x86_issue_ipi NOBITS/type8/flags3/size8/align8/value0, no target relocation. NOBITS declaration only, no fabricated file bytes, initialized mapping, live target or boot-readiness claim.",
+    "accessor": "One R64/addend0 real undefined locals reference, no private helper emission; original inline helper arithmetic/casts/valid allocation-id domain remain source-bound. Only function/slot/unwind allocated sections and function/unwind relocation sources permitted."
+  },
+  "controller_review": {
+    "payloads": "Exactly serial ipi-symbols,ipi-elf,local-symbols,local-elf; each nm-S-posix or readelf-h-SW-Ws-Wr targets corresponding passed object. No compiler/link or function payload.",
+    "preflight": "Frozen32input hashes and exact phase order checked before Popen; actual controller sched_getaffinity=={6}; Root driver/payload taskset6. Exclusive stdio files prevent replay/overwrite.",
+    "birth_waits": "Persists PID and portable proc birth before direct wait; records birth observation error and still finally joins, then stops on unknown birth. Every wait/stdout/stderr SHA persisted. Nonzero wait or any stderr stops further phases without automatic retry.",
+    "called_gates": "After all4readbacks, explicitly CALLS and persists actual_ipi_object_gate(q), then actual_local_slot_object_gate(q); only marks successful called gates after return. Any failure retains first failure/captures and prevents join; no import-only PASS.",
+    "resources": "CPU6 only; per payload AS1GiB/CPU45/60+5wall/FSIZE64MiB/core0/time-v. Outer CPU6 driver timeout260+5/AS1GiB/CPU45/64MiB/core0 is literal request. Fresh Root aggregate3jobs4GiB inclusive admission/headroom required; metrics paths retained."
+  },
+  "preparation_failure": "Preserved b4cf3ddb was zero-payload packet assembly assertion, corrected before frozen request; no object/source mutation or hidden metadata/gate run inferred.",
+  "future_join": "UNBOUND. Both actual gate results and actual latest passing cohort identity/unique-owner/field-relocation/source-byte pre/post-join review required separately before any linker admission. None slot does not qualify unwrap_unchecked runtime readiness, boot publication, CPU mapping, hardware, IRQ, native/default/original acceptance.",
+  "operations": "Read packet/contract/predicate/controller, narrow passed producer receipt and retained flag provenance; verified32 input hashes and AST only. Wrote private review. No nm/readelf/parser/gate/controller/compiler/link/tests/function/slot/hardware/runtime/native execution, canonical/index/state edits or recursive delegation."
+}

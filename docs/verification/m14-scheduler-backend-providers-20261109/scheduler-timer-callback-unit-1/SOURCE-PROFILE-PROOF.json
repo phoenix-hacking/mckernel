@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.scheduler-timer4.source-profile.v1",
+  "source_manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/SOURCE-MANIFEST.json",
+    "sha256": "b389db939fe6f56477592d9665861c6878ff138d60d02ddded9e11d272266d88"
+  },
+  "retained_profile": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "compiler_version_from_matching_receipt": "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+  },
+  "Rust": {
+    "no_std": true,
+    "edition": "2021",
+    "actual_abi_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "actual_abi_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "optional_cfg": [],
+    "extra_features": [],
+    "env_overrides": {},
+    "new_warning_suppression": false
+  },
+  "codegen_options_delta": "Only exact source/object/metrics/stdout/stderr paths; retainednightly1.95 options unchanged. No optionalcfg/features/wholecrate/no_builtins/link/runtime/toolchainfallback.",
+  "interfaces": "External declarations only at original super::process_spin_* and crate::x86_cpu_helpers::lapic_timer_* paths. Original callback module/docs/attrs/bodies/use super::* byte-exact. No link_name, aliases, stand-ins, replacement callbacks or provider bodies.",
+  "expected_diagnostics": "Exact inherited singleSSEwarning bytes only/noextra; compile stdoutempty/otherstderrsempty. Stopfirstunexpectedfailure/noautomaticretry.",
+  "expected_compile_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+  "expected_compile_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+  "resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "source_selection": "Canonical process_helpers selected unconditionally withinRustkernel; CMake pairs MCKERNEL_RUST_PROCESS_HELPERS for C exclusion. This isolatedcut enables no optionaldata cfg and makes no wholeC/native/default profile claim.",
+  "separate_two_data_lane_authority": false,
+  "no_acceptance_or_retirement_or_score": true
+}

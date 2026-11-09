@@ -1,0 +1,18 @@
+--- /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/metadata_checks.py
++++ /home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/correction-1/metadata_checks.py
+@@ -164,7 +164,14 @@
+         for rel in funcs[function]['actual_relocations']:
+             symbol = rel['symbol']
+             if symbol['bind'] == 1:
+-                assert symbol['name'] in allowed_globals and rel['addend'] == 0
++                assert symbol['name'] in allowed_globals
++                if symbol['name'] == 'x86_interrupt_log_debug':
++                    # Exact original addr_of!(Ddebug.line_flags), not the object base.
++                    assert function == 'x86_interrupt_log_bridge' and symbol == data
++                    assert rel['addend'] == contract['data_fields']['line_flags'] == 24
++                else:
++                    # Genuine function/slot providers are still exact base addresses.
++                    assert symbol['section'] == 0 and rel['addend'] == 0
+                 globals_seen.add(symbol['name'])
+             else:
+                 assert function == 'x86_interrupt_log_bridge' and symbol['bind'] == 0

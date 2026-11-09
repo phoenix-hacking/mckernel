@@ -1,0 +1,198 @@
+{
+  "status": "FINITE_ACCEPTED_F04_ORIGINAL_CPU_IPI_SOURCE_PREPARATION_ONLY",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/scheduler_interrupt_backend_unit.rs",
+  "unit_sha256": "661fe2b9a5aca100ffa6fafb61fbf76473843677e2bfe6a6f6c52c8219992332",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "source_blocks": [
+    {
+      "name": "x86_cpu_local_native",
+      "kind": "actual_private_adapter",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 903,
+      "source_line_end": 905,
+      "source_bytes": "unsafe extern \"C\" fn x86_cpu_local_native(cpu: CInt) -> *mut c_void {\n    unsafe { crate::x86_local::get_x86_cpu_local_variable(cpu).cast::<c_void>() }\n}\n",
+      "source_sha256": "392971ef3eb6d672dbb5d227a6308c016d670c3311dfcd88df24c30cd7ae7417"
+    },
+    {
+      "name": "ihk_mc_interrupt_cpu",
+      "kind": "actual_public_body_and_attributes",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 907,
+      "source_line_end": 920,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt {\n    unsafe {\n        x86_interrupt_cpu_result(\n            cpu,\n            vector,\n            crate::ap::num_processors,\n            Some(x86_cpu_local_native),\n            size_of::<CULong>() as CULong,\n            Some(x86_issue_ipi_bridge),\n            Some(x86_interrupt_log_bridge),\n        )\n    }\n}\n",
+      "source_sha256": "83685dfadd0469e849fd06d49929420dbf5d4eba1d503d7e554723dfbc111989"
+    },
+    {
+      "name": "x86_get_interrupt_id_result",
+      "kind": "actual_public_body_and_attributes",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 1800,
+      "source_line_end": 1819,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn x86_get_interrupt_id_result(\n    cpu: CInt,\n    cpu_local_fn: Option<X86CpuLocalFn>,\n    apic_id_offset: CULong,\n) -> CInt {\n    let Some(cpu_local) = cpu_local_fn else {\n        return -1;\n    };\n    let cpu_local_addr = unsafe { cpu_local(cpu) };\n    if cpu_local_addr.is_null() {\n        return -1;\n    }\n\n    unsafe {\n        read_volatile(\n            (cpu_local_addr as usize).wrapping_add(apic_id_offset as usize) as *const CULong,\n        ) as CInt\n    }\n}\n",
+      "source_sha256": "204b2095e8b9c88a14c9c2d2cc06e84ee56889d0bcb209545d95dd1935af0743"
+    },
+    {
+      "name": "x86_interrupt_cpu_result",
+      "kind": "actual_public_body_and_attributes",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 1821,
+      "source_line_end": 1856,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn x86_interrupt_cpu_result(\n    cpu: CInt,\n    vector: CInt,\n    num_processors: CInt,\n    cpu_local_fn: Option<X86CpuLocalFn>,\n    apic_id_offset: CULong,\n    issue_ipi_fn: Option<X86IssueIpiFn>,\n    log_fn: Option<X86InterruptLogFn>,\n) -> CInt {\n    if cpu < 0 || cpu >= num_processors {\n        if let Some(log) = log_fn {\n            unsafe {\n                log(1, cpu, vector);\n            }\n        }\n        return -1;\n    }\n    let Some(issue_ipi) = issue_ipi_fn else {\n        return -1;\n    };\n    let apic_id = unsafe { x86_get_interrupt_id_result(cpu, cpu_local_fn, apic_id_offset) };\n    if apic_id < 0 {\n        return -1;\n    }\n\n    if let Some(log) = log_fn {\n        unsafe {\n            log(2, cpu, vector);\n        }\n    }\n    unsafe {\n        issue_ipi(apic_id as CULong, vector);\n    }\n    0\n}\n",
+      "source_sha256": "3816ee87ab5877abbaa7570fcdb6aea0d74207f2139baa58094b7ccc2dd8b1b1"
+    },
+    {
+      "name": "X86CpuLocalFn",
+      "kind": "actual_callback_type_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 62,
+      "source_line_end": 62,
+      "source_bytes": "type X86CpuLocalFn = unsafe extern \"C\" fn(CInt) -> *mut c_void;\n",
+      "source_sha256": "e47cd6ff414cf04bda62a5df41b920cb438744ba2be6783b52e833eadd677918"
+    },
+    {
+      "name": "X86IssueIpiFn",
+      "kind": "actual_callback_type_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 63,
+      "source_line_end": 63,
+      "source_bytes": "type X86IssueIpiFn = unsafe extern \"C\" fn(CULong, CInt);\n",
+      "source_sha256": "c49028497db0260f0ecb56c37d94dc72a66ef360c0abc9ae8c2ac28bd770f4ed"
+    },
+    {
+      "name": "X86InterruptLogFn",
+      "kind": "actual_callback_type_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 64,
+      "source_line_end": 64,
+      "source_bytes": "type X86InterruptLogFn = unsafe extern \"C\" fn(CInt, CInt, CInt);\n",
+      "source_sha256": "860fff3096a8e68232fd7caf9a4d6390c70c2baf5c0647b6ecfca9b3faae9721"
+    },
+    {
+      "name": "x86_issue_ipi_bridge",
+      "kind": "actual_existing_external_declaration",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_line_start": 119,
+      "source_line_end": 119,
+      "source_bytes": "    fn x86_issue_ipi_bridge(apic_id: CULong, vector: CInt);\n",
+      "source_sha256": "a1b0d9e9f17bf7302bf904f4ff9357e84b863982b2ad56138b61710a5c05747f"
+    },
+    {
+      "name": "X86CpuLocalVariables",
+      "kind": "actual_ABI_type_from_included_module",
+      "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "source_line_start": 519,
+      "source_line_end": 531,
+      "source_bytes": "#[repr(C, packed)]\npub struct X86CpuLocalVariables {\n    pub processor_id: CULong,\n    pub apic_id: CULong,\n    pub kernel_stack: CULong,\n    pub user_stack: CULong,\n    pub gdt_ptr: X86DescPtr,\n    pub pad: [u16; 3],\n    pub gdt: [u64; 16],\n    pub tss: Tss64,\n    pub paniced: CULong,\n    pub panic_regs: [u64; 21],\n}\n",
+      "source_sha256": "2b55ba61d940baf174354e745d073c415925cd82c77fd707b14c7269ce8eff72"
+    },
+    {
+      "name": "CInt",
+      "kind": "actual_ABI_alias_from_included_module",
+      "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "source_line_start": 5,
+      "source_line_end": 5,
+      "source_bytes": "pub type CInt = i32;\n",
+      "source_sha256": "b09cd972ccaa959019e419236b46df2f11a8eebbae2cbcf8380be1a3c45e7ad6"
+    },
+    {
+      "name": "CULong",
+      "kind": "actual_ABI_alias_from_included_module",
+      "source_path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "source_line_start": 7,
+      "source_line_end": 7,
+      "source_bytes": "pub type CULong = u64;\n",
+      "source_sha256": "16aae6c9d61d650224be2fa775cfbbda0ba027bd948b22c84973755aaa5f7770"
+    }
+  ],
+  "source_public_functions": [
+    "ihk_mc_interrupt_cpu",
+    "x86_get_interrupt_id_result",
+    "x86_interrupt_cpu_result"
+  ],
+  "source_private_functions": [
+    "x86_cpu_local_native"
+  ],
+  "actual_ABI_module": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "treatment": "Unchanged real ABI type module include, with original packed X86CpuLocalVariables, real CInt/CULong, X86DescPtr/Tss64 dependencies and existing source layout assertions. No CPU helper/backend module inclusion."
+  },
+  "genuine_external_interfaces": [
+    {
+      "symbol": "num_processors",
+      "kind": "data_U",
+      "module": "ap",
+      "declaration": "pub static mut num_processors: CInt;",
+      "source": "kernel/rust/ap.rs:40-41 actual existing native definition; interface from exact affirmative contract",
+      "initializer_included": false
+    },
+    {
+      "symbol": "get_x86_cpu_local_variable",
+      "kind": "function_U",
+      "module": "x86_local",
+      "declaration": "pub fn get_x86_cpu_local_variable(id: CInt) -> *mut X86CpuLocalVariables;",
+      "source": "kernel/rust/x86_local.rs:99 exact existing native signature per affirmative contract",
+      "body_included": false
+    },
+    {
+      "symbol": "x86_issue_ipi_bridge",
+      "kind": "function_U",
+      "module": "x86_cpu_helpers",
+      "declaration": "fn x86_issue_ipi_bridge(apic_id: CULong, vector: CInt);",
+      "body_included": false
+    },
+    {
+      "symbol": "x86_interrupt_log_bridge",
+      "kind": "function_U",
+      "module": "x86_cpu_helpers",
+      "declaration": "fn x86_interrupt_log_bridge(event: CInt, cpu: CInt, vector: CInt);",
+      "source": "Exact CInt,CInt,CInt ABI in affirmative contract; actual logger implementation and storage EXCLUDED",
+      "body_included": false
+    }
+  ],
+  "new_data_definitions": [],
+  "source_semantics": "Exact original signed CPU bounds/optional callback checks, actual mutable num_processors load, typed getter pointer cast, volatile CULong APIC load with wrapping offset, existing CInt conversion and log event1/2/issue/return ordering. Vector unchanged; no new CPU limits/normalization/atomic storage/log policy.",
+  "APIC_offset_binding": {
+    "actual_first_two_fields": [
+      "processor_id: CULong",
+      "apic_id: CULong"
+    ],
+    "actual_CULong": "u64 from included abi.rs",
+    "selected_LP64_offset_bytes": 8,
+    "original_expression": "size_of::<CULong>() as CULong",
+    "method": "Direct consequence of actual repr(C,packed) field order and unchanged real type; no guessed register struct or new runtime/ABI claim."
+  },
+  "only_source_glue": "no_std and original finite namespaces, minimal core/type imports and actual four genuine external declarations. Function attributes/signatures/bodies and callback aliases copied byte-exact.",
+  "excluded": "ALL x86_local getter body/storage/mapping, ap module/init/count definition, x86_issue_ipi_bridge hardware body, x86_interrupt_log_bridge/logger/debug data, whole CPU/local/AP/debug modules, notification/generic/exec/ACK/TID/XPMEM/held source and runtime.",
+  "expected_future_object_only": {
+    "global_T": [
+      "ihk_mc_interrupt_cpu",
+      "x86_get_interrupt_id_result",
+      "x86_interrupt_cpu_result"
+    ],
+    "genuine_U": [
+      "num_processors",
+      "get_x86_cpu_local_variable",
+      "x86_issue_ipi_bridge",
+      "x86_interrupt_log_bridge"
+    ],
+    "source_private_may_optimize": [
+      "x86_cpu_local_native"
+    ],
+    "writable_data": [],
+    "actual_emission_obligation": "Actual future object/ELF/disassembly must bind any compiler private/readonly/unwind owner. Unexpected intrinsic or body/data expansion stops before link; no HOST libc/overrides."
+  },
+  "existing_num_processors_owner": "Reuse original qualified current D4; never define1/default replica. Actual then-current ownership/source bytes rechecked only at separately admitted join.",
+  "future_current_partial_input": null,
+  "future_join": "UNBOUND until matching actual current scheduler/bridge/primitive qualification; no guessed partial hash or final unresolved count.",
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-interrupt-backend-lookahead-20261109T2142.json",
+    "sha256": "db1a8214207953c15467a9fb6cd7a82c8ce1251ff3f77bc7a67bceb49595c63e"
+  },
+  "no_optional_cfg_hardware_logger_sourcehold_inspection_or_execution": true,
+  "compiler_metadata_link_test_runtime_calls": 0,
+  "canonical_or_other_private_or_index_edits": false
+}

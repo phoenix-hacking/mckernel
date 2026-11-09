@@ -1,0 +1,152 @@
+{
+  "kind": "FINITE_TIMER_CALLBACK_AND_GENUINE_STATE_OWNER_SOURCE_LOOKAHEAD",
+  "decision": "SPLIT_GO_FOUR_CALLBACK_SOURCE_ONLY_TWO_DATA_OWNERS_REQUIRE_EXACT_PROFILE_GUARD_BINDING",
+  "owner": "Existing saved Sol/HIGH lookahead; Root sole compositor/reviewer/admission; no current producer/predicate/publication edits",
+  "current_saved_owner_proof": {
+    "result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-join-1/JOIN-RESULT.json",
+    "status": "PASS_ACTUAL_CURRENT_ENGINE_PLUS_ONLY_QUALIFIED_TEN_BRIDGES",
+    "partial_sha256": "6fb8987df82078a290fdf25348079ef8775760c1a35942d6eb59370b25b3ec5b",
+    "symbol_text": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-join-1/joined-symbols.stdout",
+    "already_defined": [
+      {
+        "name": "process_spin_lock_bridge",
+        "kind": "T",
+        "size_hex": "c"
+      },
+      {
+        "name": "process_spin_unlock_bridge",
+        "kind": "T",
+        "size_hex": "c"
+      }
+    ],
+    "requested_names_not_defined_or_referenced_in_this_saved_partial": [
+      "process_timer_spin_lock_bridge",
+      "process_timer_spin_unlock_bridge",
+      "process_timer_lapic_enable_bridge",
+      "process_timer_lapic_disable_bridge",
+      "time_sharing",
+      "process_timer_runtime_offsets"
+    ],
+    "scope": "These are queued genuine dependencies of source-reviewed set_timer unit, not an assertion all six were already U in6fb. No nm/metadata/hash census rerun. Root must reconcile newest actual qualified composition before any join."
+  },
+  "eligibility": {
+    "scope": "Exact existing accepted-F02 process/scheduler timer-adapter and timer-state/descriptor partition; selected process_helpers module. Four callbacks forward genuine lock/LAPIC exports and acquire no extra policy or storage owner.",
+    "selection": "kernel/rust/lib.rs45 selects process_helpers; kernelCMake169 source; MCKERNEL_RUST_PROCESS_HELPERS at668/670 selects Rust process bridges against matching C reference exclusions.",
+    "hold_boundary": "No generic/exec/notification request/packet/endpoint implementation is readied or reassigned. LAPIC engine implementations remain genuine external function references, not imported bodies or executed clock/APIC/IRQ operations. Original SDK/native/currentfree/perf/mmap/negative-open/monitor/UNKNOWN controls remain binding.",
+    "no_port_invention": "All four Rust functions and both Rust data definitions already exist. Their exact types, initializer expressions, source guard and C ownership pairing are retained; no C-only invented Rust port, guessed offset, new flag/default or fake provider."
+  },
+  "four_exact_callbacks": [
+    {
+      "name": "process_timer_spin_lock_bridge",
+      "Rust": "kernel/rust/process_helpers.rs16144-16147",
+      "signature": "unsafe extern C fn(CULong)->CULong",
+      "body": "unsafe { super::process_spin_lock_bridge(lock_addr) }",
+      "C": "kernel/process.c165-173 actual unsigned-long signature; original ihk_mc_spinlock_lock cast/delegation",
+      "existing_owner_import": "process_spin_lock_bridge"
+    },
+    {
+      "name": "process_timer_spin_unlock_bridge",
+      "Rust": "kernel/rust/process_helpers.rs16151-16154",
+      "signature": "unsafe extern C fn(CULong,CULong)",
+      "body": "unsafe { super::process_spin_unlock_bridge(lock_addr,irqstate); }",
+      "C": "kernel/process.c180-190 exact paired lock pointer/saved irqstate forwarding",
+      "existing_owner_import": "process_spin_unlock_bridge"
+    },
+    {
+      "name": "process_timer_lapic_enable_bridge",
+      "Rust": "kernel/rust/process_helpers.rs16158-16161",
+      "signature": "unsafe extern C fn(u32)",
+      "body": "unsafe { crate::x86_cpu_helpers::lapic_timer_enable(clocks); }",
+      "C": "kernel/process.c197-203 actual unsigned-int clocks forwarded once",
+      "unresolved_genuine_import": "lapic_timer_enable; real no_mangle externC signature atkernel/rust/x86_cpu_helpers.rs1873-1874 (CUInt=u32); engine body excluded"
+    },
+    {
+      "name": "process_timer_lapic_disable_bridge",
+      "Rust": "kernel/rust/process_helpers.rs16165-16168",
+      "signature": "unsafe extern C fn()",
+      "body": "unsafe { crate::x86_cpu_helpers::lapic_timer_disable(); }",
+      "C": "kernel/process.c212-218 actual void disable forwarding",
+      "unresolved_genuine_import": "lapic_timer_disable; real no_mangle externC signature atkernel/rust/x86_cpu_helpers.rs1890-1891; engine body excluded"
+    }
+  ],
+  "two_genuine_data_owners": [
+    {
+      "name": "time_sharing",
+      "Rust": "kernel/rust/process_helpers.rs17320-17341 process_global_storage module",
+      "definition": "#[no_mangle] pub static mut time_sharing:CInt=1;",
+      "real_guard": "#[cfg(process_global_storage_candidate)]",
+      "C": "kernel/process.c804-813: extern int time_sharing with PROCESS_GLOBAL_STORAGE, otherwise int time_sharing=1",
+      "semantics": "Plain mutable C-int boot state, original1 initializer, no AtomicI32/bool/lazy replacement. Existing non-atomic ownership/synchronization retained."
+    },
+    {
+      "name": "process_timer_runtime_offsets",
+      "Rust": "kernel/rust/process_helpers.rs17548-17577 remaining_process_timer_layout_storage",
+      "definition": "#[no_mangle] pub static process_timer_runtime_offsets:TimerRuntimeOffsets with original15 offset_of! expressions",
+      "real_guard": "#[cfg(process_global_storage_candidate)]",
+      "C": "kernel/process.c136-162: extern const descriptor with PROCESS_GLOBAL_STORAGE, otherwise matching builtin_offsetof initializer",
+      "layout": "Original sched_helpers.rs259-276 repr(C)15usize descriptor; original source asserts size120/align8. Actual abi::{Thread,CpuLocalVar,Timer}; no fabricated numeric offsets or relocated pointer values.",
+      "field_expressions": {
+        "thread_status_offset": "offset_of!(Thread,status)",
+        "thread_sched_list_offset": "offset_of!(Thread,sched_list)",
+        "thread_spin_sleep_lock_offset": "offset_of!(Thread,spin_sleep_lock)",
+        "thread_spin_sleep_offset": "offset_of!(Thread,spin_sleep)",
+        "thread_itimer_enabled_offset": "offset_of!(Thread,itimer_enabled)",
+        "cpu_runq_lock_offset": "offset_of!(CpuLocalVar,runq_lock)",
+        "cpu_runq_offset": "offset_of!(CpuLocalVar,runq)",
+        "cpu_runq_len_offset": "offset_of!(CpuLocalVar,runq_len)",
+        "cpu_current_offset": "offset_of!(CpuLocalVar,current)",
+        "cpu_timer_enabled_offset": "offset_of!(CpuLocalVar,timer_enabled)",
+        "cpu_backlog_list_offset": "offset_of!(CpuLocalVar,backlog_list)",
+        "timer_timeout_offset": "offset_of!(Timer,timeout)",
+        "timer_waitq_offset": "offset_of!(Timer,processes)",
+        "timer_list_offset": "offset_of!(Timer,list)",
+        "timer_thread_offset": "offset_of!(Timer,thread)"
+      }
+    }
+  ],
+  "exact_cfg_and_profile_provenance": {
+    "Rust_selector": "kernel/CMakeLists.txt280-286: only MCKERNEL_HOST_IRQ_ABI STREQUAL linux-6.12 appends --cfg process_global_storage_candidate.",
+    "C_pair": "kernel/CMakeLists.txt698-701 under same Linux6.12 condition appends MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE to process.c; C785-787 rejects storage without PROCESS_HELPERS.",
+    "preparation_constraint": "Source/selector facts only. Actual separate compatible data source/profile/guard and C-ownership binding remains a required input; this review does not authorize enabling process_global_storage_candidate or bypassing original fullCglobalstorage guard obligations/held adjacent candidates. Four callback source GO and descriptor need provide no implied cfg authority.",
+    "actual_types": "Current genuine kernel/rust/abi.rs (retained ff48bc2e cohort), CInt=i32,CULong=u64,Thread,CpuLocalVar,Timer. Timer repr(C) has timeout:CULong,processes:Waitq,list:AbiListHead,thread:*mut c_void atabi761. Actual TimerRuntimeOffsets type remains complete15fields.",
+    "compatible_partial_scope": "Existing reviewed no_std nightly1.95/edition2021/large-static/no-redzone/no-vector/no-SSE codegen profile and inherited exact diagnostic policy; current nonoptional type profile retained. New original-source storage cfg must be explicitly bound for the isolated packet, not guessed from absent symbols.",
+    "no_boot_initialization_claim": "Compiled initializer bytes, if later qualified, are boot defaults/offset metadata only; not initialized CPU/runqueue/IRQ/timer state or backend availability."
+  },
+  "finite_dependencies": {
+    "additional_private_function_bodies": [],
+    "callback_unit_genuine_imports": [
+      "process_spin_lock_bridge(CULong)->CULong",
+      "process_spin_unlock_bridge(CULong,CULong)",
+      "lapic_timer_enable(u32)",
+      "lapic_timer_disable()"
+    ],
+    "data_unit_function_imports": [],
+    "additional_constants": "Only actual time_sharing initializer1 and real type/offset compile-time expressions; no descriptor handcoding.",
+    "resolution_limit": "Two process_spin exports are already proven in6fb; LAPIC functions are only source-identified genuine external dependencies. Do not infer any backend closure or blind remaining-U count. Root newer primitive/debugdata/timer objects may change state and require exact current-owner reconciliation."
+  },
+  "next_smallest_meaningful_preparation": "Root may review a finite exact four-callback source packet using actual external process-spin and LAPIC signatures. Separately retain the identified existing time_sharing/descriptor definitions and selector as a pending source/profile dependency; resolve exact compatible guard/ownership binding before any data source-unit/codegen proposal. This is no unified six-owner compiler permission; no whole guarded module or held adjacent candidates may be imported.",
+  "correction_consumed": "Earlier2142 timer/vector contract now explicitly removes mistaken claim that process_timer callbacks were among prior10sched bridges. All4names and state/descriptor remain genuine imports until their actual own proof is joined.",
+  "actions": {
+    "CPU0_reads_only": true,
+    "existing_saved_currentpartial_symbols_reused": true,
+    "unit_generation_or_source_edit": false,
+    "preprocessor_compiler_link_test_clock_APIC_IRQ_function_native_actions": false,
+    "canonical_or_index_or_root_producer_files_modified": false,
+    "goal_or_spawn": false,
+    "sole_new_written_file": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-provider-state-lookahead-20261109T2202.json"
+  },
+  "original_acceptance_or_scoring_change": false,
+  "separate_lane_status": {
+    "four_callbacks": {
+      "source_status": "GO_FINITE_EXACT_EXISTING_BODY_CONTRACT",
+      "compile_status": "NOT_ADMITTED; Root exact packet/review/admission required",
+      "independence": "Does not enable or depend on process_global_storage_candidate; actual data ownership is separate."
+    },
+    "two_data_owners": {
+      "source_status": "ACTUAL_EXISTING_DEFINITIONS_AND_SELECTOR_IDENTIFIED_ONLY",
+      "compile_status": "NOT_READY_NO_CFG_ENABLEMENT_AUTHORIZED",
+      "missing_input": "Separate exact compatible isolated source/profile/guard and C-ownership-exclusion binding that preserves original full Cglobalstorage guard obligations and distinguishes permitted data scope from held neighboring candidates. Need for descriptor, four-callback GO or current partial imports does not supply this authority/binding.",
+      "guard": "Original process_global_storage_candidate paired by actual Linux6.12 selector with PROCESS_GLOBAL_STORAGE C exclusion; no new flag/default/port or unified compiler permission inferred."
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "schema": "mckernel.scheduler-timer4.source-manifest.v1",
+  "status": "EXACT_FOUR_EXISTING_CALLBACK_SOURCE_ONLY_FROZEN_PENDING_REVIEW_ROOT_ADMISSION",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/scheduler_timer_callback_unit.rs",
+  "unit_sha256": "7db8dfff72477caf7e8f684d8ad96fb84af2ac54271b71bccb54f106e65437a6",
+  "eligibility": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-provider-state-lookahead-20261109T2202.json",
+    "sha256": "3aad049e9e22f6c9eebf403f71bf4f2af76f851b754fa75eb3879363167e7473",
+    "decision": "SPLIT_GO_FOUR_CALLBACK_SOURCE_ONLY_TWO_DATA_OWNERS_REQUIRE_EXACT_PROFILE_GUARD_BINDING"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+  },
+  "exact_source_segments": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 16138,
+      "last_line": 16169,
+      "role": "exact finite original four-callback module",
+      "segment_sha256": "e3a9142e9649d8c5f4147c00f33fc8da704f559b123dc4cffec3a65aaff3a4ea"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 5975,
+      "last_line": 5976,
+      "role": "genuine lock signature/attribute only",
+      "segment_sha256": "67543a2a1f8d88269a0e123faf5a1ad371a0ae94bdd468b0f28db86d43d2f3d4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 5980,
+      "last_line": 5981,
+      "role": "genuine unlock signature/attribute only",
+      "segment_sha256": "2101cef3975f7ee69b90f88178174a81a75bb845b7b4342dde7105ac54d92c63"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "role": "actual CUInt=u32 alias",
+      "segment_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1873,
+      "last_line": 1874,
+      "role": "genuine enable signature/attribute only",
+      "segment_sha256": "92b370c2ca710b3665d546383b08067ce11e4dc210347764c82f1a9df6d9f22a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1890,
+      "last_line": 1891,
+      "role": "genuine disable signature/attribute only",
+      "segment_sha256": "fef4e672209038f7528ce4869e6fbb11e0c7ebfe8f77eb5575841cf81a17e7e4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 5,
+      "last_line": 7,
+      "role": "actual C ABI type aliases",
+      "segment_sha256": "24d812dee2beebc060993d304fc5e4ef04d3b0a0cc6eaf042adb89bea48c15cc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 45,
+      "last_line": 45,
+      "role": "actual process_helpers module selection",
+      "segment_sha256": "23a7e2052f4a3d2a06b4ae739dc359bc078d144c22bbc9c25c30c24f5f7c01ea"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 169,
+      "last_line": 169,
+      "role": "actual Rust source-list selection",
+      "segment_sha256": "07da45225358466675e9a18e78607e0ff1d2ef5326692547a88d53e188a94ae9"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 667,
+      "last_line": 670,
+      "role": "paired C process-helper exclusion selector",
+      "segment_sha256": "58ddd97ca182b5d307ae308f62b277e4331504b99e618880dca9563efe882b83"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 164,
+      "last_line": 173,
+      "role": "original C lock prototype/reference selection",
+      "segment_sha256": "c8751ad818247a2bf97bf525a2e4f2fcf01ea6dbce33472ddcb57ab245e5c294"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 179,
+      "last_line": 190,
+      "role": "original C unlock prototype/reference selection",
+      "segment_sha256": "322f2d2aa03be2df4e9594b7c9e04aab7fb39f623f853cf69240cd96ce0b39c3"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 196,
+      "last_line": 203,
+      "role": "original C enable prototype/reference selection",
+      "segment_sha256": "b6e6d3ffd63ab6c36ecf57777124835b4023db4f1ac99ca4f1c1ccfcebffcd4b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "first_line": 211,
+      "last_line": 218,
+      "role": "original C disable prototype/reference selection",
+      "segment_sha256": "0be56c74762304db0babacac37fb7213583dbc1a73cefd18539329fe7ebc2a4f"
+    }
+  ],
+  "exact_original_callback_module_sha256": "e3a9142e9649d8c5f4147c00f33fc8da704f559b123dc4cffec3a65aaff3a4ea",
+  "public_C_exports": [
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_lapic_disable_bridge"
+  ],
+  "source_genuine_U": [
+    "process_spin_lock_bridge",
+    "process_spin_unlock_bridge",
+    "lapic_timer_enable",
+    "lapic_timer_disable"
+  ],
+  "actual_interfaces": {
+    "process_spin_lock_bridge": "unsafe extern C fn(CULong)->CULong; actual abi::CULong=u64",
+    "process_spin_unlock_bridge": "unsafe extern C fn(CULong,CULong); actual abi::CULong=u64",
+    "lapic_timer_enable": "unsafe extern C fn(CUInt); actual source CUInt=u32; callback clocks remains original u32",
+    "lapic_timer_disable": "unsafe extern C fn()"
+  },
+  "interface_preservation": "External declarations only at original super::process_spin_* and crate::x86_cpu_helpers::lapic_timer_* paths. Original callback module/docs/attrs/bodies/use super::* byte-exact. No link_name, aliases, stand-ins, replacement callbacks or provider bodies.",
+  "type_policy": "Genuine current abi.rs path as retained finite profile; no handbuilt type/layout. Actual x86 CUInt alias copied exactly; no cast/default/width change.",
+  "counts": {
+    "public_definitions": 4,
+    "genuine_source_external_declarations": 4,
+    "private_body_definitions": 0,
+    "selected_data_owners": 0
+  },
+  "expected_emission": "4 strongT/4genuineU, no data/privatebody; actual emitted lowering needs later qualification before any join.",
+  "optional_cfg": [],
+  "excluded": "No time_sharing, TimerRuntimeOffsets type/instance/offset computation or process_global_storage_candidate cfg; no linux6.12 data pairing. No process_spin redefinition; no LAPIC/backend/IRQ/lock/hardware body, wholeprocess/x86module, generic/exec/notification implementation.",
+  "separate_data_lane": "Split contract two guarded dataowners remain NOT_READY pending exact compatible source/profile/Cguard/Cexclusion binding. Callback need does not release or activate them.",
+  "future_base_and_join": "UNBOUND until Root binds actual next qualified cohort; existing process_spin providers reusable only at exact current identity; LAPIC names remain genuineU.",
+  "operations": "Private source/JSON only; no compiler/preprocessor/metadata/link/test/function/APIC/IRQ/timer/native operation, canonical/index/state/monitor edit or recursion."
+}

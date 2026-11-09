@@ -1,0 +1,175 @@
+{
+  "status": "READY_CPU_IPI_TWO_METADATA_READS_ONLY_PENDING_F_CONCRETE_GO_ROOT_ADMISSION",
+  "owner": "/root/m15_cli_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1",
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/scheduler_interrupt_backend_unit.rs": "661fe2b9a5aca100ffa6fafb61fbf76473843677e2bfe6a6f6c52c8219992332",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/SOURCE-MANIFEST.json": "6e9018dd8ecebe97872d679509eee774ef0c749a938708c441c51d85449baba7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/interrupt_metadata_checks.py": "358b8dd64ed0d4e736441a1f5cefe414960a24cb4c99b70c8edd95aa1cb9a4f1",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/run_metadata.py": "2fd50f60745228b6037fb8d026245879f4770d59d7c539763ea6918fa7e79eaa",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/SOURCE-PROFILE-PROOF.json": "f727874373e0feb368731111a948a1133620377af78634bb8bd437f0384827e8",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/COMPILE-PROPOSAL.json": "d46bee5801390ab5c1a5de309ff06a427673e0a02bcc1a2736f11fa471235cbc",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-review-1/REVIEW.json": "072a2e4c40c75aa40e1a8cb7bd11a4ebc750e17b79ed06dfb1576da798985216",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-join-and-backend-producers-1/RESULT.json": "c2aefd53ada3f7b58eda5d2c9795774654510ed5bb15af736274978d469ad911",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-join-and-backend-producers-1/ADMISSION.json": "8e8768d4dc8443a4d30d896641faf4e4f68b9376e4d22e8d89ea956e1530e97e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/usr/bin/python3": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/scheduler_interrupt_backend_unit.rs": "661fe2b9a5aca100ffa6fafb61fbf76473843677e2bfe6a6f6c52c8219992332",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/SOURCE-MANIFEST.json": "6e9018dd8ecebe97872d679509eee774ef0c749a938708c441c51d85449baba7"
+  },
+  "source_unit": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/scheduler_interrupt_backend_unit.rs",
+  "source_manifest": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/SOURCE-MANIFEST.json",
+  "actual_ABI": "/home/holden/mckernel/kernel/rust/abi.rs",
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o",
+    "sha256": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777",
+    "bytes": 2224,
+    "actual_compile_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-join-and-backend-producers-1/RESULT.json",
+    "actual_compile_RESULT_sha256": "c2aefd53ada3f7b58eda5d2c9795774654510ed5bb15af736274978d469ad911",
+    "actual_pid": 632432,
+    "actual_birth": "34932411",
+    "compile_already_joined": true,
+    "no_compiler_replay": true
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.stdout",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/ACTUAL-ELF-METADATA.json",
+  "expected3T": [
+    "ihk_mc_interrupt_cpu",
+    "x86_get_interrupt_id_result",
+    "x86_interrupt_cpu_result"
+  ],
+  "expected4U": [
+    "get_x86_cpu_local_variable",
+    "num_processors",
+    "x86_issue_ipi_bridge",
+    "x86_interrupt_log_bridge"
+  ],
+  "source_private_raw_v0_pattern": "^_RNvNtCs[0-9A-Za-z]+_32scheduler_interrupt_backend_unit15x86_cpu_helpers20x86_cpu_local_native$",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/interrupt_metadata_checks.py",
+    "sha256": "358b8dd64ed0d4e736441a1f5cefe414960a24cb4c99b70c8edd95aa1cb9a4f1",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_both_reads_before_future_join": true,
+    "retain_all_metadata_before_source_checks": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/run_metadata.py",
+    "sha256": "2fd50f60745228b6037fb8d026245879f4770d59d7c539763ea6918fa7e79eaa",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/REQUEST.json"
+    ],
+    "only2payloads_no_compile_or_link": true
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "scope": "Actual source3public4genuineU and atmost one exactsourceprivate getteradapter, zero source writabledata/readonlyobjects; only retainedprofile.eh_frame tied to exactselectedfunctions. Captureallactualmetadata beforestrictowners/imports/RO/sourceedgechecks. Actual packedABI first2CULong fields +u64 +originalsize_of expression bindAPIC8, no guessed CPUlocal/register layout. num_processors realU/no fixedcount/defaultvalue/storage; backend/logger/getter bodies and callbackslots excluded. Source signedCPU/APIC conversion/volatileload/log/issue/return preserved, no function/hardware/IRQ/CPUargument tests/native runtime or originalgatecredit.",
+  "future_current_partial_input": null,
+  "future_join": "UNBOUND until actual then-current80or later partial qualification and concrete actualemission review; no oldaaaf/c205 or predictedcohort hash/finalUcount.",
+  "not_runnable_until": "Independent F concrete source/ABI/actualmetadata/controller review and fresh exact Root sharedHOST admission. First unexpectedfailure preserveallreadbacks/gatecapture/PIDbirth/directwait/stdios/metrics andSTOP before futurejoin; no automaticretry/metadata or compile replay/ownerweakening.",
+  "canonical_index_other_owner_or_live_state_writes": false
+}

@@ -1,0 +1,191 @@
+{
+  "schema": "mckernel.scheduler-local-slot.finite-source.v1",
+  "status": "SOURCE_FROZEN_FOR_SEPARATE_F_REVIEW_NO_CODEGEN",
+  "owner": "/root/scheduler_debug_data_review_high sourcewriteronly; separateFmustreview",
+  "eligibility": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-callback-local-owner-lookahead-20261109T2222.json",
+    "sha256": "84078b7db561f28af0d5594730570e5c354ce6a31a65e4fca3c9de45b7be9459"
+  },
+  "unit": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/scheduler_local_slot_unit.rs",
+  "private_source_inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/scheduler_local_slot_unit.rs": "8fa3b8cd56b96b93c5ee7e459b5064e51938bd75da7f4a268c81aa9b42e0768e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/local_accessor.rs": "c66384a24b4aa3db25a5c524a3603d8b5eb1aa6059e018d1a9589bc4ba766ac3",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/ipi_slot.rs": "44c3c07953eda4ae89e346682e662b513585ce8f2362ba8e7fd4012185fb673e"
+  },
+  "source_segments": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "first_line": 8,
+      "last_line": 8,
+      "segment_sha256": "a97560b6ed62f0a2db90d362dda346786d26324c54e83d85f9481fc263cd53ff",
+      "role": "Exact original PAGE_SIZE4096"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "first_line": 12,
+      "last_line": 12,
+      "segment_sha256": "e7436cee7de82d5e4ef2395d663a2ed66aaa766c751c500f3054db4e49ffc604",
+      "role": "Exact original LOCALS_SPAN4*PAGE_SIZE"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "first_line": 15,
+      "last_line": 16,
+      "segment_sha256": "b574bf815ccaa1c670a91e86e4263587b3d664d55d020871f4eb4c8cefa5c879",
+      "role": "Existing original locals pointer type/owner reference only; its static definition is EXCLUDED"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "first_line": 84,
+      "last_line": 87,
+      "segment_sha256": "6ca32fb4744c7df6c3703e72f78cd9f52d8787b21da6a870c94dbc603e600603",
+      "role": "Exact private inline(always) local_addr complete definition; actual canonical complete lines correct lookahead off-by-one"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+      "first_line": 98,
+      "last_line": 101,
+      "segment_sha256": "8251fb65400a85eb204825dd6191128aaff3aa7c6e0397f56c515e672a72a894",
+      "role": "Exact original exported accessor attribute/signature/body"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5281,
+      "last_line": 5281,
+      "segment_sha256": "acaad29dc3d6c61e0ec61ef22e591f7071db2b980bebbacc37d7b861c98c2b2c",
+      "role": "Exact IssueIpi unsigned32 callback alias"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5295,
+      "last_line": 5296,
+      "segment_sha256": "813f5cdbf054f06113dcfa7d50ce367d79d7632564fe1acaf61c9090bb10cd0e",
+      "role": "Exact original no_mangle None callback storage owner"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5307,
+      "last_line": 5308,
+      "segment_sha256": "fa2696ce1135515359125010aa913d0b6410533f94fc61a79819426d72056174",
+      "role": "Exact existing Option<IssueIpi> size8/align8 assertions only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 5,
+      "last_line": 7,
+      "segment_sha256": "24d812dee2beebc060993d304fc5e4ef04d3b0a0cc6eaf042adb89bea48c15cc",
+      "role": "Actual CInt/CULong scalar ABI; whole actualabi.rs type dependency is reused"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "first_line": 519,
+      "last_line": 531,
+      "segment_sha256": "2b55ba61d940baf174354e745d073c415925cd82c77fd707b14c7269ce8eff72",
+      "role": "Actual complete repr(C,packed) pointee shape, not a handmade layout"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 96,
+      "segment_sha256": "877589d2eec1f23d7a2b5f040a93e66f78fbed3c6e15f8d32623df58c66c6486",
+      "role": "Original module selection context only"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/local.c",
+      "first_line": 24,
+      "last_line": 29,
+      "segment_sha256": "8af1f1d38d7fcc066b949b5392d15794d93963492166d6d51fcda4018fd0001c",
+      "role": "Original4PAGE span and existing locals pointer owner reference only"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/local.c",
+      "first_line": 44,
+      "last_line": 52,
+      "segment_sha256": "d20e989f4ceb1efc64d33ea94c2329c3c61a1d88e3ec1d1fae0cf26adb7478a1",
+      "role": "Original matching C accessor source/valid-domain reference only"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h",
+      "first_line": 29,
+      "last_line": 51,
+      "segment_sha256": "e078d19888f0ccd2f15ae387cfe4f44bf6710f849dfc1eb3d26d9c417db41c8d",
+      "role": "Actual packed Ctype and exact accessor prototype"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h",
+      "first_line": 56,
+      "last_line": 58,
+      "segment_sha256": "dcff4ce4c90e2e1b5871454bbd9a669f7c7fc256325eb1806d43020c8f353cae",
+      "role": "Actual same4PAGE span alternative; no feature expansion"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 604,
+      "last_line": 609,
+      "segment_sha256": "fb580da280e6114f0a28d4e8ee643481e2f4c64c7e6f137811a82eec21fb1095",
+      "role": "Paired unsigned32 callback pointer extern/reference owner only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "segment_sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "Actual paired C RustCPUhelper source selector only"
+    }
+  ],
+  "actual_abi": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "pointee": "Complete original repr(C,packed) X86CpuLocalVariables including actual nested X86DescPtr/Tss64 types from sameABIfile",
+    "scalar": "Actual CInt=i32,CULong=u64; no invented opaque or handbuilt structure"
+  },
+  "exact_finite_definitions": {
+    "global_T": [
+      "get_x86_cpu_local_variable"
+    ],
+    "global_B": [
+      {
+        "name": "x86_issue_ipi",
+        "source_initializer": "None",
+        "bytes": 8,
+        "align": 8,
+        "section_semantics": "Original zero-initialized BSS/NOBITS declaration, not initializedlivekernel state",
+        "no_target_relocation": true
+      }
+    ],
+    "private_source_helper": [
+      {
+        "name": "local_addr",
+        "attribute": "inline(always)",
+        "may_inline_without_emitted_private_owner": true
+      }
+    ],
+    "constants": {
+      "PAGE_SIZE": 4096,
+      "LOCALS_SPAN": "4*PAGE_SIZE (16384 actualsourcebytes)"
+    },
+    "genuine_U": [
+      {
+        "name": "locals",
+        "type": "extern static mut *mut actual X86CpuLocalVariables",
+        "existing_owner": "Already genuineB8 in savedactualcurrentpartial observations; MUST NOT be emitted by thisunit."
+      }
+    ]
+  },
+  "accessor_semantics": "Exact (locals as *mut u8).add(LOCALS_SPAN.wrapping_mul(id as usize)) as *mut X86CpuLocalVariables plus exported local_addr(id) call; casts/wrapping/pointer.add/unsafevalidallocation+id domain unchanged. No dereference, new bounds/null policy, fixedmap or valid/invalid runtimevector.",
+  "callback_semantics": "Exact original Option<IssueIpi>=None initializer and realalias/size8/align8 assertions; no Some/backend/target/setter/APIC/selectorpublication/init included. None is originalPREBOOT storage only. It does not satisfy unwrap_unchecked runtime readiness; original excluded boot lifecycle must publish genuine target beforeuse.",
+  "source_extraction_note": "All selectedconstants/helper/getter/alias/static/assertionlines are byte-exact current source slices. local_addr actualcompletecanonicalrange84\u201387 corrects lookaheadapproximate83\u201386 without including nextfunction. Only module/import/externlocals/constassertion wrappers added; no other function/storage copied.",
+  "excluded": [
+    "locals original staticinitializer",
+    "x86_cpu_local_variables_span",
+    "LAST_PROCESSOR_ID/BOOT_CPU_LOCAL",
+    "init_processors_local/alloc/write_bytes",
+    "all GS/MSR/otherCPU accessors/assignment functions",
+    "otherlapic/mode slots",
+    "APIC/x2APIC targets/boot selector/callbackpublication",
+    "heldgeneric/exec/notification bodies"
+  ],
+  "future_current_partial_and_join": "UNBOUND until Root selects actuallatestmatchingpassingcohort and independently validates unique slot/accessor plus existinglocalsB8; no savedcohort is selected by thissourcepacket.",
+  "no_compiler_preprocessor_metadata_gate_link_test_function_or_native_executed": true,
+  "no_canonical_index_state_otherowner_writes": true
+}

@@ -1,0 +1,56 @@
+{
+  "decision": "GO_EXACT_SOURCE_ABI_CONFIG_AND_ONE_COMPILE_PROPOSAL_ONLY_PENDING_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/REQUEST.json",
+    "sha256": "53d41ae5f8649ab2f4b105b7771ebdf8e501dd221ce995d0de3a4b54f3cfad61"
+  },
+  "source_manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/SOURCE-MANIFEST.json",
+    "sha256": "0b0f41a9a0c691526aa18add1bf0f1e30fd275787e03063693545e91596a75ef"
+  },
+  "configuration": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/CONFIG-PROOF.json",
+    "sha256": "6c0f58c604470046e35ef4734b857c13202aefda0f0951775f5f5cb8554fc8b9"
+  },
+  "source_files": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/scheduler_ipi_log_provider_unit.rs": "f75b44a0014d637b685e27b6b7dfdc6662782225271dbc8a0cfb4283cae3af75",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/x86_interrupt_logger.rs": "519efca6a910fe2aab8e6ba9ad08cadddfc2e4974d7697bf16bf1f5b9a18d53e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/ipi_callback.rs": "1486008d0d2d15b13a2117d645fda4814692338d846e2f49c7cf4968e58f44a7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/debug_type.rs": "0fea20d992b34b3a27838d87f05f42cef8c7576d852b913ee674f6b752c54681",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/cpu_verbose_record.rs": "a9a1311204fda8ceaab51f467d7f066dfc71f98a23ea30790363c45ceb6f1a29"
+  },
+  "affirmative_scope": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-ipi-log-provider-lookahead-20261109T2202.json",
+    "sha256": "4908c559d022601bea1a27051e7b742a85aa04443c9d647cd111a9f40795421a"
+  },
+  "exact_source_review": {
+    "verified_inputs": 12,
+    "verified_named_source_segments": 24,
+    "method": "Compared all supplied line-bounded canonical source slices and SHA values; verified function/attribute/alias/slot declaration/descriptor/prelude slices occur exactly in selected files, and exact Ddebug type/existing layout assertions. Read complete five-file source unit. No whole CPU/debug/backend module imported.",
+    "functions": [
+      "x86_issue_ipi_bridge",
+      "x86_interrupt_log_bridge"
+    ],
+    "original_data": "x86_interrupt_log_debug only; exact #[used], #[no_mangle], #[link_section=\"__verbose\"]"
+  },
+  "IPI_contract": "Actual extern mutable Option<unsafe extern C fn(u32,u32)> x86_issue_ipi remains U. Original type-only alias and size8/align8 assertions retained. Bridge C ABI(CULong,CInt)->void preserves addr_of.read.unwrap_unchecked and both as-u32 casts, including negative-vector narrowing. No None/Some/target/setter/storage/boot initialization or selected backend is supplied. Real boot-published nonNULL target and lifetime remain mandatory and unqualified; no slot read/call executed.",
+  "logger_contract": "Full event1/event2/unknown match preserved. Event1 unconditionally calls genuine kernel kprintf with exact invalid-CPU format/function/cpu arguments. Event2 volatile-reads original line_flags>>24; currentCPU getter is evaluated only after nonzero live guard, followed by exact current/cpu format arguments. Vector and kprintf result remain ignored. Unknown event silent. Initial flags0 does not authorize removing branch or treating flags immutable.",
+  "ABI": {
+    "actual_module_sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "scalars": "CInt=i32; CULong=u64; original genuine callback u32/u32 C ABI. kprintf(*const i8,...)->CInt, ihk_mc_get_processor_id()->CInt stay imports.",
+    "Ddebug": "Exact repr(C) actual Ddebug with 3 i8 pointers and u32line_flags; size32/align8/offsets0,8,16,24 retained by existing actual assertions."
+  },
+  "descriptor_contract": "Exactly one original mutable32B __verbose descriptor, line_flags3140, original filename pointer, x86_interrupt_log_bridge NUL function pointer, fmtNULL. No invented semantic padding guarantee; actual2pointer relocations/field bytes/retention/alignment/read-only strings must be separately captured and checked after compilation. No other data or private runtime helper selected.",
+  "explicit_configuration": {
+    "authority": "Root explicit selected faithful partial values, not observed native/default configuration.",
+    "MCKERNEL_CPU_C_FILE": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+    "filename_provenance": "Actual CMake511 PROJECT_SOURCE_DIR/arch/ARCH/kernel/cpu.c and522 same Rust environment; original env!/concat-NUL preserved. No Rust file!()/relative fallback.",
+    "DEBUG_PRINT_CPU": "UNDEFINED, including no =0 definition; original C guards2463/2511 reject any defined enabled-debug selection.",
+    "DDEBUG_DEFAULT": "Original debug.h DDEBUG_NONE=0, no override; original C guard4192 checked by source inspection only.",
+    "C_scope": "Paired Rust/C selector and scalar/data declarations inspected narrowly. No C preprocessing/compile, fullCPU/ENABLE_SSE/march/PAGE_SIZE/SDK assertion or default/native compatibility claim."
+  },
+  "profile": "Pinned rustc70eb and every payload option through -o match actual qualified delay referencefa816631. Only private source/output/capture paths and exact required MCKERNEL_CPU_C_FILE environment differ. no_std, no extra cfg/equivalence/c_variadic definition/no_builtins/feature suppression. Require exact retained singleSSE ABI warning52aa; no additional warning suppression.",
+  "admission_and_future": "One literal CPU6 compile proposal only: AS1GiB/CPU45/wall60+5/FSIZE64MiB/core0/time-v. Fresh exact Root admission within aggregate3jobs4GiB inclusive required. Future actual emitted-object/descriptor-field-relocation/source-readonly/intrinsic/collision gate and matching current-cohort join are separate/unbound; unknown owner/import/emission stops before join. Expected source2T1D3realU is not observed metadata or final closure.",
+  "operations": "Read frozen source/config/contract/profile packets and narrow named current source slices; hash/source-byte/profile comparisons only. Wrote this private review. No compiler/preprocessor/GNU metadata/gate/link/test/function/slot/hardware/IRQ/native execution, no canonical/index/state edits, no recursive delegation. Original holds and acceptance scopes unchanged."
+}

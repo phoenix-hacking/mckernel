@@ -1,0 +1,61 @@
+{
+  "status": "FIRST_FAILURE_STOP_NO_REPLAY",
+  "controller": {
+    "pid": 639671,
+    "birth": "35072950"
+  },
+  "commands": [
+    {
+      "label": "four-timer-callback-producer",
+      "pid": 639732,
+      "birth": "35073017",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/output/scheduler_timer_callback_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/scheduler_timer_callback_unit.rs"
+      ],
+      "joined": true,
+      "returncode": 1
+    }
+  ],
+  "error": "four-timer-callback-producer",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 46, in <module>\nAssertionError: four-timer-callback-producer\n",
+  "finished_at": "2026-11-09T22:47:44.168587+00:00"
+}

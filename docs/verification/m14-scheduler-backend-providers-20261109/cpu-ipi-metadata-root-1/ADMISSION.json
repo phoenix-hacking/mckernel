@@ -1,0 +1,82 @@
+{
+  "status": "ROOT_FRESH_INDEPENDENT_UNSTARTED_IPI_METADATA2_ADMISSION",
+  "at": "2026-11-09T22:39:30.900100+00:00",
+  "request_sha256": "6c9620dbfb54c4a1fde5f11cce9a9792dd85566deae2ad2be31705cbc191bfc4",
+  "review_sha256": "624e81b7d50bfe0618d48c39b306066930f4d106deaabd677918bba782f034d3",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/run_metadata.py",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/REQUEST.json"
+  ],
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "MemAvailable": 29764935680,
+  "usage_used_percent": 37,
+  "remaining_percent": 63,
+  "HOSTaggregate": "CPUs0/6/7,max3jobs,4GiBTOTALalloverhead; oneexplicitCPU6job",
+  "source_object602d_reused": true,
+  "timer_gate_failure": "independentlanestopped; no timerreadback/gatereplay",
+  "no_compiler_link_runtime_native_hold_release": true
+}

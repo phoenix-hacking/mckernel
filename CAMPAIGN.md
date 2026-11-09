@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T23:10Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T23:54Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -62,9 +62,35 @@ timer, lock, IRQ, boot or hardware executes. Actual slotNone/NULL is prebootstor
 
 | Next readiness prerequisite | Actual consumer | Owner / smallest completion proof |
 | --- | --- | --- |
-| Finish IPI/local exact object qualification | Real logger+32Bdescriptor and CPUlocal getter/prebootslot in F03/F06 cohort | C/E final exact predicate-only correction; Root called gates on retained4reads, no compiler/GNU replay |
-| Compose qualified next four providers | Actual35b3 plus fourtimercallbacks/IPI/local/two-data objects | B/E one compatible5object packet/owner review; Root actual prejoin beforeld-r and postjoin after2reads |
-| Prepare next genuine LAPIC/IPI lower providers | Current realtimer/LAPIC imports and source-qualified IPI consumers | F/D finite source packets, A/E independent ABI/profile/unique-owner review; reuse all existing objects; no hardware/init execution |
+| Final lower-provider composition | Actualcurrent7c3e plus qualified8e7ca only; sharedF03/F06 credential source chain | B/E exact2operand packet and alias/owner review; Rootcalledprejoin beforeld-r/postjoin after2reads |
+| Finite callback publisher source | Real six-slot publication caller and genuine compiledICR/wait/IPI providers | D/C exactcoupled6stores/bothbranches/types/owners/source-profile review; no backend/boot/init execution |
+| Matching next provider/source qualification | Original callbacktargets and sourcecohort consumers, with actual SDK/native boundary retained | Root only affirmative finite source contracts and smallest genuinelyneeded object/behavior proof; no fake callbacks or closed green replay |
+
+**Latest coherent checkpoint:** e55c3d47 is pushed/fetched/all154changedentries.
+The next completed chain through97owner4b4cc4a (81Tnames+16data/14U) is frozen in
+`docs/verification/m14-scheduler-backend-providers-20261109/`:242exactfiles with
+source/config/reviews/raw/objects/actual waits and all original failure/correction
+proof. Its scoped result adds only uncounted prerequisite evidence. No prior
+archives, account guards or unqualified source are recopied. Normal publication
+of this source/results/ledger checkpoint follows; original scores stay unchanged.
+
+Current-only4b4c+qualifiedLAPIC2f+concreteIPI1f also joined successfully as7c3e07bb:
+112global=93Tnames+19data/16genuineU, both actualgates/all3waits joined. All new
+LAPIC/IPI object gates passed once after the exact preexecution unwind-type fix;
+no compiler/readback replay or unknown flag waiver. Lower4object8e7ca2ff also
+compiled once and its2newmetadata reads/called ASM-alias-owner gate PASSed. Actual
+wrmsr/bridge share one15Bbody;4Tnames/3physicalranges are preserved, genuinecpu_pause
+binds existingT3. MFENCE/WRMSR instructions were read by objdump only, never run.
+The next reviewed2operand join is exactlycurrent7c3e+qualified8e7ca, not a newimage.
+
+A new finite callback-publication source contract is ready for private preparation:
+all6 original coupled stores/bothmodebranches, real existing target declarations
+and original missingmode/ICRslots only. Four actual APIC/x2APICread/write targets
+remain external; source/prebootNone does not establish initialized boot callbacks.
+Potential HOSTstore observations require genuine target links, priorcoverage and
+separate actual contract/review/admission; no fixture or runtime is claimed.
+Precise f03_wait_release_process/thread membership isUNKNOWN/NO_GO before body
+preparation; oldwait4/waitid/8entry evidence supplies no release for those bodies.
 
 **Critical-path blocker/owner:** original generic/exec hold has no eligible
 universal provider for a final image. The original hold retains release authority;
@@ -79,7 +105,7 @@ M14F03/F06/I01-I03; M15F02-F08/I01-I04, with M14-before-M15 acceptance.
 
 Next15-minute deliverable: finish the two corrected object gates and reviewed
 five-object join while preparing the newly eligible finite LAPIC/IPI source cuts.
-Fresh included-only guard23:02 reports38%used/62%remaining, no service/spendhold. HOST0/6/7,max3aggregate
+Fresh included-only guard23:36 reports40%used/60%remaining, no service/spendhold. HOST0/6/7,max3aggregate
 lightjobs,4GiB TOTAL including all overhead/fresh26GiB and host16/scratch12GiB
 floors remain; retained18GiB, separateheldnative2–5/12GiB, everyUNKNOWN owner/outcome,
 scratch21/mutex27:4/expiredattempts/nonces and all source/service controls persist.

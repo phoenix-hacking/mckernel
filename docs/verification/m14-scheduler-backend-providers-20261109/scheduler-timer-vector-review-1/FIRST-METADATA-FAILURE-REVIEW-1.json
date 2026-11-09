@@ -1,0 +1,126 @@
+{
+  "decision": "VALID_SOURCE_DESCRIPTOR_MEMBER_RELOCATIONS_ONE_PREDICATE_ONLY_CORRECTION_ELIGIBLE_FINAL_FROZEN_REVIEW_PENDING",
+  "failure": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/METADATA-FIRST-FAILURE.json",
+    "sha256": "ad26b091941a5b98d8d966be642e794383438420042a420441a15474f7f97fe8"
+  },
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/REQUEST.json",
+    "sha256": "6d3e985f63703f0a36f421df1917af8b9d9cb27aea1791d6ee0f506777a381e7"
+  },
+  "actual_capture": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/ACTUAL-ELF-METADATA.json",
+    "sha256": "6378fa51fe65fba1ce4b5b8aabc9eb676fc254f442bfd2ded835f521abda5583"
+  },
+  "actual_nm": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/provider-symbols.stdout",
+    "sha256": "032a2d0bc8ece1a0a539b8e3c7354ded6990da654cd452d139e224698d6df557"
+  },
+  "actual_ELF_readback": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-metadata-1/provider-elf.stdout",
+    "sha256": "699da0a2ceba22c1d29f1627d3ebc14f7d33044a722ed55c0941691a16d6bb67"
+  },
+  "object": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6/3336B",
+  "cause": "Original gate and prior E review assumed every large-static global address relocation had addend0. Compiler inlined actual timer body into set_timer and emitted R_X86_64_64 descriptor-member addresses. This is not an additional provider, synthetic descriptor or source/profile change. Both actual metadata reads passed once/joined; strict gate stopped before any link.",
+  "exact_member_binding": {
+    "descriptor": "process_timer_runtime_offsets",
+    "layout": "Original repr(C) TimerRuntimeOffsets has15usize fields; selected LP64 usize8. These addends locate fields within the descriptor, not fabricated values of the runtime offsets stored there.",
+    "source_used_member_byte_offsets": {
+      "0": "thread_status_offset",
+      "8": "thread_sched_list_offset",
+      "24": "thread_spin_sleep_offset",
+      "32": "thread_itimer_enabled_offset",
+      "40": "cpu_runq_lock_offset",
+      "48": "cpu_runq_offset",
+      "64": "cpu_current_offset",
+      "72": "cpu_timer_enabled_offset",
+      "80": "cpu_backlog_list_offset"
+    },
+    "actual_references": [
+      {
+        "set_timer_code_offset": 53,
+        "relocation_type": "R_X86_64_64",
+        "addend": 40,
+        "member": "cpu_runq_lock_offset"
+      },
+      {
+        "set_timer_code_offset": 105,
+        "relocation_type": "R_X86_64_64",
+        "addend": 48,
+        "member": "cpu_runq_offset"
+      },
+      {
+        "set_timer_code_offset": 130,
+        "relocation_type": "R_X86_64_64",
+        "addend": 8,
+        "member": "thread_sched_list_offset"
+      },
+      {
+        "set_timer_code_offset": 143,
+        "relocation_type": "R_X86_64_64",
+        "addend": 0,
+        "member": "thread_status_offset"
+      },
+      {
+        "set_timer_code_offset": 156,
+        "relocation_type": "R_X86_64_64",
+        "addend": 24,
+        "member": "thread_spin_sleep_offset"
+      },
+      {
+        "set_timer_code_offset": 223,
+        "relocation_type": "R_X86_64_64",
+        "addend": 64,
+        "member": "cpu_current_offset"
+      },
+      {
+        "set_timer_code_offset": 245,
+        "relocation_type": "R_X86_64_64",
+        "addend": 32,
+        "member": "thread_itimer_enabled_offset"
+      },
+      {
+        "set_timer_code_offset": 261,
+        "relocation_type": "R_X86_64_64",
+        "addend": 80,
+        "member": "cpu_backlog_list_offset"
+      },
+      {
+        "set_timer_code_offset": 291,
+        "relocation_type": "R_X86_64_64",
+        "addend": 72,
+        "member": "cpu_timer_enabled_offset"
+      },
+      {
+        "set_timer_code_offset": 348,
+        "relocation_type": "R_X86_64_64",
+        "addend": 80,
+        "member": "cpu_backlog_list_offset"
+      },
+      {
+        "set_timer_code_offset": 371,
+        "relocation_type": "R_X86_64_64",
+        "addend": 72,
+        "member": "cpu_timer_enabled_offset"
+      }
+    ]
+  },
+  "remaining_actual_checks_independently_reviewed": [
+    "Exactly GLOBAL DEFAULT FUNC ihk_mc_get_vector37B, set_timer465B, timer_set_timer_body_result420B; exact7 genuine U including all4 timer callbacks, state/descriptor/getThisCPU.",
+    "No defined OBJECT, local FUNC, writable allocated section, arbitrary private/core helper, readonly offset/callback table or new intrinsic.",
+    "Only readonly allocated metadata is .eh_frame256B, typeX86_64_UNWIND/flags2/alignment8, with exactly3 R_X86_64_PC64/code-section+0 references to the three source functions.",
+    "All17 code relocations belong to set_timer and have typeR_X86_64_64. Six non-descriptor rows target exact CPU getter, time_sharing and four callbacks with addend0. No other global/code target exists.",
+    "Exported vector and timer body have no code relocation; list helpers are inlined. Source/vector/body/attrs/ABI and warning profile remain unchanged and separately qualified."
+  ],
+  "minimal_correction": "Only permit original source-used descriptor member offsets {0,8,24,32,40,48,64,72,80}, bound to original field order/native usize8 and exact source use; preserve actual set_timer owner/site/type/addend evidence. Do not permit all15/arbitrary offsets, nonzero function/state addends, new types/owners/imports or masks. Other gate checks remain strict.",
+  "capture_and_execution_limit": "Pin and reuse existing source/object/producer plus all successful raw metadata/capture/failure bytes. Corrected Root gate CALL only after concrete frozen review and fresh scope admission; do not invoke compiler/nm/readelf/link or overwrite the existing exclusive ACTUAL capture. One bounded predicate correction only; any second unexpected failure stops for escalation, no further retry.",
+  "next_data_source": "New guarded timer-state/offset source queue is separate and not reviewed here; callback need or this member-offset finding authorizes no state instance/cfg inference.",
+  "reviewer_operations": {
+    "read_existing_raw_captures": true,
+    "compiler": false,
+    "metadata_or_link_Popen": false,
+    "corrected_gate_execution": false,
+    "runtime": false,
+    "canonical_index_live_state_write": false
+  }
+}

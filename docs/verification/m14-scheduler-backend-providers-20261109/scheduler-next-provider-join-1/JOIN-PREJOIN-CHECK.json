@@ -1,0 +1,61 @@
+{
+  "status": "PASS_CALLED_FIVE_MATCHING_CURRENT_AND_PROVIDER_PREJOIN",
+  "actual_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-backend-join-1/output/scheduler_backends_partial.o",
+      "sha256": "35b3a058034215e07af1fc24271e474e383b0387315ec1852cfc4054211d3a45"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/output/scheduler_timer_callback_provider.o",
+      "sha256": "9f620be402611667f7e4a833523dbac9b4ca38f6795eb61409682c75e6fc64d1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/output/scheduler_ipi_log_provider.o",
+      "sha256": "830ddbb5029b8d2dbd88b9d0b78a5e8cea9b2c7448d5867f1870573c856056c6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/output/scheduler_local_slot_provider.o",
+      "sha256": "65499b6bfb5acccf886e6080d92c1fe524092f63749fdc49a79f630e66d67591"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o",
+      "sha256": "05be11507024eb5de4c1d368245f8382e1f49c5966222def22d633d08c8957bb"
+    }
+  ],
+  "duplicate_strong_owners": [],
+  "actual_global_union": 97,
+  "actual_remaining_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "lapic_timer_disable",
+    "lapic_timer_enable",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result"
+  ],
+  "actual_verbose_inputs": [
+    {
+      "role": "qualified_current86",
+      "bytes": 640,
+      "retained_flags": "0x200003",
+      "align": 8
+    },
+    {
+      "role": "IPI_logger_descriptor",
+      "bytes": 32,
+      "retained_flags": "0x200003",
+      "align": 8
+    }
+  ],
+  "new_real_IPI_descriptor_name": "x86_interrupt_log_debug",
+  "new_real_local_slot_name": "x86_issue_ipi",
+  "source_cfg_Linux6_12_applies_ONLY_two_timer_data_object": true,
+  "actual_qualifications_consumed_without_producer_metadata_gate_reexecution": true
+}

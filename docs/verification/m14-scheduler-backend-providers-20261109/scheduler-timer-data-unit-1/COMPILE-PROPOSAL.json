@@ -1,0 +1,111 @@
+{
+  "schema": "mckernel.scheduler-timer2data.compile-proposal.v1",
+  "status": "PRIVATE_LITERAL_COMPILE_PROPOSAL_NOT_ADMITTED_OR_EXECUTED",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/scheduler_timer_data_unit.rs",
+  "unit_sha256": "718c230ea6a2ff612842c2b199bc47733dc2fc308a1e820e839ec94ec6c90686",
+  "source_manifest_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/SOURCE-MANIFEST.json",
+  "source_manifest_sha256": "73ba9ef0281f6b4df1545c378f154adb4f635805e5a3012c85db102907bdbf5b",
+  "source_profile_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/SOURCE-PROFILE-PROOF.json",
+  "source_profile_sha256": "c49d9b92b90faede25c8c43681e9a9b5a6ee0d72405cca1b1b9ae4d667a7a1f4",
+  "literal_compile_command": {
+    "label": "provider-compile",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "60s",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=45:45",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/provider-compile.metrics",
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--cfg",
+      "process_global_storage_candidate",
+      "--emit=obj",
+      "-o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/output/scheduler_timer_data.o",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/scheduler_timer_data_unit.rs"
+    ],
+    "environment_overrides": {},
+    "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/provider-compile.stdout",
+    "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-data-unit-1/provider-compile.stderr",
+    "expected_returncode": 0
+  },
+  "qualified_profile": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "compiler_version_from_matching_receipt": "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+  },
+  "profile_delta": "Only source/object/metrics/stdout/stderr paths plus single real --cfg process_global_storage_candidate. All retainednightly1.95 codegenoptions unchanged; do not claim fullargv/config equality.",
+  "resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "exact_retained_diagnostics": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+  "expected_retained_diagnostics_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+  "expected_owners": {
+    "time_sharing": {
+      "kind": "D",
+      "bytes": 4,
+      "alignment": 4
+    },
+    "process_timer_runtime_offsets": {
+      "kind": "R",
+      "bytes": 120,
+      "alignment": 8
+    }
+  },
+  "expected_T": 0,
+  "expected_genuine_U": [],
+  "expected_private_body": [],
+  "future_current_partial_input": null,
+  "future_join_command": null,
+  "not_runnable_until": "Independent E exactsource/type/cfg/profile/ownership GO and fresh Root exact HOSTcompile-onlyadmission. No metadata/compiler/link/runtime now. Actual initializer/offset/objectgate before any futurejoin; original allSDK/native/currentfree/source/UNKNOWN/Cguard holds remain."
+}

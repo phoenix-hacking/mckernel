@@ -1,0 +1,347 @@
+{
+  "status": "FINITE_EXACT3_PUBLIC2_PRIVATE_TIMER_VECTOR_SOURCE_ONLY_USER_CORRECTION_APPLIED",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/scheduler_timer_vector_unit.rs",
+  "unit_sha256": "3276643a3049ab1c5579f8a190054ae5541fc3008fe4e6510d023493958d0bcf",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/sched_helpers.rs": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+    "/home/holden/mckernel/kernel/rust/x86_setup.rs": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "source_contract": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-vector-backend-lookahead-20261109T2142.json",
+    "sha256": "689b814172df37ec1f69865fe5cd18f0717ccd6e0d9ad065267bf06cebec811b"
+  },
+  "superseding_Root_user_correction": "Contractfuture_composition sentence claimingfourtimerbridgesareamongprior10isSTALEandNOTused. ALL4namedprocess_timercallbacksremainU untilactualmatchingownerproof.",
+  "blocks": [
+    {
+      "role": "selected_public_body",
+      "name": "set_timer",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 1887,
+      "source_byte_offset": 62543,
+      "source_bytes": 618,
+      "sha256": "3c1d616d56d2bff57589383b35ec2f2e1775570ea5e3d122095180ea1447e3c5",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn set_timer(runq_locked: CInt) {\n    let v = unsafe { get_this_cpu_local_var() };\n    let sharing = unsafe { core::ptr::read(core::ptr::addr_of!(time_sharing)) };\n    let _ = unsafe {\n        timer_set_timer_body_result(\n            v as usize,\n            sharing,\n            runq_locked,\n            core::ptr::addr_of!(process_timer_runtime_offsets),\n            Some(process_timer_spin_lock_bridge),\n            Some(process_timer_spin_unlock_bridge),\n            Some(process_timer_lapic_enable_bridge),\n            Some(process_timer_lapic_disable_bridge),\n        )\n    };\n}"
+    },
+    {
+      "role": "selected_public_body",
+      "name": "timer_set_timer_body_result",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 1905,
+      "source_byte_offset": 63163,
+      "source_bytes": 2863,
+      "sha256": "7655ef7bdc2e591837ac3dd780fadb66f0af34fbb210d49975fc67b2cc4ac218",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn timer_set_timer_body_result(\n    cpu_local_addr: usize,\n    time_sharing_enabled: CInt,\n    runq_locked: CInt,\n    offsets: *const TimerRuntimeOffsets,\n    lock_fn: Option<TimerSpinLockFn>,\n    unlock_fn: Option<TimerSpinUnlockFn>,\n    enable_fn: Option<TimerLapicEnableFn>,\n    disable_fn: Option<TimerLapicDisableFn>,\n) -> CInt {\n    if time_sharing_enabled == 0 {\n        return 0;\n    }\n    if cpu_local_addr == 0 || offsets.is_null() {\n        return -EINVAL;\n    }\n    let (Some(lock), Some(unlock), Some(enable), Some(disable)) =\n        (lock_fn, unlock_fn, enable_fn, disable_fn)\n    else {\n        return -EINVAL;\n    };\n\n    let offsets = unsafe { &*offsets };\n    let runq_lock_addr = cpu_local_addr.wrapping_add(offsets.cpu_runq_lock_offset);\n    let irqstate = if runq_locked == 0 {\n        unsafe { lock(runq_lock_addr) }\n    } else {\n        0\n    };\n\n    let runq_head = cpu_local_addr.wrapping_add(offsets.cpu_runq_offset);\n    let mut num_running: CInt = 0;\n    let mut entry = unsafe { list_next(runq_head) };\n    while entry != runq_head {\n        let thread = entry.wrapping_sub(offsets.thread_sched_list_offset);\n        let status = unsafe {\n            read_volatile(thread.wrapping_add(offsets.thread_status_offset) as *const CInt)\n        };\n        let spin_sleep = unsafe {\n            read_volatile(thread.wrapping_add(offsets.thread_spin_sleep_offset) as *const CInt)\n        };\n        if status == PS_RUNNING || spin_sleep != 0 {\n            num_running += 1;\n        }\n        entry = unsafe { list_next(entry) };\n    }\n\n    let current_thread = unsafe {\n        read_volatile(cpu_local_addr.wrapping_add(offsets.cpu_current_offset) as *const usize)\n    };\n    let current_itimer_enabled = if current_thread == 0 {\n        0\n    } else {\n        unsafe {\n            read_volatile(\n                current_thread.wrapping_add(offsets.thread_itimer_enabled_offset) as *const CInt,\n            )\n        }\n    };\n    let backlog_not_empty =\n        unsafe { !list_empty_addr(cpu_local_addr.wrapping_add(offsets.cpu_backlog_list_offset)) };\n    let should_enable = num_running > 1 || current_itimer_enabled != 0 || backlog_not_empty;\n    let timer_enabled_addr = cpu_local_addr.wrapping_add(offsets.cpu_timer_enabled_offset);\n    let timer_enabled = unsafe { read_volatile(timer_enabled_addr as *const CInt) };\n\n    if should_enable {\n        if timer_enabled == 0 {\n            unsafe {\n                enable(1_000_000);\n                write_volatile(timer_enabled_addr as *mut CInt, 1);\n            }\n        }\n    } else if timer_enabled != 0 {\n        unsafe {\n            disable();\n            write_volatile(timer_enabled_addr as *mut CInt, 0);\n        }\n    }\n\n    if runq_locked == 0 {\n        unsafe {\n            unlock(runq_lock_addr, irqstate);\n        }\n    }\n\n    num_running\n}"
+    },
+    {
+      "role": "selected_private_helper",
+      "name": "list_next",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 439,
+      "source_byte_offset": 19167,
+      "source_bytes": 124,
+      "sha256": "db8ad923210a89c2ee2e7f3f5b767986d327c3912c46ddc036767188d822124a",
+      "exact_definition": "#[inline(always)]\nunsafe fn list_next(list_addr: usize) -> usize {\n    unsafe { read_volatile(list_addr as *const usize) }\n}"
+    },
+    {
+      "role": "selected_private_helper",
+      "name": "list_empty_addr",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 449,
+      "source_byte_offset": 19468,
+      "source_bytes": 122,
+      "sha256": "b2fdcd1e642e06d2ab4cc7c8d594e3e334c0ba5897ece584a06ce76ca9972a56",
+      "exact_definition": "#[inline(always)]\nunsafe fn list_empty_addr(list_addr: usize) -> bool {\n    unsafe { list_next(list_addr) == list_addr }\n}"
+    },
+    {
+      "role": "selected_public_body",
+      "name": "ihk_mc_get_vector",
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "definition_start_line": 535,
+      "source_byte_offset": 16341,
+      "source_bytes": 308,
+      "sha256": "37853fbd201759877bce4767ca1fc0651159d26bf2bd336a27af8afdc4e1cd78",
+      "exact_definition": "#[cfg_attr(not(mckernel_equivalence), no_mangle)]\npub unsafe extern \"C\" fn ihk_mc_get_vector(type_: CInt) -> CInt {\n    match type_ {\n        IHK_GV_IKC => 0xd1,\n        IHK_GV_QUERY_FREE_MEM => 200,\n        IHK_TLB_FLUSH_IRQ_VECTOR_START..IHK_TLB_FLUSH_IRQ_VECTOR_END => type_,\n        _ => -ENOENT,\n    }\n}"
+    },
+    {
+      "role": "actual_complete_descriptor_type",
+      "name": "TimerRuntimeOffsets",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 259,
+      "source_byte_offset": 12800,
+      "source_bytes": 618,
+      "sha256": "ff282acae5b78e1ed66096d3c4477b8c1548a38e677e1abb1da58606c724be41",
+      "exact_definition": "#[repr(C)]\npub struct TimerRuntimeOffsets {\n    pub thread_status_offset: usize,\n    pub thread_sched_list_offset: usize,\n    pub thread_spin_sleep_lock_offset: usize,\n    pub thread_spin_sleep_offset: usize,\n    pub thread_itimer_enabled_offset: usize,\n    pub cpu_runq_lock_offset: usize,\n    pub cpu_runq_offset: usize,\n    pub cpu_runq_len_offset: usize,\n    pub cpu_current_offset: usize,\n    pub cpu_timer_enabled_offset: usize,\n    pub cpu_backlog_list_offset: usize,\n    pub timer_timeout_offset: usize,\n    pub timer_waitq_offset: usize,\n    pub timer_list_offset: usize,\n    pub timer_thread_offset: usize,\n}"
+    },
+    {
+      "role": "actual_callback_alias",
+      "name": "TimerSpinLockFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 117,
+      "source_byte_offset": 6460,
+      "source_bytes": 61,
+      "sha256": "e94eaace50b47551f8fe9ce9ea1c1095b0ad39c516b10bd351cf00397e6e96b7",
+      "exact_definition": "type TimerSpinLockFn = unsafe extern \"C\" fn(usize) -> CULong;"
+    },
+    {
+      "role": "actual_callback_alias",
+      "name": "TimerSpinUnlockFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 118,
+      "source_byte_offset": 6522,
+      "source_bytes": 61,
+      "sha256": "583c1380bc8f40aa2b613429901b38338ecd922ec5350f48ad6ed25f1d50f521",
+      "exact_definition": "type TimerSpinUnlockFn = unsafe extern \"C\" fn(usize, CULong);"
+    },
+    {
+      "role": "actual_callback_alias",
+      "name": "TimerLapicEnableFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 122,
+      "source_byte_offset": 6737,
+      "source_bytes": 52,
+      "sha256": "e420e85c9b0b8dd95ad213fc740ad271a9e0364114633e89914779e62dbbd00f",
+      "exact_definition": "type TimerLapicEnableFn = unsafe extern \"C\" fn(u32);"
+    },
+    {
+      "role": "actual_callback_alias",
+      "name": "TimerLapicDisableFn",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 123,
+      "source_byte_offset": 6790,
+      "source_bytes": 50,
+      "sha256": "c73a11cf8b70b71e60fcb122241da83cfe5f72709d55afa48973d06cf671d2c4",
+      "exact_definition": "type TimerLapicDisableFn = unsafe extern \"C\" fn();"
+    },
+    {
+      "role": "actual_timer_constant",
+      "name": "EINVAL",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 161,
+      "source_byte_offset": 9154,
+      "source_bytes": 24,
+      "sha256": "0836b68bcc155c8cca768abaaaedb07a161e2f51aac938f86dae615d523423dd",
+      "exact_definition": "const EINVAL: CInt = 22;"
+    },
+    {
+      "role": "actual_timer_constant",
+      "name": "PS_RUNNING",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 216,
+      "source_byte_offset": 11171,
+      "source_bytes": 29,
+      "sha256": "7a812594d3d932aab60907ceace27ea268e2d881954897b6c36f2c4ac656bddd",
+      "exact_definition": "const PS_RUNNING: CInt = 0x1;"
+    },
+    {
+      "role": "actual_vector_constant",
+      "name": "ENOENT",
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "definition_start_line": 10,
+      "source_byte_offset": 264,
+      "source_bytes": 23,
+      "sha256": "43435f5b675d37ed1a6976970da2f447a2957c19a67296e260e6e2c3b9d85f77",
+      "exact_definition": "const ENOENT: CInt = 2;"
+    },
+    {
+      "role": "actual_vector_constant",
+      "name": "IHK_GV_IKC",
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "definition_start_line": 22,
+      "source_byte_offset": 634,
+      "source_bytes": 27,
+      "sha256": "59da5a558434127853d4ff520938f775566b12b4db35c2ed87f1204ecf2af0c5",
+      "exact_definition": "const IHK_GV_IKC: CInt = 1;"
+    },
+    {
+      "role": "actual_vector_constant",
+      "name": "IHK_GV_QUERY_FREE_MEM",
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "definition_start_line": 23,
+      "source_byte_offset": 662,
+      "source_bytes": 38,
+      "sha256": "55dc5456814331f8e1a015eb9132fdc8cec524aa8d50893b2f0fe97283dc5f19",
+      "exact_definition": "const IHK_GV_QUERY_FREE_MEM: CInt = 2;"
+    },
+    {
+      "role": "actual_vector_constant",
+      "name": "IHK_TLB_FLUSH_IRQ_VECTOR_START",
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "definition_start_line": 24,
+      "source_byte_offset": 701,
+      "source_bytes": 48,
+      "sha256": "3672e85b8335f396d9fbf7a90c18318eddd7cdd1d7cc49c0e873049cd48eb787",
+      "exact_definition": "const IHK_TLB_FLUSH_IRQ_VECTOR_START: CInt = 68;"
+    },
+    {
+      "role": "actual_vector_constant",
+      "name": "IHK_TLB_FLUSH_IRQ_VECTOR_END",
+      "source": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "source_sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      "definition_start_line": 25,
+      "source_byte_offset": 750,
+      "source_bytes": 79,
+      "sha256": "e003d10bf5c49d5e12b5ac572c01c5fc4bf4b994615b5145d14a44933bf5acfa",
+      "exact_definition": "const IHK_TLB_FLUSH_IRQ_VECTOR_END: CInt = IHK_TLB_FLUSH_IRQ_VECTOR_START + 64;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "get_this_cpu_local_var",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 20,
+      "source_byte_offset": 895,
+      "source_bytes": 52,
+      "sha256": "580cc9467aa29f93cffabc59ba8eed725042f5e4676006c47230877e3dd373da",
+      "exact_definition": "    fn get_this_cpu_local_var() -> *mut CpuLocalVar;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "time_sharing",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 21,
+      "source_byte_offset": 948,
+      "source_bytes": 34,
+      "sha256": "36885995767c754a4170b32111263e8cf7fc95db0a9edecf2ba33d354997e306",
+      "exact_definition": "    static mut time_sharing: CInt;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_timer_runtime_offsets",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 22,
+      "source_byte_offset": 983,
+      "source_bytes": 62,
+      "sha256": "7f141fde5d20d3e39bdab4a839f80f6a37b7b05ddc57f3eac2845e5bf85487ee",
+      "exact_definition": "    static process_timer_runtime_offsets: TimerRuntimeOffsets;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_timer_spin_lock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 23,
+      "source_byte_offset": 1046,
+      "source_bytes": 66,
+      "sha256": "a2676507abe374615ffc38df775fe881449fe2a328400a0fb7f2981ed702ef65",
+      "exact_definition": "    fn process_timer_spin_lock_bridge(lock_addr: usize) -> CULong;"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_timer_spin_unlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 24,
+      "source_byte_offset": 1113,
+      "source_bytes": 76,
+      "sha256": "4cbe1acc1302f2cd97921bf8f1d4d6a476ace375bd58b0a6cfb4e4f3a09f02b8",
+      "exact_definition": "    fn process_timer_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_timer_lapic_enable_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 25,
+      "source_byte_offset": 1190,
+      "source_bytes": 54,
+      "sha256": "d7045ac46864885c1e9c4b1e0adf0426835b7ca6f91accef3d9ebf6f66ea11c9",
+      "exact_definition": "    fn process_timer_lapic_enable_bridge(clocks: u32);"
+    },
+    {
+      "role": "genuine_external_declaration",
+      "name": "process_timer_lapic_disable_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "source_sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020",
+      "definition_start_line": 26,
+      "source_byte_offset": 1245,
+      "source_bytes": 44,
+      "sha256": "d1a11f74b020d937403b1e3207c8ec5029648e8a8c990524bae9d6463dd1d683",
+      "exact_definition": "    fn process_timer_lapic_disable_bridge();"
+    }
+  ],
+  "counts": {
+    "public_C_definitions": 3,
+    "private_helpers": 2,
+    "callback_aliases": 4,
+    "descriptor_usize_fields": 15,
+    "timer_constants": 2,
+    "vector_constants": 5,
+    "genuine_external_declarations": 7,
+    "source_data_definitions": 0
+  },
+  "required3_C_exports": [
+    "set_timer",
+    "timer_set_timer_body_result",
+    "ihk_mc_get_vector"
+  ],
+  "source_private_helpers": [
+    "list_next",
+    "list_empty_addr"
+  ],
+  "genuine7_U": [
+    "get_this_cpu_local_var",
+    "time_sharing",
+    "process_timer_runtime_offsets",
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_lapic_disable_bridge"
+  ],
+  "genuine4_timer_callback_U": [
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_lapic_disable_bridge"
+  ],
+  "external_data_declarations": {
+    "time_sharing": "actualmutableCInt; no default/valueprovided",
+    "process_timer_runtime_offsets": "actualimmutablefull15fieldTimerRuntimeOffsets; no syntheticinstance/table/offsets"
+  },
+  "descriptor_field_order": [
+    "thread_status_offset",
+    "thread_sched_list_offset",
+    "thread_spin_sleep_lock_offset",
+    "thread_spin_sleep_offset",
+    "thread_itimer_enabled_offset",
+    "cpu_runq_lock_offset",
+    "cpu_runq_offset",
+    "cpu_runq_len_offset",
+    "cpu_current_offset",
+    "cpu_timer_enabled_offset",
+    "cpu_backlog_list_offset",
+    "timer_timeout_offset",
+    "timer_waitq_offset",
+    "timer_list_offset",
+    "timer_thread_offset"
+  ],
+  "descriptor_layout_scope": "Exactrepr(C)15usizeactualsource+LP64width8profile. No new numericC/native-layoutacceptance/instance; allfields retained, evenunused.",
+  "preserved_semantics": "set_timerdiscardsoriginalbodyreturn/readsactualexternalsharingandCPU; bodyearlysharing0/null/callbackchecks/listiteration/wrappingoffsetreads/runq_lockedownership/timerenable(1_000_000)write-order/unlock/num_runningexact. Vectororiginalcfg_attr/defaultclosedmappingandhalf-open68..132remainbyte-equal.",
+  "no_cfg_or_downstream_body_imports": [
+    "process_timercallbackbodies",
+    "IRQ/LAPIC/vectorbackend/lock/hardware/runtime",
+    "actualdescriptorinstance/time_sharingowner",
+    "heldnotification/generic/exec/ACK/TID/XPMEMbodies",
+    "wholemodule/wholecrate"
+  ],
+  "future_composition": "UNBOUND untilactualcurrentjoinsPASS; no predictedpartialhash/Ucounts or assumedfourcallbackowners.",
+  "canonical_index_workload_operations": false
+}

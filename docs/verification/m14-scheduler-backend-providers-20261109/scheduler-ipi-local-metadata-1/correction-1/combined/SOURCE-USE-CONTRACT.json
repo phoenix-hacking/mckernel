@@ -1,0 +1,116 @@
+{
+  "schema": "mckernel.ipi-local.final-two-defect-source-use.v1",
+  "ipi_exact_member_correction": {
+    "schema": "mckernel.ipi-global-member-source-use.v1",
+    "failure": "Original blanket addend0 assertion rejected genuine defined descriptor member address; no provider/source/codegen defect.",
+    "descriptor_member": {
+      "global": "x86_interrupt_log_debug",
+      "actual_type": "Original reprC Ddebug32B/align8",
+      "member": "line_flags",
+      "member_type": "u32",
+      "exact_member_offset": 24,
+      "source_expression": "core::ptr::addr_of!(x86_interrupt_log_debug.line_flags)",
+      "read": "Original read_volatile u32 then >>24; the mutableflags load and lategetter remain in source; initializer3140 is not a permanently-disabled runtime claim.",
+      "source_layout_proof": "Original debug_type.rs includes offset_of!(Ddebug,line_flags)==24 and source owner remains exact32-byte mutable __verbose object.",
+      "retained_emission": {
+        "function": "x86_interrupt_log_bridge",
+        "function_bytes": 112,
+        "relocation_offset": 15,
+        "type": "R_X86_64_64",
+        "symbol": "x86_interrupt_log_debug",
+        "symbol_kind": "GLOBAL DEFAULT OBJECT defined here, size32",
+        "addend": 24
+      }
+    },
+    "all_actual_global_address_uses": [
+      {
+        "function": "x86_interrupt_log_bridge",
+        "relocation_offset": 15,
+        "symbol": "x86_interrupt_log_debug",
+        "addend": 24,
+        "source_target": "Ddebug.line_flags member, definedexactdescriptor"
+      },
+      {
+        "function": "x86_interrupt_log_bridge",
+        "relocation_offset": 56,
+        "symbol": "kprintf",
+        "addend": 0,
+        "source_target": "genuine external variadic function"
+      },
+      {
+        "function": "x86_interrupt_log_bridge",
+        "relocation_offset": 73,
+        "symbol": "ihk_mc_get_processor_id",
+        "addend": 0,
+        "source_target": "genuine external currentCPU function; lateevaluation source preserved"
+      },
+      {
+        "function": "x86_interrupt_log_bridge",
+        "relocation_offset": 95,
+        "symbol": "kprintf",
+        "addend": 0,
+        "source_target": "genuine external variadic function"
+      },
+      {
+        "function": "x86_issue_ipi_bridge",
+        "relocation_offset": 2,
+        "symbol": "x86_issue_ipi",
+        "addend": 0,
+        "source_target": "genuine external callback-slot base; no target/runtime readiness supplied"
+      }
+    ],
+    "strict_change": "Only x86_interrupt_log_bridge -> its actual defined x86_interrupt_log_debug OBJECT at exactoriginal line_flags offset24 is accepted nonzero. Every other allowed function/slot address must remain genuinely undefined and addend0. No arbitrary addend, othermember, section, symbol or emittedowner is authorized.",
+    "unchanged_sources": {
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/x86_interrupt_logger.rs": "519efca6a910fe2aab8e6ba9ad08cadddfc2e4974d7697bf16bf1f5b9a18d53e",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/debug_type.rs": "0fea20d992b34b3a27838d87f05f42cef8c7576d852b913ee674f6b752c54681",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/cpu_verbose_record.rs": "a9a1311204fda8ceaab51f467d7f066dfc71f98a23ea30790363c45ceb6f1a29",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/ipi_callback.rs": "1486008d0d2d15b13a2117d645fda4814692338d846e2f49c7cf4968e58f44a7",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/SOURCE-MANIFEST.json": "0b0f41a9a0c691526aa18add1bf0f1e30fd275787e03063693545e91596a75ef",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/CONFIG-PROOF.json": "6c0f58c604470046e35ef4734b857c13202aefda0f0951775f5f5cb8554fc8b9",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-log-provider-unit-1/REQUEST.json": "53d41ae5f8649ab2f4b105b7771ebdf8e501dd221ce995d0de3a4b54f3cfad61"
+    },
+    "gate_called_by_preparer": false,
+    "new_GNU_compiler_link_Popen_or_runtime": false
+  },
+  "local_exact_large_NOBITS_correction": {
+    "defect": "First local gate expected small-model .bss flags3 although actual qualified code-model=large emits .lbss and SHF_X86_64_LARGE. No source/provider/data initialization change.",
+    "actual_slot": {
+      "name": "x86_issue_ipi",
+      "symbol": "GLOBAL DEFAULT OBJECT, value0,size8",
+      "section": ".lbss.x86_issue_ipi",
+      "type": 8,
+      "type_name": "SHT_NOBITS",
+      "flags_decimal": 268435459,
+      "flags_hex": "0x10000003",
+      "flag_decomposition": "SHF_X86_64_LARGE0x10000000|SHF_ALLOC2|SHF_WRITE1",
+      "alignment": 8,
+      "section_bytes": 8,
+      "entry_size": 0,
+      "target_relocations": 0,
+      "source_initializer": "Original Option<IssueIpi>=None, with original 8B/align8 ABI assertions; no runtime callbacktarget/readiness."
+    },
+    "profile_basis": "Original retained rustc1.95 partial --code-model=large via -C code-model=large; actual observed .ltext already has sameLARGEbit. Primary numericLARGE definition is reused from hash-bound debug-data FLAG-PROVENANCE, reference only/no compiler-version substitution.",
+    "remaining_local_checks_reviewed": {
+      "ownership": "Actual65499b6b/1280B: oneT get_x86_cpu_local_variable21B, oneB8 originalslot, genuine localsU only; no privateFUNC/OBJECT or duplicate localsowner.",
+      "function": "One .ltext.get_x86_cpu_local_variable PROGBITS21/flags0x10000006/align16/value0; exactly oneR64 atoffset2 to genuine undefined locals+0; all functionbytes retained.",
+      "slot": "Exact .lbss.x86_issue_ipi NOBITS8/align8/value0/flags0x10000003. No slotrelocations. NOBITS declaration only, never fabricated filezero bytes.",
+      "unwind": "One .eh_frame56B/type0x70000001/flags2/align8; PC64 atoffset32 to local SECTION3 functionstart0.",
+      "allocation_accounting": "Nonempty allocated sections only function3,slot5,unwind8; exactlytwo relocations sourced function3/unwind8; all old remaining conditions fit actualsource/capture."
+    },
+    "unchanged_source_files": {
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/ipi_slot.rs": "44c3c07953eda4ae89e346682e662b513585ce8f2362ba8e7fd4012185fb673e",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/local_accessor.rs": "c66384a24b4aa3db25a5c524a3603d8b5eb1aa6059e018d1a9589bc4ba766ac3",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/PROFILE-PROOF.json": "d5e132aa5af25f0eec86955a693ac11618322f20843082638bec79e854e0ba48",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/SOURCE-MANIFEST.json": "dba611d35b5e753a715939f0a13b819a105b6300aa3061fe0aa2eb2d19a43cf2",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-local-slot-unit-1/REQUEST.json": "1146f9aa071e72465a5c8e27d185e9eced4ccef67e248ec67374197af0b5ae84"
+    },
+    "no_wildcard": "Only the exact observed section name/type/flags accepted; no .bss/.lbss alternative set, flagmask, fakezero/provider or arbitrary address."
+  },
+  "preserved_unused_IPI_only_packet": {
+    "request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-local-metadata-1/correction-1/REQUEST.json",
+    "sha256": "c57a75e03cb67b96fb3a9760c702dda79bb84c8ccadabf28ff5f833efd0854d3",
+    "predicate_sha256": "677364377ba306a1953fb27c5b0c9406f1f91e5ecdf21aa7ddf33681da07b13e",
+    "never_called": true
+  },
+  "operations": "Retained source/rawcapture analysis only. No parser/gate/controller/GNU/compiler/link/Popen/runtime execution by preparer."
+}

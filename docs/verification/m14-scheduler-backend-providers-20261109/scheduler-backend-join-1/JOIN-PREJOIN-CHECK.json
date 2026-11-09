@@ -1,0 +1,48 @@
+{
+  "status": "PASS_CALLED_EXACT_THREE_BACKEND_OPERAND_PREJOIN",
+  "predicate_called_before_ld_r": true,
+  "actual_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/output/scheduler_primitives_debug_partial.o",
+      "sha256": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-vector-unit-1/output/scheduler_timer_vector_provider.o",
+      "sha256": "7003d9bc46cfaff0ed0add8161305cfe98a34d56744bf6c207ffa3847e5166a6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-interrupt-backend-unit-1/output/scheduler_interrupt_backend_provider.o",
+      "sha256": "602d24e8bd14ac0d9a38f5e90114b1aa4945d81e49dedbe61c64c8ec6dc54777"
+    }
+  ],
+  "prior_global": 80,
+  "actual_new_timer_T": 3,
+  "actual_new_CPU_T": 3,
+  "actual_global_union": 86,
+  "actual_prospective_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "get_x86_cpu_local_variable",
+    "process_timer_lapic_disable_bridge",
+    "process_timer_lapic_enable_bridge",
+    "process_timer_runtime_offsets",
+    "process_timer_spin_lock_bridge",
+    "process_timer_spin_unlock_bridge",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result",
+    "time_sharing",
+    "x86_interrupt_log_bridge",
+    "x86_issue_ipi_bridge"
+  ],
+  "duplicate_strong_owners": [],
+  "qualified_corrected_timer_and_CPU_proofs_consumed_without_gate_or_readback_replay": true,
+  "actual_num_processors_import_binds_existing_original_D4": true
+}

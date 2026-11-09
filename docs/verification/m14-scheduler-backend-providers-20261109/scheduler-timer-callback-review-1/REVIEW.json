@@ -1,0 +1,44 @@
+{
+  "decision": "GO_EXACT_FOUR_TIMER_CALLBACK_SOURCE_ABI_AND_LITERAL_COMPILER_PROPOSAL_ONLY_PENDING_FRESH_ROOT_ADMISSION",
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/scheduler_timer_callback_unit.rs",
+    "sha256": "7db8dfff72477caf7e8f684d8ad96fb84af2ac54271b71bccb54f106e65437a6"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/SOURCE-MANIFEST.json",
+    "sha256": "b389db939fe6f56477592d9665861c6878ff138d60d02ddded9e11d272266d88"
+  },
+  "profile_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/SOURCE-PROFILE-PROOF.json",
+    "sha256": "31021b9881ad7c1c458a263def3bb56c22257e3abbab95ab7ec649594d0126c7"
+  },
+  "compile_proposal": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-timer-callback-unit-1/COMPILE-PROPOSAL.json",
+    "sha256": "384958c3cfaa6ec03793c48445889020377f6c42ceb62f9053d42bd736fb944e"
+  },
+  "affirmative_split_contract": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-provider-state-lookahead-20261109T2202.json",
+    "sha256": "3aad049e9e22f6c9eebf403f71bf4f2af76f851b754fa75eb3879363167e7473"
+  },
+  "source_checks": "The exact original four-callback module, including docs, no_mangle attributes, bodies, use super::* and module name, matches canonical process_helpers.rs lines16138\u201316169 byte-for-byte. All14 named source segments, three complete source bindings and the current split-contract hash match. Unit7db8dfff is unchanged; no source implementation was written by reviewer.",
+  "ABI_and_namespace": {
+    "types": "Actual abi.rs ff48 is directly included for CULong=u64 and other actual C aliases; actual x86_cpu_helpers CUInt=u32 alias is copied exactly. Existing no_mangle extern C signatures remain unchanged. No casts, pointer/layout stand-ins or new aliases.",
+    "spin_callbacks": "The parent process_helpers module has only genuine extern declarations process_spin_lock_bridge(CULong)->CULong and process_spin_unlock_bridge(CULong,CULong). Original super:: calls remain exact. They introduce no extra lock/IRQ operation or storage, and preserve the original lock-address borrow, saved IRQ state and paired ownership requirements.",
+    "LAPIC_callbacks": "Original crate::x86_cpu_helpers calls remain exact. Only real extern lapic_timer_enable(CUInt=u32) and lapic_timer_disable() interfaces are supplied. The enable value is forwarded once without scale/policy change; backend privilege/MMIO contracts remain unresolved and unexecuted.",
+    "export_import_boundary": "Exactly four existing callback definitions; no private function body/data owner or definitions of process_spin/LAPIC providers. Prospective4T/4U must be established by actual later metadata rather than presumed from source."
+  },
+  "source_profile_scope": "The affirmative SPLIT contract permits only these four callbacks. It does not authorize either guarded time_sharing or process_timer_runtime_offsets owner. This unit contains neither state/descriptor type/instance/default/offset computation nor process_global_storage_candidate, Linux6.12 storage cfg, neighboring guarded module, whole process/x86 module, generic/exec/notification/IRQ/backend body. Separate data lane remains NOT_READY under its exact source/profile/C-exclusion guard obligations.",
+  "compiler_profile": "Literal proposal384958c3 retains the qualified nightly1.95 edition2021/no_std/lib object/panicabort/opt2/large-static/no-redzone/no-vectorization/-SSE/AVX profile and exact inherited single SSE ABI warning. Only private source/object/metrics/stdio paths change. No extra feature/cfg/no_builtins/suppression/fallback. Fresh Root compiler-only admission is required; this is not a workload nonce.",
+  "resource_scope": "One CPU6 light compile, AS1GiB, CPU45s/wall60s/KILL5s/FSIZE64MiB/core0. Root must reconcile actual shared CPUs0/6/7, aggregate3jobs/4GiBTOTAL including overhead, fresh>=26GiB available and original disk/native/reservation floors before admission.",
+  "next_required_evidence": "Actual later object metadata must show exactly the four C exports, genuine process_spin_lock/unlock and LAPIC enable/disable imports, and no unbound helper/data/intrinsic emission; actual function bytes/relocations must bind each original forwarding edge. Unexpected emission stops before any join for focused review. Current partial identity and future join remain UNBOUND; no imported-owner availability or final U count is inferred here. No compiler/provider metadata replay is requested.",
+  "limits": "Source/compiler-proposal review only. No function, lock, LAPIC, IRQ, timer, scheduling, boot, native or test execution; no default/native ABI/image/CREDENTIAL acceptance or score change. All original source/service/native/UNKNOWN holds remain. Root is sole canonical compositor, and this review writes only the private review output.",
+  "reviewer_operations": {
+    "source_block_hash_comparison": true,
+    "compiler": false,
+    "linker": false,
+    "new_metadata_tool": false,
+    "runtime": false,
+    "canonical_index_live_state_write": false,
+    "recursive_agents": false
+  }
+}
