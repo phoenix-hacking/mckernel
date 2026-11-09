@@ -1,0 +1,179 @@
+{
+  "schema": "mckernel.scheduler-provider-eligibility.v1",
+  "request": "2026-11-09T21:14 explicit continuation; source-only accepted-F02 sched_wakeup_thread provider investigation",
+  "decision": "ELIGIBLE_EXACT_SINGLE_WRAPPER_SOURCE_PARTITION_FOR_REVIEWED_NONEXECUTED_PARTIAL_PREPARATION",
+  "owner": "Saved Root sole canonical source/provider compositor; no new execution admission supplied",
+  "active_plan": {
+    "path": "/home/holden/mckernel/CAMPAIGN.md",
+    "updated": "2026-11-09T20:45Z",
+    "accepted_file": "M14-F02 kernel/process.c, including scheduling; remains closed"
+  },
+  "eligibility_first": {
+    "evidence": [
+      "AGENTS.md explicitly prioritizes shared provider/ABI/ownership prerequisites and preserving all actual holds.",
+      "CAMPAIGN.md accepted M14-F02 includes scheduling; exact notification NO_GO explicitly is not a blanket hold on every other file.",
+      "docs/verification/m14-kernel-notify-source-eligibility-20261109.json identifies eventfd/syscall_eventfd_send_result/f03_eventfd_send and possible direct packet helper, and expressly does not ban every independent future accepted-source unit."
+    ],
+    "distinction": "This partition implements only the accepted scheduler's general public wrapper, not any notification endpoint, packet construction, dispatch, exec, ACK, TID or XPMEM body. No held caller is selected or executed. Existing upstream scheduler engine is represented solely by its actual unchanged external ABI.",
+    "source_body_limit": "Only sched_wakeup_thread itself will be included. Adjacent __sched_wakeup_thread signature/current general body was read to confirm its genuine existing ABI and the excluded boundary; no runqueue/interrupt/helper source is prepared, imported or authorized for compilation.",
+    "not_inferred": "Eligibility is based on positive accepted-F02 scope plus exact independent wrapper behavior and explicit notification boundary, not on absent hold items or a purported release of UNKNOWN request scope.",
+    "stop_condition": "If concrete preparation brings in notification/generic/exec/ACK/TID/XPMEM or the whole scheduler/runtime module, stop and obtain a separate actual scope determination; this contract does not transfer eligibility to those bodies."
+  },
+  "exact_source": {
+    "rust": {
+      "path": "kernel/rust/sched_helpers.rs",
+      "lines": "3362–3365",
+      "export": "sched_wakeup_thread",
+      "definition": "#[no_mangle] pub unsafe extern \"C\" fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt",
+      "operation": "Return the genuine __sched_wakeup_thread(thread,valid_states,0) result unchanged."
+    },
+    "c": {
+      "path": "kernel/process.c",
+      "lines": "7247–7252",
+      "signature": "int sched_wakeup_thread(struct thread *thread, int valid_states)",
+      "operation": "return __sched_wakeup_thread(thread,valid_states,0);",
+      "selection": "C definition excluded under MCKERNEL_RUST_PROCESS_HELPERS."
+    },
+    "selection_references": [
+      "kernel/rust/lib.rs:54 mod sched_helpers",
+      "kernel/CMakeLists.txt:174 lists actual Rust scheduler source",
+      "kernel/CMakeLists.txt:667–668 selects MCKERNEL_RUST_PROCESS_HELPERS for process.c"
+    ],
+    "abi": {
+      "arguments": [
+        "thread: pointer to actual crate::abi::Thread",
+        "valid_states: actual crate::abi::CInt=i32"
+      ],
+      "return": "actual CInt=i32",
+      "calling_convention": "extern \"C\", ordinary x86_64 LP64 native compiler ABI",
+      "ownership": "Borrow/pass-through only. No reference creation, field read, allocation, free, lock, wait, IRQ or owner transfer occurs in this wrapper. Original caller/upstream thread lifetime contract remains unchanged.",
+      "null_or_state_policy": "No new validation or interpretation; exact values including pointers are forwarded and upstream return is preserved. No runtime case is prescribed."
+    },
+    "required_types": [
+      {
+        "path": "kernel/rust/abi.rs",
+        "names": [
+          "CInt (line5)",
+          "Thread (line1543)"
+        ],
+        "method": "Use actual existing ABI module/type; no handwritten opaque replacement or fabricated layout. No Thread offset/layout field is consumed by wrapper.",
+        "export_observation": "No no_mangle or static/runtime export definitions found in this actual ABI file in the bounded metadata-source check."
+      }
+    ],
+    "constants": "Only existing promoted CInt literal0 for runq_locked; no scheduler state/vector/IRQ constants are imported.",
+    "private_helpers": [],
+    "required_external": {
+      "symbol": "__sched_wakeup_thread",
+      "actual_signature": "unsafe extern \"C\" fn(*mut crate::abi::Thread, crate::abi::CInt, crate::abi::CInt)->crate::abi::CInt",
+      "actual_definition_reference": "kernel/rust/sched_helpers.rs:3317–3321",
+      "proposed_treatment": "Existing genuine symbol declaration only; leave U. Do not include its body, sched_wakeup_thread_body_result, offsets, locks, CPU/interrupt/log/vector providers or whole scheduler module."
+    },
+    "expected_provider_ELF": {
+      "global_T": [
+        "sched_wakeup_thread"
+      ],
+      "genuine_U": [
+        "__sched_wakeup_thread"
+      ],
+      "global_data": [],
+      "private_data": [],
+      "private_helpers": [],
+      "literal_or_table_owners": [],
+      "expected_code": "Nonempty actual wrapper forwarding thread and signed valid_states, passing third argument0 and preserving signed return; no invented fixed byte size."
+    }
+  },
+  "current_exact_partial": {
+    "receipt": "docs/verification/m14-delay-provider-results-20261109.json",
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/join-1/output/delay_kmsg_partial.o",
+    "sha256": "aaaf8a1a31d92d1fbf7dcac72b09247e808d733f373bf3a19e92c2ec15479ce2",
+    "bytes": 38904,
+    "owners": {
+      "global": 63,
+      "T": 52,
+      "data": 11
+    },
+    "genuine_U": [
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "sched_wakeup_thread",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "retained_private_owners": "Two original LOCAL formatter helpers/tables and one original private LOCAL KMSG_LOCK; preserve exact bytes/sizes/alignment/visibility/relocations and delay aliases.",
+    "evidence_status": "Named matching existing successful receipt consumed without build, link, hash census or metadata replay in this investigation."
+  },
+  "selected_partial_profile": {
+    "scope": "Existing nonexecuted x86_64 freestanding partial-unit profile; not supported-default/fullimage/native selection.",
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "source_profile_reference": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "flags": [
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Cpanic=abort",
+      "-Copt-level=2",
+      "-Ccode-model=large",
+      "-Crelocation-model=static",
+      "-Cno-redzone=yes",
+      "-Cno-vectorize-loops",
+      "-Cno-vectorize-slp",
+      "-Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj"
+    ],
+    "diagnostics": "Retain exact existing one SSE ABI warning if emitted under this retained partial profile; no warning suppression/profile widening. Native ABI qualification is separate.",
+    "limits": "Future Root exact admission only: one local light job, CPU6 (ordinary aggregate0/6/7,max3jobs/4GiBtotal including overhead), AS1GiB, CPU45s,wall60s,FSIZE64MiB,core0. Require fresh26GiB availability and original disk/resource floors; original grant/UNKNOWN/native owner restrictions unchanged."
+  },
+  "smallest_next_plan": [
+    {
+      "id": "SCHED-WRAPPER-SOURCE",
+      "owner": "Root/private source preparer",
+      "required_input": "Exact current wrapper body, actual ABI module and exact existing __sched_wakeup_thread declaration; current aaaf receipt.",
+      "done_when": "Reviewable private no_std unit contains only actual wrapper and its real ABI/type/external declaration; no full scheduler module or downstream engine is imported.",
+      "verification_method": "Compare exact source-body/signature/provenance and include closure; inspect zero new runtime/data/private owner requirements."
+    },
+    {
+      "id": "SCHED-WRAPPER-REVIEW",
+      "owner": "Independent source/ABI/profile reviewer; Root sole compositor",
+      "required_input": "Concrete private unit/profile/expected1T1U and aaaf-only join proposal.",
+      "done_when": "Reviewer confirms accepted-F02-only independence, exact ABI/body/type and no held source, fake callback/layout/libc provider, duplicate global owner or native/runtime operation.",
+      "verification_method": "Review concrete source and future command/input declaration; stop on broader source or uncertain scope."
+    },
+    {
+      "id": "SCHED-WRAPPER-CODEGEN",
+      "owner": "Root exact HOST admission/job owner",
+      "required_input": "Source/profile GO plus actual fresh exact resource/ownership admission.",
+      "done_when": "One compile produces nonempty actual sched_wakeup_thread T, only genuine __sched_wakeup_thread U, no data/private helpers or unexpected library dependencies.",
+      "verification_method": "Compile once; capture source/compiler/profile identity and actual symbol/ELF readbacks; imported metadata predicate must be called/persisted before any later linker operation."
+    },
+    {
+      "id": "SCHED-AAAF-PREJOIN",
+      "owner": "Root compositor",
+      "required_input": "New reviewed actual object and exact current aaaf8a1a only; actual metadata/collision gate.",
+      "done_when": "Actual called prejoin predicate confirms exact two input hashes and source ownership, no duplicate globals, current aaaf has sched_wakeup_thread U/no T, new provider has1T1U and no data; exclusions remain intact.",
+      "verification_method": "Compare actual emitted metadata/relocations against source and prior receipt; preserve all63old global owners and private formatter/lock/delay identities. No oldc205/old8/fullcrate/cohort input."
+    },
+    {
+      "id": "SCHED-AAAF-PARTIAL-JOIN",
+      "owner": "Root admitted link job owner",
+      "required_input": "Passed actual prejoin gate and fresh exact admitted two-input ld-r operation.",
+      "done_when": "Only new provider+aaaf partial join succeeds; sched_wakeup_thread resolves to real current wrapper; upstream __sched_wakeup_thread remains genuine U. Expected64global=53T+11data and13U, with prior owner bytes/sizes/visibility/alignments/relocations preserved.",
+      "verification_method": "One ld-r plus actual postjoin symbol/ELF predicate; compare old/new ownership and relocs. No function/test/libc/runtime/IRQ/scheduling/boot/native execution. Equal U count is correctly reported as replacing one exposed dependency, not final provider closure."
+    }
+  ],
+  "actual_engineering_value": "Supplies an actual missing general scheduler entry referenced by the current credential/adapter partial from its accepted genuine Rust implementation, with explicit upstream dependency. This is new source/provider composition, not a coverage inventory or green rerun.",
+  "preserved_limits": [
+    "M14-F02 remains accepted; this does not reopen accepted file qualification.",
+    "No final CREDENTIAL-COHORT/PROVIDER-CLOSURE/default image/native gate or counted score is completed by preparation/partial link.",
+    "Original generic/exec/notification/service/source/SDK/native holds and every UNKNOWN owner/outcome remain unchanged.",
+    "No current or future downstream __sched body eligibility is inferred from this one wrapper."
+  ],
+  "operations": "Read active plan/entrypoint, exact notification eligibility boundary, bounded current scheduler wrapper/matching C and direct genuine callee signature, actual types/selection references and named delay receipt/profile. Wrote only this authorized private JSON. No source-unit generation/edit, build, compiler/link, test, metadata execution, native/device/hardware action, old cohort replay, goal control or nested agent."
+}

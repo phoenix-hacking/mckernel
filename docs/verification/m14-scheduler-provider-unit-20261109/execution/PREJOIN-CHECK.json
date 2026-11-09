@@ -1,0 +1,69 @@
+{
+  "status": "PASS_CALLED_PREJOIN_ONLY_NEW_SCHEDULER_PLUS_AAAF",
+  "actual_object_gate": {
+    "status": "PASS_CALLED_ACTUAL_SCHEDULER_OBJECT_GATE",
+    "object_sha256": "29bb80dcedd1babc2ebb950fef88c656d38bcf7a2d9126c83c3511f830f4eb1f",
+    "global3T": {
+      "__sched_wakeup_thread": 634,
+      "sched_wakeup_thread": 14,
+      "sched_wakeup_thread_body_result": 781
+    },
+    "genuine11U": [
+      "ihk_mc_get_processor_id",
+      "process_sched_cpu_local_bridge",
+      "process_sched_interrupt_bridge",
+      "process_sched_runq_log_bridge",
+      "process_sched_rwlock_bridge",
+      "process_sched_rwunlock_bridge",
+      "process_sched_set_timer_bridge",
+      "process_sched_status_set_bridge",
+      "process_sched_vector_bridge",
+      "process_spin_lock_bridge",
+      "process_spin_unlock_bridge"
+    ],
+    "source_private_functions": {},
+    "source_private_offset_objects": [],
+    "source_readonly_sections": [
+      {
+        "kind": "retained_profile_native_unwind",
+        "name": ".eh_frame",
+        "bytes": 200,
+        "source_code_references": [
+          [
+            "code",
+            [
+              [
+                "__sched_wakeup_thread",
+                0
+              ]
+            ]
+          ],
+          [
+            "code",
+            [
+              [
+                "sched_wakeup_thread",
+                0
+              ]
+            ]
+          ],
+          [
+            "code",
+            [
+              [
+                "sched_wakeup_thread_body_result",
+                0
+              ]
+            ]
+          ]
+        ]
+      }
+    ],
+    "no_writable_data_or_unreviewed_intrinsics": true
+  },
+  "prior_sha256": "aaaf8a1a31d92d1fbf7dcac72b09247e808d733f373bf3a19e92c2ec15479ce2",
+  "duplicate_strong_owners": [],
+  "prospective66globals55T11data22U": true,
+  "predicate_called_before_ld_r": true,
+  "no_function_or_hardware_execution": true
+}

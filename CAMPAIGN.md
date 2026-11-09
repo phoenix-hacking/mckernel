@@ -1,14 +1,86 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T20:45Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T22:11Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Three-turn impasse confirmed for same-Root resume `20261109T201010Z-8adf12e8`;
-normal blocked stop follows this final checkpoint.**
+**ACTIVE: explicit same-Root manual resume `20261109T211917Z-488788ba`.**
+The new concrete original dependency is the accepted-F02 general scheduler wakeup
+provider needed by the current credential/lower-provider partial. Independent
+wrapper eligibility, boundary review and a separate finite engine GO are READY.
+Their exact source permits one combined wrapper+engine partition: three public
+functions, three private helpers, actual ABI/types/26offset constructor and genuine
+external declarations. All downstream bridge bodies remain excluded/unresolved.
+This supersedes the prior exhausted queue; it releases no generic/exec,
+notification, SDK/source-custody/native/current-free or UNKNOWN ownership hold.
+
+Root is actual Sol/MAX; existing A/B/E new turns are actual Sol/HIGH,
+never/danger-full-access. A prepares the private finite unit, B the exact packet
+and called object/join predicates, E the independent source/ABI/owner review.
+Current worker612499/server612501 births match; normal included guard reports
+34%used/66%remaining (fresh21:30 guard). The prior interrupted goal-control return leaves no workload
+pending: final7b3aad2ee was published/joined, and this new goal is confirmed active.
+No controller, goal identity, allowance, native owner or launcher state is reset.
+
+| Next engineering prerequisite | Actual consumer | Owner / smallest completion proof |
+| --- | --- | --- |
+| Exact engine partial join | aaaf8a1a+qualified29bb only; shared F03/F06 consumers | B/E: reviewed3newlink/readbackcommands; Rootfreshadmission and called pre/post gates |
+| Ten-bridge actual object gate | Actual33500object; sixlock/CPU/status+fourtimer/vector/logger exports | A/F:2newmetadatareads and source-bound called predicate, no compiler replay |
+| Next compatible bridge join | Actualpassingcurrentenginepartial+qualified33500 only | Root/B: bind actual inputs/collisions and freshexactreview; all genuine backends remain explicit |
+
+**New producer/metadata proof:** exact scheduler unit6d632e25 compiled once as
+29bb80dc(4064B), exact retained single ABI warning, actual compiler wait joined.
+The two actual nm/ELF reads and called object/prejoin checks also PASSed once,
+both waits and outer joined/CPU6released. Actual3T sizes are634/14/781B;11realU.
+No private adapters/208B offset table were emitted: they optimized into code;
+only200B eh_frame metadata references the three real functions. Source-level full
+26offset constructor/type proof remains; no emitted table/initialization claim.
+
+The independently reviewed ten-bridge unit9b402412 also compiled once as
+33500c97(7384B), same exact diagnostics/wait joined/CPU6released. Its metadata gate
+is being prepared by A/F, with no compiler replay. One Root proposal-field binding
+error stopped before Popen; the exact-schema correction preceded this sole compile.
+Fresh normal included guard at21:30 reports34%used/66%remaining, no service hold.
+
+Next15-minute deliverable: review/admit the exact3-command engine join, then
+consume the ten-bridge object's two new metadata reads/called predicate. Qualified
+engine metadata and both producer outputs are reused; no kernel function runs. Engine GO predicts66global=55T+11data and22realU
+if metadata agrees; this exposes genuine dependencies, not final closure. Original
+checklist51.48/50.97 and accepted4/6+0/3,1/8+0/4 remain unchanged. Fullimageargv is
+UNSET; original critical-path ETA remainsUNKNOWN. HOST0/6/7,max3aggregate lightjobs,
+4GiB TOTAL including all overhead/fresh26GiB and diskfloors; retained18GiB,
+native2–5/12GiB, scratch21/mutex27:4 and every historical UNKNOWN remain binding.
+
+**Scheduler composition PASS:** actual42f177e4 (42264B) joins only new29bb and
+qualifiedaaaf:66global=55Tnames+11data,22genuineU. Called prejoin passed beforeld-r,
+postjoin preserved all63oldglobal owners/privateformatters/tables/singleKMSG/delay
+alias and real relocations; all3new waits/outer joined. Fullsource/raw6payloads/
+reviews/admissions/twoobjects are retained in
+`docs/verification/m14-scheduler-provider-unit-20261109/`; bounded result is
+`m14-scheduler-provider-results-20261109.json`. Normal checkpoint publication next.
+This is uncounted shared prerequisite evidence; finalCREDENTIAL-COHORT staysopen.
+
+**Ten-bridge join PASS:** actual6fb8987d joins only33500+42f1:76global=65Tnames+11data/19genuineU. Called pre/postchecks preserveallold66owners/privateformatter/table/KMSG/delayalias and newlogger88Btable/strings; all3payloadwaits+outerjoined. No compiler/provider-metadata replay or native/score claim.
+
+**Next shared batch PASS21:50:** called33500 tenbridge metadata gate and bothreads
+passed, then primitivea22738e2(1752B) and debug18data4bb40a5e(2544B) each compiled
+once with exact retained diagnostics. Allactualwaits joined/CPU6released. Data flags1
+are an explicit source-faithful finitepartial profile, not observeddefault/native
+state; original fullCdebug/globalstorage guard remains excluded and preserved.
+No primitive/data metadata or new bridge join is claimed yet. Nextactualsteps are
+review/admit42f1+33500 join, primitive3read/atomicgate, and debug2read/18recordgate;
+allpassing producer/oldmetadata proof is reused. Newtimer/vector andgeneralIPI
+sourcecontracts are ready for separate finite preparation after these readychecks.
+No original counted gate/acceptance/score changes; universal generic/fullimage and
+actualSDK/native/currentfree authority remain the external criticalpath.
+
+**Historical201010resume:** the following completed recovery task and three-turn
+impasse belong to the previous invocation and do not stop this new eligible work.
+
+**Prior201010resume ended after its three-turn audit and normal blocked stop.**
 The prior invocation stopped properly as blocked/exit20 at19:42 after its actual
-three-turn audit. This new manual instruction supplies a bounded operational
+three-turn audit. That prior manual instruction supplied a bounded operational
 engineering task: correct recovery handoff plan pointers and current-versus-history
 failure provenance, with focused regression coverage and independent HIGH review.
 It does not release any original OS source, SDK, native or ownership hold.
@@ -28,8 +100,8 @@ forced restart. Existing dirty tests/run_os_parallel.py remain preserved.
 Root is Sol/MAX, sole canonical source/index/publisher; A/B/E actual new turns
 were verified Sol/HIGH, never/danger-full-access. Fresh normal read-only included
 guard at20:32:18 reports32%used/68%remaining, no service/usage hold; its temporary
-account-only transport closed/joined without a thread, goal or model call. Actual
-campaign worker593038/server593040 remains running. Inherited503 and the Nov5
+account-only transport closed/joined without a thread, goal or model call. At that observation,
+prior campaign worker593038/server593040 was running. Inherited503 and the Nov5
 failure are retained history, not a current crash. Proof is in
 `docs/verification/os-recovery-handoff-provenance-20261109/`.
 
