@@ -1,0 +1,86 @@
+{
+  "decision": "GO_SMALLEST_TWO_ROOT_ONE_PRIVATE_HELPER_SOURCE_PREPARATION_ONLY_NOT_ARTIFACT_OR_RUNTIME_QUALIFICATION",
+  "scope": "Actual current kernel string provider endpoints for original M14-03-05-DEFAULT/PROVIDER-CLOSURE; genuine kernel providers, never HOST libc substitutes.",
+  "exact_items": {
+    "read_char": {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "start_line": 34,
+      "end_line": 37,
+      "text": "#[inline(always)]\nunsafe fn read_char(ptr: *const i8) -> i8 {\n    read_volatile(ptr)\n}\n",
+      "sha256": "c32989333ff93951b0032df89d8ce2f249292daae3fa061772bf055044247587"
+    },
+    "strnlen": {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "start_line": 60,
+      "end_line": 70,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn strnlen(mut ptr: *const i8, mut maxlen: SizeT) -> SizeT {\n    let head = ptr;\n\n    while read_char(ptr) != 0 && maxlen > 0 {\n        ptr = ptr.add(1);\n        maxlen -= 1;\n    }\n\n    ptr.offset_from(head) as SizeT\n}\n",
+      "sha256": "a5765c9b6e05872292deb7787f35e75e87e087aa29a5b0503c3b2c0920c6bfbc"
+    },
+    "memset": {
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "start_line": 271,
+      "end_line": 283,
+      "text": "#[no_mangle]\npub unsafe extern \"C\" fn memset(s: *mut c_void, c: CInt, mut n: SizeT) -> *mut c_void {\n    let mut ptr = s.cast::<u8>();\n    let byte = c as u8;\n\n    while n > 0 {\n        write_volatile(ptr, byte);\n        ptr = ptr.add(1);\n        n -= 1;\n    }\n\n    s\n}\n",
+      "sha256": "69cd20f99c4a3a9be7775bce28fbd4889cea61a4a981fd412a202f974f679e8e"
+    }
+  },
+  "source_sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+  "ABI": {
+    "memset": "#[no_mangle] pub unsafe extern C fn(*mut core::ffi::c_void, CInt, SizeT)->*mut core::ffi::c_void; selected lib/include/string.h:32 void *memset(void *s,int n,size_t l). Exact Rust parameter c truncates to low8bits and volatile byte writes n times; original s returned.",
+    "strnlen": "#[no_mangle] pub unsafe extern C fn(*const i8,SizeT)->SizeT; selected lib/include/string.h:20 size_t strnlen(const char *p,size_t maxlen). Pointer traversal and returned difference match actual source.",
+    "types": "Qualified actual kernel/rust/abi.rs CInt=i32, SizeT=usize, selected x86_64LP64 pointer/size_t64bits; c_void from core. No new type definitions/ABI guesses/aliases.",
+    "attributes": "Keep both exact no_mangle/externC/unsafe bodies; read_char exact inline(always)private helper. No new no_builtins, no_mangle rename, weak/linkage alias or LLVM substitution attribute."
+  },
+  "closure": {
+    "roots": [
+      "memset",
+      "strnlen"
+    ],
+    "private_helpers": [
+      "read_char"
+    ],
+    "core_dependencies": [
+      "core::ffi::c_void",
+      "core::ptr::read_volatile",
+      "core::ptr::write_volatile",
+      "pointer cast/add/offset_from"
+    ],
+    "project_type_dependency": "Exact qualified abi.rs CInt/SizeT only.",
+    "project_function_or_data_dependency": "None at source level. Do not include string module extern getlong_user/strlen_user/strcpy_from_user/_kmalloc, flatten helpers, other memory functions or initializers.",
+    "expected_new_object": "Exactly two strong exported FUNC roots/no global data/no weak or duplicate owners; no genuine project/host/compiler helper U expected from this bounded primitive source. Private read_char should inline under inherited opt2, but actual metadata is required rather than assuming emission."
+  },
+  "required_crate_build_context": {
+    "actual_default_crate": "kernel/rust/lib.rs:1-4 has feature(linkage), feature(c_variadic), feature(core_intrinsics), no_std; mod string at62. These two roots do not use the three nightly features directly; minimum unit can use no_std plus exact imports/items and qualified ABI type module.",
+    "no_builtins": "Absent from exact current lib.rs/string.rs and selected kernel/CMakeLists.txt Rust command; no fno-builtin/no-builtin profile switch there. Do not add it silently to hide a lowered-call finding.",
+    "actual_default_flags": "kernel/CMakeLists.txt:529-550 selects lib/edition2021, panicabort,opt2,debuginfo2,largecode-model,staticrelocation,noredzone,framepointers,overflowchecksoff,unwindtablesoff,no loop/SLPvectorization,-SSE/AVX family, selected cfg, emitobj/depinfo. Reuse already independently qualified bounded partial-codegen compiler/profile for a new packet; whole default crate compilation remains outside this source cut.",
+    "kernel_C_owner_switch": "kernel/CMakeLists.txt:650-651 sets MCKERNEL_RUST_STRING_CORE on lib/string.c in Rust selection; its original strlen/strnlen/memory definitions are guarded by !MCKERNEL_RUST_STRING_CORE (string.c:18-254). Never join old C string definitions or full Rust string module alongside these two new owners."
+  },
+  "direct_consumer_binding": {
+    "strnlen": "kernel/rust/numparse.rs:5 imports crate::string::{strlen,strnlen}; string formatting body calls strnlen(s,precision) at853 after substituting original static NULL_STRING for low addresses. No fake replacement callback.",
+    "memset": "Current actual kprintf object550bf6d7 has genuine compiler-lowered memset U/relocation at0x70 for original localzero1024 initialization, per independent kprintf metadata/ABI reviewd130a103. That artifact is source/metadata acceptance only, not callable/runtime; reuse existing result rather than rebuilding it.",
+    "composition": "Possible future unique partial join may resolve only genuine memset/strnlen imports from current reviewed cohort. Exact predecessor object/receipt/ownership must be bound by its own packet, not guessed here."
+  },
+  "functional_input_contract": {
+    "memset": "For n>0 original pointer must cover writable nbytes and valid pointer arithmetic; byte is c asu8. For n0 source performs no volatile write and returns original s. Do not broaden into invalid-pointer testing.",
+    "strnlen": "Preserve original while read_char(ptr)!=0 && maxlen>0 order, also present in lib/string.c:34. Caller must retain a readable byte at each condition-read position, including initial maxlen0 and post-limit position. No NULL/onepast-inaccessible baseline or reordered semantic fix belongs in this partition. Ordinary valid NUL-terminated input is sufficient for future meaningful behavior scope.",
+    "lifetime": "Caller owns input/output storage for call duration; neither primitive allocates/frees/retains storage or owns boot/global state."
+  },
+  "mandatory_new_object_checks_before_qualification": [
+    "Actual named strongFUNC ownership/type/signatures/size and no unexpected data/weakdefs/U; combine only current individually qualified unique owners.",
+    "Actual ELF relocations plus bounded actual disassembly of both new roots to reject direct/indirect self or cross-root recursion, compiler-lowered calls back into memset/strnlen, unexpected memcpy/memmove/panic/core/builtins/libc entrypoints. Volatile source operations discourage lowering but do not replace this actual object check.",
+    "If actual new object unexpectedly imports or calls helpers, stop firstfailure and obtain focused disposition; do not automatically add no_builtins, rewrite primitives, substitute libc or grow source scope.",
+    "If later partialjoin is admitted, inspect exact new resolution and preserved old symbol/function ownership/bytes. Source/codegen/partiallink alone does not accept original native/runtime/finalimage/Cretirement."
+  ],
+  "known_qualified_owner_from_direct_source_build": "No independent current matching memset/strnlen object is established by the inspected direct source/build records. Default build emits string definitions as part of whole mckernel_rust.o; this is not an independent reusable object qualification. No artifact inventory/c205/core lookup was performed and no universal absence is claimed.",
+  "requirements_for_next_step": "Root explicitly scope a private two-root/helper unit, independent concrete source/ABI/uniqueownership/execution review, fresh exact HOST resource/usage admission. No implementation/compile/runtime is authorized by this sourcecontract alone.",
+  "preserved_limits": "Accepted F04 scope remains closed/reused without rerun. Original generic/exec/XPMEM/native/SDK/source holds and undefined providers remain unchanged. No fake provider/callback or HOST libc binding.",
+  "operations": {
+    "provider_unit_implementation": false,
+    "compiler": false,
+    "linker": false,
+    "runtime": false,
+    "canonical_index_writes": false,
+    "wholemodule_read_or_compile": "Only bounded string.rs first340lines read for exact roots; no wholemodule compile",
+    "inventory_or_old_core_lookup": false
+  }
+}

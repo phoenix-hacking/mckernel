@@ -1,0 +1,186 @@
+{
+  "status": "GO_EXACT_THREE_COMMAND_NONEXECUTED_PARTIAL_JOIN_AND_READBACK",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T17:47:55.874974+00:00",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/REQUEST.json",
+    "sha256": "78b0a6fb04637a956ee8d5b0bf0aa9592cf445231597feb111e7964d2dac77e5"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py",
+    "sha256": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "AST_check": "PASS; predicate not executed by reviewer"
+  },
+  "input_owners": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/INPUT-OWNERS.json",
+    "sha256": "c108b5f9ffdc335c0dff0a041c11f491f1fc7c8eb964879cafa47cc410f5d9fe"
+  },
+  "prior_reviews_reused_without_repetition": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-review-1/REVIEW.json",
+      "sha256": "db4bffee02e482a51daeb6a3cb73ae6e4fa62da2914615a659e3b88e3b26a320"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-review-1/ACTUAL-METADATA-REVIEW.json",
+      "sha256": "d130a1034ed835da35636dc253e529534e57210bedd76229a79366489824170c"
+    }
+  ],
+  "qualified_metadata_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "scope": "Reuse only existing Image/parse_nm read-only. Header requires ELF64LE/x86_64/REL; symbol metadata rejects weak/unique/globalalias and duplicates; NOBITS is never read as initializedbytes. No storagepredicate or source re-review."
+  },
+  "exact_commands": {
+    "labels": [
+      "partial-join",
+      "joined-symbols",
+      "joined-elf"
+    ],
+    "argv": [
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.metrics",
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o"
+      ],
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o"
+      ],
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o"
+      ]
+    ],
+    "inputs": [
+      {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+        "sha256": "550bf6d7d108e766a593a18d96edc2f46e5688bd07cae48ddc61e4868b5afbdf",
+        "bytes": 19064
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+        "sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+        "bytes": 13400
+      }
+    ],
+    "identity_check": "All frozen request inputs, object hashes/sizes, retained metadata, source-review receipts and ld/nm/readelf identities independently match. Only two qualified actualobjectpaths occur in ld-r; no archive/library/wholecrate/override/linker-script/provider rewrite.",
+    "profile": "CPU6/one serial lightjob/AS1GiB/CPU45/60+5wall/FSIZE64MiB/core0/time-v, empty environmentoverrides, expectedexit0/emptystderr. Shared3jobs/4GiBTOTAL+freshRootcapacity controls remain binding."
+  },
+  "prejoin_predicate_review": {
+    "status": "PASS_SOURCE_REVIEW",
+    "required_invocation": "IMPORT frozen join_checks.py and CALL prejoin(request); persist PASS before any partial-join Popen. Merely executing definition-onlyfile or nmexit0 is not a predicate invocation.",
+    "checks": "Rechecks exactobjecthashes; reuses qualifiedImage against actualnm;11newglobalT names/kinds/sizes and12U;31actualoldglobal owners/kinds/sizes and13U; emptyglobalintersection; exact2source-ownedLOCALhelpers sizes1190/3395; computes42ownerunion/23genuineU. No guessedprivate symbols.",
+    "authority": "PredicatePASS is an execution sequencing prerequisite, not an operation lease; Rootfreshadmission separately required."
+  },
+  "postjoin_predicate_review": {
+    "status": "PASS_SOURCE_REVIEW",
+    "required_invocation": "CALL postjoin(request) after actual joinednm and ELFreadback commands; persist result bound toactualjoinedobject andrawoutputs. Stopfirstunexpectedresult, preserve all waits/stdios/metrics, no autonomousretry.",
+    "checks": [
+      "Exact42strong ownernames,33T/9data,23genuineU and actualnm-to-ELFagreement; no extra namedglobalowner/import.",
+      "All31prior and11newglobal symbols preserve actualbind/type/size/visibility/sectiontype/flags/minimumalignment; allfile-backedbytes exact. NOBITS preserves declarationbounds only.",
+      "Both actualLOCALhelper names remain uniqueLOCALFUNC with same1190/3395bytes, visibility/section metadata and exactsource-owner relocation signatures.",
+      "Per-ownerrelocation offsets/types/targets remain same through currentglobalresolution; localcode references normalize to owningfunction+offset; strings normalize by actualNULbytes across legitimateROmerge; nonstringreadonlycontent/name/position/size hashes preserved.",
+      "Two source-ownedjump-table sections retain bytecontent and allrelocation signatures; no privateVaList ABI externalization or inventedglobaldata.",
+      "Actualold x86_addr_log_bridge relocationtargets kprintf and actualnew kprintf targets currentnativeCPU; bothglobal definitions uniqueinjoinedobject. Othergenuineproviders stayU."
+    ]
+  },
+  "expected_actual_join_contract": {
+    "global_strong": 42,
+    "global_T": 33,
+    "global_data": 9,
+    "local_helpers": {
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": 1190,
+      "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": 3395
+    },
+    "remaining_U": [
+      "cpu_disable_interrupt_save",
+      "cpu_interrupt_disabled",
+      "cpu_pause",
+      "cpu_restore_interrupt",
+      "do_kill",
+      "do_syscall",
+      "eventfd",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_wait_release_process",
+      "f03_wait_release_thread",
+      "ihk_mc_delay_us",
+      "kmsg_buf",
+      "kprintf_lock",
+      "kprintf_unlock",
+      "memset",
+      "sched_wakeup_thread",
+      "strnlen",
+      "syscall_do_kill_thread_bridge",
+      "syscall_do_syscall_request_bridge",
+      "syscall_find_process_bridge",
+      "syscall_generic_forwarding_body_result",
+      "syscall_process_unlock_bridge",
+      "terminate_host_body_result"
+    ],
+    "unresolved_contract": "memset/strnlen retain actualselectedkernelstring ABI/sourceowners; no library/stub is supplied and no callablequalification assumed. kmsgbuffer/locks/IRQ/kernel-eventfd/delay/boot/genericdo_syscall/offload dependencies remain genuinelyopen."
+  },
+  "scope_and_limits": "Nonexecuted relocatablepartialproof only. No compiler/oldmetadata/function/behavior/native/IRQ/GS/MSR/init/boot replay, sourceimplementation/canonical/index write, finalprovider/default/nativeABI acceptance, Cretirement or scorecredit. Actualjoinedoutput identity/result remains UNKNOWNuntil admittedbatch succeeds.",
+  "reviewer_predicate_link_compiler_or_runtime_execution": false,
+  "execution_admission": false,
+  "decision": "GO exact REQUEST78b0a6fb only, conditional on actualprejoinCALLbeforeld-r, postjoinCALLafterreads, and freshRootadmission/resourcegrant. No unrelatedstringartifact wait required for this unresolvedpartialproof."
+}

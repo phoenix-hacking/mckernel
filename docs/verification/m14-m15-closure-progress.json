@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-09T17:25:21.611809+00:00",
+  "updated_at": "2026-11-09T17:59:17.433672+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -6701,13 +6701,15 @@
         "CAMPAIGN.md",
         "docs/verification/m14-credential-provider-partial-results-20261109.json",
         "docs/verification/m14-lower-provider-partial-results-20261109.json",
-        "docs/verification/m14-provider-storage-partial-results-20261109.json"
+        "docs/verification/m14-provider-storage-partial-results-20261109.json",
+        "docs/verification/m14-kprintf-provider-partial-results-20261109.json",
+        "docs/verification/m14-kernel-string-provider-results-20261109.json"
       ],
       "scope_limit": "No new work authorization or hold release is conveyed.",
       "definition_status": "required input and completion condition explicit; original binding absent",
       "execution_profile": "authority_input",
       "counted_in_requirement_rollup": false,
-      "current_partial_evidence": "Current22T+9genuinedata/13Ustorage-loggerpartialqualified, including exactTRACE319; nativebootinit/kprintf/offload/default/fullmatchedcohort stillunbound, finalCREDENTIAL-COHORT0."
+      "current_partial_evidence": "Current42strong33T9data/23U kprintf partial qualified; genuine2T0U kernel string object qualified separately. Exact next join and valid CABI witness pending. Boot/locks/IRQ/notification/offload/default/full matched cohort remain unbound; final CREDENTIAL-COHORT0."
     },
     {
       "id": "HISTORICAL-OWNERSHIP",
@@ -13849,6 +13851,263 @@
       "counted_in_requirement_rollup": false,
       "required_for_original_acceptance": false,
       "identified_at": "2026-11-09T16:45:46Z"
+    },
+    {
+      "id": "M14-KPRINTF-SOURCE",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Prepare finite genuine kprintf formatter source",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; A source/build owner; F independent source/ABI/owner reviewer",
+      "done_when": "Exact35 definitions include26 formatter functions+kprintf+8 private helpers; preserve actual VaList, source constants, attributes and feature context.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Actual current finite source/type/attribute/profile definitions",
+        "Qualified storage/lower1faf object",
+        "Independent source/actual metadata/join review and fresh Root admission"
+      ],
+      "dependencies": [],
+      "evidence": [
+        "docs/verification/m14-kprintf-provider-partial-results-20261109.json",
+        "docs/verification/m14-kprintf-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting partial source/provider proof only. Boot, buffer, locks, IRQ, notification, offload, full image/default/native conditions remain open; no original criterion or score change.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KPRINTF-REVIEW",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Review actual kprintf source, ABI and owner composition",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; A source/build owner; F independent source/ABI/owner reviewer",
+      "done_when": "Independent source and actual metadata review bind11 C exports/2 emitted local helpers/literals/tables and genuine compiler memset import.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Actual current finite source/type/attribute/profile definitions",
+        "Qualified storage/lower1faf object",
+        "Independent source/actual metadata/join review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KPRINTF-SOURCE"
+      ],
+      "evidence": [
+        "docs/verification/m14-kprintf-provider-partial-results-20261109.json",
+        "docs/verification/m14-kprintf-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting partial source/provider proof only. Boot, buffer, locks, IRQ, notification, offload, full image/default/native conditions remain open; no original criterion or score change.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KPRINTF-CODEGEN",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Qualify finite kprintf object",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; A source/build owner; F independent source/ABI/owner reviewer",
+      "done_when": "One actual compile and2 reads pass with exact inherited diagnostic; actual object550bf and all3 direct waits retained, no function execution.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Actual current finite source/type/attribute/profile definitions",
+        "Qualified storage/lower1faf object",
+        "Independent source/actual metadata/join review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KPRINTF-REVIEW"
+      ],
+      "evidence": [
+        "docs/verification/m14-kprintf-provider-partial-results-20261109.json",
+        "docs/verification/m14-kprintf-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting partial source/provider proof only. Boot, buffer, locks, IRQ, notification, offload, full image/default/native conditions remain open; no original criterion or score change.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KPRINTF-JOIN",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Join genuine kprintf into current storage/lower cohort",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; A source/build owner; F independent source/ABI/owner reviewer",
+      "done_when": "Called prejoin precedes one ld-r of only550bf+1faf;42 strong owners33T9data/23U and all prior bytes/relocations pass postjoin; all3 waits joined.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Actual current finite source/type/attribute/profile definitions",
+        "Qualified storage/lower1faf object",
+        "Independent source/actual metadata/join review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KPRINTF-CODEGEN"
+      ],
+      "evidence": [
+        "docs/verification/m14-kprintf-provider-partial-results-20261109.json",
+        "docs/verification/m14-kprintf-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting partial source/provider proof only. Boot, buffer, locks, IRQ, notification, offload, full image/default/native conditions remain open; no original criterion or score change.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KERNEL-STRING-SOURCE",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Prepare genuine kernel memset and strnlen provider",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; B source/fixture/job owner; E independent source/ABI/packet reviewer",
+      "done_when": "Use only current exact memset/strnlen definitions plus private read_char, original ABI and volatile bodies; no invented no_builtins or source redesign.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Exact current two-root string source/type/profile",
+        "Qualified96585067 object and actual ca06 current partial for join only",
+        "Independent changed-composition/witness review and fresh Root admission"
+      ],
+      "dependencies": [],
+      "evidence": [
+        "docs/verification/m14-kernel-string-provider-results-20261109.json",
+        "docs/verification/m14-kernel-string-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting primitive provider proof, not reopening accepted F04 or adding an original test quota. Native/full-cohort/boot conditions remain open. Witness covers only its exact ordinary valid domain.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KERNEL-STRING-REVIEW",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Review string source ABI and leaf object qualification",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; B source/fixture/job owner; E independent source/ABI/packet reviewer",
+      "done_when": "Independent review binds exact source/profile and called object/disassembly predicate; ordinary valid-domain behavior is separately reviewed.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Exact current two-root string source/type/profile",
+        "Qualified96585067 object and actual ca06 current partial for join only",
+        "Independent changed-composition/witness review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KERNEL-STRING-SOURCE"
+      ],
+      "evidence": [
+        "docs/verification/m14-kernel-string-provider-results-20261109.json",
+        "docs/verification/m14-kernel-string-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting primitive provider proof, not reopening accepted F04 or adding an original test quota. Native/full-cohort/boot conditions remain open. Witness covers only its exact ordinary valid domain.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KERNEL-STRING-CODEGEN",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Qualify actual two-root string object",
+      "percent_complete": 100,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "verified_scoped_partial_provider_only",
+      "owner": "Saved Root compositor; B source/fixture/job owner; E independent source/ABI/packet reviewer",
+      "done_when": "One compile plus3 metadata reads;96585067 object contains memset113B/strnlen57B,2T0U/no data/no generated calls; all4 waits joined.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Exact current two-root string source/type/profile",
+        "Qualified96585067 object and actual ca06 current partial for join only",
+        "Independent changed-composition/witness review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KERNEL-STRING-REVIEW"
+      ],
+      "evidence": [
+        "docs/verification/m14-kernel-string-provider-results-20261109.json",
+        "docs/verification/m14-kernel-string-provider-unit-20261109"
+      ],
+      "definition_status": "completed_scoped_supporting_step",
+      "scope_limit": "Supporting primitive provider proof, not reopening accepted F04 or adding an original test quota. Native/full-cohort/boot conditions remain open. Witness covers only its exact ordinary valid domain.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KERNEL-STRING-JOIN",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Join string providers with current genuine kprintf cohort",
+      "percent_complete": 0,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "prepared_separate_review_and_fresh_admission_pending",
+      "owner": "Saved Root compositor; B source/fixture/job owner; E independent source/ABI/packet reviewer",
+      "done_when": "Only96585067+ca06 join after called exact prejoin, preserve all42 prior owners and actual source relocations; resolve exactly memset/strnlen and validate actual remaining imports/all waits.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Exact current two-root string source/type/profile",
+        "Qualified96585067 object and actual ca06 current partial for join only",
+        "Independent changed-composition/witness review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KERNEL-STRING-CODEGEN"
+      ],
+      "evidence": [
+        "docs/verification/m14-kernel-string-provider-results-20261109.json",
+        "docs/verification/m14-kernel-string-provider-unit-20261109"
+      ],
+      "definition_status": "defined_pending_scoped_supporting_step",
+      "scope_limit": "Supporting primitive provider proof, not reopening accepted F04 or adding an original test quota. Native/full-cohort/boot conditions remain open. Witness covers only its exact ordinary valid domain.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
+    },
+    {
+      "id": "M14-KERNEL-STRING-CABI",
+      "parent": "CREDENTIAL-COHORT",
+      "title": "Check ordinary valid-domain C ABI string behavior",
+      "percent_complete": 0,
+      "progress_metric": "binary exact explicitly partial supporting evidence",
+      "status": "prepared_separate_review_and_fresh_admission_pending",
+      "owner": "Saved Root compositor; B source/fixture/job owner; E independent source/ABI/packet reviewer",
+      "done_when": "Reviewed actual caller/object/ELF call binding precedes bounded valid readable empty/abc string and owned16B buffer checks; verify pointer return, low-byte writes and untouched regions, no privileged cohort or invalid/OOB inputs.",
+      "verification_method": "Actual source/ABI/profile review, raw captures, called object/unique-owner predicates and direct child joins at the named exact scope. Runtime only for separately reviewed valid-domain witness.",
+      "required_inputs": [
+        "Exact current two-root string source/type/profile",
+        "Qualified96585067 object and actual ca06 current partial for join only",
+        "Independent changed-composition/witness review and fresh Root admission"
+      ],
+      "dependencies": [
+        "M14-KERNEL-STRING-CODEGEN"
+      ],
+      "evidence": [
+        "docs/verification/m14-kernel-string-provider-results-20261109.json",
+        "docs/verification/m14-kernel-string-provider-unit-20261109"
+      ],
+      "definition_status": "defined_pending_scoped_supporting_step",
+      "scope_limit": "Supporting primitive provider proof, not reopening accepted F04 or adding an original test quota. Native/full-cohort/boot conditions remain open. Witness covers only its exact ordinary valid domain. Witness is independent of the privileged partial cohort and does not depend on its link completion.",
+      "execution_profile": "ordinary_HOST_nonexecuted_provider_source_codegen_join; witness_separately_admitted",
+      "counted_in_requirement_rollup": false,
+      "required_for_original_acceptance": false,
+      "identified_at": "2026-11-09T17:59:17.433672+00:00"
     }
   ],
   "optional_or_deferred_decisions": [
@@ -13918,21 +14177,26 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-09T17:25:21.611809+00:00",
+    "at": "2026-11-09T17:59:17.433672+00:00",
     "invocation": "20261109T155325Z-46b56314",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "task_binding_rows_before": 370,
-    "task_binding_rows_after": 374,
-    "change_reason": "Realstorage/logger source-objectpartialqualification andexactTRACEaccounting completed;4uncountedsupportingsteps. Frozen50%relativetargetrecorded; no originalscore/acceptance/weight/denominatorchange.",
+    "task_binding_rows_before": 374,
+    "task_binding_rows_after": 383,
+    "change_reason": "Genuine finite kprintf object/unique join and two-root string object completed; exact supporting source/review/codegen steps are verified. Separate string join/CABI steps explicitly pending. No original counted score, acceptance, weight or denominator change.",
     "new_supporting_rows": [
-      "M14-STORAGE-SOURCE",
-      "M14-STORAGE-REVIEW",
-      "M14-STORAGE-CODEGEN",
-      "M14-STORAGE-JOIN"
+      "M14-KPRINTF-SOURCE",
+      "M14-KPRINTF-REVIEW",
+      "M14-KPRINTF-CODEGEN",
+      "M14-KPRINTF-JOIN",
+      "M14-KERNEL-STRING-SOURCE",
+      "M14-KERNEL-STRING-REVIEW",
+      "M14-KERNEL-STRING-CODEGEN",
+      "M14-KERNEL-STRING-JOIN",
+      "M14-KERNEL-STRING-CABI"
     ],
-    "publication_status": "storageproof+frozenuser-target checkpoint being composed; latestpublished9c433df68"
+    "publication_status": "Coherent local checkpoint being composed; latest verified publication e79042ee4."
   },
   "denominator_changes": [
     {

@@ -1,0 +1,122 @@
+{
+  "status": "PASS_ACTUAL_NONEXECUTED_KPRINTF_STORAGE_PARTIAL_JOIN",
+  "request_sha256": "78b0a6fb04637a956ee8d5b0bf0aa9592cf445231597feb111e7964d2dac77e5",
+  "review_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-review-1/JOIN-REVIEW.json",
+  "review_sha256": "1c6a50b4109eb3421781948efc6022ed71a7ac268c5ce25eccc72fd6553350b5",
+  "actual_object": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/output/kprintf_storage_partial.o",
+    "sha256": "ca06d0e48d88beb010df1d6a548c9978e4dd4445322b2e235e3896714b44b438",
+    "bytes": 31984
+  },
+  "input_objects": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/output/kprintf_provider.o",
+      "sha256": "550bf6d7d108e766a593a18d96edc2f46e5688bd07cae48ddc61e4868b5afbdf",
+      "bytes": 19064
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+      "sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+      "bytes": 13400
+    }
+  ],
+  "actual_prejoin_predicate_called_before_ld_r": true,
+  "actual_postjoin_predicate_called_after_readbacks": true,
+  "global_strong": 42,
+  "global_T": 33,
+  "global_data": 9,
+  "genuine_remaining_U": [
+    "cpu_disable_interrupt_save",
+    "cpu_interrupt_disabled",
+    "cpu_pause",
+    "cpu_restore_interrupt",
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "ihk_mc_delay_us",
+    "kmsg_buf",
+    "kprintf_lock",
+    "kprintf_unlock",
+    "memset",
+    "sched_wakeup_thread",
+    "strnlen",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result"
+  ],
+  "all31prior_owners_sizes_file_bytes_data_and_relocations_preserved": true,
+  "all11Cexports_and2source_local_helpers_preserved": true,
+  "NOBITS_is_declaration_only_not_initialized_HOST_state": true,
+  "actual_source_literals_tables_and_relocation_owners_preserved": true,
+  "command_count": 3,
+  "command_metrics": [
+    {
+      "label": "partial-join",
+      "wall_seconds_observed": 0.004777900001499802,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_RSS_KiB": 4328,
+      "metrics_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.metrics",
+      "metrics_sha256": "566ce01903e026ac314617feb70b52c8ae03939b69b861d70bf387375bc49ead",
+      "pid": 553709,
+      "birth_ticks_before_wait": "33283184",
+      "direct_wait_joined": true
+    },
+    {
+      "label": "joined-symbols",
+      "wall_seconds_observed": 0.015753882005810738,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_RSS_KiB": 56632,
+      "metrics_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.metrics",
+      "metrics_sha256": "d5c265fda5b826742fc5b67777372b2dd5e460ca0ee4e53ff163fdc0eb888cc7",
+      "pid": 553712,
+      "birth_ticks_before_wait": "33283185",
+      "direct_wait_joined": true
+    },
+    {
+      "label": "joined-elf",
+      "wall_seconds_observed": 0.004055148005136289,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_RSS_KiB": 2596,
+      "metrics_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.metrics",
+      "metrics_sha256": "fa309dd4dad098f0a1aabcce1785ef35fdcfb57098db7d8f719d57daa71ae109",
+      "pid": 553715,
+      "birth_ticks_before_wait": "33283187",
+      "direct_wait_joined": true
+    }
+  ],
+  "sum_observed_wall_seconds": 0.024586930012446828,
+  "sum_CPU_seconds": 0.0,
+  "max_RSS_KiB": 56632,
+  "all_PID_births_persisted_before_direct_wait": true,
+  "all3_known_children_directly_joined": true,
+  "CPU6_and_source_hold_released_before_packaging": true,
+  "failures": [],
+  "evidence": {
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/ROOT-ADMISSION-1.json": "93c4f4006f7e8b2dc0f7ae348db4107e9b914e5c4640d19e4990700b622a958c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/REQUEST.json": "78b0a6fb04637a956ee8d5b0bf0aa9592cf445231597feb111e7964d2dac77e5",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/EXECUTION.json": "473008df7e5c4122ad0c5a9cc6dba87c6b29925c62c74abf1f3a60c96bfd7dfb",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/PREJOIN-CHECK.json": "d06714aabc00870182af7a3a9d6b59b241d7d34176c969e0098b1ec6548759a3",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/POSTJOIN-CHECK.json": "d26cf029f0bf87f65280064755a64609632a2e42dd999a6a9409d2ea41bf03b8",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/join_checks.py": "8e713e3311f55d5316e3dc5a7bff4b72e39f650e48e5f9e6616fdf77e5933a0c",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/INPUT-OWNERS.json": "c108b5f9ffdc335c0dff0a041c11f491f1fc7c8eb964879cafa47cc410f5d9fe",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/partial-join.metrics": "566ce01903e026ac314617feb70b52c8ae03939b69b861d70bf387375bc49ead",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stdout": "ed7602f900301b23dba8bbd95cc17e06a421fa2074147c52605b94cef517680a",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-symbols.metrics": "d5c265fda5b826742fc5b67777372b2dd5e460ca0ee4e53ff163fdc0eb888cc7",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.stdout": "4106cd215990b1068298860aefca0598c8630fb2bc6e6e991bf4d60fe28e5af0",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/join-1/joined-elf.metrics": "fa309dd4dad098f0a1aabcce1785ef35fdcfb57098db7d8f719d57daa71ae109"
+  },
+  "scope": "One actual relocatable link of exactly550bf+1faf and2metadata reads. No compiler/function/boot/init/native/runtime/greenbehavior. Real remaining23imports inclmemset, locks, IRQ, offload remain unresolved; original full/default/provider closure acceptance stays open."
+}

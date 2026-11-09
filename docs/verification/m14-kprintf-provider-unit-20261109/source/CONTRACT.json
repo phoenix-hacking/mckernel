@@ -1,0 +1,143 @@
+{
+  "decision": "CURRENT_KPRINTF_CONTRACT_ESTABLISHED_SMALLEST_EXPLICIT_PARTIAL_SOURCE_CUT_AVAILABLE_NO_IMPLEMENTATION_OR_ADMISSION",
+  "owner": "/root/create_empty_entry_parity_high",
+  "scope": "Actual kprintf endpoint only; E/B own x86_addr_log_bridge, Ddebug and descriptors. Original accepted F04 remains closed. No new quota or score credit.",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/numparse.rs": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+    "/home/holden/mckernel/kernel/include/kmsg.h": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/ihk/linux/include/ihk/ihk_debug.h": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7"
+  },
+  "definition_ABI_selection": {
+    "actual_definition": "kernel/rust/debug.rs:252 #[no_mangle] pub unsafe extern C fn kprintf(format:*const i8,mut args:...)->CInt",
+    "actual_C_declaration": "kernel/include/kmsg.h:18 int kprintf(const char *format,...);",
+    "return_and_behavior": "Returns-EINVAL when actual kmsg pointer is null; otherwise original CPU-prefix+format length after ring write/overflow-head update/locking and genuine notification policy. No errno translation, success fabrication or stdout/libc replacement.",
+    "selected_owner": "ENABLE_RUST_KERNEL defaultON in kernel/CMakeLists.txt:34; kernel/rust/lib.rs:18 selects moddebug and :39 modnumparse. Existing actual feature(c_variadic) atlib.rs:2. Rust selection removes kernel/debug.c and lib/vsprintf.c from selected C sources.",
+    "F04_boundary": "Accepted F04 targetarch/x86_64/kernel/cpu.c declares extern int kprintf at630; it is a consumer, not this definition. Preserve its accepted primitive/interrupt/diagnostic scope; no F04 source change or green rerun.",
+    "private_Rust_ABI": "vkprintf_locked uses &mut core::ffi::VaList and calls pub(crate) numparse::vsnprintf_va_list_result by Rust ABI. Do not invent an external Rust/mangled symbol, C va_list struct, callback, wrapper replacement or libc formatting substitute. Copy exact private callable source or establish a qualified genuine compatible independently owned object."
+  },
+  "qualified_independent_object_status": {
+    "decision": "NOT_ESTABLISHED_FROM_DIRECT_NAMED_BUILD_OWNER",
+    "observed_owner": "kernel/CMakeLists.txt120,516\u2013558 emits only rust/mckernel_rust.o from fullkernel/rust/lib.rs for this source chain. No separately bound debug/kprintf object or receipt is identified in that direct owner.",
+    "not_universal_absence": true,
+    "no_broad_object_search": true,
+    "excluded": "Do not use/hash/carve/relabel oldc205 or another combined/held whole kernel object, allowduplicates or rewrite symbols. Missing independentartifact does not prohibit the explicitly partial source cut below."
+  },
+  "smallest_current_partial_cut_at_existing_C_ABI_boundaries": {
+    "intended_public_C_root": [
+      "kprintf"
+    ],
+    "actual_debug_private_functions": {
+      "kmsg": 93,
+      "kmsg_used": 98,
+      "kmsg_margin": 113,
+      "debug_spin_lock_irqsave": 130,
+      "debug_spin_unlock_irqrestore": 147,
+      "memcpy_ringbuf": 152,
+      "notify_kmsg_if_needed": 167,
+      "vkprintf_locked": 207
+    },
+    "actual_numparse_private_functions": {
+      "read_char": 213,
+      "write_char_if_room": 486,
+      "number_ref_result": 492,
+      "string_ref_result": 833,
+      "printf_char_ref_result": 917,
+      "init_printf_spec": 1012,
+      "copy_printf_spec": 1022,
+      "pointer_ref_result": 1031,
+      "ptr_before": 1076,
+      "ptr_delta": 1081,
+      "is_alnum": 1086,
+      "printf_read_number_from_va": 1180,
+      "printf_read_pointer_from_va": 1205,
+      "vsnprintf_va_list_result": 1225
+    },
+    "actual_definition_count": 23,
+    "calculation": "One actual kprintf definition +8calledprivate debughelpers +14necessaryprivate numparse/VaList helpers. This is a genuine incomplete source/provider slice, not complete logging/native closure.",
+    "types": "Actual unchanged abi.rs scalar types; exact debug.rs IhkKmsgBuf type; exact numparse.rs reprC PrintfSpec(6CInt fields); core VaList builtin under existing actualc_variadic feature, no handwritten varargs layout.",
+    "constants": "Copy only actual constants referenced by this exact cut from debug.rs and numparse.rs with original types/values, including original1024localbuffer,4MiB-ring geometry/notification policy and format flags/types. No format-domain specialization to current logger strings.",
+    "genuine_remaining_C_ABI_functions": {
+      "kprintf_lock": "debug.rs175 unsafeexternCfn()->CULong",
+      "kprintf_unlock": "debug.rs180 unsafeexternCfn(CULong)->void",
+      "ihk_mc_get_processor_id": "unsafeexternCfn()->CInt; currentlower provider already defines nativeimplementation, preserveexistingownedobject",
+      "cpu_disable_interrupt_save": "actualdebug.rs declaration()->CULong; existingF04 primitive scope is reused only at matching scope",
+      "cpu_restore_interrupt": "actualdebug.rs declaration(CULong)->void",
+      "cpu_pause": "actualdebug.rs declaration()->void",
+      "cpu_interrupt_disabled": "actualdebug.rs declaration()->CInt",
+      "ihk_mc_delay_us": "actualdebug.rs declaration(CInt)->void",
+      "eventfd": "actualdebug.rs declaration(CInt)->void; genuinekernelnotification endpoint only, never HOSTlibceventfd signature",
+      "snprintf": "actualnumparse.rs1342 Cvariadic definition, called withoriginalprefixformat/CPUinteger",
+      "format_decode_result": "actualnumparse.rs638 C ABI with actualPrintfSpec pointer",
+      "printf_copy_literal_result": "actualnumparse.rs899 C ABI",
+      "printf_emit_char_result": "actualnumparse.rs963 C ABI",
+      "printf_write_nchars_result": "actualnumparse.rs969 C ABI",
+      "printf_terminate_result": "actualnumparse.rs987 C ABI",
+      "put_dec_result": "actualnumparse.rs473 C ABI",
+      "strnlen": "actualkernel/rust/string.rs61 C ABI, consti8pointer/SizeT->SizeT; no libc substitution"
+    },
+    "genuine_remaining_storage": {
+      "kmsg_buf": "Actual public shared-memory pointer from debug.rs45, declared with actualIhkKmsgBuf type; real boot producer/init/lifetime remain required. Do not create a fake buffer or null success-provider."
+    },
+    "shared_lock_ownership": "Minimal cut leaves genuine public kprintf_lock/unlock unresolved. Do NOT copy a second private KMSG_LOCK singleton while another owner provides these entries. Actual KMSG_LOCK, kprintf_lock/unlock and kmsg_init must have one coherent selected owner when that next actual source partition is prepared.",
+    "no_data_initializers_or_new_provider_callbacks_in_cut": true,
+    "unresolved_is_explicit": "All named C ABI dependencies remain genuine unresolved until separately source/ABI/ownership-qualified; normal HOST library printf/snprintf cannot silently satisfy kernel provider contracts."
+  },
+  "optional_next_real_formatter_closure_ifRootchooses_more_than_minimum": {
+    "scope": "Finite26actual numparse functions reached by snprintf+vsnprintf_va_list_result, preserving their existing visibility/export attributes; excludes scanning/conversion/ctype wrappers/unrelatedwholemodule. No new implementation is authorized by this contract.",
+    "function_names": [
+      "read_char",
+      "is_digit",
+      "skip_atoi_result",
+      "put_digit",
+      "put_dec_trunc_result",
+      "put_dec_full_result",
+      "put_dec_result",
+      "write_char_if_room",
+      "number_ref_result",
+      "format_decode_result",
+      "string_ref_result",
+      "printf_copy_literal_result",
+      "printf_char_ref_result",
+      "printf_emit_char_result",
+      "printf_write_nchars_result",
+      "printf_terminate_result",
+      "init_printf_spec",
+      "copy_printf_spec",
+      "pointer_ref_result",
+      "ptr_before",
+      "ptr_delta",
+      "is_alnum",
+      "printf_read_number_from_va",
+      "printf_read_pointer_from_va",
+      "vsnprintf_va_list_result",
+      "snprintf"
+    ],
+    "external_string_boundary": "Actual strnlen remains a genuine existing kernel C ABI provider unless its separately reviewed exact callable source is deliberately added. Do not copy the whole string/numparse module."
+  },
+  "state_and_lifetime_contract": {
+    "ring_ABI": "ActualCihk_debug.h struct has int lock/tail/len/head, paddingto4096, then IHK_KMSG_SIZEbytes; Rusttypeconstasserts size4MiB/str_offset4096. Originalkernel sharedinter-kernel lock/state ownership remains.",
+    "write_order": "Formatting in actual1024stackbuffer occurs before optionalouterlock; kprintf passestrue. Realouter lock, inner atomic/IRQsave lock, ringcopy andoverflowheadupdate, innerunlock/IRQrestore, outerunlock, then original high-water/IRQ-enabled notification/delay. Do not suppress or fake primitives.",
+    "native_assumptions": "Live genuine message buffer/header/ring storage and currentCPU/IRQ/locking/event backend contracts must hold for actual execution. No function runs here and no invalid-pointer/overflow/OOB/security domain is introduced."
+  },
+  "smallest_required_proof_next": {
+    "source_preparation": "Root may explicitly assign this exact current source cut. Preserve actual bodies/attributes/types/constants and feature context, record only intendeddefinitions/privatehelpers/genuineexterns; no wholedebug/numparse/kernelcrate source include.",
+    "independent_review": "Review concrete source+exact pinnedcompiler/profile and unique ownership against actual currentpartial/logger cohorts. Reuse unchangedF04/currentlower facts at their actual scope; no claim that acceptedF04 closeskprintf.",
+    "artifact_proof": "Only after freshRootadmission: isolated nonexecuted codegen, actualpublic/private/undefined symbol and varargs-signature/source metadata, unique relocatable join to actualconsumer if eligible. Genuine remaining storage/lock/format/IRQ/event dependencies stay listed, no hidden HOSTlibc provider resolution.",
+    "final_qualification": "Actual compatible final kernel/module/cohort/provider ownership and native/source/SDK/current-free admissions plus meaningful matching behavior remain original separate gates. Source/codegen alone acceptsnone."
+  },
+  "operations": {
+    "current_direct_source_and_build_reads": true,
+    "source_only_dependency_analysis": true,
+    "private_write": "ThisJSONonly",
+    "compiler_or_linker_or_function_or_native_execution": false,
+    "source_implementation_or_canonical_index_write": false,
+    "oldcore_object_read_hash_or_reuse": false,
+    "accepted_F04_reopened": false
+  },
+  "acceptance_percent_delta": 0,
+  "admissible_compile_or_link_argv_now": null
+}

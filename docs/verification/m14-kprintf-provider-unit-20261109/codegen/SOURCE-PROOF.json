@@ -1,0 +1,437 @@
+{
+  "status": "SOURCE_CUT_READY_LITERAL35_AGREED_ROOT_AND_F_NO_COMPILER",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/kprintf_provider_unit.rs",
+  "unit_sha256": "7214ade539e74fc3b6f87ac5c9923d8dff88584fa7e43cc8d3340ade9c57e1b6",
+  "contract_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-contract-1/CONTRACT.json",
+  "contract_sha256": "b7da89fb9acf39afd4c25df70e6c86da7f57b72f8ea873f22057af9a5a102e82",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/numparse.rs": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab",
+    "/home/holden/mckernel/kernel/rust/lib.rs": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+    "/home/holden/mckernel/kernel/CMakeLists.txt": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+    "/home/holden/mckernel/kernel/include/kmsg.h": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/ihk/linux/include/ihk/ihk_debug.h": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7"
+  },
+  "literal_debug_functions": [
+    "kmsg",
+    "kmsg_used",
+    "kmsg_margin",
+    "debug_spin_lock_irqsave",
+    "debug_spin_unlock_irqrestore",
+    "memcpy_ringbuf",
+    "notify_kmsg_if_needed",
+    "vkprintf_locked",
+    "kprintf"
+  ],
+  "literal_numparse_functions": [
+    "read_char",
+    "is_digit",
+    "skip_atoi_result",
+    "put_digit",
+    "put_dec_trunc_result",
+    "put_dec_full_result",
+    "put_dec_result",
+    "write_char_if_room",
+    "number_ref_result",
+    "format_decode_result",
+    "string_ref_result",
+    "printf_copy_literal_result",
+    "printf_char_ref_result",
+    "printf_emit_char_result",
+    "printf_write_nchars_result",
+    "printf_terminate_result",
+    "init_printf_spec",
+    "copy_printf_spec",
+    "pointer_ref_result",
+    "ptr_before",
+    "ptr_delta",
+    "is_alnum",
+    "printf_read_number_from_va",
+    "printf_read_pointer_from_va",
+    "vsnprintf_va_list_result",
+    "snprintf"
+  ],
+  "actual_function_definition_count": 35,
+  "actual_existing_NoMangle_C_exports": [
+    "skip_atoi_result",
+    "put_dec_trunc_result",
+    "put_dec_full_result",
+    "put_dec_result",
+    "format_decode_result",
+    "printf_copy_literal_result",
+    "printf_emit_char_result",
+    "printf_write_nchars_result",
+    "printf_terminate_result",
+    "snprintf",
+    "kprintf"
+  ],
+  "source_function_blocks": {
+    "numparse::read_char": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 4616,
+      "end_byte": 4708,
+      "start_line": 212,
+      "exact_definition_sha256": "49e8085317ce7c2da16fe6bf7302fd804e4e310f5410baa798dcdb065d50040b",
+      "exact_definition": "#[inline(always)]\nunsafe fn read_char(ptr: *const i8) -> u8 {\n    read_volatile(ptr) as u8\n}\n"
+    },
+    "numparse::is_digit": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 4776,
+      "end_byte": 4849,
+      "start_line": 222,
+      "exact_definition_sha256": "a38a6552968f68090cb2e2b00b65804f22b47645ff5ff836e4104caf20cf6d46",
+      "exact_definition": "#[inline(always)]\nfn is_digit(ch: u8) -> bool {\n    ch.is_ascii_digit()\n}\n"
+    },
+    "numparse::skip_atoi_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 8793,
+      "end_byte": 9158,
+      "start_line": 384,
+      "exact_definition_sha256": "d215e37b3f1db06f6981fcd8d5667c5839cf953a40b72f8906903af5b16f282f",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn skip_atoi_result(s: *mut *const i8) -> CInt {\n    let mut cp = read_volatile(s);\n    let mut value: CInt = 0;\n\n    while is_digit(read_char(cp)) {\n        value = value\n            .wrapping_mul(10)\n            .wrapping_add((read_char(cp) - b'0') as CInt);\n        cp = cp.add(1);\n    }\n\n    write_volatile(s, cp);\n    value\n}\n"
+    },
+    "numparse::put_digit": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 9160,
+      "end_byte": 9317,
+      "start_line": 400,
+      "exact_definition_sha256": "3f21e2e3d14d34e76dd1296b06460a7ef9612bd633bdff43642fa3e2ba680fcf",
+      "exact_definition": "#[inline(always)]\nunsafe fn put_digit(buf: *mut i8, digit: u32) -> *mut i8 {\n    write_volatile(buf, digit.wrapping_add(b'0' as u32) as i8);\n    buf.add(1)\n}\n"
+    },
+    "numparse::put_dec_trunc_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 9319,
+      "end_byte": 10226,
+      "start_line": 406,
+      "exact_definition_sha256": "05d889330be5450da1aec98487b8be7226f257d69a35a1d028dffd8ed6e54f66",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn put_dec_trunc_result(mut buf: *mut i8, mut q: u32) -> *mut i8 {\n    let mut d1 = (q >> 4) & 0xf;\n    let mut d2 = (q >> 8) & 0xf;\n    let mut d3 = q >> 12;\n\n    let mut d0 = 6 * (d3 + d2 + d1) + (q & 0xf);\n    q = (d0 * 0xcd) >> 11;\n    d0 -= 10 * q;\n    buf = put_digit(buf, d0);\n\n    d1 += q + 9 * d3 + 5 * d2;\n    if d1 != 0 {\n        q = (d1 * 0xcd) >> 11;\n        d1 -= 10 * q;\n        buf = put_digit(buf, d1);\n\n        d2 = q + 2 * d2;\n        if d2 != 0 || d3 != 0 {\n            q = (d2 * 0xd) >> 7;\n            d2 -= 10 * q;\n            buf = put_digit(buf, d2);\n\n            d3 = q + 4 * d3;\n            if d3 != 0 {\n                q = (d3 * 0xcd) >> 11;\n                d3 -= 10 * q;\n                buf = put_digit(buf, d3);\n                if q != 0 {\n                    buf = put_digit(buf, q);\n                }\n            }\n        }\n    }\n\n    buf\n}\n"
+    },
+    "numparse::put_dec_full_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 10228,
+      "end_byte": 10868,
+      "start_line": 444,
+      "exact_definition_sha256": "47add34302c518de45407ab2c9fa5aaa9f9bfda303318025e06df1b378d4e7cc",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn put_dec_full_result(mut buf: *mut i8, mut q: u32) -> *mut i8 {\n    let mut d1 = (q >> 4) & 0xf;\n    let mut d2 = (q >> 8) & 0xf;\n    let mut d3 = q >> 12;\n\n    let mut d0 = 6 * (d3 + d2 + d1) + (q & 0xf);\n    q = (d0 * 0xcd) >> 11;\n    d0 -= 10 * q;\n    buf = put_digit(buf, d0);\n\n    d1 += q + 9 * d3 + 5 * d2;\n    q = (d1 * 0xcd) >> 11;\n    d1 -= 10 * q;\n    buf = put_digit(buf, d1);\n\n    d2 = q + 2 * d2;\n    q = (d2 * 0xd) >> 7;\n    d2 -= 10 * q;\n    buf = put_digit(buf, d2);\n\n    d3 = q + 4 * d3;\n    q = (d3 * 0xcd) >> 11;\n    d3 -= 10 * q;\n    buf = put_digit(buf, d3);\n    put_digit(buf, q)\n}\n"
+    },
+    "numparse::put_dec_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 10870,
+      "end_byte": 11196,
+      "start_line": 472,
+      "exact_definition_sha256": "8bd334ff9208ebed79c8b13995e814472c297f7b471d1dee0074481b90891c40",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn put_dec_result(mut buf: *mut i8, mut num: CULong) -> *mut i8 {\n    loop {\n        if num < 100_000 {\n            return put_dec_trunc_result(buf, num as u32);\n        }\n\n        let rem = (num % 100_000) as u32;\n        num /= 100_000;\n        buf = put_dec_full_result(buf, rem);\n    }\n}\n"
+    },
+    "numparse::write_char_if_room": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 11198,
+      "end_byte": 11370,
+      "start_line": 485,
+      "exact_definition_sha256": "987215aee85af579fde5e799e1f30e41921ba4d55d60843cf3d7436949a01382",
+      "exact_definition": "#[inline(always)]\nunsafe fn write_char_if_room(ptr: *mut i8, end: *mut i8, ch: u8) {\n    if (ptr as usize) < (end as usize) {\n        write_volatile(ptr, ch as i8);\n    }\n}\n"
+    },
+    "numparse::number_ref_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 11372,
+      "end_byte": 14638,
+      "start_line": 492,
+      "exact_definition_sha256": "21ea118537680865f53b84fa9a0d41063c032343ae0738faf34c9467c78bd9c0",
+      "exact_definition": "unsafe fn number_ref_result(\n    mut buf: *mut i8,\n    end: *mut i8,\n    mut num: CULong,\n    spec: *const PrintfSpec,\n) -> *mut i8 {\n    const DIGITS: &[u8; 16] = b\"0123456789ABCDEF\";\n    let mut tmp = core::mem::MaybeUninit::<[i8; 66]>::uninit();\n    let tmp_ptr = tmp.as_mut_ptr() as *mut i8;\n    let mut flags = read_volatile(&(*spec).flags);\n    let mut field_width = read_volatile(&(*spec).field_width);\n    let base = read_volatile(&(*spec).base);\n    let mut precision = read_volatile(&(*spec).precision);\n    let mut sign = 0u8;\n    let locase = (flags & SMALL) as u8;\n    let need_pfx = (flags & SPECIAL) != 0 && base != 10;\n    let mut i: CInt = 0;\n\n    if (flags & LEFT) != 0 {\n        flags &= !ZEROPAD;\n    }\n\n    if (flags & SIGN) != 0 {\n        let signed = num as CLong;\n\n        if signed < 0 {\n            sign = b'-';\n            num = signed.wrapping_neg() as CULong;\n            field_width -= 1;\n        } else if (flags & PLUS) != 0 {\n            sign = b'+';\n            field_width -= 1;\n        } else if (flags & SPACE) != 0 {\n            sign = b' ';\n            field_width -= 1;\n        }\n    }\n\n    if need_pfx {\n        field_width -= 1;\n        if base == 16 {\n            field_width -= 1;\n        }\n    }\n\n    if num == 0 {\n        write_volatile(tmp_ptr, b'0' as i8);\n        i = 1;\n    } else if base != 10 {\n        let mask = (base - 1) as CULong;\n        let shift = if base == 16 { 4 } else { 3 };\n\n        while num != 0 {\n            let digit = read_volatile(DIGITS.as_ptr().add((num & mask) as usize));\n            write_volatile(tmp_ptr.add(i as usize), (digit | locase) as i8);\n            i += 1;\n            num >>= shift;\n        }\n    } else {\n        i = put_dec_result(tmp_ptr, num).offset_from(tmp_ptr) as CInt;\n    }\n\n    if i > precision {\n        precision = i;\n    }\n\n    field_width -= precision;\n    if (flags & (ZEROPAD | LEFT)) == 0 {\n        loop {\n            field_width -= 1;\n            if field_width < 0 {\n                break;\n            }\n            write_char_if_room(buf, end, b' ');\n            buf = buf.add(1);\n        }\n    }\n\n    if sign != 0 {\n        write_char_if_room(buf, end, sign);\n        buf = buf.add(1);\n    }\n\n    if need_pfx {\n        write_char_if_room(buf, end, b'0');\n        buf = buf.add(1);\n        if base == 16 {\n            write_char_if_room(buf, end, b'X' | locase);\n            buf = buf.add(1);\n        }\n    }\n\n    if (flags & LEFT) == 0 {\n        let ch = if (flags & ZEROPAD) != 0 { b'0' } else { b' ' };\n\n        loop {\n            field_width -= 1;\n            if field_width < 0 {\n                break;\n            }\n            write_char_if_room(buf, end, ch);\n            buf = buf.add(1);\n        }\n    }\n\n    loop {\n        precision -= 1;\n        if i > precision {\n            break;\n        }\n        write_char_if_room(buf, end, b'0');\n        buf = buf.add(1);\n    }\n\n    loop {\n        i -= 1;\n        if i < 0 {\n            break;\n        }\n        write_char_if_room(buf, end, read_volatile(tmp_ptr.add(i as usize)) as u8);\n        buf = buf.add(1);\n    }\n\n    loop {\n        field_width -= 1;\n        if field_width < 0 {\n            break;\n        }\n        write_char_if_room(buf, end, b' ');\n        buf = buf.add(1);\n    }\n\n    buf\n}\n"
+    },
+    "numparse::format_decode_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 14838,
+      "end_byte": 20763,
+      "start_line": 637,
+      "exact_definition_sha256": "0622537767023f72d45b23aaed904af5e3efc21596ab0cc1c19186e451d54b14",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn format_decode_result(fmt: *const i8, spec: *mut PrintfSpec) -> CInt {\n    let start = fmt;\n    let mut p = fmt;\n    let spec_ref = &mut *spec;\n    let mut skip_precision = false;\n\n    if spec_ref.type_ == FORMAT_TYPE_WIDTH {\n        if spec_ref.field_width < 0 {\n            spec_ref.field_width = -spec_ref.field_width;\n            spec_ref.flags |= LEFT;\n        }\n        spec_ref.type_ = FORMAT_TYPE_NONE;\n    } else if spec_ref.type_ == FORMAT_TYPE_PRECISION {\n        if spec_ref.precision < 0 {\n            spec_ref.precision = 0;\n        }\n        spec_ref.type_ = FORMAT_TYPE_NONE;\n        skip_precision = true;\n    } else {\n        spec_ref.type_ = FORMAT_TYPE_NONE;\n\n        while read_char(p) != 0 {\n            if read_char(p) == b'%' {\n                break;\n            }\n            p = p.add(1);\n        }\n\n        if p != start || read_char(p) == 0 {\n            return p.offset_from(start) as CInt;\n        }\n\n        spec_ref.flags = 0;\n        loop {\n            let found;\n\n            p = p.add(1);\n            match read_char(p) {\n                b'-' => {\n                    spec_ref.flags |= LEFT;\n                    found = true;\n                }\n                b'+' => {\n                    spec_ref.flags |= PLUS;\n                    found = true;\n                }\n                b' ' => {\n                    spec_ref.flags |= SPACE;\n                    found = true;\n                }\n                b'#' => {\n                    spec_ref.flags |= SPECIAL;\n                    found = true;\n                }\n                b'0' => {\n                    spec_ref.flags |= ZEROPAD;\n                    found = true;\n                }\n                _ => {\n                    found = false;\n                }\n            }\n\n            if !found {\n                break;\n            }\n        }\n\n        spec_ref.field_width = -1;\n        if is_digit(read_char(p)) {\n            let mut width_ptr = p;\n            spec_ref.field_width = skip_atoi_result(&mut width_ptr);\n            p = width_ptr;\n        } else if read_char(p) == b'*' {\n            spec_ref.type_ = FORMAT_TYPE_WIDTH;\n            return p.add(1).offset_from(start) as CInt;\n        }\n    }\n\n    if !skip_precision {\n        spec_ref.precision = -1;\n        if read_char(p) == b'.' {\n            p = p.add(1);\n            if is_digit(read_char(p)) {\n                let mut precision_ptr = p;\n                spec_ref.precision = skip_atoi_result(&mut precision_ptr);\n                p = precision_ptr;\n                if spec_ref.precision < 0 {\n                    spec_ref.precision = 0;\n                }\n            } else if read_char(p) == b'*' {\n                spec_ref.type_ = FORMAT_TYPE_PRECISION;\n                return p.add(1).offset_from(start) as CInt;\n            }\n        }\n    }\n\n    spec_ref.qualifier = -1;\n    match read_char(p) {\n        b'h' | b'l' | b'L' | b'Z' | b'z' | b't' => {\n            spec_ref.qualifier = read_char(p) as CInt;\n            p = p.add(1);\n            if spec_ref.qualifier == read_char(p) as CInt {\n                if spec_ref.qualifier == b'l' as CInt {\n                    spec_ref.qualifier = b'L' as CInt;\n                    p = p.add(1);\n                } else if spec_ref.qualifier == b'h' as CInt {\n                    spec_ref.qualifier = b'H' as CInt;\n                    p = p.add(1);\n                }\n            }\n        }\n        _ => {}\n    }\n\n    spec_ref.base = 10;\n    match read_char(p) {\n        b'c' => {\n            spec_ref.type_ = FORMAT_TYPE_CHAR;\n            return p.add(1).offset_from(start) as CInt;\n        }\n        b's' => {\n            spec_ref.type_ = FORMAT_TYPE_STR;\n            return p.add(1).offset_from(start) as CInt;\n        }\n        b'f' => {\n            spec_ref.base = 16;\n            spec_ref.type_ = FORMAT_TYPE_FLOAT;\n            return p.add(1).offset_from(start) as CInt;\n        }\n        b'p' => {\n            spec_ref.type_ = FORMAT_TYPE_PTR;\n            return p.offset_from(start) as CInt;\n        }\n        b'n' => {\n            spec_ref.type_ = FORMAT_TYPE_NRCHARS;\n            return p.add(1).offset_from(start) as CInt;\n        }\n        b'%' => {\n            spec_ref.type_ = FORMAT_TYPE_PERCENT_CHAR;\n            return p.add(1).offset_from(start) as CInt;\n        }\n        b'o' => {\n            spec_ref.base = 8;\n        }\n        b'x' => {\n            spec_ref.flags |= SMALL;\n            spec_ref.base = 16;\n        }\n        b'X' => {\n            spec_ref.base = 16;\n        }\n        b'd' | b'i' => {\n            spec_ref.flags |= SIGN;\n        }\n        b'u' => {}\n        _ => {\n            spec_ref.type_ = FORMAT_TYPE_INVALID;\n            return p.offset_from(start) as CInt;\n        }\n    }\n\n    if spec_ref.qualifier == b'L' as CInt {\n        spec_ref.type_ = FORMAT_TYPE_LONG_LONG;\n    } else if spec_ref.qualifier == b'l' as CInt {\n        if (spec_ref.flags & SIGN) != 0 {\n            spec_ref.type_ = FORMAT_TYPE_LONG;\n        } else {\n            spec_ref.type_ = FORMAT_TYPE_ULONG;\n        }\n    } else if spec_ref.qualifier == b'Z' as CInt || spec_ref.qualifier == b'z' as CInt {\n        spec_ref.type_ = FORMAT_TYPE_SIZE_T;\n    } else if spec_ref.qualifier == b't' as CInt {\n        spec_ref.type_ = FORMAT_TYPE_PTRDIFF;\n    } else if spec_ref.qualifier == b'H' as CInt {\n        if (spec_ref.flags & SIGN) != 0 {\n            spec_ref.type_ = FORMAT_TYPE_BYTE;\n        } else {\n            spec_ref.type_ = FORMAT_TYPE_UBYTE;\n        }\n    } else if spec_ref.qualifier == b'h' as CInt {\n        if (spec_ref.flags & SIGN) != 0 {\n            spec_ref.type_ = FORMAT_TYPE_SHORT;\n        } else {\n            spec_ref.type_ = FORMAT_TYPE_USHORT;\n        }\n    } else if (spec_ref.flags & SIGN) != 0 {\n        spec_ref.type_ = FORMAT_TYPE_INT;\n    } else {\n        spec_ref.type_ = FORMAT_TYPE_UINT;\n    }\n\n    p.add(1).offset_from(start) as CInt\n}\n"
+    },
+    "numparse::string_ref_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 20765,
+      "end_byte": 22075,
+      "start_line": 833,
+      "exact_definition_sha256": "dc6aa11e0275bc0db005c86174a8cd2d2d731d053ccd77937b3c31f32136fd5b",
+      "exact_definition": "unsafe fn string_ref_result(\n    mut buf: *mut i8,\n    end: *mut i8,\n    mut s: *mut i8,\n    spec: *const PrintfSpec,\n) -> *mut i8 {\n    static NULL_STRING: &[u8; 7] = b\"<NULL>\\0\";\n    let flags = read_volatile(&(*spec).flags);\n    let field_width = read_volatile(&(*spec).field_width);\n    let spec_precision = read_volatile(&(*spec).precision);\n\n    if (s as usize) < PAGE_SIZE {\n        s = NULL_STRING.as_ptr() as *mut i8;\n    }\n\n    let precision = if spec_precision < 0 {\n        usize::MAX\n    } else {\n        spec_precision as usize\n    };\n    let len = strnlen(s, precision) as CInt;\n    let pad = if field_width > len {\n        field_width - len\n    } else {\n        0\n    };\n\n    if (flags & LEFT) == 0 {\n        let mut left_pad = pad;\n        while left_pad > 0 {\n            write_char_if_room(buf, end, b' ');\n            buf = buf.add(1);\n            left_pad -= 1;\n        }\n    }\n\n    let mut copied = 0;\n    while copied < len {\n        write_char_if_room(buf, end, read_volatile(s.add(copied as usize)) as u8);\n        buf = buf.add(1);\n        copied += 1;\n    }\n\n    if (flags & LEFT) != 0 {\n        let mut right_pad = pad;\n        while right_pad > 0 {\n            write_char_if_room(buf, end, b' ');\n            buf = buf.add(1);\n            right_pad -= 1;\n        }\n    }\n\n    buf\n}\n"
+    },
+    "numparse::printf_copy_literal_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 22272,
+      "end_byte": 22643,
+      "start_line": 898,
+      "exact_definition_sha256": "79551edc83562be73ce41bd3bbcd675e119013727b2651a67a31b924fb04fc6e",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn printf_copy_literal_result(\n    mut buf: *mut i8,\n    end: *mut i8,\n    mut src: *const i8,\n    read: CInt,\n) -> *mut i8 {\n    let mut copied: CInt = 0;\n\n    while copied < read {\n        write_char_if_room(buf, end, read_volatile(src) as u8);\n        buf = buf.add(1);\n        src = src.add(1);\n        copied += 1;\n    }\n\n    buf\n}\n"
+    },
+    "numparse::printf_char_ref_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 22645,
+      "end_byte": 23377,
+      "start_line": 917,
+      "exact_definition_sha256": "e3d8c52e0ce8e977b34e4b75c98563a9ab5b4913b7eb50fc208ae0d036407c70",
+      "exact_definition": "unsafe fn printf_char_ref_result(\n    mut buf: *mut i8,\n    end: *mut i8,\n    ch: CInt,\n    spec: *const PrintfSpec,\n) -> *mut i8 {\n    let flags = read_volatile(&(*spec).flags);\n    let mut field_width = read_volatile(&(*spec).field_width);\n\n    if (flags & LEFT) == 0 {\n        loop {\n            field_width -= 1;\n            if field_width <= 0 {\n                break;\n            }\n            write_char_if_room(buf, end, b' ');\n            buf = buf.add(1);\n        }\n    }\n\n    write_char_if_room(buf, end, ch as u8);\n    buf = buf.add(1);\n\n    loop {\n        field_width -= 1;\n        if field_width <= 0 {\n            break;\n        }\n        write_char_if_room(buf, end, b' ');\n        buf = buf.add(1);\n    }\n\n    buf\n}\n"
+    },
+    "numparse::printf_emit_char_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 23583,
+      "end_byte": 23756,
+      "start_line": 962,
+      "exact_definition_sha256": "cd324d16efa5686e57ccf60dbaf38914bc4b995821b7e9b5685efb23392ff725",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn printf_emit_char_result(buf: *mut i8, end: *mut i8, ch: CInt) -> *mut i8 {\n    write_char_if_room(buf, end, ch as u8);\n    buf.add(1)\n}\n"
+    },
+    "numparse::printf_write_nchars_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 23758,
+      "end_byte": 24281,
+      "start_line": 968,
+      "exact_definition_sha256": "4fc5dfe290d6820848443a1fa12fd85907e56514a96044e4a242db99ddadac78",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn printf_write_nchars_result(\n    buf: *mut i8,\n    str_: *mut i8,\n    out: *mut core::ffi::c_void,\n    qualifier: CInt,\n) {\n    let count = (str_ as isize).wrapping_sub(buf as isize);\n\n    if qualifier == b'l' as CInt {\n        write_volatile(out as *mut CLong, count as CLong);\n    } else if qualifier == b'Z' as CInt || qualifier == b'z' as CInt {\n        write_volatile(out as *mut SizeT, count as SizeT);\n    } else {\n        write_volatile(out as *mut CInt, count as CInt);\n    }\n}\n"
+    },
+    "numparse::printf_terminate_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 24283,
+      "end_byte": 24599,
+      "start_line": 986,
+      "exact_definition_sha256": "06edb31a7164dadba4a5f461d222343b3730a10a435f0b079ff44e6620f2f158",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn printf_terminate_result(\n    _buf: *mut i8,\n    size: SizeT,\n    end: *mut i8,\n    str_: *mut i8,\n) {\n    if size == 0 {\n        return;\n    }\n\n    if (str_ as usize) < (end as usize) {\n        write_volatile(str_, 0);\n    } else {\n        write_volatile(end.sub(1), 0);\n    }\n}\n"
+    },
+    "numparse::init_printf_spec": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 25001,
+      "end_byte": 25343,
+      "start_line": 1011,
+      "exact_definition_sha256": "754fb1ae931c81a9a16a6206adb2e6140a6b69a9e90645188998d056ca5a2c54",
+      "exact_definition": "#[inline(always)]\nunsafe fn init_printf_spec(spec: *mut PrintfSpec) {\n    write_volatile(&mut (*spec).type_, 0);\n    write_volatile(&mut (*spec).flags, 0);\n    write_volatile(&mut (*spec).field_width, 0);\n    write_volatile(&mut (*spec).base, 0);\n    write_volatile(&mut (*spec).precision, 0);\n    write_volatile(&mut (*spec).qualifier, 0);\n}\n"
+    },
+    "numparse::copy_printf_spec": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 25345,
+      "end_byte": 25879,
+      "start_line": 1021,
+      "exact_definition_sha256": "4aab92bda16df0e379e8530c6af425dfdf0e2c93ea3cc586b12dc380b7a549af",
+      "exact_definition": "#[inline(always)]\nunsafe fn copy_printf_spec(dst: *mut PrintfSpec, src: *const PrintfSpec) {\n    write_volatile(&mut (*dst).type_, read_volatile(&(*src).type_));\n    write_volatile(&mut (*dst).flags, read_volatile(&(*src).flags));\n    write_volatile(&mut (*dst).field_width, read_volatile(&(*src).field_width));\n    write_volatile(&mut (*dst).base, read_volatile(&(*src).base));\n    write_volatile(&mut (*dst).precision, read_volatile(&(*src).precision));\n    write_volatile(&mut (*dst).qualifier, read_volatile(&(*src).qualifier));\n}\n"
+    },
+    "numparse::pointer_ref_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 25881,
+      "end_byte": 27324,
+      "start_line": 1031,
+      "exact_definition_sha256": "2bdef609f9216821cf11cb5b8ae34948316c04b182284b3a20826aef32b214fc",
+      "exact_definition": "unsafe fn pointer_ref_result(\n    buf: *mut i8,\n    end: *mut i8,\n    ext_fmt: *const i8,\n    ptr: *mut core::ffi::c_void,\n    spec: *const PrintfSpec,\n) -> *mut i8 {\n    static NULL_POINTER: &[u8; 7] = b\"(null)\\0\";\n    let mut local_storage = core::mem::MaybeUninit::<PrintfSpec>::uninit();\n    let local = local_storage.as_mut_ptr();\n\n    if ptr.is_null() {\n        return string_ref_result(buf, end, NULL_POINTER.as_ptr() as *mut i8, spec);\n    }\n\n    copy_printf_spec(local, spec);\n    if read_char(ext_fmt) == b'S' {\n        write_volatile(\n            &mut (*local).field_width,\n            (2 * core::mem::size_of::<*const core::ffi::c_void>()) as CInt,\n        );\n        write_volatile(\n            &mut (*local).flags,\n            read_volatile(&(*local).flags) | SPECIAL | SMALL | ZEROPAD,\n        );\n        write_volatile(&mut (*local).base, 16);\n        return number_ref_result(buf, end, ptr as CULong, local);\n    }\n\n    write_volatile(&mut (*local).flags, read_volatile(&(*local).flags) | SMALL);\n    if read_volatile(&(*local).field_width) == -1 {\n        write_volatile(\n            &mut (*local).field_width,\n            (2 * core::mem::size_of::<*const core::ffi::c_void>()) as CInt,\n        );\n        write_volatile(\n            &mut (*local).flags,\n            read_volatile(&(*local).flags) | ZEROPAD,\n        );\n    }\n    write_volatile(&mut (*local).base, 16);\n    number_ref_result(buf, end, ptr as CULong, local)\n}\n"
+    },
+    "numparse::ptr_before": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 27326,
+      "end_byte": 27429,
+      "start_line": 1075,
+      "exact_definition_sha256": "71f689cfcf4b35f9c1b2a1371ca0fcfb97d5801383ced413f3cd20fe67383b08",
+      "exact_definition": "#[inline(always)]\nfn ptr_before(a: *const i8, b: *const i8) -> bool {\n    (a as usize) < (b as usize)\n}\n"
+    },
+    "numparse::ptr_delta": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 27431,
+      "end_byte": 27551,
+      "start_line": 1080,
+      "exact_definition_sha256": "0cbc6a476940e06a1d8269d9dc887aba0250505474ce1a0be33c011d6c42b728",
+      "exact_definition": "#[inline(always)]\nfn ptr_delta(a: *const i8, b: *const i8) -> CInt {\n    (a as isize).wrapping_sub(b as isize) as CInt\n}\n"
+    },
+    "numparse::is_alnum": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 27553,
+      "end_byte": 27633,
+      "start_line": 1085,
+      "exact_definition_sha256": "b51ee7a553f389478236f36251a4c2c4dba686726c38045750bd53dc16a8accc",
+      "exact_definition": "#[inline(always)]\nfn is_alnum(ch: u8) -> bool {\n    ch.is_ascii_alphanumeric()\n}\n"
+    },
+    "numparse::printf_read_number_from_va": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 30673,
+      "end_byte": 31697,
+      "start_line": 1180,
+      "exact_definition_sha256": "0e167313eb4d4406cb1a67a27e0637debc9c516919133fd3758e5cef86a4a531",
+      "exact_definition": "unsafe fn printf_read_number_from_va(args: &mut VaList<'_>, spec: *const PrintfSpec) -> CULong {\n    let type_ = read_volatile(&(*spec).type_);\n    let flags = read_volatile(&(*spec).flags);\n\n    match type_ {\n        FORMAT_TYPE_LONG_LONG => {\n            if (flags & SIGN) != 0 {\n                args.arg::<i64>() as CULong\n            } else {\n                args.arg::<u64>() as CULong\n            }\n        }\n        FORMAT_TYPE_ULONG => args.arg::<CULong>(),\n        FORMAT_TYPE_LONG => args.arg::<CLong>() as CULong,\n        FORMAT_TYPE_SIZE_T => args.arg::<SizeT>() as CULong,\n        FORMAT_TYPE_PTRDIFF => args.arg::<isize>() as CULong,\n        FORMAT_TYPE_UBYTE => (args.arg::<CInt>() as u8) as CULong,\n        FORMAT_TYPE_BYTE => (args.arg::<CInt>() as i8) as CULong,\n        FORMAT_TYPE_USHORT => (args.arg::<CInt>() as u16) as CULong,\n        FORMAT_TYPE_SHORT => (args.arg::<CInt>() as i16) as CULong,\n        FORMAT_TYPE_INT => args.arg::<CInt>() as CULong,\n        _ => args.arg::<u32>() as CULong,\n    }\n}\n"
+    },
+    "numparse::printf_read_pointer_from_va": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 31699,
+      "end_byte": 32327,
+      "start_line": 1205,
+      "exact_definition_sha256": "c79d2743eb7c32b9cd84a3051cb03da7f83a3544b1e4ec3d5aa4761468c41da4",
+      "exact_definition": "unsafe fn printf_read_pointer_from_va(\n    args: &mut VaList<'_>,\n    type_: CInt,\n    qualifier: CInt,\n) -> *mut c_void {\n    match type_ {\n        FORMAT_TYPE_STR => args.arg::<*mut i8>().cast::<c_void>(),\n        FORMAT_TYPE_NRCHARS => {\n            if qualifier == b'l' as CInt {\n                args.arg::<*mut CLong>().cast::<c_void>()\n            } else if qualifier == b'Z' as CInt || qualifier == b'z' as CInt {\n                args.arg::<*mut SizeT>().cast::<c_void>()\n            } else {\n                args.arg::<*mut CInt>().cast::<c_void>()\n            }\n        }\n        _ => args.arg::<*mut c_void>(),\n    }\n}\n"
+    },
+    "numparse::vsnprintf_va_list_result": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 32329,
+      "end_byte": 35292,
+      "start_line": 1225,
+      "exact_definition_sha256": "f254b64f63dceeb0504aa2a9729dd4a66b56850116c33ec0cc1c927c378532f5",
+      "exact_definition": "pub(crate) unsafe fn vsnprintf_va_list_result(\n    buf: *mut i8,\n    size: SizeT,\n    mut fmt: *const i8,\n    args: &mut VaList<'_>,\n) -> CInt {\n    let mut str_ = buf;\n    let mut end = buf.wrapping_add(size);\n    let mut effective_size = size;\n    let mut spec_storage = core::mem::MaybeUninit::<PrintfSpec>::uninit();\n    let spec = spec_storage.as_mut_ptr();\n\n    if (size as CInt) < 0 {\n        return 0;\n    }\n\n    init_printf_spec(spec);\n\n    if ptr_before(end, buf) {\n        end = usize::MAX as *mut i8;\n        effective_size = (end as usize).wrapping_sub(buf as usize);\n    }\n\n    while read_char(fmt) != 0 {\n        let old_fmt = fmt;\n        let read = format_decode_result(fmt, spec);\n\n        fmt = fmt.wrapping_add(read as usize);\n\n        match read_volatile(&(*spec).type_) {\n            FORMAT_TYPE_NONE => {\n                str_ = printf_copy_literal_result(str_, end, old_fmt, read);\n            }\n            FORMAT_TYPE_WIDTH => {\n                write_volatile(&mut (*spec).field_width, args.arg::<CInt>());\n            }\n            FORMAT_TYPE_PRECISION => {\n                write_volatile(&mut (*spec).precision, args.arg::<CInt>());\n            }\n            FORMAT_TYPE_CHAR => {\n                str_ = printf_char_ref_result(str_, end, args.arg::<CInt>() & 0xff, spec);\n            }\n            FORMAT_TYPE_STR => {\n                let s = printf_read_pointer_from_va(\n                    args,\n                    read_volatile(&(*spec).type_),\n                    read_volatile(&(*spec).qualifier),\n                ) as *mut i8;\n                str_ = string_ref_result(str_, end, s, spec);\n            }\n            FORMAT_TYPE_PTR => {\n                let ptr = printf_read_pointer_from_va(\n                    args,\n                    read_volatile(&(*spec).type_),\n                    read_volatile(&(*spec).qualifier),\n                );\n                str_ = pointer_ref_result(str_, end, fmt.wrapping_add(1), ptr, spec);\n                while is_alnum(read_char(fmt)) {\n                    fmt = fmt.wrapping_add(1);\n                }\n            }\n            FORMAT_TYPE_PERCENT_CHAR => {\n                str_ = printf_emit_char_result(str_, end, b'%' as CInt);\n            }\n            FORMAT_TYPE_INVALID => {\n                str_ = printf_emit_char_result(str_, end, b'%' as CInt);\n            }\n            FORMAT_TYPE_NRCHARS => {\n                let out = printf_read_pointer_from_va(\n                    args,\n                    read_volatile(&(*spec).type_),\n                    read_volatile(&(*spec).qualifier),\n                );\n                printf_write_nchars_result(buf, str_, out, read_volatile(&(*spec).qualifier));\n            }\n            _ => {\n                let num = printf_read_number_from_va(args, spec);\n                str_ = number_ref_result(str_, end, num, spec);\n            }\n        }\n    }\n\n    printf_terminate_result(buf, effective_size, end, str_);\n    ptr_delta(str_, buf)\n}\n"
+    },
+    "numparse::snprintf": {
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "start_byte": 35911,
+      "end_byte": 36101,
+      "start_line": 1341,
+      "exact_definition_sha256": "d1787dc599db4fd9eebf97d0f0b609947af07de710ce44e6900bb018d1515919",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn snprintf(\n    buf: *mut i8,\n    size: SizeT,\n    fmt: *const i8,\n    mut args: ...\n) -> CInt {\n    vsnprintf_va_list_result(buf, size, fmt, &mut args)\n}\n"
+    },
+    "debug::kmsg": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 2572,
+      "end_byte": 2668,
+      "start_line": 92,
+      "exact_definition_sha256": "f8193dc811714803007468081568e3fbe6cb4e120dab691f82c366dcc9241c1a",
+      "exact_definition": "#[inline(always)]\nunsafe fn kmsg() -> *mut IhkKmsgBuf {\n    read_volatile(&raw const kmsg_buf)\n}\n"
+    },
+    "debug::kmsg_used": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 2670,
+      "end_byte": 3021,
+      "start_line": 97,
+      "exact_definition_sha256": "8c93feec122debeee2c147634c83883eedf2a0346fce2daa3644a1e40a7667e2",
+      "exact_definition": "#[inline(always)]\nunsafe fn kmsg_used(buf: *const IhkKmsgBuf) -> CInt {\n    let tail = (*buf).tail as u32;\n    let head = (*buf).head as u32;\n    let len = (*buf).len as u32;\n\n    if len == 0 {\n        0\n    } else if tail >= head {\n        tail.wrapping_sub(head) as CInt\n    } else {\n        tail.wrapping_add(len).wrapping_sub(head) as CInt\n    }\n}\n"
+    },
+    "debug::kmsg_margin": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 3023,
+      "end_byte": 3424,
+      "start_line": 112,
+      "exact_definition_sha256": "e797ec7b6a584791f901883d25f8895c4741a7e8f78d3dbbe82ee14b70358495",
+      "exact_definition": "#[inline(always)]\nunsafe fn kmsg_margin(buf: *const IhkKmsgBuf) -> CInt {\n    let tail = (*buf).tail as u32;\n    let head = (*buf).head as u32;\n    let len = (*buf).len as u32;\n\n    if len == 0 {\n        0\n    } else if head == tail {\n        len as CInt\n    } else if head > tail {\n        head.wrapping_sub(tail) as CInt\n    } else {\n        head.wrapping_add(len).wrapping_sub(tail) as CInt\n    }\n}\n"
+    },
+    "debug::debug_spin_lock_irqsave": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 3426,
+      "end_byte": 3838,
+      "start_line": 129,
+      "exact_definition_sha256": "6ca72172fc2aef21615c3449ff234d55fa4afb348f3adecd1c4210cc22e9bcc0",
+      "exact_definition": "#[inline(always)]\nunsafe fn debug_spin_lock_irqsave(lock: *mut CInt) -> CULong {\n    let flags = cpu_disable_interrupt_save();\n    while core::sync::atomic::AtomicI32::from_ptr(lock)\n        .compare_exchange(\n            0,\n            1,\n            core::sync::atomic::Ordering::SeqCst,\n            core::sync::atomic::Ordering::SeqCst,\n        )\n        .is_err()\n    {\n        cpu_pause();\n    }\n    flags\n}\n"
+    },
+    "debug::debug_spin_unlock_irqrestore": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 3840,
+      "end_byte": 3995,
+      "start_line": 146,
+      "exact_definition_sha256": "9f865a77ec53ee80c40dd9a92977ef55d786deb28edf21308c01f934b53a763a",
+      "exact_definition": "#[inline(always)]\nunsafe fn debug_spin_unlock_irqrestore(lock: *mut CInt, flags: CULong) {\n    write_volatile(lock, 0);\n    cpu_restore_interrupt(flags);\n}\n"
+    },
+    "debug::memcpy_ringbuf": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 3997,
+      "end_byte": 4385,
+      "start_line": 152,
+      "exact_definition_sha256": "f07f1fa4904fffce29aaeffb7f5e45f733e5271672f1ac6a618001c2e826ef97",
+      "exact_definition": "unsafe fn memcpy_ringbuf(src: *const i8, len: CInt) {\n    let buf = kmsg();\n    if buf.is_null() || (*buf).len <= 0 {\n        return;\n    }\n\n    let mut i = 0;\n    while i < len {\n        *(*buf).str_.as_mut_ptr().add((*buf).tail as usize) = *src.add(i as usize);\n        let next = (*buf).tail + 1;\n        (*buf).tail = if next >= (*buf).len { 0 } else { next };\n        i += 1;\n    }\n}\n"
+    },
+    "debug::notify_kmsg_if_needed": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 4387,
+      "end_byte": 4627,
+      "start_line": 167,
+      "exact_definition_sha256": "dc4304307e50c44b322c64baf726c83dadedb48a1d63bfbe33be58487087b2e6",
+      "exact_definition": "unsafe fn notify_kmsg_if_needed(buf: *const IhkKmsgBuf) {\n    if cpu_interrupt_disabled() == 0 && kmsg_used(buf) > IHK_KMSG_HIGH_WATER_MARK {\n        eventfd(IHK_OS_EVENTFD_TYPE_KMSG);\n        ihk_mc_delay_us(IHK_KMSG_NOTIFY_DELAY);\n    }\n}\n"
+    },
+    "debug::vkprintf_locked": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 5546,
+      "end_byte": 6675,
+      "start_line": 207,
+      "exact_definition_sha256": "857c0751f0d57b7a25ea914310fa723c63ed08dbef38403758c413307044d563",
+      "exact_definition": "unsafe fn vkprintf_locked(format: *const i8, args: &mut VaList<'_>, take_outer_lock: bool) -> CInt {\n    let msg = kmsg();\n    if msg.is_null() {\n        return -EINVAL;\n    }\n\n    let mut local = [0i8; KPRINTF_LOCAL_BUF_LEN];\n    let mut len = crate::numparse::snprintf(\n        local.as_mut_ptr(),\n        KPRINTF_LOCAL_BUF_LEN,\n        c\"[%3d]: \".as_ptr().cast(),\n        ihk_mc_get_processor_id(),\n    );\n    len += crate::numparse::vsnprintf_va_list_result(\n        local.as_mut_ptr().add(len as usize),\n        KPRINTF_LOCAL_BUF_LEN - len as SizeT - 2,\n        format,\n        args,\n    );\n\n    let flags_outer = if take_outer_lock { kprintf_lock() } else { 0 };\n    let flags_inner = debug_spin_lock_irqsave(&raw mut (*msg).lock);\n    let overflow = kmsg_margin(msg) <= len;\n\n    memcpy_ringbuf(local.as_ptr(), len);\n    if overflow {\n        let next = (*msg).tail + 1;\n        (*msg).head = if next >= (*msg).len { 0 } else { next };\n    }\n\n    debug_spin_unlock_irqrestore(&raw mut (*msg).lock, flags_inner);\n    if take_outer_lock {\n        kprintf_unlock(flags_outer);\n    }\n    notify_kmsg_if_needed(msg);\n\n    len\n}\n"
+    },
+    "debug::kprintf": {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "start_byte": 6818,
+      "end_byte": 6954,
+      "start_line": 251,
+      "exact_definition_sha256": "f3e4f05c9e5c4507b3d90e1fe4872fb461b8196b08ed12adc1ad45dd46bedcf6",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn kprintf(format: *const i8, mut args: ...) -> CInt {\n    vkprintf_locked(format, &mut args, true)\n}\n"
+    }
+  },
+  "actual_types": {
+    "PrintfSpec": "#[repr(C)]\n#[derive(Clone, Copy)]\npub struct PrintfSpec {\n    pub type_: CInt,\n    pub flags: CInt,\n    pub field_width: CInt,\n    pub base: CInt,\n    pub precision: CInt,\n    pub qualifier: CInt,\n}\n",
+    "IhkKmsgBuf": "#[repr(C)]\npub struct IhkKmsgBuf {\n    pub lock: CInt,\n    pub tail: CInt,\n    pub len: CInt,\n    pub head: CInt,\n    pub padding: [i8; 4096 - core::mem::size_of::<CInt>() * 4],\n    pub str_: [i8; IHK_KMSG_SIZE as usize],\n}\n",
+    "scalars": "Direct actual unchanged kernel/rust/abi.rs include; CInt/CLong/CULong/SizeT used with existing types"
+  },
+  "actual_selected_constants": {
+    "numparse": [
+      "const PAGE_SIZE: usize = 4096;",
+      "const ZEROPAD: CInt = 1;",
+      "const SIGN: CInt = 2;",
+      "const PLUS: CInt = 4;",
+      "const SPACE: CInt = 8;",
+      "const LEFT: CInt = 16;",
+      "const SMALL: CInt = 32;",
+      "const SPECIAL: CInt = 64;",
+      "const FORMAT_TYPE_NONE: CInt = 0;",
+      "const FORMAT_TYPE_WIDTH: CInt = 1;",
+      "const FORMAT_TYPE_PRECISION: CInt = 2;",
+      "const FORMAT_TYPE_CHAR: CInt = 3;",
+      "const FORMAT_TYPE_STR: CInt = 4;",
+      "const FORMAT_TYPE_PTR: CInt = 5;",
+      "const FORMAT_TYPE_PERCENT_CHAR: CInt = 6;",
+      "const FORMAT_TYPE_INVALID: CInt = 7;",
+      "const FORMAT_TYPE_LONG_LONG: CInt = 8;",
+      "const FORMAT_TYPE_ULONG: CInt = 9;",
+      "const FORMAT_TYPE_LONG: CInt = 10;",
+      "const FORMAT_TYPE_UBYTE: CInt = 11;",
+      "const FORMAT_TYPE_BYTE: CInt = 12;",
+      "const FORMAT_TYPE_USHORT: CInt = 13;",
+      "const FORMAT_TYPE_SHORT: CInt = 14;",
+      "const FORMAT_TYPE_UINT: CInt = 15;",
+      "const FORMAT_TYPE_INT: CInt = 16;",
+      "const FORMAT_TYPE_NRCHARS: CInt = 17;",
+      "const FORMAT_TYPE_SIZE_T: CInt = 18;",
+      "const FORMAT_TYPE_PTRDIFF: CInt = 19;",
+      "const FORMAT_TYPE_FLOAT: CInt = 20;"
+    ],
+    "debug": [
+      "const EINVAL: CInt = 22;",
+      "const IHK_OS_EVENTFD_TYPE_KMSG: CInt = 101;",
+      "const IHK_KMSG_SIZE: CInt = (4 << 20) - 4096;",
+      "const IHK_KMSG_HIGH_WATER_MARK: CInt = IHK_KMSG_SIZE / 2;",
+      "const IHK_KMSG_NOTIFY_DELAY: CInt = 400;",
+      "const KPRINTF_LOCAL_BUF_LEN: SizeT = 1024;"
+    ]
+  },
+  "actual_required_feature": "#![feature(c_variadic)]",
+  "private_varargs_ABI": "Exact current core::ffi::VaList private helpers, pub(crate) vsnprintf_va_list_result Rust ABI kept within numparse module. No extern shim/mangled private declaration, handwritten C va_list layout, libc formatter or domain specialization.",
+  "genuine_remaining_C_ABI_declarations": [
+    "    fn kprintf_lock() -> CULong;",
+    "    fn kprintf_unlock(irqflags: CULong);",
+    "    fn cpu_disable_interrupt_save() -> CULong;",
+    "    fn cpu_restore_interrupt(flags: CULong);",
+    "    fn cpu_pause();",
+    "    fn cpu_interrupt_disabled() -> CInt;",
+    "    fn ihk_mc_delay_us(us: CInt);",
+    "    fn ihk_mc_get_processor_id() -> CInt;",
+    "    fn eventfd(type_: CInt);",
+    "pub fn strnlen(ptr: *const i8, maxlen: SizeT) -> SizeT;"
+  ],
+  "genuine_storage_declaration": "static mut kmsg_buf: *mut IhkKmsgBuf;",
+  "direct_source_required_unresolved_names": [
+    "kmsg_buf",
+    "kprintf_lock",
+    "kprintf_unlock",
+    "cpu_disable_interrupt_save",
+    "cpu_restore_interrupt",
+    "cpu_pause",
+    "cpu_interrupt_disabled",
+    "ihk_mc_delay_us",
+    "ihk_mc_get_processor_id",
+    "eventfd",
+    "strnlen"
+  ],
+  "compiler_support_import_policy": "Any actual compiler/core support imports must be separately reported/reconciled after reviewed codegen; no panic/memcpy/memset/provider stub or libc link is supplied. No artifact or expected private Rust symbol count is guessed.",
+  "no_owned_state_definitions": "No private KMSG_LOCK, kmsg_buf initializer, Ddebug/descriptors, sysfs/state/callback implementation. Real public lock/IRQ/eventfd/boot buffer/string ownership remains external and unexecuted.",
+  "kernel_eventfd_ABI": "fn eventfd(type_: CInt) -> (); genuine kernel notification endpoint, not HOST libc eventfd ABI.",
+  "excluded_source": [
+    "public vsnprintf / __kprintf / kputs / kmsg_init",
+    "scanning/ctype/conversion wrappers and whole numparse/debug/string modules",
+    "private lock storage/public lock implementations",
+    "dynamicdebug/sysfs/boot state and new callbacks",
+    "accepted F04 source or runtime/green checks"
+  ],
+  "predecessor_object_and_join": "UNSET pending actual qualified storage successor artifact/source-owner receipt. No stale/guessed object identity or join operation.",
+  "compiler_link_runtime_or_canonical_index_writes": false
+}

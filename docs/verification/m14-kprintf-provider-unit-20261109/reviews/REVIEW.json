@@ -1,0 +1,317 @@
+{
+  "status": "GO_EXACT_THREE_ISOLATED_CODEGEN_AND_METADATA_COMMANDS_ONLY",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "review_model_effort": "saved actual Sol/HIGH; no recursive agents",
+  "created_utc": "2026-11-09T17:25:49.079802+00:00",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/REQUEST.json",
+    "sha256": "5102f7fe764e2cae7a47e03a4c84ac4b58da9a356d245972a732c6406222a923"
+  },
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/kprintf_provider_unit.rs",
+    "sha256": "7214ade539e74fc3b6f87ac5c9923d8dff88584fa7e43cc8d3340ade9c57e1b6"
+  },
+  "source_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/SOURCE-PROOF.json",
+    "sha256": "7876582758513dc37d1ec6136a768c7368f1be7ee1808eda7e000dda690d4665"
+  },
+  "contract_provenance": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-contract-1/CONTRACT.json",
+    "sha256": "b7da89fb9acf39afd4c25df70e6c86da7f57b72f8ea873f22057af9a5a102e82",
+    "scope_clarification": "Root explicitly selected literal35=9Debug+26Numparse. Earlier26-total arithmetic is superseded, not a workload retry. No publicvsnprintf/36throot."
+  },
+  "reviewed_definition_count": 35,
+  "independently_checked_definitions": [
+    {
+      "definition": "numparse::read_char",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 212,
+      "sha256": "49e8085317ce7c2da16fe6bf7302fd804e4e310f5410baa798dcdb065d50040b"
+    },
+    {
+      "definition": "numparse::is_digit",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 222,
+      "sha256": "a38a6552968f68090cb2e2b00b65804f22b47645ff5ff836e4104caf20cf6d46"
+    },
+    {
+      "definition": "numparse::skip_atoi_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 384,
+      "sha256": "d215e37b3f1db06f6981fcd8d5667c5839cf953a40b72f8906903af5b16f282f"
+    },
+    {
+      "definition": "numparse::put_digit",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 400,
+      "sha256": "3f21e2e3d14d34e76dd1296b06460a7ef9612bd633bdff43642fa3e2ba680fcf"
+    },
+    {
+      "definition": "numparse::put_dec_trunc_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 406,
+      "sha256": "05d889330be5450da1aec98487b8be7226f257d69a35a1d028dffd8ed6e54f66"
+    },
+    {
+      "definition": "numparse::put_dec_full_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 444,
+      "sha256": "47add34302c518de45407ab2c9fa5aaa9f9bfda303318025e06df1b378d4e7cc"
+    },
+    {
+      "definition": "numparse::put_dec_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 472,
+      "sha256": "8bd334ff9208ebed79c8b13995e814472c297f7b471d1dee0074481b90891c40"
+    },
+    {
+      "definition": "numparse::write_char_if_room",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 485,
+      "sha256": "987215aee85af579fde5e799e1f30e41921ba4d55d60843cf3d7436949a01382"
+    },
+    {
+      "definition": "numparse::number_ref_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 492,
+      "sha256": "21ea118537680865f53b84fa9a0d41063c032343ae0738faf34c9467c78bd9c0"
+    },
+    {
+      "definition": "numparse::format_decode_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 637,
+      "sha256": "0622537767023f72d45b23aaed904af5e3efc21596ab0cc1c19186e451d54b14"
+    },
+    {
+      "definition": "numparse::string_ref_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 833,
+      "sha256": "dc6aa11e0275bc0db005c86174a8cd2d2d731d053ccd77937b3c31f32136fd5b"
+    },
+    {
+      "definition": "numparse::printf_copy_literal_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 898,
+      "sha256": "79551edc83562be73ce41bd3bbcd675e119013727b2651a67a31b924fb04fc6e"
+    },
+    {
+      "definition": "numparse::printf_char_ref_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 917,
+      "sha256": "e3d8c52e0ce8e977b34e4b75c98563a9ab5b4913b7eb50fc208ae0d036407c70"
+    },
+    {
+      "definition": "numparse::printf_emit_char_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 962,
+      "sha256": "cd324d16efa5686e57ccf60dbaf38914bc4b995821b7e9b5685efb23392ff725"
+    },
+    {
+      "definition": "numparse::printf_write_nchars_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 968,
+      "sha256": "4fc5dfe290d6820848443a1fa12fd85907e56514a96044e4a242db99ddadac78"
+    },
+    {
+      "definition": "numparse::printf_terminate_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 986,
+      "sha256": "06edb31a7164dadba4a5f461d222343b3730a10a435f0b079ff44e6620f2f158"
+    },
+    {
+      "definition": "numparse::init_printf_spec",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1011,
+      "sha256": "754fb1ae931c81a9a16a6206adb2e6140a6b69a9e90645188998d056ca5a2c54"
+    },
+    {
+      "definition": "numparse::copy_printf_spec",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1021,
+      "sha256": "4aab92bda16df0e379e8530c6af425dfdf0e2c93ea3cc586b12dc380b7a549af"
+    },
+    {
+      "definition": "numparse::pointer_ref_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1031,
+      "sha256": "2bdef609f9216821cf11cb5b8ae34948316c04b182284b3a20826aef32b214fc"
+    },
+    {
+      "definition": "numparse::ptr_before",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1075,
+      "sha256": "71f689cfcf4b35f9c1b2a1371ca0fcfb97d5801383ced413f3cd20fe67383b08"
+    },
+    {
+      "definition": "numparse::ptr_delta",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1080,
+      "sha256": "0cbc6a476940e06a1d8269d9dc887aba0250505474ce1a0be33c011d6c42b728"
+    },
+    {
+      "definition": "numparse::is_alnum",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1085,
+      "sha256": "b51ee7a553f389478236f36251a4c2c4dba686726c38045750bd53dc16a8accc"
+    },
+    {
+      "definition": "numparse::printf_read_number_from_va",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1180,
+      "sha256": "0e167313eb4d4406cb1a67a27e0637debc9c516919133fd3758e5cef86a4a531"
+    },
+    {
+      "definition": "numparse::printf_read_pointer_from_va",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1205,
+      "sha256": "c79d2743eb7c32b9cd84a3051cb03da7f83a3544b1e4ec3d5aa4761468c41da4"
+    },
+    {
+      "definition": "numparse::vsnprintf_va_list_result",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1225,
+      "sha256": "f254b64f63dceeb0504aa2a9729dd4a66b56850116c33ec0cc1c927c378532f5"
+    },
+    {
+      "definition": "numparse::snprintf",
+      "source": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "line": 1341,
+      "sha256": "d1787dc599db4fd9eebf97d0f0b609947af07de710ce44e6900bb018d1515919"
+    },
+    {
+      "definition": "debug::kmsg",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 92,
+      "sha256": "f8193dc811714803007468081568e3fbe6cb4e120dab691f82c366dcc9241c1a"
+    },
+    {
+      "definition": "debug::kmsg_used",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 97,
+      "sha256": "8c93feec122debeee2c147634c83883eedf2a0346fce2daa3644a1e40a7667e2"
+    },
+    {
+      "definition": "debug::kmsg_margin",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 112,
+      "sha256": "e797ec7b6a584791f901883d25f8895c4741a7e8f78d3dbbe82ee14b70358495"
+    },
+    {
+      "definition": "debug::debug_spin_lock_irqsave",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 129,
+      "sha256": "6ca72172fc2aef21615c3449ff234d55fa4afb348f3adecd1c4210cc22e9bcc0"
+    },
+    {
+      "definition": "debug::debug_spin_unlock_irqrestore",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 146,
+      "sha256": "9f865a77ec53ee80c40dd9a92977ef55d786deb28edf21308c01f934b53a763a"
+    },
+    {
+      "definition": "debug::memcpy_ringbuf",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 152,
+      "sha256": "f07f1fa4904fffce29aaeffb7f5e45f733e5271672f1ac6a618001c2e826ef97"
+    },
+    {
+      "definition": "debug::notify_kmsg_if_needed",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 167,
+      "sha256": "dc4304307e50c44b322c64baf726c83dadedb48a1d63bfbe33be58487087b2e6"
+    },
+    {
+      "definition": "debug::vkprintf_locked",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 207,
+      "sha256": "857c0751f0d57b7a25ea914310fa723c63ed08dbef38403758c413307044d563"
+    },
+    {
+      "definition": "debug::kprintf",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "line": 251,
+      "sha256": "f3e4f05c9e5c4507b3d90e1fe4872fb461b8196b08ed12adc1ad45dd46bedcf6"
+    }
+  ],
+  "exact_source_checks": {
+    "status": "PASS",
+    "all_request_input_hashes_match": true,
+    "35_body_attribute_visibility_matches": true,
+    "definition_span_convention": "SOURCE-PROOF end_byte stops immediately after closing brace; exact_definition includes the actual following source newline. All35 spans plus that genuine newline match source and occur exactly once in unit.",
+    "29_numparse_and_6_debug_constants_match_current_source": true,
+    "PrintfSpec_and_IhkKmsgBuf_match_current_source": true,
+    "11_original_NoMangle_exports_retained": [
+      "skip_atoi_result",
+      "put_dec_trunc_result",
+      "put_dec_full_result",
+      "put_dec_result",
+      "format_decode_result",
+      "printf_copy_literal_result",
+      "printf_emit_char_result",
+      "printf_write_nchars_result",
+      "printf_terminate_result",
+      "snprintf",
+      "kprintf"
+    ],
+    "remaining_unit_glue_inspected": "Only no_std/c_variadic, direct actualabi include, core imports, finite modules, genuine extern declarations and the two original IhkKmsgBuf size/str-offset assertions. No additional function implementation, state initializer, privateKMSG_LOCK, Ddebug or descriptors."
+  },
+  "ABI_contract": {
+    "scalars": "Direct current abi.rs: CInt=i32,CLong=i64,CULong=u64,SizeT=usize on selectedx86_64.",
+    "PrintfSpec": "Original repr(C), Clone/Copy, six CInt fields in unchanged order:24bytes/align4 on selectedABI; no by-value substitute.",
+    "IhkKmsgBuf": "Original repr(C),4CInt header,padding to4096,string remainder to4MiB. Original Rust size4MiB and str_offset4096 assertions retained; C ihk_debug.h shape matches.",
+    "public_entry": "Actual kprintf(const char*,...)->CInt matches kernel/include/kmsg.h; actual snprintf(char*,SizeT,const char*,...)->CInt retained. Other9 C exports retain exact existing source signatures and attrs, including unsigned32/unsigned64 and pointer fields.",
+    "private_varargs": "Actual core::ffi::VaList used by local private/pub(crate) Rust helpers. c_variadic copied from actual lib.rs. No external private/mangled ABI, guessed C va_list or callbacks.",
+    "kernel_eventfd": "Exact actual fn eventfd(type_:CInt)->void; no libc eventfd(uint,int) ABI.",
+    "genuine_imports": [
+      "kmsg_buf",
+      "kprintf_lock",
+      "kprintf_unlock",
+      "cpu_disable_interrupt_save",
+      "cpu_restore_interrupt",
+      "cpu_pause",
+      "cpu_interrupt_disabled",
+      "ihk_mc_delay_us",
+      "ihk_mc_get_processor_id",
+      "eventfd",
+      "strnlen"
+    ],
+    "ownership": "kmsg_buf pointer storage, public lock functions and their privateKMSG_LOCK, IRQ/delay/eventfd endpoints, and strnlen remain external real owners. Existing nativeCPU provider may resolve only in a separately admitted futurejoin."
+  },
+  "closure_selection": {
+    "status": "PASS_SOURCE_CODEGEN_ELIGIBILITY",
+    "selection": "Current default Rust kernel selection lib.rs owns debug+numparse; CMake removes selected C debug.c/libvsprintf.c. This finite provider is35 exact callable definitions, not a wholemodule or heldcrate import.",
+    "calls": "All current project helper edges stay within the literal35 plus declared real boundaries. core atomic/volatile/MaybeUninit/VaList primitives remain actual core semantics. No fake callback, printf substitute or provider implementation.",
+    "extra_C_ABI_source_binding": {
+      "path": "/home/holden/mckernel/lib/vsprintf.c",
+      "sha256": "a32a578296d1f71e607a6d05016ebb3389151c988daf5fe037e99ec27e11fa35",
+      "sites": "429;443-445;810;1018-1026;1431"
+    }
+  },
+  "predecessor_unique_owners": {
+    "binding_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kprintf-provider-unit-1/PREDECESSOR-BINDING.json",
+    "binding_sha256": "bef4b0db7803485ff987d113caa0b0c4a7055fdddaa7056578dbf0867964eb46",
+    "object_path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-1/output/storage_lower_partial.o",
+    "object_sha256": "1faf0e7f6157983d86cf767f6fb4743dd65da148e63bf1dc2dc125e253285845",
+    "actual_strong_owner_count": 31,
+    "11_export_intersection": [],
+    "scope": "Independently matched actual qualified retained nm names/types/sizes and receipt/object identity only. No B/E storage source/predicate re-review and no emission count assumed for this newunit."
+  },
+  "profile": {
+    "status": "PASS_FOR_ISOLATED_HOST_CODEGEN_ONLY",
+    "compiler_payload": "Pinned compiler and exact retainedfc5 flags through -o; only output/sourcepaths differ. No cfg/suppression/SDK/target substitution.",
+    "wrapper": "CPU6,serial1,AS1GiB/CPU45/60+5wall/64MiBFSIZE/core0/time-v; emptyenv overrides. Shared aggregate/Rootfreshcapacity controls remain mandatory.",
+    "diagnostics": "Exact prior singleSSE2ABIwarning required; any other diagnostic stops without retry. Inherited profile does not qualify final/native ABI."
+  },
+  "metadata_and_stop_conditions": [
+    "Record all actual nm/readelf symbols, sections, sizes and relocations, including local/global/hidden/private-mangled functions and compiler literal data; do not guess a private-symbol count.",
+    "All11 originalNoMangleCexports must be present with actual sourceownership. Any new state owner, unexpected symbol/import/diagnostic or failed command stops for focused reconciliation; no autonomous correction.",
+    "Any core/compiler support import such as memset/panic and every emitted private/global/data symbol requires concrete source/provider reconciliation before any futurelink; never fabricate stubs or silently drop symbols.",
+    "Request authorizes/proposes no ld-r, runtime, test, IRQ/MSR/GS/function/init/device/native execution. Root must independently admit these exact3commands after freshcapacity checks.",
+    "Futurelink requires a new exact request/review using actual newobject/metadata and current31-owner predecessor; no wholecrate/oldcohort/duplicateprovider/symbolrewrite."
+  ],
+  "execution_admission": false,
+  "reviewer_compiler_link_runtime_or_native_execution": false,
+  "canonical_or_index_writes": false,
+  "new_gate_acceptance_score_C_retirement_or_native_credit": false,
+  "decision": "GO source/ABI/profile/ownership for exact REQUEST5102f7fe isolated compile+nm+readelf. No present link or runtime permission; actual emitted metadata remains a new prerequisite."
+}

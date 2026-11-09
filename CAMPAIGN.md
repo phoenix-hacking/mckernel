@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T17:38Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T18:00Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -8,15 +8,16 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 **ACTIVE under explicit same-Root manual resume `20261109T155325Z-46b56314`.**
 Nov9manualauthorization revokes the Nov7pause only. RootSol/MAX and actual saved
 Sol/HIGH source/fixture/reviewer turns, never/danger-full-access, UID1000, current
-worker519639/server519641 births32587351/32587358 and included25%used/75%remaining
+worker519639/server519641 births32587351/32587358 and initial included25%used/75%remaining
 are verified in `resume-20261109T155325Z-46b56314/CURRENT-PHASE.json`. Root is sole
 canonical source/index/publisher. No objective, allowance or historical owner reset.
 
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
 IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed.
-Root`9c433df68c46bac6fcf6109cfedf7593c738468d` is pushed/fetched/all36lower-provider
-entries matched. Earlier126442f85/all34prerequisites and unknownCLI6f4c7f244/all9entries/source replay remainverified.
+Root`e79042ee4c704342ebb934dede845a1a7ef37ba8` is pushed/fetched/all62storage/target
+entries matched. Earlier9c433df68/all36lower-provider,126442f85/all34prerequisites
+and unknownCLI6f4c7f244/all9entries/source replay remainverified.
 Eight actualmainFUNCTION cases PASS=4baseline+4candidate: raw0→1, exact292/499byte
 stderr/empty stdout, zeroioctl,8realanonymousFDs once-close/EBADF and restored
 argv/FDset. All8actualobject predicates were CALLED before anylink/runtime;
@@ -30,7 +31,7 @@ PIDbirths persisted before waits. Nov9source/artifact matching reused them witho
 rebuild: ihkconfig`26be5914…`, ihkosctl`57f3f051…`, genuine libihk`53079f63…`.
 **Per-gate checklist delta:** M15-F06 36.36→63.64%; M15-F07 50.00→71.43%, each
 completing its alreadydeclared source/behavior/changedtool leaves. M15 46.91→50.97%;
-M14 stays51.48%. Counted156checks/393CSVrows/formulas are unchanged. Original
+M14 stays51.48%. Counted156checks and scoring formulas are unchanged; supporting rows are uncounted. Original
 acceptance remains M14 4/6files+0/3integration, M15 1/8files+0/4integration; deployed/
 native/backend conditions are still open. These percentages are evidence checklist
 completion, not engineering hours, convertedLOC or native acceptance.
@@ -80,30 +81,43 @@ Proof:`docs/verification/m14-provider-storage-unit-20261109/`; result
 `m14-provider-storage-partial-results-20261109.json`. Actualdata initializers are
 prebootstate, not initializedkernel/GS/geometry evidence.
 
-**Kprintf source/codegen capture PASS:** finite35exactdefinitions (26actualformatter
-functions+kprintf/8debughelpers),11originalCexports, actualVaList/c_variadiccontext.
-Object`550bf6d7…`(19064B),3commands once/allbirths/waits joined/CPU6released. No linker
-or functionexecution. Actual2localhelpers/literals/relocations and12U are independently
-source-reconciled; addedcompilerUmemset hasactualkernelstringABI, staysunresolved.
-No HOSTlibc formatter/notification/state/lock substitution or wholemoduleimport.
+**Kprintf source and unique join PASS:** finite35 exact definitions (26 formatter
+functions, kprintf and8 private debug helpers) preserve actual VaList and feature
+context. Object550bf6d7 compiled once; its11 C exports and2 emitted local helpers,
+literals/tables/relocations were independently reconciled. Exactly550bf+1faf joined
+as ca06d0e4 (31984B):42 strong owners=33T+9data,23 genuine imports. Called prejoin
+passed before ld-r and postjoin passed after reads; all6 codegen/join commands and
+waits closed. Prior31 owners and new source bytes/relocations remain exact. Genuine
+memset lowering was retained as an unresolved kernel ABI, without HOST libc.
+Proof: `docs/verification/m14-kprintf-provider-unit-20261109/` and its scoped result.
+No logging, IRQ, boot, hardware or native function executed.
+
+**Genuine kernel string object PASS:** exact current memset/strnlen plus private
+read_char compiled once as96585067 (1368B):2T,0U, no data or generated helper/self/
+cross calls. Actual function sizes113/57B and disassembly qualify; all4 commands/
+waits joined and CPU7 released. Proof: `docs/verification/m14-kernel-string-provider-unit-20261109/`.
+The separate exact join and ordinary valid-domain C ABI witness require their own
+concrete review and fresh admission; no runtime or final ABI acceptance is inferred.
 
 | Next ready original dependency | Consumer / scope | Owner / smallest proof |
 | --- | --- | --- |
-| Unique currentkprintf join | Current1fafcohort +550bfactualobject / sharedM14providers | A exactjoin-onlypacket/Factualmetadata-ownerreview, Rootfresh3commandadmission; no codegen replay |
-| Genuine kernelstring primitives | Actualstrnlen/memset source/ABI fornewformatter | B2realroots/read_char/source/predicateproposal, Eindependentreview; no fakeHOSTlibc/no inventedno_builtins, safevaliddomain only |
-| Coherent storageproof/target checkpoint | Completed31strong source/data/trace +frozen50%target | Root publishscoped evidence/ledger without scoreinflation; genuineboot/kprintf/IRQ/offload/default/nativeconditions remainopen |
+| Genuine string-to-current-kprintf join | Shared M14 credential/provider cohort | B exact965+ca06 join-only packet, E review, Root admission; called owner predicate before ld-r, preserve current42 owners |
+| Valid-domain primitive C ABI witness | Actual kernel memset/strnlen providers | B actual C caller/object binding, E concrete review, Root admission; readable strings and owned buffers only |
+| Finite lock/buffer/IRQ source cut | Current logging provider imports | A prepares reviewed15-function/2-data cut; F reviews exact bytes/one KMSG_LOCK; no privileged function execution |
 
-Next kprintfjoin will preserveall31oldowners; actual12newimports/existingproviders
-are reconciled beforeanylink, no guessedcount.PrivateVaList never crosses invented
-ABI. Genuinekmsg_buf/publiclocks/IRQ/kernel-eventfd/string ownership remainexplicit;
-oneKMSG_LOCK owner is required in its actualfutureunit.ReferenceCwork staysdeferred.
+The finite lock/init contract binds original buffer pointer and one private lock,
+actual ticketlock types/atomic orders and four native IRQ/pause bodies. Genuine
+preemption, boot mapping, notification and timing remain open. No initialized
+buffer, CPU state, HOST eventfd or alternate logger is substituted. Reference-C
+cleanup stays deferred behind these original dependencies.
 
-OrdinaryHOST remains CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL including all
-worker/controller overhead, fresh26GiB retaining18GiBcharges+4GiBfloor and host16/
-scratch12GiB diskfloors. Native2–5/12GiB, UNKNOWNowners/outcomes/scratch21/mutex27:4
-and expiredattempts/nonces remain unchanged. Next15minute deliverable: publish
-storagequalification/target handoff, then advance reviewedunique kprintf join.
-Foreground owns monitors; healthy work is preserved, no duplicate investigation.
+Ordinary HOST remains CPUs0/6/7, max3 aggregate light jobs,4GiB TOTAL including all
+worker/controller overhead, fresh26GiB retaining18GiB charges+4GiB floor and host16/
+scratch12GiB disk floors. Native2–5/12GiB, UNKNOWN owners/outcomes, scratch21/mutex27:4
+and expired attempts/nonces remain unchanged. Latest fresh included guard29%used/
+71%remaining permits ordinary work. Next15minute deliverable: publish this passed
+kprintf/string checkpoint, then execute the reviewed string join and valid witness.
+Foreground owns monitors; healthy work is preserved without duplicate owners.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
 eligible universal provider/fullimage; actual SDK/source-custody/native/current-free
@@ -240,7 +254,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M15-I03 | 42.86% | no | Reproducible Rust userspace and dependency closure |
 | M15-I04 | 0.00% | no | Matched application and restoring lifecycle qualification |
 
-The ledger names 362 concrete rows, including the three exact modules `ihk.ko`, `ihk-smp-x86_64.ko`, `mcctrl.ko`, all70function/sixdata library roots, and105unresolved symbols in the retained partial image link. Those105symbols are unresolved binding obligations, not105unimplemented ports or105new test jobs.
+The ledger names 383 concrete rows, including the three exact modules `ihk.ko`, `ihk-smp-x86_64.ko`, `mcctrl.ko`, all70function/sixdata library roots, and105unresolved symbols in the retained partial image link. Those105symbols are unresolved binding obligations, not105unimplemented ports or105new test jobs.
 
 **Required inputs and contracts that still block dependent work:**
 - **HOLD-GENERIC —0%:** Obtain original generic/exec scoped disposition. Owner: Original service/hold authority (identity/scoped release conditions currently UNKNOWN); Root integration owner. Done when: The actual original authority supplies a valid scoped disposition identifying permitted request/source/artifact scope and any retained restrictions; held/replay=false/equivalent=false controls change only by that authority. An unrestricted full-image provider is eligible under that disposition.
