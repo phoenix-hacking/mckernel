@@ -1,0 +1,115 @@
+{
+  "kind": "GENUINE_LOCK_ATOMIC_PRIMITIVE_LOOKAHEAD_REUSING_EXISTING_SYMBOL_PROOF",
+  "decision": "GO_THREE_NEW_REAL_PROVIDERS_ONLY_REUSE_EXISTING_SPIN_OWNERS",
+  "owner": "Saved Sol/HIGH read-only lookahead; Root sole compositor/admission; current producer/join owners untouched",
+  "already_provided_check": {
+    "actual_saved_text": "docs/verification/m14-delay-provider-unit-20261109/join/raw/joined-symbols.stdout",
+    "retained_partial": "aaaf8a1a qualified delay join",
+    "existing_genuine_T_owners": [
+      {
+        "name": "__ihk_mc_spinlock_lock",
+        "size_hex": "6c"
+      },
+      {
+        "name": "__ihk_mc_spinlock_unlock",
+        "size_hex": "3d"
+      },
+      {
+        "name": "__ihk_mc_spinlock_lock_noirq",
+        "size_hex": "5b"
+      },
+      {
+        "name": "__ihk_mc_spinlock_unlock_noirq",
+        "size_hex": "3b"
+      }
+    ],
+    "named_roots_absent_from_retained_definitions": [
+      "__mcs_rwlock_writer_lock_noirq",
+      "__mcs_rwlock_writer_unlock_noirq",
+      "xchg4"
+    ],
+    "consequence": "Do not prepare/recompile/redefine any existing spinlock export. Reuse its actual current retained owner/byte/relocation proof. Only three new providers are source-ready. Root must reconcile latest in-flight join before any actual composition; this review touches no producer/join files.",
+    "new_nm_hash_census_or_object_execution": false
+  },
+  "source_eligibility": {
+    "boundary": "Exact existing kernel/rust/lock_helpers.rs writer wrappers and kernel/rust/atomic_helpers.rs xchg4; accepted independent process/CPU/locking primitives, not generic/exec/notification payload or any downstream held body.",
+    "actual_selection": [
+      "kernel/rust/lib.rs12 atomic_helpers,36 lock_helpers,60 spinlock_helpers",
+      "kernel/CMakeLists.txt130/158/177 source membership;587-595 RUST_KERNEL_ENABLED defines ATOMIC/LOCK/MCS_RWLOCK/SPINLOCK helpers"
+    ],
+    "authority_limit": "Current explicit named source lookahead and genuine selected implementation permit finite preparation review. Prior patterns are not hold release authority. Every original generic/exec/notification,SDK/native,currentfree,perf/mmap,negative-open DEFER,monitor and UNKNOWN control remains unchanged.",
+    "excluded": "No wholemodule/wholecrate, original scheduler engine body, held downstream implementation, native lock/IRQ/function execution, new primitive semantics or full accepted-file reopening."
+  },
+  "exact_new_provider_closure": {
+    "function_count": 3,
+    "functions": [
+      {
+        "source": "kernel/rust/lock_helpers.rs:306-312",
+        "name": "__mcs_rwlock_writer_lock_noirq",
+        "signature": "unsafe extern C fn(*mut actual McsRwlockLock,*mut core::ffi::c_void)",
+        "body": "spinlock_helpers::__ihk_mc_spinlock_lock_noirq(&mut (*lock).slock);",
+        "genuine_import": "__ihk_mc_spinlock_lock_noirq"
+      },
+      {
+        "source": "kernel/rust/lock_helpers.rs:314-320",
+        "name": "__mcs_rwlock_writer_unlock_noirq",
+        "signature": "unsafe extern C fn(*mut actual McsRwlockLock,*mut core::ffi::c_void)",
+        "body": "spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(&mut (*lock).slock);",
+        "genuine_import": "__ihk_mc_spinlock_unlock_noirq"
+      },
+      {
+        "source": "kernel/rust/atomic_helpers.rs:117-120",
+        "name": "xchg4",
+        "signature": "unsafe extern C fn(*mut actual CInt,actual CInt)->actual CInt",
+        "body": "AtomicI32::from_ptr(ptr).swap(x,Ordering::SeqCst)",
+        "genuine_import": "None in source; actual core atomic lowering must be inspected if later compiled."
+      }
+    ],
+    "private_function_bodies": [],
+    "constants_or_literals": [],
+    "data_owners": [],
+    "genuine_imports": [
+      {
+        "name": "__ihk_mc_spinlock_lock_noirq",
+        "signature": "extern C fn(*mut original spinlock_helpers::IhkSpinlock)",
+        "existing_owner": "retained aaaf T5b"
+      },
+      {
+        "name": "__ihk_mc_spinlock_unlock_noirq",
+        "signature": "extern C fn(*mut original spinlock_helpers::IhkSpinlock)",
+        "existing_owner": "retained aaaf T3b"
+      }
+    ],
+    "semantics_to_preserve": "MCS writer wrappers intentionally ignore node and delegate to the actual selected ticket-spin noirq engines on slock. Preserve that existing behavior and all original signatures/attributes. xchg4 returns old32bit signed value with actual SeqCst swap; never replace with plain store/volatile or invented atomic protocol."
+  },
+  "real_types_and_profile": {
+    "required_source_types": [
+      "kernel/rust/abi.rs5 CInt=i32 (unchanged ff48bc2e type cohort)",
+      "kernel/rust/spinlock_helpers.rs5-8 original repr(C) IhkSpinlock {head_tail:AtomicU32}",
+      "kernel/rust/lock_helpers.rs36-39 original repr(C,align64) McsRwlockLock {slock:spinlock_helpers::IhkSpinlock}",
+      "core::ffi::c_void",
+      "core::sync::atomic::{AtomicI32,AtomicU32,Ordering}"
+    ],
+    "actual_source_assertions": "spinlock_helpers asserts size4/align4/head_tail offset0; lock_helpers asserts McsRwlockLock size64/align64/slock offset0. Retain these actual assertions/types, not opaque guessed aliases.",
+    "interface_to_existing_owner": "Finite unit may retain the actual spinlock_helpers type and module-path extern declarations for the two already exported noirq functions, derived from their actual signatures. That is an import interface only: no replacement wrapper/body/provider or altered source layout.",
+    "cfg": "No optional cfg in the three chosen functions/types; reuse the current supported non-optional x86_64 LP64 profile.",
+    "codegen_if_separately_admitted": "Same reviewed no_std nightly1.95/edition2021/large-static/no-redzone/no-vector/no-SSE HOST partial profile and inherited exact ABI-warning contract; no privilege/runtime execution or final-native ABI claim.",
+    "no_new_imported_implementation_module": "Only exact needed type/interface slices plus three existing definitions. Unused top-level atomic/lock module imports and unrelated helper functions must not pull in whole modules."
+  },
+  "smallest_next_reviewable_source_batch": {
+    "preparation": "Exact three existing definitions with real type/core imports and two genuine external noirq declarations; no mutation performed by this review.",
+    "prejoin_obligation": "If Root later admits compilation, actual object metadata/disassembly must reconcile three C export owners, genuine two spin imports, no unexpected helper/data owner and actual atomic lowering. Source-level expected sets are not completed ELF proof.",
+    "join_obligation": "Only exact then-current reviewed scheduler partial plus new object; reuse existing spin owners, preserve previous symbol bytes/relocations/unique ownership and resolve only genuine matching references. No duplicate spin definitions and no guessed final unresolved count.",
+    "limits": "No compile/link/test/function/IRQ/native actions admitted here; no new tests inferred from unknown coverage and no counted-check/acceptance delta."
+  },
+  "actions": {
+    "CPU0_reads": true,
+    "saved_symbol_text_reused": true,
+    "new_symbol_or_hash_census": false,
+    "producer_files_touched": false,
+    "code_unit_or_fixture_generated": false,
+    "canonical_or_index_edits": false,
+    "compiler_link_test_native_device_goal_controls": false,
+    "sole_written_artifact": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-lock-primitive-lookahead.json"
+  }
+}

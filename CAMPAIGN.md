@@ -1,79 +1,90 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T22:11Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T23:10Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
 **ACTIVE: explicit same-Root manual resume `20261109T211917Z-488788ba`.**
-The new concrete original dependency is the accepted-F02 general scheduler wakeup
-provider needed by the current credential/lower-provider partial. Independent
-wrapper eligibility, boundary review and a separate finite engine GO are READY.
-Their exact source permits one combined wrapper+engine partition: three public
-functions, three private helpers, actual ABI/types/26offset constructor and genuine
-external declarations. All downstream bridge bodies remain excluded/unresolved.
-This supersedes the prior exhausted queue; it releases no generic/exec,
-notification, SDK/source-custody/native/current-free or UNKNOWN ownership hold.
+Root remains actual Sol/MAX and sole canonical compositor/index/publisher. All six
+existing source/review owners are actual Sol/HIGH, never/danger-full-access; only
+ready disjoint work runs. No launcher, goal, budget, native owner or hold is reset.
 
-Root is actual Sol/MAX; existing A/B/E new turns are actual Sol/HIGH,
-never/danger-full-access. A prepares the private finite unit, B the exact packet
-and called object/join predicates, E the independent source/ABI/owner review.
-Current worker612499/server612501 births match; normal included guard reports
-34%used/66%remaining (fresh21:30 guard). The prior interrupted goal-control return leaves no workload
-pending: final7b3aad2ee was published/joined, and this new goal is confirmed active.
-No controller, goal identity, allowance, native owner or launcher state is reset.
+**Latest user target:** EACH original M14 and M15 closure checklist at least75%
+complete (at most25% remaining) by Nov9midnight America/Los_Angeles,
+`2026-11-10T08:00:00Z`. This supersedes the combined76.8375% target for current
+planning; the frozen51.225% baseline/old relative target remain in ledger history.
+Current verified M14=51.48%, M15=50.97%: required gains23.52pp/24.03pp; actual new
+counted delta0/0. All156counted checks/73verified and scoring weights are unchanged.
+The completed independent readiness audits identify38/45open counted leaves and
+no full-scope open leaf ready for credit from retained evidence.75% is an unproven
+planning target; the prior missed target/outage and original acceptance criteria
+remain. The deadline is not a stop time or a guarantee.
 
-| Next engineering prerequisite | Actual consumer | Owner / smallest completion proof |
+**Actual completed source/provider work:** scheduler engine+wrapper29bb joined
+qualifiedaaaf as42f177e4:66global=55Tnames+11data/22genuineU. Tenbridge33500 joined
+42f1 as6fb8987d:76global=65T+11data/19U. Qualified threeprimitivea227 and genuine
+18recorddata4bb4 then joined6fb asb18f9e01:80global=68T+12data/15genuineU. All actual
+called pre/post gates and direct waits passed; original bytes/relocations/aliases,
+formatter helpers/tables,88Blogger table and one privateKMSG_LOCK are preserved.
+The original descriptor-flag expectation failure and one exact0x200003GNU_RETAIN
+correction are retained; unchanged object/readbacks were reused. Its explicit
+flags1 finitepartial profile is source-faithful, not an observeddefault/native
+profile or a fullCguard pass. Actual18records/36fieldrelocations qualify; initial
+storage is preboot data only. Engine checkpointceb322938 is pushed/fetched/all64
+entries. New coherent shared proof is frozen under
+`docs/verification/m14-scheduler-shared-providers-20261109/` with149files;
+`m14-scheduler-shared-provider-results-20261109.json` adds only uncounted evidence.
+Root is preparing its normal coherent source/ledger publication.
+
+**Current execution delta:** new timer/vector7003 and CPU/IPI602d compiled once.
+Their actual two-read metadata gates now PASS. Timer's source-used descriptor
+member addresses required one exact relocation-predicate correction on retained
+object/readbacks;0newGNU/compiler/link commands, no broadaddend waiver. Original
+failure/raw bytes remain. The exact currentb18+7003+602d composition also PASSed as35b3a058:
+86global=74Tnames+12data/21genuineU, bothcalledgates/all3waitsjoined.
+
+Four real timer callbacks9f620be4(2280B), IPI-slot/logger830ddbb5(2344B) and actual
+CPU-local/accessor+prebootcallbackslot65499b6b(1280B) also compiled successfully;
+all three waits joined/exact inherited diagnostics/CPU6released. Root's first
+callback launch missed the actual output directory by selecting time's metrics
+-o. Failure is retained; one independently reviewed directory/capture correction
+passed without source/ABI/flag changes. The other two compilers ran only once.
+The exact two-data linux6.12 Rust-only target05be1150(1016B) also compiled once;
+original process_global_storage_candidate cfg/15offset_of expressions remain.
+FullCglobalstorage/PROCESS_HELPERS/debug guards, actual ownership/SDK/native
+qualification are preserved and PENDING. Fourtimer-callback and two-data actual metadata/content/owner gates nowPASS;
+all6new readback waits joined. All4IPI/local readbacks alsoPASSed/joined, but
+source field+24 and large-model NOBITS section expectations stopped their first
+gate calls. Bothretainedobjects/readbacks are preserved for ONE exact combined
+predicate-only correction under review,0newGNU/compiler/link replay. No function,
+timer, lock, IRQ, boot or hardware executes. Actual slotNone/NULL is prebootstorage, not a published callback target.
+
+| Next readiness prerequisite | Actual consumer | Owner / smallest completion proof |
 | --- | --- | --- |
-| Exact engine partial join | aaaf8a1a+qualified29bb only; shared F03/F06 consumers | B/E: reviewed3newlink/readbackcommands; Rootfreshadmission and called pre/post gates |
-| Ten-bridge actual object gate | Actual33500object; sixlock/CPU/status+fourtimer/vector/logger exports | A/F:2newmetadatareads and source-bound called predicate, no compiler replay |
-| Next compatible bridge join | Actualpassingcurrentenginepartial+qualified33500 only | Root/B: bind actual inputs/collisions and freshexactreview; all genuine backends remain explicit |
+| Finish IPI/local exact object qualification | Real logger+32Bdescriptor and CPUlocal getter/prebootslot in F03/F06 cohort | C/E final exact predicate-only correction; Root called gates on retained4reads, no compiler/GNU replay |
+| Compose qualified next four providers | Actual35b3 plus fourtimercallbacks/IPI/local/two-data objects | B/E one compatible5object packet/owner review; Root actual prejoin beforeld-r and postjoin after2reads |
+| Prepare next genuine LAPIC/IPI lower providers | Current realtimer/LAPIC imports and source-qualified IPI consumers | F/D finite source packets, A/E independent ABI/profile/unique-owner review; reuse all existing objects; no hardware/init execution |
 
-**New producer/metadata proof:** exact scheduler unit6d632e25 compiled once as
-29bb80dc(4064B), exact retained single ABI warning, actual compiler wait joined.
-The two actual nm/ELF reads and called object/prejoin checks also PASSed once,
-both waits and outer joined/CPU6released. Actual3T sizes are634/14/781B;11realU.
-No private adapters/208B offset table were emitted: they optimized into code;
-only200B eh_frame metadata references the three real functions. Source-level full
-26offset constructor/type proof remains; no emitted table/initialization claim.
+**Critical-path blocker/owner:** original generic/exec hold has no eligible
+universal provider for a final image. The original hold retains release authority;
+Root owns integration. Both retained genericC objects are excluded by their actual
+exec-tail selection; no equivalent replay/wrapper/symbol override can supply it.
+Exact notification/helper membership remainsUNKNOWN/NO_GO. Fullimage argv isUNSET;
+original SDK outer mapping/sourcecustody/native/currentfree and complete supported
+backend/scenario bindings also remain open. Revised final critical-path ETA is
+UNKNOWN until actual missing original inputs arrive. These partials add no original
+acceptance, native/image proof, Cretirement or score credit. Open gates remain
+M14F03/F06/I01-I03; M15F02-F08/I01-I04, with M14-before-M15 acceptance.
 
-The independently reviewed ten-bridge unit9b402412 also compiled once as
-33500c97(7384B), same exact diagnostics/wait joined/CPU6released. Its metadata gate
-is being prepared by A/F, with no compiler replay. One Root proposal-field binding
-error stopped before Popen; the exact-schema correction preceded this sole compile.
-Fresh normal included guard at21:30 reports34%used/66%remaining, no service hold.
-
-Next15-minute deliverable: review/admit the exact3-command engine join, then
-consume the ten-bridge object's two new metadata reads/called predicate. Qualified
-engine metadata and both producer outputs are reused; no kernel function runs. Engine GO predicts66global=55T+11data and22realU
-if metadata agrees; this exposes genuine dependencies, not final closure. Original
-checklist51.48/50.97 and accepted4/6+0/3,1/8+0/4 remain unchanged. Fullimageargv is
-UNSET; original critical-path ETA remainsUNKNOWN. HOST0/6/7,max3aggregate lightjobs,
-4GiB TOTAL including all overhead/fresh26GiB and diskfloors; retained18GiB,
-native2–5/12GiB, scratch21/mutex27:4 and every historical UNKNOWN remain binding.
-
-**Scheduler composition PASS:** actual42f177e4 (42264B) joins only new29bb and
-qualifiedaaaf:66global=55Tnames+11data,22genuineU. Called prejoin passed beforeld-r,
-postjoin preserved all63oldglobal owners/privateformatters/tables/singleKMSG/delay
-alias and real relocations; all3new waits/outer joined. Fullsource/raw6payloads/
-reviews/admissions/twoobjects are retained in
-`docs/verification/m14-scheduler-provider-unit-20261109/`; bounded result is
-`m14-scheduler-provider-results-20261109.json`. Normal checkpoint publication next.
-This is uncounted shared prerequisite evidence; finalCREDENTIAL-COHORT staysopen.
-
-**Ten-bridge join PASS:** actual6fb8987d joins only33500+42f1:76global=65Tnames+11data/19genuineU. Called pre/postchecks preserveallold66owners/privateformatter/table/KMSG/delayalias and newlogger88Btable/strings; all3payloadwaits+outerjoined. No compiler/provider-metadata replay or native/score claim.
-
-**Next shared batch PASS21:50:** called33500 tenbridge metadata gate and bothreads
-passed, then primitivea22738e2(1752B) and debug18data4bb40a5e(2544B) each compiled
-once with exact retained diagnostics. Allactualwaits joined/CPU6released. Data flags1
-are an explicit source-faithful finitepartial profile, not observeddefault/native
-state; original fullCdebug/globalstorage guard remains excluded and preserved.
-No primitive/data metadata or new bridge join is claimed yet. Nextactualsteps are
-review/admit42f1+33500 join, primitive3read/atomicgate, and debug2read/18recordgate;
-allpassing producer/oldmetadata proof is reused. Newtimer/vector andgeneralIPI
-sourcecontracts are ready for separate finite preparation after these readychecks.
-No original counted gate/acceptance/score changes; universal generic/fullimage and
-actualSDK/native/currentfree authority remain the external criticalpath.
+Next15-minute deliverable: finish the two corrected object gates and reviewed
+five-object join while preparing the newly eligible finite LAPIC/IPI source cuts.
+Fresh included-only guard23:02 reports38%used/62%remaining, no service/spendhold. HOST0/6/7,max3aggregate
+lightjobs,4GiB TOTAL including all overhead/fresh26GiB and host16/scratch12GiB
+floors remain; retained18GiB, separateheldnative2–5/12GiB, everyUNKNOWN owner/outcome,
+scratch21/mutex27:4/expiredattempts/nonces and all source/service controls persist.
+IHK8eb8/29trackedproductionRust files and sourcebundle ownership are already
+verified below; no census/restore/rebuild or ca484consumer proof is repeated.
 
 **Historical201010resume:** the following completed recovery task and three-turn
 impasse belong to the previous invocation and do not stop this new eligible work.

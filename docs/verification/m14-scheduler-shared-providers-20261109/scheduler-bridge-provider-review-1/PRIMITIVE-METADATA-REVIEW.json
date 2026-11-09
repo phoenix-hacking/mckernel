@@ -1,0 +1,143 @@
+{
+  "status": "GO_EXACT_THREE_PRIMITIVE_METADATA_READS_AND_CALLED_FINITE_ATOMIC_DELEGATE_GATE",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T21:59:33.001271+00:00",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/REQUEST.json",
+    "sha256": "6846a28eb9768c51d880e52c44b8f28b094250cffac2ec0340f4c69dae2ab200"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/primitive_checks.py",
+    "sha256": "143d820f597a74580c577e4e4ecb4310d6ba2ceed5f2395061ecee66d5c05d07"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/run_metadata.py",
+    "sha256": "5f3cbcfc3e33f8ce4a70270733972ccb0513c3dbee4c6f76ef30940185defc91",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/REQUEST.json"
+    ]
+  },
+  "independent_source_GO_reused": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-review-1/REVIEW.json",
+    "sha256": "3491bfb5333c23babe950a4842f91d6ea1e3a77a0df910b0a74858bad271d673",
+    "scope": "3491 source/profile/actualMcsRwlockLock.slockoffset0/nodeignored/AtomicI32SeqCst+xchg4CIntABI qualification unchanged. No source or oldspinlock/engine/ABIaudit repeated."
+  },
+  "actual_compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o",
+    "sha256": "a22738e2afd4286b09781ca4ae1b53cd08ee54b2b9c0470c33dd93d24fd8d25d",
+    "bytes": 1752,
+    "actual_producer_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/RESULT.json",
+    "actual_producer_result_sha256": "a554f5725e5d151e36819d5aa93195294a7e4363b8cc2898b7b8fcf186a6867a",
+    "actual_compile_pid": 622016,
+    "actual_compile_birth": "34727432",
+    "actual_compile_joined": true,
+    "no_compiler_replay": true
+  },
+  "input_validation": "Allrequestsource/manifest/proof/sourceGO3491/producerbatcha554/admission4f51/objecta22738/reader/parser/tool/gate/controllerhashes independentlymatch. Actualobjectsize1752B. Sourcecompilealreadyjoinedpid622016/birth34727432; no compiler replay.",
+  "exact_payload_and_profile": {
+    "labels": [
+      "provider-symbols",
+      "provider-elf",
+      "provider-disassembly"
+    ],
+    "argv": [
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o"
+      ],
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o"
+      ],
+      [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-disassembly.metrics",
+        "/usr/bin/objdump",
+        "-dr",
+        "--no-show-raw-insn",
+        "-M",
+        "intel",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o"
+      ]
+    ],
+    "scope": "Onlynm-Sposix/readelf-h-SW-Ws-Wr/objdump-dr--no-show-raw-insn-Mintel ofactualoneobject. All3stdoutdestinations equalgateactualnm/ELF/disasmpaths. No compile/link/runtime/function/atomic/lock/IRQ call.",
+    "profile": "EachpayloadCPU6/AS1GiB/CPU45/60+5wall/64MiBFSIZE/core0/time-v. ExactC-locale/PATH/PYTHONDONTWRITEBYTECODEenvironment. Rootoutertaskset6asexplicitlyplanned. RootfreshHOST0/6/7aggregate3LIGHT4GiBTOTALincludingcontrolleroverhead/fresh26GiBanddiskfloors stillrequired."
+  },
+  "finite_actual_object_gate_review": {
+    "metadata_first": "ReusesqualifiedImage/parse_nm a4df81bb andboundedGNUobjdumpheader/instruction-row/owner-rangepatterns fromqualifiedstringpredicate9967. No newdecoder/framework. Recordsallactualsymbols/sections/allocatedbytes/relocs/U/object+disasmhashBEFOREfiniteowner/atomicassertions; allrawreadbacks retainedonfailure.",
+    "owners": "Exactly3GLOBALDEFAULTnonzeroT functions __mcs_rwlock_writer_lock_noirq,__mcs_rwlock_writer_unlock_noirq,xchg4; exactly2genuinenoirqU. Exactly3FUNCowners/0privatehelper/0OBJECTdata/0nonemptywritableallocations. Onlynative.eh_frame ROtype/alignment withselectedfunctiontargetreferences. Unexpectedowner/import/private/RO variationSTOPsbeforefuturejoin.",
+    "genuine_delegates": "EachMCSwrappermusthaveoneR_X86_64_64 relocation+0todeclaredactualIHKnoirqfunction. Completeownedinstructionlist EXACTmovabsrax,0+jmprax withrelocationatmovimmediate+2. Noargumentmutation/othercall allowed: originalRDIlockpointerandslockoffset0retained, nodeRSIunusedasoriginalsource. Nofouralreadyownedspinfunctionsredefined.",
+    "atomic_width_pointer": "xchg4musthaveNOfunctionrelocations/helperprovider. Allownedinstructionsfitoneoftwofinite32bitmemoryXCHGdataflows throughoriginalRDIpointer;BYTE/QWORD/otherpointer/plainstore/helper/unknown loweringrejected.",
+    "atomic_input_and_old_return": "Either moveESInewCInt\u2192EAX;exchangeEAXwithDWORDPTR[RDI];retoldEAX, OR exchangeESIwithDWORDPTR[RDI];moveoldESI\u2192EAX;ret. Operands/orderexact, xchgactualopcode87retained. OriginalCInt32oldvaluereturnthuspreservedatsource-objectmetadata scope.",
+    "memory_ordering": "SourceAtomicI32.swapOrdering::SeqCstreused; selectedx86memoryXCHGisimplicitlyatomic/lockedwithoutanexplicitLOCKprefix. Gateacceptsequivalentexplicitlockprefixbutdoesnotrequireit. Thisismachineloweringvalidationonly, noatomicconcurrency/kernel/runtimequalification.",
+    "disasm_binding": "PinnedobjdumpIntelnorawbytesreadbackparsedonlywithinactualELFfunctionvalue+size; unexpectedfunctionheaders/instructionsequencefailclosed. Relocationrowsnotmistakenforinstructions. Allactualinstructionrows/objectbytes/hashrecordedinOBJECT-CHECK."
+  },
+  "controller_actual_call_and_release": {
+    "prelaunch": "Checksallfrozeninputhashes/objecthash andexact3labelsequencebeforePopen. Onlyrequest3literalpayloads execute serially; exclusivexbrawcaptures prohibitmixingoldoutputs.",
+    "birth_wait_receipts": "PIDand/procstartticks persisted/fsyncedBEFOREdirectwait. finallychild.waitcoversstartedchildren; status/rawstdioSHA/wall/argv/envretained. Eachpayloadmustexit0andemptystderr. FirstunexpectedfailurepersistsMETADATA-FIRST-FAILURE andSTOPs/noautomaticretry.",
+    "gate_call": "After3readbackwaitscontrolleractuallyCALLSprimitive_checks.actual_object_gate(q), persistsOBJECT-CHECK.json, thenmarksPASS/object_gate_called/released. Definition-onlyscriptornmexit0aloneisnotcheck. ReviewerASTinspectiononly; no gate/controller importorcall."
+  },
+  "separation_and_future_join": "Currentengine/next10joinB/Eand18-recorddataworker/reviewerlanesuntouched. Actualfuturecurrentpartialidentity/join isUNBOUNDinthispacket; noaaaf-as-final,predictedcohort/symbolcounts,duplicateoldspinowners orlinkcommand. Lateractualmetadata/owner/hash/ABIpre/postjoinreview+Rootfreshadmission required.",
+  "scope_limits": "No atomics/locks/scheduler/IRQ/kernel/native/function/hardware/boot execution; no neworiginalquota/gate/score/Cretirement/acceptance. Existinggeneric/exec/notification/ACK/TID/XPMEM/SDK/sourcecustody/current-free/UNKNOWNholds unchanged.",
+  "reviewer_compiler_nm_readelf_objdump_predicate_controller_link_tests_runtime_or_canonical_index_operations": false,
+  "execution_admission": false,
+  "decision": "GO exact6846a28e primitiveMETADATA3/controller/gate only; Rootfreshadmissionrequiredbeforepayload. Anyunplannedlowering/helper/import/ownerSTOPsbeforefuturejoin."
+}

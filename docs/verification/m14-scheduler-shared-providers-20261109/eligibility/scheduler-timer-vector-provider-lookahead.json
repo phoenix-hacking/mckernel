@@ -1,0 +1,207 @@
+{
+  "schema": "mckernel.scheduler-timer-vector-provider-lookahead.v1",
+  "invocation": "20261109T211917Z-488788ba",
+  "scope": "Disjoint source-only lookahead for four genuine accepted-F02 scheduler bridge imports; six lock/CPU/status endpoints owned by another preparer and not duplicated.",
+  "decision": "ELIGIBLE_EXISTING_FOUR_RUST_FUNCTION_PARTITION_FOR_PRIVATE_PREPARATION_AND_REVIEW",
+  "owner": "Saved Root sole canonical compositor; no compiler/link/runtime admission conveyed.",
+  "active_plan": "Read current AGENTS.md and CAMPAIGN.md; saved plan20:45Z is historical to explicit current user/Root resume. Original accepted F02 scheduling and all holds remain preserved.",
+  "eligibility": {
+    "basis": "Positive original accepted-F02 scheduler/provider scope, actual existing Rust functions and matching C scheduler behavior. Exact bodies implement forwarding and runqueue diagnostics; they do not contain notification packet construction/delivery, generic syscall dispatch, exec/ACK/TID/XPMEM work.",
+    "irq_boundary": "process_sched_interrupt_bridge is only the actual accepted general scheduler wrapper forwarding existing two scalars; its genuine ihk_mc_interrupt_cpu definition remains unresolved and is not inspected/prepared/compiled/executed by this task. Vector lookup and timer implementations likewise remain external.",
+    "log_boundary": "Exact existing logger and its private dynamic-selector helper are diagnostic-only source within accepted F02. Reading actual Ddebug type does not import debug.rs/kprintf/notification implementation or initialize any debug storage.",
+    "no_blanket_release": "Original notification NO_GO remains unchanged for eventfd/syscall_eventfd_send_result/f03_eventfd_send/direct packet helper. This source partition is independently distinguished from them; eligibility does not transfer downstream.",
+    "stop_condition": "Any attempt to include actual IRQ/timer/vector/logger backend implementation, held packet/generic source, full process/debug modules, guessed default flags or new data owners requires separate eligibility and concrete review."
+  },
+  "actual_existing_functions": [
+    {
+      "symbol": "process_sched_vector_bridge",
+      "source": "kernel/rust/process_helpers.rs:6006–6008",
+      "ABI": "unsafe extern \"C\" fn(CInt)->CInt",
+      "body": "Return ihk_mc_get_vector(vector_key) unchanged.",
+      "matching_C": "kernel/process.c:648–651; Rust selection at642",
+      "types": [
+        "actual abi::CInt=i32"
+      ],
+      "constants": [],
+      "private_helpers": [],
+      "genuine_U": [
+        "ihk_mc_get_vector"
+      ]
+    },
+    {
+      "symbol": "process_sched_interrupt_bridge",
+      "source": "kernel/rust/process_helpers.rs:6011–6013",
+      "ABI": "unsafe extern \"C\" fn(CInt,CInt)",
+      "body": "Call ihk_mc_interrupt_cpu(cpu,vector) and discard its existing CInt return, exactly as the original void wrapper.",
+      "matching_C": "kernel/process.c:653–656; Rust selection at643",
+      "types": [
+        "actual abi::CInt=i32"
+      ],
+      "constants": [],
+      "private_helpers": [],
+      "genuine_U": [
+        "ihk_mc_interrupt_cpu"
+      ],
+      "no_change": "Do not invent an error-returning ABI or new failure behavior."
+    },
+    {
+      "symbol": "process_sched_set_timer_bridge",
+      "source": "kernel/rust/process_helpers.rs:6055–6057",
+      "ABI": "unsafe extern \"C\" fn(CInt)",
+      "body": "Call existing set_timer(runq_locked) with unmodified signed scalar.",
+      "matching_C": "kernel/process.c:6459,6466–6469",
+      "types": [
+        "actual abi::CInt=i32"
+      ],
+      "constants": [],
+      "private_helpers": [],
+      "genuine_U": [
+        "set_timer"
+      ]
+    },
+    {
+      "symbol": "process_sched_runq_log_bridge",
+      "source": "kernel/rust/process_helpers.rs:17096–17152 in remaining_process_range_scheduler_logs",
+      "ABI": "unsafe extern \"C\" fn(CInt,CULong,CULong,CInt,CInt)",
+      "body": "Preserve complete original match events1–11, exact labels/formats/promoted arguments, dynamic guards and silent unknown events. Only guarded WAKE_ENTRY reads actual Thread.status/cpu_id.",
+      "matching_C": "kernel/process.c:6473–6561",
+      "types": [
+        "actual abi::CInt",
+        "actual abi::CULong",
+        "actual abi::Thread",
+        "exact debug.rs::Ddebug"
+      ],
+      "constants": "Only existing source literal event IDs/indexes, shift24 and exact original format/label byte strings; no inferred debug defaults.",
+      "private_helpers": [
+        "remaining_process_range_scheduler_logs::enabled"
+      ],
+      "genuine_U": [
+        "kprintf",
+        "ihk_mc_get_processor_id",
+        "process_remaining_range_scheduler_debug"
+      ],
+      "borrow_contract": "When event2 selector is enabled, arg0 must be the original live aligned Thread under caller wakeup/runqueue exclusion; no pointer is retained. Scalars and strings are synchronous borrowed arguments."
+    }
+  ],
+  "logger_private_closure": {
+    "helper": {
+      "source": "kernel/rust/process_helpers.rs:17029–17037",
+      "signature": "unsafe fn enabled(index:usize)->bool",
+      "operation": "Actual addr_of_mut!(process_remaining_range_scheduler_debug).cast::<Ddebug>().add(index), then volatile read of actual line_flags >>24 !=0; preserve exactly.",
+      "used_constant_indices": "8,9,10,11,12,13,14,15,16 for respective events2–9,11. Events1 and10 log unconditionally; unknown events silent."
+    },
+    "type": {
+      "source": "kernel/rust/debug.rs:26–32",
+      "name": "Ddebug",
+      "definition": "Exact existing repr(C) fields file:*const i8,func:*const i8,fmt:*const i8,line_flags:u32; retain actual size32/align8/line_flags offset24 source assertions. Extract/use actual type only, not debug module implementation."
+    },
+    "external_storage": {
+      "symbol": "process_remaining_range_scheduler_debug",
+      "declaration": "Actual extern static mut [Ddebug;18] from process_helpers.rs:17025",
+      "original_C_owner": "kernel/process.c:2957–2984: extern under MCKERNEL_RUST_PROCESS_VERBOSE_DATA, otherwise actual18-entry aligned8 __verbose initializer.",
+      "treatment": "Leave genuine U data symbol; do not instantiate, zero-fill, shorten, fold guards or infer disabled logging. Final selected metadata owner remains its original separate source/profile obligation."
+    },
+    "actual_ABI": "Use existing kernel/rust/abi.rs definitions for CInt,CULong,Thread. Original engine imports usize addresses where actual exported logger uses CULong; existing selected x86_64 LP64 equals both8bytes. Keep type distinction explicit and no transmute/new layout.",
+    "private_readonly_owners": "Exact actual logger format/label strings and compiler-derived literals/jump tables may be emitted. Preserve actual bytes/relocations; no manually generated debug records or writable storage."
+  },
+  "genuine_dependencies": [
+    {
+      "symbol": "set_timer",
+      "kind": "function",
+      "actual_signature": "extern \"C\" fn(CInt)",
+      "declaration_source": "kernel/rust/process_helpers.rs:64",
+      "treatment": "U only; actual timer body excluded."
+    },
+    {
+      "symbol": "ihk_mc_get_vector",
+      "kind": "function",
+      "actual_signature": "extern \"C\" fn(CInt)->CInt",
+      "declaration_source": "kernel/rust/process_helpers.rs:55",
+      "treatment": "U only; real vector implementation excluded."
+    },
+    {
+      "symbol": "ihk_mc_interrupt_cpu",
+      "kind": "function",
+      "actual_signature": "extern \"C\" fn(CInt,CInt)->CInt",
+      "declaration_source": "kernel/rust/process_helpers.rs:56",
+      "treatment": "U only; actual IRQ implementation excluded."
+    },
+    {
+      "symbol": "kprintf",
+      "kind": "function",
+      "actual_signature": "extern \"C\" fn(*const i8,...)->CInt",
+      "declaration_source": "kernel/rust/process_helpers.rs:11773",
+      "treatment": "Genuine kernel variadic logger only; current aaaf receipt metadata has actual T size0x2c2, no HOST libc."
+    },
+    {
+      "symbol": "ihk_mc_get_processor_id",
+      "kind": "function",
+      "actual_signature": "extern \"C\" fn()->CInt",
+      "declaration_source": "kernel/rust/process_helpers.rs:49",
+      "treatment": "Existing genuine getter; current aaaf actual T size0x4d; no current-CPU/runtime execution."
+    },
+    {
+      "symbol": "process_remaining_range_scheduler_debug",
+      "kind": "data",
+      "actual_signature": "extern static mut [actual Ddebug;18]",
+      "declaration_source": "kernel/rust/process_helpers.rs:17025; actual C declaration/initializer process.c:2959–2984",
+      "treatment": "Real initialized owner unresolved; no synthetic descriptors."
+    }
+  ],
+  "expected_emitted_ownership": {
+    "global_T": [
+      "process_sched_set_timer_bridge",
+      "process_sched_vector_bridge",
+      "process_sched_interrupt_bridge",
+      "process_sched_runq_log_bridge"
+    ],
+    "source_global_data": [],
+    "source_private_functions": [
+      "enabled(index)"
+    ],
+    "private_emission": "Actual compiler may inline enabled or retain LOCAL function and exact readonly format/table owners; record actual output rather than imposing arbitrary fixed bytes.",
+    "source_external_imports": 6,
+    "import_kinds": "Five genuine functions plus one genuine external metadata array; expected U list is exactly listed above except source-bound compiler intrinsics needing concrete review.",
+    "partial_join_effect": "When joined with a matching current engine partial retaining aaaf owners, four actual scheduler bridge imports resolve; kprintf/currentCPU imports bind existing actual kernel definitions; set_timer/getvector/interrupt/debugarray remain exposed real obligations. Do not predict the whole next cohort count until other preparer's six-endpoint composition and actual current input are bound.",
+    "legacy_inputs_excluded": "No oldc205/old8/oldcombined cohort, stale metadata, symbol overrides, duplicate strong owners or whole runtime crate.",
+    "current_reference": "docs/verification/m14-delay-provider-results-20261109.json and its exact joined-symbols.stdout entries; source lookahead did not replay metadata commands."
+  },
+  "selected_profile": {
+    "profile": "Same qualified nonexecuted x86_64 LP64 freestanding partial-provider profile as scheduler-engine contract, actual Rust1.95 compiler and original native flags/warning policy.",
+    "cfgs": "No guessed diagnostics defaults or profile expansion. Logger's original mutable selector import remains live. Extract only actual Ddebug type, do not activate process_verbose/global storage owners.",
+    "runtime_prohibition": "No scheduler, function, timer, CPU getter, lock, IRQ delivery, kprintf, logging selector/runtime, device, boot or native behavior runs.",
+    "execution_admission": "Only Root may admit a future concrete codegen/metadata/prejoin/link batch under fresh exact HOST admission and unchanged aggregate resource/UNKNOWN ownership controls."
+  },
+  "next_compatible_plan": [
+    {
+      "id": "FOUR-SOURCE-PREP",
+      "owner": "Root/private source preparer",
+      "required_input": "Exact four actual Rust bodies, logger module/private enabled, actual ABI and Ddebug type, six genuine declarations; avoid six-endpoint helper owner's files.",
+      "done_when": "Concrete private source cut exactly preserves wrappers/logger fields/guards/all11events and excludes runtime/metadata backends and unrelated modules.",
+      "verification_method": "Function/signature/type/cfg/include closure and exact string/selector mapping comparison to named source/C evidence; no C-only replacement or new callbacks."
+    },
+    {
+      "id": "FOUR-INDEPENDENT-REVIEW",
+      "owner": "Concrete source/ABI/profile reviewer",
+      "required_input": "Actual private source/profile and4T/6U/data/readonly owner declaration.",
+      "done_when": "Review confirms accepted-F02 independence, original void/result behavior, LP64/variadic layouts, actual18-entry unresolved selector owner, exact debug gating/Thread borrow and no held downstream source.",
+      "verification_method": "Read actual source/type identities and declared command/input/metadata plan; no function runtime or presumed all-disabled flags."
+    },
+    {
+      "id": "FOUR-CODEGEN-METADATA",
+      "owner": "Root admitted compiler/job owner",
+      "required_input": "Concrete GO and fresh exact resource/profile admission.",
+      "done_when": "One actual compile + necessary symbol/ELF readbacks produce exact4public functions and expected genuine imports/readonly owners; actual metadata validator CALLED/persisted before linker.",
+      "verification_method": "Capture actual source/compiler/config/object signatures, defined functions/imports/data/relocs. Any unexpected intrinsic must be source-bound/reviewed; no libc fallback."
+    },
+    {
+      "id": "NEXT-CURRENT-ENGINE-JOIN",
+      "owner": "Root sole compositor",
+      "required_input": "Actual newly passing scheduler partial identity and this reviewed provider, plus other six providers only if independently GO and Root composes one exact compatible batch.",
+      "done_when": "Only exact current matching inputs join without duplicate owners; four engine imports resolve to actual Rust bodies, old bytes/relocs/private owners preserved and four real downstream obligations remain explicit.",
+      "verification_method": "Actual called prejoin source/type/owner/hash/collision gate before ld-r, actual postjoin metadata/relocation comparison; no redundant wrapper/oldcohort/green replay and no runtime/default/native acceptance."
+    }
+  ],
+  "preserved": "No new ABI/error policy/debug storage/defaults, source/service/notification/native hold release, UNKNOWN disposition, acceptance quota, gate/score/C-retirement claim or goal control.",
+  "operations": "Read current entrypoint/plan and exact four accepted scheduler definitions/private logger/type/storage/declarations and matching C plus named retained metadata lines. Wrote only this authorized JSON. No source-unit generation/edit, tests, compiler/link/metadata execution, fake callback/layout, HOST libc, wholecrate, device/hardware/native operation or nested agent."
+}

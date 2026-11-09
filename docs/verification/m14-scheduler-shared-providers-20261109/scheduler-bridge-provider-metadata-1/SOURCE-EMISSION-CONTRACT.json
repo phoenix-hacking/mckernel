@@ -1,0 +1,67 @@
+{
+  "required10_C_exports": [
+    "process_spin_lock_bridge",
+    "process_spin_unlock_bridge",
+    "process_sched_rwlock_bridge",
+    "process_sched_rwunlock_bridge",
+    "process_sched_cpu_local_bridge",
+    "process_sched_status_set_bridge",
+    "process_sched_vector_bridge",
+    "process_sched_interrupt_bridge",
+    "process_sched_set_timer_bridge",
+    "process_sched_runq_log_bridge"
+  ],
+  "genuine12_U": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock",
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "get_cpu_local_var",
+    "xchg4",
+    "set_timer",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu",
+    "kprintf",
+    "ihk_mc_get_processor_id",
+    "process_remaining_range_scheduler_debug"
+  ],
+  "source_string_literals_hex": [
+    "25733a205741524e494e472063616e2774207363686564756c652829207768696c65206e6f20707265656d7074696f6e2c20636e743a2025640a00",
+    "25733a206361756768742061206c6f73742077616b652d7570210a00",
+    "25733a20636c6f6e655f636f756e742069732025640a00",
+    "25733a2069646c655f68616c74202d3e207363686564756c6528290a00",
+    "25733a2069737375696e67204950492c207468726561642d3e6370755f69643d25640a00",
+    "25733a2070726f632d3e7069643d25642c2076616c69645f7374617465733d253038782c2070726f632d3e7374617475733d253038782c2070726f632d3e6370755f69643d25642c6d79206370755f69643d25640a00",
+    "25733a207370696e2077616b6575703a206370755f69643a2025640a00",
+    "25733a20776f6b656e207768696c6520736c656570696e672c206370753a2025640a00",
+    "25733a20776f6b656e207768696c65207370696e6e696e672c206370753a2025642c20646f5f7363686564756c653a2025640a00",
+    "5f5f73636865645f77616b6575705f74687265616400",
+    "6e6f206d6967726174696f6e20696e2049525120636f6e746578740a00",
+    "72756e715f6164645f70726f6328293a2074696420256420616464656420746f204350555b25645d27732072756e710a00",
+    "72756e715f6164645f74687265616400",
+    "7363686564756c6500",
+    "7370696e5f736c6565705f6f725f7363686564756c6500"
+  ],
+  "logger": "process_sched_runq_log_bridge",
+  "source_private_helper": "enabled",
+  "private_helper_source_path": [
+    "scheduler_bridge_provider_unit",
+    "process_helpers",
+    "remaining_process_range_scheduler_logs",
+    "enabled"
+  ],
+  "source_private_helper_raw_v0_pattern": "^_RNvNtNtCs[0-9A-Za-z]+_30scheduler_bridge_provider_unit15process_helpers38remaining_process_range_scheduler_logs7enabled$",
+  "source_wrapper_imports": {
+    "process_spin_lock_bridge": "__ihk_mc_spinlock_lock",
+    "process_spin_unlock_bridge": "__ihk_mc_spinlock_unlock",
+    "process_sched_rwlock_bridge": "__mcs_rwlock_writer_lock_noirq",
+    "process_sched_rwunlock_bridge": "__mcs_rwlock_writer_unlock_noirq",
+    "process_sched_cpu_local_bridge": "get_cpu_local_var",
+    "process_sched_status_set_bridge": "xchg4",
+    "process_sched_set_timer_bridge": "set_timer",
+    "process_sched_vector_bridge": "ihk_mc_get_vector",
+    "process_sched_interrupt_bridge": "ihk_mc_interrupt_cpu"
+  },
+  "real_external_metadata_array": "process_remaining_range_scheduler_debug",
+  "source_external_metadata_type": "[actualDdebug;18] declarationonly; size32/align8/line_flags24 typeproof, no storage/defaultclaim."
+}

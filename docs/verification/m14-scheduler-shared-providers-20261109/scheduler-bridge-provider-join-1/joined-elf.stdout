@@ -1,0 +1,927 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          39848 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           64 (bytes)
+  Number of section headers:         134
+  Section header string table index: 133
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        0000000000000000 000040 000000 00  AX  0   0  4
+  [ 2] .ltext.process_sched_cpu_local_bridge PROGBITS        0000000000000000 000040 00000c 00 AXl  0   0 16
+  [ 3] .rela.ltext.process_sched_cpu_local_bridge RELA            0000000000000000 0068c8 000018 18   I 131   2  8
+  [ 4] .ltext.process_sched_interrupt_bridge PROGBITS        0000000000000000 000050 00000c 00 AXl  0   0 16
+  [ 5] .rela.ltext.process_sched_interrupt_bridge RELA            0000000000000000 0068e0 000018 18   I 131   4  8
+  [ 6] .ltext.process_sched_runq_log_bridge PROGBITS        0000000000000000 000060 0002ac 00 AXl  0   0 16
+  [ 7] .rela.ltext.process_sched_runq_log_bridge RELA            0000000000000000 0068f8 000390 18   I 131   6  8
+  [ 8] .ltext.process_sched_rwlock_bridge PROGBITS        0000000000000000 000310 00000c 00 AXl  0   0 16
+  [ 9] .rela.ltext.process_sched_rwlock_bridge RELA            0000000000000000 006c88 000018 18   I 131   8  8
+  [10] .ltext.process_sched_rwunlock_bridge PROGBITS        0000000000000000 000320 00000c 00 AXl  0   0 16
+  [11] .rela.ltext.process_sched_rwunlock_bridge RELA            0000000000000000 006ca0 000018 18   I 131  10  8
+  [12] .ltext.process_sched_set_timer_bridge PROGBITS        0000000000000000 000330 00000c 00 AXl  0   0 16
+  [13] .rela.ltext.process_sched_set_timer_bridge RELA            0000000000000000 006cb8 000018 18   I 131  12  8
+  [14] .ltext.process_sched_status_set_bridge PROGBITS        0000000000000000 000340 00000c 00 AXl  0   0 16
+  [15] .rela.ltext.process_sched_status_set_bridge RELA            0000000000000000 006cd0 000018 18   I 131  14  8
+  [16] .ltext.process_sched_vector_bridge PROGBITS        0000000000000000 000350 00000c 00 AXl  0   0 16
+  [17] .rela.ltext.process_sched_vector_bridge RELA            0000000000000000 006ce8 000018 18   I 131  16  8
+  [18] .ltext.process_spin_lock_bridge PROGBITS        0000000000000000 000360 00000c 00 AXl  0   0 16
+  [19] .rela.ltext.process_spin_lock_bridge RELA            0000000000000000 006d00 000018 18   I 131  18  8
+  [20] .ltext.process_spin_unlock_bridge PROGBITS        0000000000000000 000370 00000c 00 AXl  0   0 16
+  [21] .rela.ltext.process_spin_unlock_bridge RELA            0000000000000000 006d18 000018 18   I 131  20  8
+  [22] .ltext.__sched_wakeup_thread PROGBITS        0000000000000000 000380 00027a 00 AXl  0   0 16
+  [23] .rela.ltext.__sched_wakeup_thread RELA            0000000000000000 006d30 000180 18   I 131  22  8
+  [24] .ltext.sched_wakeup_thread PROGBITS        0000000000000000 000600 00000e 00 AXl  0   0 16
+  [25] .rela.ltext.sched_wakeup_thread RELA            0000000000000000 006eb0 000018 18   I 131  24  8
+  [26] .ltext.sched_wakeup_thread_body_result PROGBITS        0000000000000000 000610 00030d 00 AXl  0   0 16
+  [27] .ltext.arch_delay PROGBITS        0000000000000000 000920 00005b 00 AXl  0   0 16
+  [28] .rela.ltext.arch_delay RELA            0000000000000000 006ec8 000018 18   I 131  27  8
+  [29] .ltext.rdtsc      PROGBITS        0000000000000000 000980 00000c 00 AXl  0   0 16
+  [30] .ltext.__ihk_mc_spinlock_lock PROGBITS        0000000000000000 000990 00006c 00 AXl  0   0 16
+  [31] .rela.ltext.__ihk_mc_spinlock_lock RELA            0000000000000000 006ee0 000048 18   I 131  30  8
+  [32] .ltext.__ihk_mc_spinlock_lock_noirq PROGBITS        0000000000000000 000a00 00005b 00 AXl  0   0 16
+  [33] .rela.ltext.__ihk_mc_spinlock_lock_noirq RELA            0000000000000000 006f28 000048 18   I 131  32  8
+  [34] .ltext.__ihk_mc_spinlock_unlock PROGBITS        0000000000000000 000a60 00003d 00 AXl  0   0 16
+  [35] .rela.ltext.__ihk_mc_spinlock_unlock RELA            0000000000000000 006f70 000048 18   I 131  34  8
+  [36] .ltext.__ihk_mc_spinlock_unlock_noirq PROGBITS        0000000000000000 000aa0 00003b 00 AXl  0   0 16
+  [37] .rela.ltext.__ihk_mc_spinlock_unlock_noirq RELA            0000000000000000 006fb8 000048 18   I 131  36  8
+  [38] .ltext.cpu_disable_interrupt_save PROGBITS        0000000000000000 000ae0 000006 00 AXl  0   0 16
+  [39] .ltext.cpu_interrupt_disabled PROGBITS        0000000000000000 000af0 000010 00 AXl  0   0 16
+  [40] .ltext.cpu_pause  PROGBITS        0000000000000000 000b00 000003 00 AXl  0   0 16
+  [41] .ltext.cpu_restore_interrupt PROGBITS        0000000000000000 000b10 000005 00 AXl  0   0 16
+  [42] .ltext.ihk_mc_spinlock_init PROGBITS        0000000000000000 000b20 000005 00 AXl  0   0 16
+  [43] .ltext.kmsg_init  PROGBITS        0000000000000000 000b30 00000f 00 AXl  0   0 16
+  [44] .rela.ltext.kmsg_init RELA            0000000000000000 007000 000018 18   I 131  43  8
+  [45] .ltext.kprintf_lock PROGBITS        0000000000000000 000b40 00006b 00 AXl  0   0 16
+  [46] .rela.ltext.kprintf_lock RELA            0000000000000000 007018 000060 18   I 131  45  8
+  [47] .ltext.kprintf_unlock PROGBITS        0000000000000000 000bb0 000047 00 AXl  0   0 16
+  [48] .rela.ltext.kprintf_unlock RELA            0000000000000000 007078 000060 18   I 131  47  8
+  [49] .ltext.preempt_disable PROGBITS        0000000000000000 000c00 000036 00 AXl  0   0 16
+  [50] .rela.ltext.preempt_disable RELA            0000000000000000 0070d8 000048 18   I 131  49  8
+  [51] .ltext.preempt_enable PROGBITS        0000000000000000 000c40 000036 00 AXl  0   0 16
+  [52] .rela.ltext.preempt_enable RELA            0000000000000000 007120 000048 18   I 131  51  8
+  [53] .ltext.memset     PROGBITS        0000000000000000 000c80 000071 00 AXl  0   0 16
+  [54] .ltext.strnlen    PROGBITS        0000000000000000 000d00 000039 00 AXl  0   0 16
+  [55] .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result PROGBITS        0000000000000000 000d40 0004a6 00 AXl  0   0 16
+  [56] .rela.ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result RELA            0000000000000000 007168 000030 18   I 131  55  8
+  [57] .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result PROGBITS        0000000000000000 0011f0 000d43 00 AXl  0   0 16
+  [58] .rela.ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result RELA            0000000000000000 007198 0000d8 18   I 131  57  8
+  [59] .ltext.format_decode_result PROGBITS        0000000000000000 001f40 00036c 00 AXl  0   0 16
+  [60] .rela.ltext.format_decode_result RELA            0000000000000000 007270 000048 18   I 131  59  8
+  [61] .ltext.kprintf    PROGBITS        0000000000000000 0022b0 0002c2 00 AXl  0   0 16
+  [62] .rela.ltext.kprintf RELA            0000000000000000 0072b8 000150 18   I 131  61  8
+  [63] .ltext.printf_copy_literal_result PROGBITS        0000000000000000 002580 0000ae 00 AXl  0   0 16
+  [64] .ltext.printf_emit_char_result PROGBITS        0000000000000000 002630 00000e 00 AXl  0   0 16
+  [65] .ltext.printf_terminate_result PROGBITS        0000000000000000 002640 000013 00 AXl  0   0 16
+  [66] .ltext.printf_write_nchars_result PROGBITS        0000000000000000 002660 000019 00 AXl  0   0 16
+  [67] .ltext.put_dec_full_result PROGBITS        0000000000000000 002680 0000ae 00 AXl  0   0 16
+  [68] .ltext.put_dec_result PROGBITS        0000000000000000 002730 000123 00 AXl  0   0 16
+  [69] .rela.ltext.put_dec_result RELA            0000000000000000 007408 000018 18   I 131  68  8
+  [70] .ltext.put_dec_trunc_result PROGBITS        0000000000000000 002860 0000d6 00 AXl  0   0 16
+  [71] .ltext.skip_atoi_result PROGBITS        0000000000000000 002940 000042 00 AXl  0   0 16
+  [72] .ltext.snprintf   PROGBITS        0000000000000000 002990 00004c 00 AXl  0   0 16
+  [73] .rela.ltext.snprintf RELA            0000000000000000 007420 000018 18   I 131  72  8
+  [74] .ltext.x86_addr_log_bridge PROGBITS        0000000000000000 0029e0 000062 00 AXl  0   0 16
+  [75] .rela.ltext.x86_addr_log_bridge RELA            0000000000000000 007438 000090 18   I 131  74  8
+  [76] .ltext.get_cpu_local_var PROGBITS        0000000000000000 002a50 000018 00 AXl  0   0 16
+  [77] .rela.ltext.get_cpu_local_var RELA            0000000000000000 0074c8 000018 18   I 131  76  8
+  [78] .ltext.get_this_cpu_local_var PROGBITS        0000000000000000 002a70 000063 00 AXl  0   0 16
+  [79] .rela.ltext.get_this_cpu_local_var RELA            0000000000000000 0074e0 000048 18   I 131  78  8
+  [80] .ltext.ihk_mc_get_processor_id PROGBITS        0000000000000000 002ae0 00004d 00 AXl  0   0 16
+  [81] .rela.ltext.ihk_mc_get_processor_id RELA            0000000000000000 007528 000030 18   I 131  80  8
+  [82] .ltext.syscall_virt_to_phys_bridge PROGBITS        0000000000000000 002b30 0000a5 00 AXl  0   0 16
+  [83] .rela.ltext.syscall_virt_to_phys_bridge RELA            0000000000000000 007558 000078 18   I 131  82  8
+  [84] .ltext.x86_user_map_kernel_start_bridge PROGBITS        0000000000000000 002be0 00000e 00 AXl  0   0 16
+  [85] .rela.ltext.x86_user_map_kernel_start_bridge RELA            0000000000000000 0075d0 000018 18   I 131  84  8
+  [86] .ltext.x86_virt_to_phys_body_result PROGBITS        0000000000000000 002bf0 000069 00 AXl  0   0 16
+  [87] .ltext.getcred    PROGBITS        0000000000000000 002c60 000103 00 AXl  0   0 16
+  [88] .rela.ltext.getcred RELA            0000000000000000 0075e8 000048 18   I 131  87  8
+  [89] .ltext.getcred_body_result PROGBITS        0000000000000000 002d70 000110 00 AXl  0   0 16
+  [90] .ltext.syscall_refresh_cred_fields_body_result PROGBITS        0000000000000000 002e80 0000a3 00 AXl  0   0 16
+  [91] .ltext.do_setresgid PROGBITS        0000000000000000 002f30 0000ad 00 AXl  0   0 16
+  [92] .rela.ltext.do_setresgid RELA            0000000000000000 007630 000048 18   I 131  91  8
+  [93] .ltext.do_setresuid PROGBITS        0000000000000000 002fe0 0000ad 00 AXl  0   0 16
+  [94] .rela.ltext.do_setresuid RELA            0000000000000000 007678 000048 18   I 131  93  8
+  [95] .ltext.ptrace_detach_do_kill_bridge PROGBITS        0000000000000000 003090 00000c 00 AXl  0   0 16
+  [96] .rela.ltext.ptrace_detach_do_kill_bridge RELA            0000000000000000 0076c0 000018 18   I 131  95  8
+  [97] .ltext.ptrace_detach_wakeup_bridge PROGBITS        0000000000000000 0030a0 00000c 00 AXl  0   0 16
+  [98] .rela.ltext.ptrace_detach_wakeup_bridge RELA            0000000000000000 0076d8 000018 18   I 131  97  8
+  [99] .ltext.syscall_do_syscall2_bridge PROGBITS        0000000000000000 0030b0 0000a7 00 AXl  0   0 16
+  [100] .rela.ltext.syscall_do_syscall2_bridge RELA            0000000000000000 0076f0 000048 18   I 131  99  8
+  [101] .ltext.syscall_do_syscall3_bridge PROGBITS        0000000000000000 003160 0000ab 00 AXl  0   0 16
+  [102] .rela.ltext.syscall_do_syscall3_bridge RELA            0000000000000000 007738 000048 18   I 131 101  8
+  [103] .ltext.terminate_host PROGBITS        0000000000000000 003210 0000b7 00 AXl  0   0 16
+  [104] .rela.ltext.terminate_host RELA            0000000000000000 007780 0000c0 18   I 131 103  8
+  [105] .ltext.wait_host_wait4_bridge PROGBITS        0000000000000000 0032d0 0000a6 00 AXl  0   0 16
+  [106] .rela.ltext.wait_host_wait4_bridge RELA            0000000000000000 007840 000048 18   I 131 105  8
+  [107] .lrodata.process_sched_runq_log_bridge PROGBITS        0000000000000000 003378 000058 00  Al  0   0  8
+  [108] .rela.lrodata.process_sched_runq_log_bridge RELA            0000000000000000 007888 000108 18   I 131 107  8
+  [109] .lrodata.str1.1   PROGBITS        0000000000000000 0033d0 0002ab 01 AMSl  0   0  1
+  [110] .lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result PROGBITS        0000000000000000 003680 0000f0 00  Al  0   0  8
+  [111] .rela.lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result RELA            0000000000000000 007990 0002d0 18   I 131 110  8
+  [112] .lrodata.format_decode_result PROGBITS        0000000000000000 003770 0004c0 00  Al  0   0  8
+  [113] .rela.lrodata.format_decode_result RELA            0000000000000000 007c60 000e40 18   I 131 112  8
+  [114] .lrodata.cst16    PROGBITS        0000000000000000 003c30 000010 10 AMl  0   0  1
+  [115] .lrodata._RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE PROGBITS        0000000000000000 003c40 00013f 00  Al  0   0  1
+  [116] .lrodata.x86_map_kernel_start_geometry PROGBITS        0000000000000000 003d80 000008 00  Al  0   0  8
+  [117] .eh_frame         X86_64_UNWIND   0000000000000000 003d88 000bd0 00   A  0   0  8
+  [118] .rela.eh_frame    RELA            0000000000000000 008aa0 0005d0 18   I 131 117  8
+  [119] .ldata.num_processors PROGBITS        0000000000000000 004958 000004 00 WAl  0   0  4
+  [120] __verbose         PROGBITS        0000000000000000 004960 000040 00 WAo  0   0  8
+  [121] .rela__verbose    RELA            0000000000000000 009070 000060 18   I 131 120  8
+  [122] .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK NOBITS          0000000000000000 0049a0 000004 00 WAl  0   0  4
+  [123] .lbss.cpu_local_var_initialized NOBITS          0000000000000000 0049a0 000004 00 WAl  0   0  4
+  [124] .lbss.kmsg_buf    NOBITS          0000000000000000 0049a0 000008 00 WAl  0   0  8
+  [125] .lbss.clv         NOBITS          0000000000000000 0049a0 000008 00 WAl  0   0  8
+  [126] .lbss.linux_page_offset_base NOBITS          0000000000000000 0049a0 000008 00 WAl  0   0  8
+  [127] .lbss.locals      NOBITS          0000000000000000 0049a0 000008 00 WAl  0   0  8
+  [128] .lbss.x86_kernel_phys_base NOBITS          0000000000000000 0049a0 000008 00 WAl  0   0  8
+  [129] .comment          PROGBITS        0000000000000000 0049a0 000212 01  MS  0   0  1
+  [130] .note.GNU-stack   PROGBITS        0000000000000000 004bb2 000000 00      0   0  1
+  [131] .symtab           SYMTAB          0000000000000000 004bb8 0011e8 18     132  96  8
+  [132] .strtab           STRTAB          0000000000000000 005da0 000b24 00      0   0  1
+  [133] .shstrtab         STRTAB          0000000000000000 0090d0 000ad2 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+
+Relocation section '.rela.ltext.process_sched_cpu_local_bridge' at offset 0x68c8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.process_sched_interrupt_bridge' at offset 0x68e0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000007900000001 R_X86_64_64            0000000000000000 ihk_mc_interrupt_cpu + 0
+
+Relocation section '.rela.ltext.process_sched_runq_log_bridge' at offset 0x68f8 contains 38 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000014  0000004000000001 R_X86_64_64            0000000000000000 .lrodata.process_sched_runq_log_bridge + 0
+0000000000000021  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 0
+000000000000002b  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+0000000000000043  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 178
+000000000000005a  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + ca
+0000000000000064  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+0000000000000082  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 1a2
+000000000000008c  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 1dd
+000000000000009b  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 138
+00000000000000b2  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 89
+00000000000000be  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 158
+00000000000000d5  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + a6
+00000000000000df  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 73
+00000000000000ee  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 1d8
+0000000000000105  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000114  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 14b
+000000000000011e  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 118
+0000000000000128  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+0000000000000145  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 118
+0000000000000165  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000017a  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 1d
+0000000000000184  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 73
+000000000000018e  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+00000000000001ae  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 198
+00000000000001c5  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + fb
+00000000000001d1  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 1b8
+00000000000001e8  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 12f
+00000000000001f2  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 118
+00000000000001fc  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+0000000000000214  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 218
+0000000000000227  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 1e6
+0000000000000231  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 1fd
+000000000000023b  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+0000000000000256  000000b800000001 R_X86_64_64            0000000000000000 process_remaining_range_scheduler_debug + 1f8
+0000000000000274  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000280  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 17f
+000000000000028a  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 118
+0000000000000294  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+
+Relocation section '.rela.ltext.process_sched_rwlock_bridge' at offset 0x6c88 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  000000b500000001 R_X86_64_64            0000000000000000 __mcs_rwlock_writer_lock_noirq + 0
+
+Relocation section '.rela.ltext.process_sched_rwunlock_bridge' at offset 0x6ca0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000009400000001 R_X86_64_64            0000000000000000 __mcs_rwlock_writer_unlock_noirq + 0
+
+Relocation section '.rela.ltext.process_sched_set_timer_bridge' at offset 0x6cb8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006800000001 R_X86_64_64            0000000000000000 set_timer + 0
+
+Relocation section '.rela.ltext.process_sched_status_set_bridge' at offset 0x6cd0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006e00000001 R_X86_64_64            0000000000000000 xchg4 + 0
+
+Relocation section '.rela.ltext.process_sched_vector_bridge' at offset 0x6ce8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  000000b100000001 R_X86_64_64            0000000000000000 ihk_mc_get_vector + 0
+
+Relocation section '.rela.ltext.process_spin_lock_bridge' at offset 0x6d00 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000009900000001 R_X86_64_64            0000000000000000 __ihk_mc_spinlock_lock + 0
+
+Relocation section '.rela.ltext.process_spin_unlock_bridge' at offset 0x6d18 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000007e00000001 R_X86_64_64            0000000000000000 __ihk_mc_spinlock_unlock + 0
+
+Relocation section '.rela.ltext.__sched_wakeup_thread' at offset 0x6d30 contains 16 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000002b  0000006700000001 R_X86_64_64            0000000000000000 process_sched_cpu_local_bridge + 0
+000000000000003a  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000008f  000000a800000001 R_X86_64_64            0000000000000000 process_sched_runq_log_bridge + 0
+00000000000000b0  000000aa00000001 R_X86_64_64            0000000000000000 process_spin_lock_bridge + 0
+00000000000000db  000000a800000001 R_X86_64_64            0000000000000000 process_sched_runq_log_bridge + 0
+00000000000000f1  000000b700000001 R_X86_64_64            0000000000000000 process_spin_unlock_bridge + 0
+000000000000013a  000000aa00000001 R_X86_64_64            0000000000000000 process_spin_lock_bridge + 0
+0000000000000170  000000ba00000001 R_X86_64_64            0000000000000000 process_sched_rwlock_bridge + 0
+000000000000019b  0000006400000001 R_X86_64_64            0000000000000000 process_sched_rwunlock_bridge + 0
+00000000000001bb  0000007400000001 R_X86_64_64            0000000000000000 process_sched_status_set_bridge + 0
+00000000000001de  0000008d00000001 R_X86_64_64            0000000000000000 process_sched_set_timer_bridge + 0
+00000000000001fe  000000b700000001 R_X86_64_64            0000000000000000 process_spin_unlock_bridge + 0
+0000000000000226  000000a800000001 R_X86_64_64            0000000000000000 process_sched_runq_log_bridge + 0
+0000000000000232  0000009100000001 R_X86_64_64            0000000000000000 process_sched_vector_bridge + 0
+0000000000000243  0000006d00000001 R_X86_64_64            0000000000000000 process_sched_interrupt_bridge + 0
+000000000000025e  000000b700000001 R_X86_64_64            0000000000000000 process_spin_unlock_bridge + 0
+
+Relocation section '.rela.ltext.sched_wakeup_thread' at offset 0x6eb0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  000000b200000001 R_X86_64_64            0000000000000000 __sched_wakeup_thread + 0
+
+Relocation section '.rela.ltext.arch_delay' at offset 0x6ec8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000002e  000000a200000001 R_X86_64_64            0000000000000000 cpu_pause + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_lock' at offset 0x6ee0 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000000c  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+000000000000001b  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000027  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_lock_noirq' at offset 0x6f28 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000006  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000015  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000021  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_unlock' at offset 0x6f70 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000000b  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+000000000000001a  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000026  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.__ihk_mc_spinlock_unlock_noirq' at offset 0x6fb8 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000007  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000017  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000023  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.kmsg_init' at offset 0x7000 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000004a00000001 R_X86_64_64            0000000000000000 .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK + 0
+
+Relocation section '.rela.ltext.kprintf_lock' at offset 0x7018 contains 4 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000006  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000015  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000021  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+0000000000000036  0000004a00000001 R_X86_64_64            0000000000000000 .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK + 0
+
+Relocation section '.rela.ltext.kprintf_unlock' at offset 0x7078 contains 4 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000003  0000004a00000001 R_X86_64_64            0000000000000000 .lbss._RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK + 0
+0000000000000015  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000024  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000030  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.preempt_disable' at offset 0x70d8 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000012  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000001e  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext.preempt_enable' at offset 0x7120 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006000000001 R_X86_64_64            0000000000000000 cpu_local_var_initialized + 0
+0000000000000012  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000001e  000000bd00000001 R_X86_64_64            0000000000000000 get_cpu_local_var + 0
+
+Relocation section '.rela.ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result' at offset 0x7168 contains 2 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+00000000000000d6  0000008900000001 R_X86_64_64            0000000000000000 put_dec_result + 0
+000000000000012d  0000004400000001 R_X86_64_64            0000000000000000 .lrodata.cst16 + 0
+
+Relocation section '.rela.ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result' at offset 0x7198 contains 9 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000083  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 21c
+0000000000000093  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 215
+00000000000000d6  000000a400000001 R_X86_64_64            0000000000000000 format_decode_result + 0
+00000000000000f9  0000004200000001 R_X86_64_64            0000000000000000 .lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 0
+00000000000002e7  0000004200000001 R_X86_64_64            0000000000000000 .lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 90
+00000000000006f7  0000002100000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result + 0
+00000000000007c9  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 215
+00000000000007ed  0000008600000001 R_X86_64_64            0000000000000000 strnlen + 0
+0000000000000ce8  0000002100000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result + 0
+
+Relocation section '.rela.ltext.format_decode_result' at offset 0x7270 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000016d  0000004300000001 R_X86_64_64            0000000000000000 .lrodata.format_decode_result + 0
+000000000000025c  0000004300000001 R_X86_64_64            0000000000000000 .lrodata.format_decode_result + 88
+00000000000002da  0000004300000001 R_X86_64_64            0000000000000000 .lrodata.format_decode_result + 328
+
+Relocation section '.rela.ltext.kprintf' at offset 0x72b8 contains 14 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000052  0000006a00000001 R_X86_64_64            0000000000000000 kmsg_buf + 0
+0000000000000070  000000a100000001 R_X86_64_64            0000000000000000 memset + 0
+0000000000000086  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000092  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 20d
+000000000000009c  0000006b00000001 R_X86_64_64            0000000000000000 snprintf + 0
+00000000000000c9  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 0
+00000000000000df  0000007700000001 R_X86_64_64            0000000000000000 kprintf_lock + 0
+00000000000000f0  0000008a00000001 R_X86_64_64            0000000000000000 cpu_disable_interrupt_save + 0
+0000000000000111  000000a200000001 R_X86_64_64            0000000000000000 cpu_pause + 0
+0000000000000238  0000007f00000001 R_X86_64_64            0000000000000000 cpu_restore_interrupt + 0
+0000000000000249  0000008700000001 R_X86_64_64            0000000000000000 kprintf_unlock + 0
+000000000000025a  0000009200000001 R_X86_64_64            0000000000000000 cpu_interrupt_disabled + 0
+00000000000002a0  0000007d00000001 R_X86_64_64            0000000000000000 eventfd + 0
+00000000000002b1  0000006c00000001 R_X86_64_64            0000000000000000 ihk_mc_delay_us + 0
+
+Relocation section '.rela.ltext.put_dec_result' at offset 0x7408 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000117  0000007300000001 R_X86_64_64            0000000000000000 put_dec_trunc_result + 0
+
+Relocation section '.rela.ltext.snprintf' at offset 0x7420 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000038  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 0
+
+Relocation section '.rela.ltext.x86_addr_log_bridge' at offset 0x7438 contains 6 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000000f  0000008e00000001 R_X86_64_64            0000000000000020 x86_addr_log_straight_debug + 18
+0000000000000022  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 269
+000000000000002e  0000009e00000001 R_X86_64_64            0000000000000000 x86_addr_log_kernel_debug + 18
+0000000000000042  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 223
+000000000000004c  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 25c
+0000000000000056  000000ab00000001 R_X86_64_64            0000000000000000 kprintf + 0
+
+Relocation section '.rela.ltext.get_cpu_local_var' at offset 0x74c8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006600000001 R_X86_64_64            0000000000000000 clv + 0
+
+Relocation section '.rela.ltext.get_this_cpu_local_var' at offset 0x74e0 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000013  0000007600000001 R_X86_64_64            0000000000000000 locals + 0
+000000000000002c  0000007000000001 R_X86_64_64            0000000000000000 num_processors + 0
+000000000000004f  0000006600000001 R_X86_64_64            0000000000000000 clv + 0
+
+Relocation section '.rela.ltext.ihk_mc_get_processor_id' at offset 0x7528 contains 2 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000013  0000007600000001 R_X86_64_64            0000000000000000 locals + 0
+0000000000000025  0000007000000001 R_X86_64_64            0000000000000000 num_processors + 0
+
+Relocation section '.rela.ltext.syscall_virt_to_phys_bridge' at offset 0x7558 contains 5 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000009  0000006900000001 R_X86_64_64            0000000000000000 x86_map_kernel_start_geometry + 0
+000000000000001b  000000b300000001 R_X86_64_64            0000000000000000 linux_page_offset_base + 0
+000000000000003b  000000ac00000001 R_X86_64_64            0000000000000000 x86_addr_log_bridge + 0
+000000000000005e  0000008100000001 R_X86_64_64            0000000000000000 x86_kernel_phys_base + 0
+0000000000000071  000000ac00000001 R_X86_64_64            0000000000000000 x86_addr_log_bridge + 0
+
+Relocation section '.rela.ltext.x86_user_map_kernel_start_bridge' at offset 0x75d0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006900000001 R_X86_64_64            0000000000000000 x86_map_kernel_start_geometry + 0
+
+Relocation section '.rela.ltext.getcred' at offset 0x75e8 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+00000000000000b4  0000008000000001 R_X86_64_64            0000000000000000 syscall_virt_to_phys_bridge + 0
+00000000000000d1  0000009f00000001 R_X86_64_64            0000000000000000 syscall_get_processor_id_bridge + 0
+00000000000000dd  0000007200000001 R_X86_64_64            0000000000000000 syscall_do_syscall_request_bridge + 0
+
+Relocation section '.rela.ltext.do_setresgid' at offset 0x7630 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000004e  0000008500000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0
+0000000000000066  0000009c00000001 R_X86_64_64            0000000000000000 getcred + 0
+0000000000000070  0000008c00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0
+
+Relocation section '.rela.ltext.do_setresuid' at offset 0x7678 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000004e  0000008500000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0
+0000000000000066  0000009c00000001 R_X86_64_64            0000000000000000 getcred + 0
+0000000000000070  0000008c00000001 R_X86_64_64            0000000000000000 syscall_refresh_cred_fields_body_result + 0
+
+Relocation section '.rela.ltext.ptrace_detach_do_kill_bridge' at offset 0x76c0 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000007c00000001 R_X86_64_64            0000000000000000 do_kill + 0
+
+Relocation section '.rela.ltext.ptrace_detach_wakeup_bridge' at offset 0x76d8 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000002  0000006f00000001 R_X86_64_64            0000000000000000 sched_wakeup_thread + 0
+
+Relocation section '.rela.ltext.syscall_do_syscall2_bridge' at offset 0x76f0 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000063  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000006f  0000009300000001 R_X86_64_64            0000000000000000 do_syscall + 0
+0000000000000079  000000a500000001 R_X86_64_64            0000000000000000 syscall_generic_forwarding_body_result + 0
+
+Relocation section '.rela.ltext.syscall_do_syscall3_bridge' at offset 0x7738 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000067  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+0000000000000073  0000009300000001 R_X86_64_64            0000000000000000 do_syscall + 0
+000000000000007d  000000a500000001 R_X86_64_64            0000000000000000 syscall_generic_forwarding_body_result + 0
+
+Relocation section '.rela.ltext.terminate_host' at offset 0x7780 contains 8 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000008500000001 R_X86_64_64            0000000000000000 get_this_cpu_local_var + 0
+0000000000000037  0000008f00000001 R_X86_64_64            0000000000000000 syscall_do_kill_thread_bridge + 0
+0000000000000041  000000bc00000001 R_X86_64_64            0000000000000000 f03_wait_release_process + 0
+000000000000004b  000000be00000001 R_X86_64_64            0000000000000000 f03_wait_release_thread + 0
+0000000000000055  0000007500000001 R_X86_64_64            0000000000000000 f03_terminate_host_refcount_set_v1 + 0
+000000000000005f  000000ad00000001 R_X86_64_64            0000000000000000 syscall_process_unlock_bridge + 0
+0000000000000069  0000006500000001 R_X86_64_64            0000000000000000 syscall_find_process_bridge + 0
+000000000000009a  0000008800000001 R_X86_64_64            0000000000000000 terminate_host_body_result + 0
+
+Relocation section '.rela.ltext.wait_host_wait4_bridge' at offset 0x7840 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+000000000000005f  000000b000000001 R_X86_64_64            0000000000000000 ihk_mc_get_processor_id + 0
+000000000000006b  0000009300000001 R_X86_64_64            0000000000000000 do_syscall + 0
+0000000000000075  000000a500000001 R_X86_64_64            0000000000000000 syscall_generic_forwarding_body_result + 0
+
+Relocation section '.rela.lrodata.process_sched_runq_log_bridge' at offset 0x7888 contains 11 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000000  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 1f
+0000000000000008  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 143
+0000000000000010  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 99
+0000000000000018  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + bc
+0000000000000020  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 41
+0000000000000028  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 1ac
+0000000000000030  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 1cf
+0000000000000038  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + ec
+0000000000000040  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 254
+0000000000000048  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 80
+0000000000000050  0000000400000001 R_X86_64_64            0000000000000000 .ltext.process_sched_runq_log_bridge + 212
+
+Relocation section '.rela.lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result' at offset 0x7990 contains 30 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000000  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 17f
+0000000000000008  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 1fd
+0000000000000010  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 110
+0000000000000018  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 21f
+0000000000000020  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 241
+0000000000000028  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 132
+0000000000000030  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 104
+0000000000000038  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 104
+0000000000000040  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000048  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000050  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000058  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000060  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000068  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000070  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000078  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000080  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2d1
+0000000000000088  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 289
+0000000000000090  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 57a
+0000000000000098  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2f2
+00000000000000a0  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2f2
+00000000000000a8  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 555
+00000000000000b0  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 5c9
+00000000000000b8  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 5ef
+00000000000000c0  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 639
+00000000000000c8  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 5a7
+00000000000000d0  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 614
+00000000000000d8  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 5a7
+00000000000000e0  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2f2
+00000000000000e8  0000002200000001 R_X86_64_64            0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 2f2
+
+Relocation section '.rela.lrodata.format_decode_result' at offset 0x7c60 contains 152 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000000  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 177
+0000000000000008  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000010  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000018  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1a1
+0000000000000020  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000028  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000030  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000038  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000040  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000048  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000050  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000058  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1a9
+0000000000000060  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000068  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 180
+0000000000000070  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000078  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b9
+0000000000000080  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 1b1
+0000000000000088  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 286
+0000000000000090  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000098  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000a0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000a8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000b0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000b8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000c0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000c8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000d0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000d8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000e0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000e8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000f0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000000f8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000100  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000108  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000110  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000118  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000120  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000128  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000130  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000138  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000140  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000148  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000150  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000158  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000160  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000168  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000170  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000178  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000180  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000188  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000190  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000198  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001a0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001a8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001b0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001b8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001c0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001c8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001d0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001d8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001e0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001e8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001f0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000001f8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000200  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000208  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000210  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000218  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000220  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 27d
+0000000000000228  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000230  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000238  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000240  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000248  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000250  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000258  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000260  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000268  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000270  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000278  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2ae
+0000000000000280  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 268
+0000000000000288  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000290  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 291
+0000000000000298  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002a0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002a8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 268
+00000000000002b0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002b8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002c0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002c8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002d0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2a3
+00000000000002d8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2c4
+00000000000002e0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2b9
+00000000000002e8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002f0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+00000000000002f8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 26e
+0000000000000300  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000308  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2cb
+0000000000000310  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000318  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2f7
+0000000000000320  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 279
+0000000000000328  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 2e6
+0000000000000330  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000338  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000340  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000348  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 34a
+0000000000000350  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000358  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000360  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000368  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000370  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000378  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000380  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000388  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000390  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000398  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003a0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003a8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003b0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003b8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 363
+00000000000003c0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003c8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003d0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003d8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003e0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003e8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003f0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000003f8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000400  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000408  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000410  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000418  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000420  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000428  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 351
+0000000000000430  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000438  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000440  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000448  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 332
+0000000000000450  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000458  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000460  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000468  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000470  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000478  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000480  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000488  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 343
+0000000000000490  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+0000000000000498  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000004a0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000004a8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000004b0  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 321
+00000000000004b8  0000002300000001 R_X86_64_64            0000000000000000 .ltext.format_decode_result + 363
+
+Relocation section '.rela.eh_frame' at offset 0x8aa0 contains 62 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000000200000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_cpu_local_bridge + 0
+0000000000000040  0000000300000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_interrupt_bridge + 0
+0000000000000060  0000000400000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_runq_log_bridge + 0
+0000000000000110  0000000500000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_rwlock_bridge + 0
+0000000000000130  0000000600000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_rwunlock_bridge + 0
+0000000000000150  0000000700000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_set_timer_bridge + 0
+0000000000000170  0000000800000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_status_set_bridge + 0
+0000000000000190  0000000900000018 R_X86_64_PC64          0000000000000000 .ltext.process_sched_vector_bridge + 0
+00000000000001b0  0000000a00000018 R_X86_64_PC64          0000000000000000 .ltext.process_spin_lock_bridge + 0
+00000000000001d0  0000000b00000018 R_X86_64_PC64          0000000000000000 .ltext.process_spin_unlock_bridge + 0
+0000000000000208  0000000c00000018 R_X86_64_PC64          0000000000000000 .ltext.__sched_wakeup_thread + 0
+0000000000000240  0000000d00000018 R_X86_64_PC64          0000000000000000 .ltext.sched_wakeup_thread + 0
+0000000000000260  0000000e00000018 R_X86_64_PC64          0000000000000000 .ltext.sched_wakeup_thread_body_result + 0
+00000000000002d0  0000000f00000018 R_X86_64_PC64          0000000000000000 .ltext.arch_delay + 0
+0000000000000300  0000001000000018 R_X86_64_PC64          0000000000000000 .ltext.rdtsc + 0
+0000000000000338  0000001100000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_lock + 0
+0000000000000370  0000001200000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_lock_noirq + 0
+0000000000000398  0000001300000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_unlock + 0
+00000000000003c0  0000001400000018 R_X86_64_PC64          0000000000000000 .ltext.__ihk_mc_spinlock_unlock_noirq + 0
+00000000000003e0  0000001500000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_disable_interrupt_save + 0
+0000000000000400  0000001600000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_interrupt_disabled + 0
+0000000000000420  0000001700000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_pause + 0
+0000000000000440  0000001800000018 R_X86_64_PC64          0000000000000000 .ltext.cpu_restore_interrupt + 0
+0000000000000460  0000001900000018 R_X86_64_PC64          0000000000000000 .ltext.ihk_mc_spinlock_init + 0
+0000000000000480  0000001a00000018 R_X86_64_PC64          0000000000000000 .ltext.kmsg_init + 0
+00000000000004a0  0000001b00000018 R_X86_64_PC64          0000000000000000 .ltext.kprintf_lock + 0
+00000000000004c8  0000001c00000018 R_X86_64_PC64          0000000000000000 .ltext.kprintf_unlock + 0
+00000000000004f0  0000001d00000018 R_X86_64_PC64          0000000000000000 .ltext.preempt_disable + 0
+0000000000000510  0000001e00000018 R_X86_64_PC64          0000000000000000 .ltext.preempt_enable + 0
+0000000000000548  0000001f00000018 R_X86_64_PC64          0000000000000000 .ltext.memset + 0
+0000000000000568  0000002000000018 R_X86_64_PC64          0000000000000000 .ltext.strnlen + 0
+00000000000005a0  0000002100000018 R_X86_64_PC64          0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result + 0
+00000000000005f8  0000002200000018 R_X86_64_PC64          0000000000000000 .ltext._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result + 0
+0000000000000650  0000002300000018 R_X86_64_PC64          0000000000000000 .ltext.format_decode_result + 0
+0000000000000678  0000002400000018 R_X86_64_PC64          0000000000000000 .ltext.kprintf + 0
+00000000000006d0  0000002500000018 R_X86_64_PC64          0000000000000000 .ltext.printf_copy_literal_result + 0
+00000000000006f0  0000002600000018 R_X86_64_PC64          0000000000000000 .ltext.printf_emit_char_result + 0
+0000000000000710  0000002700000018 R_X86_64_PC64          0000000000000000 .ltext.printf_terminate_result + 0
+0000000000000730  0000002800000018 R_X86_64_PC64          0000000000000000 .ltext.printf_write_nchars_result + 0
+0000000000000750  0000002900000018 R_X86_64_PC64          0000000000000000 .ltext.put_dec_full_result + 0
+0000000000000770  0000002a00000018 R_X86_64_PC64          0000000000000000 .ltext.put_dec_result + 0
+0000000000000798  0000002b00000018 R_X86_64_PC64          0000000000000000 .ltext.put_dec_trunc_result + 0
+00000000000007b8  0000002c00000018 R_X86_64_PC64          0000000000000000 .ltext.skip_atoi_result + 0
+00000000000007d8  0000002d00000018 R_X86_64_PC64          0000000000000000 .ltext.snprintf + 0
+0000000000000810  0000002e00000018 R_X86_64_PC64          0000000000000000 .ltext.x86_addr_log_bridge + 0
+0000000000000848  0000002f00000018 R_X86_64_PC64          0000000000000000 .ltext.get_cpu_local_var + 0
+0000000000000868  0000003000000018 R_X86_64_PC64          0000000000000000 .ltext.get_this_cpu_local_var + 0
+0000000000000888  0000003100000018 R_X86_64_PC64          0000000000000000 .ltext.ihk_mc_get_processor_id + 0
+00000000000008b0  0000003200000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_virt_to_phys_bridge + 0
+00000000000008e0  0000003300000018 R_X86_64_PC64          0000000000000000 .ltext.x86_user_map_kernel_start_bridge + 0
+0000000000000900  0000003400000018 R_X86_64_PC64          0000000000000000 .ltext.x86_virt_to_phys_body_result + 0
+0000000000000948  0000003500000018 R_X86_64_PC64          0000000000000000 .ltext.getcred + 0
+0000000000000978  0000003600000018 R_X86_64_PC64          0000000000000000 .ltext.getcred_body_result + 0
+00000000000009b8  0000003700000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_refresh_cred_fields_body_result + 0
+0000000000000a18  0000003800000018 R_X86_64_PC64          0000000000000000 .ltext.do_setresgid + 0
+0000000000000a50  0000003900000018 R_X86_64_PC64          0000000000000000 .ltext.do_setresuid + 0
+0000000000000a88  0000003a00000018 R_X86_64_PC64          0000000000000000 .ltext.ptrace_detach_do_kill_bridge + 0
+0000000000000aa8  0000003b00000018 R_X86_64_PC64          0000000000000000 .ltext.ptrace_detach_wakeup_bridge + 0
+0000000000000ac8  0000003c00000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_do_syscall2_bridge + 0
+0000000000000b10  0000003d00000018 R_X86_64_PC64          0000000000000000 .ltext.syscall_do_syscall3_bridge + 0
+0000000000000b60  0000003e00000018 R_X86_64_PC64          0000000000000000 .ltext.terminate_host + 0
+0000000000000b98  0000003f00000018 R_X86_64_PC64          0000000000000000 .ltext.wait_host_wait4_bridge + 0
+
+Relocation section '.rela__verbose' at offset 0x9070 contains 4 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000000  0000009000000001 R_X86_64_64            0000000000000000 _RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE + 0
+0000000000000008  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 297
+0000000000000020  0000009000000001 R_X86_64_64            0000000000000000 _RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE + 0
+0000000000000028  0000004100000001 R_X86_64_64            0000000000000000 .lrodata.str1.1 + 297
+
+Symbol table '.symtab' contains 191 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 
+     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 
+     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 
+     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 
+     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 
+     6: 0000000000000000     0 SECTION LOCAL  DEFAULT   10 
+     7: 0000000000000000     0 SECTION LOCAL  DEFAULT   12 
+     8: 0000000000000000     0 SECTION LOCAL  DEFAULT   14 
+     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   16 
+    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   18 
+    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   20 
+    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   22 
+    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   24 
+    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   26 
+    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   27 
+    16: 0000000000000000     0 SECTION LOCAL  DEFAULT   29 
+    17: 0000000000000000     0 SECTION LOCAL  DEFAULT   30 
+    18: 0000000000000000     0 SECTION LOCAL  DEFAULT   32 
+    19: 0000000000000000     0 SECTION LOCAL  DEFAULT   34 
+    20: 0000000000000000     0 SECTION LOCAL  DEFAULT   36 
+    21: 0000000000000000     0 SECTION LOCAL  DEFAULT   38 
+    22: 0000000000000000     0 SECTION LOCAL  DEFAULT   39 
+    23: 0000000000000000     0 SECTION LOCAL  DEFAULT   40 
+    24: 0000000000000000     0 SECTION LOCAL  DEFAULT   41 
+    25: 0000000000000000     0 SECTION LOCAL  DEFAULT   42 
+    26: 0000000000000000     0 SECTION LOCAL  DEFAULT   43 
+    27: 0000000000000000     0 SECTION LOCAL  DEFAULT   45 
+    28: 0000000000000000     0 SECTION LOCAL  DEFAULT   47 
+    29: 0000000000000000     0 SECTION LOCAL  DEFAULT   49 
+    30: 0000000000000000     0 SECTION LOCAL  DEFAULT   51 
+    31: 0000000000000000     0 SECTION LOCAL  DEFAULT   53 
+    32: 0000000000000000     0 SECTION LOCAL  DEFAULT   54 
+    33: 0000000000000000     0 SECTION LOCAL  DEFAULT   55 
+    34: 0000000000000000     0 SECTION LOCAL  DEFAULT   57 
+    35: 0000000000000000     0 SECTION LOCAL  DEFAULT   59 
+    36: 0000000000000000     0 SECTION LOCAL  DEFAULT   61 
+    37: 0000000000000000     0 SECTION LOCAL  DEFAULT   63 
+    38: 0000000000000000     0 SECTION LOCAL  DEFAULT   64 
+    39: 0000000000000000     0 SECTION LOCAL  DEFAULT   65 
+    40: 0000000000000000     0 SECTION LOCAL  DEFAULT   66 
+    41: 0000000000000000     0 SECTION LOCAL  DEFAULT   67 
+    42: 0000000000000000     0 SECTION LOCAL  DEFAULT   68 
+    43: 0000000000000000     0 SECTION LOCAL  DEFAULT   70 
+    44: 0000000000000000     0 SECTION LOCAL  DEFAULT   71 
+    45: 0000000000000000     0 SECTION LOCAL  DEFAULT   72 
+    46: 0000000000000000     0 SECTION LOCAL  DEFAULT   74 
+    47: 0000000000000000     0 SECTION LOCAL  DEFAULT   76 
+    48: 0000000000000000     0 SECTION LOCAL  DEFAULT   78 
+    49: 0000000000000000     0 SECTION LOCAL  DEFAULT   80 
+    50: 0000000000000000     0 SECTION LOCAL  DEFAULT   82 
+    51: 0000000000000000     0 SECTION LOCAL  DEFAULT   84 
+    52: 0000000000000000     0 SECTION LOCAL  DEFAULT   86 
+    53: 0000000000000000     0 SECTION LOCAL  DEFAULT   87 
+    54: 0000000000000000     0 SECTION LOCAL  DEFAULT   89 
+    55: 0000000000000000     0 SECTION LOCAL  DEFAULT   90 
+    56: 0000000000000000     0 SECTION LOCAL  DEFAULT   91 
+    57: 0000000000000000     0 SECTION LOCAL  DEFAULT   93 
+    58: 0000000000000000     0 SECTION LOCAL  DEFAULT   95 
+    59: 0000000000000000     0 SECTION LOCAL  DEFAULT   97 
+    60: 0000000000000000     0 SECTION LOCAL  DEFAULT   99 
+    61: 0000000000000000     0 SECTION LOCAL  DEFAULT  101 
+    62: 0000000000000000     0 SECTION LOCAL  DEFAULT  103 
+    63: 0000000000000000     0 SECTION LOCAL  DEFAULT  105 
+    64: 0000000000000000     0 SECTION LOCAL  DEFAULT  107 
+    65: 0000000000000000     0 SECTION LOCAL  DEFAULT  109 
+    66: 0000000000000000     0 SECTION LOCAL  DEFAULT  110 
+    67: 0000000000000000     0 SECTION LOCAL  DEFAULT  112 
+    68: 0000000000000000     0 SECTION LOCAL  DEFAULT  114 
+    69: 0000000000000000     0 SECTION LOCAL  DEFAULT  115 
+    70: 0000000000000000     0 SECTION LOCAL  DEFAULT  116 
+    71: 0000000000000000     0 SECTION LOCAL  DEFAULT  117 
+    72: 0000000000000000     0 SECTION LOCAL  DEFAULT  119 
+    73: 0000000000000000     0 SECTION LOCAL  DEFAULT  120 
+    74: 0000000000000000     0 SECTION LOCAL  DEFAULT  122 
+    75: 0000000000000000     0 SECTION LOCAL  DEFAULT  123 
+    76: 0000000000000000     0 SECTION LOCAL  DEFAULT  124 
+    77: 0000000000000000     0 SECTION LOCAL  DEFAULT  125 
+    78: 0000000000000000     0 SECTION LOCAL  DEFAULT  126 
+    79: 0000000000000000     0 SECTION LOCAL  DEFAULT  127 
+    80: 0000000000000000     0 SECTION LOCAL  DEFAULT  128 
+    81: 0000000000000000     0 SECTION LOCAL  DEFAULT  129 
+    82: 0000000000000000     0 SECTION LOCAL  DEFAULT  130 
+    83: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS scheduler_bridge_provider_unit.bb35dd3c0e42eaeb-cgu.0
+    84: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS scheduler_provider_unit.268e16f942120263-cgu.0
+    85: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS delay_provider_unit.d35b6df8ff77b51b-cgu.0
+    86: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS kmsg_lock_preempt_provider_unit.29c10e0d983792a6-cgu.0
+    87: 0000000000000000     4 OBJECT  LOCAL  DEFAULT  122 _RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK
+    88: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS kernel_string_provider_unit.f7461a10722880db-cgu.0
+    89: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS kprintf_provider_unit.e99c5c752c08030b-cgu.0
+    90: 0000000000000000  1190 FUNC    LOCAL  DEFAULT   55 _RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result
+    91: 0000000000000000  3395 FUNC    LOCAL  DEFAULT   57 _RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result
+    92: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS provider_storage_unit.3e76731398987d27-cgu.0
+    93: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS lower_provider_unit.7f603cb001ec0f2e-cgu.0
+    94: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS credential_provider_unit.f5b85a196e9a46cf-cgu.0
+    95: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS f03_adapters.6d8da4dbc4ea2d51-cgu.0
+    96: 0000000000000000     4 OBJECT  GLOBAL DEFAULT  123 cpu_local_var_initialized
+    97: 0000000000000000    66 FUNC    GLOBAL DEFAULT   71 skip_atoi_result
+    98: 0000000000000000    12 FUNC    GLOBAL DEFAULT   29 rdtsc
+    99: 0000000000000000    54 FUNC    GLOBAL DEFAULT   49 preempt_disable
+   100: 0000000000000000    12 FUNC    GLOBAL DEFAULT   10 process_sched_rwunlock_bridge
+   101: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_find_process_bridge
+   102: 0000000000000000     8 OBJECT  GLOBAL DEFAULT  125 clv
+   103: 0000000000000000    12 FUNC    GLOBAL DEFAULT    2 process_sched_cpu_local_bridge
+   104: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND set_timer
+   105: 0000000000000000     8 OBJECT  GLOBAL DEFAULT  116 x86_map_kernel_start_geometry
+   106: 0000000000000000     8 OBJECT  GLOBAL DEFAULT  124 kmsg_buf
+   107: 0000000000000000    76 FUNC    GLOBAL DEFAULT   72 snprintf
+   108: 0000000000000000    91 FUNC    GLOBAL DEFAULT   27 ihk_mc_delay_us
+   109: 0000000000000000    12 FUNC    GLOBAL DEFAULT    4 process_sched_interrupt_bridge
+   110: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND xchg4
+   111: 0000000000000000    14 FUNC    GLOBAL DEFAULT   24 sched_wakeup_thread
+   112: 0000000000000000     4 OBJECT  GLOBAL DEFAULT  119 num_processors
+   113: 0000000000000000    12 FUNC    GLOBAL DEFAULT   97 ptrace_detach_wakeup_bridge
+   114: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_do_syscall_request_bridge
+   115: 0000000000000000   214 FUNC    GLOBAL DEFAULT   70 put_dec_trunc_result
+   116: 0000000000000000    12 FUNC    GLOBAL DEFAULT   14 process_sched_status_set_bridge
+   117: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f03_terminate_host_refcount_set_v1
+   118: 0000000000000000     8 OBJECT  GLOBAL DEFAULT  127 locals
+   119: 0000000000000000   107 FUNC    GLOBAL DEFAULT   45 kprintf_lock
+   120: 0000000000000000    54 FUNC    GLOBAL DEFAULT   51 preempt_enable
+   121: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND ihk_mc_interrupt_cpu
+   122: 0000000000000000   105 FUNC    GLOBAL DEFAULT   86 x86_virt_to_phys_body_result
+   123: 0000000000000000   173 FUNC    GLOBAL DEFAULT   91 do_setresgid
+   124: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND do_kill
+   125: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND eventfd
+   126: 0000000000000000    61 FUNC    GLOBAL DEFAULT   34 __ihk_mc_spinlock_unlock
+   127: 0000000000000000     5 FUNC    GLOBAL DEFAULT   41 cpu_restore_interrupt
+   128: 0000000000000000   165 FUNC    GLOBAL DEFAULT   82 syscall_virt_to_phys_bridge
+   129: 0000000000000000     8 OBJECT  GLOBAL DEFAULT  128 x86_kernel_phys_base
+   130: 0000000000000000   165 FUNC    GLOBAL DEFAULT   82 virt_to_phys
+   131: 0000000000000000   272 FUNC    GLOBAL DEFAULT   89 getcred_body_result
+   132: 0000000000000000    14 FUNC    GLOBAL DEFAULT   64 printf_emit_char_result
+   133: 0000000000000000    99 FUNC    GLOBAL DEFAULT   78 get_this_cpu_local_var
+   134: 0000000000000000    57 FUNC    GLOBAL DEFAULT   54 strnlen
+   135: 0000000000000000    71 FUNC    GLOBAL DEFAULT   47 kprintf_unlock
+   136: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND terminate_host_body_result
+   137: 0000000000000000   291 FUNC    GLOBAL DEFAULT   68 put_dec_result
+   138: 0000000000000000     6 FUNC    GLOBAL DEFAULT   38 cpu_disable_interrupt_save
+   139: 0000000000000000    15 FUNC    GLOBAL DEFAULT   43 kmsg_init
+   140: 0000000000000000   163 FUNC    GLOBAL DEFAULT   90 syscall_refresh_cred_fields_body_result
+   141: 0000000000000000    12 FUNC    GLOBAL DEFAULT   12 process_sched_set_timer_bridge
+   142: 0000000000000020    32 OBJECT  GLOBAL DEFAULT  120 x86_addr_log_straight_debug
+   143: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_do_kill_thread_bridge
+   144: 0000000000000000   319 OBJECT  GLOBAL DEFAULT  115 _RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE
+   145: 0000000000000000    12 FUNC    GLOBAL DEFAULT   16 process_sched_vector_bridge
+   146: 0000000000000000    16 FUNC    GLOBAL DEFAULT   39 cpu_interrupt_disabled
+   147: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND do_syscall
+   148: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __mcs_rwlock_writer_unlock_noirq
+   149: 0000000000000000   173 FUNC    GLOBAL DEFAULT   93 do_setresuid
+   150: 0000000000000000   167 FUNC    GLOBAL DEFAULT   99 syscall_do_syscall2_bridge
+   151: 0000000000000000    91 FUNC    GLOBAL DEFAULT   27 arch_delay
+   152: 0000000000000000   171 FUNC    GLOBAL DEFAULT  101 syscall_do_syscall3_bridge
+   153: 0000000000000000   108 FUNC    GLOBAL DEFAULT   30 __ihk_mc_spinlock_lock
+   154: 0000000000000000   183 FUNC    GLOBAL DEFAULT  103 terminate_host
+   155: 0000000000000000   167 FUNC    GLOBAL DEFAULT   99 syscall_policy_do_syscall2_bridge
+   156: 0000000000000000   259 FUNC    GLOBAL DEFAULT   87 getcred
+   157: 0000000000000000    14 FUNC    GLOBAL DEFAULT   84 x86_user_map_kernel_start_bridge
+   158: 0000000000000000    32 OBJECT  GLOBAL DEFAULT  120 x86_addr_log_kernel_debug
+   159: 0000000000000000    77 FUNC    GLOBAL DEFAULT   80 syscall_get_processor_id_bridge
+   160: 0000000000000000   174 FUNC    GLOBAL DEFAULT   67 put_dec_full_result
+   161: 0000000000000000   113 FUNC    GLOBAL DEFAULT   53 memset
+   162: 0000000000000000     3 FUNC    GLOBAL DEFAULT   40 cpu_pause
+   163: 0000000000000000    91 FUNC    GLOBAL DEFAULT   32 __ihk_mc_spinlock_lock_noirq
+   164: 0000000000000000   876 FUNC    GLOBAL DEFAULT   59 format_decode_result
+   165: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_generic_forwarding_body_result
+   166: 0000000000000000   166 FUNC    GLOBAL DEFAULT  105 wait_host_wait4_bridge
+   167: 0000000000000000    59 FUNC    GLOBAL DEFAULT   36 __ihk_mc_spinlock_unlock_noirq
+   168: 0000000000000000   684 FUNC    GLOBAL DEFAULT    6 process_sched_runq_log_bridge
+   169: 0000000000000000   171 FUNC    GLOBAL DEFAULT  101 syscall_policy_do_syscall3_bridge
+   170: 0000000000000000    12 FUNC    GLOBAL DEFAULT   18 process_spin_lock_bridge
+   171: 0000000000000000   706 FUNC    GLOBAL DEFAULT   61 kprintf
+   172: 0000000000000000    98 FUNC    GLOBAL DEFAULT   74 x86_addr_log_bridge
+   173: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND syscall_process_unlock_bridge
+   174: 0000000000000000     5 FUNC    GLOBAL DEFAULT   42 ihk_mc_spinlock_init
+   175: 0000000000000000    25 FUNC    GLOBAL DEFAULT   66 printf_write_nchars_result
+   176: 0000000000000000    77 FUNC    GLOBAL DEFAULT   80 ihk_mc_get_processor_id
+   177: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND ihk_mc_get_vector
+   178: 0000000000000000   634 FUNC    GLOBAL DEFAULT   22 __sched_wakeup_thread
+   179: 0000000000000000     8 OBJECT  GLOBAL DEFAULT  126 linux_page_offset_base
+   180: 0000000000000000    12 FUNC    GLOBAL DEFAULT   95 ptrace_detach_do_kill_bridge
+   181: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __mcs_rwlock_writer_lock_noirq
+   182: 0000000000000000   781 FUNC    GLOBAL DEFAULT   26 sched_wakeup_thread_body_result
+   183: 0000000000000000    12 FUNC    GLOBAL DEFAULT   20 process_spin_unlock_bridge
+   184: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND process_remaining_range_scheduler_debug
+   185: 0000000000000000    19 FUNC    GLOBAL DEFAULT   65 printf_terminate_result
+   186: 0000000000000000    12 FUNC    GLOBAL DEFAULT    8 process_sched_rwlock_bridge
+   187: 0000000000000000   174 FUNC    GLOBAL DEFAULT   63 printf_copy_literal_result
+   188: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f03_wait_release_process
+   189: 0000000000000000    24 FUNC    GLOBAL DEFAULT   76 get_cpu_local_var
+   190: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f03_wait_release_thread

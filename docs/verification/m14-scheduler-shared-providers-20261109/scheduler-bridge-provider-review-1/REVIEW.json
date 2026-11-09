@@ -1,0 +1,151 @@
+{
+  "status": "GO_EXACT_FINITE10_SCHEDULER_BRIDGE_SOURCE_ABI_AND_PROPOSED_CORE_PROFILE_ONLY",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T21:29:49.624230+00:00",
+  "actual_turn_controls": "Root verified newturn01a1c233-8018-7631-891f-df9a7a757a3c as Sol/HIGH,never/danger-full-access. No recursion; private review root only. Existing engine packet remains B/E ownership and was not rereviewed.",
+  "unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/scheduler_bridge_provider_unit.rs",
+    "sha256": "9b4024125fe7359db2df645bc93e0426dd31cb85a2930b41b9e36ad817dbdd5f",
+    "bytes": 6661
+  },
+  "source_manifest": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/SOURCE-MANIFEST.json",
+    "sha256": "23261c1bc305d29f81d3882fa4bd219619e7d674dd94dcce2575124e1e5612b6"
+  },
+  "source_profile_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/SOURCE-PROFILE-PROOF.json",
+    "sha256": "04c4306101245e1d799403ce798fa0a96b620a9365e8beb217eb440eebcd690a"
+  },
+  "compile_proposal": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/COMPILE-PROPOSAL.json",
+    "sha256": "c8cbbb36aee3f116b1f2453bba713d1356ded32d5a86131dc6c904518a469523"
+  },
+  "affirmative_eligibility_contracts": {
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-lock-cpu-provider-lookahead.json": "1dca2c37ab223f8b4491c2ce1da97caec7cd13751dad09d977078c6629170df6",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-vector-provider-lookahead.json": "5c629614f52075d4276504f4816513b5b7eedfcf9b00f42ddc34cf41697b0722"
+  },
+  "eligibility_and_initial_criteria": "Exact newly affirmative accepted-F02 forwarding/diagnostic scope:6lock/CPU/status+4timer/vector/IRQforward/logger. No held notification/generic/exec/ACK/TID/XPMEM/downstreamimplementation; no lookahead regeneration/fullmodule import, accepted-F02 reopening or sourceauthority expansion. Rootstillsolecompositor.",
+  "independent_source_validation": {
+    "status": "PASS_ALL27_CANONICAL_BLOCKS_AND_UNIT_GLUE",
+    "source_bindings": {
+      "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "method": "Eachprovidedblock exactcanonicalbytes atgivenbyteoffset/length/hash/startline and occurs onceinunit; afterstrippingall27verifiedblocks no additionalfn/staticimplementation remains. Remainingglueisno_std/directactualabiinclude/coreimports/finite3modules/externC/constassertscope only.",
+    "public_C_definitions": [
+      "process_spin_lock_bridge",
+      "process_spin_unlock_bridge",
+      "process_sched_rwlock_bridge",
+      "process_sched_rwunlock_bridge",
+      "process_sched_cpu_local_bridge",
+      "process_sched_status_set_bridge",
+      "process_sched_vector_bridge",
+      "process_sched_interrupt_bridge",
+      "process_sched_set_timer_bridge",
+      "process_sched_runq_log_bridge"
+    ],
+    "source_private_function": "Exactprivateenabled(index:usize)->bool keptlocalinremaining_process_range_scheduler_logs; noexternalprivateABI or inventedhelper.",
+    "source_data_definitions": [],
+    "genuine_remaining_imports": [
+      "__ihk_mc_spinlock_lock",
+      "__ihk_mc_spinlock_unlock",
+      "__mcs_rwlock_writer_lock_noirq",
+      "__mcs_rwlock_writer_unlock_noirq",
+      "get_cpu_local_var",
+      "xchg4",
+      "set_timer",
+      "ihk_mc_get_vector",
+      "ihk_mc_interrupt_cpu",
+      "kprintf",
+      "ihk_mc_get_processor_id",
+      "process_remaining_range_scheduler_debug"
+    ],
+    "no_implementation_substitution": "No lock/status/vector/IRQ/timer/CPU/kprintf/metadataarray backendbodies, newglobal/privatewritablestate, callback/libc provider, symbolrename, wholemodule, guesseddefaultflag or runtimefixture."
+  },
+  "ABI_and_ownership_review": {
+    "C_scalar_profile": "Directunchangedff48actualabi.rs: CInt=i32,CULong=u64. RetainoriginalsourceCULongaddress/IRQstateexports andrealpointercasts. Engineusizeaddressdeclarations remainunchanged; selectedx86_64LP64usize/u64 both64bitcompatibleCintegerABI. Thisisqualifiedpartialprofilecompatibility,notportable/finalnativeABIacceptance.",
+    "pointer_types": "UseactualCpuLocalVar reprC align64/IhkSpinlock reprCu32/McsRwlockLock reprC align64 andcorec_void. No opaquehandwrittenprefix or transmute. Wrappersallocate/retainnoobject/reference; callerkeepsactualalignedlock/node/CPU/statusownershipand exclusion.",
+    "return_contract": "SpinlockCulongreturnpreserved;statussetterstillcallsrealxchg4anddiscardsoldCInt, notplainstore. VectorreturnCIntunchanged;IRQforwarderremainsvoidanddiscardsactualCIntbackendreturn;set_timerforwardsunmodifiedsignedCInt. No newerrorpolicy.",
+    "Ddebug": "Exactdebug.rs26reprC3consti8pointers+u32line_flags;3originalasserts require32bytes/align8/line_flagsoffset24. Typeonly, no debugimplementation/state.",
+    "metadata_array": "Actualexternstaticmutprocess_remaining_range_scheduler_debug:[Ddebug;18], exact18entry576Bnominalarray/align8 genuinelyU. Noinitializer/shortening/zero/defaultflags/liveownerclaim. Selectedindices8..16 remainwithinoriginalarray, notnewdata.",
+    "kernel_logger": "Genuinekprintf(consti8*,...)->CInt externalCABIonly;CIntformats/scalars/pointerlabels/order exactlyoriginalbyteequal. NoHOSTlibcprintf/eventfd or callbackbridge."
+  },
+  "complete_logger_review": {
+    "all11events": "Events1through11 present;unknownsilent.1and10 unconditional;event2\u2192enabled8,3\u21929,4\u219210,5\u219211,6\u219212,7\u219213,8\u219214,9\u219215,11\u219216. No eventrestriction/default-disabled domain.",
+    "volatile_selector": "Exactenabled usesactualaddr_of_mut array.cast::<Ddebug>().add(index) thenread_volatile(addr_of!line_flags)>>24!=0. Originalmutability/volatileguardordering preserved.",
+    "Thread_borrow": "Onlyevent2AFTERenabled8 dereferencesactualarg0asconstThread, readsoriginalstatus/cpu_id andsynchronousgenuineCPUgetter. Actualthreadmuststaylive/alignedunderoriginalwakeup/runqueueexclusion; pointernotretained, no fabricatedlifetime/newreferenceacquisition.",
+    "formats_and_arguments": "Whole3103Bpubliclogger exactsourceblockincludingall20literal tokens/duplicatelabels. Exacteventformats,labels,NULs,newlines,scalarpromotions/argumentorder andThreadfieldreads retained; no source-specificformat reduction or selectiveimplementation.",
+    "read_only_emission": "Literalstrings/compilerread-onlytables/privatehelper mayemitdifferentLOCAL/global-mangledmetadata; observeallactualsymbols/sections/relocs/bytes andsource-bindthem. No assumedprivatehelpercountorblanketignoredreadonlyGLOBALdata."
+  },
+  "proposed_compile_profile_review": {
+    "status": "PASS_SOURCE_PROFILE_PROPOSAL_NOT_EXECUTION_ADMISSION",
+    "literal_compile_command": {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/output/scheduler_bridge_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/scheduler_bridge_provider_unit.rs"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/provider-compile.stderr",
+      "expected_returncode": 0
+    },
+    "reference": {
+      "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+      "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783"
+    },
+    "comparison": "Pinnedrustc70ebcbbaexactqualifieddelay/fc5payloadthrough-o; onlynewsource/outputandcapturepaths differ. edition2021/no_std/lib/abort/opt2/large-static/no-redzone/no-vector/no-SSEflags unchanged. No cfg/features/warningsuppression or nativeprofileexpansion.",
+    "warning_scope": "ExpectedexactretainedsingleSSE2ABIwarningbytes52aa1b68;extra/newdiagnosticstopsforfocusedreview, neverquieted. Inheritedpartialcodegenprofiledoesnotacceptfinal/nativeSSEABI.",
+    "resources": "ProposedCPU6one seriallightjob/AS1GiB/CPU45/60+5wall/FSIZE64MiB/core0/time-v/emptyenvoverrides. FreshRootHOST0/6/7aggregate3jobs4GiBTOTALincloverhead/fresh26GiBanddiskfloors remainrequired. No grantfromsourcereview."
+  },
+  "actual_metadata_and_composition_gates": [
+    "A futureexactcompile/readbackexecutionpacketandcalledobjectpredicate mustbereviewed/admitted separately. SourceGOisboundtotheseactualbytes/profilemanifest,notanunseenrunner/link command.",
+    "Ifcodegenadmitted,recordallactual10publicT/privateenabled/readonlyliteral/table/globalmangledowners/12genuineU andrelocs. Undefinedmetadataarrayisdata-contractU,notafunctionprovider; nofakedata/defaults. Unexpectedcompilerprivate/core/supportimport/writablestate requiresfocusedreconciliationbeforeanyjoin.",
+    "Futurepartialjoin requiresACTUALpassingcurrentenginepartial identity/imports/owners andnewbridgeactualobject/emissionreview. Neveraaafaloneasfakefinalengine or predictedcohort/global/Ucount. Calleduniqueowner/hash/ABIprejoinbeforeld-r,actualpostjoinownerbytes/relocs/private/literalpreservation needed.",
+    "No currentengine packet/predicate/source review repeated ormodified here; B/E retainit. DownstreamMCSlocks/xchg/vector/interrupt/timer/debugmetadata boot/init/runtimeandoriginalnotification/generic/offload/SDK/nativeholds remainopen."
+  ],
+  "reviewer_model_route": "Root actual Sol/HIGHverified;nochange/fallback",
+  "reviewer_compiler_link_tests_function_scheduler_lock_IRQ_timer_boot_logging_native_runtime_or_canonical_index_operations": false,
+  "execution_admission": false,
+  "new_gate_quota_score_C_retirement_or_acceptance": false,
+  "decision": "GO exact9b402412source/23261c1bmanifest/04c43061proof/c8cbbb36compileprofile forfinite10source-onlypreparationqualification. No defectfoundinselectedsource/ABI/privateclosure/full11logger; execution/object/join predicates andfreshRootadmission remainseparate."
+}

@@ -1,0 +1,217 @@
+{
+  "status": "READY_ONLY3_PRIMITIVE_METADATA_READBACKS_AND_CALLED_FINITE_ATOMIC_GATE_PENDING_F_REVIEW_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-elf.stderr"
+    },
+    {
+      "label": "provider-disassembly",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-disassembly.metrics",
+        "/usr/bin/objdump",
+        "-dr",
+        "--no-show-raw-insn",
+        "-M",
+        "intel",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-disassembly.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-disassembly.stderr",
+      "expected_returncode": 0
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/scheduler_lock_primitive_unit.rs": "33d288aa636da8450ebff8751c16ed5d24a90d0624c65e88482207d98cfdfd5b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/SOURCE-MANIFEST.json": "62e0dd6f1b59b3e572fef2b77f5b537c675a84d8328447b05578e44345e12d07",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+    "/home/holden/mckernel/kernel/rust/lock_helpers.rs": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+    "/home/holden/mckernel/kernel/rust/atomic_helpers.rs": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/SOURCE-PROFILE-PROOF.json": "974f51692b7426e25ab437a2873879a58bc121bb303c9ce7e96b7914a6db7456",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/COMPILE-PROPOSAL.json": "23bdd14b4f739429f2d0d844829fd0ddc1d445dcfc789747843a8284ca5c6eca",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-review-1/REVIEW.json": "3491bfb5333c23babe950a4842f91d6ea1e3a77a0df910b0a74858bad271d673",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/RESULT.json": "a554f5725e5d151e36819d5aa93195294a7e4363b8cc2898b7b8fcf186a6867a",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/ADMISSION.json": "4f5134acde2f66ea397d85847bf9a0adbe9d26dc909a74b7ea19cfed5d4c1706",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o": "a22738e2afd4286b09781ca4ae1b53cd08ee54b2b9c0470c33dd93d24fd8d25d",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/primitive_checks.py": "143d820f597a74580c577e4e4ecb4310d6ba2ceed5f2395061ecee66d5c05d07",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/run_metadata.py": "5f3cbcfc3e33f8ce4a70270733972ccb0513c3dbee4c6f76ef30940185defc91",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/usr/bin/objdump": "afd9c7433c96cb0f37df99cab98fc860bbbe2bed17f37df66254a8778adfc61d",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/string_predicate.py": "9967f11f27c6ae178626ce47afb11970340871763e3d02a3c8f2b4a9c4d95942"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/scheduler_lock_primitive_unit.rs": "33d288aa636da8450ebff8751c16ed5d24a90d0624c65e88482207d98cfdfd5b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/SOURCE-MANIFEST.json": "62e0dd6f1b59b3e572fef2b77f5b537c675a84d8328447b05578e44345e12d07",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+    "/home/holden/mckernel/kernel/rust/lock_helpers.rs": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+    "/home/holden/mckernel/kernel/rust/atomic_helpers.rs": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-unit-1/output/scheduler_lock_primitive_provider.o",
+    "sha256": "a22738e2afd4286b09781ca4ae1b53cd08ee54b2b9c0470c33dd93d24fd8d25d",
+    "bytes": 1752,
+    "actual_producer_result": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-provider-batch-1/RESULT.json",
+    "actual_producer_result_sha256": "a554f5725e5d151e36819d5aa93195294a7e4363b8cc2898b7b8fcf186a6867a",
+    "actual_compile_pid": 622016,
+    "actual_compile_birth": "34727432",
+    "actual_compile_joined": true,
+    "no_compiler_replay": true
+  },
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "bounded_disassembly_pattern_source": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/kernel-string-provider-unit-1/string_predicate.py",
+    "sha256": "9967f11f27c6ae178626ce47afb11970340871763e3d02a3c8f2b4a9c4d95942",
+    "reuse": "Sameboundedobjdumpheader/row/owner-rangeparsing, finite3source-specificchecks only; no new instructiondecoder/framework."
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-elf.stdout",
+  "actual_disassembly": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/provider-disassembly.stdout",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/ACTUAL-ELF-METADATA.json",
+  "expected3_C_exports": [
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "xchg4"
+  ],
+  "expected2_genuine_U": [
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock_noirq"
+  ],
+  "source_delegate_imports": {
+    "__mcs_rwlock_writer_lock_noirq": "__ihk_mc_spinlock_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq": "__ihk_mc_spinlock_unlock_noirq"
+  },
+  "object_atomic_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/primitive_checks.py",
+    "sha256": "143d820f597a74580c577e4e4ecb4310d6ba2ceed5f2395061ecee66d5c05d07",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after3actualreadbacks_before_any_future_link": true,
+    "allactualmetadata_and_disasmhash_retained_before_source_checks": true,
+    "no_predicate_execution_yet": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/run_metadata.py",
+    "sha256": "5f3cbcfc3e33f8ce4a70270733972ccb0513c3dbee4c6f76ef30940185defc91",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lock-primitive-metadata-1/REQUEST.json"
+    ],
+    "only3literalpayloads_no_compiler_link": true
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "finite_atomic_gate": "Recognizeactual32bitmemoryXCHGthroughoriginalRDI withESInewCInt/EAXoldCIntreturn. Explicitlockprefixoptional: memoryXCHGisimplicitlyatomic. Rejectchangedwidth/store/helpers/unrevieweddataflow, sourceAtomicI32swapSeqCstunchanged. No atomic/runtimeexecution.",
+  "finite_wrapper_gate": "ActualR64 relocationtooneexistinggenuinenoirqprovider, sameRDIpointer/slockoffset0/nodeignored; recognizedmovabsRAX+jmpRAXlowering only. Unplannedloweringstopsforreviewbeforefuturejoin.",
+  "future_current_partial_and_join": "UNBOUND untilactualcurrentnext10joinPASS; no predictedobject/count/hash/linkcommand. Currentexisting4spinprovidersnotcopied/recompiled/duplicated.",
+  "no_current_metadata_or_disassembly_commands_in_preparation": true,
+  "canonical_index_other_worker_or_live_owner_edits": false,
+  "not_runnable_until": "Fconcrete3readback/controller/atomic/delegate/source/profileGO thenfreshRootadmission; firstunexpectedfailureSTOP/noautomaticretry/compilerreplay."
+}

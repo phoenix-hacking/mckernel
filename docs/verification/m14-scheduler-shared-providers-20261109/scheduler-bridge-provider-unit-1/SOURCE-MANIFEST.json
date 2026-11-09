@@ -1,0 +1,444 @@
+{
+  "status": "FINITE_EXACT10_SCHEDULER_BRIDGE_AND_FULL11EVENT_LOGGER_SOURCE_ONLY",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-unit-1/scheduler_bridge_provider_unit.rs",
+  "unit_sha256": "9b4024125fe7359db2df645bc93e0426dd31cb85a2930b41b9e36ad817dbdd5f",
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/process_helpers.rs": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+    "/home/holden/mckernel/kernel/rust/debug.rs": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "eligibility_contracts": {
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-lock-cpu-provider-lookahead.json": "1dca2c37ab223f8b4491c2ce1da97caec7cd13751dad09d977078c6629170df6",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/scheduler-timer-vector-provider-lookahead.json": "5c629614f52075d4276504f4816513b5b7eedfcf9b00f42ddc34cf41697b0722"
+  },
+  "blocks": [
+    {
+      "role": "selected_public_bridge",
+      "name": "process_spin_lock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 5975,
+      "source_byte_offset": 175772,
+      "bytes": 153,
+      "sha256": "5cf885e1f031bf1e64f7eaabf602b5df2ae7b0a03f6c470add1924a0e46d0c18",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_spin_lock_bridge(lock_addr: CULong) -> CULong {\n    __ihk_mc_spinlock_lock(lock_addr as *mut IhkSpinlock)\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_spin_unlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 5980,
+      "source_byte_offset": 175927,
+      "bytes": 176,
+      "sha256": "9a9c71e6d667b50264ca63d67e308c04a77e1a4d27e1481b6ebe220db7d9b278",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_spin_unlock_bridge(lock_addr: CULong, irqstate: CULong) {\n    __ihk_mc_spinlock_unlock(lock_addr as *mut IhkSpinlock, irqstate);\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_rwlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 5995,
+      "source_byte_offset": 176427,
+      "bytes": 202,
+      "sha256": "d31bb8f1ad449207af1206ea4052bd33dfe9d34a7cee561cd04e6c66ab40ffa2",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_rwlock_bridge(lock_addr: CULong, node_addr: CULong) {\n    __mcs_rwlock_writer_lock_noirq(lock_addr as *mut McsRwlockLock, node_addr as *mut c_void);\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_rwunlock_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 6000,
+      "source_byte_offset": 176631,
+      "bytes": 206,
+      "sha256": "9021001696ac47bc9d19acfd5b6acad2d1472f58901f5b4f07d95ad493cf8be9",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_rwunlock_bridge(lock_addr: CULong, node_addr: CULong) {\n    __mcs_rwlock_writer_unlock_noirq(lock_addr as *mut McsRwlockLock, node_addr as *mut c_void);\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_cpu_local_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 6020,
+      "source_byte_offset": 177199,
+      "bytes": 136,
+      "sha256": "77c0183cded88a9e2034c6796637e1167dcec4daabf068288fe9472af046c6f4",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_cpu_local_bridge(cpu_id: CInt) -> CULong {\n    get_cpu_local_var(cpu_id) as CULong\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_status_set_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 6049,
+      "source_byte_offset": 178043,
+      "bytes": 153,
+      "sha256": "1ed276b78442d6665c8928d2a44053198ca4509cfc6ad2fb5488a672195816b8",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_status_set_bridge(status_addr: CULong, status: CInt) {\n    xchg4(status_addr as *mut CInt, status);\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_vector_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 6005,
+      "source_byte_offset": 176839,
+      "bytes": 129,
+      "sha256": "20bea9eeed58048249816892a18bd01d211bdcf74034b2385fe429b09c4fd8b9",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_vector_bridge(vector_key: CInt) -> CInt {\n    ihk_mc_get_vector(vector_key)\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_interrupt_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 6010,
+      "source_byte_offset": 176970,
+      "bytes": 136,
+      "sha256": "7871ba20117c10de3d8b480d281f59d5f44a9baf9ed26263cfb7eccdd719b115",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_interrupt_bridge(cpu: CInt, vector: CInt) {\n    ihk_mc_interrupt_cpu(cpu, vector);\n}"
+    },
+    {
+      "role": "selected_public_bridge",
+      "name": "process_sched_set_timer_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 6054,
+      "source_byte_offset": 178198,
+      "bytes": 119,
+      "sha256": "05b47ec6d0042a35dbb0560f381fcb21ab76f9a7235aff0f90de2ae1ea69844b",
+      "exact_definition": "#[no_mangle]\npub unsafe extern \"C\" fn process_sched_set_timer_bridge(runq_locked: CInt) {\n    set_timer(runq_locked);\n}"
+    },
+    {
+      "role": "selected_private_helper",
+      "name": "enabled",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 17029,
+      "source_byte_offset": 583635,
+      "bytes": 440,
+      "sha256": "09182777a2199a70f077258249691eebeaac3f504235e99988da0c5039646d25",
+      "exact_definition": "    unsafe fn enabled(index: usize) -> bool {\n        // SAFETY: The retained 18-entry metadata array is live for the kernel\n        // lifetime; selectors use the existing volatile dynamic-debug boundary.\n        unsafe {\n            let descriptor = addr_of_mut!(process_remaining_range_scheduler_debug)\n                .cast::<Ddebug>().add(index);\n            read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0\n        }\n    }"
+    },
+    {
+      "role": "selected_public_logger",
+      "name": "process_sched_runq_log_bridge",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 17095,
+      "source_byte_offset": 587054,
+      "bytes": 3103,
+      "sha256": "85a1c10823a9780c599b7a2c70d22b88eb13470968ffa727889825bff322176a",
+      "exact_definition": "    #[no_mangle]\n    pub unsafe extern \"C\" fn process_sched_runq_log_bridge(\n        event: CInt, arg0: CULong, _arg1: CULong, arg2: CInt, arg3: CInt,\n    ) {\n        // SAFETY: All formats are static. Only the enabled wake-entry event\n        // dereferences arg0, under the caller's original Thread lifetime.\n        unsafe { match event {\n            1 => { let _ = super::kprintf(b\"no migration in IRQ context\\n\\0\".as_ptr().cast()); }\n            2 if enabled(8) => {\n                let thread = arg0 as *const Thread;\n                let _ = super::kprintf(\n                    b\"%s: proc->pid=%d, valid_states=%08x, proc->status=%08x, proc->cpu_id=%d,my cpu_id=%d\\n\\0\".as_ptr().cast(),\n                    b\"__sched_wakeup_thread\\0\".as_ptr().cast::<i8>(), arg2, arg3,\n                    (*thread).status, (*thread).cpu_id, super::ihk_mc_get_processor_id(),\n                );\n            }\n            3 if enabled(9) => { let _ = super::kprintf(\n                b\"%s: spin wakeup: cpu_id: %d\\n\\0\".as_ptr().cast(),\n                b\"__sched_wakeup_thread\\0\".as_ptr().cast::<i8>(), arg2,\n            ); }\n            4 if enabled(10) => { let _ = super::kprintf(\n                b\"%s: issuing IPI, thread->cpu_id=%d\\n\\0\".as_ptr().cast(),\n                b\"__sched_wakeup_thread\\0\".as_ptr().cast::<i8>(), arg2,\n            ); }\n            5 if enabled(11) => { let _ = super::kprintf(\n                b\"runq_add_proc(): tid %d added to CPU[%d]'s runq\\n\\0\".as_ptr().cast(), arg2, arg3,\n            ); }\n            6 if enabled(12) => { let _ = super::kprintf(\n                b\"%s: idle_halt -> schedule()\\n\\0\".as_ptr().cast(),\n                b\"spin_sleep_or_schedule\\0\".as_ptr().cast::<i8>(),\n            ); }\n            7 if enabled(13) => { let _ = super::kprintf(\n                b\"%s: caught a lost wake-up!\\n\\0\".as_ptr().cast(),\n                b\"spin_sleep_or_schedule\\0\".as_ptr().cast::<i8>(),\n            ); }\n            // IHK_OS_MANYCORE maps ihk_ikc_get_processor_id to the same actual\n            // ihk_mc_get_processor_id getter in ikc/ihk.h, as in sched_helpers.\n            8 if enabled(14) => { let _ = super::kprintf(\n                b\"%s: woken while spinning, cpu: %d, do_schedule: %d\\n\\0\".as_ptr().cast(),\n                b\"spin_sleep_or_schedule\\0\".as_ptr().cast::<i8>(),\n                super::ihk_mc_get_processor_id(), arg3,\n            ); }\n            9 if enabled(15) => { let _ = super::kprintf(\n                b\"%s: woken while sleeping, cpu: %d\\n\\0\".as_ptr().cast(),\n                b\"spin_sleep_or_schedule\\0\".as_ptr().cast::<i8>(),\n                super::ihk_mc_get_processor_id(),\n            ); }\n            10 => { let _ = super::kprintf(\n                b\"%s: WARNING can't schedule() while no preemption, cnt: %d\\n\\0\".as_ptr().cast(),\n                b\"schedule\\0\".as_ptr().cast::<i8>(), arg2,\n            ); }\n            11 if enabled(16) => { let _ = super::kprintf(\n                b\"%s: clone_count is %d\\n\\0\".as_ptr().cast(),\n                b\"runq_add_thread\\0\".as_ptr().cast::<i8>(), arg2,\n            ); }\n            _ => {}\n        } }\n    }"
+    },
+    {
+      "role": "actual_debug_type",
+      "name": "Ddebug",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "source_sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "definition_start_line": 26,
+      "source_byte_offset": 748,
+      "bytes": 131,
+      "sha256": "b8dcb01d8db9b3d5ddbba9a8306118b48d50e2eef1c19050f35b8793411a2936",
+      "exact_definition": "#[repr(C)]\npub struct Ddebug {\n    pub file: *const i8,\n    pub func: *const i8,\n    pub fmt: *const i8,\n    pub line_flags: u32,\n}"
+    },
+    {
+      "role": "actual_Ddebug_assertion",
+      "name": "assert!(size_of::<Ddebug>() == 32);",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "source_sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "definition_start_line": 39,
+      "source_byte_offset": 1049,
+      "bytes": 39,
+      "sha256": "4be8b6b86ed606f0be4c623b57898118e8a60246657943e42e16a17ec6886750",
+      "exact_definition": "    assert!(size_of::<Ddebug>() == 32);"
+    },
+    {
+      "role": "actual_Ddebug_assertion",
+      "name": "assert!(align_of::<Ddebug>() == 8);",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "source_sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "definition_start_line": 40,
+      "source_byte_offset": 1089,
+      "bytes": 39,
+      "sha256": "2d4159ef60e7a0f2ae522a8023c2d9d23f3a8edcd7f10ec364d2645f4790b805",
+      "exact_definition": "    assert!(align_of::<Ddebug>() == 8);"
+    },
+    {
+      "role": "actual_Ddebug_assertion",
+      "name": "assert!(offset_of!(Ddebug, line_flags) == 24);",
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "source_sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "definition_start_line": 41,
+      "source_byte_offset": 1129,
+      "bytes": 50,
+      "sha256": "806d6108cf6c7a7b61a58dabdf9e83e6a556c521e4a4d59728af3c57b8f7ef3c",
+      "exact_definition": "    assert!(offset_of!(Ddebug, line_flags) == 24);"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "__ihk_mc_spinlock_lock",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 22,
+      "source_byte_offset": 971,
+      "bytes": 64,
+      "sha256": "808c4040871e1f29f54dc116b17ff233c48190c5238a8628591ca063c8cbc154",
+      "exact_definition": "    fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong;"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "__ihk_mc_spinlock_unlock",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 23,
+      "source_byte_offset": 1036,
+      "bytes": 71,
+      "sha256": "caa11271581e5f0dbc53fe2a3c5234f0213cca8bde7b80740e4cbf219eb49f1a",
+      "exact_definition": "    fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong);"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "__mcs_rwlock_writer_lock_noirq",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 34,
+      "source_byte_offset": 1675,
+      "bytes": 83,
+      "sha256": "4110ad8182a210c16c148e54f16995962dd834c9bf22c47688f1e18b1a61be79",
+      "exact_definition": "    fn __mcs_rwlock_writer_lock_noirq(lock: *mut McsRwlockLock, node: *mut c_void);"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "__mcs_rwlock_writer_unlock_noirq",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 35,
+      "source_byte_offset": 1759,
+      "bytes": 85,
+      "sha256": "5130aed2f23de0bd4deedd31ec0d691ca21a45a5349472b5516698db6f7853af",
+      "exact_definition": "    fn __mcs_rwlock_writer_unlock_noirq(lock: *mut McsRwlockLock, node: *mut c_void);"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "get_cpu_local_var",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 58,
+      "source_byte_offset": 2907,
+      "bytes": 59,
+      "sha256": "58a558e6f8d03e76d0c95e25f91eba697eff0358a40f67f9ea0b5a26aa31e938",
+      "exact_definition": "    fn get_cpu_local_var(cpu_id: CInt) -> *mut CpuLocalVar;"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "xchg4",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 63,
+      "source_byte_offset": 3122,
+      "bytes": 50,
+      "sha256": "18c2bea68e834ef0f82b5b045056243f28843d6059c3cef2111990f96045bdc1",
+      "exact_definition": "    fn xchg4(ptr: *mut CInt, value: CInt) -> CInt;"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "set_timer",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 64,
+      "source_byte_offset": 3173,
+      "bytes": 36,
+      "sha256": "7df7661aa0749fc9421b74ddc0055de75cf1c641421d2e4823178ad52f8786ef",
+      "exact_definition": "    fn set_timer(runq_locked: CInt);"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "ihk_mc_get_vector",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 55,
+      "source_byte_offset": 2774,
+      "bytes": 51,
+      "sha256": "0d27f9b4ebd3f8ec3c23566753453a1ffe4cba2fc6d74164cb99290a5a90040f",
+      "exact_definition": "    fn ihk_mc_get_vector(vector_key: CInt) -> CInt;"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "ihk_mc_interrupt_cpu",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 56,
+      "source_byte_offset": 2826,
+      "bytes": 61,
+      "sha256": "b700dfc312c395f236b0ed0f53c0ae4f53840330993636ab054a94fad19f78cb",
+      "exact_definition": "    fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "kprintf",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 11773,
+      "source_byte_offset": 347567,
+      "bytes": 47,
+      "sha256": "90567ff49e2a4f6be194ad9b6c2f90b7207bc3ab6cc08f2bc884cc401b6fcc63",
+      "exact_definition": "    fn kprintf(format: *const i8, ...) -> CInt;"
+    },
+    {
+      "role": "genuine_external_function_declaration",
+      "name": "ihk_mc_get_processor_id",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 49,
+      "source_byte_offset": 2489,
+      "bytes": 41,
+      "sha256": "0d294e16e122da89ece6bf9fde0151791b33ebce39d0797af3fd92f259433454",
+      "exact_definition": "    fn ihk_mc_get_processor_id() -> CInt;"
+    },
+    {
+      "role": "genuine_external_metadata_array",
+      "name": "process_remaining_range_scheduler_debug",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "definition_start_line": 17025,
+      "source_byte_offset": 583475,
+      "bytes": 73,
+      "sha256": "c1d324c19603a704c58338da259657b5e8761daf40e5b9d44c53b9100f5d8977",
+      "exact_definition": "        static mut process_remaining_range_scheduler_debug: [Ddebug; 18];"
+    }
+  ],
+  "source_counts": {
+    "public_C_definitions": 10,
+    "private_enabled_helper": 1,
+    "genuine_function_declarations": 11,
+    "genuine_external_metadata_array_declarations": 1,
+    "defined_Ddebug_type": 1,
+    "original_Ddebug_size_align_offset_assertions": 3,
+    "source_writable_data_definitions": 0
+  },
+  "required10_C_exports": [
+    "process_spin_lock_bridge",
+    "process_spin_unlock_bridge",
+    "process_sched_rwlock_bridge",
+    "process_sched_rwunlock_bridge",
+    "process_sched_cpu_local_bridge",
+    "process_sched_status_set_bridge",
+    "process_sched_vector_bridge",
+    "process_sched_interrupt_bridge",
+    "process_sched_set_timer_bridge",
+    "process_sched_runq_log_bridge"
+  ],
+  "expected12_genuine_source_imports": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock",
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "get_cpu_local_var",
+    "xchg4",
+    "set_timer",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu",
+    "kprintf",
+    "ihk_mc_get_processor_id",
+    "process_remaining_range_scheduler_debug"
+  ],
+  "complete_original_logger_events": [
+    {
+      "event": 1,
+      "dynamic_selector_index": null,
+      "unconditional": true
+    },
+    {
+      "event": 2,
+      "dynamic_selector_index": 8,
+      "unconditional": false
+    },
+    {
+      "event": 3,
+      "dynamic_selector_index": 9,
+      "unconditional": false
+    },
+    {
+      "event": 4,
+      "dynamic_selector_index": 10,
+      "unconditional": false
+    },
+    {
+      "event": 5,
+      "dynamic_selector_index": 11,
+      "unconditional": false
+    },
+    {
+      "event": 6,
+      "dynamic_selector_index": 12,
+      "unconditional": false
+    },
+    {
+      "event": 7,
+      "dynamic_selector_index": 13,
+      "unconditional": false
+    },
+    {
+      "event": 8,
+      "dynamic_selector_index": 14,
+      "unconditional": false
+    },
+    {
+      "event": 9,
+      "dynamic_selector_index": 15,
+      "unconditional": false
+    },
+    {
+      "event": 10,
+      "dynamic_selector_index": null,
+      "unconditional": true
+    },
+    {
+      "event": 11,
+      "dynamic_selector_index": 16,
+      "unconditional": false
+    }
+  ],
+  "complete_original_logger_literal_source_tokens": [
+    "b\"no migration in IRQ context\\n\\0\"",
+    "b\"%s: proc->pid=%d, valid_states=%08x, proc->status=%08x, proc->cpu_id=%d,my cpu_id=%d\\n\\0\"",
+    "b\"__sched_wakeup_thread\\0\"",
+    "b\"%s: spin wakeup: cpu_id: %d\\n\\0\"",
+    "b\"__sched_wakeup_thread\\0\"",
+    "b\"%s: issuing IPI, thread->cpu_id=%d\\n\\0\"",
+    "b\"__sched_wakeup_thread\\0\"",
+    "b\"runq_add_proc(): tid %d added to CPU[%d]'s runq\\n\\0\"",
+    "b\"%s: idle_halt -> schedule()\\n\\0\"",
+    "b\"spin_sleep_or_schedule\\0\"",
+    "b\"%s: caught a lost wake-up!\\n\\0\"",
+    "b\"spin_sleep_or_schedule\\0\"",
+    "b\"%s: woken while spinning, cpu: %d, do_schedule: %d\\n\\0\"",
+    "b\"spin_sleep_or_schedule\\0\"",
+    "b\"%s: woken while sleeping, cpu: %d\\n\\0\"",
+    "b\"spin_sleep_or_schedule\\0\"",
+    "b\"%s: WARNING can't schedule() while no preemption, cnt: %d\\n\\0\"",
+    "b\"schedule\\0\"",
+    "b\"%s: clone_count is %d\\n\\0\"",
+    "b\"runq_add_thread\\0\""
+  ],
+  "external_selector_type": "Actual[Ddebug;18] mutstatic DECLARATION ONLY; no value/flags/default/storage supplied.",
+  "Ddebug_layout_assertions": {
+    "size": 32,
+    "align": 8,
+    "line_flags_offset": 24
+  },
+  "actual_LP64_abi_types": "OriginalCULong exports andengineusize declarations remainunchanged/compatible64bit; no rewriting/transmute/handwrittenopaque types.",
+  "unsafe_borrow_preservation": "OriginalThread.status/cpu_id read ONLYevent2afterenabled(8), fullactualunsafe/loggerbodybyteequal. Scalar/format/selectorborrowssynchronous, no lifetime/bodypolicy added.",
+  "private_readonly_emission": "Observeactualenabled helper/literal/table ownership, no inventedcount/byte-length/defaults; originalstrings/tables source-bound only.",
+  "source_implementation_exclusions": [
+    "downstreamlock/vector/interrupt/timer/status/CPU/metadataarraybackendbodies",
+    "wholeprocess_helpers/debugmodules",
+    "range/migration/TID/notification/generic/exec/ACK/XPMEMbodies",
+    "anynewglobalorprivatewritablestate"
+  ],
+  "future_composition": "UNBOUND untilcurrentcombinedschedulerenginepartialACTUALPASS; do notjoinpredictedoutput/aaafalone/oldcohort.",
+  "compiler_test_runtime_canonical_index_operations": false
+}

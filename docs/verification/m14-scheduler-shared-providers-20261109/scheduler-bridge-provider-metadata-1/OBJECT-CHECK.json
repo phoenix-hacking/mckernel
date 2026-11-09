@@ -1,0 +1,1161 @@
+{
+  "status": "PASS_CALLED_FINITE_TEN_SCHEDULER_BRIDGE_SOURCE_OBJECT_GATE",
+  "object_sha256": "33500c973350e0acdaf4f2f3f251a5889378ccadf8805d2cfed806d1e4466a69",
+  "actual10T": {
+    "process_sched_cpu_local_bridge": 12,
+    "process_sched_interrupt_bridge": 12,
+    "process_sched_runq_log_bridge": 684,
+    "process_sched_rwlock_bridge": 12,
+    "process_sched_rwunlock_bridge": 12,
+    "process_sched_set_timer_bridge": 12,
+    "process_sched_status_set_bridge": 12,
+    "process_sched_vector_bridge": 12,
+    "process_spin_lock_bridge": 12,
+    "process_spin_unlock_bridge": 12
+  },
+  "genuine12U": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock",
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu",
+    "kprintf",
+    "process_remaining_range_scheduler_debug",
+    "set_timer",
+    "xchg4"
+  ],
+  "function_owners": {
+    "process_sched_cpu_local_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_cpu_local_bridge",
+      "actual_relocations": [
+        {
+          "section": 3,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "get_cpu_local_var",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_interrupt_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_interrupt_bridge",
+      "actual_relocations": [
+        {
+          "section": 5,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "ihk_mc_interrupt_cpu",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_runq_log_bridge": {
+      "bytes": 684,
+      "bytes_sha256": "5674a6f94724a56ec7e9cb0e5ce985b6980dc045c90c15fa13a7b24631166776",
+      "source_owner": "process_sched_runq_log_bridge",
+      "actual_relocations": [
+        {
+          "section": 7,
+          "offset": 20,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 9,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 33,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 43,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 67,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 376
+        },
+        {
+          "section": 7,
+          "offset": 90,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 202
+        },
+        {
+          "section": 7,
+          "offset": 100,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 130,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 418
+        },
+        {
+          "section": 7,
+          "offset": 140,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 477
+        },
+        {
+          "section": 7,
+          "offset": 155,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 312
+        },
+        {
+          "section": 7,
+          "offset": 178,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 137
+        },
+        {
+          "section": 7,
+          "offset": 190,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 344
+        },
+        {
+          "section": 7,
+          "offset": 213,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 166
+        },
+        {
+          "section": 7,
+          "offset": 223,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 115
+        },
+        {
+          "section": 7,
+          "offset": 238,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 472
+        },
+        {
+          "section": 7,
+          "offset": 261,
+          "type": 1,
+          "symbol": {
+            "name": "ihk_mc_get_processor_id",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 276,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 331
+        },
+        {
+          "section": 7,
+          "offset": 286,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 280
+        },
+        {
+          "section": 7,
+          "offset": 296,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 325,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 280
+        },
+        {
+          "section": 7,
+          "offset": 357,
+          "type": 1,
+          "symbol": {
+            "name": "ihk_mc_get_processor_id",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 378,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 29
+        },
+        {
+          "section": 7,
+          "offset": 388,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 115
+        },
+        {
+          "section": 7,
+          "offset": 398,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 430,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 408
+        },
+        {
+          "section": 7,
+          "offset": 453,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 251
+        },
+        {
+          "section": 7,
+          "offset": 465,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 440
+        },
+        {
+          "section": 7,
+          "offset": 488,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 303
+        },
+        {
+          "section": 7,
+          "offset": 498,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 280
+        },
+        {
+          "section": 7,
+          "offset": 508,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 532,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 536
+        },
+        {
+          "section": 7,
+          "offset": 551,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 486
+        },
+        {
+          "section": 7,
+          "offset": 561,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 509
+        },
+        {
+          "section": 7,
+          "offset": 571,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 598,
+          "type": 1,
+          "symbol": {
+            "name": "process_remaining_range_scheduler_debug",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 504
+        },
+        {
+          "section": 7,
+          "offset": 628,
+          "type": 1,
+          "symbol": {
+            "name": "ihk_mc_get_processor_id",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        },
+        {
+          "section": 7,
+          "offset": 640,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 383
+        },
+        {
+          "section": 7,
+          "offset": 650,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "bind": 0,
+            "type": 3,
+            "other": 0,
+            "section": 25,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 280
+        },
+        {
+          "section": 7,
+          "offset": 660,
+          "type": 1,
+          "symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_rwlock_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_rwlock_bridge",
+      "actual_relocations": [
+        {
+          "section": 11,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__mcs_rwlock_writer_lock_noirq",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_rwunlock_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_rwunlock_bridge",
+      "actual_relocations": [
+        {
+          "section": 13,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__mcs_rwlock_writer_unlock_noirq",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_set_timer_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_set_timer_bridge",
+      "actual_relocations": [
+        {
+          "section": 15,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "set_timer",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_status_set_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_status_set_bridge",
+      "actual_relocations": [
+        {
+          "section": 17,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "xchg4",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_sched_vector_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_sched_vector_bridge",
+      "actual_relocations": [
+        {
+          "section": 19,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "ihk_mc_get_vector",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_spin_lock_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_spin_lock_bridge",
+      "actual_relocations": [
+        {
+          "section": 21,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__ihk_mc_spinlock_lock",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    },
+    "process_spin_unlock_bridge": {
+      "bytes": 12,
+      "bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b",
+      "source_owner": "process_spin_unlock_bridge",
+      "actual_relocations": [
+        {
+          "section": 23,
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__ihk_mc_spinlock_unlock",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "section": 0,
+            "value": 0,
+            "size": 0
+          },
+          "addend": 0
+        }
+      ]
+    }
+  },
+  "exact_source_readonly_sections": [
+    {
+      "name": ".lrodata.process_sched_runq_log_bridge",
+      "bytes": 88,
+      "sha256": "10eef285deef7a4b7c82b22aa53589b7833df29de3814649c772bbd5c832f365",
+      "kind": "compiler_switch_table_owned_only_by_complete_source_logger",
+      "targets": [
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 31,
+          "actual_table_offset": 0
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 323,
+          "actual_table_offset": 8
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 153,
+          "actual_table_offset": 16
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 188,
+          "actual_table_offset": 24
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 65,
+          "actual_table_offset": 32
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 428,
+          "actual_table_offset": 40
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 463,
+          "actual_table_offset": 48
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 236,
+          "actual_table_offset": 56
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 596,
+          "actual_table_offset": 64
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 128,
+          "actual_table_offset": 72
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "source_code_offset": 530,
+          "actual_table_offset": 80
+        }
+      ]
+    },
+    {
+      "name": ".lrodata.str1.1",
+      "bytes": 525,
+      "sha256": "52473c782f9bb1f96d8228c7ef84134d5a11215fb4d9a3a9c1b8b444076394bc",
+      "kind": "exact_original_logger_format_label_strings",
+      "source_literals": [
+        {
+          "offset": 0,
+          "bytes_hex": "6e6f206d6967726174696f6e20696e2049525120636f6e746578740a00",
+          "exact_source_literal_or_merged_suffix": [
+            "6e6f206d6967726174696f6e20696e2049525120636f6e746578740a00"
+          ]
+        },
+        {
+          "offset": 29,
+          "bytes_hex": "25733a2070726f632d3e7069643d25642c2076616c69645f7374617465733d253038782c2070726f632d3e7374617475733d253038782c2070726f632d3e6370755f69643d25642c6d79206370755f69643d25640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a2070726f632d3e7069643d25642c2076616c69645f7374617465733d253038782c2070726f632d3e7374617475733d253038782c2070726f632d3e6370755f69643d25642c6d79206370755f69643d25640a00"
+          ]
+        },
+        {
+          "offset": 115,
+          "bytes_hex": "5f5f73636865645f77616b6575705f74687265616400",
+          "exact_source_literal_or_merged_suffix": [
+            "5f5f73636865645f77616b6575705f74687265616400"
+          ]
+        },
+        {
+          "offset": 137,
+          "bytes_hex": "25733a207370696e2077616b6575703a206370755f69643a2025640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a207370696e2077616b6575703a206370755f69643a2025640a00"
+          ]
+        },
+        {
+          "offset": 166,
+          "bytes_hex": "25733a2069737375696e67204950492c207468726561642d3e6370755f69643d25640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a2069737375696e67204950492c207468726561642d3e6370755f69643d25640a00"
+          ]
+        },
+        {
+          "offset": 202,
+          "bytes_hex": "72756e715f6164645f70726f6328293a2074696420256420616464656420746f204350555b25645d27732072756e710a00",
+          "exact_source_literal_or_merged_suffix": [
+            "72756e715f6164645f70726f6328293a2074696420256420616464656420746f204350555b25645d27732072756e710a00"
+          ]
+        },
+        {
+          "offset": 251,
+          "bytes_hex": "25733a2069646c655f68616c74202d3e207363686564756c6528290a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a2069646c655f68616c74202d3e207363686564756c6528290a00"
+          ]
+        },
+        {
+          "offset": 280,
+          "bytes_hex": "7370696e5f736c6565705f6f725f7363686564756c6500",
+          "exact_source_literal_or_merged_suffix": [
+            "7370696e5f736c6565705f6f725f7363686564756c6500"
+          ]
+        },
+        {
+          "offset": 303,
+          "bytes_hex": "25733a206361756768742061206c6f73742077616b652d7570210a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a206361756768742061206c6f73742077616b652d7570210a00"
+          ]
+        },
+        {
+          "offset": 331,
+          "bytes_hex": "25733a20776f6b656e207768696c65207370696e6e696e672c206370753a2025642c20646f5f7363686564756c653a2025640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a20776f6b656e207768696c65207370696e6e696e672c206370753a2025642c20646f5f7363686564756c653a2025640a00"
+          ]
+        },
+        {
+          "offset": 383,
+          "bytes_hex": "25733a20776f6b656e207768696c6520736c656570696e672c206370753a2025640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a20776f6b656e207768696c6520736c656570696e672c206370753a2025640a00"
+          ]
+        },
+        {
+          "offset": 418,
+          "bytes_hex": "25733a205741524e494e472063616e2774207363686564756c652829207768696c65206e6f20707265656d7074696f6e2c20636e743a2025640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a205741524e494e472063616e2774207363686564756c652829207768696c65206e6f20707265656d7074696f6e2c20636e743a2025640a00"
+          ]
+        },
+        {
+          "offset": 477,
+          "bytes_hex": "7363686564756c6500",
+          "exact_source_literal_or_merged_suffix": [
+            "7363686564756c6500",
+            "7370696e5f736c6565705f6f725f7363686564756c6500"
+          ]
+        },
+        {
+          "offset": 486,
+          "bytes_hex": "25733a20636c6f6e655f636f756e742069732025640a00",
+          "exact_source_literal_or_merged_suffix": [
+            "25733a20636c6f6e655f636f756e742069732025640a00"
+          ]
+        },
+        {
+          "offset": 509,
+          "bytes_hex": "72756e715f6164645f74687265616400",
+          "exact_source_literal_or_merged_suffix": [
+            "72756e715f6164645f74687265616400"
+          ]
+        }
+      ],
+      "incoming_source_functions": [
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 0
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 202
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 418
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 477
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 137
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 166
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 115
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 331
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 280
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 29
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 115
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 251
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 303
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 280
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 486
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 509
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 383
+        },
+        {
+          "source_functions": [
+            "process_sched_runq_log_bridge"
+          ],
+          "actual_string_offset": 280
+        }
+      ]
+    },
+    {
+      "name": ".eh_frame",
+      "bytes": 488,
+      "sha256": "841e197220d68732b8bc4c8cbc9e5e6aa6dada4de70542294f225a591e48b8c8",
+      "kind": "retained_profile_unwind_for_exact_source_functions",
+      "targets": [
+        [
+          "process_sched_cpu_local_bridge"
+        ],
+        [
+          "process_sched_interrupt_bridge"
+        ],
+        [
+          "process_sched_runq_log_bridge"
+        ],
+        [
+          "process_sched_rwlock_bridge"
+        ],
+        [
+          "process_sched_rwunlock_bridge"
+        ],
+        [
+          "process_sched_set_timer_bridge"
+        ],
+        [
+          "process_sched_status_set_bridge"
+        ],
+        [
+          "process_sched_vector_bridge"
+        ],
+        [
+          "process_spin_lock_bridge"
+        ],
+        [
+          "process_spin_unlock_bridge"
+        ]
+      ]
+    }
+  ],
+  "source_private_readonly_data": [],
+  "actual_external18_Ddebug_array_is_U_not_defined": true,
+  "all_actual_metadata_retained": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-bridge-provider-metadata-1/ACTUAL-ELF-METADATA.json",
+  "future_engine_partial_and_join_unbound": true,
+  "no_function_logging_selector_lock_timer_IRQ_native_runtime": true
+}

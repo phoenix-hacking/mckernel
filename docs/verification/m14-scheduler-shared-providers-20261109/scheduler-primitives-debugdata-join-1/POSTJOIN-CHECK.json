@@ -1,0 +1,5473 @@
+{
+  "status": "PASS_ACTUAL_CURRENT76_PLUS_PRIMITIVE3_AND_DEBUG18_PARTIAL",
+  "joined_sha256": "b18f9e01ea7b3cb0b2deb2670c0d393e39370f4d4df9defcf5b102aa97d68241",
+  "global_strong": 80,
+  "global_T": 68,
+  "global_data": 12,
+  "actual_remaining_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu",
+    "set_timer",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result"
+  ],
+  "all_source_owners_preserved": {
+    "cpu_local_var_initialized": {
+      "kind": "B",
+      "bytes": 4,
+      "NOBITS_declaration_preserved": true
+    },
+    "skip_atoi_result": {
+      "kind": "T",
+      "bytes": 66,
+      "exact_bytes_sha256": "0c763775d329c8b03609afe0af997d54eca771700e94886b79406a4d7a9e0da9"
+    },
+    "rdtsc": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "875a2c37de1c4e7e70cb003d5c8bf01aba6bee86551e91467fe78c7d6026ccad"
+    },
+    "preempt_disable": {
+      "kind": "T",
+      "bytes": 54,
+      "exact_bytes_sha256": "c3129f2f9c21bb4448d574b25f2f9ff863eb73bfb2ee342f177bd4f908dfc7c7"
+    },
+    "process_sched_rwunlock_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "clv": {
+      "kind": "B",
+      "bytes": 8,
+      "NOBITS_declaration_preserved": true
+    },
+    "process_sched_cpu_local_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "x86_map_kernel_start_geometry": {
+      "kind": "R",
+      "bytes": 8,
+      "exact_bytes_sha256": "dd60743dadacae7d36105434d557be8617e0c1bf7b0ac56be6c5da8cfd16edb9"
+    },
+    "kmsg_buf": {
+      "kind": "B",
+      "bytes": 8,
+      "NOBITS_declaration_preserved": true
+    },
+    "snprintf": {
+      "kind": "T",
+      "bytes": 76,
+      "exact_bytes_sha256": "1859e2d8510bb43d7347427c2bb90ce4b8bd7828ee95e132b18768a74bfb3235"
+    },
+    "ihk_mc_delay_us": {
+      "kind": "T",
+      "bytes": 91,
+      "exact_bytes_sha256": "ca2ef30be342d536bad3aa0e3a3ef53901b121d30104d69a9328876784915dd4"
+    },
+    "process_sched_interrupt_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "sched_wakeup_thread": {
+      "kind": "T",
+      "bytes": 14,
+      "exact_bytes_sha256": "ef2ab1c9af6bd2742e6beebe3582b272c99e4a4187d76c2dc282e0d8262d47fb"
+    },
+    "num_processors": {
+      "kind": "D",
+      "bytes": 4,
+      "exact_bytes_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    "ptrace_detach_wakeup_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "put_dec_trunc_result": {
+      "kind": "T",
+      "bytes": 214,
+      "exact_bytes_sha256": "0469bc99ac7136df812edd683d1451aa79533462f6d74308612cdc253ace97df"
+    },
+    "process_sched_status_set_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "locals": {
+      "kind": "B",
+      "bytes": 8,
+      "NOBITS_declaration_preserved": true
+    },
+    "kprintf_lock": {
+      "kind": "T",
+      "bytes": 107,
+      "exact_bytes_sha256": "bc5156c4096e50a2d10ae376df16666765064c18c1389c47bccd6db7c21878bb"
+    },
+    "preempt_enable": {
+      "kind": "T",
+      "bytes": 54,
+      "exact_bytes_sha256": "449afffa6771efeac04566d1701e45a830aab81fb1ca98d87206df95bd024e4c"
+    },
+    "x86_virt_to_phys_body_result": {
+      "kind": "T",
+      "bytes": 105,
+      "exact_bytes_sha256": "dec698a353889d0cf6a4256f6e0a0f153416cd3a4cde214aab685f7465a544f1"
+    },
+    "do_setresgid": {
+      "kind": "T",
+      "bytes": 173,
+      "exact_bytes_sha256": "0dd4f7bc04cc6c050a66afaee49378562fa1b36d1eee757a9d0221276b807514"
+    },
+    "__ihk_mc_spinlock_unlock": {
+      "kind": "T",
+      "bytes": 61,
+      "exact_bytes_sha256": "173c05f804a9950b64d852f7dc5efbe8106e04492d1941a52d6a56f42bd72ab3"
+    },
+    "cpu_restore_interrupt": {
+      "kind": "T",
+      "bytes": 5,
+      "exact_bytes_sha256": "0c7d28b8480bab7edfdd3f1e797c1534293e0d0221336c6f95fc84f4081b13ff"
+    },
+    "syscall_virt_to_phys_bridge": {
+      "kind": "T",
+      "bytes": 165,
+      "exact_bytes_sha256": "b4e3c350c786d5175619e3296d82de0b5c3b36eaa717390ddf7a36b9bd8fca7a"
+    },
+    "x86_kernel_phys_base": {
+      "kind": "B",
+      "bytes": 8,
+      "NOBITS_declaration_preserved": true
+    },
+    "virt_to_phys": {
+      "kind": "T",
+      "bytes": 165,
+      "exact_bytes_sha256": "b4e3c350c786d5175619e3296d82de0b5c3b36eaa717390ddf7a36b9bd8fca7a"
+    },
+    "getcred_body_result": {
+      "kind": "T",
+      "bytes": 272,
+      "exact_bytes_sha256": "ffdc422d5f9ae204f1b2349ab1c25907eedd1d785ade13dabfb9edaaec312c36"
+    },
+    "printf_emit_char_result": {
+      "kind": "T",
+      "bytes": 14,
+      "exact_bytes_sha256": "711637501440586f57e4295ea1313ba7202b964f5224fd251d211dd4a0dc07a3"
+    },
+    "get_this_cpu_local_var": {
+      "kind": "T",
+      "bytes": 99,
+      "exact_bytes_sha256": "6906e9df2b1af8390e056eff4b4ca79be666cbf02fc3a7375d8b7eef741c7142"
+    },
+    "strnlen": {
+      "kind": "T",
+      "bytes": 57,
+      "exact_bytes_sha256": "ed0e27f32058ee2ae9783b542337955fe4a01e6860656beb22c15c9dd41ecb4a"
+    },
+    "kprintf_unlock": {
+      "kind": "T",
+      "bytes": 71,
+      "exact_bytes_sha256": "912c5399628e21933100c5c3a39b4ccccc1d0c65cacc17b140aa2bb528c6395b"
+    },
+    "put_dec_result": {
+      "kind": "T",
+      "bytes": 291,
+      "exact_bytes_sha256": "038f63c151e262cd8eeb856309211613b2c24af374604e8d228e034831c55a44"
+    },
+    "cpu_disable_interrupt_save": {
+      "kind": "T",
+      "bytes": 6,
+      "exact_bytes_sha256": "b8ce6404957a0ab718070b8f0f09cf0372187cb91b94d924f98b38ec2b9c4b74"
+    },
+    "kmsg_init": {
+      "kind": "T",
+      "bytes": 15,
+      "exact_bytes_sha256": "c1862dbe284123440f0f452d6e7440062a47e3066e9b01b3f1ac2ee0320466ec"
+    },
+    "syscall_refresh_cred_fields_body_result": {
+      "kind": "T",
+      "bytes": 163,
+      "exact_bytes_sha256": "d464817fb52559732e10bdbcee98ec3935d3c8bdb420b47cb7e803e8c185140f"
+    },
+    "process_sched_set_timer_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "x86_addr_log_straight_debug": {
+      "kind": "D",
+      "bytes": 32,
+      "exact_bytes_sha256": "a02f07e850be4cd754913187088aae6a6a70c0367b88c172735094f75e822762"
+    },
+    "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": {
+      "kind": "R",
+      "bytes": 319,
+      "exact_bytes_sha256": "25e4ca4cdbda85175e8344faaee385b0a7d20857171e91f934fd7a5cd4ff399a"
+    },
+    "process_sched_vector_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "cpu_interrupt_disabled": {
+      "kind": "T",
+      "bytes": 16,
+      "exact_bytes_sha256": "915834f3a98a7127a4866e16287822b1c809a48783e76f925230314e3bbaaadc"
+    },
+    "do_setresuid": {
+      "kind": "T",
+      "bytes": 173,
+      "exact_bytes_sha256": "9dc7087fc0ffb06d84d82bd57cbecfd33ecd1ecf38cba920973811d933265ea4"
+    },
+    "syscall_do_syscall2_bridge": {
+      "kind": "T",
+      "bytes": 167,
+      "exact_bytes_sha256": "ee9bce5f801385dc5a4ba9853e721ff308b363390c4cd9e3cef9ed4bb9a2f5f4"
+    },
+    "arch_delay": {
+      "kind": "T",
+      "bytes": 91,
+      "exact_bytes_sha256": "ca2ef30be342d536bad3aa0e3a3ef53901b121d30104d69a9328876784915dd4"
+    },
+    "syscall_do_syscall3_bridge": {
+      "kind": "T",
+      "bytes": 171,
+      "exact_bytes_sha256": "40ad7a41b871296a774026c11ba481e3b001b98148f25b645a24820d23ebf00c"
+    },
+    "__ihk_mc_spinlock_lock": {
+      "kind": "T",
+      "bytes": 108,
+      "exact_bytes_sha256": "9e64a1107f1d05deaa87e39dd9fea7bd98bf3380671e7a286d4a90976301d916"
+    },
+    "terminate_host": {
+      "kind": "T",
+      "bytes": 183,
+      "exact_bytes_sha256": "d7cf3c496e150e0b6213af2259dc48ce91d4addfe8a4c28df6bbde923370f0cc"
+    },
+    "syscall_policy_do_syscall2_bridge": {
+      "kind": "T",
+      "bytes": 167,
+      "exact_bytes_sha256": "ee9bce5f801385dc5a4ba9853e721ff308b363390c4cd9e3cef9ed4bb9a2f5f4"
+    },
+    "getcred": {
+      "kind": "T",
+      "bytes": 259,
+      "exact_bytes_sha256": "4bf5bce154fef9ea58bf424b733dc4639ca86dc6cb9ff7b951a0f20ad5302f7a"
+    },
+    "x86_user_map_kernel_start_bridge": {
+      "kind": "T",
+      "bytes": 14,
+      "exact_bytes_sha256": "0f3977abc841dba40ebec43fa440380b36009ee7135d41857174d21180c86f15"
+    },
+    "x86_addr_log_kernel_debug": {
+      "kind": "D",
+      "bytes": 32,
+      "exact_bytes_sha256": "866533a0db65073a0656c6ca4c0f51c002fb9d81d7d88414847c59a9dbe35aa2"
+    },
+    "syscall_get_processor_id_bridge": {
+      "kind": "T",
+      "bytes": 77,
+      "exact_bytes_sha256": "7f38494e7b45beda4e6d658f4e38d6e83a5a043ea087f95439cb16d4a05a3e94"
+    },
+    "put_dec_full_result": {
+      "kind": "T",
+      "bytes": 174,
+      "exact_bytes_sha256": "0b8c7d935478e624184be0e4a7a848e2d180bb107bd42be7bd331811630eb313"
+    },
+    "memset": {
+      "kind": "T",
+      "bytes": 113,
+      "exact_bytes_sha256": "0be4bc92cb70d0556f72a440dedc9359c8bcb05f57034e4d8a042f7ecb6dcf0d"
+    },
+    "cpu_pause": {
+      "kind": "T",
+      "bytes": 3,
+      "exact_bytes_sha256": "cfb2331b0c15a140c45e70255d0c503cb0fd57736254d86ab260e63ae438e9d9"
+    },
+    "__ihk_mc_spinlock_lock_noirq": {
+      "kind": "T",
+      "bytes": 91,
+      "exact_bytes_sha256": "0f1798fdd156e35d62b6f1b81ca85dbb473f7802dac4592d956ac868522edbcd"
+    },
+    "format_decode_result": {
+      "kind": "T",
+      "bytes": 876,
+      "exact_bytes_sha256": "f00129f9f58f2acea711e25cf9c6e3101f6eea4fbe07155d9624e96623dfb116"
+    },
+    "wait_host_wait4_bridge": {
+      "kind": "T",
+      "bytes": 166,
+      "exact_bytes_sha256": "5e4a31abb5065135ef0666cb876de8dccb17d109cf7e152bc9616260a370e925"
+    },
+    "__ihk_mc_spinlock_unlock_noirq": {
+      "kind": "T",
+      "bytes": 59,
+      "exact_bytes_sha256": "016112685ef6ca7c0c757cf6fb660ca27f2f3d34cb9d75c3cc848d6231a5939f"
+    },
+    "process_sched_runq_log_bridge": {
+      "kind": "T",
+      "bytes": 684,
+      "exact_bytes_sha256": "5674a6f94724a56ec7e9cb0e5ce985b6980dc045c90c15fa13a7b24631166776"
+    },
+    "syscall_policy_do_syscall3_bridge": {
+      "kind": "T",
+      "bytes": 171,
+      "exact_bytes_sha256": "40ad7a41b871296a774026c11ba481e3b001b98148f25b645a24820d23ebf00c"
+    },
+    "process_spin_lock_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "kprintf": {
+      "kind": "T",
+      "bytes": 706,
+      "exact_bytes_sha256": "061449de7fa139cb05b076cecb0695cd01321cae727154c4d1fcfe522f89efcc"
+    },
+    "x86_addr_log_bridge": {
+      "kind": "T",
+      "bytes": 98,
+      "exact_bytes_sha256": "a5fdf02d80f6ccff24f7b368cf44264fc1775ae7639d280448d4fda7f496506c"
+    },
+    "ihk_mc_spinlock_init": {
+      "kind": "T",
+      "bytes": 5,
+      "exact_bytes_sha256": "a919fa6085316324bc55e19cc0b7e38e63fb33fc016940fd8ad3665c2cfc375a"
+    },
+    "printf_write_nchars_result": {
+      "kind": "T",
+      "bytes": 25,
+      "exact_bytes_sha256": "faf041c58c30e96c980d037e59b286d684298db19a25d7093200511c5cbffb1c"
+    },
+    "ihk_mc_get_processor_id": {
+      "kind": "T",
+      "bytes": 77,
+      "exact_bytes_sha256": "7f38494e7b45beda4e6d658f4e38d6e83a5a043ea087f95439cb16d4a05a3e94"
+    },
+    "__sched_wakeup_thread": {
+      "kind": "T",
+      "bytes": 634,
+      "exact_bytes_sha256": "c4195132c8b2797c26a9aafdc3cb8a38a7a23493269be6b0dddefed3782dc1b7"
+    },
+    "linux_page_offset_base": {
+      "kind": "B",
+      "bytes": 8,
+      "NOBITS_declaration_preserved": true
+    },
+    "ptrace_detach_do_kill_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "sched_wakeup_thread_body_result": {
+      "kind": "T",
+      "bytes": 781,
+      "exact_bytes_sha256": "5c09fe52e082ba0b85bc706429d014321d6ad64c75c58305f75f2615a2799231"
+    },
+    "process_spin_unlock_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "printf_terminate_result": {
+      "kind": "T",
+      "bytes": 19,
+      "exact_bytes_sha256": "e951d73335a1ea87677f387352bc2a505fa40dc1b057fded057556381dc6c306"
+    },
+    "process_sched_rwlock_bridge": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "printf_copy_literal_result": {
+      "kind": "T",
+      "bytes": 174,
+      "exact_bytes_sha256": "f14a0ebf4ac83af0acb605a343ccf92f3911de41da5aca197d3fe6ddc5e924c6"
+    },
+    "get_cpu_local_var": {
+      "kind": "T",
+      "bytes": 24,
+      "exact_bytes_sha256": "f1c8ee93f3c68d05ced991b27aec458dcd7868c4ab9e1471668c78084ef028d1"
+    },
+    "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK": {
+      "kind": "B",
+      "bytes": 4,
+      "NOBITS_declaration_preserved": true
+    },
+    "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": {
+      "kind": "T",
+      "bytes": 1190,
+      "exact_bytes_sha256": "65b261ff1c3022a53d9e02997440b8f730c269e8172dee5521f915ddfeebdee7"
+    },
+    "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": {
+      "kind": "T",
+      "bytes": 3395,
+      "exact_bytes_sha256": "30c025a6db9b2cdf1593878ce492e9a1e143601e8851e19eaf3f3dd231efcb6c"
+    },
+    "__mcs_rwlock_writer_lock_noirq": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "__mcs_rwlock_writer_unlock_noirq": {
+      "kind": "T",
+      "bytes": 12,
+      "exact_bytes_sha256": "ef860becd6610598da12a169f14a8fcad14885d2501781d6a0142b3d7e78fe6b"
+    },
+    "xchg4": {
+      "kind": "T",
+      "bytes": 5,
+      "exact_bytes_sha256": "f81e6f2ff8a970db99b5565994aded971be7ed78538849dfdff028447873a4ca"
+    },
+    "process_remaining_range_scheduler_debug": {
+      "kind": "D",
+      "bytes": 576,
+      "exact_bytes_sha256": "6a8f6298ec55492818cd224baa2e0b212f7231c32b4c4309b4b97ee7eb00782f"
+    }
+  },
+  "normalized_source_relocations": {
+    "cpu_local_var_initialized": [],
+    "skip_atoi_result": [],
+    "rdtsc": [],
+    "preempt_disable": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        18,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        30,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "process_sched_rwunlock_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__mcs_rwlock_writer_unlock_noirq",
+          0
+        ]
+      ]
+    ],
+    "clv": [],
+    "process_sched_cpu_local_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "x86_map_kernel_start_geometry": [],
+    "kmsg_buf": [],
+    "snprintf": [
+      [
+        56,
+        1,
+        [
+          "code",
+          [
+            [
+              "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+              0
+            ]
+          ]
+        ]
+      ]
+    ],
+    "ihk_mc_delay_us": [
+      [
+        46,
+        1,
+        [
+          "global",
+          "cpu_pause",
+          0
+        ]
+      ]
+    ],
+    "process_sched_interrupt_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "ihk_mc_interrupt_cpu",
+          0
+        ]
+      ]
+    ],
+    "sched_wakeup_thread": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__sched_wakeup_thread",
+          0
+        ]
+      ]
+    ],
+    "num_processors": [],
+    "ptrace_detach_wakeup_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "sched_wakeup_thread",
+          0
+        ]
+      ]
+    ],
+    "put_dec_trunc_result": [],
+    "process_sched_status_set_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "xchg4",
+          0
+        ]
+      ]
+    ],
+    "locals": [],
+    "kprintf_lock": [
+      [
+        6,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        21,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        33,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ],
+      [
+        54,
+        1,
+        [
+          "NOBITS_declaration_owner",
+          [
+            "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+            0,
+            4,
+            0,
+            0
+          ]
+        ]
+      ]
+    ],
+    "preempt_enable": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        18,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        30,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "x86_virt_to_phys_body_result": [],
+    "do_setresgid": [
+      [
+        78,
+        1,
+        [
+          "global",
+          "get_this_cpu_local_var",
+          0
+        ]
+      ],
+      [
+        102,
+        1,
+        [
+          "global",
+          "getcred",
+          0
+        ]
+      ],
+      [
+        112,
+        1,
+        [
+          "global",
+          "syscall_refresh_cred_fields_body_result",
+          0
+        ]
+      ]
+    ],
+    "__ihk_mc_spinlock_unlock": [
+      [
+        11,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        26,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        38,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "cpu_restore_interrupt": [],
+    "syscall_virt_to_phys_bridge": [
+      [
+        9,
+        1,
+        [
+          "global",
+          "x86_map_kernel_start_geometry",
+          0
+        ]
+      ],
+      [
+        27,
+        1,
+        [
+          "global",
+          "linux_page_offset_base",
+          0
+        ]
+      ],
+      [
+        59,
+        1,
+        [
+          "global",
+          "x86_addr_log_bridge",
+          0
+        ]
+      ],
+      [
+        94,
+        1,
+        [
+          "global",
+          "x86_kernel_phys_base",
+          0
+        ]
+      ],
+      [
+        113,
+        1,
+        [
+          "global",
+          "x86_addr_log_bridge",
+          0
+        ]
+      ]
+    ],
+    "x86_kernel_phys_base": [],
+    "virt_to_phys": [
+      [
+        9,
+        1,
+        [
+          "global",
+          "x86_map_kernel_start_geometry",
+          0
+        ]
+      ],
+      [
+        27,
+        1,
+        [
+          "global",
+          "linux_page_offset_base",
+          0
+        ]
+      ],
+      [
+        59,
+        1,
+        [
+          "global",
+          "x86_addr_log_bridge",
+          0
+        ]
+      ],
+      [
+        94,
+        1,
+        [
+          "global",
+          "x86_kernel_phys_base",
+          0
+        ]
+      ],
+      [
+        113,
+        1,
+        [
+          "global",
+          "x86_addr_log_bridge",
+          0
+        ]
+      ]
+    ],
+    "getcred_body_result": [],
+    "printf_emit_char_result": [],
+    "get_this_cpu_local_var": [
+      [
+        19,
+        1,
+        [
+          "global",
+          "locals",
+          0
+        ]
+      ],
+      [
+        44,
+        1,
+        [
+          "global",
+          "num_processors",
+          0
+        ]
+      ],
+      [
+        79,
+        1,
+        [
+          "global",
+          "clv",
+          0
+        ]
+      ]
+    ],
+    "strnlen": [],
+    "kprintf_unlock": [
+      [
+        3,
+        1,
+        [
+          "NOBITS_declaration_owner",
+          [
+            "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+            0,
+            4,
+            0,
+            0
+          ]
+        ]
+      ],
+      [
+        21,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        36,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        48,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "put_dec_result": [
+      [
+        279,
+        1,
+        [
+          "global",
+          "put_dec_trunc_result",
+          0
+        ]
+      ]
+    ],
+    "cpu_disable_interrupt_save": [],
+    "kmsg_init": [
+      [
+        2,
+        1,
+        [
+          "NOBITS_declaration_owner",
+          [
+            "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK",
+            0,
+            4,
+            0,
+            0
+          ]
+        ]
+      ]
+    ],
+    "syscall_refresh_cred_fields_body_result": [],
+    "process_sched_set_timer_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "set_timer",
+          0
+        ]
+      ]
+    ],
+    "x86_addr_log_straight_debug": [
+      [
+        0,
+        1,
+        [
+          "global",
+          "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE",
+          0
+        ]
+      ],
+      [
+        8,
+        1,
+        [
+          "literal_string",
+          "7838365f616464725f6c6f675f62726964676500"
+        ]
+      ]
+    ],
+    "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE": [],
+    "process_sched_vector_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "ihk_mc_get_vector",
+          0
+        ]
+      ]
+    ],
+    "cpu_interrupt_disabled": [],
+    "do_setresuid": [
+      [
+        78,
+        1,
+        [
+          "global",
+          "get_this_cpu_local_var",
+          0
+        ]
+      ],
+      [
+        102,
+        1,
+        [
+          "global",
+          "getcred",
+          0
+        ]
+      ],
+      [
+        112,
+        1,
+        [
+          "global",
+          "syscall_refresh_cred_fields_body_result",
+          0
+        ]
+      ]
+    ],
+    "syscall_do_syscall2_bridge": [
+      [
+        99,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        111,
+        1,
+        [
+          "global",
+          "do_syscall",
+          0
+        ]
+      ],
+      [
+        121,
+        1,
+        [
+          "global",
+          "syscall_generic_forwarding_body_result",
+          0
+        ]
+      ]
+    ],
+    "arch_delay": [
+      [
+        46,
+        1,
+        [
+          "global",
+          "cpu_pause",
+          0
+        ]
+      ]
+    ],
+    "syscall_do_syscall3_bridge": [
+      [
+        103,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        115,
+        1,
+        [
+          "global",
+          "do_syscall",
+          0
+        ]
+      ],
+      [
+        125,
+        1,
+        [
+          "global",
+          "syscall_generic_forwarding_body_result",
+          0
+        ]
+      ]
+    ],
+    "__ihk_mc_spinlock_lock": [
+      [
+        12,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        27,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        39,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "terminate_host": [
+      [
+        32,
+        1,
+        [
+          "global",
+          "get_this_cpu_local_var",
+          0
+        ]
+      ],
+      [
+        55,
+        1,
+        [
+          "global",
+          "syscall_do_kill_thread_bridge",
+          0
+        ]
+      ],
+      [
+        65,
+        1,
+        [
+          "global",
+          "f03_wait_release_process",
+          0
+        ]
+      ],
+      [
+        75,
+        1,
+        [
+          "global",
+          "f03_wait_release_thread",
+          0
+        ]
+      ],
+      [
+        85,
+        1,
+        [
+          "global",
+          "f03_terminate_host_refcount_set_v1",
+          0
+        ]
+      ],
+      [
+        95,
+        1,
+        [
+          "global",
+          "syscall_process_unlock_bridge",
+          0
+        ]
+      ],
+      [
+        105,
+        1,
+        [
+          "global",
+          "syscall_find_process_bridge",
+          0
+        ]
+      ],
+      [
+        154,
+        1,
+        [
+          "global",
+          "terminate_host_body_result",
+          0
+        ]
+      ]
+    ],
+    "syscall_policy_do_syscall2_bridge": [
+      [
+        99,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        111,
+        1,
+        [
+          "global",
+          "do_syscall",
+          0
+        ]
+      ],
+      [
+        121,
+        1,
+        [
+          "global",
+          "syscall_generic_forwarding_body_result",
+          0
+        ]
+      ]
+    ],
+    "getcred": [
+      [
+        180,
+        1,
+        [
+          "global",
+          "syscall_virt_to_phys_bridge",
+          0
+        ]
+      ],
+      [
+        209,
+        1,
+        [
+          "global",
+          "syscall_get_processor_id_bridge",
+          0
+        ]
+      ],
+      [
+        221,
+        1,
+        [
+          "global",
+          "syscall_do_syscall_request_bridge",
+          0
+        ]
+      ]
+    ],
+    "x86_user_map_kernel_start_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "x86_map_kernel_start_geometry",
+          0
+        ]
+      ]
+    ],
+    "x86_addr_log_kernel_debug": [
+      [
+        0,
+        1,
+        [
+          "global",
+          "_RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE",
+          0
+        ]
+      ],
+      [
+        8,
+        1,
+        [
+          "literal_string",
+          "7838365f616464725f6c6f675f62726964676500"
+        ]
+      ]
+    ],
+    "syscall_get_processor_id_bridge": [
+      [
+        19,
+        1,
+        [
+          "global",
+          "locals",
+          0
+        ]
+      ],
+      [
+        37,
+        1,
+        [
+          "global",
+          "num_processors",
+          0
+        ]
+      ]
+    ],
+    "put_dec_full_result": [],
+    "memset": [],
+    "cpu_pause": [],
+    "__ihk_mc_spinlock_lock_noirq": [
+      [
+        6,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        21,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        33,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "format_decode_result": [
+      [
+        365,
+        1,
+        [
+          "readonly",
+          ".lrodata.format_decode_result",
+          0,
+          1216,
+          "97d364e2d3d35f030a038c41bbadc42d0c15fa8d79ba569987e19fddb2e80f9a"
+        ]
+      ],
+      [
+        604,
+        1,
+        [
+          "readonly",
+          ".lrodata.format_decode_result",
+          136,
+          1216,
+          "97d364e2d3d35f030a038c41bbadc42d0c15fa8d79ba569987e19fddb2e80f9a"
+        ]
+      ],
+      [
+        730,
+        1,
+        [
+          "readonly",
+          ".lrodata.format_decode_result",
+          808,
+          1216,
+          "97d364e2d3d35f030a038c41bbadc42d0c15fa8d79ba569987e19fddb2e80f9a"
+        ]
+      ]
+    ],
+    "wait_host_wait4_bridge": [
+      [
+        95,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        107,
+        1,
+        [
+          "global",
+          "do_syscall",
+          0
+        ]
+      ],
+      [
+        117,
+        1,
+        [
+          "global",
+          "syscall_generic_forwarding_body_result",
+          0
+        ]
+      ]
+    ],
+    "__ihk_mc_spinlock_unlock_noirq": [
+      [
+        7,
+        1,
+        [
+          "global",
+          "cpu_local_var_initialized",
+          0
+        ]
+      ],
+      [
+        23,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        35,
+        1,
+        [
+          "global",
+          "get_cpu_local_var",
+          0
+        ]
+      ]
+    ],
+    "process_sched_runq_log_bridge": [
+      [
+        20,
+        1,
+        [
+          "readonly",
+          ".lrodata.process_sched_runq_log_bridge",
+          0,
+          88,
+          "10eef285deef7a4b7c82b22aa53589b7833df29de3814649c772bbd5c832f365"
+        ]
+      ],
+      [
+        33,
+        1,
+        [
+          "literal_string",
+          "6e6f206d6967726174696f6e20696e2049525120636f6e746578740a00"
+        ]
+      ],
+      [
+        43,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ],
+      [
+        67,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          376
+        ]
+      ],
+      [
+        90,
+        1,
+        [
+          "literal_string",
+          "72756e715f6164645f70726f6328293a2074696420256420616464656420746f204350555b25645d27732072756e710a00"
+        ]
+      ],
+      [
+        100,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ],
+      [
+        130,
+        1,
+        [
+          "literal_string",
+          "25733a205741524e494e472063616e2774207363686564756c652829207768696c65206e6f20707265656d7074696f6e2c20636e743a2025640a00"
+        ]
+      ],
+      [
+        140,
+        1,
+        [
+          "literal_string",
+          "7363686564756c6500"
+        ]
+      ],
+      [
+        155,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          312
+        ]
+      ],
+      [
+        178,
+        1,
+        [
+          "literal_string",
+          "25733a207370696e2077616b6575703a206370755f69643a2025640a00"
+        ]
+      ],
+      [
+        190,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          344
+        ]
+      ],
+      [
+        213,
+        1,
+        [
+          "literal_string",
+          "25733a2069737375696e67204950492c207468726561642d3e6370755f69643d25640a00"
+        ]
+      ],
+      [
+        223,
+        1,
+        [
+          "literal_string",
+          "5f5f73636865645f77616b6575705f74687265616400"
+        ]
+      ],
+      [
+        238,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          472
+        ]
+      ],
+      [
+        261,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        276,
+        1,
+        [
+          "literal_string",
+          "25733a20776f6b656e207768696c65207370696e6e696e672c206370753a2025642c20646f5f7363686564756c653a2025640a00"
+        ]
+      ],
+      [
+        286,
+        1,
+        [
+          "literal_string",
+          "7370696e5f736c6565705f6f725f7363686564756c6500"
+        ]
+      ],
+      [
+        296,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ],
+      [
+        325,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          280
+        ]
+      ],
+      [
+        357,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        378,
+        1,
+        [
+          "literal_string",
+          "25733a2070726f632d3e7069643d25642c2076616c69645f7374617465733d253038782c2070726f632d3e7374617475733d253038782c2070726f632d3e6370755f69643d25642c6d79206370755f69643d25640a00"
+        ]
+      ],
+      [
+        388,
+        1,
+        [
+          "literal_string",
+          "5f5f73636865645f77616b6575705f74687265616400"
+        ]
+      ],
+      [
+        398,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ],
+      [
+        430,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          408
+        ]
+      ],
+      [
+        453,
+        1,
+        [
+          "literal_string",
+          "25733a2069646c655f68616c74202d3e207363686564756c6528290a00"
+        ]
+      ],
+      [
+        465,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          440
+        ]
+      ],
+      [
+        488,
+        1,
+        [
+          "literal_string",
+          "25733a206361756768742061206c6f73742077616b652d7570210a00"
+        ]
+      ],
+      [
+        498,
+        1,
+        [
+          "literal_string",
+          "7370696e5f736c6565705f6f725f7363686564756c6500"
+        ]
+      ],
+      [
+        508,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ],
+      [
+        532,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          536
+        ]
+      ],
+      [
+        551,
+        1,
+        [
+          "literal_string",
+          "25733a20636c6f6e655f636f756e742069732025640a00"
+        ]
+      ],
+      [
+        561,
+        1,
+        [
+          "literal_string",
+          "72756e715f6164645f74687265616400"
+        ]
+      ],
+      [
+        571,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ],
+      [
+        598,
+        1,
+        [
+          "global",
+          "process_remaining_range_scheduler_debug",
+          504
+        ]
+      ],
+      [
+        628,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        640,
+        1,
+        [
+          "literal_string",
+          "25733a20776f6b656e207768696c6520736c656570696e672c206370753a2025640a00"
+        ]
+      ],
+      [
+        650,
+        1,
+        [
+          "literal_string",
+          "7370696e5f736c6565705f6f725f7363686564756c6500"
+        ]
+      ],
+      [
+        660,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ]
+    ],
+    "syscall_policy_do_syscall3_bridge": [
+      [
+        103,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        115,
+        1,
+        [
+          "global",
+          "do_syscall",
+          0
+        ]
+      ],
+      [
+        125,
+        1,
+        [
+          "global",
+          "syscall_generic_forwarding_body_result",
+          0
+        ]
+      ]
+    ],
+    "process_spin_lock_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__ihk_mc_spinlock_lock",
+          0
+        ]
+      ]
+    ],
+    "kprintf": [
+      [
+        82,
+        1,
+        [
+          "global",
+          "kmsg_buf",
+          0
+        ]
+      ],
+      [
+        112,
+        1,
+        [
+          "global",
+          "memset",
+          0
+        ]
+      ],
+      [
+        134,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        146,
+        1,
+        [
+          "literal_string",
+          "5b2533645d3a2000"
+        ]
+      ],
+      [
+        156,
+        1,
+        [
+          "global",
+          "snprintf",
+          0
+        ]
+      ],
+      [
+        201,
+        1,
+        [
+          "code",
+          [
+            [
+              "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+              0
+            ]
+          ]
+        ]
+      ],
+      [
+        223,
+        1,
+        [
+          "global",
+          "kprintf_lock",
+          0
+        ]
+      ],
+      [
+        240,
+        1,
+        [
+          "global",
+          "cpu_disable_interrupt_save",
+          0
+        ]
+      ],
+      [
+        273,
+        1,
+        [
+          "global",
+          "cpu_pause",
+          0
+        ]
+      ],
+      [
+        568,
+        1,
+        [
+          "global",
+          "cpu_restore_interrupt",
+          0
+        ]
+      ],
+      [
+        585,
+        1,
+        [
+          "global",
+          "kprintf_unlock",
+          0
+        ]
+      ],
+      [
+        602,
+        1,
+        [
+          "global",
+          "cpu_interrupt_disabled",
+          0
+        ]
+      ],
+      [
+        672,
+        1,
+        [
+          "global",
+          "eventfd",
+          0
+        ]
+      ],
+      [
+        689,
+        1,
+        [
+          "global",
+          "ihk_mc_delay_us",
+          0
+        ]
+      ]
+    ],
+    "x86_addr_log_bridge": [
+      [
+        15,
+        1,
+        [
+          "global",
+          "x86_addr_log_straight_debug",
+          24
+        ]
+      ],
+      [
+        34,
+        1,
+        [
+          "literal_string",
+          "25733a204d41505f53545f5354415254203c3d203078256c78203c3d204d41505f46495845445f53544152540a00"
+        ]
+      ],
+      [
+        46,
+        1,
+        [
+          "global",
+          "x86_addr_log_kernel_debug",
+          24
+        ]
+      ],
+      [
+        66,
+        1,
+        [
+          "literal_string",
+          "25733a204d41505f4b45524e454c5f5354415254203c3d203078256c78203c3d206c696e75785f706167655f6f66667365745f626173650a00"
+        ]
+      ],
+      [
+        76,
+        1,
+        [
+          "literal_string",
+          "766972745f746f5f7068797300"
+        ]
+      ],
+      [
+        86,
+        1,
+        [
+          "global",
+          "kprintf",
+          0
+        ]
+      ]
+    ],
+    "ihk_mc_spinlock_init": [],
+    "printf_write_nchars_result": [],
+    "ihk_mc_get_processor_id": [
+      [
+        19,
+        1,
+        [
+          "global",
+          "locals",
+          0
+        ]
+      ],
+      [
+        37,
+        1,
+        [
+          "global",
+          "num_processors",
+          0
+        ]
+      ]
+    ],
+    "__sched_wakeup_thread": [
+      [
+        43,
+        1,
+        [
+          "global",
+          "process_sched_cpu_local_bridge",
+          0
+        ]
+      ],
+      [
+        58,
+        1,
+        [
+          "global",
+          "ihk_mc_get_processor_id",
+          0
+        ]
+      ],
+      [
+        143,
+        1,
+        [
+          "global",
+          "process_sched_runq_log_bridge",
+          0
+        ]
+      ],
+      [
+        176,
+        1,
+        [
+          "global",
+          "process_spin_lock_bridge",
+          0
+        ]
+      ],
+      [
+        219,
+        1,
+        [
+          "global",
+          "process_sched_runq_log_bridge",
+          0
+        ]
+      ],
+      [
+        241,
+        1,
+        [
+          "global",
+          "process_spin_unlock_bridge",
+          0
+        ]
+      ],
+      [
+        314,
+        1,
+        [
+          "global",
+          "process_spin_lock_bridge",
+          0
+        ]
+      ],
+      [
+        368,
+        1,
+        [
+          "global",
+          "process_sched_rwlock_bridge",
+          0
+        ]
+      ],
+      [
+        411,
+        1,
+        [
+          "global",
+          "process_sched_rwunlock_bridge",
+          0
+        ]
+      ],
+      [
+        443,
+        1,
+        [
+          "global",
+          "process_sched_status_set_bridge",
+          0
+        ]
+      ],
+      [
+        478,
+        1,
+        [
+          "global",
+          "process_sched_set_timer_bridge",
+          0
+        ]
+      ],
+      [
+        510,
+        1,
+        [
+          "global",
+          "process_spin_unlock_bridge",
+          0
+        ]
+      ],
+      [
+        550,
+        1,
+        [
+          "global",
+          "process_sched_runq_log_bridge",
+          0
+        ]
+      ],
+      [
+        562,
+        1,
+        [
+          "global",
+          "process_sched_vector_bridge",
+          0
+        ]
+      ],
+      [
+        579,
+        1,
+        [
+          "global",
+          "process_sched_interrupt_bridge",
+          0
+        ]
+      ],
+      [
+        606,
+        1,
+        [
+          "global",
+          "process_spin_unlock_bridge",
+          0
+        ]
+      ]
+    ],
+    "linux_page_offset_base": [],
+    "ptrace_detach_do_kill_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "do_kill",
+          0
+        ]
+      ]
+    ],
+    "sched_wakeup_thread_body_result": [],
+    "process_spin_unlock_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__ihk_mc_spinlock_unlock",
+          0
+        ]
+      ]
+    ],
+    "printf_terminate_result": [],
+    "process_sched_rwlock_bridge": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__mcs_rwlock_writer_lock_noirq",
+          0
+        ]
+      ]
+    ],
+    "printf_copy_literal_result": [],
+    "get_cpu_local_var": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "clv",
+          0
+        ]
+      ]
+    ],
+    "_RNvNtCs3AfSQJNpqeM_31kmsg_lock_preempt_provider_unit5debug9KMSG_LOCK": [],
+    "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result": [
+      [
+        214,
+        1,
+        [
+          "global",
+          "put_dec_result",
+          0
+        ]
+      ],
+      [
+        301,
+        1,
+        [
+          "readonly",
+          ".lrodata.cst16",
+          0,
+          16,
+          "2125b2c332b1113aae9bfc5e9f7e3b4c91d828cb942c2df1eeb02502eccae9e9"
+        ]
+      ]
+    ],
+    "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result": [
+      [
+        131,
+        1,
+        [
+          "literal_string",
+          "286e756c6c2900"
+        ]
+      ],
+      [
+        147,
+        1,
+        [
+          "literal_string",
+          "3c4e554c4c3e00"
+        ]
+      ],
+      [
+        214,
+        1,
+        [
+          "global",
+          "format_decode_result",
+          0
+        ]
+      ],
+      [
+        249,
+        1,
+        [
+          "readonly",
+          ".lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+          0,
+          240,
+          "2dfba633817046c7f559ed4b93076048435f7e1a90f14eb8035c04b9ebae2537"
+        ]
+      ],
+      [
+        743,
+        1,
+        [
+          "readonly",
+          ".lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+          144,
+          240,
+          "2dfba633817046c7f559ed4b93076048435f7e1a90f14eb8035c04b9ebae2537"
+        ]
+      ],
+      [
+        1783,
+        1,
+        [
+          "code",
+          [
+            [
+              "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result",
+              0
+            ]
+          ]
+        ]
+      ],
+      [
+        1993,
+        1,
+        [
+          "literal_string",
+          "3c4e554c4c3e00"
+        ]
+      ],
+      [
+        2029,
+        1,
+        [
+          "global",
+          "strnlen",
+          0
+        ]
+      ],
+      [
+        3304,
+        1,
+        [
+          "code",
+          [
+            [
+              "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse17number_ref_result",
+              0
+            ]
+          ]
+        ]
+      ]
+    ],
+    "__mcs_rwlock_writer_lock_noirq": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__ihk_mc_spinlock_lock_noirq",
+          0
+        ]
+      ]
+    ],
+    "__mcs_rwlock_writer_unlock_noirq": [
+      [
+        2,
+        1,
+        [
+          "global",
+          "__ihk_mc_spinlock_unlock_noirq",
+          0
+        ]
+      ]
+    ],
+    "xchg4": [],
+    "process_remaining_range_scheduler_debug": [
+      [
+        0,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        8,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        32,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        40,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        64,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        72,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        96,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        104,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        128,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        136,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        160,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        168,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        192,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        200,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        224,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        232,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        256,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        264,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        288,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        296,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        320,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        328,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        352,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        360,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        384,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        392,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        416,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        424,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        448,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        456,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        480,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        488,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        512,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        520,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+        ]
+      ],
+      [
+        544,
+        1,
+        [
+          "literal_string",
+          "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+        ]
+      ],
+      [
+        552,
+        1,
+        [
+          "literal_string",
+          "70726f636573735f73636865645f646f5f6d6967726174655f6c6f675f62726964676500"
+        ]
+      ]
+    ]
+  },
+  "actual_source_readonly": [
+    {
+      "name": ".lrodata.process_sched_runq_log_bridge",
+      "bytes": 88,
+      "sha256": "10eef285deef7a4b7c82b22aa53589b7833df29de3814649c772bbd5c832f365",
+      "actual_source_relocations": [
+        [
+          0,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                31
+              ]
+            ]
+          ]
+        ],
+        [
+          8,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                323
+              ]
+            ]
+          ]
+        ],
+        [
+          16,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                153
+              ]
+            ]
+          ]
+        ],
+        [
+          24,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                188
+              ]
+            ]
+          ]
+        ],
+        [
+          32,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                65
+              ]
+            ]
+          ]
+        ],
+        [
+          40,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                428
+              ]
+            ]
+          ]
+        ],
+        [
+          48,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                463
+              ]
+            ]
+          ]
+        ],
+        [
+          56,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                236
+              ]
+            ]
+          ]
+        ],
+        [
+          64,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                596
+              ]
+            ]
+          ]
+        ],
+        [
+          72,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                128
+              ]
+            ]
+          ]
+        ],
+        [
+          80,
+          1,
+          [
+            "code",
+            [
+              [
+                "process_sched_runq_log_bridge",
+                530
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": ".lrodata.str1.1",
+      "exact_original_NUL_contents_retained": true,
+      "original_bytes": 683
+    },
+    {
+      "name": ".lrodata._RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+      "bytes": 240,
+      "sha256": "2dfba633817046c7f559ed4b93076048435f7e1a90f14eb8035c04b9ebae2537",
+      "actual_source_relocations": [
+        [
+          0,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                383
+              ]
+            ]
+          ]
+        ],
+        [
+          8,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                509
+              ]
+            ]
+          ]
+        ],
+        [
+          16,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                272
+              ]
+            ]
+          ]
+        ],
+        [
+          24,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                543
+              ]
+            ]
+          ]
+        ],
+        [
+          32,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                577
+              ]
+            ]
+          ]
+        ],
+        [
+          40,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                306
+              ]
+            ]
+          ]
+        ],
+        [
+          48,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                260
+              ]
+            ]
+          ]
+        ],
+        [
+          56,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                260
+              ]
+            ]
+          ]
+        ],
+        [
+          64,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          72,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          80,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          88,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          96,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          104,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          112,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          120,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          128,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                721
+              ]
+            ]
+          ]
+        ],
+        [
+          136,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                649
+              ]
+            ]
+          ]
+        ],
+        [
+          144,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1402
+              ]
+            ]
+          ]
+        ],
+        [
+          152,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                754
+              ]
+            ]
+          ]
+        ],
+        [
+          160,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                754
+              ]
+            ]
+          ]
+        ],
+        [
+          168,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1365
+              ]
+            ]
+          ]
+        ],
+        [
+          176,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1481
+              ]
+            ]
+          ]
+        ],
+        [
+          184,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1519
+              ]
+            ]
+          ]
+        ],
+        [
+          192,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1593
+              ]
+            ]
+          ]
+        ],
+        [
+          200,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1447
+              ]
+            ]
+          ]
+        ],
+        [
+          208,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1556
+              ]
+            ]
+          ]
+        ],
+        [
+          216,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                1447
+              ]
+            ]
+          ]
+        ],
+        [
+          224,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                754
+              ]
+            ]
+          ]
+        ],
+        [
+          232,
+          1,
+          [
+            "code",
+            [
+              [
+                "_RNvNtCsk3vibyfD9zP_21kprintf_provider_unit8numparse24vsnprintf_va_list_result",
+                754
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": ".lrodata.format_decode_result",
+      "bytes": 1216,
+      "sha256": "97d364e2d3d35f030a038c41bbadc42d0c15fa8d79ba569987e19fddb2e80f9a",
+      "actual_source_relocations": [
+        [
+          0,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                375
+              ]
+            ]
+          ]
+        ],
+        [
+          8,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          16,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          24,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                417
+              ]
+            ]
+          ]
+        ],
+        [
+          32,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          40,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          48,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          56,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          64,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          72,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          80,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          88,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                425
+              ]
+            ]
+          ]
+        ],
+        [
+          96,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          104,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                384
+              ]
+            ]
+          ]
+        ],
+        [
+          112,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          120,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                441
+              ]
+            ]
+          ]
+        ],
+        [
+          128,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                433
+              ]
+            ]
+          ]
+        ],
+        [
+          136,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                646
+              ]
+            ]
+          ]
+        ],
+        [
+          144,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          152,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          160,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          168,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          176,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          184,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          192,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          200,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          208,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          216,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          224,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          232,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          240,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          248,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          256,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          264,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          272,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          280,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          288,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          296,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          304,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          312,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          320,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          328,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          336,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          344,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          352,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          360,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          368,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          376,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          384,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          392,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          400,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          408,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          416,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          424,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          432,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          440,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          448,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          456,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          464,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          472,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          480,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          488,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          496,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          504,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          512,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          520,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          528,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          536,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          544,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                637
+              ]
+            ]
+          ]
+        ],
+        [
+          552,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          560,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          568,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          576,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          584,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          592,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          600,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          608,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          616,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          624,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          632,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                686
+              ]
+            ]
+          ]
+        ],
+        [
+          640,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                616
+              ]
+            ]
+          ]
+        ],
+        [
+          648,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          656,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                657
+              ]
+            ]
+          ]
+        ],
+        [
+          664,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          672,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          680,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                616
+              ]
+            ]
+          ]
+        ],
+        [
+          688,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          696,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          704,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          712,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          720,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                675
+              ]
+            ]
+          ]
+        ],
+        [
+          728,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                708
+              ]
+            ]
+          ]
+        ],
+        [
+          736,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                697
+              ]
+            ]
+          ]
+        ],
+        [
+          744,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          752,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          760,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                622
+              ]
+            ]
+          ]
+        ],
+        [
+          768,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          776,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                715
+              ]
+            ]
+          ]
+        ],
+        [
+          784,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          792,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                759
+              ]
+            ]
+          ]
+        ],
+        [
+          800,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                633
+              ]
+            ]
+          ]
+        ],
+        [
+          808,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                742
+              ]
+            ]
+          ]
+        ],
+        [
+          816,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          824,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          832,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          840,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                842
+              ]
+            ]
+          ]
+        ],
+        [
+          848,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          856,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          864,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          872,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          880,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          888,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          896,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          904,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          912,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          920,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          928,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          936,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          944,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          952,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                867
+              ]
+            ]
+          ]
+        ],
+        [
+          960,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          968,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          976,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          984,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          992,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1000,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1008,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1016,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1024,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1032,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1040,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1048,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1056,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1064,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                849
+              ]
+            ]
+          ]
+        ],
+        [
+          1072,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1080,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1088,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1096,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                818
+              ]
+            ]
+          ]
+        ],
+        [
+          1104,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1112,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1120,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1128,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1136,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1144,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1152,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1160,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                835
+              ]
+            ]
+          ]
+        ],
+        [
+          1168,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1176,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1184,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1192,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1200,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                801
+              ]
+            ]
+          ]
+        ],
+        [
+          1208,
+          1,
+          [
+            "code",
+            [
+              [
+                "format_decode_result",
+                867
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": ".lrodata.cst16",
+      "bytes": 16,
+      "sha256": "2125b2c332b1113aae9bfc5e9f7e3b4c91d828cb942c2df1eeb02502eccae9e9",
+      "actual_source_relocations": []
+    },
+    {
+      "name": ".lrodata._RNvNtNtCs5mudLkas02F_21provider_storage_unit18x86_memory_helpers17owned_memory_data10TRACE_FILE",
+      "bytes": 319,
+      "sha256": "25e4ca4cdbda85175e8344faaee385b0a7d20857171e91f934fd7a5cd4ff399a",
+      "actual_source_relocations": []
+    },
+    {
+      "name": ".lrodata.x86_map_kernel_start_geometry",
+      "bytes": 8,
+      "sha256": "dd60743dadacae7d36105434d557be8617e0c1bf7b0ac56be6c5da8cfd16edb9",
+      "actual_source_relocations": []
+    },
+    {
+      "name": ".lrodata.str1.1",
+      "exact_original_NUL_contents_retained": true,
+      "original_bytes": 137
+    }
+  ],
+  "new_debug18": {
+    "name": "process_remaining_range_scheduler_debug",
+    "records": [
+      {
+        "index": 0,
+        "actual_line_flags": 16779353,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 1,
+        "actual_line_flags": 16779357,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 2,
+        "actual_line_flags": 16779363,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 3,
+        "actual_line_flags": 16779367,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 4,
+        "actual_line_flags": 16779373,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 5,
+        "actual_line_flags": 16779377,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 6,
+        "actual_line_flags": 16779383,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 7,
+        "actual_line_flags": 16779389,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 722,
+            "exact_NUL_contents_hex": "70726f636573735f72616e67655f7075626c69635f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 8,
+        "actual_line_flags": 16781564,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 9,
+        "actual_line_flags": 16781573,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 10,
+        "actual_line_flags": 16781577,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 11,
+        "actual_line_flags": 16781584,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 12,
+        "actual_line_flags": 16781590,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 13,
+        "actual_line_flags": 16781598,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 14,
+        "actual_line_flags": 16781606,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 15,
+        "actual_line_flags": 16781614,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 16,
+        "actual_line_flags": 16781629,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 754,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f72756e715f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      },
+      {
+        "index": 17,
+        "actual_line_flags": 16777705,
+        "fmt_NULL": true,
+        "targets": {
+          "file": {
+            "actual_section": 114,
+            "actual_offset": 683,
+            "exact_NUL_contents_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f6b65726e656c2f70726f636573732e6300"
+          },
+          "func": {
+            "actual_section": 114,
+            "actual_offset": 784,
+            "exact_NUL_contents_hex": "70726f636573735f73636865645f646f5f6d6967726174655f6c6f675f62726964676500"
+          }
+        },
+        "actual_trailing_ABI_padding_hex": "00000000"
+      }
+    ],
+    "field_relocations": 36,
+    "flags": "0x200003",
+    "no_pool_count_or_padding_value_assumption": true
+  },
+  "two_formatter_helpers_one_private_KMSG_delay_alias_and_logger88B_table_preserved": true,
+  "actual_joined_metadata": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-primitives-debugdata-join-1/ACTUAL-JOINED-METADATA.json",
+  "source_flags_and_fullC_guard_boundary_unchanged": true,
+  "no_compiler_metadata_replay_function_boot_IRQ_scheduling_native_default_Cretirement_or_score_claim": true
+}
