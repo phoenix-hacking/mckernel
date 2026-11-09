@@ -1,0 +1,45 @@
+{
+  "status": "PRIVATE_NEW_TEST_PROPOSAL_AST_PARSES_NOT_EXECUTED",
+  "new_test_sha256": "8a4c1726dda6184e9bcb0869925d05134261cbfdf02fb38ecfd3d2898742af2e",
+  "test_methods": [
+    "test_blocked_exit20_is_current_stop_not_retained_503_technical_failure",
+    "test_matching_current_error_and_failure_are_visible",
+    "test_equal_error_text_from_different_log_is_not_promoted_to_current",
+    "test_current_legacy_failure_does_not_invent_last_error_provenance",
+    "test_same_log_with_different_worker_birth_is_not_current",
+    "test_matching_log_cannot_attribute_provenance_bound_to_another_error",
+    "test_healthy_current_state_keeps_old_metadata_unattributed",
+    "test_campaign_only_directions_preserve_configured_window_and_ownership",
+    "test_event_error_writer_binds_new_values_and_preserves_existing_stop_errors",
+    "test_run_exception_writer_binds_values_without_starting_or_retiring_workers",
+    "test_checkpoint_pause_and_actual_steer_use_only_campaign_directions",
+    "test_replacement_keeps_old_snapshot_bytes_and_raw_history_immutable"
+  ],
+  "source_inputs": {
+    "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-regression-1/scripts/tests/test_os_goal_handoff_provenance.py": "8a4c1726dda6184e9bcb0869925d05134261cbfdf02fb38ecfd3d2898742af2e",
+    "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-source-1/scripts/os_goal_handoff.py": "ff15068978291940ff3c05ab32659e191c0208cf5f9e429b204d3581194eaaf0",
+    "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-source-1/scripts/run_os_goal.py": "41e3cd10c533210746f254dd0583f59a8027322a71de2471536ad29702c37f05",
+    "/home/holden/mckernel/scripts/tests/test_os_goal_handoff.py": "8012cf71e6a209353871799555030afe6c0e20a4bb3ce6480b8638cdaf9f195b",
+    "/home/holden/mckernel/scripts/os_goal_output.py": "078d34aba711bf11846220904dfc0492396110bc3e5e2433c79fb43e88fd1fbe",
+    "/home/holden/mckernel/scripts/os_goal_resources.py": "c4761334c67461717bb5f606c7d4d5355a1c80f42709770ab206803e597c5157",
+    "/home/holden/mckernel/scripts/os_goal_windows.py": "5f35b4ff3f7aa0291885b045b375b5488c90c41864d288ac8bcd7a194606c916",
+    "/home/holden/mckernel/scripts/os_goal_instructions.py": "fc56ba5d15e5462c32ed6462ceb469af833e282a03eeb874da1a576e096a72f7",
+    "/home/holden/mckernel/scripts/os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3",
+    "/home/holden/mckernel/scripts/os_goal_transport.py": "ad2eb154f2b278194878483ea3d3114e2d25642aaf0a74ea8f42f5a3a5ba8a5c"
+  },
+  "test_scope": "Offline actual context_record/render/write_recovery_handoff helpers in TemporaryDirectory plus actual two Campaign failure writers on bare objects; save/output/stop mocked and begin throws before launch, rpc=None. No subprocess/server/worker restart/account RPC/native/device/workload runs. Actual request_checkpoint uses only pause/rpc.call/output mocks; checks pause-before-steer and CAMPAIGN-only payload. Actual run-except is a pure fully mocked method, never operational launcher/server/state effects.",
+  "policy_coverage": "Current blocked/20 vs retained old503/network; exact matching current failure; equal text different log; no inferred/missing provenance; same-log birth mismatch; exact error-value binding; healthy status; CAMPAIGN only/no invented fixed deadline; raw credit/billing/nativeUNKNOWN/PID identities retained; immutable archive bytes under replacement.",
+  "writer_modes": [
+    "replace",
+    "preserve-existing-error",
+    "preserve-existing-None",
+    "introduce-only-when-error-key-absent"
+  ],
+  "source_only_actions": [
+    "private new test file creation",
+    "AST parsing",
+    "private new-file patch/proposal"
+  ],
+  "tests_executed": 0,
+  "clarified_root_scope": "Keep original11 plus direct mocked request_checkpoint12th; earlier unexecuted proposal preserved, no runtime or dirty canonical test changes."
+}

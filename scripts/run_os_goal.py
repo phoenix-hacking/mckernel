@@ -860,9 +860,15 @@ class Campaign:
         self.state.pop("credit_timeout_startup", None)
         self.state.pop("transport_shutdown_pause", None)
         self.state.pop("transport_startup", None)
-        self.save(last_error=self.state.get("last_error", error) if preserve else error, last_failure={
-            "thread_id": thread_id, "id": turn_id, "error": error,
-            "reason": reason, "log_dir": str(self.log_dir), "recorded_at": utc()})
+        failure = {"thread_id": thread_id, "id": turn_id, "error": error,
+                   "reason": reason, "log_dir": str(self.log_dir), "recorded_at": utc(),
+                   "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")}
+        fields = {"last_failure": failure}
+        if not preserve or "last_error" not in self.state:
+            fields.update(last_error=error, last_error_provenance={
+                key: failure[key] for key in
+                ("error", "log_dir", "worker_pid", "worker_start", "recorded_at")})
+        self.save(**fields)
         if preserve:
             # A late server error must not turn a requested stop into recovery.
             return
@@ -1532,8 +1538,9 @@ class Campaign:
                     "The launcher is stopping this invocation following a signal or an "
                     "explicitly configured time limit. Stop new task dispatch. "
                     "Finish bounded active operations, join/close child agents, preserve "
-                    "original evidence and active process identities, update CURRENT.md "
-                    "with next tasks, commit/push and verify the checkpoint, then return. "
+                    "original evidence and active process identities, update CAMPAIGN.md "
+                    "as the sole active plan, status and handoff with next tasks, commit/push "
+                    "and verify the checkpoint, then return. "
                     "The launcher has paused future goal continuations. Do not mark the OS "
                     "complete or resume it during shutdown. A subsequent launcher "
                     "invocation authorizes continuation; this pause is not permanent."}]})
@@ -1644,8 +1651,13 @@ class Campaign:
             prior_stop = self.stop_reason
             self.stop_reason = self.stop_reason or "launcher_error"
             retryable = failure is not None and not failure["mutating"]
-            self.save(last_error=self.state.get("last_error", str(error)) if prior_stop else str(error),
-                      retryable=retryable, transport_failure=failure)
+            error_fields = {}
+            if not prior_stop or "last_error" not in self.state:
+                error_fields = {"last_error": str(error), "last_error_provenance": {
+                    "error": str(error), "log_dir": str(self.log_dir),
+                    "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start"),
+                    "recorded_at": utc()}}
+            self.save(retryable=retryable, transport_failure=failure, **error_fields)
             if failure is not None and failure["mutating"]:
                 self.save(transport_uncertain={"at": utc(), "method": failure["method"],
                           "error": str(error), "reason": "mutating_rpc_delivery_uncertain"})

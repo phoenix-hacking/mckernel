@@ -1,22 +1,58 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T19:29Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T20:33Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit same-Root manual resume `20261109T155325Z-46b56314`.**
-Nov9manualauthorization revokes the Nov7pause only. RootSol/MAX and actual saved
-Sol/HIGH source/fixture/reviewer turns, never/danger-full-access, UID1000, current
-worker519639/server519641 births32587351/32587358 and initial included25%used/75%remaining
-are verified in `resume-20261109T155325Z-46b56314/CURRENT-PHASE.json`. Root is sole
-canonical source/index/publisher. No objective, allowance or historical owner reset.
+**ACTIVE under explicit same-Root manual resume `20261109T201010Z-8adf12e8`.**
+The prior invocation stopped properly as blocked/exit20 at19:42 after its actual
+three-turn audit. This new manual instruction supplies a bounded operational
+engineering task: correct recovery handoff plan pointers and current-versus-history
+failure provenance, with focused regression coverage and independent HIGH review.
+It does not release any original OS source, SDK, native or ownership hold.
+
+**Recovery correction PASS:** Root composed A's exact two-source patch and B's
+new isolated test file after E's concrete independent GO. Recovery now points only
+to CAMPAIGN.md, reports the captured goal/phase/stop/exit, and separates identity-
+bound current failures from other-invocation or unknown diagnostics. Both actual
+error writers stamp new values without relabelling a preserved old error. Raw
+history, saved objective, stop/recovery priority, deadlines and ownership remain.
+All12 new offline regressions and four necessary handoff guards PASSed once;
+both actual waits joined and CPU7 is released. No live launcher state, generated
+RECOVERY.md, monitor or systemd file was edited. The running process keeps its
+loaded code; the next normal writer invocation uses this correction without a
+forced restart. Existing dirty tests/run_os_parallel.py remain preserved.
+
+Root is Sol/MAX, sole canonical source/index/publisher; A/B/E actual new turns
+were verified Sol/HIGH, never/danger-full-access. Fresh normal read-only included
+guard at20:32:18 reports32%used/68%remaining, no service/usage hold; its temporary
+account-only transport closed/joined without a thread, goal or model call. Actual
+campaign worker593038/server593040 remains running. Inherited503 and the Nov5
+failure are retained history, not a current crash. Proof is in
+`docs/verification/os-recovery-handoff-provenance-20261109/`.
+
+**IHK ownership verified by the foreground, consumed without a new census:** clean
+IHK8eb8cdcc651f588d2f8fc1275e49e8fe644f7472 equals the parent index and HEADfcbd8f728
+gitlink. All29 production Rust files underlinux/user/rust are tracked, none ignored/
+untracked. The tracked `scripts/source-bundles/ihk-m15-abi-cli-20261106.bundle`
+actual/declared/HEAD blob isd9046e40d1345c5c7e2ebb3bb2b7e2344f6bbf73.
+Its existing exact Git-only restore passed. Root owns the canonical gitlink/bundle/
+manifest, and qualified results remain retained at their actual scopes; no restore,
+build, inventory or old passing suite is repeated for this ownership note.
+
+Next15-minute deliverable: commit/publish this coherent recovery source/tests/raw
+proof and verify its changed entries once. No original M14/M15 counted check or
+acceptance gate closes from this operational fix. HOST0/6/7,max3lightjobs,4GiB TOTAL
+including all overhead/fresh26GiB and host16/scratch12GiB floors remain binding;
+retained18GiB/native2–5/12GiB/UNKNOWN/scratch21/mutex27:4 are unchanged.
 
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
 IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed.
-Root`60d70927e08900a1481efb64be051e4dc641e309` is pushed/fetched/all116primitive/delay/
-NO_GO entries matched. Earlier34f782202/all83string/lock,b4817edca/all89kprintf/string,
+Root`fcbd8f728cd6a3a1fdc9304c60862e133921fedf` is pushed/fetched/all107retained-C/source/
+producer/replay entries matched. Earlier60d70927e/all116primitive/delay/NO_GO,
+34f782202/all83string/lock,b4817edca/all89kprintf/string,
 e79042ee4/all62storage/target,
 9c433df68/all36lower-provider,
 126442f85/all34prerequisites
@@ -168,7 +204,7 @@ Current canonical IHK is `8eb8cdcc651f588d2f8fc1275e49e8fe644f7472`, tree0979fca
 only the retained C repair and actual19 witness update, based on b7b7111c. Its
 source bundle/manifest are committed locally. Existing Git-only restore replay
 PASSed fromRooted4ecc35 toexact8eb8/tree0979 andbothchangedfileidentities. No
-archivedscript/build/runtime ran. Normalpublication is the remainingcheckpointwork. Raw source, cases and producer
+archivedscript/build/runtime ran. Normalpublication returned0; fetched107entries/sourcecommitfcbd8f728 match. Raw source, cases and producer
 proof are in `m15-retained-c-dump-owner-unit-20261109/`; scoped result is
 `m15-retained-c-dump-owner-results-20261109.json`.
 
@@ -179,20 +215,23 @@ bindings remain absent. No repeat audit is queued. New consumer relinks are DEFE
 no ready original condition requires them for this constants-only library change.
 Existing CLI proof stays bound to53079; no ca484 consumer proof is claimed.
 
-| Remaining checkpoint / input | Actual consumer / scope | Owner / smallest completion proof |
+| Current checkpoint / input | Actual consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
-| Committed source replay PASS | Current8eb8 IHK component/bundle | Existing Git-only restore helper returnedexactsource/tree/twofileidentities; no archived build/runtime |
-| Publish source/results/ledger | Qualified C reference repair and affected library | Root normal push wrapper, fetched commit and changed entries; all green executions reused |
+| Recovery source/test proof PASS | Sole-plan recovery and actual diagnostic provenance | A source/B12tests/E exact GO; Root16tests PASS/allwaitsjoined; normal checkpoint publication next |
+| IHK ownership/replay/publication PASS | Current8eb8 component/bundle and qualified reference repair | Foreground tracking verified; existing Git-only replay and fetchedfcbd8f728/all107entries reused |
 | Next original dependency | Universal provider/source-SDK/native/backend contracts | Original authorities supply actual scoped inputs; Root consumes valid dispositions. No held request or replacement job queued |
 
 All new payloads and ordinary HOST slots are joined/released. Native2–5/12GiB,
 UNKNOWN owners/outcomes,18GiB charges, scratch21/mutex27:4 and expired packets stay
 preserved. HOST remains CPUs0/6/7,max3 aggregate light jobs,4GiB TOTAL including
-all overhead, fresh26GiB plus host16/scratch12GiB disk floors. Fresh included31%used/
-69%remaining permits work. Next15minute deliverable: finish this coherent source
-publication. After it, the bounded ready queue is exhausted without a new
-eligible input; honor actual three-Root-turn blocked accounting, not timer wakes or
-technical restart. No further reference-C tasks, BFD-name speculation, notification
+all overhead, fresh26GiB plus host16/scratch12GiB disk floors. Fresh included32%used/
+68%remaining permits work. The original OS ready queue was exhausted before this
+new operational task; its publication remains the current ready deliverable.
+The previous invocation ended after its third actual Root exhausted-queue
+finding(3/3), and normal Goal control returned blocked. Timer wakes did not count
+or authorize resume. The current explicit201010 manual resume supplies the new
+operational recovery task above; original OS dependency inputs remain absent. Next useful
+deliverable requires an actual scoped source/native/backend input, not a restart. No further reference-C tasks, BFD-name speculation, notification
 retry, negative-open/invalid-capacity tests or green inventory work are queued.
 Original scores51.48/50.97, combined51.225, delta0 remain; no original gate accepted.
 
@@ -246,7 +285,9 @@ Raw/bounded result: `docs/verification/m15-dump-parent-intr-results-20261107.jso
 All new execution slots are released; durable candidate packages use generation/
 AST matching only, no green runtime rerun for publication.
 
-| Next ready dependency | Original consumer / scope | Owner / smallest completion proof |
+Historical pre-pause planning below is superseded by the completed results above.
+
+| Pre-pause planned dependency | Original consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
 | Unknown-action pairedsource+8case fixture | ihkconfig/ihkosctl main false success / M15-F06,F07 | A implementation/E sourceGO/B precise hooks+FD fixture; Root composed source after fetched61b10e6ff; precise new fixture/admission next |
 | Supported success/error/cleanup scenario contracts | Shared library and both CLI/provider dependencies / M15-F05–F07,I03 | C/D completed bounded machine definitions; original full scenario membership/backend bindings remain open |
@@ -272,9 +313,9 @@ Nov6 03:41–12:41Z9hsofttarget/outage remain history, not a stop or reset clock
 
 OrdinaryHOST stays CPUs0/6/7,max3aggregate lightjobs/4GiBTOTAL incloverhead, fresh
 26GiB available/18GiBretained+4GiBfloor and host16/scratch12GiBdisk floors. Native
-CPUs2–5/12GiB and allUNKNOWN/scratch21/mutex27:4 remain held. Next15minute deliverable:
-publish this coherent fixed-source/tests/closureledger checkpoint, then consume
-ready unknown-action composition and safe new behavior. TemporaryGitHubtransport
+CPUs2–5/12GiB and allUNKNOWN/scratch21/mutex27:4 remain held. That pre-pause
+source/tests/closureledger and unknown-action work is now published and closed at
+its stated scope; it is not a new dispatch queue. TemporaryGitHubtransport
 keeps eligiblelocalwork moving with publicationpending; actualdenial isbinding.
 
 ## M14/M15 closure progress — explicit checklist

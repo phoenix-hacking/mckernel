@@ -13,8 +13,23 @@ import tempfile
 from uuid import uuid4
 
 
-DOCUMENTS = ("CURRENT.md", "HANDOFF.md", "RECOVERY-20261026.md", "GOAL.md",
-             "START.md", "CONVERGENCE.md", "RUN-WINDOW-18H-20261025.md")
+DOCUMENTS = ("CAMPAIGN.md",)
+
+
+def _invocation_attribution(state, provenance):
+    """Attribute diagnostics only by recorded invocation identity, never error text."""
+    current_log = state.get("log_dir")
+    if (not isinstance(provenance, dict) or not isinstance(current_log, str)
+            or not current_log or not isinstance(provenance.get("log_dir"), str)
+            or not provenance["log_dir"]):
+        return "unknown"
+    if provenance["log_dir"] != current_log:
+        return "other_invocation"
+    for key in ("worker_pid", "worker_start"):
+        if (state.get(key) is not None and provenance.get(key) is not None
+                and state[key] != provenance[key]):
+            return "other_invocation"
+    return "current"
 
 
 def context_record(repo, state, remaining_seconds=None):
@@ -31,30 +46,60 @@ def context_record(repo, state, remaining_seconds=None):
     fields = ("thread_id", "updated_at", "phase", "stop_reason", "worker_pid",
               "worker_start", "server_pid", "server_start", "log_dir", "console_log",
               "last_instruction", "resume_instruction", "capture_progress", "cleanup_verified",
-              "last_error", "last_failure", "credit_budget_error", "stop_errors", "exit_code",
+              "last_error", "last_error_provenance", "last_failure", "credit_budget_error", "stop_errors", "exit_code",
               "startup_instruction_sha256", "transport_failure", "transport_uncertain",
               "last_usage_transport_error", "last_usage_read_retry", "server_close_errors")
     record = {key: state[key] for key in fields if key in state}
-    record.update(schema_version=1, recorded_at=datetime.now(timezone.utc).isoformat(),
+    current = {key: state[key] for key in
+               ("thread_id", "log_dir", "worker_pid", "worker_start", "server_pid",
+                "server_start", "phase", "stop_reason", "exit_code") if key in state}
+    current["goal_status"] = goal.get("status")
+    retained = {}
+    for key in ("last_error", "last_failure"):
+        if key not in state or state[key] is None:
+            continue
+        value = state[key]
+        provenance = state.get("last_error_provenance") if key == "last_error" else value
+        attribution = _invocation_attribution(state, provenance)
+        if key == "last_error" and (not isinstance(provenance, dict)
+                or "error" not in provenance or provenance["error"] != value):
+            attribution = "unknown"
+        if attribution == "current":
+            current[key] = value
+        else:
+            retained[key] = {"value": value, "provenance": provenance,
+                             "attribution": attribution}
+    record.update(schema_version=2, recorded_at=datetime.now(timezone.utc).isoformat(),
+                  current_invocation=current, retained_diagnostics=retained,
+                  raw_worker_snapshot=dict(state),
                   scope="Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
                   release_authorized=False, goal_status=goal.get("status"),
                   credit_accounting={key: credit[key] for key in
                                      ("id", "budget", "spent", "remaining") if key in credit},
                   remaining_seconds_observed=remaining_seconds,
-                  source_documents=[str(Path(repo) / "docs/verification/os-milestones-20260914" / name)
-                                    for name in DOCUMENTS])
+                  source_documents=[str(Path(repo) / name) for name in DOCUMENTS])
     return record
 
 
 def render(record):
+    current = record["current_invocation"]
+    summary = ("Current invocation: goal=" + str(current.get("goal_status"))
+               + "; phase=" + str(current.get("phase"))
+               + "; stop_reason=" + str(current.get("stop_reason"))
+               + "; exit_code=" + str(current.get("exit_code")) + ".\n\n")
     return ("# Campaign recovery handoff\n\n"
             "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n\n"
-            "This is a factual checkpoint, not resume or workload authority. Read the latest\n"
-            "CURRENT.md and HANDOFF.md at the paths below before continuing. Preserve the\n"
-            "same credit ledger and fixed deadline. A restart does not reset the allowance\n"
-            "or extend the run window. Resolve uncertain submissions before resending.\n\n"
-            "Document filenames and historical run windows do not supply new authorization.\n"
-            "Use the current explicit invocation and its actual fixed window.\n\n"
+            "This is a factual checkpoint, not resume or workload authority. Read CAMPAIGN.md\n"
+            "as the sole active plan, status and handoff at the source_documents path below.\n"
+            "Preserve the selected allowance, ledger and any actually configured deadlines;\n"
+            "a restart resets none of them. No time limit is implied when none is configured.\n"
+            "Resolve uncertain submissions before resending. Historical documents, diagnostics\n"
+            "and run windows supply no new authorization.\n\n"
+            + summary +
+            "Only current_invocation diagnostics are attributed to this invocation.\n"
+            "retained_diagnostics distinguishes other-invocation and unknown provenance.\n"
+            "Original diagnostic fields and raw_worker_snapshot remain unchanged evidence;\n"
+            "they do not replace the current goal/stop/exit result.\n\n"
             "Local worker/server retirement does not prove native jobs or cleanup owners\n"
             "have retired. Reconcile their live identities and retained transactions; do\n"
             "not remove containers, unlink locks, replay used grants or redo successful\n"

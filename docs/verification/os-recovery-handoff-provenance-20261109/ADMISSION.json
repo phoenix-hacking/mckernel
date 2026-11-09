@@ -1,0 +1,117 @@
+{
+  "status": "ROOT_EXACT_FRESH_OFFLINE_HOST_ADMISSION",
+  "at": "2026-11-09T20:33:05.178184+00:00",
+  "review_sha256": "83e5545e5b3cd78625bb51d951978acfd294666fe5599db1d64fe664a657e3f2",
+  "prepared_request_sha256": "8cf4ed865dfd9f97e7c2834fd304b69e03cb51530d0846a08705c2fa6d1d2b1f",
+  "inputs": {
+    "/home/holden/mckernel/scripts/tests/test_os_goal_handoff_provenance.py": "8a4c1726dda6184e9bcb0869925d05134261cbfdf02fb38ecfd3d2898742af2e",
+    "/home/holden/mckernel/scripts/os_goal_handoff.py": "ff15068978291940ff3c05ab32659e191c0208cf5f9e429b204d3581194eaaf0",
+    "/home/holden/mckernel/scripts/run_os_goal.py": "41e3cd10c533210746f254dd0583f59a8027322a71de2471536ad29702c37f05",
+    "/home/holden/mckernel/scripts/tests/test_os_goal_handoff.py": "8012cf71e6a209353871799555030afe6c0e20a4bb3ce6480b8638cdaf9f195b",
+    "/home/holden/mckernel/scripts/os_goal_output.py": "078d34aba711bf11846220904dfc0492396110bc3e5e2433c79fb43e88fd1fbe",
+    "/home/holden/mckernel/scripts/os_goal_resources.py": "c4761334c67461717bb5f606c7d4d5355a1c80f42709770ab206803e597c5157",
+    "/home/holden/mckernel/scripts/os_goal_windows.py": "5f35b4ff3f7aa0291885b045b375b5488c90c41864d288ac8bcd7a194606c916",
+    "/home/holden/mckernel/scripts/os_goal_instructions.py": "fc56ba5d15e5462c32ed6462ceb469af833e282a03eeb874da1a576e096a72f7",
+    "/home/holden/mckernel/scripts/os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3",
+    "/home/holden/mckernel/scripts/os_goal_transport.py": "ad2eb154f2b278194878483ea3d3114e2d25642aaf0a74ea8f42f5a3a5ba8a5c"
+  },
+  "commands": [
+    {
+      "label": "new-provenance-tests",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "58s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-root-1/new-provenance-tests.metrics",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/tests/test_os_goal_handoff_provenance.py",
+        "-v"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-root-1/new-provenance-tests.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-root-1/new-provenance-tests.stderr"
+    },
+    {
+      "label": "existing-handoff-guard-tests",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "58s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-root-1/existing-handoff-guard-tests.metrics",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/tests/test_os_goal_handoff.py",
+        "-v"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-root-1/existing-handoff-guard-tests.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8/recovery-handoff-root-1/existing-handoff-guard-tests.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OS_GOAL_HANDOFF_SOURCE": "/home/holden/mckernel/scripts/os_goal_handoff.py",
+    "OS_GOAL_LAUNCHER_SOURCE": "/home/holden/mckernel/scripts/run_os_goal.py",
+    "OS_GOAL_SUPPORT_SCRIPTS": "/home/holden/mckernel/scripts"
+  },
+  "MemAvailable": 29875417088,
+  "disk_free": {
+    "/home/holden/mckernel": 132230594560,
+    "/home/holden/mckernel-work/resume-20261109T201010Z-8adf12e8": 132230594560,
+    "/tmp": 132230594560
+  },
+  "aggregate_grant": {
+    "cpus": [
+      0,
+      6,
+      7
+    ],
+    "max_jobs": 3,
+    "total_bytes_including_all_overhead": 4294967296,
+    "batch_jobs": 1,
+    "payload_cpu": 7,
+    "native": "unchanged and held"
+  },
+  "included_guard": {
+    "at": "2026-11-09T20:32:18.082346+00:00",
+    "used_percent": 32,
+    "remaining_percent": 68,
+    "window_minutes": 10080,
+    "resets_at": 1794518606,
+    "spendControlReached": false,
+    "rateLimitReachedType": null,
+    "billing": "included weekly only; no model call, prepaid/API fallback or allowance reset",
+    "pid": 599139,
+    "birth": "34260330"
+  },
+  "routing": "Root Sol/MAX; A/B/E actual turns independently verified Sol/HIGH never/danger-full-access",
+  "live_state_RECOVERY_controllers_monitors_native_writes": false
+}
