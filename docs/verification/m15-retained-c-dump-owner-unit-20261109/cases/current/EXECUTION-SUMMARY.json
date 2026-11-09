@@ -1,0 +1,70 @@
+{
+  "status": "PASS_ONCE_THREE_C_COMMON_OUT_OWNERSHIP_EXITS",
+  "result_sha256": "1e66821f86a5b6eef265450b70386292d60111f972d57414d411c4572e5154d0",
+  "new_cases": 3,
+  "owned_buffers_per_case": [
+    0,
+    1,
+    2
+  ],
+  "survivors": [
+    0,
+    0,
+    0
+  ],
+  "returns": [
+    -12,
+    -12,
+    -22
+  ],
+  "genuine_anonymous_FDs_onceclosed_EBADF": 3,
+  "CONT_local_callbacks": 3,
+  "new_free_group_entry_errno": 34,
+  "free_callback_poison_errno": 33,
+  "actual_hook_gate_called_before_link_runtime": true,
+  "all5_children_and_driver_joined": true,
+  "CPU7_released": true,
+  "outer_wall_seconds": 0.15712679199350532,
+  "summed_user_plus_system_seconds": 0.06,
+  "maximum_child_RSS_KiB": 56336.0,
+  "per_command_time_v": [
+    {
+      "label": "observer-compile",
+      "user_seconds": 0.02,
+      "system_seconds": 0.01,
+      "maximum_RSS_KiB": 27648.0,
+      "time_v_wall": "0:00.04"
+    },
+    {
+      "label": "candidate-compile",
+      "user_seconds": 0.02,
+      "system_seconds": 0.01,
+      "maximum_RSS_KiB": 26712.0,
+      "time_v_wall": "0:00.03"
+    },
+    {
+      "label": "candidate-symbols",
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 56336.0,
+      "time_v_wall": "0:00.01"
+    },
+    {
+      "label": "candidate-link",
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 8480.0,
+      "time_v_wall": "0:00.01"
+    },
+    {
+      "label": "candidate-run",
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "maximum_RSS_KiB": 1936.0,
+      "time_v_wall": "0:00.00"
+    }
+  ],
+  "old_baseline_proof_reused_no_runtime": true,
+  "scope": "Only exact actual C ihk_os_makedumpfile initialized prefix through failing bfd_fopen plus COMPLETE common-out. Excluded 6428B legacy BFD success region hash bound; no guessed original SDK/header adaptation/full C success-body claim. Actual selected HOST genuine bfd.h declarations before typed hooks; no BFD provider library/object/file. Zerochunk24B metadata initialized before read. Genuine malloc/free and eventfd/close/fcntl; synchronous local OS open/status/ioctl/access/BFD boundaries only. Not whole C function leakfree: name allocation ownership separate. No Rust logic, old parent cases, parser, CLI/native/default/F04/score credit.",
+  "no_whole_function_errno_or_C_leakfree_claim": true
+}

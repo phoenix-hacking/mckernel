@@ -1,0 +1,76 @@
+{
+  "decision": "GO_FIVE_COMMAND_THREE_NEW_DEFINED_C_DUMP_BUFFER_EXIT_CASES_PENDING_FRESH_ROOT_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/REQUEST.json",
+    "sha256": "9aa844acba0dda262cf745f38321aafccdbdf12109bcf6b61069e03f6dbd9d7c"
+  },
+  "candidate_unit": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/candidate.c",
+    "sha256": "2a69b265725649340fa3ba91e685331f8d64b06ed3b2d4e4334e58d9f6f7c961"
+  },
+  "observer": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/observations.c",
+    "sha256": "c489b7a4f4d316f71138dc68288298ab2bb400fe485288bd36b0cd832a235691"
+  },
+  "typed_header": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/observations.h",
+    "sha256": "de378c63d23557f93fa67983d9b20ca61163c1f188a465f42b7aa7291fb82748"
+  },
+  "source_proof": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/SOURCE-PROOF.json",
+    "sha256": "a1d5bac3e5afb1e471c56f152a2175521d333debd87eaf14c758fd999d41fd18"
+  },
+  "actual_hook_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/validate_hooks.py",
+    "sha256": "a251831478da5ecf22b5bdfe9cc66a1661c8bcbc6330f41cfc9c571bc885379f"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/retained-c-dump-owner-cases-1/run_packet.py",
+    "sha256": "3da3ce3d8a0b014b9b48fa7e2e0f51bcfdcf6e7ab3eb41c0607523280b8e2c92"
+  },
+  "source_ownership_reuse": "Rootprovided unchangedsourceGO b34935352fad7ead80a7bf13d477f44efb28d6b153b9d75ee1918ec6b1ce1674 reused; canonical/private53a2ab78 match and all29requestinputs matched. Review onlynewfixture/domain/hooks/controller, no freshwholefunctionownershipre-review. Actualprefixthroughfailedbfd_fopen plus COMPLETEcommonout retained; skipped6428BlegacyBFDsuccessregion hash08df46e5 bound and fencedwithunreachableabort.",
+  "defined_cases": [
+    {
+      "case": "malloc1_NULL",
+      "owners": 0,
+      "result": -12,
+      "defined_state": "BothownerpointersNULLfromreviewedcandidateinitializers; no failed-Cbaselineexecuted. Onlyattempt1 failswithENOMEM; cleanupfreeNULLbuf/freeNULLchunks bothobserved."
+    },
+    {
+      "case": "malloc2_NULL",
+      "owners": 1,
+      "result": -12,
+      "defined_state": "Genuinemallocsizeofdump_mem_chunks_t zeroed byactualprefix; seamfirstchecksallinitializedbytes, setsnr_chunks/kernel_base/phys_start0. Loophaszerochunks/noelementaccess. Second1MiBmallocfailsENOMEM; bufremainsNULL, metadataownerliveuntilcompleteout."
+    },
+    {
+      "case": "local_bfd_fopen_NULL",
+      "owners": 2,
+      "result": -22,
+      "defined_state": "Genuinemetadata+1MiBbufferallocated, no physicaldumpdata read; onlylocaltypedbfd_fopenreturnsNULL/EDOM afterparentaccessseam, actualexistingreturn-EINVALpreserved. Nobfdobject/providerlibrary/filecreated. Filename32Bfullyinitialized/restoredbeforecallback."
+    }
+  ],
+  "ownership_errno_order": {
+    "last_borrow_order": "Observer requires exact commandsequenceSET_LEVEL/NMI/querynum/(queryareas)/CONT, ownersliveatfinalCONT andFDclose. LocalioctlreadsONLY initializedfields: cmd, retainedlevelonfirst2commands, initializedquerysize/buf; neverCspare/startorCONTbuf/size.",
+    "FD": "Localprojectopen returnsgenuineliveeventfd; candidateonlylocaltypedioctl/status. ActualcloseonceandrealF_GETFD->EBADF assertedbeforefree; no actualdevice/sysfs/NMI/dump. ExactlyoneanonymousFD percase.",
+    "free_order": "Actualcommonout invokesfree(buf)thenfree(mem_chunks), includingNULLslots. Observer checks pointeridentityagainsttwoindependentlytrackedgenuinemallocowners/order, genuinefreeonceeachnonnull,0/1/2ownedfrees andzero survivors. No fakebackendallocators.",
+    "errno": "CONTseamsetsEINTR;close0setsERANGE34. Firstfreeentrymust34, eachfreepoisonsEDOM33, secondentry33; groupedcleanuprestores34. This proveslocalnewfreegroupentrypreservationonly. It doesnotpromiseENTRyorwholefunctionerrno. Primary-ENOMEM/-EINVAL remainsactualret; groupdoesnottranslate/overwriteit. ExistingBFDclose/close-errorprecedenceunchangedbutnotclaimedtestedhere."
+  },
+  "actual_post_header_hook_review": {
+    "typing": "observations.h containsallgenuineHOST/project/bfdheaders andmatchingexplicittypedhookdeclarationsbeforecandidatehookmacros. Generatedcandidatehasnofurtherincludesafterhooks; avoidsfortified-headerasmredirectescape. ioctlrequestdispatchchecksactualIHK_OS_DUMPbeforeva_arg(dumpargs_t*); no scalar/pointerguess.",
+    "predicate": "ActualnmrequiressoleprojectstrongTihk_os_makedumpfile, all10observationhooks, onlyexplicitnormalHOSTimports+abortguard; rejectsdirect/fortifiedopen/ioctl/close/access/allocator/BFD/projectopenaliases throughstrictallowset. No realprojectbackend/librarylinkneeded.",
+    "controller": "Afteractualcandidate-symbols thecontrollerCALLSvalidate_hooks.validate andpersistsHOOK-GATE then setshook_passed; candidate-linkANDcandidate-runPopenbothassertit. Actualcandidateobjectabsentduringreview. No sourcegrep/nmexit0 substitute.",
+    "link": "Onlycandidate.o+observer.o withnormalHOSTCRT/libc; BFD headerusedfortypesonly, no BFDlibrary/providerobjectorlocalfilesystemopen. Successregioncannotrun; abortguardisexplicitunexpectedfailurefence."
+  },
+  "baseline_reuse": "Exactpostparentfixed2d2dsourceprefix/tail associationandretainedfourpassingCcases each2survivors/reclaimed-afterreturn proof reused unchanged; no baseline/Rust/oldparent/oldgreenrerun. Failedallocbaselineuninitializedpointerpathsremainexcluded.",
+  "profile": "Fiveonce-onlyserialCPU7payloads: observercompile,candidatecompile,nm,link,one3-caseprocess. AS1GiB/CPU45s/TERM58s/KILL2s/FSIZE64MiB/core0; outerwall310s. ExistingactualCdisableddebugmacrosandcandidateENABLE_MEMDUMP/PAGE_SIZEcfg preserved. FreshRootresource/usageadmission inside shared3lightjobs/4GiBTOTALoverhead/CPUs0,6,7/>=26GiBavailable/diskfloors16GiBhost12GiBscratch required.",
+  "capture_failure": "Exclusiveoutputdir/stdio; actualPID/birthpersistedbeforedirectwait, everystartedchildwaitedinfinally. Zeroexit/emptystderrrequired; exactthreecaseownership/order/erroroutputrequired. UnexpectedfailureSTOP/FIRST-FAILURE/focusedRootreview,noautonomousretry/profileexpansion.",
+  "limits": "UncountedreferenceCbuffercleanupfixtureonly. No actualBFDsuccessSDK/body/fullpublicCfunction/leakfree/nameallocationownership/freeclaim, realfile/device/NMI/physicaldump/native/defaultacceptanceor score. Nameownershipseparate0. Originalreadyworkpriorityandallholdsretained.",
+  "reviewer_operations": {
+    "compiler": false,
+    "linker": false,
+    "new_nm_metadata": false,
+    "runtime": false,
+    "canonical_index_writes": false,
+    "recursive_agents": false
+  }
+}

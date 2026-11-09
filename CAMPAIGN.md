@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T18:40Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-09T19:29Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -15,8 +15,9 @@ canonical source/index/publisher. No objective, allowance or historical owner re
 **Completed original-scope engineering:** both C/Rust ihkconfig/ihkosctl unknown
 commands now return1 after unchanged exact usage/diagnostics and once-close.
 IHK`b7b7111cd17a3d835afc13f0dd79c0216c129991`/tree`9f14aabe…` is committed.
-Root`34f7822024b0adee57368d86e67e82704a70bc55` is pushed/fetched/all83string/lock
-entries matched. Earlier b4817edca/all89kprintf/string,e79042ee4/all62storage/target,
+Root`60d70927e08900a1481efb64be051e4dc641e309` is pushed/fetched/all116primitive/delay/
+NO_GO entries matched. Earlier34f782202/all83string/lock,b4817edca/all89kprintf/string,
+e79042ee4/all62storage/target,
 9c433df68/all36lower-provider,
 126442f85/all34prerequisites
 and unknownCLI6f4c7f244/all9entries/source replay remainverified.
@@ -143,26 +144,56 @@ That exact lane stopped before new source inspection/preparation; no equivalent
 reassignment is queued. `m14-kernel-notify-source-eligibility-20261109.json` records
 the required original scoped input. This is not a blanket hold on every other file.
 
-| Next prerequisite | Actual consumer / scope | Owner / smallest completion proof |
+**Retained C buffer repair qualified:** Root applied the existing reviewed patch:
+initialize mem_chunks=NULL; free buf then mem_chunks after CONT/BFD/FD cleanup,
+preserving only the new free group's entry errno. Three NEW defined candidate
+exits passed with0/1/2 owners freed once, zero survivors, returns-12/-12/-22,
+CONT→real close/EBADF→frees and local errno34 restored against poison33. Actual
+post-header ten-hook object gate passed before link/runtime; all five waits and
+driver joined. Matching old C survivor evidence was reused, with no baseline,
+Rust, parent or primitive replay. Scope remains the initialized C prefix plus
+complete common-out; legacy BFD success and per-chunk name ownership are excluded.
+This existing uncounted reference item is100%; original scores are unchanged.
+
+The edit changed19 source-location constants. A derived their actual sites once;
+Root applied the reviewed witness map. Source/origin gate passed before compiler,
+actual FILE/LINES/OPS and consumed file paths/SHA passed before Rust, and the
+unchanged strict qualifier required seven warnings/native library order before
+link. All six affected phases and two readbacks passed once/all waits joined.
+Archive0cd41212 and libraryca484c5c have the unchanged70function/sixdata roots,
+widths, SONAME and dependency contract. Rust bodies/types/ABI/providers are unchanged.
+libbfd2.34 is this qualified HOST dependency; original Rocky/BFD2.41 remains open.
+
+Current canonical IHK is `8eb8cdcc651f588d2f8fc1275e49e8fe644f7472`, tree0979fca2:
+only the retained C repair and actual19 witness update, based on b7b7111c. Its
+source bundle/manifest are prepared; committed-source Git-only replay and normal
+publication are the remaining checkpoint work. Raw source, cases and producer
+proof are in `m15-retained-c-dump-owner-unit-20261109/`; scoped result is
+`m15-retained-c-dump-owner-results-20261109.json`.
+
+The bounded independent ihk_os_kmsg check found no new normal return/owned-FD defect
+and reused the matching supervisor evidence. The supervisor's direct lease path is
+not relabeled public-API coverage. Complete original backend scenario/operation
+bindings remain absent. No repeat audit is queued. New consumer relinks are DEFER:
+no ready original condition requires them for this constants-only library change.
+Existing CLI proof stays bound to53079; no ca484 consumer proof is claimed.
+
+| Remaining checkpoint / input | Actual consumer / scope | Owner / smallest completion proof |
 | --- | --- | --- |
-| Publish current verified checkpoint | Shared provider and11 primitive observations | Root exact source/results/ledger publication and fetched entries, without rerunning green commands |
-| One bounded independent original-source readiness check | Remaining M14/M15 functional/provider requirement | Existing HIGH owner identifies one needed unheld source/contract task or its exact missing input; no notification retry or broad audit |
-| Execute only a genuinely ready result | Original supported acceptance dependency | Root reviews actual contract and freshly admits exact work; no slot filling, native substitution or invented quota |
+| Committed source replay | Current8eb8 IHK component/bundle | Root existing Git-only restore helper, exact two changed file identities; no archived build/runtime |
+| Publish source/results/ledger | Qualified C reference repair and affected library | Root normal push wrapper, fetched commit and changed entries; all green executions reused |
+| Next original dependency | Universal provider/source-SDK/native/backend contracts | Original authorities supply actual scoped inputs; Root consumes valid dispositions. No held request or replacement job queued |
 
-Shared packet eligibility, offload completion, boot mapping, shared buffer,
-preemption initialization and actual timing remain open. NULL/zero source storage
-is not runtime initialization. Current source/preparation proofs do not replace the
-original matched image/modules/userspace and restoring native conditions.
-
-Ordinary HOST remains CPUs0/6/7, max3 aggregate light jobs,4GiB TOTAL including all
-worker/controller overhead, fresh26GiB retaining18GiB charges+4GiB floor and host16/
-scratch12GiB disk floors. All new payloads are joined and slots released. Native
-2–5/12GiB, UNKNOWN owners/outcomes, scratch21/mutex27:4 and expired packets remain.
-Fresh included30%used/70%remaining permits ordinary work. Next15minute deliverable:
-publish this real witness/delay/NO_GO checkpoint, then consume the bounded original
-source check. Foreground owns healthy monitors and recovery; completed owners are
-available for new eligible tasks. Original scores51.48/50.97, combined51.225, delta0
-remain honest; no original file or integration gate was newly accepted.
+All new payloads and ordinary HOST slots are joined/released. Native2–5/12GiB,
+UNKNOWN owners/outcomes,18GiB charges, scratch21/mutex27:4 and expired packets stay
+preserved. HOST remains CPUs0/6/7,max3 aggregate light jobs,4GiB TOTAL including
+all overhead, fresh26GiB plus host16/scratch12GiB disk floors. Fresh included31%used/
+69%remaining permits work. Next15minute deliverable: finish this coherent source
+replay/publication. After it, the bounded ready queue is exhausted without a new
+eligible input; honor actual three-Root-turn blocked accounting, not timer wakes or
+technical restart. No further reference-C tasks, BFD-name speculation, notification
+retry, negative-open/invalid-capacity tests or green inventory work are queued.
+Original scores51.48/50.97, combined51.225, delta0 remain; no original gate accepted.
 
 **Critical-path blocker/owner:** original generic/exec hold still excludes an
 eligible universal provider/fullimage; actual SDK/source-custody/native/current-free

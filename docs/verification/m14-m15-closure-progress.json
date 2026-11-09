@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-09T18:36:46.293927+00:00",
+  "updated_at": "2026-11-09T19:27:05.221881+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -3765,7 +3765,8 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "docs/verification/m15-balanced-memory-ownership-results-20261107.json"
+        "docs/verification/m15-balanced-memory-ownership-results-20261107.json",
+        "docs/verification/m15-retained-c-dump-owner-results-20261109.json"
       ],
       "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
       "definition_status": "observable condition defined; existing evidence demonstrates only stated scope",
@@ -4154,7 +4155,8 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/RESULT.json"
+        "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-producer-1/RESULT.json",
+        "docs/verification/m15-retained-c-dump-owner-results-20261109.json"
       ],
       "scope_limit": "Actual minimal3phases+2reads PASS/all5joined; exact changed genuine library53079f63, reused19metadata/strict7/70+6roots. No SDK/native acceptance. Original supported/default/deployed/native acceptance remains separate.",
       "definition_status": "reviewed exact active proof packet exists; passing receipt not observed in this snapshot",
@@ -4197,7 +4199,8 @@
       ],
       "evidence": [
         "CAMPAIGN.md",
-        "docs/verification/m15-library-supported-scenarios-20261107.json"
+        "docs/verification/m15-library-supported-scenarios-20261107.json",
+        "docs/verification/m15-kmsg-source-readiness-20261109.json"
       ],
       "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
       "definition_status": "closure condition stated; complete original inventory and/or actual operation bindings unresolved",
@@ -13321,9 +13324,9 @@
       "id": "M15-F05-C-DUMP-BUFFER-OWNERS",
       "parent": "M15-F05",
       "title": "Retained C reference: two dump buffer owners",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "private_patch_source_reviewed_unexecuted",
+      "status": "verified_retained_C_source_common_out_and_defined_HOST_slice_only",
       "owner": "Root compositor and private source/ownership review owners",
       "done_when": "Separately reviewed complete common-out repair initializes mem_chunks and frees buf/mem_chunks after their last borrow/CONT/BFD/FD close, preserving error precedence and new cleanup-entry effects; new admitted defined cases prove zero survivors. This C-reference engineering item is not an additional Rust/default acceptance quota.",
       "verification_method": "Read exact participating source/ownership evidence and only newly admitted meaningful behavior; reuse unchanged Rust/native-scope evidence without rerun.",
@@ -13335,10 +13338,12 @@
       "dependencies": [],
       "evidence": [
         "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-c-owner-review-1/ASSESSMENT.md",
-        "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-cases-1/qualification-1/RESULT.json"
+        "/home/holden/mckernel-work/resume-20261107T023815Z-216a194d/dump-parent-cases-1/qualification-1/RESULT.json",
+        "docs/verification/m15-retained-c-dump-owner-results-20261109.json",
+        "docs/verification/m15-retained-c-dump-owner-unit-20261109"
       ],
-      "scope_limit": "Uncounted retained-C engineering finding. Rustfinish already frees its two buffers. No new final acceptance criterion, no source/SDK/native release or full C-leakfree claim.",
-      "definition_status": "observable engineering condition defined; not a new original acceptance quota",
+      "scope_limit": "UncountedretainedCsource/commonoutengineeringonly. Rustfinishalreadyfreedbothbuffers; noRustconversion/originalgate/SDK/default/nativecredit. 3definedcandidateprefix+completeoutcasespass; nolegacyBFDsuccess/fullC/per-chunknameleakfreeclaim; separateBFDnamecontract0.",
+      "definition_status": "completed_uncounted_reference_engineering_item",
       "execution_profile": "source_review_then_fresh_ordinary_HOST_admission_only_if_eligible",
       "counted_in_requirement_rollup": false,
       "required_for_original_acceptance": false
@@ -14410,21 +14415,16 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-09T18:36:46.293927+00:00",
+    "at": "2026-11-09T19:27:05.221881+00:00",
     "invocation": "20261109T155325Z-46b56314",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "task_binding_rows_before": 387,
+    "task_binding_rows_before": 391,
     "task_binding_rows_after": 391,
-    "change_reason": "Actual11validprimitiveCABIobservations completedafteroneboundedfixturecorrection; genuine3functiondelayobject/uniquejoin completed. Fouruncountedsupportingstepsadded. NotificationeligibilityNO_GObeforeanysourceprep, originalholdbindingsunchanged. No originalcountedscore/acceptance/weight/denominatorchange.",
-    "new_supporting_rows": [
-      "M14-DELAY-SOURCE",
-      "M14-DELAY-REVIEW",
-      "M14-DELAY-CODEGEN",
-      "M14-DELAY-JOIN"
-    ],
-    "publication_status": "Coherentlocalcheckpoint beingcomposed; latestverifiedpublication34f782202."
+    "change_reason": "ExistinguncountedretainedC2bufferitemverified100:reviewedsourcefix/3newdefinedcases/affected19-originlibraryproducer8waitsclosed. No newtask/quota/denominator/score/originalacceptancechange. Boundedkmsgchecknonewdefect; optionalconsumerrelinksDEFER0commands.",
+    "verified_uncounted_reference_row": "M15-F05-C-DUMP-BUFFER-OWNERS",
+    "publication_status": "IHK8eb8sourcecommitted; Rootcheckpointbeingcomposed, committed-sourceGit-onlyreplaypending; latestverified60d70927e."
   },
   "denominator_changes": [
     {

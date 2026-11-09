@@ -1,0 +1,25 @@
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -3837,7 +3837,7 @@
+ 	struct tm *tm;
+ 	char *date;
+ 	struct passwd *pw;
+-	dump_mem_chunks_t *mem_chunks;
++	dump_mem_chunks_t *mem_chunks = NULL;
+ 	long mem_size;
+ 	char *physmem_name_buf = NULL;
+ 	char physmem_name[PHYSMEM_NAME_SIZE];
+@@ -4296,6 +4296,13 @@
+ 			dprintf("%s: error: close: %s\n",
+ 				__func__, strerror(-ret));
+ 		}
++	}
++	{
++		int saved_errno = errno;
++
++		free(buf);
++		free(mem_chunks);
++		errno = saved_errno;
+ 	}
+ 	return ret;
+ }

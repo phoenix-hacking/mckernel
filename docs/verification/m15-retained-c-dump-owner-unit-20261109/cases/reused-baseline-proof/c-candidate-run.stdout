@@ -1,0 +1,5 @@
+CASE language=C-scoped mode=candidate path=0 parent=/ result=-22 bfd-fopen=1 exact-filename-restored=1 allocations=2 sut-frees=0 observed-survivors=2 descriptor-close=1 NMI-CONT-callback=1 errno-observed=34 order=OSIIIAIABPXIC
+CASE language=C-scoped mode=candidate path=1 parent=/ result=-13 bfd-fopen=0 exact-filename-restored=1 allocations=2 sut-frees=0 observed-survivors=2 descriptor-close=1 NMI-CONT-callback=1 errno-observed=34 order=OSIIIAIABPIC
+CASE language=C-scoped mode=candidate path=2 parent=/owned-dir result=-22 bfd-fopen=1 exact-filename-restored=1 allocations=2 sut-frees=0 observed-survivors=2 descriptor-close=1 NMI-CONT-callback=1 errno-observed=34 order=OSIIIAIABPXIC
+CASE language=C-scoped mode=candidate path=3 parent=<not-checked> result=-22 bfd-fopen=1 exact-filename-restored=1 allocations=2 sut-frees=0 observed-survivors=2 descriptor-close=1 NMI-CONT-callback=1 errno-observed=34 order=OSIIIAIABXIC
+dump-parent cases=4 language=C-scoped mode=candidate exact-path-and-error-order all-owned-allocations-reclaimed all-anonymous-FDs-once-closed no-real-BFD-object

@@ -1,0 +1,58 @@
+{
+  "status": "BOUNDED_CHECK_COMPLETE_NO_NEW_NORMAL_KMSG_RETURN_OR_FD_OWNER_DEFECT_ESTABLISHED_BACKEND_INPUT_OPEN",
+  "owner": "/root/create_empty_entry_parity_high",
+  "created_utc": "2026-11-09T18:45:30.998804+00:00",
+  "scope": "OneordinaryunheldIHKUSERSPACEpublicC/Rustpair ihk_os_kmsg plusdirectRustfinishcleanuphelper;actualCLI/header/supervisorroute andone retainedmatchingproof. No wholelibrary/proofcensus/ledgeraudit orkernelnotificationwork.",
+  "source_bindings": {
+    "/home/holden/mckernel/ihk/linux/user/ihklib.c": "2d2d02ebdad19c75bf3ee5298cba712e17a74fcd3ba240bd23e86f4614fd1992",
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_status_kmsg.rs": "358c8a9bf5548745265f69bee1528be7cb1136d7df61747476959f3dd8baa440",
+    "/home/holden/mckernel/ihk/linux/include/ihk/ihklib.h": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a",
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/libihklib_whole70.rs": "06d1bda2c2e605f1d7e2eb1aa1aec94076d4ed46055fa6fe7355a1cdb39788ae",
+    "/home/holden/mckernel/ihk/linux/user/ihkosctl.c": "f57e48559c856c76f6ced242f4b56118cea86164fb0f3f7ef4b310d2fabf92cb",
+    "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs": "913bf0a6f8e57d6c53eb80c987f79eabea3d458937adea8468e5b8e8cef95fc5",
+    "/home/holden/mckernel/ihk/linux/user/rust/ihkmond.rs": "988945b11275c57951c5ada75439c4f1d48ca91d3f0113056c626180eadf88df"
+  },
+  "exact_public_pair": {
+    "C": "ihk/linux/user/ihklib.c3203 int ihk_os_kmsg(intindex,char*kmsg,ssize_tsz_kmsg)",
+    "Rust": "ihk/linux/user/rust/whole70/ihklib_status_kmsg.rs16 originalNoMangle externC(c_int,*mutc_char,isize)->c_int",
+    "declaration": "ihk/linux/include/ihk/ihklib.h120 int ihk_os_kmsg(int index,char*kmsg,ssize_tsz_kmsg);",
+    "selection": "whole70/libihklib_whole70.rs28\u201329 pathihklib_status_kmsg.rs module selected.",
+    "cleanup": "status_kmsg.rs5 unsafe fn finish(fd:c_int,result:c_int)->c_int {if fd != -1 {unsafe {close(fd);}}result}",
+    "ABI": "ActualCint32/charpointer/ssize_t andRustc_int/c_charpointer/isize onselectedHOSTx86_64. Libraryborrowscallerbuffer;noheapbufferallocatedbythisAPI."
+  },
+  "source_contract_and_finding": {
+    "order": "BothopenOSendpointBEFOREexactIHK_KMSG_SIZE/nonNULLbufferchecks. Validationreturns-EINVAL/-EFAULTwhileclosingacquiredpositiveFD.",
+    "I_O": "Forvalidcallerownedwritablecapacity((4<<20)-4096),bothcallIHK_OS_READ_KMSG0x112a20 withoriginalbufferpointerasunsignedlong. Nonnegativeioctlresultpassesunchanged; negativeioctlsnapshotstoactualnegativeerrnoBEFOREcleanup.",
+    "ownership": "SuccessfullyopenednonnegativeFDhasonecommonout/finishcloseonallnormalread/validationpaths;capturedresultreturnedafterclose. Callerbufferisnotfreedbylibrary. No confirmednormal-ownedFDleak/doubleclose/resultmasking established.",
+    "excluded": "Historicalfd!=-1negativeopencleanupguardissameinC/RustanddoesnotownorcloseapositiveFD. TLSerrnoafterinvalidnegativeclose remainsDEFER,notanewbug/test. No undefined/OOB/ret>=capacitybaseline/securityvector/backendreturnbound invented.",
+    "CLI": "Actualdo_kmsg C700/Rustkmsg164callspublicAPIandowns/freesitscallocbuffer. ExistingRustsentinelhandlingisnotreopened;undefinedCcapacityboundaryexcluded. No newnormalallocation/I_Oreturn/FDownerdefectestablished."
+  },
+  "supervisor_binding_and_retained_matching_proof": {
+    "route": "ActualLease::get/bytes/release inihkmond.rs171\u2013179usesdirectIHKdeviceGET_KMSG/READ_KMSG/RELEASE_KMSGhandleioctlsandRAIIFDs. redirect_kmsg203usesLease, NOTpublicihk_os_kmsg. Do notrelabelitsdistinctrequest/handlecoverageaspublicAPIcoverage.",
+    "bounded_result": {
+      "path": "/home/holden/mckernel/docs/verification/m15-active-supervisor-results-20261107.json",
+      "sha256": "67056c1aa316c9b1ae5837fb46435f4550ce854f28908524e9f08d0a3c0c675d"
+    },
+    "raw_receipt_sha256": "ce756e6483809c51e61640ee50ca3d544127a0d3ac8ec9d0bdbe52ff4a27eb9d",
+    "frozen_request": {
+      "path": "/home/holden/mckernel-work/resume-20261107T000152Z-a458ed04/active-supervisor-cases-1/v2/REQUEST.json",
+      "sha256": "ddb98439ad81e4a0d22513f944d15a1eba032551659a896fd7b4cd5a01b4cbad"
+    },
+    "current_ihkmond_wholefile_sha_matches_frozen_source_input": true,
+    "passing_scope": "RealHOSTactiveLife/Workers/Lease/Ring/consume/redirect+actualuserspaceeventfdprovider:2generations6reads2releases4exactlines/activestop0;partial2ndREGISTERerror-22/realendpointcloses/1lease releaseattempt;actualfd/taskrestorebothcases. DeclaredlocalIHK/syslogseams,realHOSTprimitives only.",
+    "limits": "No daemon/udev/actualIHKdevice/backend/deployed/native/publicihk_os_kmsgAPIclaim. Matchingresultreusedwithoutreplay."
+  },
+  "original_requirement_readiness": {
+    "row": "M15-F05-original-behavior",
+    "definition_source": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "existing_condition": "Originalownercompletepublicfunction/backendscenarioinventory+matchingpassingresults/exactartifact/profile/operationbindings. Presentfocusedslicesdonotdefinecompleteinventory. SharedF08/I03retainmatchinglimits.",
+    "missing_input_once": "OriginalsupportedpublicAPI/backendscenario membership andactualIHKbackend artifact/deviceoperation/admittedsupportedprofile/sourceSDK/nativebindings forREAD_KMSG/publicAPIanddirectsupervisorGET/READ/RELEASE. Localcallbackproofdoesnotestablishbroaderbackendreturnbounds/cleanup/deliverysemantics.",
+    "no_broad_coverage_claim": "No assertionthatpublicAPIcasesaremissingfromallretainedproofs; no proofcensusperformed. Onlyidentifiedmatchingactiveproofsourceidentity/limitschecked;fulloriginalbackendinventory/operationinputisexplicitlyOPENinexistingrow.",
+    "decision": "No newconcretenormalallocation/I_Oreturn/FDownershipdefectorgenuinelymissingeligiblefunctionalcontractestablishedtoauthorizenewimplementation/casesnow. Reuseexactmatchingactiveproof;obtainoriginalbackend/supported-scope inputbeforeclaimingfullF05/F08/I03advance."
+  },
+  "notification_exclusion": "No kernel eventfd/syscall_eventfd_send_result/f03_eventfd_send/directpackethelper orheldACK/TID/XPMEM/execbodyinspection/import/preparation.",
+  "stop_condition": "Oneboundedremaining-originalsourcecheckcomplete; no furthersearch/cases/providerguess/framework/notificationretryqueued.",
+  "compiler_runtime_device_native_test_replay_or_sourceimplementation": false,
+  "canonical_index_writes": false,
+  "new_quota_score_gate_C_retirement_acceptance": false
+}
