@@ -1,10 +1,10 @@
 McKernel M14/M15 progress and agent status
 
-Generated UTC: 2026-11-10T05:12:10.598064Z
-Generated America/Boise: 2026-11-09T22:12:10.598064-07:00
-Treat this snapshot as stale after UTC: 2026-11-10T05:27:10.598064Z; America/Boise: 2026-11-09T22:27:10.598064-07:00 (15 minutes after generation; check for a newer report).
+Generated UTC: 2026-11-10T05:35:26.302975Z
+Generated America/Boise: 2026-11-09T22:35:26.302975-07:00
+Treat this snapshot as stale after UTC: 2026-11-10T05:50:26.302975Z; America/Boise: 2026-11-09T22:50:26.302975-07:00 (15 minutes after generation; check for a newer report).
 Ledger updated UTC: 2026-11-10T00:52:03.274556Z
-Source commit: e1cd683369b15296d7d259953f081d6e78a54ca5
+Source commit: cc9933eb7fdca877179cf173f43ae29c0516aa47
 Canonical ledger: docs/verification/m14-m15-closure-progress.json; human plan: CAMPAIGN.md.
 This is a derived view, not new acceptance or execution authority. Checklist percentages are not accepted milestones, engineering hours or converted LOC.
 Scope: Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.
@@ -24,24 +24,26 @@ Workstation runtime: UNAVAILABLE.
 No workstation snapshot was supplied. Live agents and active-turn counts are UNKNOWN, not zero.
 
 REMOTE CI (provided evidence; separate from milestone acceptance and workstation activity)
-source_commit: e1cd683369b15296d7d259953f081d6e78a54ca5
-run_id: 42760141013
-url: https://github.com/phoenix-hacking/mckernel/actions/runs/42760141013
+source_commit: cc9933eb7fdca877179cf173f43ae29c0516aa47
+run_id: 42762881017
+url: https://github.com/phoenix-hacking/mckernel/actions/runs/42762881017
 status: in_progress
 conclusion: PENDING at observation
-observed_at: 2026-11-10T05:12:10.598064+00:00
-summary: Latest source-checkpoint CI is still running. The previous ad526 run 42757273379 timed out/cancelled; its 182 FAIL and 232 ERROR entries matched the previous repaired CI baseline IDs.
-limitations: CI is separate from workstation execution, live agent health and original M14/M15 acceptance. This is an observed snapshot, not a continuous CI query.
+observed_at: 2026-11-10T05:35:26.302975+00:00
+summary: 255 focused local tests passed, and final generated systemd units passed systemd-analyze verify. The new source CI run is in progress; preceding broad tracker runs were cancelled.
+limitations: Focused tests and service configuration checks do not establish full CI success, workstation activation, live agent work or milestone acceptance.
 
 ATTRIBUTED NOTES
-Latest recorded workstation checkpoint: e1cd683369b15296d7d259953f081d6e78a54ca5 at 2026-11-10T05:07:37Z. It records completed control repairs and another SOURCE/BINDING IMPASSE, followed by normal BLOCKED goal control; no fresh cyber-policy rejection is established.
-The recorded repair/test agents A, B, D and F completed their payloads and all waits joined. Root completed three impasse audits. These are historical checkpoint observations; no current workstation agent process, count or activity is independently verified here.
-Commit 962f22549bf839a3bb8ef41b8a478b23fb71bfff fixed instruction submission chronology and preservation of explicit service opt-ins. These control repairs earned no original M14/M15 acceptance credit.
-The latest workstation result explicitly records services_activated=false, mailbox_polled=false, notifications_posted_or_dispatched=false and guardian_handoff_or_recovery_performed=false. The new guardian has not been verified active on the computer.
-GitHub bot setup posting succeeded in run 42756298558. The mailbox contains two setup notices and no observed workstation or controller receipt as of this rendering. Email/phone delivery and reading remain unconfirmed.
-Once the workstation adopts and starts the guarded launcher, this report is regenerated and publication is attempted every 600 seconds. A failed upload retains the previous public file and records a local error. Check the generated time and stale-after time.
-The critical path remains an eligible original universal/generic provider disposition, complete remaining source/provider contracts with exact ABI/callee/owner bindings, and supported SDK/source-custody/native/current-resource inputs. No final original-closure ETA is established.
-Source details: https://github.com/phoenix-hacking/mckernel/blob/e1cd683369b15296d7d259953f081d6e78a54ca5/CAMPAIGN.md . Mailbox: https://github.com/phoenix-hacking/mckernel/pull/3 .
+OVERNIGHT PREPARATION PUBLISHED: cc9933eb7fdca877179cf173f43ae29c0516aa47 on codex/local-native-staging-repair. All 12 changed source/documentation/test files were verified against their published Git blob hashes.
+The updated guardian requires a lifetime idle:sleep:handle-lid-switch inhibitor, including when the engine is held. Systemd watches it with a 90-second watchdog and Restart=always. Explicit installation/start enables current-user lingering only through the supported noninteractive OS path and verifies readback.
+These are published configuration and test results. No actual workstation service, inhibitor or lingering change was performed from this session. No workstation first mailbox poll or live agent state is verified.
+On the workstation checkout, the existing launcher now provides prepare, start, status and status-text. Preparation reports individual missing inputs without starting work. status includes readiness.monitoring_ready, current guardian/poll/publication evidence, next deadlines and separate model work state.
+Overnight defaults: no timer cutoff (hours=0); unlimited classified technical recovery attempts; repair-agent routing; stop model work after original M14 and M15 acceptances. Two child slots, three aggregate light HOST jobs on CPUs 0,6,7, and 4 GiB TOTAL. Actual account/source/native/ownership/resource holds remain binding.
+Latest recorded engineering checkpoint remains e1cd683369b15296d7d259953f081d6e78a54ca5 at 2026-11-10T05:07:37Z: completed control repairs and a SOURCE/BINDING IMPASSE with normal BLOCKED handoff. It does not establish a fresh cyber-policy rejection.
+At that recorded checkpoint, repair/test lanes A, B, D and F completed and all waits joined. Root completed three impasse audits. These historical observations do not establish any current live workstation agent or active-turn count.
+The critical path remains an eligible original universal/generic provider disposition, complete remaining source/provider contracts and exact ABI/callee/owner bindings, and supported SDK/source-custody/native/current-resource inputs. Checklist and acceptance counts are unchanged; final original-closure ETA is unknown.
+GitHub bot setup posting succeeded in run 42756298558. The latest observed mailbox still has two setup notices and no verified workstation receipt. Email/phone delivery is unconfirmed. Mailbox: https://github.com/phoenix-hacking/mckernel/pull/3 .
+Once the updated guardian is started, it keeps monitoring while engineering is blocked, checks new GitHub directions every 600 seconds and renders/publishes this report every 600 seconds with error backoff. Stale or old receipts do not prove a current first poll. Preparation instructions: https://github.com/phoenix-hacking/mckernel/blob/cc9933eb7fdca877179cf173f43ae29c0516aa47/CAMPAIGN.md .
 
 ALL CANONICAL REQUIREMENTS AND ORIGINAL GATES
 
