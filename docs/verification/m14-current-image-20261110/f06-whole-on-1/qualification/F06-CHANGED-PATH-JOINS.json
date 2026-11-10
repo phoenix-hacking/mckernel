@@ -1,0 +1,3797 @@
+{
+  "F06_source_contract": {
+    "bytes": 23155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/CONTRACT.json",
+    "sha256": "d8667d68125fd6dd49561c4d82f88b5c0ebcdc183057da5439b022754a19b230"
+  },
+  "XSAVE_XRSTOR": {
+    "actual_relocation": {
+      "addend": 0,
+      "observed_ELF64_relocation_type": 1,
+      "offset": 6,
+      "symbol": {
+        "binding": "GLOBAL",
+        "bytes": 8,
+        "index": 4613,
+        "name": "x86_cpu_xsave_mask",
+        "section_index": 6157,
+        "type": "OBJECT",
+        "value": 0,
+        "visibility": 0
+      }
+    },
+    "exact_function_disassembly": "0000000000000000 <arch_rt_sigreturn_xrstor_bridge>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 b8 00 00 00 00 00 00 00 00 \tmovabs $0x0,%rax\t6: R_X86_64_64\tx86_cpu_xsave_mask\n   e:\t48 8b 00             \tmov    (%rax),%rax\n  11:\t48 89 c2             \tmov    %rax,%rdx\n  14:\t48 c1 ea 20          \tshr    $0x20,%rdx\n  18:\t0f ae 2f             \txrstor (%rdi)\n  1b:\t5d                   \tpop    %rbp\n  1c:\tc3                   \tret\n",
+    "final_code_hex": "554889e548b8182499feffffffff488b004889c248c1ea200fae2f5dc3",
+    "final_file_offset": 241904,
+    "full_mask_provider": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 8,
+        "index": 967,
+        "name": "x86_cpu_xsave_mask",
+        "section_index": 265,
+        "type": "OBJECT",
+        "value": 18446744073686033432,
+        "visibility": 0
+      },
+      "name": "x86_cpu_xsave_mask",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 8,
+          "index": 4613,
+          "name": "x86_cpu_xsave_mask",
+          "section_index": 6157,
+          "type": "OBJECT",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073686033432,
+          "bytes": 8
+        },
+        "section": ".lbss.x86_cpu_xsave_mask"
+      }
+    },
+    "input_code_hex": "554889e548b80000000000000000488b004889c248c1ea200fae2f5dc3",
+    "input_file_offset": 214656,
+    "instruction_contract": "Incoming snapshot pointer remains RDI (no instruction writes it). Load actual64-bit x86_cpu_xsave_mask into RAX; copy to RDX, shift right32 for EDX while EAX retains low32; XRSTOR(%rdi). Input imm64 relocation and final patched provider address agree. Only passive encoding/source ABI proof; no hardware restore/snapshot-extent/native acceptance.",
+    "physical_owner": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 29,
+        "index": 4039,
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684627696,
+        "visibility": 0
+      },
+      "name": "arch_rt_sigreturn_xrstor_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 29,
+          "index": 4706,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "section_index": 929,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684627696,
+          "bytes": 29
+        },
+        "section": ".ltext.arch_rt_sigreturn_xrstor_bridge"
+      }
+    },
+    "saved_disassembly": {
+      "bytes": 220335,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata/f06-xrstor-disassembly.stdout",
+      "sha256": "1318032032d40b426cf51665559d174c6a22b87333a6a319b42c9e74eb24011f"
+    },
+    "tool_decoded_relocation": "R_X86_64_64"
+  },
+  "actual_two_counter_tests_qualification": {
+    "bytes": 6697,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-review-publicabi-max-1/actual-tests-1/RESULT.json",
+    "sha256": "12499c72c01b6db706f4f4dacd90185fdd42f79b13a5cc7c695ee06abe55631f"
+  },
+  "arch_C_allocated_section_classification": {
+    "actual_arch_note": {
+      "align": 8,
+      "blob_hex": "040000002000000005000000474e5500020001c0040000000000000000000000010001c0040000000100000000000000",
+      "blob_sha256": "500a4dc61384e928259864cbd65586d4ce20c7438877c494a8e311d77326be55",
+      "bytes": 48,
+      "descriptor_bytes": 32,
+      "flags": 2,
+      "observed_note_type": 5,
+      "owner": "GNU",
+      "section": ".note.gnu.property",
+      "type": 7
+    },
+    "same_compiler_generated_note_in_unchanged_inert_real_C_ABI_assert_unit": {
+      "identity": {
+        "bytes": 2880,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "note": {
+        "align": 8,
+        "blob_hex": "040000002000000005000000474e5500020001c0040000000000000000000000010001c0040000000100000000000000",
+        "blob_sha256": "500a4dc61384e928259864cbd65586d4ce20c7438877c494a8e311d77326be55",
+        "bytes": 48,
+        "descriptor_bytes": 32,
+        "flags": 2,
+        "observed_note_type": 5,
+        "owner": "GNU",
+        "section": ".note.gnu.property",
+        "type": 7
+      }
+    },
+    "scope": "Exactly48B SHF_ALLOC GNU ELF property note, byte-identical to the unchanged inert ABI-assert C object under the same realGCC14 compiler/profile. Compiler-generated ELF metadata, no project function/object implementation or required publicdata. ActualarchC0FUNC/0GLOBALdefs/0executablebytes remains proven; no broad projectC exemption."
+  },
+  "arch_C_allocated_sections": [
+    {
+      "address": 0,
+      "align": 8,
+      "bytes": 48,
+      "entry_bytes": 0,
+      "flags": 2,
+      "index": 15,
+      "info": 0,
+      "link": 0,
+      "name": ".note.gnu.property",
+      "offset": 776,
+      "type": 7
+    }
+  ],
+  "arch_C_object": {
+    "allocated_executable_section_bytes": 0,
+    "global_definition_names": [],
+    "global_definitions": 0,
+    "identity": {
+      "bytes": 2888,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972"
+    },
+    "language_class": "C_or_included_C_header",
+    "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "runtime_FUNC_names": [],
+    "runtime_FUNC_rows": 0,
+    "runtime_FUNC_size_sum": 0,
+    "strong_imports": 0,
+    "weak_definitions": 0,
+    "weak_imports": 0
+  },
+  "configure_postgate": {
+    "bytes": 491,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/CONFIGURE-POSTGATE.json",
+    "sha256": "695ae48e9ebe064f74d62f6b41a792164ff56dd40fa74e57bb09d248427de43a"
+  },
+  "debug_constants": {
+    "alignment_bytes": 32,
+    "exact_12_u64_words": [
+      8128,
+      7848,
+      7872,
+      7920,
+      64,
+      4208,
+      4328,
+      4304,
+      4184,
+      456,
+      20,
+      18446744073709551615
+    ],
+    "final_file_offset": 1059008,
+    "final_section": {
+      "address": 18446744073685444800,
+      "align": 32,
+      "bytes": 96,
+      "entry_bytes": 0,
+      "flags": 268435459,
+      "index": 23,
+      "info": 0,
+      "link": 0,
+      "name": ".ldata.debug_constants",
+      "offset": 1059008,
+      "type": 1
+    },
+    "input_and_final_bytes_hex": "c01f000000000000a81e000000000000c01e000000000000f01e00000000000040000000000000007010000000000000e810000000000000d0100000000000005810000000000000c8010000000000001400000000000000ffffffffffffffff",
+    "input_file_offset": 1045504,
+    "input_section": {
+      "address": 0,
+      "align": 32,
+      "bytes": 96,
+      "entry_bytes": 0,
+      "flags": 268435459,
+      "index": 5774,
+      "info": 0,
+      "link": 0,
+      "name": ".ldata.debug_constants",
+      "offset": 1045504,
+      "type": 1
+    },
+    "offset0_field_layout_source_assertions": "repr(C,align(32)), only [usize;12] field at0; genuine CABI/profileff48 and actual12 compiler-evaluated words match source contract.",
+    "physical_owner": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 96,
+        "index": 4317,
+        "name": "debug_constants",
+        "section_index": 23,
+        "type": "OBJECT",
+        "value": 18446744073685444800,
+        "visibility": 0
+      },
+      "name": "debug_constants",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 96,
+          "index": 7922,
+          "name": "debug_constants",
+          "section_index": 5774,
+          "type": "OBJECT",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073685444800,
+          "bytes": 96
+        },
+        "section": ".ldata.debug_constants"
+      }
+    },
+    "size_bytes": 96,
+    "source_ABI": {
+      "ABI": "pub static mut repr(C,align(32)) wrapper whose sole offset0 field is [usize;12], size96; real writable object, not readonly const or function",
+      "Rust_source": "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "baseline_C_bytes": 96,
+      "basis": "Actual selected PROFILE/PERF/RUSAGEON, TOFU/FugakuOFF ABIff48 and real C debug_constants sizeof/offsetof array; new actual emitted data must agree. No new field-layout witness is fabricated.",
+      "name": "debug_constants",
+      "selected20a_expected_words": [
+        8128,
+        7848,
+        7872,
+        7920,
+        64,
+        4208,
+        4328,
+        4304,
+        4184,
+        456,
+        20,
+        18446744073709551615
+      ],
+      "selector": [
+        "f06_debug_constants_candidate",
+        "MCKERNEL_RUST_F06_DEBUG_CONSTANTS"
+      ]
+    },
+    "writable_input_and_final": true
+  },
+  "function_relocation_joins": [
+    {
+      "actual_relocation_edges": [
+        {
+          "addend": 24,
+          "consumer_input_offset": 70,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 32,
+            "index": 4945,
+            "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate22F06_SIGNAL_ENTRY_DEBUG",
+            "section_index": 5732,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 32,
+              "index": 1459,
+              "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate22F06_SIGNAL_ENTRY_DEBUG",
+              "section_index": 3,
+              "type": "OBJECT",
+              "value": 18446744073685438088,
+              "visibility": 0
+            },
+            "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate22F06_SIGNAL_ENTRY_DEBUG",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 32,
+                "index": 4945,
+                "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate22F06_SIGNAL_ENTRY_DEBUG",
+                "section_index": 5732,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685438088,
+                "bytes": 32
+              },
+              "section": "__verbose"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 14624,
+          "consumer_input_offset": 125,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 138,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 209,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 4049,
+            "name": "",
+            "section_index": 5731,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 8,
+            "bytes": 8,
+            "entry_bytes": 0,
+            "flags": 268435459,
+            "index": 5731,
+            "info": 0,
+            "link": 0,
+            "name": ".ldata._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate20F06_SIGNAL_LOG_STATE",
+            "offset": 1044712,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 343,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4190,
+            "name": "cpu_local_var_initialized",
+            "section_index": 5772,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 1885,
+              "name": "cpu_local_var_initialized",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811456,
+              "visibility": 0
+            },
+            "name": "cpu_local_var_initialized",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4190,
+                "name": "cpu_local_var_initialized",
+                "section_index": 5772,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811456,
+                "bytes": 4
+              },
+              "section": ".lbss.cpu_local_var_initialized"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 375,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4182,
+            "name": "locals",
+            "section_index": 5812,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 1704,
+              "name": "locals",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685834016,
+              "visibility": 0
+            },
+            "name": "locals",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4182,
+                "name": "locals",
+                "section_index": 5812,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685834016,
+                "bytes": 8
+              },
+              "section": ".lbss.locals"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 406,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4183,
+            "name": "num_processors",
+            "section_index": 5938,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 4052,
+              "name": "num_processors",
+              "section_index": 30,
+              "type": "OBJECT",
+              "value": 18446744073685445056,
+              "visibility": 0
+            },
+            "name": "num_processors",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4183,
+                "name": "num_processors",
+                "section_index": 5938,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685445056,
+                "bytes": 4
+              },
+              "section": ".ldata.num_processors"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 432,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4190,
+            "name": "cpu_local_var_initialized",
+            "section_index": 5772,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 1885,
+              "name": "cpu_local_var_initialized",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811456,
+              "visibility": 0
+            },
+            "name": "cpu_local_var_initialized",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4190,
+                "name": "cpu_local_var_initialized",
+                "section_index": 5772,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811456,
+                "bytes": 4
+              },
+              "section": ".lbss.cpu_local_var_initialized"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 457,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4184,
+            "name": "clv",
+            "section_index": 5771,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 4306,
+              "name": "clv",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811448,
+              "visibility": 0
+            },
+            "name": "clv",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4184,
+                "name": "clv",
+                "section_index": 5771,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811448,
+                "bytes": 8
+              },
+              "section": ".lbss.clv"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 9581,
+          "consumer_input_offset": 560,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 570,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 1194,
+            "index": 4186,
+            "name": "_kfree",
+            "section_index": 738,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 1194,
+              "index": 2856,
+              "name": "_kfree",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684589776,
+              "visibility": 0
+            },
+            "name": "_kfree",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 1194,
+                "index": 4186,
+                "name": "_kfree",
+                "section_index": 738,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684589776,
+                "bytes": 1194
+              },
+              "section": ".ltext._kfree"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 633,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4182,
+            "name": "locals",
+            "section_index": 5812,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 1704,
+              "name": "locals",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685834016,
+              "visibility": 0
+            },
+            "name": "locals",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4182,
+                "name": "locals",
+                "section_index": 5812,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685834016,
+                "bytes": 8
+              },
+              "section": ".lbss.locals"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 658,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4183,
+            "name": "num_processors",
+            "section_index": 5938,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 4052,
+              "name": "num_processors",
+              "section_index": 30,
+              "type": "OBJECT",
+              "value": 18446744073685445056,
+              "visibility": 0
+            },
+            "name": "num_processors",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4183,
+                "name": "num_processors",
+                "section_index": 5938,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685445056,
+                "bytes": 4
+              },
+              "section": ".ldata.num_processors"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 693,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4184,
+            "name": "clv",
+            "section_index": 5771,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 4306,
+              "name": "clv",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811448,
+              "visibility": 0
+            },
+            "name": "clv",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4184,
+                "name": "clv",
+                "section_index": 5771,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811448,
+                "bytes": 8
+              },
+              "section": ".lbss.clv"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 758,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 306,
+            "index": 4588,
+            "name": "arch_do_signal_default_pending_transfer_result",
+            "section_index": 798,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 306,
+              "index": 3520,
+              "name": "arch_do_signal_default_pending_transfer_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684604176,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_default_pending_transfer_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 306,
+                "index": 4588,
+                "name": "arch_do_signal_default_pending_transfer_result",
+                "section_index": 798,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684604176,
+                "bytes": 306
+              },
+              "section": ".ltext.arch_do_signal_default_pending_transfer_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 819,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 991,
+            "name": "",
+            "section_index": 1196,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 8,
+            "bytes": 232,
+            "entry_bytes": 0,
+            "flags": 268435458,
+            "index": 1196,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.do_signal",
+            "offset": 285224,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 10113,
+          "consumer_input_offset": 871,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 881,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 949,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 520,
+            "name": "",
+            "section_index": 496,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 16,
+            "bytes": 436,
+            "entry_bytes": 0,
+            "flags": 268435462,
+            "index": 496,
+            "info": 0,
+            "link": 0,
+            "name": ".ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate25f06_signal_core_after_log",
+            "offset": 143056,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1001,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4658,
+            "name": "x86_cpu_xsave_size",
+            "section_index": 6158,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 4911,
+              "name": "x86_cpu_xsave_size",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073686033440,
+              "visibility": 0
+            },
+            "name": "x86_cpu_xsave_size",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4658,
+                "name": "x86_cpu_xsave_size",
+                "section_index": 6158,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073686033440,
+                "bytes": 4
+              },
+              "section": ".lbss.x86_cpu_xsave_size"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1360,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 411,
+            "index": 4601,
+            "name": "native_signal_stack_prepare_result",
+            "section_index": 2825,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 411,
+              "index": 4701,
+              "name": "native_signal_stack_prepare_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684934752,
+              "visibility": 0
+            },
+            "name": "native_signal_stack_prepare_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 411,
+                "index": 4601,
+                "name": "native_signal_stack_prepare_result",
+                "section_index": 2825,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684934752,
+                "bytes": 411
+              },
+              "section": ".ltext.native_signal_stack_prepare_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 9581,
+          "consumer_input_offset": 1403,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1413,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 1194,
+            "index": 4186,
+            "name": "_kfree",
+            "section_index": 738,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 1194,
+              "index": 2856,
+              "name": "_kfree",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684589776,
+              "visibility": 0
+            },
+            "name": "_kfree",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 1194,
+                "index": 4186,
+                "name": "_kfree",
+                "section_index": 738,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684589776,
+                "bytes": 1194
+              },
+              "section": ".ltext._kfree"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1470,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4182,
+            "name": "locals",
+            "section_index": 5812,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 1704,
+              "name": "locals",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685834016,
+              "visibility": 0
+            },
+            "name": "locals",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4182,
+                "name": "locals",
+                "section_index": 5812,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685834016,
+                "bytes": 8
+              },
+              "section": ".lbss.locals"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1495,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4183,
+            "name": "num_processors",
+            "section_index": 5938,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 4052,
+              "name": "num_processors",
+              "section_index": 30,
+              "type": "OBJECT",
+              "value": 18446744073685445056,
+              "visibility": 0
+            },
+            "name": "num_processors",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4183,
+                "name": "num_processors",
+                "section_index": 5938,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685445056,
+                "bytes": 4
+              },
+              "section": ".ldata.num_processors"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1530,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4184,
+            "name": "clv",
+            "section_index": 5771,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 4306,
+              "name": "clv",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811448,
+              "visibility": 0
+            },
+            "name": "clv",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4184,
+                "name": "clv",
+                "section_index": 5771,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811448,
+                "bytes": 8
+              },
+              "section": ".lbss.clv"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 11169,
+          "consumer_input_offset": 1561,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1571,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1588,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 4375,
+            "name": "terminate",
+            "section_index": 0,
+            "type": "NOTYPE",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 3273,
+              "index": 4424,
+              "name": "terminate",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684400864,
+              "visibility": 0
+            },
+            "name": "terminate",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 3273,
+                "index": 182,
+                "name": "terminate",
+                "section_index": 1,
+                "type": "FUNC",
+                "value": 10976,
+                "visibility": 0
+              },
+              "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+              "placement": {
+                "address": 18446744073684389888,
+                "bytes": 21378
+              },
+              "section": ".text"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1613,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 816,
+            "index": 4604,
+            "name": "arch_do_signal_stop_result",
+            "section_index": 819,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 816,
+              "index": 4178,
+              "name": "arch_do_signal_stop_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684607808,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_stop_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 816,
+                "index": 4604,
+                "name": "arch_do_signal_stop_result",
+                "section_index": 819,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684607808,
+                "bytes": 816
+              },
+              "section": ".ltext.arch_do_signal_stop_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 24,
+          "consumer_input_offset": 1665,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 32,
+            "index": 4946,
+            "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate26F06_SIGNAL_TERMINATE_DEBUG",
+            "section_index": 5736,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 32,
+              "index": 3824,
+              "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate26F06_SIGNAL_TERMINATE_DEBUG",
+              "section_index": 3,
+              "type": "OBJECT",
+              "value": 18446744073685438152,
+              "visibility": 0
+            },
+            "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate26F06_SIGNAL_TERMINATE_DEBUG",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 32,
+                "index": 4946,
+                "name": "_RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate26F06_SIGNAL_TERMINATE_DEBUG",
+                "section_index": 5736,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685438152,
+                "bytes": 32
+              },
+              "section": "__verbose"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 14661,
+          "consumer_input_offset": 1684,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1694,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1713,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 4375,
+            "name": "terminate",
+            "section_index": 0,
+            "type": "NOTYPE",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 3273,
+              "index": 4424,
+              "name": "terminate",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684400864,
+              "visibility": 0
+            },
+            "name": "terminate",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 3273,
+                "index": 182,
+                "name": "terminate",
+                "section_index": 1,
+                "type": "FUNC",
+                "value": 10976,
+                "visibility": 0
+              },
+              "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+              "placement": {
+                "address": 18446744073684389888,
+                "bytes": 21378
+              },
+              "section": ".text"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1734,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 737,
+            "index": 4608,
+            "name": "arch_do_signal_trap_stop_result",
+            "section_index": 822,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 737,
+              "index": 2335,
+              "name": "arch_do_signal_trap_stop_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684608720,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_trap_stop_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 737,
+                "index": 4608,
+                "name": "arch_do_signal_trap_stop_result",
+                "section_index": 822,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684608720,
+                "bytes": 737
+              },
+              "section": ".ltext.arch_do_signal_trap_stop_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1768,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 522,
+            "name": "",
+            "section_index": 498,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 16,
+            "bytes": 173,
+            "entry_bytes": 0,
+            "flags": 268435462,
+            "index": 498,
+            "info": 0,
+            "link": 0,
+            "name": ".ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate33f06_signal_core_terminate_current",
+            "offset": 143504,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1830,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 842,
+            "index": 4599,
+            "name": "arch_do_signal_native_context_result",
+            "section_index": 812,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 842,
+              "index": 1256,
+              "name": "arch_do_signal_native_context_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684606240,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_native_context_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 842,
+                "index": 4599,
+                "name": "arch_do_signal_native_context_result",
+                "section_index": 812,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684606240,
+                "bytes": 842
+              },
+              "section": ".ltext.arch_do_signal_native_context_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 9581,
+          "consumer_input_offset": 1885,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1895,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 1194,
+            "index": 4186,
+            "name": "_kfree",
+            "section_index": 738,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 1194,
+              "index": 2856,
+              "name": "_kfree",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684589776,
+              "visibility": 0
+            },
+            "name": "_kfree",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 1194,
+                "index": 4186,
+                "name": "_kfree",
+                "section_index": 738,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684589776,
+                "bytes": 1194
+              },
+              "section": ".ltext._kfree"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1954,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4182,
+            "name": "locals",
+            "section_index": 5812,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 1704,
+              "name": "locals",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685834016,
+              "visibility": 0
+            },
+            "name": "locals",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4182,
+                "name": "locals",
+                "section_index": 5812,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685834016,
+                "bytes": 8
+              },
+              "section": ".lbss.locals"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 1979,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4183,
+            "name": "num_processors",
+            "section_index": 5938,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 4052,
+              "name": "num_processors",
+              "section_index": 30,
+              "type": "OBJECT",
+              "value": 18446744073685445056,
+              "visibility": 0
+            },
+            "name": "num_processors",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4183,
+                "name": "num_processors",
+                "section_index": 5938,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685445056,
+                "bytes": 4
+              },
+              "section": ".ldata.num_processors"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2014,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4184,
+            "name": "clv",
+            "section_index": 5771,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 4306,
+              "name": "clv",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811448,
+              "visibility": 0
+            },
+            "name": "clv",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4184,
+                "name": "clv",
+                "section_index": 5771,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811448,
+                "bytes": 8
+              },
+              "section": ".lbss.clv"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 11169,
+          "consumer_input_offset": 2045,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2055,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2089,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 955,
+            "index": 4288,
+            "name": "copy_to_user",
+            "section_index": 1093,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 955,
+              "index": 2507,
+              "name": "copy_to_user",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684658448,
+              "visibility": 0
+            },
+            "name": "copy_to_user",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 955,
+                "index": 4288,
+                "name": "copy_to_user",
+                "section_index": 1093,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684658448,
+                "bytes": 955
+              },
+              "section": ".ltext.copy_to_user"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2099,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 518,
+            "name": "",
+            "section_index": 495,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 16,
+            "bytes": 19,
+            "entry_bytes": 0,
+            "flags": 268435462,
+            "index": 495,
+            "info": 0,
+            "link": 0,
+            "name": ".ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate24f06_signal_xsave_capture",
+            "offset": 143024,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2109,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 618,
+            "index": 4612,
+            "name": "arch_do_signal_xsave_copy_body_result",
+            "section_index": 824,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 618,
+              "index": 4336,
+              "name": "arch_do_signal_xsave_copy_body_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684609472,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_xsave_copy_body_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 618,
+                "index": 4612,
+                "name": "arch_do_signal_xsave_copy_body_result",
+                "section_index": 824,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684609472,
+                "bytes": 618
+              },
+              "section": ".ltext.arch_do_signal_xsave_copy_body_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 9581,
+          "consumer_input_offset": 2141,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2151,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 1194,
+            "index": 4186,
+            "name": "_kfree",
+            "section_index": 738,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 1194,
+              "index": 2856,
+              "name": "_kfree",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684589776,
+              "visibility": 0
+            },
+            "name": "_kfree",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 1194,
+                "index": 4186,
+                "name": "_kfree",
+                "section_index": 738,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684589776,
+                "bytes": 1194
+              },
+              "section": ".ltext._kfree"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2212,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4182,
+            "name": "locals",
+            "section_index": 5812,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 1704,
+              "name": "locals",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685834016,
+              "visibility": 0
+            },
+            "name": "locals",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4182,
+                "name": "locals",
+                "section_index": 5812,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685834016,
+                "bytes": 8
+              },
+              "section": ".lbss.locals"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2237,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 4,
+            "index": 4183,
+            "name": "num_processors",
+            "section_index": 5938,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 4,
+              "index": 4052,
+              "name": "num_processors",
+              "section_index": 30,
+              "type": "OBJECT",
+              "value": 18446744073685445056,
+              "visibility": 0
+            },
+            "name": "num_processors",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 4,
+                "index": 4183,
+                "name": "num_processors",
+                "section_index": 5938,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685445056,
+                "bytes": 4
+              },
+              "section": ".ldata.num_processors"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2272,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4184,
+            "name": "clv",
+            "section_index": 5771,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 4306,
+              "name": "clv",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073685811448,
+              "visibility": 0
+            },
+            "name": "clv",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4184,
+                "name": "clv",
+                "section_index": 5771,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073685811448,
+                "bytes": 8
+              },
+              "section": ".lbss.clv"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 11169,
+          "consumer_input_offset": 2303,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2313,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2353,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 193,
+            "index": 4247,
+            "name": "memcpy",
+            "section_index": 2708,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 193,
+              "index": 4639,
+              "name": "memcpy",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684907632,
+              "visibility": 0
+            },
+            "name": "memcpy",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 193,
+                "index": 4247,
+                "name": "memcpy",
+                "section_index": 2708,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684907632,
+                "bytes": 193
+              },
+              "section": ".ltext.memcpy"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2386,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 955,
+            "index": 4288,
+            "name": "copy_to_user",
+            "section_index": 1093,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 955,
+              "index": 2507,
+              "name": "copy_to_user",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684658448,
+              "visibility": 0
+            },
+            "name": "copy_to_user",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 955,
+                "index": 4288,
+                "name": "copy_to_user",
+                "section_index": 1093,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684658448,
+                "bytes": 955
+              },
+              "section": ".ltext.copy_to_user"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2402,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 242,
+            "index": 4596,
+            "name": "arch_do_signal_native_bad_frame_result",
+            "section_index": 808,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 242,
+              "index": 472,
+              "name": "arch_do_signal_native_bad_frame_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684605808,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_native_bad_frame_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 242,
+                "index": 4596,
+                "name": "arch_do_signal_native_bad_frame_result",
+                "section_index": 808,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684605808,
+                "bytes": 242
+              },
+              "section": ".ltext.arch_do_signal_native_bad_frame_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2444,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 162,
+            "index": 4603,
+            "name": "arch_do_signal_native_publish_result",
+            "section_index": 817,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 162,
+              "index": 2807,
+              "name": "arch_do_signal_native_publish_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684607632,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_native_publish_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 162,
+                "index": 4603,
+                "name": "arch_do_signal_native_publish_result",
+                "section_index": 817,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684607632,
+                "bytes": 162
+              },
+              "section": ".ltext.arch_do_signal_native_publish_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2476,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 242,
+            "index": 4596,
+            "name": "arch_do_signal_native_bad_frame_result",
+            "section_index": 808,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 242,
+              "index": 472,
+              "name": "arch_do_signal_native_bad_frame_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684605808,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_native_bad_frame_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 242,
+                "index": 4596,
+                "name": "arch_do_signal_native_bad_frame_result",
+                "section_index": 808,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684605808,
+                "bytes": 242
+              },
+              "section": ".ltext.arch_do_signal_native_bad_frame_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 14697,
+          "consumer_input_offset": 2549,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2559,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 2647,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 529,
+            "index": 4591,
+            "name": "arch_do_signal_handler_commit_result",
+            "section_index": 804,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 529,
+              "index": 4715,
+              "name": "arch_do_signal_handler_commit_result",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684604672,
+              "visibility": 0
+            },
+            "name": "arch_do_signal_handler_commit_result",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 529,
+                "index": 4591,
+                "name": "arch_do_signal_handler_commit_result",
+                "section_index": 804,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684604672,
+                "bytes": 529
+              },
+              "section": ".ltext.arch_do_signal_handler_commit_result"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        }
+      ],
+      "function": "do_signal",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 2707,
+          "index": 4673,
+          "name": "do_signal",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684695424,
+          "visibility": 0
+        },
+        "name": "do_signal",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 2707,
+            "index": 4300,
+            "name": "do_signal",
+            "section_index": 1194,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684695424,
+            "bytes": 2707
+          },
+          "section": ".ltext.do_signal"
+        }
+      },
+      "source_ABI": "unsafe extern C fn(CULong,*mut c_void,*mut Thread,*mut SigPending,CInt)->CInt"
+    },
+    {
+      "actual_relocation_edges": [
+        {
+          "addend": 12064,
+          "consumer_input_offset": 16,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 12019,
+          "consumer_input_offset": 28,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 38,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        }
+      ],
+      "function": "arch_ptrace_regset_log_bridge",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 53,
+          "index": 3952,
+          "name": "arch_ptrace_regset_log_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684624400,
+          "visibility": 0
+        },
+        "name": "arch_ptrace_regset_log_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 53,
+            "index": 4682,
+            "name": "arch_ptrace_regset_log_bridge",
+            "section_index": 891,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684624400,
+            "bytes": 53
+          },
+          "section": ".ltext.arch_ptrace_regset_log_bridge"
+        }
+      },
+      "source_ABI": "extern C fn(CInt,CLong) -> void"
+    },
+    {
+      "actual_relocation_edges": [
+        {
+          "addend": 11648,
+          "consumer_input_offset": 9,
+          "input_target": {
+            "binding": "LOCAL",
+            "bytes": 0,
+            "index": 3964,
+            "name": "",
+            "section_index": 5574,
+            "type": "SECTION",
+            "value": 0,
+            "visibility": 0
+          },
+          "local_Rust_section": {
+            "address": 0,
+            "align": 1,
+            "bytes": 44381,
+            "entry_bytes": 1,
+            "flags": 268435506,
+            "index": 5574,
+            "info": 0,
+            "link": 0,
+            "name": ".lrodata.str1.1",
+            "offset": 995632,
+            "type": 1
+          },
+          "observed_relocation_type": 1,
+          "scope": "Compiler-local definition or section inside the exact wholeRust object; no external provider substitution."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 19,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 85,
+            "index": 4193,
+            "name": "kprintf",
+            "section_index": 2357,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 85,
+              "index": 4036,
+              "name": "kprintf",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684869136,
+              "visibility": 0
+            },
+            "name": "kprintf",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 85,
+                "index": 4193,
+                "name": "kprintf",
+                "section_index": 2357,
+                "type": "FUNC",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073684869136,
+                "bytes": 85
+              },
+              "section": ".ltext.kprintf"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        },
+        {
+          "addend": 0,
+          "consumer_input_offset": 33,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 4375,
+            "name": "terminate",
+            "section_index": 0,
+            "type": "NOTYPE",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 3273,
+              "index": 4424,
+              "name": "terminate",
+              "section_index": 1,
+              "type": "FUNC",
+              "value": 18446744073684400864,
+              "visibility": 0
+            },
+            "name": "terminate",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 3273,
+                "index": 182,
+                "name": "terminate",
+                "section_index": 1,
+                "type": "FUNC",
+                "value": 10976,
+                "visibility": 0
+              },
+              "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+              "placement": {
+                "address": 18446744073684389888,
+                "bytes": 21378
+              },
+              "section": ".text"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        }
+      ],
+      "function": "arch_native_signal_bad_frame_bridge",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 59,
+          "index": 2047,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684617552,
+          "visibility": 0
+        },
+        "name": "arch_native_signal_bad_frame_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 59,
+            "index": 4650,
+            "name": "arch_native_signal_bad_frame_bridge",
+            "section_index": 848,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684617552,
+            "bytes": 59
+          },
+          "section": ".ltext.arch_native_signal_bad_frame_bridge"
+        }
+      },
+      "source_ABI": "unsafe extern C fn(CLong)->CLong"
+    },
+    {
+      "actual_relocation_edges": [
+        {
+          "addend": 0,
+          "consumer_input_offset": 6,
+          "input_target": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4613,
+            "name": "x86_cpu_xsave_mask",
+            "section_index": 6157,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "observed_relocation_type": 1,
+          "physical_provider": {
+            "final": {
+              "binding": "GLOBAL",
+              "bytes": 8,
+              "index": 967,
+              "name": "x86_cpu_xsave_mask",
+              "section_index": 265,
+              "type": "OBJECT",
+              "value": 18446744073686033432,
+              "visibility": 0
+            },
+            "name": "x86_cpu_xsave_mask",
+            "owner": {
+              "input": {
+                "binding": "GLOBAL",
+                "bytes": 8,
+                "index": 4613,
+                "name": "x86_cpu_xsave_mask",
+                "section_index": 6157,
+                "type": "OBJECT",
+                "value": 0,
+                "visibility": 0
+              },
+              "object": "rust/mckernel_rust.o",
+              "placement": {
+                "address": 18446744073686033432,
+                "bytes": 8
+              },
+              "section": ".lbss.x86_cpu_xsave_mask"
+            }
+          },
+          "scope": "Actual global physical provider; source79d066/d866 gives the genuine ABI/lifetime signature, not NOTYPE name-only inference."
+        }
+      ],
+      "function": "arch_rt_sigreturn_xrstor_bridge",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 29,
+          "index": 4039,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684627696,
+          "visibility": 0
+        },
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 29,
+            "index": 4706,
+            "name": "arch_rt_sigreturn_xrstor_bridge",
+            "section_index": 929,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684627696,
+            "bytes": 29
+          },
+          "section": ".ltext.arch_rt_sigreturn_xrstor_bridge"
+        }
+      },
+      "source_ABI": "unsafe extern C fn(*mut c_void)->void"
+    }
+  ],
+  "functions": [
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE",
+      "Rust_cfg": "f06_do_signal_whole_candidate",
+      "Rust_source": "kernel/rust/f06_signal_tail.rs",
+      "Rust_source_identity": {
+        "bytes": 69014,
+        "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+        "sha256": "32e44bf79e3058ad2b43b8ed530d606281143fa7217aebad1a194cc49ccdfd97"
+      },
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn do_signal(\n    mut result: CULong,\n    regs0: *mut c_void,\n    thread: *mut Thread,\n    pending: *mut crate::abi::SigPending,\n    number: CInt,\n) -> CInt",
+      "excluded_C_object": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 2707,
+          "index": 4673,
+          "name": "do_signal",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684695424,
+          "visibility": 0
+        },
+        "name": "do_signal",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 2707,
+            "index": 4300,
+            "name": "do_signal",
+            "section_index": 1194,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684695424,
+            "bytes": 2707
+          },
+          "section": ".ltext.do_signal"
+        }
+      },
+      "real_C_ABI_checks_object": {
+        "bytes": 2880,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "source_ABI": "unsafe extern C fn(CULong,*mut c_void,*mut Thread,*mut SigPending,CInt)->CInt",
+      "symbol": "do_signal"
+    },
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_PTRACE_REGSET_LOG",
+      "Rust_cfg": "f06_signal_ptrace_diagnostics_candidate",
+      "Rust_source": "kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "Rust_source_identity": {
+        "bytes": 1597,
+        "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+        "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1"
+      },
+      "actual_Rust_C_ABI_signature": "pub extern \"C\" fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong)",
+      "excluded_C_object": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 53,
+          "index": 3952,
+          "name": "arch_ptrace_regset_log_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684624400,
+          "visibility": 0
+        },
+        "name": "arch_ptrace_regset_log_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 53,
+            "index": 4682,
+            "name": "arch_ptrace_regset_log_bridge",
+            "section_index": 891,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684624400,
+            "bytes": 53
+          },
+          "section": ".ltext.arch_ptrace_regset_log_bridge"
+        }
+      },
+      "real_C_ABI_checks_object": {
+        "bytes": 2880,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "source_ABI": "extern C fn(CInt,CLong) -> void",
+      "symbol": "arch_ptrace_regset_log_bridge"
+    },
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME",
+      "Rust_cfg": "f06_signal_ptrace_diagnostics_candidate",
+      "Rust_source": "kernel/rust/f06_signal_ptrace_diagnostics.rs",
+      "Rust_source_identity": {
+        "bytes": 1597,
+        "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+        "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1"
+      },
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong",
+      "excluded_C_object": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 59,
+          "index": 2047,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684617552,
+          "visibility": 0
+        },
+        "name": "arch_native_signal_bad_frame_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 59,
+            "index": 4650,
+            "name": "arch_native_signal_bad_frame_bridge",
+            "section_index": 848,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684617552,
+            "bytes": 59
+          },
+          "section": ".ltext.arch_native_signal_bad_frame_bridge"
+        }
+      },
+      "real_C_ABI_checks_object": {
+        "bytes": 2880,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "source_ABI": "unsafe extern C fn(CLong)->CLong",
+      "symbol": "arch_native_signal_bad_frame_bridge"
+    },
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR",
+      "Rust_cfg": "f06_rt_sigreturn_xrstor_candidate",
+      "Rust_source": "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+      "Rust_source_identity": {
+        "bytes": 2153,
+        "path": "/home/holden/mckernel/kernel/rust/f06_rt_sigreturn_xrstor.rs",
+        "sha256": "a10a52d734bb494c1f0f6a84585d8f028ea44c386e3eaf10e8da12060a11134f"
+      },
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void)",
+      "excluded_C_object": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 29,
+          "index": 4039,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684627696,
+          "visibility": 0
+        },
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 29,
+            "index": 4706,
+            "name": "arch_rt_sigreturn_xrstor_bridge",
+            "section_index": 929,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684627696,
+            "bytes": 29
+          },
+          "section": ".ltext.arch_rt_sigreturn_xrstor_bridge"
+        }
+      },
+      "real_C_ABI_checks_object": {
+        "bytes": 2880,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "source_ABI": "unsafe extern C fn(*mut c_void)->void",
+      "symbol": "arch_rt_sigreturn_xrstor_bridge"
+    }
+  ],
+  "native_or_hardware_executed": false,
+  "no_atomic_hostruntime_import": true,
+  "old_arch_five_global_definitions_now_Rust": [
+    "arch_rt_sigreturn_xrstor_bridge",
+    "arch_native_signal_bad_frame_bridge",
+    "arch_ptrace_regset_log_bridge",
+    "do_signal",
+    "debug_constants"
+  ],
+  "original_acceptance": false,
+  "profile_delta": "Only explicit existingcache wholeF06 OFF\u2192ON; actual83cfgs are baseline77unionsevenwhole (contextalreadyselected), all7 Cmacro pairs once, real signal metadata env/deps; source defaultOFF unchanged.",
+  "real_retained_project_C_terminate": {
+    "final": {
+      "binding": "GLOBAL",
+      "bytes": 3273,
+      "index": 4424,
+      "name": "terminate",
+      "section_index": 1,
+      "type": "FUNC",
+      "value": 18446744073684400864,
+      "visibility": 0
+    },
+    "name": "terminate",
+    "owner": {
+      "input": {
+        "binding": "GLOBAL",
+        "bytes": 3273,
+        "index": 182,
+        "name": "terminate",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 10976,
+        "visibility": 0
+      },
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "placement": {
+        "address": 18446744073684389888,
+        "bytes": 21378
+      },
+      "section": ".text"
+    }
+  },
+  "retained_six_Rust_entries": [
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 1421,
+        "index": 3559,
+        "name": "do_syscall",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684698144,
+        "visibility": 0
+      },
+      "name": "do_syscall",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 1421,
+          "index": 4191,
+          "name": "do_syscall",
+          "section_index": 1198,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684698144,
+          "bytes": 1421
+        },
+        "section": ".ltext.do_syscall"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 204,
+        "index": 1307,
+        "name": "interrupt_syscall",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684859152,
+        "visibility": 0
+      },
+      "name": "interrupt_syscall",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 204,
+          "index": 4798,
+          "name": "interrupt_syscall",
+          "section_index": 2280,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684859152,
+          "bytes": 204
+        },
+        "section": ".ltext.interrupt_syscall"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 957,
+        "index": 3174,
+        "name": "terminate_host",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073685258784,
+        "visibility": 0
+      },
+      "name": "terminate_host",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 957,
+          "index": 4250,
+          "name": "terminate_host",
+          "section_index": 4631,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073685258784,
+          "bytes": 957
+        },
+        "section": ".ltext.terminate_host"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 165,
+        "index": 4325,
+        "name": "arch_rt_sigreturn_context_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684627424,
+        "visibility": 0
+      },
+      "name": "arch_rt_sigreturn_context_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 165,
+          "index": 4701,
+          "name": "arch_rt_sigreturn_context_bridge",
+          "section_index": 921,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684627424,
+          "bytes": 165
+        },
+        "section": ".ltext.arch_rt_sigreturn_context_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 262,
+        "index": 4416,
+        "name": "do_setresuid",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684691248,
+        "visibility": 0
+      },
+      "name": "do_setresuid",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 262,
+          "index": 4934,
+          "name": "do_setresuid",
+          "section_index": 1186,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684691248,
+          "bytes": 262
+        },
+        "section": ".ltext.do_setresuid"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 263,
+        "index": 4313,
+        "name": "do_setresgid",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684690976,
+        "visibility": 0
+      },
+      "name": "do_setresgid",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 263,
+          "index": 4932,
+          "name": "do_setresgid",
+          "section_index": 1184,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684690976,
+          "bytes": 263
+        },
+        "section": ".ltext.do_setresgid"
+      }
+    }
+  ],
+  "schema": "m14-F06-1e64-actual-changed-path-data-ABI-encoding-joins-v1",
+  "source_GO": {
+    "bytes": 20473,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-review-publicabi-max-1/REVIEW.json",
+    "sha256": "79d066a09e591d232b614510f32cad5bebcd3a8690131bd5f07dadeb51f2cb8d"
+  },
+  "status": "PASS_EXPLICIT_WHOLE_ON_ARCH_RUST_FUNCTION_DATA_AND_ENCODING_PROOF",
+  "terminate_ABI": "Source-reviewed void terminate(int,int), not noreturn; original return/error path is retained. This actual projectC body remains migration debt.",
+  "whole_metadata_records": [
+    {
+      "bytes": 5208,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata/f06-origin-binding.json",
+      "sha256": "5d8287b93dcb9226d0d305b9ceaae62bff5f1ed0a49f12102d70b449d70e87d8"
+    },
+    {
+      "bytes": 1184,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata/f06-signal-metadata.json",
+      "sha256": "f4b74627879a40571a9ebeb8a2eed177fab0a984ee78720a4d7d16f24fb3e7dd"
+    },
+    {
+      "bytes": 1248,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata/f06-signal-metadata.rs",
+      "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58"
+    }
+  ]
+}

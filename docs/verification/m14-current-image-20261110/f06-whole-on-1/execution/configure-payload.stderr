@@ -1,0 +1,54 @@
+which: no mpifcc in (/usr/bin:/bin)
+FJMPI_VERSION: 
+KRM_VERSION: 
+KRM_RELEASE: 
+KRM_VERSION: 
+KRM_RELEASE: 
+Defined module ihk
+PAGE_SIZE: 4096
+Defined module ihk-smp-x86_64
+WITH_KRM: OFF
+ENABLE_KMSG_REDIRECT: OFF
+ENABLE_PANIC_NOTIFIER_WORKAROUND: ON
+Defined module mcctrl
+CMake Warning at scripts/rust/boot-tools/SelectRustBootTools.cmake:38 (message):
+  M15 debt: explicit retained shell boot/stop fallback selected
+Call Stack (most recent call first):
+  CMakeLists.txt:306 (include)
+
+
+CMake Warning at scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake:31 (message):
+  M15 debt: explicit retained expect helper selected
+Call Stack (most recent call first):
+  CMakeLists.txt:308 (include)
+
+
+-------------------------------
+Option summary
+-------------------------------
+Build type: Debug
+Build target: smp-x86
+IHK_SOURCE_DIR: ihk (relative to mckernel source tree)
+UNAME_R: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+KERNEL_DIR: /output/build
+SYSTEM_MAP: 
+VMLINUX: 
+KBUILD_C_FLAGS:  -DPROFILE_ENABLE -DIHK_IKC_USE_LINUX_WORK_IRQ
+MAP_KERNEL_START: 0xfffffffffe800000
+ENABLE_MEMDUMP: ON
+ENABLE_PERF: ON
+ENABLE_TOFU: OFF
+ENABLE_FUGAKU_HACKS: OFF
+ENABLE_FUGAKU_DEBUG: OFF
+ENABLE_KRM_WORKAROUND: OFF
+ENABLE_FJMPI_WORKAROUND: OFF
+PROFILE_ENABLE: ON
+ENABLE_RUSAGE: ON
+ENABLE_QLMPI: OFF
+ENABLE_UTI: OFF
+ENABLE_WERROR: OFF
+ENABLE_UBSAN: OFF
+ENABLE_LINUX_WORK_IRQ_FOR_IKC: ON
+ENABLE_PER_CPU_ALLOC_CACHE: OFF
+ENABLE_KMSG_REDIRECT: OFF
+-------------------------------

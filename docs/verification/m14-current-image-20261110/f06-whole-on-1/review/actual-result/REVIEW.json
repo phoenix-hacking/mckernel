@@ -1,0 +1,1467 @@
+{
+  "XRSTOR_passive_encoding": {
+    "atomic_scope": "No libatomic/__atomic hostruntime/unresolved provider edge appears. Changed authoratomiccounter12499 result reused; actual productionnoFP/SIMD flags/lockfree supported atomic source retained. Source memory-order/lifetime contracts are not replaced by a disassembler result.",
+    "proof": {
+      "actual_relocation": {
+        "addend": 0,
+        "observed_ELF64_relocation_type": 1,
+        "offset": 6,
+        "symbol": {
+          "binding": "GLOBAL",
+          "bytes": 8,
+          "index": 4613,
+          "name": "x86_cpu_xsave_mask",
+          "section_index": 6157,
+          "type": "OBJECT",
+          "value": 0,
+          "visibility": 0
+        }
+      },
+      "exact_function_disassembly": "0000000000000000 <arch_rt_sigreturn_xrstor_bridge>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 b8 00 00 00 00 00 00 00 00 \tmovabs $0x0,%rax\t6: R_X86_64_64\tx86_cpu_xsave_mask\n   e:\t48 8b 00             \tmov    (%rax),%rax\n  11:\t48 89 c2             \tmov    %rax,%rdx\n  14:\t48 c1 ea 20          \tshr    $0x20,%rdx\n  18:\t0f ae 2f             \txrstor (%rdi)\n  1b:\t5d                   \tpop    %rbp\n  1c:\tc3                   \tret\n",
+      "final_code_hex": "554889e548b8182499feffffffff488b004889c248c1ea200fae2f5dc3",
+      "final_file_offset": 241904,
+      "full_mask_provider": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 8,
+          "index": 967,
+          "name": "x86_cpu_xsave_mask",
+          "section_index": 265,
+          "type": "OBJECT",
+          "value": 18446744073686033432,
+          "visibility": 0
+        },
+        "name": "x86_cpu_xsave_mask",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 4613,
+            "name": "x86_cpu_xsave_mask",
+            "section_index": 6157,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073686033432,
+            "bytes": 8
+          },
+          "section": ".lbss.x86_cpu_xsave_mask"
+        }
+      },
+      "input_code_hex": "554889e548b80000000000000000488b004889c248c1ea200fae2f5dc3",
+      "input_file_offset": 214656,
+      "instruction_contract": "Incoming snapshot pointer remains RDI (no instruction writes it). Load actual64-bit x86_cpu_xsave_mask into RAX; copy to RDX, shift right32 for EDX while EAX retains low32; XRSTOR(%rdi). Input imm64 relocation and final patched provider address agree. Only passive encoding/source ABI proof; no hardware restore/snapshot-extent/native acceptance.",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 29,
+          "index": 4039,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684627696,
+          "visibility": 0
+        },
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 29,
+            "index": 4706,
+            "name": "arch_rt_sigreturn_xrstor_bridge",
+            "section_index": 929,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684627696,
+            "bytes": 29
+          },
+          "section": ".ltext.arch_rt_sigreturn_xrstor_bridge"
+        }
+      },
+      "saved_disassembly": {
+        "bytes": 220335,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata/f06-xrstor-disassembly.stdout",
+        "sha256": "1318032032d40b426cf51665559d174c6a22b87333a6a319b42c9e74eb24011f"
+      },
+      "tool_decoded_relocation": "R_X86_64_64"
+    },
+    "verification": "Exact29inputbytes and29finalbytes match recordedfileoffsets. Final differs onlyimm64 at6..13, equal actualx86_cpu_xsave_mask8Bprovideraddress. Encoded push/mov/movabs/load64 RAX/copyRDX/shr32RDX/XRSTOR(%rdi)/pop/ret leaves incomingRDI untouched; EAXretainslow32 andEDXisupper32. Exact saved disassemblystring exists in pinned131803rawoutput, relocationR_X86_64_64/addend0 matches actualprovider. No hardware restore, snapshot extent, CPUmask availability or nativefault handling is inferred."
+  },
+  "actual_artifacts": {
+    "all11constituents": [
+      {
+        "bytes": 2848,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+      },
+      {
+        "bytes": 321184,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "sha256": "16de0fd8e34fb48eafb0692b69ac2b1a3d658a7b8fba1e85ea33ffad19c58542"
+      },
+      {
+        "bytes": 2864,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+      },
+      {
+        "bytes": 2880,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      {
+        "bytes": 2344,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+      },
+      {
+        "bytes": 2872,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+      },
+      {
+        "bytes": 16056,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+      },
+      {
+        "bytes": 2888,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+      },
+      {
+        "bytes": 2888,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972"
+      },
+      {
+        "bytes": 5568,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+      },
+      {
+        "bytes": 18709896,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+        "sha256": "041713e781dfb128089d2fe32b394eb20194182af439fcbf2e3ac864083f0f69"
+      }
+    ],
+    "image": {
+      "bytes": 10396880,
+      "mode": "755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+      "sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
+    },
+    "map": {
+      "bytes": 987179,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+      "sha256": "40db178d004e9c34f61be576969d301785314463b9a607406057086820450110"
+    },
+    "verification": "All19 raw metadata and request/source/GO/counter/postgate/command-source identities matched frozen SHA/size; all11 actual constituent/image/map byteSHA/size/mode matched producedfiles. Nine equal input hashes reuse a740; onlyarchC+wholeRustchanged. No new executable/tool execution byreviewer.",
+    "wholeRust": {
+      "bytes": 18709896,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "041713e781dfb128089d2fe32b394eb20194182af439fcbf2e3ac864083f0f69"
+    }
+  },
+  "actual_commands": {
+    "bytes": 29589,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/ACTUAL-RUST-AND-C-COMMANDS.json",
+    "sha256": "8f24804da0f06972a528e8183228f58efb842d2378a6d3bbf0adf056dbbb22f8"
+  },
+  "actual_function_relocation_review": {
+    "counts": {
+      "arch_native_signal_bad_frame_bridge": 3,
+      "arch_ptrace_regset_log_bridge": 3,
+      "arch_rt_sigreturn_xrstor_bridge": 1,
+      "do_signal": 62
+    },
+    "real_retained_C_terminate": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 3273,
+        "index": 4424,
+        "name": "terminate",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684400864,
+        "visibility": 0
+      },
+      "name": "terminate",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 3273,
+          "index": 182,
+          "name": "terminate",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 10976,
+          "visibility": 0
+        },
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 21378
+        },
+        "section": ".text"
+      }
+    },
+    "scope": "Existing source79d066/d866 supplies ownership/pending/reference/sigcommon IRQ/current-thread/frame/usercopy/ptrace/coredump/voidtermination lifetime/typed contracts. This actual physical code/relocation proof does not execute or prove all native behavior.",
+    "terminate_ABI": "Source-reviewed void terminate(int,int), not noreturn; original return/error path is retained. This actual projectC body remains migration debt.",
+    "verification": "Every69 consumerrelativeoffset/symbolindex/ELFrelocationtype/addend tuple independently matched the appropriate saved wholeRust .rela.ltext functionsection. Everyglobal target matches complete current physicalprovider row; everylocal target identifies actual sameRust section/index. No fake callback/external provider or NOTYPE-only prototype proof."
+  },
+  "actual_lifecycle": {
+    "UNKNOWNs": "OldCPU0/256MiB/job1 remainsUNJOINED/counts. Nativecurrentfree/source/owner/resourceservice/cleanupUNKNOWN and originalreservations remainexact; no nativegrant/release/inferredretirement.",
+    "actual_client_count": 25,
+    "memory_samples": [
+      {
+        "exact_terminal_whole_job_peak_proven": false,
+        "observed_sampled_highwater_bytes": 52301824,
+        "phase": "configure",
+        "retained_samples": 5,
+        "scope": "Saved sampled cgroup v1 highwater before exit; actual nonOOM/cgroup limit and positive lifecycle proven independently.",
+        "source": {
+          "bytes": 1453,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/configure-MEMORY.json",
+          "sha256": "2f7c29b8b1c16100777fde1640d9e2eeb9e433f24ce49bfe9ed8b9dbeacedf4a"
+        }
+      },
+      {
+        "exact_terminal_whole_job_peak_proven": false,
+        "observed_sampled_highwater_bytes": 519077888,
+        "phase": "build",
+        "retained_samples": 38,
+        "scope": "Saved sampled cgroup v1 highwater before exit; actual nonOOM/cgroup limit and positive lifecycle proven independently.",
+        "source": {
+          "bytes": 9909,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/build-MEMORY.json",
+          "sha256": "30afcabb180c988e8dd2ece7618bca92ae5ad4619ea016a2e9da678374efd0ee"
+        }
+      },
+      {
+        "exact_terminal_whole_job_peak_proven": false,
+        "observed_sampled_highwater_bytes": 51937280,
+        "phase": "metadata",
+        "retained_samples": 16,
+        "scope": "Saved sampled cgroup v1 highwater before exit; actual nonOOM/cgroup limit and positive lifecycle proven independently.",
+        "source": {
+          "bytes": 4249,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/metadata-MEMORY.json",
+          "sha256": "4cc0356a0b9d615972b5249ae0fefd68916336601f447896a3bd20e9f9de1c34"
+        }
+      }
+    ],
+    "phases": [
+      {
+        "CID": "e2c9b27f9437e976733b68a6bc511442c355b7bd7a0944f7cb9ac67f9759a372",
+        "OOMKilled": false,
+        "cgroup_samples": 5,
+        "client_wait_joined": true,
+        "exit": 0,
+        "owned_container_removed": true,
+        "phase": "configure"
+      },
+      {
+        "CID": "51ab7f1c1fc3342e8a806c51aee022e32510c28791ef2109f7670795452a5e6a",
+        "OOMKilled": false,
+        "cgroup_samples": 38,
+        "client_wait_joined": true,
+        "exit": 0,
+        "owned_container_removed": true,
+        "phase": "build"
+      },
+      {
+        "CID": "5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187",
+        "OOMKilled": false,
+        "cgroup_samples": 16,
+        "client_wait_joined": true,
+        "exit": 0,
+        "owned_container_removed": true,
+        "phase": "metadata"
+      }
+    ],
+    "sample_scope": "5/38/16retained counter samples observe52,301,824/519,077,888/51,937,280B beforeexit. These are sampledhighwater values, not exactterminal wholejobpeak. Reviewed hardphasecaps remainactual.",
+    "source": {
+      "bytes": 29827,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/RESULT.json",
+      "sha256": "a7cfe5038b6aea76d9e8dde83ed5b66b67a886a2ce78e3cc5854993ad9f4bf32"
+    },
+    "terminal_records": [
+      {
+        "CID": "e2c9b27f9437e976733b68a6bc511442c355b7bd7a0944f7cb9ac67f9759a372",
+        "owned_container_removed": true,
+        "phase": "configure",
+        "state": {
+          "Dead": false,
+          "Error": "",
+          "ExitCode": 0,
+          "FinishedAt": "2026-11-10T20:26:12.458828085Z",
+          "OOMKilled": false,
+          "Paused": false,
+          "Pid": 0,
+          "Restarting": false,
+          "Running": false,
+          "StartedAt": "2026-11-10T20:26:09.947230245Z",
+          "Status": "exited"
+        },
+        "terminal_record": {
+          "bytes": 30271,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/configure-terminal.stdout",
+          "sha256": "d6a0b43e68cb076581a07aa6ef66670013595596951746d1b6ff1c5c09d9ca48"
+        }
+      },
+      {
+        "CID": "51ab7f1c1fc3342e8a806c51aee022e32510c28791ef2109f7670795452a5e6a",
+        "owned_container_removed": true,
+        "phase": "build",
+        "state": {
+          "Dead": false,
+          "Error": "",
+          "ExitCode": 0,
+          "FinishedAt": "2026-11-10T20:26:32.186477058Z",
+          "OOMKilled": false,
+          "Paused": false,
+          "Pid": 0,
+          "Restarting": false,
+          "Running": false,
+          "StartedAt": "2026-11-10T20:26:13.290716337Z",
+          "Status": "exited"
+        },
+        "terminal_record": {
+          "bytes": 24237,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/build-terminal.stdout",
+          "sha256": "7dbd442bf2755f73d3c83967302011f2376a6f2540c0b60f268776db241540ab"
+        }
+      },
+      {
+        "CID": "5312f61218236fe8aa34d55504ed35bf7730229d6868fd537a201c1f33f69187",
+        "owned_container_removed": true,
+        "phase": "metadata",
+        "state": {
+          "Dead": false,
+          "Error": "",
+          "ExitCode": 0,
+          "FinishedAt": "2026-11-10T20:26:40.780343814Z",
+          "OOMKilled": false,
+          "Paused": false,
+          "Pid": 0,
+          "Restarting": false,
+          "Running": false,
+          "StartedAt": "2026-11-10T20:26:33.172444564Z",
+          "Status": "exited"
+        },
+        "terminal_record": {
+          "bytes": 12639,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/metadata-terminal.stdout",
+          "sha256": "834a9d6b70dbbabe0482be9dbb4ebeb9f6980e2d3c92ac66a7bebac0ec4d0a24"
+        }
+      }
+    ],
+    "verification": "Actual25positivePID/birth/directwait/exit0/closedstream records, noownedchildresidual; all3actualrawterminalIDs/State match0/nonOOM/Pid0 andpositiveownedcontainerremoval. Configure/build/reader serialize; no output/processabsence release inference."
+  },
+  "actual_selection_and_configuration": {
+    "Rust_cfg_count": 83,
+    "actual_verbose_line": 21,
+    "actual_verbose_source": {
+      "bytes": 28495,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/build-payload.stdout",
+      "sha256": "998e6a6d8bd6f0bb6eaef16849870debe577f1e25d8a3099d8814ab40328920f"
+    },
+    "command_verification": "Literal actualline21 and all221 shlex tokens match saved command, including cwd prefix.83 actualcfgs match exact vector: baseline77 plus six new effective wholecfgs, existingcontext selectedonce with reuse marker; real nonempty signalmetadata env/deps. Actual Cmacro/compiler pairs equal regeneratedcompile_commands and actual21token link equals regenerated-link.txt.",
+    "config_ABI": {
+      "IHK_HEAD": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+      "IHK_config_sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535",
+      "PROFILE_ON": true,
+      "actual_configure_postgate": {
+        "bytes": 491,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/CONFIGURE-POSTGATE.json",
+        "sha256": "695ae48e9ebe064f74d62f6b41a792164ff56dd40fa74e57bb09d248427de43a"
+      },
+      "cache_annotation_scope": "Only effective value delta wholeF06BOOL OFF\u2192ON. Exact3 CMake annotation/help resets preserved identical /usr/bin/cc,/usr/bin/cc,/usr/bin/ld values; all other cachebytes pinned. Full actual compiler commands/tools/flags/types and source/profile match independently; no broad type/config/provider waiver.",
+      "cache_unchanged_from_green20a": {
+        "bytes": 30123,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/metadata/regenerated-CMakeCache.txt",
+        "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+      },
+      "changed_objects": [
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "rust/mckernel_rust.o"
+      ],
+      "clone_zero_initializer_preserved": true,
+      "exact_cache_only_ONE_option_delta": true,
+      "explicit_candidate_cache_wholeF06_ON": true,
+      "genuine_C_ABI_assert_object_compiled": true,
+      "linker_sha256": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd",
+      "repository_wholeF06_default_OFF": true,
+      "root_config_sha256": "ca251af0e69e4c82df042063bb9ffc180cbba2bd1c34f246d7589f44ed7bfa3f",
+      "unchanged_objects": [
+        "CMakeFiles/mckernel.img.dir/mem.c.o",
+        "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "CMakeFiles/mckernel.img.dir/process.c.o",
+        "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o"
+      ]
+    },
+    "configure_postgate": {
+      "bytes": 491,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/CONFIGURE-POSTGATE.json",
+      "sha256": "695ae48e9ebe064f74d62f6b41a792164ff56dd40fa74e57bb09d248427de43a"
+    },
+    "effective_cache_delta": "Independent exact normalization of onlythreeobserved compiler/linker annotation/help stanzas leaves all other rawcachebytes identical except ENABLE_RUST_F06_SYSCALL_WHOLE:BOOL=OFF->ON. ASM/C values remain/usr/bin/cc and linker/usr/bin/ld; types STRING/STRING/FILEPATH become UNINITIALIZED from repeated untyped-D. No compiler/value/flag/profile exception or generic typewaiver.",
+    "literal_tokens": 221,
+    "metadata_scope": "Actual driverKO145296B/712f/MAP0xfffffffffe800000 and generated realconfigs/linker/wholeF06 metadata passedpostgate. Matching source/header/type/profile/CABI assertions retained; no source-only layout producer or explicitstablecompiler fallback."
+  },
+  "archC_zero_and_property_note": {
+    "allocated_sections": [
+      {
+        "address": 0,
+        "align": 8,
+        "bytes": 48,
+        "entry_bytes": 0,
+        "flags": 2,
+        "index": 15,
+        "info": 0,
+        "link": 0,
+        "name": ".note.gnu.property",
+        "offset": 776,
+        "type": 7
+      }
+    ],
+    "arch_object": {
+      "allocated_executable_section_bytes": 0,
+      "global_definition_names": [],
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2888,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972"
+      },
+      "language_class": "C_or_included_C_header",
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "runtime_FUNC_names": [],
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    "classification": {
+      "actual_arch_note": {
+        "align": 8,
+        "blob_hex": "040000002000000005000000474e5500020001c0040000000000000000000000010001c0040000000100000000000000",
+        "blob_sha256": "500a4dc61384e928259864cbd65586d4ce20c7438877c494a8e311d77326be55",
+        "bytes": 48,
+        "descriptor_bytes": 32,
+        "flags": 2,
+        "observed_note_type": 5,
+        "owner": "GNU",
+        "section": ".note.gnu.property",
+        "type": 7
+      },
+      "same_compiler_generated_note_in_unchanged_inert_real_C_ABI_assert_unit": {
+        "identity": {
+          "bytes": 2880,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+          "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+        },
+        "note": {
+          "align": 8,
+          "blob_hex": "040000002000000005000000474e5500020001c0040000000000000000000000010001c0040000000100000000000000",
+          "blob_sha256": "500a4dc61384e928259864cbd65586d4ce20c7438877c494a8e311d77326be55",
+          "bytes": 48,
+          "descriptor_bytes": 32,
+          "flags": 2,
+          "observed_note_type": 5,
+          "owner": "GNU",
+          "section": ".note.gnu.property",
+          "type": 7
+        }
+      },
+      "scope": "Exactly48B SHF_ALLOC GNU ELF property note, byte-identical to the unchanged inert ABI-assert C object under the same realGCC14 compiler/profile. Compiler-generated ELF metadata, no project function/object implementation or required publicdata. ActualarchC0FUNC/0GLOBALdefs/0executablebytes remains proven; no broad projectC exemption."
+    },
+    "old_five_global_defs": "Four functions plus publicdebug_constants now have actual Rustowners; allfive absent fromarchC. Inert compiler/source references are not falselyporteda secondtime.",
+    "verification": "Saved input symbols independently show zero LOCAL/GLOBAL definedFUNC and zeroGLOBAL/WEAK implementation/data definitions; allocated executable bytes0. Onlyallocated inputsection is48B GNUpropertynote(type7/SHF_ALLOC/align8), exact bytes at actualoffset776 match unchanged inertreal CABIassert object and SHA500a4dc6. This is compiler-generatedELF metadata, not hidden projectruntime/function/data or a broadCexemption."
+  },
+  "at": "2026-11-10T20:51:30.048617+00:00",
+  "changed_path_proof": {
+    "bytes": 123756,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/F06-CHANGED-PATH-JOINS.json",
+    "sha256": "20ed4250d9871f5d840648234b6cb51384d08689ff3da73b3391f8f03b2304fe"
+  },
+  "complete_new_image_provider_closure": {
+    "ALLOC_section_count": 266,
+    "ELF_header": {
+      "entry": 18446744073684635536,
+      "machine": 62,
+      "type": 2
+    },
+    "LOCAL_including_null": 411,
+    "all_symbols_including_null": 4966,
+    "arch_start": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 207,
+        "index": 2895,
+        "name": "arch_start",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684635536,
+        "visibility": 0
+      },
+      "name": "arch_start",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 207,
+          "index": 4726,
+          "name": "arch_start",
+          "section_index": 949,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684635536,
+          "bytes": 207
+        },
+        "section": ".ltext.arch_start"
+      }
+    },
+    "delta": "Exactly29 oldinputedges removed and0new from a740; counts/addresses/hashes are actualnewobservations, not fixedbaseline quota.",
+    "entry_hex": "0xfffffffffe83cf90",
+    "exact_script_globals": 5,
+    "finalGLOBAL": 4555,
+    "input_globals": 4550,
+    "layout_verification": "Actualnewentry equals actualRustarch_start;266 allocatedsections fullycovered byactual2LOADmemoryextents and filebackedoffsets/sizes agree. SameMAP/template/bootnote version4/Linux0x60c00/SmpBootParam7616/perf1; newGNUbuildid425276fc1b34b51465ef4fe41f2804070cf29517. NoPT_INTERP/PT_DYNAMIC/SHT_DYNAMIC/hostdependency/runtimeRelocations. No oldentry/hash/size equality requirement.",
+    "named_UND": 0,
+    "new_edges": [],
+    "notes": [
+      {
+        "descriptor_hex": "04000000000c0600c01d000001000000",
+        "descriptor_u32": [
+          4,
+          396288,
+          7616,
+          1
+        ],
+        "kind": 1296255745,
+        "owner": "MCKERNEL",
+        "section": ".note.mckernel.boot"
+      },
+      {
+        "descriptor_hex": "425276fc1b34b51465ef4fe41f2804070cf29517",
+        "descriptor_u32": null,
+        "kind": 3,
+        "owner": "GNU",
+        "section": ".note.gnu.build-id"
+      }
+    ],
+    "program_headers": [
+      {
+        "align": 4096,
+        "file_bytes": 1007459,
+        "flags": 5,
+        "memory_bytes": 1007459,
+        "offset": 4096,
+        "paddr": 18446744073684389888,
+        "type": 1,
+        "vaddr": 18446744073684389888
+      },
+      {
+        "align": 4096,
+        "file_bytes": 335872,
+        "flags": 7,
+        "memory_bytes": 635972,
+        "offset": 1011712,
+        "paddr": 18446744073685397504,
+        "type": 1,
+        "vaddr": 18446744073685397504
+      },
+      {
+        "align": 4,
+        "file_bytes": 76,
+        "flags": 4,
+        "memory_bytes": 76,
+        "offset": 1342968,
+        "paddr": 18446744073685728760,
+        "type": 4,
+        "vaddr": 18446744073685728760
+      }
+    ],
+    "removed_edges": [
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "__inline_memset"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "__mcs_rwlock_writer_lock"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "__mcs_rwlock_writer_unlock"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "arch_copy_from_user_bridge"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "arch_copy_to_user_bridge"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "check_need_resched"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "check_signal"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "copy_to_user"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "coredump"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "do_kill"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "get_xsave_mask"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "get_xsave_size"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "kfree_tracked"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "kmalloc_tracked"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "kprintf"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "memcpy"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "native_signal_action_mask_result"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "native_signal_context_prepare_result"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "native_signal_entry_targets_result"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "native_signal_stack_prepare_result"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "native_signal_stack_publish_result"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "ptrace_report_signal"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "schedule"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "set_signal"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "terminate"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "name": "waitq_wakeup"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "rust/mckernel_rust.o",
+        "name": "arch_native_signal_bad_frame_bridge"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "rust/mckernel_rust.o",
+        "name": "arch_ptrace_regset_log_bridge"
+      },
+      {
+        "binding": "GLOBAL",
+        "consumer_object": "rust/mckernel_rust.o",
+        "name": "do_signal"
+      }
+    ],
+    "strong_import_occurrences": 394,
+    "unique_import_names": 394,
+    "verification": "Every4966 final savedsymbol row matches qualification with decimal/0xsize decoding. Every4550 physicalinputrow matches real input/final index/name/type/size and exactGNUld objectsectionplacement+offset; actual5scriptassignments partition all4555GLOBALs. Every394 raw strongimport occurrence/finalphysicalprovider record matches, no weak/unknown/atomicruntime substitute.",
+    "weak_imports": 0
+  },
+  "decision": "GO_QUALIFIED_ACTUAL1E64_EXPLICIT_WHOLE_F06_RUST_FUNCTION_DATA_ARCH_C_ZERO_ENCODING_AND_PHYSICAL_PROVIDER_COHORT_DEFAULT_NATIVE_ORIGINAL_ACCEPTANCE_OPEN",
+  "four_new_Rust_functions": [
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE",
+      "Rust_cfg": "f06_do_signal_whole_candidate",
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn do_signal(\n    mut result: CULong,\n    regs0: *mut c_void,\n    thread: *mut Thread,\n    pending: *mut crate::abi::SigPending,\n    number: CInt,\n) -> CInt",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 2707,
+          "index": 4673,
+          "name": "do_signal",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684695424,
+          "visibility": 0
+        },
+        "name": "do_signal",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 2707,
+            "index": 4300,
+            "name": "do_signal",
+            "section_index": 1194,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684695424,
+            "bytes": 2707
+          },
+          "section": ".ltext.do_signal"
+        }
+      },
+      "source": {
+        "bytes": 69014,
+        "path": "/home/holden/mckernel/kernel/rust/f06_signal_tail.rs",
+        "sha256": "32e44bf79e3058ad2b43b8ed530d606281143fa7217aebad1a194cc49ccdfd97"
+      },
+      "source_ABI": "unsafe extern C fn(CULong,*mut c_void,*mut Thread,*mut SigPending,CInt)->CInt",
+      "symbol": "do_signal"
+    },
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_PTRACE_REGSET_LOG",
+      "Rust_cfg": "f06_signal_ptrace_diagnostics_candidate",
+      "actual_Rust_C_ABI_signature": "pub extern \"C\" fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong)",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 53,
+          "index": 3952,
+          "name": "arch_ptrace_regset_log_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684624400,
+          "visibility": 0
+        },
+        "name": "arch_ptrace_regset_log_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 53,
+            "index": 4682,
+            "name": "arch_ptrace_regset_log_bridge",
+            "section_index": 891,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684624400,
+            "bytes": 53
+          },
+          "section": ".ltext.arch_ptrace_regset_log_bridge"
+        }
+      },
+      "source": {
+        "bytes": 1597,
+        "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+        "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1"
+      },
+      "source_ABI": "extern C fn(CInt,CLong) -> void",
+      "symbol": "arch_ptrace_regset_log_bridge"
+    },
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME",
+      "Rust_cfg": "f06_signal_ptrace_diagnostics_candidate",
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 59,
+          "index": 2047,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684617552,
+          "visibility": 0
+        },
+        "name": "arch_native_signal_bad_frame_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 59,
+            "index": 4650,
+            "name": "arch_native_signal_bad_frame_bridge",
+            "section_index": 848,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684617552,
+            "bytes": 59
+          },
+          "section": ".ltext.arch_native_signal_bad_frame_bridge"
+        }
+      },
+      "source": {
+        "bytes": 1597,
+        "path": "/home/holden/mckernel/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+        "sha256": "950fdacc026cabbe5a19f3780aa4331cc7977e91ff65f38b0f4bc792619effb1"
+      },
+      "source_ABI": "unsafe extern C fn(CLong)->CLong",
+      "symbol": "arch_native_signal_bad_frame_bridge"
+    },
+    {
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F06_RT_SIGRETURN_XRSTOR",
+      "Rust_cfg": "f06_rt_sigreturn_xrstor_candidate",
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void)",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 29,
+          "index": 4039,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684627696,
+          "visibility": 0
+        },
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 29,
+            "index": 4706,
+            "name": "arch_rt_sigreturn_xrstor_bridge",
+            "section_index": 929,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684627696,
+            "bytes": 29
+          },
+          "section": ".ltext.arch_rt_sigreturn_xrstor_bridge"
+        }
+      },
+      "source": {
+        "bytes": 2153,
+        "path": "/home/holden/mckernel/kernel/rust/f06_rt_sigreturn_xrstor.rs",
+        "sha256": "a10a52d734bb494c1f0f6a84585d8f028ea44c386e3eaf10e8da12060a11134f"
+      },
+      "source_ABI": "unsafe extern C fn(*mut c_void)->void",
+      "symbol": "arch_rt_sigreturn_xrstor_bridge"
+    }
+  ],
+  "function_owner_verification": "Actualdo_signal2707B,ptrace_regset_log53B,bad_frame59B,xrstor29B each have exactlyone GLOBAL/FUNC wholeRust input/final owner; corresponding archCdefinitions absent. Exact inputindex/type/size/sectionoffset and literalGNUld sectionplacement match finalindex/address/type/size. No equal-size/name-only alias inference.",
+  "material_findings": [],
+  "next_action": "Root may checkpoint/push exactvalidated1e64/be58 wholeONsource+focusedresult atits statedscope. Preserve wholeONartifact/proofs beforefuturebuild. Continue named signalpayload qualification/currentnativefrontdoor binding/readonlyowner-resource operation and source-gatedconditionaldefault prep; no unchangedwholeON build/read/test replay.",
+  "offline_data_correction": {
+    "bytes": 2290,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/DATA-QUALIFIER-CORRECTION.json",
+    "sha256": "5183f595289fd9f6a04815b71cf081f194418995897a4b3f87414e3784f1c5bb"
+  },
+  "offline_qualifier_correction": {
+    "details": {
+      "actual_failed_tool_receipt": {
+        "chunk_id": "139f61",
+        "exit_code": 1,
+        "wall_time_seconds": 0.648925458
+      },
+      "allowed_exact_annotation_changes": [
+        {
+          "after_type": "UNINITIALIZED",
+          "before_type": "STRING",
+          "key": "CMAKE_ASM_COMPILER",
+          "value_unchanged": "/usr/bin/cc"
+        },
+        {
+          "after_type": "UNINITIALIZED",
+          "before_type": "STRING",
+          "key": "CMAKE_C_COMPILER",
+          "value_unchanged": "/usr/bin/cc"
+        },
+        {
+          "after_type": "UNINITIALIZED",
+          "before_type": "FILEPATH",
+          "key": "CMAKE_LINKER",
+          "value_unchanged": "/usr/bin/ld"
+        }
+      ],
+      "corrected_source": {
+        "bytes": 45937,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/qualify_saved_image.py",
+        "sha256": "25159a9cb710cc75bf48e9412dcc17c2913a90fa8b71a906983f8ef1e0caf5e4"
+      },
+      "diagnostic": "AssertionError at rawcachetext equality; actual cache differs by3untyped-D annotation/help stanzas with identical compiler/linker values plus intended one BOOL value OFF\u2192ON",
+      "failed_command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/qualify_saved_image.py"
+      ],
+      "failed_source": {
+        "bytes": 45281,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/qualify_saved_image.failed-1.py",
+        "sha256": "d197fa00a87c15e438a5f607c08c832278a63a9dc171f0960448494f619491c2"
+      },
+      "only_effective_value_delta": {
+        "after": "ON",
+        "before": "OFF",
+        "key": "ENABLE_RUST_F06_SYSCALL_WHOLE",
+        "type_unchanged": "BOOL"
+      },
+      "producer_build_readback_test_rerun": false,
+      "schema": "m14-F06-data-qualifier-exact-cache-annotation-correction-v1",
+      "status": "OFFLINE_QUALIFIER_ONLY_NOT_SUT_FAILURE",
+      "strict_scope": "Exact3 observed help/type stanzas and one BOOL replacement, all other cachebytes must match; no broad type/config/compiler/provider waiver. Actual full57argv differsonlyoneBOOL; actual compiler/linker commands/qualifiedphysicaltools/CABI source proofs remain bound."
+    },
+    "record": {
+      "bytes": 2290,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/DATA-QUALIFIER-CORRECTION.json",
+      "sha256": "5183f595289fd9f6a04815b71cf081f194418995897a4b3f87414e3784f1c5bb"
+    },
+    "review": "Retained139f61 failed onlyrawcachetext equality. Exact boundedmetadata correction admits3observed help/type stanzas while identicalcc/cc/ldvalues and allremainingcachebytesplussoleBOOLOFF->ON are pinned. Corrected9ba91c dataexit0; no compiler/configure/build/reader/test/SUTrerun. A reviewerpreliminarycomparison likewise requiredoldDEFAULT observationlabelsidentical; actual3newOPENobservationlabels were correctly assessedagainst unchangedoriginaltexts."
+  },
+  "original_acceptance": false,
+  "original_condition_review": {
+    "C_retirement_or_native_credit": false,
+    "default": "RepositoryliteralOFF and explicitcandidatecacheON remain distinct. Privateab812 defaultpatch was notapplied. Supported-defaultselection/affectedoriginalbehavior/matchingcohort mustbequalified beforepromotion; no optinlink/native/defaultleaf completion inference.",
+    "functional_native": "Noactualco-boot/app/signal/xstate/ptrace/mappings/native lifecycle/restoration ran inthispacket. Exact user169c signalapp/currentcohort/runtime and actualsource/native/currentfree/restoration operation remain genuine nextwork. Currentfrontdoor binding/ownerobservation is ordinaryengineering; no guessedfreshness or externalinventoryprerequisite.",
+    "module_scope": {
+      "actual_existing_module_source": "IHK8d/Linux6.12/config106055/actual3KO technical qualification retained",
+      "existing_hashes": {
+        "ihk-smp-x86_64.ko": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "ihk.ko": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "mcctrl.ko": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      },
+      "image_common_facts": "BUILDID8d,6.12/IRQABI/perf profile and bootnote4/0x60c00/SmpBootParam7616/perf1 recorded; independent module identities do not alone accept the final all-file Rust/assembly/deployed/native cohort."
+    },
+    "new_score_or_counted_acceptance": false,
+    "observations": "These three decisionlabels now correctly record EXPLICIT_ON_SOURCE_CODEGEN_ABI_OWNERSHIP_PASS_WHOLE_ORIGINAL_DEFAULT_CONDITION_OPEN. ActualnewzeroarchC/function/data/encoding evidence advances originalwork; their completeDEFAULT conditions are stillOPEN. Requiring oldobservationlabelsunchanged would erase genuineprogress; no acceptancewaiver.",
+    "original_M14_acceptance": false,
+    "original_M15_acceptance": false,
+    "physical_condition": "Actual1e64 explicitwholeON source/config/image/provider/archRustownership prerequisite is VERIFIED. This is a realcompletecurrentimage, not partial-only or blockedbyunsupportedhistoricalplaintextinventory assumptions.",
+    "texts": "All24 exactoriginal id/parent/title/done_when/verificationmethod/executionprofile texts matchpriora740mapping; originalintegrationparentrequirements unchanged. No relaxedcriteria/denominator/newmatrixorquota.",
+    "three_changed_observations": [
+      "M14-06-02-DEFAULT",
+      "M14-06-03-DEFAULT",
+      "M14-F06-DEFAULT"
+    ],
+    "whole_original": "OriginalI01/I02/E1/E2/allfile/capability/default/ABI-semantic/matchingmodules/I03/native acceptance remainsOPEN with37genericC and remainingactual obligations. M14beforeM15; accepted scopesstayclosed."
+  },
+  "original_conditions": {
+    "bytes": 47341,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/ORIGINAL-CONDITIONS.json",
+    "sha256": "0e74fbcd85f41a365ed5b6dacc42f9c40d84347d3f8ea028501667b9dc63c88c"
+  },
+  "physical_owner_provider_data": {
+    "bytes": 6013209,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+    "sha256": "4cb2bb0b0ad4604bcfa4e8d6be020b21ae430e1a99f9d03b8d4ef5c90e298a56"
+  },
+  "qualification": {
+    "bytes": 58097,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/QUALIFICATION.json",
+    "sha256": "0f6c7b01609b60791cc1bbb0253ea603d75d585b945bb6162da416515923bfbd"
+  },
+  "remaining_C_ledger": {
+    "actual_FUNC_rows": 37,
+    "delta": [
+      {
+        "actual_runtime_FUNC_rows": 37,
+        "added_function_names": [],
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "previous_runtime_FUNC_rows": 37,
+        "removed_function_names": []
+      },
+      {
+        "actual_runtime_FUNC_rows": 0,
+        "added_function_names": [],
+        "data_replacement_scope": "Actual writable96B/align32 Rust object has same12real ABI-derived words",
+        "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "previous_runtime_FUNC_rows": 4,
+        "removed_C_data_names": [
+          "debug_constants"
+        ],
+        "removed_function_names": [
+          "arch_native_signal_bad_frame_bridge",
+          "arch_ptrace_regset_log_bridge",
+          "arch_rt_sigreturn_xrstor_bridge",
+          "do_signal"
+        ]
+      }
+    ],
+    "meaning": "Remaininggeneric37are actualprojectcomputeC/migrationdebt, including genuinevoidterminate. ZeroarchC and remaining37 are physical facts, not global Cretirement, automaticdefaultacceptance or a new37-portquota. Keep acceptedfourM14file scopes closed; compiler-generated/inert CABI metadata needs no inventedport.",
+    "prior_FUNC_rows": 41,
+    "units": [
+      {
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "runtime_FUNC_names": [
+          "wait_host_wait4_bridge",
+          "terminate_mcexec_do_syscall_bridge",
+          "syscall_do_syscall3_bridge",
+          "ptrace_report_clone_noirq_lock_bridge",
+          "ptrace_wakeup_update_lock_bridge",
+          "clear_host_pte_log_bridge",
+          "syscall_settid_log_bridge",
+          "ptrace_wakeup_update_unlock_bridge",
+          "ptrace_report_clone_noirq_unlock_bridge",
+          "ptrace_detach_do_kill_bridge",
+          "ptrace_detach_kfree_bridge",
+          "do_munmap_clear_host_bridge",
+          "do_execveat",
+          "syscall_forward_context_bridge",
+          "ptrace_wakeup_sig",
+          "ptrace_detach_wakeup_bridge",
+          "ptrace_wakeup_log_bridge",
+          "ptrace_report_clone_log_bridge",
+          "perf_event_open_do_syscall_bridge",
+          "do_munmap_set_host_bridge",
+          "mprotect_set_host_vma_bridge",
+          "do_mmap",
+          "terminate_mcexec",
+          "terminate",
+          "exit_group_log_bridge",
+          "exit_group_terminate_bridge",
+          "exit_group_current_pid_bridge",
+          "syscall_execveat_bridge",
+          "do_fork",
+          "syscall_forward_rt_sigprocmask_bridge",
+          "syscall_forward_sigaction_update_bridge",
+          "syscall_policy_forward_context_bridge",
+          "sys_perf_event_open",
+          "syscall_policy_do_syscall2_bridge",
+          "syscall_policy_do_syscall3_bridge",
+          "util_thread",
+          "syscall_util_indicate_clone_disabled_bridge"
+        ],
+        "runtime_FUNC_rows": 37
+      }
+    ]
+  },
+  "retained_owner_check": "All six actualphysical rows match completecurrenttable and wholeRustobject. Contextreuse,do_syscall,interrupt,hostcleanup andbothcredential entries remain Rust; no duplicateCcounterparts or silentfallback.",
+  "retained_six_Rust_entries": [
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 1421,
+        "index": 3559,
+        "name": "do_syscall",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684698144,
+        "visibility": 0
+      },
+      "name": "do_syscall",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 1421,
+          "index": 4191,
+          "name": "do_syscall",
+          "section_index": 1198,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684698144,
+          "bytes": 1421
+        },
+        "section": ".ltext.do_syscall"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 204,
+        "index": 1307,
+        "name": "interrupt_syscall",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684859152,
+        "visibility": 0
+      },
+      "name": "interrupt_syscall",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 204,
+          "index": 4798,
+          "name": "interrupt_syscall",
+          "section_index": 2280,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684859152,
+          "bytes": 204
+        },
+        "section": ".ltext.interrupt_syscall"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 957,
+        "index": 3174,
+        "name": "terminate_host",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073685258784,
+        "visibility": 0
+      },
+      "name": "terminate_host",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 957,
+          "index": 4250,
+          "name": "terminate_host",
+          "section_index": 4631,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073685258784,
+          "bytes": 957
+        },
+        "section": ".ltext.terminate_host"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 165,
+        "index": 4325,
+        "name": "arch_rt_sigreturn_context_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684627424,
+        "visibility": 0
+      },
+      "name": "arch_rt_sigreturn_context_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 165,
+          "index": 4701,
+          "name": "arch_rt_sigreturn_context_bridge",
+          "section_index": 921,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684627424,
+          "bytes": 165
+        },
+        "section": ".ltext.arch_rt_sigreturn_context_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 262,
+        "index": 4416,
+        "name": "do_setresuid",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684691248,
+        "visibility": 0
+      },
+      "name": "do_setresuid",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 262,
+          "index": 4934,
+          "name": "do_setresuid",
+          "section_index": 1186,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684691248,
+          "bytes": 262
+        },
+        "section": ".ltext.do_setresuid"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 263,
+        "index": 4313,
+        "name": "do_setresgid",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684690976,
+        "visibility": 0
+      },
+      "name": "do_setresgid",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 263,
+          "index": 4932,
+          "name": "do_setresgid",
+          "section_index": 1184,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684690976,
+          "bytes": 263
+        },
+        "section": ".ltext.do_setresgid"
+      }
+    }
+  ],
+  "reviewer": "p03_cutover_source_max; existing direct same-Root gpt-6.1-sol/MAX",
+  "reviewer_operations": "Only saved JSON/text/byteSHA/stat/shlex/cache/physicalmap/relocation tuples and specific29/96/48B artifact slices plus thisprivateREVIEW write. No source/body/canonical/index/controlmutation, compiler/configure/build/link/test/readelf/objdump/checker/helper/ELF-parser/container/network/main/API/device/hardware/native or recursiveagent action.",
+  "schema": "m14-F06-runtime1e64-explicit-wholeON-independent-actual-result-review-v1",
+  "scope": "Independent focused saved actual3phase result: explicitwholeON/sourcebe58 atomic change, four remainingF06 function owners/data/Cexclusions, real input/final bytes/69relocation edges/XRSTORencoding, retainedsix, actualnewimage/provider/Cledger and exact originalconditions. Reuse source79d066/d866, counter12499 and previous a7400f18/dff18/SDK/Linux/195 proofs; no source/body/test/producer/readback replay.",
+  "source_operation_and_result": {
+    "atomic_source_commit": "be58d681bb0313bc2a10524c7915550191d4fd54",
+    "execution": {
+      "bytes": 29827,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/execution-1/RESULT.json",
+      "sha256": "a7cfe5038b6aea76d9e8dde83ed5b66b67a886a2ce78e3cc5854993ad9f4bf32"
+    },
+    "operation": {
+      "bytes": 81145,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/REQUEST.json",
+      "sha256": "b86fadc8bafdb3c3e7e16fd152cd68d32da15e20c57dec7138dec945b5389574"
+    },
+    "operation_GO": {
+      "bytes": 34254,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-operation-review-p03-max-1/f06-successor-1/REVIEW.json",
+      "sha256": "dff18f94d5e2ede762c694e67811c5bc3095404fef5ef673cf3df0744e2a1a7d"
+    },
+    "preserved_actual_image": "Root reported currentwholeON25file/30,737,547B cohort retained at stable-baseline1e64-wholeON-1 before nextbuild. The reviewer qualified the produced matching hashes; later disjointsource/payload work does not retroactively invalidate this historicalcohort.",
+    "runtime_HEAD": "1e64b165ff2a46e6ec7615e804b36c9a936172a8",
+    "source_binding": {
+      "bytes": 4046,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/SOURCE-BINDING.json",
+      "sha256": "5f5d6f080699ef4ec66a71f402350af5b5717b5d8e778f3af89a51f6d77831ce"
+    },
+    "source_scope": "Runtime1e64 docs/evidence-only child of be58, exact32e44 one-file atomic source plus prior unchangeda740 credential source. Explicit cache wholeF06ON is deliberate; sourceoptiondefault stillOFF. No held/privatebody, partial object, fake provider or hidden feature/profile change.",
+    "stable_a740_reference": {
+      "bytes": 10445,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinea740-1/BASELINE.json",
+      "sha256": "c5a10a8518a9c98e3f82693bc43f8bfa68bd06bcba2fa6d4b78af1d24f8ed0fc"
+    }
+  },
+  "writable_debug_constants": {
+    "proof": {
+      "alignment_bytes": 32,
+      "exact_12_u64_words": [
+        8128,
+        7848,
+        7872,
+        7920,
+        64,
+        4208,
+        4328,
+        4304,
+        4184,
+        456,
+        20,
+        18446744073709551615
+      ],
+      "final_file_offset": 1059008,
+      "final_section": {
+        "address": 18446744073685444800,
+        "align": 32,
+        "bytes": 96,
+        "entry_bytes": 0,
+        "flags": 268435459,
+        "index": 23,
+        "info": 0,
+        "link": 0,
+        "name": ".ldata.debug_constants",
+        "offset": 1059008,
+        "type": 1
+      },
+      "input_and_final_bytes_hex": "c01f000000000000a81e000000000000c01e000000000000f01e00000000000040000000000000007010000000000000e810000000000000d0100000000000005810000000000000c8010000000000001400000000000000ffffffffffffffff",
+      "input_file_offset": 1045504,
+      "input_section": {
+        "address": 0,
+        "align": 32,
+        "bytes": 96,
+        "entry_bytes": 0,
+        "flags": 268435459,
+        "index": 5774,
+        "info": 0,
+        "link": 0,
+        "name": ".ldata.debug_constants",
+        "offset": 1045504,
+        "type": 1
+      },
+      "offset0_field_layout_source_assertions": "repr(C,align(32)), only [usize;12] field at0; genuine CABI/profileff48 and actual12 compiler-evaluated words match source contract.",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 96,
+          "index": 4317,
+          "name": "debug_constants",
+          "section_index": 23,
+          "type": "OBJECT",
+          "value": 18446744073685444800,
+          "visibility": 0
+        },
+        "name": "debug_constants",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 96,
+            "index": 7922,
+            "name": "debug_constants",
+            "section_index": 5774,
+            "type": "OBJECT",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073685444800,
+            "bytes": 96
+          },
+          "section": ".ldata.debug_constants"
+        }
+      },
+      "size_bytes": 96,
+      "source_ABI": {
+        "ABI": "pub static mut repr(C,align(32)) wrapper whose sole offset0 field is [usize;12], size96; real writable object, not readonly const or function",
+        "Rust_source": "kernel/rust/f06_rt_sigreturn_xrstor.rs",
+        "baseline_C_bytes": 96,
+        "basis": "Actual selected PROFILE/PERF/RUSAGEON, TOFU/FugakuOFF ABIff48 and real C debug_constants sizeof/offsetof array; new actual emitted data must agree. No new field-layout witness is fabricated.",
+        "name": "debug_constants",
+        "selected20a_expected_words": [
+          8128,
+          7848,
+          7872,
+          7920,
+          64,
+          4208,
+          4328,
+          4304,
+          4184,
+          456,
+          20,
+          18446744073709551615
+        ],
+        "selector": [
+          "f06_debug_constants_candidate",
+          "MCKERNEL_RUST_F06_DEBUG_CONSTANTS"
+        ]
+      },
+      "writable_input_and_final": true
+    },
+    "verification": "Actual96B input andfinal bytes at recorded1045504/1059008 offsets independently equal packed littleendian12u64 words8128,7848,7872,7920,64,4208,4328,4304,4184,456,20,UINT64_MAX. Input/final sections writable/align32 and soleGLOBALOBJECT physicalowner matches fullprovider table. Actual CABI/sourcearray/layout basis ff48 retained, not guessedsection/readonlyconst/function/stub."
+  }
+}

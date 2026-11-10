@@ -1,0 +1,155 @@
+{
+  "schema": "m14-f06-signal-alternate-repeat-payload-operation-independent-review-v1",
+  "at": "2026-11-10T20:40:15.279930+00:00",
+  "owner": "source_acquisition_review_max, same-Root Sol/MAX, depth1/no children; independent of P03 payload preparer; Root sole executor/compositor/native owner",
+  "decision": "GO_EXACT_TWO_SERIAL_BUILD_AND_PASSIVE_READBACK_PHASES_AFTER_ROOT_FRESH_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/REQUEST.json",
+    "bytes": 16456,
+    "sha256": "fca432a3378375422703fc24cf80a7001ff5a460474ff25c96090f58a72daa5b"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/source/signal.alternate-repeat.c",
+    "bytes": 1368,
+    "sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb"
+  },
+  "canonical_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/cases/signal/signal.alternate-repeat.c",
+    "bytes": 1368,
+    "sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb"
+  },
+  "metadata_helper": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/read_payload_metadata.sh",
+    "bytes": 1294,
+    "sha256": "ef877db4aabaa7a675471983002b243f648aed859ebdc78a385bafd5f9015cec"
+  },
+  "expected_future_stdout": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/expected.stdout",
+    "bytes": 415,
+    "sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db"
+  },
+  "original_condition_scope": "M14-06-02/F06 functional-input preparation only: unchanged16 sequential SA_ONSTACK SIGUSR1 app; no actual signals, app invocation, native launch or original functional acceptance.",
+  "reviewed_operations": [
+    {
+      "phase": "compile",
+      "compiler_argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-D_GNU_SOURCE",
+        "-O2",
+        "-g1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "-MD",
+        "-MF",
+        "/output/signal.alternate-repeat.d",
+        "-Wl,-Map=/output/signal.alternate-repeat.map",
+        "-Wl,--trace",
+        "/input/signal.alternate-repeat.c",
+        "-o",
+        "/output/signal.alternate-repeat"
+      ],
+      "mount_count": 2,
+      "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "scope": "One real cc14 C11 compile/link with current SDK system headers, -O2/-g1/-Wall/-Wextra/-Werror/-fno-pie/-no-pie and real -MD depfile/map/link trace. No CMake, whole-app suite or kernel/module build. Compiler path/hash2092 reused, no version probe."
+    },
+    {
+      "phase": "metadata and new runtime input byte capture",
+      "helper": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/read_payload_metadata.sh",
+        "bytes": 1294,
+        "sha256": "ef877db4aabaa7a675471983002b243f648aed859ebdc78a385bafd5f9015cec"
+      },
+      "mount_count": 4,
+      "scope": "Read new app ELF/header/program/section/note/static+dynsymbols/dynamic/version tables and nm; retain real depfile/map. Copy exactly immutable-image libc and ld.so as regular dereferenced bytes, mode preserved, then hash/stat source/app/deps/map/runtime. No app, loader --list, ldd, dlopen, installation or signal invocation."
+    }
+  ],
+  "source_and_oracle_facts": {
+    "unchanged_source": "Private source byte-equals canonical1368B/aa6644c7. Exact source owns65536-byte alternate stack, sigaltstack setup, SA_ONSTACK SIGUSR1 handler and16 same-process kill/getpid calls; handler reports its stack location and counters.",
+    "stdout": "Expected17 lines/415B/461b8c2c derive directly from fixed16 source count, not a fabricated runtime receipt. Future app requires exit0/empty stderr plus exact output; actual execution remains pending.",
+    "scope_limit": "This case does not by itself prove every saved register/xstate byte, error/ptrace behavior or signal-mask bit. Ordinary compile/readback cannot prove F06 behavior.",
+    "retained_old_payload": "No existing payload ELF/manifest is claimed. Named old manifest/overlay were recorded absent by preparer; prior415B review remains scoped historical data. This packet reuses no old nonce/controller/native admission."
+  },
+  "actual_ABI_provider_and_interpreter_conditions": {
+    "architecture": "Require new actual ELF64/AMD64/ET_EXEC with real main/_start, expected current SDK depfile/map/trace; output hash/size/build-id/mode observed after real compile, not predeclared.",
+    "direct_runtime": "Require actual PT_INTERP exactly /lib64/ld-linux-x86-64.so.2 and direct NEEDED only libc.so.6, no unexpected RPATH/RUNPATH/DSO.",
+    "libc": {
+      "current_image_path": "/lib64/libc.so.6",
+      "expected_bytes": 2339896,
+      "expected_sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "existing_full_export_and_version_data": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/payload.stdout",
+        "bytes": 337646,
+        "sha256": "248be21979833c4f20b70132acd63036e525fc2a4d79c47caca60c42e1359324"
+      },
+      "requirement": "Join each actual strong dynamic import/version from the newly built app to the existing saved callable libc definition/version/role. Account only actual standard optional weak slots explicitly; no guessed name-only provider or blanket weak waiver."
+    },
+    "loader": {
+      "current_image_path": "/lib64/ld-linux-x86-64.so.2",
+      "existing_exact_path_closure": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/LOADER-CLOSURE.json",
+        "bytes": 14290,
+        "sha256": "abdd794d3bafb6ea5717532a64b27f792c2f4a38eb13590b0e2da798fafa31cb"
+      },
+      "identity_status": "Actual copied ELF bytes/hash/size/mode are a new captured input. abdd794d/14290B identifies a JSON closure receipt, not the loader ELF. No loader ELF hash is invented or accepted before capture."
+    },
+    "guest_namespace": "The two copied runtime files are inputs only. Any future guest run must bind actual interpreter/libc paths to those exact new bytes or prove an exact matching existing runtime; this GO does not authorize namespace masking, installation or launch.",
+    "unexpected_metadata": "Unexpected NEEDED/import/version/interpreter/source/header dependency is a concrete failed postgate requiring focused source/provider qualification; no substitution or inferred full ABI acceptance."
+  },
+  "namespace_and_source_conditions": {
+    "Root_setup": "Fresh absent owned output-1, output-1/runtime/lib64 and metadata-1, UID1000, no preexisting files/symlinks/competing writer. Output and metadata paths were absent on this review read.",
+    "compile_mounts": [
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/source/signal.alternate-repeat.c,dst=/input/signal.alternate-repeat.c,readonly",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1,dst=/output"
+    ],
+    "metadata_mounts": [
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/source/signal.alternate-repeat.c,dst=/input/signal.alternate-repeat.c,readonly",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1,dst=/output",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/read_payload_metadata.sh,dst=/producer/read_payload_metadata.sh,readonly",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/metadata-1,dst=/evidence"
+    ],
+    "mount_validation": "Exact count and Source/Destination/RW tuples, irrespective of Docker list order; no additional writable source/rootfs mount.",
+    "security": "Immutable46d; no pull/network; unprivileged1000:1000; read-only image; all caps dropped/no-new-privileges/private IPC/init; empty replacement env/no preload; bounded16MiB noexec tmpfs.",
+    "source_output_relationship": "Source remains RO. Compile writes only new app/depfile/map; metadata phase keeps that private output RW solely for two runtime byte copies, with separate fresh evidence root and set-euo-pipefail/noclobber. Root ownership and serialization exclude competing mutation."
+  },
+  "resource_and_positive_ownership_conditions": {
+    "per_phase": {
+      "CPU": [
+        7
+      ],
+      "jobs": 1,
+      "memory_bytes": 268435456,
+      "memory_swap_bytes": 268435456,
+      "AS_bytes": 268435456,
+      "pids": 64,
+      "CPU_seconds": 60,
+      "wall_seconds": 60,
+      "FSIZE_bytes": 67108864,
+      "tmpfs_bytes": 16777216
+    },
+    "AS_enforcement": "Existing bash -e ulimit -v262144 then exec exact positional argv; no unsupported Docker AS syntax or eval.",
+    "aggregate": "Fresh actual all-controller/worker/daemon/job accounting plus retained CPU0/256MiB/job1 UNKNOWN and current256MiB phase must fit HOST4GiB/max3. Require fresh26GiB MemAvailable, host16GiB/scratch12GiB floors and64MiB aggregate output budget. Native2-5/12GiB/prior18GiB/CPU1 exclusions remain unchanged.",
+    "phase_order": "Compile exit0/nonOOM, all direct and whole-family birth-bound waits/streams closed, exact owned container Pid0 and removed before metadata phase fresh admission. No optional overlap or second image-owner grant.",
+    "deadline_and_cleanup": "Root must bind exact created immutable container ID and owner label, enforce each60s daemon deadline with stop/kill/inspect/join of only that positively owned ID, and retain terminal state/OOM/streams/waits/removal. Client timeout alone and absence-only cleanup are insufficient.",
+    "failure": "Preserve failed command/source/diagnostic/profile/partial outputs and any cleanup UNKNOWN. No unchanged retry; ordinary defect correction only after meaningful reviewed change/fresh admission; no broad signal/PID selectors."
+  },
+  "scope_flags": {
+    "app_or_signal_executed": false,
+    "native_or_device_executed": false,
+    "original_F06_functional_accepted": false,
+    "original_M14_accepted": false,
+    "native_current_free_holds_released": false,
+    "old_CPU0_UNKNOWN_released": false,
+    "generic_exec_or_prohibited_fixture_replayed": false
+  },
+  "reviewer_operations": {
+    "source_JSON_and_saved_data_reads": true,
+    "private_REVIEW_write": true,
+    "compiler_helper_checker_test_payload_Docker_network_native_execution": false,
+    "canonical_or_packet_edits": false
+  },
+  "next_action": "Root may execute exactly these two serial phases after fresh operation-specific admission; saved-result qualification must bind actual output/runtime/provider bytes before a separately reviewed native/application operation."
+}

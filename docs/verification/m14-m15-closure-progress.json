@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-10T20:19:09.294855+00:00",
+  "updated_at": "2026-11-10T20:55:07.175462+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -14632,7 +14632,7 @@
       "no_pending_report": true
     },
     "latest_functional_result": {
-      "at": "2026-11-10T20:19:09.294855+00:00",
+      "at": "2026-11-10T20:55:07.175462+00:00",
       "new_counted_delta": 0,
       "verified_pair_unchanged": [
         51.48,
@@ -14776,9 +14776,10 @@
         "both_client_families_and_streams_joined": true,
         "actual_tests_independent_qualification": "docs/verification/m14-f06-shared-diagnostics-20261110/review/actual-tests/RESULT.json",
         "actual_tests_qualification_sha256": "12499c72c01b6db706f4f4dacd90185fdd42f79b13a5cc7c695ee06abe55631f",
-        "whole_ON_image_not_yet_executed": true,
+        "whole_ON_image_not_yet_executed": false,
         "repository_default_OFF_unchanged": true,
-        "new_original_counted_credit": 0
+        "new_original_counted_credit": 0,
+        "whole_ON_actual_image_qualification": "docs/verification/m14-current-image-20261110/f06-whole-on-1/qualification/QUALIFICATION.json"
       },
       "crash_new_source_inputs": {
         "actual_header_compile_PASS_at": "2026-11-10T20:01:56.084344+00:00",
@@ -14796,6 +14797,90 @@
         "actual_all_client_families_joined_and_owned_containers_removed": true,
         "cleanup_before_real_nonlocal_error_restart_still_open": true,
         "native_or_original_credit": 0
+      },
+      "M14_explicit_whole_F06_ON_image": {
+        "source_commit": "1e64b165ff2a46e6ec7615e804b36c9a936172a8",
+        "started_at": "2026-11-10T20:26:09.233939+00:00",
+        "finished_at": "2026-11-10T20:26:41.566092+00:00",
+        "elapsed_seconds": 32.33,
+        "phase_exits": [
+          0,
+          0,
+          0
+        ],
+        "image_sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f",
+        "image_bytes": 10396880,
+        "map_sha256": "40db178d004e9c34f61be576969d301785314463b9a607406057086820450110",
+        "whole_Rust_object_sha256": "041713e781dfb128089d2fe32b394eb20194182af439fcbf2e3ac864083f0f69",
+        "four_new_unique_Rust_function_bytes": [
+          2707,
+          53,
+          59,
+          29
+        ],
+        "architecture_C_function_rows": 0,
+        "architecture_C_executable_bytes": 0,
+        "architecture_C_implementation_globals": 0,
+        "inert_GNU_property_note_bytes": 48,
+        "inert_note_is_not_project_implementation": true,
+        "debug_constants_bytes": 96,
+        "debug_constants_alignment": 32,
+        "debug_constants_writable_and_all12_ABI_words_match": true,
+        "XRSTOR_genuine_29byte_full_EDX_EAX_RDI_and_R64_relocation_verified": true,
+        "no_hardware_instruction_executed": true,
+        "physical_input_globals": 4550,
+        "genuine_linker_assignments": 5,
+        "strong_import_occurrences": 394,
+        "unique_strong_import_names": 394,
+        "strong_undefined": 0,
+        "host_or_libatomic_provider_edges": 0,
+        "retained_prior_six_Rust_entries": true,
+        "nine_constituent_bytes_unchanged": true,
+        "actual_C_function_rows_before_after": [
+          41,
+          37
+        ],
+        "entry_equals_actual_arch_start": "0xfffffffffe83cf90",
+        "same_origin_and_LOAD_contract": true,
+        "all25_clients_and3containers_closed_removed_nonOOM": true,
+        "qualification": "docs/verification/m14-current-image-20261110/f06-whole-on-1/qualification/QUALIFICATION.json",
+        "qualification_sha256": "0f6c7b01609b60791cc1bbb0253ea603d75d585b945bb6162da416515923bfbd",
+        "independent_review": "docs/verification/m14-current-image-20261110/f06-whole-on-1/review/actual-result/REVIEW.json",
+        "independent_review_sha256": "606327708fe8fd366b0e099a5a92540e77991988fb3b94e67a5788eeb5827161",
+        "preserved_exact_green_cohort": "docs/verification/m14-current-image-20261110/f06-whole-on-1/PRESERVED-GREEN-BASELINE.json",
+        "explicit_cache_ON_repository_default_OFF": true,
+        "original_default_functional_native_acceptance_still_open": true,
+        "qualifier_only_exact3_cache_annotation_correction_preserved": true,
+        "producer_or_readback_replays": 0
+      },
+      "M14_signal_alternate_repeat_input": {
+        "scope": "Only named unchangedCsource compile/link/passiveELF/provider/runtimeinputs; no signal application execution",
+        "producer_PASS_at": "2026-11-10T20:42:59.041181+00:00",
+        "source_sha256": "aa6644c7a72f90e49c5eff3115bdd2c2c5aa1fa68dfa138a86335acbe16a08eb",
+        "app_sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+        "app_bytes": 18736,
+        "app_mode": "0755",
+        "libc_sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "loader_actual_ELF_sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "loader_bytes": 930600,
+        "required_native_payload_argv": [
+          "/apps/signal.alternate-repeat"
+        ],
+        "required_cwd": "/case/work",
+        "required_environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "future_stdout_bytes": 415,
+        "future_handler_rows": 16,
+        "future_footer": "delivery=16 alt_hits=16",
+        "future_exit": 0,
+        "future_stderr_bytes": 0,
+        "both_containers_and_all_client_families_joined_removed": true,
+        "native_application_executed": false,
+        "native_owner_source_currentfree_restoration_admission_not_supplied_by_compile": true,
+        "evidence": "docs/verification/m14-f06-signal-payload-20261110/execution/RESULT.json"
       }
     },
     "M14_image_priority": {
@@ -14880,31 +14965,24 @@
       }
     },
     "next_original_closure": {
-      "at": "2026-11-10T20:19:09.294855+00:00",
-      "primary_original_checks": [
-        "M14-F06-DEFAULT",
-        "M14-I02-E2"
-      ],
-      "next_exact_steps": [
-        "independently reviewed same-profile explicit ENABLE_RUST_F06_SYSCALL_WHOLE=ON configure",
-        "/usr/bin/cmake --build /work/output/build --target mckernel.img --parallel 1 --verbose",
-        "serialized frozen passive image/ownership/targeted context readbacks"
-      ],
-      "required_new_proof": "four remaining F06 unique Rust functions; no matching C executable bytes; exact writable debug_constants96B/align32 and ABI contents; no host/libatomic/undefined imports; retained credentials/prior4; actual entry/LOAD/provider/C-debt ledger and positive cleanup",
-      "source_and_runtime_option_distinguished": true,
-      "repository_default_stays_OFF_until_original_promotion_conditions_pass": true,
+      "at": "2026-11-10T20:55:07.175462+00:00",
+      "primary_original_gate": "M14-F06-FUNCTIONAL",
+      "required_exact_operation": "/apps/signal.alternate-repeat with /case/work and LANG=C LC_ALL=C TZ=UTC through existing real nativeapplicationfrontdoor on exactpreservedc664/1e64 image/modules/runtimecohort",
+      "actual_own_engineering_gap": "Existing validator/stager/guestcollector hardcode /apps/app and smaller env; prepare minimal namedcase source binding plus fresh authenticated nativeowner/currentfree/source/restoration request. No externalinventory prerequisite, fakecallback, catalogNOT_RUN, oldnonce or UNKNOWN release.",
+      "next_eligible_command": "Independently reviewed bounded read-only actualowner/resource observation, then exact real nativeapplication operation only after genuine gates; appHOSTproduceralreadyPASS",
       "owners": {
-        "image_packet": "p04_source_max",
-        "operation_actual_result_review": "p03_cutover_source_max",
-        "terminate_source": "source_acquisition_review_max",
-        "exit_group_source": "public_abi_join_max",
-        "do_mmap_source": "p04_tests_max",
-        "crash_cleanup_source": "sdk_binding_source_max",
-        "canonical_integrator_executor": "Root"
+        "whole_F06_image_qualification": "p04_source_max",
+        "signal_payload_provider_and_nativefrontdoor": "p03_cutover_source_max",
+        "native_admission_integrator_executor": "Root",
+        "terminate_corrected_source": "source_acquisition_review_max",
+        "independent_source_review": "public_abi_join_max",
+        "mmap_source": "p04_tests_max",
+        "crash_cleanup_source": "sdk_binding_source_max"
       },
-      "reuse_qualified_2000_increment_test": true,
-      "native_source_UNKNOWN_controls_unchanged": true,
-      "optional_scaffolding_deferred": true
+      "parallel_original_M15": "New exact seven-case cleanupd05b operation under independentreview; no oldimage/counter/header/library replay",
+      "original_default_native_criteria_unchanged": true,
+      "new_counted_credit": 0,
+      "same_credit_identity_resource_UNKNOWN_holds_preserved": true
     }
   },
   "denominator_changes": [
