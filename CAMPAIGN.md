@@ -1,11 +1,15 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T03:39Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T03:42Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit manual resume `20261110T032750Z-14c19ec7`, same saved Root.**
+**SOURCE/BINDING IMPASSE after manual resume `20261110T032750Z-14c19ec7`.**
+The confirmed helper repair is complete and published. Three consecutive actual
+Root goal turns now find no eligible original input; normal goal control records
+BLOCKED after this final handoff. The launcher is healthy, with no in-flight
+workload or technical restart requirement. The whole-system goal remains unfinished.
 The prior025232 invocation completed terminal repair c58470e3 and handoff bca25e0d,
 then stopped normally BLOCKED/exit20 after three actual goal turns. Its audit and
 old process births are historical. This new invocation supplies a confirmed
@@ -73,9 +77,18 @@ integration. Final-image argv remains unset. No new original source/native input
 is implied by this inert helper adoption, optional recipe, available quota or
 completed owners. Do not manufacture compatibility APIs, CI retests or closed
 source audits to fill slots. The original final ETA remains unknown.
-This invocation's first impasse observation begins after publication in actual Root
-turn `01a1c37f-7523-7fe2-894b-09f0185ba2bb`; goal remains active. Old invocation audits
-and timer wakes do not count toward this new audit.
+Published/fetched repair `474c9ee79012d64ece928756de9539815c26f71b`: all19 changed
+entries match and all direct waits joined. Impasse audit3/3 completed in actual
+Root turns `01a1c37f-7523-7fe2-894b-09f0185ba2bb` after repair/publication,
+`01a1c38b-0049-7170-93b6-2f0dd64e2f7e` after unchanged-input revalidation, and
+`01a1c38b-b371-7f81-9d04-beab2764dd19` after checking current instructions and
+completed owners. The preceding turn made no engineering progress; the same
+original source/provider/SDK/native inputs remain unavailable. No timer wake or
+old invocation was counted. Normal BLOCKED status follows this final checkpoint.
+No automatic hold retry, mechanical resume, optional helper activation or healthy
+controller restart is authorized by a source impasse. A genuine eligible input
+is required for further engineering. Preserve the original objective, criteria,
+target history, allowance and every source/service/native/ownership reservation.
 
 ## Previous025232 checkpoint (historical; current manual resume above is active)
 
