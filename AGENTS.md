@@ -12,19 +12,26 @@ uses reasoning `high` or above under the user's November 5 instruction.
 Engineering is active under the user's explicit same-Root manual resume.
 Prepare independent eligible M14/M15 source and qualification work in parallel;
 retain M14-before-M15 acceptance order and one shared compositor. The latest user
-capacity change authorizes up to six actual Sol/HIGH children through the normal
-same-Root launcher/server transition, with no recursive spawning or state edits.
+capacity change authorizes up to16 direct Sol/HIGH preparation owners, but the
+latest user priority correction defers that optional integration and transition.
+Do not load more owners without a genuinely eligible original functional task
+that needs the reviewed change. No recursive spawning or live state edits.
 The normal same-Root transition is verified in invocation20261106T103153Z-e5bed1f2;
 the actual current ceiling is six direct HIGH owners. Use only ready disjoint work.
 
 After fresh admission, ordinary HOST work may use CPUs0,6,7 with up to three
 aggregate light compile/test jobs and4 GiB TOTAL including all worker/controller
 overhead. Preserve18 GiB prior reservations plus4 GiB host floor: require at least
-26 GiB available before the expanded batch and retain host/scratch disk floors.
-Never multiply4 GiB per worker or borrow native CPUs2–5. Native remains one owner,
+26 GiB available before a current-phase batch and retain host/scratch disk floors.
+The later authorized shared-pool phase reserves CPU1 and2GiB for the OS, with
+every retained/native/controller/worker/container slice inside one measured work
+pool. Its proposed25GiB/7jobs/up16 phase is deferred, not loaded; preserve actual
+ownership/UNKNOWN outcomes before any reallocation. Never multiply RAM per owner.
+Under the current loaded phase do not borrow native CPUs2–5. Native remains one owner,
 CPUs2–5/12 GiB, under its separate actual source/ownership/admission gates. Honor any later user pause or stop. Preserve
-every native/resource owner, UNKNOWN outcome, service/account hold, original
-weekly-only limit and dirty edit.
+every native/resource owner, UNKNOWN outcome, service/account hold, cumulative
+credit budget and dirty edit. The recurring foreground20-minute command is
+cancelled; do not re-enable it. Guardian/mailbox monitoring continues.
 
 Prioritize shared dependencies and work that unlocks parallel lanes. Finish
 shared provider, ABI, ownership and cleanup contracts before isolated leaf work.
@@ -32,11 +39,14 @@ Batch compatible short checks under one reviewed shared HOST admission, respecti
 actual dependencies and aggregate limits; promptly hand released resources to the
 next ready worker.
 
-The latest user instruction authorizes continued useful campaign work beyond
-the soft time target until the objective is complete or the included weekly
-allowance is exhausted. Use fresh service observations, distinguish percentage
-used from remaining, and stop at the actual usage limit or earlier binding hold.
-Checkpoint incrementally; no prepaid/API fallback or artificial quota consumption.
+The latest target is EACH M14/M15 at least75% VERIFIED by08:00 November10
+America/Los_Angeles (16:00Z), without changing criteria or guaranteeing closure.
+Use remaining included allowance first, then already authorized signed-in credits
+under the SAME finite durable credit-run ID and cumulative budget. No purchases,
+top-ups, API-key billing, alternate account/model or accounting reset. Stop on a
+later user stop or actual service/auth/spend/exhausted/unknown-accounting hold.
+Checkpoint incrementally; no artificial quota consumption. Keep original M14
+acceptance before M15; after both acceptances checkpoint/pause the larger goal.
 
 Current source, artifacts and live machine controls remain usable for necessary
 execution checks; they are not extra narrative entrypoints. Historical originals
@@ -49,3 +59,7 @@ real build/test batch; avoid repeated hash inventories, proof wrappers and green
 reruns. Pipeline independent source, test preparation and result analysis; actual
 execution stays within the currently admitted aggregate HOST grant and single native owner.
 Net-conversion LOC accounting stays bounded and behind ready engineering work.
+Optional capacity/pool integration, handoff/API automation and extra harness tests
+are deferred. When original functional packets lack authoritative inputs, state
+the exact original check, missing input and supplying owner; retain guardian
+monitoring instead of filling agents/CPUs or repeating unchanged model turns.

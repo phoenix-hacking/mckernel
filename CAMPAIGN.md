@@ -1,9 +1,110 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T06:05Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T06:47Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Workstation start authorization and compatibility fixes
+## Current decision
+
+**Original closure work has no admitted functional packet; guardian monitoring
+remains active under invocation20261110T060029Z-3fe88dab.** The latest user
+priority correction defers optional preparation-agent/full-machine capacity
+integration, handoff automation/API expansion and further harness tests. Their
+private candidates and passing evidence are retained, with no canonical apply or
+live configuration change. Six existing HIGH owners are sufficient until an
+eligible original command exists. Completed owners are not stalled workers.
+
+M14 remains **51.48%**, M15 **50.97%**: zero new counted closures,156 counted
+checks/73 verified,38/45 open; accepted files4/6 and1/8, integrations0/3 and0/4.
+The latest target is **EACH at least75% by2026-11-10T08:00 America/Los_Angeles
+(16:00Z)**, gains23.52/24.03 percentage points. It supersedes the earlier midnight
+and combined planning targets, whose history is preserved in the canonical JSON.
+The target is at risk; no reliable completion ETA exists without the inputs below.
+Neither urgency nor infrastructure changes supply original acceptance evidence.
+All31 original requirement groups have been read from the existing ledger,
+including all five generic and all five architecture work areas and all seven
+integration gates. File-only completion cannot reach either75% target with the
+retained integration evidence: coherent image/module ownership, reproducibility,
+complete ABI and matching functional/restoration gates remain critical. Preserve
+the73 verified scopes; the83 open counted conditions receive no inferred credit.
+
+The current original-criteria reconciliation consumes the completed independent
+F02/F03/F04/F06/F07 readiness result and the retained F05/F08/integration scope
+decisions. It does not rerun their green cases or reopen excluded bodies.
+
+| Original check / actual consumer | Minimum missing input and supplying owner | Next eligible functional action |
+| --- | --- | --- |
+| M14-F03-DEFAULT, F06-DEFAULT and I02 final matching image | Original HOLD-GENERIC authority supplies an exact admissible universal dispatch/exec provider disposition; genuine remaining source/ABI/provider owners must also be established | No build/link command is bound until the admissible cohort and supported profile exist; Root then reviews and composes that exact default build |
+| M15-F02-complete-ABI-behavior, F05-original-behavior, F06/F07-device-behavior, F08-installed-service | Original executor/library/CLI/supervisor owners supply the complete required delivered behavior sets and exact installed/backend operation bindings; F05 balanced/zero and optional F08 observations remain excluded | Match retained passing slices to those actual sets, then run only newly admitted required functional cases; no invented fixtures or repeated green suites |
+| M14-I01/I03 and M15-I01–I04, including I02-bindings/I03-complete-ABI | Original SDK/source-custody/module/native owners supply exact supported source/config/toolchain/transitive SDK, three delivered module identities, complete public ABI, matched installed cohort and fresh native/current-free/lifetime admission | Review those bindings first, then qualify matching selection/link/deployment/application/restoration evidence; no native or installed-service command is currently admitted |
+
+The critical-path blocker is the absent eligible universal/generic provider cohort;
+its original hold authority owns disposition and Root owns integration. The source
+record does not establish a replacement authority: the human can supply the exact
+original scoped record or identify its actual owner, rather than a broad override.
+The remaining genuine imports are do_kill,do_syscall,eventfd,
+f03_terminate_host_refcount_set_v1,f03_wait_release_process,f03_wait_release_thread,
+syscall_do_kill_thread_bridge,syscall_do_syscall_request_bridge,
+syscall_find_process_bridge,syscall_generic_forwarding_body_result,
+syscall_process_unlock_bridge and terminate_host_body_result. Their exact
+eligibility/ABI/callee/ownership contracts remain UNKNOWN/NO_GO. Generic/exec
+replay/equivalent=false, notification and exact wait/kill/process exclusions,
+perf/mmap, SDK/native/source-custody/current-free holds and installed realgate
+refusal remain binding. Full-image argv stays unset. More agents cannot supply
+these missing source or admission contracts.
+
+Actual activation is now established, superseding the preparation/inert statements
+in the historical sections below. Guardian761845/birth37669071 started at
+06:00:24.730083Z; first successful poll06:00:24.738109Z and first verified status
+publication06:00:27.077990Z. Read-only06:47:15Z observation confirms monitoring
+ready, last poll06:40:52.944819Z and verified publication06:40:53.612202Z. The
+same watcher762046/birth37669552, worker762048/birth37669559 and
+server762050/birth37669567 matched at06:40:54Z. The06:12 observation established
+both real blocking inhibitors (guardian idle/sleep/lid, engine idle/sleep) and
+current-user Linger=yes; these power observations are retained, not freshly retested.
+The requested mailbox test was acknowledged once in
+[PR3 comment6760511190](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6760511190).
+
+The user cancelled only the recurring foreground20-minute command; it stays
+disabled. Guardian10-second health and600-second mailbox/status monitoring remain
+active. Optional transition work is deferred: actual watcher cap is still3 and
+loaded agent ceiling6. The requested unlimited technical-recovery correction is
+pending because the loaded guardian cannot bind original request authority,
+transition-owned stop and later-stop ordering at the same commit boundary; no
+independent outside-engine handoff owner is established. Disk-only settings/CAS
+or a newly minted start timestamp would not safely load the correction. Existing
+safe technical recovery remains in place; no healthy owner is interrupted.
+The pending correction result was posted once in
+[PR3 comment6761054058](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6761054058),
+with an actual06:50:10Z watcher-argv observation confirming cap3.
+
+Latest resource authorization permits a future shared work pool reserving CPU1
+and2GiB for the OS, with all actual retained/native/controller/worker/container
+slices inside the one measured pool, not additive grants. The proposed25GiB/
+7jobs/up16 HIGH phase is **deferred and not loaded**. Current engine remains
+CPUs0,6,7/max3 aggregate light jobs/4GiB TOTAL, fresh26GiB before admission,
+host16/scratch12GiB disk floors; planner12 is not extra RAM. Native2–5/12GiB and
+all UNKNOWN owners/reservations, scratch21/mutex27:4 remain held. No allocation
+can be reclaimed without its actual ownership disposition. Docker socket access
+was denied; no containers or permission changes occurred.
+
+Use remaining included allowance first, then the existing signed-in credits under
+the same finite durable run7c6ef3604bfb4008a917bba8cfb6cfaa and cumulative ledger.
+No purchases, API billing, account/model fallback or allowance reset. Current
+controller snapshot06:45:33Z reports48% used/52% remaining, no stop or credit
+guard error. All startup/inhibitor/credit checks remain reused. A read-only account
+capture joined successfully after the actual guard passed; its extra secondary-
+window assertion failed because that optional window was absent. That capture
+expectation is not an account hold; no account/model/test replay was performed.
+
+Next deliverable is an actual scoped source/provider or supported SDK/backend/
+ownership input for the three prerequisite rows above, followed by its smallest
+matching functional proof. No optional capacity integration, automatic handoff,
+percentage audit or unchanged test round is queued. Preserve all private evidence
+and monitored waiting; stop model work at actual user/service/account limits.
+This is the current invocation's first exhausted original-queue finding, not the
+three historical goal turns from an earlier invocation and not OS acceptance.
+
+## Workstation preparation at05:59Z (historical; actual activation above)
 
 The foreground user explicitly resumed the pause with "ok lets start it up with
 our new and improved scripts", then requested bug fixes and a GitHub push.
@@ -38,7 +139,7 @@ the private evidence. These are control fixes and earn no original milestone
 credit: M14 remains51.48%, M15 remains50.97%. Evidence:
 `docs/verification/workstation-launch-compatibility-20261110/validation.json`.
 
-## Overnight preparation and awake guardian
+## Overnight preparation and awake guardian (historical preparation)
 
 The current user request is to prepare the unattended run, push it to GitHub and
 keep the computer awake. The source preparation is complete; actual workstation
@@ -127,7 +228,7 @@ linger readback, read-only preparation, current first-poll/publication readiness
 existing explicit options, and retained failure/recovery/mailbox behavior.
 Evidence: `docs/verification/overnight-readiness-20261110/validation.json`.
 
-## Generated M14/M15 status text
+## Generated M14/M15 status text (historical preparation)
 
 The user requested a readable status update covering every original M14/M15
 subgoal and the agents. The generated view is now published at:
@@ -189,7 +290,7 @@ new e1cd tracker run `42760141013` was still in progress when observed. Full CI,
 actual email delivery and workstation deployment are not verified successes.
 Evidence: `docs/verification/guardian-status-text-20261110/validation.json`.
 
-## Current decision
+## Previous044806 checkpoint (historical; current decision above supersedes)
 
 **SOURCE/BINDING IMPASSE after manual resume `20261110T044806Z-3ecbebf5`.**
 Both confirmed new control repairs are complete and published. Three consecutive
@@ -937,7 +1038,11 @@ keeps eligiblelocalwork moving with publicationpending; actualdenial isbinding.
 
 ## M14/M15 closure progress — explicit checklist
 
-**User target, frozen2026-11-09T16:45Z:** a50%relative increase of the existing
+**Current user target:** EACH original milestone at least75% verified by
+2026-11-10T08:00-08:00 (16:00Z). Original scores and criteria remain unchanged;
+the prior midnight target and the following combined target are frozen history.
+
+**Previous combined target, frozen2026-11-09T16:45Z:** a50%relative increase of the existing
 equal-milestone combined checklist. BaselineM14=51.48%,M15=50.97%,combined51.225%;
 target76.8375%(+25.6125percentagepoints). Currentcombined51.225%,delta0;0counted
 checks closed since thisbaseline. This changes no weights, originalcriteria,
