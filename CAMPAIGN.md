@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T19:10:37.446731+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T19:51:43+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -32,20 +32,34 @@ peak513,519,616B/failcnt0/OOM0 under2GiB. No partial object was injected.
 The green image/map/all11objects/configs/link/cache/dependencies are preserved
 privately as stable-baseline20a7-1 before the next changed source cohort.
 
-The physical source/configure/link blocker is resolved for this cohort. P04
-freezes full source/provider/ownership and original E1/E2 decisions; P03 reviews
-saved evidence. Retained C implementations, complete Rust default ownership,
+The physical source/configure/link blocker is resolved for this cohort. First-image
+qualification63a89092 and independent60624209 verify the saved source/provider/
+ownership records and exact still-open original conditions. Retained C implementations, complete Rust default ownership,
 matching behavior/deployment/native and original acceptance remain separate.
 No historical rejection or genuine control flag was cleared to obtain this build.
 
-Root has privately composed the independently reviewed real Rust outerdo_syscall
-and interrupt_syscall changes with zero merge conflicts; both new modules are
-byte-identical to reviewed sources and preserve the tested clone initializer.
-Outer source/unsafe GO8ea828 plus both branch metadata checksPASS18:11;
-interrupt source GO164dca and coherent real provider codegen/link are retained.
-The next source cohort coalesces these guards with reviewed eligible host-cleanup/
-shared-context selectors, then uses the valid cache for normal incremental image
-build and actual Rust-entry/C-exclusion/provider/ABI ownership qualification.
+**The next incremental image also PASS19:39:34.** Actual source594acfc0 selects
+real Rust do_syscall, interrupt_syscall, terminate_host and the shared signal-context
+bridge, excluding their matching C definitions. Normal incremental CMake/image
+build plus passive ELF/map capture completed in25.09s; image44ed9519/10,321,064B,
+map7e262911/980,648B and wholeRustf4004800/18,512,984B. Qualification93696737
+joins all four unique Rust owners, actual427 strong imports/416 names, zeroUND
+and new Rust arch_start/entry0xfffffffffe83c5d0 under the same origin/twoLOAD+NOTE
+contract. Eight object bytes are unchanged; only genericC/archC/wholeRust changed.
+The actual C-function ledger falls47→43 (generic42→39, architecture5→4), with
+exactly those four removed and none added. Clone/DMA/zero-initialization and
+reviewed accounting/monitor/borrow/IRQ/GS-TSS/XSAVE contracts are preserved.
+All20 client waits/streams and both containers closed/removed. Sampled highwater
+517,898,240B is not claimed as exact terminal peak. Independent P03 review9cd4c350 confirms
+this saved result; no build or metadata replay was required. Original whole
+E1/E2/default/native acceptance remains open. The new green594 image/map/all11
+objects/config/cache are preserved separately before the next source cohort.
+
+Root incorporated the owner's one-file baseline guide91fcfaa4 as documentation
+commit96f4cbba, byte-identical at docs/development/M14-STABLE-BASELINE.md. This
+dated reference leaves CAMPAIGN as the sole active plan; source/cache and all33
+unrelated dirty paths are preserved. Source594 and this guide are ready for the
+normal coherent checkpoint with their own completed validation/review boundaries.
 
 The genuine kill/provider continuation PASS18:38:45: joined14323447 has186 global
 owners/158functions+28data and16 typed partial imports. All143 old owner/relocation
@@ -174,9 +188,9 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M14-I02 actual first-image conditions | P04 freezes full a541/20a7/config/source/ABI/provider/owner qualification and precise E1/E2 decisions; P03 independently reviews saved outputs; Root credits only wholly satisfied technical leaves, no rebuild |
-| M14-F03/F06 changed Rust selection | Root composes reviewed outerdo_syscall/interrupt plus eligible reviewed host-cleanup/context selectors; P04/P03 bind/review one incremental named-image packet. Require actual new Rust owners, removed old C definitions, ABI/entry/LOAD/provider closure and cleanup |
-| M15-F02 original supported executor profile | Eight actual phasesPASS18:28/598Rust+3ASM/124imports/typedNUMA/privateinstall/66positivefamilies, independenta6f130 whole-profileGO. Root publishes verified technical closure; complete ABI/behavior/deployed/native remain open |
+| M14-F03/F06/I02 actual four-owner image | Actual44ed/594 build and saved ownership qualification936967 PASS; Independent9cd4c350 confirms the whole stated artifact scope; Root publishes this coherent source/result checkpoint; no rebuild or original whole-condition credit inferred |
+| M14-03-05/default and remaining M14-F06 architecture owners | Credential pair selector83d922/sourceGO3d2b is ready. P04Tests freezes the concrete shared signal-diagnostic atomic fix4cfb55 and whole-F06-ON contract; PublicABI independently reviews, P04 prepares the next normal incremental image packet from the new green baseline |
+| M15-P04/I03 actual crash ABI and cleanup | SDK joins18 consumed real source/export/type contracts with no ABI mismatch; SourceAcq reviews only the changed-real-header compile packet. Actual FAULT_ON_ERROR longjmp bypasses Rust allocation drops: SDK prepares one authenticated tools.c::__error source input for a faithful cleanup repair; no flags-only behavioral substitution or extension/native execution |
 
 
 **Current original-closure blocker:** complete selected Rust implementation/
@@ -189,7 +203,7 @@ native UNKNOWN owners/leases/reservations/current-free. Unknown old payload is
 not an external current-source inventory requirement. No boot/module load/MMIO/
 MSR/valid native dump or dummy passing gate has run.
 
-Fresh controller guard17:35Z:68%included used/32%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
+Fresh controller guard19:51Z:73%included used/27%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
 allowance reset. Root/six actual task routes gpt-6.1-sol/MAX/depth1; one canonical
 compositor/heavy/image owner. Actual HOST CPUs0/6/7,max3 jobs,4GiB TOTAL including
@@ -200,18 +214,20 @@ inferred from output/process absence. Correction uses disjoint output and normal
 positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
 pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
 
-Prior verified source checkpoint4adf52e4248300e220dc4e6a55e50484b658a53b is
-pushed/fetched; all121 owned entries matched16:43:14Z. The changed pair55.97 was posted once in
-PR3 comment6770338341; no duplicate unchanged progress comment.
+Verified source/results checkpointe34b958d is pushed/fetched; all154 owned entries
+matched19:14:20Z. Local source594acfc0 now has actual incremental image proof;
+docs-only96f4cbba incorporates the requested baseline guide. The current changed
+pair51.48/57.01 was posted once in PR3 comment6776807210; no unchanged duplicate.
 
-Next15-minute deliverable: publish already verified actual image/provider and
-executor-profile results now, without waiting for unrelated condition mapping.
-Finish the first-image E1/E2 saved-result review, then integrate the coherent
-reviewed Rust source/selector cohort and run its affected incremental image build.
-Retain the green baseline, normal CMake cache and all unchanged passing tests;
-qualify actual ownership/ABI changes, never source counts or partial objects as
-original acceptance. Publication delay is being corrected by separating ready
-validated checkpoint evidence from still-open source/acceptance tasks.
+Next15-minute deliverable: publish the completed four-owner Rust source/image
+and requested guide with independent saved-result GO9cd4c350, then compose the
+next credential/signal cohort and execute only its affected focused checks and
+normal incremental image build after actual review/admission. Preserve both
+recoverable green baselines and valid cache. P04/PublicABI/P04Tests/SourceAcq own
+the next source/operation review; Root alone integrates and executes. SDK's
+disjoint actual crash cleanup input can advance within the remaining shared
+grant. Original whole-condition, behavior and native requirements stay open;
+completed source/artifact evidence is published without waiting for unrelated work.
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)

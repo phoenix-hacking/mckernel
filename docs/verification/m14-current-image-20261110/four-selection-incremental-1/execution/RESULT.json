@@ -1,0 +1,979 @@
+{
+  "all_client_waits_streams_joined": true,
+  "clients": [
+    {
+      "argv": [
+        "/usr/bin/git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "birth": "42581572",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "source-commit",
+      "pid": 1068783,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "-C",
+        "/home/holden/mckernel/ihk",
+        "rev-parse",
+        "HEAD"
+      ],
+      "birth": "42581573",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "ihk-commit",
+      "pid": 1068784,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--no-trunc",
+        "--format",
+        "{{.ID}}"
+      ],
+      "birth": "42581573",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "running-preflight",
+      "pid": 1068785,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "birth": "42581585",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "names-preflight",
+      "pid": 1068794,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-four-selection-image-build-20261110-1",
+        "--label",
+        "mckernel.preparation-owner=m14-four-selection-image-build-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=6",
+        "--memory=2g",
+        "--memory-swap=2g",
+        "--pids-limit=256",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=4294967296:4294967296",
+        "--ulimit",
+        "cpu=3600:3600",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+        "--workdir",
+        "/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel,dst=/src,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2,dst=/source,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2,dst=/output,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake,dst=/usr/bin/cmake,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake,dst=/usr/share/cmake,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0,dst=/usr/lib64/libuv.so.1,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h,dst=/usr/include/bfd.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h,dst=/usr/include/ansidecl.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h,dst=/usr/include/symcat.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h,dst=/usr/include/diagnostics.h,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so,dst=/usr/lib64/libbfd.so,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a,dst=/usr/lib64/libbfd.a,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a,dst=/usr/lib64/libsframe.a,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a,dst=/usr/lib64/libiberty.a,readonly",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "GNUMAKEFLAGS=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "MAKEFILES=",
+        "MAKEFLAGS=",
+        "MAKEOVERRIDES=",
+        "MFLAGS=",
+        "CMAKE_BUILD_PARALLEL_LEVEL=1",
+        "SOURCE_DATE_EPOCH=1786434034",
+        "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER=mckernel",
+        "KBUILD_BUILD_VERSION=1",
+        "TMPDIR=/tmp",
+        "TMP=/tmp",
+        "TEMP=/tmp",
+        "/usr/bin/cmake",
+        "--build",
+        "/work/output/build",
+        "--target",
+        "mckernel.img",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "birth": "42581596",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-create",
+      "pid": 1068803,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42581608",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-profile",
+      "pid": 1068812,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "--attach",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42581620",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-payload",
+      "pid": 1068821,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42583827",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-container-wait",
+      "pid": 1069371,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42583840",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-terminal",
+      "pid": 1069380,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42583852",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-retirement-inspect",
+      "pid": 1069389,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42583864",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-final-terminal",
+      "pid": 1069398,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6"
+      ],
+      "birth": "42583876",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "build-owned-remove",
+      "pid": 1069408,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-four-selection-image-elf-20261110-1",
+        "--label",
+        "mckernel.preparation-owner=m14-four-selection-image-elf-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=6",
+        "--memory=512m",
+        "--memory-swap=512m",
+        "--pids-limit=64",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=1073741824:1073741824",
+        "--ulimit",
+        "cpu=120:120",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+        "--workdir",
+        "/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/read_image_metadata.sh,dst=/producer/read_image_metadata.sh,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata,dst=/evidence",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/producer/read_image_metadata.sh"
+      ],
+      "birth": "42583889",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-create",
+      "pid": 1069418,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42583901",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-profile",
+      "pid": 1069427,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "--attach",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42583913",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-payload",
+      "pid": 1069436,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42584014",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-container-wait",
+      "pid": 1069536,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42584026",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-terminal",
+      "pid": 1069545,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42584038",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-retirement-inspect",
+      "pid": 1069561,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42584050",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-final-terminal",
+      "pid": 1069570,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250"
+      ],
+      "birth": "42584062",
+      "direct_wait_joined": true,
+      "exit": 0,
+      "label": "metadata-owned-remove",
+      "pid": 1069579,
+      "streams_closed": true
+    }
+  ],
+  "finished_at": "2026-11-10T19:39:34.724915+00:00",
+  "metadata_outputs": [
+    {
+      "bytes": 2086,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/artifact-identities.sha256",
+      "sha256": "20a1c286e16c372ab8d9e6113b5effd3ecf474405cefc77cf5a221c839fa1465"
+    },
+    {
+      "bytes": 1186,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/artifact-modes.stdout",
+      "sha256": "31b1b16176e30323a536786a786694f0ba8c0680446fc8dc3609b42224a3639d"
+    },
+    {
+      "bytes": 37415049,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/constituent-symbols-relocations.stdout",
+      "sha256": "ffd1922bd0c1e835dd418b20b17954799abf6e4f55e9d09b434934ed1b763f7c"
+    },
+    {
+      "bytes": 44944,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/image-elf.stdout",
+      "sha256": "515277422d5eb7c176e20db7ab937587570569c23c28e18ce86b772008c133a8"
+    },
+    {
+      "bytes": 980648,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/image-map.stdout",
+      "sha256": "7e262911c887f737afe6a37762eeef048fae5a107752dc6ae30a25f037cd4cf9"
+    },
+    {
+      "bytes": 238362,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/image-nm.stdout",
+      "sha256": "dafa2c78518e985d19475542ac194e1dad5ef4685a19675760c5985c8b4ce4c9"
+    },
+    {
+      "bytes": 436735,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/image-symbols-relocations.stdout",
+      "sha256": "8f8bfe49ca3e2b87dc22b6cb7e757b1f462a1dafbbdb2dd109201ac674080e95"
+    },
+    {
+      "bytes": 30001,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-CMakeCache.txt",
+      "sha256": "cb70ba54c37f60ab3a1884e8a561a222e906b379640f346ab55e59dcddaa8d0e"
+    },
+    {
+      "bytes": 45294,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-build.make",
+      "sha256": "b04f517d4dc163fd50e374fbf6ea949a737ca88783d932d938d87e1ee3b7b20a"
+    },
+    {
+      "bytes": 72703,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-compile_commands.json",
+      "sha256": "2dcf26d9be21418c97db8fdc5e6cfbe7f7662a50cc6bfa56291265fbadffcf55"
+    },
+    {
+      "bytes": 6610,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-flags.make",
+      "sha256": "e5a0845e389713c502fabebd4c7d2d9bd0151da274147ca56a7a25b7e3a7e947"
+    },
+    {
+      "bytes": 1290,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-link.d",
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+    },
+    {
+      "bytes": 759,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-link.txt",
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    {
+      "bytes": 10130,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-mckernel_rust.d",
+      "sha256": "a8d7b360674ab78a13fe336f4756fe2e45da3f086b2c8f795a29ef9baf710855"
+    },
+    {
+      "bytes": 10755,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/metadata/regenerated-mckernel_rust.raw.d",
+      "sha256": "18ee3cef24816978bef15f0f0b312761819a927b25186b12ff00320231324e4c"
+    }
+  ],
+  "old_CPU0_UNKNOWN_released": false,
+  "original_acceptance": false,
+  "owner": "Root",
+  "phases": [
+    {
+      "attach_exit": 0,
+      "container_exit": 0,
+      "final_state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T19:39:31.990615728Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T19:39:10.325369387Z",
+        "Status": "exited"
+      },
+      "id": "61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6",
+      "memory_samples": [
+        {
+          "at": "2026-11-10T19:39:10.643120+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "17068032",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:11.144423+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "36306944",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:11.645750+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "53862400",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:12.147209+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "56123392",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:12.648512+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "56123392",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:13.149865+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "153247744",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:13.651226+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "244748288",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:14.152666+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "244748288",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:14.654209+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "245088256",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:15.155592+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "297029632",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:15.656962+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "350564352",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:16.158358+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "372633600",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:16.659761+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "413966336",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:17.161165+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:17.662576+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:18.164138+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:18.665602+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:19.167102+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:19.668591+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:20.170130+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:20.671169+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:21.172640+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:21.674093+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:22.175186+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:22.676722+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:23.178248+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:23.679908+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:24.181483+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:24.683049+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:25.184677+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:25.686209+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:26.187859+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:26.689450+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:27.191062+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:27.692577+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:28.194969+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:28.696576+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:29.198208+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:29.699975+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:30.201780+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:30.703202+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:31.204842+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        },
+        {
+          "at": "2026-11-10T19:39:31.706598+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.max_usage_in_bytes": "517898240",
+            "/sys/fs/cgroup/memory/docker/61f7d55e6142bc4f6bfdbfffe7ced5ff123d9118507c43a98031dcc9748c3fe6/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        }
+      ],
+      "owned_container_removed": true,
+      "phase": "build",
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T19:39:31.990615728Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T19:39:10.325369387Z",
+        "Status": "exited"
+      }
+    },
+    {
+      "attach_exit": 0,
+      "container_exit": 0,
+      "final_state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T19:39:33.914524706Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T19:39:33.242823391Z",
+        "Status": "exited"
+      },
+      "id": "9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250",
+      "memory_samples": [
+        {
+          "at": "2026-11-10T19:39:33.570170+00:00",
+          "values": {
+            "/sys/fs/cgroup/memory/docker/9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250/memory.failcnt": "0",
+            "/sys/fs/cgroup/memory/docker/9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250/memory.max_usage_in_bytes": "6680576",
+            "/sys/fs/cgroup/memory/docker/9a159ab7ac947efd42e5be82928cf54df48dff97de5ecab9040dbfe0a09f0250/memory.oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0"
+          }
+        }
+      ],
+      "owned_container_removed": true,
+      "phase": "metadata",
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T19:39:33.914524706Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T19:39:33.242823391Z",
+        "Status": "exited"
+      }
+    }
+  ],
+  "remaining_owned_child_pids": [],
+  "source_commit": "594acfc067012d87ade1aff7ac0abdc5944ce257",
+  "started_at": "2026-11-10T19:39:09.632497+00:00",
+  "status": "PASS_FOUR_SELECTION_CURRENT594AC_INCREMENTAL_IMAGE_BUILD_AND_PASSIVE_METADATA_PENDING_OWNER_QUALIFICATION"
+}

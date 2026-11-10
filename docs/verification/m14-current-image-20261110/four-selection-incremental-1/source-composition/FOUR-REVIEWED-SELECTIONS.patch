@@ -1,0 +1,599 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -94,6 +94,10 @@
+      NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" OR ENABLE_UBSAN))
+ 	message(FATAL_ERROR "M14 syscall adapter candidate requires the x86_64 Rust kernel, linux-6.12 IRQ ABI and UBSAN disabled")
+ endif()
++# The outer entry has a narrower scope than the existing inner OFFLOAD macro.
++set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
++set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
++set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+ set(RUST_KERNEL_ENABLED OFF)
+ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
+ 	# Makefile depfiles require 3.20; the supported native SDK uses 3.28.3.
+@@ -289,6 +293,21 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
+ 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
+ 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++                # Genuine project interrupt_syscall paired only in this profile.
++                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_interrupt_syscall_candidate")
++                list(APPEND RUST_KERNEL_SRCS
++                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_interrupt_syscall.rs")
++                # Select only the genuine host-cleanup entry, without broad adapter opt-in.
++                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_host_cleanup_candidate")
++                list(APPEND RUST_KERNEL_SRCS
++                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_host_cleanup.rs")
++				# Shared sigreturn context has an independent real implementation.
++				# Select it without activating whole do_signal/XRSTOR/debug ownership.
++				if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
++					list(APPEND RUST_KERNEL_CFG "--cfg" "f06_signal_context_candidate")
++					list(APPEND RUST_KERNEL_SRCS
++					    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_signal_tail.rs")
++				endif()
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_prlimit_body_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_exit_supported_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_begin_selected_candidate")
+@@ -512,6 +531,20 @@
+ 		list(APPEND RUST_KERNEL_SRCS "${MCKERNEL_CPU_MARCH_HEADER}" "${MCKERNEL_CPU_C_FILE}")
+ 		set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 			"${MCKERNEL_CPU_MARCH_HEADER}")
++		# Real outer entry and its exact C guard are selected as one supported cut.
++		if (ENABLE_RUST_KERNEL AND ARCH STREQUAL "x86_64" AND
++		    MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND
++		    NOT ENABLE_UBSAN AND PROFILE_ENABLE)
++			if (NOT MCKERNEL_DO_SYSCALL_C_FILE MATCHES "^/[A-Za-z0-9_./+-]+$")
++				message(FATAL_ERROR "Unsupported syscall.c path for exact C/Rust debug identity")
++			endif()
++			set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED ON)
++			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_outer_candidate")
++			list(APPEND RUST_KERNEL_SRCS
++			    "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_offload_entry.rs"
++			    "${MCKERNEL_DO_SYSCALL_C_FILE}"
++			    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
++		endif()
+ 		add_custom_command(
+ 		OUTPUT "${RUST_KERNEL_OBJ}"
+ 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+@@ -520,8 +553,11 @@
+ 			MCKERNEL_RUST_BUILDID=${BUILDID}
+ 			MCKERNEL_X86_ENABLE_SSE=${MCKERNEL_X86_ENABLE_SSE}
+ 			MCKERNEL_CPU_C_FILE=${MCKERNEL_CPU_C_FILE}
++			"MCKERNEL_DO_SYSCALL_C_FILE=${MCKERNEL_DO_SYSCALL_C_FILE}"
++			"MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=${MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS}"
+             "MCKERNEL_PROCESS_C_FILE=${MCKERNEL_PROCESS_C_FILE}"
+             "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
++            "MCKERNEL_INTERRUPT_SYSCALL_C_FILE=${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
+ 			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
+ 			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
+ 			"MCKERNEL_F06_SIGNAL_METADATA_RS=${MCKERNEL_F06_SIGNAL_METADATA_RS}"
+@@ -706,6 +742,13 @@
+ 				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME;MCKERNEL_RUST_F06_PTRACE_REGSET_LOG;MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO")
+ 		endif()
+ 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++            set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++                COMPILE_DEFINITIONS MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
++                    MCKERNEL_RUST_F03_HOST_CLEANUP)
++			if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
++				set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++				    COMPILE_DEFINITIONS MCKERNEL_RUST_F06_SIGNAL_CONTEXT)
++			endif()
+ 			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE;MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE;MCKERNEL_RUST_F03_TERMINATE_REFCOUNT;MCKERNEL_RUST_F03_TERMINATE_CMPXCHG;MCKERNEL_RUST_F03_PTRACE_IO_FIND;MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK;MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM;MCKERNEL_RUST_F03_SYNC_CHILD_EVENT;MCKERNEL_RUST_F03_WAKEUP_FIND;MCKERNEL_RUST_F03_WAKEUP_UNLOCK;MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE")
+ 			if (ENABLE_PERF)
+@@ -913,6 +956,14 @@
+         COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS)
+ endif()
+ 
++# Apply after the existing source properties, which otherwise replace flags.
++if (MCKERNEL_DO_SYSCALL_OUTER_SELECTED)
++    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_DO_SYSCALL_OUTER
++        "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=${MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS}"
++        "MCKERNEL_DO_SYSCALL_C_FILE=\"${MCKERNEL_DO_SYSCALL_C_FILE}\"")
++endif()
++
+ add_executable(mckernel.img ${MCKERNEL_SRCS})
+ if (RUST_KERNEL_ENABLED)
+ 	add_dependencies(mckernel.img mckernel_rust_obj)
+--- /dev/null
++++ b/kernel/rust/f03_interrupt_syscall.rs
+@@ -0,0 +1,60 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++use core::mem::MaybeUninit;
++use core::ptr::{addr_of, read_volatile};
++use crate::abi::{CInt, CLong, CULong, Thread, X86UserContext};
++
++#[cfg(not(all(target_arch = "x86_64", native_linux_irq_work_v6_12)))]
++compile_error!("interrupt_syscall requires the selected x86_64 Linux6.12 profile");
++
++const SYS_KILL: CInt = 62;
++
++// Preserve the original selected syscall.c debug identity. Existing conditional
++// #line mappings give logical5666 for its dkprintf in OFFLOAD/POLICY/DISPATCH.
++// The paired C guard restores both original mappings for C and later functions.
++#[used]
++#[link_section = "__verbose"]
++static mut INTERRUPT_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: concat!(env!("MCKERNEL_INTERRUPT_SYSCALL_C_FILE"), "\0").as_ptr().cast(),
++    func: b"interrupt_syscall\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    line_flags: 5666, // Original DDEBUG_DEFAULT is DDEBUG_NONE (upper8 bits0).
++};
++
++unsafe extern "C" {
++    fn syscall_generic_forwarding(number: CInt, context: *mut X86UserContext) -> CLong;
++    fn kprintf(format: *const i8, ...) -> CInt;
++}
++
++/// Forward the original Linux-UTI signal through the genuine provider.
++/// # Safety
++/// Thread/Process and the actual CPU/offload context remain live through the
++/// synchronous forwarding call. The local context remains valid until return.
++/// This entry adds no reference, IRQ/preemption change or retained pointer.
++#[no_mangle]
++pub unsafe extern "C" fn interrupt_syscall(thread: *mut Thread, sig: CInt) {
++    let mut context = MaybeUninit::<X86UserContext>::zeroed();
++    if unsafe { read_volatile(addr_of!(INTERRUPT_DEBUG.line_flags)) } >> 24 != 0 {
++        unsafe {
++            kprintf(
++                b"interrupt_syscall pid=%d tid=%d sig=%d\n\0".as_ptr().cast(),
++                (*(*thread).proc).pid, (*thread).tid, sig,
++            );
++        }
++    }
++    // Re-read PID/TID after optional formatting, in the original C order.
++    unsafe {
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(
++            context.as_mut_ptr(), (*(*thread).proc).pid as CULong,
++        );
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(
++            context.as_mut_ptr(), (*thread).tid as CULong,
++        );
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(
++            context.as_mut_ptr(), sig as CULong,
++        );
++    }
++    let error = unsafe { syscall_generic_forwarding(SYS_KILL, context.as_mut_ptr()) };
++    if error != 0 {
++        unsafe { kprintf(b"interrupt_syscall failed. %ld\n\0".as_ptr().cast(), error); }
++    }
++}
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -60,16 +60,20 @@
+ mod spinlock_helpers;
+ mod string;
+ mod syscall_policy;
++#[cfg(f03_do_syscall_outer_candidate)]
++mod syscall_offload_entry;
+ #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
+ mod f06_rt_sigreturn_xrstor;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+ mod f03_forward_adapters;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+ mod f03_ptrace_adapters;
+-#[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
++#[cfg(all(any(f03_forward_adapters_candidate, f03_host_cleanup_candidate), target_arch = "x86_64"))]
+ mod f03_host_cleanup;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+ mod f03_credential_refresh;
++#[cfg(all(f03_interrupt_syscall_candidate, target_arch = "x86_64"))]
++mod f03_interrupt_syscall;
+ #[cfg(f06_signal_ptrace_diagnostics_candidate)]
+ mod f06_signal_ptrace_diagnostics;
+ #[cfg(f06_signal_trap_info_candidate)]
+--- /dev/null
++++ b/kernel/rust/syscall_offload_entry.rs
+@@ -0,0 +1,296 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! The real delegated-syscall outer entry. The existing Rust transport and reply
++//! state machine retain their implementation and all nested/fork-control work.
++
++#[cfg(not(all(target_arch = "x86_64", native_linux_irq_work_v6_12, enable_profile)))]
++compile_error!("do_syscall outer requires its paired x86_64/linux-6.12/PROFILE profile");
++
++use core::mem::{align_of, offset_of, size_of, MaybeUninit};
++use core::ptr::{addr_of, addr_of_mut, read, read_volatile, write, write_volatile};
++use core::sync::atomic::AtomicU64;
++
++use crate::abi::{CInt, CLong, CULong, Process, SyscallRequest, SyscallResponse, Thread};
++use crate::debug::Ddebug;
++use crate::syscall_policy;
++
++const SYS_EXIT_GROUP: CInt = 231;
++const SYS_SCHED_SETAFFINITY: CInt = 203;
++const REQUEST_THREAD_SPINNING: CULong = 0;
++const MONITOR_KERNEL_OFFLOAD: CInt = 5;
++#[cfg(enable_profile)]
++const PROFILE_SYSCALL_MAX: CInt = 2000;
++#[cfg(enable_tofu)]
++const SYS_IOCTL: CInt = 16;
++#[cfg(enable_tofu)]
++const SYS_OPENAT: CInt = 257;
++#[cfg(enable_tofu)]
++const MAX_FD_PDE: CInt = 1024;
++
++// The C source asserts its actual __FILE__ and DDEBUG_DEFAULT against these
++// same build inputs. Original logical C line identities are retained by the
++// paired C guard's #line directives; no Rust file!()/line!() substitution.
++const SOURCE_FILE: &[u8] = concat!(env!("MCKERNEL_DO_SYSCALL_C_FILE"), "\0").as_bytes();
++const INITIAL_DEBUG_FLAGS: u32 = match env!("MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS").as_bytes() {
++    b"0" => 0,
++    b"1" => 1,
++    _ => panic!("do_syscall DDEBUG flags must match the C definition"),
++};
++const FUNCTION_NAME: &[u8] = b"do_syscall\0";
++const _: () = assert!(SOURCE_FILE.len() > 1);
++
++const fn debug_record(line: u32) -> Ddebug {
++    Ddebug {
++        file: SOURCE_FILE.as_ptr().cast(),
++        func: FUNCTION_NAME.as_ptr().cast(),
++        fmt: core::ptr::null(),
++        line_flags: (line & 0x00ff_ffff) | (INITIAL_DEBUG_FLAGS << 24),
++    }
++}
++
++#[used]
++#[link_section = "__verbose"]
++static mut SEND_DEBUG: Ddebug = debug_record(4149);
++#[used]
++#[link_section = "__verbose"]
++static mut REQUESTER_DEBUG: Ddebug = debug_record(4183);
++#[used]
++#[link_section = "__verbose"]
++static mut WAIT_DEBUG: Ddebug = debug_record(4191);
++#[used]
++#[link_section = "__verbose"]
++static mut REPLY_DEBUG: Ddebug = debug_record(4363);
++#[cfg(enable_tofu)]
++#[used]
++#[link_section = "__verbose"]
++static mut TOFU_DEBUG: Ddebug = debug_record(4392);
++#[used]
++#[link_section = "__verbose"]
++static mut PROXY_DEBUG: Ddebug = debug_record(4410);
++#[cfg(enable_profile)]
++#[used]
++#[link_section = "__verbose"]
++static mut PROFILE_DEBUG: Ddebug = debug_record(4422);
++
++// Same sequential initial PID=-1/count=0, reset-on-PID-change and budget64 as
++// the C counters. The existing real helper serializes only this diagnostic
++// budget; no request, reply, thread or process state is published by it.
++static RETURN_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
++
++#[inline(always)]
++unsafe fn debug_enabled(record: *const Ddebug) -> bool {
++    // The genuine dkprintf macro tests any nonzero flags, not only bit zero.
++    unsafe { read_volatile(addr_of!((*record).line_flags)) >> 24 != 0 }
++}
++
++// These are the genuinely new field accesses of the outer port. The paired C
++// selection asserts the same offsets under the actual generated configuration.
++const _: () = {
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
++    assert!(size_of::<SyscallResponse>() == 48 && align_of::<SyscallResponse>() == 8);
++    assert!(offset_of!(Thread, in_syscall_offload) == 4792);
++    assert!(offset_of!(Thread, profile) == 4796);
++    assert!(offset_of!(Process, nohost) == 500);
++};
++
++/// Own the complete supported delegated-syscall outer orchestration.
++///
++/// # Safety
++/// The original C entry's context is required: request is live, writable and
++/// naturally aligned; number/consumed arguments are initialized; cpu selects a
++/// live IKC channel; the current Thread, Process, monitor and scheduler graph
++/// remain live throughout synchronous send/wait/nested work. The Linux proxy
++/// must obey the actual response publication protocol. No exclusive Rust
++/// reference spans transport, a callback or a context switch. This entry adds
++/// no process reference, native admission, timeout, cancellation or free.
++#[no_mangle]
++pub unsafe extern "C" fn do_syscall(request: *mut SyscallRequest, cpu: CInt) -> CLong {
++    // Define unused response bytes too: existing selected control code may
++    // create a typed view after completion. Zero is IN_PROGRESS, never a fake
++    // completion. The real producer must still publish the actual reply.
++    let mut response_slot = MaybeUninit::<SyscallResponse>::zeroed();
++    let response = response_slot.as_mut_ptr();
++    let thread = unsafe { (*crate::cls::get_this_cpu_local_var()).current };
++    let monitor = unsafe { (*crate::cls::get_this_cpu_local_var()).monitor };
++    let pid = unsafe {
++        if thread.is_null() || (*thread).proc.is_null() {
++            -1
++        } else {
++            (*(*thread).proc).pid
++        }
++    };
++    #[cfg(enable_profile)]
++    let started = unsafe {
++        if read(addr_of!((*thread).profile)) != 0 {
++            crate::x86_cpu_helpers::rdtsc()
++        } else {
++            0
++        }
++    };
++
++    unsafe {
++        if debug_enabled(addr_of!(SEND_DEBUG)) {
++            crate::debug::kprintf(
++                b"SC(%d)[%3d] sending syscall\n\0".as_ptr().cast(),
++                crate::x86_local::ihk_mc_get_processor_id(),
++                read(addr_of!((*request).number)) as CInt,
++            );
++        }
++    }
++    let saved_monitor_status = unsafe { read_volatile(addr_of!((*monitor).status)) };
++    unsafe { write_volatile(addr_of_mut!((*monitor).status), MONITOR_KERNEL_OFFLOAD) };
++    // Same compiler memory clobber as C barrier(); deliberately no nomem or
++    // readonly option and no newly introduced hardware fence.
++    unsafe { core::arch::asm!("", options(nostack, preserves_flags)) };
++
++    unsafe {
++        if syscall_policy::syscall_offload_counted_result(
++            read(addr_of!((*request).number)) as CInt, SYS_EXIT_GROUP,
++        ) != 0 {
++            let count = addr_of_mut!((*thread).in_syscall_offload);
++            write(count, read(count).wrapping_add(1));
++        }
++    }
++
++    let use_requester_tid = unsafe {
++        syscall_policy::syscall_offload_prepare_result(
++            request, response,
++            (*(*crate::cls::get_this_cpu_local_var()).current).tid,
++            read(addr_of!((*request).number)) as CInt,
++            read(addr_of!((*request).args[0])),
++            SYS_SCHED_SETAFFINITY, REQUEST_THREAD_SPINNING,
++        )
++    };
++    if use_requester_tid < 0 {
++        // Keep the original early-return point; this is not a newly invented
++        // recovery or cleanup policy for invalid original caller arguments.
++        return use_requester_tid as CLong;
++    }
++    unsafe {
++        if use_requester_tid != 0 && debug_enabled(addr_of!(REQUESTER_DEBUG)) {
++            crate::debug::kprintf(
++                b"%s: uti, ttid=%d\n\0".as_ptr().cast(),
++                FUNCTION_NAME.as_ptr().cast::<i8>(), read(addr_of!((*request).ttid)),
++            );
++        }
++        syscall_policy::send_syscall(request, cpu, response);
++        if syscall_policy::syscall_preempt_disable_needed_result(read(addr_of!((*request).rtid))) != 0 {
++            crate::cls::preempt_disable();
++        }
++        if debug_enabled(addr_of!(WAIT_DEBUG)) {
++            crate::debug::kprintf(
++                b"%s: syscall num: %d waiting for Linux.. \n\0".as_ptr().cast(),
++                FUNCTION_NAME.as_ptr().cast::<i8>(), read(addr_of!((*request).number)) as CInt,
++            );
++        }
++        // Actual Rust state machine: IRQ/waitq/runqueue scheduling, nested
++        // services and genuine outer fork-control observation stay unchanged.
++        syscall_policy::syscall_offload_wait_reply(request, response, cpu, thread);
++        if syscall_policy::syscall_preempt_disable_needed_result(read(addr_of!((*request).rtid))) != 0 {
++            crate::cls::preempt_enable();
++        }
++        if debug_enabled(addr_of!(REPLY_DEBUG)) {
++            crate::debug::kprintf(
++                b"%s: syscall num: %d got host reply: %d \n\0".as_ptr().cast(),
++                FUNCTION_NAME.as_ptr().cast::<i8>(),
++                read(addr_of!((*request).number)) as CInt,
++                read_volatile(addr_of!((*response).ret)) as CInt,
++            );
++        }
++    }
++
++    // The real wait acquired this exact completed response before returning.
++    let rc = unsafe { read_volatile(addr_of!((*response).ret)) };
++    if syscall_policy::syscall_owner_log_budget(&RETURN_LOG_STATE, pid) {
++        unsafe {
++            crate::debug::kprintf(
++                b"mcexec_v10: offload_return cpu=%d pid=%d tid=%d nr=%d ret=0x%lx ret_signed=%ld\n\0"
++                    .as_ptr().cast(),
++                cpu, pid, if thread.is_null() { -1 } else { (*thread).tid },
++                read(addr_of!((*request).number)) as CInt, rc as CULong, rc,
++            );
++        }
++    }
++
++    #[cfg(enable_tofu)]
++    unsafe {
++        if syscall_policy::syscall_tofu_post_reply_candidate_result(
++            read(addr_of!((*request).number)) as CInt, rc, SYS_IOCTL, SYS_OPENAT,
++        ) != 0 {
++            // Preserve the original full-width ioctl comparison followed by
++            // C-int narrowing, path selection and short-circuit evaluation.
++            let is_ioctl = read(addr_of!((*request).number)) == SYS_IOCTL as CULong;
++            let fd = if is_ioctl { read(addr_of!((*request).args[0])) as CInt } else { rc as CInt };
++            let proc = read(addr_of!((*thread).proc));
++            let path = if is_ioctl {
++                read(addr_of!((*proc).fd_path).cast::<*mut i8>().offset(fd as isize))
++            } else {
++                read(addr_of!((*thread).fd_path_in_open))
++            };
++            let current = (*crate::cls::get_this_cpu_local_var()).current;
++            if (*(*current).proc).enable_tofu != 0
++                && !read_volatile(addr_of!((*response).pde_data)).is_null()
++                && fd < MAX_FD_PDE
++                && read(addr_of!((*proc).fd_pde_data).cast::<*mut core::ffi::c_void>().offset(fd as isize)).is_null()
++                && crate::string::strncmp(path, b"/proc/tofu/dev/\0".as_ptr().cast(), 15) == 0
++            {
++                // Original valid TOFU-fd/path and process lifetime contracts
++                // remain required; no new unsupported-request filter is added.
++                let lock = addr_of_mut!((*proc).mckfd_lock).cast::<crate::spinlock_helpers::IhkSpinlock>();
++                let irqstate = crate::spinlock_helpers::__ihk_mc_spinlock_lock(lock);
++                write(
++                    addr_of_mut!((*proc).fd_pde_data).cast::<*mut core::ffi::c_void>().offset(fd as isize),
++                    read_volatile(addr_of!((*response).pde_data)),
++                );
++                crate::spinlock_helpers::__ihk_mc_spinlock_unlock(lock, irqstate);
++                if debug_enabled(addr_of!(TOFU_DEBUG)) {
++                    crate::debug::kprintf(
++                        b"%s: PID: %d, ioctl fd: %d, filename: %s, pde_data: 0x%lx\n\0".as_ptr().cast(),
++                        FUNCTION_NAME.as_ptr().cast::<i8>(), (*proc).pid, fd, path,
++                        read_volatile(addr_of!((*response).pde_data)) as CULong,
++                    );
++                }
++            }
++        }
++    }
++
++    unsafe {
++        if syscall_policy::syscall_offload_counted_result(
++            read(addr_of!((*request).number)) as CInt, SYS_EXIT_GROUP,
++        ) != 0 {
++            let count = addr_of_mut!((*thread).in_syscall_offload);
++            write(count, read(count).wrapping_sub(1));
++        }
++        if syscall_policy::syscall_proxy_dead_result(rc) != 0 {
++            if debug_enabled(addr_of!(PROXY_DEBUG)) {
++                crate::debug::kprintf(
++                    b"%s: proxy PID %d is dead, terminate()\n\0".as_ptr().cast(),
++                    FUNCTION_NAME.as_ptr().cast::<i8>(), (*(*thread).proc).pid,
++                );
++            }
++            write(addr_of_mut!((*(*thread).proc).nohost), 1);
++        }
++    }
++    #[cfg(enable_profile)]
++    unsafe {
++        if syscall_policy::syscall_profile_event_needed_result(
++            read(addr_of!((*request).number)) as CInt, PROFILE_SYSCALL_MAX,
++        ) != 0 {
++            let event = crate::profile::profile_syscall2offload(read(addr_of!((*request).number)) as CInt);
++            crate::profile::profile_event_add(event, crate::x86_cpu_helpers::rdtsc().wrapping_sub(started));
++        } else if debug_enabled(addr_of!(PROFILE_DEBUG)) {
++            crate::debug::kprintf(
++                b"%s: offload syscall > %d ?? : %d\n\0".as_ptr().cast(),
++                FUNCTION_NAME.as_ptr().cast::<i8>(), PROFILE_SYSCALL_MAX,
++                read(addr_of!((*request).number)) as CInt,
++            );
++        }
++    }
++    unsafe {
++        write_volatile(addr_of_mut!((*monitor).status), saved_monitor_status);
++        let counter = addr_of_mut!((*monitor).counter);
++        write_volatile(counter, read_volatile(counter).wrapping_add(1));
++    }
++    rc
++}
++
++const _: unsafe extern "C" fn(*mut SyscallRequest, CInt) -> CLong = do_syscall;
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -2492,7 +2492,7 @@
+ #[cfg(not(mckernel_equivalence))]
+ static OFFLOAD_WAIT_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+ 
+-fn syscall_owner_log_budget(state_slot: &AtomicU64, pid: CInt) -> bool {
++pub(crate) fn syscall_owner_log_budget(state_slot: &AtomicU64, pid: CInt) -> bool {
+     let pid_bits = (pid as u32 as u64) << 32;
+     let mut state = state_slot.load(Ordering::Relaxed);
+ 
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4148,6 +4148,47 @@
+ 		struct syscall_response *res, int cpu, struct thread *thread);
+ #endif
+ 
++/* Preserve the original logical C source locations in every fallback profile.
++ * The original last active #line is127 for the selected inner Rust dispatch
++ * cohort, or119 for the other C baseline. These private constants are source
++ * metadata only, never a provider or runtime selector. */
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && \
++    defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
++    defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#define MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE 4128
++#define MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE 4431
++#else
++#define MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE 4135
++#define MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE 4438
++#endif
++/* Real Rust outer entry; existing inner OFFLOAD selection remains broader. */
++#ifdef MCKERNEL_RUST_DO_SYSCALL_OUTER
++#if !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || !defined(PROFILE_ENABLE) || \
++    !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS) || !defined(MCKERNEL_DO_SYSCALL_C_FILE)
++#error "Rust do_syscall outer requires its paired transport/profile/debug inputs"
++#endif
++_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
++    "Rust do_syscall debug flags must match C DDEBUG_DEFAULT");
++_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
++    "Rust do_syscall filename must match actual C __FILE__");
++_Static_assert(sizeof(struct ddebug) == 32 && __alignof__(struct ddebug) == 8,
++    "Rust do_syscall Ddebug ABI");
++_Static_assert(__NR_exit_group == 231 && __NR_sched_setaffinity == 203 &&
++    IHK_SCD_REQ_THREAD_SPINNING == 0 && IHK_OS_MONITOR_KERNEL_OFFLOAD == 5 &&
++    PROFILE_SYSCALL_MAX == 2000, "Rust do_syscall protocol constants");
++_Static_assert(__builtin_offsetof(struct thread, in_syscall_offload) == 4792 &&
++    __builtin_offsetof(struct thread, profile) == 4796 &&
++    __builtin_offsetof(struct process, nohost) == 500,
++    "Rust do_syscall newly accessed fields require the actual C profile");
++_Static_assert(_Generic(&do_syscall,
++    long (*)(struct syscall_request *, int): 1, default: 0),
++    "Rust do_syscall entry ABI");
++#ifdef ENABLE_TOFU
++_Static_assert(__NR_ioctl == 16 && __NR_openat == 257 && MAX_FD_PDE == 1024,
++    "Rust do_syscall TOFU constants");
++#endif
++#else
++#line MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE
+ long do_syscall(struct syscall_request *req, int cpu)
+ {
+ 	struct syscall_response res;
+@@ -4451,6 +4492,8 @@
+ 	monitor->counter++;
+ 	return rc;
+ }
++#endif /* MCKERNEL_RUST_DO_SYSCALL_OUTER */
++#line MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
+ long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
+@@ -5714,7 +5757,7 @@
+ #endif
+ 
+ 
+-#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS
++#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_HOST_CLEANUP)
+ extern void terminate_host(int pid, struct thread *thread);
+ #else
+ void
+@@ -5731,7 +5774,7 @@
+ 			wait_thread_release_bridge, wait_process_release_bridge,
+ 			syscall_do_kill_thread_bridge);
+ }
+-#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */
++#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS || MCKERNEL_RUST_F03_HOST_CLEANUP */
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static int syscall_ikc_send_bridge(void *channel, void *packet, int opt)
+@@ -5754,6 +5797,14 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
++extern void interrupt_syscall(struct thread *thread, int sig);
++#else
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5657
++#else
++#line 5666
++#endif
+ void
+ interrupt_syscall(struct thread *thread, int sig)
+ {
+@@ -5772,6 +5823,12 @@
+ 	}
+ 	return;
+ }
++#endif /* MCKERNEL_RUST_F03_INTERRUPT_SYSCALL */
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#line 5675
++#else
++#line 5684
++#endif
+ 
+ void
+ exit_group_log_bridge(int pid)

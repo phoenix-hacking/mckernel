@@ -1,0 +1,56 @@
+{
+  "at": "2026-11-10T19:18:59.715314+00:00",
+  "owner": "Root sole compositor",
+  "code_base": "20a7bd5e72afcbe639d3a55fa0d1eada6dce4777",
+  "documentation_head": "e34b958d35d508d29fbfc9ee9b7efd868a331b80",
+  "source_reviews": [
+    "8ea82895",
+    "164dca64",
+    "bf9ac503",
+    "5fb32bda",
+    "43785f09"
+  ],
+  "first_image_independent_review": "60624209944071035024e2f8e136f43d54997bb9797e093d3625d69f430d01c5",
+  "conflict_resolutions": [
+    "Concatenate cfg/source additions for independently reviewed interrupt/hostcleanup/context inside same native supported-profile block, retaining context NOTwhole guard",
+    "One source APPEND definitions list contains both reviewed interrupt and hostcleanup macros",
+    "Retain separate architecture APPEND definitions for context inside original NOTwhole guard"
+  ],
+  "retained_premerge_conflict_captures": true,
+  "clone_initializer_preserved": true,
+  "new_body_modules_unchanged": true,
+  "canonical_not_yet_modified": true,
+  "patch_sha256": "2c6dcd7c412ad4acae4859ee3891e91c2d69251d0da3a65be7538c9890500be0",
+  "files": [
+    {
+      "path": "kernel/CMakeLists.txt",
+      "before_sha256": "1254c624f883166d3eaefb5e795571afcaf962ff10b0991524b317be71bec057",
+      "after_sha256": "a57f241745e4065415d323c0d7a027fe799178926fb135df46194bcd429d39fc"
+    },
+    {
+      "path": "kernel/rust/f03_interrupt_syscall.rs",
+      "before_sha256": null,
+      "after_sha256": "004e8dd5c5158858d5236386e9f250734567948b2fdcc5b6a14a497c4daf6436"
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "before_sha256": "e6e8f0203ea587789977c7dd23a1e7bbd8f89a9f6c84b8aeaa874b2f0880fe0b",
+      "after_sha256": "0adfc66cccea6b719f3837aad93af8c1f1404f3b7790067dec68db43e1d196d1"
+    },
+    {
+      "path": "kernel/rust/syscall_offload_entry.rs",
+      "before_sha256": null,
+      "after_sha256": "378bd1373807833442cb72a602061157fd1109ee559f7b8f25e6d2a67a5112cf"
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "before_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "after_sha256": "b2b05b5de6a3fac2aebfd08928b868a07707b8b1030bc96cf4430b201724a7e5"
+    },
+    {
+      "path": "kernel/syscall.c",
+      "before_sha256": "1804f7c252e036ab61badf41ed996074fc52868f6b87c7cf419bbcc3ac507356",
+      "after_sha256": "f5fcb0f114604c2ad4159285f1ef64cee6fc993ae00b75ea5c96541ec0ec35d5"
+    }
+  ]
+}
