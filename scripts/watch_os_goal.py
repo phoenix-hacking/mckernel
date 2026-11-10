@@ -288,7 +288,7 @@ def saved_recovery_argv(argv):
     result = []
     values = iter(argv)
     for value in values:
-        if value in {"--fresh-recovery-proof", "--credit-timeout-goal-sha256", "--recovery-goal-sha256"}:
+        if value in {"--fresh-recovery-proof", "--credit-timeout-goal-sha256", "--recovery-goal-sha256", "--guardian-recovery-proof"}:
             next(values, None)
         elif value not in {"--fresh-session", "--fresh-on-recovery", "--recovery-require-active"}:
             result.append(value)
@@ -402,6 +402,10 @@ def retire_server(state, worker_pid):
 
 def supervise(args, repo, directory, argv, lease_factory, write_json):
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+    guardian_proof = None
+    if getattr(args, "guardian_recovery_proof", None):
+        from os_goal_guard_protocol import validate_recovery_proof
+        guardian_proof = validate_recovery_proof(directory, args.guardian_recovery_proof, args.guardian_run_id)
     lease = lease_factory(directory / "watch.lock")
     state_path = directory / "state.json"
     watch_path = directory / "watcher.json"
@@ -414,6 +418,11 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     recovery_proof = None
     timeout_recovery = None
     transport_recovery = None
+    if guardian_proof is not None:
+        transport_recovery = dict(schema_version=1, approved=True,
+            thread_id=guardian_proof["thread_id"], goal_after=guardian_proof["goal_after"],
+            goal_after_sha256=guardian_proof["goal_sha256"], require_active=False,
+            origin_kind="authenticated_guardian_checkpoint")
     recovery_handoff = None
     server_retired = False
     server_retirement_attempted = False
@@ -425,6 +434,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     def record(event, **values):
         data = dict(event=event, at=time.time(), watcher_pid=os.getpid(),
                     watcher_start=process_start(os.getpid()),
+                    guardian_run_id=getattr(args, "guardian_run_id", None),
                     worker_pid=child.pid if child else None, restarts=restarts,
                     credit_timeout_recovery=timeout_recovery, transport_recovery=transport_recovery,
                     recovery_handoff=recovery_handoff, **values)
@@ -469,10 +479,10 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 break
             # An explicit fresh first launch is not authorization to reset every
             # replacement. Fresh recovery has its own opt-in and retirement proof.
-            worker_argv = saved_recovery_argv(argv) if restarts else list(argv)
+            worker_argv = saved_recovery_argv(argv) if restarts or guardian_proof else list(argv)
             command = [sys.executable, "-B", str(repo / "scripts/run_os_goal.py"),
                        *worker_argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0)]
-            if restarts:
+            if restarts or guardian_proof:
                 command.append("--recovered")
                 if timeout_recovery is not None:
                     command.extend(["--credit-timeout-goal-sha256",
@@ -512,6 +522,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 if marker is None or marker != last_progress:
                     progress_at, last_progress = now, marker
                 if now >= next_notice:
+                    record("heartbeat", worker_start=child_start)
                     # Keep the supervisor visible during startup, RPC waits and shutdown.
                     print("[os-watch] HEARTBEAT alive; worker_pid=" + str(child.pid)
                           + "; uptime=" + str(int(now - started))

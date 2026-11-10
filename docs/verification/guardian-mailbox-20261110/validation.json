@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-11-10T04:39:00Z",
+  "upstream_base": "96886e8450964979861c104772e6e9aa84b8eefa",
+  "scope": "Supervisor guardian, existing launcher replacement, GitHub mailbox and correlated message receipts",
+  "focused_tests": {
+    "tests": 166,
+    "failures": 0,
+    "errors": 0,
+    "modules": [
+      "test_os_goal_guardian", "test_os_goal_mailbox", "test_os_goal_service",
+      "test_os_goal_mailbox_workflow", "test_os_goal_overnight", "test_os_goal_stop_log",
+      "test_os_goal_repair", "test_os_goal_continuous", "test_os_goal_handoff_provenance"
+    ],
+    "model_native_or_systemd_operations": false
+  },
+  "real_process_synthetic_smoke": {
+    "passed": true,
+    "scenarios": ["live_supervisor_stale_heartbeat", "dead_supervisor_orphaned_worker"],
+    "authenticated_worker_checkpoint": true,
+    "exact_process_births_and_pidfd_signals": true,
+    "proof_validated_before_successor": true,
+    "successors_per_scenario": 1,
+    "same_root_and_accounting_preserved": true,
+    "mailbox_continued_while_held": true,
+    "all_owned_processes_joined": true,
+    "real_systemd_model_native_calls": false
+  },
+  "systemd_unit_validation": {"command": "systemd-analyze verify", "exit_code": 0, "stderr": ""},
+  "github_bot_validation": {
+    "workflow_commit": "42842c947c4eac0bb83c9c26dbd579cdc8a38e2a",
+    "run_url": "https://github.com/phoenix-hacking/mckernel/actions/runs/42756298558",
+    "conclusion": "success",
+    "comment_url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6759023675",
+    "author": "github-actions[bot]",
+    "email_delivery": "unverified",
+    "human_read_receipt": "unverified"
+  },
+  "broader_compatibility": {
+    "candidate_tests_run": 419,
+    "candidate_failure_entries": 95,
+    "candidate_error_entries": 27,
+    "baseline_comparison_tests_each": 145,
+    "all_candidate_failing_ids_reproduced_in_baseline": true,
+    "new_failing_ids": 0,
+    "changed_normalized_exception_details": 0,
+    "production_guards_relaxed": false,
+    "limitations": [
+      "Legacy fixture assumptions remain failing, including missing args and process provenance.",
+      "The test host has approximately 4.8 GiB free; the unchanged production disk floor is 16 GiB.",
+      "This is not a full CI pass or an original M14/M15 acceptance result."
+    ]
+  },
+  "deployment": {
+    "mailbox_url": "https://github.com/phoenix-hacking/mckernel/pull/3",
+    "comment_poll_seconds": 600,
+    "guardian_tick_seconds": 10,
+    "guardian_os_watchdog_seconds": 90,
+    "actual_workstation_activated_from_this_session": false,
+    "actual_workstation_first_poll_verified": false
+  }
+}

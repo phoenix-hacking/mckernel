@@ -1,7 +1,112 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T03:42Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T04:39Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+## Guarded launcher and GitHub control mailbox
+
+The user requested that the replacement launcher run unattended, watch the
+supervisor itself, record why work stops, and accept directions from a phone
+through GitHub. New GitHub comments are checked every **600 seconds (10 minutes)**.
+This supersedes the initial 60-second mailbox proposal. Local health checks and
+already queued receipt delivery continue between those comment checks.
+
+`scripts/start_os_overnight.py` is now the canonical service front door. Its
+`start`, `status`, `stop`, and `dry-run` commands retain the existing script name.
+Normal `scripts/run_os_goal.py` invocations forward their existing flags to the
+same guarded service; its explicit internal supervisor/worker modes remain
+separate. No new launcher name is required. Old detached receipts, live owners,
+leases and logs are preserved; a running or unresolved legacy invocation must
+checkpoint before migration. Publishing these files does not replace that owner.
+
+The Linux user service manager watches the guardian with a 90-second watchdog
+and restarts a failed guardian. The guardian checks the model supervisor every
+10 seconds, independently of the model worker. A separate engine service keeps
+guardian restart/termination from killing model/native descendants. The engine
+has no blind OS restart loop. Recovery requires exact process births, a durable
+checkpoint, completed retirement, free leases and the same saved Root/goal/accounting.
+A positively known pre-submission busy engine is retried after retirement;
+uncertain submission remains held for reconciliation. Service re-entry restores
+monitoring and does not create a new manual start authorization.
+
+The control mailbox is the open draft PR **#3**:
+https://github.com/phoenix-hacking/mckernel/pull/3
+Repository issues are disabled, so the draft PR conversation is the persistent
+mailbox. Keep it open and draft. The Actions bot posts notices mentioning the
+verified account `phoenix-hacking` (numeric ID 175406809). The notification workflow
+is installed on `development`, independently of the source work branch, so the
+computer can dispatch it with the authenticated `gh` CLI. Its tested bot setup
+notice is visible in the mailbox. GitHub notification settings govern email
+delivery; a posted comment does not prove that an email/phone notification was read.
+
+Each phone message has a correlated receipt: **📤 SENT** uses its GitHub comment
+time, **📥 RECEIVED** records the computer's receipt time, and **⏳ WAITING** states
+whether it is queued for controller delivery or needs a corrected command/input.
+Only the exact durable `accepted_by_server` delivery receipt permits a separate
+controller-acceptance acknowledgment. Acceptance is not completion of the requested
+engineering work. Outgoing blocker notices identify the missing input and wait for
+a real reply. Old policy diagnostics cannot be mixed into a new source blocker.
+The durable outbox retries notification delivery without duplicating instructions;
+GitHub reads retain the ten-minute cadence while receipt posts can drain promptly.
+
+To issue a direction from the phone, post a new comment in PR #3, or reply to a
+GitHub notification email, with one command alone on the first line:
+
+```text
+/mckernel-resume
+Continue with this concrete instruction or newly available input: ...
+```
+
+`/mckernel-resume` records a manual continuation request and queues the instruction.
+`/mckernel-instruct` queues a direction for the existing controller without granting
+a new start. The poller verifies the numeric author identity and original comment
+timestamp, processes each comment once, and never interprets message text as shell
+commands. An older reply fetched later cannot supersede a newer stop request.
+Ordinary non-command comments receive a receipt/help response without executing.
+Existing source/native/ownership/account/service holds remain binding.
+
+On the actual workstation, after adopting this branch, use the existing entry point:
+
+```sh
+python3 -B scripts/start_os_overnight.py start
+python3 -B scripts/start_os_overnight.py status
+```
+
+Start validates the supported `gh` identity, mailbox and active workflow before
+authorizing model work, installs the two repository-specific user units, and
+enables the guardian. Default overnight work retains hours0, unlimited classified
+technical recoveries, repair-agent routing and the original M14/M15 stop condition.
+HOST CPU/RAM/job limits remain the existing 0,6,7 / 4GiB TOTAL / 3-job grant.
+`stop` requests an orderly model checkpoint while leaving the mailbox guardian
+alive. `dry-run` renders the service configuration without starting services/models.
+Runtime receipts and stop diagnostics are under the existing git-common-dir
+`os-autopilot`; the systemd journal also records service failures. The machine must
+remain powered on with its user service manager available. Sleep is inhibited
+while the engine runs; logout/reboot/model continuation is not promised by a user
+service restart. No actual workstation service has been activated from this session.
+
+The latest inspected workstation checkpoint is still `96886e84` below: normal
+BLOCKED on original source/provider/SDK/native prerequisites, not a newly established
+cyber-policy rejection. These launcher/mailbox changes earn no original M14/M15
+acceptance credit. The independent real-process synthetic watchdog smoke passed
+both stale-live and dead-supervisor cases; systemd unit validation passed; the
+actual GitHub notification workflow posted its setup receipt successfully.
+Final focused verification passed **166 tests** across guardian, mailbox, service,
+workflow, legacy helper, stop log, repair, continuous work and handoff provenance.
+Both real-process synthetic watchdog cases passed again against the final source;
+all synthetic processes joined. `systemd-analyze verify` accepted both generated
+units. The actual receipt workflow run `42756298558` succeeded and bot comment
+`6759023675` displays the sent/received/waiting setup state in PR #3.
+Machine-readable evidence: `docs/verification/guardian-mailbox-20261110/validation.json`.
+
+The broader compatibility run executed 419 tests and remains failing with 95 failure
+entries and 27 errors. All of those failing IDs were reproduced unchanged against
+the exact upstream 96886e84 run/watch sources in 145 targeted baseline comparisons;
+no new failing IDs or exception differences were observed. Existing fixture gaps
+(including missing args/process provenance) and the unchanged 16 GiB disk admission
+on this 4.8 GiB-free test host remain separate work. No production guard was lowered.
+This verification is not a claim that full CI, original M14/M15, or the actual
+workstation deployment is complete.
 
 ## Current decision
 

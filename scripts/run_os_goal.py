@@ -235,7 +235,7 @@ def validate_capture_progress_directory(value):
     return path
 
 
-def queue_instruction(directory, instruction, capture_progress_directory=None):
+def queue_instruction(directory, instruction, capture_progress_directory=None, *, source_id=None):
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
@@ -259,6 +259,32 @@ def queue_instruction(directory, instruction, capture_progress_directory=None):
     inbox = directory / "instructions" / "pending"
     inbox.mkdir(mode=0o700, parents=True, exist_ok=True)
     ident = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid4().hex
+    if source_id is not None:
+        if not isinstance(source_id, str) or not 0 < len(source_id) <= 512 or capture_progress_directory is not None:
+            raise ValueError("Source-bound instructions require a bounded source ID and no capture registration")
+        digest = hashlib.sha256(source_id.encode()).hexdigest()
+        ident = "source-" + digest
+        item.update(source_id=source_id, text_sha256=hashlib.sha256(instruction.encode()).hexdigest())
+        item["id"] = ident
+        sources = directory / "instructions" / "sources"
+        sources.mkdir(mode=0o700, parents=True, exist_ok=True)
+        lock = os.open(sources / "queue.lock", os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            registry = sources / (digest + ".json")
+            prior = json.loads(registry.read_text()) if registry.exists() else None
+            if prior:
+                if prior.get("item", {}).get("text_sha256") != item["text_sha256"] or prior["item"].get("source_id") != source_id:
+                    raise ValueError("Source instruction content changed; refusing replay")
+                if prior.get("status") == "queued" or any((directory / "instructions" / phase / (ident + ".json")).exists()
+                        for phase in ("pending", "sending", "delivered", "refused")):
+                    return ident
+            atomic_json(registry, {"status": "intent", "item": item})
+            atomic_json(inbox / (ident + ".json"), item)
+            atomic_json(registry, {"status": "queued", "item": item})
+            return ident
+        finally:
+            os.close(lock)
     item["id"] = ident
     atomic_json(inbox / (ident + ".json"), item)
     return ident
@@ -921,6 +947,13 @@ class Campaign:
         self.stop_reason = "signal_" + str(signum)
 
     def on_watchdog(self, signum, frame):
+        from os_goal_guard_protocol import checkpoint_request
+        request = checkpoint_request(self.directory, self.state)
+        if request is not None:
+            if not self.stop_reason and not self.stop_now:
+                self.save(guardian_checkpoint_request=request)
+                self.stop_reason = "guardian_recovery"
+            return
         from watch_os_goal import watchdog_requested
         if not watchdog_requested(self.directory, os.getpid()):
             self.on_signal(signum, frame)
@@ -1420,6 +1453,7 @@ class Campaign:
         from watch_os_goal import process_start
         self.save(worker_pid=os.getpid(), worker_start=process_start(os.getpid()),
                   server_pid=None, server_start=None, retryable=False,
+                  guardian_run_id=getattr(self.args, "guardian_run_id", None),
                   startup_instruction_sha256=hashlib.sha256(note.encode()).hexdigest() if note else None)
         check_resources(launch_resources(self.args, self.repo))
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
@@ -1892,6 +1926,10 @@ class Campaign:
                               stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
                                   "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
                                   "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
+                    if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
+                        request = self.state["guardian_checkpoint_request"]
+                        self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
+                                  "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
                     self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
                                                 exit_code=code, snapshot=stop_snapshot)
                     self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
@@ -1955,6 +1993,9 @@ def arguments(argv=None):
     parser.add_argument("--stall-seconds", type=float, default=0, help="Opt-in agent-silence watchdog; 0 (default) preserves healthy silent builds/soaks")
     parser.add_argument("--quiet", action="store_true", help="Hide live agent output; keep heartbeats and console.log")
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--supervisor", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--guardian-run-id", help=argparse.SUPPRESS)
+    parser.add_argument("--guardian-recovery-proof", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--credit-timeout-goal-sha256", help=argparse.SUPPRESS)
     parser.add_argument("--recovery-goal-sha256", help=argparse.SUPPRESS)
@@ -1962,6 +2003,10 @@ def arguments(argv=None):
     parser.add_argument("--allow-dispatcher-fallback", action="store_true",
                         help="Explicitly allow advertised model fallback for unpinned defaults; otherwise Sol/max stays pinned")
     args = parser.parse_args(argv)
+    if args.guardian_run_id and (len(args.guardian_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.guardian_run_id)):
+        parser.error("Guardian run identity must be a 32-character hex nonce")
+    if args.guardian_recovery_proof and (not args.guardian_run_id or not args.supervisor or args.worker or args.fresh_session):
+        parser.error("Guardian recovery needs its supervised first-launch proof and saved cursor")
     args.dispatcher_pinned = (args.model is not None or args.effort is not None
                               or not args.allow_dispatcher_fallback)
     if args.model is None:
@@ -2109,6 +2154,9 @@ def main(argv=None):
                 rpc.close()
         return 0
     if not args.worker:
+        if not args.supervisor:
+            from start_os_overnight import launch_legacy
+            return launch_legacy(list(sys.argv[1:] if argv is None else argv))
         check_resources(launch_resources(args, REPO))
         from watch_os_goal import supervise
         forwarded = list(sys.argv[1:] if argv is None else argv)

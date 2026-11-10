@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Detach the existing McKernel watcher for a powered-on, logged-in workstation.
+"""Start the guarded McKernel user service through the existing launcher name.
 
-No outer restart loop, service installation, model calls for status/dry-run, or
-logout/reboot guarantee. Existing watcher and worker leases remain authoritative.
+The CLI now uses an independently watched guardian and GitHub mailbox. Legacy
+receipt helpers remain available for inspecting an already detached invocation.
 """
 import argparse
 from datetime import datetime, timezone
@@ -274,25 +274,15 @@ def stop(directory):
     return dict(result, status="STOP_REQUESTED", reason="SIGTERM sent only to the verified watcher; checkpoint/join remains in progress")
 
 
+def launch_legacy(arguments):
+    """Preserve run_os_goal.py flags while replacing its old foreground launcher."""
+    from os_goal_service import main as service_main
+    return service_main(["start"], engine_arguments=list(arguments))
+
+
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", nargs="?", choices=("start", "status", "stop", "dry-run"), default="start")
-    args = parser.parse_args(argv)
-    os.umask(0o077)
-    repo = Path(__file__).resolve().parents[1]
-    try:
-        git_dir = subprocess.check_output(["git", "-C", str(repo), "rev-parse", "--git-common-dir"], text=True).strip()
-        directory = (repo / git_dir).resolve() / "os-autopilot"
-        if args.command == "dry-run":
-            result = {"status": "DRY_RUN", "command": build_command(repo), "state_directory": str(directory),
-                      "model_calls": 0, "guarantee": "Terminal detachment while powered on and logged in; no logout/reboot guarantee"}
-        else:
-            result = {"start": lambda: start(repo, directory), "status": lambda: status(directory),
-                      "stop": lambda: stop(directory)}[args.command]()
-    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
-        result = {"status": "FAILED", "reason": str(error)}
-    print(json.dumps(result, indent=2, sort_keys=True))
-    return 1 if result["status"] in {"FAILED", "UNKNOWN", "REFUSED"} else 0
+    from os_goal_service import main as service_main
+    return service_main(argv)
 
 
 if __name__ == "__main__":
