@@ -1,0 +1,219 @@
+{
+  "status": "PASS_FIVE_NEW_REGRESSIONS_TWO_OWNERSHIP_CONTROLS",
+  "commands": [
+    {
+      "label": "baseline",
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/focused-prespawn-behavior-1/baseline.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+      ],
+      "pid": 722646,
+      "birth": "36813411",
+      "joined": true,
+      "returncode": 1
+    },
+    {
+      "label": "source-apply-check",
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/PRESPAWN-LOG.PRIVATE.patch"
+      ],
+      "pid": 722650,
+      "birth": "36813427",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "source-apply",
+      "argv": [
+        "git",
+        "apply",
+        "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/PRESPAWN-LOG.PRIVATE.patch"
+      ],
+      "pid": 722651,
+      "birth": "36813427",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "stage-source",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "scripts/start_os_overnight.py"
+      ],
+      "pid": 722652,
+      "birth": "36813427",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-paths",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only",
+        "-z"
+      ],
+      "pid": 722673,
+      "birth": "36813439",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-format",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "--",
+        "CAMPAIGN.md",
+        "scripts/start_os_overnight.py",
+        "scripts/tests/test_os_goal_overnight.py"
+      ],
+      "pid": 722674,
+      "birth": "36813441",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "staged-source-review",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--",
+        "scripts/start_os_overnight.py"
+      ],
+      "pid": 722675,
+      "birth": "36813443",
+      "joined": true,
+      "returncode": 0
+    },
+    {
+      "label": "candidate",
+      "argv": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/focused-prespawn-behavior-1/candidate.metrics",
+        "/usr/bin/timeout",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+        "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+      ],
+      "pid": 722697,
+      "birth": "36816481",
+      "joined": true,
+      "returncode": 0
+    }
+  ],
+  "review_sha256": "9a1d9a9a7130216df3c139e49ec42cedd3342a8c74a217ddefcca453389cbc48",
+  "selectors": [
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+  ],
+  "cpu": 7,
+  "serial_jobs": 1,
+  "aggregate_gib_ceiling": 4,
+  "as_gib": 1,
+  "cpu_seconds": 45,
+  "wall_seconds": 60,
+  "kill_after_seconds": 5,
+  "core_bytes": 0,
+  "MemAvailable": 29771223040,
+  "usage": {
+    "at": "2026-11-10T03:37:48.034078+00:00",
+    "used_percent": 45,
+    "remaining_percent": 55,
+    "normal_guard_passed": true,
+    "included_only": true
+  },
+  "no_real_helper_or_child_payload": true,
+  "original_acceptance_delta": 0,
+  "baseline": {
+    "status": "CONFIRMED_FIVE_NEW_FAILURES",
+    "methods": 7,
+    "failures": 3,
+    "errors": 2,
+    "failing_methods": [
+      [
+        "ERROR",
+        "test_log_open_failure_is_failed_and_explicit_retry_spawns_once"
+      ],
+      [
+        "ERROR",
+        "test_log_fdopen_failure_closes_acquired_fd_and_persists_failure"
+      ],
+      [
+        "FAIL",
+        "test_failure_log_write_is_best_effort_after_durable_receipt"
+      ],
+      [
+        "FAIL",
+        "test_attempted_popen_exception_is_unknown_and_prevents_second_spawn"
+      ],
+      [
+        "FAIL",
+        "test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn"
+      ]
+    ],
+    "existing_controls_passed": 2,
+    "returncode": 1
+  },
+  "corrected_sha256": "5937e05070f9c539dee33ed0ae0fc1f79a96e803e8f716151af808beb564a390",
+  "all_started_waits_joined": true,
+  "Root_staged_source_review": "Actual staged diff read after baseline, matches approved7598/5937. Explicit spawn-attempt boundary, durable receipt before optional logging, one owned raw/stream close; no other helper methods or recipe changed.",
+  "candidate": {
+    "methods": 7,
+    "new_regressions": 5,
+    "existing_controls": 2,
+    "returncode": 0,
+    "status": "PASS",
+    "known_prespawn_failure_retry_mock_spawn_count": 1,
+    "attempted_spawn_unknown_no_second_spawn": true,
+    "failed_receipt_persistence_keeps_unknown": true,
+    "owned_fd_cleanup_and_best_effort_logging": true
+  },
+  "all_direct_waits_joined": true,
+  "test_cpu_released": 7,
+  "finished_at": "2026-11-10T03:38:18.962243+00:00"
+}

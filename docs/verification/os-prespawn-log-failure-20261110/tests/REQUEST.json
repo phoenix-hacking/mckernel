@@ -1,0 +1,55 @@
+{
+  "status": "PRIVATE_TEST_SOURCE_AND_AST_ONLY_NO_IMPORT_RUN_PROCESS_PENDING_REVIEW_ROOT_ADMISSION",
+  "incoming_commit": "d84ee20ae834626ac62eaaae9233f4a12500a3d7",
+  "patch": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/TESTS.PRIVATE.patch",
+  "patch_sha256": "f8dd1b9646cf8990c077ae380a5a9373c1295c8e34ad14ab6bb77b2d9c335d09",
+  "candidate_test": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/candidate/scripts/tests/test_os_goal_overnight.py",
+  "candidate_test_sha256": "d781b59d54aed1f0408009b56ede4f0844654843ac0c5528127558ff52b81c80",
+  "selectors": [
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+  ],
+  "proposed_payload": [
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_open_failure_is_failed_and_explicit_retry_spawns_once",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_log_fdopen_failure_closes_acquired_fd_and_persists_failure",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_log_write_is_best_effort_after_durable_receipt",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_attempted_popen_exception_is_unknown_and_prevents_second_spawn",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_unresolved_crash_around_popen_prevents_blind_second_start",
+    "scripts.tests.test_os_goal_overnight.OvernightTests.test_live_receipt_prevents_second_detached_start_before_watcher_lease"
+  ],
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "source_inputs": {
+    "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/incoming/scripts/tests/test_os_goal_overnight.py": "b45d173ebebd0c5f0e0c1b8ce6f92b37d2fba7f6414472eb3068469b4101b9dd",
+    "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-tests-1/incoming/scripts/start_os_overnight.py": "bcca5560b364e8608f93f4f2410b4f2b2452616680304d6cb636bc7d5b8908cc"
+  },
+  "expected_baseline_source_derived_not_observed": [
+    "Logopenerror escapes beforehandler, durableSTARTING insteadofFAILED;zeroPopenbutretrylatched",
+    "Logfdopenerror escapes andownedrealfixturelogFDleaks;cleanupcallbackreclaimsONLYmatchingfixtureowner",
+    "Secondarylogwriteerror escapes before_persist, leavingSTARTING",
+    "Popenenteredexception isclassifiedFAILED onchildNone, makingnextspawneligible insteadofUNKNOWN",
+    "Logopenfailure escapes beforeknownfailurepersistence; storageunavailablecasefailsrequiredinjectedEIO/failedwriteattempt; originalSTARTINGreceiptretainsUNKNOWN",
+    "Existingunresolvedreceipt andliveowner controlsPASS"
+  ],
+  "expected_candidate_source_contract": "All5newtests+2necessaryexistinguncertainty/liveownercontrols pass. KnownprespawnFAILED permits1laterMOCKchild; attemptedPopenUNKNOWN orfailedfailurepersistence retainsunresolvedreceipt/statusUNKNOWN/no nextspawn. No actualchild/helper/server/account/native/livecontrol actions.",
+  "no_test_import_or_run": true,
+  "no_canonical_or_live_state_change": true,
+  "candidate_source": {
+    "path": "/home/holden/mckernel-work/resume-20261110T032750Z-14c19ec7/prespawn-log-source-1/candidate/scripts/start_os_overnight.py",
+    "sha256": "5937e05070f9c539dee33ed0ae0fc1f79a96e803e8f716151af808beb564a390"
+  },
+  "failure_log_order": "FailingLog.write asserts FAILED/error already in bothdurablereceipts before its injectedENOSPC; secondarydiagnosticfailure cannot latch STARTING or replaceprimaryerror.",
+  "storage_unavailable_contract": "InitialSTARTINGpersistencegenuine,tempdir only; failedknownfailurepersist injectsEIO (allowedtoreportactualstorageerror). Assert originalbothreceiptsbyteimmutable/statusUNKNOWN andsecondexplicitstartEXISTING_OWNER/zeroPopen; noreset/deletion."
+}

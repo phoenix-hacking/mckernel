@@ -1,0 +1,211 @@
+--- a/scripts/tests/test_os_goal_overnight.py
++++ b/scripts/tests/test_os_goal_overnight.py
+@@ -2,8 +2,10 @@
+ """Detached overnight ownership tests; fake processes, no model/native execution."""
+ from contextlib import redirect_stdout
+ import copy
++import errno
+ import io
+ import json
++import os
+ from pathlib import Path
+ import signal
+ import subprocess
+@@ -167,6 +169,197 @@
+         self.assertTrue(Path(receipt["log_path"]).is_file())
+         self.assertIn(result["status"], {"ACTIVE", "STARTING", "WAITING"})
+ 
++    def latest_detached_receipt(self):
++        pointer = json.loads((self.directory / overnight.LATEST).read_text())
++        path = Path(pointer["receipt_path"])
++        receipt = json.loads(path.read_text())
++        self.assertEqual(receipt, pointer)
++        return path, receipt
++
++    def assert_known_prespawn_failure(self, result, marker):
++        self.assertEqual(result["status"], "FAILED")
++        path, receipt = self.latest_detached_receipt()
++        self.assertEqual(receipt["status"], "FAILED")
++        self.assertIsNone(receipt["launch_pid"])
++        self.assertIsNone(receipt["launch_start"])
++        self.assertIsNone(receipt["launch_session"])
++        self.assertIn(marker, receipt["error"])
++        current = overnight.status(self.directory)
++        self.assertEqual(current["status"], "FAILED")
++        self.assertIn(marker, current["reason"])
++        return path, receipt
++
++    def test_log_open_failure_is_failed_and_explicit_retry_spawns_once(self):
++        real_open = overnight.os.open
++        deny_log = [True]
++
++        def open_log(path, *args, **kwargs):
++            if Path(path).name == "overnight.log" and deny_log[0]:
++                raise PermissionError(errno.EACCES, "test log open denied")
++            return real_open(path, *args, **kwargs)
++
++        process = self.fake_launch()
++        with patch.object(overnight, "lease_held", return_value=False), \
++                patch.object(overnight.shutil, "which", side_effect=lambda name: "/fake/" + name), \
++                patch.object(overnight.os, "open", side_effect=open_log), \
++                patch.object(overnight.subprocess, "Popen", return_value=process) as popen, \
++                patch.object(overnight.time, "sleep"):
++            first = overnight.start(self.repo, self.directory, wait_seconds=0)
++            popen.assert_not_called()
++            first_path, first_receipt = self.assert_known_prespawn_failure(first, "test log open denied")
++            first_bytes = first_path.read_bytes()
++            self.assertFalse(Path(first_receipt["log_path"]).exists())
++            deny_log[0] = False
++            second = overnight.start(self.repo, self.directory, wait_seconds=0)
++            self.assertEqual(popen.call_count, 1)
++            self.assertEqual(second["status"], "STARTING")
++            second_path, second_receipt = self.latest_detached_receipt()
++            self.assertNotEqual(second_path, first_path)
++            self.assertEqual(second_receipt["launch_pid"], 100)
++            self.assertEqual(first_path.read_bytes(), first_bytes)
++
++    def test_log_fdopen_failure_closes_acquired_fd_and_persists_failure(self):
++        real_open, real_fdopen, real_close = overnight.os.open, overnight.os.fdopen, overnight.os.close
++        owned = []
++
++        def track_log(path, *args, **kwargs):
++            fd = real_open(path, *args, **kwargs)
++            if Path(path).name == "overnight.log":
++                info = os.fstat(fd)
++                owned.append((fd, info.st_dev, info.st_ino))
++            return fd
++
++        def fdopen_log(fd, mode="r", *args, **kwargs):
++            if mode == "ab":
++                self.assertIn(fd, [row[0] for row in owned])
++                raise OSError(errno.EIO, "test log fdopen failed")
++            return real_fdopen(fd, mode, *args, **kwargs)
++
++        def reclaim_only_fixture_log_fd():
++            # A failing predecessor test must not leak its owned temporary FD.
++            for fd, device, inode in owned:
++                try:
++                    info = os.fstat(fd)
++                except OSError as error:
++                    if error.errno != errno.EBADF:
++                        raise
++                else:
++                    if (info.st_dev, info.st_ino) == (device, inode):
++                        real_close(fd)
++
++        self.addCleanup(reclaim_only_fixture_log_fd)
++        with patch.object(overnight, "lease_held", return_value=False), \
++                patch.object(overnight.shutil, "which", side_effect=lambda name: "/fake/" + name), \
++                patch.object(overnight.os, "open", side_effect=track_log), \
++                patch.object(overnight.os, "fdopen", side_effect=fdopen_log), \
++                patch.object(overnight.subprocess, "Popen") as popen:
++            result = overnight.start(self.repo, self.directory, wait_seconds=0)
++            popen.assert_not_called()
++            self.assertEqual(len(owned), 1)
++            with self.assertRaises(OSError) as closed:
++                os.fstat(owned[0][0])
++            self.assertEqual(closed.exception.errno, errno.EBADF)
++            self.assert_known_prespawn_failure(result, "test log fdopen failed")
++
++    def test_failure_log_write_is_best_effort_after_durable_receipt(self):
++        real_fdopen = overnight.os.fdopen
++        writes = []
++
++        class FailingLog:
++            def __init__(inner, stream):
++                inner.stream = stream
++
++            def __enter__(inner):
++                return inner
++
++            def __exit__(inner, *exc):
++                return inner.stream.__exit__(*exc)
++
++            def close(inner):
++                return inner.stream.close()
++
++            def write(inner, value):
++                writes.append(value)
++                # The primary failure must already be durable even while the
++                # diagnostic destination is failing.
++                _, saved = self.latest_detached_receipt()
++                self.assertEqual(saved["status"], "FAILED")
++                self.assertIn("test command preparation failed", saved["error"])
++                raise OSError(errno.ENOSPC, "test diagnostic log write failed")
++
++        def fdopen_log(fd, mode="r", *args, **kwargs):
++            stream = real_fdopen(fd, mode, *args, **kwargs)
++            return FailingLog(stream) if mode == "ab" else stream
++
++        with patch.object(overnight, "lease_held", return_value=False), \
++                patch.object(overnight.os, "fdopen", side_effect=fdopen_log), \
++                patch.object(overnight, "build_command", side_effect=RuntimeError("test command preparation failed")), \
++                patch.object(overnight.subprocess, "Popen") as popen:
++            result = overnight.start(self.repo, self.directory, wait_seconds=0)
++            popen.assert_not_called()
++            self.assertEqual(len(writes), 1)
++            self.assert_known_prespawn_failure(result, "test command preparation failed")
++
++    def test_attempted_popen_exception_is_unknown_and_prevents_second_spawn(self):
++        with patch.object(overnight, "lease_held", return_value=False), \
++                patch.object(overnight.shutil, "which", side_effect=lambda name: "/fake/" + name), \
++                patch.object(overnight.subprocess, "Popen", side_effect=OSError(errno.EIO, "test attempted spawn uncertain")) as popen:
++            first = overnight.start(self.repo, self.directory, wait_seconds=0)
++            self.assertEqual(popen.call_count, 1)
++            self.assertEqual(first["status"], "UNKNOWN")
++            first_path, receipt = self.latest_detached_receipt()
++            self.assertEqual(receipt["status"], "UNKNOWN")
++            self.assertIsNone(receipt["launch_pid"])
++            self.assertEqual(overnight.status(self.directory)["status"], "UNKNOWN")
++            first_bytes = first_path.read_bytes()
++            pointer_bytes = (self.directory / overnight.LATEST).read_bytes()
++            second = overnight.start(self.repo, self.directory, wait_seconds=0)
++            self.assertEqual(second["status"], "EXISTING_OWNER")
++            self.assertEqual(popen.call_count, 1)
++            self.assertEqual(first_path.read_bytes(), first_bytes)
++            self.assertEqual((self.directory / overnight.LATEST).read_bytes(), pointer_bytes)
++
++    def test_failure_receipt_storage_unavailable_keeps_unknown_and_blocks_spawn(self):
++        real_open, real_persist = overnight.os.open, overnight._persist
++        initial = []
++        failed_writes = []
++
++        def open_log(path, *args, **kwargs):
++            if Path(path).name == "overnight.log":
++                raise PermissionError(errno.EACCES, "test log open denied")
++            return real_open(path, *args, **kwargs)
++
++        def persist(directory, receipt):
++            if receipt["status"] == "FAILED":
++                failed_writes.append(copy.deepcopy(receipt))
++                raise OSError(errno.EIO, "test failure receipt storage unavailable")
++            real_persist(directory, receipt)
++            path = Path(receipt["receipt_path"])
++            initial.append((path, path.read_bytes(), (self.directory / overnight.LATEST).read_bytes()))
++
++        with patch.object(overnight, "lease_held", return_value=False), \
++                patch.object(overnight.os, "open", side_effect=open_log), \
++                patch.object(overnight, "_persist", side_effect=persist), \
++                patch.object(overnight.subprocess, "Popen") as popen:
++            # A real storage error may propagate; it must not be rewritten as
++            # proof that the original unresolved launch receipt is retired.
++            with self.assertRaises(OSError) as failed:
++                overnight.start(self.repo, self.directory, wait_seconds=0)
++            self.assertEqual(failed.exception.errno, errno.EIO)
++            self.assertIn("test failure receipt storage unavailable", str(failed.exception))
++            self.assertEqual(len(failed_writes), 1)
++            self.assertEqual(len(initial), 1)
++            path, receipt_bytes, pointer_bytes = initial[0]
++            self.assertEqual(json.loads(receipt_bytes)["status"], "STARTING")
++            self.assertEqual(overnight.status(self.directory)["status"], "UNKNOWN")
++            second = overnight.start(self.repo, self.directory, wait_seconds=0)
++            self.assertEqual(second["status"], "EXISTING_OWNER")
++            popen.assert_not_called()
++            self.assertEqual(path.read_bytes(), receipt_bytes)
++            self.assertEqual((self.directory / overnight.LATEST).read_bytes(), pointer_bytes)
++            self.assertEqual(len(initial), 1)
++            self.assertEqual(len(failed_writes), 1)
++
+     def test_existing_campaign_lease_prevents_another_spawn(self):
+         for held_name in ("watch.lock", "run.lock"):
+             with self.subTest(held_name=held_name), \

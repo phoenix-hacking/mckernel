@@ -1,9 +1,84 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T03:17Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T03:39Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**ACTIVE under explicit manual resume `20261110T032750Z-14c19ec7`, same saved Root.**
+The prior025232 invocation completed terminal repair c58470e3 and handoff bca25e0d,
+then stopped normally BLOCKED/exit20 after three actual goal turns. Its audit and
+old process births are historical. This new invocation supplies a confirmed
+ordinary helper defect; it releases no original OS/source/SDK/native/resource hold.
+Root is actual Sol/MAX; A/B new source/test turns are verified Sol/HIGH,
+never/danger-full-access. Six direct owners maximum, depth1, one sole compositor.
+
+Pinned remote `d84ee20ae834626ac62eaaae9233f4a12500a3d7` was fetched and
+fast-forwarded from exact parent bca25e0d after clean four-path/index/collision
+checks. All33 unrelated dirty tracked paths/deletions remain identical. IHK source,
+gitlink and bundle are outside these four paths; no tracking census, restore,
+build, terminal-precedence test or qualified provider chain is replayed.
+
+**Repair PASS:** definite before-Popen log setup failures now persist FAILED when
+storage works, close the owned raw FD/stream and permit a later explicit retry.
+A separate attempted-spawn marker prevents child=None after entering Popen from
+being mistaken for proof of no child. Those receipts remain UNKNOWN and refuse a
+second spawn. Failure persistence does not depend on a writable log; unavailable
+receipt storage preserves the original unresolved receipt and conservative refusal.
+
+The incoming helper reproduced all5 new regressions (3 failures/2 errors). The
+reviewed correction passed the same7 selected methods:5 new cases and2 necessary
+existing uncertainty/live-owner controls. One cleared-condition retry reached
+exactly1 MOCK child; no real helper or inhibitor/child/campaign was launched.
+FD cleanup and receipt-before-best-effort logging passed. Both test payload waits
+joined/CPU7 released. Raw scoped evidence: `docs/verification/os-prespawn-log-failure-20261110/`.
+The initial four-case unexecuted test proposal remains in its private owned path;
+no failed or UNKNOWN record was deleted/reset. Other helper methods and recipe
+are unchanged, including live identity/leases/duplicate refusal/pidfd stop.
+
+| Remaining prerequisite | Actual consumer | Owner / smallest proof |
+| --- | --- | --- |
+| Eligible universal/generic provider disposition | OriginalM14F03/F06/I02 matching final build | Original hold authority; exact original scope and eligible genuine cohort, with no held/equivalent replay |
+| Complete remaining12 source/provider contracts | Existing qualified partial and original integrations | Original scope/ABI/callee/owner input; existing exact UNKNOWN/NO_GO decisions remain binding |
+| Supported SDK/source-custody/native/currentfree bindings | Original default image/modules/native/application acceptance | Original source/native owners; matching supported artifacts and fresh operation-specific real gates |
+
+The new helper is not used for this invocation. Do not execute its start/stop,
+apply its instruction, reload a healthy controller or enable optional repair/
+milestone-stop flags. Current launcher stays hours0/watchdog180/stall1200/maxrestarts3,
+agent windows off. Technical recovery remains foreground-owned through normal
+guarded controls. No fresh session, hidden recovered mode, goal/budget/state edit.
+
+Fresh normal included guard03:37:45% used/55% remaining; no service/spend hold.
+HOST CPUs0,6,7, max3 aggregate light jobs,4GiB TOTAL including all controller/worker
+overhead; fresh26GiB available, host16/scratch12GiB disk floors. Retain18GiB prior
+reservations plus4GiB host floor. Existing12GiB planner ceiling is not another RAM
+grant. Native2–5/12GiB remains separately held; CPU1 excluded. All UNKNOWN owners,
+expired attempts/nonces, scratch21/mutex27:4 and later user/usage/service stops remain.
+No prepaid/credits/API fallback. The optional source recipe grants no live authority.
+
+Original M14/M15 checklist remains51.48%/50.97%,156 counted/73 verified,38/45 open;
+acceptance4/6+0/3 and1/8+0/4. Harness adoption/repair earns0 original credit.
+EACH>=75% by2026-11-10T08:00Z stays a soft planning target, not a stop or guarantee.
+Original generic/exec replay/equivalent=false, exact12providers/notification/wait/
+kill/process UNKNOWN/NO_GO, supported SDK/source-custody/native/currentfree/backend/
+ABI/lifetime bindings and installed real-gate refusal persist. Final-image argv is
+unset; original source/native input still prevents a reliable final ETA.
+No kernel/native/MMIO/MSR action, balanced/zero cases or BFD-name task is admitted.
+
+Next15-minute deliverable after this coherent publication requires a genuine eligible
+input for the three original prerequisites above. The new four-path adoption and
+confirmed helper repair are complete. Critical-path blocker remains the held
+universal generic provider; original authority owns its disposition, Root owns
+integration. Final-image argv remains unset. No new original source/native input
+is implied by this inert helper adoption, optional recipe, available quota or
+completed owners. Do not manufacture compatibility APIs, CI retests or closed
+source audits to fill slots. The original final ETA remains unknown.
+This invocation's first impasse observation begins after publication in actual Root
+turn `01a1c37f-7523-7fe2-894b-09f0185ba2bb`; goal remains active. Old invocation audits
+and timer wakes do not count toward this new audit.
+
+## Previous025232 checkpoint (historical; current manual resume above is active)
+
 
 **SOURCE/BINDING IMPASSE after manual resume `20261110T025232Z-785c93f5`.**
 The confirmed new harness task is complete and published. Three consecutive actual
@@ -88,103 +163,16 @@ is authorized by a source impasse. Further useful engineering needs a genuine ne
 eligible input. Original objective, target history, criteria, reservations and
 all source/service/usage/native/later-stop controls remain unchanged.
 
-## Overnight launcher prepared for the next explicit start
+## Optional overnight source proposal (not live launch authority)
 
-The user's follow-up requests unattended work all night while sleeping. The
-latest workstation checkpoint and terminal-precedence repair above are preserved. This helper is an option for a new explicit invocation; it does not
-replace, reconfigure or duplicate an existing live controller. Publishing the
-helper is not evidence that the workstation has launched it.
-
-After a normal checkpoint has released the existing watcher and worker leases,
-update the checkout and start:
-
-```bash
-cd /home/holden/mckernel
-git switch codex/local-native-staging-repair
-git pull --ff-only origin codex/local-native-staging-repair
-python3 -B scripts/start_os_overnight.py start
-```
-
-If an existing controller still owns the campaign, start returns EXISTING_OWNER
-and launches nothing. That is not confirmation that the existing process has
-acquired the overnight settings. Preserve that owner and use its normal handoff;
-do not force a reload, kill a process group or edit saved state.
-
-The helper detaches the supervised launcher from the terminal, redirects input
-away from the terminal and writes output to a private per-attempt overnight log.
-It runs under `systemd-inhibit --what=idle:sleep --mode=block --no-ask-password`,
-which acquires sleep protection before launching the command and releases it when
-the command exits. Missing or denied inhibition fails visibly, without an
-unattended prompt or uninhibited fallback. There is no outer retry loop: the
-existing watcher retains its classified recovery and genuine stop controls.
-
-For this new opt-in invocation only, the helper selects `--hours 0` (no time
-cutoff), `--max-restarts -1` (no numerical cap on eligible technical recovery),
-`--repair-agent-failures --stop-after-m14-m15`, and desktop agent windows off.
-Its separate `scripts/m14-m15-overnight-instruction.txt` applies those actual
-arguments without rewriting the current invocation's general instruction file.
-The default selects two direct children, three aggregate light HOST jobs on
-CPUs0,6,7 and 4 GiB TOTAL shared by all controller/worker overhead and work. This
-fits the launcher's current 2-GiB-per-child planner without increasing the actual
-HOST grant. Existing owners, reservations, fresh operation admission, disk floors
-and the separately held native owner remain unchanged.
-
-The existing repair mode gives ordinary engineering failures to same-Root owners
-for concrete fixes, independent focused review and meaningful retries. A blocked
-goal can remain in monitored waiting and accept real queued instructions without
-repeating unchanged model turns. Actual service, permission, usage, ownership and
-uncertain-delivery holds keep their own recorded causes. Both original M14/M15
-milestone acceptances and every original file/integration gate must close before
-the selected milestone checkpoint can pause the larger saved goal. Original
-terminal causes retain precedence; M14/M15 closure does not mean whole-system
-completion.
-
-```bash
-python3 -B scripts/start_os_overnight.py status
-python3 -B scripts/start_os_overnight.py stop
-python3 -B scripts/start_os_overnight.py dry-run
-```
-
-ACTIVE means this attempt's watcher and active worker are live, have matching
-birth/parent/session identities and hold the campaign leases. WAITING means the
-verified live controller is monitoring a BLOCKED goal. Popen success alone is
-STARTING. Historical or unrelated state never proves a live run. The command
-prints its receipt and console-log paths under the Git common directory's
-`os-autopilot/overnight/`; `overnight-latest.json` identifies the latest attempt.
-`stop` uses a pidfd and rechecks the watcher identity before requesting its normal
-checkpoint. It never signals unrelated work, a process group or native owners.
-`dry-run` prints the command without starting an inhibitor or making model calls.
-
-The workstation must stay powered, connected and logged in. Closing the launch
-terminal is supported; logout, reboot, power loss and administrative overrides
-are outside this helper's lifetime. No global power configuration is changed.
-The [systemd inhibitor documentation](https://www.freedesktop.org/software/systemd/man/latest/systemd-inhibit.html)
-describes the temporary sleep lock.
-
-The existing `os-autopilot/stop-events.jsonl` records stop reasons and evidence;
-`latest-stop.json` is its latest-record view. Existing RPC, console, stderr and
-watcher logs remain the detailed evidence. The ordinary
-`python3 -B scripts/run_os_goal.py --status` and `--progress` reports remain usable,
-and `--instruct 'concrete new input'` queues a real instruction.
-
-Overnight helper validation: 19 focused tests pass. A separate real-process
-synthetic smoke used only fake Python wrapper/watcher/worker processes: after the
-launching parent exited, status remained ACTIVE, console output stayed in the log,
-and exact-watcher stop checkpointed/joined the fake worker, released both leases
-and ended EXITED. No systemd service, model, native operation or real campaign ran
-in that smoke. All 91 focused controller, overnight, stop-log, repair, handoff,
-workflow and restore tests pass with the newer upstream terminal-precedence fix;
-the zero-model-call dry run and whitespace check also pass. These checks do not
-establish native McKernel acceptance.
-
-GitHub Actions follow-up for `8fa22bdc77da30d19f7c802fe520d3aa887c81f9`:
-[run42744577904](https://github.com/phoenix-hacking/mckernel/actions/runs/42744577904)
-successfully checked out the candidate and restored frozen IHK. The broad test
-discovery then reported failures/errors and was cancelled after about ten minutes,
-matching the configured timeout; the API/log does not explicitly identify the
-cancelling source. Later tracker validation was skipped and no summary artifact
-was produced. Full CI is not green. Triage the first actionable failing check and
-its baseline before repair/retry; increasing the timeout alone is not a fix.
+Remote d84ee20 introduced an opt-in helper and separate instruction file. It is
+adopted as inert source only. Its two-child, unlimited-restart, default-stall0 and
+repair/milestone-stop recipe is not the current live configuration. This invocation
+must not run helper start/stop or apply that instruction. No overnight deployment,
+inhibitor capability or process-lifetime proof is claimed. Reported upstream91
+focused passes and synthetic parent-exit smoke are retained at their reported
+scope without rerun. Full CI remains non-green; no new CI failure is qualified
+as an independent task here.
 
 ## Previous211917 source checkpoint (historical; new manual resume above is active)
 

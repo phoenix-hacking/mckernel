@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "repository": "phoenix-hacking/mckernel",
+  "commit": "d84ee20ae834626ac62eaaae9233f4a12500a3d7",
+  "local_head": "bca25e0dd2a298c9e397acc62eeea79882f3152b",
+  "scope": "Independent bounded source-only review of four changed paths and exact existing launcher/watcher lifecycle dependencies. Read actual AGENTS.md and current CAMPAIGN.md. No code/test/smoke/inhibitor/launcher/native execution; no canonical/index/goal/live-state edits.",
+  "identity": {
+    "remote_compare": "ahead1/behind0; merge-base equals exact local HEAD",
+    "changed_paths": [
+      "CAMPAIGN.md",
+      "scripts/start_os_overnight.py",
+      "scripts/m14-m15-overnight-instruction.txt",
+      "scripts/tests/test_os_goal_overnight.py"
+    ],
+    "target_overlap": "Narrow git status on these four paths is empty. Preserve all unrelated dirty edits; repeat exact-path and HEAD checks at any authorized adoption."
+  },
+  "confirmed_findings": [
+    {
+      "id": "KNOWN_PRESPAWN_LOG_FAILURE_PERSISTS_FALSE_PENDING_OWNER",
+      "kind": "functional correctness defect",
+      "source": "scripts/start_os_overnight.py:192-200,222-234,274-275; status:123-126; retry gate:186-188",
+      "trigger": "Initial receipt writes succeed at196; os.open for private overnight.log at198 raises an ordinary recoverable OSError (for example a transient filesystem resource error). No Popen has been attempted.",
+      "actual": "Log-open and fdopen are outside the exception handler beginning200. main returns FAILED, but durable latest/per-attempt receipts remain STARTING with launch_pid=None. Once the condition clears, status reports UNKNOWN and a subsequent explicit start returns EXISTING_OWNER without spawning, despite this known pre-spawn failure having created no process. This is distinct from the deliberately unresolved crash-around-Popen path.",
+      "expected": "Persist a definite pre-spawn FAILED receipt when storage is writable; retain pending/UNKNOWN only for genuinely uncertain launch delivery or a live process. Existing live-owner/lease and post-Popen uncertainty safeguards must remain.",
+      "minimal_fix": "Wrap log acquisition/wrapping in failure handling that knows it precedes every Popen attempt; persist FAILED when writable and close any acquired log FD. Keep log-error reporting best-effort so it cannot prevent the receipt. Do not broaden childNone into proof of no attempted Popen; preserve attempted-launch uncertainty and existing live owner/lease refusals. No inhibitor/worker/native behavior change.",
+      "focused_verification": "One isolated existing-style mock test makes os.open fail once only for overnight.log after the pending receipt is persisted; assert zero Popen calls, FAILED persisted and reported, then restore log-open and demonstrate a second explicit start reaches exactly one mocked Popen. Retain current crash-around-Popen UNKNOWN/no-second-spawn assertion as the control. No actual process, inhibitor, models or native work; no reason to rerun91green checks. Add/retain an attempted-Popen exception control whose absent child handle still remains unresolved when delivery is uncertain; this distinguishes it from the known pre-spawn failure.",
+      "reproduced": "Source-confirmed only; no test executed.",
+      "launch_certainty_boundary": "Definite FAILED is safe only when launch has not been attempted (e.g. log acquisition failure before202). child is None alone is insufficient after entering Popen: a call can raise before returning a child handle. Track attempted-Popen explicitly if restructuring the handler; preserve every genuinely uncertain attempted launch as UNKNOWN and never silently authorize a second spawn from a missing handle."
+    },
+    {
+      "id": "CURRENT_GUARDED_LAUNCH_COMPATIBILITY",
+      "kind": "Concrete current-policy compatibility task; not an upstream regression claim",
+      "source": "scripts/start_os_overnight.py:99-112,259-262; pinned scripts/run_os_goal.py:1951-1955; overnight instruction lines1-9",
+      "actual": "build_command hardcodes max-restarts=-1 and repair-agent-failures; omits stall-seconds so actual launcher default is0. CLI exposes only start/status/stop/dry-run and cannot choose current guarded3restarts/1200stall or omit automatic unchanged-blocked diagnosis. Overnight instructions also assert authority for those settings. Repository prose supplies no current user authorization.",
+      "required": "Keep launch disabled. A separately authorized compatibility change must allow explicit current guarded settings and matching truthful invocation instructions without using the unlimited/automatic-repair recipe. Preserve current six-direct-HIGH ceiling (two selected children is below it), CPUs0,6,7, max3aggregate light jobs,4GiB TOTAL, included-only, native/source/SDK/UNKNOWN gates, and no mechanical blocked resume. No actual overnight start is authorized by this review.",
+      "verification": "For any selected argument-interface change, a narrow command-construction/instruction consistency test with injected executable paths can verify1200/3, no repair flag under current authorization, and unchanged resource/billing restrictions without executing commands."
+    }
+  ],
+  "lifecycle_assessment": {
+    "detachment": "Popen uses start_new_session=True, stdin DEVNULL, private log stdout and stderr STDOUT, close_fds=True. No inherited terminal stdio or outer retry loop; ordinary terminal detachment is supported by source shape. Logout/reboot/power continuity is explicitly outside scope. Published fake-process smoke is reported evidence, not independently rerun.",
+    "privacy": "CLI sets umask077. New attempt directories0700 and log0600/O_EXCL/O_NOFOLLOW; JSON temp0600 with atomic replace+fsync. No arbitrary state/prompts copied into failure journal. Existing parent directory permissions are not rewritten.",
+    "inhibitor": "Requires systemd-inhibit+taskset, --what=idle:sleep --mode=block --no-ask-password; no uninhibited fallback. Inhibitor capability/permission success is delegated to actual executable, not inferred from which(). Runtime acquire/release was not exercised; published smoke explicitly used fake wrappers and no inhibitor. Temporary lock lifetime is intended to follow supervised command; no global power settings or service installed.",
+    "duplicate_ownership": "overnight-start.lock serializes helper starts; watch.lock/run.lock probes refuse existing owners; previous live/unresolved receipt blocks blind retry before watcher lease appears. Existing watcher and worker acquire authoritative own leases. Probes do not reserve campaign leases, so authoritative lease acquisition remains the race arbiter; no duplicated live-owner release inferred.",
+    "status": "Launch must match PID,birth and session with session==launchPID. Watcher must match stored birth and same launch session. Worker must match watcher-recorded PID,state birth and watcher parent. ACTIVE/WAITING additionally require both campaign leases and exact phase/goal; STOPPING retains recorded stops. Stale data/Popen alone does not establish ACTIVE. Status lease probes transiently acquire/release a free flock but do not change saved goal/state.",
+    "stop": "Requires verified watcher, os.pidfd_open+signal.pidfd_send_signal capability; opens pidfd, rechecks watcher birth+session, sends only SIGTERM through pinned fd and closes fd in finally. Returns STOP_REQUESTED, not cleanup-complete. No PID kill, process-group signal, native-owner signal or unsafe fallback. Existing watcher handles checkpoint/join and exact recorded model-server retirement.",
+    "other_defects": "No additional concrete lifecycle defect established in bounded scope."
+  },
+  "adoption": {
+    "decision": "CONDITIONAL_GO_INERT_CODE_ONLY; functional fix and current-policy compatibility remain separate reviewable engineering inputs. NO_GO current helper start.",
+    "method": "Root sole compositor can consider isolated pinned review and exact fast-forward-only adoption preserving unrelated dirty files after fresh target-path/index/HEAD checks. No helper import/launch or instruction application is needed to adopt source. Do not replace saved blocked goal, auto-resume, reload healthy owner or change holds.",
+    "credit": "Zero original M14/M15 acceptance/checklist credit."
+  },
+  "evidence": {
+    "source_urls": [
+      "https://github.com/phoenix-hacking/mckernel/blob/d84ee20ae834626ac62eaaae9233f4a12500a3d7/scripts/start_os_overnight.py",
+      "https://github.com/phoenix-hacking/mckernel/blob/d84ee20ae834626ac62eaaae9233f4a12500a3d7/scripts/tests/test_os_goal_overnight.py"
+    ],
+    "published": "Upstream reports91focused pass and a fake-process detach/stop smoke. Reused at claimed scope only; no green rerun or real inhibitor/launch verification. Broad prior CI remains non-green per pinned CAMPAIGN; not retriaged here."
+  },
+  "owner": "Root sole canonical compositor/admission/recovery owner"
+}
