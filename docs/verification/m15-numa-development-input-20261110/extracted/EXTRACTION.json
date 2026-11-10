@@ -1,0 +1,352 @@
+{
+  "status": "PASS_TRUSTED_BINARY_NUMA_DEVELOPMENT_EXTRACTION_AND_REQUIRED_INPUT_METADATA_PENDING_TYPE_NAMESPACE_REVIEW",
+  "scope": "Exact ordinary RPM metadata/signature/query/passive extraction only; no install, script, CMake/compiler/project/test/native execution",
+  "commands": [
+    {
+      "label": "numactl-devel-nevra",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--qf",
+        "%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}\n",
+        "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel-nevra.stdout",
+      "stderr_path": "/output/numactl-devel-nevra.stderr",
+      "state": "PASS",
+      "pid": 8,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.7674124,
+      "timeout_seconds": 20,
+      "disk_used_before": 67140147,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774183",
+      "finished_at": 1794331475.7833948,
+      "stdout": {
+        "path": "/output/numactl-devel-nevra.stdout",
+        "bytes": 37,
+        "sha256": "2c9ec77db8d0c3e720b24d12f4866f067388d670a7312bd4d12aafe9278534b6"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-nevra.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67148339
+    },
+    {
+      "label": "numactl-devel-signature",
+      "argv": [
+        "/usr/bin/rpmkeys",
+        "--checksig",
+        "--verbose",
+        "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel-signature.stdout",
+      "stderr_path": "/output/numactl-devel-signature.stderr",
+      "state": "PASS",
+      "pid": 9,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.7840688,
+      "timeout_seconds": 20,
+      "disk_used_before": 67148339,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774184",
+      "finished_at": 1794331475.7919848,
+      "stdout": {
+        "path": "/output/numactl-devel-signature.stdout",
+        "bytes": 211,
+        "sha256": "1274a0a00316ff1f0477050ebe0018b5bd5898d0750281ce756e2607cd81a05f"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-signature.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67152435
+    },
+    {
+      "label": "numactl-devel-requires",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--requires",
+        "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel-requires.stdout",
+      "stderr_path": "/output/numactl-devel-requires.stderr",
+      "state": "PASS",
+      "pid": 10,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.7925065,
+      "timeout_seconds": 20,
+      "disk_used_before": 67152435,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774185",
+      "finished_at": 1794331475.8003774,
+      "stdout": {
+        "path": "/output/numactl-devel-requires.stdout",
+        "bytes": 215,
+        "sha256": "df928c18ba8721f80f3e6dd9b6a5e7b6eb41f7bfc77fb72ebca25f1dbda98e05"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-requires.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67160627
+    },
+    {
+      "label": "numactl-devel-payload-manifest",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--dump",
+        "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel-payload-manifest.stdout",
+      "stderr_path": "/output/numactl-devel-payload-manifest.stderr",
+      "state": "PASS",
+      "pid": 11,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.8009744,
+      "timeout_seconds": 20,
+      "disk_used_before": 67160627,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774186",
+      "finished_at": 1794331475.8090532,
+      "stdout": {
+        "path": "/output/numactl-devel-payload-manifest.stdout",
+        "bytes": 805,
+        "sha256": "f29e507c3c396259aa7082974ade15b9b02d933fdd65a5c4202412e8c8353ba7"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-payload-manifest.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67164723
+    },
+    {
+      "label": "numactl-devel-rpm2cpio",
+      "argv": [
+        "/usr/bin/rpm2cpio",
+        "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel.payload.cpio",
+      "stderr_path": "/output/numactl-devel-rpm2cpio.stderr",
+      "state": "PASS",
+      "pid": 12,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.8098433,
+      "timeout_seconds": 30,
+      "disk_used_before": 67172915,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774187",
+      "finished_at": 1794331475.8180203,
+      "stdout": {
+        "path": "/output/numactl-devel.payload.cpio",
+        "bytes": 28484,
+        "sha256": "6894ad40ddeed98b5e0e035d2cccba44631edbfb1a25607e72ae4dfc2ffff335"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-rpm2cpio.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67201587
+    },
+    {
+      "label": "numactl-devel-cpio-names",
+      "argv": [
+        "/usr/bin/cpio",
+        "--list",
+        "--quiet"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel-cpio-names.stdout",
+      "stderr_path": "/output/numactl-devel-cpio-names.stderr",
+      "state": "PASS",
+      "pid": 13,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.8191323,
+      "timeout_seconds": 15,
+      "disk_used_before": 67201587,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774188",
+      "finished_at": 1794331475.8211987,
+      "stdout": {
+        "path": "/output/numactl-devel-cpio-names.stdout",
+        "bytes": 156,
+        "sha256": "5675c1a998270cd1fc1ecfaab9f157c3c045d8b2775cd51765ad9ba629f6de8a"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-cpio-names.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67205683
+    },
+    {
+      "label": "numactl-devel-cpio-extract",
+      "argv": [
+        "/usr/bin/cpio",
+        "--extract",
+        "--make-directories",
+        "--quiet",
+        "--no-absolute-filenames",
+        "--no-preserve-owner"
+      ],
+      "cwd": "/output/numactl-devel",
+      "stdout_path": "/output/numactl-devel-cpio-extract.stdout",
+      "stderr_path": "/output/numactl-devel-cpio-extract.stderr",
+      "state": "PASS",
+      "pid": 14,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.8220313,
+      "timeout_seconds": 30,
+      "disk_used_before": 67209779,
+      "disk_reserved_growth": 536948548,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774188",
+      "finished_at": 1794331475.824083,
+      "stdout": {
+        "path": "/output/numactl-devel-cpio-extract.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-cpio-extract.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67308099
+    },
+    {
+      "label": "numactl-devel-source-RPM",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--qf",
+        "%{SOURCERPM}\n",
+        "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/numactl-devel-source-RPM.stdout",
+      "stderr_path": "/output/numactl-devel-source-RPM.stderr",
+      "state": "PASS",
+      "pid": 15,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794331475.8258934,
+      "timeout_seconds": 10,
+      "disk_used_before": 67308099,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "41774189",
+      "finished_at": 1794331475.8340836,
+      "stdout": {
+        "path": "/output/numactl-devel-source-RPM.stdout",
+        "bytes": 30,
+        "sha256": "6d58256aec0cdc8e91af0da94aca4e803520150728af13a9a313c1c6bcba67eb"
+      },
+      "stderr": {
+        "path": "/output/numactl-devel-source-RPM.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 67312195
+    }
+  ],
+  "packages": [
+    {
+      "id": "numactl-devel",
+      "archive": {
+        "path": "/packages/numactl-devel-2.0.19-3.el10.x86_64.rpm",
+        "bytes": 23091,
+        "sha256": "42c4ad21608d85f8da8fcc608bbdefb1b953c9433f4f5e041a0eab6a5d8f9c65"
+      },
+      "rpm_fields": [
+        "numactl-devel",
+        "0",
+        "2.0.19",
+        "3.el10",
+        "x86_64"
+      ],
+      "trusted_signature_exit0": true,
+      "trusted_full_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "payload_cpio": {
+        "path": "/output/numactl-devel.payload.cpio",
+        "bytes": 28484,
+        "sha256": "6894ad40ddeed98b5e0e035d2cccba44631edbfb1a25607e72ae4dfc2ffff335"
+      }
+    }
+  ],
+  "original_acceptance": false,
+  "trusted_release_key": {
+    "already_trusted_material_equal": true,
+    "existing_rpm_key_record": "gpg-pubkey|6fedfc85|682ae1a9",
+    "full_fingerprint_basis": "existing source lock exactkeySHA/fullfingerprint binding; actual existing RPMdb packets equal source-pinned bytes, no new crypto implementation",
+    "full_primary_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+    "import_or_trust_mutation": false,
+    "key_packet_sha256": "1f09530c1d1fdcbe03279b565e9b7ff1ec4d6fccd663ac2710d0b2f0119dbb7e",
+    "source_pinned_file": {
+      "bytes": 1688,
+      "path": "/etc/pki/rpm-gpg/RPM-GPG-KEY-Rocky-10",
+      "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+    }
+  },
+  "trusted_release_key_reuse": {
+    "bytes": 29632,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/EXTRACTION.json",
+    "sha256": "e0b12f0fa9677992570936436e3e4875034e495fd8f7fb473e686b3dcab35468"
+  },
+  "NUMA_required_input_join": {
+    "signed_package_source_RPM": "numactl-2.0.19-3.el10.src.rpm",
+    "actual_runtime_EQ_requires": true,
+    "actual_header": {
+      "path": "/output/numactl-devel/usr/include/numa.h",
+      "bytes": 14593,
+      "sha256": "207180d3910364a757537835aafe75b33ffe02c792e2407b27b0f6c081a053e0"
+    },
+    "actual_linker_input": {
+      "path": "/output/numactl-devel/usr/lib64/libnuma.so",
+      "mode": "0o777",
+      "is_symlink": true,
+      "actual_packaged_symlink_text": "libnuma.so.1.0.0",
+      "actual_immutable_runtime": {
+        "path": "/usr/lib64/libnuma.so.1.0.0",
+        "bytes": 62328,
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e"
+      },
+      "relation": "SIGNED_SYMLINK_MATCHES_ACTUAL_IMMUTABLE_RUNTIME"
+    },
+    "required_default_functions": [
+      "numa_run_on_node",
+      "numa_parse_nodestring_all",
+      "numa_max_possible_node",
+      "numa_bitmask_isbitset"
+    ],
+    "four_typed_C_header_signature_ABI_accepted": false,
+    "source_header_body_or_compiler_API_execution": false,
+    "readonly_namespace_not_yet_materialized": true
+  }
+}

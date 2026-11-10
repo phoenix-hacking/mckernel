@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-10T17:42:33.464744+00:00",
+  "canonical_changes": false,
+  "inputs": {
+    "bytes": 2858,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/INPUTS.json",
+    "sha256": "59a0d91f60093ddcc149bfd1ce600d376c4e4bc00d1229a2c2e1c2e9c17e1368"
+  },
+  "no_payloads_or_compiler_tests_by_preparer": true,
+  "outer_next_action": {
+    "bytes": 11155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/IMPLEMENTATION-SPEC.json",
+    "sha256": "e7d1321c1e7839fd9f3208a439bc1afeaf1eabb0611c6c821c8360855067df33"
+  },
+  "patch": {
+    "bytes": 335,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/CLONE-REQUEST-DEFINED-MARKER.patch",
+    "sha256": "de67e1ef7db51b2ef42a28851cc686dba5b3d28b00a0d01a1b0ef16aed555e4b"
+  },
+  "pre_handoff_static_correction": {
+    "bytes": 657,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/PRE-HANDOFF-STATIC-CORRECTION.json",
+    "sha256": "ab1b0cc3000f2506c1a5831713d718767b36880630f31d30d9557529e9fd41d7"
+  },
+  "production_delta": "One do_fork request1 declaration gains = { 0 }; every other byte remains identical, including all real VM/root/parent flag inputs, clone selector1/report, kill/error cleanup and native-fork defaultOFF.",
+  "regression_scope": "Old marker typed load compile rejection only, then one candidate C/Rust actual wire/pure helper/discriminator regression across initial clone/report/cleanup shapes and exact/wrong marker controls. Initializer and known wire field preservation are tested; no undefined baseline execution, host response fabrication, whole kernel/provider or original native acceptance.",
+  "request": {
+    "bytes": 10399,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/REQUEST.json",
+    "sha256": "2f1e340329bbe4ebe81679960dea2566f2f3776aa6e00365c194f92059415e54"
+  },
+  "source_bindings": {
+    "bytes": 5276,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/SOURCE-BINDINGS.json",
+    "sha256": "8dc082332835a526a72f9fbebb36fb2e08e1e376f68027dd88c52b57609ec61a"
+  },
+  "status": "SMALLEST_SOURCE_AND_FOCUSED_PROTOCOL_REGRESSION_READY_NOT_EXECUTED"
+}

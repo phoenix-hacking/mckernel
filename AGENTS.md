@@ -74,3 +74,11 @@ Rust must close project implementation/provider ownership. Escalate only exact
 absent external artifacts/access/hardware approvals with evidence. Genuine generic/
 exec/replay/source/native/UNKNOWN holds remain; source-only corrections earn no
 unproved original acceptance. Advance admitted independent original work first.
+
+Latest M14 image-priority clarification: reading current generic/syscall/process
+bodies and deriving source/header/caller/build contracts is ordinary engineering,
+not blocked by UNKNOWN historical plaintext or a missing per-name packet. Assess
+each proposed operation against actual rules/evidence; preserve the real rejection,
+known prohibited replay and all actual flags/holds. Prepare the matching full-image
+source/provider/build operation and execute once its genuine requirements pass.
+Do not reinstate an unsupported blanket source-wide restriction.

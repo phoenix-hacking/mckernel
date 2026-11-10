@@ -1,0 +1,412 @@
+{
+  "C_retirement": false,
+  "actual_Root_capture": {
+    "bytes": 1729,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/root-execution-1/RESULT.json",
+    "sha256": "24be79d1da69b67137bd348731d7174e33520c212fe676085af167c3d7182445"
+  },
+  "actual_lifecycle_and_resource": {
+    "CPU7_1GiB_plan_with_old256MiB_and_all_overhead_inside4GiB": true,
+    "HOST_no_container_OOM_state_claim": "Positive HOST exits/waits and metrics are the evidence; no container/nonOOM field is invented.",
+    "Root_admission": {
+      "bytes": 8526,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/root-execution-1/ADMISSION.json",
+      "sha256": "f985d2e70dca41c4592095048539baa5ea1499a2c1641fd9516b1716dc209775"
+    },
+    "Root_exact_two_outer_families_positive_parent_whole_descendants_and_closed_streams": [
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "no-live-Docker-owner",
+        "leader": 1030886,
+        "leader_birth": "41881487",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "exact-six-phase-pair-driver",
+        "leader": 1030895,
+        "leader_birth": "41881494",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    ],
+    "finished_at": "2026-11-10T17:42:29.796030+00:00",
+    "fresh26GiB_and_disk_floors_packet_headroom": true,
+    "no_timeout_signal_adopted_reap_or_residual": true,
+    "old_CPU0_UNKNOWN_released": false,
+    "six_literal_child_commands_pid_birth_exit0_direct_wait": true
+  },
+  "actual_result": {
+    "bytes": 83151,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/RESULT.json",
+    "sha256": "a662286bc2b39c2f185075bb13110c4e5446e81858f67841f6e19b55732e4856"
+  },
+  "at": "2026-11-10T17:48:41.886807+00:00",
+  "decision": "GO_ACTUAL_CURRENT_PROCESS_PAIR11_SOURCE_TYPE_CODEGEN_PARTIAL_LINK_OWNER_RESULT_AT_STATED_SCOPE",
+  "findings": {
+    "NOBITS_is_only_declaration_not_live_kernel_state": true,
+    "actual11_named_strong_FUNC_owners_verified": [
+      {
+        "actual_normalized_relocations": [
+          [
+            33,
+            1,
+            [
+              "global",
+              "get_this_cpu_local_var",
+              0
+            ]
+          ],
+          [
+            143,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_lock",
+              0
+            ]
+          ],
+          [
+            201,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_unlock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 228,
+        "exact_bytes_sha256": "2531947d4c8db6da431062e29d29ec633b391b4437ff39038bca21eb6b8b056c",
+        "kind": "T",
+        "name": "syscall_find_process_bridge",
+        "section": 174,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            26,
+            1,
+            [
+              "global",
+              "get_this_cpu_local_var",
+              0
+            ]
+          ],
+          [
+            124,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_unlock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 149,
+        "exact_bytes_sha256": "52b872862ea7c954f056e0db3d7cce0556897a204c71f58823da71913a59b542",
+        "kind": "T",
+        "name": "syscall_process_unlock_bridge",
+        "section": 182,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            33,
+            1,
+            [
+              "global",
+              "get_this_cpu_local_var",
+              0
+            ]
+          ],
+          [
+            143,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_lock",
+              0
+            ]
+          ],
+          [
+            201,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_unlock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 228,
+        "exact_bytes_sha256": "2531947d4c8db6da431062e29d29ec633b391b4437ff39038bca21eb6b8b056c",
+        "kind": "T",
+        "name": "find_process",
+        "section": 174,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            26,
+            1,
+            [
+              "global",
+              "get_this_cpu_local_var",
+              0
+            ]
+          ],
+          [
+            124,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_unlock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 149,
+        "exact_bytes_sha256": "52b872862ea7c954f056e0db3d7cce0556897a204c71f58823da71913a59b542",
+        "kind": "T",
+        "name": "process_unlock",
+        "section": 182,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [],
+        "bytes": 35,
+        "exact_bytes_sha256": "87ed5f3e0e2e7e94e4c4909b9e515b0c9a8e15ba243c6d691aeac651609cd5b3",
+        "kind": "T",
+        "name": "process_hash",
+        "section": 177,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [],
+        "bytes": 162,
+        "exact_bytes_sha256": "87b4d6ea03d9db1b1f3086197d02943d16b34076a02a95828ef2a9acb34818de",
+        "kind": "T",
+        "name": "process_find_process_body_result",
+        "section": 176,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [],
+        "bytes": 38,
+        "exact_bytes_sha256": "132fce173149d457b1da3556a1367d9f5338cdcbd87dfb43a124c23489088df5",
+        "kind": "T",
+        "name": "process_unlock_found_process_result",
+        "section": 184,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            6,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_lock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 21,
+        "exact_bytes_sha256": "cc322594fc7445c67e1d0c3d272e5430bbef43fa5e20027592bd459a98283a7a",
+        "kind": "T",
+        "name": "process_mcs_reader_lock_bridge",
+        "section": 178,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            5,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_unlock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 15,
+        "exact_bytes_sha256": "a7579fd3658e23e619a4a8359222a2e79cb425c9317df2f99b024a70fb294901",
+        "kind": "T",
+        "name": "process_mcs_reader_unlock_bridge",
+        "section": 180,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            6,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_lock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 21,
+        "exact_bytes_sha256": "cc322594fc7445c67e1d0c3d272e5430bbef43fa5e20027592bd459a98283a7a",
+        "kind": "T",
+        "name": "__mcs_rwlock_reader_lock",
+        "section": 170,
+        "value": 0
+      },
+      {
+        "actual_normalized_relocations": [
+          [
+            5,
+            1,
+            [
+              "global",
+              "__ihk_mc_spinlock_unlock",
+              0
+            ]
+          ]
+        ],
+        "bytes": 15,
+        "exact_bytes_sha256": "a7579fd3658e23e619a4a8359222a2e79cb425c9317df2f99b024a70fb294901",
+        "kind": "T",
+        "name": "__mcs_rwlock_reader_unlock",
+        "section": 172,
+        "value": 0
+      }
+    ],
+    "actual19_flags_source64node_callback_assertions_and383B_SSE_diagnostic": "Actual corrected6f018 literal compile command matches the reviewed flags, same70eb compiler and exact52aa warning with empty compile stdout. Source-bound no_cfg/ABIff48/node64+align64/irqsave0/CInt4/CULong8/pointer8/Process offsets and real callback signatures compiled. No new C-header probe, no old proof replay.",
+    "actual_frontier": {
+      "old_genuine_U": 12,
+      "remaining10": [
+        "do_kill",
+        "do_syscall",
+        "eventfd",
+        "f03_terminate_host_refcount_set_v1",
+        "f03_wait_release_process",
+        "f03_wait_release_thread",
+        "syscall_do_kill_thread_bridge",
+        "syscall_do_syscall_request_bridge",
+        "syscall_generic_forwarding_body_result",
+        "terminate_host_body_result"
+      ],
+      "resolved": [
+        "syscall_find_process_bridge",
+        "syscall_process_unlock_bridge"
+      ]
+    },
+    "actual_global_membership": {
+      "FUNC": 115,
+      "data": 25,
+      "new_global_data": 0,
+      "strong": 140
+    },
+    "actual_joined_partial": {
+      "bytes": 72920,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/output/process_pair_e1a_partial.o",
+      "sha256": "b4835b0a9276376c3f523220b469062f3dff73c468279a5ce7557f7321769b13"
+    },
+    "actual_provider": {
+      "bytes": 4392,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/output/process_pair.o",
+      "sha256": "8e820f7e65050c208d75b9127bd7232ba07da74dec08ed28272b4444a7d21a60"
+    },
+    "all132_old129global_and3LOCAL_owner_proofs_and_normalized_relocations_equal_saved_e1a": true,
+    "all143_old_and_new_owner_rows_and_relocations_recorded_by_actual_called_postjoin": true,
+    "borrow_protocol_scope": "The real source contract remains borrowed successful hash-reader hit/no reference increment, miss release, same live Process/PID/resource-set/node exactly-one matching IRQrestore. Codegen/link proves the source/typed/provider artifact prerequisite; target lookup, lock, IRQ, GS/MSR, process lifetime and native behavior were not executed.",
+    "eleven_readonly_records_preserved": true,
+    "exact_three_new_imports_resolved_to_retained_real_owner_bytes": {
+      "__ihk_mc_spinlock_lock": {
+        "actual_retained_source_owner_proof": {
+          "bytes": 108,
+          "exact_bytes_sha256": "9e64a1107f1d05deaa87e39dd9fea7bd98bf3380671e7a286d4a90976301d916",
+          "kind": "T"
+        },
+        "retained_owner": {
+          "bytes": 108,
+          "kind": "T"
+        }
+      },
+      "__ihk_mc_spinlock_unlock": {
+        "actual_retained_source_owner_proof": {
+          "bytes": 61,
+          "exact_bytes_sha256": "173c05f804a9950b64d852f7dc5efbe8106e04492d1941a52d6a56f42bd72ab3",
+          "kind": "T"
+        },
+        "retained_owner": {
+          "bytes": 61,
+          "kind": "T"
+        }
+      },
+      "get_this_cpu_local_var": {
+        "actual_retained_source_owner_proof": {
+          "bytes": 99,
+          "exact_bytes_sha256": "6906e9df2b1af8390e056eff4b4ca79be666cbf02fc3a7375d8b7eef741c7142",
+          "kind": "T"
+        },
+        "retained_owner": {
+          "bytes": 99,
+          "kind": "T"
+        }
+      }
+    },
+    "nine_actual_physical_ranges_two_true_alias_pairs": [
+      [
+        "find_process",
+        "syscall_find_process_bridge"
+      ],
+      [
+        "process_unlock",
+        "syscall_process_unlock_bridge"
+      ]
+    ],
+    "same_bytes_reader_bridge_and_MCS_in_distinct_sections_not_aliases": true,
+    "saved_raw_nm_readelf_correspondence": true
+  },
+  "material_source_profile_GO": {
+    "bytes": 18029,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-review-1/producer-1/flag-correction-1/REVIEW.json",
+    "sha256": "8b77692c0e6ff30aed9943fb91b4aca99ced61062f167e5132fbec1bae6524c3"
+  },
+  "original_acceptance": false,
+  "publication": "Root may integrate essential frozen source/request/review/raw text/result and actual new b483/frontier at its exact scope; no binaries/toolchains/keys/native payload. Actual immutable passing compile/read/link phases must not be rerun unchanged.",
+  "qualification": {
+    "bytes": 29533,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/qualification-1/RESULT.json",
+    "sha256": "a668defd3f7680a3d8a197b67c711fb1a6ecaf74a08c5de1bae4f363b1c097b3"
+  },
+  "remaining_original_conditions": [
+    "Actual b483 partial may supply the two providers and shared process_hash/IRQsave-reader ownership to the separately owned matching-image/kill contracts; do not duplicate unchanged source/codegen or rebuild old lower providers.",
+    "The ten exact genuine U, full selected C/Rust image/SDK/config/ABI/caller/cohort/lifetime and original generic/exec/notification/wait/kill/termination scopes remain separate. No newly cleared held work or remaining-ten runtime/owner eligibility follows.",
+    "No supported full-image/default/runtime/native/C-retirement/milestone acceptance. Native/currentfree/resource/oldCPU0 UNKNOWN/service/account/same finite credit-run controls and M14-beforeM15 persist."
+  ],
+  "request": {
+    "bytes": 35428,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/REQUEST.json",
+    "sha256": "6f018cd96fd11ec95c9d13bf866eb129ad0e09578292dc3852c9679d8f72d4b6"
+  },
+  "reviewer": "/root/p03_cutover_source_max existing direct gpt-6.1-sol/MAX; independent actual-result review; Root sole canonical/executor/publisher; no children",
+  "reviewer_operations": "Read only frozen qualification/request/result/capture/admission/command/nm/readelf/metrics and prior/current owner/relocation JSON, plus provider/joined bytes only for SHA/size. Direct saved-text/symbol/alias and JSON equality comparisons; write this one disjoint private REVIEW. No source-body preparation, ELFreader/checker/helper/compiler/link/readback/probe/test/Docker/network/kernel function/native execution or canonical/other-owner edit.",
+  "schema": "mckernel.m14-process-pair-independent-actual-result-review.v1",
+  "summary_null_field_reconciled": "Root generic capture actual_joined_sha256 is null; authoritative producer RESULT and actual POSTJOIN/metadata plus independently hashed72920B object all match b4835b0a. Raw capture remains preserved. This reporting-key mismatch is not a compiler/link failure and needs no replay."
+}

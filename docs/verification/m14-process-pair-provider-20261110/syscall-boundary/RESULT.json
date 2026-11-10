@@ -1,0 +1,302 @@
+{
+  "ABI": {
+    "entry": "C long do_syscall(struct syscall_request*,int); Rust unsafe extern C fn(*mut SyscallRequest,CInt)->CLong. On this actual x86_64 CInt=i32, CLong=i64, CULong=u64, pointer/usize8. No new errno or supported-request filter.",
+    "monitor": "IhkOsCpuMonitor reprC size24, status int0/status_bak4/counter unsignedlong8/ocounter16; IHK_OS_MONITOR_KERNEL_OFFLOAD=5. Preserve original monitor pointer/status and unsigned counter wrapping.",
+    "process_thread_layout": "Current ABIff48 asserts Thread5568/align64/proc4304/refcount4628 and Process1728 withoutTOFU/18112 withTOFU/align64,pid456,mckfd_lock1284. New outer also accesses in_syscall_offload/profile/Process.nohost and CPU monitor/current. Matching actual generated C ABI check must bind these fields; no new measured offset is claimed here.",
+    "profile": "PROFILE_SYSCALL_MAX2000; profile_syscall2offload(sc)->CInt adds2000; profile_event_add(CInt,u64) uses real current-thread profile storage. Keep signed narrowing/unsigned timestamp subtraction and current-thread profile allocation/error semantics; no replacement metrics.",
+    "request": {
+      "align": 8,
+      "mutation": "do_syscall prep initializes rtid/ttid, send zeros caller valid and publishes only copied packet valid=1. number/six arguments preserve original values/bit patterns; C helper calls narrow number to int where originally declared int.",
+      "offsets": {
+        "args": 24,
+        "number": 16,
+        "rtid": 0,
+        "ttid": 4,
+        "valid": 8
+      },
+      "size": 72,
+      "source": "kernel/include/syscall.h261; Rustabi148; Linuxuprotocol.h184; x86 IHK_DMA_ALIGN actual macro is empty (ihk/cokernel/smp/x86_64/include/ihk/memconst.h6)"
+    },
+    "response": {
+      "guest_align": 8,
+      "guest_size": 48,
+      "host_TOFU_OFF_size": 40,
+      "host_TOFU_ON_size": 48,
+      "initialization": "Use MaybeUninit slot/raw projected field access; prepare initializes status/request status/pde, host initializes ret/stid for completed response. Never assume all48 bytes or unused fault fields initialized merely because completed.",
+      "offsets": {
+        "fault_address": 32,
+        "pde_data": 40,
+        "req_thread_status": 16,
+        "ret": 24,
+        "status": 8,
+        "stid": 4,
+        "ttid": 0
+      },
+      "publication": "Linux __return_syscall at2509 writes ret/stid and optional pde_data, performs requester notification handshake, mb(), then status=1; existing Rust wait acquire-observes status before outer ret. Nested status4 request map/copy/unmap remains same live response.",
+      "source": "Guest kernel/include/syscall.h348 always includes pde_data; Linux executer/include/uprotocol.h213 conditionally includes that extension. Common prefix has identical offsets. Guest initializes pde_data before send; non-TOFU selected branch never consumes it. Do not invent a requirement that host OFF be48 bytes."
+    }
+  },
+  "acceptance_delta": {
+    "C_retirement": 0,
+    "M14": 0,
+    "M15": 0,
+    "native": 0,
+    "old_UNKNOWN_release": false
+  },
+  "actual_outer_behavior": "kernel/syscall.c4151-4453, all current branches read. It owns monitor status/barrier/counter, in_syscall_offload except exit_group, request preparation, send->preempt->wait->preempt ordering, return log, optional TOFU pde publication, proxy-dead nohost flag and optional profiling. The selected wait/send algorithms below are real existing Rust calls, not missing wrappers.",
+  "at": "2026-11-10T17:35:21.285081+00:00",
+  "confirmed_source_gap": {
+    "consumer": "kernel/rust/fork_control_guest.rs245 evaluates request.args[5] for number56 before returning from unrelated-marker path. Thus legacy clone has a source-established typed uninitialized marker read; owned-control producers correctly initialize their complete request.",
+    "id": "DO-SYSCALL-LEGACY-CLONE-MARKER-INITIALIZATION-01",
+    "minimal_fix": "Define existing request1 at declaration with = { 0 }; retain every actual subsequently assigned argument and all legacy clone/report/kill/cleanup branches. Do not turn the native ownership feature on or remove legacy clone to evade the input.",
+    "predicate": "Current ENABLE_NATIVE_FORK_OWNED_TRANSACTION defaultOFF; production ordinary legacy do_fork branch reaches selected real Rust wait hook. This is not an assertion that a particular native run occurred.",
+    "producer": "kernel/syscall.c8030 declares request1 without initialization; all actual request1 occurrences show no memset or args4/args5 assignment before clone offload8282-8291 and8444-8447.",
+    "qualification": "Independent exact source review plus actual same-build selected callsite readback and genuine matching-image compile. No rejected live-reference/reset fixture, fake host success or old green test replay. Native functional closure remains its distinct actual gate.",
+    "runtime_bug_claim": "No crash, misclassification or native behavior was executed/observed by this source audit; the actual source initialization gap is sufficient to prepare the bounded repair."
+  },
+  "current_provider_gap": {
+    "actual_partial": {
+      "already_bound_lower_symbols": [
+        {
+          "bind": 1,
+          "name": "cpu_local_var_initialized",
+          "other": 0,
+          "section": 191,
+          "size": 4,
+          "type": 1,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "rdtsc",
+          "other": 0,
+          "section": 29,
+          "size": 12,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "preempt_disable",
+          "other": 0,
+          "section": 49,
+          "size": 54,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "clv",
+          "other": 0,
+          "section": 193,
+          "size": 8,
+          "type": 1,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "num_processors",
+          "other": 0,
+          "section": 186,
+          "size": 4,
+          "type": 1,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "locals",
+          "other": 0,
+          "section": 195,
+          "size": 8,
+          "type": 1,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "preempt_enable",
+          "other": 0,
+          "section": 51,
+          "size": 54,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "cpu_restore_interrupt",
+          "other": 0,
+          "section": 41,
+          "size": 5,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "get_this_cpu_local_var",
+          "other": 0,
+          "section": 78,
+          "size": 99,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "cpu_disable_interrupt_save",
+          "other": 0,
+          "section": 38,
+          "size": 6,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "cpu_pause",
+          "other": 0,
+          "section": 40,
+          "size": 3,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "kprintf",
+          "other": 0,
+          "section": 61,
+          "size": 706,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "ihk_mc_get_processor_id",
+          "other": 0,
+          "section": 80,
+          "size": 77,
+          "type": 2,
+          "value": 0
+        },
+        {
+          "bind": 1,
+          "name": "get_cpu_local_var",
+          "other": 0,
+          "section": 76,
+          "size": 24,
+          "type": 2,
+          "value": 0
+        }
+      ],
+      "genuine_U": [
+        "do_kill",
+        "do_syscall",
+        "eventfd",
+        "f03_terminate_host_refcount_set_v1",
+        "f03_wait_release_process",
+        "f03_wait_release_thread",
+        "syscall_do_kill_thread_bridge",
+        "syscall_do_syscall_request_bridge",
+        "syscall_find_process_bridge",
+        "syscall_generic_forwarding_body_result",
+        "syscall_process_unlock_bridge",
+        "terminate_host_body_result"
+      ],
+      "sha256": "e1a2469706723545483f74be15ad0bcc8ef01c9171159991b7a367adf87d2fd9",
+      "strong_data": 25,
+      "strong_functions": 104,
+      "strong_total": 129
+    },
+    "missing_Rust_definition": "do_syscall itself has only extern declarations/consumers in current Rust; C4151 remains real outer owner. New real outer Rust body and paired C/CFG selection are required.",
+    "next_real_join": "Root/P04 current full-image build must pull actual transitive implementations/data/table/handlers and close remaining frontier with real selected owners. Do not infer exactly11 residuals by adding only a tiny do_syscall shim; real send/wait brings further genuine dependencies.",
+    "not_missing_code": "send_syscall, wait reply, generic forwarding body, request bridge, policy and lower provider definitions exist. Their absence from e1a is a missing current artifact/cohort binding, not evidence that source algorithms are absent.",
+    "not_present_as_strong_in_e1a": [
+      "send_syscall",
+      "syscall_offload_wait_reply",
+      "profile_event_add",
+      "profile_syscall2offload",
+      "schedule",
+      "syscall_dispatch_context_bridge",
+      "check_sig_pending",
+      "ihk_mc_get_numa_node_by_distance"
+    ],
+    "parallel_ownership": "PublicABI process lookup/unlock pair and SourceAcq do_kill remain their disjoint work. This report does not duplicate those bodies, alter their provider admission or clear their UNKNOWN runtime/ownership outcomes."
+  },
+  "current_selected_profile": {
+    "ARCH": "x86_64",
+    "ENABLE_FUGAKU_HACKS": "OFF explicitly; existing Rust wait conditional preserved",
+    "ENABLE_PERF": "ON",
+    "ENABLE_RUSAGE": "ON",
+    "ENABLE_RUST_KERNEL": "ON",
+    "ENABLE_TOFU": "OFF explicitly for ordinary Rocky profile; retain C/Rust optional branch source behavior",
+    "ENABLE_UBSAN": "OFF",
+    "MCKERNEL_HOST_IRQ_ABI": "linux-6.12",
+    "MCKERNEL_RUST_SYSCALL_OFFLOAD": "selected by current kernel/CMakeLists.txt693; real Rust send/wait selected, C do_syscall outer is still unconditionally defined",
+    "PROFILE_ENABLE": "ON, layout-critical because Rust Process/Thread currently contain profile fields",
+    "SYSCALL_BY_IKC": "unconditional source #define kernel/syscall.c94, no CMake flag to invent",
+    "new_full_image_compiler": "P04 image owner binds real already-retained nightly1.95 and existing qualified loader closure; native46d stable1.92 does not satisfy the production nightly guard",
+    "not_frozen_here": "Actual full-image argv/generated compute config and positive execution admission are owned by Root/p04_source_max, not inferred from these source values.",
+    "source_derived_and_sibling_confirmed": true
+  },
+  "existing_Rust_coverage": [
+    {
+      "actual_code": "Request/response prep; zeroed128B packet, byte-copy72B request, release valid publication, true CPU/PID/physical response packet, actual ikc_manycore::ihk_ikc_send and negative-send diagnostic. Packet consumption is synchronous copy; current ikc_queue.rs212 memcpyl is byte-copy, so old u64-copy comment is not a reason to infer an alignment defect.",
+      "definition": "send_syscall",
+      "selection": "MCKERNEL_RUST_SYSCALL_OFFLOAD suppresses C fallback4087-4142",
+      "source": "kernel/rust/syscall_policy.rs2525-2621"
+    },
+    {
+      "actual_code": "Acquire status loop; optional Fugaku epoll schedule; genuine backlog callback/free and signal polling; no-preempt/tid0 spin; runqueue flags/IRQ locks/NUMA zero pages; SPINNING/DESCHEDULED CAS and waitq/schedule; physical+virtual nested request map/copy/unmap; rt_sigaction or actual sparse-table dispatch; nr8001 nested reply; actual fork_control_guest::observe_fork_control_reply after the outer completion. The existing map-failure error response is preserved, not replaced or claimed newly behavior-qualified.",
+      "definition": "syscall_offload_wait_reply",
+      "selection": "same selected C entry calls it at4219",
+      "source": "kernel/rust/syscall_policy.rs2690-2911"
+    },
+    {
+      "actual_code": "Public delegated entry fills all six args through actual builder and invokes genuine do_syscall. Current e1a U for body is an unbound selected provider, not absence of its existing Rust definition.",
+      "definition": "syscall_generic_forwarding + syscall_generic_forwarding_body_result",
+      "source": "kernel/rust/syscall_policy.rs2640-2678 and2946-2977"
+    },
+    {
+      "actual_code": "Existing requester/target TID, send prepare/copy/publish, budget, offload prepare, preempt predicate, proxy-dead, TOFU predicate, profile threshold and counted predicate; keep their exact CInt conversion boundaries.",
+      "definition": "setup/accounting policies",
+      "source": "kernel/rust/syscall_policy.rs2402-2490,3056-3175"
+    },
+    {
+      "actual_code": "These are real current source providers with project implementation ownership obligations. This source list is not a claimed current final-image symbol join.",
+      "definition": "real lower implementations",
+      "source": "cls.rs168-186 current CPU/preempt; x86_cpu_helpers.rs184 rdtsc and679 acquire; debug.rs252 kprintf; profile.rs194/199; waitq.rs187/193/320/349; spinlock_helpers.rs90/108/116/122; page_alloc.rs2989 zero pages; mem_helpers.rs2958/2978 map/unmap and7516 NUMA; x86_setup.rs608/617 physical map/unmap; ikc_manycore.rs180 actual send"
+    },
+    {
+      "actual_code": "Scheduler resumes with real context/CPU/FP lifetime semantics. Nested dispatch uses actual sparse handler slots and real handlers; the immutable descriptor/table ownership is part of full-image closure. No dummy table/empty handler list/blanket platform waiver.",
+      "definition": "schedule and nested dispatch/data",
+      "source": "process_helpers.rs remaining_process_schedule_entry::schedule16437; syscall_policy.rs32518 actual dispatch; syscall.c114-158 table/descriptor; cfg-selected Rust table atsyscall_policy.rs33417+"
+    }
+  ],
+  "implementation_spec": {
+    "bytes": 11155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/IMPLEMENTATION-SPEC.json",
+    "sha256": "e7d1321c1e7839fd9f3208a439bc1afeaf1eabb0611c6c821c8360855067df33"
+  },
+  "inputs": {
+    "bytes": 7589,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/INPUTS.json",
+    "sha256": "ce3fac4a95b711da5bb7718435cdf61a960ec7500ed74c021dc3a52f11371c9e"
+  },
+  "next_action": "Root assigns the exact four-path private outer implementation + paired selector + one declaration initialization above to an existing owner; a separate existing MAX owner reviews changed source/ABI/lifetime. Compose reviewed source into P04 real full-image packet and run only after actual operation-specific admission.",
+  "owner": "/root/p04_tests_max; actual inherited gpt-6.1-sol/MAX, no recursion, Root sole canonical compositor/executor",
+  "ownership_and_lifetime": [
+    "Caller request72 is writable/naturally aligned and live throughout synchronous send, nested service and completed return. Some legacy C callers initialize only consumed arguments; do not bulk-read the struct into a Rust value or reject those callers as unsupported. Assess actual typed reads/consumer fields; the specific clone marker fix below is required.",
+    "Private response48 resides on the original live kernel stack; its physical address is published to the Linux proxy. Return/stack retirement requires the actual completed response, not a fake ACK or wait callback. No early timeout/cancellation/free is introduced. C send-error logging still has no new transport recovery policy.",
+    "Original Thread/Process/VM/signal-common and CPU channel remain borrowed under caller/scheduler lifetime; no new refcount acquire/release or termination permission comes from this entry. No long-lived Rust &mut reference may span send, schedule, real nested dispatch or any callback.",
+    "The original monitor pointer and outer thread pointer are retained across blocking; current CPU-local state for wait/runqueue/IRQ is reacquired by actual wait/scheduler code. Same-stack response and retained monitor are not replaced with new CPU ownership after resume.",
+    "Waitq entry lives through prepare/schedule/finish; IRQ-save and runqueue noirq lock pairs stay in existing real providers. Backlog callback/arg is cleared before invocation and argument freed once afterwards; those effects cannot be elided by an outer wrapper.",
+    "Nested remote request physical/virtual maps are copied before their unmap; actual handler receives only live local context/request data. Real sparse table/handler ABI, rt_sigaction signal-common lifetime and error returns remain dependencies.",
+    "The genuine fork-control observer runs only after outer completion and may retain its own registry carrier on errors. Outer entry must neither suppress it nor reinterpret its source presence as revoke/destruction/runtime authority.",
+    "TOFU pde slot publication uses the original process mckfd_lock IRQ-save pair; no new PDE ownership transfer/refcount is invented. Profiling storage and debug verbose records retain their current process/whole-kernel lifetimes."
+  ],
+  "performed": "Only current source/header/build and necessary saved machine-evidence reads plus these private JSON writes/hashes. No compiler, test, source extraction/codegen, link, object parser, Docker, network, sudo, process-control, guest/native, known rejected fixture or canonical edit.",
+  "primary_finding": "The real offload algorithm is substantially implemented in current Rust already. The currently C-owned outer do_syscall orchestration is the specific missing Rust implementation/selection, not an absent syscall algorithm. Source readiness is not matching-image/provider or native acceptance.",
+  "retained_local_read_errors": "During bounded location searches, some guessed absent source/include paths produced ENOENT. No payload failed, protected source was opened, permission was escalated or failure retried as an equivalent held operation. The selected debug header was subsequently correctly supplied by P04 owner at root/lib/include/ihk/debug.h.",
+  "scope_assessment": {
+    "current_authority": "Current AGENTS/CAMPAIGN latest user clarification expressly authorizes ordinary current generic/syscall/process body reading and local source/header/caller/build derivation. Unknown encrypted historical assignment alone is not a source-wide prohibition or per-name external inventory gate.",
+    "historical_controls_preserved": "Actual original service rejection and known DIRECT-TID-LIVE-REF/TERMINATE-HOST-RESET fixture replay prohibitions remain. No rejected fixture, equivalent operation, policy/permission bypass, held runtime/native operation, source authority flag, ledger, native owner or UNKNOWN reservation was changed.",
+    "supersedes_only_obsolete_interpretation": "The former frontier0f866 do_syscall body-reading stop and inferred unspecified external universal-backend prerequisite are superseded by the new explicit clarification and actual source inspection. Its exact saved e1a facts and historical failed/rejected evidence remain intact."
+  },
+  "status": "REAL_SOURCE_CONTRACT_READY_PRIVATE_IMPLEMENTATION_REQUIRED_NOT_EXECUTED"
+}

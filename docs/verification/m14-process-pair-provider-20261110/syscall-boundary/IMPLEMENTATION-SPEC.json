@@ -1,0 +1,87 @@
+{
+  "acceptance_delta": {
+    "C_retirement": 0,
+    "M14": 0,
+    "M15": 0,
+    "native": 0
+  },
+  "command_binding_owner": "Root plus p04_source_max bind the actual full-image configure/build/ABI/read argv, matching source/SDK/compiler and generated config. This source task does not invent a second build profile, RAM quota, external inventory prerequisite or executable command before that binding is frozen.",
+  "debug_data_obligation": {
+    "C_macro_actual": "dkprintf creates aligned8 static __verbose Ddebug record with actual file/function/line/default flags0 and prints when its entire 8-bit flags field is nonzero. Rust debug::Ddebug is32B/align8/line_flags offset24. Preserve original function name do_syscall, format/argument conversions and selected site descriptors; no unconditional replacement or hard-coded assumed print-bit test.",
+    "provider": "lib/include/ihk/debug.h SHA7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc; kernel CMake include root/lib/include",
+    "source_sites": "initial send, requester-TID, waiting, got-reply, optional TOFU, proxy-dead, optional profile overflow; selected ordinary profile has six sites, TOFU variant adds one."
+  },
+  "inputs": {
+    "bytes": 7589,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/INPUTS.json",
+    "sha256": "ce3fac4a95b711da5bb7718435cdf61a960ec7500ed74c021dc3a52f11371c9e"
+  },
+  "original_check": "M14 full supported x86_64 Rust image / F03 universal delegated syscall ownership; M14-I02 matching image closure",
+  "outer_phases_in_original_order": [
+    "Capture original live current Thread, original CpuLocalVar.monitor pointer and initial PID; allocate private naturally aligned SyscallResponse slot, retaining it on the kernel stack through all host replies/nested work.",
+    "PROFILE_ENABLE: capture a separate rdtsc timestamp only when captured thread.profile is nonzero; initial timestamp remains zero otherwise. Do not reuse thread.profile_start_ts.",
+    "Preserve initial dkprintf site. Save original monitor.status, write KERNEL_OFFLOAD=5, then the original compiler-only memory barrier. Do not replace it with a new hardware-ordering protocol.",
+    "Evaluate syscall_offload_counted_result with exact C int narrowing and increment original thread.in_syscall_offload unless low-level helper identifies exit_group. Do not newly cache a predicate that the original re-evaluates after callbacks.",
+    "Use the real syscall_offload_prepare_result: requester rtid=current tid, UTI sched_setaffinity nr203/arg0=0 selects ttid=requester, otherwise ttid=0; initialize req_thread_status=SPINNING0 and pde_data=null. Preserve its early negative return position rather than silently inventing a cleanup policy.",
+    "Preserve requester-TID diagnostic and real send_syscall(request,cpu,response). That provider resets response.status, request.valid, copies the request into its zero-initialized 128-byte packet, release-publishes packet request.valid=1 and performs actual IKC send.",
+    "After send, apply real preempt_disable only if syscall_preempt_disable_needed_result(request.rtid) says so; preserve waiting debug site; enter actual syscall_offload_wait_reply with original request/response/cpu/thread.",
+    "Preserve real wait implementation unchanged: acquire response status, backlog/signal/CPU polling, runqueue/IRQ and waitq scheduling, mapped nested request copy/unmap, real dispatch including rt_sigaction special handling, nested nr8001 response, and selected genuine fork-control outer reply observer.",
+    "After wait returns, re-evaluate original rtid preempt predicate and call matching preempt_enable, preserve reply debug site and read response.ret only after actual completed Acquire. No whole uninitialized response assume_init or retained exclusive reference.",
+    "Preserve return log text, signed/unsigned C vararg widths and per-PID budget64. Reuse existing packed AtomicU64 syscall_owner_log_budget for a new independent return-log state; that preserves sequential PID/budget behavior and avoids introducing unsynchronized Rust static-mut data races under concurrent valid callers.",
+    "ENABLE_TOFU: preserve the exact ioctl-success/openat-positive predicate, C int fd narrowing, original path selection/short-circuit order, fresh current-process enable_tofu test, nonnull pde check, MAX_FD_PDE1024 slot/prefix test, mckfd_lock IRQ-save pair, pde_data write and gated diagnostic. Keep this source branch even though the ordinary Rocky profile binds TOFU OFF; no broad supported request exclusion is added.",
+    "Re-evaluate counted predicate and decrement original in_syscall_offload; for rc=-512 set original thread.proc.nohost=1 and preserve gated diagnostic. Do not terminate/release the process here.",
+    "PROFILE_ENABLE: retain exact helper C-int conversion and threshold2000; profile_syscall2offload then profile_event_add with unsigned rdtsc subtraction, or original out-of-range diagnostic. Do not change the helper into a u64 range filter.",
+    "Restore captured original monitor.status, increment that monitor unsigned-long counter once, return exact signed long rc. A context switch does not authorize replacing the original monitor pointer with a freshly chosen CPU monitor."
+  ],
+  "paired_changes": [
+    {
+      "definition": "one unsafe extern C fn do_syscall(*mut SyscallRequest,CInt)->CLong with no_mangle under a matching f03_do_syscall_outer_candidate cfg",
+      "kind": "new real implementation",
+      "path": "kernel/rust/f03_do_syscall_outer.rs",
+      "requirements": "Raw caller-owned request/response/thread/monitor pointers throughout the synchronous transaction. Implement every outer phase below, including cfg(enable_tofu) and cfg(enable_profile) source branches. Call actual super::send_syscall and super::syscall_offload_wait_reply, not callbacks standing in for them."
+    },
+    {
+      "definition": "append a matching cfg-gated path module, so the new child module can reuse existing private policy/log helpers without changing their implementation or extern ABI",
+      "kind": "small module inclusion only",
+      "path": "kernel/rust/syscall_policy.rs",
+      "requirements": "Existing extern do_syscall declaration and every caller retain identical type/name. Do not re-export duplicate C/Rust owners or widen unrelated selectors."
+    },
+    {
+      "definition": "put only the complete original C do_syscall definition behind a new paired MCKERNEL_RUST_DO_SYSCALL_OUTER guard; leave original body intact as fallback. At the existing do_fork request1 declaration define all bytes using = { 0 } before any cloned request reaches the selected reply observer.",
+      "kind": "exact definition guard plus one caller initialization",
+      "path": "kernel/syscall.c",
+      "requirements": "No generic/exec tail disabling, syscall-list pruning, native fork-option workaround or altered host request fields. Preserve current real supported legacy clone and owned-transaction branches. The declaration initialization is a functional defined-marker fix, not a new fixture."
+    },
+    {
+      "definition": "add the real new file to RUST_KERNEL_SRCS and pair f03_do_syscall_outer_candidate with MCKERNEL_RUST_DO_SYSCALL_OUTER in the exact reviewed x86_64/Rust/linux-6.12/NOT UBSAN branch, with PROFILE_ENABLE=ON for this actual profile",
+      "kind": "paired supported-profile source dependency/cfg/C selector",
+      "path": "kernel/CMakeLists.txt",
+      "requirements": "Actual source depfile and compiler must bind new source. C is suppressed exactly when Rust exports this entry. Preserve all current selectors, including MCKERNEL_RUST_SYSCALL_OFFLOAD, EXEC_DEFINED_TAIL and actual syscall-table/dispatch providers. No default or profile acceptance inferred before the real image build."
+    }
+  ],
+  "resource_authority": "No resource/execution grant from this packet. Root preserves shared HOST CPUs0/6/7/max3/4GiB TOTAL, current UNJOINED256MiB/job1 and native/UNKNOWN reservations; native2-5/12GiB remains separate. No root/native/runtime or held fixture action was performed.",
+  "scope": "Port only the currently C-owned outer do_syscall orchestration; preserve the existing real Rust send/wait/nested/ACK path and all supported C input behavior. No fake provider, reduced syscall set, per-name external inventory, held fixture replay or native operation.",
+  "smallest_qualification_sequence": [
+    {
+      "phase": "independent actual source/ownership review",
+      "proof": "Review the new full outer implementation, unchanged real wait/send call edges, paired cfg/C guard/dependency, and one-line legacy clone initialization against these exact source phases and current source hashes. This report is the source-derived contract, not approval of code that has not yet been written."
+    },
+    {
+      "phase": "same actual full-image C ABI compile",
+      "proof": "Use P04 full-image owner's real selected generated config/include roots/compiler in its already necessary C ABI phase. Require actual long do_syscall(request*,int), request72/align8/common offsets, guest response48/align8 and common ret/status fields, monitor24/status0/counter8, and matching Process/Thread/CpuLocalVar fields used by new code. Existing source-only offset assertions are reused but are not fabricated C compile results. Extend the existing witness only for genuinely uncovered fields (nohost/in_syscall_offload/profile) if needed; all other qualified layout coverage is reused."
+    },
+    {
+      "phase": "one real production matching image build",
+      "proof": "After Root admits actual scope/resources, build genuine named mckernel.img from supported current source using the full-image owner's exact real nightly1.95, matching SDK/Linux/IHK config, compiler flags/source dependencies and one owned output. No new partial object or isolated fake protocol substitutes for this first actual image consumer. Preserve all error diagnostics; ordinary changed-input fixes retry only necessary failed commands."
+    },
+    {
+      "phase": "same-build ownership/data/readback",
+      "proof": "Join actual new Rust do_syscall definition and callsites to final image/map; exactly one selected strong owner, no selected C copy, no duplicate or weak/fake providers, actual send/wait/schedule/dispatch/table/IKC/profile/debug/data owners and remaining frontier definitions. The e1a partial does not contain this transitive graph. Use actual compiler-produced legacy-clone callsite readback from this same batch to corroborate a defined zero marker before clone offload; no old fixture or green suite replay."
+    },
+    {
+      "phase": "genuine functional gate remains separate",
+      "proof": "A matching image and type/source checks do not establish actual offload behavior or accept M14. Original supported guest/proxy behavior, real nested work/ACK/completion/ownership/restoration require their genuine native/current-source/resource admission. Do not run a fabricated host response or known rejected historical fixture to claim that gate."
+    }
+  ],
+  "status": "CONCRETE_PRIVATE_IMPLEMENTATION_SPEC_NOT_EXECUTION_AUTHORITY"
+}

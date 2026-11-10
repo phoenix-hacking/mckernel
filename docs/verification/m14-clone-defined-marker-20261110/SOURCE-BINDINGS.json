@@ -1,0 +1,129 @@
+{
+  "C_wire_types": {
+    "bytes": 20836,
+    "path": "/home/holden/mckernel/kernel/include/syscall.h",
+    "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+  },
+  "actual_caller_refs": [
+    "kernel/syscall.c8030",
+    "kernel/syscall.c8282-8291",
+    "kernel/syscall.c8444-8447",
+    "kernel/syscall.c8495-8498"
+  ],
+  "actual_postimage_if_one_line_applied": {
+    "bytes": 932919,
+    "path": "kernel/syscall.c",
+    "sha256": "1804f7c252e036ab61badf41ed996074fc52868f6b87c7cf419bbcc3ac507356"
+  },
+  "actual_preimage": {
+    "bytes": 932911,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "f313b9f1dada0ed99b86951a1427ef24518d48a5c58faa3f45b6fe764c2f28f2"
+  },
+  "boundary_result": {
+    "bytes": 19504,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/RESULT.json",
+    "sha256": "ba553d023f194a2964e6ade6fd68106996a26e20e485f02def35f388b0fc7494"
+  },
+  "consumer": {
+    "bytes": 18671,
+    "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+    "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+  },
+  "defect": "Legacy nr56 producers never set args4/args5 before actual selected Rust observer reads args5. Defining the original private request declaration preserves every assigned field and supports ordinary legacy clone rather than excluding it.",
+  "exact_early_condition": "request.is_null()||response.is_null()||thread.is_null()||(*request).number!=NR_CLONE||(*request).args[5]!=MARKER",
+  "exact_one_change": {
+    "all_other_bytes_equal": true,
+    "count": 1,
+    "new": "\tstruct syscall_request request1 IHK_DMA_ALIGN = { 0 };",
+    "old": "\tstruct syscall_request request1 IHK_DMA_ALIGN;"
+  },
+  "full_abi_module": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "guard_scope": "Only first actual nr56/marker discrimination is exposed; its matched branch is not carrier matching, ACK, revocation, ownership acceptance or destruction permission.",
+  "native_fork_default_unchanged": "kernel/CMakeLists.txt51 ENABLE_NATIVE_FORK_OWNED_TRANSACTION OFF; no build/selector/config/source authority flag changed",
+  "outer_ownership_next": {
+    "bytes": 11155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/IMPLEMENTATION-SPEC.json",
+    "sha256": "e7d1321c1e7839fd9f3208a439bc1afeaf1eabb0611c6c821c8360855067df33"
+  },
+  "patch": {
+    "bytes": 335,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-syscall-boundary-1/clone-request-initialization-1/CLONE-REQUEST-DEFINED-MARKER.patch",
+    "sha256": "de67e1ef7db51b2ef42a28851cc686dba5b3d28b00a0d01a1b0ef16aed555e4b"
+  },
+  "real_helper_extractions": [
+    {
+      "bytes": 213,
+      "changed": false,
+      "first_line": 2412,
+      "last_line": 2419,
+      "name": "syscall_use_requester_tid_result",
+      "sha256": "f8bc1f1a4c7f18bfcd0c6d1ac1a9fc0d39e429c027b3f12233f32dc47a7834dd",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "bytes": 194,
+      "changed": false,
+      "first_line": 2421,
+      "last_line": 2428,
+      "name": "syscall_target_tid_result",
+      "sha256": "c4bd595ac3ced89293a12452b64eb9a8ff81527bf90199f6dad71109a9b80e21",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "bytes": 354,
+      "changed": false,
+      "first_line": 2430,
+      "last_line": 2443,
+      "name": "syscall_send_prepare_result",
+      "sha256": "fe031631477bf4d8b8a2ce9534da5d30e11bed3e075a475fc59fb13191790d73",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "bytes": 649,
+      "changed": false,
+      "first_line": 2451,
+      "last_line": 2471,
+      "name": "syscall_request_copy_result",
+      "sha256": "cd8d6d535253f7d6bbca0d8007c3aeebcfc950ed62d79c472e666c17339070cc",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "bytes": 260,
+      "changed": false,
+      "first_line": 2479,
+      "last_line": 2487,
+      "name": "syscall_request_publish_result",
+      "sha256": "ec55b8ae9cdf89e84987a63df11bc3d79adc753cf6cfb15d756a7c5577212407",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "bytes": 914,
+      "changed": false,
+      "first_line": 3100,
+      "last_line": 3130,
+      "name": "syscall_offload_prepare_result",
+      "sha256": "a08225c98efb99643df7d75bba25f5e5face7c1defe0092c41432b6787eec2ac",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "bytes": 232,
+      "changed": false,
+      "first_line": 22082,
+      "last_line": 22089,
+      "name": "clone_host_parent_flags_result",
+      "sha256": "84a46f5baae5e9cc94e2e91dd903ab8fecb8ac8635a19ebf59932c2209185b3a",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    }
+  ],
+  "status": "SOURCE_ONLY_NOT_EXECUTED",
+  "x86_actual_empty_dma_macro": {
+    "bytes": 198,
+    "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+    "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+  }
+}

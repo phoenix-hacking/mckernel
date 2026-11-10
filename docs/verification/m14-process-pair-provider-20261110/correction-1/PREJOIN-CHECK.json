@@ -1,0 +1,70 @@
+{
+  "status": "PASS_NEW_GENUINE_PROCESS_PAIR_PREJOIN",
+  "called_before_ld_r": true,
+  "provider_sha256": "8e820f7e65050c208d75b9127bd7232ba07da74dec08ed28272b4444a7d21a60",
+  "actual_new11": {
+    "__mcs_rwlock_reader_lock": {
+      "kind": "T",
+      "bytes": 21
+    },
+    "__mcs_rwlock_reader_unlock": {
+      "kind": "T",
+      "bytes": 15
+    },
+    "find_process": {
+      "kind": "T",
+      "bytes": 228
+    },
+    "process_find_process_body_result": {
+      "kind": "T",
+      "bytes": 162
+    },
+    "process_hash": {
+      "kind": "T",
+      "bytes": 35
+    },
+    "process_mcs_reader_lock_bridge": {
+      "kind": "T",
+      "bytes": 21
+    },
+    "process_mcs_reader_unlock_bridge": {
+      "kind": "T",
+      "bytes": 15
+    },
+    "process_unlock": {
+      "kind": "T",
+      "bytes": 149
+    },
+    "process_unlock_found_process_result": {
+      "kind": "T",
+      "bytes": 38
+    },
+    "syscall_find_process_bridge": {
+      "kind": "T",
+      "bytes": 228
+    },
+    "syscall_process_unlock_bridge": {
+      "kind": "T",
+      "bytes": 149
+    }
+  },
+  "actual_new_genuine_U": [
+    "__ihk_mc_spinlock_lock",
+    "__ihk_mc_spinlock_unlock",
+    "get_this_cpu_local_var"
+  ],
+  "duplicate_strong_owners": [],
+  "expected_remaining_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_generic_forwarding_body_result",
+    "terminate_host_body_result"
+  ],
+  "old_or_new_kernel_function_executed": false
+}

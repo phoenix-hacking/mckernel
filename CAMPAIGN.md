@@ -1,9 +1,46 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T16:36:48.075649+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T17:54:07.946902+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**PRIMARY: original M14 matching image/provider closure.** The current owner
+clarification corrects the obsolete blanket restriction on reading current
+generic/syscall/process bodies and deriving routine source/header/caller/build
+contracts. Those are our engineering tasks. UNKNOWN historical request metadata
+is not source-wide prohibition or a requirement for an unspecified external
+inventory. Assess each actual proposed operation; preserve the real rejection,
+known prohibited replay, current control flags and native/resource/service holds.
+
+Actual provenancef833 confirms original child turn completion cyber_policy:
+“This content was flagged for possible cybersecurity risk.” The matched932B
+assignment remains encrypted; exact classifier scope/issuer/requestID/release
+predicate are not exposed. Old cited parent2239 is a goal event; actual original
+child notice is969. The whole-generic cohort/macro mapping is later local
+bookkeeping, not a scope field in that service error. No genuine restriction or
+control flag is silently cleared; no old rejected fixture is replayed.
+
+Current M14 verified provider baseline is joinedb4835b0a:140owners/115T+25data,
+10 genuine imports. The11 new process-pair functions compile/link with zero new
+data; old owners/bytes/relocations are preserved. Qualificationa668 and independent
+e7fea verify all six commands/positive joins. The129-owner e1a24697 baseline stays
+recoverable. Original7f39 stopped before execution on missing Rust flags and a
+Python3.8 dictionary expression; corrected6f018 passed without replaying old
+green producers. PublicABI now prepares coherent real kill/lower-provider closure;
+P03 reviews actual saved artifacts and P04 consumes this frontier into the image.
+
+The legacy-clone request1 initializer fix is integrated: baseline compile rejects
+the typed undefined marker read; the corrected real Rust/C protocol and known
+arguments pass17:49:51, all four process families joined. Only declaration
+initialization changed (source1804f7c2); no old undefined read was executed.
+P04Tests now implements genuine outer do_syscall accounting/monitor/preemption/
+response ownership. SourceAcq implements real interrupt_syscall and independently
+reviews the clone result. P04 owns the actual nightly compiler,
+compute-generated ABI/configuration and full mckernel.img build/link recipe.
+Routine current-source contracts are not an external inventory prerequisite.
+No lock/refcount/node-zeroing repair is justified by the pair review. A partial
+object is a prerequisite, not image completion or M14 acceptance.
 
 **ACTIVE original closure engineering, same Root/live060029 run.** All three technical M15-I02
 conditions are now verified: **bindings, module ownership and ABI/modpost**. The
@@ -28,6 +65,13 @@ the soft target; no unchanged PR3 percentage comment.
 
 **Actual implementation/build/functional evidence:**
 
+- Genuine process-pair six serial phasesPASS17:42:29Z: real11 new function
+  symbols/9 physical ranges/two actual aliases, zero new data. Joinedb4835b0a
+  now has140owners/115T+25data and10 genuine imports; all old owners/bytes and
+  normalized relocations preserved. All6 direct waits and both Root families
+  joined; compiler0.07s/103588KiB peak. Qualificationa668 is frozen; independent
+  saved-result review follows. It extends recoverablee1a129; no image/runtime/
+  native/C-retirement or counted original condition is inferred.
 - Full changed module readerbfac PASS13:45:24Z on unchanged099/IHK8d/config106055/
   threeKO/symvers. Canonical33d7 closure and recheck, exact eight8f7d helpers,
   generated/kernel/config records, real module metadata/import/provider checks
@@ -115,19 +159,21 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M15-I03/I01 corrected diagnostics | Source2988/88b6 + wholecaller regression independentlyGO; Root publishes/fetches, then executes GOb241 exact Eclair six-phase currentRust195 build. PublicABI/P03 prepare/review corrected native1.92 mcinspect producer. Actual objects/imports/provider/RPATH/stage must join before replacement |
-| M15-I03/F02 current mcexec providers | Realnuma runtimebe20 supplies four typed/versioned exports; actual numactl-devel2.0.19-3 23091B/SHA42c4 GETPASS16:33. SDK binds new signature/header/link passive payload and current-sourcefdd producer; no repeated metadata or old349 parity claim |
-| M15-I03/P04 crash/BFD source compatibility | SourcePackage1/headerx86_64/newsignature/outerCPIOPASS16:30 report66d95; original src/header mismatch retained. P04 derives contained actual nested archive/spec/patch/source/used-layout operation, SourceAcq reviews. Binary18symbols/fourwidths don't prove source/BFD ABI |
+| M14-I02 genuine process/kill providers / image consumer | PublicABI extends actualb483140/10U with genuine kill/lower owners; process-pair qualificationa668 and independente7fea are reused. Next proof is actual coherent source/ABI/provider closure and its real remaining imports, with no wrapper-only cycle |
+| M14-F03/I02 syscall ownership | Clone initializer source1804f7 is integrated after four-commandPASS17:49; P04Tests implements real outerdo_syscall, SourceAcq real interrupt_syscall with paired supported-profile selectors. Preserve original branches and stack-response/accounting/monitor semantics; qualify changed code before integration |
+| M14-I02 real full-image configuration/build | P04 binds real Rust1.95nightly, existing Linux6.12 source/build, actual generated compute config/ABI and mckernel.img linker target. Root integrates qualified providers and runs the reviewed matching command; no partial-link or Linux-only artifact substitutes |
 
 
-**Single full-image critical-path blocker:** no admissible universal generic/exec
-cohort under HOLD-GENERIC/replayfalse/equivalentfalse. Original hold authority owns
-scoped disposition; Root integrates. Remaining12 exact provider/source/ABI/
-ownership exclusions and native UNKNOWN owners/leases/reservations/current-free
-stay binding. No held compute graph, boot/module load/MMIO/MSR/valid native dump,
-reset, source-authority bypass or dummy passing gate runs.
+**Single full-image critical-path blocker:** the complete genuine compute-provider
+and ownership graph, actual compute configuration and matching final command are
+not yet qualified. Root integrates; PublicABI/P03 own the immediate pair packet,
+P04Tests/SourceAcq the syscall/kill closure and P04 the real image build binding.
+Preserve actual HOLD-GENERIC/replayfalse/equivalentfalse controls, known rejected
+operations and native UNKNOWN owners/leases/reservations/current-free. Their
+unknown historical payload is not a blanket ban on deriving current contracts.
+No boot/module load/MMIO/MSR/valid native dump or dummy passing gate is admitted.
 
-Fresh controller guard15:34Z:63%included used/37%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
+Fresh controller guard17:35Z:68%included used/32%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
 allowance reset. Root/six actual task routes gpt-6.1-sol/MAX/depth1; one canonical
 compositor/heavy/image owner. Actual HOST CPUs0/6/7,max3 jobs,4GiB TOTAL including
@@ -138,17 +184,18 @@ inferred from output/process absence. Correction uses disjoint output and normal
 positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
 pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
 
-Latest verified source checkpoint68bb719c3e9bba511b52586bf7380ac2ac59d6dc is
-pushed/fetched; all286 owned entries matched15:59:30Z. The changed pair55.97 was posted once in
+Prior verified source checkpoint4adf52e4248300e220dc4e6a55e50484b658a53b is
+pushed/fetched; all121 owned entries matched16:43:14Z. The changed pair55.97 was posted once in
 PR3 comment6770338341; no duplicate unchanged progress comment.
 
-Next15-minute deliverable: publish the verified two-source BFD ABI correction,
-then execute reviewed corrected Eclair production phases and qualify actual new
-objects/link/provider/privateinstall. Finish signed NUMA header/link input for
-current mcexec and contained authenticated crash/BFD source contracts. Reuse
-monitor/mcps/P01/P02/BFD type/old41+72 proof; no unchanged producer replay.
-Matching image/deployed/native proof remains separate; originalM14-I02-E1 still
-needs the exact held generic/exec disposition before any full compute command.
+Next15-minute deliverable: bind/review/admit P04's ready exact configure320cc
+against this published source and execute its real driverprobe/generated ABI, and prepare the genuine syscall/
+kill implementation changes in parallel. Publish the qualified pair and tested
+clone initializer as one coherent source/results checkpoint. Corrected Eclair
+six phasesPASS16:45 and native1.92 mcinspect six phasesPASS16:52 are retained;
+NUMA trusted extractionPASS17:24/reporta339 feeds SDK's four-call type/link join.
+No rebuild of those passing artifacts, percentage credit from source-only work,
+or change to the real native/deployed acceptance conditions.
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)

@@ -1,0 +1,17 @@
+{
+  "source_id": "source-c5860013d2885b4db03c9818b2dd9e70b7d0765e2a30b9d1bfe42f272a6af62d",
+  "request_id": "MCKERNEL-M14-PROCESS-CONTRACT-20261110",
+  "source_url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6773502039",
+  "received_in_current_Root": true,
+  "recorded_at": "2026-11-10T17:04:43.977345+00:00",
+  "source_commit_reviewed_by_user": "68bb719c3e9bba511b52586bf7380ac2ac59d6dc",
+  "source_facts_supplied_verbatim": [
+    "C callers in kernel/syscall.c use struct mcs_rwlock_node_irqsave; baseline adapters cast the same type.",
+    "arch/x86_64/kernel/include/arch-lock.h defines SPINLOCK_IN_MCS_RWLOCK. Its selected IRQ-save node contains only unsigned long irqsave and is aligned64 with UBSAN disabled.",
+    "kernel/rust/lock_helpers.rs defines repr(C,align64) McsRwlockNodeIrqsave with CULong irqsave; process_helpers.rs also contains explicit size64/align64 assertions. Verify the assertions selected profile when reusing compiled evidence.",
+    "process_helpers::find_process returns a process with its hash-reader lock retained. It does NOT increment a process reference. The successful borrow is protected by that lock; a miss unlocks before null return.",
+    "Matching process_unlock must use the same live process/PID/hash/resource-set and exclusively owned live node, release the same lock and restore the saved IRQ state. Acquisition initializes irqsave; prior zero-initialization is not required.",
+    "The Rust adapters and genuine callees already exist. The prior process-bridge NO_GO explicitly did not establish that their bodies were held or absent."
+  ],
+  "authorization_limit": "Source-derived input to existing priority audit; not execution/native acceptance, actual rejected-operation release or transitive full-image provider closure."
+}

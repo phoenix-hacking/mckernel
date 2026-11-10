@@ -8027,7 +8027,7 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	struct process *oldproc = old->proc;
 	struct process *newproc;
 	struct thread *new;
-	struct syscall_request request1 IHK_DMA_ALIGN;
+	struct syscall_request request1 IHK_DMA_ALIGN = { 0 };
 	int ptrace_event = 0;
 	int termsig = clone_flags & 0x000000ff;
 #if 0
