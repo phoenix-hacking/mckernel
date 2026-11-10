@@ -1,10 +1,10 @@
 McKernel M14/M15 progress and agent status
 
-Generated UTC: 2026-11-10T05:35:26.302975Z
-Generated America/Boise: 2026-11-09T22:35:26.302975-07:00
-Treat this snapshot as stale after UTC: 2026-11-10T05:50:26.302975Z; America/Boise: 2026-11-09T22:50:26.302975-07:00 (15 minutes after generation; check for a newer report).
+Generated UTC: 2026-11-10T06:00:26.995301Z
+Generated America/Boise: 2026-11-09T23:00:26.995301-07:00
+Treat this snapshot as stale after UTC: 2026-11-10T06:15:26.995301Z; America/Boise: 2026-11-09T23:15:26.995301-07:00 (15 minutes after generation; check for a newer report).
 Ledger updated UTC: 2026-11-10T00:52:03.274556Z
-Source commit: cc9933eb7fdca877179cf173f43ae29c0516aa47
+Source commit: 8cc66bf14788f4f63bfb656364083476799f6fb0
 Canonical ledger: docs/verification/m14-m15-closure-progress.json; human plan: CAMPAIGN.md.
 This is a derived view, not new acceptance or execution authority. Checklist percentages are not accepted milestones, engineering hours or converted LOC.
 Scope: Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.
@@ -20,30 +20,39 @@ Uncounted rows remain visible and do not add checklist credit. A 100% task is ve
 
 WORKSTATION AND AGENTS
 
-Workstation runtime: UNAVAILABLE.
-No workstation snapshot was supplied. Live agents and active-turn counts are UNKNOWN, not zero.
-
-REMOTE CI (provided evidence; separate from milestone acceptance and workstation activity)
-source_commit: cc9933eb7fdca877179cf173f43ae29c0516aa47
-run_id: 42762881017
-url: https://github.com/phoenix-hacking/mckernel/actions/runs/42762881017
-status: in_progress
-conclusion: PENDING at observation
-observed_at: 2026-11-10T05:35:26.302975+00:00
-summary: 255 focused local tests passed, and final generated systemd units passed systemd-analyze verify. The new source CI run is in progress; preceding broad tracker runs were cancelled.
-limitations: Focused tests and service configuration checks do not establish full CI success, workstation activation, live agent work or milestone acceptance.
+Snapshot attribution: STALE OR UNVERIFIED: saved agent status does not establish live agents.
+Worker exact birth verified: False; watcher exact birth verified: False; guardian exact birth verified: True
+Controller phase: stopped; goal: blocked
+State heartbeat UTC: 2026-11-10T05:07:44.634830Z; state updated UTC: 2026-11-10T05:07:44.752178Z
+State heartbeat age seconds: 3162.4
+Guardian phase: UNKNOWN; reason: UNKNOWN
+Watcher event: watcher_retirement; observation UTC: 2026-11-10T05:07:44.964394Z
+Mailbox last attempt UTC: 2026-11-10T06:00:24.738109Z; last successful poll UTC: 2026-11-10T06:00:24.738109Z
+Mailbox next GET UTC: 2026-11-10T06:10:24.738109Z; error: UNKNOWN
+Saved roster records: 6; saved active-turn records: 1.
+Fresh controller snapshot active-turn count: UNKNOWN
+Per-agent models, efforts and assignments are unavailable unless explicitly recorded; no defaults are inferred.
+AGENT 01a18bc3-e072-7810-9426-75101b0856c0 | SAVED / NOT VERIFIED LIVE | label=dispatcher | saved status=idle | turn=01a1c3d9-94b9-7e52-9770-d5cbe885ba3b
+  Recorded agent metadata: controller role=Root (recorded primary thread) | last event UTC=2026-11-10T05:07:44.671167Z | quiet_seconds=0.1 | child=True
+AGENT 01a1aefa-52af-7e70-bf6e-4fcc59f43aae | SAVED / NOT VERIFIED LIVE | label=/root/m15_public_abi_high | saved status=completed | turn=01a1c3cb-3fed-76b1-8ff5-39aeb1d5478f
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T04:52:50.013874Z | quiet_seconds=894.7 | retired=True | child=True
+AGENT 01a1aefa-8217-7003-b4a3-24d19c899ac3 | SAVED / NOT VERIFIED LIVE | label=/root/m15_cli_high | saved status=completed | turn=01a1c3cb-6d51-7d13-a090-10d994a8b954
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T04:54:58.290290Z | quiet_seconds=766.5 | retired=True | child=True
+AGENT 01a1b070-8040-7fb2-b4b1-7810bac365ff | SAVED / NOT VERIFIED LIVE | label=/root/memory_error_cleanup_witness_high | saved status=completed | turn=01a1c3cf-1f6e-73d1-a434-1a8b4e3d7b65
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T05:00:17.300246Z | quiet_seconds=447.5 | retired=True | child=True
+AGENT 01a1b2d8-359e-7bf3-b724-988d8fc445e2 | SAVED / NOT VERIFIED LIVE | label=/root/create_empty_entry_parity_high | saved status=completed | turn=01a1c3cb-b92c-72f2-9812-b166b1b3f4af
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T04:57:27.560703Z | quiet_seconds=617.2 | retired=True | child=True
+AGENT 01a1c241-1f88-7d11-9f7b-b05891b5cdbb | SAVED / NOT VERIFIED LIVE | label=/root/scheduler_debug_data_review_high | saved status=completed | turn=01a1c3cb-960b-7e32-8d9e-ecf015bd1a5a
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T04:55:18.498992Z | quiet_seconds=746.3 | retired=True | child=True
+Last stop diagnostic attribution: matches saved worker invocation
+Recorded stop: campaign_blocked | UNKNOWN
+Recorded error: UNKNOWN | UNKNOWN
+Recorded next action: Diagnose the exact blocker and continue authorized independent repair or engineering. A missing scope record alone does not establish a new policy rejection; preserve actual holds.
+Instruction receipts: WAITING=0; ACCEPTED=0; NOT_QUEUED=0. Acceptance is not completed work.
+Last controller instruction: 20261110T050417266470Z-1bb5afd0c9c048ff8d85d64935ce0b68 | accepted_by_server | accepted timestamp=2026-11-10T05:04:18.233282Z
 
 ATTRIBUTED NOTES
-OVERNIGHT PREPARATION PUBLISHED: cc9933eb7fdca877179cf173f43ae29c0516aa47 on codex/local-native-staging-repair. All 12 changed source/documentation/test files were verified against their published Git blob hashes.
-The updated guardian requires a lifetime idle:sleep:handle-lid-switch inhibitor, including when the engine is held. Systemd watches it with a 90-second watchdog and Restart=always. Explicit installation/start enables current-user lingering only through the supported noninteractive OS path and verifies readback.
-These are published configuration and test results. No actual workstation service, inhibitor or lingering change was performed from this session. No workstation first mailbox poll or live agent state is verified.
-On the workstation checkout, the existing launcher now provides prepare, start, status and status-text. Preparation reports individual missing inputs without starting work. status includes readiness.monitoring_ready, current guardian/poll/publication evidence, next deadlines and separate model work state.
-Overnight defaults: no timer cutoff (hours=0); unlimited classified technical recovery attempts; repair-agent routing; stop model work after original M14 and M15 acceptances. Two child slots, three aggregate light HOST jobs on CPUs 0,6,7, and 4 GiB TOTAL. Actual account/source/native/ownership/resource holds remain binding.
-Latest recorded engineering checkpoint remains e1cd683369b15296d7d259953f081d6e78a54ca5 at 2026-11-10T05:07:37Z: completed control repairs and a SOURCE/BINDING IMPASSE with normal BLOCKED handoff. It does not establish a fresh cyber-policy rejection.
-At that recorded checkpoint, repair/test lanes A, B, D and F completed and all waits joined. Root completed three impasse audits. These historical observations do not establish any current live workstation agent or active-turn count.
-The critical path remains an eligible original universal/generic provider disposition, complete remaining source/provider contracts and exact ABI/callee/owner bindings, and supported SDK/source-custody/native/current-resource inputs. Checklist and acceptance counts are unchanged; final original-closure ETA is unknown.
-GitHub bot setup posting succeeded in run 42756298558. The latest observed mailbox still has two setup notices and no verified workstation receipt. Email/phone delivery is unconfirmed. Mailbox: https://github.com/phoenix-hacking/mckernel/pull/3 .
-Once the updated guardian is started, it keeps monitoring while engineering is blocked, checks new GitHub directions every 600 seconds and renders/publishes this report every 600 seconds with error backoff. Stale or old receipts do not prove a current first poll. Preparation instructions: https://github.com/phoenix-hacking/mckernel/blob/cc9933eb7fdca877179cf173f43ae29c0516aa47/CAMPAIGN.md .
+The progress ledger is the current working-tree snapshot; checkout HEAD does not assert it is committed or that a milestone is accepted.
 
 ALL CANONICAL REQUIREMENTS AND ORIGINAL GATES
 
