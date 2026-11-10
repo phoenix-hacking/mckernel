@@ -1,9 +1,73 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T06:58Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T07:38Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**ACTIVE original M15 integration work under the same Root and live060029 run.**
+The new source-backed original-acceptance audit (source361963..., clarified65cd...)
+corrects our unsupported requirement for externally authored inventories/module
+names/SDK recipes. Deriving public contracts, implementation/provider closure,
+selected Kbuild identities and reconstructing pinned dependencies is our conversion
+and qualification work. Original Rust implementation, focused behavior/ABI,
+production selection/link ownership and applicable matching native proof remain
+mandatory. Existing C functionality and necessary unmodified platform dependencies
+are preserved. The prior blanket source/binding impasse below is superseded for
+these independent eligible lanes; genuine held scopes are not released.
+
+**New functional result:** the installed public `ihk/affinity.h` CPU_EQUAL macro
+used undefined identical `__bits` operands. The real canonical-header consumer
+failed compilation before correction. The reviewed one-line change compares its
+original const input arrays; the corrected canonical consumer compiles without
+warnings and passes14 valid full/prefix/equal/different cases. All3 direct waits
+joined and CPU7 released. Existing52 public signature/layout and70function/6data
+provider/link results are reused without library/Rust rebuild. IHK successor
+8d288b8bd81b50cc3a3f814d949b89bf416a6ec7 changes only this header; its incremental
+bundle follows retained8eb8. Evidence is
+`docs/verification/m15-affinity-public-header-20261110/RESULT.json`.
+This closes that concrete header defect, not the complete I03 or M15 gate.
+
+The independently reviewed ledger wording correction removes unsupported external-
+supplier prerequisites in18 completion statements and34 open M15 row methods.
+Scores, weights, denominators, all accepted checks, dependencies and actual
+behavior/build/link/deployed/native/restoration requirements are unchanged.
+Existing JSON/CSV mirrors stay synchronized. No new test quota or acceptance gain.
+
+| Original check / next actual deliverable | Current owner and proof |
+| --- | --- |
+| M15-I03-complete-ABI / I01 selected-header ownership | A source/E independent consumer; Root14checksPASS and qualified header integration. Continue complete delivered header/provider joins from actual recipes, not an external inventory request |
+| M15-I02 bindings/module ownership/ABI provenance | B actual Kbuild/stage mapping identifies ihk, ihk-smp-x86_64, mcctrl and current Rust/two-ASM mcctrl composite. E source GO; F freezes4 focused validator/collector cases and truthful local-Git scope. Root runs baseline/candidate onCPU7 after final execution GO; actual SDK ASM/fixdep/modpost/current .ko proof remains engineering TODO |
+| M15-P03 and complete-runtime I01 | D recovered exact retained Rust source/default-OFF selector and real installed HOST1.95 std/link profile. A reviews its CPU6 CMake configure/named-target compile/ELF-readback. No program/Eclair/main/native action. P01/P02/P04 source/default/functional work remains; P05 existing Rust default and23cases stay reused |
+
+The actual baseline remains M14=51.48%, M15=50.97%,156 counted checks/73verified,
+38/45open; source/qualification progress is not automatically a completed counted
+leaf. EACH>=75% by08:00 November10 America/Los_Angeles (16:00Z) remains at risk,
+not a guarantee or stop. Original M14 acceptance precedes M15. All31groups and
+83open check scopes remain in the existing ledger; integration requirements and
+original five runtime programs are not omitted. Each actual percentage report is
+mirrored once to existing GitHub PR3 under the user's explicit publishing request;
+no reporting subsystem or loopback instruction is added.
+
+True constraints still bind: original generic/exec policy hold and equivalent/
+replay=false; exact12 remaining source/provider/ABI/ownership exclusions, perf/
+XPMEM/credential-cohort scope, native UNKNOWN owners/reservations/leases/current-
+free and actual hardware/operation admission. No old held full graph, dummy passing
+gate, module load, boot, valid native dump, MMIO/MSR or native runtime is executed.
+Actual image/module/cohort/lifecycle proof is still required; no particular Python
+custody implementation is an extra original acceptance condition.
+
+The foreground restored same-goal active state normally at07:10:11Z on the accepted
+new input; no goal, objective, budget, server or launch reset. Fresh07:09 allowance
+observation49%used/51%remaining, no hold, same finite credit-run/accounting. Included
+first then existing authorized credits, no purchases/API/model fallback. Guardian/
+mailbox and requested20-minute functional assistance remain running. Actual phase
+stays6 direct Sol/HIGH owners, RootSol/MAX, depth1, CPUs0/6/7,max3 light jobs,4GiB
+TOTAL including overhead/fresh26GiB and disk floors. Optional16-agent/shared-pool/
+handoff infrastructure remains deferred. Root alone composes source/index/publish;
+private sources/tests/reviews are disjoint and changed payloads take priority.
+
+## Previous06:00 input assessment (historical; supplier assumption corrected below)
 
 **Original closure work has no admitted functional packet; guardian monitoring
 remains active under invocation20261110T060029Z-3fe88dab.** The latest user

@@ -64,3 +64,12 @@ Optional capacity/pool integration, handoff/API automation and extra harness tes
 are deferred. When original functional packets lack authoritative inputs, state
 the exact original check, missing input and supplying owner; retain guardian
 monitoring instead of filling agents/CPUs or repeating unchanged model turns.
+
+Current original-acceptance clarification: source/header/caller/build-derived ABI,
+behavior obligations, selected module identities and pinned dependency acquisition
+are OUR engineering work, not externally authored inventory prerequisites. Preserve
+the C baseline's complete supported behavior and necessary platform dependencies;
+Rust must close project implementation/provider ownership. Escalate only exact
+absent external artifacts/access/hardware approvals with evidence. Genuine generic/
+exec/replay/source/native/UNKNOWN holds remain; source-only corrections earn no
+unproved original acceptance. Advance admitted independent original work first.
