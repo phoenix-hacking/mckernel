@@ -1,104 +1,104 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T11:20:26.453734+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T12:34:56.102011+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE original closure engineering, same Root and live060029 run.** Root is
-integrating a qualified P04 lifecycle correction while the matching Linux kernel/
-three-module build runs. Completed owners are available for new concrete tasks;
-there is no observed technical stall. Original M14 acceptance precedes M15.
+**ACTIVE original closure engineering, same Root/live060029 run.** The matching
+Linux platform kernel/three Rust modules and the current Rust mcinspect consumer
+have actually built. Root is publishing the qualified strict validator correction
+and these results, then consuming the unchanged module artifacts through the
+corrected reader. Original M14 acceptance precedes M15; no native/source hold is
+released. Inventories, ABI/provider derivation and SDK reconstruction are our work.
 
-**New actual evidence since source checkpoint099cb5b8:**
+**Actual new functional/build evidence:**
 
-- M14-I02/M15-I02 source stage PASS: pinned Linux unpack/debrand, ordered26+5
-  patches and secondary-reset supplement, currentIHK8d288 and68 stage-lock entries
-  including generated BUILDID. All returned hashes match. The initial post-readback
-  filename error is preserved; its successful payload was not rerun.
-- Actual compiler/core-source/lld bindings and corrected configuration PASS.
-  The first immutable0444 copy failed; the bounded successor uses a new writable
-  working config. Baseline+two-fragment merge, two byte-equal LLVM=1/-j1
-  olddefconfig passes, Rust/WERROR/MODULES/three-module=m assertions and
-  rustavailable all succeed. ConfigSHA106055ad is retained unchanged.
-- Matching platform build started10:50:58Z onCPU6 under the independently reviewed
-  2GiB container limit; preparation completed and bzImage compilation is advancing.
-  The unstarted3GiB proposal could not fit measured controller overhead. Actual
-  admission measured1,585,029,120B conservative overhead plus2GiB builder within
-  the unchanged4GiB shared total. Output2/099/IHK8d288/config106055 are reused.
-  Real bzImage/vmlinux/symvers/three.ko, generated bindings, final commands and
-  cleanup still must complete and be qualified; this is no artifact acceptance.
-  Hybrid-host cgroup-v1 memory capture supplements the unavailable v2 samples
-  without restarting the healthy build; observed unknown samples stay preserved.
-- M15-I03 official binutils-devel2.41-63 and CMake/CMake-data3.31.8 acquisition,
-  trusted signature/NEVRA/header/payload qualification and passive extraction PASS.
-  The failed actual CMake loader identified libuv.so.1. Its original container is
-  terminal/removed; later metadata/build remain unstarted. Corrected BaseOS
-  metadata acquisition now passes both full checksums with scoped provider absence;
-  its original byte-envelope failure and Root expected-unique failure are retained.
-  AppStream descriptor/primary checksums also PASS. Two real libuv rows remain in
-  the raw report; Root selected the currentel10_2 row for the Rocky10.2 profile.
-  Exact libuv-1:1.52.1-1.el10_2.x86_64 RPM GET passes271123bytes/SHAeb323408;
-  trusted signature/header/NEVRA/ELF and passive overlay qualification are pending
-  the existing Docker owner's release. Installed-RPM facts stay separate from the
-  passive provider. No old packages, descriptors or passing primary were refetched.
-- M15-P04/I01/I04 controlled lifecycle regression PASS at10:38:48Z: the baseline
-  actually published ACK/output with a live owned same-session descendant; the
-  corrected wrapper positively retires/reaps it before publication and returns0
-  without outer rescue or residual/UNKNOWN. The actual C ABI witness precedes
-  runtime. Six commands and every owned family joined. The initial enum-compare
-  compiler failure is preserved, with only the common-int comparison repaired.
-  Root integrated the exact independently reviewed Rust correctionee647c17.
-  This proves the controlled case, not whole-session/native/default parity.
+- Matching M14-I02/M15-I02 host-platform producer PASS11:26:07Z. Exact099/IHK8d288/
+  config106055 source/compiler cohort produces bzImage415b951d, vmlinux.o d5f98b86,
+  vmlinux.symvers37ac946c, Module.symversc3b2eade and real Rust modules:
+  ihk04f5d3e0, ihk-smp-x86_64ae67f463, mcctrldc46a4f5. The three actual Kbuild
+  commands exit0; config/vmlinux hashes stay stable through module phase. All
+  clients/waits joined; owned container removed, no OOM. Observed cgroup-v1 peak
+  2147356672B under2GiB limit; final instantaneous peak remains unclaimed. Linux
+  bzImage is the platform companion, not the held McKernel compute image.
+- The first called module reader rejected stale SMP63-vs65 dependencies. A scoped
+  correction exposed MCCTRL's19 actual fixdep CONFIG rows; the next exposed both
+  ASM include/profile data. Every failure is retained. Exact source/Kbuild/config/
+  fixdep/compiler-derived tables now cover both unchanged ASM leaves and preserve
+  parsing/order/options/owner/injection checks. Eight focused HOST cases PASS at
+  12:28:26Z: real19record three-module canonical closure succeeds; missing/reordered/
+  extra source, extra option, cross-module owner, undeclared CONFIG and same-count
+  unknown ASM include all reject with required diagnostics/no output. All eight
+  children/streams joined, no residual/UNKNOWN. Qualified validator33d7bd01 is
+  integrated; kernel/modules/config and old passing suites were not rebuilt/rerun.
+  The complete emitted artifact/ABI/import/provider/generated-record reader still
+  must pass before original module leaf review; source/count/name presence alone
+  grants no acceptance.
+- M15-I03 current complete Rust mcinspect e9a9 + real bundled ab9230b libdwarf and
+  pinned BFD2.41 build PASS12:00:35Z. Four configure/named-build/readelf/nm phases
+  exit0, all containers/waits close. Actual ELF63502c57 is7081592B; Rust object
+  ace35a93, BFD bridge8a5b0e1e, new dwarf archivebdf5630e, link map763bad9d. Separate
+  MAX review435f7ebb qualifies the changed TAG/type/static-artifact bridge: all83
+  Rust roots/four BFD bridges unique, Rust main owner, genuine dwarf TAG member,
+  real BFD/system link providers,128 strong system imports/four weak toolchain
+  slots and three NEEDED libraries. Existing41layout/70+6/public52/affinity proof
+  is reused. Complete I03, program behavior, default/install/native and C retirement
+  remain open; this target did not build the separate converter.
+- The actual CMake libuv gap is resolved. Official metadata/checksum acquisition,
+  Root selection of currentEL10_2 libuv1:1.52.1,271123B/SHAeb323408, trusted signature/
+  header/NEVRA/provides/Requires/passive ELF qualification all pass. Loader exits0
+  with all8direct/transitive libraries. Initial predicted/usr/lib64 spelling failed
+  a postgate; exact subsequent RO dev/inode/hash/containment proof joins actual
+  /lib64 alias without replaying the successful loader. Both previously unstarted
+  provider/tool queries PASS11:49:55Z. Private libuv is not installed-RPMDB state.
 
-Retain earlier affinity14, library70+6/public52, libdwarf41, mcctrl composite and
-changed fixture, P01/P02eight-case/link, P03parser/PTY/selection/install, P04twenty-
-two-case/30join and configure-dependency results without replay. New raw evidence:
-`docs/verification/m14-m15-matching-kbuild-20261110/` and
-`docs/verification/m15-p04-session-lifecycle-20261110/`. No RPMs, full kernel trees,
-private signing keys or unqualified binaries are copied into the source checkpoint.
+Raw evidence: docs/verification/m14-m15-matching-kbuild-20261110 and
+m15-mcinspect-native-consumer-20261110. Existing P04 lifecycle correctionee647,
+actual baseline/candidate descendant retirement, ABI witness and six joins remain
+qualified and published; P01/P02eight cases, P03ELF/parser/PTY/selector/install,
+P04twenty-two cases/configure dependency, affinity14 and prior scoped checks stay
+reused. No kernel/module/program/RPM binaries or private signing keys are copied
+into this source checkpoint. New source/results follow published ae1040299.
 
 | Next original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M14-I02/M15-I02 matching platform/module artifacts | Root sole build/container owner; current2GiB CPU6 build must produce real bzImage/vmlinux.o/symvers and all3.ko in one config/provider universe, retain generated bindings/commands/memory and positive terminal cleanup, then qualify emitted ownership/modpost |
-| M15-I03 complete public ABI / current mcinspect | Public ABI MAX source owner and separate MAX reviewer; actual AppStream metadata and selected RPM size/hash PASS; trust/passively bind exact libuv provider after Docker-owner release, finish only unstarted runtime metadata phases and named mcinspect/libdwarf/converter linkage/readback |
-| M15-I01/I04 complete runtime/lifecycle | Root consumes P04 actual baseline/candidate retirement proof and publishes minimal correction; reuse P01-P05 slices, then qualify remaining complete selected/default/real-runtime/lifecycle conditions under genuine admission |
+| M15-I02-bindings/module-ownership/ABI-modpost; shared M14-I02 platform part | Root+SDK source/MAX reviewer: pin qualified33d7 helper to this source checkpoint, fresh reader namespace, exact canonical recheck and real3KO ELF/modinfo/import/namespace/provider/generated-record joins on unchanged099/IHK8d/config106055, then review full original leaf conditions |
+| M15-I03 complete public ABI and supported library | Public ABI MAX owner: current mcinspect changed bridge qualified; whole70+6 production ihklib native SDK join remains. Known1.95 diagnostic qualifier is unbound to proposed1.92, so cfb91 is NO_GO919cc907/unexecuted; derive real eligible1.95 toolchain or narrowly justified guarded current-profile requalification before command, no spoof/waiver/old green replay |
+| M15-P04/I01 selected shared crash extension and packaging | P04 MAX source/independent reviewer: baseline8phase d48c5377 GO65c1f161 covers exact Rust5aab PIC/shared build, actual defs0cb ABI, ELF imports/init/fini and DESTDIR staging without load/execution. Observe baseline lib64/lib-prefix mismatch against prefix/lib/ldump2mcdump.so, then conditional minimal PREFIX/install fix532d84b1 and fresh candidate; real crash-export/runtime/default/native conditions stay open |
 
-Verified checklist remains M14=51.48%, M15=50.97%,156checks/73verified,38/45open;
-new counted/accepted-file/integration/C-retirement/native delta0. Criteria, weights,
-denominators and four accepted M14 files/accepted M15-F01 remain unchanged.
-EACH>=75% by08:00 November10 America/Los_Angeles (16:00Z) remains at risk, not a
-promise or stop time. No reliable final ETA is available while the genuine held
-provider and matching artifact/native path remain open. Post PR3 percentage
-progress only when the verified pair changes; direct requested status answers
-are authorized separately and contain actual execution/publication facts.
+Verified original checklist remains M14=51.48%, M15=50.97%,156checks/73verified,
+38/45open. New accepted-file/integration/count/C-retirement/native delta0. All
+criteria/weights/denominators and four accepted M14/accepted M15-F01 scopes remain.
+EACH>=75% by08:00 November10 America/Los_Angeles (16:00Z) remains at risk; no reliable
+final ETA exists while required held provider and matching runtime/native inputs
+remain. Deadline is neither a guarantee nor stop time. PR3 percentage comments
+only on a changed verified pair; direct requested status was answered once with
+source publication, not an unchanged percentage notification.
 
-**Single full-image critical-path blocker:** no admissible universal generic/
-exec provider cohort under HOLD-GENERIC/replayfalse/equivalentfalse. Original hold
-authority retains exact scoped disposition; Root owns integration. The remaining
-12 exact provider/source/ABI/ownership exclusions and native UNKNOWN owners,
-leases/reservations/current-free stay binding. Independent userspace and Linux
-platform/module engineering above continues. Inventories, ABI/provider derivation
-and reproducible SDK reconstruction are our engineering work. No held compute
-image, native boot/module load/MMIO/MSR/real dump or dummy passing gate is run.
+**Single full-image critical-path blocker:** no admissible universal generic/exec
+cohort under HOLD-GENERIC/replayfalse/equivalentfalse. Original hold authority
+retains exact scoped disposition; Root integrates. Remaining12 exact provider/
+source/ABI/ownership exclusions and native UNKNOWN owners/leases/reservations/
+current-free stay binding. No held compute graph, boot/module load/MMIO/MSR/real
+native dump, dummy passing gate or reset is executed. Independent original source,
+build, type/provider and installation engineering above continues.
 
-Fresh controller guard10:52:41Z:56%included used/44%remaining, no stop or credit
-error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa; included first then
-authorized existing credits, no purchase/API/account/model fallback or reset.
-Root and all six actual routes staygpt-6.1-sol/MAX/depth1. Actual HOST CPUs0/6/7,
-max3 aggregate jobs,4GiB TOTAL including controllers/workers/containers, fresh
-26GiB available and disk16/12GiB floors; the build additionally reserves32GiB disk
-headroom. Native2-5/12GiB and retained18GiB/UNKNOWN reservations stay held. Optional
-capacity/pool/handoff changes remain deferred. Guardian/mailbox and the restored
-20-minute closure assistance remain active; healthy owners are not restarted.
+Fresh controller guard2026-11-10T12:34:51.036447+00:00: 59%included used/41%remaining,
+no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
+included first then authorized existing credits, no purchase/API/account/model
+fallback or allowance reset. Root/six actual routes remain gpt-6.1-sol/MAX/depth1;
+one compositor/heavy/image owner. Actual HOST CPUs0/6/7,max3 aggregate jobs,
+4GiB TOTAL including all overhead/containers, fresh26GiB and disk16/12GiB floors;
+retained18GiB/native2-5/12GiB/UNKNOWN outcomes stay held. Optional16-agent/pool/
+handoff work stays deferred. Guardian/mailbox/restored20-minute assistance remain
+active; completed/compacting owners are not restarted.
 
-Next15-minute deliverable: continue the healthy matching build toward its actual
-link/module phase, retain exact diagnostics/memory and positive terminal cleanup.
-Corrected CPU6/512MiB artifact-reader packet4119a5bc has independentGO49905de7;
-execute only after actual producer success/owner release. In parallel finish the
-trusted libuv passive-overlay/loader successor for the next Docker-owner handoff.
-P04 correction/source/config receipts are published in ae89c6043; preserve all
-passing scopes and unchanged counted criteria. No competing Docker owner.
+Next15-minute deliverable: publish the qualified validator/build/ABI results,
+freeze its exact helper identity and execute the corrected failed module reader;
+run the independently GO P04 shared-extension baseline while disjoint library
+compiler-profile source repair proceeds. Hand each released lane to its next
+ready reviewed payload; preserve failures and reuse passing inputs.
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)
 

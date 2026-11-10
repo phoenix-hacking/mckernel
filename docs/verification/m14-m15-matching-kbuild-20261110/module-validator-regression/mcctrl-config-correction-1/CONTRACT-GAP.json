@@ -1,0 +1,243 @@
+{
+  "status": "BOUNDED_SOURCE_DATA_CORRECTION_PREPARED_NOT_IMPORTED_OR_EXECUTED",
+  "original_checks": [
+    "M14-I02 compiler provenance at actual scope",
+    "M15-I02 three-module source/link ownership"
+  ],
+  "failure_family": "Current MCCTRL exact fixdep CONFIG dependency records omitted from old parser data tables; separate from already-corrected SMP63to65 family.",
+  "failed_actual_operation": {
+    "request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/REQUEST.json",
+      "bytes": 18158,
+      "sha256": "02f7d19e06ad2efcd4c5d73f5a5e96a5bdd0c032e53b8492af67a952616db26d"
+    },
+    "result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-1/RESULT.json",
+      "bytes": 926,
+      "sha256": "3174dd6109e39a7a0907ed2c74836a77f15c7ca58b0f8d83e20689876d33ee90"
+    },
+    "command": "candidate-actual against existing19raw records/stage, candidate40d7",
+    "diagnostic": ".mcctrl_rust.o.cmd dependency entry is not one path or the exact module configuration record: '    $(wildcard include/config/X86_64) \\'",
+    "one_direct_command_joined": true,
+    "remaining_five_negatives_started": false,
+    "reexecute_unchanged": false
+  },
+  "base40d7": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/mcctrl-config-correction-1/preimage/scripts/native_rust_kbuild_link_closure.py",
+    "bytes": 69436,
+    "sha256": "40d7a9ebce0fb0737ebc13faf345ebfebe87921935f3911a3675dadecd4f532c"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/mcctrl-config-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+    "bytes": 70460,
+    "sha256": "49dfac78efab20e3d3b6e6a5d84b67c50f577534052a6c85477c71ce1563c4ac"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/mcctrl-config-correction-1/MCCTRL-EXACT-FIXDEP-CONFIG.patch",
+    "bytes": 1707,
+    "sha256": "4982a153506f8fe63b228326e28ed965e4da63490bc179828a78b8bbbb67f53d"
+  },
+  "complete_actual_shape": {
+    "record": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.mcctrl_rust.o.cmd",
+      "bytes": 3857,
+      "sha256": "e45404fa0c2cdbb9cd7d9bd281f63dec678f14c6e5330970c1750e9c0f21e329"
+    },
+    "config_record_count": 19,
+    "config_names_ordered": [
+      "X86_64",
+      "SMP",
+      "PER_VMA_LOCK",
+      "TRACING",
+      "MEMCG",
+      "HAVE_JUMP_LABEL_HACK",
+      "KCSAN",
+      "DEBUG_LOCK_ALLOC",
+      "DEBUG_VM",
+      "LOCKDEP",
+      "NOINSTR_VALIDATION",
+      "PREEMPT_RT",
+      "TRACEPOINTS",
+      "JUMP_LABEL",
+      "OBJTOOL",
+      "GENERIC_BUG",
+      "GENERIC_BUG_RELATIVE_POINTERS",
+      "DEBUG_BUGVERBOSE",
+      "BUG"
+    ],
+    "starts_after": "/source/drivers/misc/mckernel/mcctrl_mm_write.rs",
+    "ends_before": "/source/drivers/misc/mckernel/user_string.rs",
+    "four_space_literal_rows_only": true,
+    "project_dependencies_unchanged": [
+      "mcctrl_exec.rs",
+      "mcctrl_process.rs",
+      "current_fork_host.rs",
+      "mcctrl_vm.rs",
+      "mcctrl_mm_write.rs",
+      "user_string.rs",
+      "application_image.rs",
+      "abi/x86_64.rs",
+      "abi/os_service.rs",
+      "abi/application.rs"
+    ],
+    "kernel_dependencies_unchanged": [
+      "./rust/libcore.rmeta",
+      "./rust/libkernel.rmeta",
+      "./rust/liballoc.rmeta",
+      "./rust/libcompiler_builtins.rmeta",
+      "./rust/libmacros.so",
+      "./rust/libbindings.rmeta",
+      "./rust/libuapi.rmeta",
+      "./rust/libbuild_error.rmeta"
+    ],
+    "total_dependency_entries": 37,
+    "static_full_dependency_body_equals_proposed_exact_model": true
+  },
+  "source_provenance": {
+    "selected_commit": "099cb5b874e34a72848e12838d367da62b097db6",
+    "committed_mcctrl_mm_write_blob": "95cc1f22c1a6d3b46af4ecb46a03baddc929a4b6",
+    "committed_Kbuild_blob": "092bcf82e07c72124469973e54f254e2bc55266f",
+    "stage_lock": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+      "bytes": 9140,
+      "sha256": "f0f7cf6f846efdec7f826a1f07589bb396da1b430d3cc998189e58539ebd97ef"
+    },
+    "selected_stage_row": {
+      "path": "mcctrl_mm_write.rs",
+      "sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107"
+    },
+    "source_declaration_prefix_path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_mm_write.rs",
+    "source_declaration_lines_read": "1-32 only, no implementation body quoted or executed",
+    "exact_first_use_CONFIG_order_matches_observed19": true,
+    "Kbuild_existing_check_cfg": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/Kbuild",
+      "bytes": 1472,
+      "sha256": "192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3"
+    },
+    "accepted_source_stage_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/execution-1/RESULT.json",
+      "bytes": 19498,
+      "sha256": "14cca76d61126a8ad51db20cc9002fe98218fcb35620651232c9b14003b8ee0e"
+    },
+    "body_identity_reused": "Stage68 existing PASS binds selected099 project bytes; no new project-source inventory or heldbody extraction."
+  },
+  "fixdep_provenance": {
+    "actual_selected_source": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/basic/fixdep.c",
+      "bytes": 10854,
+      "sha256": "512a85c24ca2cdd44d1d652e071abc6650cf4776e21979e0a08b421178f59590"
+    },
+    "actual_produced_binary": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/scripts/basic/fixdep",
+      "bytes": 13776,
+      "sha256": "01506178f2868bd3fcff88d54a7ffe94dee924bb0aa995a9935a98ac7723d5e4"
+    },
+    "actual_producer_cmd": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/scripts/basic/.fixdep.cmd",
+      "bytes": 604,
+      "sha256": "557116820d7368091ba68fe390250e80f6a96332c6f00e6b0fe3531d202cfcf7"
+    },
+    "rules": "use_config source167-175 emits exactly fourspaces $(wildcard include/config/<literal>) followed by continuation; first-use config_hashtab suppressesduplicates. parse_config_file189-209 scans literalCONFIG_ tokens and strips only _MODULE; parse_dep_file261-395 processes raw prerequisite order, emits path then newly discovered CONFIG records, skipping binary.rmeta/.so contents. Values are not preprocessor-filtered; explicitn or absent symbol dependencies remain genuine records."
+  },
+  "matching_configuration": {
+    "resolved": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/.config",
+      "bytes": 260490,
+      "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474"
+    },
+    "records_in_source_order": [
+      {
+        "name": "CONFIG_X86_64",
+        "resolved_record": "CONFIG_X86_64=y"
+      },
+      {
+        "name": "CONFIG_SMP",
+        "resolved_record": "CONFIG_SMP=y"
+      },
+      {
+        "name": "CONFIG_PER_VMA_LOCK",
+        "resolved_record": "CONFIG_PER_VMA_LOCK=y"
+      },
+      {
+        "name": "CONFIG_TRACING",
+        "resolved_record": "CONFIG_TRACING=y"
+      },
+      {
+        "name": "CONFIG_MEMCG",
+        "resolved_record": "CONFIG_MEMCG=y"
+      },
+      {
+        "name": "CONFIG_HAVE_JUMP_LABEL_HACK",
+        "resolved_record": "CONFIG_HAVE_JUMP_LABEL_HACK=y"
+      },
+      {
+        "name": "CONFIG_KCSAN",
+        "resolved_record": "# CONFIG_KCSAN is not set"
+      },
+      {
+        "name": "CONFIG_DEBUG_LOCK_ALLOC",
+        "resolved_record": "# CONFIG_DEBUG_LOCK_ALLOC is not set"
+      },
+      {
+        "name": "CONFIG_DEBUG_VM",
+        "resolved_record": "# CONFIG_DEBUG_VM is not set"
+      },
+      {
+        "name": "CONFIG_LOCKDEP",
+        "resolved_record": "<not emitted in locked resolved config>"
+      },
+      {
+        "name": "CONFIG_NOINSTR_VALIDATION",
+        "resolved_record": "<not emitted in locked resolved config>"
+      },
+      {
+        "name": "CONFIG_PREEMPT_RT",
+        "resolved_record": "# CONFIG_PREEMPT_RT is not set"
+      },
+      {
+        "name": "CONFIG_TRACEPOINTS",
+        "resolved_record": "CONFIG_TRACEPOINTS=y"
+      },
+      {
+        "name": "CONFIG_JUMP_LABEL",
+        "resolved_record": "CONFIG_JUMP_LABEL=y"
+      },
+      {
+        "name": "CONFIG_OBJTOOL",
+        "resolved_record": "CONFIG_OBJTOOL=y"
+      },
+      {
+        "name": "CONFIG_GENERIC_BUG",
+        "resolved_record": "CONFIG_GENERIC_BUG=y"
+      },
+      {
+        "name": "CONFIG_GENERIC_BUG_RELATIVE_POINTERS",
+        "resolved_record": "CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y"
+      },
+      {
+        "name": "CONFIG_DEBUG_BUGVERBOSE",
+        "resolved_record": "CONFIG_DEBUG_BUGVERBOSE=y"
+      },
+      {
+        "name": "CONFIG_BUG",
+        "resolved_record": "CONFIG_BUG=y"
+      }
+    ],
+    "actual_kernel_build_reused": true,
+    "configuration_or_Kbuild_flags_changed": false
+  },
+  "smallest_correction": "Only populate MCCTRL exact19literal entries in _FIXDEP_CONFIG_DEPENDENCIES and bind that complete tuple after mcctrl_mm_write.rs in _FIXDEP_CONFIG_AFTER_SOURCE. Existing parser exact four-space grammar/order/complete-list checks remain unchanged. SMP40d7 insertion and all IHK/SMP data stay preserved.",
+  "strictness": {
+    "unknown_configuration_record": "still absent from exact config_lines => existing not-one-path/exact-configuration diagnostic; no broad wildcard regex or configprefix allowance",
+    "known_wrong_position_order_duplicate_or_missing": "existing complete expected-list comparison rejects; no count-only/set/whitelist-union success",
+    "extra_project_compiler_or_response_owner": "all existing checks unchanged",
+    "all_non_table_AST_identical": true,
+    "no_source_or_flag_selection_expansion": true
+  },
+  "next_required_checks": "Separatep03MAX source review and p04testsMAX same actualcapture with focused unknown-config (and meaningful exact-order/missing where needed) rejection after Root actualadmission; no baseline/collector/kernel/oldgreen replay. Root alone integrates/publishes changed consumer.",
+  "operations": "Read actualMCCTRL record, exact config/fixdep source and producer metadata, only32line selectedRust declarationprefix, stage/Git tree metadata. Stdlib AST/literal/byte/hash modelling only; no validator import or call, tests/compiler/Docker/native/process/probe, canonical/index/source-profile/control change.",
+  "owner": "/root/p04_source_max",
+  "runtime_authority": null,
+  "validator_imports_tests_or_payload_executions": 0,
+  "original_acceptance_delta": 0
+}

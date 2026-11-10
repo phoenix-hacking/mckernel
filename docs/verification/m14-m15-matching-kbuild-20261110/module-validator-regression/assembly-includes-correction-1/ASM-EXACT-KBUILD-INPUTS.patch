@@ -1,0 +1,29 @@
+--- a/scripts/native_rust_kbuild_link_closure.py
++++ b/scripts/native_rust_kbuild_link_closure.py
+@@ -1357,7 +1357,7 @@
+     _require_pair(tokens, "-o", target, name)
+     if tokens[-1] != source or _source_assignment(text, target, name) != source:
+         raise LinkClosureError("{0} assembly source owner differs".format(name))
+-    includes = [source_prefix + "/arch/x86/include", "./arch/x86/include/generated", source_prefix + "/include", "./include", source_prefix + "/arch/x86/include/uapi", "./arch/x86/include/generated/uapi", source_prefix + "/include/uapi", "./include/generated/uapi"]
++    includes = [source_prefix + "/arch/x86/include", "./arch/x86/include/generated", source_prefix + "/include", "./include", source_prefix + "/arch/x86/include/uapi", "./arch/x86/include/generated/uapi", source_prefix + "/include/uapi", "./include/generated/uapi", source_prefix + "/" + MODULE_ROOT, MODULE_ROOT]
+     if [token[2:] for token in tokens if token.startswith("-I")] != includes:
+         raise LinkClosureError("{0} assembly include closure differs".format(name))
+     forced = [source_prefix + "/include/linux/compiler-version.h", source_prefix + "/include/linux/kconfig.h"]
+@@ -1367,6 +1367,17 @@
+     dependency_output = "-Wp,-MMD,{0}/.{1}.d".format(MODULE_ROOT, obj)
+     _require_once(tokens, dependency_output, name)
+     allowed = set(_CLANG_SAFE_FIXED_FLAGS) - {"-std=gnu11"}
++    # Pinned Clang Kbuild CPPFLAGS and the selected function-tracer AFLAGS.
++    allowed.update((
++        "-Werror=unknown-warning-option",
++        "-Werror=ignored-optimization-argument",
++        "-Werror=option-ignored",
++        "-Werror=unused-command-line-argument",
++        "-Werror",
++        "-DCC_USING_NOP_MCOUNT",
++        "-DCC_USING_FENTRY",
++        "-fmacro-prefix-map=" + source_prefix + "/=",
++    ))
+     allowed.update(["clang", source, target, "-include", dependency_output, "-D__KERNEL__", "-D__ASSEMBLY__", "-DMODULE", '-DKBUILD_BASENAME="{0}"'.format(basename), '-DKBUILD_MODNAME="{0}"'.format(modname), "-D__KBUILD_MODNAME=" + modname])
+     allowed.update("-I" + value for value in includes)
+     allowed.update(forced)

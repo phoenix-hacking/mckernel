@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG -fPIE -pie -Wl,--trace -Wl,-Map=/output/mcinspect.map -Wl,--dependency-file=CMakeFiles/mcinspect.dir/link.d rust/bfd_accessors.o rust/mcinspect_helpers.o -o mcinspect  dwarf/libdwarf.a -lz -lelf -lbfd

@@ -1,0 +1,94 @@
+{
+  "actual_input_records": {
+    "ihk": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.ihk.o.cmd",
+      "sha256": "a1c51459835fdec89766d38f7d2fb9e56f87cf02bf1deeb9d52658fed8352c88",
+      "size": 2797
+    },
+    "ihk-smp-x86_64": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.ihk_smp_x86_64.o.cmd",
+      "sha256": "f7630d72fbcef6284fdd635d272aab91d5218f284e8c8eda803eb7b85cdd35e5",
+      "size": 4861
+    },
+    "mcctrl": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.mcctrl_rust.o.cmd",
+      "sha256": "e45404fa0c2cdbb9cd7d9bd281f63dec678f14c6e5330970c1750e9c0f21e329",
+      "size": 3857
+    }
+  },
+  "execution": "Source/locked data comparison only; no SUT import/validator invocation, test, compiler, Docker, build, tool probe or network. Root sole canonical/index/publisher/execution owner; p04_tests_max owns independent actual-capture regression preparation.",
+  "failure": {
+    "build_replay": false,
+    "captured_diagnostic": ".ihk_smp_x86_64.o.cmd compiler dependency closure differs at entry47: expected /source/drivers/misc/mckernel/smp_application_syscall.rs, actual /source/drivers/misc/mckernel/current_fork_task_mm.rs (expected63,actual65)",
+    "reader_exit": 1,
+    "reader_waits_joined_and_owned_container_removed": true,
+    "result": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/correction-1/execution-1/RESULT.json",
+    "sha256": "2c35425467c1a98663e4270454dc02e4bb3f3a203c4010f889614388d1abb068"
+  },
+  "module_comparison": {
+    "ihk": {
+      "actual": 12,
+      "expected": 12,
+      "ordered_match": true
+    },
+    "ihk-smp-x86_64": {
+      "actual_project_rows": 47,
+      "added_paths_in_order": [
+        "current_fork_task_mm.rs",
+        "current_fork_control.rs"
+      ],
+      "all_old_paths_in_order": true,
+      "insert_after": "smp_application.rs",
+      "insert_before": "smp_application_syscall.rs",
+      "new_expected_project_rows": 47,
+      "new_total_dependency_rows": 65,
+      "old_expected_project_rows": 45,
+      "old_total_dependency_rows": 63
+    },
+    "mcctrl": {
+      "actual": 10,
+      "expected": 10,
+      "ordered_match": true
+    }
+  },
+  "only_changed_contract": "Append exact current_fork_task_mm.rs then current_fork_control.rs at that precise SMP tuple position. All dependency/config grammar, source prefix/root, compiler/extern/option checks, stage hashing, object ownership, response lists, generated metadata, assembly and final-link checks stay unchanged. Aggregate EXPECTED_COMPILER_SOURCES remains mechanically derived from the explicit exact module tuples.",
+  "original_contract_gap": "The locked SMP expected compiler dependency tuple omits the two unconditional #[path] submodules in source099 smp_application.rs lines21-25. Rust1.92/fixdep emitted both real selected inputs immediately after smp_application.rs. All earlier/later existing dependencies retain their exact order. The files were already locked in EXPECTED_STAGED_FILES and physically staged by accepted67file selection; this is not newly eligible source or a new provider/ABI body.",
+  "preserved": [
+    "Original failed reader/capture and successful build",
+    "Prior existing fixture/graph/quote proofs at their unchanged scopes",
+    "Eighth policy helper import correction",
+    "All actual3KO/kernel/symvers/config/generated artifacts and source099/IHK8d bindings",
+    "Generic/exec/equivalent/replay/perf/XPMEM and native/currentfree/UNKNOWN holds"
+  ],
+  "selected_source_proof": [
+    {
+      "already_in_captured_stage_lock": true,
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0",
+      "size": 74960,
+      "source_commit": "099cb5b874e34a72848e12838d367da62b097db6",
+      "stage_destination": "smp_application.rs"
+    },
+    {
+      "already_in_captured_stage_lock": true,
+      "path": "host-kernel/native-rust/current_fork_task_mm.rs",
+      "sha256": "e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe",
+      "size": 4578,
+      "source_commit": "099cb5b874e34a72848e12838d367da62b097db6",
+      "stage_destination": "current_fork_task_mm.rs"
+    },
+    {
+      "already_in_captured_stage_lock": true,
+      "path": "host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126",
+      "size": 10725,
+      "source_commit": "099cb5b874e34a72848e12838d367da62b097db6",
+      "stage_destination": "current_fork_control.rs"
+    }
+  ],
+  "stage_lock": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+    "sha256": "f0f7cf6f846efdec7f826a1f07589bb396da1b430d3cc998189e58539ebd97ef"
+  },
+  "status": "ONE_BOUNDED_SOURCE_SUPPORTED_VALIDATOR_DATA_CORRECTION_NOT_EXECUTED"
+}

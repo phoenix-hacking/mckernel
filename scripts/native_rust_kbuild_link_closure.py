@@ -184,6 +184,7 @@ _PROJECT_DEPENDENCIES = {
         "sysfs_rpc.rs", "sysfs_remote.rs", "abi/application.rs", "application_rpc.rs",
         "application_syscall.rs", "application_image.rs", "exec_transfer_checked.rs",
         "exec_delivery.rs", "smp_application.rs",
+        "current_fork_task_mm.rs", "current_fork_control.rs",
         "smp_application_syscall.rs", "smp_application_image.rs", "application_pager.rs",
         "smp_file_pager.rs", "zero_pages.rs", "smp_trampoline.S", "smp_startup_entry.S",
     ),
@@ -225,7 +226,27 @@ _FIXDEP_CONFIG_DEPENDENCIES = {
         "$(wildcard include/config/HYPERV_TIMER)",
         "$(wildcard include/config/AMD_MEM_ENCRYPT)",
     ),
-    "mcctrl": (),
+    "mcctrl": (
+        "$(wildcard include/config/X86_64)",
+        "$(wildcard include/config/SMP)",
+        "$(wildcard include/config/PER_VMA_LOCK)",
+        "$(wildcard include/config/TRACING)",
+        "$(wildcard include/config/MEMCG)",
+        "$(wildcard include/config/HAVE_JUMP_LABEL_HACK)",
+        "$(wildcard include/config/KCSAN)",
+        "$(wildcard include/config/DEBUG_LOCK_ALLOC)",
+        "$(wildcard include/config/DEBUG_VM)",
+        "$(wildcard include/config/LOCKDEP)",
+        "$(wildcard include/config/NOINSTR_VALIDATION)",
+        "$(wildcard include/config/PREEMPT_RT)",
+        "$(wildcard include/config/TRACEPOINTS)",
+        "$(wildcard include/config/JUMP_LABEL)",
+        "$(wildcard include/config/OBJTOOL)",
+        "$(wildcard include/config/GENERIC_BUG)",
+        "$(wildcard include/config/GENERIC_BUG_RELATIVE_POINTERS)",
+        "$(wildcard include/config/DEBUG_BUGVERBOSE)",
+        "$(wildcard include/config/BUG)",
+    ),
 }
 _FIXDEP_CONFIG_AFTER_SOURCE = {
     "ihk": {"os_runtime.rs": ("$(wildcard include/config/COMPAT)",)},
@@ -234,7 +255,9 @@ _FIXDEP_CONFIG_AFTER_SOURCE = {
         "smp_memory.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][1:6],
         "smp_vdso.rs": _FIXDEP_CONFIG_DEPENDENCIES["ihk-smp-x86_64"][6:],
     },
-    "mcctrl": {},
+    "mcctrl": {
+        "mcctrl_mm_write.rs": _FIXDEP_CONFIG_DEPENDENCIES["mcctrl"],
+    },
 }
 _KERNEL_RUST_DEPENDENCIES = (
     "./rust/libcore.rmeta",
@@ -1334,7 +1357,7 @@ def _parse_assembly_record(name, target, command, text, module, source_prefix):
     _require_pair(tokens, "-o", target, name)
     if tokens[-1] != source or _source_assignment(text, target, name) != source:
         raise LinkClosureError("{0} assembly source owner differs".format(name))
-    includes = [source_prefix + "/arch/x86/include", "./arch/x86/include/generated", source_prefix + "/include", "./include", source_prefix + "/arch/x86/include/uapi", "./arch/x86/include/generated/uapi", source_prefix + "/include/uapi", "./include/generated/uapi"]
+    includes = [source_prefix + "/arch/x86/include", "./arch/x86/include/generated", source_prefix + "/include", "./include", source_prefix + "/arch/x86/include/uapi", "./arch/x86/include/generated/uapi", source_prefix + "/include/uapi", "./include/generated/uapi", source_prefix + "/" + MODULE_ROOT, MODULE_ROOT]
     if [token[2:] for token in tokens if token.startswith("-I")] != includes:
         raise LinkClosureError("{0} assembly include closure differs".format(name))
     forced = [source_prefix + "/include/linux/compiler-version.h", source_prefix + "/include/linux/kconfig.h"]
@@ -1344,6 +1367,17 @@ def _parse_assembly_record(name, target, command, text, module, source_prefix):
     dependency_output = "-Wp,-MMD,{0}/.{1}.d".format(MODULE_ROOT, obj)
     _require_once(tokens, dependency_output, name)
     allowed = set(_CLANG_SAFE_FIXED_FLAGS) - {"-std=gnu11"}
+    # Pinned Clang Kbuild CPPFLAGS and the selected function-tracer AFLAGS.
+    allowed.update((
+        "-Werror=unknown-warning-option",
+        "-Werror=ignored-optimization-argument",
+        "-Werror=option-ignored",
+        "-Werror=unused-command-line-argument",
+        "-Werror",
+        "-DCC_USING_NOP_MCOUNT",
+        "-DCC_USING_FENTRY",
+        "-fmacro-prefix-map=" + source_prefix + "/=",
+    ))
     allowed.update(["clang", source, target, "-include", dependency_output, "-D__KERNEL__", "-D__ASSEMBLY__", "-DMODULE", '-DKBUILD_BASENAME="{0}"'.format(basename), '-DKBUILD_MODNAME="{0}"'.format(modname), "-D__KBUILD_MODNAME=" + modname])
     allowed.update("-I" + value for value in includes)
     allowed.update(forced)

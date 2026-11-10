@@ -1,0 +1,1325 @@
+{
+  "status": "BOUNDED_SOURCE_DATA_CORRECTION_PREPARED_NOT_IMPORTED_OR_EXECUTED",
+  "failure_family": "Actual selected Kbuild assembly include/CPPFLAGS profile omitted by the ASM-only validator data; distinct from the retained SMP and MCCTRL fixdep corrections.",
+  "original_checks": [
+    "M14-I02 platform/module compiler provenance at its actual scope",
+    "M15-I02 three-module source/link ownership; artifact acceptance remains pending"
+  ],
+  "failed_actual_operation": {
+    "result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/validator-tests-1/execution-2/RESULT.json",
+      "bytes": 848,
+      "sha256": "d417f4aa732144fb2a04f8b36c4b00d039295ef468bf077aa4d0f54aca7519bf"
+    },
+    "diagnostic": ".m15_mmap_trace_gates.o.cmd assembly include closure differs",
+    "candidate49_preserved": true,
+    "actual_positive_failed_and_joined": true,
+    "all_six_negative_controls_remain_unstarted": true,
+    "no_kernel_replay": true
+  },
+  "base49": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/preimage/scripts/native_rust_kbuild_link_closure.py",
+    "bytes": 70460,
+    "sha256": "49dfac78efab20e3d3b6e6a5d84b67c50f577534052a6c85477c71ce1563c4ac"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+    "bytes": 70920,
+    "sha256": "33d7bd01c5291a4f94c12f6636a5d90e11b12fe8c5c8be3afc88bf097b177833"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-includes-correction-1/ASM-EXACT-KBUILD-INPUTS.patch",
+    "bytes": 2147,
+    "sha256": "1a8c9c63988c933cc7b28635f5a3b4f3d92711e165562f2a3805bfdef0759d2c"
+  },
+  "minimal_source_delta": {
+    "scope": "_parse_assembly_record local explicit data only",
+    "include_list_append_ordered": [
+      "source_prefix + \"/\" + MODULE_ROOT",
+      "MODULE_ROOT"
+    ],
+    "fixed_allowed_tokens": [
+      "-Werror=unknown-warning-option",
+      "-Werror=ignored-optimization-argument",
+      "-Werror=option-ignored",
+      "-Werror=unused-command-line-argument",
+      "-Werror",
+      "-DCC_USING_NOP_MCOUNT",
+      "-DCC_USING_FENTRY"
+    ],
+    "dynamic_allowed_token_exact": "\"-fmacro-prefix-map=\" + source_prefix + \"/=\"",
+    "prior_mandatory_flag_checks_unchanged": true,
+    "new_tokens_use_existing_allow_list_semantics": "Exact literals only; no new namespace, prefix, regular expression or alternative include list. The existing required-token checks are not weakened or broadened.",
+    "global_C_and_Rust_flags_unchanged": true,
+    "quote_injection_command_source_forced_include_and_owner_checks_unchanged": true,
+    "prior_SMP_and_MCCTRL_changes_unchanged": true,
+    "no_API_or_CLI_change": true
+  },
+  "selected_source": {
+    "commit": "099cb5b874e34a72848e12838d367da62b097db6",
+    "IHK_head": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "stage_lock": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/stage-lock.json",
+      "bytes": 9140,
+      "sha256": "f0f7cf6f846efdec7f826a1f07589bb396da1b430d3cc998189e58539ebd97ef"
+    },
+    "accepted_stage_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/execution-1/RESULT.json",
+      "bytes": 19498,
+      "sha256": "14cca76d61126a8ad51db20cc9002fe98218fcb35620651232c9b14003b8ee0e"
+    },
+    "no_new_project_body": "Both exact selected ASM files already appear in the accepted stage lock; only their include/conditional prefixes were read for this repair. No project body was copied or restaged."
+  },
+  "source_rules": [
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.lib",
+      "bytes": 20093,
+      "sha256": "6a93e566cef4e54792566e44f205aac173fe59913b6758365cbb86b0f0352dad",
+      "lines": "217-224",
+      "rule": "Out-of-source in-tree assembly adds exactly $(src) then $(obj) include directories."
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.clang",
+      "bytes": 1653,
+      "sha256": "af4750f7fe84258d737e3fb37ab6e7cd676930c75e029e5848f2cc462787da53",
+      "lines": "13,20-38",
+      "rule": "Selected x86 target and integrated assembler; four exact warning-error flags pass through KBUILD_CPPFLAGS."
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.extrawarn",
+      "bytes": 7999,
+      "sha256": "c027f8dc67f2a00011f651517003b312c430d5411bf7783d766ed31a7b64ac02",
+      "lines": "31-34",
+      "rule": "CONFIG_WERROR=y passes exact -Werror through KBUILD_CPPFLAGS."
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/Makefile",
+      "bytes": 70466,
+      "sha256": "96d61309de7b5a043f53f8203c05ea30c27808fc7db06b3503d98105f4fde6f6",
+      "lines": "906-939,1034",
+      "rule": "Configured function tracing emits CC_USING_NOP_MCOUNT/FENTRY into KBUILD_AFLAGS; exact srctree macro-prefix map passes through KBUILD_CPPFLAGS."
+    }
+  ],
+  "matching_configuration": {
+    "resolved": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/.config",
+      "bytes": 260490,
+      "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474"
+    },
+    "profile_records": [
+      {
+        "WERROR": "CONFIG_WERROR=y"
+      },
+      {
+        "FUNCTION_TRACER": "CONFIG_FUNCTION_TRACER=y"
+      },
+      {
+        "FTRACE_MCOUNT_USE_OBJTOOL": "CONFIG_FTRACE_MCOUNT_USE_OBJTOOL=y"
+      },
+      {
+        "HAVE_OBJTOOL_NOP_MCOUNT": "CONFIG_HAVE_OBJTOOL_NOP_MCOUNT=y"
+      },
+      {
+        "HAVE_FENTRY": "CONFIG_HAVE_FENTRY=y"
+      },
+      {
+        "CC_IS_CLANG": "CONFIG_CC_IS_CLANG=y"
+      },
+      {
+        "CLANG_VERSION": "CONFIG_CLANG_VERSION=210108"
+      },
+      {
+        "AS_IS_LLVM": "CONFIG_AS_IS_LLVM=y"
+      },
+      {
+        "AS_VERSION": "CONFIG_AS_VERSION=210108"
+      },
+      {
+        "LD_IS_LLD": "CONFIG_LD_IS_LLD=y"
+      },
+      {
+        "LLD_VERSION": "CONFIG_LLD_VERSION=210108"
+      },
+      {
+        "DEBUG_INFO": "CONFIG_DEBUG_INFO=y"
+      }
+    ]
+  },
+  "existing_tool_and_fixdep_bindings": {
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "source_free_probe": {
+      "path": "/home/holden/mckernel-work/m14-m15-closure-first-20261110/docker-tool-probes-20261110T0820Z/corrected/native.json",
+      "bytes": 2088,
+      "sha256": "c8865a497416c98e76234e8d1be39d2a1cdd0a512d02bac3c4d9b7242bb189f6"
+    },
+    "clang_observed": {
+      "rc": 0,
+      "stdout": "clang version 21.1.8 (RESF 21.1.8-1.el10)\nTarget: x86_64-redhat-linux-gnu\nThread model: posix\nInstalledDir: /usr/bin\nConfiguration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg\n",
+      "stderr": ""
+    },
+    "actual_core_and_lld_record": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/evidence/actual-compiler-inputs.json",
+      "bytes": 931,
+      "sha256": "4364887f56d09bd3c2a3bbd0dc638cef617407c061a276376f7bc1d11ff852bf"
+    },
+    "fixdep_source": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/scripts/basic/fixdep.c",
+      "bytes": 10854,
+      "sha256": "512a85c24ca2cdd44d1d652e071abc6650cf4776e21979e0a08b421178f59590"
+    },
+    "fixdep_producer": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/scripts/basic/.fixdep.cmd",
+      "bytes": 604,
+      "sha256": "557116820d7368091ba68fe390250e80f6a96332c6f00e6b0fe3531d202cfcf7"
+    },
+    "fixdep_binary": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/scripts/basic/fixdep",
+      "bytes": 13776,
+      "sha256": "01506178f2868bd3fcff88d54a7ffe94dee924bb0aa995a9935a98ac7723d5e4"
+    },
+    "fixdep_rule_reused_from": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/mcctrl-config-correction-1/CONTRACT-GAP.json",
+      "bytes": 11698,
+      "sha256": "0f081d3910583958af672cb17a028411a874bb8ad4ccc0bd9fef7008c1a131ce"
+    },
+    "literal_config_records_scope": "Real first-use fixdep header/ASM CONFIG wildcard records are preserved. No new generalized wildcard grammar or policy values were introduced."
+  },
+  "both_actual_assembly_leaves": [
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.m15_mmap_trace_gates.o.cmd",
+        "bytes": 4162,
+        "sha256": "566a7e920e1429abc61eab69c56b86ac176bc68ab934bc397e766f8396b9a181"
+      },
+      "selected_stage_row": {
+        "path": "m15_mmap_trace_gates.S",
+        "sha256": "365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161"
+      },
+      "staged_source_identity": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/m15_mmap_trace_gates.S",
+        "bytes": 2272,
+        "sha256": "365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161"
+      },
+      "source_prefix_only": {
+        "lines_read": "1-26",
+        "bytes": 1008,
+        "sha256": "cd622d9f7f75bf3d6cd547a272aa3d79334281b6d38834140e8481f9281967e6",
+        "direct_include_directives": [
+          "<linux/linkage.h>",
+          "<linux/annotate.h>",
+          "<asm/asm.h>"
+        ]
+      },
+      "compiler": "clang",
+      "source_assignment": "/source/drivers/misc/mckernel/m15_mmap_trace_gates.S",
+      "include_paths_ordered": [
+        "/source/arch/x86/include",
+        "./arch/x86/include/generated",
+        "/source/include",
+        "./include",
+        "/source/arch/x86/include/uapi",
+        "./arch/x86/include/generated/uapi",
+        "/source/include/uapi",
+        "./include/generated/uapi",
+        "/source/drivers/misc/mckernel",
+        "drivers/misc/mckernel"
+      ],
+      "forced_includes_ordered": [
+        "/source/include/linux/compiler-version.h",
+        "/source/include/linux/kconfig.h"
+      ],
+      "actual_new_profile_tokens_ordered": [
+        "-Werror=unknown-warning-option",
+        "-Werror=ignored-optimization-argument",
+        "-Werror=option-ignored",
+        "-Werror=unused-command-line-argument",
+        "-fmacro-prefix-map=/source/=",
+        "-Werror",
+        "-DCC_USING_NOP_MCOUNT",
+        "-DCC_USING_FENTRY"
+      ],
+      "profile_token_occurrences": {
+        "-Werror=unknown-warning-option": 1,
+        "-Werror=ignored-optimization-argument": 1,
+        "-Werror=option-ignored": 1,
+        "-Werror=unused-command-line-argument": 1,
+        "-Werror": 1,
+        "-DCC_USING_NOP_MCOUNT": 1,
+        "-DCC_USING_FENTRY": 1,
+        "-fmacro-prefix-map=/source/=": 1
+      },
+      "tokens_unclassified_by_base49": [
+        "-Werror=unknown-warning-option",
+        "-Werror=ignored-optimization-argument",
+        "-Werror=option-ignored",
+        "-Werror=unused-command-line-argument",
+        "-fmacro-prefix-map=/source/=",
+        "-Werror",
+        "-DCC_USING_NOP_MCOUNT",
+        "-DCC_USING_FENTRY",
+        "-I/source/drivers/misc/mckernel",
+        "-Idrivers/misc/mckernel"
+      ],
+      "tokens_unclassified_by_proposed_explicit_data": [],
+      "project_references_sorted": [
+        ".m15_mmap_trace_gates.o.d",
+        "m15_mmap_trace_gates.S",
+        "m15_mmap_trace_gates.o"
+      ],
+      "kernel_header_and_literal_config_dependency_entries_ordered": [
+        {
+          "kind": "literal_config_wildcard",
+          "name": "X86_64"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "HAVE_JUMP_LABEL_HACK"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "OBJTOOL"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/compiler-version.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_VERSION_TEXT"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/kconfig.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CPU_BIG_ENDIAN"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "BOOGER"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "FOO"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/linkage.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "FUNCTION_ALIGNMENT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_USE_SYM_ANNOTATIONS"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/compiler_types.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "DEBUG_INFO_BTF"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PAHOLE_HAS_BTF_TAG"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_HAS_SANE_FUNCTION_ALIGNMENT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARM64"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "LD_DEAD_CODE_DATA_ELIMINATION"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "LTO_CLANG"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "HAVE_ARCH_COMPILER_H"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_HAS_MULTIDIMENSIONAL_NONSTRING"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "UBSAN_SIGNED_WRAP"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_USES_CFI_GENERIC_LLVM_PASS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_HAS_ASM_INLINE"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/stringify.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/export.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MODVERSIONS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "64BIT"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/compiler.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "TRACE_BRANCH_PROFILING"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PROFILE_ALL_BRANCHES"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "arch/x86/include/generated/asm/rwonce.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/asm-generic/rwonce.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/asm/linkage.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "X86_32"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CALL_PADDING"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MITIGATION_RETHUNK"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MITIGATION_RETPOLINE"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MITIGATION_SLS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "FUNCTION_PADDING_BYTES"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "UML"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/asm/ibt.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "X86_KERNEL_IBT"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/types.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "HAVE_UID16"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "UID16"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_DMA_ADDR_T_64BIT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PHYS_ADDR_T_64BIT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_32BIT_USTAT_F_TINODE"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/linux/types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "arch/x86/include/generated/uapi/asm/types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/asm-generic/types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/asm-generic/int-ll64.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/asm-generic/int-ll64.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/uapi/asm/bitsperlong.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/asm-generic/bitsperlong.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/asm-generic/bitsperlong.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/annotate.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/objtool_types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/asm/asm.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "KPROBES"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/asm/extable_fixup_types.h"
+        }
+      ],
+      "config_records": [
+        {
+          "X86_64": "CONFIG_X86_64=y"
+        },
+        {
+          "HAVE_JUMP_LABEL_HACK": "CONFIG_HAVE_JUMP_LABEL_HACK=y"
+        },
+        {
+          "OBJTOOL": "CONFIG_OBJTOOL=y"
+        },
+        {
+          "CC_VERSION_TEXT": "CONFIG_CC_VERSION_TEXT=\"clang version 21.1.8 (RESF 21.1.8-1.el10)\""
+        },
+        {
+          "CPU_BIG_ENDIAN": "<not emitted in resolved config>"
+        },
+        {
+          "BOOGER": "<not emitted in resolved config>"
+        },
+        {
+          "FOO": "<not emitted in resolved config>"
+        },
+        {
+          "FUNCTION_ALIGNMENT": "CONFIG_FUNCTION_ALIGNMENT=16"
+        },
+        {
+          "ARCH_USE_SYM_ANNOTATIONS": "CONFIG_ARCH_USE_SYM_ANNOTATIONS=y"
+        },
+        {
+          "DEBUG_INFO_BTF": "CONFIG_DEBUG_INFO_BTF=y"
+        },
+        {
+          "PAHOLE_HAS_BTF_TAG": "CONFIG_PAHOLE_HAS_BTF_TAG=y"
+        },
+        {
+          "CC_HAS_SANE_FUNCTION_ALIGNMENT": "CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT=y"
+        },
+        {
+          "ARM64": "<not emitted in resolved config>"
+        },
+        {
+          "LD_DEAD_CODE_DATA_ELIMINATION": "<not emitted in resolved config>"
+        },
+        {
+          "LTO_CLANG": "<not emitted in resolved config>"
+        },
+        {
+          "HAVE_ARCH_COMPILER_H": "<not emitted in resolved config>"
+        },
+        {
+          "CC_HAS_MULTIDIMENSIONAL_NONSTRING": "CONFIG_CC_HAS_MULTIDIMENSIONAL_NONSTRING=y"
+        },
+        {
+          "UBSAN_SIGNED_WRAP": "<not emitted in resolved config>"
+        },
+        {
+          "ARCH_USES_CFI_GENERIC_LLVM_PASS": "<not emitted in resolved config>"
+        },
+        {
+          "CC_HAS_ASM_INLINE": "CONFIG_CC_HAS_ASM_INLINE=y"
+        },
+        {
+          "MODVERSIONS": "# CONFIG_MODVERSIONS is not set"
+        },
+        {
+          "64BIT": "CONFIG_64BIT=y"
+        },
+        {
+          "TRACE_BRANCH_PROFILING": "<not emitted in resolved config>"
+        },
+        {
+          "PROFILE_ALL_BRANCHES": "<not emitted in resolved config>"
+        },
+        {
+          "X86_32": "<not emitted in resolved config>"
+        },
+        {
+          "CALL_PADDING": "CONFIG_CALL_PADDING=y"
+        },
+        {
+          "MITIGATION_RETHUNK": "CONFIG_MITIGATION_RETHUNK=y"
+        },
+        {
+          "MITIGATION_RETPOLINE": "CONFIG_MITIGATION_RETPOLINE=y"
+        },
+        {
+          "MITIGATION_SLS": "CONFIG_MITIGATION_SLS=y"
+        },
+        {
+          "FUNCTION_PADDING_BYTES": "CONFIG_FUNCTION_PADDING_BYTES=16"
+        },
+        {
+          "UML": "<not emitted in resolved config>"
+        },
+        {
+          "X86_KERNEL_IBT": "CONFIG_X86_KERNEL_IBT=y"
+        },
+        {
+          "HAVE_UID16": "CONFIG_HAVE_UID16=y"
+        },
+        {
+          "UID16": "CONFIG_UID16=y"
+        },
+        {
+          "ARCH_DMA_ADDR_T_64BIT": "CONFIG_ARCH_DMA_ADDR_T_64BIT=y"
+        },
+        {
+          "PHYS_ADDR_T_64BIT": "CONFIG_PHYS_ADDR_T_64BIT=y"
+        },
+        {
+          "ARCH_32BIT_USTAT_F_TINODE": "<not emitted in resolved config>"
+        },
+        {
+          "KPROBES": "CONFIG_KPROBES=y"
+        }
+      ]
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.m15_mm_write_warning.o.cmd",
+        "bytes": 4305,
+        "sha256": "5d92c6c821f8facadb288cb9b61de8f698536a637ff9c2440b1f47a3629b4876"
+      },
+      "selected_stage_row": {
+        "path": "m15_mm_write_warning.S",
+        "sha256": "24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550"
+      },
+      "staged_source_identity": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/m15_mm_write_warning.S",
+        "bytes": 1872,
+        "sha256": "24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550"
+      },
+      "source_prefix_only": {
+        "lines_read": "1-22",
+        "bytes": 1306,
+        "sha256": "5e98e0e59e9ff3b0a0810715698b3976ae32f6355cca2b47053fb96f39697686",
+        "direct_include_directives": [
+          "<linux/linkage.h>",
+          "<linux/annotate.h>"
+        ]
+      },
+      "compiler": "clang",
+      "source_assignment": "/source/drivers/misc/mckernel/m15_mm_write_warning.S",
+      "include_paths_ordered": [
+        "/source/arch/x86/include",
+        "./arch/x86/include/generated",
+        "/source/include",
+        "./include",
+        "/source/arch/x86/include/uapi",
+        "./arch/x86/include/generated/uapi",
+        "/source/include/uapi",
+        "./include/generated/uapi",
+        "/source/drivers/misc/mckernel",
+        "drivers/misc/mckernel"
+      ],
+      "forced_includes_ordered": [
+        "/source/include/linux/compiler-version.h",
+        "/source/include/linux/kconfig.h"
+      ],
+      "actual_new_profile_tokens_ordered": [
+        "-Werror=unknown-warning-option",
+        "-Werror=ignored-optimization-argument",
+        "-Werror=option-ignored",
+        "-Werror=unused-command-line-argument",
+        "-fmacro-prefix-map=/source/=",
+        "-Werror",
+        "-DCC_USING_NOP_MCOUNT",
+        "-DCC_USING_FENTRY"
+      ],
+      "profile_token_occurrences": {
+        "-Werror=unknown-warning-option": 1,
+        "-Werror=ignored-optimization-argument": 1,
+        "-Werror=option-ignored": 1,
+        "-Werror=unused-command-line-argument": 1,
+        "-Werror": 1,
+        "-DCC_USING_NOP_MCOUNT": 1,
+        "-DCC_USING_FENTRY": 1,
+        "-fmacro-prefix-map=/source/=": 1
+      },
+      "tokens_unclassified_by_base49": [
+        "-Werror=unknown-warning-option",
+        "-Werror=ignored-optimization-argument",
+        "-Werror=option-ignored",
+        "-Werror=unused-command-line-argument",
+        "-fmacro-prefix-map=/source/=",
+        "-Werror",
+        "-DCC_USING_NOP_MCOUNT",
+        "-DCC_USING_FENTRY",
+        "-I/source/drivers/misc/mckernel",
+        "-Idrivers/misc/mckernel"
+      ],
+      "tokens_unclassified_by_proposed_explicit_data": [],
+      "project_references_sorted": [
+        ".m15_mm_write_warning.o.d",
+        "m15_mm_write_warning.S",
+        "m15_mm_write_warning.o"
+      ],
+      "kernel_header_and_literal_config_dependency_entries_ordered": [
+        {
+          "kind": "literal_config_wildcard",
+          "name": "X86_64"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "OBJTOOL"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "GENERIC_BUG"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "GENERIC_BUG_RELATIVE_POINTERS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "DEBUG_BUGVERBOSE"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "BUG"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "LOCKDEP"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PREEMPT_RT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "NOINSTR_VALIDATION"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/compiler-version.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_VERSION_TEXT"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/kconfig.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CPU_BIG_ENDIAN"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "BOOGER"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "FOO"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/linkage.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "FUNCTION_ALIGNMENT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_USE_SYM_ANNOTATIONS"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/compiler_types.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "DEBUG_INFO_BTF"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PAHOLE_HAS_BTF_TAG"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_HAS_SANE_FUNCTION_ALIGNMENT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARM64"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "LD_DEAD_CODE_DATA_ELIMINATION"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "LTO_CLANG"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "HAVE_ARCH_COMPILER_H"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_HAS_MULTIDIMENSIONAL_NONSTRING"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "UBSAN_SIGNED_WRAP"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_USES_CFI_GENERIC_LLVM_PASS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CC_HAS_ASM_INLINE"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/stringify.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/export.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MODVERSIONS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "64BIT"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/compiler.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "TRACE_BRANCH_PROFILING"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PROFILE_ALL_BRANCHES"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "arch/x86/include/generated/asm/rwonce.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/asm-generic/rwonce.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/asm/linkage.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "X86_32"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "CALL_PADDING"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MITIGATION_RETHUNK"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MITIGATION_RETPOLINE"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "MITIGATION_SLS"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "FUNCTION_PADDING_BYTES"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "UML"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/asm/ibt.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "X86_KERNEL_IBT"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/types.h"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "HAVE_UID16"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "UID16"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_DMA_ADDR_T_64BIT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "PHYS_ADDR_T_64BIT"
+        },
+        {
+          "kind": "literal_config_wildcard",
+          "name": "ARCH_32BIT_USTAT_F_TINODE"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/linux/types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "arch/x86/include/generated/uapi/asm/types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/asm-generic/types.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/asm-generic/int-ll64.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/asm-generic/int-ll64.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/arch/x86/include/uapi/asm/bitsperlong.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/asm-generic/bitsperlong.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/uapi/asm-generic/bitsperlong.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/annotate.h"
+        },
+        {
+          "kind": "kernel_header",
+          "path": "/source/include/linux/objtool_types.h"
+        }
+      ],
+      "config_records": [
+        {
+          "X86_64": "CONFIG_X86_64=y"
+        },
+        {
+          "OBJTOOL": "CONFIG_OBJTOOL=y"
+        },
+        {
+          "GENERIC_BUG": "CONFIG_GENERIC_BUG=y"
+        },
+        {
+          "GENERIC_BUG_RELATIVE_POINTERS": "CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y"
+        },
+        {
+          "DEBUG_BUGVERBOSE": "CONFIG_DEBUG_BUGVERBOSE=y"
+        },
+        {
+          "BUG": "CONFIG_BUG=y"
+        },
+        {
+          "LOCKDEP": "<not emitted in resolved config>"
+        },
+        {
+          "PREEMPT_RT": "# CONFIG_PREEMPT_RT is not set"
+        },
+        {
+          "NOINSTR_VALIDATION": "<not emitted in resolved config>"
+        },
+        {
+          "CC_VERSION_TEXT": "CONFIG_CC_VERSION_TEXT=\"clang version 21.1.8 (RESF 21.1.8-1.el10)\""
+        },
+        {
+          "CPU_BIG_ENDIAN": "<not emitted in resolved config>"
+        },
+        {
+          "BOOGER": "<not emitted in resolved config>"
+        },
+        {
+          "FOO": "<not emitted in resolved config>"
+        },
+        {
+          "FUNCTION_ALIGNMENT": "CONFIG_FUNCTION_ALIGNMENT=16"
+        },
+        {
+          "ARCH_USE_SYM_ANNOTATIONS": "CONFIG_ARCH_USE_SYM_ANNOTATIONS=y"
+        },
+        {
+          "DEBUG_INFO_BTF": "CONFIG_DEBUG_INFO_BTF=y"
+        },
+        {
+          "PAHOLE_HAS_BTF_TAG": "CONFIG_PAHOLE_HAS_BTF_TAG=y"
+        },
+        {
+          "CC_HAS_SANE_FUNCTION_ALIGNMENT": "CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT=y"
+        },
+        {
+          "ARM64": "<not emitted in resolved config>"
+        },
+        {
+          "LD_DEAD_CODE_DATA_ELIMINATION": "<not emitted in resolved config>"
+        },
+        {
+          "LTO_CLANG": "<not emitted in resolved config>"
+        },
+        {
+          "HAVE_ARCH_COMPILER_H": "<not emitted in resolved config>"
+        },
+        {
+          "CC_HAS_MULTIDIMENSIONAL_NONSTRING": "CONFIG_CC_HAS_MULTIDIMENSIONAL_NONSTRING=y"
+        },
+        {
+          "UBSAN_SIGNED_WRAP": "<not emitted in resolved config>"
+        },
+        {
+          "ARCH_USES_CFI_GENERIC_LLVM_PASS": "<not emitted in resolved config>"
+        },
+        {
+          "CC_HAS_ASM_INLINE": "CONFIG_CC_HAS_ASM_INLINE=y"
+        },
+        {
+          "MODVERSIONS": "# CONFIG_MODVERSIONS is not set"
+        },
+        {
+          "64BIT": "CONFIG_64BIT=y"
+        },
+        {
+          "TRACE_BRANCH_PROFILING": "<not emitted in resolved config>"
+        },
+        {
+          "PROFILE_ALL_BRANCHES": "<not emitted in resolved config>"
+        },
+        {
+          "X86_32": "<not emitted in resolved config>"
+        },
+        {
+          "CALL_PADDING": "CONFIG_CALL_PADDING=y"
+        },
+        {
+          "MITIGATION_RETHUNK": "CONFIG_MITIGATION_RETHUNK=y"
+        },
+        {
+          "MITIGATION_RETPOLINE": "CONFIG_MITIGATION_RETPOLINE=y"
+        },
+        {
+          "MITIGATION_SLS": "CONFIG_MITIGATION_SLS=y"
+        },
+        {
+          "FUNCTION_PADDING_BYTES": "CONFIG_FUNCTION_PADDING_BYTES=16"
+        },
+        {
+          "UML": "<not emitted in resolved config>"
+        },
+        {
+          "X86_KERNEL_IBT": "CONFIG_X86_KERNEL_IBT=y"
+        },
+        {
+          "HAVE_UID16": "CONFIG_HAVE_UID16=y"
+        },
+        {
+          "UID16": "CONFIG_UID16=y"
+        },
+        {
+          "ARCH_DMA_ADDR_T_64BIT": "CONFIG_ARCH_DMA_ADDR_T_64BIT=y"
+        },
+        {
+          "PHYS_ADDR_T_64BIT": "CONFIG_PHYS_ADDR_T_64BIT=y"
+        },
+        {
+          "ARCH_32BIT_USTAT_F_TINODE": "<not emitted in resolved config>"
+        }
+      ]
+    }
+  ],
+  "targeted_actual_kernel_header_identities": {
+    "/source/include/linux/compiler-version.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/compiler-version.h",
+      "bytes": 517,
+      "sha256": "ac920528afa7f525956535f1ad94dfd4ce5ed6e516b21cd4ca83b7e674cb9fad"
+    },
+    "/source/include/linux/kconfig.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/kconfig.h",
+      "bytes": 2691,
+      "sha256": "1b51cc51b6e4beb9b249853e0a0774f63679599f9a27b9e9fb8cc26ca14265f1"
+    },
+    "/source/include/linux/linkage.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/linkage.h",
+      "bytes": 9580,
+      "sha256": "7032c93f8b3be3170944453b633d84767ff62215e7d9b481debe6c31387e6efd"
+    },
+    "/source/include/linux/compiler_types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/compiler_types.h",
+      "bytes": 19085,
+      "sha256": "062f9d6c2294d1f318b21d1f5dbdf8d932d8fa3993db159833bcfe151b7aab01"
+    },
+    "/source/include/linux/stringify.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/stringify.h",
+      "bytes": 395,
+      "sha256": "a7fd23c88d861142792d9233eb7a7e535b936690a2873af66524cafd2879d5e4"
+    },
+    "/source/include/linux/export.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/export.h",
+      "bytes": 2228,
+      "sha256": "45221053198a3645810894bee91a10ad9eb38fb80637fe617a8cdac53cba1e9a"
+    },
+    "/source/include/linux/compiler.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/compiler.h",
+      "bytes": 12405,
+      "sha256": "4fb4e87aec72942dff922e9934b1818640fa646a3ca06538a420e3f8a4f3dd2b"
+    },
+    "arch/x86/include/generated/asm/rwonce.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/arch/x86/include/generated/asm/rwonce.h",
+      "bytes": 32,
+      "sha256": "e65428b6b0334c3fa3b08c940356e87132ccb205a984bb0d561110b122738963"
+    },
+    "/source/include/asm-generic/rwonce.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/asm-generic/rwonce.h",
+      "bytes": 2932,
+      "sha256": "40e6162e9efcc6dbface785a7797a58be8d002596c326e6f2c6fa911abc87aab"
+    },
+    "/source/arch/x86/include/asm/linkage.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/include/asm/linkage.h",
+      "bytes": 4125,
+      "sha256": "3abcae55bcd947e4fb92c40a1c85527b8b5b6d20ba6be97f34776e338b8148b3"
+    },
+    "/source/arch/x86/include/asm/ibt.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/include/asm/ibt.h",
+      "bytes": 2573,
+      "sha256": "b7d57862246518b8739bf77f4d1254d66cddcff65a298ebd543666d8902eea03"
+    },
+    "/source/include/linux/types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/types.h",
+      "bytes": 6487,
+      "sha256": "04148aa244639d914443d723569338238b896f0949f6189126cd0afe101aa3f7"
+    },
+    "/source/include/uapi/linux/types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/uapi/linux/types.h",
+      "bytes": 1979,
+      "sha256": "fed77a624a108eef218c82bc29a9f3565a3e517a9cec327d7adeb89e1ca0417c"
+    },
+    "arch/x86/include/generated/uapi/asm/types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/arch/x86/include/generated/uapi/asm/types.h",
+      "bytes": 31,
+      "sha256": "b6bdcd528bce555b2ecb58e8a1624e3e13e09312c31318023c4e86b957e2b01f"
+    },
+    "/source/include/uapi/asm-generic/types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/uapi/asm-generic/types.h",
+      "bytes": 248,
+      "sha256": "e768a8355242ccf2c18e629ff7cebd9cbeda19e7f6823e16f163efa02ce29d35"
+    },
+    "/source/include/asm-generic/int-ll64.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/asm-generic/int-ll64.h",
+      "bytes": 863,
+      "sha256": "6adf196af7b0af7c4175e8c749f2acfcda2ffb59b926bb6b665182b0d6d6720a"
+    },
+    "/source/include/uapi/asm-generic/int-ll64.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/uapi/asm-generic/int-ll64.h",
+      "bytes": 879,
+      "sha256": "faca16150492e943a43c83e6b3069531dd498ef15dc612fb2051b88f7da83afc"
+    },
+    "/source/arch/x86/include/uapi/asm/bitsperlong.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/include/uapi/asm/bitsperlong.h",
+      "bytes": 321,
+      "sha256": "8ef5efeb3f25ae47ce03ba892f5caf77631b1257715fc12de72c21e61db17e43"
+    },
+    "/source/include/asm-generic/bitsperlong.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/asm-generic/bitsperlong.h",
+      "bytes": 1207,
+      "sha256": "09c1354e4daa869af60b1b9ae76a0f7a5362bb0fc0be62d64c8ad51e3d19aa87"
+    },
+    "/source/include/uapi/asm-generic/bitsperlong.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/uapi/asm-generic/bitsperlong.h",
+      "bytes": 1107,
+      "sha256": "fa25db88dc972820b72f8baf9cea6f39ca7f5bd0cf39182089409f6676fa90b6"
+    },
+    "/source/include/linux/annotate.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/annotate.h",
+      "bytes": 4357,
+      "sha256": "5b5e26e29b6e1a7578a474fa8f11dba97c71fd34633add47b21c99e65e2db7b9"
+    },
+    "/source/include/linux/objtool_types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/linux/objtool_types.h",
+      "bytes": 2165,
+      "sha256": "c6ad4902120a7ea623c894db9304e7df03c3b48c401491ffeb55a3333c6c1c61"
+    },
+    "/source/arch/x86/include/asm/asm.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/include/asm/asm.h",
+      "bytes": 6370,
+      "sha256": "41978bfcc28ae6ae76257f98db3f99c698da70a8a60b7632403dc4646e659c55"
+    },
+    "/source/arch/x86/include/asm/extable_fixup_types.h": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/include/asm/extable_fixup_types.h",
+      "bytes": 2396,
+      "sha256": "7b79522de6c715389ab26bc2ff6dadee0bcf5a5bb59a49206b415999cf7fd65e"
+    }
+  },
+  "remaining_associated_command_contract_static_comparisons": [
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/ihk.mod",
+        "bytes": 28,
+        "sha256": "21d023987a6249e8918fe9c01cbffc42346c3bee9c55feeca64f57eed18877ad"
+      },
+      "comparison": "unchanged exact module response/component data",
+      "matches": true,
+      "expected_components": [
+        "ihk.o"
+      ]
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.ihk.ko.cmd",
+        "bytes": 228,
+        "sha256": "6739f4d1e9141d321835a6a607d735113def24054abf2d3b1ab5fed8843e23db"
+      },
+      "comparison": "unchanged exact final-link token data",
+      "matches": true
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/ihk-smp-x86_64.mod",
+        "bytes": 39,
+        "sha256": "a3bceeb424df30f067f00f5916875522d7dd6d4becdaa5afe543b6e1582f60ea"
+      },
+      "comparison": "unchanged exact module response/component data",
+      "matches": true,
+      "expected_components": [
+        "ihk_smp_x86_64.o"
+      ]
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.ihk-smp-x86_64.ko.cmd",
+        "bytes": 272,
+        "sha256": "2e608ceeeab99a11ff07135f014be4b0e87209cb864165fc41fdfeb6c0b87cd7"
+      },
+      "comparison": "unchanged exact final-link token data",
+      "matches": true
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.ihk-smp-x86_64.o.cmd",
+        "bytes": 489,
+        "sha256": "569329bc0644b43570f3e47eb8373374cbe9fa849f7d57c73fbc5e88ee801a6a"
+      },
+      "comparison": "unchanged exact aggregate and objtool token data",
+      "matches": true
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/mcctrl.mod",
+        "bytes": 126,
+        "sha256": "2ca72ca8fbb1e6f7f5fa4077aa7ada1dd273dbff4c588c51f6889b057a9f12fb"
+      },
+      "comparison": "unchanged exact module response/component data",
+      "matches": true,
+      "expected_components": [
+        "mcctrl_rust.o",
+        "m15_mmap_trace_gates.o",
+        "m15_mm_write_warning.o"
+      ]
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.mcctrl.ko.cmd",
+        "bytes": 240,
+        "sha256": "dce809d695b2e46a132460f3719f5f1d1e1952b284a6f275290e1b04dcf9e9a4"
+      },
+      "comparison": "unchanged exact final-link token data",
+      "matches": true
+    },
+    {
+      "record": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/capture-1/records/.mcctrl.o.cmd",
+        "bytes": 449,
+        "sha256": "0c10544963927dab1383aa7cd064b47af802ab9199d5ac3af8c86c7791ab71c5"
+      },
+      "comparison": "unchanged exact aggregate and objtool token data",
+      "matches": true
+    }
+  ],
+  "same_19_record_set_scope": "The two ASM records, three raw module responses, both aggregate/objtool commands and all three final links were inspected statically. The previously consumed Rust and generated-mod.c records, source matrix, configuration and build are unchanged; no validator, import, test or command under test was run.",
+  "unchanged_remaining_conditions": [
+    "Independent source review and Root admission of a changed positive plus six never-started negative controls and focused exact-ASM reject.",
+    "Actual full artifact collector/ELF/modpost/ownership qualification still pending; symbol presence alone cannot accept modules.",
+    "Compiler input provenance retains actual_profile_and_emission_qualification=False; pinned compiler/objtool and emitted table/return-thunk obligations remain separate.",
+    "M14 original image/provider/native/currentfree/generic holds and acceptance-before-M15 remain. No module load or C retirement credit."
+  ]
+}

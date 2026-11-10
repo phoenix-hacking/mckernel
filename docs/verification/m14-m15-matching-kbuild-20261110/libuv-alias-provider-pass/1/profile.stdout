@@ -1,0 +1,431 @@
+[
+    {
+        "Id": "31c10036dd1706f987405e2b9978cc5810515a9d559831d3e52d4b9c05970b15",
+        "Created": "2026-11-10T11:49:53.827670812Z",
+        "Path": "/usr/bin/bash",
+        "Args": [
+            "--noprofile",
+            "--norc",
+            "-e",
+            "-c",
+            "ulimit -v 1048576; exec \"$@\"",
+            "m15-consumer-as-limit",
+            "/usr/bin/python3",
+            "-I",
+            "-B",
+            "-c",
+            "import hashlib, json, os, stat\nfrom pathlib import Path\nexpected_sha = \"e14ce16ebef281548fe650470d518c4e76ef179c7d15d39cdad853ec50d33d8b\"\nexpected_size = 233392\nroots = [Path(\"/usr/lib64\"), Path(\"/lib64\")]\npaths = [root / \"libuv.so.1\" for root in roots]\nreport = {\"scope\": \"Exact libuv read-only mount alias identity only\", \"status\": \"FAIL\", \"directories\": [], \"files\": []}\ntry:\n    for root in roots:\n        ls = root.lstat()\n        rs = root.resolve(strict=True)\n        report[\"directories\"].append({\"path\": str(root), \"is_symlink\": stat.S_ISLNK(ls.st_mode), \"readlink\": os.readlink(root) if stat.S_ISLNK(ls.st_mode) else None, \"resolved\": str(rs), \"st_dev\": root.stat().st_dev, \"st_ino\": root.stat().st_ino})\n        assert rs.is_dir(), \"not a resolved directory\"\n    assert roots[0].resolve(strict=True) == roots[1].resolve(strict=True), \"library directory aliases differ\"\n    assert (report[\"directories\"][0][\"st_dev\"], report[\"directories\"][0][\"st_ino\"]) == (report[\"directories\"][1][\"st_dev\"], report[\"directories\"][1][\"st_ino\"]), \"directory stat identities differ\"\n    for path in paths:\n        resolved = path.resolve(strict=True)\n        assert resolved.parent == roots[0].resolve(strict=True), \"resolved file escapes exact library directory\"\n        with path.open(\"rb\") as stream:\n            before = os.fstat(stream.fileno())\n            assert stat.S_ISREG(before.st_mode), \"not regular ELF file\"\n            assert before.st_size == expected_size, \"ELF byte count differs\"\n            payload = stream.read(expected_size + 1)\n            assert len(payload) == expected_size, \"bounded ELF read differs\"\n            digest = hashlib.sha256(payload).hexdigest()\n            after = os.fstat(stream.fileno())\n        identity = lambda st: (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns)\n        assert identity(before) == identity(after) == identity(path.stat()), \"file identity changed during read\"\n        report[\"files\"].append({\"path\": str(path), \"resolved\": str(resolved), \"is_symlink\": path.is_symlink(), \"readlink\": os.readlink(path) if path.is_symlink() else None, \"st_dev\": before.st_dev, \"st_ino\": before.st_ino, \"bytes\": before.st_size, \"sha256\": digest})\n        assert digest == expected_sha, \"ELF hash differs from trusted passive provider\"\n    assert report[\"files\"][0][\"resolved\"] == report[\"files\"][1][\"resolved\"], \"resolved file paths differ\"\n    assert (report[\"files\"][0][\"st_dev\"], report[\"files\"][0][\"st_ino\"]) == (report[\"files\"][1][\"st_dev\"], report[\"files\"][1][\"st_ino\"]), \"file stat identities differ\"\n    with open(\"/proc/self/mountinfo\", \"rb\") as stream:\n        mountinfo = stream.read(262145)\n    assert len(mountinfo) <= 262144, \"mount metadata exceeded bounded read\"\n    mounted_file = report[\"files\"][0][\"resolved\"]\n    matches = [line for line in mountinfo.decode(\"ascii\").splitlines() if len(line.split()) >= 10 and line.split()[4] == mounted_file]\n    report[\"exact_mountinfo_lines\"] = matches\n    assert len(matches) == 1, \"exact library file mount not unique\"\n    assert \"ro\" in matches[0].split()[5].split(\",\"), \"actual exact file mount is not read-only\"\n    report[\"status\"] = \"PASS_EXACT_LIBUV_READONLY_ALIAS_IDENTITY\"\nexcept BaseException as error:\n    report[\"error\"] = type(error).__name__ + \": \" + str(error)\n    print(json.dumps(report, sort_keys=True), flush=True)\n    raise\nprint(json.dumps(report, sort_keys=True), flush=True)\n"
+        ],
+        "State": {
+            "Status": "created",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "0001-01-01T00:00:00Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "ResolvConfPath": "",
+        "HostnamePath": "",
+        "HostsPath": "",
+        "LogPath": "",
+        "Name": "/mck-m15-libuv-ro-alias-20261110-1",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges"
+            ],
+            "Tmpfs": {
+                "/tmp": "rw,nodev,nosuid,noexec,size=64m,mode=1777"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 1073741824,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "7",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 1073741824,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 64,
+            "Ulimits": [
+                {
+                    "Name": "core",
+                    "Hard": 0,
+                    "Soft": 0
+                },
+                {
+                    "Name": "cpu",
+                    "Hard": 90,
+                    "Soft": 90
+                },
+                {
+                    "Name": "fsize",
+                    "Hard": 67108864,
+                    "Soft": 67108864
+                },
+                {
+                    "Name": "nofile",
+                    "Hard": 128,
+                    "Soft": 128
+                }
+            ],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+                    "Target": "/usr/bin/cmake",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+                    "Target": "/usr/share/cmake",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h",
+                    "Target": "/usr/include/bfd.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h",
+                    "Target": "/usr/include/ansidecl.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h",
+                    "Target": "/usr/include/symcat.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h",
+                    "Target": "/usr/include/diagnostics.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so",
+                    "Target": "/usr/lib64/libbfd.so",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a",
+                    "Target": "/usr/lib64/libbfd.a",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a",
+                    "Target": "/usr/lib64/libsframe.a",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a",
+                    "Target": "/usr/lib64/libiberty.a",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+                    "Target": "/usr/lib64/libuv.so.1",
+                    "ReadOnly": true
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ],
+            "Init": true
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/1b8988f63124ce3fee09a4f6a27e54794ffa33f968a660bf0b13076269a22ecd-init/diff:/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/diff:/var/lib/docker/overlay2/fff00856c276031a055641a39e0919e79db7904afb0ce80a3d4f4db638a0269c/diff:/var/lib/docker/overlay2/d199f563791647ba171c6a6b30772ca85312af33440b39d08e6bb730f6e6013a/diff:/var/lib/docker/overlay2/f0749d426bb01c0f3b1cf8801b25513f92ffa67570954f3f881636dbf54f2b04/diff:/var/lib/docker/overlay2/b108a9aa871c34f689ca9dad26ceac43de807cd903f00a7ba1d77804cd2d8f1e/diff:/var/lib/docker/overlay2/fb2f4457a35c8482edb2928b3b235f4050018750bf17cdff8b8b1bb174b2c5d6/diff:/var/lib/docker/overlay2/6b8acc345c6edc4a5dfd53ec0ef55b3b54be94cb1082c09d8fba86f9fd66d001/diff:/var/lib/docker/overlay2/8fe2188ddb7c5e6ab9ab5a67a024ba8f7896b7a9cbe1f9cdae2a953e5ef7651d/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+                "MergedDir": "/var/lib/docker/overlay2/1b8988f63124ce3fee09a4f6a27e54794ffa33f968a660bf0b13076269a22ecd/merged",
+                "UpperDir": "/var/lib/docker/overlay2/1b8988f63124ce3fee09a4f6a27e54794ffa33f968a660bf0b13076269a22ecd/diff",
+                "WorkDir": "/var/lib/docker/overlay2/1b8988f63124ce3fee09a4f6a27e54794ffa33f968a660bf0b13076269a22ecd/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+                "Destination": "/usr/share/cmake",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h",
+                "Destination": "/usr/include/bfd.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so",
+                "Destination": "/usr/lib64/libbfd.so",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a",
+                "Destination": "/usr/lib64/libsframe.a",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+                "Destination": "/usr/bin/cmake",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h",
+                "Destination": "/usr/include/ansidecl.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h",
+                "Destination": "/usr/include/symcat.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h",
+                "Destination": "/usr/include/diagnostics.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a",
+                "Destination": "/usr/lib64/libbfd.a",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a",
+                "Destination": "/usr/lib64/libiberty.a",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+                "Destination": "/usr/lib64/libuv.so.1",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "31c10036dd17",
+            "Domainname": "",
+            "User": "1000:1000",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "LANG=C",
+                "CMAKE_BUILD_PARALLEL_LEVEL=1",
+                "OMP_NUM_THREADS=1",
+                "CARGO_MAKEFLAGS=",
+                "PATH=/usr/bin:/bin",
+                "LC_ALL=C",
+                "TZ=UTC",
+                "PYTHONDONTWRITEBYTECODE=1",
+                "MAKEFLAGS=",
+                "container=oci",
+                "CARGO_BUILD_JOBS=4"
+            ],
+            "Cmd": [
+                "--noprofile",
+                "--norc",
+                "-e",
+                "-c",
+                "ulimit -v 1048576; exec \"$@\"",
+                "m15-consumer-as-limit",
+                "/usr/bin/python3",
+                "-I",
+                "-B",
+                "-c",
+                "import hashlib, json, os, stat\nfrom pathlib import Path\nexpected_sha = \"e14ce16ebef281548fe650470d518c4e76ef179c7d15d39cdad853ec50d33d8b\"\nexpected_size = 233392\nroots = [Path(\"/usr/lib64\"), Path(\"/lib64\")]\npaths = [root / \"libuv.so.1\" for root in roots]\nreport = {\"scope\": \"Exact libuv read-only mount alias identity only\", \"status\": \"FAIL\", \"directories\": [], \"files\": []}\ntry:\n    for root in roots:\n        ls = root.lstat()\n        rs = root.resolve(strict=True)\n        report[\"directories\"].append({\"path\": str(root), \"is_symlink\": stat.S_ISLNK(ls.st_mode), \"readlink\": os.readlink(root) if stat.S_ISLNK(ls.st_mode) else None, \"resolved\": str(rs), \"st_dev\": root.stat().st_dev, \"st_ino\": root.stat().st_ino})\n        assert rs.is_dir(), \"not a resolved directory\"\n    assert roots[0].resolve(strict=True) == roots[1].resolve(strict=True), \"library directory aliases differ\"\n    assert (report[\"directories\"][0][\"st_dev\"], report[\"directories\"][0][\"st_ino\"]) == (report[\"directories\"][1][\"st_dev\"], report[\"directories\"][1][\"st_ino\"]), \"directory stat identities differ\"\n    for path in paths:\n        resolved = path.resolve(strict=True)\n        assert resolved.parent == roots[0].resolve(strict=True), \"resolved file escapes exact library directory\"\n        with path.open(\"rb\") as stream:\n            before = os.fstat(stream.fileno())\n            assert stat.S_ISREG(before.st_mode), \"not regular ELF file\"\n            assert before.st_size == expected_size, \"ELF byte count differs\"\n            payload = stream.read(expected_size + 1)\n            assert len(payload) == expected_size, \"bounded ELF read differs\"\n            digest = hashlib.sha256(payload).hexdigest()\n            after = os.fstat(stream.fileno())\n        identity = lambda st: (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns)\n        assert identity(before) == identity(after) == identity(path.stat()), \"file identity changed during read\"\n        report[\"files\"].append({\"path\": str(path), \"resolved\": str(resolved), \"is_symlink\": path.is_symlink(), \"readlink\": os.readlink(path) if path.is_symlink() else None, \"st_dev\": before.st_dev, \"st_ino\": before.st_ino, \"bytes\": before.st_size, \"sha256\": digest})\n        assert digest == expected_sha, \"ELF hash differs from trusted passive provider\"\n    assert report[\"files\"][0][\"resolved\"] == report[\"files\"][1][\"resolved\"], \"resolved file paths differ\"\n    assert (report[\"files\"][0][\"st_dev\"], report[\"files\"][0][\"st_ino\"]) == (report[\"files\"][1][\"st_dev\"], report[\"files\"][1][\"st_ino\"]), \"file stat identities differ\"\n    with open(\"/proc/self/mountinfo\", \"rb\") as stream:\n        mountinfo = stream.read(262145)\n    assert len(mountinfo) <= 262144, \"mount metadata exceeded bounded read\"\n    mounted_file = report[\"files\"][0][\"resolved\"]\n    matches = [line for line in mountinfo.decode(\"ascii\").splitlines() if len(line.split()) >= 10 and line.split()[4] == mounted_file]\n    report[\"exact_mountinfo_lines\"] = matches\n    assert len(matches) == 1, \"exact library file mount not unique\"\n    assert \"ro\" in matches[0].split()[5].split(\",\"), \"actual exact file mount is not read-only\"\n    report[\"status\"] = \"PASS_EXACT_LIBUV_READONLY_ALIAS_IDENTITY\"\nexcept BaseException as error:\n    report[\"error\"] = type(error).__name__ + \": \" + str(error)\n    print(json.dumps(report, sort_keys=True), flush=True)\n    raise\nprint(json.dumps(report, sort_keys=True), flush=True)\n"
+            ],
+            "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+            "Volumes": null,
+            "WorkingDir": "/",
+            "Entrypoint": [
+                "/usr/bin/bash"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "io.buildah.version": "1.43.1",
+                "license": "BSD-3-Clause",
+                "mckernel.preparation-owner": "public-abi-native46d-consumer-1",
+                "name": "rockylinux",
+                "org.mckernel.scope": "local development; no production evidence credit",
+                "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+                "org.opencontainers.image.licenses": "BSD-3-Clause",
+                "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+                "org.opencontainers.image.title": "rockylinux",
+                "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+                "org.opencontainers.image.version": "10",
+                "summary": "Rocky Linux Base image",
+                "vendor": "Rocky Enterprise Software Foundation",
+                "version": "10"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

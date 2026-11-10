@@ -1,0 +1,1 @@
+savedcmd_drivers/misc/mckernel/mcctrl.ko := ld.lld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o drivers/misc/mckernel/mcctrl.ko drivers/misc/mckernel/mcctrl.o drivers/misc/mckernel/mcctrl.mod.o .module-common.o
