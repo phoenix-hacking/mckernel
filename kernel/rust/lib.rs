@@ -60,6 +60,8 @@ mod smp_ikc;
 mod spinlock_helpers;
 mod string;
 mod syscall_policy;
+#[cfg(f03_do_mmap_candidate)]
+mod f03_do_mmap;
 #[cfg(f03_do_syscall_outer_candidate)]
 mod syscall_offload_entry;
 #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]

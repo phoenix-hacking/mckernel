@@ -6213,6 +6213,78 @@ do_mmap_smaller_page_bridge(size_t size, int *p2alignp)
 }
 #endif
 
+/* Preserve the actual original logical origins in both existing profiles. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_DO_MMAP_ORIGINAL_START_LINE 5914
+#define MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE 6675
+#else
+#define MCKERNEL_DO_MMAP_ORIGINAL_START_LINE 5921
+#define MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE 6682
+#endif
+#ifdef MCKERNEL_RUST_F03_DO_MMAP
+#if !defined(__x86_64__) || !defined(MCKERNEL_NATIVE_SIGNAL_STACK) || !defined(PROFILE_ENABLE) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || defined(ENABLE_FUGAKU_HACKS) || defined(ENABLE_TOFU) || defined(ATTACHED_MIC)
+#error "Rust do_mmap requires the paired ordinary x86/Linux6.12/PROFILE profile"
+#endif
+#if !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
+#error "Rust do_mmap requires actual C source/debug input bindings"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust do_mmap debug flags must match C");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust do_mmap source filename must match C");
+typedef intptr_t (*mckernel_do_mmap_signature_t)(uintptr_t, size_t, int, int,
+    int, off_t, int, void *);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_mmap),
+    mckernel_do_mmap_signature_t), "do_mmap complete eight-argument ABI");
+_Static_assert(sizeof(size_t) == 8 && _Alignof(size_t) == 8
+    && sizeof(unsigned long) == 8 && _Alignof(unsigned long) == 8,
+    "Rust do_mmap lossless size_t/unsigned long conversions");
+_Static_assert(sizeof(struct memobj) == 56 && _Alignof(struct memobj) == 8,
+    "Rust do_mmap memobj geometry");
+_Static_assert(offsetof(struct memobj, status) == 12 && offsetof(struct memobj, size) == 16,
+    "Rust do_mmap status and size");
+_Static_assert(offsetof(struct memobj, pages) == 32 && offsetof(struct memobj, nr_pages) == 40
+    && offsetof(struct memobj, path) == 48 && offsetof(struct memobj_ops, free) == 0,
+    "Rust do_mmap object pages/path/free");
+_Static_assert(sizeof(struct shmid_ds) == 112 && offsetof(struct shmid_ds, init_pgshift) == 108
+    && offsetof(struct shmid_ds, shm_segsz) == 48, "Rust do_mmap shared-object ABI");
+_Static_assert(sizeof(ihk_rwspinlock_t) == 4 && _Alignof(ihk_rwspinlock_t) == 4
+    && offsetof(ihk_rwspinlock_t, v) == 0 && offsetof(ihk_atomic_t, counter) == 0
+    && IHK_RWSPINLOCK_WRITELOCKED == 0xff000000U,
+    "Rust do_mmap exact existing four-byte lock protocol");
+_Static_assert(offsetof(struct process_vm, memory_range_lock) == 180
+    && offsetof(struct vm_range, straight_start) == 48 && offsetof(struct vm_range, memobj) == 56,
+    "Rust do_mmap range and lock ABI");
+_Static_assert(sizeof(struct mckfd) == 80 && offsetof(struct mckfd, mmap_cb) == 48
+    && sizeof(ihk_mc_user_context_t) == 224, "Rust do_mmap descriptor/context ABI");
+_Static_assert(offsetof(struct thread, vm) == 4200 && offsetof(struct thread, proc) == 4304
+    && offsetof(struct process, vm) == 128 && offsetof(struct process, mckfd_lock) == 1284
+    && offsetof(struct process, mckfd) == 1288 && offsetof(struct process, mpol_flags) == 1376
+    && offsetof(struct process, mpol_threshold) == 1384 && offsetof(struct process, thp_disable) == 1428
+    && offsetof(struct process, straight_map) == 1432 && offsetof(struct process, straight_map_threshold) == 1440
+    && offsetof(struct process, straight_va) == 1624 && offsetof(struct process, straight_len) == 1632
+    && offsetof(struct process, straight_pa) == 1640,
+    "Rust do_mmap complete selected Thread/Process field ABI");
+_Static_assert(PROFILE_mmap_anon_contig_phys == 4008 && PROFILE_mmap_anon_straight == 4009
+    && PROFILE_mmap_anon_not_straight == 4010 && PROFILE_mmap_anon_no_contig_phys == 4011
+    && PROFILE_mmap_regular_file == 4012 && PROFILE_mmap_device_file == 4013,
+    "Rust do_mmap actual profile event identities");
+_Static_assert(MAP_SHARED == 1 && MAP_FIXED == 0x10 && MAP_ANONYMOUS == 0x20
+    && MAP_LOCKED == 0x2000 && MAP_POPULATE == 0x8000 && MAP_STACK == 0x20000,
+    "Rust do_mmap actual mapping flags");
+_Static_assert(VR_AP_USER == 4 && VR_DEMAND_PAGING == 0x1000 && VR_PROT_MASK == 0x70000
+    && VR_MEMTYPE_MASK == 0x0f000000 && VR_MEMTYPE_UC == 0x01000000,
+    "Rust do_mmap actual range flags");
+_Static_assert(MF_ZEROFILL == 0x10 && MF_DEV_FILE == 0x2000 && MF_PREMAP == 0x8000
+    && MF_XPMEM == 0x10000 && MF_HUGETLBFS == 0x100000
+    && MPOL_NO_STACK == 2 && MPOL_SHM_PREMAP == 8 && SHM_DEST == 01000,
+    "Rust do_mmap actual object/policy flags");
+_Static_assert(PAGE_SHIFT == 12 && PAGE_SIZE == 4096 && PAGE_P2ALIGN == 0
+    && PF_POPULATE == (1UL << 30) && NOPHYS == (uintptr_t)-1
+    && IHK_MC_AP_NOWAIT == 2 && IHK_MC_AP_USER == 0x1000 && IHK_MC_PG_USER == 1,
+    "Rust do_mmap actual architecture/allocation values");
+#else
+#line MCKERNEL_DO_MMAP_ORIGINAL_START_LINE
 intptr_t
 do_mmap(const uintptr_t addr0, const size_t len0, const int prot,
 	const int flags, const int fd, const off_t off0,
@@ -6974,6 +7046,8 @@ out:
 		(range->straight_start ? range->straight_start : addr) :
 		error;
 }
+#endif /* MCKERNEL_RUST_F03_DO_MMAP */
+#line MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void munmap_write_lock_bridge(void *);

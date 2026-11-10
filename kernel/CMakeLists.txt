@@ -96,6 +96,7 @@ if (ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
 endif()
 # The outer entry has a narrower scope than the existing inner OFFLOAD macro.
 set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
+set(MCKERNEL_DO_MMAP_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -557,6 +558,17 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 				message(FATAL_ERROR "Unsupported syscall.c path for exact C/Rust debug identity")
 			endif()
 			set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED ON)
+            # Complete ordinary-x86 mapping entry; preserve all other C profiles.
+            if (NOT ENABLE_FUGAKU_HACKS AND NOT ENABLE_TOFU)
+                set(MCKERNEL_DO_MMAP_SELECTED ON)
+                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_mmap_candidate")
+                list(APPEND RUST_KERNEL_SRCS
+                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_mmap.rs"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/memobj.h"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/shm.h"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/include/profile.h")
+            endif()
 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_outer_candidate")
 			list(APPEND RUST_KERNEL_SRCS
 			    "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_offload_entry.rs"
@@ -985,6 +997,10 @@ if (RUST_KERNEL_ENABLED AND MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
 endif()
 
 # Apply after the existing source properties, which otherwise replace flags.
+if (MCKERNEL_DO_MMAP_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_MMAP)
+endif()
 if (MCKERNEL_DO_SYSCALL_OUTER_SELECTED)
     set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_DO_SYSCALL_OUTER

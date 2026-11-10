@@ -16605,27 +16605,58 @@ mod remaining_process_memory_forwarding {
         unsafe { super::vm_range_insert(vm, range) }
     }
 
-    /// Preserve page-table update flags and signed error forwarding.
+    /// Transactional preparation for a newly inserted, caller-owned range.
     /// # Safety
-    /// vm/range and backing address space stay live under original VM/PT
-    /// exclusion throughout the synchronous existing update implementation.
+    /// The original caller holds range writer exclusion. Range/backing/VM remain
+    /// live through the same IRQ-save page-table lock. On error the transaction
+    /// has cleared/flushed ONLY its new PTE prefix and committed no RSS; caller
+    /// backing remains owned. No descriptor is freed by this stage.
     #[no_mangle]
     pub unsafe extern "C" fn process_add_range_update_bridge(
-        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, attr: CULong,
+        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, _attr: CULong,
     ) -> CInt {
-        unsafe { super::update_process_page_table(vm, range, phys, attr) }
+        unsafe {
+            if vm.is_null() || range.is_null() || (*vm).address_space.is_null() {
+                return -super::EINVAL;
+            }
+            // The prior public updater intentionally ignored its flag argument
+            // and derived attributes from actual range flags + PF_POPULATE.
+            let attr = crate::x86_memory_helpers::arch_vrflag_to_ptattr(
+                (*range).flag, super::PF_POPULATE, core::ptr::null_mut());
+            let lock = core::ptr::addr_of_mut!((*vm).page_table_lock);
+            let irq = super::__ihk_mc_spinlock_lock(lock);
+            let error = crate::x86_memory_helpers::add_range_transaction::map(
+                (*(*vm).address_space).page_table, vm, (*range).start,
+                (*range).end, phys, attr, (*range).pgshift, range);
+            super::__ihk_mc_spinlock_unlock(lock, irq);
+            if error != 0 { super::process_update_page_table_log_bridge(error); }
+            error
+        }
     }
 
-    /// Retain the original discarded removal status and NULL accounting output.
+    /// Non-owning rollback after the paired updater has cleared its new PTEs.
     /// # Safety
-    /// The existing owner provides a live VM/process and original range writer
-    /// exclusion. The backend owns removal, storage release and all field use;
-    /// this adapter performs no access to removed ranges after its return.
+    /// Range writer exclusion and the exact just-inserted range remain owned by
+    /// the add-range orchestrator. This callback only detaches tree/cache; its
+    /// existing free callback subsequently retires descriptor storage ONCE.
+    /// It consumes no page/memobj/private_data backing and preserves the ABI.
     #[no_mangle]
     pub unsafe extern "C" fn process_add_range_remove_bridge(
         vm: *mut ProcessVm, start: CULong, end: CULong,
     ) {
-        unsafe { let _ = super::remove_process_memory_range(vm, start, end, core::ptr::null_mut()); }
+        unsafe {
+            let range = super::process_lookup_memory_range_body_result(vm, start, end);
+            if range.is_null() || (*range).start != start || (*range).end != end {
+                // Do not return an ordinary error to a caller about to free
+                // backing when a supposedly owned descriptor cannot be found.
+                crate::abort::panic(b"add-range rollback lost its inserted descriptor\0".as_ptr().cast());
+            }
+            super::rb_erase(super::vm_range_rb_node(range),
+                core::ptr::addr_of_mut!((*vm).vm_range_tree).cast());
+            super::process_range_cache_replace_result(
+                core::ptr::addr_of_mut!((*vm).range_cache).cast(),
+                super::VM_RANGE_CACHE_SIZE as CInt, range.cast(), core::ptr::null_mut());
+        }
     }
 
     /// Preserve the existing split result and caller-owned range output.
