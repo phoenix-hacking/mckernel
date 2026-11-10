@@ -1,0 +1,17 @@
+filename:       /output/build/drivers/misc/mckernel/ihk-smp-x86_64.ko
+import_ns:      MCKERNEL_IHK_V1
+license:        Dual BSD/GPL
+name:           ihk_smp_x86_64
+intree:         Y
+depends:        ihk
+srcversion:     5D65114B2FC45B2A594806E
+rhelversion:    10.2
+vermagic:       6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload 
+retpoline:      Y
+parm:           ihk_ikc_irq_core:Target CPU of IHK IKC IRQ (uint)
+parm:           native_boot_prepare_only:Hold owned boot preparation without starting CPUs (0 or 1) (uint)
+parm:           ihk_trampoline:IHK trampoline page physical address (ulong)
+parm:           ihk_phys_start:IHK reserved physical memory start address (ulong)
+parm:           ihk_start_irq:IHK IKC IPI to be scanned from this IRQ vector (uint)
+parm:           ihk_cores:IHK reserved CPU cores (uint)
+parm:           ihk_mem:IHK reserved memory in MBs (ulong)

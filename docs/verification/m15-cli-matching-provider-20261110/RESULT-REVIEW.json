@@ -1,0 +1,302 @@
+{
+  "C_retirement": false,
+  "acceptance_delta": 0,
+  "actual_artifacts": [
+    {
+      "actual_IHK_function_imports": [
+        "ihk_reserve_mem",
+        "ihk_get_os_instances",
+        "ihk_get_num_os_instances",
+        "ihk_reserve_cpu"
+      ],
+      "built": {
+        "bytes": 40960,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/linux/user/ihkconfig",
+        "sha256": "2398da4ba6cf6963a0850da40ff69548015ac01280178819d2e341600efc95ba"
+      },
+      "caller": "ihkconfig",
+      "object": {
+        "bytes": 54584,
+        "mode": "0o644",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/linux/user/rust/ihkconfig.o",
+        "sha256": "2fe33e31e5a1e892ff769f076b4b8359c775ffdafc2b0000c555fddef0312cba"
+      },
+      "optional_weak_imports": 4,
+      "stage": {
+        "bytes": 40960,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkconfig",
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b"
+      },
+      "strong_system_imports": 30
+    },
+    {
+      "actual_IHK_function_imports": [
+        "ikc_str2req",
+        "ikc_req2str",
+        "mem_str2req",
+        "mem_str2count",
+        "mem_req2str",
+        "ikc_str2count",
+        "ihk_os_kmsg",
+        "ihk_os_get_status",
+        "cpu_str2req",
+        "cpu_req2str",
+        "ihk_os_makedumpfile",
+        "ihklib_os_query_mem_sysfs",
+        "cpu_str2count"
+      ],
+      "built": {
+        "bytes": 37776,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/linux/user/ihkosctl",
+        "sha256": "79eda5343d825784f8dea4e0cd1ec27f59f86c7f866676d9e267653105590e43"
+      },
+      "caller": "ihkosctl",
+      "object": {
+        "bytes": 46864,
+        "mode": "0o644",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/linux/user/rust/ihkosctl.o",
+        "sha256": "afde3adc817256d4d15df60bebff5bc881b6aa7d7b80072f3fad05a1598871e6"
+      },
+      "optional_weak_imports": 4,
+      "stage": {
+        "bytes": 37776,
+        "mode": "0o755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkosctl",
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672"
+      },
+      "strong_system_imports": 31
+    }
+  ],
+  "actual_map_symbol_spellings": [
+    {
+      "caller": "ihkconfig",
+      "map_symbol": "__rustc::rust_begin_unwind",
+      "map_value": 4160,
+      "nm_symbol": "_RNvCs59BO7kP62uP_7___rustc17rust_begin_unwind",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkconfig",
+      "map_symbol": "__argc",
+      "map_value": 24596,
+      "nm_symbol": "__argc",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkconfig",
+      "map_symbol": "__argv",
+      "map_value": 24600,
+      "nm_symbol": "__argv",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkconfig",
+      "map_symbol": "main",
+      "map_value": 8416,
+      "nm_symbol": "main",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkosctl",
+      "map_symbol": "__rustc::rust_begin_unwind",
+      "map_value": 8400,
+      "nm_symbol": "_RNvCs59BO7kP62uP_7___rustc17rust_begin_unwind",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkosctl",
+      "map_symbol": "__argc",
+      "map_value": 24596,
+      "nm_symbol": "__argc",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkosctl",
+      "map_symbol": "__argv",
+      "map_value": 24600,
+      "nm_symbol": "__argv",
+      "one_exact_object_owner_and_final_address": true
+    },
+    {
+      "caller": "ihkosctl",
+      "map_symbol": "main",
+      "map_value": 10544,
+      "nm_symbol": "main",
+      "one_exact_object_owner_and_final_address": true
+    }
+  ],
+  "actual_phase_checks": [
+    {
+      "actual_profile_exact": true,
+      "actual_shared4_fresh26_admission": true,
+      "container_id": "226d596a9c8de84940a005d435a00c8dd52fb37d41c214751a21e13d00b729a5",
+      "direct_birth": "40485853",
+      "direct_pid": 953879,
+      "phase": "configure-two-production-callers",
+      "positive_owned_cleanup": true
+    },
+    {
+      "actual_profile_exact": true,
+      "actual_shared4_fresh26_admission": true,
+      "container_id": "b639a6d315d1dd8f93e1cedbb07d55b36b4cc2f7b8d1c3f2affb06dc879b1905",
+      "direct_birth": "40485909",
+      "direct_pid": 954034,
+      "phase": "named-ihkconfig-ihkosctl-build-link",
+      "positive_owned_cleanup": true
+    },
+    {
+      "actual_profile_exact": true,
+      "actual_shared4_fresh26_admission": true,
+      "container_id": "c8f2f4d6d375ed03917c09f8edaca0e27ec50fcda111b6f8ea54d1a15ccbc4ad",
+      "direct_birth": "40486008",
+      "direct_pid": 954222,
+      "phase": "built-callers-ELF-readback",
+      "positive_owned_cleanup": true
+    },
+    {
+      "actual_profile_exact": true,
+      "actual_shared4_fresh26_admission": true,
+      "container_id": "2640f16a6834a23d4bed8f83158c005df49b2d85009830f9f8d0155119643be2",
+      "direct_birth": "40486054",
+      "direct_pid": 954350,
+      "phase": "caller-object-final-provider-readback",
+      "positive_owned_cleanup": true
+    },
+    {
+      "actual_profile_exact": true,
+      "actual_shared4_fresh26_admission": true,
+      "container_id": "86a6e8f22099f7be40fa45bc8f8dfc6232a82d1a14e9a2976bd2c59a561c22b8",
+      "direct_birth": "40486097",
+      "direct_pid": 954479,
+      "phase": "private-coherent-caller-provider-header-stage",
+      "positive_owned_cleanup": true
+    },
+    {
+      "actual_profile_exact": true,
+      "actual_shared4_fresh26_admission": true,
+      "container_id": "377eef3373da972615e7f18b3085a0a2aaa1c2400fb8749d0d8835df6d4feb41",
+      "direct_birth": "40486137",
+      "direct_pid": 954607,
+      "phase": "staged-callers-ELF-readback",
+      "positive_owned_cleanup": true
+    }
+  ],
+  "caller_checks": [
+    {
+      "PIE_interpreter_NEEDED_original_install_RPATH": true,
+      "actual_link_LOAD_trace_exact_provider_interface_no_Cfallback": true,
+      "all_four_map_owners_actual_Rust_object": true,
+      "all_other_saved_ELF_rows_unchanged": true,
+      "all_remaining_strong_GLIBC_four_optional_weak": true,
+      "argc_argv_caller_defined4_8_same_DSO_ABI": true,
+      "caller": "ihkconfig",
+      "each_object_root_one_final_definition": true,
+      "exact_actual_version_requirements": true,
+      "four_or_thirteen_IHK_import_edges_exact_b7bc": true,
+      "object0644_executables0755": true,
+      "object_four_exact_definitions": true,
+      "only_exact_single_RPATH_binary_string_change": true
+    },
+    {
+      "PIE_interpreter_NEEDED_original_install_RPATH": true,
+      "actual_link_LOAD_trace_exact_provider_interface_no_Cfallback": true,
+      "all_four_map_owners_actual_Rust_object": true,
+      "all_other_saved_ELF_rows_unchanged": true,
+      "all_remaining_strong_GLIBC_four_optional_weak": true,
+      "argc_argv_caller_defined4_8_same_DSO_ABI": true,
+      "caller": "ihkosctl",
+      "each_object_root_one_final_definition": true,
+      "exact_actual_version_requirements": true,
+      "four_or_thirteen_IHK_import_edges_exact_b7bc": true,
+      "object0644_executables0755": true,
+      "object_four_exact_definitions": true,
+      "only_exact_single_RPATH_binary_string_change": true
+    }
+  ],
+  "checks": {
+    "all6_Root_shared4GiB_fresh26GiB_disk_admissions": true,
+    "all6_birth_bound_wait_terminal0_nonOOM_owned_removals": true,
+    "all6_materialized_argv_profiles_mounts_exact": true,
+    "all_frozen_saved_artifact_source_raw_identity_rows": true,
+    "both_callers_all_actual_object_ELF_provider_stage_checks": true,
+    "frozen_c474_request367b_manifest3dd1_GO8a18_run854e": true,
+    "matching_config_BUILDID8d_MEMDUMP_RustON_fallbackOFF_KRMoff": true,
+    "no_library_rebuild_codegen_or_oldbehavior_replay": true,
+    "no_original_acceptance_runtime_Cretirement": true,
+    "staged_provider_exact_b7bc0755": true,
+    "three_current_canonical_headers_private_stage0644": true,
+    "two_generated_manfiles_stage0644": true
+  },
+  "data_ownership_precision": "EachCLI has ownRust __argc4/__argv8 definitions, also stronglydefined/globaldefault initsmainELF, matching sameABIavailableDSO definitions. These are classifiedcaller-owned data/intendedinterposition, never counted asmissing or undefinedDSOimports. Actualmainwrites argc/argv tothosevariables. DefaultELFpreemption supports intendedsharedABIstorage; that is a staticlinking inference and no runtimeinterposition/API behavior wasexecuted.",
+  "decision": "GO_EXACT_TWO_CLI_MATCHING_SOURCE_OBJECT_LINK_PROVIDER_PRIVATE_STAGE_RESULT",
+  "executed": false,
+  "failed_checks": [],
+  "historical_reviewer_comparison": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-review-p03-max-1/qualification-1/REVIEW.before-Rust-map-spelling-correction.json",
+    "sha256": "63d1f97f4d6a8a84b94d80dd5fa6b3f3d272c3fed61276f38423c8f7d0a050ea"
+  },
+  "holds": "M14acceptancebeforeM15; allgeneric/exec/replay/equivalentfalse/exact12/source/native/currentfree/UNKNOWN/resource/service/account/spend controls remain. Noobservationretiresanotherowner orreleaseshardware.",
+  "identity_mismatches": [],
+  "identity_only_binding_count": 53,
+  "inputs": {
+    "execution": {
+      "bytes": 9489,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/execution-1/RESULT.json",
+      "sha256": "854edaad0bd6ebd437adfbd2636fc7ac81da1a22924602c1387398303adbae9d"
+    },
+    "library_independent_GO": {
+      "bytes": 70647,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-review-p03-max-1/qualification-1/REVIEW.json",
+      "sha256": "b667d389e2407512e2751037a72f1e16a382431844b84965394a447e2814aaf1"
+    },
+    "qualification": {
+      "bytes": 82223,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/qualification-1/RESULT.json",
+      "sha256": "c474796490bd8b443f66ceb49abb113bda1d9cadd6d0a9174c8f8a6506ed43e0"
+    },
+    "request": {
+      "bytes": 61250,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/REQUEST.json",
+      "sha256": "367bc82ef125316ab506ff42eff5df0778912956721bb7d3bf2bb23687791b64"
+    },
+    "source_manifest": {
+      "bytes": 8472,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/SOURCE-BINDINGS.json",
+      "sha256": "3dd1e46a1239db7e57e4e1002609fffe5948350b18c5a9ab48dbeff11919ce4e"
+    },
+    "source_profile_GO": {
+      "bytes": 47505,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-review-p03-max-1/REVIEW.json",
+      "sha256": "8a18fa95c6d3de2e5bbc54561b0d47694e1d6bba21f9d32c76532b9fd15e211a"
+    }
+  },
+  "install_conclusion": "Direct byte comparison proves solely one normal null-terminated /provider::::::: -> /usr/local/lib64 RPATH replacement per staged PIE. All other ELF/code/symbol/import/version bytes and complete saved readelf tables remain unchanged. Actual DT_RPATH matches original production policy. Private provider b7bc/0755, three current canonical byte-equal headers/0644, generated manfiles/0644 and CLI0755 are coherent; no actual deployment or loader/main/runtime test is claimed.",
+  "next_action": "Root may publish this exact text/raw/link/map/header/provider result slice and join it to the original delivered-cohort obligations. Consume independent ihkmond/LIBUDEV lane and exact seven crash/eleven BFD host-provider ownership inputs. Future runtime/default/deployment/native work needs its own concrete packet/applicable independent review/fresh admission; no extra CLI/library/ELF green replay is required.",
+  "operations": "Only frozen saved results/raw ELF/nm/map/build/link/config/profile/admission/identity/header/manfile/artifact byte reads, stdlib comparisons and this disjoint private REVIEW write. No readelf/nm/compiler/link/CMake/build/test/helper/API/loader/Docker/network/device/native/canonical/index/control execution or recursive agent.",
+  "original_acceptance": false,
+  "qualified_original_condition_slice": "Two current IHK8d/defaultRust CLI callers have genuine actual Rust objects and final PIEs in immutable46d/GCC14/BFD2.41/qualifiedRust1.95 universe against exactb7bc ihklib and43B736d samecompile response. Actual4 ihkconfig+13 ihkosctl strong IHKfunction imports match b7bc roots and retained typedpublic/private contracts. Four strong source-owned Rust roots per caller, including4/8byte argc/argv data, are uniquely present in the final ELF and map to that object. Remaining30/31 strong imports are actual GLIBC requirements, with four optional weak slots each. This closes these two caller source/object/link/provider/private-stage joins at that exact scope.",
+  "remaining_original_conditions": [
+    {
+      "contract": "Separate currentRustmonitor/namedlink/privateinstall and actualLIBUDEV opaque11call/header/provider/RPATH join tosameb7bc/library/config. Ownedby/root/p04_source_max; consumethat lane actualresult ratherthanreplayoromit.",
+      "source_status_basis": "CurrentCAMPAIGN13:39 nextconsumer entry; thisqualificationdoesnotassertabsenceorfailureofindependentlaterwork.",
+      "target": "ihkmond"
+    },
+    {
+      "contract": "Alreadyqualifiedactualpackaging/libcbridge isreused; remainingsevencrash-host andelevenBFD imports need selectedreal /usr/bin/crash ELF/version/source/header/libraryowner join. ExistingP04/Rootlane owns this; no inventedhostexports/shim/extensionload.",
+      "source_status_basis": "CurrentCAMPAIGN exactremainingproviderentry; not an unbuiltconverter claim.",
+      "target": "ldump2mcdump crash-extension runtime-provider boundary"
+    },
+    {
+      "contract": "Root joins theseactualcaller+library+mcinspect andotheralreadyownedsource/providerresults tothecompleteoriginaldelivery, actualdeployment/behavior/admissions. Thisprivatecompile/link/stage suppliesonlythese2callerobligations; originalI03/I01completeacceptance remainsRootreview, not externallyauthoredinventory.",
+      "target": "coherent original supported installed/runtime cohort"
+    }
+  ],
+  "retained_proofs": "Actuallibrarye530/independentb667 and source/profile8a18 plus priorCLI behavior/public52/library/affinity proof scopes are reused. Library compilation/metadata/link and oldbehavior cases were not replayed. No separate module-reader, monitor or crash source work is duplicated.",
+  "reviewed_at": "2026-11-10T14:10:55.109755+00:00",
+  "reviewer": "/root/p03_cutover_source_max direct same-Root gpt-6.1-sol/MAX independent result reviewer; no recursion",
+  "reviewer_bookkeeping": "Read-only reviewer lookups first assumed a top-level ADMISSION.json and an argv field in DIRECT-CLIENT.json. Actual admissions are six phase-local files, and direct records contain pid/birth/parent. Corrected only those reviewer schema assumptions, then bound full create argv/profile/container IDs and all six positive direct waits/removals. No SUT/source/packet/actual outcome changed or executed. Initial private map comparison expected the mangled Rust panic symbol as a displayed map label; GNU map displays the exact demangled __rustc::rust_begin_unwind label. Corrected only that reviewer spelling comparison and separately required the actual mangled input-section name, same object owner, exact nm/final/map address and all four roots. No source, parser, actual result or strict owner condition changed.",
+  "schema": "mckernel.two-cli-matching-provider-independent-actual-result-review.v1"
+}

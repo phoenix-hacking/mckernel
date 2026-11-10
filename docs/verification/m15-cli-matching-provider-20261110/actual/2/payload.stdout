@@ -1,0 +1,150 @@
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 ihkconfig
+make[1]: Entering directory '/output'
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 3
+/usr/bin/make  -f CMakeFiles/Makefile2 linux/user/CMakeFiles/ihkconfig.dir/all
+make[2]: Entering directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkconfig_rust_main.dir/build.make linux/user/CMakeFiles/ihkconfig_rust_main.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/linux/user /output /output/linux/user /output/linux/user/CMakeFiles/ihkconfig_rust_main.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkconfig_rust_main.dir/build.make linux/user/CMakeFiles/ihkconfig_rust_main.dir/build
+make[3]: Entering directory '/output'
+[ 33%] Generating rust/ihkconfig.o
+cd /output/linux/user && /usr/bin/cmake -E make_directory /output/linux/user/rust
+cd /output/linux/user && /usr/bin/python3 /source/linux/user/rust/build_ihkconfig.py --rustc /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --source /source/linux/user/rust/ihkconfig.rs --output /output/linux/user/rust/ihkconfig.o --config /output/config.h --krm 0
+make[3]: Leaving directory '/output'
+[ 33%] Built target ihkconfig_rust_main
+/usr/bin/make  -f linux/user/CMakeFiles/ihkconfig.dir/build.make linux/user/CMakeFiles/ihkconfig.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/linux/user /output /output/linux/user /output/linux/user/CMakeFiles/ihkconfig.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkconfig.dir/build.make linux/user/CMakeFiles/ihkconfig.dir/build
+make[3]: Entering directory '/output'
+[ 66%] Linking C executable ihkconfig
+cd /output/linux/user && /usr/bin/cmake -E cmake_link_script CMakeFiles/ihkconfig.dir/link.txt --verbose=1
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/Scrt1.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o
+/usr/lib/gcc/x86_64-redhat-linux/14/crtbeginS.o
+rust/ihkconfig.o
+/provider/libihk.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libbfd.so
+/usr/lib64/libbfd.a
+/usr/lib64/libsframe.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libiberty.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libz.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libdl.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libutil.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/librt.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libpthread.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libm.so
+/lib64/libm.so.6
+/lib64/libmvec.so.1
+/lib64/libmvec.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libdl.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so
+/lib64/libc.so.6
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so
+/lib64/libc.so.6
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/crtendS.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+/usr/bin/cc -O3 -DNDEBUG -fPIE -pie -Wl,--trace -Wl,-Map=/output/ihkconfig.map -Wl,--dependency-file=CMakeFiles/ihkconfig.dir/link.d rust/ihkconfig.o -o ihkconfig  -Wl,-rpath,/provider::::::: /provider/libihk.so -lbfd -Wl,@/provider/native-static-libs.rsp
+make[3]: Leaving directory '/output'
+[100%] Built target ihkconfig
+make[2]: Leaving directory '/output'
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 0
+make[1]: Leaving directory '/output'
+/usr/bin/make  -f CMakeFiles/Makefile2 ihkosctl
+make[1]: Entering directory '/output'
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 3
+/usr/bin/make  -f CMakeFiles/Makefile2 linux/user/CMakeFiles/ihkosctl.dir/all
+make[2]: Entering directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkosctl_rust_main.dir/build.make linux/user/CMakeFiles/ihkosctl_rust_main.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/linux/user /output /output/linux/user /output/linux/user/CMakeFiles/ihkosctl_rust_main.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkosctl_rust_main.dir/build.make linux/user/CMakeFiles/ihkosctl_rust_main.dir/build
+make[3]: Entering directory '/output'
+[ 33%] Generating rust/ihkosctl.o
+cd /output/linux/user && /usr/bin/cmake -E make_directory /output/linux/user/rust
+cd /output/linux/user && /usr/bin/python3 /source/linux/user/rust/build_ihkosctl.py --rustc /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --source /source/linux/user/rust/ihkosctl.rs --output /output/linux/user/rust/ihkosctl.o --config /output/config.h
+make[3]: Leaving directory '/output'
+[ 33%] Built target ihkosctl_rust_main
+/usr/bin/make  -f linux/user/CMakeFiles/ihkosctl.dir/build.make linux/user/CMakeFiles/ihkosctl.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/linux/user /output /output/linux/user /output/linux/user/CMakeFiles/ihkosctl.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkosctl.dir/build.make linux/user/CMakeFiles/ihkosctl.dir/build
+make[3]: Entering directory '/output'
+[ 66%] Linking C executable ihkosctl
+cd /output/linux/user && /usr/bin/cmake -E cmake_link_script CMakeFiles/ihkosctl.dir/link.txt --verbose=1
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/Scrt1.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o
+/usr/lib/gcc/x86_64-redhat-linux/14/crtbeginS.o
+rust/ihkosctl.o
+/provider/libihk.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libbfd.so
+/usr/lib64/libbfd.a
+/usr/lib64/libsframe.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libiberty.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libz.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libdl.a
+/usr/lib64/libiberty.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libutil.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/librt.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libpthread.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libm.so
+/lib64/libm.so.6
+/lib64/libmvec.so.1
+/lib64/libmvec.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libdl.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so
+/lib64/libc.so.6
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so
+/lib64/libc.so.6
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/crtendS.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+/usr/bin/cc -O3 -DNDEBUG -fPIE -pie -Wl,--trace -Wl,-Map=/output/ihkosctl.map -Wl,--dependency-file=CMakeFiles/ihkosctl.dir/link.d rust/ihkosctl.o -o ihkosctl  -Wl,-rpath,/provider::::::: /provider/libihk.so -lbfd /usr/lib64/libiberty.a -Wl,@/provider/native-static-libs.rsp
+make[3]: Leaving directory '/output'
+[100%] Built target ihkosctl
+make[2]: Leaving directory '/output'
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 0
+make[1]: Leaving directory '/output'
