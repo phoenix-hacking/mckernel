@@ -1,11 +1,16 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T05:03Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T05:07Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit manual resume `20261110T044806Z-3ecbebf5`, same saved Root.**
+**SOURCE/BINDING IMPASSE after manual resume `20261110T044806Z-3ecbebf5`.**
+Both confirmed new control repairs are complete and published. Three consecutive
+actual Root goal turns now find no eligible original input; normal goal control
+records BLOCKED after this final handoff. The loaded launcher is healthy, all
+payloads are joined and no service/recovery/restart action is required. The whole-
+system objective remains unfinished, with every original acceptance gate intact.
 Prior032750 completed pre-spawn repair474c9ee7 and handoff96886e84, then stopped
 normally BLOCKED/exit20 after three actual goal turns. Those births/audits are
 historical. This invocation supplies two confirmed control defects, with no
@@ -85,9 +90,18 @@ disposition and Root owns integration. Original image argv is unset and final ET
 is unknown. Inert service/mailbox adoption supplies no original source/native input.
 Do not create more guardian, mailbox, CI, percentage or closed-scope tasks to fill
 slots. No operational service/frontdoor, notification or guardian handoff was run.
-This invocation's first impasse observation begins only after publication in actual
-Root turn `01a1c3c8-ef6f-7d51-829a-4f061693477e`; goal stays active. Earlier invocation
-audits and timer wakes do not count toward the new three-actual-turn audit.
+Published/fetched repairs `962f22549bf839a3bb8ef41b8a478b23fb71bfff`: all30 changed
+entries match and all direct waits joined. Impasse audit3/3 completed in actual
+Root turns `01a1c3c8-ef6f-7d51-829a-4f061693477e` after fixes/publication,
+`01a1c3d8-acad-7983-bcd2-fac4093f3b37` after unchanged-input revalidation, and
+`01a1c3d9-94b9-7e52-9770-d5cbe885ba3b` after checking current instructions and
+completed owners. The preceding turn made no engineering progress; the same
+original source/provider/SDK/native inputs remain unavailable. No timer wake or
+old invocation was counted. Normal BLOCKED status follows this final checkpoint.
+No mechanical resume, held-equivalent retry, optional service/mailbox activation
+or healthy controller restart follows from a source impasse. Further engineering
+requires a genuine eligible input. Preserve original objective/criteria/target
+history/allowance and all source/service/native/ownership/resource reservations.
 
 ## Previous032750 checkpoint (historical; current manual resume above is active)
 
