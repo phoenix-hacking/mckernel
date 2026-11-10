@@ -1,11 +1,15 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T03:10Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T03:13Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE under explicit manual resume `20261110T025232Z-785c93f5`, same saved Root.**
+**SOURCE/BINDING IMPASSE after manual resume `20261110T025232Z-785c93f5`.**
+The confirmed new harness task is complete and published. Three consecutive actual
+Root goal turns now find no eligible original input; normal goal control records
+BLOCKED after this final handoff. The controller is healthy, with no in-flight
+workload or technical recovery requirement. The whole-system goal is unfinished.
 The prior211917 invocation ended normally BLOCKED/exit20 after three actual goal
 turns. Its audit is historical; this new invocation supplies a confirmed controller
 defect and does not release any original OS source, SDK, native or ownership hold.
@@ -70,9 +74,19 @@ Critical-path blocker remains the held universal generic provider; original hold
 authority owns its disposition and Root owns integration. Full-image argv stays
 unset. No further ordinary engineering task is established from the incoming13
 paths, and no closed source audit or passing suite is queued again.
-This invocation's first impasse observation begins only after publication in actual
-Root turn `01a1c35f-2207-7663-b4d1-f8fe11d0abcc`. Its goal stays active; old invocation
-three-turn audits and timer wakes do not count toward the new audit.
+Published/fetched repair `c58470e36f7e023409add367ba5d41e77e1442ce`: all22 changed
+entries match and all direct waits joined. No publication or green test was replayed.
+Impasse audit3/3 completed in consecutive actual Root goal turns:
+`01a1c35f-2207-7663-b4d1-f8fe11d0abcc` after the completed repair/publication,
+`01a1c370-802e-75b3-a73f-2643e4d6365f` after unchanged-input revalidation, and
+`01a1c371-75aa-7390-bd38-177a4fcfe642` after checking the current plan, accepted
+instruction receipt and completed owners. The preceding turn made no engineering
+progress; the same original source/SDK/native bindings are still unavailable.
+No old invocation or timer wake was counted. Normal BLOCKED status follows this
+final checkpoint; no mechanical resume, held-equivalent replay or controller restart
+is authorized by a source impasse. Further useful engineering needs a genuine new
+eligible input. Original objective, target history, criteria, reservations and
+all source/service/usage/native/later-stop controls remain unchanged.
 
 ## Previous211917 source checkpoint (historical; new manual resume above is active)
 
