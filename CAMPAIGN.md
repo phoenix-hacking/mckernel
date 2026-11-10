@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T00:47Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T00:56Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -70,24 +70,27 @@ scenario bindings also remain unbound. Final critical-path ETA isUNKNOWN until
 actual original inputs arrive. Source counts/partial ELF links/available quota do
 not close an original gate, retire C or release source/native authority.
 
-**Published/fetched:**99052e60/all247changedentries covers backend chain through97;
-e55c3d47/all154 shared-provider entries and ceb322938/all64engine entries remain
-verified. Current117/129 proof packages are complete and copied for this coherent checkpoint; no
-unchanged fetch, source census, restore or old green suite is repeated. IHK8eb8,
+**Published/fetched:** `c9c955e422ce6d182284d9791544a5b492e54a21`, all311 changed
+entries match, including the finite provider chain through129 and the exact remaining
+source decisions. Publication finished at00:52:10UTC; every direct wait joined.
+Earlier99052e60/all247, e55c3d47/all154 and ceb322938/all64 entries remain verified.
+No unchanged fetch, source census, restore or old green suite is repeated. IHK8eb8,
 29tracked productionRust files and trackedbundled9046e40 ownership are already
 verified below and remain untouched. CLIproof stays53079-bound; ca484relinks DEFER.
 Optional NEWpublisher HOSTstore observation027f isCLOSED/NO_GO absent actual new
 need/caller/provider/admission input; no fixture/testquota/equivalent reassignment.
 
-Next15-minute action: finish this actualsource/results/ledger publication/readback.
-All supplied affirmative finite engineering tasks are complete. Exactsignal check
+Next15-minute deliverable requires an actual new eligible source/provider or supported
+SDK/native input for the prerequisites above. All supplied affirmative finite
+engineering tasks and their publication are complete. Exactsignal check
 fd33fe19 confirms UNKNOWN/NO_GO for do_kill/syscall_do_kill_thread_bridge: prior
 signal-link proof covers two DIFFERENT forwarders, not these bodies. No bodies
 were inspected/prepared and no new original functional task is established.
 No newready source is implied by timers, availablequota, package publication or
-completed owners. Preserve the three-ACTUAL-Root-turn impasse audit; this first
-exhausted-queue observation occurs only after completing the current publication.
-Fresh normal includedguard00:45UTCNov10:42%used/58%remaining,no service/spendhold.
+completed owners. Impasse audit1/3 is now recorded after publication in actual Root
+turn `01a1c22e-0a85-7360-a753-8897d3d773f2`; the goal remains active. Only a subsequent
+actual Root goal turn can advance this count; timer wakes and old invocations cannot.
+Fresh normal included guard 2026-11-10T00:57UTC: 42% used/58% remaining; no service/spend hold.
 HOST0/6/7,max3aggregateLIGHTjobs,4GiB TOTAL including all overhead/fresh26GiB and
 host16/scratch12GiB floors remain. Retained18GiB; separateheldnative2–5/12GiB;
 allUNKNOWN owners/outcomes,scratch21/mutex27:4/expiredattempts/nonces and original
