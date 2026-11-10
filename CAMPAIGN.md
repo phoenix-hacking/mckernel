@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T00:56Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T01:03Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -58,7 +58,7 @@ symbol rewrite, fake callback or equivalent request may supply it.
 | Remaining prerequisite | Actual consumer | Owner / smallest completion proof |
 | --- | --- | --- |
 | Eligible universal/generic source disposition | OriginalM14F03/F06/I02 matching final build and source cohort | Originalholdauthority; exactscope/eligible genuineprovider record. Root cannot replay held/equivalent work |
-| Complete remaining12 provider/source ownership and supported bindings | Credential/sourcecohort and original integration gates | Originalscope/ABI/callee-owner input or matching independentlyqualified source; exactkill2 andwait2 checks areUNKNOWN/NO_GO |
+| Complete remaining12 provider/source ownership and supported bindings | Credential/sourcecohort and original integration gates | Originalscope/ABI/callee-owner input or matching independentlyqualified source; exact kill2, wait2 and process-bridge2 checks are UNKNOWN/NO_GO |
 | Actual SDK/sourcecustody/native/currentfree admission | Original defaultimage/modules/native/application acceptance | Originalsource/nativeowners, matching supported bindings and fresh operation-specific realgate; localquota/NULLstorage doesnot supply it |
 
 **Critical-path blocker/owner:** no eligible universal generic/exec provider for a
@@ -87,9 +87,16 @@ fd33fe19 confirms UNKNOWN/NO_GO for do_kill/syscall_do_kill_thread_bridge: prior
 signal-link proof covers two DIFFERENT forwarders, not these bodies. No bodies
 were inspected/prepared and no new original functional task is established.
 No newready source is implied by timers, availablequota, package publication or
-completed owners. Impasse audit1/3 is now recorded after publication in actual Root
-turn `01a1c22e-0a85-7360-a753-8897d3d773f2`; the goal remains active. Only a subsequent
-actual Root goal turn can advance this count; timer wakes and old invocations cannot.
+completed owners. The new bounded process-bridge check `49aec985` also found no
+established affirmative exact source/ABI/pointee/lock-lifetime/provider-owner contract
+for `syscall_find_process_bridge` or `syscall_process_unlock_bridge`; both remain
+UNKNOWN/NO_GO before bodies. Its incomplete broader name search is recorded without
+claiming universal absence. Raw result: `docs/verification/m14-remaining-process-bridge-eligibility-20261110.json`.
+Impasse audit2/3: the first observation followed publication in Root turn
+`01a1c22e-0a85-7360-a753-8897d3d773f2`; this second observation is actual Root turn
+`01a1c2f6-1bb3-7fd1-b58d-2703e08f390a`. The same source/binding prerequisite remains
+missing after the bounded new check; the goal remains active. Timer wakes and old
+invocations do not count.
 Fresh normal included guard 2026-11-10T00:57UTC: 42% used/58% remaining; no service/spend hold.
 HOST0/6/7,max3aggregateLIGHTjobs,4GiB TOTAL including all overhead/fresh26GiB and
 host16/scratch12GiB floors remain. Retained18GiB; separateheldnative2–5/12GiB;
