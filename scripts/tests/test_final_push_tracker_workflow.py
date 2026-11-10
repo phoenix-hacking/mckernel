@@ -56,6 +56,26 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
                     0, completed.returncode, completed.stderr.decode("utf-8", "replace")
                 )
 
+    def test_frozen_ihk_source_uses_committed_bundle_restoration(self):
+        steps = self.workflow["jobs"]["tracker"]["steps"]
+        names = [step.get("name") for step in steps]
+        restore_index = names.index("Restore frozen IHK source")
+        script = steps[restore_index]["run"]
+        self.assertEqual(
+            script,
+            'set -euo pipefail\n'
+            'python3 -B scripts/restore_ihk_source.py \\\n'
+            '  --repo "$GITHUB_WORKSPACE" \\\n'
+            '  --destination "$GITHUB_WORKSPACE/ihk"\n',
+        )
+        self.assertNotIn("git submodule update", self.text)
+        self.assertLess(names.index("Verify exact candidate identity"), restore_index)
+        for consumer in (
+            "Validate frozen host-module inventory",
+            "Validate locked scope, policy, and behavior contract",
+        ):
+            self.assertLess(restore_index, names.index(consumer))
+
     def test_behavior_contract_uses_commit_bound_isolated_authority(self):
         step = self.text.split(
             "- name: Validate locked scope, policy, and behavior contract", 1
@@ -88,3 +108,4 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

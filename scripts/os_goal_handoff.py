@@ -49,6 +49,8 @@ def context_record(repo, state, remaining_seconds=None):
               "last_error", "last_error_provenance", "last_failure", "credit_budget_error", "stop_errors", "exit_code",
               "startup_instruction_sha256", "transport_failure", "transport_uncertain",
               "last_usage_transport_error", "last_usage_read_retry", "server_close_errors")
+    fields += ("stop_journal", "latest_stop", "last_stop_record_id", "stop_decision", "blocked_repair_reviews",
+               "waiting_reason")
     record = {key: state[key] for key in fields if key in state}
     current = {key: state[key] for key in
                ("thread_id", "log_dir", "worker_pid", "worker_start", "server_pid",
@@ -153,3 +155,4 @@ def write_recovery_handoff(repo, directory, state, *, remaining_seconds=None):
         except FileNotFoundError:
             pass
     return directory / "RECOVERY.md"
+

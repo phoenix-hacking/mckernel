@@ -32,10 +32,12 @@ jobs:
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
 
-      - name: Initialize frozen IHK source
+      - name: Restore frozen IHK source
         run: |
           set -euo pipefail
-          git submodule update --init --depth 1 ihk
+          python3 -B scripts/restore_ihk_source.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --destination "$GITHUB_WORKSPACE/ihk"
 
       - name: Validate frozen host-module inventory
         run: |
@@ -247,3 +249,4 @@ jobs:
           path: evidence/final-push-summary.json
           if-no-files-found: error
           retention-days: 90
+

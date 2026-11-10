@@ -35,6 +35,9 @@ from os_goal_credits import (CreditBudget, available_balance, billing_policy,
                              credit_budget_argument)
 from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure, classify_service_failure,
                                classify_usage_failure)
+from os_goal_stop_log import write_stop_record
+from os_goal_repair import (repair_instruction, blocked_repair_key,
+                            blocked_repair_instruction)
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -109,6 +112,34 @@ class RecoverableFailure(RuntimeError):
 
 def utc():
     return datetime.now(timezone.utc).isoformat()
+
+
+def m14_m15_closed(repo):
+    """Require original binary acceptance, never checklist percentages alone."""
+    path = Path(repo) / "docs/verification/m14-m15-closure-progress.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data.get("original_criteria_unchanged") is not True:
+            return False
+        requirements = data["requirements"]
+        if not isinstance(requirements, list):
+            return False
+        for milestone, files, integrations in (("M14", 6, 3), ("M15", 8, 4)):
+            expected = ({f"{milestone}-F{n:02d}" for n in range(1, files + 1)} |
+                        {f"{milestone}-I{n:02d}" for n in range(1, integrations + 1)})
+            summary = data["summaries"][milestone]
+            gate_ids = summary.get("original_gate_ids", [])
+            if (summary.get("milestone_accepted") is not True or
+                    not isinstance(gate_ids, list) or len(gate_ids) != len(expected)
+                    or set(gate_ids) != expected):
+                return False
+            rows = [row for row in requirements if row.get("id") in expected]
+            if (len(rows) != len(expected) or {row["id"] for row in rows} != expected
+                    or any(row.get("accepted") is not True for row in rows)):
+                return False
+        return True
+    except (OSError, ValueError, TypeError, KeyError, AttributeError):
+        return False
 
 
 def read_startup_instruction(path):
@@ -653,6 +684,99 @@ class Campaign:
                           agent_event_count=self.output.agent_event_count)
         atomic_json(self.state_path, self.state)
 
+    def record_stop_diagnostic(self, event, *, error=None, reason=None, exit_code=None, snapshot=None):
+        """Keep failure history across restarts without changing recovery authority."""
+        state = dict(self.state if snapshot is None else snapshot)
+        state.setdefault("log_dir", str(self.log_dir))
+        state.setdefault("worker_pid", os.getpid())
+        try:
+            result = write_stop_record(self.directory, state, event=event, error=error,
+                                       reason=reason, exit_code=exit_code)
+            self.save(stop_journal=result["journal_path"], latest_stop=result["latest_path"],
+                      last_stop_record_id=result["record"]["record_id"])
+        except (OSError, ValueError, TypeError) as error:
+            # The existing console remains a fallback; logging failure is never
+            # permission to reset a goal or repeat an uncertain operation.
+            self.output.notice("Stop journal write failed (" + type(error).__name__
+                               + "); retain console and state diagnostics.")
+
+    def remember_started_turn(self, thread_id, turn):
+        ident = turn.get("id")
+        if not isinstance(ident, str) or not ident:
+            raise ValueError("Started turn response has no turn identity")
+        completed = self.state.get("last_turn") or {}
+        terminal = {"completed", "failed", "interrupted"}
+        # A completion can be pumped before the start response. Never resurrect
+        # that turn; otherwise block a second start while notifications catch up.
+        if (turn.get("status") not in terminal and
+                not (completed.get("thread_id") == thread_id and completed.get("id") == ident
+                     and completed.get("status") in terminal)):
+            self.active[thread_id] = ident
+        self.last_activity = time.monotonic()
+        return ident
+
+    def review_blocked_goal(self):
+        """One same-Root diagnosis, then monitored waiting for changed input.
+
+        This never sets a blocked goal active. Actual hard stops are handled by
+        the normal run loop before this method. An uncertain turn/start is not
+        resubmitted, including after supervisor recovery.
+        """
+        if self.active:
+            return
+        view = dict(self.state, active_turns=dict(self.active), goal=self.goal,
+                    stop_reason=self.stop_reason, stop_now=self.stop_now,
+                    checkpoint_requested=self.checkpoint_requested)
+        key = blocked_repair_key(self.goal, view)
+        reviews = self.state.get("blocked_repair_reviews", {})
+        if not isinstance(reviews, dict):
+            raise ValueError("Invalid saved repair review receipts")
+        if not key or key in reviews:
+            if self.state.get("phase") != "waiting_for_input":
+                self.save(phase="waiting_for_input", waiting_reason="blocked_goal_requires_changed_input")
+                self.record_stop_diagnostic("blocked_wait", reason="goal_blocked")
+                self.output.notice("Blocked task retained; waiting for changed input or a queued instruction.")
+            return
+        self.refresh_credit_budget()
+        if self.stop_reason or self.stop_now:
+            return
+        # A read can deliver a newer stop or an active turn. Revalidate before
+        # sending, and persist the receipt before the mutating RPC.
+        self.remember_goal(self.rpc.call("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"])
+        view.update(self.state, active_turns=dict(self.active), goal=self.goal,
+                    stop_reason=self.stop_reason, stop_now=self.stop_now,
+                    checkpoint_requested=self.checkpoint_requested)
+        if blocked_repair_key(self.goal, view) != key:
+            return
+        message = blocked_repair_instruction(self.goal, view)
+        receipt = {"key": key, "status": "sending", "submitted_at": utc(),
+                   "thread_id": self.state["thread_id"], "log_dir": str(self.log_dir)}
+        generation = self.primary_stop_generation
+        reviews = dict(reviews, **{key: receipt})
+        self.save(blocked_repair_reviews=reviews, phase="repair_review")
+        self.record_stop_diagnostic("blocked_repair_review", reason="goal_blocked")
+        if (self.stop_reason or self.stop_now or self.checkpoint_requested or self.active
+                or self.primary_stop_generation != generation or not self.goal
+                or self.goal.get("status") != "blocked"):
+            self.save(blocked_repair_reviews=dict(reviews, **{
+                key: dict(receipt, status="cancelled_before_submission")}))
+            return
+        try:
+            started = self.rpc.call("turn/start", {"threadId": self.state["thread_id"],
+                "input": [{"type": "text", "text": message}]})
+            turn = started["turn"]
+            turn_id = self.remember_started_turn(self.state["thread_id"], turn)
+            receipt = dict(receipt, status="accepted_by_server", turn_id=turn_id)
+            self.save(blocked_repair_reviews=dict(reviews, **{key: receipt}))
+        except Exception as error:
+            receipt = dict(receipt, status="delivery_uncertain", error_type=type(error).__name__)
+            self.stop_reason, self.stop_now = "rpc_delivery_uncertain", True
+            self.save(blocked_repair_reviews=dict(reviews, **{key: receipt}),
+                      transport_uncertain={"at": utc(), "method": "turn/start",
+                          "reason": "repair_review_delivery_uncertain"})
+            self.record_stop_diagnostic("repair_review_delivery_uncertain", error=error,
+                                        reason=self.stop_reason)
+
     def register_instruction_capture_progress(self, item, receipt):
         """Durably acknowledge visibility registration before this instruction steers."""
         if 'capture_progress' not in item:
@@ -704,9 +828,11 @@ class Campaign:
     def deliver_instruction(self):
         """Steer one active coordinator turn; retain uncertain deliveries for audit."""
         ident = self.state.get("thread_id")
+        waiting = (getattr(self.args, "repair_agent_failures", False) and self.goal
+                   and self.goal.get("status") == "blocked" and not self.active)
         if (not ident or not self.controlled or self.checkpoint_requested or self.stop_reason
-                or not self.goal or self.goal.get("status") != "active"
-                or ident not in self.active):
+                or not self.goal or self.goal.get("status") not in {"active", "blocked"}
+                or ident not in self.active and not waiting):
             return
         control = self.directory / "instructions"
         sending_dir = control / "sending"
@@ -721,7 +847,7 @@ class Campaign:
         os.replace(source, sending)
         item = json.loads(sending.read_text())
         receipt = {"id": item["id"], "thread_id": ident,
-                   "turn_id": self.active[ident], "submitted_at": item["submitted_at"]}
+                   "turn_id": self.active.get(ident), "submitted_at": item["submitted_at"]}
         try:
             progress_ack = self.register_instruction_capture_progress(item, receipt)
         except ValueError as error:
@@ -753,9 +879,19 @@ class Campaign:
             self.output.notice('Capture registration persistence failed before steering; retained instruction at ' + str(sending))
             return  # No RPC attempted; retain uncertain persistence evidence without replay.
         try:
-            self.rpc.call("turn/steer", {"threadId": ident,
-                          "expectedTurnId": receipt["turn_id"], "input": [{"type": "text",
-                          "text": "Live user instruction " + item["id"] + ":\n" + item["text"] + progress_ack}]})
+            message = "Live user instruction " + item["id"] + ":\n" + item["text"] + progress_ack
+            if waiting:
+                if (self.stop_reason or self.stop_now or self.checkpoint_requested or self.active
+                        or not self.goal or self.goal.get("status") != "blocked"):
+                    os.replace(sending, source)
+                    return
+                started = self.rpc.call("turn/start", {"threadId": ident,
+                    "input": [{"type": "text", "text": message}]})
+                receipt["turn_id"] = self.remember_started_turn(ident, started["turn"])
+            else:
+                self.rpc.call("turn/steer", {"threadId": ident,
+                              "expectedTurnId": receipt["turn_id"], "input": [{"type": "text",
+                              "text": message}]})
             receipt.update(status="accepted_by_server", delivered_at=utc())
             delivered = control / "delivered"
             delivered.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -768,7 +904,7 @@ class Campaign:
             # retry a potentially non-idempotent user instruction.
             receipt.update(status="delivery_uncertain", error=str(error))
             self.save(last_instruction=receipt, transport_uncertain={"at": utc(),
-                      "method": "turn/steer", "error": str(error),
+                      "method": "turn/start" if waiting else "turn/steer", "error": str(error),
                       "reason": "instruction_delivery_uncertain"})
             self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
             self.stop_now = True
@@ -794,7 +930,12 @@ class Campaign:
 
     def remember_goal(self, goal):
         self.goal = goal
-        self.save(goal=goal)
+        fields = {"goal": goal}
+        if (isinstance(goal, dict) and goal.get("status") == "active"
+                and self.state.get("phase") in {"waiting_for_input", "repair_review"}
+                and not self.stop_reason and not self.stop_now and not self.checkpoint_requested):
+            fields.update(phase="running", waiting_reason=None)
+        self.save(**fields)
 
     def remember_child_provenance(self, data):
         """Only an observed direct-child activity in the current root turn qualifies."""
@@ -869,6 +1010,7 @@ class Campaign:
                 key: failure[key] for key in
                 ("error", "log_dir", "worker_pid", "worker_start", "recorded_at")})
         self.save(**fields)
+        self.record_stop_diagnostic("service_failure", error=error, reason=reason)
         if preserve:
             # A late server error must not turn a requested stop into recovery.
             return
@@ -1109,8 +1251,14 @@ class Campaign:
         )
         window = ("This invocation has a finite work window. " if self.args.hours else
                   "This invocation has no time limit beyond its actual usage and inherited controls. ")
+        repair = repair_instruction() if getattr(self.args, "repair_agent_failures", False) else ""
+        milestones = ("This invocation targets original M14 and M15 acceptance only. "
+                      "Prepare independent eligible work in parallel, accept M14 before M15, "
+                      "and checkpoint when BOTH original milestones are accepted. Do not "
+                      "mark the larger saved whole-system goal complete at that point. "
+                      if getattr(self.args, "stop_after_m14_m15", False) else "")
         return (
-            prefix + "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. "
+            prefix + repair + milestones + "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. "
             "Read CAMPAIGN.md as the SOLE human-readable plan, status and handoff. Do not read "
             "legacy narrative logs or follow their reading lists. This replaces the old reading "
             "order in the retained goal identity and archived conversation. On fresh/recovered "
@@ -1373,6 +1521,12 @@ class Campaign:
         if self.stop_reason:
             self.remember_goal(goal)
             return
+        if goal and goal["status"] == "blocked" and self.args.recovered:
+            # Recovery is not a new manual authorization. In repair mode the
+            # run loop can diagnose once while preserving this blocked goal.
+            self.remember_goal(goal)
+            self.save(phase="waiting_for_input" if getattr(self.args, "repair_agent_failures", False) else "ready")
+            return
         if previous_id and goal and goal["status"] in {"paused", "blocked"} and not self.args.recovered:
             # A fresh explicit --run is a CURRENT user instruction. Seeding it
             # once before activation fixes stale user-role history without a
@@ -1418,6 +1572,9 @@ class Campaign:
                     (goal["status"], goal.get("updatedAt")) !=
                     (resume_goal["status"], resume_goal.get("updatedAt"))):
                 self.remember_goal(goal)
+                if goal["status"] == "blocked" and getattr(self.args, "repair_agent_failures", False):
+                    self.save(phase="waiting_for_input")
+                    return
                 self.stop_reason, self.stop_now = "startup_goal_stopped", True
                 return
             if (goal["status"] in {"complete", "usageLimited"} or
@@ -1535,8 +1692,9 @@ class Campaign:
         if turn:
             self.rpc.call("turn/steer", {"threadId": ident, "expectedTurnId": turn,
                 "input": [{"type": "text", "text":
-                    "The launcher is stopping this invocation following a signal or an "
-                    "explicitly configured time limit. Stop new task dispatch. "
+                    "The launcher is checkpointing following a signal, accepted milestone completion, "
+                    "or an explicitly configured time limit; recorded reason "
+                    + str(self.stop_reason or "work_window") + ". Stop new task dispatch. "
                     "Finish bounded active operations, join/close child agents, preserve "
                     "original evidence and active process identities, update CAMPAIGN.md "
                     "as the sole active plan, status and handoff with next tasks, commit/push "
@@ -1595,6 +1753,8 @@ class Campaign:
         refresh_interval = 5 if self.credit_guard is not None else 30
         next_refresh = started + refresh_interval
         next_heartbeat = started
+        next_acceptance_check = started
+        acceptance_turn = None
         code = 1
         try:
             self.output.notice("Starting launcher; worker_pid=" + str(os.getpid())
@@ -1603,6 +1763,20 @@ class Campaign:
             while True:
                 now = time.monotonic()
                 status = self.goal["status"] if self.goal else None
+                blocked_wait = (status == "blocked" and
+                                getattr(self.args, "repair_agent_failures", False)
+                                and not self.stop_reason and not self.stop_now
+                                and not self.checkpoint_requested)
+                current_turn = (self.state.get("last_turn") or {}).get("id")
+                if (getattr(self.args, "stop_after_m14_m15", False)
+                        and not self.stop_reason and not self.stop_now and not self.checkpoint_requested
+                        and (now >= next_acceptance_check or current_turn != acceptance_turn)):
+                    next_acceptance_check, acceptance_turn = now + 30, current_turn
+                    if m14_m15_closed(self.repo):
+                        self.stop_reason = "requested_milestones_complete"
+                        self.request_checkpoint()
+                        stop_deadline = min(deadline, now + self.args.grace_seconds)
+                        blocked_wait = False
                 if self.stop_now:
                     code = 21 if self.stop_reason in {"quota_exhausted", "included_usage_guard",
                                                       "included_usage_unknown", "credit_balance_decreased",
@@ -1610,9 +1784,14 @@ class Campaign:
                                                       "chatgpt_auth_changed", "credit_budget_exhausted",
                                                       "credit_budget_unknown"} else 23
                     break
-                if status in TERMINAL_CODES and not self.checkpoint_requested:
+                if (status in TERMINAL_CODES and not self.checkpoint_requested
+                        and not blocked_wait and not self.stop_reason):
                     code = TERMINAL_CODES[status]
                     break
+                if blocked_wait:
+                    self.review_blocked_goal()
+                    if self.stop_now:
+                        continue
                 if not self.checkpoint_requested and (self.stop_reason or now >= checkpoint_at):
                     self.stop_reason = self.stop_reason or "work_window"
                     self.request_checkpoint()
@@ -1620,7 +1799,7 @@ class Campaign:
                 if self.checkpoint_requested and (not self.active or now >= stop_deadline):
                     code = 10
                     break
-                if not self.active and now - self.last_activity > 120:
+                if not self.active and now - self.last_activity > 120 and not blocked_wait:
                     self.stop_reason = "active_goal_did_not_continue"
                     self.save(retryable=True, transport_failure={"schema_version": 1,
                         "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start"),
@@ -1679,6 +1858,11 @@ class Campaign:
                     "class": failure["class"], "error": failure["error"], "method": failure["method"]})
             self.output.notice(str(error))
         finally:
+            # Capture the actual reason/goal before shutdown may pause it. Keep
+            # the original diagnostic identity; old failures are not relabelled.
+            stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
+                                 stop_reason=self.stop_reason, phase="stopping",
+                                 active_turns=dict(self.active))
             try:
                 self.stop()
             finally:
@@ -1693,7 +1877,12 @@ class Campaign:
                     if isinstance(known, list):
                         close_errors = known + close_errors
                     self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
-                              server_close_errors=close_errors, cleanup_verified=False)
+                              server_close_errors=close_errors, cleanup_verified=False,
+                              stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
+                                  "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
+                                  "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
+                    self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
+                                                exit_code=code, snapshot=stop_snapshot)
                     self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
                                        + "; " + (self.stop_reason or "goal status") + ".")
                     self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
@@ -1714,6 +1903,10 @@ def arguments(argv=None):
     parser.add_argument('--capture-progress-directory', type=Path,
                         help='Explicit fresh capture directory; with --instruct register it before steering, otherwise at startup')
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
+    parser.add_argument("--repair-agent-failures", action="store_true",
+                        help="Delegate eligible engineering repairs; diagnose a blocked goal once and retain monitored waiting")
+    parser.add_argument("--stop-after-m14-m15", action="store_true",
+                        help="Checkpoint after BOTH original M14 and M15 file/integration acceptances; preserve the larger saved goal")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
     parser.add_argument("--model",
                         choices=list(dict.fromkeys((DEFAULT_DISPATCHER_MODEL,) + DISPATCHER_MODEL_PREFERENCE)),
@@ -1837,6 +2030,13 @@ def main(argv=None):
                 current["phase"] = "stopped"
                 current["last_recorded_active_turns"] = current.get("active_turns", {})
                 current["active_turns"] = {}
+        latest_stop = directory / "latest-stop.json"
+        if latest_stop.is_file() and not latest_stop.is_symlink():
+            try:
+                current["latest_stop_diagnostic"] = json.loads(latest_stop.read_text())
+                current["stop_journal"] = str(directory / "stop-events.jsonl")
+            except (OSError, ValueError):
+                current["stop_diagnostic_read_error"] = "Latest stop diagnostic is unreadable; inspect journal/console."
         print(json.dumps(current, indent=2))
         return 0
     if args.progress:
@@ -1855,6 +2055,9 @@ def main(argv=None):
                           "watchdog_seconds": args.watchdog_seconds,
                           "heartbeat_seconds": args.heartbeat_seconds, "live_output": not args.quiet,
                           "stall_seconds": args.stall_seconds,
+                          "repair_agent_failures": args.repair_agent_failures,
+                          "stop_after_m14_m15": args.stop_after_m14_m15,
+                          "stop_journal": str(directory / "stop-events.jsonl"),
                           "resources": launch_resources(args, REPO), "policy_sha256": policy_hashes(REPO),
                           "model_routing": model_routing(args),
                           "included_usage_stop_percent": INCLUDED_USAGE_STOP_PERCENT,
@@ -1935,3 +2138,4 @@ if __name__ == "__main__":
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as failure:
         say(str(failure))
         sys.exit(1)
+

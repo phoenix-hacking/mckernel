@@ -68,6 +68,8 @@ class HandoffProvenanceTests(unittest.TestCase):
         # Never call Campaign.__init__/begin/stop or an RPC factory. The run-except
         # test forces the exception at a mocked begin, before any real launch.
         campaign = object.__new__(launcher.Campaign)
+        campaign.directory = self.directory
+        campaign.active = {}
         campaign.state = copy.deepcopy(self.state)
         campaign.state["worker_pid"] = os.getpid()
         campaign.state["last_error_provenance"] = self.provenance(self.previous_log)
@@ -304,3 +306,4 @@ class HandoffProvenanceTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

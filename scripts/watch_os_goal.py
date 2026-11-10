@@ -14,6 +14,7 @@ import time
 from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure,
                                classify_service_failure, classify_usage_failure)
 from os_goal_handoff import write_recovery_handoff
+from os_goal_stop_log import write_stop_record
 
 
 def process_start(pid):
@@ -429,6 +430,26 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                     recovery_handoff=recovery_handoff, **values)
         write_json(watch_path, data)
         log.write(json.dumps(data) + "\n")
+        if event in {"worker_exited", "recovery_held_classification", "watcher_stopped", "watcher_failed"}:
+            same_worker = (child is not None and last_state.get("worker_pid") == child.pid
+                           and last_state.get("worker_start") == child_start)
+            diagnostic = (dict(last_state) if same_worker else
+                          {"worker_pid": child.pid if child else None, "worker_start": child_start})
+            diagnostic.update(watcher_pid=os.getpid(), watcher_start=process_start(os.getpid()))
+            diagnostic["recovery_handoff"] = recovery_handoff
+            decision = diagnostic.get("stop_decision")
+            if (isinstance(decision, dict) and decision.get("log_dir") == diagnostic.get("log_dir")
+                    and decision.get("worker_pid") == diagnostic.get("worker_pid")
+                    and decision.get("worker_start") == diagnostic.get("worker_start")):
+                diagnostic["goal"] = {"status": decision.get("goal_status")}
+            try:
+                write_stop_record(directory, diagnostic, event="supervisor_" + event,
+                                  exit_code=values.get("exit_code"),
+                                  error=values.get("error") if event == "watcher_failed" else None,
+                                  reason=values.get("stop_reason") or diagnostic.get("stop_reason"))
+            except (OSError, ValueError, TypeError) as error:
+                log.write(json.dumps({"event": "stop_journal_write_failed",
+                                      "error_type": type(error).__name__}) + "\n")
         details = " ".join(str(key) + "=" + str(value) for key, value in data.items()
                            if key not in {"event", "at", "watcher_pid"})
         print("[os-watch] " + event + " " + details, flush=True)
@@ -703,3 +724,4 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 signal.signal(signum, handler)
             log.close()
             lease.close()
+
