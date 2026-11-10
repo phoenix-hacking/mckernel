@@ -1,0 +1,330 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          38976 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         8
+  Size of section headers:           64 (bytes)
+  Number of section headers:         34
+  Section header string table index: 33
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .note.gnu.build-id NOTE            0000000000000200 000200 000024 00   A  0   0  4
+  [ 2] .gnu.hash         GNU_HASH        0000000000000228 000228 000060 00   A  3   0  8
+  [ 3] .dynsym           DYNSYM          0000000000000288 000288 000528 18   A  4   1  8
+  [ 4] .dynstr           STRTAB          00000000000007b0 0007b0 0004aa 00   A  0   0  1
+  [ 5] .gnu.version      VERSYM          0000000000000c5a 000c5a 00006e 02   A  3   0  2
+  [ 6] .gnu.version_r    VERNEED         0000000000000cc8 000cc8 000020 00   A  4   1  8
+  [ 7] .rela.dyn         RELA            0000000000000ce8 000ce8 000498 18   A  3   0  8
+  [ 8] .rela.plt         RELA            0000000000001180 001180 000018 18  AI  3  20  8
+  [ 9] .init             PROGBITS        0000000000002000 002000 00001b 00  AX  0   0  4
+  [10] .plt              PROGBITS        0000000000002020 002020 000020 10  AX  0   0 16
+  [11] .text             PROGBITS        0000000000002040 002040 0012ae 00  AX  0   0 16
+  [12] .fini             PROGBITS        00000000000032f0 0032f0 00000d 00  AX  0   0  4
+  [13] .rodata           PROGBITS        0000000000004000 004000 0003fa 00   A  0   0 32
+  [14] .eh_frame         PROGBITS        0000000000004400 004400 000004 00   A  0   0  8
+  [15] .init_array       INIT_ARRAY      0000000000005c80 004c80 000010 08  WA  0   0  8
+  [16] .fini_array       FINI_ARRAY      0000000000005c90 004c90 000010 08  WA  0   0  8
+  [17] .data.rel.ro      PROGBITS        0000000000005ca0 004ca0 000008 00  WA  0   0  8
+  [18] .dynamic          DYNAMIC         0000000000005ca8 004ca8 0001e0 10  WA  4   0  8
+  [19] .got              PROGBITS        0000000000005e88 004e88 000160 08  WA  0   0  8
+  [20] .got.plt          PROGBITS        0000000000005fe8 004fe8 000020 08  WA  0   0  8
+  [21] .bss              NOBITS          0000000000006008 005008 0010c8 00  WA  0   0  8
+  [22] .comment          PROGBITS        0000000000000000 005008 000072 01  MS  0   0  1
+  [23] .gnu.build.attributes NOTE            00000000000090d0 00507c 000120 00      0   0  4
+  [24] .debug_aranges    PROGBITS        0000000000000000 00519c 0000e0 00      0   0  1
+  [25] .debug_info       PROGBITS        0000000000000000 00527c 000e3e 00      0   0  1
+  [26] .debug_abbrev     PROGBITS        0000000000000000 0060ba 000151 00      0   0  1
+  [27] .debug_line       PROGBITS        0000000000000000 00620b 000cae 00      0   0  1
+  [28] .debug_frame      PROGBITS        0000000000000000 006ec0 000288 00      0   0  8
+  [29] .debug_str        PROGBITS        0000000000000000 007148 00115f 01  MS  0   0  1
+  [30] .debug_ranges     PROGBITS        0000000000000000 0082a7 000550 00      0   0  1
+  [31] .symtab           SYMTAB          0000000000000000 0087f8 000750 18     32  24  8
+  [32] .strtab           STRTAB          0000000000000000 008f48 0007a0 00      0   0  1
+  [33] .shstrtab         STRTAB          0000000000000000 0096e8 000157 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), l (large), p (processor specific)
+
+Program Headers:
+  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+  LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x001198 0x001198 R   0x1000
+  LOAD           0x002000 0x0000000000002000 0x0000000000002000 0x0012fd 0x0012fd R E 0x1000
+  LOAD           0x004000 0x0000000000004000 0x0000000000004000 0x000404 0x000404 R   0x1000
+  LOAD           0x004c80 0x0000000000005c80 0x0000000000005c80 0x000388 0x001450 RW  0x1000
+  DYNAMIC        0x004ca8 0x0000000000005ca8 0x0000000000005ca8 0x0001e0 0x0001e0 RW  0x8
+  NOTE           0x000200 0x0000000000000200 0x0000000000000200 0x000024 0x000024 R   0x4
+  GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10
+  GNU_RELRO      0x004c80 0x0000000000005c80 0x0000000000005c80 0x000380 0x000380 R   0x1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rela.dyn .rela.plt 
+   01     .init .plt .text .fini 
+   02     .rodata .eh_frame 
+   03     .init_array .fini_array .data.rel.ro .dynamic .got .got.plt .bss 
+   04     .dynamic 
+   05     .note.gnu.build-id 
+   06     
+   07     .init_array .fini_array .data.rel.ro .dynamic .got 
+
+Dynamic section at offset 0x4ca8 contains 26 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [ldump2mcdump.so]
+ 0x000000000000000f (RPATH)              Library rpath: [/opt/mckernel-p04/lib64]
+ 0x000000000000000c (INIT)               0x2000
+ 0x000000000000000d (FINI)               0x32f0
+ 0x0000000000000019 (INIT_ARRAY)         0x5c80
+ 0x000000000000001b (INIT_ARRAYSZ)       16 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x5c90
+ 0x000000000000001c (FINI_ARRAYSZ)       16 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x228
+ 0x0000000000000005 (STRTAB)             0x7b0
+ 0x0000000000000006 (SYMTAB)             0x288
+ 0x000000000000000a (STRSZ)              1194 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000003 (PLTGOT)             0x5fe8
+ 0x0000000000000002 (PLTRELSZ)           24 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x1180
+ 0x0000000000000007 (RELA)               0xce8
+ 0x0000000000000008 (RELASZ)             1176 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffffe (VERNEED)            0xcc8
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0xc5a
+ 0x000000006ffffff9 (RELACOUNT)          3
+ 0x0000000000000000 (NULL)               0x0
+
+Relocation section '.rela.dyn' at offset 0xce8 contains 49 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000005c80  0000000000000008 R_X86_64_RELATIVE                         20f0
+0000000000005c90  0000000000000008 R_X86_64_RELATIVE                         20b0
+0000000000005ca0  0000000000000008 R_X86_64_RELATIVE                         5ca0
+0000000000005c88  0000002b00000001 R_X86_64_64            0000000000003250 ldump2mcdump_init + 0
+0000000000005c98  0000003300000001 R_X86_64_64            0000000000003240 ldump2mcdump_fini + 0
+0000000000005e88  0000000100000006 R_X86_64_GLOB_DAT      0000000000000000 free@GLIBC_2.2.5 + 0
+0000000000005e90  0000000200000006 R_X86_64_GLOB_DAT      0000000000000000 localtime@GLIBC_2.2.5 + 0
+0000000000005e98  0000000300000006 R_X86_64_GLOB_DAT      0000000000000000 _ITM_deregisterTMCloneTable + 0
+0000000000005ea0  0000000400000006 R_X86_64_GLOB_DAT      0000000000000000 strcpy@GLIBC_2.2.5 + 0
+0000000000005ea8  0000002f00000006 R_X86_64_GLOB_DAT      0000000000007090 help_ldump2mcdump + 0
+0000000000005eb0  0000000500000006 R_X86_64_GLOB_DAT      0000000000000000 fp + 0
+0000000000005eb8  0000000600000006 R_X86_64_GLOB_DAT      0000000000000000 getpwuid@GLIBC_2.2.5 + 0
+0000000000005ec0  0000000700000006 R_X86_64_GLOB_DAT      0000000000000000 args + 0
+0000000000005ec8  0000000800000006 R_X86_64_GLOB_DAT      0000000000000000 strlen@GLIBC_2.2.5 + 0
+0000000000005ed0  0000000900000006 R_X86_64_GLOB_DAT      0000000000000000 getuid@GLIBC_2.2.5 + 0
+0000000000005ed8  0000000a00000006 R_X86_64_GLOB_DAT      0000000000000000 asctime@GLIBC_2.2.5 + 0
+0000000000005ee0  0000000b00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_set_section_contents + 0
+0000000000005ee8  0000000c00000006 R_X86_64_GLOB_DAT      0000000000000000 memset@GLIBC_2.2.5 + 0
+0000000000005ef0  0000000d00000006 R_X86_64_GLOB_DAT      0000000000000000 argcnt + 0
+0000000000005ef8  0000003500000006 R_X86_64_GLOB_DAT      00000000000025e0 cmd_ldump2mcdump + 0
+0000000000005f00  0000000e00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_get_section_by_name + 0
+0000000000005f08  0000000f00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_init + 0
+0000000000005f10  0000001000000006 R_X86_64_GLOB_DAT      0000000000000000 calloc@GLIBC_2.2.5 + 0
+0000000000005f18  0000001100000006 R_X86_64_GLOB_DAT      0000000000000000 optarg@GLIBC_2.2.5 + 0
+0000000000005f20  0000001200000006 R_X86_64_GLOB_DAT      0000000000000000 fprintf@GLIBC_2.2.5 + 0
+0000000000005f28  0000001300000006 R_X86_64_GLOB_DAT      0000000000000000 __gmon_start__ + 0
+0000000000005f30  0000001400000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_set_format + 0
+0000000000005f38  0000001500000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_close_all_done + 0
+0000000000005f40  0000001600000006 R_X86_64_GLOB_DAT      0000000000000000 time@GLIBC_2.2.5 + 0
+0000000000005f48  0000001700000006 R_X86_64_GLOB_DAT      0000000000000000 readmem + 0
+0000000000005f50  0000001800000006 R_X86_64_GLOB_DAT      0000000000000000 machdep + 0
+0000000000005f58  0000003200000006 R_X86_64_GLOB_DAT      00000000000030e0 ldump2_physmem_name_result + 0
+0000000000005f60  0000001900000006 R_X86_64_GLOB_DAT      0000000000000000 malloc@GLIBC_2.2.5 + 0
+0000000000005f68  0000001a00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_fopen + 0
+0000000000005f70  0000001b00000006 R_X86_64_GLOB_DAT      0000000000000000 fflush@GLIBC_2.2.5 + 0
+0000000000005f78  0000001c00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_set_section_size + 0
+0000000000005f80  0000001d00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_make_section_anyway + 0
+0000000000005f88  0000001e00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_perror + 0
+0000000000005f90  0000001f00000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_close + 0
+0000000000005f98  0000002000000006 R_X86_64_GLOB_DAT      0000000000000000 perror@GLIBC_2.2.5 + 0
+0000000000005fa0  0000002100000006 R_X86_64_GLOB_DAT      0000000000000000 getopt@GLIBC_2.2.5 + 0
+0000000000005fa8  0000002200000006 R_X86_64_GLOB_DAT      0000000000000000 gethostname@GLIBC_2.2.5 + 0
+0000000000005fb0  0000002300000006 R_X86_64_GLOB_DAT      0000000000000000 fwrite@GLIBC_2.2.5 + 0
+0000000000005fb8  0000002400000006 R_X86_64_GLOB_DAT      0000000000000000 _ITM_registerTMCloneTable + 0
+0000000000005fc0  0000002500000006 R_X86_64_GLOB_DAT      0000000000000000 register_extension + 0
+0000000000005fc8  0000002600000006 R_X86_64_GLOB_DAT      0000000000000000 bfd_set_section_flags + 0
+0000000000005fd0  0000002700000006 R_X86_64_GLOB_DAT      0000000000000000 __cxa_finalize@GLIBC_2.2.5 + 0
+0000000000005fd8  0000002800000006 R_X86_64_GLOB_DAT      0000000000000000 symbol_value + 0
+0000000000005fe0  0000002900000006 R_X86_64_GLOB_DAT      0000000000000000 stderr@GLIBC_2.2.5 + 0
+
+Relocation section '.rela.plt' at offset 0x1180 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000006000  0000002700000007 R_X86_64_JUMP_SLOT     0000000000000000 __cxa_finalize@GLIBC_2.2.5 + 0
+
+Symbol table '.dynsym' contains 55 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (2)
+     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND localtime@GLIBC_2.2.5 (2)
+     3: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+     4: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcpy@GLIBC_2.2.5 (2)
+     5: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND fp
+     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpwuid@GLIBC_2.2.5 (2)
+     7: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND args
+     8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5 (2)
+     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getuid@GLIBC_2.2.5 (2)
+    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND asctime@GLIBC_2.2.5 (2)
+    11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_section_contents
+    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5 (2)
+    13: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND argcnt
+    14: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_get_section_by_name
+    15: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_init
+    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5 (2)
+    17: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND optarg@GLIBC_2.2.5 (2)
+    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fprintf@GLIBC_2.2.5 (2)
+    19: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    20: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_format
+    21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_close_all_done
+    22: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND time@GLIBC_2.2.5 (2)
+    23: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND readmem
+    24: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND machdep
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 (2)
+    26: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_fopen
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fflush@GLIBC_2.2.5 (2)
+    28: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_section_size
+    29: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_make_section_anyway
+    30: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_perror
+    31: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_close
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND perror@GLIBC_2.2.5 (2)
+    33: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getopt@GLIBC_2.2.5 (2)
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND gethostname@GLIBC_2.2.5 (2)
+    35: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fwrite@GLIBC_2.2.5 (2)
+    36: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    37: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND register_extension
+    38: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_section_flags
+    39: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (2)
+    40: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND symbol_value
+    41: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stderr@GLIBC_2.2.5 (2)
+    42: 0000000000002fc0   283 FUNC    GLOBAL DEFAULT   11 ldump2_fill_chunks_result
+    43: 0000000000003250   158 FUNC    GLOBAL DEFAULT   11 ldump2mcdump_init
+    44: 0000000000002580    25 FUNC    GLOBAL DEFAULT   11 _ZN79_$LT$ldump2mcdump_helpers..OwnedAllocation$u20$as$u20$core..ops..drop..Drop$GT$4drop17h9f78495f48de9a78E
+    45: 0000000000002100     4 FUNC    GLOBAL DEFAULT   11 _RNvCs3oH69xKo20m_7___rustc17rust_begin_unwind
+    46: 00000000000025a0    59 FUNC    GLOBAL DEFAULT   11 _ZN81_$LT$ldump2mcdump_helpers..OwnedSectionNames$u20$as$u20$core..ops..drop..Drop$GT$4drop17h1544aa70792995beE
+    47: 0000000000007090    64 OBJECT  GLOBAL DEFAULT   21 help_ldump2mcdump
+    48: 0000000000002f30   131 FUNC    GLOBAL DEFAULT   11 ldump2_count_chunks_result
+    49: 0000000000002560    25 FUNC    GLOBAL DEFAULT   11 _ZN72_$LT$ldump2mcdump_helpers..OwnedBfd$u20$as$u20$core..ops..drop..Drop$GT$4drop17h319310750ec78478E
+    50: 00000000000030e0   346 FUNC    GLOBAL DEFAULT   11 ldump2_physmem_name_result
+    51: 0000000000003240     1 FUNC    GLOBAL DEFAULT   11 ldump2mcdump_fini
+    52: 0000000000005c98     8 OBJECT  GLOBAL DEFAULT   16 _ZN20ldump2mcdump_helpers23LDUMP2MCDUMP_FINI_ARRAY17hcdceeca4bf0ea37eE
+    53: 00000000000025e0  2374 FUNC    GLOBAL DEFAULT   11 cmd_ldump2mcdump
+    54: 0000000000005c88     8 OBJECT  GLOBAL DEFAULT   15 _ZN20ldump2mcdump_helpers23LDUMP2MCDUMP_INIT_ARRAY17h5058dd1148b693abE
+
+Symbol table '.symtab' contains 78 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+     2: 0000000000002040     0 FUNC    LOCAL  DEFAULT   11 deregister_tm_clones
+     3: 0000000000002070     0 FUNC    LOCAL  DEFAULT   11 register_tm_clones
+     4: 00000000000020b0     0 FUNC    LOCAL  DEFAULT   11 __do_global_dtors_aux
+     5: 0000000000006008     1 OBJECT  LOCAL  DEFAULT   21 completed.0
+     6: 0000000000005c90     0 OBJECT  LOCAL  DEFAULT   16 __do_global_dtors_aux_fini_array_entry
+     7: 00000000000020f0     0 FUNC    LOCAL  DEFAULT   11 frame_dummy
+     8: 0000000000005c80     0 OBJECT  LOCAL  DEFAULT   15 __frame_dummy_init_array_entry
+     9: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS ldump2mcdump_helpers.e5d0a44588a37fce-cgu.0
+    10: 0000000000002110   101 FUNC    LOCAL  DEFAULT   11 _ZN20ldump2mcdump_helpers12make_section17h62519f7343ab6715E
+    11: 0000000000002180   979 FUNC    LOCAL  DEFAULT   11 _ZN20ldump2mcdump_helpers15read_dump_pages17hf662ba6e42c3e1a7E
+    12: 0000000000006009  4096 OBJECT  LOCAL  DEFAULT   21 _ZN20ldump2mcdump_helpers16cmd_ldump2mcdump4PATH17ha5cdb534bf58f697E
+    13: 0000000000007009    65 OBJECT  LOCAL  DEFAULT   21 _ZN20ldump2mcdump_helpers16cmd_ldump2mcdump5HNAME17hc00d61eb8616225fE
+    14: 0000000000007050    64 OBJECT  LOCAL  DEFAULT   21 _ZN20ldump2mcdump_helpers13COMMAND_TABLE17h17c7f84304f374d4E
+    15: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    16: 0000000000004400     0 OBJECT  LOCAL  DEFAULT   14 __FRAME_END__
+    17: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS 
+    18: 00000000000032f0     0 FUNC    LOCAL  DEFAULT   12 _fini
+    19: 0000000000005ca0     0 OBJECT  LOCAL  DEFAULT   17 __dso_handle
+    20: 0000000000005ca8     0 OBJECT  LOCAL  DEFAULT   18 _DYNAMIC
+    21: 0000000000006008     0 OBJECT  LOCAL  DEFAULT   20 __TMC_END__
+    22: 0000000000005fe8     0 OBJECT  LOCAL  DEFAULT   20 _GLOBAL_OFFSET_TABLE_
+    23: 0000000000002000     0 FUNC    LOCAL  DEFAULT    9 _init
+    24: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND localtime@GLIBC_2.2.5
+    26: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcpy@GLIBC_2.2.5
+    28: 0000000000007090    64 OBJECT  GLOBAL DEFAULT   21 help_ldump2mcdump
+    29: 0000000000002fc0   283 FUNC    GLOBAL DEFAULT   11 ldump2_fill_chunks_result
+    30: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND fp
+    31: 0000000000005c98     8 OBJECT  GLOBAL DEFAULT   16 _ZN20ldump2mcdump_helpers23LDUMP2MCDUMP_FINI_ARRAY17hcdceeca4bf0ea37eE
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpwuid@GLIBC_2.2.5
+    33: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND args
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5
+    35: 0000000000003250   158 FUNC    GLOBAL DEFAULT   11 ldump2mcdump_init
+    36: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getuid@GLIBC_2.2.5
+    37: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND asctime@GLIBC_2.2.5
+    38: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_section_contents
+    39: 0000000000002f30   131 FUNC    GLOBAL DEFAULT   11 ldump2_count_chunks_result
+    40: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5
+    41: 0000000000002580    25 FUNC    GLOBAL DEFAULT   11 _ZN79_$LT$ldump2mcdump_helpers..OwnedAllocation$u20$as$u20$core..ops..drop..Drop$GT$4drop17h9f78495f48de9a78E
+    42: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND argcnt
+    43: 00000000000025e0  2374 FUNC    GLOBAL DEFAULT   11 cmd_ldump2mcdump
+    44: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_get_section_by_name
+    45: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_init
+    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5
+    47: 0000000000002560    25 FUNC    GLOBAL DEFAULT   11 _ZN72_$LT$ldump2mcdump_helpers..OwnedBfd$u20$as$u20$core..ops..drop..Drop$GT$4drop17h319310750ec78478E
+    48: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND optarg@GLIBC_2.2.5
+    49: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fprintf@GLIBC_2.2.5
+    50: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    51: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_format
+    52: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_close_all_done
+    53: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND time@GLIBC_2.2.5
+    54: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND readmem
+    55: 0000000000002100     4 FUNC    GLOBAL DEFAULT   11 _RNvCs3oH69xKo20m_7___rustc17rust_begin_unwind
+    56: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND machdep
+    57: 00000000000030e0   346 FUNC    GLOBAL DEFAULT   11 ldump2_physmem_name_result
+    58: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5
+    59: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_fopen
+    60: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fflush@GLIBC_2.2.5
+    61: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_section_size
+    62: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_make_section_anyway
+    63: 00000000000025a0    59 FUNC    GLOBAL DEFAULT   11 _ZN81_$LT$ldump2mcdump_helpers..OwnedSectionNames$u20$as$u20$core..ops..drop..Drop$GT$4drop17h1544aa70792995beE
+    64: 0000000000003240     1 FUNC    GLOBAL DEFAULT   11 ldump2mcdump_fini
+    65: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_perror
+    66: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_close
+    67: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND perror@GLIBC_2.2.5
+    68: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getopt@GLIBC_2.2.5
+    69: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND gethostname@GLIBC_2.2.5
+    70: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fwrite@GLIBC_2.2.5
+    71: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    72: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND register_extension
+    73: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND bfd_set_section_flags
+    74: 0000000000005c88     8 OBJECT  GLOBAL DEFAULT   15 _ZN20ldump2mcdump_helpers23LDUMP2MCDUMP_INIT_ARRAY17h5058dd1148b693abE
+    75: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5
+    76: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND symbol_value
+    77: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND stderr@GLIBC_2.2.5
+
+Version symbols section '.gnu.version' contains 55 entries:
+ Addr: 0x0000000000000c5a  Offset: 0x00000c5a  Link: 3 (.dynsym)
+  000:   0 (*local*)       2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)   
+  004:   2 (GLIBC_2.2.5)   1 (*global*)      2 (GLIBC_2.2.5)   1 (*global*)   
+  008:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)   
+  00c:   2 (GLIBC_2.2.5)   1 (*global*)      1 (*global*)      1 (*global*)   
+  010:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)   
+  014:   1 (*global*)      1 (*global*)      2 (GLIBC_2.2.5)   1 (*global*)   
+  018:   1 (*global*)      2 (GLIBC_2.2.5)   1 (*global*)      2 (GLIBC_2.2.5)
+  01c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  020:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)
+  024:   1 (*global*)      1 (*global*)      1 (*global*)      2 (GLIBC_2.2.5)
+  028:   1 (*global*)      2 (GLIBC_2.2.5)   1 (*global*)      1 (*global*)   
+  02c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  030:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  034:   1 (*global*)      1 (*global*)      1 (*global*)   
+
+Version needs section '.gnu.version_r' contains 1 entry:
+ Addr: 0x0000000000000cc8  Offset: 0x00000cc8  Link: 4 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 1
+  0x0010:   Name: GLIBC_2.2.5  Flags: none  Version: 2

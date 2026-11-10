@@ -1,0 +1,181 @@
+{
+  "C_retirement": false,
+  "actual_admission_by_reviewer": false,
+  "actual_loader_execution": {
+    "bytes": 1079,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/loader-execution-1/RESULT.json",
+    "sha256": "37e98e81dac65f325e95535eadda45aeeaf3009e02829db622b0f2d1bc4cdd80"
+  },
+  "actual_loader_join": {
+    "bytes": 14290,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/LOADER-CLOSURE.json",
+    "sha256": "abdd794d3bafb6ea5717532a64b27f792c2f4a38eb13590b0e2da798fafa31cb"
+  },
+  "actual_loader_profile": {
+    "bytes": 20229,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/loader-execution-1/profile.stdout",
+    "sha256": "342d9a7f64d612b65dcfbd2e88b4e86f575aad4f4db110f2251f134d0b37e8dd"
+  },
+  "actual_loader_stdout": {
+    "bytes": 1002,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/loader-execution-1/payload.stdout",
+    "sha256": "f8dbe16c450bd26e5d520ddd56a51332d334dfa1fe05b1d7c7790b72b47a820b"
+  },
+  "actual_new_library_build_known": false,
+  "at": "2026-11-10T13:04:52.555628+00:00",
+  "blocking_source_or_profile_defects": [],
+  "decision": "GO_EXACT_RUST195_FIVE_PHASE_PRODUCTION_IHKLIB_BUILD_READBACK_STAGE_SUBJECT_TO_ROOT_FRESH_ADMISSION",
+  "exact_serial_phases": [
+    {
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/source",
+        "-B",
+        "/output",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_C_COMPILER:FILEPATH=/usr/bin/cc",
+        "-DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3",
+        "-DIHK_USER_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "-DCMAKE_BUILD_TYPE:STRING=Release",
+        "-DIHK_ENABLE_RUST_WHOLE_LIBRARY:BOOL=ON",
+        "-DIHK_ALLOW_CLI_C_FALLBACK:BOOL=OFF",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE:BOOL=OFF",
+        "-DWITH_KRM:BOOL=OFF",
+        "-DENABLE_KRM_WORKAROUND:BOOL=OFF",
+        "-DENABLE_FUGAKU_HACKS:BOOL=OFF",
+        "-DENABLE_FUGAKU_DEBUG:BOOL=OFF",
+        "-DENABLE_MEMDUMP:BOOL=ON",
+        "-DENABLE_PERF:BOOL=ON",
+        "-DENABLE_RUSAGE:BOOL=ON",
+        "-DENABLE_GCOV:BOOL=OFF",
+        "-DCMAKE_INSTALL_LIBDIR:PATH=lib64",
+        "-DCMAKE_INSTALL_INCLUDEDIR:PATH=include",
+        "-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--trace -Wl,-Map=/output/libihk.map"
+      ],
+      "name": "mck-m15-ihklib-configure195-20261110-1",
+      "phase": "configure",
+      "wall_seconds": 90
+    },
+    {
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/output",
+        "--target",
+        "ihklib",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "name": "mck-m15-ihklib-build195-20261110-1",
+      "phase": "named-production-ihklib",
+      "wall_seconds": 120
+    },
+    {
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--file-header",
+        "--program-headers",
+        "--dynamic",
+        "--dyn-syms",
+        "--version-info",
+        "/output/linux/user/libihk.so"
+      ],
+      "name": "mck-m15-ihklib-elf195-20261110-1",
+      "phase": "shared-library-ELF-readback",
+      "wall_seconds": 30
+    },
+    {
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "--defined-only",
+        "--format=posix",
+        "/output/linux/user/rust/whole70/libihklib_whole70.a",
+        "/output/linux/user/libihk.so"
+      ],
+      "name": "mck-m15-ihklib-symbols195-20261110-1",
+      "phase": "archive-and-DSO-provider-readback",
+      "wall_seconds": 30
+    },
+    {
+      "expected_returncode": 0,
+      "inner_argv": [
+        "/usr/bin/cmake",
+        "--install",
+        "/output",
+        "--prefix",
+        "/output/stage"
+      ],
+      "name": "mck-m15-ihklib-stage195-20261110-1",
+      "phase": "private-library-and-public-header-stage",
+      "wall_seconds": 30
+    }
+  ],
+  "findings": [
+    "Actualabdd join/37e98 rawreceipt/f8dstdout/342dprofile matchfrozenidentities. Actualloader0/emptystderr resolvesall10dependencies, with driver63b8 andLLVM22 insideexactreadonlyqualifiedtoolchain using onlyknownnormalbin/../lib syntax; rawinterpreterplainline alsoexact/lib64/ld-linux-x86-64.so.2. ActualCID3d80 terminal0/Pid0/nonrunning/nonOOM/allpositivewaits/ownedremoved. No compiler main/version/sourcegen ran. This supplies the newnamespace prerequisite; cfB91unexecuted1.92NO_GO stayshistorical.",
+    "Sameactual70ebRust1.95 compiler/fullstd/driver/LLVM sourceidentities and actual46d/GCC14/CMake3.31.8/BFD2.41/libuv/sourceheader providers areselected. No version spoof/native1.92fallback/diagnosticrelaxation/Rustbody edit or oldHOSTartifactremap. OnlyconfigureIHK_USER_RUSTC argument changes torealqualified1.95; other4 executablecommands/status/walls remain unchanged. All5materializedcreateargv match declaredprefix/name/innerargv.",
+    "Source86997 remains unchanged. Independently compared exactproductionIHKCMake include1-6/library21-151/install295-297/header306-309 bytes toprivaterecipe0494; topdriver590887 suppliesproductionx86PAGE4096/features/BUILDID8d and exactoriginalrusageinstalltext. No unrelatedIHKkernel/modules/CLI/libudev or wholeprojecttarget configured. Private source/helpers/publicheaders are currentIHK8d copies; no selectedC ihklib.c runtimeprovider or oldpartialarchive.",
+    "Read exactproductionselection: wholelibraryON, externalarchiveOFF, C/CLI fallbackOFF, KRM/workaround/Fugaku/GCOVOFF, memdump/perf/rusageON. Original76requiredroots appearonce inlist, -Wl,--undefined each, --gc-sections and -z,defs preserved. Actualproducerarchive plus SAMEcompile-native-libsresponse and selectedBFDscript link remainstrict; all6expectedC datawidths retained. No missingbody/provider ispatched with stub/externaloldarchive.",
+    "Normalunchangedbuilder compiles4nonshippedrealheader/source Cwitnesses withGNU11/-O0/-Wall/-Wextra/-Werror, runs onlyboundedmetadata mainstoemitactualperf/pages,dump,diagnosticmacrooriginandstatselection data, validatesactualsourceexports and setsgeneratedRustenv. These are requirednewGCC14/header buildinputs. DiagnosticCwitness carriesstatic#linemetadata andprintf; combinedheaderwitness type/layout/asserts+puts; no libraryAPI/balanced/zero/device/native body runs. Cmetadata contributes no productionDSO implementation.",
+    "Exactlyone realRust1.95 staticlib compile usesedition2021/hoststdruntime/actualstatcfg/PIC/panicabort/codegenunits1/opt2 and --printnative-static-libs to.new. Exact7warnings/sourceSHA/locations/category/order/fullnormalizedbytes/nativeflags checks precede responsewrite/archivepromotion/PASS. No cached/fabricatedmetadata or warningwaiver. Any genuinefailure retains.rawstderr/.new/partialevidence and stops; no unchangedcompilerretry.",
+    "ELFandnmreadback must bind actualnewarchive/DSO/libihk.map/linkcommands, all76GLOBALDEFAULTnonemptyuniqueFUNC/OBJECTroots and6widths, genuineRustprojectownership plus separatelyclassifiedRuststd/compiler/Linux/BFD/systemproviders/importversions/SONAME. Actualprivateinstall muststage sameproducedDSO pluscurrentihklib.h/affinity.h/rusage.h at originalrelativeinstallrules. This is actualartifact/header custody and not fullruntime/cohortacceptance."
+  ],
+  "independent": true,
+  "mandatory_Root_admission_and_result_conditions": [
+    "Beforefirstlibrarycreate positivelyreleasecurrentP04baseline/heavy/image/container/clientowner and anyotherknowncurrentoperation; nootherrunningDocker or competingheavy/nativeowner. Freshnamesabsent acrossallstates, freshownedemptybuild-output-195, preserveold192proposal/output/history/UNKNOWN/prior18GiB/native2-5/12GiB/CPU1/currentfree andservice/account/sourceholds.",
+    "RootfreshMemAvailable>=26GiB, allHOSTcontrollers/workers/container<=4GiB and max3jobsCPU0/6/7, host16/scratch12GiBfloors plus2GiBbuild/captureheadroom and allgreaterexistingreservations. CPU7/onejob/1GiBmem=swap+AS/64pids/cpu90/64MiBperfile/64MiBnoexectmpfs are boundedcandidates, notfitguarantees. OnlyalreadyrevieweddisjointHOST0/6work mayoverlapwithinactualsum; no optionalDocker overlap orgrantmultiplication.",
+    "Bind exactrequest/source/qualifiedtoolchain+complete55stdcomponent/driver/LLVM/providerinput identities, no source/toolchainwriter overlap, executableprivateoutputbacking for4normalmetadatawitnesses and correctUIDownership. InspecteachnewimmutableCID/image46d/ROroot/ROsource+11SDK+ROtoolchaintree/privateoutputRW/CPU7/memory/security/argv beforestart. No toolavailability/loader/versionprobe repeat.",
+    "Enforceconfigure90s/build120s/readelf30s/nm30s/stage30s daemonimmutableCID deadlines, with exactclientPID/birth/argv/stdio and availablelimits/peaks/events/OOM/terminalresults captured beforepositiveownedremoval/release. Primaryfailure and partialarchive/generatedmetadata/rawdiagnostics preserved; unknownretirement or timeout holdsreservation andstopsdependentphases.",
+    "Run5phasesinorder stoppingfirstfailure. No actualcallintolibrary, installedservice/API/behavior/semantic/header/52/70/affinity/BFDcase/oldsource/testsuite rerun. Normalproductionmetadata/generator/mainisallowedonlyasreviewedbuildstep, never projectlibrary/nativeAPI.",
+    "Afteractualsuccess freezeproducerreceipt/samecompileRSP/actualstatcfg/4generatedRustmetadata+sourcecontracts/config/CMakeCache/archive/DSO/map/trace/rootwidth/importnamespace/SONAME/readelf/nm/header-stageidentities andcleanup. Capture normalinstallRPATHbytechanges distinctly. Uniqueproject/systemprovider and matchingcompleteABI resultreview remainsmandatory beforeoriginalclaim; namesalone or oldHOSTproofs cannotacceptnewcohort."
+  ],
+  "native_currentfree_UNKNOWN_reservations_released": false,
+  "original_acceptance_delta": 0,
+  "preserved_native192_NO_GO": {
+    "bytes": 6126,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "919cc9071513a488a8a15a856169270ce2314e579ba6d9cdd460ae59d54af4ad"
+  },
+  "qualified_compiler_binding": {
+    "bytes": 47937,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/COMPILER-BINDING.json",
+    "sha256": "978a22dab7d017d6daf201f6fffcc2eee2bc7a0d63b83c0af89a5361ca4e9b96"
+  },
+  "remaining_original_conditions": [
+    "Actualnewmatchinglibrary/header/artifact/provider proof remainsunexecuted atthisreview; completeI03/I01/delivereddefaultcohort/native/deployed/runtime/C-retirement requirements remainopen afterfocusedbuild.",
+    "Retainpublic52/whole70+6/affinity/typedCproofs onlyatpreviousscopes; do not relabel asnewmatchedruntimeacceptance.",
+    "OriginalM14beforeM15, acceptedfileclosures, HOLD-GENERIC/replayfalse/equivalentfalse/exact12/source/native/UNKNOWN/resource/service/account/spendcontrols unchanged."
+  ],
+  "request": {
+    "bytes": 99812,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/REQUEST.json",
+    "sha256": "c199615e61c21d876992e5e0efc78a9e2597c4a3bc7d616d784a9edef189aa6c"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_execution": {
+    "Docker_or_network": 0,
+    "canonical_edits": 0,
+    "compiler_or_CMake_or_helper": 0,
+    "native_or_device": 0,
+    "private_REVIEW_write_only": true,
+    "probes_or_loader": 0,
+    "source_and_saved_receipt_reads": true,
+    "tests_or_API": 0
+  },
+  "scope": "CurrentIHK8d productionwhole70+6 Rustlibrary matching new46d/GCC14/BFD2.41/header/linkprofile with genuinelyqualifiedRust1.95+std. Fiveexactserialconfigure/namedlibrarybuild/ELF/nm/privateheaderinstall operations only; no libraryAPI/device/behavior/native or fullmilestone acceptance.",
+  "source_manifest": {
+    "bytes": 35501,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/SOURCE-BINDINGS.json",
+    "sha256": "86997d60e1b3db2533683d59f6148ba12a613365bea3ff4b99d996f84ace4f3a"
+  }
+}

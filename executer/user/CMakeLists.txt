@@ -610,6 +610,8 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 endif()
 
 add_library(ldump2mcdump SHARED ${LDUMP2MCDUMP_SRCS})
+# Both vmcore wrappers load ${prefix}/lib/ldump2mcdump.so.
+set_target_properties(ldump2mcdump PROPERTIES PREFIX "")
 if (TARGET ldump2mcdump_rust_helpers)
 	add_dependencies(ldump2mcdump ldump2mcdump_rust_helpers)
 	set_target_properties(ldump2mcdump PROPERTIES LINKER_LANGUAGE C)
@@ -667,8 +669,10 @@ install(PROGRAMS
 	"${CMAKE_CURRENT_BINARY_DIR}/vmcore2mckdump"
 	"${CMAKE_CURRENT_BINARY_DIR}/mcps"
 	DESTINATION "${CMAKE_INSTALL_BINDIR}")
-install(TARGETS sched_yield ldump2mcdump
+install(TARGETS sched_yield
 	DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+install(TARGETS ldump2mcdump
+	DESTINATION "lib")
 install(FILES "${IHK_FULL_SOURCE_DIR}/linux/include/ihk/ihk_rusage.h"
 	DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ihk")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/mcexec.1"
