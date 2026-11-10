@@ -1,0 +1,143 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-10T19:50:33.796849+00:00",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "f06_diagnostic_budget_regression",
+        "--edition=2021",
+        "-Dwarnings",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/tests/diagnostic_budget.rs",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/diagnostic-budget"
+      ],
+      "expected_exit": 0,
+      "id": "compile-changed-diagnostic-counter-only",
+      "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/diagnostic-budget",
+      "required_stderr": "empty",
+      "required_stdout": "empty",
+      "scope": "Compile only exact new production atomic budget state/functions plus one bounded stdHOST regression main; not kernel ABI/image/native codegen.",
+      "wall_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--fsize=16777216",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/diagnostic-budget"
+      ],
+      "expected_exit": 0,
+      "id": "entry-reset-postformatter-and-concurrent-count",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "entry_reset": true,
+        "increments": 2000,
+        "joined_workers": 2,
+        "kernel_runtime": false,
+        "post_formatter_reread": true,
+        "scope": "actual-f06-diagnostic-atomics-only",
+        "status": "PASS"
+      },
+      "scope": "Sequential64 budget/samePID/no-log entry reset, freshPID postformat increment, negativePID; exactly2std worker threads each1000increments/barrier; actual JoinHandle joins before PASS, no kernel callback or process spawning.",
+      "wall_seconds": 5
+    }
+  ],
+  "contract": {
+    "bytes": 23155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/CONTRACT.json",
+    "sha256": "d8667d68125fd6dd49561c4d82f88b5c0ebcdc183057da5439b022754a19b230"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1",
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1",
+  "inputs": [
+    {
+      "bytes": 2806,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/tests/diagnostic_budget.rs",
+      "sha256": "b73d451d0d32b9061d2a94d68b399dcdfb25530289ac8537d142c6a7d01e2fbb"
+    },
+    {
+      "bytes": 43555,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+    }
+  ],
+  "no_native_Docker_network": true,
+  "no_old_suite_replay": true,
+  "owner": "Root sole executor; p04_tests_max private source/test preparation only",
+  "ownership_postconditions": {
+    "cleanup": "Use exact authenticated Owner retirement on timeout/failure; never numericPID/reapedPID fallback/global signal. Both direct waits+streams and final family have to close, no UNKNOWN release.",
+    "immediate_each_record": "Validate all existing successful positive-birth/wait/stream/exit/family facts immediately. Reject any adopted_reaps/adopted_kills/residual/UNKNOWN; preserve primary error and best-effort partialreceipt on compiler/deadline/owner/stream failure.",
+    "record_count": 2,
+    "result": "Runtime exact JSON plus exit0 required; compiler result or source assertion alone is not a functional PASS.",
+    "runtime_threads": "One owned runtime process, main plus2joined std threads on same CPU6. No new light-job slot per thread and no process descendant expected. Retain Rootfamily accounting for compiler/linker descendants."
+  },
+  "preconditions": [
+    "Exact source/test/patch/inputs plus independent material GO; do not execute obsolete baseline racy state.",
+    "Root creates fresh owned output-1/tmp before firstcommand. Stop if output-1 already exists, or currentsource/test input differs.",
+    "Root positively authenticates new leader birth, session/process group and captured streams for each serial command using existing Owner; do not hand control to an unjoined previous driver.",
+    "Fresh actual cumulative resource/CPU/storage admission and credit/service authority; no grant increase. Current frozen four-change image packet is independent and is not extended by this proposal."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/tmp",
+  "profile": {
+    "all_other_workers_controllers_and_UNJOINED": "Root measures/counts all actual overhead plus retained CPU0/256MiB/job1 UNKNOWN inside shared4GiB/max3; native18GiB reservations and floor remain; no execution unless complete operation fits existing grant",
+    "batch_wall_seconds": 120,
+    "cpu": 6,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "same existing ordinary HOST Rust1.95 lane; one changed diagnostic regression, no quota expansion",
+    "max_address_space_bytes": 2147483648,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "native_or_Docker_or_network": false,
+    "output_disk_reservation_bytes": 33554432,
+    "output_max_file_bytes": 16777216,
+    "runtime_threads_in_one_job": 3,
+    "scratch_disk_floor_GiB": 12
+  },
+  "schema": "m14-f06-changed-atomics-request-v1",
+  "source_bindings": {
+    "bytes": 2413,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/SOURCE-BINDINGS.json",
+    "sha256": "b5d152f6ffff5367de48821ec517cce0363de14730c6d64b339e601b1d560da3"
+  },
+  "status": "PROPOSED_NOT_EXECUTED_REQUIRES_INDEPENDENT_GO_AND_ROOT_FRESH_ADMISSION"
+}

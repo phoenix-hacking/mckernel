@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T19:51:43+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T20:19:00+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -58,8 +58,33 @@ objects/config/cache are preserved separately before the next source cohort.
 Root incorporated the owner's one-file baseline guide91fcfaa4 as documentation
 commit96f4cbba, byte-identical at docs/development/M14-STABLE-BASELINE.md. This
 dated reference leaves CAMPAIGN as the sole active plan; source/cache and all33
-unrelated dirty paths are preserved. Source594 and this guide are ready for the
-normal coherent checkpoint with their own completed validation/review boundaries.
+unrelated dirty paths are preserved. Source594 and this guide are published in
+verified checkpoint41da5226 with their completed validation/review boundaries.
+
+**Latest credential image PASS20:06:17; independent GO20:16Z.** Sourcea7404154
+adds the reviewed existing Rust do_setresuid/do_setresgid selectors. The exact
+incremental image and passive metadata batch completed in24.99s; imaged82295c7/
+10,337,016B, mapc6e20275/980,918B and Rust61a7d9b2/18,545,888B. Qualification
+f35f17f6 and independent0f18efe5 join both unique Rust callbacks262/263B, their
+C exclusions,14 typed caller/provider rows including eight setters, and the
+previous four selected entries. Actual423 strong imports/412 names resolve;
+zeroUND, new arch_start/entry0xfffffffffe83c510 and the same origin/twoLOAD+NOTE
+contract pass. Nine objects are byte-identical; genericC and wholeRust changed.
+C-function rows43→41: exactly the two credentials removed, no new C function.
+Both containers exited0/nonOOM/Pid0 and were removed; all18 clients joined.
+Sampled highwater516,907,008B/failcnt0/OOM0 is not exact terminal peak. All21
+current image/map/objects/config/cache records are separately preserved as
+stable-baselinea740-1. Whole original default/native acceptance stays open.
+
+The separate one-file shared signal-diagnostic race correction4cfb55 is now
+integrated as sourcebe58d681 after sourceGO79d066. Its exact two HOST commands
+PASS20:00:25: entry-reset/postformatter behavior, two joined workers and2,000
+observed increments; independent12499c72 qualifies actual results. No rerun is
+needed. Repository whole-F06 default remainsOFF. P04 binds the next explicitON
+configure/incremental-image/passive-owner operation; P03 independently reviews
+that packet before Root admission. All remaining signal functions/debug data,
+prior six Rust entries, real provider closure and remaining C debt must be
+observed in that new image; explicitON is not default/native acceptance.
 
 The genuine kill/provider continuation PASS18:38:45: joined14323447 has186 global
 owners/158functions+28data and16 typed partial imports. All143 old owner/relocation
@@ -188,9 +213,9 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M14-F03/F06/I02 actual four-owner image | Actual44ed/594 build and saved ownership qualification936967 PASS; Independent9cd4c350 confirms the whole stated artifact scope; Root publishes this coherent source/result checkpoint; no rebuild or original whole-condition credit inferred |
-| M14-03-05/default and remaining M14-F06 architecture owners | Credential pair selector83d922/sourceGO3d2b is ready. P04Tests freezes the concrete shared signal-diagnostic atomic fix4cfb55 and whole-F06-ON contract; PublicABI independently reviews, P04 prepares the next normal incremental image packet from the new green baseline |
-| M15-P04/I03 actual crash ABI and cleanup | SDK joins18 consumed real source/export/type contracts with no ABI mismatch; SourceAcq reviews only the changed-real-header compile packet. Actual FAULT_ON_ERROR longjmp bypasses Rust allocation drops: SDK prepares one authenticated tools.c::__error source input for a faithful cleanup repair; no flags-only behavioral substitution or extension/native execution |
+| M14-F06 supported selection / M14-I02-E2 image ownership | P04 finishes the explicit whole-F06-ON packet on exactbe58 source/preserveda740 green; P03 reviews then Root executes configure, normal incremental image and serialized metadata/targeted context reads. Require four remaining Rust owners, no executable architecture-C, exact96B/align32 debug data, no libatomic/host/undefined imports and actual entry/LOAD/debt/cleanup |
+| M14-F03 remaining genuine C entries | SourceAcq implements real terminate orchestration; PublicABI's three exit-group bridges are frozen for P04Tests review; P04Tests implements real do_mmap with explicit lock/range failure cleanup. Private disjoint bodies/guards feed the next image after review; they do not delay ready F06 execution |
+| M15-P04/I03 actual crash cleanup | Actual new-header compile/readback PASS20:01/qualification0d1d joins18 source/type/export contracts; consumed-prefix offsets0/8 agree, full actual table544B is recorded honestly. One authenticated tools.c177,533B/d3155bcf extraction PASS20:08 with all seven clients/CID closed. SDK implements faithful cleanup before real __error/restart; flags and real diagnostics stay unchanged, behavior/native acceptance remains open |
 
 
 **Current original-closure blocker:** complete selected Rust implementation/
@@ -203,7 +228,7 @@ native UNKNOWN owners/leases/reservations/current-free. Unknown old payload is
 not an external current-source inventory requirement. No boot/module load/MMIO/
 MSR/valid native dump or dummy passing gate has run.
 
-Fresh controller guard19:51Z:73%included used/27%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
+Fresh controller guard20:11Z:74%included used/26%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
 allowance reset. Root/six actual task routes gpt-6.1-sol/MAX/depth1; one canonical
 compositor/heavy/image owner. Actual HOST CPUs0/6/7,max3 jobs,4GiB TOTAL including
@@ -214,20 +239,21 @@ inferred from output/process absence. Correction uses disjoint output and normal
 positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
 pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
 
-Verified source/results checkpointe34b958d is pushed/fetched; all154 owned entries
-matched19:14:20Z. Local source594acfc0 now has actual incremental image proof;
-docs-only96f4cbba incorporates the requested baseline guide. The current changed
+Verified source/results checkpoint41da5226 is pushed/fetched; all60 owned entries
+matched19:56:05Z, including source594 and guide96f4cbba. Currenta740 credential
+image/result is independently qualified; the nextbe58 atomic source has its
+focused functional proof and retains defaultOFF pending the new image. The current changed
 pair51.48/57.01 was posted once in PR3 comment6776807210; no unchanged duplicate.
 
-Next15-minute deliverable: publish the completed four-owner Rust source/image
-and requested guide with independent saved-result GO9cd4c350, then compose the
-next credential/signal cohort and execute only its affected focused checks and
-normal incremental image build after actual review/admission. Preserve both
-recoverable green baselines and valid cache. P04/PublicABI/P04Tests/SourceAcq own
-the next source/operation review; Root alone integrates and executes. SDK's
-disjoint actual crash cleanup input can advance within the remaining shared
-grant. Original whole-condition, behavior and native requirements stay open;
-completed source/artifact evidence is published without waiting for unrelated work.
+Next15-minute deliverable: checkpoint/publish verifieda740 credential image and
+be58 atomic source/tests now, then execute the independently reviewed explicit
+whole-F06-ON configure/image/metadata packet on the new stable baseline. Reuse
+the2,000-increment result and all unchanged proofs. Require actual remaining
+architecture ownership, debug data, provider/entry/LOAD/debt and positive cleanup.
+Source owners continue real terminate/exit-group/mmap and crash-cleanup work in
+private; ready image execution does not wait for those separate ports. Original
+default, functional and native conditions earn credit only on whole-condition
+proof. Root alone integrates, admits and publishes, preserving all green baselines.
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)

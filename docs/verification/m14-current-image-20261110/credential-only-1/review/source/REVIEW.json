@@ -1,0 +1,188 @@
+{
+  "Root_admission": "Existing solecompositor/executor and oneheavyowner; operation-specific source/profile/cleanup review/fresh HOST4GiB/max3/CPUs0,6,7/fresh26GiB+floors and all overhead/oldCPU0-256MiB-job1/native2-5/12GiB/UNKNOWN/realhold accounting remain. No new resource grant or overlap assumption.",
+  "at_utc": "2026-11-10T19:44:48.274720+00:00",
+  "base_commit": "594acfc067012d87ade1aff7ac0abdc5944ce257",
+  "bindings": {
+    "bytes": 2746,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-selection-1/SOURCE-BINDINGS.json",
+    "sha256": "62e5d1cbb113a5f438ccbe7b68af89332e869b411fb21abc40ba9cf05cdc3529"
+  },
+  "contract": {
+    "bytes": 29699,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-selection-1/CONTRACT.json",
+    "sha256": "04b237b239ec42012f4c265c66f67d2abccb13ac5ac5c89eb836b46cfc7f63e1"
+  },
+  "decision": "GO_EXACT_THREE_FILE_CREDENTIAL_PAIR_SELECTOR_FOR_REVIEWED_NEXT_COHORT_IMAGE",
+  "findings": [
+    {
+      "area": "actual original language-selection gap",
+      "detail": "First actual image owns do_setresuid/do_setresgid as two95B C functions, while8 setters and getcred/refresh helpers are already genuine wholeRust owners. Existing complete credential Rust callbacks9d52 were actually code-generated and are blocked only by broad opt-in module/guard selection. This pair is a real M14-03-05-DEFAULT ownership prerequisite, not a missing algorithm or externally authored inventory.",
+      "result": "PASS"
+    },
+    {
+      "area": "exact delta and complete supported pairing",
+      "detail": "Reconstructed exact3file patch83d922 from bound594ac preimages/postimages. Only two C#if lines change; all Cbody/callsite/physical lines and cloneinitializer remain. Existing supported Rust/x86/Linux6.12/!UBSAN cfg branch registers f03_credential_refresh_candidate and actual source only if broadadapterOFF; matching source property APPEND adds only MCKERNEL_RUST_F03_CREDENTIAL_REFRESH. One lib.rs module gate ORs existing/new cfgs, so old broadON and new narrowON produce one module/definition. No option/default, wholeF06/forward-adapter toggle or behavior narrowing. Legacy/nonRust/nonx86/UBSAN fallback unchanged.",
+      "result": "PASS"
+    },
+    {
+      "area": "source ABI and complete callback behavior",
+      "detail": "Both actual entry ABIs are unsafe externC fn()->void, existing signature/16CInt64B and8CInt32B guards retained. Cselected wrappers and Rust call same real syscall_refresh_cred_fields_body_result with same Thread.proc and Process fields, ordered UIDslots0..3 and GIDslots4..7 and real getcred. CurrentCPU/Thread snapshot remains once, void error discard unchanged. Rust scratch zeroing is redundant with genuine getter64B initialization; extra CPU-NULL early return lies outside original valid CcurrentCPU domain and introduces no supported-path difference.",
+      "result": "PASS"
+    },
+    {
+      "area": "producer completion, paging and lifetime",
+      "detail": "Actual getcred_body_result initializes16 slots, picks complete8-int same-page span, zero-initializes real request, sets original syscall/physicalbuffer/queryflag1, and consumes only exact synchronous result0. Nonzero/partial failure returnsNULL; helper performs no ID writes on null values/Thread/Process. It loads actual Process after synchronous getcred and writes4 CInt fields in original order. Stack/physicalmapping/currentThread/Process remain original caller-owned through return, with no added references/concurrency serialization/reconciliation/rollback/publication. Existing8 Rust setter caller policies and setfsid previous-ID return remain unchanged.",
+      "result": "PASS_REUSED_UNCHANGED_PROOFS"
+    },
+    {
+      "area": "matching retained engineering proof without replay",
+      "detail": "Prior real1.95 callback codegen receipt4c7f source9d52 matches current callback bytes. Current getcred and refresh functionbody hashes match their exact text in actual passing448c five-case source: failed/partial/no-publication, nonzerooffload, previous-ID, realEBADF and realextractedproducer snapshot. No old body/suite/compiler/library/provider replay. Old partial/nativefalse/production-linkfalse scopes remain; this selector is not a new runtime or producer proof.",
+      "result": "PASS_AT_ORIGINAL_SCOPE"
+    },
+    {
+      "area": "composition, next actual artifact and acceptance limits",
+      "detail": "Current594ac/81e8 in-flight/critical packet and all other owners remain untouched. Root applies focused hunks only after independent review, publishes/fetches a real next-cohort source, then freezes a new exact ordinary namedimage/reconfigure/build/readback packet. New wholeRust must define both nonzero real entry functions, genericC must define neither, finalmap/caller/provider joins unique with no namedUND. This review grants no codegen/container/native operation or wholeDEFAULT/file/image/milestone/Cretirement acceptance.",
+      "result": "PASS_SOURCE_ONLY"
+    }
+  ],
+  "next_actual_command_and_oracles": {
+    "actual_required_oracles": [
+      "New Rustcfg and Cmacro both selected only at supported predicate; exact dependency registered",
+      "do_setresuid and do_setresgid each exactly one actual final GLOBALFUNC owner in wholeRust object; no definition in generic C object",
+      "Existing getcred/refresh/helper and eight setter syscall caller/provider joins still match genuine actual image, zero namedUND and real ABIobject passed",
+      "C fallback retained in unsupported/legacy profiles and broad old opt-in path unchanged by source rules; no negative-source feature disabling",
+      "Original native/functional deployment/lifecycle gates retain exact admission; unchanged five passing producer cases reused"
+    ],
+    "affected_outputs": [
+      "rust/mckernel_rust.o",
+      "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "mckernel.img",
+      "mckernel.img.map",
+      "regenerated Rustcfg/Cflags/dependency metadata"
+    ],
+    "build_cwd": "/work/output/build/kernel",
+    "next_cohort_only": "After Root source composition +independent review, reuse valid cache/qualifiedSDK/productionCMake selection in a new exact admitted source cohort; preserve current594ac/green20a baseline. Do not run this private source packet directly.",
+    "no_extra_functional_replay_needed": "Only source selection changed. Reuse unchanged body/producer semantic cases; the meaningful changed-input check is real next-cohort build/link/selection/provider readback, not another old behavior fixture run.",
+    "ordinary_root_build_argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "same_production_route_reference": {
+      "bytes": 55239,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/four-selection-incremental-1/REQUEST.json",
+      "sha256": "81e8f01a16353db3524f5a0ba633c3d8a60aeacf3debf9b364f44e659b40f85c"
+    }
+  },
+  "operations": "Current exact source/caller/ABI/CMake and retained technical machine proofs reads; data-only identities/diff/body-text comparison; private review JSON write. No source/canonical edits, helper/checker/test/compiler/preprocessor/CMake/tool/Docker/network/native/project API or recursive agent.",
+  "original_check": {
+    "id": "M14-03-05-DEFAULT",
+    "pair_only": true,
+    "whole_condition_satisfied": false
+  },
+  "patch": {
+    "bytes": 3058,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-selection-1/CREDENTIAL-REFRESH-SELECTION.patch",
+    "sha256": "83d922f5547daef29a65dca07e4603e300d28a455ab403fda703bdd1f0236200"
+  },
+  "preserved": {
+    "M14_before_M15": true,
+    "Root_current4selector_packet_unchanged": true,
+    "canonical_or_index_or_goal_or_launcher_or_credit_edit": false,
+    "native_resource_UNKNOWN_service_account_controls_unchanged": true,
+    "no_broad_adapter_enable_or_feature_disable": true,
+    "old_green_image_and_failed_evidence": true,
+    "original_acceptance_delta": 0,
+    "perf_XPMEM_privateTID_TERMRESET_fixture_or_equivalent_selected": false
+  },
+  "reviewed_truth_table": [
+    {
+      "C_bodies_selected": false,
+      "Rust_module_instances": 1,
+      "body_dependency": "new existing source dependency",
+      "credential_C_macro": true,
+      "credential_Rust_cfg": true,
+      "profile": "Rust/x86_64/linux6.12/UBSAN_OFF; broad_adapter_OFF"
+    },
+    {
+      "C_bodies_selected": false,
+      "Rust_module_instances": 1,
+      "body_dependency": "existing broad source dependency reused",
+      "credential_C_macro": true,
+      "credential_Rust_cfg": true,
+      "old_forward_cfg": true,
+      "profile": "same supported profile; broad_adapter_ON"
+    },
+    {
+      "C_bodies_selected": true,
+      "Rust_module_instances": 0,
+      "change": "none",
+      "credential_C_macro": false,
+      "credential_Rust_cfg": false,
+      "profile": "Rust/x86_64/legacy; broad_adapter_OFF"
+    },
+    {
+      "C_bodies_selected": true,
+      "Rust_module_instances": 0,
+      "change": "none; no new ABI support claim",
+      "credential_C_macro": false,
+      "credential_Rust_cfg": false,
+      "profile": "Rust/x86_64/linux6.12/UBSAN_ON; broad_adapter_OFF"
+    },
+    {
+      "change": "none; existing unsupported profile validation remains",
+      "credential_C_macro": false,
+      "credential_Rust_cfg": false,
+      "profile": "Rust disabled or non-x86_64"
+    }
+  ],
+  "reviewer": "source_acquisition_review_max; independent current source/data review, same Root, no children",
+  "schema": "mckernel.m14.credential-refresh-independent-selector-review.v1",
+  "source_ready": {
+    "bytes": 1282,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-selection-1/SOURCE-READY.json",
+    "sha256": "fb433fd502d0e99559f9360bc402b77779ac06efcc05de290ab192213f651b6c"
+  },
+  "unchanged_evidence_reused": {
+    "exact_body_source": {
+      "bytes": 2684,
+      "path": "/home/holden/mckernel/kernel/rust/f03_credential_refresh.rs",
+      "sha256": "9d52bfd14779a4396bf98e20058f8eac5a15ce3da99cdd788f667db6146a0e7c"
+    },
+    "real_credential_callback_codegen": {
+      "bytes": 3165,
+      "path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/receipt.json",
+      "sha256": "4c7f8d0870e24088e92b5c1685c2dcd2b030ff55cf1ee8dac0365b40cd283d2f"
+    },
+    "real_old_producer_consumer_five_cases": {
+      "bytes": 2834,
+      "path": "/home/holden/mckernel/docs/verification/m14-credential-producer-results-20261105.json",
+      "sha256": "448c8e7c0ae21b7d441cf30f3d59c7d5370b0ae0e957df078c116d4c556f47e5"
+    },
+    "retained_cases": [
+      "failed/partial ioctl never publishes fields",
+      "ordinary setfsuid previous-ID contract",
+      "positive nonzero offload is not snapshot",
+      "real libc invalid-descriptor EBADF",
+      "real extracted producer exact UID/GID snapshot"
+    ],
+    "reuse_limit": "Prior HOST semantic cases and partial callback codegen remain their exact scope; no suite/fixture/compiler replay, no runtime/native/C-retirement or fullimage default adoption inferred.",
+    "source_body_identity_to_passing_fixture": {
+      "getcred_body_result": {
+        "current_body_sha256": "93c570bfa5864b0a8544474ebd17f235e9afd6a0f4d4c4469e1223aff5b1b3ec",
+        "current_first_line": 2210,
+        "exact_current_body_in_retained_passing_fixture": true
+      },
+      "syscall_refresh_cred_fields_body_result": {
+        "current_body_sha256": "8c0edc0915de6d37e65ebaf366f00cf54f6f3000a7c73abce20c2727dc0adeb3",
+        "current_first_line": 2257,
+        "exact_current_body_in_retained_passing_fixture": true
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "schema": "mckernel.m14.f06-changed-atomic-saved-result-qualification.v1",
+  "at_utc": "2026-11-10T20:02:01.703476+00:00",
+  "status": "PASS_EXACT_TWO_ADMITTED_CHANGED_ATOMIC_HOST_COMMANDS_SAVED_RESULT_QUALIFIED",
+  "owner": "public_abi_join_max actual Sol/MAX, independent of source/test preparer and Root executor; private saved-result qualification only",
+  "request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/TEST-REQUEST.PROPOSED.json",
+    "bytes": 7050,
+    "sha256": "b84c22972b9bda4eb734a33a77ac5d28b50ff211ab3a88f2f31f20bbe43a380f"
+  },
+  "material_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-review-publicabi-max-1/REVIEW.json",
+    "bytes": 20473,
+    "sha256": "79d066a09e591d232b614510f32cad5bebcd3a8690131bd5f07dadeb51f2cb8d"
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/RESULT.json",
+    "bytes": 2860,
+    "sha256": "8fdade9161671521eac364febcd8cb2d656a6050caa271ba7bb99cb7e5ca0c65"
+  },
+  "admission": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/ADMISSION.json",
+    "bytes": 629,
+    "sha256": "6fb908a0429c12a180973974a1ebccb176bbe60eb29433f3030f34e1855075d3"
+  },
+  "ownership": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/ownership.json",
+    "bytes": 816,
+    "sha256": "05f5bfb40935f93cb37fb479afabb64161e61f4cf7ac18fb2df9157373f49e32"
+  },
+  "raw_captures": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/compile-changed-diagnostic-counter-only.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/compile-changed-diagnostic-counter-only.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/entry-reset-postformatter-and-concurrent-count.stdout",
+      "bytes": 171,
+      "sha256": "38ea03634938a82da206fef1014f35b8e3ce86953196c022bc45ebddc874d2b0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/execution-1/entry-reset-postformatter-and-concurrent-count.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "test_source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/tests/diagnostic_budget.rs",
+    "bytes": 2806,
+    "sha256": "b73d451d0d32b9061d2a94d68b399dcdfb25530289ac8537d142c6a7d01e2fbb"
+  },
+  "new_executable": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-remaining-ownership-1/output-1/diagnostic-budget",
+    "bytes": 4441648,
+    "sha256": "8498089f8adabd2a556498e659c676258973b51c8dcb5b440c03aec5e4e0d858"
+  },
+  "actual_interval": {
+    "started": "2026-11-10T20:00:25.545686+00:00",
+    "finished": "2026-11-10T20:00:25.765893+00:00"
+  },
+  "actual_checks": [
+    "Both actual argv arrays exactly equal the two previously reviewed request commands, in the same order; no extra phase, compiler flag, runtime command or new test.",
+    "Compile exit0, empty stdout/stderr; actual runtime exit0, empty stderr and exact171-byte JSON with entry_reset=true,post_formatter_reread=true,joined_workers=2,increments=2000,kernel_runtime=false.",
+    "Current test bytes retain the reviewed b73d source and exact3bd8 production atomic slice qualification from79d066. No new source-body audit or inference that HOST executed the signal/kernel paths.",
+    "Output executable8498089f8adabd2a556498e659c676258973b51c8dcb5b440c03aec5e4e0d858 matches its actual saved bytes; runtime argv selects that exact private path.",
+    "Two distinct actual positive leader/birth rows, direct parent joins/status0, whole descendants joined, streams closed; no timeout/signalled group/adopted reaps/adopted kills/remaining children/error. Runtime test code joins both std worker handles before emitting PASS; no ownership UNKNOWN or old reservation was released."
+  ],
+  "actual_lifecycle": [
+    {
+      "label": "compile-changed-diagnostic-counter-only",
+      "leader": 1076759,
+      "birth": "42709162",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "whole_family_joined": true,
+      "streams_closed": true
+    },
+    {
+      "label": "entry-reset-postformatter-and-concurrent-count",
+      "leader": 1076774,
+      "birth": "42709182",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "whole_family_joined": true,
+      "streams_closed": true
+    }
+  ],
+  "admitted_shared_resources": {
+    "CPU": 6,
+    "new_jobs": 1,
+    "retained_UNKNOWN_jobs": 1,
+    "max_jobs": 3,
+    "address_space_bytes": 2147483648,
+    "new_job_reserved_bytes": 2147483648,
+    "all_controller_worker_overhead_bytes": 1551015936,
+    "retained_UNKNOWN_reserved_bytes": 268435456,
+    "actual_sum_reserved_bytes": 3966935040,
+    "HOST_pool_bytes": 4294967296,
+    "MemAvailable_bytes": 29344653312,
+    "host_free_bytes": 124435431424,
+    "scratch_free_bytes": 124435431424,
+    "native_admitted": false
+  },
+  "decision_for_P04": "Necessary changed-atomic HOST behavior is now actually PASS, so the reviewed F06 source may be coalesced into an unfrozen next production cohort, or the immediate next cohort if already frozen.79d066 source/ABI/wholeON-plan review remains reused; Root/P04 must still freeze and independently review actual composed production operation and execute its real image ownership/provider checks.",
+  "scope_limits": [
+    "Pure diagnostic-sharing state only; no kernel signal/frame/GS/XSAVE/usercopy/allocator/stop/core/termination execution.",
+    "No default promotion, native/deployment, C retirement, whole-image/wholeF06/M14/M15 acceptance or score change.",
+    "Old UNKNOWN CPU0/256MiB/job1 and all source/native/service/account controls remain unchanged.",
+    "No compiler/test/readback/old-suite replay, new test/source edit or canonical/control/launcher/budget mutation by qualifier."
+  ],
+  "acceptance_delta": 0,
+  "operations": "Read exact saved raw/result/admission/ownership and bound current request/review/test/output bytes; static JSON/argv/identity comparisons; write only this private saved-result qualification."
+}
