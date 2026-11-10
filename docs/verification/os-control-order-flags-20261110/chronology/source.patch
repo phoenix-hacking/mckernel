@@ -1,0 +1,14 @@
+--- a/scripts/run_os_goal.py
++++ b/scripts/run_os_goal.py
+@@ -864,7 +864,10 @@
+         sending_dir = control / "sending"
+         if any(sending_dir.glob("*.json")):
+             return  # An uncertain earlier delivery must be resolved before newer ones.
+-        pending = sorted((control / "pending").glob("*.json"))
++        pending = sorted(
++            (control / "pending").glob("*.json"),
++            key=lambda path: (datetime.fromisoformat(json.loads(path.read_text())["submitted_at"]),
++                              path.name))
+         if not pending:
+             return
+         sending_dir.mkdir(mode=0o700, parents=True, exist_ok=True)

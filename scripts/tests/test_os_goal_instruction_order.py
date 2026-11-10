@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""Instruction submission chronology with actual tempdir producer and FakeRPC only."""
+import json
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+
+from scripts.tests.test_os_goal_launcher import FakeRPC, goal, launcher
+
+
+class InstructionOrderTests(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory(prefix="os-instruction-order-")
+        self.addCleanup(temp.cleanup)
+        self.directory = Path(temp.name)
+        self.args = launcher.arguments(["--hours", "0", "--agent-windows", "off", "--recovered"])
+        self.control = self.directory / "instructions"
+        self.attach_fake_campaign()
+
+    def attach_fake_campaign(self):
+        self.campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        self.addCleanup(self.campaign.output.close)
+        self.campaign.state["thread_id"] = "test-thread"
+        self.campaign.controlled = True
+        self.campaign.goal = goal()
+        self.rpc = FakeRPC(self.args, goal())
+        self.addCleanup(self.rpc.close)
+        self.rpc.on_event = self.campaign.event
+        self.campaign.rpc = self.rpc
+        self.rpc.started("instruction-turn-1")
+        self.campaign.save()
+
+    def queue(self, text, submitted_at, source_id=None):
+        # Exercise the real durable producer for BOTH instruction types. No
+        # hand-written pending records or filename-based chronology oracle.
+        with patch.object(launcher, "utc", return_value=submitted_at):
+            ident = launcher.queue_instruction(self.directory, text, source_id=source_id)
+        return ident
+
+    def steer_calls(self):
+        return [params for method, params in self.rpc.calls if method == "turn/steer"]
+
+    def deliver_expected(self, ident, text, submitted_at):
+        if "test-thread" not in self.campaign.active:
+            self.rpc.started("instruction-turn-" + str(len(self.steer_calls()) + 1))
+        count = len(self.steer_calls())
+        self.campaign.deliver_instruction()
+        self.assertEqual(len(self.steer_calls()), count + 1)
+        params = self.steer_calls()[-1]
+        self.assertEqual(params["threadId"], "test-thread")
+        self.assertEqual(params["input"][0]["text"], "Live user instruction " + ident + ":\n" + text)
+        receipt_path = self.control / "delivered" / (ident + ".json")
+        receipt = json.loads(receipt_path.read_text())
+        self.assertEqual(receipt["id"], ident)
+        self.assertEqual(receipt["submitted_at"], submitted_at)
+        self.assertEqual(receipt["status"], "accepted_by_server")
+        self.assertEqual(self.campaign.state["last_instruction"], receipt)
+        self.assertFalse((self.control / "pending" / (ident + ".json")).exists())
+        self.assertFalse((self.control / "sending" / (ident + ".json")).exists())
+        self.assertFalse(any(method in {"thread/start", "thread/goal/set", "turn/start"}
+                             for method, _ in self.rpc.calls))
+        return receipt_path
+
+    def test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order(self):
+        # Deliberately choose chronological source IDs whose stable filenames
+        # sort in reverse. Their spelling is identity, never a timestamp.
+        first = self.queue("Earlier source instruction", "2026-11-10T04:48:01+00:00",
+                           source_id="instruction-source-second")
+        second = self.queue("Later source instruction", "2026-11-10T04:48:02+00:00",
+                            source_id="instruction-source-first")
+        self.assertGreater(first, second)
+        self.deliver_expected(first, "Earlier source instruction", "2026-11-10T04:48:01+00:00")
+        self.deliver_expected(second, "Later source instruction", "2026-11-10T04:48:02+00:00")
+        self.assertEqual(len(self.steer_calls()), 2)
+
+    def test_local_and_source_instructions_share_submission_chronology(self):
+        first = self.queue("Source before local", "2026-11-10T04:48:01+00:00",
+                           source_id="instruction-source-second")
+        middle = self.queue("Local between sources", "2026-11-10T04:48:02+00:00")
+        last = self.queue("Source after local", "2026-11-10T04:48:03+00:00",
+                          source_id="instruction-source-first")
+        self.assertLess(middle, first)
+        self.deliver_expected(first, "Source before local", "2026-11-10T04:48:01+00:00")
+        self.deliver_expected(middle, "Local between sources", "2026-11-10T04:48:02+00:00")
+        self.deliver_expected(last, "Source after local", "2026-11-10T04:48:03+00:00")
+        self.assertEqual(list((self.control / "pending").glob("*.json")), [])
+
+    def test_stable_source_id_dedup_preserves_original_content_and_accepted_receipt(self):
+        text, source = "One stable instruction", "stable-source-dedupe"
+        ident = self.queue(text, "2026-11-10T04:48:01+00:00", source_id=source)
+        pending = self.control / "pending" / (ident + ".json")
+        registry = self.control / "sources" / (ident[len("source-"): ] + ".json")
+        original, source_bytes = pending.read_bytes(), registry.read_bytes()
+        self.assertEqual(self.queue(text, "2026-11-10T04:48:02+00:00", source_id=source), ident)
+        self.assertEqual(pending.read_bytes(), original)
+        self.assertEqual(registry.read_bytes(), source_bytes)
+        with self.assertRaisesRegex(ValueError, "content changed"):
+            self.queue("Different instruction under same source", "2026-11-10T04:48:03+00:00", source_id=source)
+        self.assertEqual(pending.read_bytes(), original)
+        delivered = self.deliver_expected(ident, text, "2026-11-10T04:48:01+00:00")
+        accepted_bytes = delivered.read_bytes()
+        self.assertEqual(self.queue(text, "2026-11-10T04:48:04+00:00", source_id=source), ident)
+        self.assertEqual(delivered.read_bytes(), accepted_bytes)
+        self.assertEqual(registry.read_bytes(), source_bytes)
+        self.assertEqual(list((self.control / "pending").glob("*.json")), [])
+        self.rpc.started("post-dedupe-turn")
+        self.campaign.deliver_instruction()
+        self.assertEqual(len(self.steer_calls()), 1)
+
+    def test_unresolved_sending_instruction_blocks_newer_delivery_after_recovery(self):
+        ident = self.queue("Uncertain earlier delivery", "2026-11-10T04:48:01+00:00", source_id="uncertain-source")
+        pending = self.control / "pending" / (ident + ".json")
+        original = pending.read_bytes()
+
+        def lost_reply(method, params, **kwargs):
+            self.assertEqual(method, "turn/steer")
+            self.rpc.calls.append((method, params))
+            raise TimeoutError("test steer accepted but reply unavailable")
+
+        with patch.object(self.rpc, "call", side_effect=lost_reply):
+            self.campaign.deliver_instruction()
+        sending = self.control / "sending" / (ident + ".json")
+        self.assertEqual(sending.read_bytes(), original)
+        self.assertEqual(self.campaign.state["last_instruction"]["status"], "delivery_uncertain")
+        self.assertEqual(self.campaign.stop_reason, "rpc_delivery_uncertain")
+        self.assertEqual(len(self.steer_calls()), 1)
+        newer = self.queue("Newer instruction waits", "2026-11-10T04:48:02+00:00", source_id="newer-source")
+        new_pending = self.control / "pending" / (newer + ".json")
+        new_bytes = new_pending.read_bytes()
+        # Reattach only a fresh FakeRPC fixture; retain actual durable sending
+        # and state records. This exercises the sending guard independently of
+        # the predecessor's memory-only stop_reason latch.
+        self.attach_fake_campaign()
+        self.assertIsNone(self.campaign.stop_reason)
+        self.campaign.deliver_instruction()
+        self.assertEqual(self.rpc.calls, [])
+        self.assertEqual(sending.read_bytes(), original)
+        self.assertEqual(new_pending.read_bytes(), new_bytes)
+        self.assertFalse((self.control / "delivered" / (ident + ".json")).exists())
+        self.assertEqual(self.campaign.state["last_instruction"]["status"], "delivery_uncertain")
+
+
+if __name__ == "__main__":
+    unittest.main()

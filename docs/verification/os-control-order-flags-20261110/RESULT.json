@@ -1,0 +1,116 @@
+{
+  "status": "PASS_TWO_CONFIRMED_CONTROL_DEFECTS",
+  "invocation": "20261110T044806Z-3ecbebf5",
+  "incoming_commit": "ad526fc4e8484fced90265668486167566d7087d",
+  "parent": "96886e8450964979861c104772e6e9aa84b8eefa",
+  "adoption": {
+    "paths": 16,
+    "unrelated_dirty_tracked_paths_preserved": 33,
+    "ihk_unchanged": true,
+    "initial_exact_doc_boundary_correction_retained": true
+  },
+  "baseline": {
+    "chronology": {
+      "methods": 4,
+      "failures": 2,
+      "errors": 0,
+      "failing_methods": [
+        [
+          "FAIL",
+          "test_source_ids_deliver_by_submission_despite_reverse_hash_filename_order"
+        ],
+        [
+          "FAIL",
+          "test_local_and_source_instructions_share_submission_chronology"
+        ]
+      ],
+      "returncode": 1
+    },
+    "flags": {
+      "methods": 4,
+      "failures": 7,
+      "errors": 0,
+      "failing_methods": [
+        [
+          "FAIL",
+          "test_validator_preserves_each_explicit_optional_flag_combination"
+        ],
+        [
+          "FAIL",
+          "test_validator_preserves_each_explicit_optional_flag_combination"
+        ],
+        [
+          "FAIL",
+          "test_validator_preserves_each_explicit_optional_flag_combination"
+        ],
+        [
+          "FAIL",
+          "test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags"
+        ],
+        [
+          "FAIL",
+          "test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags"
+        ],
+        [
+          "FAIL",
+          "test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags"
+        ],
+        [
+          "FAIL",
+          "test_engine_exec_preserves_flags_and_authenticated_recovery_lineage"
+        ]
+      ],
+      "returncode": 1
+    }
+  },
+  "candidate": {
+    "chronology": {
+      "status": "PASS",
+      "methods": 4,
+      "returncode": 0
+    },
+    "flags": {
+      "status": "PASS",
+      "methods": 4,
+      "returncode": 0,
+      "flag_vectors": 10
+    }
+  },
+  "all_direct_waits_joined": true,
+  "test_cpus_released": [
+    6,
+    7
+  ],
+  "sources": {
+    "scripts/run_os_goal.py": "6f5ae87f0844db5718530f2198c2206a0d8900f951482ce5588243b832dc17a0",
+    "scripts/os_goal_service.py": "db1f492d78be56b3c2eb50b8dbf2477c5c7ffba3ea6583966dd3dd9a09b1047e"
+  },
+  "independent_review_sha256": "0e13710d6895a95e92a8c603af003791fbc9903ba7fafaa920e4071927492681",
+  "scope": "Actual producer/FakeRPC chronology controls and actual validator/parser/legacy bridge with all outer service/authorization/publication/exec effects mocked. Four chronology methods and four flag methods (10 flag vectors). No operational main/frontdoor/controller/guardian/mailbox/model/network/remote human message, service deployment or native operation.",
+  "contracts_preserved": [
+    "stable source IDs and exact instruction contents",
+    "dedupe/source registry and accepted/sending/refused receipts",
+    "uncertain sending refuses newer delivery",
+    "explicit opt-ins preserved, None intentional defaults retained",
+    "hidden/read-only validation and live ownership/resource/usage controls"
+  ],
+  "live_changes": {
+    "services_activated": false,
+    "mailbox_polled": false,
+    "notifications_posted_or_dispatched": false,
+    "guardian_handoff_or_recovery_performed": false,
+    "controller_reloaded": false,
+    "optional_flags_enabled": false,
+    "launcher_state_edited": false,
+    "new_goal_or_allowance": false
+  },
+  "original_credit_delta": {
+    "M14": 0,
+    "M15": 0,
+    "acceptance": 0,
+    "C_retirement": 0,
+    "native": 0
+  },
+  "reported_scope_reused": "Upstream166 focused and broader95failure/27error comparisons not rerun; no old7/12/provider replay.",
+  "remaining": "Original eligible universal/provider source and supported SDK/source-custody/native/currentfree bindings remain missing; no held equivalent retry."
+}

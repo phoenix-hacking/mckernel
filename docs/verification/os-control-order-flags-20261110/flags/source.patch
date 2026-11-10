@@ -1,0 +1,13 @@
+--- a/scripts/os_goal_service.py
++++ b/scripts/os_goal_service.py
+@@ -172,10 +172,6 @@
+               "--fresh-recovery-proof", "--recovery-goal-sha256", "--recovery-require-active"}
+     if any(value.split("=", 1)[0] in hidden for value in values):
+         raise ValueError("Internal recovery controls cannot be supplied as a new service start")
+-    if "--repair-agent-failures" not in values:
+-        values.append("--repair-agent-failures")
+-    if "--stop-after-m14-m15" not in values:
+-        values.append("--stop-after-m14-m15")
+     parsed = parse_arguments(values)
+     if any((parsed.status, parsed.progress, parsed.check, parsed.check_sudo, parsed.dry_run,
+             parsed.instruct is not None)):

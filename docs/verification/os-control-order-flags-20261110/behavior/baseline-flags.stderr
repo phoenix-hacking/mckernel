@@ -1,0 +1,117 @@
+test_validator_preserves_each_explicit_optional_flag_combination (scripts.tests.test_os_goal_service.ServiceTests) ... test_validator_none_keeps_intentional_both_true_defaults (scripts.tests.test_os_goal_service.ServiceTests) ... ok
+test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags (scripts.tests.test_os_goal_service.ServiceTests) ... test_engine_exec_preserves_flags_and_authenticated_recovery_lineage (scripts.tests.test_os_goal_service.ServiceTests) ... FAIL
+
+======================================================================
+FAIL: test_validator_preserves_each_explicit_optional_flag_combination (scripts.tests.test_os_goal_service.ServiceTests) (optional=())
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 241, in test_validator_preserves_each_explicit_optional_flag_combination
+    self.assert_explicit_engine_arguments(values, expected)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 212, in assert_explicit_engine_arguments
+    self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
+AssertionError: Tuples differ: (True, True) != (False, False)
+
+First differing element 0:
+True
+False
+
+- (True, True)
++ (False, False)
+
+======================================================================
+FAIL: test_validator_preserves_each_explicit_optional_flag_combination (scripts.tests.test_os_goal_service.ServiceTests) (optional=('--repair-agent-failures',))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 241, in test_validator_preserves_each_explicit_optional_flag_combination
+    self.assert_explicit_engine_arguments(values, expected)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 212, in assert_explicit_engine_arguments
+    self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
+AssertionError: Tuples differ: (True, True) != (True, False)
+
+First differing element 1:
+True
+False
+
+- (True, True)
++ (True, False)
+
+======================================================================
+FAIL: test_validator_preserves_each_explicit_optional_flag_combination (scripts.tests.test_os_goal_service.ServiceTests) (optional=('--stop-after-m14-m15',))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 241, in test_validator_preserves_each_explicit_optional_flag_combination
+    self.assert_explicit_engine_arguments(values, expected)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 212, in assert_explicit_engine_arguments
+    self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
+AssertionError: Tuples differ: (True, True) != (False, True)
+
+First differing element 0:
+True
+False
+
+- (True, True)
++ (False, True)
+
+======================================================================
+FAIL: test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags (scripts.tests.test_os_goal_service.ServiceTests) (optional=())
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 282, in test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags
+    self.assert_explicit_engine_arguments(config['arguments'], expected)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 212, in assert_explicit_engine_arguments
+    self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
+AssertionError: Tuples differ: (True, True) != (False, False)
+
+First differing element 0:
+True
+False
+
+- (True, True)
++ (False, False)
+
+======================================================================
+FAIL: test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags (scripts.tests.test_os_goal_service.ServiceTests) (optional=('--repair-agent-failures',))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 282, in test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags
+    self.assert_explicit_engine_arguments(config['arguments'], expected)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 212, in assert_explicit_engine_arguments
+    self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
+AssertionError: Tuples differ: (True, True) != (True, False)
+
+First differing element 1:
+True
+False
+
+- (True, True)
++ (True, False)
+
+======================================================================
+FAIL: test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags (scripts.tests.test_os_goal_service.ServiceTests) (optional=('--stop-after-m14-m15',))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 282, in test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags
+    self.assert_explicit_engine_arguments(config['arguments'], expected)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 212, in assert_explicit_engine_arguments
+    self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
+AssertionError: Tuples differ: (True, True) != (False, True)
+
+First differing element 0:
+True
+False
+
+- (True, True)
++ (False, True)
+
+======================================================================
+FAIL: test_engine_exec_preserves_flags_and_authenticated_recovery_lineage (scripts.tests.test_os_goal_service.ServiceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_service.py", line 321, in test_engine_exec_preserves_flags_and_authenticated_recovery_lineage
+    self.assertFalse(parsed.repair_agent_failures)
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.060s
+
+FAILED (failures=7)

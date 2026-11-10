@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "repository": "phoenix-hacking/mckernel",
+  "commit": "ad526fc4e8484fced90265668486167566d7087d",
+  "parent_and_local_head": "96886e8450964979861c104772e6e9aa84b8eefa",
+  "scope": "Bounded independent source-only mailbox/protocol/workflow review; exact guardian acknowledgement and queue consumer dependencies read as needed. Actual AGENTS.md and current CAMPAIGN.md read. No production imports/execution/tests/services/helper/inhibitor/model/native action, GitHub writes/dispatches, state/goal/canonical/index changes. Parent requested one additional exact service validator check after first finding; only that function, call path and named forwarding test were inspected.",
+  "identity": {
+    "comparison": "Pinned GitHub compare ahead1/behind0; merge-base equals exact local HEAD.",
+    "incoming_paths": 16,
+    "overlap": "Narrow git status on exactly16incoming paths is empty. Unrelated dirty work must be preserved; fresh HEAD/index/path checks remain Root responsibility before any adoption."
+  },
+  "confirmed_findings": [
+    {
+      "id": "SOURCE_HASH_IDS_REORDER_PENDING_INSTRUCTIONS",
+      "kind": "ordinary functional regression",
+      "source_evidence": [
+        "scripts/os_goal_mailbox.py:163-175 sorts GitHub comments by original integer id; poll383-426 queues recognized commands in that ascending order.",
+        "scripts/run_os_goal.py:244 records submitted_at; source-bound queue265-268 replaces timestamp-based id with source-SHA256(source_id);283 writes pending/<that hash id>.json.",
+        "scripts/run_os_goal.py:865-871 blocks uncertain earlier delivery, then sorted(pending.glob('*.json')) chooses pending[0]. Thus the consumer's chronological filename assumption no longer holds for the new producer.",
+        "scripts/run_os_goal.py:908-924 steers that selected text and writes accepted delivery receipt; a later call selects the remaining item."
+      ],
+      "normal_trigger": "Two or more valid unedited authorized /mckernel-instruct comments are collected before the controller consumes them; their stable source-ID hashes need not sort in the original comment/queue order. A newer local timestamp-named instruction can also sort ahead of every previously queued source-* item.",
+      "actual": "Controller delivery follows hash-filename order for mailbox messages rather than their existing queue order. An older direction may be delivered after its newer correction, changing the final instruction seen by Root. Stable dedupe/at-most-once alone does not preserve instruction sequence.",
+      "expected": "Retain stable source IDs and original at-most-once receipts while delivering pending instructions in their established chronological queue order. Preserve the existing rule that any unresolved sending item blocks newer delivery.",
+      "minimal_fix": "Use a durable explicit queue-order key/validated enqueue timestamp for selection rather than treating source identity hashes as chronological filenames; retain source-ID registry, content binding, idempotent retries, exact receipts and conservative uncertain delivery. Root should select the smallest compatible representation and deterministic tie behavior without rewriting delivered history.",
+      "meaningful_verification": "One focused offline producer/consumer test with two original-order mailbox comments whose source-hash lexical order is opposite, controlled distinct enqueue times, and FakeRPC controller steering: assert older then newer text, unchanged stable IDs, one delivery each and matching accepted receipts. A mixed mailbox/local item ordering case exercises the same changed selector; retain an unresolved sending-file refusal control. All GitHub GET/POST, queue consumer RPC, services/models/processes mocked; no real mailbox or controller activation. Test proposal only, not executed.",
+      "prior_test_scope": "Existing mailbox tests prove multiple comments queued and deduplicated, cursor/pagination, crash recovery and receipts; test_ten_minute_reads_allow_one_prompt_receipt_post_each_monitor_tick writes synthetic delivery receipts directly and does not exercise actual consumer ordering.",
+      "status": "SOURCE_CONFIRMED_NOT_EXECUTED"
+    },
+    {
+      "id": "EXPLICIT_LEGACY_OPT_INS_FORCED_TRUE",
+      "kind": "ordinary CLI compatibility defect",
+      "source_evidence": [
+        "scripts/os_goal_service.py:168-183 copies supplied arguments then appends --repair-agent-failures175-176 and --stop-after-m14-m15 177-178 before parsing179. default_arguments161-165 already supplies the intended default opt-ins when arguments is None.",
+        "scripts/run_os_goal.py:2157-2159 routes ordinary nonworker/nonsupervisor launch through start_os_overnight.launch_legacy; that function calls service_main([start], engine_arguments=list(arguments)) and promises to preserve flags. service start215-219 invokes the actual validator.",
+        "scripts/tests/test_os_goal_service.py:196 test_legacy_entry_points_forward_existing_cli_flags_exactly mocks service.main before actual validation, so only proves forwarding and misses false-to-true mutation."
+      ],
+      "normal_trigger": "An explicit legacy run_os_goal invocation omits either/both opt-in flags, including the current guarded invocation that intentionally has neither enabled.",
+      "actual": "Explicit omitted false options become true in service configuration; repair mode can schedule an unchanged-blocked diagnostic and milestone-stop mode can pause the larger goal. This changes caller-selected behavior even though argument forwarding itself is exact.",
+      "expected": "Use default_arguments only for the no-explicit-argument case. Preserve explicit caller lists and their absent/selected opt-in modes through validation; retain hidden-control/read-only rejection checks.",
+      "minimal_fix": "Remove unconditional insertion for explicit argument lists while preserving established default_arguments when arguments is None. No need for a new CLI surface, service activation or changes to source/native holds.",
+      "meaningful_verification": "Focused actual _validated_arguments plus real launcher parser cases: explicit neither flag yields both false; each single flag preserves its true/false pair; both remain true; None retains the existing default both-true recipe. Add legacy forwarding-to-real-validator coverage with only outer launch/service effects mocked, so the mutation path is exercised. No gh/systemctl/post/notification/inhibitor/model/native operation.",
+      "status": "SOURCE_CONFIRMED_NOT_EXECUTED"
+    }
+  ],
+  "bounded_assessment": {
+    "crash_queue": "enqueue_intent snapshot is persisted before queue_instruction; source-bound registry and stable content hash reconcile crash-after-queue without recreating pending when any pending/sending/delivered/refused item exists or registry is queued. Original comment timestamp retained for resume authorization. Saved intent is not silently replaced by edited/deleted remote comment.",
+    "cursor_identity": "Comments read only from configured repository/PR endpoint, bounded pagination, sorted integer IDs. Numeric user ID, login, User type, exact first-line command and original created_at==updated_at required. Non-command/edited/oversized comments get NOT_QUEUED receipts; cursor advances without executing their text.",
+    "receipt_semantics": "WAITING queue receipt is separate from ACCEPTED. Exact source-id delivered file must contain accepted_by_server, matching id and nonempty thread/turn/time with timezone. ACCEPTED reports acceptance rather than completion. Missing/ambiguous receipt remains WAITING. Outgoing accepted notice waits for observed received-notice bot marker.",
+    "outbox": "Durable event id/intent before POST; bounded one dispatch per tick, read-before-redispatch/backoff, same event id reused after ambiguous dispatch. Workflow serializes by event_id and looks for matching bot marker before creating a notice. No dispatch/comment was performed by this review.",
+    "resume_ack": "Mailbox returns pending resume until guardian authorize_start records source-bound intent then ack_resume removes pending mailbox request. Guardian stores original server-authored timestamp; _intent cancels a resume older than later recorded user-stop. This review does not authorize interpreting existing remote prose/comments as a new local instruction.",
+    "holds": "os_goal_guard_protocol.recovery_blocker retains terminal goals, account/policy/permission/source/resource/native holds, uncertain operations and unaccepted instructions. Explicit user mode can distinguish user stops, but does not release other holds. No automatic reactivation clearance established.",
+    "scope_limit": "No additional concrete defect established in this bounded review. Guardian/service runtime, real power-loss durability and broader CI are not executed or newly qualified here."
+  },
+  "adoption": {
+    "decision": "CONDITIONAL_GO_INERT_CODE_ONLY; confirmed ordering defect is a concrete new repair input, not original OS/source/native credit.",
+    "requirements": "Root sole compositor may prepare isolated pinned adoption with exact fast-forward and preservation of dirty files. No service installation/enabling, guardian/mailbox activation, GitHub posts/dispatches or goal resume follows from code publication/adoption. New run_os_goal service forwarding requires its own guarded invocation review, not a healthy-owner reload. Any later direct guarded invocation after adoption must explicitly use --supervisor to bypass new services/mailbox forwarding; this review does not authorize that invocation or repair-mode activation.",
+    "authority": "Preserve current6directHIGH/depth1, hours0/watchdog180/stall1200/maxrestarts3, included-only, CPUs0,6,7/max3aggregateLIGHT/4GiBTOTAL, later-stop and actual-new-input-before-blocked-resume controls. New unlimited recipe is context, not current user permission. All original source/SDK/native/UNKNOWN holds remain."
+  },
+  "validation": {
+    "upstream": "Reported166focused tests and synthetic guardian/notification smoke reused only at stated scope; not rerun. Prior broader419-test compatibility run remains failing as documented, not green.",
+    "performed": "Pinned connector source/patch review plus read-only local HEAD/exact-target overlap checks only.",
+    "original_acceptance_credit": 0
+  },
+  "sources": [
+    "https://github.com/phoenix-hacking/mckernel/blob/ad526fc4e8484fced90265668486167566d7087d/scripts/os_goal_mailbox.py",
+    "https://github.com/phoenix-hacking/mckernel/blob/ad526fc4e8484fced90265668486167566d7087d/scripts/run_os_goal.py",
+    "https://github.com/phoenix-hacking/mckernel/blob/ad526fc4e8484fced90265668486167566d7087d/scripts/os_goal_guard_protocol.py",
+    "https://github.com/phoenix-hacking/mckernel/blob/ad526fc4e8484fced90265668486167566d7087d/.github/workflows/mckernel-mailbox-notify.yml"
+  ],
+  "owner": "Root sole canonical compositor/review/admission owner"
+}

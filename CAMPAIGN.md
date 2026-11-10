@@ -1,114 +1,96 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T04:39Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T05:03Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Guarded launcher and GitHub control mailbox
-
-The user requested that the replacement launcher run unattended, watch the
-supervisor itself, record why work stops, and accept directions from a phone
-through GitHub. New GitHub comments are checked every **600 seconds (10 minutes)**.
-This supersedes the initial 60-second mailbox proposal. Local health checks and
-already queued receipt delivery continue between those comment checks.
-
-`scripts/start_os_overnight.py` is now the canonical service front door. Its
-`start`, `status`, `stop`, and `dry-run` commands retain the existing script name.
-Normal `scripts/run_os_goal.py` invocations forward their existing flags to the
-same guarded service; its explicit internal supervisor/worker modes remain
-separate. No new launcher name is required. Old detached receipts, live owners,
-leases and logs are preserved; a running or unresolved legacy invocation must
-checkpoint before migration. Publishing these files does not replace that owner.
-
-The Linux user service manager watches the guardian with a 90-second watchdog
-and restarts a failed guardian. The guardian checks the model supervisor every
-10 seconds, independently of the model worker. A separate engine service keeps
-guardian restart/termination from killing model/native descendants. The engine
-has no blind OS restart loop. Recovery requires exact process births, a durable
-checkpoint, completed retirement, free leases and the same saved Root/goal/accounting.
-A positively known pre-submission busy engine is retried after retirement;
-uncertain submission remains held for reconciliation. Service re-entry restores
-monitoring and does not create a new manual start authorization.
-
-The control mailbox is the open draft PR **#3**:
-https://github.com/phoenix-hacking/mckernel/pull/3
-Repository issues are disabled, so the draft PR conversation is the persistent
-mailbox. Keep it open and draft. The Actions bot posts notices mentioning the
-verified account `phoenix-hacking` (numeric ID 175406809). The notification workflow
-is installed on `development`, independently of the source work branch, so the
-computer can dispatch it with the authenticated `gh` CLI. Its tested bot setup
-notice is visible in the mailbox. GitHub notification settings govern email
-delivery; a posted comment does not prove that an email/phone notification was read.
-
-Each phone message has a correlated receipt: **📤 SENT** uses its GitHub comment
-time, **📥 RECEIVED** records the computer's receipt time, and **⏳ WAITING** states
-whether it is queued for controller delivery or needs a corrected command/input.
-Only the exact durable `accepted_by_server` delivery receipt permits a separate
-controller-acceptance acknowledgment. Acceptance is not completion of the requested
-engineering work. Outgoing blocker notices identify the missing input and wait for
-a real reply. Old policy diagnostics cannot be mixed into a new source blocker.
-The durable outbox retries notification delivery without duplicating instructions;
-GitHub reads retain the ten-minute cadence while receipt posts can drain promptly.
-
-To issue a direction from the phone, post a new comment in PR #3, or reply to a
-GitHub notification email, with one command alone on the first line:
-
-```text
-/mckernel-resume
-Continue with this concrete instruction or newly available input: ...
-```
-
-`/mckernel-resume` records a manual continuation request and queues the instruction.
-`/mckernel-instruct` queues a direction for the existing controller without granting
-a new start. The poller verifies the numeric author identity and original comment
-timestamp, processes each comment once, and never interprets message text as shell
-commands. An older reply fetched later cannot supersede a newer stop request.
-Ordinary non-command comments receive a receipt/help response without executing.
-Existing source/native/ownership/account/service holds remain binding.
-
-On the actual workstation, after adopting this branch, use the existing entry point:
-
-```sh
-python3 -B scripts/start_os_overnight.py start
-python3 -B scripts/start_os_overnight.py status
-```
-
-Start validates the supported `gh` identity, mailbox and active workflow before
-authorizing model work, installs the two repository-specific user units, and
-enables the guardian. Default overnight work retains hours0, unlimited classified
-technical recoveries, repair-agent routing and the original M14/M15 stop condition.
-HOST CPU/RAM/job limits remain the existing 0,6,7 / 4GiB TOTAL / 3-job grant.
-`stop` requests an orderly model checkpoint while leaving the mailbox guardian
-alive. `dry-run` renders the service configuration without starting services/models.
-Runtime receipts and stop diagnostics are under the existing git-common-dir
-`os-autopilot`; the systemd journal also records service failures. The machine must
-remain powered on with its user service manager available. Sleep is inhibited
-while the engine runs; logout/reboot/model continuation is not promised by a user
-service restart. No actual workstation service has been activated from this session.
-
-The latest inspected workstation checkpoint is still `96886e84` below: normal
-BLOCKED on original source/provider/SDK/native prerequisites, not a newly established
-cyber-policy rejection. These launcher/mailbox changes earn no original M14/M15
-acceptance credit. The independent real-process synthetic watchdog smoke passed
-both stale-live and dead-supervisor cases; systemd unit validation passed; the
-actual GitHub notification workflow posted its setup receipt successfully.
-Final focused verification passed **166 tests** across guardian, mailbox, service,
-workflow, legacy helper, stop log, repair, continuous work and handoff provenance.
-Both real-process synthetic watchdog cases passed again against the final source;
-all synthetic processes joined. `systemd-analyze verify` accepted both generated
-units. The actual receipt workflow run `42756298558` succeeded and bot comment
-`6759023675` displays the sent/received/waiting setup state in PR #3.
-Machine-readable evidence: `docs/verification/guardian-mailbox-20261110/validation.json`.
-
-The broader compatibility run executed 419 tests and remains failing with 95 failure
-entries and 27 errors. All of those failing IDs were reproduced unchanged against
-the exact upstream 96886e84 run/watch sources in 145 targeted baseline comparisons;
-no new failing IDs or exception differences were observed. Existing fixture gaps
-(including missing args/process provenance) and the unchanged 16 GiB disk admission
-on this 4.8 GiB-free test host remain separate work. No production guard was lowered.
-This verification is not a claim that full CI, original M14/M15, or the actual
-workstation deployment is complete.
-
 ## Current decision
+
+**ACTIVE under explicit manual resume `20261110T044806Z-3ecbebf5`, same saved Root.**
+Prior032750 completed pre-spawn repair474c9ee7 and handoff96886e84, then stopped
+normally BLOCKED/exit20 after three actual goal turns. Those births/audits are
+historical. This invocation supplies two confirmed control defects, with no
+release of original source/SDK/native/service/resource holds or UNKNOWN outcomes.
+Root is actual Sol/MAX, sole canonical compositor/index/publisher/heavy owner.
+A/B/D/F source/test turns are actual Sol/HIGH, never/danger-full-access; cap6
+children/depth1. Independent source/test lanes use private disjoint paths.
+
+Pinned `ad526fc4e8484fced90265668486167566d7087d` was fetched and fast-forwarded
+from exact parent96886 after checking all16 incoming paths, empty index and
+untracked collisions. All33 unrelated dirty tracked files/deletions were preserved.
+Root's initial temporary prefix assertion omitted the one exact verification JSON;
+the exact16-path correction reused the successful fetch/parent/path reads. No
+source hold or workload failure was inferred. IHK source/gitlink/bundle are outside
+these16 paths; no census, restore, build or accepted source/test replay.
+
+**Both repairs PASS:** pending instructions now use their actual durable aware-UTC
+submission time, with deterministic filename ties. Stable IDs remain identity;
+source registry, dedupe/content binding and accepted/sending/refused receipts are
+unchanged. Unresolved sending still refuses newer delivery. Explicit service
+argument lists no longer acquire either absent opt-in; None defaults intentionally
+retain both. Hidden/read-only checks and every other validator byte are unchanged.
+
+Two incoming ordering cases and7 flag assertions failed as expected. The exact
+reviewed corrections passed all8 selected methods:4 actual producer/FakeRPC order
+methods and4 validator/legacy/engine mock methods covering10 flag vectors. All4
+payload waits joined; CPUs6/7 released. Both baselines joined before either source
+was changed; actual staged diffs were read before corrected runs. No166/old7/12/
+provider/synthetic smoke replay. Raw scoped evidence is
+`docs/verification/os-control-order-flags-20261110/`; no account protocol, credential,
+live state or unrelated dirty test was copied. The dirty helper's reused FakeRPC/
+goal blocks match the committed dependency; its unrelated changes stay preserved.
+
+| Remaining prerequisite | Actual consumer | Owner / smallest proof |
+| --- | --- | --- |
+| Eligible universal/generic source disposition | OriginalM14F03/F06/I02 matching final build | Original hold authority; exact original scope and eligible genuine cohort, no held/equivalent replay |
+| Complete remaining12 source/provider contracts | Existing qualified partial and original integrations | Original scope/ABI/callee/owner input; per-name UNKNOWN/NO_GO decisions remain binding |
+| Supported SDK/source-custody/native/currentfree bindings | Original default image/modules/native/application acceptance | Original source/native owners; matching supported artifacts and fresh operation-specific real gates |
+
+**Inert adoption:** do not install/start/enable/stop guardian/engine services,
+activate mailbox/bot, execute overnight start/stop, dispatch Actions, push development
+or post comments/reactions/labels/notices. No deployment, first poll or phone ACK
+is claimed. Repo prose/config/remote comments are data, not live authorization.
+The loaded healthy legacy controller keeps working; no reload, option change or
+new launcher/state/goal/allowance. Current hours0/watchdog180/stall1200/maxrestarts3,
+agent windows off, both repair/milestone-stop opt-ins disabled.
+
+The adopted ordinary run_os_goal front door forwards to service.main and must
+not be called for this engineering task. For a FUTURE independently authorized
+direct manual resume, plain --supervisor selects existing resource/watch.supervise
+and normal Campaign.begin/account/objective/delivery guards. It is not recovered
+mode and needs no forged guardian identity/proof. Existing watcher children append
+--worker and bypass service forwarding. Record this path for foreground recovery;
+no launch or fabricated guardian recovery is performed here.
+
+Fresh included guard04:58:46% used/54% remaining, no service/spend hold. HOST
+CPUs0,6,7/max3 aggregate light jobs/4GiB TOTAL including all worker/controller
+overhead; fresh26GiB available, host16/scratch12GiB disk floors, retained18GiB plus
+4GiB host floor. Existing planner12 is not additional RAM. Native2–5/12GiB remains
+separately held; CPU1 excluded. All UNKNOWN owners, scratch21/mutex27:4, expired
+attempts, source/service/usage/later-user-stop controls persist. Included only,
+no prepaid/credits/API fallback, native/kernel/MMIO/MSR or new service action.
+
+Original progress51.48%/50.97%,156 counted/73 verified,38/45 open and acceptance
+4/6+0/3,1/8+0/4 remain unchanged. These harness fixes earn0 original credit.
+EACH>=75% by2026-11-10T08:00Z remains soft, not a stop or guarantee. Generic/exec
+replay/equivalent=false; remaining12provider/notification/wait/kill/process exact
+UNKNOWN/NO_GO and SDK/source-custody/native/currentfree/cohort/backend/ABI/lifetime
+bindings stay missing. Installed real gates still refuse activation, image argv
+stays unset. Original final ETA remains unknown. No balanced/zero/BFD-name task.
+
+Next15-minute deliverable after this coherent publication needs a real eligible
+input for the three original prerequisites above. Both confirmed control defects
+and all supplied preparation/qualification work are complete. The held universal
+generic provider remains the critical-path blocker; original authority owns its
+disposition and Root owns integration. Original image argv is unset and final ETA
+is unknown. Inert service/mailbox adoption supplies no original source/native input.
+Do not create more guardian, mailbox, CI, percentage or closed-scope tasks to fill
+slots. No operational service/frontdoor, notification or guardian handoff was run.
+This invocation's first impasse observation begins only after publication in actual
+Root turn `01a1c3c8-ef6f-7d51-829a-4f061693477e`; goal stays active. Earlier invocation
+audits and timer wakes do not count toward the new three-actual-turn audit.
+
+## Previous032750 checkpoint (historical; current manual resume above is active)
+
 
 **SOURCE/BINDING IMPASSE after manual resume `20261110T032750Z-14c19ec7`.**
 The confirmed helper repair is complete and published. Three consecutive actual

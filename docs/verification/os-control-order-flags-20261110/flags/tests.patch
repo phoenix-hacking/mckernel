@@ -1,0 +1,122 @@
+--- a/scripts/tests/test_os_goal_service.py
++++ b/scripts/tests/test_os_goal_service.py
+@@ -1,6 +1,7 @@
+ """Service boundaries with fake systemd, GitHub and exec; no workloads started."""
+-from contextlib import redirect_stdout
++from contextlib import nullcontext, redirect_stdout
+ import fcntl
++import hashlib
+ import io
+ import json
+ from pathlib import Path
+@@ -193,6 +194,100 @@
+         self.preflight.assert_not_called()
+         self.systemctl.assert_not_called()
+ 
++    def explicit_engine_arguments(self):
++        instruction = self.repo / 'scripts' / 'explicit-engine-instruction.txt'
++        instruction.write_text(
++            'Continue eligible work only. HOST CPUs0,6,7: max3 jobs and4 GiB TOTAL '
++            'including overhead. Planner12 GiB is a ceiling, not extra HOST RAM. '
++            'Preserve source, native and service holds.')
++        digest = hashlib.sha256(instruction.read_bytes()).hexdigest()
++        return ['--hours', '0', '--watchdog-seconds', '180', '--stall-seconds', '1200',
++                '--max-restarts', '3', '--max-agents', '6', '--build-jobs', '3',
++                '--memory-gib', '12', '--profile', 'aggressive', '--agent-windows', 'off',
++                '--startup-instruction-file', str(instruction),
++                '--startup-instruction-sha256', digest]
++
++    def assert_explicit_engine_arguments(self, values, expected_pair):
++        parsed = launcher.arguments(values)
++        self.assertEqual((parsed.repair_agent_failures, parsed.stop_after_m14_m15), expected_pair)
++        self.assertEqual(parsed.hours, 0)
++        self.assertEqual(parsed.watchdog_seconds, 180)
++        self.assertEqual(parsed.stall_seconds, 1200)
++        self.assertEqual(parsed.max_restarts, 3)
++        self.assertEqual(parsed.max_agents, 6)
++        self.assertEqual(parsed.build_jobs, 3)
++        self.assertEqual(parsed.memory_gib, 12)
++        self.assertEqual(parsed.profile, 'aggressive')
++        self.assertEqual(parsed.agent_windows, 'off')
++        instruction = self.repo / 'scripts' / 'explicit-engine-instruction.txt'
++        self.assertEqual(parsed.startup_instruction_file, instruction)
++        self.assertEqual(parsed.startup_instruction, instruction.read_text())
++        self.assertEqual(parsed.startup_instruction_sha256,
++                         hashlib.sha256(instruction.read_bytes()).hexdigest())
++        # Parsing a planner ceiling does not grant more than the source-bound HOST budget.
++        self.assertIn('4 GiB TOTAL', parsed.startup_instruction)
++        self.assertIn('not extra HOST RAM', parsed.startup_instruction)
++
++    def test_validator_preserves_each_explicit_optional_flag_combination(self):
++        cases = [((), (False, False)),
++                 (('--repair-agent-failures',), (True, False)),
++                 (('--stop-after-m14-m15',), (False, True)),
++                 (('--repair-agent-failures', '--stop-after-m14-m15'), (True, True))]
++        for optional, expected in cases:
++            with self.subTest(optional=optional):
++                flags = self.explicit_engine_arguments() + list(optional)
++                original = flags.copy()
++                values = subject._validated_arguments(self.repo, flags)
++                self.assert_explicit_engine_arguments(values, expected)
++                self.assertEqual(values, original)
++                self.assertEqual(flags, original)
++
++    def test_validator_none_keeps_intentional_both_true_defaults(self):
++        values = subject._validated_arguments(self.repo, None)
++        parsed = launcher.arguments(values)
++        self.assertEqual(values, subject.default_arguments(self.repo))
++        self.assertTrue(parsed.repair_agent_failures)
++        self.assertTrue(parsed.stop_after_m14_m15)
++        self.assertEqual(parsed.memory_gib, 4)
++
++    def test_legacy_forwarding_reaches_real_validator_without_adding_optional_flags(self):
++        cases = [((), (False, False)),
++                 (('--repair-agent-failures',), (True, False)),
++                 (('--stop-after-m14-m15',), (False, True)),
++                 (('--repair-agent-failures', '--stop-after-m14-m15'), (True, True))]
++        for optional, expected in cases:
++            with self.subTest(optional=optional):
++                flags = self.explicit_engine_arguments() + list(optional)
++                original = flags.copy()
++                output = io.StringIO()
++                # Keep launch_legacy, service.main/start, validator and parser real.
++                # Mock only service ownership, publication and external launch effects.
++                with patch.object(subject, 'REPO', self.repo), \
++                        patch.object(subject, 'runtime_directory', return_value=self.directory), \
++                        patch.object(subject.os, 'umask'), \
++                        patch.object(subject, '_service_lock', return_value=nullcontext()), \
++                        patch.object(subject, 'lease_free', return_value=True), \
++                        patch.object(subject, '_legacy_owner', return_value=None), \
++                        patch.object(guardian, 'authorize_start', return_value={'request_id': 'fake-intent'}) as authorize, \
++                        patch.object(subject, 'atomic_json') as publish, \
++                        patch.object(subject, 'status', return_value={'status': 'NOT_STARTED'}), \
++                        patch.object(subject.subprocess, 'Popen', side_effect=AssertionError('No process launch')), \
++                        patch.object(subject, '_validated_arguments', wraps=subject._validated_arguments) as validate, \
++                        redirect_stdout(output):
++                    self.assertEqual(overnight.launch_legacy(flags), 0)
++                validate.assert_called_once_with(self.repo.resolve(), original)
++                publish.assert_called_once()
++                destination, config = publish.call_args.args
++                self.assertEqual(destination, self.directory / subject.CONFIG)
++                self.assert_explicit_engine_arguments(config['arguments'], expected)
++                self.assertEqual(config['arguments'], original)
++                self.assertEqual(flags, original)
++                authorize.assert_called_once_with(self.directory)
++                self.assertEqual(json.loads(output.getvalue())['start_request_id'], 'fake-intent')
++                self.assertFalse((self.directory / subject.CONFIG).exists())
++                self.assertFalse((self.directory / 'guardian-intents').exists())
++                self.exec.assert_not_called()
++
+     def test_legacy_entry_points_forward_existing_cli_flags_exactly(self):
+         flags = ['--hours', '24', '--max-restarts', '-1', '--token-budget', '5000', '--agent-windows', 'off']
+         with patch.object(subject, 'main', return_value=7) as entry:
+@@ -223,7 +318,8 @@
+         self.assertEqual(parsed.guardian_run_id, guard['run_id'])
+         self.assertEqual(parsed.guardian_recovery_proof, Path(launch['proof_path']))
+         self.assertEqual(parsed.max_agents, 2)
+-        self.assertTrue(parsed.repair_agent_failures and parsed.stop_after_m14_m15)
++        self.assertFalse(parsed.repair_agent_failures)
++        self.assertFalse(parsed.stop_after_m14_m15)
+ 
+     def test_engine_rejects_stale_guardian_or_mismatched_launch_without_exec(self):
+         guard, launch = self.engine_fixture()

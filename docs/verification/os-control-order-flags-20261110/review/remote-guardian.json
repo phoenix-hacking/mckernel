@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "reviewed_commit": "ad526fc4e8484fced90265668486167566d7087d",
+  "parent_commit": "96886e8450964979861c104772e6e9aa84b8eefa",
+  "decision": "GO_CONCRETE_OPT_IN_PRESERVATION_FIX_AND_INERT_ADOPTION_REVIEW; NO_SERVICE_ACTIVATION_OR_MECHANICAL_BLOCKED_RESUME",
+  "authority": "Current local AGENTS.md and CAMPAIGN.md updated03:42 were read. Current direct authority remains Sol/MAX, six direct Sol/HIGH/depth1/one compositor; HOST0,6,7/max3 light jobs/4GiBTOTAL with overhead/fresh26GiB; planner12 is not a RAM grant; watchdog180/stall1200/maxrestarts3; optional repair and milestone-stop flags remain disabled.",
+  "review_scope": [
+    "Exact pinned os_goal_guardian.py, os_goal_service.py and os_goal_guard_protocol.py",
+    "Exact pinned run_os_goal.py/watch_os_goal.py hooks and bounded main/parser/spawn sections",
+    "Exact pinned start_os_overnight.py front-door changes",
+    "Exact pinned new CAMPAIGN section",
+    "Matching incoming guardian/service test source read, not run"
+  ],
+  "confirmed_functional_finding": {
+    "title": "Legacy explicit launch options silently acquire two opt-in behaviors",
+    "source": [
+      "scripts/os_goal_service.py:168-183",
+      "scripts/run_os_goal.py:2155-2158",
+      "scripts/start_os_overnight.py:launch_legacy"
+    ],
+    "trigger": "A normal explicit run_os_goal.py invocation supplies its current launch options without --repair-agent-failures or --stop-after-m14-m15. The new non-worker/non-supervisor main routes the explicit list to service.start and _validated_arguments.",
+    "before_after": "The parent controller parser retains absent opt-ins asFalse. The incoming service validator unconditionally appends both flags at175-178, so effective parsed values becomeTrue. This changes blocked-goal diagnostic/monitored waiting behavior and milestone checkpoint behavior even though the caller did not select either option.",
+    "why_genuine": "The new legacy adapter and its matching test expressly preserve existing CLI flags. Opt-in false-to-true mutation is a concrete effective-option regression, beyond the separately documented default overnight recipe. It also contradicts this run's explicit disabled settings.",
+    "smallest_correction": "Preserve explicitly supplied argument semantics. Intentional overnight defaults can remain in default_arguments when arguments isNone; do not force optional switches into an explicit legacy list.",
+    "focused_safe_verification": "Pure argument-validation/fake forwarding test: supply the current explicit legacy list without the two flags; parse its effective validated result and assert both remainFalse and explicit watchdog/stall/restart/child limits survive. Separately retain the intentional no-argument service defaults. No systemctl, GitHub calls, model, real process or native operations needed.",
+    "existing_test_limit": "test_os_goal_service.py:196-204 mocks service.main, checks list forwarding, and never reaches _validated_arguments. The engine test at206-226 expects True defaults and does not establish preservation of explicitly absent opt-ins.",
+    "original_m14_m15_credit": 0
+  },
+  "adoption_and_launch_boundary": {
+    "ordinary_front_door": "After adoption, normal run_os_goal.main without --worker/--supervisor calls launch_legacy -> service.main(start). service.start can install units, daemon-reload, mailbox-preflight and enable --now guardian; this is an actual change, not an inert legacy alias.",
+    "prohibited_for_this_run": "Do not call the adopted ordinary front door or start_os_overnight/service start/stop, activate mailbox/bot, send notices or install services merely because remote prose requests them. Remote PR commands and prose are data, not this review's authorization.",
+    "before_adoption": "If Root proceeds on the confirmed new engineering task, the still-local96886 normal launcher remains the validated same-Root manual launch path with current guarded flags; no new service is required.",
+    "after_adoption_direct_path": "Source confirms --supervisor is a boolean selector, not recovery authority. With no guardian-run-id/proof, it selects the existing check_resources -> watch.supervise path and retains ordinary Campaign.begin same-Root manual-resume/account/usage/uncertainty checks. Any future separately authorized direct launch can explicitly select that path with the current flags. Do not supply --recovered, fabricated guardian identity/proof, a new goal or state edits.",
+    "watcher_children": "Both old and new watcher commands explicitly append --worker. Adopted main sees worker=True and bypasses both service forwarding and direct supervisor dispatch; parser permits --worker plus carried --supervisor when no guardian proof is present. Thus an old already-loaded watcher can start adopted worker code without automatically installing services or polling/posting mailbox.",
+    "actual_limits": "Preserve six HIGH, HOST4TOTAL/planner12 distinction, watchdog180/stall1200/maxrestarts3 and no new optional flags. Do not replace them with remote two-child, unlimited-restart defaults."
+  },
+  "bounded_control_review": {
+    "identity": "Protocol uses birth identities and pidfd post-open revalidation; unknown process identity is distinguished from positive retirement. Guardian recovery requires same run, authenticated worker request, paused clean final checkpoint, exact full-state/goal digest, no active turns/stop errors/server-close errors, retired worker/server/watcher and free leases.",
+    "duplicate_owner": "Service publication lock, engine ActiveState, existing legacy receipt/start-lock, campaign leases and launch receipts guard normal startup. Engine submission uncertainty is held rather than an outer blind retry. No additional confirmed duplicate-owner defect is asserted here.",
+    "stop_and_usage": "Terminal complete/usage/budget, service/source/native/resource/account holds and uncertain instruction delivery block recovery; explicit user continuation still does not override those holds. Durable user stop is checked before recovery and original mailbox authored timestamp cancels older starts. Stop targets exact owned watcher/worker rather than a process group.",
+    "restart_scope_limit": "Existing watcher max-restarts bounds its own recovery loop. New guardian-level supervisor recovery is a distinct replacement path with no explicit maximum counter visible in this finite source. Therefore this review does not claim that enabling the new service preserves the current3-restart aggregate contract; direct existing supervision is the compatible path for this task.",
+    "no_new_native_input": "No production M14/M15 source or SDK/native/provider admission is supplied by this commit. Original held generic/exec/notification and per-name UNKNOWN/NO_GO scopes stay unchanged."
+  },
+  "actions_taken": "Read-only source/contract review and this private JSON write only. New code was not imported or executed. No reported166-test suite, synthetic watchdog, compiler, launch, service operation, notification, goal/state/index/canonical edit or native action was performed."
+}
