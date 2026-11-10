@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "source_parent": "cc9933eb7fdca877179cf173f43ae29c0516aa47",
+  "scope": "Actual workstation guardian startup compatibility and durable credit-run identity",
+  "inhibitor_baseline": {
+    "result": "FAIL",
+    "diagnostic": "systemd-inhibit: unrecognized option '--no-ask-password'",
+    "same_scoped_command_without_unsupported_option_exit": 0,
+    "privilege_fallback": false
+  },
+  "credit_regression": {
+    "method": "test_credit_identity_is_durable_before_start_and_reused_by_guardian_recovery",
+    "baseline": "FAIL: The identity must be durable before guardian enablement",
+    "candidate": "PASS",
+    "verified": [
+      "Credit identity is in durable CONFIG before service enablement",
+      "Initial and authenticated guardian recovery engine commands use the same credit identity and budget",
+      "Recovered accounting retains cumulative spending and remaining allowance"
+    ]
+  },
+  "focused_validation": {
+    "methods": 8,
+    "result": "PASS",
+    "scope": "credit identity, guardian inhibition and notifications, authenticated engine recovery, pending intent settings, pre-enable intent persistence, scoped power probe, probe failure and diagnostic bounds, retained detached command construction",
+    "cpu": 0,
+    "native_or_model_execution": false
+  },
+  "actual_prepare": {
+    "result": "PREPARED",
+    "all_checks": "PASS",
+    "model_calls": 0,
+    "services_started": false,
+    "custom_launch_arguments": "Separately recorded and admitted; prepare checks bundled defaults only"
+  },
+  "unit_verify": {
+    "exit_code": 0,
+    "diagnostics": "Unrelated installed host-unit and analysis-manager warnings; complete output retained privately"
+  },
+  "independent_review": "PASS: existing Sol/HIGH lifecycle reviewer inspected the exact five-file diff without execution or edits",
+  "preserved": "Original same Root, source/native/resource/UNKNOWN holds, acceptance criteria, later stops and all 33 unrelated tracked dirty entries",
+  "original_milestone_credit": 0,
+  "private_evidence": "/home/holden/mckernel-work/m14-m15-new-launch-20261110T0555Z"
+}

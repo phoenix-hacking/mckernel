@@ -58,8 +58,10 @@ def probe_inhibition():
     """Acquire then release a short lock, proving permission without permanent policy."""
     if not sys.executable or not Path(sys.executable).is_absolute():
         raise RuntimeError("The inhibition probe requires the current absolute Python executable")
+    # Older supported systemd-inhibit versions have no --no-ask-password
+    # option. The bounded subprocess already has stdin disconnected.
     _run([_binary("systemd-inhibit"), "--what=" + INHIBIT_WHAT, "--mode=block",
-          "--no-ask-password", "--who=McKernel readiness",
+          "--who=McKernel readiness",
           "--why=Verify overnight idle sleep and lid inhibition", "--",
           sys.executable, "-B", "-c", "pass"], "Noninteractive overnight inhibition probe")
     return {"verified": True, "what": INHIBIT_WHAT, "mode": "block", "persistent": False}

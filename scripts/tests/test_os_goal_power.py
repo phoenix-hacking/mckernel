@@ -97,7 +97,8 @@ class PowerReadinessTests(unittest.TestCase):
                                   "mode": "block", "persistent": False})
         command = self.command.call_args.args[0]
         self.assertEqual(command[0], "/fake/systemd-inhibit")
-        self.assertEqual(command[1:4], ["--what=idle:sleep:handle-lid-switch", "--mode=block", "--no-ask-password"])
+        self.assertEqual(command[1:3], ["--what=idle:sleep:handle-lid-switch", "--mode=block"])
+        self.assertNotIn("--no-ask-password", command)
         self.assertEqual(command[command.index("--") + 1:], ["/fake/python", "-B", "-c", "pass"])
         self.assertNotIn("shutdown", command[1])
         self.assertEqual(self.command.call_count, 1)

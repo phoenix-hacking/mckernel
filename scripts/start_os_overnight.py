@@ -102,7 +102,7 @@ def build_command(repo, *, python=None, inhibit=None, taskset=None):
     taskset = taskset or shutil.which("taskset")
     if not inhibit or not taskset:
         raise RuntimeError("systemd-inhibit and taskset are required; no uninhibited fallback")
-    return [str(inhibit), "--what=idle:sleep", "--mode=block", "--no-ask-password",
+    return [str(inhibit), "--what=idle:sleep", "--mode=block",
             "--who=McKernel", "--why=Finish original M14 and M15 while the workstation is idle",
             "--", str(taskset), "-c", "0,6,7", str(python or sys.executable), "-B",
             str(repo / "scripts/run_os_goal.py"), "--hours", "0", "--max-restarts", "-1",

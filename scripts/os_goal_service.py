@@ -59,7 +59,7 @@ def render_units(repo, directory, *, python=None, path_environment=None):
     # The long-lived Python child sends READY/WATCHDOG, so NotifyAccess=all lets
     # systemd accept its notifications within the inhibitor wrapper's cgroup.
     guardian_command = " ".join(_quote(v) for v in (
-        inhibit, "--what=idle:sleep:handle-lid-switch", "--mode=block", "--no-ask-password", "--who=McKernel guardian",
+        inhibit, "--what=idle:sleep:handle-lid-switch", "--mode=block", "--who=McKernel guardian",
         "--why=Keep overnight monitoring and the phone mailbox awake", "--")) + " " + command
     # WorkingDirectory is a single path, not an ExecStart-style quoted word.
     # Literal quotes would become part of the path and fail systemd validation.
@@ -263,6 +263,12 @@ def start(repo, directory, arguments=None):
                 intent = pending[0]
             else:
                 verified = mailbox_preflight(repo)
+                from run_os_goal import arguments as parse_arguments
+                parsed = parse_arguments(values)
+                # Guardian recovery reconstructs this durable argv, rather than
+                # the first supervisor's in-memory worker command.
+                if parsed.credit_budget is not None and parsed.credit_run_id is None:
+                    values += ["--credit-run-id", uuid4().hex]
                 atomic_json(directory / CONFIG, {"schema_version": 1, "repo": str(repo),
                                                   "arguments": values, "mailbox_preflight": verified})
                 intent = authorize_start(directory)
@@ -306,7 +312,7 @@ def engine(repo, directory):
     inhibit, taskset = shutil.which("systemd-inhibit"), shutil.which("taskset")
     if not inhibit or not taskset:
         raise RuntimeError("Sleep protection and taskset are required; engine was not started")
-    command = [inhibit, "--what=idle:sleep", "--mode=block", "--no-ask-password", "--who=McKernel",
+    command = [inhibit, "--what=idle:sleep", "--mode=block", "--who=McKernel",
                "--why=Unattended M14/M15 work", "--", taskset, "-c", "0,6,7", sys.executable,
                "-B", str(Path(repo) / "scripts/run_os_goal.py"), *values]
     os.execv(command[0], command)

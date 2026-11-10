@@ -1,7 +1,42 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T05:32Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T06:05Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+## Workstation start authorization and compatibility fixes
+
+The foreground user explicitly resumed the pause with "ok lets start it up with
+our new and improved scripts", then requested bug fixes and a GitHub push.
+This supersedes the earlier inert-adoption and user-pause instructions for this
+new start. Activation is being verified on the actual workstation; preparation
+alone is not proof of a live guardian, model worker or first mailbox poll.
+
+The user's later billing instruction supersedes the older included-only rule:
+use the remaining included weekly allowance first, then existing signed-in Codex
+credits as needed for original M14/M15 closure. Use a fresh finite balance-backed
+credit budget, with the same durable run ID and cumulative spending across
+recoveries. No credit purchases, automatic top-up or API-key billing are allowed.
+Fresh pre-start observation showed47% used/53% remaining and no spending hold.
+
+This explicit invocation retains Sol/MAX, up to six independent Sol/HIGH owners,
+depth1, one compositor/heavy owner, hours0, watchdog180, stall1200 and bounded
+watcher max-restarts3. Repair routing and stop-after-original-M14/M15 are enabled.
+Planner12GiB supports six remote owners; actual HOST remains CPUs0,6,7, three
+aggregate light jobs and4GiB TOTAL, with fresh26GiB available and existing disk
+floors. The bundled overnight defaults below describe a different argument list.
+No source/provider/SDK/native hold, UNKNOWN outcome or original criterion changes.
+
+Two actual startup defects were fixed. The installed `systemd-inhibit` rejects
+`--no-ask-password`; removing that unsupported inhibitor option preserves the
+same scoped inhibition and bounded, disconnected-input probe. The loginctl option
+is unchanged. Credit starts now persist their run ID in the service configuration
+before guardian enablement, so recovery cannot generate a replacement allowance.
+The new credit regression failed before the fix; all eight focused changed-path
+checks pass, and actual workstation `prepare` now passes every check. Generated
+units pass systemd verification with unrelated host-unit diagnostics retained in
+the private evidence. These are control fixes and earn no original milestone
+credit: M14 remains51.48%, M15 remains50.97%. Evidence:
+`docs/verification/workstation-launch-compatibility-20261110/validation.json`.
 
 ## Overnight preparation and awake guardian
 

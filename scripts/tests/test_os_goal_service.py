@@ -95,7 +95,8 @@ class ServiceTests(unittest.TestCase):
         fields = dict(line.split('=', 1) for line in monitor.splitlines() if '=' in line)
         command = shlex.split(fields['ExecStart'])
         self.assertEqual(command[0], '/fake/systemd-inhibit')
-        self.assertEqual(command[1:4], ['--what=idle:sleep:handle-lid-switch', '--mode=block', '--no-ask-password'])
+        self.assertEqual(command[1:3], ['--what=idle:sleep:handle-lid-switch', '--mode=block'])
+        self.assertNotIn('--no-ask-password', command)
         self.assertEqual(command[command.index('--') + 1:],
                          ['/fake/python', '-B', str(self.repo / 'scripts/os_goal_service.py'), 'guardian'])
         self.assertEqual(fields['Type'], 'notify')
@@ -213,6 +214,46 @@ class ServiceTests(unittest.TestCase):
         self.assertTrue(result['start_request_id'])
         self.assertEqual(len(enabled), 1)
         self.preflight.assert_called_once_with(self.repo)
+
+    def test_credit_identity_is_durable_before_start_and_reused_by_guardian_recovery(self):
+        from os_goal_credits import CreditBudget
+
+        def systemctl(*values, **kwargs):
+            if values[0] == 'show':
+                return 'inactive'
+            config = protocol.read_json(self.directory / subject.CONFIG)
+            parsed = launcher.arguments(config['arguments'])
+            self.assertIsNotNone(parsed.credit_run_id,
+                                 'The identity must be durable before guardian enablement')
+            return ''
+
+        self.systemctl.side_effect = systemctl
+        subject.start(self.repo, self.directory, self.arguments + ['--credit-budget', '25'])
+        config = protocol.read_json(self.directory / subject.CONFIG)
+        parsed = launcher.arguments(config['arguments'])
+        identifier = parsed.credit_run_id
+        budget = CreditBudget(self.directory, identifier, parsed.credit_budget, protocol.atomic_json)
+        limits = {'credits': {'hasCredits': True, 'unlimited': False, 'balance': '50'}}
+        budget.observe(limits)
+        guard = self.live_guard()
+        for proof in (None, str(self.directory / 'guardian-recovery-test.json')):
+            self.write(subject.NEXT, {'run_id': guard['run_id'], 'guardian_pid': guard['pid'],
+                       'guardian_start': guard['start'], 'proof_path': proof})
+            with patch.object(subject, 'process_start', return_value=guard['start']), \
+                    patch.object(subject, 'lease_free', side_effect=lambda directory, name: name != 'guardian.lock'):
+                subject.engine(self.repo, self.directory)
+            command = self.exec.call_args.args[1]
+            index = command.index(str(self.repo / 'scripts/run_os_goal.py'))
+            engine_args = launcher.arguments(command[index + 1:])
+            self.assertEqual(engine_args.credit_run_id, identifier)
+            self.assertEqual(engine_args.credit_budget, '25')
+        recovered = CreditBudget(self.directory, identifier, '25', protocol.atomic_json, recovered=True)
+        limits['credits']['balance'] = '47'
+        saved, exhausted = recovered.observe(limits)
+        self.assertEqual(saved['spent'], '3')
+        self.assertEqual(saved['remaining'], '22')
+        self.assertFalse(exhausted)
+        self.assertEqual(protocol.read_json(self.directory / subject.CONFIG), config)
 
     def test_service_restart_guardian_entry_never_creates_manual_intent(self):
         with patch.object(subject, 'runtime_directory', return_value=self.directory), \
