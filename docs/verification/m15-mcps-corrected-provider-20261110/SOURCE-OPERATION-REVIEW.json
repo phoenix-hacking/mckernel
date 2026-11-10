@@ -1,0 +1,195 @@
+{
+  "READY": {
+    "bytes": 1063,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/READY.json",
+    "sha256": "57b694f38e1cfb6fec28a6115219b4703e210bc2f27a2e9c580f7fc24fbe0b0f"
+  },
+  "actual_pinned_programs": [
+    {
+      "destination": "stage/usr/local/bin/mcps",
+      "identity": {
+        "bytes": 18944,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/stage/usr/local/bin/mcps",
+        "sha256": "bfbc4a63e3eda8edabe58efbfeeb206ee994c3668f39248ae1e61c11b2f086e7"
+      },
+      "mode": "0755",
+      "name": "mcps"
+    },
+    {
+      "destination": "stage/usr/local/bin/mcinspect",
+      "identity": {
+        "bytes": 7081592,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/stage/usr/local/bin/mcinspect",
+        "sha256": "9af6abfd8f8eb4214538cf1a3ee5f1a9189ef68639ec8c67323516e91bda1133"
+      },
+      "mode": "0755",
+      "name": "mcinspect"
+    }
+  ],
+  "actual_provider_provenance": {
+    "all_declared_receipts_exact_hash_and_size_match": true,
+    "built8c8cc": {
+      "bytes": 7081592,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/mcinspect",
+      "sha256": "8c8ccf64714698df869e8bc69e2365db16926639212e460ef5226daa2a8b404f"
+    },
+    "independent_eaf852": {
+      "bytes": 7126,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-production-review-p03-max-1/qualification-1/REVIEW.json",
+      "sha256": "eaf85291f3ecebd184d4b89028c1762d63e5446f36c2e3309679813ef116def6"
+    },
+    "installed9af6": {
+      "bytes": 7081592,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/stage/usr/local/bin/mcinspect",
+      "sha256": "9af6abfd8f8eb4214538cf1a3ee5f1a9189ef68639ec8c67323516e91bda1133"
+    },
+    "qualification_a226": {
+      "bytes": 31320,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "a22690aa8c491f55e25df392ab5973bf4d3a5adac2d9899128dab1b80bf62fdd"
+    },
+    "sole_built_to_installed_change": {
+      "after": "/usr/local/lib64",
+      "all_other_bytes_equal": true,
+      "before": "::::::::::::::::",
+      "bytes": 16,
+      "offset": 5482
+    },
+    "source88b6": {
+      "bytes": 100935,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/source/rust/mcinspect_helpers.rs",
+      "sha256": "88b6c5254ff9b4377d67f7da8f44d17a4c330a82c609c65ec9c557d9ec7dc50f"
+    },
+    "source_commit": "4adf52e4248300e220dc4e6a55e50484b658a53b"
+  },
+  "at_utc": "2026-11-10T23:26:12.186419+00:00",
+  "decision": "GO_SOURCE_AND_FINITE_HOST_PRIVATE_PAIR_OPERATION_CONDITIONAL_ON_ROOT_FRESH_ADMISSION",
+  "execution_admitted": false,
+  "helper": {
+    "bytes": 4795,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/stage_pair.py",
+    "sha256": "da2aa839be701eb44745cf055ea1f20c545473f8c4197d146a0a65ed53433675"
+  },
+  "helper_check": [
+    "Only hashlib/json/os/pathlib/stat/sys. No target execution, subprocess, ELF tool, network or temp-file API. Python-I/-B and env-i prevent path/cache output; no compiler/temp output exists that needs a TMPDIR override.",
+    "Both source files opened read-only/nofollow, exact regular0755/size/SHA required. Bounded size+1 read and before/after dev/inode/size/mode/mtime/ctime verified. Both checked before any output directory.",
+    "OUT must be absent; existing/partial refused/preserved. Only four new stage directories, literal two exclusive nofollow files and MANIFEST.json are created. New files fchmod0755/flush/fsync then complete reread byte/mode/hash/stability check; exact two bin names checked. No old pair or actual /usr/local/bin write.",
+    "Exclusive manifest binds INPUTS6c8f/programs/current installed9af6/receipts and all explicit false runtime/old-owner/original-acceptance claims. Failure diagnostic raises, preserving partial output; Root must reject nonzero/timeout/incomplete manifest."
+  ],
+  "inputs": {
+    "bytes": 10555,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/INPUTS.json",
+    "sha256": "6c8f90d461ad0096f3330dfbdded16b16aab4ff81c959170e2c70066e9b5d9af"
+  },
+  "limits": [
+    "Private pair structure does NOT redirect MCPS hardcoded absolute /usr/local/bin/mcinspect at runtime; actual Root namespace/deployment/current provider use and matching mckernel.img remain separate. No posix_spawn or --ps run admitted.",
+    "9af6 installed RPATH is preserved; old63502 pair and all original source/artifacts/results unchanged. Current provider qualification remains its saved source/ELF scope, not new loader/provider/runtime acceptance.",
+    "Whole P05/I01/I03/milestone/C-retirement/default/deployed/native/ACCEPT and M14-before-M15 remain open at required scope. No percentage awarded here.",
+    "Both UNKNOWN reservations remain charged until Root actual independent disposition; neither source GO nor future manifest releases them."
+  ],
+  "mcps_contract": {
+    "exact_target_a17e": {
+      "bytes": 1865,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer/production-mcps-target.cmake",
+      "sha256": "a17ef0474db793dea1d61ce504ff23c7aa942a90c805ba731f9e42aff4f9c45c"
+    },
+    "independent_b0ff": {
+      "bytes": 18725,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-review-tests-max-1/result-1/REVIEW.json",
+      "sha256": "b0ff6390e0261d6efad39948fe5ab602c4437014e2ec120b5d835fc089d5c678"
+    },
+    "literal_spawn_argv": [
+      "/usr/local/bin/mcinspect",
+      "--kernel=/usr/local/smp-x86/kernel/mckernel.img",
+      "--ps",
+      null
+    ],
+    "qualification_ba472": {
+      "bytes": 40187,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "ba4722b8ff7f3d35d516f243f1327656407a91b58d72a84fc04ed7d365d4d86a"
+    },
+    "retained23": {
+      "bytes": 2141,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-mcps/signal-diagnostic-correction-1/actual-host-fixture-1/ACTUAL-MCPS-COMPACT-RESULT.json",
+      "sha256": "8713bf4954ca2d15040c3e19cf1ac543596f4df30e1d02caafcca53655feb355"
+    },
+    "scope": "Exact existing source/stub/C-locale TERM/KILL and recorded cases only; other/inherited/parent-directed/core/stop/non-C-locale/supported-profile obligations remain open. No new run against corrected MCI.",
+    "source11bb": {
+      "bytes": 3902,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer/rust/mcps.rs",
+      "sha256": "11bbecd7a0a6f4d098bb737ccca1e64e974e7c91bcc124b989fdc40b552c3b53"
+    },
+    "verification": "Current source PROGRAM/KERNEL env constants and posix_spawn vector, actual configured compile profile and three actualELF NUL data strings at declared offsets agree. Subprocess provider identity composition does not require MCPS ELF rebuild."
+  },
+  "profile": {
+    "AS_bytes": 268435456,
+    "CORE": 0,
+    "CPU": "7",
+    "CPU_seconds": 10,
+    "FSIZE_bytes_per_file": 16777216,
+    "Python_compatibility": "Plain3.8-compatible source; actual pinned qualifiedAnaconda3.9 bytes checked, no SUT/PyYAML/Python3.10 import",
+    "bounded_memory_basis": "Two small actual input files plus bounded chunks/copy/reread and stdlib interpreter, no build/ELF/runtime load. AS256MiB is explicit bounded candidate; peak not claimed measured.",
+    "capture_gate": "Existing corrected Root front door must preserve tool/session handles, positivePID/birth/direct wait/wholefamily/streams/noresidual even on fast exit; never infer retirement from artifact/absence.",
+    "fresh_gate": "Root5b15 heavy owner positively joined/removed/released, latest actual ownership/service/account/budget and MemAvailable26GiB/host16GiB/scratch12GiB+64MiB floors. New retirement authority can be bound only through genuine Root disposition/admission, not this review.",
+    "growth_capture_envelope_bytes": 67108864,
+    "interpreter": {
+      "bytes": 15880080,
+      "mode": "0775",
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "reuse": "Same Anaconda3 Python3.9 path used successfully by saved MCPS phase5; this new stdlib-only helper is valid Python3.8 syntax and needs no Python3.10 SUT import.",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "new_job": 1,
+    "new_payload_bytes": 7100536,
+    "shared_grant": "4GiB TOTAL incl all controllers/workers, max3 HOST jobs. Until Root actual disposition retainCPU0/CPU7 UNKNOWN256MiB/job1 each:512MiB/twojobs+one new256MiB/job. No nativeCPU2-5 borrow or newDocker/heavy lane.",
+    "wall_seconds": 30
+  },
+  "request": {
+    "bytes": 8554,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/REQUEST.json",
+    "sha256": "0d1d3f1664d2e66527615ee9b460ff3a64de771022f04b91e88165685957fecb"
+  },
+  "required_actual_postgate": [
+    "One exact literal command exit0 with positive direct/wholefamily/stream receipt and no owned residual/error.",
+    "Exactly fresh stage/usr/local/bin/mcps18944B/bfbc and mcinspect7081592B/9af6,0755 each, plus authoritative MANIFEST; no third executable or historical/host-root write.",
+    "Manifest PASS/input6c8f/source hashes/runtime literals/provider provenance and preserved scope flags all match; no generic stdout-only acceptance."
+  ],
+  "reviewed_command": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=268435456:268435456",
+      "--cpu=10:10",
+      "--core=0:0",
+      "--fsize=16777216:16777216",
+      "--",
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LANG=C",
+      "LC_ALL=C",
+      "TZ=UTC",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/stage_pair.py"
+    ],
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1",
+    "executed_by_preparer": false,
+    "expected_exit": 0,
+    "name": "stage-unchanged-mcps-with-corrected-installed-mcinspect",
+    "wall_seconds_max": 30
+  },
+  "reviewer": "/root/sdk_binding_source_max independent actualSol/MAX; P03 authored",
+  "reviewer_operations": "Only static AST, pinned saved JSON/text and necessary artifact byte/hash/mode comparison. Helper/program/ELF/compiler/test/provider/API/native execution, source/packet/canonical edits and recursive agents: NONE.",
+  "reviewer_static_check_note": "A preliminary AST import inventory used ImportFrom imported-name instead of its module property; corrected metadata inspection recognizes pathlib.Path. Packet/source unchanged, no helper execution or source defect.",
+  "schema": "mckernel.mcps-corrected-provider-independent-source-profile-review.v1",
+  "scope": "One HOST data-copy/hash/mode/JSON command; exactly unchangedMCPS plus corrected already-installedMCInspect and one manifest in new private prefix. No application/ELF/compiler/test/Docker/API/native execution."
+}

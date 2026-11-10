@@ -1,9 +1,38 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T23:29:40.839467+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T23:56:49.835340+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Current original closure work.** M14-I02-E1 is under PublicABI whole-condition
+review of assessment3f13aabb, qualifiedf253/image100d and the exact Linux6.12/
+Rust1.95/config106055/three-module cohort. No additional zero-C or external
+inventory prerequisite is added. E2 remains open: P04 prepares a profile-scoped
+F06 default correction; actual cache-unset/no-explicit-ON production configure
+and its effective inputs must pass before default-source credit. Greenf253's25
+image/object/config/cache files are now preserved separately before another build.
+
+For M14-06-02-FUNCTIONAL, the actual guest-input run failed only when readelf
+was applied to the tee shebang wrapper. All10 copied files and passing insmod
+ELF/RPM reads are retained; result3c3e has positive waits/container removal and
+its new job is released. P03's0cdcb successor binds the genuine coreutils
+interpreter and only unstarted metadata reads. The separate CPU7 signal compile
+PASS23:37:06 produced27 saved outputs and positively released its job; P04Tests
+qualifies those exact bytes without executing signal/FP/appmain. The joined
+getenforce offline query returned exactly one actual package row; SourceAcq
+pins its genuine binary/dependencies before any separate trusted acquisition.
+Native execution/current-free/restoration and full frame/altstack/register/xstate
+behavior remain required on the matched cohort; no HOST result substitutes.
+
+**M15 mcps provider pair qualified.** The single copy-only command PASS23:52:20
+and independent07faca74 join unchangedmcpsbfbc plus corrected installedmcinspect
+9af6 in a fresh private usr/local/bin pair, byte-equal0755. Manifestaf49 and one
+positive PID/birth/direct/family/stream receipt close the job; no build, old23case
+or program main was replayed. SDK joins this and the already-qualified real
+cleanup library to complete-selected/linked/ABI manifests. Known project-C debt
+is classified; complete linkage/default/deployment/native conditions remain open.
+No additional percentage change is claimed from these prerequisites.
 
 **Original M15-F03-original-default technical leaf now verified.** Actual whole
 qualificationa3a44aa4 and independent736d8592 join current bool-corrected mcinspect
@@ -13,6 +42,8 @@ No provider or consumer was replayed. This closes exactly one original technical
 check:79/156 verified; M14 remains51.48%, M15 is59.10% (+1.04 displayed points).
 The F03 file checklist is75%; deployed/native/ACCEPT and M14-before-M15 final
 acceptance remain open. Original criteria/weights/denominators are unchanged.
+Checkpoint51a48552 is published/fetched with all157 source/evidence blobs matching;
+the changed pair was posted once in PR3 comment6782340657. No report is pending.
 
 **Scoped mmap image fully qualified.** Sourcef253/actual5b15 build and affected
 reader PASS23:05:44; qualification2074b6aa and independentf949b85f join real Rust
@@ -372,44 +403,32 @@ native UNKNOWN owners/leases/reservations/current-free. Unknown old payload is
 not an external current-source inventory requirement. No boot/module load/MMIO/
 MSR/valid native dump or dummy passing gate has run.
 
-Fresh controller guard22:00Z:79%included used/21%remaining, running/no stop or
-account hold. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa; included first
-then existing credits, no purchase/API/account/model or allowance reset. Root/six
-actual task routes remain Sol/MAX/depth1, one canonical compositor/heavy owner.
-HOST CPUs0/6/7,max3jobs,4GiB TOTAL including overhead; fresh26GiB and disk16/12GiB
-floors, retained18GiB/native2-5/12GiB and UNKNOWN reservations persist. Old CPU0/
-256MiB/job1 stays UNJOINED. The new CPU7/256MiB/job1 NUMA-copy capture also remains
-UNKNOWN: actual hash/stat output and terminal0/Pid0/nonOOM/owned-container removal
-exist, but a fast-exit /proc cgroup read raced process exit and the capture's
-subsequent killpg returned EPERM before a payload client wait was recorded. No
-copy or rejected kill is retried. SourceAcq diagnoses saved exact-birth records;
-both slices/twojobs/512MiB are charged, never released from output or absence.
-Optional capacity/control work stays deferred; guardian/mailbox/restored20-minute
-functional assistance remain active.
+Current guards remain healthy/running with the same finite credit-run identity;
+included allowance first, then already-authorized existing credits, no purchase,
+API/account/model or allowance reset. Root/six actual task routes remain Sol/MAX
+and depth1; one canonical compositor/heavy owner. HOST CPUs0/6/7,max3jobs,4GiB
+TOTAL including all overhead; fresh26GiB and16/12GiB disk floors/packet growth,
+retained18GiB/native2-5/12GiB and all other UNKNOWN/source/service holds persist.
+Only the two exact stale HOST scopes are currently retired under a41/540; their
+historical missing waits remain unchanged. Each new guest/signal/MCPS/query job
+has its own positive completion/release; no slot is released from artifact presence.
+Optional capacity/control work remains deferred; guardian/mailbox/restored20-minute
+functional assistance continue.
 
+Latest verified source/results checkpoint51a48552 is published/fetched with all157
+owned blobs matching and all33 unrelated dirty paths preserved. Pair51.48/59.10
+was posted once in PR3 comment6782340657; no duplicate or pending report. The missed
+16:00Z75%-each target remains recorded and is not a stop time or changed criterion.
 
-Source/results checkpointc0522ae4 is pushed/fetched with all252 source/evidence
-blobs matching and all33 unrelated dirty paths preserved. It publishes actualf8
-image/provider/ownership proof, seven-case cleanup and scoped signal/mmap HOST
-results. This next checkpoint records the independently closed Eclair technical
-leaf and its actual shared-provider evidence. Repository whole-F06 default staysOFF pending original promotion. The current changed
-pair51.48/57.01 was posted once in PR3 comment6776807210; no unchanged duplicate.
-
-Next15-minute deliverable: run the reviewedf253 normal M14 incremental image
-and ownership reader at the next admitted slot; finish SourceAcq whole mcinspect
-technical-leaf review from the already-PASS libzstd input. Carry forward the now
-closed Eclair technical leaf and publishedf8 image. Run the independently reviewed
-two-command mmap atomic protocol once; P04 corrects two finite entry type-call
-boundaries before material GO and the next normal incremental image. No known
-incompatible entry is compiled. Genuine signal native setup remains separate.
-Carry the now-PASS mmap rollback/RSS correction into its full source review and
-next genuine incremental image; do not replay its passing three commands. Complete
-only the missing zlib/provider and whole original Eclair/mcinspect technical-leaf
-conditions, while P03 composes genuine F06 native setup/restoration and scoped
-signal cases. Execute the separate real-header cleanup-library packet only after
-independent GO/fresh aggregate admission. Reuse all passing producer/ABI/behavior
-proof; source/fixture/component success does not alone close original conditions.
-
+Next15-minute deliverable: finish whole M14-I02-E1 review and checkpoint it only
+on whole-condition GO. In parallel P04 freezes the minimal supported-profile E2
+default correction and actual cmake-U operation; P03's independently reviewed
+coreutils/unstarted-read successor takes the next admitted CPU0 lane. SourceAcq
+qualifies the actual getenforce row; P04Tests finishes saved27-output signal
+qualification; SDK closes concrete selected/linked/ABI manifest gaps from real
+component artifacts and the now-qualified MCPS pair. Root admits/executes only
+reviewed changed packets, promptly joins/releases each job and publishes its own
+coherent verified result. Genuine native behavior/restoration remains separate.
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)

@@ -1,0 +1,229 @@
+{
+  "accounting_handoff": {
+    "current_releasable_HOST_bytes": 536870912,
+    "current_releasable_HOST_jobs": 2,
+    "eligible_lanes": [
+      "CPU0 offline metadata reader",
+      "CPU7 runtime NUMA copy"
+    ],
+    "executor": "Root alone records current normal admission charge retirement. Reviewer has not changed admission, launcher, goal, lease or accounting state.",
+    "fresh_admission_required": true,
+    "limit": "This disposition creates no new grant, free-memory measurement, native-current-free finding or authority to change historical missing-wait records.",
+    "loaded_HOST_ceiling": {
+      "CPUs": [
+        0,
+        6,
+        7
+      ],
+      "aggregate_jobs": 3,
+      "fresh_available_bytes_minimum": 27917287424,
+      "host_disk_floor_GiB": 16,
+      "scratch_disk_floor_GiB": 12,
+      "total_bytes_including_all_overhead": 4294967296
+    }
+  },
+  "authority": {
+    "root_clarification": "One fresh bounded process check plus the exact journal observation is sufficient. Reconstructing old waits is not a prerequisite to the newly authorized current-charge disposition.",
+    "scope": "Reclaim ONLY the dead CPU0 offline metadata reader and CPU7 runtime-NUMA-copy HOST admission charges. This current disposition does not repair historical missing waits.",
+    "source": "Explicit current foreground user e9ee and b1 authority, delivered by Root; Root clarification delivered in this review turn.",
+    "trusted_current_census": {
+      "evidence_form": "Trusted exact user b1 observation delivered by Root. No file path was supplied or required; this review does not represent it as an independently read saved census.",
+      "finding": "No CPU7 original PID, parent, PGID, session or exact-CID client/family; no CPU0 13:55 source-reader family.",
+      "observed_at_UTC": "2026-11-10T23:10:56Z",
+      "processes": 289,
+      "unreadable": 0
+    }
+  },
+  "decision": "GO_CURRENT_HOST_CHARGE_RELEASE_ONLY",
+  "evidence_files": [
+    {
+      "bytes": 10747,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/SOURCE-READ-HANDLE-DIAGNOSTIC.json",
+      "sha256": "a0df583b8c3f16d3c26660a1103fdbf3e290cb30ed34861da10027bdf0a58ed9"
+    },
+    {
+      "bytes": 4097,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/SOURCE-READ-ORIGINAL-COMMAND.txt",
+      "sha256": "274293e583e069fd7ec76c729c7a80fa3b1aaa818d0fe644ff4924c64f99aa93"
+    },
+    {
+      "bytes": 4233,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/SOURCE-READ-ORIGINAL-JAVASCRIPT.txt",
+      "sha256": "2ef14cfa13a39d362e7bd3198ecf1d97a3e7df567e3d56ad12ec827ea0de9bae"
+    },
+    {
+      "bytes": 271,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/execution-1/copy-OWNED-ID.json",
+      "sha256": "951d6995c88820f0101efc980d181af5a1cea781c525782b48a536547d1b7d69"
+    },
+    {
+      "bytes": 206,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/execution-1/LIVE.json",
+      "sha256": "3be9a07120f5d0da7b87d1a8e50b32967d4d05ab39c51ac6c1bcd070541bea8a"
+    },
+    {
+      "bytes": 6635,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/execution-1/RESULT.json",
+      "sha256": "28026766c6b243836935dccbd0b979e480b94638241466f10c1964deeec9c978"
+    },
+    {
+      "bytes": 12824,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/execution-1/failure-inspect-7f82c1b6.stdout",
+      "sha256": "e7139ba40e52f752021b0338556871f70b111ad9eb7ea6d950b3cc03262d0c07"
+    },
+    {
+      "bytes": 65,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/execution-1/failure-owned-remove-7f82c1b6.stdout",
+      "sha256": "0a49b5df05e208f379a109b461aa6a19198c840ba5be2a4df46f89f673befb31"
+    },
+    {
+      "bytes": 12744,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/capture-diagnostic-1/DIAGNOSTIC.json",
+      "sha256": "d4ac22c8d014f490f1b0d17cce93abc5b39c8b4c21a87e22f6e9cfed6c074dc1"
+    }
+  ],
+  "lanes": [
+    {
+      "charged_CPU": [
+        0
+      ],
+      "charged_jobs": 1,
+      "charged_memory_bytes": 268435456,
+      "current_charge_release": "GO",
+      "current_evidence": "The exact non-spawning synchronous scope, original normal-delivery completion, and trusted complete fresh census exclude a current surviving workload/family in this narrowly authorized scope. A tool receipt or output existence alone is not asserted to prove the missing historical wait.",
+      "current_workload_disposition": "RETIRED",
+      "historical_direct_wait": "UNKNOWN_NOT_REPAIRED",
+      "historical_status_preserved": "UNJOINED_SOURCE_READER_HANDLE_OUTPUT_OMITTED_RESERVATION_RETAINED remains the immutable historical diagnostic. Current accounting may now retire its charge under the new authority.",
+      "lane": "CPU0 retained offline source metadata reader",
+      "normal_delivery": {
+        "call_id": "call_0e23d025983c491d9e1a661a74842dad",
+        "call_input_bytes": 4234,
+        "call_input_sha256": "a4828a2abd6ae8756bbea36c2e9a05add91f169ee3a8fd0b288d5440a32c1777",
+        "call_line": 1827,
+        "call_timestamp_UTC": "2026-11-10T13:55:01.554Z",
+        "limit": "The outer Javascript printed only nested exec_command.output. The retained receipt does not supply a nested PID, session handle, exit status or direct wait.",
+        "output": "Script completed; Wall time 1.2 seconds; Output blank.",
+        "output_line": 1829,
+        "output_serialization": "json.dumps(output,sort_keys=True), default ASCII/separators",
+        "output_serialized_bytes": 122,
+        "output_serialized_sha256": "90f5eec7d9176d48a3f521078c7ee70de1a5c95cacdd36dfb3a6cc2bdd3eac3b",
+        "output_timestamp_UTC": "2026-11-10T13:55:02.736Z",
+        "path": "/home/holden/.codex/sessions/2026/11/10/rollout-2026-11-10T00-22-17-01a1c48d-020a-7c21-b545-256b222c8e0d.jsonl",
+        "selection": "Only exact original operation-path custom-tool-call and its call_id-joined output; no narrative reading or payload execution."
+      },
+      "origin": {
+        "owner": "/root/p04_source_max",
+        "process_contract": "Synchronous taskset CPU0 / prlimit AS256MiB / python3 -I -B heredoc. Only pathlib, gzip, hashlib, json and XML stdlib streaming reads and local result write. No fork, subprocess, thread, daemon, network, native service or background operation is created by this source.",
+        "recorded_PID": null,
+        "recorded_birth": null,
+        "recorded_session": null,
+        "source_command_sha256": "274293e583e069fd7ec76c729c7a80fa3b1aaa818d0fe644ff4924c64f99aa93"
+      },
+      "remaining_current_retirement_condition": null,
+      "surviving_PID_birth": null
+    },
+    {
+      "charged_CPU": [
+        7
+      ],
+      "charged_jobs": 1,
+      "charged_memory_bytes": 268435456,
+      "current_charge_release": "GO",
+      "current_evidence": "Exact terminal removed non-restarting container, exact sudo PAM close, completed outer wrapper, absent original client/init PIDs and trusted complete fresh no-family census establish no current owned payload/client/family requiring this charge.",
+      "current_workload_disposition": "RETIRED",
+      "historical_direct_wait": "UNKNOWN_NOT_REPAIRED",
+      "historical_status_preserved": "Original start-client direct wait is NOT_RECORDED. The failed fast-exit capture, ENOENT and rejected killpg EPERM remain preserved. Neither copy nor rejected signal is retried.",
+      "lane": "CPU7 runtime NUMA byte-copy payload",
+      "origin": {
+        "immutable_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "observed_init_PID": 1115549,
+        "original_start_client_PID": 1115511,
+        "original_start_client_birth": 43397623,
+        "owned_CID": "7f82c1b65e8d6963d0b15b0a93d87b537d69a50f0dc2102dfdc3a1aafbe367bb",
+        "owned_name": "/mck-m14-signal-runtime-numa-copy-20261110-1"
+      },
+      "outer_launcher_disposition": {
+        "evidence_form": "Trusted Root actual tool attestation delivered in this review turn.",
+        "exit_code": 1,
+        "limit": "This is the completed outer wrapper, not the missing inner sudo start-client direct wait.",
+        "operation": "taskset -c 0 python3 -B runtime-numa-copy-1/run_root_once.py",
+        "running_session": false,
+        "tool_chunk": "6ed036",
+        "wall_seconds": 0.901
+      },
+      "remaining_current_retirement_condition": null,
+      "saved_container_terminal": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-10T21:55:10.388853029Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "RestartPolicy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-10T21:55:10.380421332Z",
+        "Status": "exited",
+        "exact_owned_container_removal": "Positive joined rm, stdout is exactly the owned immutable CID plus newline; seven control-client joins remain preserved."
+      },
+      "specific_current_proc_observation": {
+        "method": "Read only /proc/1115511/stat and /proc/1115549/stat; no enumeration, signal or process control.",
+        "observed_at_UTC": "2026-11-10T23:15:47.482467Z",
+        "results": [
+          {
+            "PID": 1115511,
+            "expected_birth": 43397623,
+            "status": "ABSENT"
+          },
+          {
+            "PID": 1115549,
+            "expected_birth": null,
+            "status": "ABSENT"
+          }
+        ]
+      },
+      "specific_readonly_journal": {
+        "boot_id": "3ba4f2ca4323433dbfb87859268121b6",
+        "command_scope": "journalctl --since 2026-11-10 21:55:09 UTC --until 2026-11-10 21:55:12 UTC _PID=1115511; selected JSON fields only. No credentials or environment read.",
+        "events": [
+          {
+            "COMM": "sudo",
+            "MESSAGE": "  holden : TTY=unknown ; PWD=/home/holden/mckernel ; USER=root ; COMMAND=/usr/bin/docker --host=unix:///var/run/docker.sock start -a 7f82c1b65e8d6963d0b15b0a93d87b537d69a50f0dc2102dfdc3a1aafbe367bb",
+            "PID": 1115511,
+            "realtime_us": "1794347710248752"
+          },
+          {
+            "COMM": "sudo",
+            "MESSAGE": "pam_unix(sudo:session): session opened for user root by (uid=0)",
+            "PID": 1115511,
+            "realtime_us": "1794347710249084"
+          },
+          {
+            "COMM": "sudo",
+            "MESSAGE": "pam_unix(sudo:session): session closed for user root",
+            "PID": 1115511,
+            "realtime_us": "1794347710412874"
+          }
+        ],
+        "limit": "PAM session close supports current retirement and exact launch identity; it is not a fabricated Popen.wait record."
+      },
+      "surviving_PID_birth": null
+    }
+  ],
+  "preserved": [
+    "All historical raw diagnostics and missing direct waits",
+    "Native CPUs2-5/12GiB and source/native/current-free gates",
+    "Scratch21 and every other reservation or UNKNOWN outcome",
+    "CPU1 exclusion, prior reservations, all floors and cumulative credit accounting",
+    "Generic/exec cyber-policy and rejected-operation exclusions",
+    "Original M14-before-M15 acceptance and all unproved functional/ABI/runtime criteria"
+  ],
+  "review_actions": "Exact necessary source/receipt data reads, two fixed proc-stat reads, one exact PID/time journal query, and this private REVIEW write only. No payload, replay, Docker state action, signaling, credential/environment read, global census, new control framework or canonical edit.",
+  "reviewed_at_UTC": "2026-11-10T23:20:36Z",
+  "reviewer": "/root/source_acquisition_review_max",
+  "schema": "mckernel.bounded-current-host-retirement-review.v1"
+}

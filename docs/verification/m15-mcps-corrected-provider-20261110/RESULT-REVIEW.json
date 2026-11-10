@@ -1,0 +1,131 @@
+{
+  "Root_tool_closed": {
+    "chunk_id": "449f00",
+    "exit0": true,
+    "session_id": null
+  },
+  "accounting_scope": "Both prior currentHOST claims had separately been retired under actual Root disposition before this admission; this copy releases only its own256MiB/job1. Historical missing-wait evidence and Native/Scratch/other holds remain unchanged. Raw manifest old_UNKNOWN_released=false truthfully denotes no release action by helper.",
+  "actual_admission": {
+    "bytes": 398,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/execution-1/ADMISSION.json",
+    "sha256": "c1562e1e69c072a89f10bec4ecadc90ebba84fcab69ff4919aec36b820461d04"
+  },
+  "actual_manifest": {
+    "bytes": 8559,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/output-1/MANIFEST.json",
+    "sha256": "af49d651c96db471701da99d130c060dfe52c1f5fc8ff1da3ff55b07837fe3d9"
+  },
+  "actual_ownership": {
+    "adopted_kills": [],
+    "adopted_reaps": [],
+    "error": null,
+    "label": "mcps-pair",
+    "leader": 1153752,
+    "leader_birth": "44100629",
+    "leader_group_signalled": false,
+    "leader_parent_joined": true,
+    "remaining_direct_children": [],
+    "status": 0,
+    "streams_closed": true,
+    "timed_out": false,
+    "whole_descendants_joined": true
+  },
+  "actual_programs": [
+    {
+      "byte_equal": true,
+      "bytes": 18944,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/output-1/stage/usr/local/bin/mcps",
+      "sha256": "bfbc4a63e3eda8edabe58efbfeeb206ee994c3668f39248ae1e61c11b2f086e7",
+      "source": {
+        "bytes": 18944,
+        "mode": "0755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/stage/usr/local/bin/mcps",
+        "sha256": "bfbc4a63e3eda8edabe58efbfeeb206ee994c3668f39248ae1e61c11b2f086e7"
+      }
+    },
+    {
+      "byte_equal": true,
+      "bytes": 7081592,
+      "mode": "0755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/output-1/stage/usr/local/bin/mcinspect",
+      "sha256": "9af6abfd8f8eb4214538cf1a3ee5f1a9189ef68639ec8c67323516e91bda1133",
+      "source": {
+        "bytes": 7081592,
+        "mode": "0755",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/build-output/stage/usr/local/bin/mcinspect",
+        "sha256": "9af6abfd8f8eb4214538cf1a3ee5f1a9189ef68639ec8c67323516e91bda1133"
+      }
+    }
+  ],
+  "actual_result": {
+    "bytes": 789,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/execution-1/RESULT.json",
+    "sha256": "cadb61a75662f19cb637730667423dafd4d62d1bec78cfb693a1cbd7c93f23c0"
+  },
+  "at_utc": "2026-11-10T23:56:03.254114+00:00",
+  "current_job_positive_release": {
+    "bytes": 159,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/execution-1/RESOURCE-RELEASE.json",
+    "sha256": "3c55f9939e4a3678351c4adee0d954fc3dc00a26fb77630865188225d921d2a9"
+  },
+  "decision": "GO_ACTUAL_EXACT_SAVED_ARTIFACT_PAIR_COPY_HASH_MODE_MANIFEST_AND_POSITIVE_RETIREMENT_AT_STATED_SCOPE",
+  "exact_three_regular_output_files": [
+    "MANIFEST.json",
+    "stage/usr/local/bin/mcinspect",
+    "stage/usr/local/bin/mcps"
+  ],
+  "full_Root_tool_result": {
+    "bytes": 288,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-update-1/ROOT-EXEC-TOOL.json",
+    "sha256": "58617bcd113cada1ca89396ea868d5f817ebf46467dfcaa9fa2946ee6c5cfc90"
+  },
+  "literal_process_contract": {
+    "MCPS_MCKERNELDIR": "/usr/local/smp-x86/kernel",
+    "MCPS_PREFIX": "/usr/local",
+    "actual_object_ELF_argument_data": [
+      {
+        "ELF_file_offset": 8196,
+        "nul_terminated_bytes": "/usr/local/bin/mcinspect",
+        "object_file_offset": 605
+      },
+      {
+        "ELF_file_offset": 8221,
+        "nul_terminated_bytes": "--kernel=/usr/local/smp-x86/kernel/mckernel.img",
+        "object_file_offset": 630
+      },
+      {
+        "ELF_file_offset": 8370,
+        "nul_terminated_bytes": "--ps",
+        "object_file_offset": 678
+      }
+    ],
+    "argv": [
+      "/usr/local/bin/mcinspect",
+      "--kernel=/usr/local/smp-x86/kernel/mckernel.img",
+      "--ps",
+      null
+    ],
+    "binding": "Source constants env!(MCPS_PREFIX/MCPS_MCKERNELDIR) and fixed --ps construct this3argument/null-terminated vector; same actual compile command has exact env values, both emitted artifacts contain those precise bytes, and saved source main passes that vector to posix_spawn. Byte presence is corroboration, not sole behavior acceptance."
+  },
+  "new_component_gap_closed": "The concrete private MCPSbfbc pair now contains corrected installedMCInspect9af6 rather than historical63502. No rebuild was necessary for unchanged MCPS subprocess contract.",
+  "provider_installed_RPATH": "Copied exact9af6 retains qualified /usr/local/lib64 installed RPATH; no new edit or pre-install8c8 substitution. SourceGO78cd/eaf/a226 built\u2192installed16bytes5482 proof reused.",
+  "raw_false_acceptance_flags_retained": {
+    "manifest_original_acceptance": false,
+    "new_build_test_ELF_or_program_execution": false,
+    "root_acceptance": false
+  },
+  "remaining": [
+    "Private prefix is data composition; hardcoded absolute /usr/local/bin/mcinspect is not redirected by copying. Actual delivered namespace/current runtime/device/mckernel.img/cohort/provider use remains separate.",
+    "Reused23case source/stub/C-locale limits and fullP05/I01/I03/native/default/ACCEPT remain as recorded; this result adds no functional run, loader/providerAPI or compiler/test/ELF readback.",
+    "Original M14-before-M15 and all other genuine source/native/account/resource holds remain binding; no canonical/tracker or percentage edit."
+  ],
+  "reviewer": "/root/sdk_binding_source_max independent actualSol/MAX; Root executed/P03 prepared",
+  "reviewer_operations": "Saved JSON/text and two copied artifact bytes/hash/mode/file-set only. No stage helper, target/API/main, producer/23case/ELF/compiler/tool/native replay.",
+  "schema": "mckernel.mcps-corrected-private-pair-independent-actual-result-review.v1",
+  "source_profile_GO": {
+    "bytes": 11865,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-corrected-provider-review-sdk-max-1/REVIEW.json",
+    "sha256": "78cd63e4caeed0b0aa24e5a0c81c471c6a7bf4364ce972a2cd7948c686a0163e"
+  }
+}
