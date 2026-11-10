@@ -64,9 +64,13 @@ current-user Linger=yes; these power observations are retained, not freshly rete
 The requested mailbox test was acknowledged once in
 [PR3 comment6760511190](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6760511190).
 
-The user cancelled only the recurring foreground20-minute command; it stays
-disabled. Guardian10-second health and600-second mailbox/status monitoring remain
-active. Optional transition work is deferred: actual watcher cap is still3 and
+After the earlier cancellation, the user explicitly restored the existing
+foreground20-minute assistance schedule (source1662d194...) to steer original
+provider/ABI/image/module and functional/lifecycle closure against the16:00Z
+target. Foreground applied the timer change; Root changed no service or timer.
+Legacy15-minute steering stays retired. Guardian10-second health and600-second
+mailbox/status monitoring remain active. Optional transition work is deferred:
+actual watcher cap is still3 and
 loaded agent ceiling6. The requested unlimited technical-recovery correction is
 pending because the loaded guardian cannot bind original request authority,
 transition-owned stop and later-stop ordering at the same commit boundary; no

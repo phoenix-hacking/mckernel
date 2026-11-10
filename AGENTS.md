@@ -30,8 +30,9 @@ ownership/UNKNOWN outcomes before any reallocation. Never multiply RAM per owner
 Under the current loaded phase do not borrow native CPUs2–5. Native remains one owner,
 CPUs2–5/12 GiB, under its separate actual source/ownership/admission gates. Honor any later user pause or stop. Preserve
 every native/resource owner, UNKNOWN outcome, service/account hold, cumulative
-credit budget and dirty edit. The recurring foreground20-minute command is
-cancelled; do not re-enable it. Guardian/mailbox monitoring continues.
+credit budget and dirty edit. The user restored the existing foreground20-minute
+assistance schedule to steer original provider/ABI/image/module and functional
+closure. Do not restore legacy15-minute steering. Guardian/mailbox monitoring continues.
 
 Prioritize shared dependencies and work that unlocks parallel lanes. Finish
 shared provider, ABI, ownership and cleanup contracts before isolated leaf work.
