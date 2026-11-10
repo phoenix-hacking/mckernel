@@ -1,0 +1,149 @@
+{
+  "schema": "mckernel.callback-backend-data.proposed-compile.v1",
+  "status": "FROZEN_ONE_LITERAL_DATA_ONLY_COMPILE_PROPOSAL_PENDING_E_REVIEW_FRESH_ROOT_ADMISSION",
+  "owner": "Rootsoleactualadmission/execution/compositor",
+  "private_source_owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/output",
+  "commands": [
+    {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/output/scheduler_callback_backend_data.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/scheduler_callback_backend_data_unit.rs"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/provider-compile.stderr",
+      "expected_returncode": 0
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/scheduler_callback_backend_data_unit.rs": "1c938fcf5a2088e150461b1e0823e28ab2ce410f620ce9cefd2b5a4c8b437f42",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/SOURCE-MANIFEST.json": "6be8d1855bbe68d988c32699b814333e4ef2579013f0bb6fbe63fcf3a99161b6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/PROFILE-PROOF.json": "5655f92d564b0ff0022fc2936d6817818969ffcad613ea3f03f11d0ac6425e5d",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/arch/x86_64/kernel/cpu.c": "9adb2435e75a1b27cd9511f4b69739fe25d2bb95dc0fc80eb73d2abd60c34813",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-data-owner-eligibility-1/RESULT.json": "377a09a39aaeae1847ca9ec9cddf154da52b6f7f64fc87659a78e1bee53f7174",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-apic-backend-data-lookahead-20261110T0022.json": "1ff513c6c9de38e323fe0a203db933acd8a1f849ca83fee95708ebdd343017c7",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99"
+  },
+  "source_unit": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/scheduler_callback_backend_data_unit.rs",
+  "source_manifest": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/SOURCE-MANIFEST.json",
+  "profile_proof": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/PROFILE-PROOF.json",
+  "retained_profile_reference": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783"
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "compiler_profile": {
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "no_std": true,
+    "exact_retained_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "exact_retained_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "flags": "All compiler payload flags through -o exactly match qualified reference; only source/output/metrics/stdout/stderr paths differ; no cfg/env/feature/lint changes."
+  },
+  "required_prelaunch": "Root must check all frozen inputs, find exact pinned rustc index and exactly one -o AFTER it; following literal object path must be absent, then mkdir its actual parent before Popen. Source remains last argv. Wrapper time-metrics -o is separate. Exclusive fresh captures, raw PID/birth before direct wait/stdios/metrics/joins; first unexpected failure STOP/no automatic retry.",
+  "source_expected_T": [],
+  "source_expected_U": [],
+  "source_expected_data": [
+    {
+      "ELF_name": "lapic_vp",
+      "namespace": "initialization_entries",
+      "type": "*mut core::ffi::c_void",
+      "attributes": [
+        "#[no_mangle]"
+      ],
+      "visibility": "pub(crate) staticmut",
+      "initializer": "Originalcore::ptr::null_mut()",
+      "expected_B_bytes": 8,
+      "expected_align": 8,
+      "consumer_Rust_alias": "mapped_local_apic importsactualELFlapic_vp throughORIGINALlink_name; no mapped_local_apic/lapic_virtpage ownerdefined",
+      "runtime": "NULLstorageONLY/notmappedcontroller"
+    },
+    {
+      "ELF_name": "x86_local_apic_base_msr",
+      "namespace": "selected_fixed_cpu_selectors",
+      "type": "OriginalCUInt=u32",
+      "attributes": [
+        "#[no_mangle]"
+      ],
+      "visibility": "pub static immutable",
+      "initializer": "Original0x800 fromRust6814, actualCmacroAPIC_BASE_MSR326 andexistingstaticguard4205",
+      "expected_R_bytes": 4,
+      "expected_align": 4,
+      "runtime": "Index-baseconstantONLY/notenabledx2APIC or validMSRcontext"
+    }
+  ],
+  "actual_future_emission": "ExpectedonlyoriginalB8lapic_vp+immutableR4x86_local_apic_base_msr,0T0U/private/relocs ifactualmetadataagrees; captureactualsections/flags/align/bytes, no guessedsectionorNOPprovider.",
+  "C_guard_header_processing_selected": false,
+  "C_guard_header_or_original_integration_pass_claim": false,
+  "metadata_or_join_selected": false,
+  "future_current_partial": null,
+  "scope": "Exacttwooriginaldata definitions/types/attrs/initializers only. DoNOTdefinemapped_local_apic orlapic_virtpage, importwholemodule/function/target/constructor/mapping/init/callback ornewcfg. NULLnotmappedcontroller;0x800notenabledhardware.",
+  "not_runnable_until": "E exactsource/type/guard-boundary/profile/ownershipGO+freshRootHOSTcompileadmission. No compiler/GNU/parser/gate/runtimeexecution selectedbythisproposal.",
+  "preparation_operations": "Sourcebyte/profilecomparison+privatewritesonly; no compiler/preprocessor/Cguardprocessing/GNU/ELFparser/predicate/link/test/function/slot/hardware/runtime/native/canonical/index changes."
+}

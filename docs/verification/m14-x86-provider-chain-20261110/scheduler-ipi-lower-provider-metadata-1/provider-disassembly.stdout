@@ -1,0 +1,26 @@
+
+/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.ihk_mc_mb:
+
+0000000000000000 <ihk_mc_mb>:
+   0:	mfence 
+   3:	ret    
+
+Disassembly of section .ltext.wrmsr:
+
+0000000000000000 <wrmsr>:
+   0:	mov    rax,rsi
+   3:	mov    ecx,edi
+   5:	mov    rdx,rsi
+   8:	shr    rdx,0x20
+   c:	wrmsr  
+   e:	ret    
+
+Disassembly of section .ltext.x86_cpu_pause_bridge:
+
+0000000000000000 <x86_cpu_pause_bridge>:
+   0:	movabs rax,0x0
+			2: R_X86_64_64	cpu_pause
+   a:	jmp    rax

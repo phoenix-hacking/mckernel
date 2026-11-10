@@ -1,0 +1,184 @@
+{
+  "status": "READY_ONE_EXACT_PREEXECUTION_UNWIND_SECTION_TYPE_CORRECTION_PENDING_F_GO_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/SOURCE-MANIFEST.json": "e30bb72568e7436a03d5ea9f919c676fefa611c1b7e8f2cc421a297e6c1fef0b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/PROFILE-PROOF.json": "a4658e9434f05f9c336513395295d8182c24bb1180d66ee42d46cf108be369e4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/REQUEST.json": "a5709399aad576c53fba3054150f8f4b1251fbdd7061d01bdef315842173ac69",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-review-1/REVIEW.json": "e41454b118fc362f8b138fa8a2a5411595565bc62b902361b5ee6035abcbdac0",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-next-join-and-lapic-ipi-producers-1/ADMISSION.json": "baa4994c848a212e5e5ca65aa7b6821aacd1ed537d4b31b81ff589ccb6156e2d",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-next-join-and-lapic-ipi-producers-1/RESULT.json": "941c0ecde84e6123a36e131087ffcfbb45b398d0b4b47f87b0f51652c15f0417",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/lapic-ipi-emission-capture-root-1/ADMISSION.json": "b27d1d11186bf94099474e907b633b6f20f086b70a54d97dc8dc0886e1d9c6a5",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/lapic-ipi-emission-capture-root-1/RESULT.json": "fa2660ce8f056070fc655f69580a2cde6844e4c54948ee17f0361ecddfb200f5",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o": "2f149772ebb539640d2a5eafcffaef6768ce40e57ed0a0a180934f5d91903ecb",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json": "151e4399fef50201ab76ed9c131150a333e2d0d906dd19711fb0a6f6551fa916",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/EMISSION-SOURCE-CONTRACT.json": "2506b0e1c1d5f5ce7a450205b09e46230fcd291a1174ad125f48d4ec45ee0afa",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/lapic_checks.py": "ca5a3461366cea0c6bf4f8a26c4b80d61330af243269f76a0c13dc9b56182efb",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/run_metadata.py": "7f3408867a7256972bbb683131d36df95eee5a02bdcd1ca21fec2a91b0ea28cf",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/RESULT.json": "38107c2acc60908d4d110a51bb673a70bffd60e601f3d991a650d256052f35f4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/ENGINE-RESULT.json": "6f4ec3c234a1827c8f94b6a7cb5aaeb10cd9f8f90e58c7a15810dca5ce06b858",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-write-owner-lookahead-20261109T2302.json": "1cd9e7a754d4830367d8f7995f24a322049cf816d02fbf965d8d7d2d683d64e9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-timer-engines-lookahead-20261109T2302.json": "7e255415058281e0ba0be406f6b5e6f9968da9d89dbefc9d06251b8dc929ce0f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/REQUEST.json": "3a064c4debcd8a9d0990510f61c73f4e156f28ec81f4072dc056871fcffe5775",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/lapic_checks.py": "3219d2f1f7ba0a88249bdefe223e81632bbfac887869b5069ef54413b204fc1e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/run_metadata.py": "7f3408867a7256972bbb683131d36df95eee5a02bdcd1ca21fec2a91b0ea28cf"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+  },
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+    "sha256": "2f149772ebb539640d2a5eafcffaef6768ce40e57ed0a0a180934f5d91903ecb",
+    "bytes": 2448,
+    "actual_producer_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-next-join-and-lapic-ipi-producers-1/RESULT.json",
+    "actual_producer_RESULT_sha256": "941c0ecde84e6123a36e131087ffcfbb45b398d0b4b47f87b0f51652c15f0417",
+    "actual_compile_pid": 650168,
+    "actual_compile_birth": "35262484",
+    "actual_compile_wait_joined": true,
+    "compile_replay": false
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/provider-elf.stdout",
+  "retained_actual_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/ACTUAL-ELF-METADATA.json",
+  "emission_source_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/EMISSION-SOURCE-CONTRACT.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/lapic_checks.py",
+    "sha256": "3219d2f1f7ba0a88249bdefe223e81632bbfac887869b5069ef54413b204fc1e",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_two_actual_readbacks_before_any_future_link": true,
+    "capture_all_actual_metadata_before_assertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/run_metadata.py",
+    "sha256": "7f3408867a7256972bbb683131d36df95eee5a02bdcd1ca21fec2a91b0ea28cf",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/REQUEST.json"
+    ],
+    "only_two_literal_payloads_no_compiler_link": true
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "actual_emission_scope": "Actual5T22/51/31/56/15 distinctsourceowned code ranges, original8B.lbss.lapic_write flags0x10000003 align8,Nonepreboot;0U/no extra owners. Three capturedR64real slotedges+fivePC64unwindedges individually bound, all observed addends0. Preserveactualinlining/order/error/types; no invented callback target/zero runtime bytes.",
+  "future_current_partial_and_join": "UNBOUND until actualmetadataGO+matching current cohort collision/ABI/owner review and freshRootadmission; no runtime/readiness/boot/target or default/native acceptance.",
+  "no_execution_in_preparation": true,
+  "not_runnable_until": "F exact source-emission/controller/predicate review GO and fresh Root HOST metadata admission. FirstunexpectedfailureSTOP/noautomaticretry/codegenreplay.",
+  "bounded_preexecution_correction": {
+    "original_request": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/REQUEST.json",
+    "original_request_sha256": "3a064c4debcd8a9d0990510f61c73f4e156f28ec81f4072dc056871fcffe5775",
+    "original_gate": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/lapic_checks.py",
+    "original_gate_sha256": "ca5a3461366cea0c6bf4f8a26c4b80d61330af243269f76a0c13dc9b56182efb",
+    "original_controller": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/run_metadata.py",
+    "original_controller_sha256": "7f3408867a7256972bbb683131d36df95eee5a02bdcd1ca21fec2a91b0ea28cf",
+    "original_UNEXECUTED_payloads": 2,
+    "selected_by_Root": "One exact literal eh_frame type correction only after F preexecutionNO_GO534ba4fd; no broad alternatives.",
+    "predicate_change": "Final allocated .eh_frame tuple requires actualSHT_X86_64_UNWIND1879048193 instead of erroneousPROGBITS1; every other predicate byte unchanged.",
+    "controller_routing": "Byte-identical controller copied into correction-1; normal Python scriptdir sys.path[0] makes unchanged import lapic_checks load correction-1/lapic_checks.py. Literal invocation uses this correctedscript and correctionrequest. Subprocesscwd and both exact GNUargv/rawpaths remain original, receipt request.parent and exclusiveactualcapture are correction-1.",
+    "object_source_retainedcapture_sourcecontract_flags_sizes_bytes_relocs_unchanged": true,
+    "compiler_GNU_gate_controller_Popen_executions_before_fresh_admission": 0
+  }
+}

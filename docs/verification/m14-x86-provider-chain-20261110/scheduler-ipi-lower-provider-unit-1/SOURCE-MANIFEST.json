@@ -1,0 +1,162 @@
+{
+  "schema": "mckernel.scheduler-ipi-lower.finite-source.v1",
+  "status": "FROZEN_FOUR_ORIGINAL_FUNCTIONS_AND_ONE_REAL_PREBOOT_READ_SLOT_NO_CODEGEN",
+  "owner": "/root/m15_public_abi_high private source preparer; Root sole compositor/admission",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs",
+  "unit_sha256": "59ac46e5f2e4219f1da36f901055e9a5c65313709498c98de9560cde746e62fe",
+  "unit_bytes": 1655,
+  "affirmative_contracts": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-eligibility-1/RESULT.json": "9f8038ef3cd3df57f4fe6c9eaef68ecbf7568fcc974e96db2ad35e8649f197c9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-irq-barrier-lookahead-20261109T2322.json": "3ae62269a1cadc533defa56997e0e84802356b0f3adb85ee2fd862e6a7856d0c",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-msr-pause-readslot-lookahead-20261109T2322.json": "9e7295dc39c5104ab8bd4aee74d01443a582f1db9927117f696fbdd14459d1f2"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "source_blocks": [
+    {
+      "name": "CUInt",
+      "kind": "actual_scalar_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "source_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "bytes": 18,
+      "source_bytes": "type CUInt = u32;\n",
+      "unit_byte_offset": 122
+    },
+    {
+      "name": "wrmsr",
+      "kind": "actual_public_asm_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 764,
+      "last_line": 776,
+      "source_sha256": "20ca08201ddd0b7a757d3922af054fa5fe9fdedccaff4d39de3093729f3def4e",
+      "bytes": 304,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn wrmsr(index: CUInt, value: CULong) {\n    let low = value as u32;\n    let high = (value >> 32) as u32;\n\n    core::arch::asm!(\n        \"wrmsr\",\n        in(\"ecx\") index,\n        in(\"eax\") low,\n        in(\"edx\") high,\n        options(nostack, preserves_flags),\n    );\n}\n",
+      "unit_byte_offset": 184
+    },
+    {
+      "name": "ihk_mc_mb",
+      "kind": "actual_public_asm_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 810,
+      "last_line": 813,
+      "source_sha256": "ea1809f1ae26ef50b5a7239152c0ed9cadad0881bec3b988cf0cd0939ba77248",
+      "bytes": 121,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn ihk_mc_mb() {\n    core::arch::asm!(\"mfence\", options(nostack, preserves_flags));\n}\n",
+      "unit_byte_offset": 489
+    },
+    {
+      "name": "x86_write_msr_bridge",
+      "kind": "actual_public_function_docs_attrs",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5788,
+      "last_line": 5795,
+      "source_sha256": "2a64e1ca97cf95e8b6994a31eac85d5aac31fbfde374a4987edd6ae91ec29d15",
+      "bytes": 324,
+      "source_bytes": "    /// Write the same MSR through the existing Rust provider.\n    ///\n    /// # Safety\n    /// The original legal MSR/value and privileged CPU ownership must hold.\n    #[no_mangle]\n    pub unsafe extern \"C\" fn x86_write_msr_bridge(register: CInt, value: CULong) {\n    unsafe { super::wrmsr(register as u32, value); }\n    }\n",
+      "unit_byte_offset": 678
+    },
+    {
+      "name": "x86_cpu_pause_bridge",
+      "kind": "actual_public_function_docs_attrs",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 6034,
+      "last_line": 6041,
+      "source_sha256": "025fd1534a684c12dd5c8939a96cb98a8df568b8e4c649f0de2c19af6d3eb1d7",
+      "bytes": 278,
+      "source_bytes": "    /// Call the same existing pause instruction provider.\n    ///\n    /// # Safety\n    /// Retain the original polling/CPU context; no timeout or progress is added.\n    #[no_mangle]\n    pub unsafe extern \"C\" fn x86_cpu_pause_bridge() {\n    unsafe { super::cpu_pause(); }\n    }\n",
+      "unit_byte_offset": 1003
+    },
+    {
+      "name": "ReadRegister",
+      "kind": "actual_callback_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5278,
+      "last_line": 5278,
+      "source_sha256": "6970a4600ad541ae9e78983ee819999b579f4f9837f5b24953e663983541edd8",
+      "bytes": 59,
+      "source_bytes": "    type ReadRegister = unsafe extern \"C\" fn(CInt) -> u32;\n",
+      "unit_byte_offset": 1342
+    },
+    {
+      "name": "lapic_read",
+      "kind": "actual_original_static",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5289,
+      "last_line": 5290,
+      "source_sha256": "43f65a6f03f8c9c525f365302caf5198760c311fcc84ebecb6b732d766d79bc5",
+      "bytes": 84,
+      "source_bytes": "    #[no_mangle]\n    pub(crate) static mut lapic_read: Option<ReadRegister> = None;\n",
+      "unit_byte_offset": 1402
+    },
+    {
+      "name": "ReadRegister_Option_layout_assertions",
+      "kind": "actual_selected_size_alignment_assertions",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5301,
+      "last_line": 5302,
+      "source_sha256": "785d0162d24c6e5c4f45e2b736b7b09ef35d778e71c65405e812dd3c69badd49",
+      "bytes": 137,
+      "source_bytes": "        assert!(core::mem::size_of::<Option<ReadRegister>>() == 8);\n        assert!(core::mem::align_of::<Option<ReadRegister>>() == 8);\n",
+      "unit_byte_offset": 1507
+    }
+  ],
+  "actual_ABI": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "types": [
+      "CInt=i32 actualabi5",
+      "CULong=u64 actualabi7",
+      "CUInt=u32 actualx86cpu9",
+      "ReadRegister=unsafeexternCfn(CInt)->u32 actual5278"
+    ],
+    "nullable_read_callback": "Original Option<ReadRegister> and originalsize8/align8 assertions, no fabricated layout/target"
+  },
+  "functions": [
+    "ihk_mc_mb",
+    "wrmsr",
+    "x86_cpu_pause_bridge",
+    "x86_write_msr_bridge"
+  ],
+  "original_data": [
+    {
+      "name": "lapic_read",
+      "type": "Option<ReadRegister>",
+      "initializer": "None",
+      "bytes": 8,
+      "alignment": 8,
+      "expected_kind": "B/NOBITS declaration, actual section/flags remain future emission",
+      "target_relocations": 0
+    }
+  ],
+  "genuine_external_declarations": [
+    {
+      "name": "cpu_pause",
+      "declaration": "unsafe extern \"C\" { fn cpu_pause(); }",
+      "ABI": "unsafeexternCfn()->()",
+      "basis": "Exact current native source signature at845-849, callable existing qualified3B owner; declaration-only glue preserving original symbol, no alias/fakecallback or body imported.",
+      "actual_reference_source_sha256": "fe9a327ea2ee18df3f63a18a2273cb09bdc36f5c183bc5c4daac117be4c38fc1",
+      "existing_cpu_pause_body_excluded": true
+    }
+  ],
+  "source_expected_T": 4,
+  "source_expected_U": [
+    "cpu_pause"
+  ],
+  "source_private_helpers": [],
+  "source_constants": [],
+  "semantics": {
+    "wrmsr": "Exact low=valueasu32,high=(value>>32)asu32; asm wrmsr with inECXindex/EAXlow/EDXhigh,options(nostack,preserves_flags); no nomem/readonly/pure.",
+    "ihk_mc_mb": "Exact mfence options(nostack,preserves_flags), original compiler-memory effect preserved; not compiler-onlyfence.",
+    "x86_write_msr_bridge": "Exact super::wrmsr(register asu32,value) signedindexbitcast and CULong64 forwarding.",
+    "x86_cpu_pause_bridge": "Exact super::cpu_pause() to genuine existing external3B owner; no duplicate cpu_pause or cfg substitute."
+  },
+  "source_glue": "no_std+actualABI path; finite originalx86_cpu_helpers/remaining_cpu_callbacks/dispatch_and_msr_entries namespaces; minimalactualscalar/corecontext and genuinecpu_pauseextern only; allselectedbody/attrs/static/alias/assertion bytes exact.",
+  "ownership": "Distinct from currentcpu_pause/IRQrestore-disable/LAPICwrite/lapic_write owners. No wholemodule/otherCPU/IRQ/slots/Some targets/backend/init/held bodies. Actual future current-cohort collision gate required, UNBOUND here.",
+  "initial_vs_live": "Original None lapic_read ispreboot8B storage only, no real target/boot publication/controller/MMIO/IRQ/native readiness. No function/slot/asm invoked.",
+  "future_emission": "Future actual4T+1B8/1genuineU only if actual metadata agrees; compiler may coalesce wrmsr/bridge under distinct original names. Must capture actual private/intrinsic/readonly/alias/code/reloc/asm lowering, stop unexplained variation.",
+  "operations": "Private source/JSON writing and sourcebyte/profile comparisons only; no compiler/GNU/ELFparser/predicate/link/test/function/hardware/runtime/native/canonical/index/state or recursive agent."
+}

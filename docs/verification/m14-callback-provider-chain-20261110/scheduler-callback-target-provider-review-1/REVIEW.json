@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.callback-target-provider.independent-source-profile-review.v1",
+  "decision": "GO_EXACT_FIVE_T_SOURCE_AND_ONE_LITERAL_COMPILE_PROPOSAL_ONLY_SUBJECT_TO_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH; never/danger-full-access; no recursion/private writer",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/REQUEST.json",
+    "sha256": "7d7230dee529bdea3585404461b06acab62dcfc5ffa3796186c8519972948131"
+  },
+  "reviewed_files_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/SOURCE-MANIFEST.json": "3c51dd5ea051220664a15305e3d3eb53a1b61679622b90b36ff21503de6c48e3",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/PROFILE-PROOF.json": "ae68ad1d09a0d094c54e4f71fa22c9560687a950d17e9984393e84cf66857136",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/scheduler_callback_target_provider_unit.rs": "912b9e5617caa3eda781984b640be991c69b1f50ea5b5ba9abb0ac9ac645d676",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/rdmsr.rs": "c326d9c97e0ceed5be24f2eac7376a4f6de680fee29695e119bcdc7f228cf617",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-provider-unit-1/local_apic_io.rs": "a5d12fd29ef23a2f9f02d198c51ec1b8008fc2a1b1bdc14c0b48d46e1b09efe9"
+  },
+  "eligibility_reused": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-eligibility-1/RESULT.json",
+    "sha256": "9557bd4cb16624f9f6a51791ee1da115b944ba8ceaa0186e6b6490dfbbbf9606",
+    "decisions": [
+      "GO_EXACT_FOUR_EXISTING_ACCEPTED_F04_APIC_TARGETS_SOURCE_PREPARATION_PLUS_DISTINCT_GENUINE_RDMSR_SOURCE_GO_ONLY",
+      "GO_EXACT_EXISTING_PUBLIC_RDMSR_ONE_FUNCTION_SOURCE_PREPARATION_ONLY"
+    ]
+  },
+  "checks": {
+    "all10_frozen_input_pins_checked": true,
+    "all17_actual_source_segments_match": true,
+    "five_original_attr_function_blocks_and_original_module_interface_verbatim": true,
+    "actualABIff48_preserved": true,
+    "no_new_storage_or_constants": true
+  },
+  "ABI_pointer_effects": [
+    "Original no_mangle C ABI: APICwrite(CInt,u32),APICread(CInt)->u32,x2write(CInt,u32),x2read(CInt)->u32,RDMSR(CUInt=u32)->CULong=u64. Only actual abi.rsff48/alias/core rawpointers used; no substitute register/device layout.",
+    "Original #[link_name=\"lapic_vp\"] remains on Rust-local extern static mut mapped_local_apic:*mut c_void. ELF import is lapic_vp; this is faithful declaration binding, not a reverse alias/renamed owner. No mapped storage/fixedpointer/null/mapping initialization defined.",
+    "Mapped writes/reads retain one actual pointer-slot load via addr_of().read(), signed byte offset reg asisize, actual u32 cast and one volatile access. No reference formed to MMIO, new cachedread/retry/null/alignment policy or HOSfixture supplied.",
+    "x2 targets retain signed reg>>=4, OR actual external immutable u32base asCInt, index cast u32 and zero-extended writevalue/truncated readresult. No copied0x800 constant, mask/errorpolicy/serialization or syntheticstatus.",
+    "Public RDMSR exact lateoutEDX high/lateoutEAX low/inECX index and high<<32|low. Original RDMSR options(nomem,nostack,preserves_flags) unchanged; no conflation with WRMSR memory effects.",
+    "Original WRMSR source/asm remains imported only from genuine already qualified8e7ca/currentcohort. No copied primitive or bridge alias; no duplicate existing owner."
+  ],
+  "ownership_and_source_scope": {
+    "expected_standalone": "Only five source globalT/no data/private runtime helper; genuine imports wrmsr,lapic_vp,x86_local_apic_base_msr. Emitted5T3U/readonly/intrinsic/unwind/inlining/aliases require actual future gate, not assumed source proof.",
+    "namespace": "Original local_apic_io module/imports/extern declarations and actual4bodies intact; root public RDMSR plus declaration-only genuineWRMSR. No wholeCPUmodule, neighboringdata/init/controller/boot/mode/publication or heldsource body imported.",
+    "future_owner_binding": "Currentpartial/join UNBOUND; Root must match latest genuineWRMSR/data/target ownership and actual prejoin collision checks. No stalecohort/no target initialized or callable readiness claim.",
+    "C_selection": "Actual lib.rs/CMake CPU selection and paired Cselector/reference API/data declarations checked; original source/header/fullC/SDK/native guards remain separate."
+  },
+  "compiler_profile_output": {
+    "flags": "Exact retained nightly1.95/no_std/edition2021/abort/opt2/large/static/no-redzone/no-vector/no-SSE compiler options match qualified reference; only source/output/metrics/capture paths differ. No cfg/env/lint/feature/no_builtins change.",
+    "preflight": "Actual compiler-only -o path has intended private output parent; Root must locate pinned rustc then its unique -o, require absent output and create that exact parent before Popen (time metrics -o separate). Fresh exclusive stdios/metrics/PIDbirth/directwait/diagnostics required.",
+    "limits": "One CPU6 compiler payload AS1GiB/CPU45/wall60/KILL5/FSIZE64MiB/core0 within HOST0,6,7/max3aggregatejobs/4GiB TOTAL incl overhead. Fresh Root usage/capacity/ownership admission prerequisite.",
+    "warnings": "Only exact retained52aa SSE warning/empty stdout accepted; publisherselected_mode warning belongs separate frozen attempt and is not waived/edited here. First unexpected failure STOP/preserve, no automaticretry."
+  },
+  "reviewer_operations": "CPU0 read-only source/hash/byte/profile comparisons and private REVIEW write only; no ELFparser/predicate/GNU/compiler/link/runtime/canonical/index/state operation or recursion.",
+  "acceptance_boundary": "No actual RDMSR/WRMSR/MMIO/CPU/IRQ/function/slot/boot/init/mapping/publication/HOST fixture/native/default/C-retirement/checklist qualification; F03 waitrelease/notification/generic/exec NO_GOs remain.",
+  "defects": []
+}

@@ -1,0 +1,67 @@
+{
+  "decision": "GO_EXACT_TWO_NEW_METADATA_READS_AND_CALLED_SOURCE_ASM_ALIAS_OWNER_GATE_PENDING_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/create_empty_entry_parity_high",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/REQUEST.json",
+    "sha256": "c217954cbd7da8d2f5cf7906d4782221078dfad6ced1e5ef498059b7062688ed"
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ipi_lower_checks.py",
+    "sha256": "6334158002c2ac67e659497de01cf966cf8d89c0ab4e69af451dd4d02fd5102a"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/run_metadata.py",
+    "sha256": "c8faac10417cb38ba3aef1dd7b937a5b25327f14ecf56dcc2c3f86984953acef"
+  },
+  "source_ASM_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/EMISSION-SOURCE-ASM-CONTRACT.json",
+    "sha256": "232c5f7988d5aac67afc5dd2fa7d97e269ef271fcd78257617864e590eb39580"
+  },
+  "reused_source_GO": "c350c5f4e10d536cff5a43a35a4c83a82b018545dc61fae466dc86f2f410daa6; exact four functions/original None ReadRegister slot/native source/ABI/profile reused, no source eligibility or producer replay.",
+  "frozen_bindings": {
+    "input_hashes_verified": 23,
+    "object": {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o",
+      "sha256": "8e7ca2ffcfa218acd6342019bc8bcc85dade472e1923c356335d0f2027874032",
+      "bytes": 1712,
+      "actual_producer_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/RESULT.json",
+      "actual_producer_RESULT_sha256": "185e6e0d0e8a0fea41761da3c02268aafd61cb791ee3d429af947bece7066908",
+      "compile_replay": false
+    },
+    "actual_producer": "Retained lower-four-producer655522 birth35368370 return0/joined, object8e7ca2ff/1712B and exact retained singleSSE warning.",
+    "retained_capture": {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+      "sha256": "79999ea9eac9d621fb66cd5d2ccc12b2f0431bccc7beb07d6c654fb6f15dec64",
+      "is_not_gate_PASS": true
+    },
+    "saved_disassembly": {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.stdout",
+      "sha256": "3252505943dd9fda5067d6aee74d801b1b2ffc9bc7bd806c718591c102394caa",
+      "Root_retained_observation": "Existing qualified objdump656714/birth35395089/directwait0joined; exact saved text only, no objdump replay."
+    }
+  },
+  "ASM_and_ABI_reconciliation": {
+    "actual_types": "Source GO binds actual abi.ff48 CInt=i32/CULong=u64, original CUInt=u32 and ReadRegister unsafe extern C fn(CInt)->u32.",
+    "MFENCE": "Actual4B0faef0c3 is mfence;ret. Original nostack/preserves_flags asm retained, no nomem/readonly/pure introduced; compiler-visible memory effects remain those source semantics.",
+    "WRMSR": "Actual15B mov RAX,RSI;mov ECX,EDI;mov RDX,RSI;shr RDX,32;wrmsr;ret. ECX receives original index bits (bridge CInt->u32), EAX gets low32 of u64 value fromRSI, EDX gets high32; source memory-effect options preserved. No instruction executed.",
+    "alias": "Four public T names occupy exactly3physical ranges. wrmsr and x86_write_msr_bridge both section4/value0/size15, real compiler coalescence of original definitions, no symbol rewrite or invented separate bytes.",
+    "pause": "Actual12B movabs RAX,address relocation cpu_pause; jmp RAX. Genuine cpu_pause remains sole U, no duplicate qualified pause/IRQ/body owner."
+  },
+  "finite_gate_review": {
+    "capture_first": "Verifies frozen23input hashes, qualified a4df reader identity, exclusively records all actual symbols/sections/relocations/defined/undefined/allocated file bytes before owner assertions. NOBITS metadata only. New object SHA/1712B, full symbols/sections/relocations/definitions must equal retained79999 capture.",
+    "strict_owner_set": "Exactly ihk_mc_mb,wrmsr,x86_cpu_pause_bridge,x86_write_msr_bridge T and original lapic_read B8; exactly cpu_pause U. Exactly5global/default-visible FUNC/OBJECT owners, no private helper/data/intrinsic owner.",
+    "code_ranges": "Exact3source-bound large-model PROGBITS section identities/flags0x10000006/align16/sizes/code bytes; every T name maps expected range; alias exact4/0/15, no fabricated address or function-size assumption.",
+    "real_None_slot": "lapic_read exact .lbss.lapic_read/type8NOBITS/flags0x10000003/size8/align8/value0 and no target relocation. No file zero bytes or initialized/live callback readiness inferred.",
+    "relocations": "Exactly4retained rows: R64 cpu_pause+0 at code section5 offset2, and exactly3PC64 local section3/4/5+0 references from actual .eh_frame offsets32/64/96. One physical unwind record covers alias, no one-record-per-name guess. Full row equality rejects unknown source/target/addend/import.",
+    "unwind_readonly": "Only observed SHT_X86_64_UNWIND0x70000001/1879048193 .eh_frame/flags2/align8/size120/exact captured bytes beyond exact selected code+slot allocated sections. No unknown readonly/state/private emission accepted.",
+    "saved_disassembly_binding": "Exact immutable32525059 text/SHA and source-owned code hex asserted; no new objdump/parser implementation. Instruction substring checks supplement fixed complete text and codebytes, not a replacement for their binding."
+  },
+  "controller_review": {
+    "literal_work": "Exactly serial nm-S-posix and readelf-h-SW-Ws-Wr of actual bound object. No compiler/objdump/link/loader/function command.",
+    "preflight_and_waits": "All23input hashes/objecthash/2phase labels checked before first Popen. Exclusive stdio captures; actual argv/env/PID/portable proc birth persisted+fsynced before direct wait; finally joins started child, records wall/rawstdioSHA and failure. Nonzero wait or any stderr stops.",
+    "actual_called_gate": "Fresh literal controller script imports adjacent ipi_lower_checks and CALLS actual_object_gate(q) after both successful reads; writes OBJECT-CHECK and called PASS only after return. First unexpected failure preserved/no retry.",
+    "CPU_resource_prerequisite": "Root outer must explicitly bind fresh controller and predicate to CPU6, in addition to both payloadtaskset6. Same AS1GiB/CPU45/wall60+5/FSIZE64MiB/core0/time-v, serial local1 and aggregate3jobs4GiB inclusive/reservations/floors. Driver literal has no internal taskset/affinity assertion; outer6 remains required."
+  },
+  "future_join": "UNBOUND. Actual metadata PASS plus latest passing matching cohort/source/ABI/collision/alias/bytes/relocs pre/post-join review and fresh Root admission remain required. None is PREBOOT only; real publication/target/controller/boot lifetime and runtime/native/default/original acceptance stay open.",
+  "operations": "Read frozen packets/check/controller, retained JSON capture, saved disassembly text and narrow producer/source-GO ABI fields. Verified23 input hashes and AST syntax only. Wrote private review. No ELF reader/parser/gate/controller/GNU/compiler/link/test/function/barrier/MSR/slot/IRQ/native runtime, canonical/index/state changes or delegation."
+}

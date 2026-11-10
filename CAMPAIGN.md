@@ -1,116 +1,97 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-09T23:54Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T00:47Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE: explicit same-Root manual resume `20261109T211917Z-488788ba`.**
-Root remains actual Sol/MAX and sole canonical compositor/index/publisher. All six
-existing source/review owners are actual Sol/HIGH, never/danger-full-access; only
-ready disjoint work runs. No launcher, goal, budget, native owner or hold is reset.
+**ACTIVE: same saved Root, manual invocation `20261109T211917Z-488788ba`.**
+Root is actual Sol/MAX, sole canonical compositor/index/publisher. Existing direct
+owners are Sol/HIGH, cap6/depth1; completed owners are not stalled. No controller,
+goal, budget, native owner or original hold is reset.
 
-**Latest user target:** EACH original M14 and M15 closure checklist at least75%
-complete (at most25% remaining) by Nov9midnight America/Los_Angeles,
-`2026-11-10T08:00:00Z`. This supersedes the combined76.8375% target for current
-planning; the frozen51.225% baseline/old relative target remain in ledger history.
-Current verified M14=51.48%, M15=50.97%: required gains23.52pp/24.03pp; actual new
-counted delta0/0. All156counted checks/73verified and scoring weights are unchanged.
-The completed independent readiness audits identify38/45open counted leaves and
-no full-scope open leaf ready for credit from retained evidence.75% is an unproven
-planning target; the prior missed target/outage and original acceptance criteria
-remain. The deadline is not a stop time or a guarantee.
+**Target:** EACH original M14/M15 closure checklist at least75%complete by
+Nov9midnight LosAngeles (`2026-11-10T08:00:00Z`). Current M14=51.48%, M15=50.97%;
+new counted/acceptance delta0/0.156counted checks/73verified and original weights/
+denominators stay fixed. Required gains23.52pp/24.03pp are unproven; target is not
+a guarantee or stop time. Prior51.225%combined baseline/76.8375%relative target,
+missed target/outage and original acceptance history remain in ledger/history.
+Accepted gates remain M14F01/F02/F04/F05 (4/6)+0/3integrations, M15F01(1/8)+0/4.
+Open original gates: M14F03/F06/I01-I03; M15F02-F08/I01-I04. M14-before-M15
+acceptance retained. Independent readiness audits already found38/45open counted
+leaves with no complete open leaf ready for credit from retained evidence; no
+further percentage audit or extra HOST cases are queued to change that number.
 
-**Actual completed source/provider work:** scheduler engine+wrapper29bb joined
-qualifiedaaaf as42f177e4:66global=55Tnames+11data/22genuineU. Tenbridge33500 joined
-42f1 as6fb8987d:76global=65T+11data/19U. Qualified threeprimitivea227 and genuine
-18recorddata4bb4 then joined6fb asb18f9e01:80global=68T+12data/15genuineU. All actual
-called pre/post gates and direct waits passed; original bytes/relocations/aliases,
-formatter helpers/tables,88Blogger table and one privateKMSG_LOCK are preserved.
-The original descriptor-flag expectation failure and one exact0x200003GNU_RETAIN
-correction are retained; unchanged object/readbacks were reused. Its explicit
-flags1 finitepartial profile is source-faithful, not an observeddefault/native
-profile or a fullCguard pass. Actual18records/36fieldrelocations qualify; initial
-storage is preboot data only. Engine checkpointceb322938 is pushed/fetched/all64
-entries. New coherent shared proof is frozen under
-`docs/verification/m14-scheduler-shared-providers-20261109/` with149files;
-`m14-scheduler-shared-provider-results-20261109.json` adds only uncounted evidence.
-Root is preparing its normal coherent source/ledger publication.
+**Latest actual source result:** current partial
+`e1a2469706723545483f74be15ad0bcc8ef01c9171159991b7a367adf87d2fd9`
+PASSed its exact three-object join:129global=104Tnames+25data,12genuineU. Source
+aliases remain aliases: WRMSR/bridge share15B and olddelay coalescence is preserved.
+All actual pre/postgates and three direct waits joined/CPU6released; all old/new
+code/data/normalizedrelocations/privateformatter helpers/tables/oneKMSG_LOCK,
+source descriptors and six-slot boundaries remain exact. No kernel function,
+selector store, MMIO/MSR/IRQ/boot/native operation executed. NULL/None/zero/one and
+fixed MSR geometry are original preboot/source data, not initialized hardware.
+FullCguard/headerobject equality/Cduplicateowner/default/native qualification remain
+open; actual source-profile choices are finite Rust-only preparation.
 
-**Current execution delta:** new timer/vector7003 and CPU/IPI602d compiled once.
-Their actual two-read metadata gates now PASS. Timer's source-used descriptor
-member addresses required one exact relocation-predicate correction on retained
-object/readbacks;0newGNU/compiler/link commands, no broadaddend waiver. Original
-failure/raw bytes remain. The exact currentb18+7003+602d composition also PASSed as35b3a058:
-86global=74Tnames+12data/21genuineU, bothcalledgates/all3waitsjoined.
+Completed chain reused without green replay: engine42f1 → bridge6fb → primitive/
+18descriptor b18 → timer/CPU35b3 → callback/data4b4c → LAPIC/IPI7c3e → lower63f2 →
+publisher70c5 → final e1a2. All genuine source units/ABI/attributes/profiles received
+independent review. Source-specific failures remain preserved: output-directory
+launch error; exact descriptor/large-section expectation corrections; unexecuted
+LAPIC unwind-type NO_GO corrected before payloads; publisher's exact original
+selected_mode namingstyle+retainedSSE diagnostic reconciled on a514 without source
+edit, warning suppression or recompile. Actual owner/content/relocation gates then
+passed on retained objects. No wildcard flag/addend/warning acceptance.
 
-Four real timer callbacks9f620be4(2280B), IPI-slot/logger830ddbb5(2344B) and actual
-CPU-local/accessor+prebootcallbackslot65499b6b(1280B) also compiled successfully;
-all three waits joined/exact inherited diagnostics/CPU6released. Root's first
-callback launch missed the actual output directory by selecting time's metrics
--o. Failure is retained; one independently reviewed directory/capture correction
-passed without source/ABI/flag changes. The other two compilers ran only once.
-The exact two-data linux6.12 Rust-only target05be1150(1016B) also compiled once;
-original process_global_storage_candidate cfg/15offset_of expressions remain.
-FullCglobalstorage/PROCESS_HELPERS/debug guards, actual ownership/SDK/native
-qualification are preserved and PENDING. Fourtimer-callback and two-data actual metadata/content/owner gates nowPASS;
-all6new readback waits joined. All4IPI/local readbacks alsoPASSed/joined, but
-source field+24 and large-model NOBITS section expectations stopped their first
-gate calls. Bothretainedobjects/readbacks are preserved for ONE exact combined
-predicate-only correction under review,0newGNU/compiler/link replay. No function,
-timer, lock, IRQ, boot or hardware executes. Actual slotNone/NULL is prebootstorage, not a published callback target.
+**Remaining actual imports**, from the existing final readback only:
+`do_kill`, `do_syscall`, `eventfd`, `f03_terminate_host_refcount_set_v1`,
+`f03_wait_release_process`, `f03_wait_release_thread`,
+`syscall_do_kill_thread_bridge`, `syscall_do_syscall_request_bridge`,
+`syscall_find_process_bridge`, `syscall_generic_forwarding_body_result`,
+`syscall_process_unlock_bridge`, `terminate_host_body_result`.
+Exact wait-release membership and notification are UNKNOWN/NO_GO before body
+preparation. Oldwait4/waitid/8entry proof supplies no exemption. Generic/exec stays
+held/replay=false/equivalent=false; no oldc205/old8/combinedcore/genericC cohort,
+symbol rewrite, fake callback or equivalent request may supply it.
 
-| Next readiness prerequisite | Actual consumer | Owner / smallest completion proof |
+| Remaining prerequisite | Actual consumer | Owner / smallest completion proof |
 | --- | --- | --- |
-| Final lower-provider composition | Actualcurrent7c3e plus qualified8e7ca only; sharedF03/F06 credential source chain | B/E exact2operand packet and alias/owner review; Rootcalledprejoin beforeld-r/postjoin after2reads |
-| Finite callback publisher source | Real six-slot publication caller and genuine compiledICR/wait/IPI providers | D/C exactcoupled6stores/bothbranches/types/owners/source-profile review; no backend/boot/init execution |
-| Matching next provider/source qualification | Original callbacktargets and sourcecohort consumers, with actual SDK/native boundary retained | Root only affirmative finite source contracts and smallest genuinelyneeded object/behavior proof; no fake callbacks or closed green replay |
+| Eligible universal/generic source disposition | OriginalM14F03/F06/I02 matching final build and source cohort | Originalholdauthority; exactscope/eligible genuineprovider record. Root cannot replay held/equivalent work |
+| Complete remaining12 provider/source ownership and supported bindings | Credential/sourcecohort and original integration gates | Originalscope/ABI/callee-owner input or matching independentlyqualified source; exactkill2 andwait2 checks areUNKNOWN/NO_GO |
+| Actual SDK/sourcecustody/native/currentfree admission | Original defaultimage/modules/native/application acceptance | Originalsource/nativeowners, matching supported bindings and fresh operation-specific realgate; localquota/NULLstorage doesnot supply it |
 
-**Latest coherent checkpoint:** e55c3d47 is pushed/fetched/all154changedentries.
-The next completed chain through97owner4b4cc4a (81Tnames+16data/14U) is frozen in
-`docs/verification/m14-scheduler-backend-providers-20261109/`:242exactfiles with
-source/config/reviews/raw/objects/actual waits and all original failure/correction
-proof. Its scoped result adds only uncounted prerequisite evidence. No prior
-archives, account guards or unqualified source are recopied. Normal publication
-of this source/results/ledger checkpoint follows; original scores stay unchanged.
+**Critical-path blocker/owner:** no eligible universal generic/exec provider for a
+new final image. Original hold retains release authority; Root owns integration.
+Both retained genericC objects include the held exec-tail selection and stay
+excluded. Fullimageargv remainsUNSET. Original SDK outer mapping/sourcecustody,
+matching supported artifacts, native ownership/currentfree and complete backend/
+scenario bindings also remain unbound. Final critical-path ETA isUNKNOWN until
+actual original inputs arrive. Source counts/partial ELF links/available quota do
+not close an original gate, retire C or release source/native authority.
 
-Current-only4b4c+qualifiedLAPIC2f+concreteIPI1f also joined successfully as7c3e07bb:
-112global=93Tnames+19data/16genuineU, both actualgates/all3waits joined. All new
-LAPIC/IPI object gates passed once after the exact preexecution unwind-type fix;
-no compiler/readback replay or unknown flag waiver. Lower4object8e7ca2ff also
-compiled once and its2newmetadata reads/called ASM-alias-owner gate PASSed. Actual
-wrmsr/bridge share one15Bbody;4Tnames/3physicalranges are preserved, genuinecpu_pause
-binds existingT3. MFENCE/WRMSR instructions were read by objdump only, never run.
-The next reviewed2operand join is exactlycurrent7c3e+qualified8e7ca, not a newimage.
+**Published/fetched:**99052e60/all247changedentries covers backend chain through97;
+e55c3d47/all154 shared-provider entries and ceb322938/all64engine entries remain
+verified. Current117/129 proof packages are complete and copied for this coherent checkpoint; no
+unchanged fetch, source census, restore or old green suite is repeated. IHK8eb8,
+29tracked productionRust files and trackedbundled9046e40 ownership are already
+verified below and remain untouched. CLIproof stays53079-bound; ca484relinks DEFER.
+Optional NEWpublisher HOSTstore observation027f isCLOSED/NO_GO absent actual new
+need/caller/provider/admission input; no fixture/testquota/equivalent reassignment.
 
-A new finite callback-publication source contract is ready for private preparation:
-all6 original coupled stores/bothmodebranches, real existing target declarations
-and original missingmode/ICRslots only. Four actual APIC/x2APICread/write targets
-remain external; source/prebootNone does not establish initialized boot callbacks.
-Potential HOSTstore observations require genuine target links, priorcoverage and
-separate actual contract/review/admission; no fixture or runtime is claimed.
-Precise f03_wait_release_process/thread membership isUNKNOWN/NO_GO before body
-preparation; oldwait4/waitid/8entry evidence supplies no release for those bodies.
-
-**Critical-path blocker/owner:** original generic/exec hold has no eligible
-universal provider for a final image. The original hold retains release authority;
-Root owns integration. Both retained genericC objects are excluded by their actual
-exec-tail selection; no equivalent replay/wrapper/symbol override can supply it.
-Exact notification/helper membership remainsUNKNOWN/NO_GO. Fullimage argv isUNSET;
-original SDK outer mapping/sourcecustody/native/currentfree and complete supported
-backend/scenario bindings also remain open. Revised final critical-path ETA is
-UNKNOWN until actual missing original inputs arrive. These partials add no original
-acceptance, native/image proof, Cretirement or score credit. Open gates remain
-M14F03/F06/I01-I03; M15F02-F08/I01-I04, with M14-before-M15 acceptance.
-
-Next15-minute deliverable: finish the two corrected object gates and reviewed
-five-object join while preparing the newly eligible finite LAPIC/IPI source cuts.
-Fresh included-only guard23:36 reports40%used/60%remaining, no service/spendhold. HOST0/6/7,max3aggregate
-lightjobs,4GiB TOTAL including all overhead/fresh26GiB and host16/scratch12GiB
-floors remain; retained18GiB, separateheldnative2–5/12GiB, everyUNKNOWN owner/outcome,
-scratch21/mutex27:4/expiredattempts/nonces and all source/service controls persist.
-IHK8eb8/29trackedproductionRust files and sourcebundle ownership are already
-verified below; no census/restore/rebuild or ca484consumer proof is repeated.
+Next15-minute action: finish this actualsource/results/ledger publication/readback.
+All supplied affirmative finite engineering tasks are complete. Exactsignal check
+fd33fe19 confirms UNKNOWN/NO_GO for do_kill/syscall_do_kill_thread_bridge: prior
+signal-link proof covers two DIFFERENT forwarders, not these bodies. No bodies
+were inspected/prepared and no new original functional task is established.
+No newready source is implied by timers, availablequota, package publication or
+completed owners. Preserve the three-ACTUAL-Root-turn impasse audit; this first
+exhausted-queue observation occurs only after completing the current publication.
+Fresh normal includedguard00:45UTCNov10:42%used/58%remaining,no service/spendhold.
+HOST0/6/7,max3aggregateLIGHTjobs,4GiB TOTAL including all overhead/fresh26GiB and
+host16/scratch12GiB floors remain. Retained18GiB; separateheldnative2–5/12GiB;
+allUNKNOWN owners/outcomes,scratch21/mutex27:4/expiredattempts/nonces and original
+source/service/usage/laterstop controls persist. No prepaid/API fallback.
 
 **Historical201010resume:** the following completed recovery task and three-turn
 impasse belong to the previous invocation and do not stop this new eligible work.

@@ -1,0 +1,47 @@
+{
+  "schema": "mckernel.ipi-lower-provider.independent-source-profile-review.v1",
+  "decision": "GO_EXACT_FOUR_FUNCTIONS_ONE_NONE_READ_SLOT_SOURCE_AND_LITERAL_COMPILE_PROPOSAL_ONLY_SUBJECT_TO_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Root-confirmed actual Sol/HIGH, never/danger-full-access; no recursion",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/REQUEST.json",
+    "sha256": "1e5d029b6bbdee03c07692e53fd241370182df8af5048dca4a2345edf53bfb42"
+  },
+  "reviewed_files_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs": "59ac46e5f2e4219f1da36f901055e9a5c65313709498c98de9560cde746e62fe",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/SOURCE-MANIFEST.json": "3a1c44c0c09fadfdde59267b0e916a7dd796296fa7208ef808b349845d874e80",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/PROFILE-PROOF.json": "ad06bced3b6a6b7ab337ba189eac5b061009d14a75b70e34aeca79bd4dba6d7c"
+  },
+  "eligibility_reused": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-eligibility-1/RESULT.json": "9f8038ef3cd3df57f4fe6c9eaef68ecbf7568fcc974e96db2ad35e8649f197c9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-irq-barrier-lookahead-20261109T2322.json": "3ae62269a1cadc533defa56997e0e84802356b0f3adb85ee2fd862e6a7856d0c",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-msr-pause-readslot-lookahead-20261109T2322.json": "9e7295dc39c5104ab8bd4aee74d01443a582f1db9927117f696fbdd14459d1f2"
+  },
+  "validation": {
+    "all11_input_pins_checked": true,
+    "all8_manifest_blocks_actual_source_text_hash_size_and_unit_offset_match": true,
+    "unit_bytes": 1655,
+    "five_original_no_mangle_attrs_exact": true,
+    "compiler_flags_through_output_option_match_qualified_reference": true
+  },
+  "source_ABI_and_semantics": [
+    "Actual abi.rsff48 CInt=i32/CULong=u64; exact original CUInt=u32 and ReadRegister unsafe extern C fn(CInt)->u32. No replacement layout/callback signature or type inference from names.",
+    "wrmsr exact low=value asu32 and high=(value>>32) asu32, ECX index/EAX low/EDX high; original nostack,preserves_flags only. No nomem/readonly/pure; compiler-visible memory effects retained.",
+    "ihk_mc_mb exact original mfence with nostack,preserves_flags; not compiler-only/atomic/noop fence. No IRQ/CPU primitive body duplicated.",
+    "x86_write_msr_bridge retains exact actual CInt->u32 index cast/CULong forwarding via super::wrmsr. x86_cpu_pause_bridge retains exact call super::cpu_pause; original namespaces preserved.",
+    "Only external function declaration is genuine original-symbol cpu_pause. No duplicate cpu_pause/save/restore/LAPIC implementation, name alias or export/link rewrite.",
+    "lapic_read exact original no_mangle pub(crate) static mut Option<ReadRegister>=None with original size8/align8 assertions in original namespace. No target, publication, getter initialization or fake read provider."
+  ],
+  "ownership_and_profile": {
+    "expected": "Source4T+realB8 lapic_read, sole genuinecpu_pauseU, no private source helper/extra data; actual emission and any compiler alias/section/intrinsic must be captured/reviewed later.",
+    "existing_owners": "Current actual cpu_pause is reused externally, no copied definition; currentIRQsave/restore/LAPICwrite/lapic_write owners excluded and disjoint. No stale currentcohort/object identity guessed; future join unbound.",
+    "flags": "Retained native x86_64 LP64 no_std/edition2021/nightly1.95/abort/opt2/large/static/no-redzone/no-vector/no-SSE exact qualified profile, only private paths differ. No cfg/env/lint/feature/no_builtins or memory option change.",
+    "limits": "One serial CPU6 compile,AS1GiB/CPU45/wall60/KILL5/FSIZE64MiB/core0 within shared0,6,7/max3aggregatejobs/4GiB TOTAL incl overhead. Fresh Root usage/capacity/ownership admission required.",
+    "output_preflight": "Request explicitly requires exact pinned rustc position, exactly one compiler -o AFTER it, absent literal object, actual output parent creation before Popen; wrapper time -o kept distinct. Path matches intended private output directory; stdout/stderr exclusive with PID/birth/rawmetrics/directjoin.",
+    "diagnostics": "Exact52aa single retained SSE warning and empty stdout; first unexpected failure STOP and preserve, no automatic retry/workaround."
+  },
+  "future_metadata_requirements": "Actual emitted object/asm/aliases/private-owner/code/data/section flags/size/alignment/relocations/genuine U qualification before link. No guessed small-bss flags or fixed emitted bytes: genuine None data remains a preboot NOBITS declaration only. Root actual collision gate must precede any ld-r.",
+  "boundaries": "Only nonexecuted source/compile proposal. No MSR/MFENCE/pause/function/IRQ/slot read or hardware/boot selector/target publication/init/native invocation; full C selector/header/source/SDK/currentfree/cohort/default acceptance remain. No original checklist/C-retirement credit.",
+  "reviewer_operations": "CPU0 source/hash/byte/flag comparisons and private REVIEW write only; no compiler/GNU/parser/gate/link/runtime/canonical/index/state operation or recursion.",
+  "defects": []
+}

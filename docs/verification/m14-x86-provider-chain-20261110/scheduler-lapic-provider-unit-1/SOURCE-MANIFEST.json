@@ -1,0 +1,329 @@
+{
+  "schema": "mckernel.scheduler-lapic.finite-source.v1",
+  "status": "FROZEN_FIVE_ORIGINAL_FUNCTIONS_AND_ONE_REAL_PREBOOT_SLOT_NO_CODEGEN",
+  "owner": "/root/create_empty_entry_parity_high private source owner; independent A review required",
+  "unit_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs",
+  "unit_sha256": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113",
+  "unit_bytes": 2455,
+  "affirmative_contracts": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/RESULT.json": "38107c2acc60908d4d110a51bb673a70bffd60e601f3d991a650d256052f35f4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/ENGINE-RESULT.json": "6f4ec3c234a1827c8f94b6a7cb5aaeb10cd9f8f90e58c7a15810dca5ce06b858",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-write-owner-lookahead-20261109T2302.json": "1cd9e7a754d4830367d8f7995f24a322049cf816d02fbf965d8d7d2d683d64e9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-timer-engines-lookahead-20261109T2302.json": "7e255415058281e0ba0be406f6b5e6f9968da9d89dbefc9d06251b8dc929ce0f"
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "source_blocks": [
+    {
+      "name": "CUInt",
+      "kind": "actual_type_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "source_sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "unit_byte_offset": 120,
+      "bytes": 18,
+      "source_bytes": "type CUInt = u32;\n"
+    },
+    {
+      "name": "EINVAL",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 11,
+      "last_line": 11,
+      "source_sha256": "859c14c67e6dfbcf569b7cbcb7fe17386c68ea474ce4af9925b4efed549a5345",
+      "unit_byte_offset": 139,
+      "bytes": 25,
+      "source_bytes": "const EINVAL: CInt = 22;\n"
+    },
+    {
+      "name": "LAPIC_TIMER",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 13,
+      "last_line": 13,
+      "source_sha256": "af8fdf07accf46b5fe7b2a400fc8694cb35889ab540a4221ee3154475486452e",
+      "unit_byte_offset": 164,
+      "bytes": 33,
+      "source_bytes": "const LAPIC_TIMER: CInt = 0x320;\n"
+    },
+    {
+      "name": "LAPIC_TIMER_INITIAL",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 15,
+      "last_line": 15,
+      "source_sha256": "7d27605da7a38781f39b6852fbcd4dff0ea3fe486f4426de19ead8a802e6c995",
+      "unit_byte_offset": 197,
+      "bytes": 41,
+      "source_bytes": "const LAPIC_TIMER_INITIAL: CInt = 0x380;\n"
+    },
+    {
+      "name": "LAPIC_TIMER_DIVIDE",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 16,
+      "last_line": 16,
+      "source_sha256": "cfd631b9bb5b0ce1385403a4da0f69ad5891214f7af07e190de5c62aa8295530",
+      "unit_byte_offset": 238,
+      "bytes": 40,
+      "source_bytes": "const LAPIC_TIMER_DIVIDE: CInt = 0x3e0;\n"
+    },
+    {
+      "name": "LOCAL_TIMER_VECTOR",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 25,
+      "last_line": 25,
+      "source_sha256": "6c841406430062dbcfe0cb0d1a3b1743a758e4d9cf14abe2e64ba62297ef0d9d",
+      "unit_byte_offset": 278,
+      "bytes": 40,
+      "source_bytes": "const LOCAL_TIMER_VECTOR: CUInt = 0xef;\n"
+    },
+    {
+      "name": "APIC_DIVISOR",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 35,
+      "last_line": 35,
+      "source_sha256": "986ce904b5652a92434e697c57aa45e3b7c34bbc0486398a2cb577df4f7e3382",
+      "unit_byte_offset": 318,
+      "bytes": 32,
+      "source_bytes": "const APIC_DIVISOR: CUInt = 16;\n"
+    },
+    {
+      "name": "APIC_LVT_TIMER_PERIODIC",
+      "kind": "actual_scalar_constant",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 36,
+      "last_line": 36,
+      "source_sha256": "26e32b020c0a73a0182bc32970e629a8db6946967c61137cba2c582999fb9c8c",
+      "unit_byte_offset": 350,
+      "bytes": 48,
+      "source_bytes": "const APIC_LVT_TIMER_PERIODIC: CUInt = 1 << 17;\n"
+    },
+    {
+      "name": "X86LapicWriteFn",
+      "kind": "actual_callback_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 69,
+      "last_line": 69,
+      "source_sha256": "a3644f3493daf9d3fe90a693caa33431ada9dbb7f11af2046b7802f24e7a625b",
+      "unit_byte_offset": 399,
+      "bytes": 58,
+      "source_bytes": "type X86LapicWriteFn = unsafe extern \"C\" fn(CInt, CUInt);\n"
+    },
+    {
+      "name": "x86_lapic_write_bridge_declaration",
+      "kind": "actual_existing_declaration",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 117,
+      "last_line": 117,
+      "source_sha256": "99f2d3e244ffa7f2172006b145d613a4acffbda230398c876bbbf679ef16718f",
+      "unit_byte_offset": 478,
+      "bytes": 56,
+      "source_bytes": "    fn x86_lapic_write_bridge(reg: CInt, value: CUInt);\n"
+    },
+    {
+      "name": "x86_lapic_timer_enable_body_result",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1858,
+      "last_line": 1871,
+      "source_sha256": "512b1e2a6163b67f78637b9b88f358d08eb91702a5ab4a2b7cf06de350a8a9ef",
+      "unit_byte_offset": 537,
+      "bytes": 381,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn x86_lapic_timer_enable_body_result(\n    clocks: CUInt,\n    write_fn: Option<X86LapicWriteFn>,\n) -> CInt {\n    let Some(write) = write_fn else {\n        return -EINVAL;\n    };\n\n    write(LAPIC_TIMER_INITIAL, clocks / APIC_DIVISOR);\n    write(LAPIC_TIMER_DIVIDE, 3);\n    write(LAPIC_TIMER, LOCAL_TIMER_VECTOR | APIC_LVT_TIMER_PERIODIC);\n    0\n}\n"
+    },
+    {
+      "name": "lapic_timer_enable",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1873,
+      "last_line": 1876,
+      "source_sha256": "1c6fc9889a1dabe38d529a91fac65fb3f3263e90ec83a0c450afae068a173368",
+      "unit_byte_offset": 919,
+      "bytes": 162,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn lapic_timer_enable(clocks: CUInt) {\n    let _ = x86_lapic_timer_enable_body_result(clocks, Some(x86_lapic_write_bridge));\n}\n"
+    },
+    {
+      "name": "x86_lapic_timer_disable_body_result",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1878,
+      "last_line": 1888,
+      "source_sha256": "47e8be151101ec1f4d35c3aaad7a46dad15f17ce07ebb41ba6d25590c2b017f5",
+      "unit_byte_offset": 1082,
+      "bytes": 239,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn x86_lapic_timer_disable_body_result(\n    write_fn: Option<X86LapicWriteFn>,\n) -> CInt {\n    let Some(write) = write_fn else {\n        return -EINVAL;\n    };\n\n    write(LAPIC_TIMER_INITIAL, 0);\n    0\n}\n"
+    },
+    {
+      "name": "lapic_timer_disable",
+      "kind": "actual_public_function",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 1890,
+      "last_line": 1893,
+      "source_sha256": "6f89e356c6f80a5c81227feb0c6007f6921aaabdd305843e21316c06a03e8fdd",
+      "unit_byte_offset": 1322,
+      "bytes": 143,
+      "source_bytes": "#[no_mangle]\npub unsafe extern \"C\" fn lapic_timer_disable() {\n    let _ = x86_lapic_timer_disable_body_result(Some(x86_lapic_write_bridge));\n}\n"
+    },
+    {
+      "name": "lapic_write_slot_declaration",
+      "kind": "actual_existing_slot_declaration",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5706,
+      "last_line": 5706,
+      "source_sha256": "9382ef344e13dee8f9813576b4e7570c680794de1f862bd3f7c87b6ca11d5738",
+      "unit_byte_offset": 1575,
+      "bytes": 73,
+      "source_bytes": "        static mut lapic_write: Option<unsafe extern \"C\" fn(CInt, u32)>;\n"
+    },
+    {
+      "name": "x86_lapic_write_bridge",
+      "kind": "actual_public_function_docs_and_attributes",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5742,
+      "last_line": 5750,
+      "source_sha256": "cb0fe1355864e882c6fccc496e360cb5c26292555acd477e27f8acc9235eb79a",
+      "unit_byte_offset": 1655,
+      "bytes": 423,
+      "source_bytes": "    /// Call the same selected LAPIC write target.\n    ///\n    /// # Safety\n    /// The live boot-selected callback and mapped controller must remain owned\n    /// through the call; preserve its original MMIO/MSR and interrupt contract.\n    #[no_mangle]\n    pub unsafe extern \"C\" fn x86_lapic_write_bridge(register: CInt, value: u32) {\n    unsafe { addr_of!(lapic_write).read().unwrap_unchecked()(register, value); }\n    }\n"
+    },
+    {
+      "name": "WriteRegister",
+      "kind": "actual_callback_alias",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5277,
+      "last_line": 5277,
+      "source_sha256": "aa5b18ea21f1d2ef0ce3dc570e089565b8602ac11bc62d349ebce1d383a6539c",
+      "unit_byte_offset": 2139,
+      "bytes": 58,
+      "source_bytes": "    type WriteRegister = unsafe extern \"C\" fn(CInt, u32);\n"
+    },
+    {
+      "name": "lapic_write",
+      "kind": "actual_original_data_definition",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5287,
+      "last_line": 5288,
+      "source_sha256": "3613d6fe0e375cb08b9176113349649570429be3b3559c0dc4f3e8e8fc5020d2",
+      "unit_byte_offset": 2198,
+      "bytes": 86,
+      "source_bytes": "    #[no_mangle]\n    pub(crate) static mut lapic_write: Option<WriteRegister> = None;\n"
+    },
+    {
+      "name": "WriteRegister_Option_layout_assertions",
+      "kind": "actual_two_selected_layout_assertions",
+      "source_path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5299,
+      "last_line": 5300,
+      "source_sha256": "317e632f06926a54e5c9962288731792bd5a1f6381343ed462f63a55cacca9ee",
+      "unit_byte_offset": 2305,
+      "bytes": 139,
+      "source_bytes": "        assert!(core::mem::size_of::<Option<WriteRegister>>() == 8);\n        assert!(core::mem::align_of::<Option<WriteRegister>>() == 8);\n"
+    }
+  ],
+  "actual_ABI": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "types": [
+      "CInt=i32 from actualabi.rs5",
+      "CUInt=u32 from actualx86_cpu_helpers.rs9",
+      "X86LapicWriteFn=unsafe extern C fn(CInt,CUInt) from69",
+      "WriteRegister=unsafe extern C fn(CInt,u32) from5277"
+    ],
+    "nullable_callback": "Exact original Option C-function-pointer types and source size8/align8 assertions; no invented layout"
+  },
+  "functions": [
+    "lapic_timer_enable",
+    "lapic_timer_disable",
+    "x86_lapic_timer_enable_body_result",
+    "x86_lapic_timer_disable_body_result",
+    "x86_lapic_write_bridge"
+  ],
+  "original_data": [
+    {
+      "name": "lapic_write",
+      "source": "x86_cpu_helpers.rs5287-5288",
+      "type": "Option<WriteRegister>",
+      "initializer": "None",
+      "bytes": 8,
+      "alignment": 8,
+      "expected_section": "BSS/NOBITS",
+      "target_relocations": 0
+    }
+  ],
+  "scalar_constants": [
+    {
+      "name": "EINVAL",
+      "type": "CInt",
+      "value": "22",
+      "Rust_source_line": 11,
+      "Rust_segment_sha256": "859c14c67e6dfbcf569b7cbcb7fe17386c68ea474ce4af9925b4efed549a5345"
+    },
+    {
+      "name": "LAPIC_TIMER",
+      "type": "CInt",
+      "value": "0x320",
+      "Rust_source_line": 13,
+      "Rust_segment_sha256": "af8fdf07accf46b5fe7b2a400fc8694cb35889ab540a4221ee3154475486452e"
+    },
+    {
+      "name": "LAPIC_TIMER_INITIAL",
+      "type": "CInt",
+      "value": "0x380",
+      "Rust_source_line": 15,
+      "Rust_segment_sha256": "7d27605da7a38781f39b6852fbcd4dff0ea3fe486f4426de19ead8a802e6c995"
+    },
+    {
+      "name": "LAPIC_TIMER_DIVIDE",
+      "type": "CInt",
+      "value": "0x3e0",
+      "Rust_source_line": 16,
+      "Rust_segment_sha256": "cfd631b9bb5b0ce1385403a4da0f69ad5891214f7af07e190de5c62aa8295530"
+    },
+    {
+      "name": "LOCAL_TIMER_VECTOR",
+      "type": "CUInt",
+      "value": "0xef",
+      "Rust_source_line": 25,
+      "Rust_segment_sha256": "6c841406430062dbcfe0cb0d1a3b1743a758e4d9cf14abe2e64ba62297ef0d9d"
+    },
+    {
+      "name": "APIC_DIVISOR",
+      "type": "CUInt",
+      "value": "16",
+      "Rust_source_line": 35,
+      "Rust_segment_sha256": "986ce904b5652a92434e697c57aa45e3b7c34bbc0486398a2cb577df4f7e3382"
+    },
+    {
+      "name": "APIC_LVT_TIMER_PERIODIC",
+      "type": "CUInt",
+      "value": "1 << 17",
+      "Rust_source_line": 36,
+      "Rust_segment_sha256": "26e32b020c0a73a0182bc32970e629a8db6946967c61137cba2c582999fb9c8c"
+    }
+  ],
+  "private_runtime_helpers": [],
+  "source_expected_genuine_U": [],
+  "source_expected_globals": "5originalNoMangleT +1originalB8 slot; actual emission must be observed separately",
+  "composition": "Preserved finite x86_cpu_helpers / remaining_cpu_callbacks / dispatch_and_msr_entries namespaces. Original root write-bridge extern and nested no_mangle definition name the same genuine C symbol; original slot extern and one nested original definition likewise. No renaming, alias, override, fabricated callback or foreign provider.",
+  "semantics": "Wrappers preserve Some(actual bridge) and ignore original result. Enable engine: None -EINVAL22; otherwise ordered INITIAL(clocks/16),DIVIDE3,TIMER(vector0xef|periodic1<<17),0. Disable engine: None-EINVAL22; otherwise INITIAL0 once,0. Write bridge preserves addr_of.read.unwrap_unchecked and original CInt/u32 forwarding; no new checks/policy.",
+  "initial_vs_live": "Original None8B is PREBOOT storage only. Actual boot-selected nonNULL callback/mapped controller/IRQ lifetime remains required before any original timer/write function use; backend/publication/init is excluded and never invoked.",
+  "source_line_clarification": "Bridge contract function5748 includes no_mangle5747 and original docs5742. Actual Option size/alignment assertion rows5299-5300 follow const header5298; copy exact two assertion lines only, no other slot assertions/owners.",
+  "source_glue": "Only no_std/actualabi path, original finite namespaces, minimal original type/core imports, extern/const braces and original selected declarations. All selected function/attribute/initializer/alias/constant/assertion bytes unchanged.",
+  "excluded": [
+    "whole CPU/debug/architecture modules",
+    "all other slots/constants/functions",
+    "actual APIC/x2APIC/MMIO/MSR/IRQ implementations",
+    "boot selection/publication/init",
+    "Some/fixed target/fake register state/HOSTlibc",
+    "held generic/exec/notification/ACK/TID/XPMEM bodies"
+  ],
+  "future_current_partial_and_join": "UNBOUND; actual latest passing matching cohort/source-owner collision and all prior bytes/aliases/relocations must be reviewed before any future join.",
+  "no_compiler_metadata_predicate_link_test_function_or_runtime_execution": true,
+  "no_canonical_index_other_owner_or_state_edits": true
+}

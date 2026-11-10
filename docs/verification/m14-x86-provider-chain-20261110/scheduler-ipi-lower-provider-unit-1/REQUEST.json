@@ -1,0 +1,137 @@
+{
+  "schema": "mckernel.scheduler-ipi-lower.proposed-compile.v1",
+  "status": "FROZEN_ONE_LITERAL_COMPILE_PROPOSAL_PENDING_E_REVIEW_FRESH_ROOT_ADMISSION",
+  "owner": "Root sole actualadmission/execution/compositor",
+  "private_source_owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output",
+  "commands": [
+    {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/provider-compile.stderr",
+      "expected_returncode": 0
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs": "59ac46e5f2e4219f1da36f901055e9a5c65313709498c98de9560cde746e62fe",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/SOURCE-MANIFEST.json": "3a1c44c0c09fadfdde59267b0e916a7dd796296fa7208ef808b349845d874e80",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/PROFILE-PROOF.json": "ad06bced3b6a6b7ab337ba189eac5b061009d14a75b70e34aeca79bd4dba6d7c",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-eligibility-1/RESULT.json": "9f8038ef3cd3df57f4fe6c9eaef68ecbf7568fcc974e96db2ad35e8649f197c9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-irq-barrier-lookahead-20261109T2322.json": "3ae62269a1cadc533defa56997e0e84802356b0f3adb85ee2fd862e6a7856d0c",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-msr-pause-readslot-lookahead-20261109T2322.json": "9e7295dc39c5104ab8bd4aee74d01443a582f1db9927117f696fbdd14459d1f2",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99"
+  },
+  "source_unit": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs",
+  "source_manifest": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/SOURCE-MANIFEST.json",
+  "profile_proof": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/PROFILE-PROOF.json",
+  "retained_profile_reference": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783"
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "compiler_profile": {
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "no_std": true,
+    "exact_retained_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "exact_retained_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "flags": "All compiler payload flags through -o exactly match qualified reference; only source/output/metrics/stdout/stderr paths differ; no cfg/env/feature/lint changes."
+  },
+  "required_prelaunch": "Root must check all frozen inputs, find exact pinned rustc index and exactly one -o AFTER it; following literal object path must be absent, then mkdir its actual parent before Popen. Source remains last argv. Wrapper time-metrics -o is separate. Exclusive fresh captures, raw PID/birth before direct wait/stdios/metrics/joins; first unexpected failure STOP/no automatic retry.",
+  "source_expected_T": [
+    "ihk_mc_mb",
+    "wrmsr",
+    "x86_cpu_pause_bridge",
+    "x86_write_msr_bridge"
+  ],
+  "source_expected_B": [
+    {
+      "name": "lapic_read",
+      "type": "Option<ReadRegister>",
+      "initializer": "None",
+      "bytes": 8,
+      "alignment": 8,
+      "expected_kind": "B/NOBITS declaration, actual section/flags remain future emission",
+      "target_relocations": 0
+    }
+  ],
+  "source_expected_U": [
+    "cpu_pause"
+  ],
+  "expected_private_emission": "Future actual4T+1B8/1genuineU only if actual metadata agrees; compiler may coalesce wrmsr/bridge under distinct original names. Must capture actual private/intrinsic/readonly/alias/code/reloc/asm lowering, stop unexplained variation.",
+  "metadata_or_join_selected": false,
+  "future_current_partial": null,
+  "future_join": "UNBOUND until actual source-bound object/asm/owner emission gate and actual latest matching partial collision review/freshRootadmission. No stalefoundation/symbolrewrite or duplicateexistingCPU/IRQ owner.",
+  "scope": "Finite4actualfunctions+originalNone8Breadslot only, no function/barrier/IRQ/MSR/slot/native/runtime execution, target/backend/init/bootreadiness/holdrelease or originalacceptancecredit.",
+  "not_runnable_until": "E concrete source/ABI/asm/profile/ownership GO and freshRootHOSTcompileadmission. No actualcodegen/metadata/linkselectedbythisproposal.",
+  "preparation_operations": "Sourcebyte/flag/hashcomparison and privatesource/JSONwriting only; no compiler/GNU/parser/predicate/controller/link/test/function/native/canonical/index operations."
+}

@@ -1,0 +1,138 @@
+{
+  "schema": "mckernel.scheduler-lapic.proposed-compile.v1",
+  "status": "FROZEN_ONE_LITERAL_COMPILE_PROPOSAL_PENDING_A_REVIEW_AND_FRESH_ROOT_ADMISSION",
+  "owner": "Root sole actual admission/execution/compositor",
+  "private_source_owner": "/root/create_empty_entry_parity_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1",
+  "private_output": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output",
+  "commands": [
+    {
+      "label": "provider-compile",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/provider-compile.stderr",
+      "expected_returncode": 0
+    }
+  ],
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs": "68eb48635613f0b611787ef64a0dbb269b80dc066b9e858e2b1e478dcb407113",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/SOURCE-MANIFEST.json": "e30bb72568e7436a03d5ea9f919c676fefa611c1b7e8f2cc421a297e6c1fef0b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/PROFILE-PROOF.json": "a4658e9434f05f9c336513395295d8182c24bb1180d66ee42d46cf108be369e4",
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/RESULT.json": "38107c2acc60908d4d110a51bb673a70bffd60e601f3d991a650d256052f35f4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-eligibility-1/ENGINE-RESULT.json": "6f4ec3c234a1827c8f94b6a7cb5aaeb10cd9f8f90e58c7a15810dca5ce06b858",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-write-owner-lookahead-20261109T2302.json": "1cd9e7a754d4830367d8f7995f24a322049cf816d02fbf965d8d7d2d683d64e9",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-lapic-timer-engines-lookahead-20261109T2302.json": "7e255415058281e0ba0be406f6b5e6f9968da9d89dbefc9d06251b8dc929ce0f",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99"
+  },
+  "source_unit": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/scheduler_lapic_provider_unit.rs",
+  "source_manifest": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/SOURCE-MANIFEST.json",
+  "profile_proof": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/PROFILE-PROOF.json",
+  "retained_profile_reference": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/delay-provider-unit-1/REQUEST.json",
+    "sha256": "fa8166319eed657c68c83efca2537c30c93a89b5a5e0325abe0d5ecf953c2783"
+  },
+  "profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_bytes": 19327352832,
+    "host_floor_bytes": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424
+  },
+  "compiler_profile": {
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "no_std": true,
+    "exact_retained_stderr_path": "/home/holden/mckernel/docs/verification/m14-f03-adapters-unit-20261105-2/stderr.txt",
+    "exact_retained_stderr_sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "flags": "All compiler payload flags through -o exactly match qualified reference; only source/output/metrics/stdout/stderr paths differ; no cfg/env/feature/lint changes."
+  },
+  "required_prelaunch": "Root must check all frozen inputs, find exact pinned rustc index and exactly one -o AFTER it; following literal object path must be absent, then mkdir its actual parent before Popen. Source remains last argv. Wrapper time-metrics -o is separate. Exclusive fresh captures, raw PID/birth before direct wait/stdios/metrics/joins; first unexpected failure STOP/no automatic retry.",
+  "source_expected_T": [
+    "lapic_timer_enable",
+    "lapic_timer_disable",
+    "x86_lapic_timer_enable_body_result",
+    "x86_lapic_timer_disable_body_result",
+    "x86_lapic_write_bridge"
+  ],
+  "source_expected_B": [
+    {
+      "name": "lapic_write",
+      "source": "x86_cpu_helpers.rs5287-5288",
+      "type": "Option<WriteRegister>",
+      "initializer": "None",
+      "bytes": 8,
+      "alignment": 8,
+      "expected_section": "BSS/NOBITS",
+      "target_relocations": 0
+    }
+  ],
+  "source_expected_U": [],
+  "expected_private_emission": "No source private runtime helpers; any actual private/core/intrinsic/readonly or compiler-lowering owner/import must be captured and reconciled, no guessed counts/sizes or wildcard acceptance.",
+  "metadata_or_join_selected": false,
+  "future_current_partial": null,
+  "future_join": "UNBOUND until actual source-bound object/emission/collision gate and actual latest passing matching cohort review; no stale foundation/substitute or final closure inference.",
+  "scope": "Finite5originalexports+realNone8slot only. No original/default/native/boot/timer/controller/IRQ readiness, acceptance/C retirement/score claim. No function, callback, slot read, hardware, backend, init, publication or held source imported/executed.",
+  "not_runnable_until": "A independent exact source/ABI/ownership/profile review GO and fresh Root HOST admission. Actual metadata/predicate and any later join require separately selected/reviewed packets.",
+  "preparation_operations": "Source-byte/hash/profile comparisons and private source/JSON writing only. No compiler, GNU metadata/parser/gate/controller, linker, tests/function/hardware/native runtime or canonical/index/state writes; no recursion."
+}

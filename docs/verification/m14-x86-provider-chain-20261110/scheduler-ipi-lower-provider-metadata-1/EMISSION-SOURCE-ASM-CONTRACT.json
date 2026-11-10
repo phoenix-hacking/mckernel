@@ -1,0 +1,181 @@
+{
+  "schema": "mckernel.ipi-lower.actual-emission-source-asm-contract.v1",
+  "capture_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+  "capture_sha256": "79999ea9eac9d621fb66cd5d2ccc12b2f0431bccc7beb07d6c654fb6f15dec64",
+  "capture_is_not_gate_PASS": true,
+  "saved_disassembly": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/provider-disassembly.stdout",
+    "sha256": "3252505943dd9fda5067d6aee74d801b1b2ffc9bc7bd806c718591c102394caa",
+    "exact_retained_text": "\n/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o:     file format elf64-x86-64\n\n\nDisassembly of section .ltext.ihk_mc_mb:\n\n0000000000000000 <ihk_mc_mb>:\n   0:\tmfence \n   3:\tret    \n\nDisassembly of section .ltext.wrmsr:\n\n0000000000000000 <wrmsr>:\n   0:\tmov    rax,rsi\n   3:\tmov    ecx,edi\n   5:\tmov    rdx,rsi\n   8:\tshr    rdx,0x20\n   c:\twrmsr  \n   e:\tret    \n\nDisassembly of section .ltext.x86_cpu_pause_bridge:\n\n0000000000000000 <x86_cpu_pause_bridge>:\n   0:\tmovabs rax,0x0\n\t\t\t2: R_X86_64_64\tcpu_pause\n   a:\tjmp    rax\n",
+    "no_objdump_replay": true,
+    "proof": "Root lower-provider-emission-capture-root-1 actualqualifiedobjdump pid656714/birth35395089/directwait0joined"
+  },
+  "unit_sha256": "59ac46e5f2e4219f1da36f901055e9a5c65313709498c98de9560cde746e62fe",
+  "source_manifest_sha256": "3a1c44c0c09fadfdde59267b0e916a7dd796296fa7208ef808b349845d874e80",
+  "physical_code_ranges": [
+    {
+      "names": [
+        "ihk_mc_mb"
+      ],
+      "section": ".ltext.ihk_mc_mb",
+      "index": 3,
+      "size": 4,
+      "align": 16,
+      "flags": 268435462,
+      "code_hex": "0faef0c3",
+      "instructions": [
+        "mfence",
+        "ret"
+      ],
+      "source_block_sha256": "ea1809f1ae26ef50b5a7239152c0ed9cadad0881bec3b988cf0cd0939ba77248",
+      "source_binding": "Original mfence/nostack/preserves_flags; source omitsnomem/readonly/pure, preserving Cmemoryclobber. Actual mfence thenret."
+    },
+    {
+      "names": [
+        "wrmsr",
+        "x86_write_msr_bridge"
+      ],
+      "section": ".ltext.wrmsr",
+      "index": 4,
+      "size": 15,
+      "align": 16,
+      "flags": 268435462,
+      "code_hex": "4889f089f94889f248c1ea200f30c3",
+      "instructions": [
+        "mov    rax,rsi",
+        "mov    ecx,edi",
+        "mov    rdx,rsi",
+        "shr    rdx,0x20",
+        "wrmsr",
+        "ret"
+      ],
+      "source_block_sha256": [
+        "20ca08201ddd0b7a757d3922af054fa5fe9fdedccaff4d39de3093729f3def4e",
+        "2a64e1ca97cf95e8b6994a31eac85d5aac31fbfde374a4987edd6ae91ec29d15"
+      ],
+      "source_binding": "Actualcompilercoalesces originalCInt->u32 bridge and originalCUInt primitive, same physical range under2genuine names. ECX getsEDIindex; EAX low32 throughRAX=RSI; EDXhigh32 viaRDX=RSI>>32, thenWRMSR. Original source asm optionsnostack,preserves_flags/no nomem unchanged."
+    },
+    {
+      "names": [
+        "x86_cpu_pause_bridge"
+      ],
+      "section": ".ltext.x86_cpu_pause_bridge",
+      "index": 5,
+      "size": 12,
+      "align": 16,
+      "flags": 268435462,
+      "code_hex": "48b80000000000000000ffe0",
+      "instructions": [
+        "movabs rax,0x0",
+        "R_X86_64_64\tcpu_pause",
+        "jmp    rax"
+      ],
+      "source_block_sha256": "025fd1534a684c12dd5c8939a96cb98a8df568b8e4c649f0de2c19af6d3eb1d7",
+      "source_binding": "Originalsuper::cpu_pause realexternal call emittedAbs64tailjmp withsolecpu_pauseU; no duplicatepause body."
+    }
+  ],
+  "alias_group": {
+    "names": [
+      "wrmsr",
+      "x86_write_msr_bridge"
+    ],
+    "section": 4,
+    "value": 0,
+    "size": 15,
+    "physical_code_ranges": 1,
+    "distinct_original_source_names_no_symbolrewrite": true
+  },
+  "slot": {
+    "name": "lapic_read",
+    "kind": "B",
+    "section": ".lbss.lapic_read",
+    "type": 8,
+    "size": 8,
+    "value": 0,
+    "align": 8,
+    "flags": 268435459,
+    "source_initializer": "None",
+    "source_block_sha256": "43f65a6f03f8c9c525f365302caf5198760c311fcc84ebecb6b732d766d79bc5",
+    "no_target_relocation": true,
+    "NOBITS_declaration_only_no_runtime_initialization_claim": true
+  },
+  "relocations": [
+    {
+      "section": 5,
+      "offset": 2,
+      "type": 1,
+      "symbol": {
+        "name": "cpu_pause",
+        "bind": 1,
+        "type": 0,
+        "other": 0,
+        "section": 0,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 10,
+      "offset": 32,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 3,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 10,
+      "offset": 64,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 4,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    },
+    {
+      "section": 10,
+      "offset": 96,
+      "type": 24,
+      "symbol": {
+        "name": "",
+        "bind": 0,
+        "type": 3,
+        "other": 0,
+        "section": 5,
+        "value": 0,
+        "size": 0
+      },
+      "addend": 0
+    }
+  ],
+  "source_relocation_roles": [
+    "Only code edge: .ltext.x86_cpu_pause_bridge+2 R64 genuineundefinedcpu_pause+0.",
+    "Exactly3PC64 .eh_frame offsets32/64/96\u2192physicalsections3/4/5+0; actualwrmsr/bridge alias contributesONEphysicalunwindrecord, notonepername."
+  ],
+  "allocated_unwind": {
+    "section": ".eh_frame",
+    "type": 1879048193,
+    "flags": 2,
+    "size": 120,
+    "align": 8,
+    "bytes": "1400000000000000017a5200017810011c0c0708900100001c0000001c0000000000000000000000040000000000000000000000000000001c0000003c00000000000000000000000f0000000000000000000000000000001c0000005c00000000000000000000000c000000000000000000000000000000"
+  },
+  "genuine_U": [
+    "cpu_pause"
+  ],
+  "source_private_helpers_and_extra_readonly": [],
+  "no_hardware_function_runtime_or_full_source_acceptance": true
+}

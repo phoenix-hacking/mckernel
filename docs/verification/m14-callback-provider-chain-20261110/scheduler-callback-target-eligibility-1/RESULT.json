@@ -1,0 +1,212 @@
+{
+  "schema": "mckernel.scheduler-callback-target.source-eligibility.v1",
+  "decision": "GO_EXACT_FOUR_EXISTING_ACCEPTED_F04_APIC_TARGETS_SOURCE_PREPARATION_PLUS_DISTINCT_GENUINE_RDMSR_SOURCE_GO_ONLY",
+  "owner": "Root sole compositor/admission; /root/create_empty_entry_parity_high bounded read-only contract owner",
+  "consumer_binding": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/REQUEST.json",
+    "sha256": "bf78914c60b7ce9d3471c6014231259d05043636086e1c0eb7e6a6b73dbaca82",
+    "true_imports_selected": [
+      "apic_write",
+      "apic_read",
+      "x2apic_write",
+      "x2apic_read"
+    ],
+    "foreground_publisher_contract": {
+      "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-callback-publication-lookahead-20261109T2342.json",
+      "sha256": "e83fee9ae7c6b197b70ccad8ae4e9257859538452193d400ac0bd4e46010e16d"
+    },
+    "not_duplicate": "Existing publisher/six-store/empty-wait source contract reused; only its four not-yet-qualified read/write targets assessed here. Other5target bodies and publisher are not re-investigated or prepared."
+  },
+  "eligibility_first": {
+    "positive_basis": "CAMPAIGN M14-F04 /04-01..05 explicitly accepts arch/x86_64/kernel/cpu.c primitives/startup/interrupts/context/TLS/FPU/xstate/diagnostics. Exact selected C declarations989-990/999-1000/1011-1012/1021-1022 name these four general APIC register APIs. Original C alternatives preserve the same direct MMIO/MSR read/write behavior; they are not packet/generic/exec/notification/ACK/TID/XPMEM endpoints.",
+    "selected_Rust_mapping": "Exact current no_mangle native definitions in local_apic_io, no local cfg/equivalence or alternative body. lib.rs94 selects x86_cpu_helpers; CMake187 adds same source and729-730 pairs cpu.c under MCKERNEL_RUST_X86_CPU_HELPERS.",
+    "order": "Established accepted-F04 owner/signatures/build selectors before inspecting exact4target Rust bodies. Separate public rdmsr eligibility below is based on its own actual original C counterpart, not inferred from target permission.",
+    "holds": "This finite accepted source determination releases none of original generic/exec/notification/perf/mmap/source/SDK/service/native/current-free/UNKNOWN controls. No whole CPU/backend/module/initializer/publication or runtime entrypoint is authorized.",
+    "source_vs_runtime": "Bodies contain real volatile MMIO or genuine MSR calls; reading/preparing accepted source never permits actual register/privileged/function execution. Actual mapped device, live target/boot initialization, exclusions and correct CPU context remain unproven."
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/arch/x86_64/kernel/cpu.c": "9adb2435e75a1b27cd9511f4b69739fe25d2bb95dc0fc80eb73d2abd60c34813",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "exact_four_functions": {
+    "apic_write": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3944,
+      "last_line": 3954,
+      "sha256": "ba3e8cc918f59df173913af61b8cbbd9cc5d99533775ed78fc5aa97fa378b73e",
+      "role": "Exact existing no_mangle definition/attribute; no surrounding module bodies",
+      "exact_source": "    #[no_mangle]\n    pub unsafe extern \"C\" fn apic_write(reg: CInt, value: u32) {\n        // SAFETY: The caller owns the same mapping/exclusion contract as the C\n        // provider. The slot contains a live device base; no reference is formed\n        // to MMIO. Signed byte offset and access width are preserved exactly.\n        unsafe {\n            let base = addr_of!(mapped_local_apic).read().cast::<u8>();\n            let register = base.offset(reg as isize).cast::<u32>();\n            write_volatile(register, value);\n        }\n    }\n"
+    },
+    "apic_read": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3961,
+      "last_line": 3969,
+      "sha256": "bec898b4e685a83cd71bd811237376f7878d69f9fc0dd4f1bf6d069999eef3aa",
+      "role": "Exact existing no_mangle definition/attribute; no surrounding module bodies",
+      "exact_source": "    #[no_mangle]\n    pub unsafe extern \"C\" fn apic_read(reg: CInt) -> u32 {\n        // SAFETY: The caller supplies a live, aligned readable device register.\n        // The load remains volatile; no caching, retry or additional read occurs.\n        unsafe {\n            let base = addr_of!(mapped_local_apic).read().cast::<u8>();\n            read_volatile(base.offset(reg as isize).cast::<u32>())\n        }\n    }\n"
+    },
+    "x2apic_write": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3976,
+      "last_line": 3986,
+      "sha256": "ad6455837312075ce713474b6c0db6c0f64eaad40caaf29c740f894209c8eee1",
+      "role": "Exact existing no_mangle definition/attribute; no surrounding module bodies",
+      "exact_source": "    #[no_mangle]\n    pub unsafe extern \"C\" fn x2apic_write(mut reg: CInt, value: u32) {\n        // SAFETY: The real C macro supplies the same index base; arithmetic\n        // right shift preserves GCC's signed int mapping. The existing Rust\n        // wrmsr provider retains the privileged instruction and ordering contract.\n        unsafe {\n            reg >>= 4;\n            reg |= x86_local_apic_base_msr as CInt;\n            super::wrmsr(reg as u32, value as CULong);\n        }\n    }\n"
+    },
+    "x2apic_read": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3993,
+      "last_line": 4003,
+      "sha256": "750bb6410ddc9e14bcd819e79d2a655b66c6135cd85b3caa2a23ad5977d99ffb",
+      "role": "Exact existing no_mangle definition/attribute; no surrounding module bodies",
+      "exact_source": "    #[no_mangle]\n    pub unsafe extern \"C\" fn x2apic_read(mut reg: CInt) -> u32 {\n        // SAFETY: The caller selected a valid x2APIC provider/register. The same\n        // single existing Rust rdmsr call occurs; C's int-to-unsigned return\n        // conversion keeps the same low32 bits of the 64-bit MSR value.\n        unsafe {\n            reg >>= 4;\n            reg |= x86_local_apic_base_msr as CInt;\n            super::rdmsr(reg as u32) as u32\n        }\n    }\n"
+    }
+  },
+  "four_target_contract": {
+    "apic_write": "unsafe extern C fn(CInt,u32)->void: load genuine mapped pointer slot once via addr_of.read, signed reg asisize byte-offset, castu32 pointer and one write_volatile. No reference formed to MMIO, extra access/barrier/validation/ownership introduced.",
+    "apic_read": "unsafe extern C fn(CInt)->u32: same genuine mapped pointer/signed byte offset and exactly one read_volatile. Real aligned accessible readable32-bit register/valid allocation-offset domain required; no fake pointer/null/OOB/HOST vector proposed.",
+    "x2apic_write": "unsafe extern C fn(CInt,u32)->void: original arithmetic signed reg>>=4, OR actual external u32 MSR base asCInt, then wrmsr(reg asu32,value asCULong). Value is zero-extendedu32\u2192u64. No hardcoded0x800 replacement, validation, mask or target changed.",
+    "x2apic_read": "unsafe extern C fn(CInt)->u32: same arithmetic signed shift/OR/cast, one genuine rdmsr and truncation tolow32 via asu32. Preserves original C signed-int-to-unsigned return bit result; no synthetic error/status policy."
+  },
+  "strict_finite_target_closure": {
+    "public_T": [
+      "apic_write",
+      "apic_read",
+      "x2apic_write",
+      "x2apic_read"
+    ],
+    "private_runtime_helpers": [],
+    "new_data_owners": [],
+    "new_scalar_constants": [],
+    "types": "Reuse actual abi.ff48 CInt=i32/CULong=u64; u32 and core::ffi::c_void, core::ptr::{addr_of,read_volatile,write_volatile} only. No handbuilt device layout/physical pointer/register array.",
+    "exact_declarations": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3926,
+      "last_line": 3936,
+      "sha256": "c489955b63036ac73c4dc12f5f620800c610b0f13c24716c8252f7cfb06f9362",
+      "role": "Only original local_apic_io namespace/imports/genuine extern declarations; no data definition",
+      "exact_source": "mod local_apic_io {\n    use core::ffi::c_void;\n    use core::ptr::{addr_of, read_volatile, write_volatile};\n\n    use crate::abi::{CInt, CULong};\n\n    unsafe extern \"C\" {\n        #[link_name = \"lapic_vp\"]\n        static mut mapped_local_apic: *mut c_void;\n        static x86_local_apic_base_msr: u32;\n    }\n"
+    },
+    "real_imports": [
+      {
+        "ELF_name": "lapic_vp",
+        "source_name": "mapped_local_apic",
+        "ABI": "extern static mut *mut core::ffi::c_void",
+        "original_attribute": "#[link_name=\"lapic_vp\"] is existing canonical source, not a new alias or hold bypass",
+        "owner_reference": {
+          "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+          "first_line": 4496,
+          "last_line": 4497,
+          "sha256": "379f0e95f74cd594ac9beb621a071a25d736bcbd2044558645c53584bd8c27c4",
+          "role": "Original genuine NULL pointer storage owner identified only, EXCLUDED from proposed target cut",
+          "exact_source": "    #[no_mangle]\n    pub(crate) static mut lapic_vp: *mut c_void = core::ptr::null_mut();\n"
+        },
+        "runtime": "Live MMIO mapping/init/exclusion/lifetime unproven; no pointer/address fabricated and no new pointer owner selected."
+      },
+      {
+        "ELF_name": "x86_local_apic_base_msr",
+        "ABI": "extern immutable u32",
+        "owner_reference": {
+          "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+          "first_line": 6813,
+          "last_line": 6814,
+          "sha256": "37521e3388395e1d44da3cd9579aa92bd67f47490048c6218d1f3a86518f9fc4",
+          "role": "Original actual no_mangle CUInt0x800 data owner identified only, EXCLUDED from proposed cut",
+          "exact_source": "    #[no_mangle]\n    pub static x86_local_apic_base_msr: CUInt = 0x800;\n"
+        },
+        "policy": "Keep genuine data import; no copied/guessed inline0x800 constant or override. Root must bind unique actual source owner before future full closure."
+      },
+      {
+        "ELF_name": "wrmsr",
+        "ABI": "unsafe extern C fn(CUInt=u32,CULong=u64)->void",
+        "reuse": "Existing actual qualified lower object8e7ca2ffcfa218acd6342019bc8bcc85dade472e1923c356335d0f2027874032 exports real wrmsr alias group; MUST NOT duplicate primitive or x86_write_msr_bridge."
+      },
+      {
+        "ELF_name": "rdmsr",
+        "ABI": "unsafe extern C fn(CUInt=u32)->CULong=u64",
+        "policy": "Actual distinct public source; independent eligibility and optional finite addition below. Do not infer it from a same-name private/inlined local CPU helper."
+      }
+    ],
+    "source_expected": "Four publicT, no data/private helpers and four genuine U names if staged alone; actual emitted compiler/private/intrinsic/readonly/alias/unwind/import variation must later be captured and reviewed, no guessed size."
+  },
+  "distinct_rdmsr_eligibility": {
+    "decision": "GO_EXACT_EXISTING_PUBLIC_RDMSR_ONE_FUNCTION_SOURCE_PREPARATION_ONLY",
+    "separate_basis": "Direct original accepted-F04 cpu.c186-193 unsigned long rdmsr(unsigned int) owns same volatile RDMSR primitive and EDX:EAX recombination. Actual Rust no_mangle794-808 in already selected x86_cpu_helpers has no local cfg/body substitution; no inference from four-target GO.",
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 794,
+      "last_line": 808,
+      "sha256": "c326d9c97e0ceed5be24f2eac7376a4f6de680fee29695e119bcdc7f228cf617",
+      "role": "Exact existing no_mangle definition/attribute; no surrounding module bodies",
+      "exact_source": "#[no_mangle]\npub unsafe extern \"C\" fn rdmsr(index: CUInt) -> CULong {\n    let high: u32;\n    let low: u32;\n\n    core::arch::asm!(\n        \"rdmsr\",\n        lateout(\"edx\") high,\n        lateout(\"eax\") low,\n        in(\"ecx\") index,\n        options(nomem, nostack, preserves_flags),\n    );\n\n    ((high as CULong) << 32) | (low as CULong)\n}\n"
+    },
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 186,
+      "last_line": 193,
+      "sha256": "350fe5a24f9e1b0721d5f20dbde17c38d5ef260d7a79e77626e326bb12fb5a78",
+      "role": "Only exact direct original rdmsr C counterpart",
+      "exact_source": "unsigned long rdmsr(unsigned int index)\n{\n\tunsigned int high, low;\n\n\tasm volatile(\"rdmsr\" : \"=a\" (low), \"=d\" (high) : \"c\" (index));\n\n\treturn (unsigned long)high << 32 | low;\n}\n"
+    },
+    "ABI_and_effects": "CUInt=u32 from actual x86_cpu_helpers.rs9 and CULong=u64 from actualabi.rs7. ECX index, lateoutEDX high/lateoutEAX low, ((high asCULong)<<32)|(low asCULong). Preserve original options(nomem,nostack,preserves_flags); do not copy wrmsr memory-effect options or invent serialization/error checks.",
+    "needed_types": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "role": "Original CUInt alias only",
+      "exact_source": "type CUInt = u32;\n"
+    },
+    "private_helpers": [],
+    "new_data_or_constants": [],
+    "project_U": [],
+    "possible_compatible_batch": "If Root selects before first codegen, exact4targets+this independently eligible1rdmsr form5publicT/0newdata; real U remains wrmsr,lapic_vp,x86_local_apic_base_msr. Existing wrmsr/CPU primitives reused, no private local CPU-helper duplication. Actual emitted lowering/ownership separate.",
+    "runtime_open": "Actual valid MSR index/privilege/CPU/controller/boot conditions remain untouched and unqualified. No RDMSR or any function executed."
+  },
+  "source_selection_evidence": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "Current selected Rust module",
+      "exact_source": "mod x86_cpu_helpers;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "Actual Rust source input",
+      "exact_source": "\t\t\"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs\"\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "Actual C Rust-owner selector",
+      "exact_source": "\tset_source_files_properties(\"${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/cpu.c\"\n\t\tPROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_X86_CPU_HELPERS)\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 989,
+      "last_line": 1034,
+      "sha256": "108b035c6c755f7c9d92031fb311d969ae81b6a648c8201670b718bbf9c6f5b1",
+      "role": "Only four exact selected C APIs and original reference implementations",
+      "exact_source": "#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nvoid apic_write(int reg, unsigned int value);\n#else\nstatic void\napic_write(int reg, unsigned int value)\n{\n\t*(volatile unsigned int *)((char *)lapic_vp + reg) = value;\n}\n#endif\n\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nvoid x2apic_write(int reg, unsigned int value);\n#else\nstatic void\nx2apic_write(int reg, unsigned int value)\n{\n\treg >>= 4;\n\treg |= APIC_BASE_MSR;\n\twrmsr(reg, value);\n}\n#endif\n\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nunsigned int apic_read(int reg);\n#else\nstatic unsigned int\napic_read(int reg)\n{\n\treturn *(volatile unsigned int *)((char *)lapic_vp + reg);\n}\n#endif\n\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nunsigned int x2apic_read(int reg);\n#else\nstatic unsigned int\nx2apic_read(int reg)\n{\n\tunsigned long value;\n\n\treg >>= 4;\n\treg |= APIC_BASE_MSR;\n\tvalue = rdmsr(reg);\n\treturn (int)value;\n}\n#endif\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 339,
+      "last_line": 348,
+      "sha256": "ac8e1cbf64bf859c00d542dcadc5c9132ef8178e19e3a1556389f10107bbf6e8",
+      "role": "Only genuine lapic_vp/base-msr C data owner selection, no init body",
+      "exact_source": "#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nextern void *lapic_vp; /* Rust-owned slot; existing device lifetime unchanged. */\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nextern const unsigned int x86_local_apic_base_msr;\n#else\nconst unsigned int x86_local_apic_base_msr = APIC_BASE_MSR;\n#endif\n#else\nstatic void *lapic_vp;\n#endif\n"
+    }
+  ],
+  "source_profile_and_unique_owner_requirements": "Use retained native x86_64LP64 no_stdnightly1.95 partial profile/exact diagnostics and actual ABI; no optionalcfg/equivalence/newHOSTlibc. Before codegen Root selects one concrete finite unit and obtains independent source/profile/ownership GO plus fresh HOST admission. Root binds actual latest matching passed cohort and exact wrmsr/publicrdmsr/data owner status before any later join; this contract selects no stale partial or presumed owner roster.",
+  "remaining_real_obligations": "Real lapic_vp mapping/owner initialization, immutable MSR-base owner and boot/runtime authority remain genuine imports/obligations unless independently qualified matching owners already exist. This source contract does not supply target publication, boot selector, controller MMIO mapping, fake callbacks, physical address storage or full image/native readiness.",
+  "operations": "Read consumer exact four names, supplied publisher contract, active CAMPAIGN F04 mapping, named C/Rust function selectors and finite source/type/data declarations; separately established/read exact public rdmsr primitive. Wrote only this private RESULT.json. No source unit/fixture generation, compiler/preprocessor/GNU metadata/ELFparser/gate/link/function/hardware/MSR/IRQ/runtime/native, canonical/index/state edits or recursion. No original checklist/acceptance/C-retirement/score credit."
+}

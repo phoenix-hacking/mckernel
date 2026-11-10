@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-10T00:45:09.151605+00:00",
+  "request_sha256": "fa73600a28f1f8638b520456934d2e7af6a3096356c709f6f21cad41399cc0be",
+  "review_sha256": "845b168517e4fa02625c18281a8e209c419e1be05cc8ac0ff778ed500d04c114",
+  "actual_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "200s",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=45:45",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/run_join.py",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-complete-provider-join-1/JOIN-REQUEST.json"
+  ],
+  "MemAvailable": 29747945472,
+  "disk_free": {
+    "/home/holden/mckernel": 131973304320,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 131973304320
+  },
+  "usage": {
+    "at": "2026-11-10T00:45:09.131087+00:00",
+    "used_percent": 42,
+    "remaining_percent": 58,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "HOST": "CPU6controller+serial3payloads;shared0/6/7max3LIGHTjobs4GiBTOTALalloverhead;RootCPU0",
+  "scope": "Onlyactual70c5+qualifiede55e+ffd43 sourcepartial; no Cguardprocessing/mapping/boot/function/native action or sourceholdrelease"
+}

@@ -1,0 +1,173 @@
+{
+  "schema": "mckernel.scheduler-callback-data-owner.eligibility.v1",
+  "decision": "GO_EXACT_TWO_ORIGINAL_DATA_OWNERS_SOURCE_PREPARATION_ONLY_WITH_ORIGINAL_GUARD_AND_MAPPING_OBLIGATIONS_RETAINED",
+  "owner": "Saved Root sole compositor/source/admission/publisher; /root/create_empty_entry_parity_high read-only eligibility reviewer",
+  "trigger": "Root reports actual e55e73a7/2408B target5 compiled once without function execution and still imports these exact two genuine data symbols. No replay or fresh inventory inferred.",
+  "prior_target_contract": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-target-eligibility-1/RESULT.json",
+    "sha256": "9557bd4cb16624f9f6a51791ee1da115b944ba8ceaa0186e6b6490dfbbbf9606",
+    "boundary": "Both actual data definitions were identified but deliberately EXCLUDED there; this new explicit Root task independently assesses only these2owners, no backend/rdmsr/target source re-review."
+  },
+  "eligibility_first": {
+    "positive_basis": "Actual accepted M14-F04 cpu.c owner and exact current Rust/C paired declarative storage selection, not permission inferred from target/account/module membership alone. C guards339-348 explicitly choose extern Rust lapic_vp and immutable x86_local_apic_base_msr when MCKERNEL_RUST_X86_CPU_HELPERS is selected; reference branches show original NULL pointer storage and APIC_BASE_MSR const.",
+    "source_and_selection": "Actual lib.rs94 and CMake187 include x86_cpu_helpers; CMake729-730 applies same C owner selector. Both named statics have exact no_mangle attributes and no local Rust cfg; their containing modules initialization_entries and selected_fixed_cpu_selectors are unconditional, no equivalence profile.",
+    "finite_behavior": "Two declarations/initializers only, no function/constructor/address calculation/MMIO/MSR/IRQ access, memory allocation or publication. Module names do not pull their surrounding initialization/backend functions into this cut.",
+    "holds": "No generic/exec/notification/perf/mmap/source/SDK/service/native/currentfree or historical UNKNOWN control is released. Original F04 acceptance remains closed at matching scope; source eligibility is not integration/default/native/runtime evidence."
+  },
+  "source_bindings": {
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+    "/home/holden/mckernel/arch/x86_64/kernel/cpu.c": "9adb2435e75a1b27cd9511f4b69739fe25d2bb95dc0fc80eb73d2abd60c34813",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "exact_two_data_cut": [
+    {
+      "ELF_and_Rust_name": "lapic_vp",
+      "namespace": "initialization_entries",
+      "definition": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 4496,
+        "last_line": 4497,
+        "sha256": "379f0e95f74cd594ac9beb621a071a25d736bcbd2044558645c53584bd8c27c4",
+        "role": "Only original no_mangle mutable pointer definition; surrounding init functions excluded",
+        "exact_source": "    #[no_mangle]\n    pub(crate) static mut lapic_vp: *mut c_void = core::ptr::null_mut();\n"
+      },
+      "type": "*mut core::ffi::c_void",
+      "initializer": "Exact original core::ptr::null_mut(), not a selected virtual/physical device address",
+      "attributes": [
+        "no_mangle"
+      ],
+      "visibility": "pub(crate), original exported C symbol through no_mangle",
+      "expected_selected_LP64_data": "One mutable pointer B8/align8/NOBITS declaration; actual emitter section/flags/kind/size/relocations must be captured later, no fabricated file bytes.",
+      "consumer_direction": "Actual local_apic_io declaration uses #[link_name=\"lapic_vp\"] static mut mapped_local_apic:*mut c_void; that existing source alias resolves TO lapic_vp. Do not create a new mapped_local_apic owner/alias or rename lapic_vp.",
+      "live_state": "Original NULL initializer is preboot data only. Real mapping assignment, validity, alignment, device lifetime and exclusion/boot ownership remain unproven/excluded. No pointer/read/store/mapping/initialization/function executes."
+    },
+    {
+      "ELF_and_Rust_name": "x86_local_apic_base_msr",
+      "namespace": "selected_fixed_cpu_selectors",
+      "definition": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 6813,
+        "last_line": 6814,
+        "sha256": "37521e3388395e1d44da3cd9579aa92bd67f47490048c6218d1f3a86518f9fc4",
+        "role": "Only original no_mangle immutable scalar definition",
+        "exact_source": "    #[no_mangle]\n    pub static x86_local_apic_base_msr: CUInt = 0x800;\n"
+      },
+      "type": "Actual CUInt=u32 from x86_cpu_helpers.rs9",
+      "initializer": "Exact source0x800, tied to actual original cpu.c APIC_BASE_MSR macro and guard; do not transcribe a guessed alternate base or caller-local constant.",
+      "attributes": [
+        "no_mangle"
+      ],
+      "visibility": "pub, immutable static",
+      "expected_data": "One immutable4-byte C unsigned-int compatible scalar, natural align4 under selected target. Actual RO section/flags/bytes/retention/emission checked later; no invented link_section/used attribute.",
+      "guard": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+        "first_line": 4205,
+        "last_line": 4205,
+        "sha256": "cbba09d87abd495a2cf427ecdb74db31e663dea65db04b275f7bc4ea9c473edd",
+        "role": "Original selected C static assertion remains required; inspected only, not preprocessed or passed",
+        "exact_source": "_Static_assert((APIC_BASE_MSR) == (0x800), \"Rust selected APIC_BASE_MSR binding\");\n"
+      },
+      "original_source_warning": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "first_line": 6804,
+        "last_line": 6807,
+        "sha256": "11a0ceb88dd3768230d31cd23d9ce04103ff4a21d3b5ed641f59cbc54257dfd3",
+        "role": "Original literal selector real-header equality requirement retained, no alternate header/native inference",
+        "exact_source": "// Literal values transcribed from the exact selected C macro definitions.\n// No build-dependent MAP_KERNEL_START or configuration policy is inferred here.\n// Real-header object equality remains mandatory before these private providers\n// can be integrated; alternate header values are not qualified by this source.\n"
+      }
+    }
+  ],
+  "strict_type_closure": {
+    "core": "core::ffi::c_void and core::ptr::null_mut only, no project runtime helper/data import.",
+    "CUInt": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 9,
+      "last_line": 9,
+      "sha256": "c805374cb64cd23693fd085ad2b8826126eb2efd01b8e083c7686ec006e7f358",
+      "role": "Exact actual CUInt alias; do not invent abi.rs CUInt or another type width",
+      "exact_source": "type CUInt = u32;\n"
+    },
+    "ABI_context": "Existing actualabi.ff48/selected x86_64LP64 context retained, no handmade structure/pointer/physical layout. Pointer storage ABI is actual void*; immutable scalar matches C unsignedint/u32.",
+    "functions": [],
+    "private_runtime_helpers": [],
+    "source_expected_U": [],
+    "source_expected_globals": "Only original lapic_vp mutableB8 plus immutable x86_local_apic_base_msr u32 data;0T. Actual object/classification/RO/NOBITS/relocations/support imports and unique ownership require later called gate, no final count/size/address guessed."
+  },
+  "source_profile_and_guard_requirements": {
+    "profile": "Exact retained native x86_64LP64 no_stdnightly1.95 partial flags/warnings; no optionalcfg/equivalence/feature/lint expansion. Preserve finite original namespaces/types/attributes/initializer bytes; no whole initialization_entries or fixed-selectors module.",
+    "C_ownership": "Actual MCKERNEL_RUST_X86_CPU_HELPERS selection makes C lapic_vp and base-msr declarations extern rather than duplicate providers; CMake pairing must remain. Do not compile/reference alternative competing C owner into same cohort.",
+    "source_macro": "APIC_BASE_MSR is actual unconditional cpu.c326 definition0x800. Immutable Rust initializer preserves that exact selected source. Existing C static assertion4205 explicitly guards equality under MCKERNEL_RUST_X86_CPU_HELPERS.",
+    "no_guard_processing": "Source guard inspected only. No C preprocessing/compilation/guard PASS, ENABLE_SSE/march/PAGE_SIZE/fullCPU/SDK proof supplied by this task.",
+    "integration_requirement": "Original selected_fixed_cpu_selectors comment requires real-header object equality before integration; retain that requirement. A standalone finite Rust data compile cannot satisfy it or original full-C/default/native/sourcecustody/currentfree gates. Root must reuse matching qualified proof or obtain separately authorized guard/header/object comparison before claiming corresponding integration.",
+    "next_source_selection": "Root may select one compatible two-data private unit for independent exact source/profile/ownership review and fresh HOST admission. No unit/proposal/command selected or generated here."
+  },
+  "source_evidence": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 4488,
+      "last_line": 4497,
+      "sha256": "04100c782c70ab62854967dc1ad986745a27dfc1c476d19117047f113853f68d",
+      "role": "Only original module/type-import/storage prelude; no init body",
+      "exact_source": "mod initialization_entries {\n    use core::ffi::c_void;\n    use core::ptr::addr_of_mut;\n\n    use crate::abi::{CInt, CULong};\n\n    // Storage ownership only; mapping, feature publication and all device\n    // accesses remain in the unchanged selected provider bodies.\n    #[no_mangle]\n    pub(crate) static mut lapic_vp: *mut c_void = core::ptr::null_mut();\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 6808,
+      "last_line": 6814,
+      "sha256": "288456e4c36bf72c27cc0dfbff033ff3d70474d8a572d59fe6e6c80829609b6e",
+      "role": "Only fixed-selector module/type import/one data owner",
+      "exact_source": "mod selected_fixed_cpu_selectors {\n    use crate::abi::{CInt, CULong};\n    use super::CUInt;\n\n    // Existing cpu.c APIC_BASE_MSR definition, retained source value 0x800.\n    #[no_mangle]\n    pub static x86_local_apic_base_msr: CUInt = 0x800;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3932,
+      "last_line": 3935,
+      "sha256": "69f48bfbe98341c9b9527b58df5901953ff68e1da5098134aa20f07e347f3e9e",
+      "role": "Only exact consumer original linked pointer/u32 extern declarations",
+      "exact_source": "    unsafe extern \"C\" {\n        #[link_name = \"lapic_vp\"]\n        static mut mapped_local_apic: *mut c_void;\n        static x86_local_apic_base_msr: u32;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 326,
+      "last_line": 326,
+      "sha256": "6a46606bfb31bf20d26f6a5ce0e1f5f2fd280219d972d80f39b5edb8d7e7aee5",
+      "role": "Actual source APIC_BASE_MSR macro",
+      "exact_source": "#define APIC_BASE_MSR\t\t0x800\n"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "first_line": 339,
+      "last_line": 348,
+      "sha256": "ac8e1cbf64bf859c00d542dcadc5c9132ef8178e19e3a1556389f10107bbf6e8",
+      "role": "Exact Rust/C storage owner selection",
+      "exact_source": "#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nextern void *lapic_vp; /* Rust-owned slot; existing device lifetime unchanged. */\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\nextern const unsigned int x86_local_apic_base_msr;\n#else\nconst unsigned int x86_local_apic_base_msr = APIC_BASE_MSR;\n#endif\n#else\nstatic void *lapic_vp;\n#endif\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "first_line": 94,
+      "last_line": 94,
+      "sha256": "4fefcc69e0dc6f48051ca4ae83e2a725ccefc386861463a2e76508354c5bdbbc",
+      "role": "Actual source selection",
+      "exact_source": "mod x86_cpu_helpers;\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 187,
+      "last_line": 187,
+      "sha256": "cce0758db812ec01f3ec037f576e8e612ca1ebc38bbd17bcf64ebc10284766cd",
+      "role": "Actual build source input",
+      "exact_source": "\t\t\"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs\"\n"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "first_line": 729,
+      "last_line": 730,
+      "sha256": "4256c5202df3cad22f53ced67131586dced0f7179e081c1740b6d95039cf352e",
+      "role": "Paired C Rust-owner definition",
+      "exact_source": "\tset_source_files_properties(\"${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/cpu.c\"\n\t\tPROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_X86_CPU_HELPERS)\n"
+    }
+  ],
+  "unique_ownership_boundary": "These are original genuine owner definitions, not new fake state. Before any future join Root binds actual latest passing matching target/current cohort and rejects duplicate lapic_vp or x86_local_apic_base_msr or alternate C owners; target5/RDMSR/WRMSR/CPU primitives must be reused. This contract does not infer a current owner roster from source or artifact absence.",
+  "remaining_original_conditions": "Full native/default C selection/real-header proof, actual original boot/MMIO mapping initialization/lifetime/currentfree/sourcecustody and real callback publication/target/IRQ/MSR context remain unproven. NULL slot does not make any target safe to call; immutable base is no controller mapping. No original gate/acceptance/C retirement/score credit.",
+  "operations": "Read only named original Rust data definitions/type/attributes/module cfg context, paired C declarations/macro/one static guard and existing source selection/prior contract. Wrote only private RESULT.json. No unit/fixture/compiler/preprocessor/Cguardprocessing/ELFparser/GNUmetadata/gate/link/function/slot/map/MSR/hardware/runtime/native, canonical/index/state edits or recursion."
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.callback-backend-data.independent-source-profile-review.v1",
+  "decision": "GO_EXACT_TWO_ORIGINAL_DATA_SOURCE_AND_LITERAL_ONE_COMPILE_PROPOSAL_ONLY_SUBJECT_TO_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH; never/danger-full-access; private source review/no recursion",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/REQUEST.json",
+    "sha256": "ab56c2f870d11b7345aa76cae355c0f10778e06b4aab3879f0993dc67b9e1b66"
+  },
+  "reviewed_files_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/scheduler_callback_backend_data_unit.rs": "1c938fcf5a2088e150461b1e0823e28ab2ce410f620ce9cefd2b5a4c8b437f42",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/SOURCE-MANIFEST.json": "6be8d1855bbe68d988c32699b814333e4ef2579013f0bb6fbe63fcf3a99161b6",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-backend-data-unit-1/PROFILE-PROOF.json": "5655f92d564b0ff0022fc2936d6817818969ffcad613ea3f03f11d0ac6425e5d"
+  },
+  "eligibility_reused": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-data-owner-eligibility-1/RESULT.json": "377a09a39aaeae1847ca9ec9cddf154da52b6f7f64fc87659a78e1bee53f7174",
+    "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-apic-backend-data-lookahead-20261110T0022.json": "1ff513c6c9de38e323fe0a203db933acd8a1f849ca83fee95708ebdd343017c7"
+  },
+  "checks": {
+    "all11_input_pins_match": true,
+    "all4_sourceblocks_text_hash_unit_byteoffset_exact": true,
+    "all9_original_Rust_Cmacro_owner_selector_guard_build_evidence_segments_exact": true,
+    "unit_bytes": 716,
+    "only_two_no_mangle_attrs_no_fn_extern_cfg_or_alias_definition": true,
+    "retained_compiler_flags_match": true
+  },
+  "original_owners": {
+    "lapic_vp": {
+      "namespace": "x86_cpu_helpers::initialization_entries",
+      "definition": "Original #[no_mangle] pub(crate) static mut lapic_vp:*mut core::ffi::c_void=core::ptr::null_mut()",
+      "expected": "B8/align8 original null-storage declaration, actual future metadata/NOBITS flags to be checked",
+      "ownership": "Actual target consumer mapped_local_apic imports ELF lapic_vp through original link_name. Unit defines only lapic_vp, never mapped_local_apic/lapic_virtpage. No pointer alias/fixed address/reference or mapping initialization invented."
+    },
+    "x86_local_apic_base_msr": {
+      "namespace": "x86_cpu_helpers::selected_fixed_cpu_selectors",
+      "definition": "Original #[no_mangle] pub static immutable x86_local_apic_base_msr:actualCUInt=u32=0x800",
+      "expected": "R4/align4, original scalaralias/exactinitializer",
+      "ownership": "Original source declaration + actual C APIC_BASE_MSR macro and selected guard support this finite source value. Not a discovered/enabled controller/MSR context or replacement of unknown config."
+    }
+  },
+  "guard_profile_boundary": [
+    "Actual cpu.c339-348 Rust-owner extern/Cowner alternate selection,CMakeCPUhelper pairing and original staticassertAPIC_BASE_MSR==0x800 at4205 inspected as source evidence. Guard not preprocessed/compiled/passed by this packet.",
+    "Original source comment requiring real-header object equality remains byte-exact. Full selected header/Cguard/duplicateCowner/real-header equality and original matching supported cohort remain required for corresponding integration; no partialsource/compiler result substitutes for them.",
+    "No whole initialization/fixed-selector module, other data/functions/constructor/mapping/boot/target publication or new cfg. Existing target5/RDMSR/WRMSR/CPU/publisher source owners not copied.",
+    "Only prospective0T0U+2data; actual emitted bytes/flags/align/private/relocation/owner evidence and future currentpartial binding remain unqualified. No slot initialized to an active mapping."
+  ],
+  "compile_profile_preflight": {
+    "flags": "Retained actual nightly1.95/no_std/edition2021/abort/opt2/large/static/no-redzone/no-vector/no-SSE exact options; only privatepaths differ, no cfg/env/feature/lint/no_builtins changes.",
+    "output": "Request explicitly selects pinned rustc then unique compiler -o, absent literal object, actual intended output parent creation before Popen. Metrics -o separate; source last; exclusive captures/PIDbirth/directwait/rawmetrics required.",
+    "resources": "One CPU6 compile,AS1GiB/CPU45/wall60/KILL5/FSIZE64MiB/core0 under HOST0,6,7/max3aggregatejobs/4GiB TOTAL incl overhead. Root fresh usage/capacity/admission remains prerequisite.",
+    "diagnostics": "Exact retained52aa single SSE warning/empty stdout; first unexpected failure STOP/preserve, no automatic retry."
+  },
+  "reviewer_operations": "CPU0 source/hash/byte/profile review and sole private REVIEW write; no compiler/preprocessor/Cguardprocessing/GNU/ELFparser/predicate/link/map/function/runtime/canonical/index/state operation.",
+  "acceptance_boundary": "No real mapping/backend/boot mode/live target/IRQ/MSR/native/default/fullC/C-retirement/checklist qualification. OptionalHOSTpublisherobservation027f stays CLOSED/NO_GO, no fixture.",
+  "defects": []
+}

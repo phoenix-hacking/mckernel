@@ -1,0 +1,106 @@
+{
+  "status": "CAPTURED_TWO_NEW_REAL_OBJECTS_NO_OWNERSHIP_PASS_CLAIM",
+  "new_Popen": 0,
+  "records": [
+    {
+      "label": "lapic",
+      "capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+      "sha256": "151e4399fef50201ab76ed9c131150a333e2d0d906dd19711fb0a6f6551fa916",
+      "actual_global_definitions": {
+        "lapic_timer_disable": {
+          "type": 2,
+          "size": 22,
+          "kind": "T"
+        },
+        "lapic_write": {
+          "type": 1,
+          "size": 8,
+          "kind": "B"
+        },
+        "lapic_timer_enable": {
+          "type": 2,
+          "size": 51,
+          "kind": "T"
+        },
+        "x86_lapic_timer_disable_body_result": {
+          "type": 2,
+          "size": 31,
+          "kind": "T"
+        },
+        "x86_lapic_timer_enable_body_result": {
+          "type": 2,
+          "size": 56,
+          "kind": "T"
+        },
+        "x86_lapic_write_bridge": {
+          "type": 2,
+          "size": 15,
+          "kind": "T"
+        }
+      },
+      "actual_U": []
+    },
+    {
+      "label": "ipi",
+      "capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+      "sha256": "d7c5046d4393d21a0ef8080fdcca7d1d318749117191342b47d61508e898adc3",
+      "actual_global_definitions": {
+        "apic_icr_write": {
+          "type": 2,
+          "size": 45,
+          "kind": "T"
+        },
+        "apic_wait_icr_idle": {
+          "type": 2,
+          "size": 73,
+          "kind": "T"
+        },
+        "apic_x86_issue_ipi": {
+          "type": 2,
+          "size": 138,
+          "kind": "T"
+        },
+        "x2apic_icr_write": {
+          "type": 2,
+          "size": 26,
+          "kind": "T"
+        },
+        "x2apic_x86_issue_ipi": {
+          "type": 2,
+          "size": 83,
+          "kind": "T"
+        },
+        "x86_apic_issue_ipi_body_result": {
+          "type": 2,
+          "size": 120,
+          "kind": "T"
+        },
+        "x86_x2apic_issue_ipi_body_result": {
+          "type": 2,
+          "size": 94,
+          "kind": "T"
+        },
+        "x86_icr_geometry": {
+          "type": 1,
+          "size": 32,
+          "kind": "R"
+        },
+        "x86_ipi_icr_id_shift": {
+          "type": 1,
+          "size": 4,
+          "kind": "R"
+        }
+      },
+      "actual_U": [
+        "cpu_disable_interrupt_save",
+        "cpu_restore_interrupt",
+        "ihk_mc_mb",
+        "lapic_read",
+        "x86_cpu_pause_bridge",
+        "x86_lapic_write_bridge",
+        "x86_write_msr_bridge"
+      ]
+    }
+  ],
+  "CPU6_released": true
+}

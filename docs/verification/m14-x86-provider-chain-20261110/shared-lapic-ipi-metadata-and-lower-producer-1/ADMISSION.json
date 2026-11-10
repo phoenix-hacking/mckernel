@@ -1,0 +1,139 @@
+{
+  "at": "2026-11-09T23:36:57.510347+00:00",
+  "owner": "Root sole compositor/actualHOSTadmission",
+  "controller": {
+    "pid": 655448,
+    "birth": "35368288"
+  },
+  "steps": [
+    {
+      "label": "lapic-metadata",
+      "kind": "metadata-controller",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1/correction-1/REQUEST.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-metadata-1",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/lapic-metadata.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/lapic-metadata.stderr",
+      "request_sha256": "0016d23072f91e793edcb7e2af4e811b222424888a2dcd51f1ac47db8ae84da6",
+      "review_sha256": "9d06f4cde9b187d924919da9a195303d7c0c81fe47dab68f963411d098b82ed3"
+    },
+    {
+      "label": "concrete-ipi-metadata",
+      "kind": "metadata-controller",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "140s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1/REQUEST.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-metadata-1",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/concrete-ipi-metadata.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lapic-ipi-metadata-and-lower-producer-1/concrete-ipi-metadata.stderr",
+      "request_sha256": "bfe8dcf453b47df6987bf4407c4762d1da6ad5b82a5ed3de7a697486f0e1762c",
+      "review_sha256": "086943c9fc896bad76e1f1afcb23f6f6280fec2ed15b1187aee2a62ed8f5755f"
+    },
+    {
+      "label": "lower-four-producer",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/provider-compile.metrics",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/scheduler_ipi_lower_provider_unit.rs"
+      ],
+      "environment_overrides": {},
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/provider-compile.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/provider-compile.stderr",
+      "expected_returncode": 0,
+      "kind": "compiler",
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1",
+      "object_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-unit-1/output/scheduler_ipi_lower_provider.o",
+      "request_sha256": "1e5d029b6bbdee03c07692e53fd241370182df8af5048dca4a2345edf53bfb42",
+      "review_sha256": "c350c5f4e10d536cff5a43a35a4c83a82b018545dc61fae466dc86f2f410daa6"
+    }
+  ],
+  "MemAvailable": 29763907584,
+  "disk_free": {
+    "/home/holden/mckernel": 132017471488,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132017471488
+  },
+  "usage": {
+    "at": "2026-11-09T23:36:57.488500+00:00",
+    "used_percent": 40,
+    "remaining_percent": 60,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "HOST": "CPUs0/6/7,max3aggregateLIGHTjobs,4GiBTOTALincludingalloverhead; serialCPU6 two META2 controllers then first lower4 compiler,RootCPU0",
+  "all_exact_input_and_review_pins_checked": true,
+  "new_native_hardware_function_or_hold_release": false
+}

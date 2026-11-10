@@ -1,0 +1,139 @@
+{
+  "kind": "ACCEPTED_F04_CONCRETE_IPI_TRANSACTION_AND_ICR_PROVIDER_SOURCE_CONTRACT",
+  "decision": "GO_EXACT_SEVEN_EXISTING_FUNCTIONS_TWO_FIXED_DATA_OWNERS_SOURCE_ONLY",
+  "scope": "Real x2APIC/mappedAPIC entry transactions, existing transaction cores and ICR callbacks only. No callback publication/init, wholemodule, hardware call or duplicate LAPICtimer/writebridge preparation.",
+  "plan": "Current AGENTS.md and CAMPAIGN.md updated2026-11-09T22:56Z read; sameRoot211917Z active, all original source/service/SDK/native/currentfree/UNKNOWN holds and original checklists unchanged.",
+  "existing_preparation_overlap_check": {
+    "bounded_packets_checked": [
+      "scheduler-interrupt-backend-unit-1 JSON",
+      "scheduler-ipi-log-provider-unit-1 JSON",
+      "scheduler-local-slot-unit-1 JSON",
+      "scheduler-lapic-provider-eligibility-1/RESULT.json",
+      "current invocation directory names"
+    ],
+    "finding": "No preparation for x2apic_x86_issue_ipi/apic_x86_issue_ipi was established in these concrete packets. Existing interrupt/slot/logger work is reused, not duplicated. Root confirms its LAPICtimer entry/result-body scope and a separate writebridge/slot lookahead; those remain outside this cut.",
+    "retained_symbols": "scheduler-backend-join-1/joined-symbols.stdout for actual current35b3a058; no x2APIC/APIC entry/core/ICRcallback/fixed-data owner found. cpu_disable_interrupt_save and cpu_restore_interrupt are existingT6/T5 owners.",
+    "no_new_symbol_hash_or_repo_census": true,
+    "future_composition": "Root must match latest actually qualified objects/owners before any preparation/codegen/join; new directories or source-only lookaheads are not completed provider evidence."
+  },
+  "affirmative_source_boundary": {
+    "original_scope": "AcceptedF04 arch/x86_64/kernel/cpu.c startup/interrupt/primitive source context; exact two reference IPI entries and ICR providers, distinct from syscall notification/event/ACK/TID/exec implementation.",
+    "selection": "kernel/rust/lib.rs94 selects x86_cpu_helpers; kernelCMake187 actualsource and729-730 pairs CPU C reference with MCKERNEL_RUST_X86_CPU_HELPERS.",
+    "correspondence": "arch/x86_64/kernel/cpu.c1314-1345 has exact original ICR idle/write bodies and Rust declarations in selected branch;1353-1397 has exact two IPI entries. C1420-1435 later selects these real functions as callback targets; that publication transaction is excluded here.",
+    "holds": "This acceptedF04 finite source cut neither interprets/releases original generic/exec/notification membership nor selects held neighboring code. No native/IRQ/sourcecustody/SDK/runtime grant is inferred."
+  },
+  "exact_function_cut": [
+    {
+      "name": "x2apic_x86_issue_ipi",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs4024-4039",
+      "signature": "unsafe extern C fn(u32,u32)",
+      "semantics": "Original entry passes apicid,low and genuine ihk_mc_mb,IRQ-save,x2apic_icr_write,IRQ-restore function addresses to its actual transaction core; preserves discarded CInt result."
+    },
+    {
+      "name": "apic_x86_issue_ipi",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs4047-4063",
+      "signature": "unsafe extern C fn(u32,u32)",
+      "semantics": "Original entry reads actual x86_ipi_icr_id_shift and passes genuine IRQ-save,idlewait,apic_icr_write,IRQ-restore addresses into actual core; preserves result discard."
+    },
+    {
+      "name": "x86_x2apic_issue_ipi_body_result",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs1910-1930",
+      "signature": "unsafe extern C fn(CUInt,CUInt,Option<X86VoidFn>,Option<X86DisableSaveFn>,Option<X86IcrWriteFn>,Option<X86RestoreFn>)->CInt",
+      "semantics": "Original callback validation then mb,saveflags,icr_write(low,apicid),restoreflags,return0; missing callback-EINVAL unchanged."
+    },
+    {
+      "name": "x86_apic_issue_ipi_body_result",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs1932-1956",
+      "signature": "unsafe extern C fn(CUInt,CUInt,CInt,Option<X86DisableSaveFn>,Option<X86VoidFn>,Option<X86IcrWriteFn>,Option<X86RestoreFn>)->CInt",
+      "semantics": "Original shift0..31/callback validation; saveflags,waitidle,icr_write(apicid<<shift,low),restoreflags,return0; no added masking or timeout."
+    },
+    {
+      "name": "x2apic_icr_write",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs4087-4096",
+      "signature": "unsafe extern C fn(u32,u32)",
+      "semantics": "Original combined((apicid as CULong)<<32)|low and actual geometry[0] passed to genuine external x86_write_msr_bridge."
+    },
+    {
+      "name": "apic_icr_write",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs4104-4113",
+      "signature": "unsafe extern C fn(u32,u32)",
+      "semantics": "Original highwrite geometry[1] then lowwrite geometry[2] through genuine external x86_lapic_write_bridge; no reordered/extra barrier/read."
+    },
+    {
+      "name": "apic_wait_icr_idle",
+      "Rust": "kernel/rust/x86_cpu_helpers.rs4121-4136",
+      "signature": "unsafe extern C fn()",
+      "semantics": "Reload genuine lapic_read slot eachiteration, original unchecked nonnull contract, geometry[2] busyread/maskgeometry[3], pausebridge until clear. No fallback/timeout/new callback."
+    }
+  ],
+  "types_private_closure": {
+    "actual_types": [
+      "abi::CInt=i32",
+      "abi::CULong=u64",
+      "x86_cpu_helpers.rs9 CUInt=u32",
+      "core::ptr::addr_of"
+    ],
+    "actual_aliases": {
+      "X86VoidFn": "unsafe extern C fn()",
+      "X86DisableSaveFn": "unsafe extern C fn()->CULong",
+      "X86RestoreFn": "unsafe extern C fn(CULong)",
+      "X86IcrWriteFn": "unsafe extern C fn(CUInt,CUInt)",
+      "icr_callbacks::ReadRegister": "unsafe extern C fn(CInt)->u32"
+    },
+    "source_scalar_constants": [
+      "EINVAL:CInt=22 atx86_cpu_helpers11",
+      "Original shifts/literals/bit operations in the seven exact bodies"
+    ],
+    "additional_private_runtime_functions": [],
+    "cfg": "Seven functions and selected fixed-data definitions are unconditional existing source with no equivalence/candidate replacement; retain original no_mangle attributes. No full module/neighbor import.",
+    "profile": "Same qualified current no_std nightly1.95/edition2021/large-static/no-redzone/no-vector/no-SSE nonexecuted partial-codegen profile and exact diagnostic contract; actual original C/native binding remains separate."
+  },
+  "actual_fixed_data_cut": [
+    {
+      "name": "x86_ipi_icr_id_shift",
+      "source": "kernel/rust/x86_cpu_helpers.rs6817-6818 selected_fixed_cpu_selectors",
+      "definition": "#[no_mangle] pub static x86_ipi_icr_id_shift:CInt=24;",
+      "Cbinding": "cpu.c1347-1351 selected LAPIC_ICR_ID_SHIFT; unchanged Cstaticassert at4206 requires24",
+      "scope": "4byte signedCint immutable source constant, not a discovered hardware capability."
+    },
+    {
+      "name": "x86_icr_geometry",
+      "source": "kernel/rust/x86_cpu_helpers.rs6912-6920 selected_remaining_cpu_arrays",
+      "definition": "#[no_mangle] pub static x86_icr_geometry:[CULong;4]=[0x830,0x310,0x300,0x1000];",
+      "Cbinding": "cpu.c364-366 [IA32_X2APIC_ICR,LAPIC_ICR2,LAPIC_ICR0,APIC_ICR_BUSY]; actual source macros at308/309/317/328 and unchanged staticasserts4238-4241",
+      "scope": "32byte immutable real sourcearray, original order and width; no hardcoded replacement of unknown config."
+    }
+  ],
+  "fixed_data_qualification_limit": "Actual source values and original Cassertions establish a reviewable finite source-supported target. No preprocessor/headerobject comparison was run here. Preserve original selected-header equality/full Cguards for actual integration; compiling finite Rustdata alone cannot claim those guards/native ABI passed. No original assertion or hardware mapping/state is changed.",
+  "genuine_external_boundary": {
+    "functions": [
+      "ihk_mc_mb()",
+      "cpu_disable_interrupt_save()->CULong",
+      "cpu_restore_interrupt(CULong)",
+      "x86_write_msr_bridge(CInt,CULong)",
+      "x86_lapic_write_bridge(CInt,u32)",
+      "x86_cpu_pause_bridge()"
+    ],
+    "data": [
+      {
+        "symbol": "lapic_read",
+        "original_local_link_name": "selected_read",
+        "type": "static mut Option<unsafe extern C fn(CInt)->u32>",
+        "meaning": "Actual original nullable readcallback slot; only imported, never fabricated/published/initialized by thiscut."
+      }
+    ],
+    "reuse": "IRQsave/restore have retained35b owners. x86_lapic_write_bridge,x86_write_msr_bridge,x86_cpu_pause_bridge remain true external definitions; separate existing writebridge/slot/timer preparation owns its own scope. Root composes matching owners and never duplicates them.",
+    "no_blind_Ucount": "Source lists describe standalone dependencies, not actual final unresolved set or completed objectmetadata. Root current overlapping trueowners determine actual resolution."
+  },
+  "callback_target_readiness_limit": "The cut supplies genuine code targets with the actual IssueIpi ABI unsafe extern C fn(u32,u32), matching x86_issue_ipi Option type at5281/5296. It does not publish an address into prebootNone x86_issue_ipi or lapic_read, select APICmode, initialize/mmap APIC, or prove delivery. Actual selected init_lapic_bsp/dispatch publication and live backend conditions remain separate genuine source/runtime prerequisites. Original C1427/1435 assignments demonstrate real target use; no invented setter is proposed.",
+  "smallest_next_preparation": "Root may review exactly7existingfunctiondefinitions+2fixeddata definitions, required genuine typealiases/constants and actual extern declarations. No source extraction/unit generation performed here. Any compiler/object/initializer/relocation/owner checks and currentpartial join require Root exact independent review/admission; no hardware function runs.",
+  "actions": {
+    "CPU0_reads_only": true,
+    "source_extraction_or_unit_creation": false,
+    "compiler_metadata_link_runtime_hardware": false,
+    "canonical_repo_index_ledger_launcher_changes": false,
+    "goal_control_or_spawn": false,
+    "sole_written_file": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-concrete-provider-lookahead-20261109T2302.json"
+  },
+  "checklist_acceptance_credit": 0
+}

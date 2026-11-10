@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.ipi-concrete-provider.independent-source-profile-review.v1",
+  "decision": "GO_EXACT_SEVEN_FUNCTIONS_TWO_FIXED_DATA_SOURCE_AND_ONE_COMPILE_PROPOSAL_ONLY_SUBJECT_TO_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Actual Sol/HIGH; never/danger-full-access; private source review/no recursion",
+  "request": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/REQUEST.json",
+    "sha256": "b90ba760ec8fddad7f53634ba413a889f6fb30529c5fd714d5cddea9232ce532"
+  },
+  "reviewed_files_sha256": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/SOURCE-MANIFEST.json": "447060e7295e6a2a68fefc2fed17965cc06439a425039e9d52ee9e0267d409b7",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/PROFILE-PROOF.json": "dd0c3306029162ae7b147e61a990dfcca4e6fddeb45d548e19c6a29a22b6ddb8",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/scheduler_ipi_concrete_provider_unit.rs": "c08951e23808d7c6cd466c9eac813a8f41d95689e79eed2cf07aa48a7a1eb5ae",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/transactions.rs": "75592d0b4fdb102ee10ec3c3cebf488856cc9a75149df74653ce715ca732da7e",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/ipi_entries.rs": "114b8e26815687e0876ffda247da5f8bf8de327649a4383a149df327cbe315b9",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/icr_callbacks.rs": "82186f6ab3125282b6e6f694a35ff27338f1ce9011138c32f8101fc42dc600e2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/fixed_data.rs": "d5e50d39c9f2202e7c6d631d37d5732a48322f1bf557beeea16e56d7fa2a74aa"
+  },
+  "eligibility": {
+    "path": "/home/holden/mckernel-work/m14-m15-scheduler-resume-20261109T211802Z/x86-ipi-concrete-provider-lookahead-20261109T2302.json",
+    "sha256": "b15abe0ff503d188c5fb405f7ae3443c5514617a7c4169bbfc0eeebad098e1a4"
+  },
+  "source_checks": {
+    "all12_request_pins_checked": true,
+    "all31_source_segment_hashes_checked": true,
+    "all7_complete_original_function_attribute_blocks_and2_original_data_declarations_verbatim_in_private_source": true,
+    "actualABI": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "scope_matches_affirmative2302": true
+  },
+  "exact_functions": [
+    "x2apic_x86_issue_ipi",
+    "apic_x86_issue_ipi",
+    "x86_x2apic_issue_ipi_body_result",
+    "x86_apic_issue_ipi_body_result",
+    "x2apic_icr_write",
+    "apic_icr_write",
+    "apic_wait_icr_idle"
+  ],
+  "ABI_and_call_order": [
+    "Actual CInt=i32,CULong=u64,CUInt=u32; four original unsafe extern C Option callback aliases and ICR ReadRegister(CInt)->u32 retained. No handmade struct/enum/borrow conversion.",
+    "x2 transaction validates all callbacks then mb->saveIRQflags->ICR(low,apicid)->restore sameflags->0, missingcallback-EINVAL; entry passes exact real callback addresses and discards original result.",
+    "Mapped transaction rejects shift outside0..31, validates callbacks, saveIRQflags->waitidle->ICR(apicid<<shift,low)->restore sameflags->0. Entry original shift read/result discard preserved.",
+    "x2 ICR combines u32destination<<32 with low in actual CULong and geometry[0]. Mapped ICR writes high geometry[1] then low geometry[2] through genuine bridge; no extra barrier/read/order change.",
+    "Idle loop retains actual selected_read link_name lapic_read Option slot, reload each iteration without mutable reference, unchecked original callback contract, geometry[2] read/mask geometry[3], genuine pausebridge. No timeout/fallback/slotowner/publication added."
+  ],
+  "fixed_data": {
+    "x86_ipi_icr_id_shift": "Exact immutable no_mangle original CInt24, expectedR4/align4.",
+    "x86_icr_geometry": "Exact immutable no_mangle original[actualCULong;4]=[0x830,0x310,0x300,0x1000], expectedR32/align8/order unchanged.",
+    "source_C_binding": "Actual macro/declaration/equalityguard segments checked, including shift24 and4geometry values. Finite Rust compile does not preprocess/pass full C/header or original SDK/native binding; original guards remain."
+  },
+  "ownership": {
+    "expected_standalone": "Source7T+2R/no writable data/no extra private helper; emission remains unqualified pending actual readback.",
+    "genuine_imports": [
+      "ihk_mc_mb",
+      "cpu_disable_interrupt_save",
+      "cpu_restore_interrupt",
+      "x86_write_msr_bridge",
+      "x86_lapic_write_bridge",
+      "x86_cpu_pause_bridge",
+      "lapic_read"
+    ],
+    "no_alias": "x86_cpu_pause_bridge remains genuine U, never guessed/renamed to cpu_pause. Original lapic_read link_name is only declaration binding, not fake provider.",
+    "disjoint": "Only listed7exports+2fixeddata defined. No LAPICtimer functions/writebridge/slot storage, IRQsave/restore/mb/MSR/pause implementation, logger/accessor/NoneIPI slot or boot/init/backend/hardware body duplicated. Separate LAPIC5T+1B cut remains external.",
+    "future_composition": "Exact currentpartial/join unbound. Root must reconcile actual latest qualified operands and uniqueowners/bytes/relocs; no stalecohort/count inference or closure claim."
+  },
+  "compiler_profile_review": {
+    "unchanged": "Retained qualified nightly1.95 compiler70ebcbba/no_std/edition2021/abort/opt2/large/static/no-redzone/no-vector/no-SSE exact flags; only private source/output/metrics/capture paths differ.",
+    "extra_cfg_env_features_or_suppression": "None; no no_builtins or target/layout substitution.",
+    "limits": "One CPU6 compiler payload;AS1GiB/CPU45/wall60/KILL5/FSIZE64MiB/core0 under shared CPUs0,6,7/max3aggregatejobs/4GiB TOTAL including overhead. Root fresh usage/capacity/admission and creation of intended private output directory required before compile.",
+    "diagnostic_contract": "Exact retained single SSE warning52aa/empty stdout. Any unexpected compiler/helper/owner/import/emission failure STOP and preserve, no automatic workaround/retry.",
+    "later_gate": "Actual emitted object metadata/private/intrinsic/alias/function/data/readonly/reloc proof before any composition; unknownowner/import does not receive wildcard allowance."
+  },
+  "operations": "CPU0 read-only source/hash comparisons and private REVIEW write only; no ELFparser/gate/compiler/GNU/link/function/runtime/canonical/index/state operation.",
+  "acceptance_boundary": "No APIC/MSR/IRQ/mb/pause/slotread/callbackcall/target publication/boot mode/hardware/native/default/C-retirement/checklist credit; original held scope unchanged.",
+  "defects": []
+}

@@ -1,0 +1,74 @@
+{
+  "at": "2026-11-09T23:47:09.348674+00:00",
+  "owner": "Root sole compositor/integrator",
+  "steps": [
+    {
+      "label": "lapic-ipi-join",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "200s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1/run_join.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1/JOIN-REQUEST.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-ipi-join-1",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "request_sha256": "489d4253f110138b3b59a813ad59ee0fc8c40b2cfe5a6ede8f3708173a7b3d6a",
+      "review_sha256": "5ab044b95eebc2f847207ee93bd7e7887406e3395ba5171aa7b9a175f233fdb1"
+    },
+    {
+      "label": "lower-metadata",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/run_metadata.py",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1/REQUEST.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-lower-provider-metadata-1",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "request_sha256": "c217954cbd7da8d2f5cf7906d4782221078dfad6ced1e5ef498059b7062688ed",
+      "review_sha256": "12319dad33e9419c8ed765d9a2ede85a04aac45f32e036e9ec2cf284e0312394"
+    }
+  ],
+  "MemAvailable": 29741015040,
+  "disk_free": {
+    "/home/holden/mckernel": 132006813696,
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba": 132006813696
+  },
+  "usage": {
+    "at": "2026-11-09T23:36:57.488500+00:00",
+    "used_percent": 40,
+    "remaining_percent": 60,
+    "normal_guard_passed": true,
+    "rateLimitReachedType": null,
+    "spendControlReached": false,
+    "included_only": true
+  },
+  "HOST": "CPUs0/6/7max3LIGHTjobs4GiBTOTALalloverhead; serialCPU6 JOIN3 then META2,RootCPU0",
+  "no_compiler_native_function_hardware_or_hold_release": true
+}

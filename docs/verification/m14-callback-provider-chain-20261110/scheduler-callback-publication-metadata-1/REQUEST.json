@@ -1,0 +1,223 @@
+{
+  "status": "READY_PUBLISHER_TWO_METADATA_READS_CALLED_ACTUAL_SIX_STORE_TARGET_OWNER_GATE_PENDING_C_GO_ROOT_ADMISSION",
+  "owner": "/root/m15_public_abi_high",
+  "cwd": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1",
+  "commands": [
+    {
+      "label": "provider-symbols",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-symbols.metrics",
+        "/usr/bin/nm",
+        "-S",
+        "--format=posix",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output/scheduler_callback_publication_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-symbols.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-symbols.stderr"
+    },
+    {
+      "label": "provider-elf",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5s",
+        "60s",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=45:45",
+        "--fsize=67108864:67108864",
+        "--core=0:0",
+        "--",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-elf.metrics",
+        "/usr/bin/readelf",
+        "-h",
+        "-SW",
+        "-Ws",
+        "-Wr",
+        "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output/scheduler_callback_publication_provider.o"
+      ],
+      "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-elf.stdout",
+      "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-elf.stderr"
+    }
+  ],
+  "environment_replace": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "inputs": {
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/scheduler_callback_publication_unit.rs": "00e07a248d8e198f1a01702c11290c7a04b201b4b617925a1e1f09e8572b6926",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/publisher.rs": "bc6d4d255084ea609c5ca9be60196695607871fae1c0b4717ed9f3775bd357a8",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/target_declarations.rs": "d774e45797c89292aa950b8fbd71a8bf0c05b9df7ccacb7a5bc2fee6fcebb08b",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/SOURCE-MANIFEST.json": "16759c238f147ab8e7811509f7e83fb0047086a66aa97e769c10ed0db2ce4605",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/PROFILE-PROOF.json": "2cab85336bf98e98cdb473600a559f796f4ea8fcc402357daf51e7bce78f10b2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/REQUEST.json": "bf78914c60b7ce9d3471c6014231259d05043636086e1c0eb7e6a6b73dbaca82",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.stderr": "12b575684ad444760dd47d4d5ff4c2333b65b71053b01bba7367c697e39726e4",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.metrics": "5ea74cf2be00d8e9de0471e3187dcc5a62d8163891ec96ab2f3b4e580c6f1362",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-review-1/REVIEW.json": "06fa83755b2f6bbdcf75e01a79bb10a1457d550232fedc8c2fcb8bef17db9b1d",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-review-1/DIAGNOSTIC-REVIEW.json": "f63fc493f721aad6b707e857a018ce076037951de5b42122ccc3699ce6c3df21",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/callback-publication-reconciliation-root-1/ADMISSION.json": "5350a8166d41497b82eae5104be862121fbb64b2ecf0a98c77e25cb428f51955",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/callback-publication-reconciliation-root-1/RESULT.json": "1ccfb77f21a19cf6a8b21aab449468dd87b31581f07758a0a70f7a1c77f89a90",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lower-join-and-publication-producer-1/ADMISSION.json": "2ed60f0ac20243c278cde70df8be0f3192264784107c3b1a7d411742d0388064",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/shared-lower-join-and-publication-producer-1/RESULT.json": "3af917cda8a8ef0499a5277bd081a926b5988ce06232cc037f7fef0e96174fc2",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output/scheduler_callback_publication_provider.o": "a51435b0b116a390b13b8936426680a5a5fab10223698eeeca286e6794cc40be",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json": "fa11792824361129f2a7565e5d66aa0a19cab5b115c49a905bdd65248ea7f908",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/EMISSION-SIX-STORE-CONTRACT.json": "2ab63c099d50bf4d0b2c70164cf6f2a8209d74a254d010b5cc9d263d3a23ca4f",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/publication_checks.py": "217055da7890527379cf402694fecae91611eef428d0e602be9358bbc50305fb",
+    "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/run_metadata.py": "4e6995c3635d370d4afef646a947d6d30efdc09b66ec41b5f3bf7ee443a059ac",
+    "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "/usr/bin/nm": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/home/holden/mckernel/kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "source_segment_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5272,
+      "last_line": 5274,
+      "segment_sha256": "fa8f93b99bc76a0e602c3a5758abae01e45b183261baa62ca5f0a9a5e5142d90",
+      "role": "Exact addr_of_mut andactualCInt import context"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5277,
+      "last_line": 5281,
+      "segment_sha256": "f1af96fc016eac5a6ca8ae7665c610f3ae51e480097c897927994e148b74d693",
+      "role": "Exact five originalcallbackaliases"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5283,
+      "last_line": 5286,
+      "segment_sha256": "412cab6eec257827136c87345a744e13acbe344bb5ef7180ebad9441818dc65e",
+      "role": "Exact originalexport_name/selectedmode0 owner"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5291,
+      "last_line": 5294,
+      "segment_sha256": "bf445a0d9e8fba34d4e19dcd28ad75d0b06d579a3e91c24967810a21d3116d21",
+      "role": "Exact originalICRwrite/waitNone8B owners only"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5298,
+      "last_line": 5309,
+      "segment_sha256": "567242684b5a6e1157e5c54c1cff276cdd558b48dbd871f00d3aa165e7f4aa50",
+      "role": "Exact allfiveOptioncallbacksize8/align8 assertionblock"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5311,
+      "last_line": 5317,
+      "segment_sha256": "48bdac493946a25fe5cedbed1020cb73eb0a55eeb4748ba95d4ed1f83d94deed",
+      "role": "Exact genuineintentionallyemptyx2APICwait leaf/doc/attribute"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5319,
+      "last_line": 5348,
+      "segment_sha256": "334d74f3d5ff2b550acd70252164f3e03503f95c420f2a7961c287222b77b95d",
+      "role": "Exact fullsixcoupledstorepublisher/doc/attribute/BOTHbranches"
+    }
+  ],
+  "compiled_input": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/output/scheduler_callback_publication_provider.o",
+    "sha256": "a51435b0b116a390b13b8936426680a5a5fab10223698eeeca286e6794cc40be",
+    "bytes": 2616,
+    "actual_original_compiler_PID": 664585,
+    "actual_original_compiler_birth": "35547338",
+    "direct_wait_joined": true,
+    "compiler_replayed": false
+  },
+  "actual_nm": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-symbols.stdout",
+  "actual_elf": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/provider-elf.stdout",
+  "retained_actual_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/ACTUAL-CAPTURE-BEFORE-GATE.json",
+  "actual_metadata_capture": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/ACTUAL-ELF-METADATA.json",
+  "emission_source_contract": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/EMISSION-SIX-STORE-CONTRACT.json",
+  "qualified_ELF_reader": {
+    "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/storage_predicate.py",
+    "sha256": "a4df81bb2b86d97f4199ae816dab7965213ceba05dca17945f9eae861dc31892",
+    "qualification_receipt": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/provider-storage-unit-1/correction-2/RESULT.json",
+    "scope": "Reuse existing exact Image/parse_nm for ELF64-LE/x86_64 REL metadata/bytes only, not storage predicate re-review or new parser/loader."
+  },
+  "object_predicate": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/publication_checks.py",
+    "sha256": "217055da7890527379cf402694fecae91611eef428d0e602be9358bbc50305fb",
+    "callable": "actual_object_gate(q)",
+    "must_IMPORT_and_CALL_after_two_actual_readbacks_before_any_future_link": true,
+    "capture_all_actual_metadata_before_assertions": true
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/run_metadata.py",
+    "sha256": "4e6995c3635d370d4afef646a947d6d30efdc09b66ec41b5f3bf7ee443a059ac",
+    "literal_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/run_metadata.py",
+      "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-metadata-1/REQUEST.json"
+    ],
+    "only_two_nm_ELF_payloads_no_compiler_link_runtime": true
+  },
+  "exact_diagnostic_reconciliation": {
+    "review_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-review-1/DIAGNOSTIC-REVIEW.json",
+    "review_sha256": "f63fc493f721aad6b707e857a018ce076037951de5b42122ccc3699ce6c3df21",
+    "Root_reconciliation_RESULT": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/callback-publication-reconciliation-root-1/RESULT.json",
+    "stdout_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.stdout",
+    "stderr_path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-callback-publication-unit-1/provider-compile.stderr",
+    "stderr_sha256": "12b575684ad444760dd47d4d5ff4c2333b65b71053b01bba7367c697e39726e4",
+    "stderr_bytes": 910,
+    "policy": "ONLYretained52aaSSE+actualselected_mode originalnamingstyle/exact2warningssummary forbf789source/a514object; no wildcard/renaming/suppression/profileedit or compilerreplay. OldFIRST_FAILURE_STOP_NO_REPLAYreceipt/raw preserved and bound."
+  },
+  "inherited_resource_profile": {
+    "CPU": [
+      6
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 60,
+    "kill_after_seconds": 5,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "aggregate_jobs_max": 3,
+    "aggregate_HOST_total_bytes_all_overhead": 4294967296,
+    "retained_prior_GiB": 18,
+    "floor_GiB": 4,
+    "minimum_MemAvailable_GiB": 26
+  },
+  "actual_emission_scope": "2T205+1Bemptywait;3originalB4/8/8,12realU; exact16R64 original6slot+10targetaddresses/allobservedaddends0 plus2PC64physicalunwindrefs. ActualbranchoptimizationviaSETNEand5CMOVs preservesbothsourcebranches;6orderedstores fulltransaction unchanged. NOBITSnotlivepublishedstate.",
+  "optional_behavior_readiness": "CLOSED_NO_GO_FOR_NEW_OBSERVATION027f; no fixture/store/target/boot execution selected here.",
+  "future_current_partial_and_join": "UNBOUND until actualobjectgatePASS/latestmatchingactualcohort source/ABI/collision/owner review and Rootfreshjoinadmission. No source/runtime/default/nativecountcredit.",
+  "no_execution_in_preparation": true,
+  "not_runnable_until": "C independentconcretesource/ABI/6storebranch/address-owner/diagnostic/controllerGO thenfreshRootCPU6admission; firstunexpectedfailureSTOP/noautomaticretry/codegenreplay."
+}

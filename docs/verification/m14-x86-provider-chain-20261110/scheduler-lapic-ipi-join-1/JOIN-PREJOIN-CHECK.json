@@ -1,0 +1,40 @@
+{
+  "status": "PASS_CALLED_EXACT_CURRENT97_LAPIC_CONCRETE_IPI_PREJOIN",
+  "predicate_called_before_ld_r": true,
+  "actual_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-next-provider-join-1/output/scheduler_next_provider_partial.o",
+      "sha256": "4b4cc4a00304bb0896864446896cbf159cd597bafa8a111b141bf346c460eb91"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-lapic-provider-unit-1/output/scheduler_lapic_provider.o",
+      "sha256": "2f149772ebb539640d2a5eafcffaef6768ce40e57ed0a0a180934f5d91903ecb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/resume-20261109T211917Z-488788ba/scheduler-ipi-concrete-provider-unit-1/output/scheduler_ipi_concrete_provider.o",
+      "sha256": "1f4a6b978f6b81737c4bf2bf62c94fbdd71a4003c59161db7abec761209be2e0"
+    }
+  ],
+  "duplicate_strong_owners": [],
+  "actual_global_union": 112,
+  "actual_remaining_genuine_U": [
+    "do_kill",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "ihk_mc_mb",
+    "lapic_read",
+    "syscall_do_kill_thread_bridge",
+    "syscall_do_syscall_request_bridge",
+    "syscall_find_process_bridge",
+    "syscall_generic_forwarding_body_result",
+    "syscall_process_unlock_bridge",
+    "terminate_host_body_result",
+    "x86_cpu_pause_bridge",
+    "x86_write_msr_bridge"
+  ],
+  "old_real_save_restore_owners_reused": true,
+  "actual_provider_gates_consumed_without_producer_readback_or_gate_reexecution": true
+}
