@@ -1,0 +1,37 @@
+{
+  "status": "ONE_DEFINED_REACHABLE_SOURCE_FAILURE_AND_ONE_PRIVATE_CORRECTION_NOT_EXECUTED",
+  "original_checks": [
+    "M15-P04 whole-session cleanup scope",
+    "M15-I01 installed Rust runtime ownership"
+  ],
+  "source_failure": {
+    "preimage_sha256": "44329596ff8fcb1f197878664bf4999407648f056f81280008d885802f6e5427",
+    "path": "Session::finish child.try_wait() reaps successful leader before private-session retirement; Drop calls try_wait again and receivesSome, hence skips kill/wait. ACK+nonempty staging can still be published while a same-session child lives.",
+    "defined_peer": "Peer forks exactlyone samePGID/SID child, child ignoresSIGHUP, closesPTY0/1/2, records own exactPID/birth, and blocks on an isolated self-held pipe. Peer completes existing5command dialogue with exact fresh stagingACK and exits0. PTYEOF is then normal, but child remains until actual owner retires it.",
+    "no_actual_reproduction_yet": true
+  },
+  "baseline_oracle": "Wrapper return0 and exact synthetic output publication, positive wrapperleader wait; previouslyopened descendantpidfd remains unreadable/alive after return. Root helper must retire only that exactpidfd and positivelywait the adopted child; record the defect and no residuals.",
+  "candidate_oracle": "Same argv5commands/ACK/staging/status0/output bytes, but child pidfd is already readable/dead when wrapper returns and no Root rescue signal is needed. Actual correctedsource requires positive leader wait plus adopted-child wait(s) before ECHILD/restoration/publication. Independent test owner must retain wait evidence at actual scope; Root joins its helper/SUT children and reconciles any adopted child; no residual/UNKNOWN retirement inferred from absence.",
+  "source_fix": "Observe leader through own verifiedpidfd withoutreaping. Before numericPGIDsignal, prove the original ownedleader remainswaitable via waitid(P_PIDFD,WNOWAIT); only then SIGKILL its privategroup, positivelywait leader and adopted descendants under private subreaper, then restore prior subreaper state and allow publication. Failure Drop uses the same existing configured timeout and makes one retirement attempt; no numeric signal after reap/identityfailure.",
+  "identity_proof": "Beforelaunch require no preexistingchildren using nonreaping P_ALL wait; acquire privateprocess subreaper. Before anypidfd signalling, nonreaping P_PIDFDwait proves descriptor belongs to own child. Group signal requires a second successful blockingWNOWAIT after pidfdexit readiness, with leader not reaped and no concurrent reaper in this single-threaded standalone command. No /proc or global host PID selector in production source.",
+  "failure_boundaries": "If pidfd acquisition/own-child verification/waitability/childjoin fails, returnerror and report retirementunproved; never guessPGID/PID or create numericfallback. The outer exact owner retains any UNKNOWN outcome. This packet does not claim all resource/error/escaped-session variants complete.",
+  "unchanged": "Publicargv, prompts, five command strings, exactACK parser, freshstaging identity check, nonempty requirement, permissions and atomicrename are unchanged. Previous22controlled cases and56converter/header/ownershipproof are preserved, not replayed or broadly upgraded.",
+  "one_case_only": true,
+  "peer": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/qualification/controlled_crash_peer.py",
+    "bytes": 2484,
+    "sha256": "0f5fd17ff2b3a5a14041c919be08364b45945d6ee8cce98f6819257cf813b6c6"
+  },
+  "ABI_bindings": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/ABI-BINDINGS.SOURCE-ONLY.json",
+    "bytes": 5265,
+    "sha256": "80d07f1c25db4e39220f8eca47e0d7faeb15a659e014931d81bcecda85308650"
+  },
+  "unsupported_claims": [
+    "No actualcrash/Eclair/converter/native/validdump execution",
+    "No escapednew-session descendant completion claim",
+    "No broad originalM15/default/deployed/native acceptance",
+    "No same-source green22/56 replay"
+  ],
+  "runtime_authority": null
+}

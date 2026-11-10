@@ -1,0 +1,239 @@
+{
+  "status": "FROZEN_FIRST_ACTUAL_LIFECYCLE_CASE_ABI_FIRST_NOT_EXECUTED_REQUIRES_INDEPENDENT_MAX_REVIEW_AND_ROOT_FRESH_ADMISSION",
+  "owner": "/root/p04_tests_max private fixture/controller owner; Root sole executor/compositor/publisher",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 3606,
+    "sha256": "3a4987871b523ac7b764545b35deffb9d150a9b73d63cd8120c30758d56847c4"
+  },
+  "source_request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/REQUEST.PROPOSED.json",
+    "bytes": 10557,
+    "sha256": "83e99be62d1177db2c2ba5d15fe7f2cc637336b9ca996d84f484a453aa8a99a3"
+  },
+  "source_patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/P04-OWNED-DESCENDANT-LIFECYCLE.PRIVATE.patch",
+    "bytes": 12235,
+    "sha256": "e6eaf6d22a6040fe3b3fd5164ef8baa5dc3e7bdedda19dfbe2c6f8d79134ca96"
+  },
+  "source_ABI": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/ABI-BINDINGS.SOURCE-ONLY.json",
+    "bytes": 5265,
+    "sha256": "80d07f1c25db4e39220f8eca47e0d7faeb15a659e014931d81bcecda85308650"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/INPUTS.json",
+    "bytes": 3465,
+    "sha256": "5a91523f574813cf84e8f641d5a22936eaaa35fb0a3891a67eb447d3492ac974"
+  },
+  "case": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/CASE.json",
+    "bytes": 4239,
+    "sha256": "e065fd10896a90c095936ca7024f3839df802b3c20ae8c502a89bb4b06f58782"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/run_lifecycle.py",
+    "bytes": 8903,
+    "sha256": "780e69fc628f79a2b78bd0e8719f39beb536c8d5be89983b8405e32990c61de4"
+  },
+  "controller": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/run_case.py",
+    "bytes": 18610,
+    "sha256": "62cf1004be817f29e38f8701fc4352675f0dda511afb541796b868507443a7cd"
+  },
+  "qualified_outer_owner": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/owned_process.py",
+    "bytes": 4668,
+    "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+  },
+  "qualified_outer_owner_reuse": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+  "typed_C_ABI_witness": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/fixtures/linux_child_abi_witness.c",
+    "bytes": 2555,
+    "sha256": "909285905c8d0da3fae545a7fb24bb6854f36ad88efd0d50dcb0d4fd1dbbf964"
+  },
+  "exact_outer_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--fsize=67108864:67108864",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/run_lifecycle.py",
+    "--execute"
+  ],
+  "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor",
+  "clean_parent_environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+    "MAKEFLAGS": "-j1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "exact_serial_operations": [
+    {
+      "label": "abi-compile",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/fixtures/linux_child_abi_witness.c",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/linux-child-abi-witness"
+      ],
+      "wall_seconds": 30
+    },
+    {
+      "label": "abi-values",
+      "argv": [
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/linux-child-abi-witness"
+      ],
+      "wall_seconds": 5,
+      "mandatory_before_runtime": "Genuine header/prototype/opaque storage assertions and actual emitted JSON must pass; witness makes0process-control calls."
+    },
+    {
+      "labels": [
+        "baseline-compile",
+        "baseline-controlled-case",
+        "candidate-compile",
+        "candidate-controlled-case"
+      ],
+      "details": "Driver literal compiler argv edition2021/opt2/debuginfo1/no panic override from exact baseline/candidate source paths. Distinct real private CRASH/prefix constants require these separate producers. Each controller invocation is python3-I-B run_case.py exactvariant. Baseline must reproduce/retire its expected leak before candidate is compiled/run."
+    }
+  ],
+  "compile_input_profile": {
+    "rustc": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "unchanged_HOST_binding": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+    "unchanged_Python_binding": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/PYTHON-BINDING.json",
+    "new_ABI_binding": "Driver checks exact newly declared header hashes, compiles and executes the nonshipped typed C witness before controller/runtime. Linux x86_64 LP64, local libc siginfo128/align8/idtype/id widths/prototypes/syscall434+424/wait/prctl/poll constants must qualify. Controller uses opaque-descriptor syscalls only; it never reads or synthesizes waitid siginfo fields.",
+    "VMCORE_prompt_timeout_ms": "1000",
+    "prefix_crash_paths": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/{baseline,candidate}/{prefix,tools/crash}"
+  },
+  "profile": {
+    "CPU": [
+      0
+    ],
+    "jobs": 1,
+    "process_AS_bytes": 2147483648,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "whole_outer_wall_seconds": 160,
+    "driver_work_seconds": 150,
+    "each_Rust_compile_wall_seconds": 60,
+    "each_wrapper_wall_seconds": 8,
+    "inner_retirement_seconds": 6,
+    "each_controller_outer_seconds": 16,
+    "outer_owner_retirement_seconds": 6,
+    "planning_RSS_slice_bytes_from_same_HOST_pool": 1073741824,
+    "new_actual_peak_not_claimed": "Reuse prior matching compiler peak planning; record actual RUSAGE_CHILDREN maxrss and fresh Root aggregate actualRSS. No per-owner multiplied grant.",
+    "private_output_disk_allowance_bytes": 268435456,
+    "HOST_total_bytes_including_all_controllers_workers": 4294967296,
+    "aggregate_HOST_jobs_max": 3,
+    "HOST_CPUs": [
+      0,
+      6,
+      7
+    ],
+    "fresh_MemAvailable_minimum_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "scratch_disk_floor_bytes": 12884901888,
+    "native_CPUs2_5_12GiB_and_retained18_UNKNOWN_unchanged": true
+  },
+  "ownership_and_failure_controls": [
+    "Fresh output directory is created exclusively; every path/write stays in this private test root. All source/peer/witness/helper hashes frozen; no SUT/private source edit. Six expected outerOwner records must each immediately prove matching argv/label/positivebirth/integerstatus/parent+family joins/closedstreams/no error/timeout/group signal/adoptedkill/reap/residual. Baseline rescue occurs only inside its bounded controller, not by an unnoticed outerOwner cleanup.",
+    "Controller first verifies actual C receipt and empty defaultSIGCHLD child scope; privately acquires subreaper. Wrapper PID/birth/own pidfd is bound before peer handshaking. Peer/descendant exact birth/parent/SID/PGID, HUP-ignore and private pipe checks precede marker and any descriptor signal. Only own stable pidfd_send_signal(SIGKILL,NULL,flags0), never bare numericPID/PGID, is used by new controller.",
+    "Baseline expected defect is recorded as FAIL_EXPECTED only after actual publication/livechild observation and exactly one pidfd rescue/positive adopted wait. Candidate must have no controller rescue/adopted reap, ECHILD after its positive wrapper wait and empty scope before restoring subreaper. All pidfds/streams close and every started owned process is positively joined or retainsUNKNOWN.",
+    "On unexpected controller error, retain primary diagnostic/phase/identity/stdio and attempt bounded exact-pidfd retirement of only authenticated owned family, join before drainage, restore only after empty scope. Unknown/unbound residuals are retained for the unchanged qualified outerOwner to reconcile using only its still-unreaped direct/adopted ownership proof; any outer cleanup or unproved join fails the operation. No globalPID search/signal and no rescue can manufacture candidatePASS.",
+    "Root outer capture records driverPID/birth/argv/waits/streams/metrics and preserves sufficient retirement envelope before160s bound. Source/runtime/ABI/compiler/permission failures stop at first unexpected outcome; best-effort driver partial receipt and raw Owner evidence remain. No unchanged retry, alternate model/tool/source route, skipped ABI gate or native hold release."
+  ],
+  "required_outputs": [
+    "output/abi-values.json and raw ABI compiler/witness captures",
+    "output/ownership.json exactly6 fully joined outer commands",
+    "output/{baseline,candidate}/control/binding.json, peer/child/uname receipts and trigger",
+    "output/{baseline,candidate}/wrapper.stdout,wrapper.stderr,RESULT.json and exact synthetic mckdump",
+    "output/RESULT.json PASS_BASELINE_DEFECT_REPRODUCED_AND_CANDIDATE_CONTROLLED_SCOPE only after baselineFAIL_EXPECTED/candidatePASS and noUNKNOWN"
+  ],
+  "reuse_closed_scopes": "No22case,56converter/header/ownership, native/source-stage/Kbuild or real converter/backend checks are requested or replayed. This single changed-lifecycle regression earns only its actual controlled scope and no C retirement/original percentage.",
+  "next_owner": "Existing source_acquisition_review_max independent ownership/unsafe/ABI/fixture/profile review. Root may run exact operation only after explicitGO plus fresh actual account/resource/owner admission.",
+  "executed": false,
+  "compiler_calls_by_test_owner": 0,
+  "process_control_calls_by_test_owner": 0,
+  "native_or_real_dump": false,
+  "acceptance_delta": 0,
+  "bounded_controller_correction": {
+    "original_request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-1/original/REQUEST.json",
+      "bytes": 10605,
+      "sha256": "74a2572332ed8423358dbc3af6d9ada7c73847b87d5cf74b6783a0e3ccee2252"
+    },
+    "original_controller": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-1/original/run_case.py",
+      "bytes": 17560,
+      "sha256": "00b41937d7039cf3443129931cd6c54111984a24f6d58979daca042ad66d32ae"
+    },
+    "original_inputs": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-1/original/INPUTS.json",
+      "bytes": 2997,
+      "sha256": "662c4f64dff23d2bca839ed3856256be0f537c086121cc39b84b9d6258e8c2af"
+    },
+    "patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-1/CONTROLLER-BINDING-ONLY.patch",
+      "bytes": 2525,
+      "sha256": "1074fb46520f8b77cdf29dfddff91e499a9c983a5bc908bfe05aa10cdbb1ecf8"
+    },
+    "finding": "Independent MAX review: descriptor registered before post-open identity proof and signal before authenticated identity lookup.",
+    "correction": "Keep new descriptor local until post-open pid/birth/ppid/pgid/sid match. Close on any proof failure without masking the primary error, never register failed role. Publish authenticated identity then descriptor only after success. Signal requires authenticated identity and descriptor before poll/syscall.",
+    "unchanged": "All six commands, driver, CASE, peer, witness, qualified Owner, production Rust, compiler flags and resource profile are unchanged. No new case, numeric signal fallback or execution."
+  },
+  "bounded_witness_correction": {
+    "actual_failed_output_retained": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/output",
+    "failed_request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/original/REQUEST.json",
+      "bytes": 12447,
+      "sha256": "ef2f00caf12758c7955e2957027848ebd3b14af89d90e7ac1b8025a1c31fd036"
+    },
+    "failed_witness": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/original/linux_child_abi_witness.c",
+      "bytes": 2545,
+      "sha256": "6b61d56b739dcfe888613a57d11bd16f928dd06236089c3ca3896583354bebe8"
+    },
+    "failed_abi_stderr": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/output/abi-compile.stderr",
+      "bytes": 423,
+      "sha256": "fdd251fcb39b2a63502a719c87833317dc044fed9afb6c6afdf37b90ba844817"
+    },
+    "failed_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/output/RESULT.json",
+      "bytes": 910,
+      "sha256": "faf9d26e19ef1e099847ee326de99b31b5be7acd617cb7fda77e40b81c6a6857"
+    },
+    "failed_ownership": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/output/ownership.json",
+      "bytes": 377,
+      "sha256": "3076c02089eed9bfe6bd729ef08eab0e4f14f3d140cdc4480483c070a1b48138"
+    },
+    "actual_failed_check": "cc -std=c11 -Wall -Wextra -Werror stopped at line42 enum comparison KERNEL_P_ALL == P_ALL; status1, compiler844682/birth39208926 joined, no descendants/runtime/Rust compile/signals.",
+    "correction": "Cast both actual enum constants explicitly to common int for equality. No numeric substitution, warning waiver, prototype/layout/value check removal, production source or runtime/controller change.",
+    "witness_patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/WITNESS-ENUM-COMPARISON-ONLY.patch",
+      "bytes": 959,
+      "sha256": "5c472a8515a11dae5c0777188c54f3f90327abac880187fbdad53ae7909bde8f"
+    },
+    "fresh_root_path_binding_patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/DRIVER-SOURCE-PATH-BINDING-ONLY.patch",
+      "bytes": 484,
+      "sha256": "97d36e4a252de19593ea830c2baa39398a876a8a67ace4a7655ef4237879ad57"
+    },
+    "fresh_root": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor",
+    "fresh_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output",
+    "scope": "Same literal six-operation semantics, flags/profile and one baseline/candidate condition. None of the runtime cases previously executed; original output is preserved without overwrite. Private controller/CASE/Owner/peer/uname bytes are unchanged."
+  }
+}

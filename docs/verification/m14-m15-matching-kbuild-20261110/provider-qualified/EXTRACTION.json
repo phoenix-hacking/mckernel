@@ -1,0 +1,905 @@
+{
+  "status": "PASS_ACQUISITION_AND_PASSIVE_EXTRACTION_ONLY",
+  "scope": "Exact ordinary RPM metadata/signature/query/passive extraction only; no install, script, CMake/compiler/project/test/native execution",
+  "commands": [
+    {
+      "label": "already-trusted-key-material",
+      "argv": [
+        "/usr/bin/rpm",
+        "-q",
+        "--qf",
+        "%{NAME}|%{VERSION}|%{RELEASE}|%{DESCRIPTION}\n",
+        "gpg-pubkey-6fedfc85"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/already-trusted-key-material.stdout",
+      "stderr_path": "/output/already-trusted-key-material.stderr",
+      "state": "PASS",
+      "pid": 8,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.421051,
+      "timeout_seconds": 20,
+      "disk_used_before": 92214626,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075348",
+      "finished_at": 1794304487.4371014,
+      "stdout": {
+        "path": "/output/already-trusted-key-material.stdout",
+        "bytes": 1718,
+        "sha256": "9555c618dac0b1393d6754fa8a78f400f3b596b6a896bcb3dbbe9690e0d45ec4"
+      },
+      "stderr": {
+        "path": "/output/already-trusted-key-material.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92222818
+    },
+    {
+      "label": "binutils-devel-nevra",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--qf",
+        "%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}\n",
+        "/packages/binutils-devel-2.41-63.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/binutils-devel-nevra.stdout",
+      "stderr_path": "/output/binutils-devel-nevra.stderr",
+      "state": "PASS",
+      "pid": 9,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.4461064,
+      "timeout_seconds": 20,
+      "disk_used_before": 92222818,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075351",
+      "finished_at": 1794304487.4540932,
+      "stdout": {
+        "path": "/output/binutils-devel-nevra.stdout",
+        "bytes": 37,
+        "sha256": "5ea6782c50fb124529cd409d630714236931b5217b3157ff50796f450e6fe74d"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-nevra.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92226914
+    },
+    {
+      "label": "binutils-devel-signature",
+      "argv": [
+        "/usr/bin/rpmkeys",
+        "--checksig",
+        "--verbose",
+        "/packages/binutils-devel-2.41-63.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/binutils-devel-signature.stdout",
+      "stderr_path": "/output/binutils-devel-signature.stderr",
+      "state": "PASS",
+      "pid": 10,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.454615,
+      "timeout_seconds": 20,
+      "disk_used_before": 92226914,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075352",
+      "finished_at": 1794304487.5191765,
+      "stdout": {
+        "path": "/output/binutils-devel-signature.stdout",
+        "bytes": 211,
+        "sha256": "f11db8a08b0a7a80084117e48911f04bd4e2fe66d591bc950ed840a3e6128d52"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-signature.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92231010
+    },
+    {
+      "label": "binutils-devel-requires",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--requires",
+        "/packages/binutils-devel-2.41-63.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/binutils-devel-requires.stdout",
+      "stderr_path": "/output/binutils-devel-requires.stderr",
+      "state": "PASS",
+      "pid": 11,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.520863,
+      "timeout_seconds": 20,
+      "disk_used_before": 92235106,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075358",
+      "finished_at": 1794304487.5382917,
+      "stdout": {
+        "path": "/output/binutils-devel-requires.stdout",
+        "bytes": 189,
+        "sha256": "673ea35442ba8c1b040e78c5155964a674a61843ea363c9f9344fd60db0e4b5d"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-requires.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92239202
+    },
+    {
+      "label": "binutils-devel-payload-manifest",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--dump",
+        "/packages/binutils-devel-2.41-63.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/binutils-devel-payload-manifest.stdout",
+      "stderr_path": "/output/binutils-devel-payload-manifest.stderr",
+      "state": "PASS",
+      "pid": 12,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.5390346,
+      "timeout_seconds": 20,
+      "disk_used_before": 92239202,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075360",
+      "finished_at": 1794304487.5551305,
+      "stdout": {
+        "path": "/output/binutils-devel-payload-manifest.stdout",
+        "bytes": 3300,
+        "sha256": "1961f7f0cf7a6a0c32a526198a19220993de4727861fb08584504b2b66932f3e"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-payload-manifest.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92243298
+    },
+    {
+      "label": "cmake-nevra",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--qf",
+        "%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}\n",
+        "/packages/cmake-3.31.8-1.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-nevra.stdout",
+      "stderr_path": "/output/cmake-nevra.stderr",
+      "state": "PASS",
+      "pid": 13,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.567977,
+      "timeout_seconds": 20,
+      "disk_used_before": 92243298,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075363",
+      "finished_at": 1794304487.5843546,
+      "stdout": {
+        "path": "/output/cmake-nevra.stdout",
+        "bytes": 29,
+        "sha256": "549f1ec05a89ea390f0c945316b70ae941523ecb772667ed140dee19044d8e25"
+      },
+      "stderr": {
+        "path": "/output/cmake-nevra.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92247394
+    },
+    {
+      "label": "cmake-signature",
+      "argv": [
+        "/usr/bin/rpmkeys",
+        "--checksig",
+        "--verbose",
+        "/packages/cmake-3.31.8-1.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-signature.stdout",
+      "stderr_path": "/output/cmake-signature.stderr",
+      "state": "PASS",
+      "pid": 14,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.5853643,
+      "timeout_seconds": 20,
+      "disk_used_before": 92251490,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075365",
+      "finished_at": 1794304487.6499295,
+      "stdout": {
+        "path": "/output/cmake-signature.stdout",
+        "bytes": 203,
+        "sha256": "a312cc062c50163c6a1afac7dbe2b5b06408905af866c6a3189d3c8d860d9186"
+      },
+      "stderr": {
+        "path": "/output/cmake-signature.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92255586
+    },
+    {
+      "label": "cmake-requires",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--requires",
+        "/packages/cmake-3.31.8-1.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-requires.stdout",
+      "stderr_path": "/output/cmake-requires.stderr",
+      "state": "PASS",
+      "pid": 15,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.6512034,
+      "timeout_seconds": 20,
+      "disk_used_before": 92255586,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075371",
+      "finished_at": 1794304487.6677113,
+      "stdout": {
+        "path": "/output/cmake-requires.stdout",
+        "bytes": 1933,
+        "sha256": "f12ae937753e48f1fc01abd1c3f2247cb6ab1361ba5f2053fea52c5ab5fc4306"
+      },
+      "stderr": {
+        "path": "/output/cmake-requires.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92259682
+    },
+    {
+      "label": "cmake-payload-manifest",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--dump",
+        "/packages/cmake-3.31.8-1.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-payload-manifest.stdout",
+      "stderr_path": "/output/cmake-payload-manifest.stderr",
+      "state": "PASS",
+      "pid": 16,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.668667,
+      "timeout_seconds": 20,
+      "disk_used_before": 92259682,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075373",
+      "finished_at": 1794304487.685209,
+      "stdout": {
+        "path": "/output/cmake-payload-manifest.stdout",
+        "bytes": 8131,
+        "sha256": "775711151944e1b67e87fbdaf080c4bed043e6cf06c9cec9134870d02e963d76"
+      },
+      "stderr": {
+        "path": "/output/cmake-payload-manifest.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92267874
+    },
+    {
+      "label": "cmake-data-nevra",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--qf",
+        "%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}\n",
+        "/packages/cmake-data-3.31.8-1.el10.noarch.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-data-nevra.stdout",
+      "stderr_path": "/output/cmake-data-nevra.stderr",
+      "state": "PASS",
+      "pid": 17,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.6894922,
+      "timeout_seconds": 20,
+      "disk_used_before": 92267874,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075375",
+      "finished_at": 1794304487.7062216,
+      "stdout": {
+        "path": "/output/cmake-data-nevra.stdout",
+        "bytes": 34,
+        "sha256": "e7a05db3acb8cc4ce69bc42b1c62efe8cc862530828de9f010eb5ddc61c5c9b5"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-nevra.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92276066
+    },
+    {
+      "label": "cmake-data-signature",
+      "argv": [
+        "/usr/bin/rpmkeys",
+        "--checksig",
+        "--verbose",
+        "/packages/cmake-data-3.31.8-1.el10.noarch.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-data-signature.stdout",
+      "stderr_path": "/output/cmake-data-signature.stderr",
+      "state": "PASS",
+      "pid": 18,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.7076385,
+      "timeout_seconds": 20,
+      "disk_used_before": 92276066,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075377",
+      "finished_at": 1794304487.7409194,
+      "stdout": {
+        "path": "/output/cmake-data-signature.stdout",
+        "bytes": 208,
+        "sha256": "15a46b72e660f7c92cb54e88e7771a6da752a2d8f1428d63199acbab8cfadea5"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-signature.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92280162
+    },
+    {
+      "label": "cmake-data-requires",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--requires",
+        "/packages/cmake-data-3.31.8-1.el10.noarch.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-data-requires.stdout",
+      "stderr_path": "/output/cmake-data-requires.stderr",
+      "state": "PASS",
+      "pid": 19,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.7422552,
+      "timeout_seconds": 20,
+      "disk_used_before": 92280162,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075380",
+      "finished_at": 1794304487.7589595,
+      "stdout": {
+        "path": "/output/cmake-data-requires.stdout",
+        "bytes": 341,
+        "sha256": "6a3cb3a4f4b6e31029d5103c994f79d9fce015a1b115b5fae118bd678bd5897f"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-requires.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92284258
+    },
+    {
+      "label": "cmake-data-payload-manifest",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--dump",
+        "/packages/cmake-data-3.31.8-1.el10.noarch.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-data-payload-manifest.stdout",
+      "stderr_path": "/output/cmake-data-payload-manifest.stderr",
+      "state": "PASS",
+      "pid": 20,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.7603211,
+      "timeout_seconds": 20,
+      "disk_used_before": 92284258,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075382",
+      "finished_at": 1794304487.7929971,
+      "stdout": {
+        "path": "/output/cmake-data-payload-manifest.stdout",
+        "bytes": 610513,
+        "sha256": "4ef444d2ed88ec82cc0b034bfe0402d2e808980d793d444bff042df66cb72477"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-payload-manifest.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 92898658
+    },
+    {
+      "label": "binutils-devel-rpm2cpio",
+      "argv": [
+        "/usr/bin/rpm2cpio",
+        "/packages/binutils-devel-2.41-63.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/binutils-devel.payload.cpio",
+      "stderr_path": "/output/binutils-devel-rpm2cpio.stderr",
+      "state": "PASS",
+      "pid": 21,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304487.7955596,
+      "timeout_seconds": 30,
+      "disk_used_before": 92906850,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075386",
+      "finished_at": 1794304487.9608104,
+      "stdout": {
+        "path": "/output/binutils-devel.payload.cpio",
+        "bytes": 57194068,
+        "sha256": "14e21175ac2643706656a8bc8b68c450524479acb66583b2b8b1095ec18e7eab"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-rpm2cpio.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 150107490
+    },
+    {
+      "label": "binutils-devel-cpio-names",
+      "argv": [
+        "/usr/bin/cpio",
+        "--list",
+        "--quiet"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/binutils-devel-cpio-names.stdout",
+      "stderr_path": "/output/binutils-devel-cpio-names.stderr",
+      "state": "PASS",
+      "pid": 22,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.0189104,
+      "timeout_seconds": 15,
+      "disk_used_before": 150107490,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075408",
+      "finished_at": 1794304488.0877512,
+      "stdout": {
+        "path": "/output/binutils-devel-cpio-names.stdout",
+        "bytes": 619,
+        "sha256": "336d8614bb7e1284cef88e267592da23fccc2f145d036af1af013a36b1110913"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-cpio-names.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 150111586
+    },
+    {
+      "label": "binutils-devel-cpio-extract",
+      "argv": [
+        "/usr/bin/cpio",
+        "--extract",
+        "--make-directories",
+        "--quiet",
+        "--no-absolute-filenames",
+        "--no-preserve-owner"
+      ],
+      "cwd": "/output/binutils-devel",
+      "stdout_path": "/output/binutils-devel-cpio-extract.stdout",
+      "stderr_path": "/output/binutils-devel-cpio-extract.stderr",
+      "state": "PASS",
+      "pid": 23,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.0897262,
+      "timeout_seconds": 30,
+      "disk_used_before": 150111586,
+      "disk_reserved_growth": 594269780,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075415",
+      "finished_at": 1794304488.3056898,
+      "stdout": {
+        "path": "/output/binutils-devel-cpio-extract.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/output/binutils-devel-cpio-extract.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 207373666
+    },
+    {
+      "label": "cmake-rpm2cpio",
+      "argv": [
+        "/usr/bin/rpm2cpio",
+        "/packages/cmake-3.31.8-1.el10.x86_64.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake.payload.cpio",
+      "stderr_path": "/output/cmake-rpm2cpio.stderr",
+      "state": "PASS",
+      "pid": 24,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.3752975,
+      "timeout_seconds": 30,
+      "disk_used_before": 207381858,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075444",
+      "finished_at": 1794304488.49101,
+      "stdout": {
+        "path": "/output/cmake.payload.cpio",
+        "bytes": 36325500,
+        "sha256": "af7d3ad68040edaaa30cd5d692a2e8ccb141eb8e46c051b458e9bb29e6c9144b"
+      },
+      "stderr": {
+        "path": "/output/cmake-rpm2cpio.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 243713378
+    },
+    {
+      "label": "cmake-cpio-names",
+      "argv": [
+        "/usr/bin/cpio",
+        "--list",
+        "--quiet"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-cpio-names.stdout",
+      "stderr_path": "/output/cmake-cpio-names.stderr",
+      "state": "PASS",
+      "pid": 25,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.52469,
+      "timeout_seconds": 15,
+      "disk_used_before": 243713378,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075459",
+      "finished_at": 1794304488.5576584,
+      "stdout": {
+        "path": "/output/cmake-cpio-names.stdout",
+        "bytes": 2104,
+        "sha256": "82cfd78a69477baa3374db8d45fc682fa40e2962725e526bf371cf2232d48652"
+      },
+      "stderr": {
+        "path": "/output/cmake-cpio-names.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 243717474
+    },
+    {
+      "label": "cmake-cpio-extract",
+      "argv": [
+        "/usr/bin/cpio",
+        "--extract",
+        "--make-directories",
+        "--quiet",
+        "--no-absolute-filenames",
+        "--no-preserve-owner"
+      ],
+      "cwd": "/output/cmake",
+      "stdout_path": "/output/cmake-cpio-extract.stdout",
+      "stderr_path": "/output/cmake-cpio-extract.stderr",
+      "state": "PASS",
+      "pid": 26,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.560597,
+      "timeout_seconds": 30,
+      "disk_used_before": 243717474,
+      "disk_reserved_growth": 573655164,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075462",
+      "finished_at": 1794304488.7261786,
+      "stdout": {
+        "path": "/output/cmake-cpio-extract.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/output/cmake-cpio-extract.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 280258012
+    },
+    {
+      "label": "cmake-ELF-metadata",
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--file-header",
+        "--dynamic",
+        "/output/cmake/usr/bin/cmake"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-ELF-metadata.stdout",
+      "stderr_path": "/output/cmake-ELF-metadata.stderr",
+      "state": "PASS",
+      "pid": 27,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.748529,
+      "timeout_seconds": 10,
+      "disk_used_before": 280262108,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075481",
+      "finished_at": 1794304488.7821684,
+      "stdout": {
+        "path": "/output/cmake-ELF-metadata.stdout",
+        "bytes": 3051,
+        "sha256": "37f967699a81b2b4802230d5d46834f41b2961ef3539accad826122bededfbb5"
+      },
+      "stderr": {
+        "path": "/output/cmake-ELF-metadata.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 280266204
+    },
+    {
+      "label": "cmake-data-rpm2cpio",
+      "argv": [
+        "/usr/bin/rpm2cpio",
+        "/packages/cmake-data-3.31.8-1.el10.noarch.rpm"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-data.payload.cpio",
+      "stderr_path": "/output/cmake-data-rpm2cpio.stderr",
+      "state": "PASS",
+      "pid": 28,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.828164,
+      "timeout_seconds": 30,
+      "disk_used_before": 280274396,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075489",
+      "finished_at": 1794304488.8616066,
+      "stdout": {
+        "path": "/output/cmake-data.payload.cpio",
+        "bytes": 9525716,
+        "sha256": "b244c9dc7f6fbb43444cb01a3b084e44e789244a32496aed4f36570a7c5a1214"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-rpm2cpio.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 289801692
+    },
+    {
+      "label": "cmake-data-cpio-names",
+      "argv": [
+        "/usr/bin/cpio",
+        "--list",
+        "--quiet"
+      ],
+      "cwd": null,
+      "stdout_path": "/output/cmake-data-cpio-names.stdout",
+      "stderr_path": "/output/cmake-data-cpio-names.stderr",
+      "state": "PASS",
+      "pid": 29,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.8752131,
+      "timeout_seconds": 15,
+      "disk_used_before": 289801692,
+      "disk_reserved_growth": 536870912,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075494",
+      "finished_at": 1794304488.8951383,
+      "stdout": {
+        "path": "/output/cmake-data-cpio-names.stdout",
+        "bytes": 212001,
+        "sha256": "0bba17c2a5ac56f0a9d0bbee3330997a56d197c25c88ed628a6b3b06b564958d"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-cpio-names.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 290014684
+    },
+    {
+      "label": "cmake-data-cpio-extract",
+      "argv": [
+        "/usr/bin/cpio",
+        "--extract",
+        "--make-directories",
+        "--quiet",
+        "--no-absolute-filenames",
+        "--no-preserve-owner"
+      ],
+      "cwd": "/output/cmake-data",
+      "stdout_path": "/output/cmake-data-cpio-extract.stdout",
+      "stderr_path": "/output/cmake-data-cpio-extract.stderr",
+      "state": "PASS",
+      "pid": 30,
+      "returncode": 0,
+      "wait_joined": true,
+      "started_at": 1794304488.920646,
+      "timeout_seconds": 30,
+      "disk_used_before": 290014684,
+      "disk_reserved_growth": 577427924,
+      "global_disk_budget_bytes": 2147483648,
+      "birth": "39075499",
+      "finished_at": 1794304489.0414674,
+      "stdout": {
+        "path": "/output/cmake-data-cpio-extract.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/output/cmake-data-cpio-extract.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "disk_used_after": 311944668
+    }
+  ],
+  "packages": [
+    {
+      "id": "binutils-devel",
+      "archive": {
+        "path": "/packages/binutils-devel-2.41-63.el10.x86_64.rpm",
+        "bytes": 9024880,
+        "sha256": "0907f95d4351afcac619be9aaf398d05389eba037ad5080c09254824e4539d84"
+      },
+      "rpm_fields": [
+        "binutils-devel",
+        "0",
+        "2.41",
+        "63.el10",
+        "x86_64"
+      ],
+      "trusted_signature_exit0": true,
+      "trusted_full_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "payload_cpio": {
+        "path": "/output/binutils-devel.payload.cpio",
+        "bytes": 57194068,
+        "sha256": "14e21175ac2643706656a8bc8b68c450524479acb66583b2b8b1095ec18e7eab"
+      }
+    },
+    {
+      "id": "cmake",
+      "archive": {
+        "path": "/packages/cmake-3.31.8-1.el10.x86_64.rpm",
+        "bytes": 13237662,
+        "sha256": "46feb3841f2b43ecadb82c83cab7dab1d7a048cc4041b8794b552c9adba47fe9"
+      },
+      "rpm_fields": [
+        "cmake",
+        "0",
+        "3.31.8",
+        "1.el10",
+        "x86_64"
+      ],
+      "trusted_signature_exit0": true,
+      "trusted_full_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "payload_cpio": {
+        "path": "/output/cmake.payload.cpio",
+        "bytes": 36325500,
+        "sha256": "af7d3ad68040edaaa30cd5d692a2e8ccb141eb8e46c051b458e9bb29e6c9144b"
+      }
+    },
+    {
+      "id": "cmake-data",
+      "archive": {
+        "path": "/packages/cmake-data-3.31.8-1.el10.noarch.rpm",
+        "bytes": 2835028,
+        "sha256": "a7170d886b12bf05c7523dd886a0a3f2b4efed4f263139efc881ac1c355c46cb"
+      },
+      "rpm_fields": [
+        "cmake-data",
+        "0",
+        "3.31.8",
+        "1.el10",
+        "noarch"
+      ],
+      "trusted_signature_exit0": true,
+      "trusted_full_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "payload_cpio": {
+        "path": "/output/cmake-data.payload.cpio",
+        "bytes": 9525716,
+        "sha256": "b244c9dc7f6fbb43444cb01a3b084e44e789244a32496aed4f36570a7c5a1214"
+      }
+    }
+  ],
+  "original_acceptance": false,
+  "trusted_release_key": {
+    "source_pinned_file": {
+      "path": "/etc/pki/rpm-gpg/RPM-GPG-KEY-Rocky-10",
+      "bytes": 1688,
+      "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+    },
+    "full_primary_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+    "full_fingerprint_basis": "existing source lock exactkeySHA/fullfingerprint binding; actual existing RPMdb packets equal source-pinned bytes, no new crypto implementation",
+    "existing_rpm_key_record": "gpg-pubkey|6fedfc85|682ae1a9",
+    "key_packet_sha256": "1f09530c1d1fdcbe03279b565e9b7ff1ec4d6fccd663ac2710d0b2f0119dbb7e",
+    "already_trusted_material_equal": true,
+    "import_or_trust_mutation": false
+  },
+  "selected_BFD_outputs": {
+    "usr/include/bfd.h": {
+      "path": "/output/binutils-devel/usr/include/bfd.h",
+      "bytes": 252810,
+      "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432"
+    },
+    "usr/lib64/libbfd.so": {
+      "path": "/output/binutils-devel/usr/lib64/libbfd.so",
+      "bytes": 382,
+      "sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3"
+    },
+    "usr/lib64/libbfd.a": {
+      "path": "/output/binutils-devel/usr/lib64/libbfd.a",
+      "bytes": 18504828,
+      "sha256": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e"
+    },
+    "usr/lib64/libsframe.a": {
+      "path": "/output/binutils-devel/usr/lib64/libsframe.a",
+      "bytes": 166174,
+      "sha256": "672167bbda65094966dce98fd6ba06a4b421fa20b4c7d05ed73aee2744bad072"
+    },
+    "usr/lib64/libiberty.a": {
+      "path": "/output/binutils-devel/usr/lib64/libiberty.a",
+      "bytes": 2215908,
+      "sha256": "714cae91080b3c21c127bd7c43330724c1a6397c8f6c3abcf9f91f063e9487a5"
+    }
+  },
+  "cmake_binary": {
+    "path": "/output/cmake/usr/bin/cmake",
+    "bytes": 8838896,
+    "sha256": "a2ec9c59d15b48b6abba45cfaa873df186e01a2e3ca99302ada1e51637f4cfd1"
+  },
+  "cmake_module_root": "/output/cmake-data/usr/share/cmake"
+}

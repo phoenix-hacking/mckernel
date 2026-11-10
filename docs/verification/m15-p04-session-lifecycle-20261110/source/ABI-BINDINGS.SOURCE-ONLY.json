@@ -1,0 +1,115 @@
+{
+  "status": "REAL_LOCAL_LINUX_GLIBC_HEADER_DERIVATION_WITNESS_NOT_COMPILED",
+  "headers": [
+    {
+      "path": "/usr/include/x86_64-linux-gnu/asm/unistd_64.h",
+      "bytes": 9286,
+      "sha256": "698d4666c969b0b4d0bed328b4a4f3cab765ec1a9948e0f14751f0ce56d91535"
+    },
+    {
+      "path": "/usr/include/linux/prctl.h",
+      "bytes": 8073,
+      "sha256": "5d6c1c99502c6689ca44d631fba56b5c360116059f92cfc6b8ba7e8776f268e9"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/prctl.h",
+      "bytes": 1059,
+      "sha256": "db450f90fbc2e37c7e6defe1b1a1d15e553f11fda7b1006c1b8825364d87c2fe"
+    },
+    {
+      "path": "/usr/include/unistd.h",
+      "bytes": 42804,
+      "sha256": "690e12d91da100d6916752f38804386710d427823f7783f730218a9ac2d043e2"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/sys/wait.h",
+      "bytes": 5313,
+      "sha256": "8217c6eb62cbb576fc2fb7f98711f8b1158d447f2031691b2f4ca758ef4669b5"
+    },
+    {
+      "path": "/usr/include/linux/wait.h",
+      "bytes": 682,
+      "sha256": "0a4960db70b3e42826b84d134e787a5d79e716e77cc6016a818ed2625e3240a5"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/waitflags.h",
+      "bytes": 2218,
+      "sha256": "4b5a3c68814e83b0f24286101a50c7f8a838ab502c8ee0ab1729e4fc845b0c75"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types.h",
+      "bytes": 8757,
+      "sha256": "69454c580d77b06559520ed59cd14551d626cb494fcf5fd95a29144d79b2538b"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/typesizes.h",
+      "bytes": 3546,
+      "sha256": "dd38f16bed43eda106684d2af8b57af4373814fd1c4404b37302fdefde7be2e0"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h",
+      "bytes": 3892,
+      "sha256": "88b1392b88af3a08d908866f4e9c5650c5cddb0c8e021b0a3f8293cef6616feb"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/poll.h",
+      "bytes": 2076,
+      "sha256": "a1ce68bdd9798cb20c61cea95033502b245824e96860aae4cf79fabfd29e95b3"
+    },
+    {
+      "path": "/usr/include/asm-generic/errno-base.h",
+      "bytes": 1612,
+      "sha256": "2c148e92b8318deeb767fabd60822113e575ee664ff09a1873aed8f7a495793c"
+    },
+    {
+      "path": "/usr/include/x86_64-linux-gnu/bits/signum-generic.h",
+      "bytes": 4341,
+      "sha256": "f12870e9fb54111b77278a2d5d5c96643c91f455e8ae5be9a378253bb1fd9d04"
+    }
+  ],
+  "manuals": [
+    {
+      "path": "/usr/share/man/man2/pidfd_open.2.gz",
+      "bytes": 2849,
+      "sha256": "281259ab07d0ca86dc1e3ade1be869f82adad645cee587e5691075a0279eab36"
+    },
+    {
+      "path": "/usr/share/man/man2/pidfd_send_signal.2.gz",
+      "bytes": 2662,
+      "sha256": "22e0b9b9ec89c1fd75d53104092db0becdd4a24eeb83a76624b29972499ce08e"
+    },
+    {
+      "path": "/usr/share/man/man2/wait.2.gz",
+      "bytes": 7372,
+      "sha256": "d39c2261e092d96c0e53e565c8a22e5878701322a671fde0b4a479fad7ed7b68"
+    },
+    {
+      "path": "/usr/share/man/man2/prctl.2.gz",
+      "bytes": 15325,
+      "sha256": "7279e9079fd24cffc31c77cde3033a7397e08b8640e4cd4b741e19ab800de5f2"
+    }
+  ],
+  "derived": {
+    "syscall": "unistd.h long int syscall(long int,...); x86_64 asm numbers434/424; flags0; pidfd_send_signal usesNULLinfo",
+    "prctl": "int prctl(int,...), options36/37; GET writes int*; unused varargs supplied as unsigned long zeros",
+    "waitid": "int waitid(idtype_t,id_t,siginfo_t*,int); Linux P_PIDFD3 and P_ALL0; id/idtype32bit unsigned ABI must pass actual C witness before any run",
+    "opaque_wait_output": "glibc siginfo_t __SI_MAX_SIZE128 and LP64 union alignment8; Rust only allocates128bytes aligned8 with MaybeUninit and never reads a field. No si_pid offset/layout guessed or used. Actual C witness must prove size/alignment and enum/prototype.",
+    "waitpid": "pid_t signed32; waitpid(-1,status,WNOHANG1) consumes only the sole private subreaper command children after no-preexisting-child proof",
+    "poll": "existing pollfd ABI reused; events1/8/32 from bits/poll.h; pidfd poll observes leader exit without consuming wait",
+    "signal_errno": "SIGKILL9/ESRCH3/ECHILD10 from actual headers"
+  },
+  "witness": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-source-max-1/qualification/linux_child_abi_witness.c",
+    "bytes": 2545,
+    "sha256": "6b61d56b739dcfe888613a57d11bd16f928dd06236089c3ca3896583354bebe8"
+  },
+  "profile_limit": "Linux x86_64 LP64 and kernel supporting pidfd_open/P_PIDFDwaitid (Linux>=5.4). Current matching HOST/kernel/libc admission is Root responsibility; no compile/run or external hold bypass by source owner.",
+  "source_read_diagnostic": {
+    "command": "rg ... /usr/include/x86_64-linux-gnu/bits/types/idtype_t.h ...",
+    "exit": 2,
+    "diagnostic": "requested idtype_t.h absent in actual glibc2.31 header tree",
+    "resolution": "exact actual idtype_t enum and flags are in bits/waitflags.h; read that current header, no permission change or repeated failed request"
+  },
+  "runtime_authority": null,
+  "witness_header_handling": "Capture exact Linux UAPI wait constants into enum values, undef same-name macros, then include glibc wait declarations and compare values. Avoid glibc/UAPI redefinition diagnostics under required-Werror; no fallback numeric macro is supplied."
+}

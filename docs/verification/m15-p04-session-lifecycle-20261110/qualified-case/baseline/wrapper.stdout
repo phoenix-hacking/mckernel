@@ -1,0 +1,8 @@
+spawn /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/tools/crash /usr/lib/debug/lib/modules/fixture-linux/vmlinux /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/input
+crash>mod -s ihk_smp_x86 /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/prefix/kmod/ihk-smp-x86.ko
+crash>extend /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/prefix/lib/ldump2mcdump.so
+crash>ldump2mcdump 0 -o /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/.vmcore2mckdump-850451-0.tmp
+MCKERNEL_LDUMP2MCDUMP_SUCCESS /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/.vmcore2mckdump-850451-0.tmp
+crash>extend -u /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/prefix/lib/ldump2mcdump.so
+crash>quit
+mcdump: /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-lifecycle-tests-max-1/correction-2/successor/output/baseline/mckdump is extracted.

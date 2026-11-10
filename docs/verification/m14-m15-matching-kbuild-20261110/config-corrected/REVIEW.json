@@ -1,0 +1,115 @@
+{
+  "schema": "mckernel.first-config.owned-build-copy.bounded-delta-review.v1",
+  "at": "2026-11-10T09:57:02.113721+00:00",
+  "decision": "GO_EXACT_ONE_BOUNDED_COPY_MODE_CORRECTION_AFTER_ROOT_FRESH_ADMISSION",
+  "review_owner": "/root/source_acquisition_review_max; direct same-Root; no recursion",
+  "scope": "Delta-only ordinary engineering repair review. Reuse prior4057b041 actualstage/input/profile GO and60677bfd semantic/resource findings; no repeated stage/SDK/test/source audit. Only source/data reads and this private review write; no compiler/probe/payload/container/process-control/canonical/source edit.",
+  "bindings": {
+    "request": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/correction-1/REQUEST.json",
+      "sha256": "3c696d54205a81910f78513e072d49bfdaaf3782326f3c5be8220307db29f4cb"
+    },
+    "source_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/correction-1/RESULT.json",
+      "sha256": "a6a4d46afbce642bd901d7eb67e0d850b1278442ee6bb6e54f8bfada42784a3b"
+    },
+    "script": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/correction-1/configure-first.corrected.sh",
+      "sha256": "18a6e5d36a1d07eeb98aaad26e7f25b94f3f99371c39ad0cab62c38c9008ac94"
+    },
+    "copy_only_patch": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/correction-1/copy-mode-only.patch",
+      "sha256": "73716ea0fb57efe5206f7dd47016cda73a26c43e0e82387a328cf85d09245293"
+    },
+    "prior_GO": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/config-build-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "4057b04171c72a596c83618ad5412f302f26ed9f8d066fe78a1e9fbac8773dcd"
+    },
+    "prior_semantic_review_sha256": "60677bfd5ccbfc6721e23b035f7a61dcbef59367736ad6eb607c9d625252e035",
+    "preserved_unexecuted_stale_output_metadata": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/correction-1/REQUEST.unexecuted-b67.json",
+      "sha256": "b67efd266a7f4d6c823cce544c6f4dfa31ac9707ef07c211635e6c0e1fe0c390"
+    }
+  },
+  "actual_failure": {
+    "result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/execution-1/RESULT.json",
+      "sha256": "a091ecd25c7b9d5bc40f3f72b1aa0024621fe7c757e550e1e35c438aa5941b98"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/execution-1/config-payload.stderr",
+      "sha256": "ce67236cd41abd301d5988444f2d188876386668af34aaf7d66ded3d97faccbb",
+      "text": "cp: cannot create regular file '/output/build/.config': Permission denied\n"
+    },
+    "observed_owned_config": "output-1/build/.config mode0444 UID1000; its builddirectory mode0755 UID1000. Readonly baseline was copied with inherited0444 into the fresh owned build; merge_config destination update failed before firstolddefconfig.",
+    "diagnostic": "cp: cannot create regular file '/output/build/.config': Permission denied",
+    "classification": "Concrete owned-build-copy software defect, as Root authorized; no service/auth/native/resource hold or policy rejection. Source/configinputs stay readonly. No permission or source-file ownership expansion is part of the fix.",
+    "lifetime": "Exact oldcontainer46fcb065e2455b642d4adc035fb10ecfbccfaf324f94d517bd08c9e7a0178d3d exited1/notOOM/notrunning; Root joined every client and removed only that proved-owned container. Failedoutput1/rawdiagnostics/script/request are retained. This establishes no older UNKNOWN release."
+  },
+  "exact_delta_review": {
+    "old_line": "/usr/bin/cp -- /config/srpm-baseline.config /output/build/.config",
+    "new_line": "/usr/bin/install -m 0600 -- /config/srpm-baseline.config /output/build/.config",
+    "one_occurrence_only": true,
+    "exact_reverse_reproduces_old_script7d56": true,
+    "effect": "Create same baseline bytes as a fresh regular build-local file owned by existingUID1000 and writablemode0600. No change to immutable baseline,sourceconfig,failedoutput1 or hostmount/permissions. install has no strip/owner/group option and runs under unchangedUID1000.",
+    "only_create_argv_changes": [
+      "new exactnamemckernel-config-first-20261110-0708-2",
+      "readonly correctedscript hostbind at unchanged/input/configure-first.sh",
+      "new privateoutput-2 writablebind"
+    ],
+    "all_other_create_argv_bytes_and_resource_scope_equal": true,
+    "expected_output_metadata_correction": "All6 expected_outputs prefixes nowoutput-2. Reversing only those6prefixes reproduces preservedb67metadata bytes. No script/source/profile change accompanied this metadata correction.",
+    "all_source_toolchain_flags_and_semantics_reused": "Same099/IHK8d source-stage PASS/f0f7stage68lock/159bsupplement/7262BUILDID andexact3seeds; sameRust1.92/LLVM21.1.8 tool-input prologue, exactmerge/two-j1olddefconfig/cmp/RUST+WERROR+MODULES+3=m/rustavailable. No broader compiler target or case is added."
+  },
+  "actual_tool_input_evidence_reused": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-1/evidence/actual-compiler-inputs.json",
+    "sha256": "4364887f56d09bd3c2a3bbd0dc638cef617407c061a276376f7bc1d11ff852bf",
+    "core_source_sha256": "38ed9003ea2427f8803317e3e040d69f988d88534468bb28cbf83f27e2b51080",
+    "core_owner": "rust-src-0:1.92.0-1.el10.noarch",
+    "lld_sha256": "52029c7d731c74ab72a2eca8126d578547242b3192ba74e27c94c1b51be001f9",
+    "lld_owner": "lld-0:21.1.8-1.el10.x86_64",
+    "RPM_verify": "Actual firstbatch exit0/emptystdout/stderr before mergefailure.",
+    "reuse_limit": "No separate availability probe/rebuild/inventory or SDK acceptance. Identical prologue remains inside the one corrected necessary actualconsumer as Root instructed; matching observations are reused at scope."
+  },
+  "exact_operation_GO": {
+    "request_command_argv_bound_by_SHA": "3c696d54205a81910f78513e072d49bfdaaf3782326f3c5be8220307db29f4cb",
+    "new_name": "mckernel-config-first-20261110-0708-2",
+    "fresh_output": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2",
+    "fresh_capture": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/correction-1/execution-1",
+    "expected_outputs": [
+      "output-2/evidence/actual-compiler-inputs.json",
+      "output-2/build/.config (byte-equal to resolved-first.config)",
+      "output-2/build/scripts/kconfig/conf and its genuine Linux-produced command/dependency inputs",
+      "output-2/evidence/resolved.config",
+      "output-2/evidence/config-artifacts.sha256",
+      "output-2/evidence/phase complete"
+    ],
+    "resource_profile": {
+      "HOST_total_all_controllers_workers_max_bytes": 4294967296,
+      "aggregate_jobs_max": 3,
+      "aggregate_light_jobs_consumed": 1,
+      "container_memory_including_tmpfs_bytes": 1610612736,
+      "cpu_seconds_per_process": 180,
+      "cpu_set": [
+        6
+      ],
+      "extra_disk_planning_bytes": 536870912,
+      "fresh_MemAvailable_GiB_minimum": 26,
+      "host_free_disk_GiB_floor": 16,
+      "max_per_file_bytes": 268435456,
+      "memory_swap_total_bytes": 1610612736,
+      "native_CPUs2_5_12GiB_andUNKNOWN_retained": true,
+      "pids": 128,
+      "scratch_free_disk_GiB_floor": 12,
+      "wall_seconds": 300
+    },
+    "Root_actual_admission": "Fresh currentservice/account/credit/stop guard, exactnewname/output/capture ownership and executable/outputbacking, actualsharedHOSTusage/leases. OneCPU6job/1536MiBincludingtmpfs insideHOST4GiB/max3jobs/fresh26GiB. Retainhost16GiB/scratch12GiB plus512MiBoutput/capture andgreaterneeds; native2-5/12GiB/prior18GiB/allUNKNOWN held.",
+    "lifetime": "Root bindsNEWimmutablecontainerID/name/image/profile/readonlymounts before start; daemon-ID300s deadline/stop/kill/join/terminalinspect plus boundedretirement; client-onlytimeout insufficient. All directbirths/stdio/waits captured. Remove only newlyproved-ownedterminalcontainer; oldcontainers unchanged.",
+    "PASS": "Same original actualconfig/rustavailable predicate, now reading output-2. No image/KO/native/projectruntime acceptance."
+  },
+  "failure_family": "This is one failedcandidate plus one bounded meaningfulcopy-mode correction. On any newfailure retain exact command/check/phase/diagnostic/source/owner and require focusedescalation plus meaningfulnewinput/independentreview/freshadmission before anotherattempt. No unchangedretry or heldscope/permission/policy bypass.",
+  "next_action": "Root performs fresh actualadmission and executes this singlecorrected configpayload in newoutput2; preserve everyfailedartifact/sourceinput and allunrelateddirtywork. P04lifecycle review remains pending finaltestpacket and is independent sourcework.",
+  "reviewer_payload_calls": 0,
+  "resource_releases": 0,
+  "acceptance_delta": 0
+}

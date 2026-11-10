@@ -1,0 +1,228 @@
+--- a/executer/user/rust/vmcore2mckdump.rs
++++ b/executer/user/rust/vmcore2mckdump.rs
+@@ -11,9 +11,12 @@
+ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
+ use std::os::unix::process::CommandExt;
+ use std::path::{Path, PathBuf};
+-use std::process::{Child, Command, Stdio};
++use std::process::{Child, Command, ExitStatus, Stdio};
++use std::mem::MaybeUninit;
+ use std::time::{Duration, Instant};
+-use std::os::raw::{c_int, c_short, c_ulong, c_void};
++use std::os::raw::{c_int, c_long, c_short, c_uint, c_ulong, c_void};
++#[cfg(not(all(target_arch="x86_64", target_os="linux", target_pointer_width="64")))]
++compile_error!("vmcore session custody requires the qualified Linux/x86_64 LP64 ABI");
+ const PREFIX: &str = env!("VMCORE_INSTALLDIR");
+ const ARCH: &str = env!("VMCORE_ARCH");
+ const CRASH: &str = env!("VMCORE_CRASH");
+@@ -29,6 +32,10 @@
+     fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
+     fn poll(fds: *mut PollFd, count: c_ulong, timeout: c_int) -> c_int;
+     fn kill(pid: c_int, signal: c_int) -> c_int;
++    fn syscall(number: c_long, ...) -> c_long;
++    fn prctl(option: c_int, ...) -> c_int;
++    fn waitid(which: c_uint, id: c_uint, info: *mut WaitInfo, options: c_int) -> c_int;
++    fn waitpid(pid: c_int, status: *mut c_int, options: c_int) -> c_int;
+ }
+ fn literal_path(path: &OsStr) -> bool {
+     !path.is_empty() && path.as_bytes().iter().all(|b| b.is_ascii_alphanumeric() || b"/._:+,@%=-".contains(b))
+@@ -82,9 +89,77 @@
+         }
+     }
+ }
+-struct Session { child: Child, master: File, pending: Vec<u8>, line: Vec<u8>, wanted_ack: Vec<u8>, acknowledged: bool, eof: bool }
++// Linux/x86_64 UAPI and glibc declarations are bound by the nonshipped ABI
++// witness. waitid writes opaque siginfo_t storage; no siginfo fields are read.
++const SYS_PIDFD_OPEN: c_long = 434;
++const SYS_PIDFD_SEND_SIGNAL: c_long = 424;
++const PR_SET_CHILD_SUBREAPER: c_int = 36;
++const PR_GET_CHILD_SUBREAPER: c_int = 37;
++const P_ALL: c_uint = 0;
++const P_PIDFD: c_uint = 3;
++const WNOHANG: c_int = 1;
++const WEXITED: c_int = 4;
++const WNOWAIT: c_int = 0x01000000;
++const SIGKILL: c_int = 9;
++const ESRCH: c_int = 3;
++const ECHILD: c_int = 10;
++const POLLIN: c_short = 0x001;
++const POLLERR: c_short = 0x008;
++const POLLNVAL: c_short = 0x020;
++#[repr(C, align(8))]
++struct WaitInfo { bytes: [u8; 128] }
++fn observe_child(which: c_uint, id: c_uint, options: c_int) -> io::Result<()> {
++    let mut info = MaybeUninit::<WaitInfo>::uninit();
++    if unsafe { waitid(which, id, info.as_mut_ptr(), options) } < 0 {
++        return Err(io::Error::last_os_error());
++    }
++    Ok(())
++}
++struct ChildScope { previous: c_int, restored: bool }
++impl ChildScope {
++    fn acquire() -> io::Result<Self> {
++        // This standalone, single-threaded command has already waited for uname.
++        // Refuse preexisting children rather than consuming another owner's wait.
++        match observe_child(P_ALL, 0, WEXITED | WNOWAIT | WNOHANG) {
++            Err(e) if e.raw_os_error() == Some(ECHILD) => {},
++            Err(e) => return Err(e),
++            Ok(()) => return Err(io::Error::new(io::ErrorKind::Other, "preexisting child outside crash session")),
++        }
++        let mut previous = 0;
++        if unsafe { prctl(PR_GET_CHILD_SUBREAPER, &mut previous as *mut c_int, 0 as c_ulong, 0 as c_ulong, 0 as c_ulong) } < 0 {
++            return Err(io::Error::last_os_error());
++        }
++        if previous != 0 && previous != 1 {
++            return Err(io::Error::new(io::ErrorKind::InvalidData, "unknown subreaper setting"));
++        }
++        if previous == 0 && unsafe { prctl(PR_SET_CHILD_SUBREAPER, 1 as c_ulong, 0 as c_ulong, 0 as c_ulong, 0 as c_ulong) } < 0 {
++            return Err(io::Error::last_os_error());
++        }
++        Ok(Self { previous, restored: previous == 1 })
++    }
++    fn restore(&mut self) -> io::Result<()> {
++        if !self.restored {
++            if unsafe { prctl(PR_SET_CHILD_SUBREAPER, self.previous as c_ulong, 0 as c_ulong, 0 as c_ulong, 0 as c_ulong) } < 0 {
++                return Err(io::Error::last_os_error());
++            }
++            self.restored = true;
++        }
++        Ok(())
++    }
++}
++impl Drop for ChildScope {
++    fn drop(&mut self) {
++        if let Err(e) = self.restore() { eprintln!("vmcore2mckdump: subreaper restoration unproved: {e}"); }
++    }
++}
++struct Session {
++    child: Child, master: File, pending: Vec<u8>, line: Vec<u8>, wanted_ack: Vec<u8>, acknowledged: bool, eof: bool,
++    pidfd: Option<File>, pidfd_verified: bool, leader_reaped: bool, retirement_started: bool,
++    cleanup_timeout: Duration, scope: ChildScope,
++}
+ impl Session {
+-    fn spawn(vmlinux: &OsStr, infile: &OsStr, outfile: &OsStr, staging: &Path) -> io::Result<Self> {
++    fn spawn(vmlinux: &OsStr, infile: &OsStr, outfile: &OsStr, staging: &Path, timeout: Duration) -> io::Result<Self> {
++        let scope = ChildScope::acquire()?;
+         let mut master = -1; let mut slave = -1;
+         if unsafe { openpty(&mut master, &mut slave, std::ptr::null_mut(), std::ptr::null(), std::ptr::null()) } != 0 { return Err(io::Error::last_os_error()); }
+         let master = unsafe { File::from_raw_fd(master) };
+@@ -102,7 +177,20 @@
+         }
+         let child = command.spawn()?;
+         let mut wanted_ack = ACK.to_vec(); wanted_ack.extend_from_slice(staging.as_os_str().as_bytes());
+-        Ok(Self { child, master, pending: Vec::new(), line: Vec::new(), wanted_ack, acknowledged: false, eof: false })
++        let mut session = Self {
++            child, master, pending: Vec::new(), line: Vec::new(), wanted_ack, acknowledged: false, eof: false,
++            pidfd: None, pidfd_verified: false, leader_reaped: false, retirement_started: false,
++            cleanup_timeout: timeout, scope,
++        };
++        let raw = unsafe { syscall(SYS_PIDFD_OPEN, session.child.id() as c_int, 0 as c_uint) };
++        if raw < 0 { return Err(io::Error::last_os_error()); }
++        session.pidfd = Some(unsafe { File::from_raw_fd(raw as c_int) });
++        let fd = session.pidfd.as_ref().unwrap().as_raw_fd();
++        // A pidfd opened after spawn is not used for signalling until waitid
++        // proves that it still refers to this command's own waitable child.
++        observe_child(P_PIDFD, fd as c_uint, WEXITED | WNOWAIT | WNOHANG)?;
++        session.pidfd_verified = true;
++        Ok(session)
+     }
+     fn receive(&mut self, deadline: Instant) -> io::Result<()> {
+         if self.eof { return Err(io::Error::new(io::ErrorKind::UnexpectedEof, "crash PTY closed")); }
+@@ -142,16 +230,67 @@
+         }
+     }
+     fn send(&mut self, bytes: &[u8]) -> io::Result<()> { self.master.write_all(bytes) }
++    fn leader_exited(&self) -> io::Result<bool> {
++        if !self.pidfd_verified {
++            return Err(io::Error::new(io::ErrorKind::Other, "crash pidfd ownership unproved"));
++        }
++        let mut fd = PollFd { fd: self.pidfd.as_ref().unwrap().as_raw_fd(), events: POLLIN, revents: 0 };
++        let ready = unsafe { poll(&mut fd, 1, 0) };
++        if ready < 0 { return Err(io::Error::last_os_error()); }
++        if fd.revents & (POLLERR | POLLNVAL) != 0 {
++            return Err(io::Error::new(io::ErrorKind::Other, "crash pidfd poll failed"));
++        }
++        Ok(fd.revents & POLLIN != 0)
++    }
++    fn retire(&mut self, deadline: Instant) -> io::Result<ExitStatus> {
++        self.retirement_started = true;
++        if !self.pidfd_verified || self.leader_reaped {
++            return Err(io::Error::new(io::ErrorKind::Other, "crash retirement identity unproved"));
++        }
++        let fd = self.pidfd.as_ref().unwrap().as_raw_fd();
++        if !self.leader_exited()? {
++            if unsafe { syscall(SYS_PIDFD_SEND_SIGNAL, fd, SIGKILL, std::ptr::null::<c_void>(), 0 as c_uint) } < 0 {
++                let e = io::Error::last_os_error();
++                if e.raw_os_error() != Some(ESRCH) { return Err(e); }
++            }
++            while !self.leader_exited()? {
++                if Instant::now() >= deadline { return Err(io::Error::new(io::ErrorKind::TimedOut, "crash retirement deadline")); }
++                std::thread::sleep(Duration::from_millis(1));
++            }
++        }
++        // WNOWAIT is the positive proof that the original leader remains owned
++        // and unreaped. Only now can its numeric private PGID be signalled.
++        observe_child(P_PIDFD, fd as c_uint, WEXITED | WNOWAIT)?;
++        if unsafe { kill(-(self.child.id() as c_int), SIGKILL) } < 0 {
++            let e = io::Error::last_os_error();
++            if e.raw_os_error() != Some(ESRCH) { return Err(e); }
++        }
++        let status = self.child.wait()?;
++        self.leader_reaped = true;
++        loop {
++            let mut child_status = 0;
++            let joined = unsafe { waitpid(-1, &mut child_status, WNOHANG) };
++            if joined > 0 { continue; }
++            if joined < 0 {
++                let e = io::Error::last_os_error();
++                if e.raw_os_error() == Some(ECHILD) { self.scope.restore()?; return Ok(status); }
++                if e.kind() != io::ErrorKind::Interrupted { return Err(e); }
++            }
++            if Instant::now() >= deadline { return Err(io::Error::new(io::ErrorKind::TimedOut, "crash descendants retirement deadline")); }
++            std::thread::sleep(Duration::from_millis(1));
++        }
++    }
+     fn finish(&mut self, timeout: Duration) -> io::Result<()> {
+         let deadline = Instant::now() + timeout;
+         loop {
+-            if let Some(status) = self.child.try_wait()? {
+-                // Drain already readable bytes, including a final ack, before
+-                // accepting exit. PTY EOF/EIO is normal after crash closes.
++            if self.leader_exited()? {
++                // Drain the final protocol bytes without consuming leader
++                // ownership. The existing configured deadline bounds the drain.
+                 while !self.eof {
+-                    let short = Instant::now() + Duration::from_millis(20);
++                    let short = (Instant::now() + Duration::from_millis(20)).min(deadline);
+                     match self.receive(short) { Ok(()) => {}, Err(e) if e.kind() == io::ErrorKind::TimedOut => break, Err(e) => return Err(e) }
+                 }
++                let status = self.retire(deadline)?;
+                 if !status.success() { return Err(io::Error::new(io::ErrorKind::Other, format!("crash failed: {status}"))); }
+                 return Ok(());
+             }
+@@ -167,9 +306,13 @@
+ }
+ impl Drop for Session {
+     fn drop(&mut self) {
+-        // While the unreaped leader is owned its PID cannot be reused. Kill its
+-        // private session group on failure; do not signal a reaped numeric PID.
+-        if matches!(self.child.try_wait(), Ok(None)) { unsafe { kill(-(self.child.id() as c_int), 9); } let _ = self.child.wait(); }
++        // One retirement attempt. Never signal a numeric group after leader
++        // reap or after any identity/wait failure; the outer owner retains it.
++        if !self.retirement_started {
++            if let Err(e) = self.retire(Instant::now() + self.cleanup_timeout) {
++                eprintln!("vmcore2mckdump: session retirement unproved: {e}");
++            }
++        }
+     }
+ }
+ fn convert(vmlinux: &OsStr, infile: &OsStr, outfile: &OsStr) -> io::Result<()> {
+@@ -182,7 +325,7 @@
+     let mut staging = Staging::create(Path::new(outfile))?;
+     // CString check is independent of shell/Tcl syntax; no interpreter executes.
+     let _ = CString::new(staging.path.as_os_str().as_bytes()).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "NUL output path"))?;
+-    let mut session = Session::spawn(vmlinux, infile, outfile, &staging.path)?;
++    let mut session = Session::spawn(vmlinux, infile, outfile, &staging.path, timeout)?;
+     let mut spawn = b"spawn ".to_vec(); spawn.extend_from_slice(CRASH.as_bytes()); spawn.push(b' '); spawn.extend_from_slice(vmlinux.as_bytes()); spawn.push(b' '); spawn.extend_from_slice(infile.as_bytes()); spawn.extend_from_slice(b"\r\n");
+     io::stdout().write_all(&spawn)?; io::stdout().flush()?;
+     let commands = [format!("mod -s ihk_smp_{arch} {PREFIX}/kmod/ihk-smp-{arch}.ko\n"),
