@@ -182,7 +182,13 @@ def _validated_arguments(repo, arguments):
 def status(repo, directory):
     names = unit_names(directory)
     result = {"units": names, "mailbox_url": "https://github.com/phoenix-hacking/mckernel/pull/3",
-              "state_directory": str(directory)}
+              "state_directory": str(directory),
+              "status_text_url": "https://github.com/phoenix-hacking/mckernel/blob/codex/mckernel-control-mailbox/status.txt",
+              "status_text_path": str(Path(directory) / "status.txt")}
+    try:
+        result["status_text"] = read_json(Path(directory) / "status-text-state.json")
+    except FileNotFoundError:
+        result["status_text"] = {"status": "NOT_GENERATED"}
     try:
         guard = read_json(Path(directory) / "guardian.json")
     except FileNotFoundError:
@@ -312,14 +318,34 @@ def campaign_blocker(repo):
 
 
 def guardian(repo, directory):
-    from os_goal_guardian import Guardian
+    from os_goal_guardian import Guardian, sd_notify
     from os_goal_mailbox import Mailbox
+    from os_goal_status_feed import StatusFeed
     mailbox = Mailbox(repo, directory, Path(repo) / "scripts/os_goal_mailbox.json")
+    feed = StatusFeed(repo, directory)
     def poll(control_directory, context):
         state = context.get("engine_state") or {}
         if (state.get("goal") or {}).get("status") == "blocked":
             context = dict(context, missing_input=campaign_blocker(repo))
-        return mailbox.poll(context)
+        try:
+            reply = mailbox.poll(context)
+        except Exception as error:
+            from os_goal_stop_log import _text
+            reply = {"status": "ERROR", "reason": _text(str(error), 500)}
+        # The comment poll and the status upload are separate bounded segments;
+        # a slow GitHub response cannot consume the whole watchdog interval.
+        sd_notify("Mailbox checked; refreshing the generated status view")
+        try:
+            feed.tick(context)
+        except Exception as error:
+            from os_goal_stop_log import _text
+            failure = {"status": "ERROR", "reason": _text(str(error), 500),
+                       "next_refresh_at": time.time() + 600}
+            try:
+                atomic_json(Path(directory) / "status-text-state.json", failure)
+            except (OSError, ValueError):
+                print(json.dumps({"status_text_error": failure}), flush=True)
+        return reply
     monitor = Guardian(repo, directory,
                        launch_engine=lambda proof: _launch_engine(repo, directory, proof),
                        mailbox_poll=poll, mailbox_ack=mailbox.ack_resume)
@@ -332,7 +358,7 @@ def guardian(repo, directory):
 def main(argv=None, *, engine_arguments=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", nargs="?", default="start",
-                        choices=("start", "status", "stop", "dry-run", "guardian", "engine"))
+                        choices=("start", "status", "status-text", "stop", "dry-run", "guardian", "engine"))
     args = parser.parse_args(argv)
     os.umask(0o077)
     directory = None
@@ -344,6 +370,12 @@ def main(argv=None, *, engine_arguments=None):
             return engine(REPO, directory) or 0
         if args.command == "start":
             result = start(REPO, directory, engine_arguments)
+        elif args.command == "status-text":
+            from os_goal_status_feed import StatusFeed
+            result = StatusFeed(REPO, directory).tick(publish=False)
+            if result["status"] == "GENERATED":
+                print((directory / "status.txt").read_text(encoding="utf-8"), end="")
+                return 0
         elif args.command == "status":
             result = status(REPO, directory)
         elif args.command == "stop":
@@ -367,7 +399,7 @@ def main(argv=None, *, engine_arguments=None):
             except (OSError, ValueError, RuntimeError) as logging_error:
                 result["stop_log_error"] = type(logging_error).__name__
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 1 if result["status"] in {"FAILED", "GUARDIAN_NOT_LIVE"} else 0
+    return 1 if result["status"] in {"FAILED", "GUARDIAN_NOT_LIVE", "ERROR"} else 0
 
 
 if __name__ == "__main__":

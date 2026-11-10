@@ -414,5 +414,68 @@ class ServiceTests(unittest.TestCase):
         self.exec.assert_not_called()
 
 
+    def test_guardian_retains_resume_reply_when_status_feed_fails_after_watchdog_ping(self):
+        import os_goal_mailbox as mailbox_module
+        import os_goal_status_feed as feed_module
+        events, replies = [], []
+        reply = {'status': 'POLLED', 'resume_request_id': 'github-comment-123',
+                 'resume_created_at': 900}
+        mailbox, feed, monitor = Mock(), Mock(), Mock()
+        mailbox.poll.side_effect = lambda context: events.append('mailbox') or reply
+        def broken_feed(context):
+            events.append('feed')
+            raise TypeError('Synthetic malformed status telemetry')
+        feed.tick.side_effect = broken_feed
+        monitor.run.return_value = 0
+        with patch.object(mailbox_module, 'Mailbox', return_value=mailbox), \
+                patch.object(feed_module, 'StatusFeed', return_value=feed), \
+                patch.object(guardian, 'sd_notify', side_effect=lambda message: events.append('notify')), \
+                patch.object(guardian, 'Guardian', return_value=monitor) as constructor, \
+                patch.object(subject.time, 'time', return_value=1000):
+            def run_one_cycle():
+                callback = constructor.call_args.kwargs['mailbox_poll']
+                replies.append(callback(self.directory, {
+                    'phase': 'HELD', 'engine_state': {'goal': {'status': 'blocked'}}}))
+                return 0
+            monitor.run.side_effect = run_one_cycle
+            self.assertEqual(subject.guardian(self.repo, self.directory), 0)
+        self.assertEqual(events, ['mailbox', 'notify', 'feed'])
+        self.assertIs(replies[0], reply)
+        failure = protocol.read_json(self.directory / 'status-text-state.json')
+        self.assertEqual(failure['status'], 'ERROR')
+        self.assertIn('Synthetic malformed status telemetry', failure['reason'])
+        self.assertEqual(failure['next_refresh_at'], 1600)
+        self.assertIs(constructor.call_args.kwargs['mailbox_ack'], mailbox.ack_resume)
+        monitor.close.assert_called_once()
+        self.systemctl.assert_not_called()
+        self.exec.assert_not_called()
+
+
+    def test_status_text_command_renders_locally_without_publication_or_start(self):
+        import os_goal_status_feed as feed_module
+        output = io.StringIO()
+        feed = Mock()
+        def preview(*args, **kwargs):
+            self.assertEqual(args, ())
+            self.assertEqual(kwargs, {'publish': False})
+            (self.directory / 'status.txt').write_text('Complete local status preview\n')
+            return {'status': 'GENERATED'}
+        feed.tick.side_effect = preview
+        with patch.object(subject, 'REPO', self.repo), \
+                patch.object(subject, 'runtime_directory', return_value=self.directory), \
+                patch.object(feed_module, 'StatusFeed', return_value=feed) as constructor, \
+                patch.object(guardian, 'authorize_start') as authorize, redirect_stdout(output):
+            self.assertEqual(subject.main(['status-text']), 0)
+        self.assertEqual(output.getvalue(), 'Complete local status preview\n')
+        constructor.assert_called_once_with(self.repo, self.directory)
+        feed.tick.assert_called_once_with(publish=False)
+        authorize.assert_not_called()
+        self.systemctl.assert_not_called()
+        self.install.assert_not_called()
+        self.preflight.assert_not_called()
+        self.exec.assert_not_called()
+
+
+
 if __name__ == '__main__':
     unittest.main()

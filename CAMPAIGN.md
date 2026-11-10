@@ -1,7 +1,69 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T05:07Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T05:13Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+## Generated M14/M15 status text
+
+The user requested a readable status update covering every original M14/M15
+subgoal and the agents. The generated view is now published at:
+https://github.com/phoenix-hacking/mckernel/blob/codex/mckernel-control-mailbox/status.txt
+It is also linked in the phone mailbox PR #3. This is a derived telemetry view;
+this campaign and the canonical progress JSON retain their existing authority.
+
+The initial snapshot uses the unchanged canonical ledger from `e1cd6833`, with
+all **31 requirement rows and 391 task rows**, **156 counted evidence tasks / 73
+verified at 100%**, 235 uncounted support rows and three optional decisions. All
+requirement/task IDs occur once; owners, dependencies, completion conditions,
+scope limits, evidence references and remaining actions are retained. Checklist
+progress stays **M14 51.48%, M15 50.97%**; original acceptance remains **4/6 files
+and 0/3 integrations**, **1/8 files and 0/4 integrations**. No original credit is
+claimed for this reporting work.
+
+The report includes generation times in UTC and America/Boise, the older ledger
+update time, source revision, recorded controller/guardian/watcher/mailbox state,
+agent roster and active turns when available, last stop and relevant errors.
+Current agent activity requires exact worker/watcher births and a fresh controller
+heartbeat. Saved inProgress alone cannot establish a live agent. Missing live
+runtime is explicitly UNAVAILABLE, with unknown agent counts. The initial report
+attributes the e1cd checkpoint and its completed/joined repair lanes as historical.
+
+Once the workstation adopts and starts the guarded launcher, the guardian renders
+a local report and attempts GitHub publication every **600 seconds**. Treat a
+snapshot as stale **15 minutes** after its printed generation time. Updates target
+only `status.txt` on `codex/mckernel-control-mailbox`; the telemetry commit skips
+push/PR CI so a ten-minute update does not launch repeated source test jobs. The
+publisher uses the existing supported authenticated gh path, exact contents/hash
+validation, a durable publication intent and a conditional blob update. A lost
+response is reconciled before a newer timestamp is sent. Upload failures retain
+the previous public file and persist a bounded error/backoff. No report or upload
+failure consumes a received mailbox direction, authorizes a model start or changes
+the original goal. Heartbeats separate bounded comment and publication operations.
+
+The existing launcher exposes `status-text` for a fresh local-only view:
+
+```sh
+python3 -B scripts/start_os_overnight.py status-text
+```
+
+This command does not start services, publish to GitHub or defer the scheduled
+publication. `status` includes the public URL and local publication result. The
+normal first activation still uses the existing `start` entry point on the actual
+workstation, after explicit adoption and normal ownership/account/resource checks.
+No workstation service, mailbox poll, model or native workload was started here.
+The latest actual host result still explicitly records no service/mailbox activation;
+the public conversation has setup bot notices but no observed workstation receipt.
+
+The actual initial public commit `920b3019b7b5856000ebc0277ff7f3a979dd8364` was
+read back and its complete text matched the generated 179850-byte file. Focused
+verification passed **213 tests**, including publication failure/reconciliation,
+complete ledger rendering, stale/unknown agents, retained resume replies, local
+preview cadence and the two newly published chronology/explicit-opt-in repairs.
+The latest completed broad tracker run `42757273379` timed out/cancelled after
+182 FAIL and 232 ERROR entries matching its previous repaired baseline IDs;
+new e1cd tracker run `42760141013` was still in progress when observed. Full CI,
+actual email delivery and workstation deployment are not verified successes.
+Evidence: `docs/verification/guardian-status-text-20261110/validation.json`.
 
 ## Current decision
 
