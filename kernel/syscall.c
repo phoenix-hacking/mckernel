@@ -5408,6 +5408,15 @@ _Static_assert(__builtin_offsetof(struct thread, siblings_list) == 4312, "Rust t
 _Static_assert(__builtin_offsetof(struct thread, report_siblings_list) == 4368, "Rust terminate Thread.report_siblings_list ABI");
 _Static_assert(__builtin_offsetof(struct thread, system_tsc) == 5040, "Rust terminate Thread.system_tsc ABI");
 _Static_assert(__builtin_offsetof(struct thread, user_tsc) == 5048, "Rust terminate Thread.user_tsc ABI");
+#ifndef SPINLOCK_IN_MCS_RWLOCK
+#error "Rust terminate requires the selected ticket-spinlock MCS representation"
+#endif
+_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64
+    && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,
+    "Rust terminate ABI/runtime MCS lock representation");
+_Static_assert(sizeof(ihk_spinlock_t) == 4 && __alignof__(ihk_spinlock_t) == 4
+    && __builtin_offsetof(ihk_spinlock_t, head_tail) == 0,
+    "Rust terminate ABI/runtime ticket lock representation");
 _Static_assert(sizeof(struct mcs_rwlock_node) == 64 && __alignof__(struct mcs_rwlock_node) == 64, "Rust terminate noirq node ABI");
 _Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64, "Rust terminate irq node ABI");
 _Static_assert(DDEBUG_DEFAULT == DDEBUG_NONE, "Rust terminate original debug default");
