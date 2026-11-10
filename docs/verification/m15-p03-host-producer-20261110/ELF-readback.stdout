@@ -1,0 +1,164 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x17a30
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          4405576 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         12
+  Size of section headers:           64 (bytes)
+  Number of section headers:         41
+  Section header string table index: 39
+
+Dynamic section at offset 0x60ec0 contains 31 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libutil.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]
+ 0x000000000000001e (FLAGS)              BIND_NOW
+ 0x000000006ffffffb (FLAGS_1)            Flags: NOW PIE
+ 0x0000000000000015 (DEBUG)              0x0
+ 0x0000000000000007 (RELA)               0x15e0
+ 0x0000000000000008 (RELASZ)             19632 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffff9 (RELACOUNT)          716
+ 0x0000000000000017 (JMPREL)             0x6290
+ 0x0000000000000002 (PLTRELSZ)           96 (bytes)
+ 0x0000000000000003 (PLTGOT)             0x63ba8
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000006 (SYMTAB)             0x340
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000005 (STRTAB)             0xf9c
+ 0x000000000000000a (STRSZ)              1597 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0xf80
+ 0x0000000000000019 (INIT_ARRAY)         0x60b88
+ 0x000000000000001b (INIT_ARRAYSZ)       16 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x60b80
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000000000000c (INIT)               0x5fae4
+ 0x000000000000000d (FINI)               0x5fb00
+ 0x000000006ffffff0 (VERSYM)             0xd48
+ 0x000000006ffffffe (VERNEED)            0xe20
+ 0x000000006fffffff (VERNEEDNUM)         5
+ 0x0000000000000000 (NULL)               0x0
+
+Symbol table '.dynsym' contains 107 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.2.5 (2)
+     2: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+     3: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+     4: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+     5: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (2)
+     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND close@GLIBC_2.2.5 (3)
+     7: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setsid@GLIBC_2.2.5 (2)
+     8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ioctl@GLIBC_2.2.5 (2)
+     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __errno_location@GLIBC_2.2.5 (3)
+    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcpy@GLIBC_2.14 (4)
+    11: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND bcmp@GLIBC_2.2.5 (2)
+    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5 (2)
+    13: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND openpty@GLIBC_2.2.5 (5)
+    14: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_Resume@GCC_3.0 (6)
+    15: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND dl_iterate_phdr@GLIBC_2.2.5 (2)
+    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND munmap@GLIBC_2.2.5 (2)
+    17: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND read@GLIBC_2.2.5 (3)
+    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND syscall@GLIBC_2.2.5 (2)
+    19: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_attr_destroy@GLIBC_2.2.5 (2)
+    20: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND chdir@GLIBC_2.2.5 (2)
+    21: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_GetIP@GCC_3.0 (6)
+    22: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __tls_get_addr@GLIBC_2.3 (7)
+    23: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND gettid@GLIBC_2.30 (8)
+    24: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5 (2)
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND open64@GLIBC_2.2.5 (3)
+    26: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_GetTextRelBase@GCC_3.0 (6)
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_GetDataRelBase@GCC_3.0 (6)
+    28: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND chroot@GLIBC_2.2.5 (2)
+    29: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getenv@GLIBC_2.2.5 (2)
+    30: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5 (2)
+    31: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 (2)
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_memalign@GLIBC_2.2.5 (2)
+    33: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (2)
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND realloc@GLIBC_2.2.5 (2)
+    35: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND write@GLIBC_2.2.5 (3)
+    36: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5 (2)
+    37: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND poll@GLIBC_2.2.5 (2)
+    38: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND recv@GLIBC_2.2.5 (3)
+    39: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fcntl@GLIBC_2.2.5 (2)
+    40: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND writev@GLIBC_2.2.5 (2)
+    41: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND recvmsg@GLIBC_2.2.5 (3)
+    42: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpid@GLIBC_2.2.5 (2)
+    43: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sendmsg@GLIBC_2.2.5 (3)
+    44: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND pidfd_spawnp
+    45: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND socketpair@GLIBC_2.2.5 (2)
+    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fork@GLIBC_2.2.5 (2)
+    47: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND posix_spawn_file_actions_addchdir_np@GLIBC_2.29 (9)
+    48: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND posix_spawn_file_actions_addchdir
+    49: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawnattr_init@GLIBC_2.2.5 (2)
+    50: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawn_file_actions_init@GLIBC_2.2.5 (2)
+    51: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawn_file_actions_adddup2@GLIBC_2.2.5 (2)
+    52: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawnattr_setpgroup@GLIBC_2.2.5 (2)
+    53: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawnattr_setflags@GLIBC_2.2.5 (2)
+    54: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawn_file_actions_destroy@GLIBC_2.2.5 (2)
+    55: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawnattr_destroy@GLIBC_2.2.5 (2)
+    56: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigemptyset@GLIBC_2.2.5 (2)
+    57: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigaddset@GLIBC_2.2.5 (2)
+    58: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawnattr_setsigdefault@GLIBC_2.2.5 (2)
+    59: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  UND environ@GLIBC_2.2.5 (2)
+    60: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND posix_spawnp@GLIBC_2.15 (10)
+    61: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _exit@GLIBC_2.2.5 (2)
+    62: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND dup2@GLIBC_2.2.5 (2)
+    63: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setgroups@GLIBC_2.2.5 (2)
+    64: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setgid@GLIBC_2.2.5 (2)
+    65: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setuid@GLIBC_2.2.5 (2)
+    66: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setpgid@GLIBC_2.2.5 (2)
+    67: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND signal@GLIBC_2.2.5 (2)
+    68: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND execvp@GLIBC_2.2.5 (2)
+    69: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND pidfd_getpid
+    70: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitid@GLIBC_2.2.5 (2)
+    71: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sysconf@GLIBC_2.2.5 (2)
+    72: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pipe2@GLIBC_2.9 (11)
+    73: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_Backtrace@GCC_3.3 (12)
+    74: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitpid@GLIBC_2.2.5 (2)
+    75: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memcmp@GLIBC_2.2.5 (2)
+    76: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND lseek64@GLIBC_2.2.5 (3)
+    77: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND dup@GLIBC_2.2.5 (2)
+    78: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND abort@GLIBC_2.2.5 (2)
+    79: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_self@GLIBC_2.2.5 (2)
+    80: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_getattr_np@GLIBC_2.2.5 (3)
+    81: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_attr_getstack@GLIBC_2.2.5 (3)
+    82: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigaction@GLIBC_2.2.5 (3)
+    83: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pause@GLIBC_2.2.5 (3)
+    84: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getcwd@GLIBC_2.2.5 (2)
+    85: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mmap64@GLIBC_2.2.5 (2)
+    86: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND realpath@GLIBC_2.3 (13)
+    87: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND readlink@GLIBC_2.2.5 (2)
+    88: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND statx@GLIBC_2.28 (14)
+    89: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_thread_atexit_impl@GLIBC_2.18 (15)
+    90: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_key_create@GLIBC_2.2.5 (3)
+    91: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_key_delete@GLIBC_2.2.5 (3)
+    92: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_setspecific@GLIBC_2.2.5 (3)
+    93: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND gnu_get_libc_version@GLIBC_2.2.5 (2)
+    94: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND exit@GLIBC_2.2.5 (2)
+    95: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getauxval@GLIBC_2.16 (16)
+    96: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sigaltstack@GLIBC_2.2.5 (2)
+    97: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pthread_attr_getguardsize@GLIBC_2.2.5 (3)
+    98: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mprotect@GLIBC_2.2.5 (2)
+    99: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __xpg_strerror_r@GLIBC_2.3.4 (17)
+   100: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_GetLanguageSpecificData@GCC_3.0 (6)
+   101: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_GetIPInfo@GCC_4.2.0 (18)
+   102: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_GetRegionStart@GCC_3.0 (6)
+   103: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_SetGR@GCC_3.0 (6)
+   104: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _Unwind_SetIP@GCC_3.0 (6)
+   105: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __fxstat64@GLIBC_2.2.5 (2)
+   106: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __xstat64@GLIBC_2.2.5 (2)

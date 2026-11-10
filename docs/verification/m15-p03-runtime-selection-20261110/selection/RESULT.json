@@ -1,0 +1,206 @@
+{
+  "status": "PASS",
+  "started_at": "2026-11-10T08:36:57.468968+00:00",
+  "commands": [
+    {
+      "phase": "default-OFF-configure",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-source",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DARCH:STRING=x86_64",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/off"
+      ],
+      "started_at": "2026-11-10T08:36:57.469035+00:00",
+      "process": {
+        "pid": 811650,
+        "state": "R",
+        "pgrp": 811650,
+        "birth": 38608353
+      },
+      "exit": 0,
+      "wait_joined": true,
+      "finished_at": "2026-11-10T08:36:57.485471+00:00",
+      "peak_children_rss_kib": 12828,
+      "remaining_process_group": []
+    },
+    {
+      "phase": "default-OFF-staged-install",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/staged-off",
+        "/usr/bin/cmake",
+        "--install",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/off"
+      ],
+      "started_at": "2026-11-10T08:36:57.496870+00:00",
+      "process": {
+        "pid": 811656,
+        "state": "R",
+        "pgrp": 811656,
+        "birth": 38608356
+      },
+      "exit": 0,
+      "wait_joined": true,
+      "finished_at": "2026-11-10T08:36:57.505344+00:00",
+      "peak_children_rss_kib": 12828,
+      "remaining_process_group": []
+    },
+    {
+      "phase": "explicit-ON-configure",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-source",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DARCH:STRING=x86_64",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on",
+        "-DENABLE_RUST_ECLAIR_BACKTRACE:BOOL=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "started_at": "2026-11-10T08:36:57.514511+00:00",
+      "process": {
+        "pid": 811658,
+        "state": "R",
+        "pgrp": 811658,
+        "birth": 38608358
+      },
+      "exit": 0,
+      "wait_joined": true,
+      "finished_at": "2026-11-10T08:36:57.530939+00:00",
+      "peak_children_rss_kib": 13012,
+      "remaining_process_group": []
+    },
+    {
+      "phase": "reuse-qualified-output",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cp",
+        "--preserve=mode",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/output/p03-host-build-1/eclair-dump-backtrace.exp",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on/eclair-dump-backtrace.exp"
+      ],
+      "started_at": "2026-11-10T08:36:57.541176+00:00",
+      "process": {
+        "pid": 811664,
+        "state": "R",
+        "pgrp": 811664,
+        "birth": 38608360
+      },
+      "exit": 0,
+      "wait_joined": true,
+      "finished_at": "2026-11-10T08:36:57.549642+00:00",
+      "peak_children_rss_kib": 13012,
+      "remaining_process_group": []
+    },
+    {
+      "phase": "explicit-ON-staged-install",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/staged-on",
+        "/usr/bin/cmake",
+        "--install",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on"
+      ],
+      "started_at": "2026-11-10T08:36:57.559227+00:00",
+      "process": {
+        "pid": 811665,
+        "state": "R",
+        "pgrp": 811665,
+        "birth": 38608362
+      },
+      "exit": 0,
+      "wait_joined": true,
+      "finished_at": "2026-11-10T08:36:57.576039+00:00",
+      "peak_children_rss_kib": 13012,
+      "remaining_process_group": []
+    }
+  ],
+  "finished_at": "2026-11-10T08:36:57.588199+00:00",
+  "all_direct_waits_joined": true,
+  "CPU6_released": true,
+  "readback": {
+    "off": {
+      "cache_selection": "OFF",
+      "named_target_count": 0,
+      "install_manifest": [
+        "/usr/local/bin/eclair-dump-backtrace.exp"
+      ],
+      "installed_sha256": "e4090999f99eddf4259435fb8fe8bbb0c684d5568b5bb716ec6fe47a72eb5ba3",
+      "installed_mode": "0755",
+      "exact_template_or_qualified_artifact": true
+    },
+    "on": {
+      "cache_selection": "ON",
+      "named_target_count": 1,
+      "install_manifest": [
+        "/usr/local/bin/eclair-dump-backtrace.exp"
+      ],
+      "installed_sha256": "a85291382cb1b327966d26ef149f80858f6373203b218ece704e8ace7c302b1e",
+      "installed_mode": "0755",
+      "exact_template_or_qualified_artifact": true
+    },
+    "canonical_integration": {
+      "six_path_patch_applied": true,
+      "no_duplicate_configure_install": true,
+      "user_cmake_unchanged": true,
+      "all_five_sources_equal_qualified_selector": true,
+      "default_OFF_preserved": true
+    }
+  },
+  "readback_at": "2026-11-10T08:38:03.504562+00:00",
+  "scope": "Isolated actual selector/staged install; whole top-level/default-Rust/real Eclair/kernel/native acceptance remains open",
+  "original_counted_credit": 0
+}

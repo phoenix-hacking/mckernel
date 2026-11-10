@@ -139,7 +139,7 @@ unsafe extern "C" {
     #[cfg(mcinspect_full_body)]
     fn dwarf_diename(die: *mut c_void, name: *mut *mut u8, error: *mut *mut c_void) -> c_int;
     #[cfg(mcinspect_full_body)]
-    fn dwarf_get_TAG_name(value: c_int, out: *mut *const u8) -> c_int;
+    fn dwarf_get_TAG_name(value: core::ffi::c_uint, out: *mut *const u8) -> c_int;
     #[cfg(mcinspect_full_body)]
     fn dwarf_attr(
         die: *mut c_void,
@@ -1204,7 +1204,7 @@ unsafe fn dwarf_debug_print_die(dbg: *mut c_void, die: *mut c_void, indent: c_in
         }
         return;
     }
-    if unsafe { dwarf_get_TAG_name(tag as c_int, &mut tag_name) } != DW_DLV_OK {
+    if unsafe { dwarf_get_TAG_name(tag as core::ffi::c_uint, &mut tag_name) } != DW_DLV_OK {
         tag_name = b"<unknown>\0".as_ptr();
     }
 

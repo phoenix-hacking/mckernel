@@ -1,0 +1,211 @@
+{
+  "BFD_ABI_link_or_production_acceptance": false,
+  "bfd_all_six_exact": false,
+  "bfd_provider_files": [
+    {
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/include/bfd.h'",
+      "expected_sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432",
+      "path": "/usr/include/bfd.h",
+      "rpm_owner": {
+        "argv": [
+          "/usr/bin/rpm",
+          "-qf",
+          "--qf",
+          "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+          "/usr/include/bfd.h"
+        ],
+        "returncode": 1,
+        "stderr": "error: file /usr/include/bfd.h: No such file or directory\n",
+        "stdout": "",
+        "wait_joined": true
+      }
+    },
+    {
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/lib64/libbfd.so'",
+      "expected_sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3",
+      "path": "/usr/lib64/libbfd.so",
+      "rpm_owner": {
+        "argv": [
+          "/usr/bin/rpm",
+          "-qf",
+          "--qf",
+          "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+          "/usr/lib64/libbfd.so"
+        ],
+        "returncode": 1,
+        "stderr": "error: file /usr/lib64/libbfd.so: No such file or directory\n",
+        "stdout": "",
+        "wait_joined": true
+      }
+    },
+    {
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/lib64/libbfd.a'",
+      "expected_sha256": "2324c3f9557b3387126123659badf4cccdbbd272104aec42a21c709c31bf6d4e",
+      "path": "/usr/lib64/libbfd.a",
+      "rpm_owner": {
+        "argv": [
+          "/usr/bin/rpm",
+          "-qf",
+          "--qf",
+          "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+          "/usr/lib64/libbfd.a"
+        ],
+        "returncode": 1,
+        "stderr": "error: file /usr/lib64/libbfd.a: No such file or directory\n",
+        "stdout": "",
+        "wait_joined": true
+      }
+    },
+    {
+      "bytes": 1375456,
+      "expected_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "gid": 0,
+      "matches_expected": true,
+      "mode": "0o755",
+      "path": "/usr/bin/cc",
+      "resolved_path": "/usr/bin/gcc",
+      "rpm_owner": {
+        "argv": [
+          "/usr/bin/rpm",
+          "-qf",
+          "--qf",
+          "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+          "/usr/bin/cc"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "gcc-14.3.1-4.4.el10.x86_64\n",
+        "wait_joined": true
+      },
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "uid": 0
+    },
+    {
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/lib64/libsframe.a'",
+      "expected_sha256": "672167bbda65094966dce98fd6ba06a4b421fa20b4c7d05ed73aee2744bad072",
+      "path": "/usr/lib64/libsframe.a",
+      "rpm_owner": {
+        "argv": [
+          "/usr/bin/rpm",
+          "-qf",
+          "--qf",
+          "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+          "/usr/lib64/libsframe.a"
+        ],
+        "returncode": 1,
+        "stderr": "error: file /usr/lib64/libsframe.a: No such file or directory\n",
+        "stdout": "",
+        "wait_joined": true
+      }
+    },
+    {
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/lib64/libiberty.a'",
+      "expected_sha256": "714cae91080b3c21c127bd7c43330724c1a6397c8f6c3abcf9f91f063e9487a5",
+      "path": "/usr/lib64/libiberty.a",
+      "rpm_owner": {
+        "argv": [
+          "/usr/bin/rpm",
+          "-qf",
+          "--qf",
+          "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+          "/usr/lib64/libiberty.a"
+        ],
+        "returncode": 1,
+        "stderr": "error: file /usr/lib64/libiberty.a: No such file or directory\n",
+        "stdout": "",
+        "wait_joined": true
+      }
+    }
+  ],
+  "cwd": "/",
+  "gid": 1000,
+  "libc_metadata": {
+    "bytes": 2339896,
+    "expected_sha256": null,
+    "gid": 0,
+    "matches_expected": null,
+    "mode": "0o755",
+    "path": "/usr/lib64/libc.so.6",
+    "readelf": {
+      "GLIBC_2_38_symbols": {
+        "__isoc23_sscanf": true,
+        "__isoc23_strtol": true,
+        "__isoc23_strtoul": true
+      },
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--dyn-syms",
+        "/usr/lib64/libc.so.6"
+      ],
+      "returncode": 0,
+      "selected_dynsym_lines": [
+        "1051: 000000000005afd0   317 FUNC    GLOBAL DEFAULT   16 __isoc23_sscanf@@GLIBC_2.38",
+        "1455: 0000000000050c10    28 FUNC    GLOBAL DEFAULT   16 __isoc23_strtol@@GLIBC_2.38",
+        "2580: 0000000000053d80    28 FUNC    GLOBAL DEFAULT   16 __isoc23_strtoul@@GLIBC_2.38"
+      ],
+      "stderr": "",
+      "wait_joined": true
+    },
+    "resolved_path": "/usr/lib64/libc.so.6",
+    "rpm_owner": {
+      "argv": [
+        "/usr/bin/rpm",
+        "-qf",
+        "--qf",
+        "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+        "/usr/lib64/libc.so.6"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "glibc-2.39-121.el10_2.x86_64\n",
+      "wait_joined": true
+    },
+    "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+    "uid": 0
+  },
+  "project_or_SDK_tests_executed": false,
+  "python": {
+    "at_least_3_10": true,
+    "executable": "/usr/bin/python3",
+    "executable_identity": {
+      "bytes": 15800,
+      "expected_sha256": null,
+      "gid": 0,
+      "matches_expected": null,
+      "mode": "0o755",
+      "path": "/usr/bin/python3",
+      "resolved_path": "/usr/bin/python3.12",
+      "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+      "uid": 0
+    },
+    "version": "3.12.14 (main, Aug 13 2026, 00:00:00) [GCC 14.3.1 20251022 (Red Hat 14.3.1-4)]",
+    "version_info": [
+      3,
+      12,
+      14
+    ]
+  },
+  "python_prerequisite_pass": true,
+  "scope": "Source-free Python/PyYAML prerequisite and exact BFD/provider metadata only; no compiler/test/library/native/source execution",
+  "source_mounted": false,
+  "status": "PASS_PYTHON_PREREQUISITE_ONLY",
+  "uid": 1000,
+  "yaml": {
+    "import_ok": true,
+    "module": "/usr/lib64/python3.12/site-packages/yaml/__init__.py",
+    "module_identity": {
+      "bytes": 12311,
+      "expected_sha256": null,
+      "gid": 0,
+      "matches_expected": null,
+      "mode": "0o644",
+      "path": "/usr/lib64/python3.12/site-packages/yaml/__init__.py",
+      "resolved_path": "/usr/lib64/python3.12/site-packages/yaml/__init__.py",
+      "sha256": "6e1974e6a49e3bed59c654918c6aef9769bd9eb5dbd67f7e1906ad4cdd0caea7",
+      "uid": 0
+    },
+    "small_literal_load_ok": true,
+    "version": "6.0.1"
+  }
+}

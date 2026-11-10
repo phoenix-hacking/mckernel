@@ -18,8 +18,10 @@ import time
 import uuid
 
 WORKFLOW = '.github/workflows/native-rust-host-modules-exact-build.yml'
-EXPECTED_IHK_HEAD = '3114d9e7101ad52030eb3effa849a5c108972a1f'
-REVIEWED_IHK_HEAD = EXPECTED_IHK_HEAD
+EXPECTED_IHK_HEAD = '8d288b8bd81b50cc3a3f814d949b89bf416a6ec7'
+# Only this historical preimage needs the reviewed working-tree overlay.
+# The current selected IHK commits the exact IHK_OVERLAY_RESULT_SHA256 bytes.
+REVIEWED_IHK_HEAD = '3114d9e7101ad52030eb3effa849a5c108972a1f'
 IHK_OVERLAY_PATH = 'test/ihklib/whitebox/src/driver/mckernel/syscall.c'
 IHK_OVERLAY_ASSET = 'host-kernel/exact-build/ihk-clear-host-pte-overlay.patch'
 IHK_OVERLAY_PATCH_SHA256 = 'cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7'
@@ -205,7 +207,7 @@ def source_inventory(repo, git, allow_ihk_overlay=False):
 def verify_ihk_overlay(repo, git, applied):
     """Admit only the reviewed one-file IHK working-tree overlay.
 
-    The IHK gitlink remains pinned to EXPECTED_IHK_HEAD.  Preparation applies
+    The overlay preimage remains pinned to REVIEWED_IHK_HEAD.  Preparation applies
     this patch after the pristine checkout, so the ordinary Git blob check is
     intentionally replaced for this one path by a base/result byte check.
     """

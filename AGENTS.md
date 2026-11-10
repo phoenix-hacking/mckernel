@@ -7,8 +7,9 @@ narrative logs or follow their reading lists. This supersedes older campaign
 startup/read-order instructions, including references in the retained goal identity.
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
-Dispatcher: `gpt-6.1-sol`, reasoning `max`; every worker, auditor and reviewer
-uses reasoning `high` or above under the user's November 5 instruction.
+Dispatcher: `gpt-6.1-sol`, reasoning `max`; every subsequent worker, auditor and
+reviewer task uses explicit `gpt-6.1-sol` / reasoning `max` under the latest user
+instruction. Reuse completed HIGH work; do not restart healthy turns to change effort.
 Engineering is active under the user's explicit same-Root manual resume.
 Prepare independent eligible M14/M15 source and qualification work in parallel;
 retain M14-before-M15 acceptance order and one shared compositor. The latest user
@@ -17,7 +18,7 @@ latest user priority correction defers that optional integration and transition.
 Do not load more owners without a genuinely eligible original functional task
 that needs the reviewed change. No recursive spawning or live state edits.
 The normal same-Root transition is verified in invocation20261106T103153Z-e5bed1f2;
-the actual current ceiling is six direct HIGH owners. Use only ready disjoint work.
+the actual current ceiling is six direct owners; current new task routes are Sol/MAX. Use only ready disjoint work.
 
 After fresh admission, ordinary HOST work may use CPUs0,6,7 with up to three
 aggregate light compile/test jobs and4 GiB TOTAL including all worker/controller

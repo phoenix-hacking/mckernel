@@ -1,0 +1,127 @@
+{
+  "schema": "mckernel.p03.production-selection-install-request.v1",
+  "status": "PREPARED_UNINVOKED_REQUIRES_INDEPENDENT_REVIEW_AND_ROOT_ADMISSION",
+  "owner": "Root sole executor; independent reviewer to assess this changed integration contract",
+  "commands": [
+    {
+      "phase": "default-OFF-configure",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-source",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DARCH:STRING=x86_64",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/off"
+      ],
+      "expected": "fresh cache ENABLE_RUST_ECLAIR_BACKTRACE:BOOL=OFF; configured baseline only; no Rust compiler invocation"
+    },
+    {
+      "phase": "default-OFF-staged-install",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/staged-off",
+        "/usr/bin/cmake",
+        "--install",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/off"
+      ],
+      "expected": "only stage under this private directory; /usr/local/bin/eclair-dump-backtrace.exp mode0755, exact canonical Expect template with prefix=/usr/local and ARCH=x86_64"
+    },
+    {
+      "phase": "explicit-ON-configure",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-source",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DARCH:STRING=x86_64",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on",
+        "-DENABLE_RUST_ECLAIR_BACKTRACE:BOOL=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "expected": "target eclair_backtrace_rust_program; generated exact qualified source/config; same already declared runtime compiler path; no compiler invocation"
+    },
+    {
+      "phase": "reuse-qualified-output",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cp",
+        "--preserve=mode",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/output/p03-host-build-1/eclair-dump-backtrace.exp",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on/eclair-dump-backtrace.exp"
+      ],
+      "expected": "reuse a85291382cb1b327966d26ef149f80858f6373203b218ece704e8ace7c302b1e, no compile or main invocation"
+    },
+    {
+      "phase": "explicit-ON-staged-install",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/staged-on",
+        "/usr/bin/cmake",
+        "--install",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on"
+      ],
+      "expected": "only stage under this private directory; /usr/local/bin/eclair-dump-backtrace.exp mode0755 and SHA256 a85291382cb1b327966d26ef149f80858f6373203b218ece704e8ace7c302b1e"
+    }
+  ],
+  "readback_expectations": [
+    "Canonical postimage top CMake contains the one selector include and neither duplicate old configure nor duplicate old install rule.",
+    "Existing user CMake declaration remains byte-identical at blob 6d18da57df0ca152edaa3c81664947363fa49054; top include runs after add_subdirectory(executer/user).",
+    "ON generated config and copied Rust files equal the prior production-prefix producer inputs; generated named-target rule binds the same runtime compiler and existing source/compiler prerequisites.",
+    "OFF has no named Rust target; ON has exactly eclair_backtrace_rust_program and exactly one install entry for the output name.",
+    "Both staged files have basename eclair-dump-backtrace.exp and mode0755; ON staged bytes equal the reused artifact; OFF staged bytes equal literal @prefix@/@ARCH@ template substitution.",
+    "No build, Rust main, Eclair, kernel image read, service, native or system-prefix write is requested."
+  ],
+  "resource_requirement": "Fresh Root CPU6 light-job admission within shared max3jobs/4GiB TOTAL and fresh26GiB + host/scratch disk floors; serial phases; stop on first unexpected failure; retain direct PID/birth/waits/descendant cleanup.",
+  "qualification_limit": "Isolated actual unchanged selector and staged install contract only; full top-level/native/default behavior/production deployed parity and original P03/I01 acceptance remain OPEN."
+}

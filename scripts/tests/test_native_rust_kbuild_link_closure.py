@@ -199,6 +199,11 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             "--emit=obj={0}".format(target),
             source,
         ]
+        if module["name"] == "mcctrl":
+            tokens[-1:-1] = [
+                token for operand in closure.MCCTRL_CHECK_CFG
+                for token in ("--check-cfg", "'" + operand + "'")
+            ]
         command = " ".join(tokens)
         if module["objtool_on_rust_object"]:
             command += " ; " + objtool(target)
@@ -244,7 +249,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
     def generated_record(self, module):
         target = "{0}/{1}.mod.o".format(closure.MODULE_ROOT, module["name"])
         source = "{0}/{1}.mod.c".format(closure.MODULE_ROOT, module["name"])
-        basename = "{0}.mod".format(module["crate"])
+        modname = module["name"].replace("-", "_")
+        basename = "{0}.mod".format(modname)
         command = " ".join(
             (
                 "clang",
@@ -272,8 +278,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 "-std=gnu11",
                 "-DMODULE",
                 "-DKBUILD_BASENAME='\"{0}\"'".format(basename),
-                "-DKBUILD_MODNAME='\"{0}\"'".format(module["crate"]),
-                "-D__KBUILD_MODNAME={0}".format(module["crate"]),
+                "-DKBUILD_MODNAME='\"{0}\"'".format(modname),
+                "-D__KBUILD_MODNAME={0}".format(modname),
                 "-c",
                 "-o",
                 target,
@@ -308,6 +314,21 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         )
         return "savedcmd_{0} := {1}\n".format(target, command)
 
+    def assembly_record(self, module, obj):
+        # Synthetic source-owner grammar only, not a captured/pinned SDK command.
+        target = closure.MODULE_ROOT + "/" + obj
+        source = SOURCE_PREFIX + obj[:-2] + ".S"
+        includes = [SOURCE_ROOT + "/arch/x86/include", "./arch/x86/include/generated",
+                    SOURCE_ROOT + "/include", "./include", SOURCE_ROOT + "/arch/x86/include/uapi",
+                    "./arch/x86/include/generated/uapi", SOURCE_ROOT + "/include/uapi", "./include/generated/uapi"]
+        tokens = ["clang", "-Wp,-MMD," + closure.MODULE_ROOT + "/." + obj + ".d", "-nostdinc"]
+        tokens += ["-I" + path for path in includes]
+        tokens += ["-include", SOURCE_ROOT + "/include/linux/compiler-version.h",
+                   "-include", SOURCE_ROOT + "/include/linux/kconfig.h", "--target=x86_64-linux-gnu",
+                   "-D__KERNEL__", "-D__ASSEMBLY__", "-DMODULE", "-c", "-o", target, source]
+        command = " ".join(tokens)
+        return "savedcmd_" + target + " := " + command + "\n\nsource_" + target + " := " + source + "\n"
+
     def make_records(self):
         source_groups = {
             module["name"]: (
@@ -331,15 +352,20 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             generator = (
                 "printf '%s\\n'   {0} | awk '!x[$$0]++ {{ print(\"{1}/\"$$0) }}' "
                 "> {1}/{2}.mod"
-            ).format(module["rust_object"], closure.MODULE_ROOT, module["name"])
+            ).format(" ".join(closure._module_components(module)), closure.MODULE_ROOT, module["name"])
             self.write_text(
                 closure._cmd_name(mod_target),
                 "savedcmd_{0} := {1}\n".format(mod_target, generator),
             )
             self.write_text(
                 "{0}.mod".format(module["name"]),
-                "{0}/{1}\n".format(closure.MODULE_ROOT, module["rust_object"]),
+                "".join("{0}/{1}\n".format(closure.MODULE_ROOT, obj)
+                        for obj in closure._module_components(module)),
             )
+
+            for component in module.get("assembly_objects", ()):
+                target = closure.MODULE_ROOT + "/" + component
+                self.write_text(closure._cmd_name(target), self.assembly_record(module, component))
 
             generated_target = "{0}/{1}.mod.o".format(
                 closure.MODULE_ROOT, module["name"]
@@ -354,30 +380,32 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 closure._cmd_name(final_target), self.final_record(module)
             )
 
-        smp = closure.MODULES[1]
-        aggregate_target = "{0}/{1}".format(
-            closure.MODULE_ROOT, smp["module_object"]
-        )
-        aggregate = " ".join(
-            (
-                "ld.lld",
-                "-m",
-                "elf_x86_64",
-                "-z",
-                "noexecstack",
-                "-r",
-                "-o",
-                aggregate_target,
-                "@{0}/{1}.mod".format(closure.MODULE_ROOT, smp["name"]),
+        for module in closure.MODULES:
+            if module["module_object"] == module["rust_object"]:
+                continue
+            aggregate_target = "{0}/{1}".format(
+                closure.MODULE_ROOT, module["module_object"]
             )
-        )
-        aggregate += " ; " + objtool(aggregate_target)
-        self.write_text(
-            closure._cmd_name(aggregate_target),
-            "savedcmd_{0} := {1}\n\n{0}: $(wildcard ./tools/objtool/objtool)\n".format(
-                aggregate_target, aggregate
-            ),
-        )
+            aggregate = " ".join(
+                (
+                    "ld.lld",
+                    "-m",
+                    "elf_x86_64",
+                    "-z",
+                    "noexecstack",
+                    "-r",
+                    "-o",
+                    aggregate_target,
+                    "@{0}/{1}.mod".format(closure.MODULE_ROOT, module["name"]),
+                )
+            )
+            aggregate += " ; " + objtool(aggregate_target)
+            self.write_text(
+                closure._cmd_name(aggregate_target),
+                "savedcmd_{0} := {1}\n\n{0}: $(wildcard ./tools/objtool/objtool)\n".format(
+                    aggregate_target, aggregate
+                ),
+            )
 
     def assert_rejected(self):
         with self.assertRaises(closure.LinkClosureError):
@@ -441,7 +469,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 included_inputs = []
 
                 def visit(relative):
-                    with open(os.path.join(native_root, relative), "r", encoding="utf-8") as stream:
+                    source_relative = staging.RUST_STAGE_ALIASES.get(relative, relative)
+                    with open(os.path.join(native_root, source_relative), "r", encoding="utf-8") as stream:
                         source = stream.read()
                     edges = re.findall(
                         r'(?m)^(?:#\[path\s*=\s*"([^"]+)"\]\s*\n)?'
@@ -490,7 +519,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
         )
         self.assertEqual(closure.SCHEMA_ID, value["schema_id"])
         self.assertEqual(list(closure.EXPECTED_RAW_RECORD_NAMES), value["raw_record_names"])
-        self.assertEqual(16, len(value["raw_records"]))
+        self.assertEqual(19, len(value["raw_records"]))
         self.assertEqual(
             {
                 "complete_external_build_input_closure": False,
@@ -527,6 +556,16 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             self.assertTrue(
                 all(path.endswith((".rs", ".S")) for path in module["source_dependencies"])
             )
+        mcctrl = next(item for item in value["modules"] if item["module"] == "mcctrl")
+        self.assertEqual([closure.MODULE_ROOT + "/" + item for item in
+                          ("mcctrl_rust.o", "m15_mmap_trace_gates.o", "m15_mm_write_warning.o")],
+                         mcctrl["raw_object_list"])
+        self.assertEqual(2, len(mcctrl["assembly_components"]))
+        self.assertTrue(all(item["actual_profile_and_emission_qualification"] is False
+                            for item in mcctrl["assembly_components"]))
+        self.assertEqual(["m15_mmap_trace_gates.S", "m15_mm_write_warning.S"],
+                         [item["path"] for item in value["assembly_source_closure"]])
+        self.assertTrue(all(item["stage_sha256"] for item in value["assembly_source_closure"]))
         closure.write_kbuild_link_closure(
             self.records, self.output, stage_lock_path=self.stage_lock_path
         )
@@ -1367,8 +1406,8 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
                 ast.parse(source, filename=path, feature_version=6)
             self.assertNotIn("from " + "pathlib import", source)
             self.assertNotIn(" | " + "None", source)
-        self.assertEqual(16, len(closure.EXPECTED_RAW_RECORD_NAMES))
-        self.assertEqual(13, len(closure.EXPECTED_CMD_NAMES))
+        self.assertEqual(19, len(closure.EXPECTED_RAW_RECORD_NAMES))
+        self.assertEqual(16, len(closure.EXPECTED_CMD_NAMES))
         self.assertEqual(3, len(closure.EXPECTED_MOD_NAMES))
 
 

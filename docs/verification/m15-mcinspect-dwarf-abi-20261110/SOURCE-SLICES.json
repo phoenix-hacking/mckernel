@@ -1,0 +1,102 @@
+{
+  "baseline": {
+    "source": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+    "source_sha256": "6168be9d060280ef993240b06cecb3b794888174a3aac412097541fb7fe98ab4",
+    "unit": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/baseline.rs",
+    "unit_sha256": "eecd15b0176eec83302173a94997826380f8df087eb45af491dc6c10b359868e",
+    "slices": [
+      {
+        "kind": "struct",
+        "name": "DwarfSig8",
+        "text": "#[cfg(mcinspect_full_body)]\n#[repr(C)]\nstruct DwarfSig8 {\n    signature: [u8; 8],\n}",
+        "sha256": "32597a4865184b476917c39a0b2967896d092f7dc8354d4f7fb594bf8aa55d5a"
+      },
+      {
+        "kind": "struct",
+        "name": "DwarfLoc",
+        "text": "#[cfg(mcinspect_full_body)]\n#[repr(C)]\nstruct DwarfLoc {\n    lr_atom: u8,\n    lr_number: u64,\n    lr_number2: u64,\n    lr_offset: u64,\n}",
+        "sha256": "01596a54ec84d9c199aa3806c4402a7379df6f7c203b9576e07d54549f30423b"
+      },
+      {
+        "kind": "struct",
+        "name": "DwarfLocdesc",
+        "text": "#[cfg(mcinspect_full_body)]\n#[repr(C)]\nstruct DwarfLocdesc {\n    ld_lopc: u64,\n    ld_hipc: u64,\n    ld_cents: u16,\n    ld_s: *mut DwarfLoc,\n    ld_from_loclist: u8,\n    ld_section_offset: u64,\n}",
+        "sha256": "f7363df574aa048caf7d7c9a4e623292c59013d2863c43cd0467859f34d6a51a"
+      },
+      {
+        "kind": "foreign_declaration",
+        "name": "dwarf_get_TAG_name",
+        "text": "    #[cfg(mcinspect_full_body)]\n    fn dwarf_get_TAG_name(value: c_int, out: *mut *const u8) -> c_int;",
+        "sha256": "c44a68ee0406999d41a09c1fcc31c9f5c43996f38b8f4669bbf47bcad068b2d5"
+      },
+      {
+        "kind": "foreign_declaration",
+        "name": "dwarf_next_cu_header_c",
+        "text": "    #[cfg(mcinspect_full_body)]\n    fn dwarf_next_cu_header_c(\n        dbg: *mut c_void,\n        is_info: c_int,\n        cu_length: *mut u64,\n        cu_version: *mut u16,\n        cu_abbrev_offset: *mut u64,\n        cu_pointer_size: *mut u16,\n        cu_offset_size: *mut u16,\n        cu_extension_size: *mut u16,\n        type_signature: *mut DwarfSig8,\n        type_offset: *mut u64,\n        cu_next_offset: *mut u64,\n        error: *mut *mut c_void,\n    ) -> c_int;",
+        "sha256": "79295992b59fa202b3a8c11775c03a4408133918c43ffcaa76994043760a3295"
+      },
+      {
+        "kind": "foreign_declaration",
+        "name": "dwarf_loclist_n",
+        "text": "    #[cfg(mcinspect_full_body)]\n    fn dwarf_loclist_n(\n        attr: *mut c_void,\n        locdescs: *mut *mut *mut DwarfLocdesc,\n        len: *mut i64,\n        error: *mut *mut c_void,\n    ) -> c_int;",
+        "sha256": "dd1a35aaebdb8028b35773cff92928d92e1744c7662fdcf868efed1885b53f02"
+      },
+      {
+        "kind": "actual_call_expression",
+        "name": "tag_promotion",
+        "text": "dwarf_get_TAG_name(tag as c_int, &mut tag_name)",
+        "sha256": "1f771f0c9dac8ceed378f605ccf45855af7ffd8064c5afb31aeaade8fac150ce"
+      }
+    ]
+  },
+  "candidate": {
+    "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/abi-next-1/two-line/candidate/executer/user/rust/mcinspect_helpers.rs",
+    "source_sha256": "e9a9a648035e71c430742ac3f505cc5f9cbaeadb344b4727792721682da5db88",
+    "unit": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-abi-tests-1/candidate.rs",
+    "unit_sha256": "921a789f0ab76e99ef246b6b48f5c13272f8b229f6729c26c3d1f3ff437cd47c",
+    "slices": [
+      {
+        "kind": "struct",
+        "name": "DwarfSig8",
+        "text": "#[cfg(mcinspect_full_body)]\n#[repr(C)]\nstruct DwarfSig8 {\n    signature: [u8; 8],\n}",
+        "sha256": "32597a4865184b476917c39a0b2967896d092f7dc8354d4f7fb594bf8aa55d5a"
+      },
+      {
+        "kind": "struct",
+        "name": "DwarfLoc",
+        "text": "#[cfg(mcinspect_full_body)]\n#[repr(C)]\nstruct DwarfLoc {\n    lr_atom: u8,\n    lr_number: u64,\n    lr_number2: u64,\n    lr_offset: u64,\n}",
+        "sha256": "01596a54ec84d9c199aa3806c4402a7379df6f7c203b9576e07d54549f30423b"
+      },
+      {
+        "kind": "struct",
+        "name": "DwarfLocdesc",
+        "text": "#[cfg(mcinspect_full_body)]\n#[repr(C)]\nstruct DwarfLocdesc {\n    ld_lopc: u64,\n    ld_hipc: u64,\n    ld_cents: u16,\n    ld_s: *mut DwarfLoc,\n    ld_from_loclist: u8,\n    ld_section_offset: u64,\n}",
+        "sha256": "f7363df574aa048caf7d7c9a4e623292c59013d2863c43cd0467859f34d6a51a"
+      },
+      {
+        "kind": "foreign_declaration",
+        "name": "dwarf_get_TAG_name",
+        "text": "    #[cfg(mcinspect_full_body)]\n    fn dwarf_get_TAG_name(value: core::ffi::c_uint, out: *mut *const u8) -> c_int;",
+        "sha256": "3e956950b28cbfcb59f58e6c06d421db4d6313b709b206494e072db9e9b91b2e"
+      },
+      {
+        "kind": "foreign_declaration",
+        "name": "dwarf_next_cu_header_c",
+        "text": "    #[cfg(mcinspect_full_body)]\n    fn dwarf_next_cu_header_c(\n        dbg: *mut c_void,\n        is_info: c_int,\n        cu_length: *mut u64,\n        cu_version: *mut u16,\n        cu_abbrev_offset: *mut u64,\n        cu_pointer_size: *mut u16,\n        cu_offset_size: *mut u16,\n        cu_extension_size: *mut u16,\n        type_signature: *mut DwarfSig8,\n        type_offset: *mut u64,\n        cu_next_offset: *mut u64,\n        error: *mut *mut c_void,\n    ) -> c_int;",
+        "sha256": "79295992b59fa202b3a8c11775c03a4408133918c43ffcaa76994043760a3295"
+      },
+      {
+        "kind": "foreign_declaration",
+        "name": "dwarf_loclist_n",
+        "text": "    #[cfg(mcinspect_full_body)]\n    fn dwarf_loclist_n(\n        attr: *mut c_void,\n        locdescs: *mut *mut *mut DwarfLocdesc,\n        len: *mut i64,\n        error: *mut *mut c_void,\n    ) -> c_int;",
+        "sha256": "dd1a35aaebdb8028b35773cff92928d92e1744c7662fdcf868efed1885b53f02"
+      },
+      {
+        "kind": "actual_call_expression",
+        "name": "tag_promotion",
+        "text": "dwarf_get_TAG_name(tag as core::ffi::c_uint, &mut tag_name)",
+        "sha256": "ef2ad08262bf03f9eab946429dcac185058f75a99859502bd2b56854c4dcf00b"
+      }
+    ]
+  }
+}

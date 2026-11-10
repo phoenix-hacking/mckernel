@@ -1,0 +1,145 @@
+{
+  "schema": "mckernel.sdk-python-execution-independent-review.v1",
+  "status": "GO_CORRECTED_SOURCE_FREE_PROBE_AND_CONDITIONAL_EXACT_THREE_SOURCE_TESTS_PENDING_FRESH_ROOT_ADMISSION",
+  "reviewer": "/root/public_abi_join_max independently reviews /root/p03_cutover_source_max source/execution-profile correction",
+  "frozen_prerequisite_request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/docker-ulimit-correction-1/PREREQUISITE-REQUEST.json",
+    "bytes": 28799,
+    "sha256": "7da393cccb095fcd16521505aff496b96f4c4e59262477dc4eb3913d942231d5"
+  },
+  "frozen_conditional_full_request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/docker-ulimit-correction-1/REQUEST.json",
+    "bytes": 33739,
+    "sha256": "e805d229679ad6cada90a5694f108ea0ccefbda034ec17fdcb6a3c5742449d1f"
+  },
+  "frozen_operation": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/docker-ulimit-correction-1/OPERATION.json",
+    "bytes": 13142,
+    "sha256": "350fb535fbec02dcfc3e6f3229bbde869dff5607f305cdc4defdd827f5ab99e8"
+  },
+  "prior_probe_source_review": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-review-max-1/PROBE-REVIEW.json",
+    "bytes": 3907,
+    "sha256": "b456d9a850201cfe2d1c53cbb6d40aa639f711aa6af2397e463df361abafd823"
+  },
+  "prior_probe_profile_disposition": "Old --ulimit as command is FAILED and must not rerun. Reuse only unchanged program/source/effect analysis; this successor binds the actual corrected CLI profile.",
+  "Docker_profile_delta": {
+    "source_only_exact_reverse_transform_verified": true,
+    "unsupported_pair_removed": [
+      "--ulimit",
+      "as=1073741824:1073741824"
+    ],
+    "entrypoint": "/usr/bin/bash",
+    "wrapper_after_image": [
+      "--noprofile",
+      "--norc",
+      "-e",
+      "-c",
+      "ulimit -v 1048576; exec \"$@\"",
+      "sdk-python-as-limit",
+      "/usr/bin/python3"
+    ],
+    "RLIMIT_AS_bytes": 1073741824,
+    "reasoning": "Bash ulimit -v uses1024byte units;1048576KiB=1073741824B. With no-H/-S both soft/hard limits are set. Bash-e exits on failure of the simple ulimit command before exec; it never continues with an unenforced limit. exec \"$@\" preserves each supplied Python argument exactly and replaces Bash, so Python and its subprocesses inherit the limit. The explicit harmless$0 sdk-python-as-limit is not part of$@. No eval, interpolation of payload, startup files, sourced host file, permission change or additional workload.",
+    "all_other_resource_image_mount_protocol_guards_literal_unchanged": true,
+    "no_container_RLIMIT_AS_inspect_claim": "AS is enforced by this fixed Bash builtin, not an unsupported Docker HostConfig ulimit entry. Root records actual immutable Config.Entrypoint/Cmd plus existing cgroup/ulimit/profile before start."
+  },
+  "probe_GO": {
+    "decision": "GO only correctedrequest7da393... after actualRootadmission",
+    "program": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/PREREQUISITE-PROBE.py",
+      "bytes": 4871,
+      "sha256": "7243770cddbe414e70014827c6df6e29c91360866e986a9bb17936b1cdc988af"
+    },
+    "same_inline_bytes": true,
+    "source_mounts": [],
+    "Python_PyYAML_pass_independent_of_BFD_metadata": true,
+    "BFDmissing_mismatch_never_ABI_pass": true,
+    "wall_seconds": 40
+  },
+  "conditional_tests_GO": {
+    "decision": "GO only after actualsameimage Python>=3.10/PyYAML prerequisitePASS, separate freshRootadmission and positive probe retirement; BFD result does not condition these independent source methods.",
+    "stage_manifest": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/STAGE.json",
+      "bytes": 13055,
+      "sha256": "5b142681f9f31d09780ecda4ff11f2ca5a994413e2c3e875466d2b5c4fdc6006"
+    },
+    "stage_exact_regular_files": 17,
+    "stage_no_extras_or_symlinks": true,
+    "all17_canonical_stage_bytes_and_recorded_SHA_match": true,
+    "stage0644_and_directory_traversal_for_unprivileged1000": true,
+    "stage_mounted_readonly_only_at": "/src",
+    "writable_host_mounts": [],
+    "canonical_six_source_postimages_preserved_exact_prior_GO": true,
+    "all_actual_validate_contract_repository_inputs_and_three_semantic_authorities_in_stage": true,
+    "same3selectors_as_failed3_9_request": [
+      "scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_frozen_legacy_oracle_and_shared_evidence_path_are_available",
+      "scripts.tests.test_native_rust_runtime_evidence.NativeRustRuntimeEvidenceTests.test_exact_build_workflow_step_hashes_match_source_and_contract",
+      "scripts.tests.test_native_rust_runtime_evidence.NativeRustRuntimeEvidenceTests.test_isolated_checker_normalized_self_digest_is_exact"
+    ],
+    "effects": "First method only workflowstrings. Second reads exact workflows/contract/helper/ASM/shell/config/source-lock data and launches the existing descriptor-bound Python config-fragment semantic worker; no shell/ASM/workflow execution, Git/network/compiler/native/device action. Third reads currentcheckerbytes and verifies its normalized selfdigest. Existing setUp/tearDown uses ordinary TemporaryDirectory under64MiB private/tmp.",
+    "isolated_worker": "Same current image sys.executable -I and exact staged file descriptors; original checker/self/semantic-authority identity checks and60s bound remain.",
+    "wall_seconds": 70,
+    "CPU_seconds": 45,
+    "pass_condition": "Exactly3methods execute with0failures/errors/skips; exit0, all actual Dockerclient/container/worker outcomes positively joined, noOOM and exactownedcontainer normally retired. This GO is not an observedPASS."
+  },
+  "resource_profile": {
+    "HOST_cpu": 7,
+    "jobs": 1,
+    "container_cpu_limit": 1,
+    "container_memory_bytes": 1073741824,
+    "container_swap_total_bytes": 1073741824,
+    "pids": 64,
+    "tmpfs_bytes": 67108864,
+    "AS_bytes": 1073741824,
+    "core_bytes": 0,
+    "FSIZE_bytes": 67108864,
+    "probe_CPU_seconds": 30,
+    "tests_CPU_seconds": 45,
+    "shared_HOST_jobs_max": 3,
+    "shared_HOST_total_bytes_all_controllers_workers": 4294967296,
+    "fresh_MemAvailable_minimum_bytes": 27917287424,
+    "retained_reservations_bytes": 19327352832,
+    "host_free_floor_bytes": 17179869184,
+    "scratch_free_floor_bytes": 12884901888,
+    "Root_fresh_measurement_and_actual_existing_lease_reconciliation_required": true,
+    "native_CPUs2to5_and12GiB_remain_separately_held": true,
+    "one_container_at_a_time_no_overlap_probe_and_tests": true,
+    "RLIMIT_AS_enforcement": "Exact fixed Bash ulimit-v1048576 then exec positional original Python; no unsupported Docker AS ulimit remains"
+  },
+  "Root_admission_and_ownership_conditions": [
+    "Match exact fresh requested name mck-sdk-python-prereq-20261110-c1; collision stops, never replaces.",
+    "Authenticate newly created64hexID, ownerlabel, immutableimage and all actual profile fields before start; Root captures actual clientbirth and all positive waits.",
+    "Require no other running container for this one shared image/operation owner; measure actual concurrent HOST consumers and retain aggregateCPU0/6/7 <=3jobs,4GiBTOTAL including controllers/workers.",
+    "Fresh26GiB available plus host16/scratch12GiB diskfloors. Native2-5/12GiB and retained18GiB reservations remain held.",
+    "Legacy exited/created UNKNOWN containers are neither a no-running failure nor a retirement permission; preserve all59historical owners/reservations and never remove/signal them.",
+    "Stop/retire only exact authenticated ownedID through existing operation-specific protocol on40s bound; remove only after proved exited+joined; UNKNOWN retains ownership/reservation.",
+    "No service/auth/spend/account/user hold bypass."
+  ],
+  "preserved_failure_evidence": {
+    "original_Python3_9": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-binding-source-1/correction-1/qualification-1/stderr",
+      "bytes": 1651,
+      "sha256": "fcb41f882b233d6b3bfcfbd717468b12f4ed86cf29affe58e4a079431d1e15ea"
+    },
+    "unsupported_Docker_AS": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/prerequisite-qualification-1/create.stderr",
+      "bytes": 117,
+      "sha256": "4d5c447005325495dba50a284a305187149554d6824bc5c8b14d06bf4018196f"
+    },
+    "unsupported_Docker_result": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sdk-python-execution-correction-1/prerequisite-qualification-1/RESULT.json",
+      "bytes": 8379,
+      "sha256": "3756048a928502f6e0b7c7715e95932834971347330996bbb4c2854046b24ab6"
+    },
+    "diagnostic": "invalid argument \"as=1073741824:1073741824\" for \"--ulimit\" flag: invalid ulimit type: as\nSee 'docker create --help'.",
+    "container_or_probe_created_by_failed_command": false,
+    "bounded_correction_rule": "One meaningful Dockerprofile correction supplied; preserve both failurefamilies. First actual successorfailure stops; additionalrepair requires focused owner/escalation and changedeligible input, never unchangedreplay."
+  },
+  "scope_limits": [
+    "No SUT/test/canonical/sourcepin/digest weakening. No optionalimage/CMake/package action/newtests.",
+    "No actualprobe/test/ABI/link/SDK/native/image/module/Cretirement or milestone acceptance is asserted.",
+    "Allgeneric/exec/equivalentfalse/provider/native/UNKNOWN/source/service/account/spendholds and originalM14-before-M15 order retained."
+  ],
+  "operations": "Only exact source/JSON/AST/current17stage bytes, selectedmethods/callees, qualified source/tool/failure receipt reads and private review write. No Docker/compiler/test/probe/native/credential commands run by reviewer."
+}

@@ -579,11 +579,12 @@ endif()
 set(LDUMP2MCDUMP_SRCS ldump2mcdump.c)
 if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 	if (MCKERNEL_RUNTIME_TOOL_RUSTC)
+		include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/ldump2-selected-bfd/Ldump2SelectedBfdLayout.cmake")
 		set(LDUMP2MCDUMP_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/ldump2mcdump_helpers.o")
 		add_custom_command(
 			OUTPUT "${LDUMP2MCDUMP_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${MCKERNEL_RUNTIME_TOOL_RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= "${LDUMP2_BFD_LAYOUT_ENV}" ${MCKERNEL_RUNTIME_TOOL_RUSTC}
 				--crate-name ldump2mcdump_helpers
 				--crate-type lib
 				--edition=2021
@@ -597,6 +598,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs"
 				"${MCKERNEL_RUNTIME_TOOL_RUSTC}"
+				${LDUMP2_BFD_LAYOUT_DEPENDS}
 			COMMENT "Building Rust ldump2mcdump helpers"
 			VERBATIM
 		)
@@ -616,7 +618,7 @@ if(EXECUTER_BFD_SET_SECTION_NEEDS_BFD)
 	target_compile_definitions(ldump2mcdump PRIVATE -DEXECUTER_BFD_SET_SECTION_NEEDS_BFD)
 endif()
 
-configure_file(vmcore2mckdump.in vmcore2mckdump @ONLY)
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/SelectRustVmcore2mckdump.cmake")
 
 configure_file(mcexec.1in mcexec.1 @ONLY)
 # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

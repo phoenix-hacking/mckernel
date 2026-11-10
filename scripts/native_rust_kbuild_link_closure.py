@@ -54,11 +54,12 @@ MODULES = (
     },
     {
         "name": "mcctrl",
-        "crate": "mcctrl",
-        "crate_root": "mcctrl.rs",
-        "rust_object": "mcctrl.o",
+        "crate": "mcctrl_rust",
+        "crate_root": "mcctrl_rust.rs",
+        "rust_object": "mcctrl_rust.o",
         "module_object": "mcctrl.o",
-        "objtool_on_rust_object": True,
+        "objtool_on_rust_object": False,
+        "assembly_objects": ("m15_mmap_trace_gates.o", "m15_mm_write_warning.o"),
     },
 )
 
@@ -75,7 +76,12 @@ EXPECTED_STAGED_FILES = (
     "application_pager.rs",
     "application_rpc.rs",
     "application_syscall.rs",
+    "current_fork_control.rs",
+    "current_fork_host.rs",
+    "current_fork_task_mm.rs",
     "device_registry.rs",
+    "exec_delivery.rs",
+    "exec_transfer_checked.rs",
     "ihk-compat-build-id.bin",
     "ihk.rs",
     "ihk_ioctl.rs",
@@ -83,9 +89,12 @@ EXPECTED_STAGED_FILES = (
     "ihk_smp_x86_64.rs",
     "ikc_master.rs",
     "ikc_queue.rs",
-    "mcctrl.rs",
+    "m15_mm_write_warning.S",
+    "m15_mmap_trace_gates.S",
     "mcctrl_exec.rs",
+    "mcctrl_mm_write.rs",
     "mcctrl_process.rs",
+    "mcctrl_rust.rs",
     "mcctrl_vm.rs",
     "os_registry.rs",
     "os_runtime.rs",
@@ -173,12 +182,14 @@ _PROJECT_DEPENDENCIES = {
         "abi/vdso.rs", "smp_vdso.rs", "sysfs_objects.rs", "sysfs_os.rs",
         "sysfs_tree.rs", "sysfs_setup.rs", "abi/sysfs.rs", "abi/sysfs_request.rs",
         "sysfs_rpc.rs", "sysfs_remote.rs", "abi/application.rs", "application_rpc.rs",
-        "application_syscall.rs", "application_image.rs", "smp_application.rs",
+        "application_syscall.rs", "application_image.rs", "exec_transfer_checked.rs",
+        "exec_delivery.rs", "smp_application.rs",
         "smp_application_syscall.rs", "smp_application_image.rs", "application_pager.rs",
         "smp_file_pager.rs", "zero_pages.rs", "smp_trampoline.S", "smp_startup_entry.S",
     ),
     "mcctrl": (
-        "mcctrl_exec.rs", "mcctrl_process.rs", "mcctrl_vm.rs", "user_string.rs",
+        "mcctrl_exec.rs", "mcctrl_process.rs", "current_fork_host.rs",
+        "mcctrl_vm.rs", "mcctrl_mm_write.rs", "user_string.rs",
         "application_image.rs", "abi/x86_64.rs", "abi/os_service.rs", "abi/application.rs",
     ),
 }
@@ -241,6 +252,13 @@ def _cmd_name(target):
     return ".{0}.cmd".format(target.rsplit("/", 1)[-1])
 
 
+MCCTRL_CHECK_CFG = ('cfg(mckernel_current_fork_adoption_opt_in)', 'cfg(MODULE)', 'cfg(m15_fixture)', 'cfg(CONFIG_X86_64, CONFIG_SMP, CONFIG_PER_VMA_LOCK, CONFIG_TRACING, CONFIG_MEMCG, CONFIG_HAVE_JUMP_LABEL_HACK, CONFIG_KCSAN, CONFIG_DEBUG_LOCK_ALLOC, CONFIG_DEBUG_VM, CONFIG_LOCKDEP, CONFIG_NOINSTR_VALIDATION, CONFIG_PREEMPT_RT, CONFIG_TRACEPOINTS, CONFIG_JUMP_LABEL, CONFIG_OBJTOOL, CONFIG_GENERIC_BUG, CONFIG_GENERIC_BUG_RELATIVE_POINTERS, CONFIG_DEBUG_BUGVERBOSE, CONFIG_BUG, values(none(), "y", "m", "n"))')
+
+
+def _module_components(module):
+    return (module["rust_object"],) + module.get("assembly_objects", ())
+
+
 EXPECTED_COMMAND_TARGETS = {}
 for _module in MODULES:
     _name = _module["name"]
@@ -252,6 +270,9 @@ for _module in MODULES:
         "{0}/{1}.mod.o".format(MODULE_ROOT, _name),
         "{0}/{1}.ko".format(MODULE_ROOT, _name),
     ):
+        EXPECTED_COMMAND_TARGETS[_cmd_name(_target)] = _target
+    for _assembly_object in _module.get("assembly_objects", ()):
+        _target = "{0}/{1}".format(MODULE_ROOT, _assembly_object)
         EXPECTED_COMMAND_TARGETS[_cmd_name(_target)] = _target
     if _module_object != _rust_object:
         _target = "{0}/{1}".format(MODULE_ROOT, _module_object)
@@ -864,6 +885,8 @@ def _validate_reference_surface(name, references, module):
     if name == _cmd_name(module["rust_object"]):
         known.update(_GENERATED_METADATA_DEPENDENCIES[module["name"]])
     for item in MODULES:
+        for obj in item.get("assembly_objects", ()):
+            known.update((obj, ".{0}.d".format(obj)))
         known.update(
             (
                 item["name"],
@@ -998,13 +1021,16 @@ def _parse_rust_record(name, target, command, text, module):
     tokens = _shell_tokens(
         compile_command,
         name + " rustc command",
-        allowed_quotes=(_RUST_QUOTED_ATTRIBUTE,),
+        allowed_quotes=(_RUST_QUOTED_ATTRIBUTE,) + tuple("'" + value + "'" for value in (MCCTRL_CHECK_CFG if module["name"] == "mcctrl" else ())),
     )
     expected_modfile = "RUST_MODFILE={0}/{1}".format(MODULE_ROOT, module["name"])
     if len(tokens) < 3 or tokens[0] != expected_modfile or tokens[1] != "rustc":
         raise LinkClosureError("{0} must be owned by bare rustc with the exact RUST_MODFILE".format(name))
     compiler_tokens = tokens[1:]
     _reject_driver_injection(compiler_tokens, name)
+    checks = [compiler_tokens[i + 1] for i, token in enumerate(compiler_tokens[:-1]) if token == "--check-cfg"]
+    if checks != (list(MCCTRL_CHECK_CFG) if module["name"] == "mcctrl" else []):
+        raise LinkClosureError("{0} current Kbuild check-cfg operands differ".format(name))
     _require_pair(compiler_tokens, "--crate-name", module["crate"], name)
     _require_pair(compiler_tokens, "--crate-type", "rlib", name)
     _require_pair(compiler_tokens, "--out-dir", MODULE_ROOT + "/", name)
@@ -1080,7 +1106,7 @@ def _parse_mod_generator(name, target, command, module):
     normalized = re.sub(r"[ \t]+", " ", command).strip()
     expected = (
         "printf '%s\\n' {0} | awk '!x[$$0]++ {{ print(\"{1}/\"$$0) }}' > {1}/{2}.mod"
-    ).format(module["rust_object"], MODULE_ROOT, module["name"])
+    ).format(" ".join(_module_components(module)), MODULE_ROOT, module["name"])
     if normalized != expected:
         raise LinkClosureError("{0} object-list generator differs".format(name))
     if target != "{0}/{1}.mod".format(MODULE_ROOT, module["name"]):
@@ -1088,9 +1114,10 @@ def _parse_mod_generator(name, target, command, module):
 
 
 def _parse_generated_mod(name, target, command, text, module, source_prefix):
-    basename = "{0}.mod".format(module["crate"])
+    modname = module["name"].replace("-", "_")
+    basename = "{0}.mod".format(modname)
     raw_basename = "-DKBUILD_BASENAME='\"{0}\"'".format(basename)
-    raw_modname = "-DKBUILD_MODNAME='\"{0}\"'".format(module["crate"])
+    raw_modname = "-DKBUILD_MODNAME='\"{0}\"'".format(modname)
     tokens = _shell_tokens(
         command,
         name + " clang command",
@@ -1108,8 +1135,8 @@ def _parse_generated_mod(name, target, command, text, module, source_prefix):
         "-D__KERNEL__",
         "-DMODULE",
         '-DKBUILD_BASENAME="{0}"'.format(basename),
-        '-DKBUILD_MODNAME="{0}"'.format(module["crate"]),
-        "-D__KBUILD_MODNAME={0}".format(module["crate"]),
+        '-DKBUILD_MODNAME="{0}"'.format(modname),
+        "-D__KBUILD_MODNAME={0}".format(modname),
         "-c",
     )
     for required in required_tokens:
@@ -1133,12 +1160,12 @@ def _parse_generated_mod(name, target, command, text, module, source_prefix):
         (
             "KBUILD_MODNAME",
             "-D",
-            '-DKBUILD_MODNAME="{0}"'.format(module["crate"]),
+            '-DKBUILD_MODNAME="{0}"'.format(modname),
         ),
         (
             "__KBUILD_MODNAME",
             "-D",
-            "-D__KBUILD_MODNAME={0}".format(module["crate"]),
+            "-D__KBUILD_MODNAME={0}".format(modname),
         ),
     ]
     actual_macro_operations = _protected_macro_operations(tokens, protected_macros)
@@ -1284,6 +1311,52 @@ def _parse_generated_mod(name, target, command, text, module, source_prefix):
         raise LinkClosureError("{0} generated source assignment differs".format(name))
 
 
+def _parse_assembly_record(name, target, command, text, module, source_prefix):
+    """Current two source-owned assembly components; unknown flags fail closed.
+
+    This records compiler input provenance only. Actual pinned compiler/objtool
+    and emitted table/return-thunk qualification remain separate obligations.
+    """
+    obj = target.rsplit("/", 1)[-1]
+    if obj not in module.get("assembly_objects", ()):
+        raise LinkClosureError("{0} is not a selected assembly component".format(name))
+    source = source_prefix + "/" + MODULE_ROOT + "/" + obj[:-2] + ".S"
+    pieces = _split_objtool(command, False, name)
+    basename = obj[:-2]
+    modname = module["name"].replace("-", "_")
+    quote_flags = ("-DKBUILD_BASENAME='\"" + basename + "\"'", "-DKBUILD_MODNAME='\"" + modname + "\"'")
+    tokens = _shell_tokens(pieces[0], name + " assembly command", allowed_quotes=tuple(flag for flag in quote_flags if flag in pieces[0]))
+    if not tokens or tokens[0] != "clang":
+        raise LinkClosureError("{0} assembly compiler must be bare clang".format(name))
+    _reject_driver_injection(tokens[1:], name)
+    for value in ("-nostdinc", "--target=x86_64-linux-gnu", "-D__KERNEL__", "-D__ASSEMBLY__", "-DMODULE", "-c"):
+        _require_once(tokens, value, name)
+    _require_pair(tokens, "-o", target, name)
+    if tokens[-1] != source or _source_assignment(text, target, name) != source:
+        raise LinkClosureError("{0} assembly source owner differs".format(name))
+    includes = [source_prefix + "/arch/x86/include", "./arch/x86/include/generated", source_prefix + "/include", "./include", source_prefix + "/arch/x86/include/uapi", "./arch/x86/include/generated/uapi", source_prefix + "/include/uapi", "./include/generated/uapi"]
+    if [token[2:] for token in tokens if token.startswith("-I")] != includes:
+        raise LinkClosureError("{0} assembly include closure differs".format(name))
+    forced = [source_prefix + "/include/linux/compiler-version.h", source_prefix + "/include/linux/kconfig.h"]
+    indices = [i for i, token in enumerate(tokens) if token == "-include"]
+    if any(i + 1 >= len(tokens) for i in indices) or [tokens[i + 1] for i in indices] != forced:
+        raise LinkClosureError("{0} assembly forced includes differ".format(name))
+    dependency_output = "-Wp,-MMD,{0}/.{1}.d".format(MODULE_ROOT, obj)
+    _require_once(tokens, dependency_output, name)
+    allowed = set(_CLANG_SAFE_FIXED_FLAGS) - {"-std=gnu11"}
+    allowed.update(["clang", source, target, "-include", dependency_output, "-D__KERNEL__", "-D__ASSEMBLY__", "-DMODULE", '-DKBUILD_BASENAME="{0}"'.format(basename), '-DKBUILD_MODNAME="{0}"'.format(modname), "-D__KBUILD_MODNAME=" + modname])
+    allowed.update("-I" + value for value in includes)
+    allowed.update(forced)
+    for token in tokens:
+        if token not in allowed:
+            raise LinkClosureError("{0} contains an unclassified assembly compiler token: {1}".format(name, token))
+    actual_project = set(_project_references(text, name))
+    expected_project = {obj, ".{0}.d".format(obj), obj[:-2] + ".S"}
+    if not actual_project <= expected_project:
+        raise LinkClosureError("{0} assembly record consumes another project owner".format(name))
+    return dict(object=target, source=obj[:-2] + ".S", compiler="clang", project_language="reviewed_assembly", actual_profile_and_emission_qualification=False)
+
+
 def _parse_aggregate(name, target, command, module):
     pieces = _split_objtool(command, True, name)
     link = _shell_tokens(pieces[0], name + " aggregate link")
@@ -1403,9 +1476,7 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
         mod_name = _cmd_name(mod_target)
         mod_command = _parse_saved_command(mod_name, mod_target, texts[mod_name])
         _parse_mod_generator(mod_name, mod_target, mod_command, module)
-        expected_response = "{0}/{1}\n".format(MODULE_ROOT, module["rust_object"]).encode(
-            "ascii"
-        )
+        expected_response = "".join("{0}/{1}\n".format(MODULE_ROOT, component) for component in _module_components(module)).encode("ascii")
         response_name = "{0}.mod".format(module["name"])
         if raw[response_name] != expected_response:
             raise LinkClosureError("{0} raw object-list response differs".format(response_name))
@@ -1423,6 +1494,13 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
             module,
             source_prefix,
         )
+
+        assembly_results = []
+        for component in module.get("assembly_objects", ()):
+            assembly_target = "{0}/{1}".format(MODULE_ROOT, component)
+            assembly_name = _cmd_name(assembly_target)
+            assembly_command = _parse_saved_command(assembly_name, assembly_target, texts[assembly_name])
+            assembly_results.append(_parse_assembly_record(assembly_name, assembly_target, assembly_command, texts[assembly_name], module, source_prefix))
 
         if module["module_object"] != module["rust_object"]:
             aggregate_target = "{0}/{1}".format(MODULE_ROOT, module["module_object"])
@@ -1444,7 +1522,7 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
             mod_name,
             generated_name,
             final_name,
-        ) + (
+        ) + tuple(_cmd_name("{0}/{1}".format(MODULE_ROOT, obj)) for obj in module.get("assembly_objects", ())) + (
             (_cmd_name("{0}/{1}".format(MODULE_ROOT, module["module_object"])),)
             if module["module_object"] != module["rust_object"]
             else ()
@@ -1463,7 +1541,8 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
                 ),
                 "module": module["name"],
                 "module_object": "{0}/{1}".format(MODULE_ROOT, module["module_object"]),
-                "raw_object_list": ["{0}/{1}".format(MODULE_ROOT, module["rust_object"])],
+                "raw_object_list": ["{0}/{1}".format(MODULE_ROOT, obj) for obj in _module_components(module)],
+                "assembly_components": assembly_results,
                 "rust_object": "{0}/{1}".format(MODULE_ROOT, module["rust_object"]),
                 "source_dependencies": sources,
             }
@@ -1522,6 +1601,7 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
             "linker": "ld.lld",
             "object_postprocessor": "./tools/objtool/objtool",
             "project_source": "rustc",
+            "project_assembly": "clang (strict current-component input provenance; actual profile/emission qualification separate)",
         },
         "generated_metadata_inputs": [
             {"path": path, "stage_sha256": stage_digests[path]}
@@ -1546,6 +1626,7 @@ def validate_kbuild_link_closure(records_dir, stage_lock_path=None):
             "kernel headers, generated kernel metadata, libraries, and toolchain binaries "
             "remain outside this closure"
         ),
+        "assembly_source_closure": [{"path": obj[:-2] + ".S", "stage_sha256": stage_digests[obj[:-2] + ".S"]} for module in MODULES for obj in module.get("assembly_objects", ())],
         "stage_lock": stage_binding,
     }
 

@@ -1,0 +1,151 @@
+{
+  "status": "PASS",
+  "started_at": "2026-11-10T09:08:32.986275+00:00",
+  "commands": [
+    {
+      "name": "retained-copy",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cp",
+        "-a",
+        "--",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/source"
+      ],
+      "exit": 0,
+      "wait_joined": true,
+      "expected_boundary": "exit0"
+    },
+    {
+      "name": "retained-configure",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/source",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/build",
+        "-DP04_SELECTOR_FILE=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/retained/SelectRustVmcore2mckdump.cmake",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make"
+      ],
+      "exit": 0,
+      "wait_joined": true,
+      "expected_boundary": "exit0"
+    },
+    {
+      "name": "retained-build",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "--build",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/retained/build",
+        "--target",
+        "vmcore2mckdump_rust",
+        "--parallel",
+        "1"
+      ],
+      "exit": 2,
+      "wait_joined": true,
+      "expected_boundary": "gate remains stale; only TEST_ONLY nonexecuting build guard is reached"
+    },
+    {
+      "name": "candidate-copy",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cp",
+        "-a",
+        "--",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/qualification/gate-project",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/source"
+      ],
+      "exit": 0,
+      "wait_joined": true,
+      "expected_boundary": "exit0"
+    },
+    {
+      "name": "candidate-configure",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/source",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/build",
+        "-DP04_SELECTOR_FILE=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/source/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make"
+      ],
+      "exit": 0,
+      "wait_joined": true,
+      "expected_boundary": "exit0"
+    },
+    {
+      "name": "candidate-build",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "--build",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-converter-current-source-max-1/output/configure-invalidation/candidate/build",
+        "--target",
+        "vmcore2mckdump_rust",
+        "--parallel",
+        "1"
+      ],
+      "exit": 2,
+      "wait_joined": true,
+      "expected_boundary": "actual CMake reconfigure reruns hash gate and refuses changed source before TEST_ONLY build guard"
+    }
+  ],
+  "finished_at": "2026-11-10T09:08:33.051454+00:00",
+  "retained_stale_build_guard_reached": true,
+  "candidate_regenerated_hash_gate_refused_before_guard": true,
+  "compiler_calls": 0,
+  "all_direct_waits_joined": true,
+  "CPU0_released": true,
+  "canonical_reviewed_source_integrated": true
+}

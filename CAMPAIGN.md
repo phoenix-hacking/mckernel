@@ -1,71 +1,102 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T07:38Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T09:13:49.438016+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE original M15 integration work under the same Root and live060029 run.**
-The new source-backed original-acceptance audit (source361963..., clarified65cd...)
-corrects our unsupported requirement for externally authored inventories/module
-names/SDK recipes. Deriving public contracts, implementation/provider closure,
-selected Kbuild identities and reconstructing pinned dependencies is our conversion
-and qualification work. Original Rust implementation, focused behavior/ABI,
-production selection/link ownership and applicable matching native proof remain
-mandatory. Existing C functionality and necessary unmodified platform dependencies
-are preserved. The prior blanket source/binding impasse below is superseded for
-these independent eligible lanes; genuine held scopes are not released.
+**ACTIVE original closure engineering under the same Root and live060029 run.**
+The source-derived inventory/ABI/module/SDK work is our conversion responsibility.
+Existing passing slices stay qualified at their actual scopes; original M14
+acceptance still precedes M15. No source/native/UNKNOWN hold is released.
 
-**New functional result:** the installed public `ihk/affinity.h` CPU_EQUAL macro
-used undefined identical `__bits` operands. The real canonical-header consumer
-failed compilation before correction. The reviewed one-line change compares its
-original const input arrays; the corrected canonical consumer compiles without
-warnings and passes14 valid full/prefix/equal/different cases. All3 direct waits
-joined and CPU7 released. Existing52 public signature/layout and70function/6data
-provider/link results are reused without library/Rust rebuild. IHK successor
-8d288b8bd81b50cc3a3f814d949b89bf416a6ec7 changes only this header; its incremental
-bundle follows retained8eb8. Evidence is
-`docs/verification/m15-affinity-public-header-20261110/RESULT.json`.
-This closes that concrete header defect, not the complete I03 or M15 gate.
+**Actual functional results since the07:38 checkpoint:**
 
-The independently reviewed ledger wording correction removes unsupported external-
-supplier prerequisites in18 completion statements and34 open M15 row methods.
-Scores, weights, denominators, all accepted checks, dependencies and actual
-behavior/build/link/deployed/native/restoration requirements are unchanged.
-Existing JSON/CSV mirrors stay synchronized. No new test quota or acceptance gain.
+- Public IHK affinity defect remains fixed/qualified: actual shipped-header
+  baseline failed compilation; correction passes14 valid equality/prefix checks.
+  Published IHK8d288b8 and retained70function/6data/public52 proofs are reused.
+- M15-I02 mcctrl now has its actual Rust/two-ASM composite validator and three
+  additional command records. Baseline rejects the current graph; corrected
+  graph/strict ownership/option cases and two changed existing happy-path/CLI
+  fixtures pass. Initial quote-expectation failure and narrow correction remain.
+- M15-I03 libdwarf TAG signedness is corrected in the selected Rust consumer.
+  Actual C header/layout probe provides41 facts; Rust baseline fails TYPE and
+  candidate agrees. Full current mcinspect/provider linking is next, not assumed
+  from that type witness. HostBFD2.34/glibc2.31 do not match the retained2.41 ABI.
+- M15-P03 actual Rust ELF compile/link/readback, six parser cases and a controlled
+  child PTY dialogue/argv/exit/cleanup pass. Five serial selector/private-install
+  commands also pass: OFF exact Expect template, ON exact a8529138 Rust ELF,
+  unchanged basename and0755 mode, exact compiler/generated-source dependencies
+  and one named-target/install owner. The minimal production selector/source
+  patch is integrated with defaultOFF. Full top-level/defaultRust/real Eclair/
+  kernel/lifecycle/deployed/native parity remains open.
+- M15-P04's corrected driver actually passes22 controlled CLI/PTY cases with30
+  joined owned records, no residuals/UNKNOWN, peak child RSS143700KiB. The original
+  rejected driver and two scoped predicate/partial-receipt corrections remain.
+  Converter/native/real-dump and whole-session lifecycle qualification remain open.
+- Exact Rocky kernel SRPM acquisition passes:159328372bytes, SHA2bfeda65bd9bdd4b
+  86650074c81e061c37822b80317ac0d4f5aacc89c85589cb. The current-IHK8d288 source/
+  workflow/contract successor is independently reviewed and integrated, preserving
+  historical3114 overlay identity. All3 focused methods nowPASS using actual
+  native46d Python3.12.14/PyYAML6.0.1. The initial3.9 import failure and unsupported
+  Docker AS flag are retained with the bounded execution correction. Exact3SRPM
+  assets/configseeds pass unchanged pins; Root corrected its readback assets/
+  prefix after the single successful payload. Ownedterminalcontainerremoved;
+  all legacyexited/createdcontainers and UNKNOWN reservations preserved. CMake
+  is unnecessary for this Linux-module route.
 
-| Original check / next actual deliverable | Current owner and proof |
+Raw proof is in docs/verification/m15-affinity-public-header-20261110,
+m15-mcctrl-composite-qualification-20261110, m15-mcinspect-dwarf-abi-20261110,
+m15-p03-host-producer-20261110 and m15-p03-runtime-selection-20261110.
+P04/SDK/extraction private results are retained under
+/home/holden/mckernel-work/m15-original-integration-20261110T0708Z and will join
+this normal coherent source/results checkpoint. Source-reviewed code alone,
+HOST fixtures, tool presence and source acquisition give no original gate credit.
+P01/P02 nondefaultSBINDIR baseline fails101/candidatepasses0;8controlledcases
+pass andboth actualRustmainslink withoutNativeexecution. Theirminimalcurrent
+selector/source is integrated. P04 exactconverter/layout/wrapper selection and
+CMAKE_CONFIGURE_DEPENDS fix are integrated; actual retained/candidate changed-
+source regression proves candidateSHArejectionbeforeanyguard/compiler.
+No new full image, module/native proof, accepted-file delta or C retirement.
+
+| Next actual original prerequisite / consumer | Owner and smallest completion proof |
 | --- | --- |
-| M15-I03-complete-ABI / I01 selected-header ownership | A source/E independent consumer; Root14checksPASS and qualified header integration. Continue complete delivered header/provider joins from actual recipes, not an external inventory request |
-| M15-I02 bindings/module ownership/ABI provenance | B actual Kbuild/stage mapping identifies ihk, ihk-smp-x86_64, mcctrl and current Rust/two-ASM mcctrl composite. E source GO; F freezes4 focused validator/collector cases and truthful local-Git scope. Root runs baseline/candidate onCPU7 after final execution GO; actual SDK ASM/fixdep/modpost/current .ko proof remains engineering TODO |
-| M15-P03 and complete-runtime I01 | D recovered exact retained Rust source/default-OFF selector and real installed HOST1.95 std/link profile. A reviews its CPU6 CMake configure/named-target compile/ELF-readback. No program/Eclair/main/native action. P01/P02/P04 source/default/functional work remains; P05 existing Rust default and23cases stay reused |
+| M14-I02/M15-I02 pinned Linux source/config and current three-module consumers | SDK source owner + independent MAX reviewer; extraction3asset/configpinsPASS/ownedcontainerremoved. Next exactLinuxunpack/orderedpatches/67projectstagefiles in private135inputsource snapshot from this checkpoint; then compiler/config/generatedbindings/modpost/current3modulequalification |
+| M15-I03 changed mcinspect complete public ABI/provider join | Public ABI MAX owner + separate review; recover exact BFD2.41/header/accessor/glibc-compatible provider inputs from a real bound profile, build current diagnostic target and read back real linked ownership; reuse affinity14/typed70+6/public52/libdwarf41 proof |
+| M15-I01 complete runtime including originalP01-P05 | P01/P02 configuredSBINDIR fix/eightcases/twonamedELFsPASS; P04sixpathsource+changedconverterconfigureguardPASS and22casesreused. Next genuineBFD2.41/CMake/libdwarfprovider builds and fullcurrentselecteddefault/lifecycle parity; P05prior23casesstayreused |
 
-The actual baseline remains M14=51.48%, M15=50.97%,156 counted checks/73verified,
-38/45open; source/qualification progress is not automatically a completed counted
-leaf. EACH>=75% by08:00 November10 America/Los_Angeles (16:00Z) remains at risk,
-not a guarantee or stop. Original M14 acceptance precedes M15. All31groups and
-83open check scopes remain in the existing ledger; integration requirements and
-original five runtime programs are not omitted. Each actual percentage report is
-mirrored once to existing GitHub PR3 under the user's explicit publishing request;
-no reporting subsystem or loopback instruction is added.
+Verified checklist remains M14=51.48%, M15=50.97%,156checks/73verified,38/45open;
+all criteria/weights/denominators/accepted scopes are unchanged. EACH>=75% by
+08:00 November10 America/Los_Angeles (16:00Z) remains at risk, not a guarantee or
+stop. Post GitHub PR3 progress ONLY when a verified percentage changes from the
+last published pair51.48/50.97; do not post unchanged fixes/builds or acknowledgments.
 
-True constraints still bind: original generic/exec policy hold and equivalent/
-replay=false; exact12 remaining source/provider/ABI/ownership exclusions, perf/
-XPMEM/credential-cohort scope, native UNKNOWN owners/reservations/leases/current-
-free and actual hardware/operation admission. No old held full graph, dummy passing
-gate, module load, boot, valid native dump, MMIO/MSR or native runtime is executed.
-Actual image/module/cohort/lifecycle proof is still required; no particular Python
-custody implementation is an extra original acceptance condition.
+**Single full-image critical-path blocker:** no admissible universal generic/
+exec provider cohort under HOLD-GENERIC/replayfalse/equivalentfalse. The original
+hold authority retains exact scoped disposition; Root owns integration. The12
+remaining syscall/wait/kill/provider contracts and native UNKNOWN owners/leases/
+reservations/current-free remain binding. This does not block the independent
+userspace and Linux-module dependency engineering above. No vague externally
+supplied inventory/SDK requirement is reinstated. No held compute graph, module
+load, boot, MMIO/MSR, valid native dump or dummy passing gate is executed.
 
-The foreground restored same-goal active state normally at07:10:11Z on the accepted
-new input; no goal, objective, budget, server or launch reset. Fresh07:09 allowance
-observation49%used/51%remaining, no hold, same finite credit-run/accounting. Included
-first then existing authorized credits, no purchases/API/model fallback. Guardian/
-mailbox and requested20-minute functional assistance remain running. Actual phase
-stays6 direct Sol/HIGH owners, RootSol/MAX, depth1, CPUs0/6/7,max3 light jobs,4GiB
-TOTAL including overhead/fresh26GiB and disk floors. Optional16-agent/shared-pool/
-handoff infrastructure remains deferred. Root alone composes source/index/publish;
-private sources/tests/reviews are disjoint and changed payloads take priority.
+Current allowance readback08:46:53%used/47%remaining, no stop/credit error; same
+finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa. Included first then authorized
+existing credits; no purchase/API/account/model fallback or accounting reset.
+Actual six current source/review routes read back gpt-6.1-sol/MAX, never and
+full-access; Root staysSol/MAX/depth1, one source/index/publisher/image owner.
+Current HOST phase CPUs0/6/7,max3aggregate light jobs,4GiB TOTAL including overhead,
+fresh26GiB and host16/scratch12GiB disk floors. Native2-5/12GiB and all UNKNOWN
+reservations remain separately held. Optional16-agent/shared-pool/handoff work
+stays deferred. Foreground20-minute original-closure assistance and guardian/
+mailbox monitoring remain active; no healthy owner is restarted.
+
+Next15-minute deliverable: freeze this cleanownedsourcecheckpoint into the
+reviewed narrowLinuxsource-stagepacket, then execute pinnedtreeunpack/ordered
+patches/exactmodule-stage verification. Inparallel acquire exactmissingBFD2.41
+andCMake3.31.8 for the genuine mcinspect/libdwarf/converter consumers; no duplicate
+image/toolprobes, green suite or percentage audit. Qualified fixes/results are
+published together; full original gates and score deltas remainunproved.
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)
 

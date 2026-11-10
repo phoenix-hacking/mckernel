@@ -1,0 +1,29 @@
+{
+  "decision": "SOURCE_GO_TEST_PACKET_REVIEW_PENDING",
+  "patch_sha256": "2ce0c1e38e827f8faedbea6fe4d0bb852d2ca9d7fbf789ea5821ca064cee9529",
+  "source_proof_sha256": "d4e9d842da884dd89b37bb8f377ba123d13de9baa6c8c7f9c115de3ea3e9b4cf",
+  "contract_sha256": "d668206bd60f07716bc14f8f73106ae92f75690601f0cd4318f52e874e27b034",
+  "reviewed_candidates": {
+    "scripts/native_rust_kbuild_link_closure.py": {
+      "baseline": "03425657bfcf8bae4de25e8a95b8af6d753304f9e6ce2014b5ecb7279226294e",
+      "candidate": "0a9cf2f90d44293c3e7195cf1562b9a4fd7343c72059dee9de2aa0a2611970d3"
+    },
+    ".github/workflows/native-rust-host-modules-exact-build.yml": {
+      "baseline": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629",
+      "candidate": "a60c8468c151a8598997d1ba9e8f3c3693ecf1785866e99e7edbc0dc75c4add6"
+    }
+  },
+  "findings": [
+    "Actual Kbuild defines mcctrl composite from mcctrl_rust.o,m15_mmap_trace_gates.o,m15_mm_write_warning.o; staged names and required check-cfg operands agree.",
+    "Exact raw record set includes all three component .cmd records plus aggregate .cmd; raw .mod members and generator must equal the ordered three components.",
+    "Aggregate/final linker roots remain exact; generated .mod metadata identifies normalized module name, independent of Rust crate name.",
+    "New ASM parser requires source-owned selected .S, exact target/source assignment, include closure, forced includes and dependency output; only classified finite flags and declared project references accepted. Unknown flags/owners/records fail.",
+    "Workflow adds precisely the three missing component records and requires each real non-symlink before copying."
+  ],
+  "limits": [
+    "Offline source/fixture qualification only. Actual pinned assembler/objtool emission and actual Rust CONFIG/fixdep dependencies still require reconciliation by our qualification work.",
+    "No actual current .ko/modpost/kernel/config/custody/native acceptance, old cohort reuse only exact historical scope.",
+    "No source imports, test/parser/module/compiler/workflow/native execution in this review."
+  ],
+  "test_review": "Awaiting separate F frozen test identity/selectors and offline resource request."
+}

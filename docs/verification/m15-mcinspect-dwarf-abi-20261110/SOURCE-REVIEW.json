@@ -1,0 +1,37 @@
+{
+  "status": "INDEPENDENT_SOURCE_GO_TWO_LINE_TYPED_TAG_CORRECTION_TESTS_UNEXECUTED",
+  "original_check": "M15-I03-complete-ABI",
+  "candidate": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/abi-next-1/two-line/candidate/executer/user/rust/mcinspect_helpers.rs",
+    "sha256": "e9a9a648035e71c430742ac3f505cc5f9cbaeadb344b4727792721682da5db88",
+    "bytes": 100940
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+    "sha256": "6168be9d060280ef993240b06cecb3b794888174a3aac412097541fb7fe98ab4",
+    "bytes": 100916
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/abi-next-1/two-line/MCINSPECT-DWARF-TAG.PRIVATE.patch",
+    "sha256": "a80fc222720a048543d4c2239c066aed9e06f4af1583f4ed64dde858b70c84c1",
+    "bytes": 796
+  },
+  "actual_header": {
+    "path": "/home/holden/mckernel/executer/user/lib/libdwarf/libdwarf/libdwarf/libdwarf.h.in",
+    "sha256": "727cd79fecf8f9b469eb20fd0d1cf4bd3102b1d96a77b3320a99d323763f527c",
+    "bytes": 171097
+  },
+  "generation": {
+    "source": {
+      "path": "/home/holden/mckernel/executer/user/lib/libdwarf/CMakeLists.txt",
+      "sha256": "17760833ef598cc7f6add3bd66f8fd0cd6c266b17e977680105e9671da2c4599",
+      "bytes": 4975
+    },
+    "line": 104,
+    "operation": "configure_file(libdwarf/libdwarf/libdwarf.h.in libdwarf.h COPYONLY)"
+  },
+  "finding": "Actual header unsigned int parameter matches core::ffi::c_uint. Both declaration and actual u16-tag promotion corrected; same validu16 machinebits, no runtime crash/behavior failure claimed.",
+  "layout_review": "Actual repr(C) DwarfSig8/Loc/Locdesc slices map to actual public C structures. Size/alignment/offset/field-width facts are derived by actual Cheader probe at execution, never hardcoded expected layouts or handbuilt C mirrors.",
+  "prototype_review": "Actual TAG, CUheader_c and loclist_n public prototypes are checked via Cheader typed compatibility plus source-extracted Rust declaration function-pointer witnesses. Struct signatures remain original; char[8]/u8[8] checks address layout only, not char signed-value equivalence.",
+  "scope": "Finite typedABI+layout qualification only; reuse retained realprovider/fulltool/BFD72/public52 receipts without rebuilding or rerunning. No bundledlibdwarf/project function called by probe, no tools/device/native."
+}

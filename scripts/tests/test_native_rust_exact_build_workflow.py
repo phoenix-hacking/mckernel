@@ -2366,7 +2366,7 @@ exec {modinfo_fd}<&-
         self.assertIn("submodules: recursive", self.workflow)
         self.assertIn(
             'test "$(/usr/bin/git -C ihk rev-parse HEAD)" = '
-            '"3114d9e7101ad52030eb3effa849a5c108972a1f"',
+            '"8d288b8bd81b50cc3a3f814d949b89bf416a6ec7"',
             self.workflow,
         )
         self.assertGreaterEqual(

@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.source-extraction.fresh-reconciliation-delta-approval.v1",
+  "at": "2026-11-10T09:00:57.625686+00:00",
+  "decision": "GO_PRECISE_SEPARATE_HOST_ADMISSION_AFTER_P01_P02_CPU6_JOIN_AND_ROOT_FRESH_GRANT",
+  "owner": "/root/source_acquisition_review_max; direct same-Root; no recursion",
+  "scope": "Admission predicate delta only; reuse original extraction source/execution GO and independent focused review. No Docker/payload/process-control/test/compiler command, old-container mutation or resource release by this reviewer.",
+  "bindings": {
+    "original_request_sha256": "ab9c51bec1790ee57682f312ea387f17b8a6f45d6e903831a6ec04aedf21d7b9",
+    "original_source_GO": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/source-extraction-review-max-1/REVIEW.json",
+      "sha256": "2ba8af1d35e3285657afc36a4be6da175802953c06635290647195147f9d8b42"
+    },
+    "reused_independent_focused_review": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/source-extraction-admission-review-max-1/REVIEW.json",
+      "sha256": "62dbc70f833ee62be43afcf939034b3e6cd82d5332d8e673601f95f0ad22fc7d"
+    },
+    "fresh_Root_reconciliation": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-extraction-1/reconciliation-1/RECONCILIATION.json",
+      "sha256": "fadb5f926242ce0abe7b33d7822691f57e536978f11f3ee10a014cf7e16ead25",
+      "captured_at": "2026-11-10T08:58:49.263399+00:00"
+    },
+    "exact_created_inspect": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-extraction-1/reconciliation-1/legacy-created-inspect.json",
+      "sha256": "a9a1b92ab85fec9b241da687fd4949bc34300f6be61b91127152e9cdefb35010"
+    }
+  },
+  "actual_facts": {
+    "old_container_ID": "ef25c02fc111c3174aaab67d9fc3eac8a5be7743adaf05e83a309d8336b14d68",
+    "old_name": "/current290-build-only-0b9c44bcab064992b16ff143fb626e4e",
+    "old_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "old_owner": {
+      "mckernel.owner": "c56c894429a44fd19710ae638df0c5f3"
+    },
+    "old_state": {
+      "Status": "created",
+      "Pid": 0,
+      "Running": false,
+      "Paused": false,
+      "Restarting": false
+    },
+    "old_CPU_set": "2-5",
+    "old_memory_bytes": 12884901888,
+    "old_memory_plus_swap_bytes": 12884901888,
+    "fresh_running_container_count": 0,
+    "exact_new_name_collision_count": 0,
+    "exact_new_name": "mckernel-source-extraction-20261110-0708-1",
+    "all_three_readonly_clients": "Exit0, positive recordedPID/starttime, directwaitjoined andstreamsclosed; no state-changing Docker command in this reconciliation."
+  },
+  "admission_delta": {
+    "precise_predicate": "Retained exited/created rows may remain. Neither an empty dockerps--all result nor allState==exited is required. The fresh exact old ef25 row is a different image/job/owner onCPUs2-5; its write/source ancestry is disjoint from the extraction binds per the reused focused review. Source image46d and its separate writableoutput are not that old owner.",
+    "new_slice": "Only new source extraction image46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94; CPU6/one lightjob/512MiB includingtmpfs,64tasks, no swap, inside existing HOST4GiB/max3jobs/CPUs0,6,7. This is not an additive memory grant or another native/heavy owner.",
+    "known_inflight_owner": "Root reports P01/P02 CPU6/AS2GiB serialHOSTtests in flight. Root must positively join that operation and account/release only its actual HOST slice before extraction usesCPU6. This review does not claim that join has occurred.",
+    "fresh_grant": "At actual create/start Root rechecks service/account/credit and shared job/RAM/disk/lease headroom; MemAvailable>=26GiB; retain host16GiB/scratch12GiB plus192MiBoutput/captures and greater inherited floors. Preserve prior18GiB reservations and native2-5/12GiB exactly.",
+    "new_ownership": "Root alone issues the unchanged create after exact newname absence and empty real1000:1000mode0700output/no-symlink-parent/disjointcapture checks. Capture the NEW immutableID and validate name->ID/image/profile/mounts before start; any collision/possiblylive overlap stops without controlling the other owner.",
+    "new_lifecycle": "Original reviewed limits and Root-confirmed immutable-ID180s timeout/stop/kill/join/terminalinspect remain required. Client-onlytimeout is insufficient. Root may remove only the newly proved-owned terminal extraction container after captures; uncertain outcome stays UNKNOWN/reserved."
+  },
+  "preserved": "ALL oldcontainers including ef25 and58exited records; every old lease/owner,18GiB reservation,native2-5/12GiB,scratch21 and source/currentfree/cleanup UNKNOWN outcome. No old start/stop/kill/remove/rename/relabel/reallocation is required or authorized. CREATED/Pid0 and none-running are observations, not retirement,currentfree or release proof. Both prior failed local admission-guard receipts remain intact; no payload has run under those failures.",
+  "no_source_or_acceptance_change": "Original exact3SRPMmember/config-only source GO is reused unchanged. No acquisition rerun, compiler,oldheldgraph,configuration/native action or generic/exec/replay/equivalent hold release; zero original acceptance,percentage orCretirement.",
+  "next_action": "Root joins P01/P02 CPU6, obtains the actual fresh shared grant and creates/starts only the exact reviewed new extraction container; preserve all retained old state.",
+  "reviewer_payload_calls": 0,
+  "old_container_mutations": 0,
+  "resource_releases": 0
+}

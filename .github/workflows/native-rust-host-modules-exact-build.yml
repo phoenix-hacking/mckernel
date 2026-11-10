@@ -418,7 +418,7 @@ jobs:
           unset GITHUB_ENV GITHUB_PATH
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
-          test "$(/usr/bin/git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
+          test "$(/usr/bin/git -C ihk rev-parse HEAD)" = "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7"
           /usr/bin/python3 -E -s scripts/linux_api_exact_probe.py \
             --repo "$GITHUB_WORKSPACE" check-contract
           /usr/bin/python3 -E -s scripts/x86_64_shared_abi.py \
@@ -1530,6 +1530,9 @@ jobs:
             .mcctrl.mod.cmd
             .mcctrl.mod.o.cmd
             .mcctrl.o.cmd
+            .mcctrl_rust.o.cmd
+            .m15_mmap_trace_gates.o.cmd
+            .m15_mm_write_warning.o.cmd
           )
           mod_records=(ihk-smp-x86_64.mod ihk.mod mcctrl.mod)
           for record in "${cmd_records[@]}" "${mod_records[@]}"; do

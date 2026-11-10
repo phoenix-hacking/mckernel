@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "started_at": "2026-11-10T08:42:50.019017+00:00",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--fsize=67108864:67108864",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification/fixture/run_fixture.py",
+    "--execute",
+    "--rustc",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+  ],
+  "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-tests-max-1/qualification",
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C",
+    "LANG": "C",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+    "MAKEFLAGS": "-j1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "finished_at": "2026-11-10T08:42:52.655729+00:00",
+  "cases": 22,
+  "owned_records": 30,
+  "all_direct_waits_joined": true,
+  "no_residuals_or_UNKNOWN": true,
+  "CPU0_released": true,
+  "peak_children_rss_kib": 143700,
+  "summary_sha256": "bb40ccab2a2fded9ee15dbc955185153e4780daec66c5ff0820e8f9f5a8671c2",
+  "ownership_sha256": "f67cbe7fdca8af1e37ffa64bd4856cae55a08208111f4b67411a9b38d0547b0c",
+  "real_dump_converter_native_or_original_acceptance": false
+}

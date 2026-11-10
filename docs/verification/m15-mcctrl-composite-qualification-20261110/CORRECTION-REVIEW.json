@@ -1,0 +1,82 @@
+{
+  "decision": "GO_ONE_BOUNDED_QUOTE_CORRECTION_RETRY_PENDING_ROOT_FRESH_ADMISSION",
+  "request": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/REQUEST.json",
+  "request_sha256": "6e2b69873be62cbb3b6cd51966e305f41cadc5c5ec68fa4994e5346f9e23f491",
+  "source_correction_review_sha256": "5a56609cb6bc6d86b1fb88372d1298b3ba7a36b9476e8bca347cf80f2f3c3d59",
+  "candidate_sha256": "dcf60a94f46a8312cf60a67cba0a28d3dc27654083d1d0c5d25bf3ccad6c0523",
+  "test_sha256": "6327356bee9fd13aa8440a9b9befe0adda3509b8406bcc69bcd98b1389ded23a",
+  "runner_sha256": "c254b9e0a7efb671c359687f2a4f81c4693b147c987d902d6453428905cf60a3",
+  "findings": [
+    "Exact failed ASM method is byte-identical; two new methods exercise directly changed quote call sites and rejection controls.",
+    "Explicit-selector-only runner loads exactly three supplied methods; no fullclass/suite fallback or prior three PASS rerun.",
+    "New non-MC test constructs existing helper TestCase but invokes only rust_record; no old setUp/run/suite. Import binds corrected closure under original module name; helper is pure synthetic grammar source-bound to pinned file.",
+    "Both non-MC roots must parse the retained quoted Rust attribute without MC checkcfg; known optional ASM quote may be present, duplicates/altered quoted module/unclassified unquoted macro must reject. Shared strict helper/source/owner checks remain unchanged.",
+    "Normal three realstager setUps permit up to nine declared local read-only Git queries; no network/state/service/mutation/compiler/module action."
+  ],
+  "selectors": [
+    "McctrlCompositeKbuildTests.test_assembly_component_source_ownership_is_strict",
+    "McctrlCompositeKbuildTests.test_non_mcctrl_rust_quotes_do_not_require_mcctrl_check_cfg",
+    "McctrlCompositeKbuildTests.test_asm_optional_quotes_and_unknown_options_stay_strict"
+  ],
+  "command": {
+    "label": "candidate-quote-correction",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "58s",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=45:45",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/candidate-quote-correction.metrics",
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/run_focused_tests.py",
+      "/home/holden/mckernel",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/test_native_rust_mcctrl_composite.py",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-source-1/correction-1/candidate/scripts/native_rust_kbuild_link_closure.py",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-source-1/candidate/.github/workflows/native-rust-host-modules-exact-build.yml",
+      "McctrlCompositeKbuildTests.test_assembly_component_source_ownership_is_strict",
+      "McctrlCompositeKbuildTests.test_non_mcctrl_rust_quotes_do_not_require_mcctrl_check_cfg",
+      "McctrlCompositeKbuildTests.test_asm_optional_quotes_and_unknown_options_stay_strict"
+    ],
+    "cwd": "/home/holden/mckernel",
+    "environment_replace": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout_path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/candidate-quote-correction.stdout",
+    "stderr_path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/correction-1/candidate-quote-correction.stderr",
+    "expected_returncode": 0
+  },
+  "bounds": {
+    "CPU": [
+      7
+    ],
+    "local_serial_jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 45,
+    "wall_seconds": 58,
+    "kill_after_seconds": 2,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "aggregate_HOST_jobs_max": 3,
+    "aggregate_HOST_total_bytes_including_overhead": 4294967296,
+    "minimum_fresh_MemAvailable_GiB": 26
+  },
+  "execution_conditions": "Root fresh actual admission and input/currentIHKidentity reconciliation; one CPU7 payload once. Capture real PID/birth/wait/rawstdio/metrics, require exactly three selected methods PASS/exit0, join and release. Aggregate3jobs/4GiBTOTAL inclowners/controllers/fresh26/floors unchanged.",
+  "reuse": "Original baseline plus prior three candidate PASS selectors retained/reused, no rerun; actual failed candidate0a9/stderr64df/result3f53 preserved.",
+  "failure_policy": "This is sole bounded correction for this actual failure family. Any further unexpected failure STOP and focused escalation, no automatic retry.",
+  "limits": "Offline source/stage/grammar evidence only, not actualSDK ASM/fixdep/objtool/modpost/fullmodule/native/acceptance or score. No execution/imports by reviewer."
+}

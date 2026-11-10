@@ -1,0 +1,142 @@
+{
+  "decision": "GO_FOCUSED_P03_BEHAVIOR_PENDING_ROOT_FRESH_ADMISSION",
+  "request": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/REQUEST.json",
+  "request_sha256": "7c1f0693c97d481aa6480741aefb8d28125779a642811ee187a5bdfcb98965f7",
+  "prior_review_sha256": "7234263d7d771812c96debe84d37ee6718a263e4c4df4fd7c944920157da6548",
+  "driver_sha256": "281f72e871f5061150580f09303ca11aeae98a435cf0819a8a459c8fbee67f62",
+  "correction_patch_sha256": "0eb7d847efab21a04f910d6eb97461783ee77b0b365c6dfdc9538f4eb2616d2f",
+  "correction_proof_sha256": "a33e57a077996f2e33502e36ee69c75a2290b5baa58b5fdf165db7d5a4a246ed",
+  "correction_manifest_sha256": "b8685fc0a2b5deddd5606fd129b4ae1b9a3aa2c2b07ffc7f89b4f4cbc4572e92",
+  "main_manifest_sha256": "1c7ecb0df1f32da43703c8bdb3cbc9eeba4e964a228175bf2ff06c0bd502fed7",
+  "source_contract_sha256": "e11c0cde1bd0c9df7d064274642a619ca177bc8b8f02d3392e866533299f37cd",
+  "verified_delta": "Exact original driver minus single impossible P03_CONTROLLED_CHILD_DONE-in-transcribed-stdout assertion. No extra loader/drain or SUT/helper/child/case changes. Five literal commands and resource arrays byte-structurally unchanged; source contract differs only driver identity. Frozen originals preserved exactly.",
+  "remaining_proof": "Exact child completion receipt/argv/dialogue/TTY/session, real SUT Child.wait, owner birth/whole-child joins/closed streams/no error/no adopted kill/reap/residual remain mandatory. Six recovered parser cases plus one controlled-child real PTY only.",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "-S",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/source",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-controlled-build-1",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/controlled-prefix",
+        "-DARCH:STRING=x86_64",
+        "-DENABLE_RUST_ECLAIR_BACKTRACE:BOOL=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "configure controlled-prefix existing selector",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/cmake",
+        "--build",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-controlled-build-1",
+        "--target",
+        "eclair_backtrace_rust_program",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "compile/link changed-config controlled-prefix target",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "--crate-name",
+        "eclair_backtrace_contract",
+        "-C",
+        "opt-level=2",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/source/scripts/rust/eclair-backtrace/fixture.rs",
+        "-o",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-byte-stream-tests"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "compile original six-test byte-stream fixture",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/output/p03-byte-stream-tests",
+        "--test-threads=1"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "run original six byte-stream cases",
+      "sequential": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--fsize=67108864:67108864",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/run_behavior.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1",
+      "role": "run one actual controlled-child PTY case",
+      "sequential": true
+    }
+  ],
+  "resources": {
+    "CPU": 6,
+    "PTY_owner_deadline_seconds": 20,
+    "fresh_Root_aggregate_admission_required": true,
+    "fresh_available_GiB_before_batch": 26,
+    "jobs": 1,
+    "process_AS_bytes": 2147483648,
+    "retirement_seconds": 6,
+    "shared_HOST_total_bytes": 4294967296,
+    "whole_serial_batch_wall_seconds": 120
+  },
+  "execution_conditions": "Root validates actual unchanged source/compiler/fresh output and grants exact five serial CPU6 commands. AS2GiB/process, one light job, aggregate3jobs/4GiBTOTAL inclcontrollers/owners/fresh26GiB/floors. PTY20s+owned retirement6s before outer termination; batch120s. Retain each direct PID/birth/stdio/wait/metrics and actual six-test/one-dialogue result.",
+  "failure_policy": "Stop first unexpected actual failure; preserve failed diagnostic and owned custody, join every started child or retain UNKNOWN. No unchanged retry.",
+  "limits": "No original Expect runtime baseline, real Eclair/kernel/boot/module/dump/native/defaultinstall/production parity or original acceptance/score/hold release. Production-prefix a852 compile reused. No unrelated green replay.",
+  "review_operations": "Only changed private source/packet reads and private REVIEW write. No compiler/test/parser/helper/SUT imports or execution."
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "name": "no-arguments",
+    "args": [],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "one-argument",
+    "args": [
+      "{in}"
+    ],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "empty-input",
+    "args": [
+      "",
+      "{out}"
+    ],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "empty-output",
+    "args": [
+      "{in}",
+      ""
+    ],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "third-nonempty",
+    "args": [
+      "{in}",
+      "{out}",
+      "extra"
+    ],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "missing-input",
+    "args": [
+      "{missing}",
+      "{out}"
+    ],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "directory-input",
+    "args": [
+      "{indir}",
+      "{out}"
+    ],
+    "status": 1,
+    "cli_parity": true
+  },
+  {
+    "name": "success-fresh",
+    "mode": "success",
+    "status": 0
+  },
+  {
+    "name": "success-replace-old",
+    "mode": "success",
+    "status": 0,
+    "old": true
+  },
+  {
+    "name": "empty-third-ignores-fourth",
+    "mode": "success",
+    "args": [
+      "{in}",
+      "{out}",
+      "",
+      "ignored"
+    ],
+    "status": 0
+  },
+  {
+    "name": "fragmented-prompt",
+    "mode": "fragmented",
+    "status": 0
+  },
+  {
+    "name": "missing-ack-preserves-old",
+    "mode": "no-ack",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "no-output-preserves-old",
+    "mode": "no-output",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "empty-output-preserves-old",
+    "mode": "empty",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "wrong-ack-preserves-old",
+    "mode": "wrong-ack",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "crash-nonzero-preserves-old",
+    "mode": "nonzero",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "read-error-preserves-old",
+    "mode": "read-error",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "crash-signal-preserves-old",
+    "mode": "signal",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "early-exit-preserves-old",
+    "mode": "early-exit",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "prompt-timeout-preserves-old",
+    "mode": "timeout",
+    "status": 1,
+    "old": true
+  },
+  {
+    "name": "missing-output-parent",
+    "mode": "success",
+    "args": [
+      "{in}",
+      "{no_parent}/out"
+    ],
+    "status": 1
+  },
+  {
+    "name": "uname-nonzero-is-ignored",
+    "mode": "success",
+    "status": 0,
+    "uname_status": 7
+  }
+]

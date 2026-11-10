@@ -16,7 +16,7 @@ if __package__:
 else:
     import native_rust_exact_build_offline as provenance
 
-EXPECTED_IHK_HEAD = '3114d9e7101ad52030eb3effa849a5c108972a1f'
+EXPECTED_IHK_HEAD = '8d288b8bd81b50cc3a3f814d949b89bf416a6ec7'
 ARCHIVE = 'linux-6.12.0-211.44.1.el10_2.tar.xz'
 BASELINE = 'kernel-x86_64-rhel.config'
 SRPM = 'kernel-6.12.0-211.44.1.el10_2.src.rpm'

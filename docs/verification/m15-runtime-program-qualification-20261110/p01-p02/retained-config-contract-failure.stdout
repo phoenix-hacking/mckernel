@@ -1,0 +1,20 @@
+
+running 1 test
+test nondefault_stop_sbindir_preserves_boot_provider ... FAILED
+
+failures:
+
+---- nondefault_stop_sbindir_preserves_boot_provider stdout ----
+
+thread 'nondefault_stop_sbindir_preserves_boot_provider' (818750) panicked at /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/output/baseline-config/config_provider_regression.rs:12:5:
+assertion `left == right` failed: stop provider must use current shell's configured SBINDIR
+  left: "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/qualification/prefix/sbin"
+ right: "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/qualification/prefix/admin-tools"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    nondefault_stop_sbindir_preserves_boot_provider
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,28 @@
+test_valid_closure_is_exact_canonical_and_credit_forbidden (m15_existing_fixture_tests.NativeRustKbuildLinkClosureTests) ... ERROR
+test_cli_round_trip_and_exact_check_output (m15_existing_fixture_tests.NativeRustKbuildLinkClosureTests) ... FAIL
+
+======================================================================
+ERROR: test_valid_closure_is_exact_canonical_and_credit_forbidden (m15_existing_fixture_tests.NativeRustKbuildLinkClosureTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/baseline/scripts/tests/test_native_rust_kbuild_link_closure.py", line 488, in test_valid_closure_is_exact_canonical_and_credit_forbidden
+    value = closure.validate_kbuild_link_closure(
+  File "/home/holden/mckernel/scripts/native_rust_kbuild_link_closure.py", line 1440, in validate_kbuild_link_closure
+    records_dir, raw, texts, record_bindings, directory_binding = _validate_record_set(
+  File "/home/holden/mckernel/scripts/native_rust_kbuild_link_closure.py", line 1418, in _validate_record_set
+    raise LinkClosureError(
+scripts.native_rust_kbuild_link_closure.LinkClosureError: raw record set differs: missing=['.m15_mm_write_warning.o.cmd', '.m15_mmap_trace_gates.o.cmd', '.mcctrl.o.cmd'], extra=[]
+
+======================================================================
+FAIL: test_cli_round_trip_and_exact_check_output (m15_existing_fixture_tests.NativeRustKbuildLinkClosureTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-existing-fixture-1/baseline/scripts/tests/test_native_rust_kbuild_link_closure.py", line 567, in test_cli_round_trip_and_exact_check_output
+    self.assertEqual(0, create.returncode, create.stderr)
+AssertionError: 0 != 1 : native Rust Kbuild link closure: raw record set differs: missing=['.m15_mm_write_warning.o.cmd', '.m15_mmap_trace_gates.o.cmd', '.mcctrl.o.cmd'], extra=[]
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.039s
+
+FAILED (failures=1, errors=1)

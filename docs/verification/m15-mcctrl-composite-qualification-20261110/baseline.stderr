@@ -1,0 +1,69 @@
+test_assembly_component_source_ownership_is_strict (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... test_changed_dependencies_and_owners_remain_required (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... test_current_stage_and_three_object_graph (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... FAIL
+test_workflow_collects_all_current_component_records (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) ... 
+======================================================================
+ERROR: test_assembly_component_source_ownership_is_strict (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (component='m15_mmap_trace_gates.o')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 122, in test_assembly_component_source_ownership_is_strict
+    result = closure._parse_assembly_record(name, target, command, text, self.module, SOURCE_ROOT)
+AttributeError: module 'scripts.native_rust_kbuild_link_closure' has no attribute '_parse_assembly_record'
+
+======================================================================
+ERROR: test_assembly_component_source_ownership_is_strict (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (component='m15_mm_write_warning.o')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 122, in test_assembly_component_source_ownership_is_strict
+    result = closure._parse_assembly_record(name, target, command, text, self.module, SOURCE_ROOT)
+AttributeError: module 'scripts.native_rust_kbuild_link_closure' has no attribute '_parse_assembly_record'
+
+======================================================================
+FAIL: test_changed_dependencies_and_owners_remain_required (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (members=('mcctrl.o',))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 95, in test_changed_dependencies_and_owners_remain_required
+    closure._parse_mod_generator(".mcctrl.mod.cmd", closure.MODULE_ROOT + "/mcctrl.mod",
+AssertionError: LinkClosureError not raised
+
+======================================================================
+FAIL: test_current_stage_and_three_object_graph (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 56, in test_current_stage_and_three_object_graph
+    self.assertEqual(("mcctrl_rust", source["destination"], self.members[0], "mcctrl.o", False),
+AssertionError: Tuples differ: ('mcctrl_rust', 'mcctrl_rust.rs', 'mcctrl_rust.o', 'mcctrl.o', False) != ('mcctrl', 'mcctrl.rs', 'mcctrl.o', 'mcctrl.o', True)
+
+First differing element 0:
+'mcctrl_rust'
+'mcctrl'
+
+- ('mcctrl_rust', 'mcctrl_rust.rs', 'mcctrl_rust.o', 'mcctrl.o', False)
++ ('mcctrl', 'mcctrl.rs', 'mcctrl.o', 'mcctrl.o', True)
+
+======================================================================
+FAIL: test_workflow_collects_all_current_component_records (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (record='.mcctrl_rust.o.cmd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 142, in test_workflow_collects_all_current_component_records
+    self.assertEqual(1, names.count(name))
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_workflow_collects_all_current_component_records (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (record='.m15_mmap_trace_gates.o.cmd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 142, in test_workflow_collects_all_current_component_records
+    self.assertEqual(1, names.count(name))
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_workflow_collects_all_current_component_records (m15_mcctrl_contract_tests.McctrlCompositeKbuildTests) (record='.m15_mm_write_warning.o.cmd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/module-tests-1/test_native_rust_mcctrl_composite.py", line 142, in test_workflow_collects_all_current_component_records
+    self.assertEqual(1, names.count(name))
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.596s
+
+FAILED (failures=5, errors=2)
