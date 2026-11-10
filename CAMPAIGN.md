@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T06:47Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T06:58Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -105,8 +105,21 @@ ownership input for the three prerequisite rows above, followed by its smallest
 matching functional proof. No optional capacity integration, automatic handoff,
 percentage audit or unchanged test round is queued. Preserve all private evidence
 and monitored waiting; stop model work at actual user/service/account limits.
-This is the current invocation's first exhausted original-queue finding, not the
-three historical goal turns from an earlier invocation and not OS acceptance.
+Current invocation exhausted-queue findings:1/3 in actual Root turn
+01a1c40b-365c-7102-8ed9-5ae031596d26 after its published priority checkpoint;
+2/3 in actual continuation01a1c43d-b617-7843-953b-4e3258af9a8f at06:56Z;
+3/3 in actual continuation01a1c43f-1bc4-7770-82e4-8e53564fdb4f at06:57:55Z.
+The second turn made no functional progress; this third turn confirms the same
+missing original source/provider/SDK/ABI/backend/native inputs, no pending/sending
+instructions and no changed original source. No eligible independent functional
+packet or running engineering payload remains. Existing completed owners are not
+restarted and no optional infrastructure is substituted. Normal goal BLOCKED
+follows this final checkpoint; the whole-system objective remains unfinished.
+Guardian/mailbox monitoring stays awake for a genuine scoped input, with the
+restored20-minute foreground assistance and existing credit/stop/ownership
+controls preserved. This is a source impasse, not a technical recovery or a user
+pause. No new allowance, forced retirement, hold release or mechanical resume.
+Historical turns/timer wakes are not counted.
 
 ## Workstation preparation at05:59Z (historical; actual activation above)
 
