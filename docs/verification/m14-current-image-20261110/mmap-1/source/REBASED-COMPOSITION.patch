@@ -1,0 +1,1041 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -96,6 +96,7 @@
+ endif()
+ # The outer entry has a narrower scope than the existing inner OFFLOAD macro.
+ set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
++set(MCKERNEL_DO_MMAP_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+ set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+ set(RUST_KERNEL_ENABLED OFF)
+@@ -557,6 +558,17 @@
+ 				message(FATAL_ERROR "Unsupported syscall.c path for exact C/Rust debug identity")
+ 			endif()
+ 			set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED ON)
++            # Complete ordinary-x86 mapping entry; preserve all other C profiles.
++            if (NOT ENABLE_FUGAKU_HACKS AND NOT ENABLE_TOFU)
++                set(MCKERNEL_DO_MMAP_SELECTED ON)
++                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_mmap_candidate")
++                list(APPEND RUST_KERNEL_SRCS
++                    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_mmap.rs"
++                    "${CMAKE_CURRENT_SOURCE_DIR}/include/memobj.h"
++                    "${CMAKE_CURRENT_SOURCE_DIR}/include/shm.h"
++                    "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
++                    "${CMAKE_CURRENT_SOURCE_DIR}/include/profile.h")
++            endif()
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_outer_candidate")
+ 			list(APPEND RUST_KERNEL_SRCS
+ 			    "${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_offload_entry.rs"
+@@ -985,6 +997,10 @@
+ endif()
+ 
+ # Apply after the existing source properties, which otherwise replace flags.
++if (MCKERNEL_DO_MMAP_SELECTED)
++    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_MMAP)
++endif()
+ if (MCKERNEL_DO_SYSCALL_OUTER_SELECTED)
+     set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_DO_SYSCALL_OUTER
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -60,6 +60,8 @@
+ mod spinlock_helpers;
+ mod string;
+ mod syscall_policy;
++#[cfg(f03_do_mmap_candidate)]
++mod f03_do_mmap;
+ #[cfg(f03_do_syscall_outer_candidate)]
+ mod syscall_offload_entry;
+ #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -6213,6 +6213,78 @@
+ }
+ #endif
+ 
++/* Preserve the actual original logical origins in both existing profiles. */
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#define MCKERNEL_DO_MMAP_ORIGINAL_START_LINE 5914
++#define MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE 6675
++#else
++#define MCKERNEL_DO_MMAP_ORIGINAL_START_LINE 5921
++#define MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE 6682
++#endif
++#ifdef MCKERNEL_RUST_F03_DO_MMAP
++#if !defined(__x86_64__) || !defined(MCKERNEL_NATIVE_SIGNAL_STACK) || !defined(PROFILE_ENABLE) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || defined(ENABLE_FUGAKU_HACKS) || defined(ENABLE_TOFU) || defined(ATTACHED_MIC)
++#error "Rust do_mmap requires the paired ordinary x86/Linux6.12/PROFILE profile"
++#endif
++#if !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
++#error "Rust do_mmap requires actual C source/debug input bindings"
++#endif
++_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
++    "Rust do_mmap debug flags must match C");
++_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
++    "Rust do_mmap source filename must match C");
++typedef intptr_t (*mckernel_do_mmap_signature_t)(uintptr_t, size_t, int, int,
++    int, off_t, int, void *);
++_Static_assert(__builtin_types_compatible_p(__typeof__(&do_mmap),
++    mckernel_do_mmap_signature_t), "do_mmap complete eight-argument ABI");
++_Static_assert(sizeof(size_t) == 8 && _Alignof(size_t) == 8
++    && sizeof(unsigned long) == 8 && _Alignof(unsigned long) == 8,
++    "Rust do_mmap lossless size_t/unsigned long conversions");
++_Static_assert(sizeof(struct memobj) == 56 && _Alignof(struct memobj) == 8,
++    "Rust do_mmap memobj geometry");
++_Static_assert(offsetof(struct memobj, status) == 12 && offsetof(struct memobj, size) == 16,
++    "Rust do_mmap status and size");
++_Static_assert(offsetof(struct memobj, pages) == 32 && offsetof(struct memobj, nr_pages) == 40
++    && offsetof(struct memobj, path) == 48 && offsetof(struct memobj_ops, free) == 0,
++    "Rust do_mmap object pages/path/free");
++_Static_assert(sizeof(struct shmid_ds) == 112 && offsetof(struct shmid_ds, init_pgshift) == 108
++    && offsetof(struct shmid_ds, shm_segsz) == 48, "Rust do_mmap shared-object ABI");
++_Static_assert(sizeof(ihk_rwspinlock_t) == 4 && _Alignof(ihk_rwspinlock_t) == 4
++    && offsetof(ihk_rwspinlock_t, v) == 0 && offsetof(ihk_atomic_t, counter) == 0
++    && IHK_RWSPINLOCK_WRITELOCKED == 0xff000000U,
++    "Rust do_mmap exact existing four-byte lock protocol");
++_Static_assert(offsetof(struct process_vm, memory_range_lock) == 180
++    && offsetof(struct vm_range, straight_start) == 48 && offsetof(struct vm_range, memobj) == 56,
++    "Rust do_mmap range and lock ABI");
++_Static_assert(sizeof(struct mckfd) == 80 && offsetof(struct mckfd, mmap_cb) == 48
++    && sizeof(ihk_mc_user_context_t) == 224, "Rust do_mmap descriptor/context ABI");
++_Static_assert(offsetof(struct thread, vm) == 4200 && offsetof(struct thread, proc) == 4304
++    && offsetof(struct process, vm) == 128 && offsetof(struct process, mckfd_lock) == 1284
++    && offsetof(struct process, mckfd) == 1288 && offsetof(struct process, mpol_flags) == 1376
++    && offsetof(struct process, mpol_threshold) == 1384 && offsetof(struct process, thp_disable) == 1428
++    && offsetof(struct process, straight_map) == 1432 && offsetof(struct process, straight_map_threshold) == 1440
++    && offsetof(struct process, straight_va) == 1624 && offsetof(struct process, straight_len) == 1632
++    && offsetof(struct process, straight_pa) == 1640,
++    "Rust do_mmap complete selected Thread/Process field ABI");
++_Static_assert(PROFILE_mmap_anon_contig_phys == 4008 && PROFILE_mmap_anon_straight == 4009
++    && PROFILE_mmap_anon_not_straight == 4010 && PROFILE_mmap_anon_no_contig_phys == 4011
++    && PROFILE_mmap_regular_file == 4012 && PROFILE_mmap_device_file == 4013,
++    "Rust do_mmap actual profile event identities");
++_Static_assert(MAP_SHARED == 1 && MAP_FIXED == 0x10 && MAP_ANONYMOUS == 0x20
++    && MAP_LOCKED == 0x2000 && MAP_POPULATE == 0x8000 && MAP_STACK == 0x20000,
++    "Rust do_mmap actual mapping flags");
++_Static_assert(VR_AP_USER == 4 && VR_DEMAND_PAGING == 0x1000 && VR_PROT_MASK == 0x70000
++    && VR_MEMTYPE_MASK == 0x0f000000 && VR_MEMTYPE_UC == 0x01000000,
++    "Rust do_mmap actual range flags");
++_Static_assert(MF_ZEROFILL == 0x10 && MF_DEV_FILE == 0x2000 && MF_PREMAP == 0x8000
++    && MF_XPMEM == 0x10000 && MF_HUGETLBFS == 0x100000
++    && MPOL_NO_STACK == 2 && MPOL_SHM_PREMAP == 8 && SHM_DEST == 01000,
++    "Rust do_mmap actual object/policy flags");
++_Static_assert(PAGE_SHIFT == 12 && PAGE_SIZE == 4096 && PAGE_P2ALIGN == 0
++    && PF_POPULATE == (1UL << 30) && NOPHYS == (uintptr_t)-1
++    && IHK_MC_AP_NOWAIT == 2 && IHK_MC_AP_USER == 0x1000 && IHK_MC_PG_USER == 1,
++    "Rust do_mmap actual architecture/allocation values");
++#else
++#line MCKERNEL_DO_MMAP_ORIGINAL_START_LINE
+ intptr_t
+ do_mmap(const uintptr_t addr0, const size_t len0, const int prot,
+ 	const int flags, const int fd, const off_t off0,
+@@ -6974,6 +7046,8 @@
+ 		(range->straight_start ? range->straight_start : addr) :
+ 		error;
+ }
++#endif /* MCKERNEL_RUST_F03_DO_MMAP */
++#line MCKERNEL_DO_MMAP_ORIGINAL_AFTER_LINE
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ void munmap_write_lock_bridge(void *);
+--- /dev/null
++++ b/kernel/rust/f03_do_mmap.rs
+@@ -0,0 +1,548 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Complete current ordinary-x86 do_mmap orchestration. Other C profiles retain
++// their original entry. No effect endpoint is replaced by a test callback.
++#[cfg(not(all(target_arch = "x86_64", native_linux_irq_work_v6_12,
++    enable_profile, not(enable_tofu), not(enable_fugaku_hacks))))]
++compile_error!("do_mmap requires its paired ordinary x86/Linux6.12/PROFILE profile");
++
++use core::ffi::c_void;
++use core::mem::{align_of, offset_of, size_of};
++use core::ptr::{addr_of, addr_of_mut, null_mut, read_volatile};
++use core::sync::atomic::{AtomicI32, Ordering};
++
++use crate::abi::{CInt, CLong, CULong, Mckfd, Memobj, MemobjOps, OffT,
++    Process, ProcessVm, ShmidDs, SizeT, Thread, VmRange, X86UserContext};
++use crate::debug::{kprintf, Ddebug};
++use crate::syscall_policy as policy;
++
++const PAGE_SHIFT: CInt = 12;
++const PAGE_SIZE: CULong = 1 << PAGE_SHIFT;
++const MAP_SHARED: CInt = 1;
++const MAP_FIXED: CInt = 0x10;
++const MAP_ANONYMOUS: CInt = 0x20;
++const MAP_LOCKED: CInt = 0x2000;
++const MAP_POPULATE: CInt = 0x8000;
++const MAP_STACK: CInt = 0x20000;
++const PROT_READ: CInt = 1;
++const PROT_WRITE: CInt = 2;
++const PROT_EXEC: CInt = 4;
++const VR_AP_USER: CInt = 4;
++const VR_DEMAND_PAGING: CInt = 0x1000;
++const VR_PROT_MASK: CInt = 0x70000;
++const VR_MEMTYPE_UC: CInt = 0x01000000;
++const VR_MEMTYPE_MASK: CInt = 0x0f000000;
++const MF_ZEROFILL: u32 = 0x10;
++const MF_DEV_FILE: u32 = 0x2000;
++const MF_PREMAP: u32 = 0x8000;
++const MF_XPMEM: u32 = 0x10000;
++const MF_HUGETLBFS: u32 = 0x100000;
++const MPOL_NO_STACK: CULong = 2;
++const MPOL_SHM_PREMAP: CULong = 8;
++const PF_POPULATE: CULong = 1 << 30;
++const IHK_MC_AP_NOWAIT: CULong = 2;
++const IHK_MC_AP_USER: CULong = 0x1000;
++const IHK_MC_PG_USER: CInt = 1;
++const EINVAL: CInt = 22;
++const ESRCH: CInt = 3;
++
++unsafe extern "C" {
++    static anon_on_demand: CInt;
++    fn do_munmap(addr: *mut c_void, len: SizeT, holding_lock: CInt) -> CInt;
++    fn f03_do_mmap_smaller_page_v2(size: SizeT, p2align: *mut CInt) -> CInt;
++}
++
++// These are the real source-origin/debug inputs already supplied to the current
++// PROFILE-on outer-syscall producer. The paired selector has the same requirement.
++const SOURCE_FILE: &[u8] = concat!(env!("MCKERNEL_DO_SYSCALL_C_FILE"), "\0").as_bytes();
++const NAME: &[u8] = b"do_mmap\0";
++const DEBUG_FLAGS: u32 = match env!("MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS").as_bytes() {
++    b"0" => 0,
++    b"1" => 1,
++    _ => panic!("do_mmap requires the actual C DDEBUG default"),
++};
++const fn record(line: u32) -> Ddebug {
++    Ddebug { file: SOURCE_FILE.as_ptr().cast(), func: NAME.as_ptr().cast(),
++        fmt: core::ptr::null(), line_flags: line | (DEBUG_FLAGS << 24) }
++}
++// Original selected #line5838 maps physical6062 to5838. Inactive #line5847,
++// FUGAKU/TOFU and #if0 macros are excluded by the paired ordinary-x86 selector.
++#[used]
++#[link_section = "__verbose"]
++static mut MMAP_DEBUG: [Ddebug; 14] = [
++    record(5945), record(6090), record(6269), record(6332),
++    record(6414), record(6417), record(6439), record(6462),
++    record(6469), record(6481), record(6503), record(6537),
++    record(6582), record(6658),
++];
++unsafe fn debug(index: usize) -> bool {
++    let entry = addr_of!(MMAP_DEBUG).cast::<Ddebug>().add(index);
++    read_volatile(addr_of!((*entry).line_flags)) >> 24 != 0
++}
++
++// Matching C assertions live in the selected source guard. These are typed
++// existing ABI structures, not offsets projected through an invented layout.
++const _: () = {
++    assert!(size_of::<SizeT>() == 8 && align_of::<SizeT>() == 8);
++    assert!(size_of::<CULong>() == 8 && align_of::<CULong>() == 8);
++    assert!(size_of::<Memobj>() == 56 && align_of::<Memobj>() == 8);
++    assert!(offset_of!(Memobj, status) == 12 && offset_of!(Memobj, size) == 16);
++    assert!(offset_of!(Memobj, pages) == 32 && offset_of!(Memobj, nr_pages) == 40);
++    assert!(offset_of!(Memobj, path) == 48 && offset_of!(MemobjOps, free) == 0);
++    assert!(size_of::<ShmidDs>() == 112 && offset_of!(ShmidDs, init_pgshift) == 108);
++    assert!(offset_of!(ShmidDs, shm_segsz) == 48);
++    assert!(offset_of!(ProcessVm, memory_range_lock) == 180);
++    assert!(offset_of!(VmRange, straight_start) == 48 && offset_of!(VmRange, memobj) == 56);
++    assert!(offset_of!(Mckfd, mmap_cb) == 48 && size_of::<Mckfd>() == 80);
++    assert!(size_of::<X86UserContext>() == 224);
++    assert!(size_of::<crate::abi::IhkRwSpinlock>() == 4);
++    assert!(align_of::<crate::abi::IhkRwSpinlock>() == 4);
++    assert!(offset_of!(crate::abi::IhkRwSpinlock, v) == 0);
++    assert!(offset_of!(crate::abi::IhkAtomic, counter) == 0);
++    assert!(offset_of!(Thread, vm) == 4200 && offset_of!(Thread, proc) == 4304);
++    assert!(offset_of!(Process, vm) == 128 && offset_of!(Process, mckfd_lock) == 1284);
++    assert!(offset_of!(Process, mckfd) == 1288 && offset_of!(Process, mpol_flags) == 1376);
++    assert!(offset_of!(Process, mpol_threshold) == 1384 && offset_of!(Process, thp_disable) == 1428);
++    assert!(offset_of!(Process, straight_map) == 1432 && offset_of!(Process, straight_map_threshold) == 1440);
++    assert!(offset_of!(Process, straight_va) == 1624 && offset_of!(Process, straight_len) == 1632);
++    assert!(offset_of!(Process, straight_pa) == 1640);
++};
++
++unsafe fn object_unref(object: *mut Memobj) {
++    // The real refcount helper consumes the common repr(C) memobj prefix.
++    let _ = crate::refcount_helpers::memobj_unref(object.cast());
++}
++
++// The genuine noirq writer owns one preempt-disable count. Convert its exclusive
++// counter to one reader without a zero/unlocked interval or preempt-enable gap.
++// Existing reader unlock later consumes that same count. New readers acquire
++// from this Release; writers require zero and cannot retire this range early.
++// Safety: caller exclusively owns the actual writer lock, no other lock flavor.
++unsafe fn downgrade_write_to_reader(lock: *mut crate::abi::IhkRwSpinlock) {
++    AtomicI32::from_ptr(addr_of_mut!((*lock).v.counter)).store(1, Ordering::Release);
++}
++
++/// Own the complete selected mapping transaction, including straight mappings.
++///
++/// # Safety
++/// Current CPU/thread/VM/process, file descriptors and private_data have their
++/// original kernel lifetimes and context. Range/page-table/host operations obey
++/// the original provider contracts. Successful add_range transfers local backing
++/// ownership to the real range; no RAII reference spans an offload or release.
++/// This entry is never HOST-run with fabricated VMs, pages or mapping callbacks.
++#[no_mangle]
++pub unsafe extern "C" fn do_mmap(
++    addr0: CULong, len: SizeT, prot: CInt, flags: CInt, fd: CInt,
++    off0: OffT, vrf0: CInt, private_data: *mut c_void,
++) -> CLong {
++    let thread = (*crate::cls::get_this_cpu_local_var()).current;
++    let proc = (*thread).proc;
++    let region = addr_of_mut!((*(*thread).vm).region);
++    let mut addr = addr0;
++    if debug(0) {
++        kprintf(b"do_mmap(%lx,%lx,%x,%x,%d,%lx)\n\0".as_ptr().cast(),
++            addr0, len, prot, flags, fd, off0);
++    }
++
++    // The exact already-selected MCKFD body retains lock/borrow/callback ordering.
++    if flags & MAP_ANONYMOUS == 0 {
++        let offsets = policy::SyscallMckfdOffsets {
++            thread_proc_offset: offset_of!(Thread, proc),
++            proc_mckfd_lock_offset: offset_of!(Process, mckfd_lock),
++            proc_mckfd_offset: offset_of!(Process, mckfd),
++            mckfd_next_offset: offset_of!(Mckfd, next),
++            mckfd_fd_offset: offset_of!(Mckfd, fd),
++            mckfd_read_cb_offset: offset_of!(Mckfd, read_cb),
++            mckfd_ioctl_cb_offset: offset_of!(Mckfd, ioctl_cb),
++            mckfd_close_cb_offset: offset_of!(Mckfd, close_cb),
++            mckfd_fcntl_cb_offset: offset_of!(Mckfd, fcntl_cb),
++        };
++        let mut ctx: X86UserContext = core::mem::zeroed();
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(&mut ctx, addr0);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(&mut ctx, len as CULong);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(&mut ctx, prot as CLong as CULong);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg3(&mut ctx, flags as CLong as CULong);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg4(&mut ctx, fd as CLong as CULong);
++        crate::x86_cpu_helpers::ihk_mc_syscall_set_arg5(&mut ctx, off0 as CULong);
++        let mut handled = 0;
++        let result = policy::do_mmap_mckfd_dispatch_body_result(thread.cast(), flags,
++            fd, (&mut ctx as *mut X86UserContext).cast(), &mut handled,
++            &offsets, offset_of!(Mckfd, mmap_cb), Some(policy::syscall_mckfd_lock_bridge),
++            Some(policy::syscall_mckfd_unlock_bridge));
++        if handled != 0 { return result; }
++    }
++    crate::x86_memory_helpers::flush_nfo_tlb();
++
++    // Original best-effort initialization. Each failure clears straight_va and
++    // falls through to the ordinary mapping; no new rollback or error return.
++    if (*proc).straight_map != 0 && (*proc).straight_va.is_null() {
++        'straight: {
++            let mut start = CULong::MAX;
++            let mut end: CULong = 0;
++            let mut i = 0;
++            while i < crate::x86_setup::ihk_mc_get_nr_memory_chunks() {
++                let mut a = 0;
++                let mut b = 0;
++                let _ = crate::x86_setup::ihk_mc_get_memory_chunk(i, &mut a, &mut b, null_mut());
++                if start > a { start = a; }
++                if end < b { end = b; }
++                i += 1;
++            }
++            kprintf(b"%s: straight_pa_start: 0x%lx, straight_pa_end: 0x%lx\n\0".as_ptr().cast(),
++                NAME.as_ptr(), start, end);
++            let mut query_psize: SizeT = PAGE_SIZE as SizeT;
++            let mut alignment = 0;
++            let error = crate::x86_memory_helpers::arch_get_smaller_page_size(null_mut(),
++                end.wrapping_sub(start) as SizeT, &mut query_psize, &mut alignment);
++            if error != 0 {
++                kprintf(b"%s: arch_get_smaller_page_size failed: %d\n\0".as_ptr().cast(), NAME.as_ptr(), error);
++                break 'straight;
++            }
++            // Preserve the actual C override, even when a larger page exists.
++            let psize: CULong = 1 << 29;
++            alignment = 29 - PAGE_SHIFT;
++            kprintf(b"%s: using page shift: %d, psize: %lu\n\0".as_ptr().cast(),
++                NAME.as_ptr(), PAGE_SHIFT + alignment, psize);
++            start &= !(psize - 1);
++            end = end.wrapping_add(psize - 1) & !(psize - 1);
++            kprintf(b"%s: aligned straight_pa_start: 0x%lx, straight_pa_end: 0x%lx\n\0".as_ptr().cast(),
++                NAME.as_ptr(), start, end);
++            (*proc).straight_len = end.wrapping_sub(start) as SizeT;
++            let error = policy::f03_search_free_space_v1((*proc).straight_len,
++                PAGE_SHIFT + alignment, addr_of_mut!((*proc).straight_va).cast());
++            if error != 0 {
++                kprintf(b"%s: search_free_space() failed: %d\n\0".as_ptr().cast(), NAME.as_ptr(), error);
++                (*proc).straight_va = null_mut();
++                break 'straight;
++            }
++            if debug(1) {
++                kprintf(b"%s: straight_va: 0x%lx to be used\n\0".as_ptr().cast(), NAME.as_ptr(), (*proc).straight_va);
++            }
++            let protection = crate::process_helpers::PROT_TO_VR_FLAG((PROT_READ | PROT_WRITE) as CULong);
++            let protection = protection | crate::process_helpers::VRFLAG_PROT_TO_MAXPROT(protection)
++                | VR_DEMAND_PAGING as CULong;
++            let mut range: *mut VmRange = null_mut();
++            if crate::process_helpers::add_process_memory_range((*proc).vm,
++                (*proc).straight_va as CULong,
++                ((*proc).straight_va as CULong).wrapping_add((*proc).straight_len as CULong),
++                CULong::MAX, protection, null_mut(), 0, PAGE_SHIFT + alignment,
++                private_data, &mut range) != 0 {
++                kprintf(b"%s: error: adding straight memory range \n\0".as_ptr().cast(), NAME.as_ptr());
++                (*proc).straight_va = null_mut();
++                break 'straight;
++            }
++            kprintf(b"%s: straight_va: 0x%lx, range->pgshift: %d, range OK\n\0".as_ptr().cast(),
++                NAME.as_ptr(), (*proc).straight_va, (*range).pgshift);
++            let attr = crate::x86_memory_helpers::arch_vrflag_to_ptattr((*range).flag, PF_POPULATE, null_mut());
++            let error = crate::x86_memory_helpers::ihk_mc_pt_set_range(
++                (*(*(*proc).vm).address_space).page_table, (*proc).vm.cast(),
++                (*range).start as *mut c_void, (*range).end as *mut c_void,
++                start, attr, (*range).pgshift, range.cast(), 0);
++            if error != 0 {
++                kprintf(b"%s: ihk_mc_pt_set_range() failed: %d\n\0".as_ptr().cast(), NAME.as_ptr(), error);
++                (*proc).straight_va = null_mut();
++                break 'straight;
++            }
++            (*region).map_end = ((*proc).straight_va as CULong).wrapping_add((*proc).straight_len as CULong);
++            (*proc).straight_pa = start;
++            kprintf(b"%s: straight mapping: 0x%lx:%lu @ 0x%lx, psize: %lu, straight_map_threshold: %lu\n\0".as_ptr().cast(),
++                NAME.as_ptr(), (*proc).straight_va, (*proc).straight_len,
++                (*proc).straight_pa, psize, (*proc).straight_map_threshold);
++        }
++    }
++
++    let mut pgshift = 0;
++    let mut p2align = 0;
++    let mut p: *mut c_void = null_mut();
++    let mut npages: CLong = 0;
++    let mut object: *mut Memobj = null_mut();
++    let mut range: *mut VmRange = null_mut();
++    let mut vrflags: CInt = 0;
++    let mut ro_vma_mapped = false;
++    let mut write_locked = false;
++    let mut populated_mapping = false;
++    let mut populate_len: SizeT = 0;
++    let mut error = 'mapping: {
++        let error = policy::do_mmap_page_size_body_result(flags, vrf0 as CLong as CULong,
++            (*proc).thp_disable, len, &mut pgshift, &mut p2align,
++            Some(crate::x86_setup::ihk_mc_get_linux_default_huge_page_shift),
++            Some(f03_do_mmap_smaller_page_v2));
++        if error != 0 {
++            kprintf(b"do_mmap:arch_get_smaller_page_size failed. %d\n\0".as_ptr().cast(), error);
++            break 'mapping error;
++        }
++        crate::lock_helpers::ihk_rwspinlock_write_lock_noirq(addr_of_mut!((*(*thread).vm).memory_range_lock).cast());
++        write_locked = true;
++        if flags & MAP_FIXED != 0 && !(*proc).straight_va.is_null()
++            && addr >= (*proc).straight_va as CULong
++            && addr.wrapping_add(len as CULong) <= ((*proc).straight_va as CULong).wrapping_add((*proc).straight_len as CULong) {
++            kprintf(b"%s: can't map MAP_FIXED into straight mapping\n\0".as_ptr().cast(), NAME.as_ptr());
++            break 'mapping -EINVAL;
++        }
++        if flags & MAP_FIXED != 0 {
++            let error = do_munmap(addr as *mut c_void, len, 1);
++            if error != 0 {
++                kprintf(b"do_mmap:do_munmap(%lx,%lx) failed. %d\n\0".as_ptr().cast(), addr, len, error);
++                break 'mapping error;
++            }
++        } else if flags & MAP_ANONYMOUS != 0 {
++            let error = policy::f03_search_free_space_v1(len, PAGE_SHIFT + p2align, &mut addr);
++            if error != 0 {
++                kprintf(b"%s: error: search_free_space(%lx,%lx,%lx) failed. %d\n\0".as_ptr().cast(),
++                    NAME.as_ptr(), len, (PAGE_SHIFT + p2align) as CLong, addr, error);
++                break 'mapping error;
++            }
++        }
++        vrflags = policy::mmap_base_vrflags(prot, flags, vrf0 as CLong as CULong, anon_on_demand) as CInt;
++        if policy::mmap_populated_mapping_result(flags) != 0 {
++            if debug(2) {
++                kprintf(b"%s: 0x%lx:%lu %s%s|\n\0".as_ptr().cast(), NAME.as_ptr(), addr, len,
++                    if flags & MAP_POPULATE != 0 { b"|MAP_POPULATE\0".as_ptr() } else { b"\0".as_ptr() },
++                    if flags & MAP_LOCKED != 0 { b"|MAP_LOCKED\0".as_ptr() } else { b"\0".as_ptr() });
++            }
++            populated_mapping = true;
++        }
++        if policy::mmap_should_set_host_ro(flags, prot, 1) != 0 {
++            let error = policy::set_host_vma_body_result(addr, len, PROT_READ | PROT_EXEC, 1);
++            if error != 0 {
++                kprintf(b"do_mmap:set_host_vma failed. %d\n\0".as_ptr().cast(), error);
++                break 'mapping error;
++            }
++            ro_vma_mapped = true;
++        }
++        let mut phys: CULong = 0;
++        let mut straight_phys: CULong = 0;
++        let mut off: OffT = 0;
++        let mut maxprot = PROT_READ | PROT_WRITE | PROT_EXEC;
++        if flags & MAP_ANONYMOUS == 0 {
++            off = off0;
++            let mut error = crate::fileobj::fileobj_create(fd, &mut object, &mut maxprot, flags, addr0);
++            if !object.is_null() && !(*object).path.is_null()
++                && crate::string::strncmp((*object).path, b"/dev/shm/ucx_posix\0".as_ptr().cast(), 18) == 0 {
++                kprintf(b"%s: mmap flags: %lx, path: %s, memobj->flags: %lx, pgshift: %d, p2align: %d -> FIXING page size\n\0".as_ptr().cast(),
++                    NAME.as_ptr(), flags as CLong, (*object).path, (*object).flags as CULong, pgshift, p2align);
++                pgshift = PAGE_SHIFT;
++                p2align = 0;
++                populated_mapping = true;
++            }
++            if error == 0 { crate::profile::profile_event_add(4012, len as u64); }
++            if error == -ESRCH {
++                if debug(3) { kprintf(b"do_mmap:hit non VREG\n\0".as_ptr().cast()); }
++                vrflags = (vrflags & !VR_MEMTYPE_MASK) | VR_MEMTYPE_UC;
++                error = crate::devobj::devobj_create(fd, len, off, &mut object, &mut maxprot,
++                    prot, flags & (MAP_POPULATE | MAP_LOCKED));
++                if error == 0 {
++                    crate::profile::profile_event_add(4013, len as u64);
++                    if !(*object).path.is_null()
++                        && (crate::string::strncmp(b"/tmp/ompi.\0".as_ptr().cast(), (*object).path, 10) == 0
++                        || crate::string::strncmp(b"/dev/shm/\0".as_ptr().cast(), (*object).path, 9) == 0) {
++                        pgshift = PAGE_SHIFT;
++                        p2align = 0;
++                        populated_mapping = true;
++                    }
++                }
++            }
++            if error != 0 {
++                kprintf(b"%s: error: file mapping failed, fd: %d, error: %d\n\0".as_ptr().cast(), NAME.as_ptr(), fd, error);
++                break 'mapping error;
++            }
++            if !object.is_null() && (*object).flags & MF_HUGETLBFS != 0 {
++                let error = crate::hugefileobj::hugefileobj_create(object, len, off, &mut pgshift, addr0);
++                if error != 0 {
++                    let free: unsafe extern "C" fn(*mut Memobj) = core::mem::transmute((*(*object).ops).free);
++                    free(object);
++                    // The real free callback destroys the allocation: common
++                    // cleanup must not subsequently unref the retired pointer.
++                    object = null_mut();
++                    kprintf(b"%s: error creating hugetlbfs memobj, fd: %d, error: %d\n\0".as_ptr().cast(), NAME.as_ptr(), fd, error);
++                    break 'mapping error;
++                }
++                p2align = pgshift - PAGE_SHIFT;
++            }
++            if flags & MAP_FIXED == 0 {
++                let error = policy::f03_search_free_space_v1(len, PAGE_SHIFT + p2align, &mut addr);
++                if error != 0 {
++                    kprintf(b"do_mmap:search_free_space(%lx,%lx,%d) failed. %d\n\0".as_ptr().cast(),
++                        len, (*region).map_end, p2align, error);
++                    break 'mapping error;
++                }
++            }
++            if policy::mmap_should_set_host_ro(flags, prot, 0) != 0 {
++                let error = policy::set_host_vma_body_result(addr, len, PROT_READ | PROT_EXEC, 1);
++                if error != 0 {
++                    kprintf(b"do_mmap:set_host_vma failed. %d\n\0".as_ptr().cast(), error);
++                    break 'mapping error;
++                }
++                ro_vma_mapped = true;
++            }
++            if (*object).flags & MF_HUGETLBFS != 0 {
++                if debug(4) { kprintf(b"Created hugefileobj %p (%d:%x %llx-%llx, fd %d, pgshift %d)\n\0".as_ptr().cast(),
++                    object, len as CInt, off as u32, addr, addr.wrapping_add(len as CULong), fd, pgshift); }
++            } else if (*object).flags & MF_DEV_FILE != 0 && debug(5) {
++                kprintf(b"%s: device fd: %d off: %lu mapping at %p - %p\n\0".as_ptr().cast(),
++                    NAME.as_ptr(), fd, off, addr, addr.wrapping_add(len as CULong));
++            }
++        } else if vrflags & VR_DEMAND_PAGING == 0 && flags & MAP_SHARED == 0 && vrflags & VR_PROT_MASK != 0 {
++            npages = (len >> PAGE_SHIFT) as CLong;
++            let ap_flag = if (flags & MAP_STACK == 0 && len >= (*(*thread).proc).mpol_threshold)
++                || (flags & MAP_STACK != 0 && (*(*thread).proc).mpol_flags & MPOL_NO_STACK == 0) { IHK_MC_AP_USER } else { 0 };
++            if ap_flag != 0 { vrflags |= VR_AP_USER; }
++            p = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(npages as CInt, p2align,
++                IHK_MC_AP_NOWAIT | ap_flag, -1, IHK_MC_PG_USER, addr0,
++                SOURCE_FILE.as_ptr().cast_mut().cast(), 6437);
++            if p.is_null() {
++                if debug(6) { kprintf(b"%s: warning: failed to allocate %d contiguous pages  (bytes: %lu, pgshift: %d), enabling demand paging\n\0".as_ptr().cast(),
++                    NAME.as_ptr(), npages as CInt, (npages as CULong).wrapping_mul(PAGE_SIZE), p2align); }
++                vrflags |= VR_DEMAND_PAGING;
++                populated_mapping = false;
++                crate::profile::profile_event_add(4011, len as u64);
++                let error = crate::zeroobj::zeroobj_create(&mut object);
++                if error != 0 {
++                    kprintf(b"%s: zeroobj_create failed, error: %d\n\0".as_ptr().cast(), NAME.as_ptr(), error);
++                    break 'mapping error;
++                }
++            } else {
++                crate::profile::profile_event_add(4008, len as u64);
++                if debug(7) { kprintf(b"%s: 0x%x:%lu MAP_ANONYMOUS allocated %d pages, p2align: %lx\n\0".as_ptr().cast(),
++                    NAME.as_ptr(), addr as u32, len, npages as CInt, p2align as CLong); }
++                phys = crate::x86_memory_helpers::virt_to_phys(p);
++            }
++        } else if policy::mmap_is_shared(flags) != 0 {
++            if debug(8) { kprintf(b"%s: MAP_SHARED,flags=%x,len=%ld\n\0".as_ptr().cast(), NAME.as_ptr(), flags, len); }
++            let mut ads: ShmidDs = core::mem::zeroed();
++            ads.shm_segsz = len;
++            ads.shm_perm.mode = 0o1000;
++            ads.init_pgshift = PAGE_SHIFT + p2align;
++            let error = crate::shmobj::shmobj_create(&mut ads, &mut object);
++            if error != 0 {
++                kprintf(b"do_mmap:shmobj_create failed. %d\n\0".as_ptr().cast(), error);
++                break 'mapping error;
++            }
++        } else {
++            if debug(9) { kprintf(b"%s: anon&demand-paging\n\0".as_ptr().cast(), NAME.as_ptr()); }
++            let error = crate::zeroobj::zeroobj_create(&mut object);
++            if error != 0 {
++                kprintf(b"do_mmap:zeroobj_create failed. %d\n\0".as_ptr().cast(), error);
++                break 'mapping error;
++            }
++        }
++        maxprot = policy::mmap_update_private_maxprot(flags, maxprot);
++        let mut denied = 0;
++        let error = policy::mmap_prot_denied_result(prot, maxprot, &mut denied);
++        if error != 0 {
++            kprintf(b"do_mmap:denied %x. %x %x\n\0".as_ptr().cast(), denied, prot, maxprot);
++            break 'mapping error;
++        }
++        vrflags |= policy::mmap_maxprot_to_vrflags(maxprot) as CInt;
++        if policy::mmap_should_force_straight(flags, (*proc).straight_map, phys, len, (*proc).straight_map_threshold) != 0 {
++            if debug(10) { kprintf(b"%s: range 0x%lx:%lu will be straight, addding VR_DEMAND\n\0".as_ptr().cast(), NAME.as_ptr(), addr, len); }
++            vrflags |= VR_DEMAND_PAGING;
++            straight_phys = phys;
++            phys = 0;
++            crate::profile::profile_event_add(4009, len as u64);
++        } else if flags & MAP_ANONYMOUS != 0 && (*proc).straight_map != 0 && flags & MAP_FIXED == 0 && phys != 0 {
++            if (*(*crate::cls::get_this_cpu_local_var()).current).profile != 0 {
++                kprintf(b"%s: contiguous but not straight? len: %lu\n\0".as_ptr().cast(), NAME.as_ptr(), len);
++            }
++            crate::profile::profile_event_add(4010, len as u64);
++        }
++        let error = crate::process_helpers::add_process_memory_range((*thread).vm, addr,
++            addr.wrapping_add(len as CULong), phys, vrflags as CLong as CULong,
++            object.cast(), off, pgshift, private_data, &mut range);
++        if error != 0 {
++            kprintf(b"%s: add_process_memory_range failed for 0x%lx:%lu flags: %lx, vrflags: %lx, pgshift: %d, error: %d\n\0".as_ptr().cast(),
++                NAME.as_ptr(), addr, addr.wrapping_add(len as CULong), flags as CLong, vrflags as CLong, pgshift, error);
++            break 'mapping error;
++        }
++        if straight_phys != 0 {
++            (*range).straight_start = ((*proc).straight_va as CULong).wrapping_add(straight_phys.wrapping_sub((*proc).straight_pa));
++            if debug(11) { kprintf(b"%s: range 0x%lx:%lu is straight starting at 0x%lx\n\0".as_ptr().cast(),
++                NAME.as_ptr(), addr, len, (*range).straight_start); }
++            crate::string::__inline_memset(crate::x86_memory_helpers::phys_to_virt(straight_phys), 0, len);
++        }
++        populate_len = if object.is_null() { len } else { core::cmp::min(len, (*object).size) };
++        if flags & MAP_ANONYMOUS == 0 {
++            if crate::atomic_helpers::atomic_cmpxchg4(addr_of_mut!((*object).status), 1, 0) == 1 {
++                populated_mapping = true;
++            }
++            if (*object).flags & MF_PREMAP != 0 && (*proc).mpol_flags & MPOL_SHM_PREMAP != 0 {
++                if (*object).flags & MF_ZEROFILL != 0 {
++                    let attr = crate::x86_memory_helpers::arch_vrflag_to_ptattr((*range).flag, PF_POPULATE, null_mut());
++                    let mut i: CInt = 0;
++                    while i < (*object).nr_pages {
++                        let start = (*range).start.wrapping_add((i as CLong as CULong).wrapping_mul(PAGE_SIZE));
++                        let error = crate::x86_memory_helpers::ihk_mc_pt_set_range(
++                            (*(*(*proc).vm).address_space).page_table, (*proc).vm.cast(),
++                            start as *mut c_void, start.wrapping_add(PAGE_SIZE) as *mut c_void,
++                            crate::x86_memory_helpers::virt_to_phys(*(*object).pages.add(i as usize)),
++                            attr, PAGE_SHIFT, range.cast(), 0);
++                        if error != 0 {
++                            kprintf(b"%s: ERROR: mapping %d page of pre-mapped file\n\0".as_ptr().cast(), NAME.as_ptr(), i);
++                        }
++                        i = i.wrapping_add(1);
++                    }
++                    if debug(12) { kprintf(b"%s: memobj 0x%lx pre-mapped\n\0".as_ptr().cast(), NAME.as_ptr(), object); }
++                } else { populated_mapping = true; }
++            }
++        }
++        // Original successful add-range ownership transfer. Later errors do not
++        // roll back or free the published physical pages/memobj as local state.
++        p = null_mut();
++        object = null_mut();
++        ro_vma_mapped = false;
++        0
++    };
++
++    // Three source-confirmed error repairs: never dereference an absent output
++    // range during host rollback, never unlock a write lock not yet acquired,
++    // and never unref a hugefile object already destroyed by its real free hook.
++    if ro_vma_mapped && (range.is_null() || (*range).straight_start == 0) {
++        let _ = policy::set_host_vma_body_result(addr, len, PROT_READ | PROT_WRITE | PROT_EXEC, 1);
++    }
++    if write_locked {
++        // Keep the just-published range alive into the original read phase;
++        // dropping writer then reacquiring reader admits a concurrent free.
++        downgrade_write_to_reader(addr_of_mut!((*(*thread).vm).memory_range_lock));
++    } else {
++        // Page-size failure never acquired a writer and owns no range pointer.
++        crate::lock_helpers::ihk_rwspinlock_read_lock_noirq(addr_of_mut!((*(*thread).vm).memory_range_lock).cast());
++    }
++    if error == 0 && !range.is_null() && !(*range).memobj.is_null()
++        && (*(*range).memobj.cast::<Memobj>()).flags & MF_XPMEM != 0 {
++        error = crate::xpmem_helpers::xpmem_update_process_page_table((*thread).vm.cast(), range.cast());
++        if error != 0 {
++            kprintf(b"%s: xpmem_update_process_page_table(): vm: %p, range: %lx-%lx failed %d\n\0".as_ptr().cast(),
++                NAME.as_ptr(), (*thread).vm, (*range).start, (*range).end, error);
++        }
++    }
++    // No VmRange borrow survives the reader unlock. Population looks up through
++    // the real VM/address provider, and return/logging use these scalar snapshots.
++    let straight_start = if error == 0 { (*range).straight_start } else { 0 };
++    let should_populate = error == 0 && populated_mapping
++        && vrflags & VR_PROT_MASK != 0 && straight_start == 0;
++    crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(addr_of_mut!((*(*thread).vm).memory_range_lock).cast());
++    if should_populate {
++        let result = crate::process_helpers::populate_process_memory((*thread).vm, addr as *mut c_void, populate_len);
++        if result != 0 {
++            kprintf(b"%s: WARNING: populate_process_memory(): vm: %p, addr: %p, len: %d (flags: %s%s) failed %d\n\0".as_ptr().cast(),
++                NAME.as_ptr(), (*thread).vm, addr, len as CInt,
++                if flags & MAP_POPULATE != 0 { b"MAP_POPULATE \0".as_ptr() } else { b"\0".as_ptr() },
++                if flags & MAP_LOCKED != 0 { b"MAP_LOCKED \0".as_ptr() } else { b"\0".as_ptr() }, result);
++            // Original Linux-like policy: population failure is ignored. The
++            // unlocked range may have changed, so do not invent an unmap here.
++        }
++    }
++    if !p.is_null() && npages > 0 {
++        crate::mem_helpers::_ihk_mc_free_pages(p, npages as CInt, IHK_MC_PG_USER,
++            SOURCE_FILE.as_ptr().cast_mut().cast(), 6651);
++    }
++    if !object.is_null() { object_unref(object); }
++    if debug(13) {
++        kprintf(b"%s: 0x%lx:%8lu, (req: 0x%lx:%lu), prot: %x, flags: %x, fd: %d, off: %lu, error: %ld, addr: 0x%lx\n\0".as_ptr().cast(),
++            NAME.as_ptr(), addr, len, addr0, len, prot, flags, fd, off0, error as CLong, addr);
++    }
++    if error == 0 {
++        if straight_start != 0 { straight_start as CLong } else { addr as CLong }
++    } else { error as CLong }
++}
++
++const _: unsafe extern "C" fn(CULong, SizeT, CInt, CInt, CInt, OffT, CInt, *mut c_void) -> CLong = do_mmap;
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -16605,27 +16605,58 @@
+         unsafe { super::vm_range_insert(vm, range) }
+     }
+ 
+-    /// Preserve page-table update flags and signed error forwarding.
++    /// Transactional preparation for a newly inserted, caller-owned range.
+     /// # Safety
+-    /// vm/range and backing address space stay live under original VM/PT
+-    /// exclusion throughout the synchronous existing update implementation.
++    /// The original caller holds range writer exclusion. Range/backing/VM remain
++    /// live through the same IRQ-save page-table lock. On error the transaction
++    /// has cleared/flushed ONLY its new PTE prefix and committed no RSS; caller
++    /// backing remains owned. No descriptor is freed by this stage.
+     #[no_mangle]
+     pub unsafe extern "C" fn process_add_range_update_bridge(
+-        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, attr: CULong,
++        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, _attr: CULong,
+     ) -> CInt {
+-        unsafe { super::update_process_page_table(vm, range, phys, attr) }
+-    }
+-
+-    /// Retain the original discarded removal status and NULL accounting output.
++        unsafe {
++            if vm.is_null() || range.is_null() || (*vm).address_space.is_null() {
++                return -super::EINVAL;
++            }
++            // The prior public updater intentionally ignored its flag argument
++            // and derived attributes from actual range flags + PF_POPULATE.
++            let attr = crate::x86_memory_helpers::arch_vrflag_to_ptattr(
++                (*range).flag, super::PF_POPULATE, core::ptr::null_mut());
++            let lock = core::ptr::addr_of_mut!((*vm).page_table_lock);
++            let irq = super::__ihk_mc_spinlock_lock(lock);
++            let error = crate::x86_memory_helpers::add_range_transaction::map(
++                (*(*vm).address_space).page_table, vm, (*range).start,
++                (*range).end, phys, attr, (*range).pgshift, range);
++            super::__ihk_mc_spinlock_unlock(lock, irq);
++            if error != 0 { super::process_update_page_table_log_bridge(error); }
++            error
++        }
++    }
++
++    /// Non-owning rollback after the paired updater has cleared its new PTEs.
+     /// # Safety
+-    /// The existing owner provides a live VM/process and original range writer
+-    /// exclusion. The backend owns removal, storage release and all field use;
+-    /// this adapter performs no access to removed ranges after its return.
++    /// Range writer exclusion and the exact just-inserted range remain owned by
++    /// the add-range orchestrator. This callback only detaches tree/cache; its
++    /// existing free callback subsequently retires descriptor storage ONCE.
++    /// It consumes no page/memobj/private_data backing and preserves the ABI.
+     #[no_mangle]
+     pub unsafe extern "C" fn process_add_range_remove_bridge(
+         vm: *mut ProcessVm, start: CULong, end: CULong,
+     ) {
+-        unsafe { let _ = super::remove_process_memory_range(vm, start, end, core::ptr::null_mut()); }
++        unsafe {
++            let range = super::process_lookup_memory_range_body_result(vm, start, end);
++            if range.is_null() || (*range).start != start || (*range).end != end {
++                // Do not return an ordinary error to a caller about to free
++                // backing when a supposedly owned descriptor cannot be found.
++                crate::abort::panic(b"add-range rollback lost its inserted descriptor\0".as_ptr().cast());
++            }
++            super::rb_erase(super::vm_range_rb_node(range),
++                core::ptr::addr_of_mut!((*vm).vm_range_tree).cast());
++            super::process_range_cache_replace_result(
++                core::ptr::addr_of_mut!((*vm).range_cache).cast(),
++                super::VM_RANGE_CACHE_SIZE as CInt, range.cast(), core::ptr::null_mut());
++        }
+     }
+ 
+     /// Preserve the existing split result and caller-owned range output.
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -10132,3 +10132,274 @@
+     pub(super) static x86_memory_kmalloc_file: [u8; 319] = TRACE_FILE_BYTES;
+ 
+ }
++
++// Add-range-only transaction. Existing public set/free/clear APIs and their
++// already qualified algorithms stay unchanged. No test callback is bound here.
++pub(crate) mod add_range_transaction {
++    use super::*;
++
++    // Keep the genuine SetRangeArgs at offset0. Existing walkers consume only
++    // that prefix; the owned sidecar records the newly mapped prefix for abort.
++    #[repr(C)]
++    struct AddArgs {
++        state: SetRangeArgs,
++        mapped_end: CULong,
++    }
++
++    const _: () = {
++        assert!(core::mem::offset_of!(AddArgs, state) == 0);
++        assert!(core::mem::offset_of!(AddArgs, mapped_end) == core::mem::size_of::<SetRangeArgs>());
++    };
++
++    unsafe fn remember(args: *mut c_void, base: CULong, end: CULong, size: CULong) {
++        let args = args.cast::<AddArgs>();
++        let mapped_end = core::cmp::min(end, base.wrapping_add(size));
++        if (*args).mapped_end < mapped_end { (*args).mapped_end = mapped_end; }
++    }
++
++    // This is a deliberate transaction phase, not a replacement RSS provider.
++    // The mandatory successful commit below invokes the real RSS provider for
++    // every mapped leaf/large entry. Failed transactions must charge nothing.
++    unsafe extern "C" fn defer_rss(
++        _range: *mut c_void, _phys: CULong, _size: CULong, _pgsize: CULong,
++    ) -> CInt { 0 }
++
++    unsafe extern "C" fn clear_prefix(
++        pt: *mut c_void, vm: *mut c_void, start: CULong, end: CULong,
++        free_physical: CInt, memobj: *mut c_void,
++    ) -> CInt {
++        if free_physical != 0 || !memobj.is_null() {
++            crate::abort::panic(b"add-range rollback attempted backing release\0".as_ptr().cast());
++        }
++        let result = clear_nonowning(pt, vm.cast(), start, end);
++        if result != 0 {
++            // Never let an ordinary caller-owned error escape with live new
++            // PTEs, after which the caller would free their backing allocation.
++            crate::abort::panic(b"add-range rollback could not clear new PTEs\0".as_ptr().cast());
++        }
++        0
++    }
++
++    unsafe extern "C" fn map_l1(
++        args: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
++    ) -> CInt {
++        set_range_trace_enter(1, base, start, end);
++        let state = core::ptr::read(args.cast::<SetRangeArgs>());
++        let error = x86_set_range_leaf_body_result(args, ptep, base, start, end,
++            state.pt, state.vm, state.phys, state.attr,
++            read_volatile(core::ptr::addr_of!(X86_ATTR_MASK)), state.range,
++            Some(clear_prefix), Some(defer_rss), Some(x86_set_range_log_bridge));
++        if error == 0 { remember(args, base, end, PTL1_SIZE); }
++        set_range_trace_exit(1, ptep, base, start, end, error);
++        error
++    }
++
++    unsafe fn map_level(
++        level: CInt, args: *mut c_void, ptep: *mut CULong,
++        base: CULong, start: CULong, end: CULong, shift: CInt,
++        size: CULong, size_flag: CULong, direct: CInt, pdir: CULong,
++        child: X86SetRangeChildWalkFn,
++    ) -> CInt {
++        set_range_trace_enter(level, base, start, end);
++        let state = core::ptr::read(args.cast::<SetRangeArgs>());
++        let error = x86_set_range_level_body_result(args, ptep, base, start, end,
++            state.pt, state.vm, state.phys, state.attr,
++            read_volatile(core::ptr::addr_of!(X86_ATTR_MASK)), state.diff,
++            state.pgshift, shift, size, size_flag, direct, pdir, state.range,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
++            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
++            Some(child), Some(clear_prefix), Some(defer_rss),
++            Some(x86_set_range_log_bridge));
++        if error == 0 && direct != 0 && size_flag != 0 && *ptep & size_flag != 0 {
++            remember(args, base, end, size);
++        }
++        set_range_trace_exit(level, ptep, base, start, end, error);
++        error
++    }
++
++    unsafe extern "C" fn map_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        map_level(2, a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, map_walk_l1)
++    }
++    unsafe extern "C" fn map_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        map_level(3, a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
++            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, map_walk_l2)
++    }
++    unsafe extern "C" fn map_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        map_level(4, a, p, b, s, e, PTL4_SHIFT, 0, 0, 0, PFL4_PDIR_ATTR, map_walk_l3)
++    }
++    unsafe extern "C" fn map_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(map_l1), a)
++    }
++    unsafe extern "C" fn map_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(map_l2), a)
++    }
++    unsafe extern "C" fn map_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(map_l3), a)
++    }
++    unsafe extern "C" fn map_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l4(p, b, s, e, Some(map_l4), a)
++    }
++
++    // Clear only; preserve both caller backing and address-space-owned table
++    // metadata. In particular do not free a table before its TLB batch is acked.
++    // Empty tables remain reachable through the address space and are reused or
++    // destroyed by its genuine existing teardown, never leaked/unowned storage.
++    unsafe fn clear_level(
++        args: *mut c_void, ptep: *mut CULong, base: CULong,
++        start: CULong, end: CULong, shift: CInt, size: CULong,
++        size_flag: CULong, child: X86ClearChildWalkFn,
++    ) -> CInt {
++        let state = args.cast::<X86ClearRangeArgs>();
++        x86_clear_range_level_body_result(args, ptep, base, start, end,
++            shift, size, size_flag, 0, (*state).vm, (*state).addr,
++            core::ptr::addr_of_mut!((*state).nr_addr), (*state).max_nr_addr,
++            ihk_mc_get_processor_id(), 0, core::ptr::null_mut(),
++            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
++            Some(child), Some(remote_flush_tlb_array_cpumask),
++            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
++            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
++            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
++            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log))
++    }
++    unsafe extern "C" fn clear_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        clear_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, clear_walk_l1)
++    }
++    unsafe extern "C" fn clear_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        clear_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, clear_walk_l2)
++    }
++    unsafe extern "C" fn clear_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        x86_clear_range_root_body_result(a, p, b, s, e,
++            Some(x86_clear_phys_to_virt_bridge), Some(clear_walk_l3))
++    }
++    unsafe extern "C" fn clear_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(clear_range_l1), a)
++    }
++    unsafe extern "C" fn clear_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(clear_l2), a)
++    }
++    unsafe extern "C" fn clear_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(clear_l3), a)
++    }
++
++    /// Clear just the failed transaction's newly mapped prefix without allocation.
++    /// Caller holds the genuine page-table lock and range writer. No page, memobj
++    /// reference or descriptor is consumed. TLB acknowledgements finish before
++    /// this borrowed stack buffer or caller-owned backing can be retired.
++    unsafe fn clear_nonowning(pt: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong) -> CInt {
++        if end <= start { return 0; }
++        if x86_clear_range_validate_result(start, end, (*vm).region.user_start, (*vm).region.user_end) != 0 {
++            return -EINVAL;
++        }
++        let mut address = 0;
++        let mut args = X86ClearRangeArgs { free_physical: 0,
++            memobj: core::ptr::null_mut(), vm: vm.cast(), addr: &mut address,
++            nr_addr: 0, max_nr_addr: 1 };
++        let error = walk_pte_l4(pt, 0, start, end, Some(clear_l4),
++            (&mut args as *mut X86ClearRangeArgs).cast());
++        if args.nr_addr > 0 {
++            remote_flush_tlb_array_cpumask(vm.cast(), args.addr, args.nr_addr, ihk_mc_get_processor_id());
++        }
++        if error == -ENOENT { 0 } else { error }
++    }
++
++    unsafe extern "C" fn commit_rss(
++        range: *mut c_void, _pt: *mut c_void, ptep: *mut CULong,
++        base: *mut c_void, shift: CInt,
++    ) -> CInt {
++        let entry = read_volatile(ptep);
++        if entry == PTE_NULL || !matches!(shift, PTL1_SHIFT | PTL2_SHIFT | PTL3_SHIFT) {
++            return -EINVAL;
++        }
++        let size = 1u64 << shift;
++        let phys = entry & PT_PHYSMASK;
++        let charged = set_range_rss_add(range, phys, size, size);
++        let typed = range.cast::<crate::abi::VmRange>();
++        x86_set_range_log_bridge(if charged != 0 { X86_SET_RANGE_LOG_RSS_ADD } else { X86_SET_RANGE_LOG_RSS_SKIP },
++            shift, base as CULong, (*typed).start, (*typed).end, 0,
++            entry, phys, size, size, 0);
++        0
++    }
++
++    // Read-only visitor with the existing safe classifier, but no LWK-RAM
++    // validation of leaf physical addresses: remote/I/O/COW mappings are valid
++    // inputs, and the real RSS provider decides whether/how they are charged.
++    // Directory entries require the genuine size bit for a large-page visit;
++    // all missing entries skip, and no commit walk allocates or splits a table.
++    unsafe extern "C" fn commit_l1(a: *mut c_void, p: *mut CULong, b: CULong, _s: CULong, _e: CULong) -> CInt {
++        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
++        x86_visit_pte_leaf_result(state.arg, state.pt, p, b, 1, PTL1_SHIFT, state.funcp)
++    }
++    unsafe fn commit_level(
++        a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong,
++        shift: CInt, size: CULong, size_flag: CULong, direct: CInt,
++        pdir: CULong, child: X86VisitPteWalkFn,
++    ) -> CInt {
++        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
++        x86_visit_pte_level_result(state.arg, state.pt, p, b, s, e,
++            1, 1, 0, size, shift, size_flag, 1, direct, 0, pdir,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
++            Some(x86_pt_phys_to_virt_bridge), Some(child), a, state.funcp,
++            Some(x86_visit_pte_log_bridge))
++    }
++    unsafe extern "C" fn commit_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        commit_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, commit_walk_l1)
++    }
++    unsafe extern "C" fn commit_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        commit_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
++            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, commit_walk_l2)
++    }
++    unsafe extern "C" fn commit_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        x86_visit_pte_root_result(p, b, s, e, 1, 0, PFL4_PDIR_ATTR,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
++            Some(x86_pt_phys_to_virt_bridge), Some(commit_walk_l3), a)
++    }
++    unsafe extern "C" fn commit_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(commit_l1), a)
++    }
++    unsafe extern "C" fn commit_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(commit_l2), a)
++    }
++    unsafe extern "C" fn commit_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(commit_l3), a)
++    }
++    unsafe extern "C" fn commit_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l4(p, b, s, e, Some(commit_l4), a)
++    }
++
++    unsafe fn commit_accounting(pt: *mut c_void, start: CULong, end: CULong, range: *mut c_void) -> CInt {
++        let mut args = X86VisitPteArgs { pt, flags: X86_VPTEF_SKIP_NULL,
++            pgshift: 0, funcp: Some(commit_rss), arg: range };
++        x86_visit_pte_range_dispatch_result(pt, start, end,
++            (&mut args as *mut X86VisitPteArgs).cast(), Some(commit_walk_l4))
++    }
++
++    /// The add-range-only mapping transaction. Genuine mapping algorithms and
++    /// allocation/attribute/huge-page policy are reused; accounting is committed
++    /// only after full success, so abort needs no reconstruction of cleared RSS.
++    pub(crate) unsafe fn map(
++        pt: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong,
++        phys: CULong, attr: CULong, pgshift: CInt, range: *mut crate::abi::VmRange,
++    ) -> CInt {
++        let mut args = AddArgs { state: SetRangeArgs { pt, phys, attr, pgshift,
++            diff: start ^ phys, vm: vm.cast(), range: range.cast() }, mapped_end: start };
++        let error = set_range_top_wide_body(pt, vm.cast(), start, end, phys, attr,
++            pgshift, range.cast(), core::ptr::addr_of_mut!(args.state),
++            map_walk_l4, x86_set_range_log_bridge);
++        if error != 0 {
++            // Never clear a conflicting old PTE at/beyond the failed cursor.
++            let clear = clear_nonowning(pt, vm, start, args.mapped_end);
++            if clear != 0 {
++                crate::abort::panic(b"add-range rollback retained partial PTEs\0".as_ptr().cast());
++            }
++            return error;
++        }
++        if args.mapped_end != end {
++            crate::abort::panic(b"add-range success did not cover its full range\0".as_ptr().cast());
++        }
++        let account = commit_accounting(pt, start, end, range.cast());
++        if account != 0 {
++            crate::abort::panic(b"add-range RSS commit violated mapped-range invariant\0".as_ptr().cast());
++        }
++        0
++    }
++}

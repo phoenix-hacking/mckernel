@@ -1,0 +1,7 @@
+{
+  "actual_error": "AssertionError at initial data-only in-memory comparator line55",
+  "cause": "Reviewer comparator treated readelf GNU versym display indices as decimal digits only; real display has hexadecimal a..f indices in neighboring entries, which shifted per-symbol indexing. Actual raw provider metadata and report are unchanged and valid.",
+  "correction": "Parse hexadecimal versym index tokens and count every entry, then compare selected symbol positions/version names to actual report.",
+  "no_SUT_command_test_payload_or_artifact_changed_or_replayed": true,
+  "status": "AUXILIARY_SAVED_TEXT_COMPARISON_FAILED_BEFORE_QUALIFICATION_WRITE"
+}

@@ -1,0 +1,180 @@
+{
+  "schema": "m14-do-mmap-direct-call-type-successor-independent-delta-and-composition-review-v1",
+  "at": "2026-11-10T22:50:34.921418+00:00",
+  "reviewer": "/root/public_abi_join_max, actual gpt-6.1-sol/MAX; independent P04Source correction/composition and P04Tests port/provider authors",
+  "decision": "GO_EXACT_F338_TYPED_BOUNDARY_CORRECTION_AND_09DF_SIX_PATH_CURRENT_SOURCE_COMPOSITION__NOT_AN_EXECUTION_OR_ARTIFACT_ACCEPTANCE",
+  "material_defects": [],
+  "contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/CONTRACT.json",
+    "bytes": 8256,
+    "sha256": "dff00a49ec767338479b30ae4d92ef01930c3bcca5ed983db92ec79b81fad419"
+  },
+  "type_delta": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/TYPE-CORRECTION.patch",
+    "bytes": 2973,
+    "sha256": "f3381128ab1cf70701ce648c0b1afeafcb80e289a65148fa28fce77d207bc67a"
+  },
+  "complete_composed_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/REBASED-COMPOSITION.patch",
+    "bytes": 58114,
+    "sha256": "09df57577b901f31f96406dc5d1705b2b2ce0e29b4015200b02abbacb280f382"
+  },
+  "original_material_review_reused": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-final-review-publicabi-max-1/REVIEW.json",
+    "bytes": 24944,
+    "sha256": "b3db9552313f9f218bd449f24364776ccb183c34e7854cfbfebf75b16572e5bc"
+  },
+  "old_uncompiled_candidate_preserved": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/candidate/kernel/rust/f03_do_mmap.rs",
+    "bytes": 30728,
+    "sha256": "5961fe04c786323bbe8640a4ee66b883f9062f311f69447b6bcd36219c7536d5"
+  },
+  "old_private428c_preserved": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/REBASED-COMPOSITION.patch",
+    "bytes": 58116,
+    "sha256": "428c3168cb2b327ac50745e208d33608f355afe40402e1f060ccdb963ff5efb0"
+  },
+  "current_preimage_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/PREIMAGES.json",
+    "bytes": 3096,
+    "sha256": "447a1366997d8b73957af20289e0af5909f7cd29507749d8eac4be467400bea4"
+  },
+  "review_scope": "Only the complete finite type-finding family and exact current-source six-file composition. Reuse closed full-body/borrow/ABI/provider/rollback/RSS and actual six-HOST-case findings from b3db/c33/a69/712/5b0de. No body audit, old green suite, compiler, codegen, metadata, helper or native replay.",
+  "closed_preflight_findings": [
+    {
+      "former_finding": "Original5961 line159: SizeT usize passed to arg1 CULong u64",
+      "exact_new_expression": "crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(&mut ctx, len as CULong);",
+      "actual_provider": "x86_cpu_helpers.rs1059 value:CULong; ABIff48 aliases CULong=u64,SizeT=usize",
+      "disposition": "Exact expression type now matches the genuine existing setter; public eight-argument do_mmap signature and context/setter order are unchanged."
+    },
+    {
+      "former_finding": "Original5961 lines192-193: u64 cursor span and *mutu64 output passed to SizeT/*mutSizeT page-query parameters",
+      "exact_new_bindings": [
+        "let mut query_psize: SizeT = PAGE_SIZE as SizeT;",
+        "end.wrapping_sub(start) as SizeT, &mut query_psize, &mut alignment",
+        "let psize: CULong = 1 << 29;"
+      ],
+      "actual_provider": "Existing arch_get_smaller_page_size(_args:*mutc_void,cursize:SizeT,newsizep:*mutSizeT,p2alignp:*mutCInt)->CInt",
+      "disposition": "Both incompatible query arguments now have the actual formal types. Output uses genuine typed initialized storage and ordinary reference-to-raw coercion; no pointer reinterpretation. The same query occurs before the same error/log/break. Its successful size was already discarded by the unconditional512MiB override; new immutable CULong override preserves all downstream masks/arithmetic/debug values."
+    }
+  ],
+  "lossless_selected_type_contract": {
+    "bound_sources": [
+      {
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "bytes": 76151,
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      {
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "bytes": 256003,
+        "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/candidate/kernel/rust/x86_memory_helpers.rs",
+        "bytes": 325789,
+        "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+      },
+      {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+        "bytes": 1074,
+        "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+      }
+    ],
+    "Rust": "CULong=u64,SizeT=usize. New const assertions require both size8/align8 in the real selected module. No global typedef change.",
+    "C": "Actual x86 ihk/types.h defines uint64_t unsigned long long and size_t uint64_t. The new selected C assertion requires size_t and unsigned long size8/align8. Existing actual eight-argument signature/type guards remain.",
+    "value_domain": "Selected64-bit unsigned conversions preserve all bits of len and wrapping physical span. Typed query storage starts with4096; alignment/error order and original512MiB override are identical. No additional error policy, truncation, initialization, lifetime or reference is introduced.",
+    "actual_assert_status": "SOURCE_GUARDS_NOT_YET_COMPILED; normal genuine C/Rust compile remains required. Width proof is not a blanket alternate-profile waiver."
+  },
+  "independent_exact_composition_checks": {
+    "method": "Read-only standard-library text/byte/hash and unified-diff reconstruction in memory; no patch was applied to files. Actual context/deleted lines and old/new line counts were matched at exact positions with zero fuzz.",
+    "all_contract_patch_candidate_type_source_pins_match": true,
+    "all_five_current_canonical_preimages_equal_c052_manifest_bytes": true,
+    "new_f03_do_mmap_absent_from_canonical_at_review": true,
+    "complete09df_applied_in_memory_reproduces_all_six_pinned_candidates": true,
+    "old428c_applied_in_memory_still_reproduces_its_original_six_candidates": true,
+    "f338_applied_in_memory_to428c_changes_exactly_two_paths_and_reproduces_new_candidates": true,
+    "four_byte_identical_paths": [
+      "kernel/CMakeLists.txt",
+      "kernel/rust/lib.rs",
+      "kernel/rust/process_helpers.rs",
+      "kernel/rust/x86_memory_helpers.rs"
+    ],
+    "semantic_delta_equality": {
+      "kernel_CMakeLists_and_lib": "All added/removed lines equal the original independently reviewed bb682 port; rebased contexts preserve current f8 additions. No option/default/compiler/feature toggle or unrelated source hunk.",
+      "process_and_x86_providers": "All added/removed lines equal exact reviewed611dffe correction; candidate d3be/19aa bytes unchanged. Rejected RSS candidate is not used.",
+      "generic_syscall_C": "All port added/removed lines equal bb682 plus exactly the three new lossless-width guard lines. No current source is restored from the old preimage, and no Term/Exit/clone/credential/F06 body or origin is changed.",
+      "new_Rust_entry": "Exact original5961 plus only declared width guards/scalar conversions/typed query binding and CULong override. F338 reproduces75a1 exactly; no extra repair/body/selector/provider edit."
+    },
+    "scope_preservation": "Same supported ordinary Rust+x86/Linux6.12/PROFILE/!UBSAN/!TOFU/!Fugaku selector, one module registration and paired C exclusion. New dependencies and source/debug env remain the bb682 contract. All14 selected f8 owners/C exclusions, Term26casts/representation guards and18field checks, clonezero initialization, credentials and F06 origins remain outside these exact additions.",
+    "C_fallback_and_line_mapping": "Original761-line C fallback is retained by unchanged bb682 edits. Selected/alternate5914/5921 start and6675/6682 following origins are restored by the same #line macros; additional width guards are before fallback selection. Existing downstream descriptors are not renumbered.",
+    "F06": "Source defaultOFF and current explicit cacheON are unchanged. No cache/build/shared-output mutation by preparer or reviewer."
+  },
+  "candidate_source_records": [
+    {
+      "relative_path": "kernel/CMakeLists.txt",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 55676,
+      "sha256": "25158df4ed1b0a94ef6433265c4b92035096289972feb89213ea0185ff3c08c8"
+    },
+    {
+      "relative_path": "kernel/rust/lib.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/lib.rs",
+      "bytes": 4333,
+      "sha256": "1bbe24ffb98810c83f70cf3d37999b26c9fd06ce048f5d733b6a96a2b6a61959"
+    },
+    {
+      "relative_path": "kernel/syscall.c",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/syscall.c",
+      "bytes": 946602,
+      "sha256": "81682ae8cac4a0792d521f5cca240cf81db837f087bdc1c898a9a6561621e9be"
+    },
+    {
+      "relative_path": "kernel/rust/f03_do_mmap.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/f03_do_mmap.rs",
+      "bytes": 30921,
+      "sha256": "75a1f11b33af4e663f857d54190ec0b14c4193fb944d20ed0d7a7b54c5e1298e"
+    },
+    {
+      "relative_path": "kernel/rust/process_helpers.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 619886,
+      "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+    },
+    {
+      "relative_path": "kernel/rust/x86_memory_helpers.rs",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "bytes": 325789,
+      "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+    }
+  ],
+  "unchanged_proofs_reused": {
+    "shared_provider": "509be/611dffe source and actual5787 HOST0/42/0 six cases remain exactly reusable. Descriptor-once, caller-backed ordinary error, partial-new-PTE clear/ack, mandatory RSS, outside-LWK and512x4K-vs2M classification need no new source or test replay.",
+    "private_atomic_slice": "Exact writer->reader function remains byte-identical8e837db66a13bc19595f478b7fb8fc71cd495e887bb34af54bad6898078641af. Existing c33 source protocol and b3db separate856b test/profile GO with current two-UNKNOWN binding remain valid; this review neither reruns nor invents an atomic PASS.",
+    "accepted_scope": "Existing accepted F01/F02/F04/F05 and all original four accepted M14 file scopes stay closed at their exact prior scope. New add-range transaction effects and complete mmap entry still require their newly affected image/functional proof."
+  },
+  "remaining_required_actual_validation": {
+    "Root_integration": "Root alone may integrate this exact six-file09df composition after rechecking current source bytes, and freeze the resulting real source/commit and operation bindings. No full-file rollback from old candidate trees.",
+    "operation": "New actual source/profile/namespace/cache/mount/capture/resource request requires focused operation GO and Root fresh admission. Preserve both UNKNOWN256MiB/jobs and all actual controller/worker overhead under HOST4GiB/max3/fresh26/floors until positive disposition; one heavy/image owner.",
+    "named_target_argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "actual_compile": "Real wholeRust must compile/codegen new module and genuine callers/providers; selected genericC must compile paired new field/type/width/flag/origin assertions, retaining all old guards and diagnostics. No flags suppression, old object reuse as new result or standalone fixture substitution.",
+    "passive_result": "Actual new unique Rustdo_mmap and missing corresponding genericC definition; changed shared providers/true import and indirect ownership/ABI closure;14newDdebug32/tracked origins; prior14 f8 owners/F06data/zeroarchC; final ELF/map/entry/LOAD/noUND/actual Cledger and positive cleanup. C33-to32 is a source expectation checked by names and owners, not credit before result.",
+    "functional_native": "Atomic HOST receipt, actual VM/error/concurrent/XPMEM behavior, matching deployed/native/resource-restoring lifecycle and original whole-file/default/E1E2 acceptance remain distinct. Source/type correction alone retires no C or original condition."
+  },
+  "inspection_and_action_limits": {
+    "reviewer_performed": "Source/saved JSON/text/byte/hash reads, exact in-memory diff reconstruction and this one private review write only.",
+    "not_performed": "No compiler/test/CMake/checker/helper/ELFtool/Docker/network/API/program/native action, source/canonical/index/controller/resource edit, goal/billing change or recursive agent.",
+    "inspection_format_correction": "An exploratory read-only decoder initially rejected Git diff preamble metadata; corrected parsing recognized only its actual diff/index/newfile headers and completed exact context/count checks. No candidate, producer or payload failed or reran."
+  },
+  "preserved_holds": "Original5961/bb682/428c/b3db and c33/a69/test compiler failures remain intact. Published f8/c052 and25-file green cohort are immutable. Old held private mmap/exec/TERMRESET/Direct-TID fixture/equivalent, source/service/account/native/currentfree and UNKNOWN/resource holds are not released.",
+  "next_action": "Root may compose exact09df now and advance the separately reviewed genuine normal image operation with fresh admission. No further full-body/SDK/source census or alreadypassing rollback/RSS test replay is needed; independently qualify its actual new artifact afterward."
+}

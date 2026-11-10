@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "status": "PASS_SUPPORTED_F253_MMAP_ARTIFACT_ABI_PROVIDER_AND_C_EXCLUSION_DELTA",
+  "source_commit": "f2535305aaef51dd9b15a798f6cab1a16f29e575",
+  "actual": {
+    "Rust": {
+      "bytes": 19117720,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912"
+    },
+    "Rust_cfgs": 86,
+    "Rust_tokens": 228,
+    "actual_clients": 18,
+    "entry": "0xfffffffffe83b7a0",
+    "generic_C_FUNC_rows": 32,
+    "image": {
+      "bytes": 10588200,
+      "mode": "755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+      "sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2"
+    },
+    "inputglobals": 4553,
+    "map": {
+      "bytes": 991255,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+      "sha256": "6f11926be391d76579a60f37a60297585c629b81f980a844e4c70f60b39c6cd9"
+    },
+    "new_do_mmap_bytes": 8971,
+    "raw_warning_lines": 164,
+    "retained_Rust_entries": 14,
+    "scriptglobals": 5,
+    "strongimports": 318,
+    "typed_provider_rows": 56,
+    "uniqueimports": 318
+  },
+  "evidence": [
+    {
+      "bytes": 90254,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/QUALIFICATION.json",
+      "sha256": "2074b6aa194b210581bd5ec0700833f3c4477e21f2e7bac09ae81356cd379453"
+    },
+    {
+      "bytes": 545450,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/MMAP-CHANGED-PATH-JOINS.json",
+      "sha256": "f6ca53514e3a9b35623d504d71ace80f954475735095cd25c4bef64084d6fcb4"
+    },
+    {
+      "bytes": 5886989,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+      "sha256": "4a7d4e40af20543625abc5e5d0377a48428dbd59e06ede3c1eb295ea45c7b098"
+    },
+    {
+      "bytes": 48375,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/ORIGINAL-CONDITIONS.json",
+      "sha256": "45a37cbccc49a494759a74de198f2a080d9b27d747a682bd15f0ea1496426765"
+    },
+    {
+      "bytes": 20091,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/ACTUAL-RUST-AND-C-COMMANDS.json",
+      "sha256": "a966e2cbb93482657808df4788e7e34fd0faa7a788e6df0ca34c17db1314a6a7"
+    }
+  ],
+  "new_owner_scope": "One actual8971B Rust do_mmap and no matching C definition; all14 prior selected Rust entries retained. Actual C33→32 with only do_mmap removed. Paired C/Rust64bit guards, real shared rollback providers,14 writable source-origin debug records and56 existing source provider rows join.",
+  "lifecycle": "Actual18 positive clientbirth/waits/streams; both producer/reader0/nonOOM/Pid0/removed, no owned children and both256MiB UNKNOWN jobs retained. Root outer73810 separately confirmedclosed; no extra client rows invented.",
+  "warnings": "164 captured warning-containing lines, not a count of unique issues. Complete original build stdout/stderr are retained by hash in detailed qualification; no warning suppression or warning-free claim.",
+  "scope": "Physical normal full-image/source/type/provider/ownership delta passes; original all-file/default/capability/matchednative/runtime/lifecycle conditions remain OPEN. No original leaf credit, native call or C32 retirement.",
+  "qualifier_tool_receipt": {
+    "chunk_id": "cadf27",
+    "exit_code": 0,
+    "wall_time_seconds": 0.448904503
+  },
+  "rebuild_readback_test_or_source_contract_replay": false
+}

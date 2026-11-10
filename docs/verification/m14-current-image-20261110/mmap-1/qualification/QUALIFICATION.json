@@ -1,0 +1,1795 @@
+{
+  "ELF_layout": {
+    "allocated_sections_LOAD_covered": true,
+    "arch_start": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 207,
+        "index": 2879,
+        "name": "arch_start",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684629408,
+        "visibility": 0
+      },
+      "name": "arch_start",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 207,
+          "index": 4761,
+          "name": "arch_start",
+          "section_index": 963,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684629408,
+          "bytes": 207
+        },
+        "section": ".ltext.arch_start"
+      }
+    },
+    "header": {
+      "entry": 18446744073684629408,
+      "machine": 62,
+      "type": 2
+    },
+    "legitimate_changed_addresses_and_codegen_allowed": true,
+    "no_INTERP_DYNAMIC_or_runtime_relocations": true,
+    "notes": [
+      {
+        "descriptor_hex": "04000000000c0600c01d000001000000",
+        "descriptor_u32": [
+          4,
+          396288,
+          7616,
+          1
+        ],
+        "kind": 1296255745,
+        "owner": "MCKERNEL",
+        "section": ".note.mckernel.boot"
+      },
+      {
+        "descriptor_hex": "47bdc3023608a0789aa551fd27d45592deb3cdb7",
+        "descriptor_u32": null,
+        "kind": 3,
+        "owner": "GNU",
+        "section": ".note.gnu.build-id"
+      }
+    ],
+    "origin": "0xfffffffffe800000",
+    "program_headers": [
+      {
+        "align": 4096,
+        "file_bytes": 1019955,
+        "flags": 5,
+        "memory_bytes": 1019955,
+        "offset": 4096,
+        "paddr": 18446744073684389888,
+        "type": 1,
+        "vaddr": 18446744073684389888
+      },
+      {
+        "align": 4096,
+        "file_bytes": 335872,
+        "flags": 7,
+        "memory_bytes": 635972,
+        "offset": 1028096,
+        "paddr": 18446744073685413888,
+        "type": 1,
+        "vaddr": 18446744073685413888
+      },
+      {
+        "align": 4,
+        "file_bytes": 76,
+        "flags": 4,
+        "memory_bytes": 76,
+        "offset": 1359704,
+        "paddr": 18446744073685745496,
+        "type": 4,
+        "vaddr": 18446744073685745496
+      }
+    ]
+  },
+  "actual_execution": {
+    "bytes": 18847,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/RESULT.json",
+    "sha256": "5527f0af8cb9948acad428bf3e889c16eaf6d866f5ff4f04b93e26082458ddd1"
+  },
+  "actual_image": {
+    "bytes": 10588200,
+    "mode": "755",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+    "sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2"
+  },
+  "actual_map": {
+    "bytes": 991255,
+    "mode": "644",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+    "sha256": "6f11926be391d76579a60f37a60297585c629b81f980a844e4c70f60b39c6cd9"
+  },
+  "actual_new_do_mmap": [
+    {
+      "ABI": "pub unsafe extern \"C\" fn do_mmap(\n    addr0: CULong, len: SizeT, prot: CInt, flags: CInt, fd: CInt,\n    off0: OffT, vrf0: CInt, private_data: *mut c_void,\n) -> CLong",
+      "C_defined_counterparts": [],
+      "C_macro": "MCKERNEL_RUST_F03_DO_MMAP",
+      "Rust_cfg": "f03_do_mmap_candidate",
+      "Rust_source": "kernel/rust/f03_do_mmap.rs",
+      "Rust_source_identity": {
+        "bytes": 30921,
+        "path": "/home/holden/mckernel/kernel/rust/f03_do_mmap.rs",
+        "sha256": "75a1f11b33af4e663f857d54190ec0b14c4193fb944d20ed0d7a7b54c5e1298e"
+      },
+      "actual_Rust_C_ABI_signature": "pub unsafe extern \"C\" fn do_mmap(\n    addr0: CULong, len: SizeT, prot: CInt, flags: CInt, fd: CInt,\n    off0: OffT, vrf0: CInt, private_data: *mut c_void,\n) -> CLong",
+      "actual_bytes_size_address": "Observe new actual result; no predicted codegen identity.",
+      "excluded_C_object": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "physical_owner": {
+        "final": {
+          "binding": "GLOBAL",
+          "bytes": 8971,
+          "index": 3896,
+          "name": "do_mmap",
+          "section_index": 1,
+          "type": "FUNC",
+          "value": 18446744073684676192,
+          "visibility": 0
+        },
+        "name": "do_mmap",
+        "owner": {
+          "input": {
+            "binding": "GLOBAL",
+            "bytes": 8971,
+            "index": 4300,
+            "name": "do_mmap",
+            "section_index": 1185,
+            "type": "FUNC",
+            "value": 0,
+            "visibility": 0
+          },
+          "object": "rust/mckernel_rust.o",
+          "placement": {
+            "address": 18446744073684676192,
+            "bytes": 8971
+          },
+          "section": ".ltext.do_mmap"
+        }
+      },
+      "real_C_ABI_checks_object": {
+        "bytes": 2880,
+        "mode": "644",
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "source_ABI": "pub unsafe extern \"C\" fn do_mmap(\n    addr0: CULong, len: SizeT, prot: CInt, flags: CInt, fd: CInt,\n    off0: OffT, vrf0: CInt, private_data: *mut c_void,\n) -> CLong",
+      "symbol": "do_mmap"
+    }
+  ],
+  "actual_whole_Rust_object": {
+    "bytes": 19117720,
+    "mode": "644",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+    "sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912"
+  },
+  "all11_constituent_identities": [
+    {
+      "bytes": 2848,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+      "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+    },
+    {
+      "bytes": 248752,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "sha256": "7559299363060b0cafbbec97ed2b00412fa71c19bc4caf17caa7478adfaf5e38"
+    },
+    {
+      "bytes": 2864,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    {
+      "bytes": 2880,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+    },
+    {
+      "bytes": 2344,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+    },
+    {
+      "bytes": 2872,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+    },
+    {
+      "bytes": 16056,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+    },
+    {
+      "bytes": 2888,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+    },
+    {
+      "bytes": 2888,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972"
+    },
+    {
+      "bytes": 5568,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+    },
+    {
+      "bytes": 19117720,
+      "mode": "644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912"
+    }
+  ],
+  "at": "2026-11-10T23:11:51.842914+00:00",
+  "changed_path_proof": {
+    "bytes": 545450,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/MMAP-CHANGED-PATH-JOINS.json",
+    "sha256": "f6ca53514e3a9b35623d504d71ace80f954475735095cd25c4bef64084d6fcb4"
+  },
+  "commands": {
+    "bytes": 20091,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/ACTUAL-RUST-AND-C-COMMANDS.json",
+    "sha256": "a966e2cbb93482657808df4788e7e34fd0faa7a788e6df0ca34c17db1314a6a7"
+  },
+  "config_ABI": {
+    "IHK": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "IHK_config": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535",
+    "PROFILE_ON": true,
+    "actual_cache": {
+      "bytes": 30123,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-CMakeCache.txt",
+      "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+    },
+    "cacheexplicitF6ON": true,
+    "changed_units_observed": [
+      "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "rust/mckernel_rust.o"
+    ],
+    "clonezero_initializer_retained": true,
+    "config": "ca251af0e69e4c82df042063bb9ffc180cbba2bd1c34f246d7589f44ed7bfa3f",
+    "linker": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd",
+    "paired_new64bit_C_and_Rust_guards_compiled": true,
+    "sourceF6defaultOFF": true,
+    "unchanged_units_observed": [
+      "CMakeFiles/mckernel.img.dir/mem.c.o",
+      "CMakeFiles/mckernel.img.dir/process.c.o",
+      "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o"
+    ]
+  },
+  "lifecycle": {
+    "actual_client_count": 18,
+    "all18_positivebirth_wait_streams": true,
+    "both_UNKNOWN_released": false,
+    "bothcontainers0_nonOOM_Pid0_removed": true,
+    "no_owned_children_remain": true,
+    "sampled_cgroup_highwaters": [
+      {
+        "exact_terminal_whole_job_peak_proven": false,
+        "observed_sampled_highwater_bytes": 530190336,
+        "phase": "build",
+        "retained_samples": 46,
+        "source": {
+          "bytes": 11947,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-MEMORY.json",
+          "sha256": "a014162832976137baaa6c7fa1304e89bd5c5fad768b9b7ab0776bac2a17af87"
+        }
+      },
+      {
+        "exact_terminal_whole_job_peak_proven": false,
+        "observed_sampled_highwater_bytes": 50024448,
+        "phase": "metadata",
+        "retained_samples": 17,
+        "source": {
+          "bytes": 4503,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/metadata-MEMORY.json",
+          "sha256": "f1706cca3c115d2e7d72f6765de5a438d42eb127a32c13dce5e96af485a5901d"
+        }
+      }
+    ],
+    "terminal_records": [
+      {
+        "CID": "57c8762424f2e346355e662a8f39faf4730377941f38c935532121d84ef90d06",
+        "owned_container_removed": true,
+        "phase": "build",
+        "state": {
+          "Dead": false,
+          "Error": "",
+          "ExitCode": 0,
+          "FinishedAt": "2026-11-10T23:05:34.492801625Z",
+          "OOMKilled": false,
+          "Paused": false,
+          "Pid": 0,
+          "Restarting": false,
+          "Running": false,
+          "StartedAt": "2026-11-10T23:05:11.898113718Z",
+          "Status": "exited"
+        },
+        "terminal_record": {
+          "bytes": 24228,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-terminal.stdout",
+          "sha256": "fe3d968b4cc27170032e8315b82894c45bb4ae9a07e84d661656a55602d6d427"
+        }
+      },
+      {
+        "CID": "35694fa886a22136b25686cd186af933e13bf97af354879141490436258ddf66",
+        "owned_container_removed": true,
+        "phase": "metadata",
+        "state": {
+          "Dead": false,
+          "Error": "",
+          "ExitCode": 0,
+          "FinishedAt": "2026-11-10T23:05:44.300245486Z",
+          "OOMKilled": false,
+          "Paused": false,
+          "Pid": 0,
+          "Restarting": false,
+          "Running": false,
+          "StartedAt": "2026-11-10T23:05:35.875656763Z",
+          "Status": "exited"
+        },
+        "terminal_record": {
+          "bytes": 12763,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/metadata-terminal.stdout",
+          "sha256": "c31a83e5befec295b2d7c547ceafba3fa1e54e0e128e26c987e9ede6532d99c4"
+        }
+      }
+    ]
+  },
+  "metadata_records": [
+    {
+      "bytes": 2086,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/artifact-identities.sha256",
+      "sha256": "c0c7aed148639d140eabcfc6bae9be85a8756a5dff490c3051b0208f9b166f8f"
+    },
+    {
+      "bytes": 1185,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/artifact-modes.stdout",
+      "sha256": "18b720d20a1cab2285427284f43061f679bd0c24f4429b4348d5275602f91ddb"
+    },
+    {
+      "bytes": 38386598,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/constituent-symbols-relocations.stdout",
+      "sha256": "af32b6154a2150ac7c2fed51fc370ea01772650820a8a2c715ce2f73683defd9"
+    },
+    {
+      "bytes": 331080,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/do-mmap-disassembly.stdout",
+      "sha256": "d94efe8db1783dab0eb515e758897ef3672ed72c9fe6e7240c684d975e057e98"
+    },
+    {
+      "bytes": 46756,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/image-elf.stdout",
+      "sha256": "32c4abd97f8c9c9620c45c702b1aef0733ced41d7b45b80c3741f3d844272b46"
+    },
+    {
+      "bytes": 991255,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/image-map.stdout",
+      "sha256": "6f11926be391d76579a60f37a60297585c629b81f980a844e4c70f60b39c6cd9"
+    },
+    {
+      "bytes": 240811,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/image-nm.stdout",
+      "sha256": "d8faee601c219da1b127b084267486fa003d81523a5cdd220b012b1ecdbd7442"
+    },
+    {
+      "bytes": 439344,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/image-symbols-relocations.stdout",
+      "sha256": "900d21e9c2a24036bd1c64364536ce05ebd8f9c6fd9a8d32d83bd423a0c9d6f3"
+    },
+    {
+      "bytes": 30123,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-CMakeCache.txt",
+      "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+    },
+    {
+      "bytes": 47670,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-build.make",
+      "sha256": "9b04a2a90bd8c42b1dd83242d1147e856648e988b5e6b7fb215d82b5cb99371d"
+    },
+    {
+      "bytes": 73070,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-compile_commands.json",
+      "sha256": "1cf8863f3d196bc65996910f8b6468cd2f65ab0860f680d3dff01cfc25c61aba"
+    },
+    {
+      "bytes": 6957,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-flags.make",
+      "sha256": "3272e04f16bf78166dc97864ac10bd4fe8133115cfec3b7c8b709b1d2dd0b875"
+    },
+    {
+      "bytes": 1290,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-link.d",
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+    },
+    {
+      "bytes": 759,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-link.txt",
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    {
+      "bytes": 10828,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-mckernel_rust.d",
+      "sha256": "914d3e14ac5133b0ea3bc8e5c2f812186ceb428f50202b412a341b0ed3150e29"
+    },
+    {
+      "bytes": 11616,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/metadata/regenerated-mckernel_rust.raw.d",
+      "sha256": "47bbd389b3d388aeed96db701e064d9885912edbb2198f2caa21e2c215ecf7c1"
+    }
+  ],
+  "original_acceptance": false,
+  "original_whole_conditions": {
+    "bytes": 48375,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/ORIGINAL-CONDITIONS.json",
+    "sha256": "45a37cbccc49a494759a74de198f2a080d9b27d747a682bd15f0ea1496426765"
+  },
+  "owner": "/root/p04_source_max saved-byte qualifier; Root sole executor/publisher",
+  "physical_provider_closure": {
+    "actual_final_globals": 4558,
+    "current56_typed_source_provider_rows": 56,
+    "data": {
+      "bytes": 5886989,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+      "sha256": "4a7d4e40af20543625abc5e5d0377a48428dbd59e06ede3c1eb295ea45c7b098"
+    },
+    "input_global_physical_joins": 4553,
+    "linker_assignment_joins": 5,
+    "named_undefined": [],
+    "physical_mismatches": [],
+    "strong_import_occurrences": 318,
+    "unique_import_names": 318,
+    "weak_import_occurrences": 0
+  },
+  "progress_changed_by_qualifier": false,
+  "qualification_method": {
+    "bytes": 38553,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/qualification-1/qualify_saved_image.py",
+    "sha256": "a5dc55b7b5169a2d3f52b64c11d5b0e57d45c9863539db6879e70b8ffe68c6a6"
+  },
+  "qualifier_actions": "Only savedsource/ELF/map/JSON reads and private result writes; no subprocess, producer, compiler, helper, test, readelf/objdump, SDK query, bodyaudit, native/API/program/hardware call.",
+  "raw_warnings": {
+    "all_raw_stream_bytes_retained": true,
+    "raw_streams": [
+      {
+        "bytes": 29868,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stdout",
+        "sha256": "b9407ccb4b4a4f825f47123d718dab12ec9d2d4490e87a2b8af2d8a04fd716fd"
+      },
+      {
+        "bytes": 63152,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "sha256": "d7ed99617727276f21ac21692ece77a30540d1006f7e45d15457d9290c879e6f"
+      }
+    ],
+    "warning_lines": [
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 55,
+        "literal": "warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 60,
+        "literal": "warning: the feature `core_intrinsics` is internal to the compiler or standard library"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 69,
+        "literal": "warning: unused import: `IhkSpinlock`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 77,
+        "literal": "warning: unused import: `MaybeUninit`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 83,
+        "literal": "warning: unused imports: `null_mut` and `read_volatile`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 89,
+        "literal": "warning: unused import: `MovePagesSmpReq`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 95,
+        "literal": "warning: unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 114,
+        "literal": "warning: unused import: `super::*`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 120,
+        "literal": "warning: unused import: `super::*`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 126,
+        "literal": "warning: unused import: `super::*`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 132,
+        "literal": "warning: unused imports: `align_of` and `size_of`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 138,
+        "literal": "warning: unused imports: `CLong` and `SizeT`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 144,
+        "literal": "warning: unused import: `addr_of_mut`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 150,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 158,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 164,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 170,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 176,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 182,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 188,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 194,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 200,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 206,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 212,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 218,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 224,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 230,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 236,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 242,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 248,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 254,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 260,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 266,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 272,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 278,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 284,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 290,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 296,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 302,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 308,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 314,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 320,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 326,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 332,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 338,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 344,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 350,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 356,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 362,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 368,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 374,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 380,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 386,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 392,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 398,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 404,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 410,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 416,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 422,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 428,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 434,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 440,
+        "literal": "warning: unused variable: `thread`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 448,
+        "literal": "warning: unused variable: `sig`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 454,
+        "literal": "warning: unused variable: `lock_node`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 460,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 466,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 472,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 478,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 484,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 490,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 496,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 502,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 508,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 514,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 520,
+        "literal": "warning: unnecessary `unsafe` block"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 526,
+        "literal": "warning: type `ProcessCloneConfig` is more private than the item `process_clone_thread_body_result`"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 545,
+        "literal": "warning: struct `CallerCredits` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 553,
+        "literal": "warning: associated items `acquire` and `cancel_unpublished` are never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 565,
+        "literal": "warning: struct `PrivateFork` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 571,
+        "literal": "warning: struct `CreateFailure` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 577,
+        "literal": "warning: struct `PrivateFailure` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 583,
+        "literal": "warning: enum `BeginFailure` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 589,
+        "literal": "warning: associated items `create`, `create_owned`, `create_raw`, `validate`, `cancel`, and `begin` are never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 613,
+        "literal": "warning: field `child_pid` is never read"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 621,
+        "literal": "warning: field `actual` is never read"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 629,
+        "literal": "warning: method `handle` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 637,
+        "literal": "warning: method `caller_cleanup_allowed` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 646,
+        "literal": "warning: constant `NATIVE_QUEUE_ABI_VERSION` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 652,
+        "literal": "warning: enum `PendingFreeBatchState` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 658,
+        "literal": "warning: struct `PendingPhysicalBounds` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 664,
+        "literal": "warning: struct `PendingFreeCallbackArgs` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 670,
+        "literal": "warning: struct `PendingInventoryLease` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 676,
+        "literal": "warning: associated items `new`, `descriptor`, `descriptor_node`, and `descriptor_index` are never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 694,
+        "literal": "warning: struct `ValidatedPendingInventory` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 700,
+        "literal": "warning: struct `PendingFreeBatch` is never constructed"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 706,
+        "literal": "warning: associated function `new` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 714,
+        "literal": "warning: function `validate_pending_inventory_metadata` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 720,
+        "literal": "warning: function `validate_pending_inventory_ring` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 726,
+        "literal": "warning: function `validate_pending_inventory` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 732,
+        "literal": "warning: methods `try_reanchor_into` and `reanchor_into` are never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 744,
+        "literal": "warning: function `drain_validated_pending_inventory` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 750,
+        "literal": "warning: function `detach_pending_free_batch` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 756,
+        "literal": "warning: function `drain_pending_free_batch` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 762,
+        "literal": "warning: associated function `unpublished` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 770,
+        "literal": "warning: function `native_irq_work_descriptor_offset` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 776,
+        "literal": "warning: associated items `new` and `can_drain` are never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 788,
+        "literal": "warning: constant `F06_SIGNAL_LEGACY_FRAME_COPY_PENDING_FREE_LINE` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 794,
+        "literal": "warning: constant `F06_SIGNAL_LEGACY_XSAVE_COPY_PENDING_FREE_LINE` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 800,
+        "literal": "warning: constant `F06_SIGNAL_LEGACY_XSAVE_OOM_PENDING_FREE_LINE` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 806,
+        "literal": "warning: constant `F06_HANDLER_SA_NODEFER` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 812,
+        "literal": "warning: function `f06_signal_frame_copy_terminate` is never used"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 818,
+        "literal": "warning: module `selected_APboot_storage` should have a snake case name"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 826,
+        "literal": "warning: static variable `no_execute` should have an upper case name"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 839,
+        "literal": "warning: static variable `selected_mode` should have an upper case name"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 851,
+        "literal": "warning: direct cast of function item into an integer"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 863,
+        "literal": "warning: direct cast of function item into an integer"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 874,
+        "literal": "warning: direct cast of function item into an integer"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 885,
+        "literal": "warning: `ihk_ikc_send` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 900,
+        "literal": "warning: `page_fault_process_vm` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 914,
+        "literal": "warning: `sched_wakeup_thread` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 928,
+        "literal": "warning: `ihk_mc_map_virtual` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 942,
+        "literal": "warning: `ihk_mc_unmap_virtual` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 956,
+        "literal": "warning: `ihk_mc_map_virtual` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 970,
+        "literal": "warning: `ihk_mc_unmap_virtual` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 984,
+        "literal": "warning: `page_fault_process_vm` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 998,
+        "literal": "warning: `mem_kmalloc_panic` redeclares `panic` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1012,
+        "literal": "warning: `mem_register_interrupt_handler_provider` redeclares `ihk_mc_register_interrupt_handler` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1027,
+        "literal": "warning: `mem_get_vector_provider` redeclares `ihk_mc_get_vector` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1041,
+        "literal": "warning: `ORIGINAL_CPU_INFO` redeclares `ihk_mc_get_cpu_info` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1055,
+        "literal": "warning: `ORIGINAL_PROFILE_EVENT_ADD` redeclares `profile_event_add` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1069,
+        "literal": "warning: `mem_reserve_panic_provider` redeclares `panic` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1083,
+        "literal": "warning: `phys_to_page` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1097,
+        "literal": "warning: `process_copy_set_range_public` redeclares `ihk_mc_pt_set_range` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1117,
+        "literal": "warning: `ihk_mc_map_virtual` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1131,
+        "literal": "warning: `ihk_mc_unmap_virtual` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1145,
+        "literal": "warning: `release_thread` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1159,
+        "literal": "warning: `process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1173,
+        "literal": "warning: `process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1187,
+        "literal": "warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1210,
+        "literal": "warning: `f06_set_signal_kernel_panic` redeclares `panic` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1224,
+        "literal": "warning: `set_cputime` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1238,
+        "literal": "warning: `f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1258,
+        "literal": "warning: `f06_signal_adapter_syscall` redeclares `syscall` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1272,
+        "literal": "warning: `panic` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1286,
+        "literal": "warning: `c_map_fixed_area` redeclares `map_fixed_area` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1300,
+        "literal": "warning: `c_cpu_info` redeclares `ihk_mc_get_cpu_info` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1314,
+        "literal": "warning: `x86_memory_existing_panic` redeclares `panic` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1328,
+        "literal": "warning: `page_unmap` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1342,
+        "literal": "warning: `phys_to_page` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1356,
+        "literal": "warning: `memory_find_command_line` redeclares `find_command_line` with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1370,
+        "literal": "warning: `syscall_generic_forwarding` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1384,
+        "literal": "warning: `memobj_unref` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1398,
+        "literal": "warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1421,
+        "literal": "warning: `ihk_mc_pt_set_range` redeclared with a different signature"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1447,
+        "literal": "warning: 154 warnings emitted"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1450,
+        "literal": "/src/kernel/syscall.c:7546:33: warning: unused variable 'range' [-Wunused-variable]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1454,
+        "literal": "/src/kernel/syscall.c:26376:44: warning: 'syscall_itimer_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1457,
+        "literal": "/src/kernel/syscall.c:26058:43: warning: 'sched_syscall_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1460,
+        "literal": "/src/kernel/syscall.c:24599:46: warning: 'ptrace_io_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1463,
+        "literal": "/src/kernel/syscall.c:24297:59: warning: 'syscall_cputime_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1466,
+        "literal": "/src/kernel/syscall.c:4910:60: warning: 'wait_scan_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1469,
+        "literal": "/src/kernel/syscall.c:4877:62: warning: 'wait_zombie_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1472,
+        "literal": "/src/kernel/syscall.c:4726:43: warning: 'ptrace_detach_kernel_offsets' defined but not used [-Wunused-const-variable=]"
+      },
+      {
+        "file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/execution-1/build-payload.stderr",
+        "line_1based": 1475,
+        "literal": "/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions"
+      }
+    ]
+  },
+  "retained_C_runtime_debt": {
+    "actual_FUNC_rows": 32,
+    "delta": [
+      {
+        "actual_runtime_FUNC_rows": 32,
+        "added_function_names": [],
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "previous_runtime_FUNC_rows": 33,
+        "removed_function_names": [
+          "do_mmap"
+        ]
+      }
+    ],
+    "whole_original_C_retirement": false
+  },
+  "retained_prior14_Rust_owners": [
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 1421,
+        "index": 3544,
+        "name": "do_syscall",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684700992,
+        "visibility": 0
+      },
+      "name": "do_syscall",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 1421,
+          "index": 4213,
+          "name": "do_syscall",
+          "section_index": 1214,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684700992,
+          "bytes": 1421
+        },
+        "section": ".ltext.do_syscall"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 204,
+        "index": 1291,
+        "name": "interrupt_syscall",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684862224,
+        "visibility": 0
+      },
+      "name": "interrupt_syscall",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 204,
+          "index": 4831,
+          "name": "interrupt_syscall",
+          "section_index": 2302,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684862224,
+          "bytes": 204
+        },
+        "section": ".ltext.interrupt_syscall"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 957,
+        "index": 3158,
+        "name": "terminate_host",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073685271280,
+        "visibility": 0
+      },
+      "name": "terminate_host",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 957,
+          "index": 4272,
+          "name": "terminate_host",
+          "section_index": 4655,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073685271280,
+          "bytes": 957
+        },
+        "section": ".ltext.terminate_host"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 165,
+        "index": 4310,
+        "name": "arch_rt_sigreturn_context_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684621296,
+        "visibility": 0
+      },
+      "name": "arch_rt_sigreturn_context_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 165,
+          "index": 4736,
+          "name": "arch_rt_sigreturn_context_bridge",
+          "section_index": 935,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684621296,
+          "bytes": 165
+        },
+        "section": ".ltext.arch_rt_sigreturn_context_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 262,
+        "index": 4401,
+        "name": "do_setresuid",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684694096,
+        "visibility": 0
+      },
+      "name": "do_setresuid",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 262,
+          "index": 4978,
+          "name": "do_setresuid",
+          "section_index": 1202,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684694096,
+          "bytes": 262
+        },
+        "section": ".ltext.do_setresuid"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 263,
+        "index": 4298,
+        "name": "do_setresgid",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684693824,
+        "visibility": 0
+      },
+      "name": "do_setresgid",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 263,
+          "index": 4976,
+          "name": "do_setresgid",
+          "section_index": 1200,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684693824,
+          "bytes": 263
+        },
+        "section": ".ltext.do_setresgid"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 2707,
+        "index": 4658,
+        "name": "do_signal",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684698272,
+        "visibility": 0
+      },
+      "name": "do_signal",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 2707,
+          "index": 4322,
+          "name": "do_signal",
+          "section_index": 1210,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684698272,
+          "bytes": 2707
+        },
+        "section": ".ltext.do_signal"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 53,
+        "index": 3937,
+        "name": "arch_ptrace_regset_log_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684618272,
+        "visibility": 0
+      },
+      "name": "arch_ptrace_regset_log_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 53,
+          "index": 4717,
+          "name": "arch_ptrace_regset_log_bridge",
+          "section_index": 905,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684618272,
+          "bytes": 53
+        },
+        "section": ".ltext.arch_ptrace_regset_log_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 59,
+        "index": 2031,
+        "name": "arch_native_signal_bad_frame_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684611424,
+        "visibility": 0
+      },
+      "name": "arch_native_signal_bad_frame_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 59,
+          "index": 4685,
+          "name": "arch_native_signal_bad_frame_bridge",
+          "section_index": 862,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684611424,
+          "bytes": 59
+        },
+        "section": ".ltext.arch_native_signal_bad_frame_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 29,
+        "index": 4024,
+        "name": "arch_rt_sigreturn_xrstor_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684621568,
+        "visibility": 0
+      },
+      "name": "arch_rt_sigreturn_xrstor_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 29,
+          "index": 4741,
+          "name": "arch_rt_sigreturn_xrstor_bridge",
+          "section_index": 943,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684621568,
+          "bytes": 29
+        },
+        "section": ".ltext.arch_rt_sigreturn_xrstor_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 5669,
+        "index": 4409,
+        "name": "terminate",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073685265536,
+        "visibility": 0
+      },
+      "name": "terminate",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 5669,
+          "index": 4410,
+          "name": "terminate",
+          "section_index": 4651,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073685265536,
+          "bytes": 5669
+        },
+        "section": ".ltext.terminate"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 52,
+        "index": 856,
+        "name": "exit_group_log_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684705232,
+        "visibility": 0
+      },
+      "name": "exit_group_log_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 52,
+          "index": 5015,
+          "name": "exit_group_log_bridge",
+          "section_index": 1244,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684705232,
+          "bytes": 52
+        },
+        "section": ".ltext.exit_group_log_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 17,
+        "index": 2056,
+        "name": "exit_group_terminate_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684705344,
+        "visibility": 0
+      },
+      "name": "exit_group_terminate_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 17,
+          "index": 5019,
+          "name": "exit_group_terminate_bridge",
+          "section_index": 1248,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684705344,
+          "bytes": 17
+        },
+        "section": ".ltext.exit_group_terminate_bridge"
+      }
+    },
+    {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 123,
+        "index": 2949,
+        "name": "exit_group_current_pid_bridge",
+        "section_index": 1,
+        "type": "FUNC",
+        "value": 18446744073684705104,
+        "visibility": 0
+      },
+      "name": "exit_group_current_pid_bridge",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 123,
+          "index": 5014,
+          "name": "exit_group_current_pid_bridge",
+          "section_index": 1242,
+          "type": "FUNC",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073684705104,
+          "bytes": 123
+        },
+        "section": ".ltext.exit_group_current_pid_bridge"
+      }
+    }
+  ],
+  "reused_original_qualified_parser": {
+    "bytes": 46448,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/compiler-correction-1/qualification-1/qualify_saved_image.py",
+    "sha256": "cd7290b60ec54fd3a4c80d9f2eeb0f032a8a80bb3725e22986694c5d17a0f5b8"
+  },
+  "reviewed_operation": {
+    "bytes": 46675,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/REQUEST.json",
+    "sha256": "5b15afe6e3b1b7770bef603161e63554eed5302a735e586197e08c98c50093b6"
+  },
+  "reviewed_operation_GO": {
+    "bytes": 18098,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-operation-review-publicabi-max-1/do-mmap-incremental-1/REVIEW.json",
+    "sha256": "36195ced4b9f98fa57a5d0c819471b8ce7b9083e5dc060a45a86321d958197ed"
+  },
+  "schema": "m14-f253-do-mmap-actual-image-qualification-v1",
+  "scope_limit": "Supported selectedartifact/source/type/ABI/provider/C-exclusion delta only. Prior14 and accepted scopes retained; genericC32/sourceF6defaultOFF/native/matchedruntime/original wholeconditions remain open.",
+  "source_binding": {
+    "bytes": 3865,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/mmap-next-source-1/direct-call-type-correction-1/normal-incremental-1/SOURCE-BINDING.json",
+    "sha256": "fb6422b1b5b968ebcd631c713f2113424024a7b85f1ff33f482f3432812c7481"
+  },
+  "source_commit": "f2535305aaef51dd9b15a798f6cab1a16f29e575",
+  "stable_f8_green": {
+    "bytes": 12693,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef8cf0bd7-1/BASELINE.json",
+    "sha256": "eb3aa2cd817fa5e0b718d3becd76ec1b3de30e51c921fce753405b4db7775307"
+  },
+  "status": "PASS_ACTUAL_RUST_DO_MMAP_C_EXCLUSION_AND_FULL_PHYSICAL_PROVIDER_CLOSURE",
+  "whole_I02_E1_E2_decision": "Physical currentf253 completeimage/provider blocker RESOLVED. OriginalwholeM14-I02E1/E2 remain OPEN: 32 genericprojectC FUNC rows/data plus completeall-file/default/capability/matchingmodule/native conditions. This one newentry never accepts a wholeleaf."
+}

@@ -1,0 +1,59 @@
+{
+  "status": "PASS_EXACT_TYPED_ATOMIC_WRITER_READER_HANDOFF_HOST_ONLY",
+  "started_at": "2026-11-10T22:49:36.542578+00:00",
+  "finished_at": "2026-11-10T22:49:37.358192+00:00",
+  "request_sha256": "856b3c196bcafc6920a06d539c1e8afec7de3d61135cc20dca04ec285beded77",
+  "review_sha256": "b3db9552313f9f218bd449f24364776ccb183c34e7854cfbfebf75b16572e5bc",
+  "phases": [
+    {
+      "phase": 1,
+      "id": "compile-exact-new-typed-lock-transition-regression",
+      "exit": 0,
+      "ownership": {
+        "label": "phase-1",
+        "leader": 1132912,
+        "leader_birth": "43724262",
+        "status": 0,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      }
+    },
+    {
+      "phase": 2,
+      "id": "typed-lock-reader-writer-lifetime-handoff",
+      "exit": 0,
+      "ownership": {
+        "label": "phase-2",
+        "leader": 1132938,
+        "leader_birth": "43724342",
+        "status": 0,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      }
+    }
+  ],
+  "executable": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/atomic-output-1/lock-downgrade",
+    "bytes": 4740432,
+    "sha256": "de0a8d357399afc73ff7d49d45bf3eead25de3451dbe9271132f862ab6a414ac"
+  },
+  "all_two_positive_owned_records": true,
+  "kernel_runtime": false,
+  "native_admitted": false,
+  "old_UNKNOWN_released": false,
+  "original_acceptance": false
+}

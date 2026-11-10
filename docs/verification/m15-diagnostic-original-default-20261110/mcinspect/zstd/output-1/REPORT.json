@@ -1,0 +1,372 @@
+{
+  "original_leaves_accepted": false,
+  "owned_records": [
+    {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "zstd-runtime-rpm",
+      "leader": 8,
+      "leader_birth": "43742043",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    },
+    {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "zstd-ELF",
+      "leader": 9,
+      "leader_birth": "43742044",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    }
+  ],
+  "providers": [
+    {
+      "ELF_join": {
+        "DT_NEEDED": [
+          "libc.so.6"
+        ],
+        "SONAME": "libzstd.so.1",
+        "scope": "Exact caller-selected definitions/versions, no target loader/API invocation",
+        "selected_definitions": [
+          {
+            "definition": {
+              "base_name": "ZSTD_compressStream2",
+              "binding": "GLOBAL",
+              "bytes": 7039,
+              "index": 193,
+              "kind": "FUNC",
+              "name": "ZSTD_compressStream2",
+              "raw": "   193: 0000000000021220  7039 FUNC    GLOBAL DEFAULT   15 ZSTD_compressStream2",
+              "section": "15",
+              "value": "0000000000021220",
+              "visibility": "DEFAULT"
+            },
+            "required": {
+              "name": "ZSTD_compressStream2",
+              "required_version": null
+            },
+            "verdef": null,
+            "versym": {
+              "hidden": false,
+              "index": 1,
+              "name": "*global*"
+            }
+          },
+          {
+            "definition": {
+              "base_name": "ZSTD_createCCtx",
+              "binding": "GLOBAL",
+              "bytes": 43,
+              "index": 70,
+              "kind": "FUNC",
+              "name": "ZSTD_createCCtx",
+              "raw": "    70: 000000000001d540    43 FUNC    GLOBAL DEFAULT   15 ZSTD_createCCtx",
+              "section": "15",
+              "value": "000000000001d540",
+              "visibility": "DEFAULT"
+            },
+            "required": {
+              "name": "ZSTD_createCCtx",
+              "required_version": null
+            },
+            "verdef": null,
+            "versym": {
+              "hidden": false,
+              "index": 1,
+              "name": "*global*"
+            }
+          },
+          {
+            "definition": {
+              "base_name": "ZSTD_decompress",
+              "binding": "GLOBAL",
+              "bytes": 307,
+              "index": 64,
+              "kind": "FUNC",
+              "name": "ZSTD_decompress",
+              "raw": "    64: 0000000000062fc0   307 FUNC    GLOBAL DEFAULT   15 ZSTD_decompress",
+              "section": "15",
+              "value": "0000000000062fc0",
+              "visibility": "DEFAULT"
+            },
+            "required": {
+              "name": "ZSTD_decompress",
+              "required_version": null
+            },
+            "verdef": null,
+            "versym": {
+              "hidden": false,
+              "index": 1,
+              "name": "*global*"
+            }
+          },
+          {
+            "definition": {
+              "base_name": "ZSTD_freeCCtx",
+              "binding": "GLOBAL",
+              "bytes": 391,
+              "index": 90,
+              "kind": "FUNC",
+              "name": "ZSTD_freeCCtx",
+              "raw": "    90: 000000000001d110   391 FUNC    GLOBAL DEFAULT   15 ZSTD_freeCCtx",
+              "section": "15",
+              "value": "000000000001d110",
+              "visibility": "DEFAULT"
+            },
+            "required": {
+              "name": "ZSTD_freeCCtx",
+              "required_version": null
+            },
+            "verdef": null,
+            "versym": {
+              "hidden": false,
+              "index": 1,
+              "name": "*global*"
+            }
+          },
+          {
+            "definition": {
+              "base_name": "ZSTD_isError",
+              "binding": "GLOBAL",
+              "bytes": 14,
+              "index": 121,
+              "kind": "FUNC",
+              "name": "ZSTD_isError",
+              "raw": "   121: 0000000000008960    14 FUNC    GLOBAL DEFAULT   15 ZSTD_isError",
+              "section": "15",
+              "value": "0000000000008960",
+              "visibility": "DEFAULT"
+            },
+            "required": {
+              "name": "ZSTD_isError",
+              "required_version": null
+            },
+            "verdef": null,
+            "versym": {
+              "hidden": false,
+              "index": 1,
+              "name": "*global*"
+            }
+          }
+        ],
+        "version_definition_names": {}
+      },
+      "caller_rows": [
+        {
+          "actual_caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 6,
+            "kind": "FUNC",
+            "name": "ZSTD_isError",
+            "raw": "     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_isError",
+            "section": "UND",
+            "value": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "caller_versym": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "actual selected libelf -> current mcinspect",
+          "current_mcinspect_join": {
+            "bytes": 89626,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-original-default-assessment-p04tests-max-1/actual-provider-join-1/ACTUAL-PROVIDER-JOINS.json",
+            "sha256": "31f2631a74259b22505ebef77b75d5bf96d32fb640d99c890aae03af96ef94a9"
+          },
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 26700,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/libelf-ELF.stdout",
+            "sha256": "a3e62c9790e2a24cbac48f9dd5d4efdbf6ff6db178126024e7d413c1400c9bde"
+          },
+          "required_version": null,
+          "selected_consumer_provider": "Actual selected libelf111896B/a50e64cf"
+        },
+        {
+          "actual_caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 9,
+            "kind": "FUNC",
+            "name": "ZSTD_decompress",
+            "raw": "     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_decompress",
+            "section": "UND",
+            "value": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "caller_versym": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "actual selected libelf -> current mcinspect",
+          "current_mcinspect_join": {
+            "bytes": 89626,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-original-default-assessment-p04tests-max-1/actual-provider-join-1/ACTUAL-PROVIDER-JOINS.json",
+            "sha256": "31f2631a74259b22505ebef77b75d5bf96d32fb640d99c890aae03af96ef94a9"
+          },
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 26700,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/libelf-ELF.stdout",
+            "sha256": "a3e62c9790e2a24cbac48f9dd5d4efdbf6ff6db178126024e7d413c1400c9bde"
+          },
+          "required_version": null,
+          "selected_consumer_provider": "Actual selected libelf111896B/a50e64cf"
+        },
+        {
+          "actual_caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 10,
+            "kind": "FUNC",
+            "name": "ZSTD_freeCCtx",
+            "raw": "    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_freeCCtx",
+            "section": "UND",
+            "value": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "caller_versym": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "actual selected libelf -> current mcinspect",
+          "current_mcinspect_join": {
+            "bytes": 89626,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-original-default-assessment-p04tests-max-1/actual-provider-join-1/ACTUAL-PROVIDER-JOINS.json",
+            "sha256": "31f2631a74259b22505ebef77b75d5bf96d32fb640d99c890aae03af96ef94a9"
+          },
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 26700,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/libelf-ELF.stdout",
+            "sha256": "a3e62c9790e2a24cbac48f9dd5d4efdbf6ff6db178126024e7d413c1400c9bde"
+          },
+          "required_version": null,
+          "selected_consumer_provider": "Actual selected libelf111896B/a50e64cf"
+        },
+        {
+          "actual_caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 16,
+            "kind": "FUNC",
+            "name": "ZSTD_compressStream2",
+            "raw": "    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_compressStream2",
+            "section": "UND",
+            "value": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "caller_versym": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "actual selected libelf -> current mcinspect",
+          "current_mcinspect_join": {
+            "bytes": 89626,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-original-default-assessment-p04tests-max-1/actual-provider-join-1/ACTUAL-PROVIDER-JOINS.json",
+            "sha256": "31f2631a74259b22505ebef77b75d5bf96d32fb640d99c890aae03af96ef94a9"
+          },
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 26700,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/libelf-ELF.stdout",
+            "sha256": "a3e62c9790e2a24cbac48f9dd5d4efdbf6ff6db178126024e7d413c1400c9bde"
+          },
+          "required_version": null,
+          "selected_consumer_provider": "Actual selected libelf111896B/a50e64cf"
+        },
+        {
+          "actual_caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 21,
+            "kind": "FUNC",
+            "name": "ZSTD_createCCtx",
+            "raw": "    21: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND ZSTD_createCCtx",
+            "section": "UND",
+            "value": "0000000000000000",
+            "visibility": "DEFAULT"
+          },
+          "caller_versym": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "actual selected libelf -> current mcinspect",
+          "current_mcinspect_join": {
+            "bytes": 89626,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-original-default-assessment-p04tests-max-1/actual-provider-join-1/ACTUAL-PROVIDER-JOINS.json",
+            "sha256": "31f2631a74259b22505ebef77b75d5bf96d32fb640d99c890aae03af96ef94a9"
+          },
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 26700,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/original-default-qualification-sdk-max-1/shared-provider-read-1/output-1/libelf-ELF.stdout",
+            "sha256": "a3e62c9790e2a24cbac48f9dd5d4efdbf6ff6db178126024e7d413c1400c9bde"
+          },
+          "required_version": null,
+          "selected_consumer_provider": "Actual selected libelf111896B/a50e64cf"
+        }
+      ],
+      "id": "zstd",
+      "identity_stable_after_metadata": true,
+      "package_headers": [
+        {
+          "argv_path": "/usr/lib64/libzstd.so.1",
+          "fields": [
+            "libzstd",
+            "0",
+            "1.5.5",
+            "9.el10",
+            "x86_64",
+            "zstd-1.5.5-9.el10.src.rpm"
+          ],
+          "raw": "libzstd|0|1.5.5|9.el10|x86_64|zstd-1.5.5-9.el10.src.rpm\n",
+          "role": "runtime"
+        }
+      ],
+      "runtime": {
+        "ELF": {
+          "class": 64,
+          "little_endian": true,
+          "machine": 62,
+          "type": 3
+        },
+        "bytes": 729608,
+        "gid": 0,
+        "mode": "0o755",
+        "path": "/usr/lib64/libzstd.so.1",
+        "resolved_path": "/usr/lib64/libzstd.so.1.5.5",
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "symlinks": [
+          {
+            "path": "/usr/lib64/libzstd.so.1",
+            "text": "libzstd.so.1.5.5"
+          }
+        ],
+        "uid": 0
+      }
+    }
+  ],
+  "runtime_or_API_executed": false,
+  "schema": "mckernel.mcinspect-libelf-zstd-five-passive-result.v1",
+  "status": "PASS_EXACT_ZSTD_FIVE_RUNTIME_DEFINITION_VERSION_FILE_PACKAGE_JOINS_PENDING_ORIGINAL_LEAF_REVIEW"
+}

@@ -1,0 +1,64 @@
+{
+  "at": "2026-11-10T23:23:00.529582+00:00",
+  "owner": "/root sole current integration/admission owner",
+  "saved_Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "authority": [
+    "source-e9ee712f52640da14bc2a8cfc90712a9c5703d0a58839f6fa86933fb1d54ce77",
+    "source-b1f06a754c53000df4ae121d5696f2080cce91460143ef44b95a56885608c463"
+  ],
+  "independent_review": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/host-lane-current-retirement-20261110/REVIEW.json",
+    "sha256": "a41bad7b82600ebf489041fb950aea4084b8fedf4a6f6a47c05b3713283be9fe"
+  },
+  "status": "CURRENT_TWO_HOST_CHARGES_RELEASED_AFTER_POSITIVE_SCOPE_RECONCILIATION",
+  "lanes": [
+    {
+      "id": "CPU0_ihkmond_libudev_stdlib_source_read",
+      "current_scope_retired": true,
+      "charge_bytes_before": 268435456,
+      "charge_jobs_before": 1,
+      "charge_bytes_after": 0,
+      "charge_jobs_after": 0,
+      "historical_nested_wait": "UNKNOWN_PRESERVED",
+      "basis": "Original completed delivery + synchronous stdlib-only no-spawn source + current full original-family census, independently reviewed"
+    },
+    {
+      "id": "CPU7_7f82_NUMA_runtime_copy",
+      "current_scope_retired": true,
+      "charge_bytes_before": 268435456,
+      "charge_jobs_before": 1,
+      "charge_bytes_after": 0,
+      "charge_jobs_after": 0,
+      "historical_payload_wait": "NOT_RECORDED_UNKNOWN_PRESERVED",
+      "basis": "Exact CID exit0/Pid0/joined removal + exact sudo start PAM close + completed outer launcher + current full original-scope census, independently reviewed"
+    }
+  ],
+  "verified_surviving_original_owners": [],
+  "retirement_signals_or_replays_needed": false,
+  "released_HOST_bytes": 536870912,
+  "released_HOST_jobs": 2,
+  "current_ordinary_HOST": {
+    "cpus": [
+      0,
+      6,
+      7
+    ],
+    "total_bytes": 4294967296,
+    "max_jobs": 3,
+    "loaded_child_cap": 6,
+    "remaining_these_two_UNKNOWN_bytes": 0,
+    "remaining_these_two_UNKNOWN_jobs": 0,
+    "all_controller_worker_container_overhead_counted": true,
+    "fresh_admission_still_required": true
+  },
+  "historical_failures_and_receipts_mutated": false,
+  "launcher_goal_budget_credit_state_mutated": false,
+  "unchanged_holds": [
+    "native CPUs2-5/12GiB and actual ownership/currentfree/source gates",
+    "retained18GiB historical reservations",
+    "scratch21",
+    "mutex27:4",
+    "all other UNKNOWN/source/service/account holds"
+  ],
+  "standing_completion_rule": "Every new operation retains full tool handle/return plus positive original-Popen wait/streams and exact owned lifecycle; retire/release immediately on proven full scope completion or explicitly retain UNKNOWN, without rewriting historical outcome."
+}
