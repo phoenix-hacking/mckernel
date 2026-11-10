@@ -1,9 +1,29 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T22:22:27.466524+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T22:44:16.138799+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Original M15-F04-original-default technical leaf verified.** Actual Eclair
+qualification08068f10 and independent whole-conditionGO9d46769a compose the
+complete source/profile/toolchain/Rust-owner/private-install proof with all six
+actual zlib definition/version/file/package joins and qualified libc dependency.
+Shared provider operation9e84/d328 PASS22:26:58 has six positive inner and nine
+outer waits, actual0/nonOOM/Pid0/owned-container removal; neither original915
+nor any old tool build was replayed. Both UNKNOWN HOST reservations remain.
+This closes exactly one original technical check:78/156 verified. M14 remains
+51.48%; M15 is58.06% (+1.05 displayed points from57.01, exact new contribution
+1.0416666667points using unrounded unchanged gate weights). Eclair file checklist
+is75%; deployed/native/ACCEPT and final M15 acceptance remain open.
+
+M15-F03's18 direct zlib/libelf joins now pass, but actual libelfa50e64cf exposes
+one missing transitive runtime provider: libzstd.so.1 and five ZSTD functions.
+P04Tests froze the two passive metadata-child packetb81ee9d9; SourceAcq reviews
+before Root admission. No rebuilt mcinspect, guessed export or new scenario quota
+substitutes for that exact input. Prior current-artifact/source/install proof stays
+qualified; only wholly satisfied original conditions receive credit.
+
 
 **Corrected terminate/exit image build and first reader PASS21:53:22.**
 Sourcef8cf0bd7 applies only the independently reviewed26 raw lock-pointer boundary
@@ -322,16 +342,19 @@ Optional capacity/control work stays deferred; guardian/mailbox/restored20-minut
 functional assistance remain active.
 
 
-Previous source/results checkpoint61659ac2 is pushed/fetched with all87 owned
-entries matched21:00:27Z. Sourcef8 and the reviewed image/provider/ownership proof,
-seven-case cleanup and scoped signal/mmap HOST results form this next coherent
-checkpoint. Repository whole-F06 default staysOFF pending original promotion. The current changed
+Source/results checkpointc0522ae4 is pushed/fetched with all252 source/evidence
+blobs matching and all33 unrelated dirty paths preserved. It publishes actualf8
+image/provider/ownership proof, seven-case cleanup and scoped signal/mmap HOST
+results. This next checkpoint records the independently closed Eclair technical
+leaf and its actual shared-provider evidence. Repository whole-F06 default staysOFF pending original promotion. The current changed
 pair51.48/57.01 was posted once in PR3 comment6776807210; no unchanged duplicate.
 
-Next15-minute deliverable: execute the exact shared zlib/libelf read915 after
-corrected capture and operation GO, then independently decide complete original
-F04/F03 technical leaves. Publish the now-reviewedf8 source/image/provider/ownership
-checkpoint without waiting for native.
+Next15-minute deliverable: execute only the new libzstd5 passive input after GO
+and finish the whole mcinspect technical-leaf decision. Carry forward the now
+closed Eclair technical leaf and publishedf8 image. Run the independently reviewed
+two-command mmap atomic protocol once; P04 corrects two finite entry type-call
+boundaries before material GO and the next normal incremental image. No known
+incompatible entry is compiled. Genuine signal native setup remains separate.
 Carry the now-PASS mmap rollback/RSS correction into its full source review and
 next genuine incremental image; do not replay its passing three commands. Complete
 only the missing zlib/provider and whole original Eclair/mcinspect technical-leaf
@@ -1414,7 +1437,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 | Milestone | Checklist progress | Accepted file goals | Accepted integration gates |
 | --- | ---: | ---: | ---: |
 | M14 | 51.48% | 4/6 | 0/3 |
-| M15 | 50.97% | 1/8 | 0/4 |
+| M15 | 58.06% | 1/8 | 0/4 |
 
 | Requirement | Checklist complete | Accepted | Defined scope / remaining obligation |
 | --- | ---: | --- | --- |
@@ -1438,15 +1461,15 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M14-I02 | 0.00% | no | Reproducible default source/config/toolchain and matched image/modules |
 | M14-I03 | 0.00% | no | Matching useful applications, process/memory/thread/signal behavior and native lifecycle/resource restoration on that image |
 | M15-F01 | 100.00% | yes | Accepted original MM compatibility wrappers |
-| M15-F02 | 37.50% | no | Rust executor qualification |
+| M15-F02 | 50.00% | no | Rust executor qualification |
 | M15-F03 | 62.50% | no | Rust mcinspect diagnostic qualification |
-| M15-F04 | 62.50% | no | Rust eclair diagnostic qualification |
+| M15-F04 | 75.00% | no | Rust eclair diagnostic qualification |
 | M15-F05 | 81.25% | no | Rust IHK library qualification |
 | M15-F06 | 63.64% | no | Rust ihkconfig CLI qualification |
 | M15-F07 | 71.43% | no | Rust ihkosctl CLI qualification |
 | M15-F08 | 70.00% | no | Rust ihkmond supervisor qualification |
 | M15-I01 | 20.00% | no | Complete project-runtime ownership manifest |
-| M15-I02 | 0.00% | no | Three delivered Linux-loadable Rust/assembly modules |
+| M15-I02 | 60.00% | no | Three delivered Linux-loadable Rust/assembly modules |
 | M15-I03 | 42.86% | no | Reproducible Rust userspace and dependency closure |
 | M15-I04 | 0.00% | no | Matched application and restoring lifecycle qualification |
 

@@ -1,0 +1,894 @@
+{
+  "at_utc": "2026-11-10T22:09:39.934024+00:00",
+  "command_stderr_limit_bytes": 262144,
+  "consumer_qualifications": {
+    "F03_independent_GO": {
+      "bytes": 7126,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-production-review-p03-max-1/qualification-1/REVIEW.json",
+      "sha256": "eaf85291f3ecebd184d4b89028c1762d63e5446f36c2e3309679813ef116def6"
+    },
+    "F03_provider_join": {
+      "bytes": 295576,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+      "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+    },
+    "F04": {
+      "bytes": 33775,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/QUALIFICATION.json",
+      "sha256": "75e750e7c74fb34b66bf599c9b00100ee5bd91f7aa5e8ebcc76abc333c5c23ce"
+    },
+    "F04_independent_GO": {
+      "bytes": 20403,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/independent-review-sdk-max-1/REVIEW.json",
+      "sha256": "2797fa284081d70d359d6a7a557c5251836609fb898414bd691d4762ebf9dfa2"
+    }
+  },
+  "existing_owner_helper": {
+    "bytes": 4668,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+    "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+  },
+  "file_size_limit_bytes": 4194304,
+  "prior_devel_metadata": {
+    "bytes": 319,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/3/payload.stdout",
+    "sha256": "e7ffa2e0101d59477fc0a34a59f9f5a98a222f0effad03e7042221fb3a2de7ac"
+  },
+  "prior_runtime_metadata": {
+    "bytes": 374,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/2/payload.stdout",
+    "sha256": "3a2494d487c2433bf991752176d3eb4c963d355b0acb3003b2869106e16cc990"
+  },
+  "providers": [
+    {
+      "caller_rows": [
+        {
+          "actual_caller": {
+            "annotated_version_index": null,
+            "base_name": "compress",
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 11,
+            "kind": "FUNC",
+            "name": "compress",
+            "section": "UND",
+            "value": 0,
+            "version": null,
+            "visibility": "DEFAULT"
+          },
+          "actual_current_map_PLT": "                0x00000000000320c0                compress",
+          "caller_version_index": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "eclair",
+          "name": "compress",
+          "original_check": "M15-F04-original-default",
+          "proof": {
+            "bytes": 370034,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "annotated_version_index": null,
+            "base_name": "inflate",
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 20,
+            "kind": "FUNC",
+            "name": "inflate",
+            "section": "UND",
+            "value": 0,
+            "version": null,
+            "visibility": "DEFAULT"
+          },
+          "actual_current_map_PLT": "                0x0000000000032130                inflate",
+          "caller_version_index": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "eclair",
+          "name": "inflate",
+          "original_check": "M15-F04-original-default",
+          "proof": {
+            "bytes": 370034,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "annotated_version_index": null,
+            "base_name": "inflateEnd",
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 74,
+            "kind": "FUNC",
+            "name": "inflateEnd",
+            "section": "UND",
+            "value": 0,
+            "version": null,
+            "visibility": "DEFAULT"
+          },
+          "actual_current_map_PLT": "                0x00000000000323e0                inflateEnd",
+          "caller_version_index": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "eclair",
+          "name": "inflateEnd",
+          "original_check": "M15-F04-original-default",
+          "proof": {
+            "bytes": 370034,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "annotated_version_index": 9,
+            "base_name": "compressBound",
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 84,
+            "kind": "FUNC",
+            "name": "compressBound@ZLIB_1.2.0",
+            "section": "UND",
+            "value": 0,
+            "version": "ZLIB_1.2.0",
+            "visibility": "DEFAULT"
+          },
+          "actual_current_map_PLT": "                0x0000000000032470                compressBound@@ZLIB_1.2.0",
+          "caller_version_index": {
+            "hidden": false,
+            "index": 9,
+            "name": "ZLIB_1.2.0"
+          },
+          "consumer": "eclair",
+          "name": "compressBound",
+          "original_check": "M15-F04-original-default",
+          "proof": {
+            "bytes": 370034,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+          },
+          "provider": "zlib",
+          "required_version": "ZLIB_1.2.0"
+        },
+        {
+          "actual_caller": {
+            "annotated_version_index": null,
+            "base_name": "inflateInit_",
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 96,
+            "kind": "FUNC",
+            "name": "inflateInit_",
+            "section": "UND",
+            "value": 0,
+            "version": null,
+            "visibility": "DEFAULT"
+          },
+          "actual_current_map_PLT": "                0x0000000000032510                inflateInit_",
+          "caller_version_index": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "eclair",
+          "name": "inflateInit_",
+          "original_check": "M15-F04-original-default",
+          "proof": {
+            "bytes": 370034,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "annotated_version_index": null,
+            "base_name": "inflateReset",
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 109,
+            "kind": "FUNC",
+            "name": "inflateReset",
+            "section": "UND",
+            "value": 0,
+            "version": null,
+            "visibility": "DEFAULT"
+          },
+          "actual_current_map_PLT": "                0x00000000000325a0                inflateReset",
+          "caller_version_index": {
+            "hidden": false,
+            "index": 1,
+            "name": "*global*"
+          },
+          "consumer": "eclair",
+          "name": "inflateReset",
+          "original_check": "M15-F04-original-default",
+          "proof": {
+            "bytes": 370034,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/eclair-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "80afe2d17e6a9c4e56a7a54a7322a9c0e6ecf12cfcdd95eeac20e8df40cbd60d"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "compress",
+            "index": 12,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "compress",
+            "provider": null,
+            "section": 0,
+            "value": 0,
+            "version": null,
+            "version_index": 1,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x00000000000350d0                compress",
+          "caller_version_index": 1,
+          "consumer": "mcinspect",
+          "name": "compress",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "inflate",
+            "index": 22,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "inflate",
+            "provider": null,
+            "section": 0,
+            "value": 0,
+            "version": null,
+            "version_index": 1,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035150                inflate",
+          "caller_version_index": 1,
+          "consumer": "mcinspect",
+          "name": "inflate",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "uncompress",
+            "index": 30,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "uncompress",
+            "provider": null,
+            "section": 0,
+            "value": 0,
+            "version": null,
+            "version_index": 1,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x00000000000351d0                uncompress",
+          "caller_version_index": 1,
+          "consumer": "mcinspect",
+          "name": "uncompress",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "inflateEnd",
+            "index": 80,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "inflateEnd",
+            "provider": null,
+            "section": 0,
+            "value": 0,
+            "version": null,
+            "version_index": 1,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035490                inflateEnd",
+          "caller_version_index": 1,
+          "consumer": "mcinspect",
+          "name": "inflateEnd",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "compressBound@ZLIB_1.2.0",
+            "index": 89,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "compressBound",
+            "provider": "libz.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ZLIB_1.2.0",
+            "version_index": 10,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035520                compressBound@@ZLIB_1.2.0",
+          "caller_version_index": 10,
+          "consumer": "mcinspect",
+          "name": "compressBound",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": "ZLIB_1.2.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "inflateInit_",
+            "index": 101,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "inflateInit_",
+            "provider": null,
+            "section": 0,
+            "value": 0,
+            "version": null,
+            "version_index": 1,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x00000000000355e0                inflateInit_",
+          "caller_version_index": 1,
+          "consumer": "mcinspect",
+          "name": "inflateInit_",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": null
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "inflateReset",
+            "index": 114,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "inflateReset",
+            "provider": null,
+            "section": 0,
+            "value": 0,
+            "version": null,
+            "version_index": 1,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x00000000000356a0                inflateReset",
+          "caller_version_index": 1,
+          "consumer": "mcinspect",
+          "name": "inflateReset",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "zlib",
+          "required_version": null
+        }
+      ],
+      "file_hash": "UNKNOWN until this one passive read",
+      "id": "zlib",
+      "link_input": "/usr/lib64/libz.so",
+      "prior_devel_package": [
+        "zlib-ng-compat-devel",
+        "0",
+        "2.2.3",
+        "3.el10_1",
+        "x86_64"
+      ],
+      "prior_runtime_package": [
+        "zlib-ng-compat",
+        "0",
+        "2.2.3",
+        "3.el10_1",
+        "x86_64"
+      ],
+      "required_SONAME": "libz.so.1",
+      "required_unique": [
+        {
+          "name": "compress",
+          "required_version": null
+        },
+        {
+          "name": "compressBound",
+          "required_version": "ZLIB_1.2.0"
+        },
+        {
+          "name": "inflate",
+          "required_version": null
+        },
+        {
+          "name": "inflateEnd",
+          "required_version": null
+        },
+        {
+          "name": "inflateInit_",
+          "required_version": null
+        },
+        {
+          "name": "inflateReset",
+          "required_version": null
+        },
+        {
+          "name": "uncompress",
+          "required_version": null
+        }
+      ],
+      "runtime_anchor": "/usr/lib64/libz.so.1",
+      "runtime_identity_observed": false,
+      "source_RPM": "UNKNOWN until actual installed header read"
+    },
+    {
+      "caller_rows": [
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf32_getshdr@ELFUTILS_1.0",
+            "index": 3,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf32_getshdr",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035050                elf32_getshdr@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf32_getshdr",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_version@ELFUTILS_1.0",
+            "index": 16,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_version",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035110                elf_version@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_version",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf64_getehdr@ELFUTILS_1.0",
+            "index": 32,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf64_getehdr",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x00000000000351f0                elf64_getehdr@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf64_getehdr",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_getident@ELFUTILS_1.0",
+            "index": 34,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_getident",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035210                elf_getident@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_getident",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_strptr@ELFUTILS_1.0",
+            "index": 43,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_strptr",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035290                elf_strptr@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_strptr",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf64_getshdr@ELFUTILS_1.0",
+            "index": 56,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf64_getshdr",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035350                elf64_getshdr@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf64_getshdr",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_getdata@ELFUTILS_1.0",
+            "index": 58,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_getdata",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035370                elf_getdata@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_getdata",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_end@ELFUTILS_1.0",
+            "index": 78,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_end",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035470                elf_end@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_end",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf32_getehdr@ELFUTILS_1.0",
+            "index": 91,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf32_getehdr",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035540                elf32_getehdr@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf32_getehdr",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_begin@ELFUTILS_1.0",
+            "index": 96,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_begin",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035590                elf_begin@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_begin",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "actual_caller": {
+            "binding": 1,
+            "binding_name": "GLOBAL",
+            "bytes": 0,
+            "display_name": "elf_getscn@ELFUTILS_1.0",
+            "index": 121,
+            "kind": 2,
+            "kind_name": "FUNC",
+            "name": "elf_getscn",
+            "provider": "libelf.so.1",
+            "section": 0,
+            "value": 0,
+            "version": "ELFUTILS_1.0",
+            "version_index": 4,
+            "visibility": 0
+          },
+          "actual_current_map_PLT": "                0x0000000000035700                elf_getscn@@ELFUTILS_1.0",
+          "caller_version_index": 4,
+          "consumer": "mcinspect",
+          "name": "elf_getscn",
+          "original_check": "M15-F03-original-default",
+          "proof": {
+            "bytes": 295576,
+            "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcinspect-bool-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+            "sha256": "7dec94a582fd10588a09edf081dcc47ba2ff07b8144bf27a954f37e2dbef36c5"
+          },
+          "provider": "libelf",
+          "required_version": "ELFUTILS_1.0"
+        }
+      ],
+      "file_hash": "UNKNOWN until this one passive read",
+      "id": "libelf",
+      "link_input": "/usr/lib64/libelf.so",
+      "prior_devel_package": [
+        "elfutils-libelf-devel",
+        "0",
+        "0.194",
+        "2.el10.rocky.0.1",
+        "x86_64"
+      ],
+      "prior_runtime_package": null,
+      "required_SONAME": "libelf.so.1",
+      "required_unique": [
+        {
+          "name": "elf32_getehdr",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf32_getshdr",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf64_getehdr",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf64_getshdr",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_begin",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_end",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_getdata",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_getident",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_getscn",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_strptr",
+          "required_version": "ELFUTILS_1.0"
+        },
+        {
+          "name": "elf_version",
+          "required_version": "ELFUTILS_1.0"
+        }
+      ],
+      "runtime_anchor": "/usr/lib64/libelf.so.1",
+      "runtime_identity_observed": false,
+      "source_RPM": "UNKNOWN until actual installed header read"
+    }
+  ],
+  "readelf_stdout_limit_bytes": 2097152,
+  "schema": "mckernel.two-diagnostic-real-provider-passive-inputs.v1",
+  "scope": "Exactly seven zlib unique names (F04 consumes six) and eleven libelf names from actual saved caller rows. No third provider or program/API/loader action; metadata-only runtime/link file identity and RPM source relation.",
+  "status": "FROZEN_CALLER_DERIVED_SCOPE_NEW_PROVIDER_BYTES_NOT_YET_OBSERVED"
+}

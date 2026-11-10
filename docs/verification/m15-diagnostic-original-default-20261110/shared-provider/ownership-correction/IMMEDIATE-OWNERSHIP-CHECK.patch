@@ -1,0 +1,18 @@
+--- preserved-786e/PROBE.py
++++ ownership-correction-1/PROBE.py
+@@ -144,7 +144,15 @@
+     environment = {'PATH':'/usr/bin:/bin','LANG':'C','LC_ALL':'C','TZ':'UTC',
+                    'TMPDIR':'/output/tmp','PYTHONDONTWRITEBYTECODE':'1'}
+     def run(argv,label):
++        before = len(owner.records)
+         completed = owner.run(argv,env=environment,cwd='/output',timeout=15,label=label)
++        if len(owner.records) != before+1:
++            raise ValueError('passive command must append exactly one ownership record: '+label)
++        record = owner.records[before]
++        if record['label'] != label or not (int(record['leader']) > 0 and int(record['leader_birth']) > 0 and record['status'] == 0 and record['leader_parent_joined'] and record['whole_descendants_joined'] and record['streams_closed']):
++            raise ValueError('current passive command lacks positive ownership/exit/stream facts: '+label)
++        if any(record.get(key) for key in ['adopted_reaps','adopted_kills','remaining_direct_children','error','timed_out','leader_group_signalled']):
++            raise ValueError('current passive command cleanup is unresolved: '+label)
+         if len(completed.stdout) > spec['readelf_stdout_limit_bytes'] or len(completed.stderr) > spec['command_stderr_limit_bytes']:
+             raise ValueError('passive command capture bound exceeded')
+         if completed.returncode != 0 or completed.stderr:
