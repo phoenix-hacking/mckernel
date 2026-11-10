@@ -301,6 +301,12 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 list(APPEND RUST_KERNEL_CFG "--cfg" "f03_host_cleanup_candidate")
                 list(APPEND RUST_KERNEL_SRCS
                     "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_host_cleanup.rs")
+                # Pair only the existing credential-refresh callbacks in this profile.
+                list(APPEND RUST_KERNEL_CFG "--cfg" "f03_credential_refresh_candidate")
+                if (NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS)
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_credential_refresh.rs")
+                endif()
 				# Shared sigreturn context has an independent real implementation.
 				# Select it without activating whole do_signal/XRSTOR/debug ownership.
 				if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
@@ -744,7 +750,8 @@ if (RUST_KERNEL_ENABLED)
 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
             set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
                 COMPILE_DEFINITIONS MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
-                    MCKERNEL_RUST_F03_HOST_CLEANUP)
+                    MCKERNEL_RUST_F03_HOST_CLEANUP
+                    MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)
 			if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
 				set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
 				    COMPILE_DEFINITIONS MCKERNEL_RUST_F06_SIGNAL_CONTEXT)

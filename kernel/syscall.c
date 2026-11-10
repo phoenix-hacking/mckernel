@@ -19923,7 +19923,7 @@ getcred(int *_buf)
 }
 #endif
 
-#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+#if (defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
 extern void do_setresuid(void);
 #else
 void
@@ -19955,7 +19955,7 @@ do_setresuid()
 }
 #endif
 
-#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
+#if (defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)
 extern void do_setresgid(void);
 #else
 void
