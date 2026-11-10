@@ -1,0 +1,350 @@
+{
+  "actual_admission": {
+    "bytes": 677,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/ADMISSION.json",
+    "sha256": "b20754192dde6f96f1f794a6e8973e417ff73c889be24f603300a724c73d1d1e"
+  },
+  "actual_execution_result": {
+    "bytes": 1166,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/RESULT.json",
+    "sha256": "0f57d6ca3e1be4fe6e7064f9156de53feb3786df1f5340318c7bbfed7ba19d68"
+  },
+  "actual_identity_and_lifecycle": {
+    "OOM": false,
+    "all_direct_waits_joined": true,
+    "attach_exit": 0,
+    "container_exit": 0,
+    "container_id": "27f7680be88ae9bb25a3ca6bb3fac70c9facf4a08535a166172f09f57172f9d2",
+    "finished_at": "2026-11-10T13:23:10.843709+00:00",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "inner_argv": [
+      "/usr/bin/readelf",
+      "-W",
+      "--dyn-syms",
+      "--version-info",
+      "/lib64/libc.so.6"
+    ],
+    "new_tool_or_payload_run_by_qualifier": false,
+    "owned_terminal_container_removed": true,
+    "provider_or_source_mounts": [],
+    "read_only_root": true
+  },
+  "actual_profile": {
+    "bytes": 10012,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/profile.stdout",
+    "sha256": "aacbc0a3d893566ba708e5052318761874d6b7efe97f7f49e2a3c1c51c75b72b"
+  },
+  "consumer_version_need_rows": [
+    {
+      "line_number": 329,
+      "raw_line": "000000: Version: 1  File: libc.so.6  Cnt: 1"
+    },
+    {
+      "line_number": 330,
+      "raw_line": "0x0010:   Name: GLIBC_2.2.5  Flags: none  Version: 2"
+    }
+  ],
+  "contract": {
+    "bytes": 14125,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/CONTRACT.json",
+    "sha256": "d63cab4e7007bcebfcdf12e588ee512b9594e62ef6707e6c9f91f78350550760"
+  },
+  "five_exact_joins": [
+    {
+      "actual_consumer_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 2,
+        "kind": "FUNC",
+        "name": "localtime@GLIBC_2.2.5",
+        "raw_line": "2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND localtime@GLIBC_2.2.5 (2)",
+        "raw_line_number": 175,
+        "section_index": "UND",
+        "size": 0,
+        "value": "0x0000000000000000",
+        "visibility": "DEFAULT"
+      },
+      "actual_consumer_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "000:   0 (*local*)       2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)",
+        "raw_line_number": 312,
+        "raw_row_start_dynsym_index": 0,
+        "version_index": 2
+      },
+      "actual_provider_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 2324,
+        "kind": "FUNC",
+        "name": "localtime@@GLIBC_2.2.5",
+        "raw_line": "2324: 00000000000c3190    24 FUNC    GLOBAL DEFAULT   16 localtime@@GLIBC_2.2.5",
+        "raw_line_number": 2328,
+        "section_index": "16",
+        "size": 24,
+        "value": "0x00000000000c3190",
+        "visibility": "DEFAULT"
+      },
+      "actual_provider_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "914:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)  27 (GLIBC_2.39)   2b (GLIBC_PRIVATE)",
+        "raw_line_number": 3747,
+        "raw_row_start_dynsym_index": 2324,
+        "version_index": 2
+      },
+      "provider_definition_node_index": 2,
+      "qualified": "PASS_DEFINED_CALLABLE_VERSIONED_SAME_PROVIDER",
+      "required_import": "localtime@GLIBC_2.2.5"
+    },
+    {
+      "actual_consumer_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 6,
+        "kind": "FUNC",
+        "name": "getpwuid@GLIBC_2.2.5",
+        "raw_line": "6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getpwuid@GLIBC_2.2.5 (2)",
+        "raw_line_number": 179,
+        "section_index": "UND",
+        "size": 0,
+        "value": "0x0000000000000000",
+        "visibility": "DEFAULT"
+      },
+      "actual_consumer_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "004:   2 (GLIBC_2.2.5)   1 (*global*)      2 (GLIBC_2.2.5)   1 (*global*)",
+        "raw_line_number": 313,
+        "raw_row_start_dynsym_index": 4,
+        "version_index": 2
+      },
+      "actual_provider_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 1089,
+        "kind": "FUNC",
+        "name": "getpwuid@@GLIBC_2.2.5",
+        "raw_line": "1089: 0000000000138ee0   361 FUNC    GLOBAL DEFAULT   16 getpwuid@@GLIBC_2.2.5",
+        "raw_line_number": 1093,
+        "section_index": "16",
+        "size": 361,
+        "value": "0x0000000000138ee0",
+        "visibility": "DEFAULT"
+      },
+      "actual_provider_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "440:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)  2b (GLIBC_PRIVATE)   2 (GLIBC_2.2.5)",
+        "raw_line_number": 3438,
+        "raw_row_start_dynsym_index": 1088,
+        "version_index": 2
+      },
+      "provider_definition_node_index": 2,
+      "qualified": "PASS_DEFINED_CALLABLE_VERSIONED_SAME_PROVIDER",
+      "required_import": "getpwuid@GLIBC_2.2.5"
+    },
+    {
+      "actual_consumer_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 10,
+        "kind": "FUNC",
+        "name": "asctime@GLIBC_2.2.5",
+        "raw_line": "10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND asctime@GLIBC_2.2.5 (2)",
+        "raw_line_number": 183,
+        "section_index": "UND",
+        "size": 0,
+        "value": "0x0000000000000000",
+        "visibility": "DEFAULT"
+      },
+      "actual_consumer_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "008:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   1 (*global*)",
+        "raw_line_number": 314,
+        "raw_row_start_dynsym_index": 8,
+        "version_index": 2
+      },
+      "actual_provider_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 2505,
+        "kind": "FUNC",
+        "name": "asctime@@GLIBC_2.2.5",
+        "raw_line": "2505: 00000000000c2ff0    21 FUNC    GLOBAL DEFAULT   16 asctime@@GLIBC_2.2.5",
+        "raw_line_number": 2509,
+        "section_index": "16",
+        "size": 21,
+        "value": "0x00000000000c2ff0",
+        "visibility": "DEFAULT"
+      },
+      "actual_provider_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "9c8:  2b (GLIBC_PRIVATE)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)  1a (GLIBC_2.25)",
+        "raw_line_number": 3792,
+        "raw_row_start_dynsym_index": 2504,
+        "version_index": 2
+      },
+      "provider_definition_node_index": 2,
+      "qualified": "PASS_DEFINED_CALLABLE_VERSIONED_SAME_PROVIDER",
+      "required_import": "asctime@GLIBC_2.2.5"
+    },
+    {
+      "actual_consumer_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 33,
+        "kind": "FUNC",
+        "name": "getopt@GLIBC_2.2.5",
+        "raw_line": "33: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getopt@GLIBC_2.2.5 (2)",
+        "raw_line_number": 206,
+        "section_index": "UND",
+        "size": 0,
+        "value": "0x0000000000000000",
+        "visibility": "DEFAULT"
+      },
+      "actual_consumer_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "020:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)",
+        "raw_line_number": 320,
+        "raw_row_start_dynsym_index": 32,
+        "version_index": 2
+      },
+      "actual_provider_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 2038,
+        "kind": "FUNC",
+        "name": "getopt@@GLIBC_2.2.5",
+        "raw_line": "2038: 00000000000d8740    28 FUNC    GLOBAL DEFAULT   16 getopt@@GLIBC_2.2.5",
+        "raw_line_number": 2042,
+        "section_index": "16",
+        "size": 28,
+        "value": "0x00000000000d8740",
+        "visibility": "DEFAULT"
+      },
+      "actual_provider_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "7f4:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)",
+        "raw_line_number": 3675,
+        "raw_row_start_dynsym_index": 2036,
+        "version_index": 2
+      },
+      "provider_definition_node_index": 2,
+      "qualified": "PASS_DEFINED_CALLABLE_VERSIONED_SAME_PROVIDER",
+      "required_import": "getopt@GLIBC_2.2.5"
+    },
+    {
+      "actual_consumer_dynsym": {
+        "binding": "GLOBAL",
+        "dynsym_index": 34,
+        "kind": "FUNC",
+        "name": "gethostname@GLIBC_2.2.5",
+        "raw_line": "34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND gethostname@GLIBC_2.2.5 (2)",
+        "raw_line_number": 207,
+        "section_index": "UND",
+        "size": 0,
+        "value": "0x0000000000000000",
+        "visibility": "DEFAULT"
+      },
+      "actual_consumer_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "020:   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)",
+        "raw_line_number": 320,
+        "raw_row_start_dynsym_index": 32,
+        "version_index": 2
+      },
+      "actual_provider_dynsym": {
+        "binding": "WEAK",
+        "dynsym_index": 99,
+        "kind": "FUNC",
+        "name": "gethostname@@GLIBC_2.2.5",
+        "raw_line": "99: 00000000000fd110   275 FUNC    WEAK   DEFAULT   16 gethostname@@GLIBC_2.2.5",
+        "raw_line_number": 103,
+        "section_index": "16",
+        "size": 275,
+        "value": "0x00000000000fd110",
+        "visibility": "DEFAULT"
+      },
+      "actual_provider_version_index": {
+        "hidden": false,
+        "name": "GLIBC_2.2.5",
+        "raw_line": "060:   2 (GLIBC_2.2.5)  23 (GLIBC_2.34)    2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)",
+        "raw_line_number": 3190,
+        "raw_row_start_dynsym_index": 96,
+        "version_index": 2
+      },
+      "provider_definition_node_index": 2,
+      "qualified": "PASS_DEFINED_CALLABLE_VERSIONED_SAME_PROVIDER",
+      "required_import": "gethostname@GLIBC_2.2.5"
+    }
+  ],
+  "fixed_provider": {
+    "RPM_owner_reused": {
+      "argv": [
+        "/usr/bin/rpm",
+        "-qf",
+        "--qf",
+        "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+        "/usr/lib64/libc.so.6"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "glibc-2.39-121.el10_2.x86_64\n",
+      "wait_joined": true
+    },
+    "alias_basis": {
+      "bytes": 1201,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/runtime-libuv-successor-1/alias-correction-1/execution-1/1/payload.stdout",
+      "sha256": "cb3dd99ce71331501322755145e089ec9e40d0b8a8860f751d484d11272ec552"
+    },
+    "bytes": 2339896,
+    "file_path": "/usr/lib64/libc.so.6",
+    "identity_rule": "Same immutable image, read-only root, no bind mounts or overlay of libc/loader/tool paths; existing b058/glibc RPM metadata remains actual selected input. New syscall/hash/package/version/loader/tool probes are not requested.",
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "read_path": "/lib64/libc.so.6",
+    "resolved_path": "/usr/lib64/libc.so.6",
+    "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+    "source_provider_mounts": []
+  },
+  "independent_review": {
+    "bytes": 9798,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-provider-closure-review-p03-max-1/REVIEW.json",
+    "sha256": "280bee1dcb4e2943b65133d33824f56718a752d9c3861622d029c59253ec7b25"
+  },
+  "operations_by_qualifier": {
+    "ELF_or_extension_or_crash_main_or_init_execution": 0,
+    "canonical_or_index_edits": 0,
+    "native_or_dump": 0,
+    "new_probes_or_tests_or_compiler_or_Docker_or_network": 0
+  },
+  "owner": "/root/p04_source_max actual gpt-6.1-sol/MAX; Root executed once, qualifier only reads saved evidence",
+  "precise_result_delta": "Closes only the five libc export joins left by P04 packaging qualification. The observed functions were not called; no ABI behavior/native acceptance follows from passive exports.",
+  "provider_identity_rule": "Retained actual immutable46d glibc2.39-121.el10_2/usr/lib64/libc.so.6 bytes2339896 SHA b058 plus recorded /lib64->usr/lib64 directory alias bind the exact source-free input. Actual container image equals46d, root read-only, no mounts: no replacement libc or hidden provider overlay. No new hash/package/tool/loader probe was added.",
+  "provider_version_definition": {
+    "line_number": 3960,
+    "raw_line": "0x001c: Rev: 1  Flags: none  Index: 2  Cnt: 1  Name: GLIBC_2.2.5"
+  },
+  "qualified_at": "2026-11-10T13:25:23.252512+00:00",
+  "raw_consumer_stdout": {
+    "bytes": 25183,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/candidate-execution-1/6/payload.stdout",
+    "sha256": "f56932b119f5d24efc574ecc5027a1628d0b76bc5ab0a8fb4e6a9f332e58b779"
+  },
+  "raw_provider_stdout": {
+    "bytes": 337646,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/payload.stdout",
+    "sha256": "248be21979833c4f20b70132acd63036e525fc2a4d79c47caca60c42e1359324"
+  },
+  "remaining": {
+    "crash_host_ELF": "The selected wrappers name /usr/bin/crash, but no actual matching host executable/version/build/header/BFD provenance is bound. Contract crash7 and BFD11 exports remain OPEN exactly; no package/version/runtime selection is invented.",
+    "holds": "Preserve original generic/exec/replay/source/native/service/account/resources/UNKNOWN and M14-before-M15 acceptance. No new execution is proposed by this qualification.",
+    "original_P04_I01_I03": "Rust default wrapper selection, full delivered-runtime ownership/public ABI closure, real crash/backend/valid-native-dump and original acceptance gates remain open. No project C retirement, milestone acceptance, hold release or broader complete-system claim."
+  },
+  "request": {
+    "bytes": 7109,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/REQUEST.json",
+    "sha256": "3a8993d6d1116fa996fe532e35f53079d40e7b720b1d149baec9103683e52355"
+  },
+  "schema": "m15-p04-five-libc-exports-qualification-v1",
+  "status": "PASS_EXACT_FIVE_LIBC_CALLABLE_DEFINITION_AND_VERSION_INDEX_JOINS",
+  "version_join_rule": "Each actual consumer dynsym position indexes its own .gnu.version entry2 and libc.so.6 version requirement GLIBC_2.2.5. Each actual provider dynsym position indexes provider .gnu.version entry2, nonhidden, and actual .gnu.version_d definition node2 GLIBC_2.2.5. Text version spelling alone is not used as proof.",
+  "weak_provider_detail": "Actual gethostname is a defined WEAK/FUNC/DEFAULT export at provider dynsym99, not undefined. The other four are GLOBAL/FUNC/DEFAULT. All five have the same exact nonhidden GLIBC_2.2.5 definition node; weak binding is recorded, not mistaken for missing or newly executed fallback."
+}

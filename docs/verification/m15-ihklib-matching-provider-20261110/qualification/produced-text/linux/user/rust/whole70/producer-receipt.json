@@ -1,0 +1,176 @@
+{
+  "C_runtime_TU": false,
+  "archive": "/output/linux/user/rust/whole70/libihklib_whole70.a",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/output/linux/user/rust/whole70",
+        "-I/source/linux/include",
+        "-I/source/linux/include/ihk/arch/x86_64",
+        "-I/output/linux/include",
+        "-I/output",
+        "/source/linux/user/rust/whole70/abi/perf_pages_abi_witness.c",
+        "-o",
+        "/output/linux/user/rust/whole70/perf-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/perf-compile.stderr",
+      "stdout": "/output/linux/user/rust/whole70/perf-compile.stdout"
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/output/linux/user/rust/whole70",
+        "-I/source/linux/include",
+        "-I/source/linux/include/ihk/arch/x86_64",
+        "-I/output/linux/include",
+        "-I/output",
+        "-DPAGE_SIZE=4096",
+        "/source/linux/user/rust/whole70/abi/dump_abi_witness.c",
+        "-o",
+        "/output/linux/user/rust/whole70/dump-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/dump-compile.stderr",
+      "stdout": "/output/linux/user/rust/whole70/dump-compile.stdout"
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/output/linux/user/rust/whole70",
+        "-I/source/linux/include",
+        "-I/source/linux/include/ihk/arch/x86_64",
+        "-I/output/linux/include",
+        "-I/output",
+        "/source/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+        "-o",
+        "/output/linux/user/rust/whole70/origins-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/origins-compile.stderr",
+      "stdout": "/output/linux/user/rust/whole70/origins-compile.stdout"
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O0",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/output/linux/user/rust/whole70",
+        "-I/source/linux/include",
+        "-I/source/linux/include/ihk/arch/x86_64",
+        "-I/output/linux/include",
+        "-I/output",
+        "-DPAGE_SIZE=4096",
+        "/source/linux/user/rust/whole70/abi/combined_selected_SDK_actual_header_ABI.c",
+        "-o",
+        "/output/linux/user/rust/whole70/platform-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/platform-compile.stderr",
+      "stdout": "/output/linux/user/rust/whole70/platform-compile.stdout"
+    },
+    {
+      "argv": [
+        "/output/linux/user/rust/whole70/perf-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/perf_pages_abi.rs.stderr",
+      "stdout": "/output/linux/user/rust/whole70/perf_pages_abi.rs.stdout"
+    },
+    {
+      "argv": [
+        "/output/linux/user/rust/whole70/dump-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/dump_abi.rs.stderr",
+      "stdout": "/output/linux/user/rust/whole70/dump_abi.rs.stdout"
+    },
+    {
+      "argv": [
+        "/output/linux/user/rust/whole70/origins-witness",
+        "raw"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/diagnostic_origins.rs.stderr",
+      "stdout": "/output/linux/user/rust/whole70/diagnostic_origins.rs.stdout"
+    },
+    {
+      "argv": [
+        "/output/linux/user/rust/whole70/origins-witness",
+        "create"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/create_diagnostic_origins.rs.stderr",
+      "stdout": "/output/linux/user/rust/whole70/create_diagnostic_origins.rs.stdout"
+    },
+    {
+      "argv": [
+        "/output/linux/user/rust/whole70/platform-witness"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/platform-select.stderr",
+      "stdout": "/output/linux/user/rust/whole70/platform-select.stdout"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-name",
+        "ihklib_supported_whole70_host",
+        "--crate-type",
+        "staticlib",
+        "--cfg",
+        "ihklib_host_std_runtime",
+        "--cfg",
+        "ihklib_stat_abi_stat",
+        "-C",
+        "panic=abort",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=pic",
+        "-C",
+        "opt-level=2",
+        "--print",
+        "native-static-libs",
+        "-o",
+        "/output/linux/user/rust/whole70/libihklib_whole70.a.new",
+        "/source/linux/user/rust/whole70/libihklib_whole70.rs"
+      ],
+      "returncode": 0,
+      "stderr": "/output/linux/user/rust/whole70/whole70-rust.stderr",
+      "stdout": "/output/linux/user/rust/whole70/whole70-rust.stdout"
+    }
+  ],
+  "native": false,
+  "native_static_libs": [
+    "-lgcc_s",
+    "-lutil",
+    "-lrt",
+    "-lpthread",
+    "-lm",
+    "-ldl",
+    "-lc"
+  ],
+  "stat_cfg": "ihklib_stat_abi_stat",
+  "status": "PASS_REAL_HEADERS_AND_ONE_RUST_STATICLIB_BUILD_ONLY"
+}

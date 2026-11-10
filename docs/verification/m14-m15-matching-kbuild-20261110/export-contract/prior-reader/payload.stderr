@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/input/artifact-functions-only.py", line 15, in <module>
+    ihk.validate_module_artifact(modules/'ihk.ko',isummary,fd)
+  File "/helpers/scripts/ihk_native_lifecycle_check.py", line 1447, in validate_module_artifact
+    _validate_provider_export_symbols(
+  File "/helpers/scripts/ihk_native_lifecycle_check.py", line 1407, in _validate_provider_export_symbols
+    raise ValidationError(
+ihk_native_lifecycle_check.ValidationError: built ihk.ko contains unreviewed export metadata: __kstrtab_ihk_os_application_adopt_current_v4, __kstrtab_ihk_os_application_fork_control_current_v1, __kstrtabns_ihk_os_application_adopt_current_v4, __kstrtabns_ihk_os_application_fork_control_current_v1, __ksymtab_ihk_os_application_adopt_current_v4, __ksymtab_ihk_os_application_fork_control_current_v1

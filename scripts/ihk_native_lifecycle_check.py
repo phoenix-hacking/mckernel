@@ -142,6 +142,8 @@ EXPECTED_NATIVE_LIFECYCLE_EXPORTS = frozenset(
         "ihk_os_application_open_v1",
         "ihk_os_application_invoke_v1",
         "ihk_os_application_close_v1",
+        "ihk_os_application_adopt_current_v4",
+        "ihk_os_application_fork_control_current_v1",
         "ihk_os_create_unbooted_v2",
         "ihk_os_create_unbooted_v3",
         "ihk_os_create_unbooted_v4",

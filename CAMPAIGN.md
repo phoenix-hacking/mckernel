@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T13:16:25.278918+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T13:39:05.324440+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -23,8 +23,9 @@ our engineering work.
   relocations remain equal to baseline. Actual defs/header ABI witness passes.
   All14 phase clients/waits close, owned containers removed, nonOOM, baseline
   binaries preserved. Source delta is integrated, not deployed. Qualification
-  5de9523d accepts this packaging/unchanged ABI bridge only. Exact five libc
-  export joins and seven crash-host/eleven BFD provider joins remain explicit;
+  5de9523d accepts this packaging/unchanged ABI bridge only. One source-free libc read PASS13:23:10Z; qualificatione3847155 joins allfive
+  exact definitions via their actual versionindices to GLIBC_2.2.5, including
+  real definedWEAK/FUNC gethostname. Seven crash-host/eleven BFD joins stay open;
   no extension load, crash main, valid native dump or default acceptance ran.
 - M15-I03/I01 production whole70+6 ihklib five phases PASS13:08:53Z under reviewed
   c199615e/9b6db944. Real retained Rust1.95 compiler/driver/LLVM loader closure
@@ -32,18 +33,22 @@ our engineering work.
   archive compile, same-compile native response, shared-library link, ELF/nm and
   private library/public-header staging. Exact diagnostic guard is preserved;
   proposed1.92 cfb91 NO_GO stays unexecuted. All five containers/waits close,
-  nonOOM. Public ABI MAX owner now joins actual76roots/sixwidths/map/trace/imports/
-  provider versions and staged headers; complete original ABI/runtime remains open.
+  nonOOM. Actual qualificatione530ac72 and independentb667d389 join all76 unique Rust
+  roots/sixwidths/map/trace,259 strong/13 optional weak imports, real provider
+  versions and all3 byte-equal current installed headers. Library bridge passes;
+  remaining actual caller ELFs ihkconfig/ihkosctl/ihkmond and complete delivered
+  cohort/runtime remain open. No library/API/old-green execution is replayed.
 - M15-I02 reader19e executed12:43Z: canonical33d7 link closure and its recheck now
   PASS on unchanged099/IHK8d/config106055/threeKO. Full reader then rejects two
   unexpected IHK export families: ihk_os_application_adopt_current_v4 and
   ihk_os_application_fork_control_current_v1. Exact failure/raw records and owned
-  terminal cleanup are retained. SDK reconciliationefd13/c6c567 derives current
-  source/caller/type/namespace/hold bindings; independent material MAX review is
-  pending. Only actual GO may authorize two literal expected-export additions,
-  retaining prior21, strict unknown and held v12/prepare/receipt exclusions. Then
-  run the prepared focused guard cases and changed failed-reader successor; no
-  kernel rebuild or eight-validator replay.
+  terminal cleanup are retained. Material MAX reviewa6fb verifies exactcurrent source/caller/
+  type/namespace/lifetime/hold bindings. Exact two-literal helper1fe24 now passes
+  actual23/prior21 plus unknown/v12/prepare/receipt full-family rejections at
+  13:34:03Z; independent451cebdc confirms all five cases and positive host joins.
+  This exact source-only guard correction is integrated for checkpoint. All other
+  guards remain byte-identical. The actual commit-bound full reader is next; no
+  kernel rebuild, five-case or eight-validator replay.
 - Retained platform producer PASS11:26:07Z: bzImage415b951d, vmlinux.od5f98b86,
   vmlinux.symvers37ac946c, Module.symversc3b2eade and Rust ihk04f5d3e0,
   ihk-smp-x86_64ae67f463, mcctrldc46a4f5; stable config106055, three commands0,
@@ -59,16 +64,16 @@ our engineering work.
 
 New raw evidence: docs/verification/m15-p04-matching-provider-20261110 and
 m15-ihklib-matching-provider-20261110. Previous matching-kbuild/mcinspect and actual
-failed-reader records remain intact. Latest published/fetched source5fb18c0a has
-371 matching owned entries; this checkpoint adds only verified owned source and
+failed-reader records remain intact. Latest published/fetched source21bbeb5a has
+121 matching owned entries; this checkpoint adds the exact helper guard fix and
 results, preserving all33 unrelated dirty/deleted paths. No binaries/toolchains,
 RPM payloads or signing keys are copied into Git.
 
 | Next original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M15-I02 bindings/module ownership/ABI-modpost; shared M14-I02 platform part | SourceAcq MAX material review → SDK two literal contract additions only after GO → P04 tests/P03 review → Root strict cases and corrected full artifact reader on existing099/IHK8d/config106055/threeKO; then full original leaf review |
-| M15-I03 complete public ABI, M15-I01 linked ownership | Public ABI MAX: actual new1.95 whole70+6 archive/DSO/map/trace/76roots/sixwidths/provider versions and private staged current headers; separate independent result review, name only unmatched delivered contracts |
-| M15-P04/I03 crash-extension providers | P04 MAX source + P03 review: one passive actual46d libc ELF read closes five exact GLIBC2.2.5 names; join eleven BFD and seven real crash-host exports from selected headers/provider bytes. Absent actual crash-host ELF remains explicit, no load/native substitute |
+| M15-I02 bindings/module ownership/ABI-modpost; shared M14-I02 platform part | Materiala6fb/source-test9d59/actual strictPASS/independent451c complete; Root checkpoints helper1fe24, SDK freezes actual fetched-commit reader, SourceAcq reviews changed binding, Root runs only full reader on existing099/IHK8d/config106055/threeKO; then full original leaf review |
+| M15-I03 complete public ABI, M15-I01 linked ownership | Library actuale530/independentb667 qualified; PublicABI MAX prepares genuine twoCLI Rust objects/link/readback/stage against existingb7bc without library rebuild. P04 MAX prepares ihkmond realLIBUDEV header/type/link/provider join and named monitor build; no daemon/API/native execution |
+| M15-P04/I03 crash-extension providers | P04 exactfive libc joinPASS; selected /usr/bin/crash ELF/version/source/header/BFD ownership is still unbound. Derive legitimate supported artifact input; do not invent host exports or load extension. In parallel SourceAcq GO3ca8 permits exact fixed-path libudev RPM/ELF read for monitor, then bind actual11 opaque ABI calls |
 
 Verified original checklist remains M14=51.48%, M15=50.97%,156checks/73verified,
 38/45open. Accepted-gate/count/C-retirement/native delta0. Original criteria,
@@ -86,7 +91,7 @@ current-free stay binding. No held compute graph, boot/module load/MMIO/MSR/real
 native dump, dummy passing gate, source-authority bypass or reset is executed.
 Independent source/build/ABI/provider/install work above continues.
 
-Fresh controller guard2026-11-10T13:16:21.114224+00:00: 60%included used/40%remaining,
+Fresh controller guard2026-11-10T13:39:32.234293+00:00: 60%included used/40%remaining,
 no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
 allowance reset. Root/six actual task routes stay gpt-6.1-sol/MAX/depth1; one
@@ -96,11 +101,11 @@ all overhead/containers; fresh26GiB and disk16/12GiB floors, retained18GiB/nativ
 Guardian/mailbox/restored20-minute original-closure assistance remain active;
 healthy/compacting/completed owners are not restarted.
 
-Next15-minute deliverable: finish the material two-export contract review, strict
-changed-helper cases and actual unchanged-artifact reader; qualify the produced
-whole70+6 ABI/provider/header join and passive P04 provider read, then checkpoint
-fully satisfied original leaves and source/results. Reuse all green artifacts;
-hand each released lane directly to its next reviewed eligible payload.
+Next15-minute deliverable: pin the qualified helper checkpoint, freeze/review and
+execute the changed failed-reader successor, then review fully satisfied original
+module leaves. Run approved libudev read and prepare matching Rust CLI/monitor
+links from actual library/provider inputs. Reuse green producers/cases; preserve
+all source/native/UNKNOWN controls and publish real source/results promptly.
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)
 
