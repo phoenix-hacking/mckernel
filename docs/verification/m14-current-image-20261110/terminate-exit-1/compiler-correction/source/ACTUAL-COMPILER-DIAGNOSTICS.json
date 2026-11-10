@@ -1,0 +1,265 @@
+{
+  "schema": "m14-terminate-exact-first-compiler-failure-family-v1",
+  "actual_failure_result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/execution-1/RESULT.json",
+    "bytes": 10954,
+    "sha256": "0e4f5850fb8cf2de6c3ead89663710da5b795c0ae266072333ba4fa0cbcf7121"
+  },
+  "raw_stderr": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/execution-1/build-payload.stderr",
+    "bytes": 53454,
+    "sha256": "3c0e1305c188edc47856852e8318e63b31ddeedce2838ad1c559aacd8b0c5b99"
+  },
+  "retained_first_errors": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/execution-1/FIRST-COMPILER-ERRORS.txt",
+    "bytes": 32332,
+    "sha256": "fe5787f3636e92c4763a90aeb05b9829cfb04543c94dfd26a1c538928f1f3bf9"
+  },
+  "actual_failed_source_commit": "78a13f48716261ac2ed2e1cba8b42ada013f2797",
+  "actual_failed_module": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/preimage/kernel/rust/f03_terminate.rs",
+    "bytes": 19859,
+    "sha256": "383cb59daeab9a5122bbbe6e93c426a24d1f4204377c8a93aaa9a8c71311bf71"
+  },
+  "all_actual26_errors": [
+    {
+      "record": 1,
+      "error": "E0308",
+      "source_line": 97,
+      "source_column": 47,
+      "actual_call": "locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 2,
+      "error": "E0308",
+      "source_line": 98,
+      "source_column": 41,
+      "actual_call": "locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 3,
+      "error": "E0308",
+      "source_line": 115,
+      "source_column": 47,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 4,
+      "error": "E0308",
+      "source_line": 116,
+      "source_column": 53,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 5,
+      "error": "E0308",
+      "source_line": 138,
+      "source_column": 43,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 6,
+      "error": "E0308",
+      "source_line": 139,
+      "source_column": 49,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 7,
+      "error": "E0308",
+      "source_line": 141,
+      "source_column": 41,
+      "actual_call": "locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 8,
+      "error": "E0308",
+      "source_line": 143,
+      "source_column": 43,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 9,
+      "error": "E0308",
+      "source_line": 144,
+      "source_column": 41,
+      "actual_call": "locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 10,
+      "error": "E0308",
+      "source_line": 177,
+      "source_column": 48,
+      "actual_call": "unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 11,
+      "error": "E0308",
+      "source_line": 189,
+      "source_column": 50,
+      "actual_call": "unsafe { locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 12,
+      "error": "E0308",
+      "source_line": 200,
+      "source_column": 52,
+      "actual_call": "unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 13,
+      "error": "E0308",
+      "source_line": 205,
+      "source_column": 41,
+      "actual_call": "locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 14,
+      "error": "E0308",
+      "source_line": 207,
+      "source_column": 43,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 15,
+      "error": "E0308",
+      "source_line": 230,
+      "source_column": 49,
+      "actual_call": "locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 16,
+      "error": "E0308",
+      "source_line": 232,
+      "source_column": 51,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 17,
+      "error": "E0308",
+      "source_line": 245,
+      "source_column": 54,
+      "actual_call": "unsafe { locks::__mcs_rwlock_writer_lock(addr_of_mut!((*hash).lock[bucket]), lock.as_mut_ptr()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 18,
+      "error": "E0308",
+      "source_line": 254,
+      "source_column": 64,
+      "actual_call": "unsafe { locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 19,
+      "error": "E0308",
+      "source_line": 268,
+      "source_column": 67,
+      "actual_call": "locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 20,
+      "error": "E0308",
+      "source_line": 269,
+      "source_column": 67,
+      "actual_call": "locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 21,
+      "error": "E0308",
+      "source_line": 281,
+      "source_column": 69,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 22,
+      "error": "E0308",
+      "source_line": 282,
+      "source_column": 69,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 23,
+      "error": "E0308",
+      "source_line": 287,
+      "source_column": 66,
+      "actual_call": "unsafe { locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 24,
+      "error": "E0308",
+      "source_line": 294,
+      "source_column": 56,
+      "actual_call": "unsafe { locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*unlock_hash).lock[bucket]), lock.as_mut_ptr()) };",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 25,
+      "error": "E0308",
+      "source_line": 304,
+      "source_column": 41,
+      "actual_call": "locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    },
+    {
+      "record": 26,
+      "error": "E0308",
+      "source_line": 306,
+      "source_column": 43,
+      "actual_call": "locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());",
+      "expected_type": "*mut crate::lock_helpers::McsRwlockLock",
+      "actual_type": "*mut crate::abi::McsRwlockLock"
+    }
+  ],
+  "one_failure_family": "Distinct Rust nominal McsRwlockLock types at the26 lock-address parameters; no provider/data/refcount/runtime failure inferred.",
+  "all75_actual_warnings_retained_not_waived": true,
+  "no_Rust_object_or_C_ABI_reader_success_claimed": true,
+  "metadata_reader_not_started": true,
+  "owned_failure_container": "0b0262f3ad0c6cef97bdc62d19f5f4884962845c31a8b2fc1284a05e925044e0 positively exited2/nonOOM/Pid0/removed; existing raw11client captures retained; no reviewer retirement or retry"
+}

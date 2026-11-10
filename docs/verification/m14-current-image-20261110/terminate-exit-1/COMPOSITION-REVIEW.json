@@ -1,0 +1,231 @@
+{
+  "Root_composition": {
+    "bytes": 1647,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-terminate-exit-composition-1/COMPOSITION.json",
+    "sha256": "63be0b17ac6071326f5a91ef3068a85099374e0a27bf75c0272d7d46c17f153b"
+  },
+  "Root_integration": {
+    "bytes": 1710,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-terminate-exit-composition-1/CANONICAL-INTEGRATION.json",
+    "sha256": "a170fa91bc9f87461eb6fb8e4d94e499924e4c332a04185dd5910f0a2dff8d43"
+  },
+  "Root_staged_diff": {
+    "bytes": 11077,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-terminate-exit-composition-1/STAGED-SOURCE.diff",
+    "sha256": "5099a7cad7cc0e0a8404980a65d936c288bef8b5e815926caa673057428ae1b7"
+  },
+  "actual_paired_18_offsets": [
+    {
+      "field": "children_list",
+      "offset": 288,
+      "type": "process"
+    },
+    {
+      "field": "children_lock",
+      "offset": 320,
+      "type": "process"
+    },
+    {
+      "field": "hash_list",
+      "offset": 0,
+      "type": "process"
+    },
+    {
+      "field": "ppid_parent",
+      "offset": 280,
+      "type": "process"
+    },
+    {
+      "field": "ptraced_children_list",
+      "offset": 304,
+      "type": "process"
+    },
+    {
+      "field": "ptraced_siblings_list",
+      "offset": 400,
+      "type": "process"
+    },
+    {
+      "field": "report_threads_list",
+      "offset": 152,
+      "type": "process"
+    },
+    {
+      "field": "saved_cmdline",
+      "offset": 1136,
+      "type": "process"
+    },
+    {
+      "field": "siblings_list",
+      "offset": 384,
+      "type": "process"
+    },
+    {
+      "field": "threads_lock",
+      "offset": 192,
+      "type": "process"
+    },
+    {
+      "field": "update_lock",
+      "offset": 64,
+      "type": "process"
+    },
+    {
+      "field": "utime",
+      "offset": 1312,
+      "type": "process"
+    },
+    {
+      "field": "exit_status",
+      "offset": 4188,
+      "type": "thread"
+    },
+    {
+      "field": "report_siblings_list",
+      "offset": 4368,
+      "type": "thread"
+    },
+    {
+      "field": "siblings_list",
+      "offset": 4312,
+      "type": "thread"
+    },
+    {
+      "field": "system_tsc",
+      "offset": 5040,
+      "type": "thread"
+    },
+    {
+      "field": "termsig",
+      "offset": 4196,
+      "type": "thread"
+    },
+    {
+      "field": "user_tsc",
+      "offset": 5048,
+      "type": "thread"
+    }
+  ],
+  "actual_six_sources": [
+    {
+      "bytes": 54794,
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "926ca78adb59c509643da70abc43ccec927928453b25f7275433295176990e6c"
+    },
+    {
+      "bytes": 4286,
+      "path": "kernel/rust/lib.rs",
+      "sha256": "db91fffd0661567006190f564d0e57abd696f09ad5b96178b88eb7b067516409"
+    },
+    {
+      "bytes": 1240596,
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    {
+      "bytes": 941060,
+      "path": "kernel/syscall.c",
+      "sha256": "18c7227443a311eefb14286c37bbdbdcad1148afb74720ca92436e85b5fb6631"
+    },
+    {
+      "bytes": 19859,
+      "path": "kernel/rust/f03_terminate.rs",
+      "sha256": "383cb59daeab9a5122bbbe6e93c426a24d1f4204377c8a93aaa9a8c71311bf71"
+    },
+    {
+      "bytes": 3157,
+      "path": "kernel/rust/f03_exit_group.rs",
+      "sha256": "92ed48264d8a88d70b312cfc36fb241b10df1351591746edaa0634df96c1eab8"
+    }
+  ],
+  "additional_real_C_Rust_guards": "Actual selected C asserts noirq/IRQ node size+align64, DDEBUG_NONE, true unsignedlong do_kill(thread*,int,int,int,siginfo*,int) type; Rust CInt4/CULong8/HASH73/node size+align64 and fn-pointer signatures retained. No type/layout guessed or ABI shim added.",
+  "at": "2026-11-10T21:15:22.250814+00:00",
+  "clone_DMA_zero_preserved": true,
+  "combined_callee_join": "Three real exit-group entries retain their original C-int/void ABI and now resolve to the independent complete Rust terminate owner when selected, rather than the prior C terminate. New18 field assertions are in actual genericC source and Rust module; actual compilation/ownership/provider checks remain required.",
+  "native_frontdoor_scope": "Preserved qualified1e64/c664 artifacts and native-frontdoor preparation are separate; this request changes only HOST image source78a, grants no native operation or resource ownership change.",
+  "no_duplicate_body_audit": true,
+  "node_change": "Existing exact reprC/align64 McsRwlockNode only made pub(crate); no fields/layout/ownership behavior changed",
+  "original_acceptance": false,
+  "owner": "/root/p04_source_max private operation preparer, no canonical edits",
+  "payloads_by_preparer": false,
+  "reused_independent_body_ABI_ownership_reviews": [
+    {
+      "bytes": 19142,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-review-publicabi-max-1/REVIEW.json",
+      "sha256": "34181e6b66ed3c0b194e7413e5b733fe8a057cd93ee89afec48eaf563c395554"
+    },
+    {
+      "bytes": 7030,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-review-publicabi-max-1/correction-1/REVIEW.json",
+      "sha256": "db52a258f82029dd0f502b4c8303e21f2f78b891dcb53cd2353a503c2c439fcc"
+    },
+    {
+      "bytes": 10566,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/exit-group-bridge-review-p04tests-max-1/REVIEW.json",
+      "sha256": "b0e8d65ab2a1040b7d0bb72b9a82ca40101192b9312154f7dfebc5582113bf9a"
+    }
+  ],
+  "reused_source_contracts": [
+    {
+      "bytes": 13339,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/correction-1/CONTRACT.json",
+      "sha256": "2a99a6d7b33f2d275100ecb9a07bfa9ca05b29e80a73156e599a14ce1a834d9f"
+    },
+    {
+      "bytes": 26150,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/exit-group-bridge-ownership-1/CONTRACT.json",
+      "sha256": "bae14e1136176a40563313fda260b2ab28e1c3a695eddf73cb0139d8a6e7172d"
+    }
+  ],
+  "schema": "m14-terminate-exit-combined-selector-ABI-origin-review-v1",
+  "selected_pairs": [
+    {
+      "C_macro": "MCKERNEL_RUST_F03_TERMINATE",
+      "cfg": "f03_terminate_candidate",
+      "predicates": "Existing Rust+x86_64/Linux6.12/nonUBSAN block; PROFILE_ENABLE && !ENABLE_TOFU && !DCFA_KMOD, identical in Rust source/dependency and C definition selector"
+    },
+    {
+      "C_macro": "MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES",
+      "cfg": "f03_exit_group_bridges_candidate",
+      "predicates": "Existing Rust+x86_64/Linux6.12/nonUBSAN block; PROFILE_ENABLE identical in Rust source/dependency and C selector"
+    }
+  ],
+  "source_commit": "78a13f48716261ac2ed2e1cba8b42ada013f2797",
+  "source_default_F06_OFF_cache_ON": true,
+  "source_origin": {
+    "exit_group": {
+      "Ddebug_records": 1,
+      "actual_C_guards": "Selected C compile asserts DDEBUG flags equality and exact __FILE__ spelling",
+      "downstream_reset": 5698,
+      "file_env": "MCKERNEL_DO_SYSCALL_C_FILE=/src/kernel/syscall.c",
+      "flags_env": "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=0",
+      "fmt": "NULL",
+      "function": "exit_group_log_bridge",
+      "logical_line": 5682,
+      "record_bytes": 32,
+      "selected_C_fallback_line_reset": 5679
+    },
+    "terminate": {
+      "Ddebug_records": 3,
+      "downstream_reset": 5528,
+      "file_env": "MCKERNEL_TERMINATE_C_FILE=/src/kernel/syscall.c",
+      "fmt": "NULL",
+      "function": "terminate",
+      "initial_upper8_flags": 0,
+      "logical_lines": [
+        5271,
+        5292,
+        5511
+      ],
+      "record_bytes": 32,
+      "selected_C_fallback_line_reset": 5239,
+      "tracked_sites": {
+        "TID_allocate": 5346,
+        "TID_free": 5363,
+        "saved_cmdline_free": 5403
+      }
+    }
+  },
+  "status": "GO_EXACT_COMPOSITION_WIRING_ONLY_REAL_CHANGED_BUILD_AND_ARTIFACT_PROOF_REQUIRED",
+  "unchanged_F06_tail": "32e44bf79e3058ad2b43b8ed530d606281143fa7217aebad1a194cc49ccdfd97"
+}

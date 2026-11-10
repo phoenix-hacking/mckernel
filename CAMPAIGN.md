@@ -1,9 +1,37 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T20:55:07.175462+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T22:22:27.466524+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Corrected terminate/exit image build and first reader PASS21:53:22.**
+Sourcef8cf0bd7 applies only the independently reviewed26 raw lock-pointer boundary
+conversions and paired C/Rust representation assertions. Exact request96bfdd00,
+operationGOfd8e705b and actual resultf42e920f retain the original78a13f48/26E0308
+failure and preserved c664 green cohort. Normal named mckernel.img build and its
+previously unstarted passive reader both exited0/nonOOM/Pid0; both owned containers
+were removed, all18 client waits/streams joined and no owned child remained.
+The batch took45.10s. Actual image0f7525a7/10,443,312B and wholeRust279fc267/
+18,819,168B now have final P04 qualification15cfaaed and independent PublicABI
+GO19694c68. All four nonempty Rust terminate/exit owners5669/52/17/123B replace
+the exact C definitions;44 typed provider/18-field/lock-layout/debug joins and all
+ten prior selected Rust entries pass. Architecture-C remains zero executable
+implementation. Actual4552input+5script globals,362 strong imports/362 names,
+zeroUND and new arch_start/entry0xfffffffffe83c300 satisfy the supported origin/
+twoLOAD+NOTE contract. C-function rows37→33: exactly four removed, none added.
+Both actual admissions and all18 client waits/streams/terminal removals pass;
+sampled highwaters520,802,304B/52,174,848B have failcnt/OOM0 and are not claimed
+as exact terminal peaks. The new25-file/30,871,826B cohort is preserved with
+separate inodes before another source build. All source/default/native/original
+whole-condition gaps stay explicit; this checkpoint earns no original leaf credit.
+
+
+The failed78a attempt remains at compute-image-source-1/terminate-exit-incremental-1/
+execution-1: exit2,26 E0308 nominal lock-pointer diagnostics, no reader started,
+nonOOM/Pid0/owned removal. SourceAcq's boundeda70481e6 correction and independent
+62307e5e source/type GO are recorded in the correction successor. This is an
+ordinary compiler repair, not a controller failure or authority to reset history.
 
 **PRIMARY: original M14 matching image/provider closure.** The current owner
 clarification corrects the obsolete blanket restriction on reading current
@@ -115,6 +143,25 @@ restoration binding are our remaining composition work. Catalog NOT_RUN is not
 execution, installed SDK refusal stays intact, and no UNKNOWN lease is released.
 The future16-handler/inside-alt-stack/exit0/empty-stderr result proves only that
 observed signal scope; all other xstate/ptrace/default/native conditions remain.
+
+Actual authenticated native-input observation ran once and failed safely:
+/run/lock/mckernel-development.lock and the fixed mckernel-dev child files under
+the existing v1 cpu/memory/pids roots are absent. Its RootUID/CPU7/family/streams
+are captured in native-request-1/readonly-execution-1; errors remain UNKNOWN and
+every native/source/current-free/release flag staysfalse. P03 derives the real
+missing setup/ownership and named-case flow; no unchanged read, guessed remap,
+placeholder control file or availability inferred from absence is permitted.
+The four-file named-path/env source deltaf7a has independentaf6 material GO;
+exact focused HOST checks and the genuine native admission remain separate.
+
+The new seven-case crash cleanup packetd05b actuallyPASS21:06:31: all11 serial
+commands and seven exact case oracles pass, including exactly-once Rust frees
+before real main/foreach restart and genuine BFD fixture output. All inner/outer
+families and streams joined; owned468afa container exited0/nonOOM and was removed.
+SDK freezes saved-result/provider qualification; independent result review and
+the matching real-header production link/install are next. The104-line C boundary
+remains explicit projectC debt; no real crash/valid-dump/native or overall cleanup
+acceptance is inferred from controlled HOST fixtures.
 
 The genuine kill/provider continuation PASS18:38:45: joined14323447 has186 global
 owners/158functions+28data and16 typed partial imports. All143 old owner/relocation
@@ -243,9 +290,10 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M14-F06-FUNCTIONAL, supported-default/I02 follow their own conditions | P03 finishes actual payload/provider and named-case native-frontdoor path/env binding on preservedc664/1e64 cohort. Root independently admits only exact authenticated owner/current-resource observation, then a fresh real application operation when genuine gates pass. Require16 handler=N in_alt=inside rows, delivery=16 alt_hits=16, exit0/empty stderr and restoration; no old nonce or catalog backend |
-| M14-F03 remaining genuine C entries | Real terminate port has bounded selector/path correction510b/sourceGOdb52; three real exit-group bridges have sourceGOb0e8. Complete do_mmap is under independent unsafe/concurrency review, including a newly identified add-range error-ownership mismatch. Compose only reviewed source after preserving green cohort; real changed-image/behavior proof remains |
-| M15-P04/I03 actual crash cleanup | Actual header18-import/type join and new tools.c are qualified inputs. Source33ed/e56 preserves real error flags/diagnostics and drops Rust owners before original restart through an explicit104-line C boundary (retained projectC debt). SDK's exact seven-case full-Rust/C-boundary/BFD packetd05b is independently reviewed before Root admission; no accepted cleanup/runtime result is inferred |
+| M14-06-02-FUNCTIONAL, then its unchanged supported-default condition | P03/Root finish genuine native owner/source/current-free/guest-base setup on preservedc664/1e64. Named-path/env five HOST phases and seven unit cases PASS21:51:49, result0f0dcbb5/independentc0f5ab18. Alternate-repeat16-handler scope alone does not cover all signal-frame/context/xstate/normal/error conditions. No catalog NOT_RUN, placeholder lock or old nonce |
+| M14-F03-FUNCTIONAL and DEFAULT/I02 genuine Rust ownership | P04/PublicABI completed actual f8 qualification15cfaaed/independent19694c68. Root publishes it now. Mmap's fixture-only checked conversion5787 has independent5b0de GO and actual three-command PASS21:59:36: safe baseline42/descriptor2/backing2, candidate six ownership/RSS/classification cases; all waits joined. SourceAcq reviews saved results and complete shared-provider/outer-port obligations before Root composition/new affected image |
+| M15-F04-original-default, F03-original-default and P04/I03 cleanup | SDK binds six missing actual zlib definition/version/file identities to qualified Eclair and assesses the entire original leaf; P04Tests assesses actual corrected mcinspect6-phase evidence without rebuild. Separate cleanup production requestf498 binds authentic a875 header/private source tree after seven-case d73/fb10 GO. SourceAcq reviews it; Root executes only newly admitted producer/ELF/private-install commands |
+
 
 
 **Current original-closure blocker:** complete selected Rust implementation/
@@ -258,33 +306,40 @@ native UNKNOWN owners/leases/reservations/current-free. Unknown old payload is
 not an external current-source inventory requirement. No boot/module load/MMIO/
 MSR/valid native dump or dummy passing gate has run.
 
-Fresh controller guard20:55Z:76%included used/24%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
-included first then authorized existing credits, no purchase/API/account/model or
-allowance reset. Root/six actual task routes gpt-6.1-sol/MAX/depth1; one canonical
-compositor/heavy/image owner. Actual HOST CPUs0/6/7,max3 jobs,4GiB TOTAL including
-overhead/containers; fresh26GiB and disk16/12GiB floors, retained18GiB/native
-2-5/12GiB/UNKNOWN remain. One new offline-source read lost its tool session handle:
-CPU0/256MiB/job1 stays UNJOINED/reserved insideHOST4GiB/max3; no exit or release is
-inferred from output/process absence. Correction uses disjoint output and normal
-positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
-pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
+Fresh controller guard22:00Z:79%included used/21%remaining, running/no stop or
+account hold. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa; included first
+then existing credits, no purchase/API/account/model or allowance reset. Root/six
+actual task routes remain Sol/MAX/depth1, one canonical compositor/heavy owner.
+HOST CPUs0/6/7,max3jobs,4GiB TOTAL including overhead; fresh26GiB and disk16/12GiB
+floors, retained18GiB/native2-5/12GiB and UNKNOWN reservations persist. Old CPU0/
+256MiB/job1 stays UNJOINED. The new CPU7/256MiB/job1 NUMA-copy capture also remains
+UNKNOWN: actual hash/stat output and terminal0/Pid0/nonOOM/owned-container removal
+exist, but a fast-exit /proc cgroup read raced process exit and the capture's
+subsequent killpg returned EPERM before a payload client wait was recorded. No
+copy or rejected kill is retried. SourceAcq diagnoses saved exact-birth records;
+both slices/twojobs/512MiB are charged, never released from output or absence.
+Optional capacity/control work stays deferred; guardian/mailbox/restored20-minute
+functional assistance remain active.
 
-Verified source/results checkpoint1e64b165 is pushed/fetched; all71 owned entries
-matched20:20:21Z, including a740 credential proof and be58 atomic source/test.
-The next explicitON image on that exact source is now independently qualified;
-its source default staysOFF pending original promotion conditions. The current changed
+
+Previous source/results checkpoint61659ac2 is pushed/fetched with all87 owned
+entries matched21:00:27Z. Sourcef8 and the reviewed image/provider/ownership proof,
+seven-case cleanup and scoped signal/mmap HOST results form this next coherent
+checkpoint. Repository whole-F06 default staysOFF pending original promotion. The current changed
 pair51.48/57.01 was posted once in PR3 comment6776807210; no unchanged duplicate.
 
-Next15-minute deliverable: publish verified whole-F06-ON ownership/image proof
-and actual signal-payload input preparation, then finish the exact real native
-case/frontdoor/current-owner/restoration composition for M14-F06-FUNCTIONAL.
-Execute only newly reviewed admissible observation/application steps; no old
-attempt, NOT_RUN backend or admission bypass. In parallel admit only the new
-seven-case crash cleanup packet after independent GO, and carry reviewed real
-terminate/exit-group/mmap changes toward their next coherent image. Reuse all
-green image/counter/header/library suites and preserve exact c664 cohort before
-any new source build. Original default/native/whole-condition acceptance remains
-separate; Root alone integrates, admits and publishes the actual results.
+Next15-minute deliverable: execute the exact shared zlib/libelf read915 after
+corrected capture and operation GO, then independently decide complete original
+F04/F03 technical leaves. Publish the now-reviewedf8 source/image/provider/ownership
+checkpoint without waiting for native.
+Carry the now-PASS mmap rollback/RSS correction into its full source review and
+next genuine incremental image; do not replay its passing three commands. Complete
+only the missing zlib/provider and whole original Eclair/mcinspect technical-leaf
+conditions, while P03 composes genuine F06 native setup/restoration and scoped
+signal cases. Execute the separate real-header cleanup-library packet only after
+independent GO/fresh aggregate admission. Reuse all passing producer/ABI/behavior
+proof; source/fixture/component success does not alone close original conditions.
+
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)

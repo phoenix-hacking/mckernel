@@ -1,0 +1,1234 @@
+which: no mpifcc in (/usr/bin:/bin)
+FJMPI_VERSION: 
+KRM_VERSION: 
+KRM_RELEASE: 
+KRM_VERSION: 
+KRM_RELEASE: 
+Defined module ihk
+PAGE_SIZE: 4096
+Defined module ihk-smp-x86_64
+WITH_KRM: OFF
+ENABLE_KMSG_REDIRECT: OFF
+ENABLE_PANIC_NOTIFIER_WORKAROUND: ON
+Defined module mcctrl
+CMake Warning at scripts/rust/boot-tools/SelectRustBootTools.cmake:38 (message):
+  M15 debt: explicit retained shell boot/stop fallback selected
+Call Stack (most recent call first):
+  CMakeLists.txt:306 (include)
+
+
+CMake Warning at scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake:31 (message):
+  M15 debt: explicit retained expect helper selected
+Call Stack (most recent call first):
+  CMakeLists.txt:308 (include)
+
+
+-------------------------------
+Option summary
+-------------------------------
+Build type: Debug
+Build target: smp-x86
+IHK_SOURCE_DIR: ihk (relative to mckernel source tree)
+UNAME_R: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+KERNEL_DIR: /output/build
+SYSTEM_MAP: 
+VMLINUX: 
+KBUILD_C_FLAGS:  -DPROFILE_ENABLE -DIHK_IKC_USE_LINUX_WORK_IRQ
+MAP_KERNEL_START: 0xfffffffffe800000
+ENABLE_MEMDUMP: ON
+ENABLE_PERF: ON
+ENABLE_TOFU: OFF
+ENABLE_FUGAKU_HACKS: OFF
+ENABLE_FUGAKU_DEBUG: OFF
+ENABLE_KRM_WORKAROUND: OFF
+ENABLE_FJMPI_WORKAROUND: OFF
+PROFILE_ENABLE: ON
+ENABLE_RUSAGE: ON
+ENABLE_QLMPI: OFF
+ENABLE_UTI: OFF
+ENABLE_WERROR: OFF
+ENABLE_UBSAN: OFF
+ENABLE_LINUX_WORK_IRQ_FOR_IKC: ON
+ENABLE_PER_CPU_ALLOC_CACHE: OFF
+ENABLE_KMSG_REDIRECT: OFF
+-------------------------------
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /src/kernel/rust/lib.rs:3:12
+  |
+3 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+warning: unused import: `IhkSpinlock`
+     --> /src/kernel/rust/process_helpers.rs:16367:49
+      |
+16367 |     use crate::abi::{CInt, CULong, CpuLocalVar, IhkSpinlock, Thread, X86UserContext};
+      |                                                 ^^^^^^^^^^^
+      |
+      = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `MaybeUninit`
+     --> /src/kernel/rust/syscall_policy.rs:30841:30
+      |
+30841 |     use core::mem::{size_of, MaybeUninit};
+      |                              ^^^^^^^^^^^
+
+warning: unused imports: `null_mut` and `read_volatile`
+     --> /src/kernel/rust/syscall_policy.rs:30842:34
+      |
+30842 |     use core::ptr::{addr_of_mut, null_mut, read_volatile};
+      |                                  ^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `MovePagesSmpReq`
+     --> /src/kernel/rust/syscall_policy.rs:30844:51
+      |
+30844 |     use crate::abi::{CInt, CLong, CULong, CpuSet, MovePagesSmpReq, ProcessVm, SizeT,
+      |                                                   ^^^^^^^^^^^^^^^
+
+warning: unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`
+     --> /src/kernel/rust/syscall_policy.rs:30848:9
+      |
+30848 |         move_pages_free_arrays, move_pages_log_delta, move_pages_policy_result,
+      |         ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+30849 |         move_pages_smp_req_prepare_result, syscall_alloc_bridge, syscall_copy_from_user_bridge,
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+30850 |         syscall_copy_to_user_bridge, syscall_mckfd_free_bridge, MovePagesGetNrNodesFn,
+      |                                                                 ^^^^^^^^^^^^^^^^^^^^^
+30851 |         MovePagesLogFn, MovePagesSmpCallFn, MovePagesSmpHandlerFn, MovePagesVerifyFn,
+      |         ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^^^^^
+30852 |         SyscallCopyFromUserFn, SyscallCopyToUserFn, SyscallMckfdFreeFn, SyscallPolicyAllocFn,
+      |         ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+30853 |         SyscallRdtscFn, SyscallRwlockFn, EFAULT, ENODEV, ENOMEM, IHK_MC_AP_NOWAIT,
+      |         ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^  ^^^^^^
+30854 |         MOVE_PAGES_LOG_INIT_MALLOC, MOVE_PAGES_LOG_INIT_VERIFY, MOVE_PAGES_LOG_PARALLEL,
+30855 |         MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL, MOVE_PAGES_LOG_UNSUPPORTED_PID, MPOL_MF_MOVE_ALL};
+      |                                                                              ^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:34258:6
+      |
+34258 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:34284:6
+      |
+34284 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:34296:6
+      |
+34296 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused imports: `align_of` and `size_of`
+     --> /src/kernel/rust/syscall_policy.rs:34386:18
+      |
+34386 |  use core::mem::{size_of,align_of,offset_of};
+      |                  ^^^^^^^ ^^^^^^^^
+
+warning: unused imports: `CLong` and `SizeT`
+     --> /src/kernel/rust/syscall_policy.rs:35150:27
+      |
+35150 |     use crate::abi::{CInt,CLong,CULong,SizeT};
+      |                           ^^^^^        ^^^^^
+
+warning: unused import: `addr_of_mut`
+    --> /src/kernel/rust/x86_cpu_helpers.rs:4807:30
+     |
+4807 |     use core::ptr::{addr_of, addr_of_mut};
+     |                              ^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:97:47
+    |
+ 97 |         locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+    |         ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:98:41
+    |
+ 98 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:115:47
+    |
+115 |             locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |             --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |             |
+    |             arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:116:53
+    |
+116 |             locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+    |             --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |             |
+    |             arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:138:43
+    |
+138 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:139:49
+    |
+139 |         locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+    |         --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:141:41
+    |
+141 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:143:43
+    |
+143 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:144:41
+    |
+144 |         locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:355:26
+    |
+355 | pub unsafe extern "C" fn __mcs_rwlock_reader_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+356 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:177:48
+    |
+177 |     unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
+    |              --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |              |
+    |              arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:363:26
+    |
+363 | pub unsafe extern "C" fn __mcs_rwlock_reader_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+364 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:189:50
+    |
+189 |         unsafe { locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
+    |                  ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                  |
+    |                  arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:355:26
+    |
+355 | pub unsafe extern "C" fn __mcs_rwlock_reader_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+356 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:200:52
+    |
+200 |         unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
+    |                  --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                  |
+    |                  arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:363:26
+    |
+363 | pub unsafe extern "C" fn __mcs_rwlock_reader_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+364 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:205:41
+    |
+205 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:207:43
+    |
+207 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:230:49
+    |
+230 |                 locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |                 ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                 |
+    |                 arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:232:51
+    |
+232 |                 locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |                 --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                 |
+    |                 arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:245:54
+    |
+245 |             unsafe { locks::__mcs_rwlock_writer_lock(addr_of_mut!((*hash).lock[bucket]), lock.as_mut_ptr()) };
+    |                      ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                      |
+    |                      arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:254:64
+    |
+254 |                 unsafe { locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };
+    |                          ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                          |
+    |                          arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:268:67
+    |
+268 | ...                   locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());
+    |                       ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:269:67
+    |
+269 | ...                   locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());
+    |                       ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:281:69
+    |
+281 | ...                   locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());
+    |                       --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:282:69
+    |
+282 | ...                   locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());
+    |                       --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:287:66
+    |
+287 |                 unsafe { locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };
+    |                          --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                          |
+    |                          arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:294:56
+    |
+294 |             unsafe { locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*unlock_hash).lock[bucket]), lock.as_mut_ptr()) };
+    |                      --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                      |
+    |                      arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:304:41
+    |
+304 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:306:43
+    |
+306 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11879:17
+      |
+11879 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_3).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+      |
+      = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11890:13
+      |
+11890 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11902:13
+      |
+11902 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11903:13
+      |
+11903 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11904:13
+      |
+11904 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11905:13
+      |
+11905 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11917:13
+      |
+11917 |             unsafe { core::ptr::addr_of_mut!(RECORD_9).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11929:13
+      |
+11929 |             unsafe { core::ptr::addr_of_mut!(RECORD_10).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11930:13
+      |
+11930 |             unsafe { core::ptr::addr_of_mut!(RECORD_11).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11931:13
+      |
+11931 |             unsafe { core::ptr::addr_of_mut!(RECORD_12).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11932:13
+      |
+11932 |             unsafe { core::ptr::addr_of_mut!(RECORD_13).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11933:13
+      |
+11933 |             unsafe { core::ptr::addr_of_mut!(RECORD_14).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11934:13
+      |
+11934 |             unsafe { core::ptr::addr_of_mut!(RECORD_15).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11935:13
+      |
+11935 |             unsafe { core::ptr::addr_of_mut!(RECORD_16).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11947:13
+      |
+11947 |             unsafe { core::ptr::addr_of_mut!(RECORD_18).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11958:17
+      |
+11958 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_17).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11969:13
+      |
+11969 |             unsafe { core::ptr::addr_of_mut!(RECORD_19).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11970:13
+      |
+11970 |             unsafe { core::ptr::addr_of_mut!(RECORD_20).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11971:13
+      |
+11971 |             unsafe { core::ptr::addr_of_mut!(RECORD_21).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11984:17
+      |
+11984 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_2).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11998:13
+      |
+11998 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11999:13
+      |
+11999 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12088:29
+      |
+12088 |         query_free_handler: unsafe { core::ptr::addr_of!(QUERY_FREE_MEM_HANDLER).cast() },
+      |                             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12090:20
+      |
+12090 |         anon_slot: unsafe { core::ptr::addr_of_mut!(ANON_ON_DEMAND) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12091:21
+      |
+12091 |         xpmem_slot: unsafe { core::ptr::addr_of_mut!(XPMEM_PAGE_IN_REMOTE_ON_ATTACH) },
+      |                     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12100:9
+      |
+12100 |         unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12109:13
+      |
+12109 |             unsafe { core::ptr::addr_of_mut!(VMAP_ALLOCATOR) },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12118:18
+      |
+12118 |             ops: unsafe { core::ptr::addr_of_mut!(NUMA_SYSFS_MEMINFO) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12119:20
+      |
+12119 |             nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12242:13
+      |
+12242 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12243:13
+      |
+12243 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12418:20
+      |
+12418 |         allocator: unsafe { core::ptr::addr_of_mut!(ALLOCATOR) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12441:16
+      |
+12441 |         nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12460:20
+      |
+12460 |         log_count: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_COUNT) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12461:18
+      |
+12461 |         log_pid: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_PID) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12484:13
+      |
+12484 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12486:13
+      |
+12486 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12487:13
+      |
+12487 |             unsafe { core::ptr::addr_of_mut!(RECORD_2).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12570:13
+      |
+12570 |             unsafe { core::ptr::addr_of_mut!(RECORD_3).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12571:13
+      |
+12571 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12572:13
+      |
+12572 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12573:13
+      |
+12573 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12574:13
+      |
+12574 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12576:13
+      |
+12576 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3382:28
+     |
+3382 |             pa_start_slot: unsafe { core::ptr::addr_of_mut!(PA_START) },
+     |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3383:26
+     |
+3383 |             pa_end_slot: unsafe { core::ptr::addr_of_mut!(PA_END) },
+     |                          ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3384:25
+     |
+3384 |             kernel_end: unsafe { core::ptr::addr_of_mut!(KERNEL_END) },
+     |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/process_helpers.rs:13167:18
+      |
+13167 |     let config = unsafe { core::ptr::addr_of!(process_extend_region_entry_config) };
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unused variable: `thread`
+   --> /src/kernel/rust/f06_signal_tail.rs:301:5
+    |
+301 |     thread:*mut Thread,pending:*mut crate::abi::SigPending,sig:CInt,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_thread`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sig`
+   --> /src/kernel/rust/f06_signal_tail.rs:301:60
+    |
+301 |     thread:*mut Thread,pending:*mut crate::abi::SigPending,sig:CInt,
+    |                                                            ^^^ help: if this is intentional, prefix it with an underscore: `_sig`
+
+warning: unused variable: `lock_node`
+   --> /src/kernel/rust/f06_signal_tail.rs:303:23
+    |
+303 |     user_frame:CULong,lock_node:*mut McsRwlockNodeIrqsave,copy:F06SignalFrameCopy,
+    |                       ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_lock_node`
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/syscall_policy.rs:35280:28
+      |
+35280 |             let descriptor=unsafe{addr_of!(f03_vm_policy_insert_log_debug_v1).cast::<Ddebug>()};
+      |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:8770:5
+     |
+8770 |     unsafe { core::ptr::addr_of!(X86_END) as CULong }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:8939:5
+     |
+8939 |     unsafe { core::ptr::addr_of!(MEMORY_VSYSCALL_PAGE) as *mut c_void }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9169:18
+     |
+9169 |     let result = unsafe { core::arch::x86_64::__cpuid(op as u32) };
+     |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9573:9
+     |
+9573 |         unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9584:9
+     |
+9584 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9592:9
+     |
+9592 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9600:9
+     |
+9600 |         unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9608:9
+     |
+9608 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9616:9
+     |
+9616 |         unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9967:9
+     |
+9967 |         unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+error: aborting due to 26 previous errors; 75 warnings emitted
+
+For more information about this error, try `rustc --explain E0308`.
+make[3]: *** [kernel/CMakeFiles/mckernel_rust_obj.dir/build.make:217: kernel/rust/mckernel_rust.o] Error 1
+make[2]: *** [CMakeFiles/Makefile2:1316: kernel/CMakeFiles/mckernel_rust_obj.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:1355: kernel/CMakeFiles/mckernel.img.dir/rule] Error 2
+make: *** [Makefile:579: mckernel.img] Error 2

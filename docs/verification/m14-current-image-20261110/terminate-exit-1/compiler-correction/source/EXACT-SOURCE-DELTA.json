@@ -1,0 +1,72 @@
+{
+  "schema": "m14-terminate-one-bounded-compiler-correction-delta-v1",
+  "status": "PRIVATE_SOURCE_ONLY_NOT_EXECUTED",
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/LOCK-TYPE-BOUNDARY-ONLY.patch",
+    "bytes": 14398,
+    "sha256": "a70481e62e82cf06cc52eb88f8c4d72d23c1426df868758dc50546e34a78bc24"
+  },
+  "files": [
+    {
+      "path": "kernel/rust/f03_terminate.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/preimage/kernel/rust/f03_terminate.rs",
+        "bytes": 19859,
+        "sha256": "383cb59daeab9a5122bbbe6e93c426a24d1f4204377c8a93aaa9a8c71311bf71"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/candidate/kernel/rust/f03_terminate.rs",
+        "bytes": 21974,
+        "sha256": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+      }
+    },
+    {
+      "path": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/preimage/kernel/syscall.c",
+        "bytes": 941060,
+        "sha256": "18c7227443a311eefb14286c37bbdbdcad1148afb74720ca92436e85b5fb6631"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/candidate/kernel/syscall.c",
+        "bytes": 941598,
+        "sha256": "460e16897c497fbc63b7ec46922c85ccf0e8e8bccc58fdf37fc5b1603a6230c8"
+      }
+    }
+  ],
+  "diagnosed_lock_conversions": 26,
+  "old_source_lines": [
+    97,
+    98,
+    115,
+    116,
+    138,
+    139,
+    141,
+    143,
+    144,
+    177,
+    189,
+    200,
+    205,
+    207,
+    230,
+    232,
+    245,
+    254,
+    268,
+    269,
+    281,
+    282,
+    287,
+    294,
+    304,
+    306
+  ],
+  "additions": {
+    "comment": "// The ABI field and runtime provider use distinct Rust nominal types for the\n// same selected C mcs_rwlock_lock: repr(C), align64, one four-byte ticket lock\n// at offset0. Existing provider-module assertions bind its private slock and\n// atomic head_tail offsets; the local assertions below and paired C guard bind\n// the ABI view. Cast only these lock addresses at the existing unsafe calls;\n// never copy the lock, borrow it across a call, or change its provider/state.\n",
+    "rust_assertions": "    // Exact nominal-type boundary; runtime-module private offsets are already\n    // asserted in lock_helpers/spinlock_helpers, not accessed or made public.\n    assert!(size_of::<crate::abi::McsRwlockLock>() == 64);\n    assert!(core::mem::align_of::<crate::abi::McsRwlockLock>() == 64);\n    assert!(offset_of!(crate::abi::McsRwlockLock, slock) == 0);\n    assert!(size_of::<locks::McsRwlockLock>() == 64);\n    assert!(core::mem::align_of::<locks::McsRwlockLock>() == 64);\n    assert!(size_of::<crate::abi::IhkSpinlock>() == 4);\n    assert!(core::mem::align_of::<crate::abi::IhkSpinlock>() == 4);\n    assert!(offset_of!(crate::abi::IhkSpinlock, head_tail) == 0);\n    assert!(size_of::<crate::spinlock_helpers::IhkSpinlock>() == 4);\n    assert!(core::mem::align_of::<crate::spinlock_helpers::IhkSpinlock>() == 4);\n",
+    "C_assertions": "#ifndef SPINLOCK_IN_MCS_RWLOCK\n#error \"Rust terminate requires the selected ticket-spinlock MCS representation\"\n#endif\n_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64\n    && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,\n    \"Rust terminate ABI/runtime MCS lock representation\");\n_Static_assert(sizeof(ihk_spinlock_t) == 4 && __alignof__(ihk_spinlock_t) == 4\n    && __builtin_offsetof(ihk_spinlock_t, head_tail) == 0,\n    \"Rust terminate ABI/runtime ticket lock representation\");\n"
+  },
+  "unchanged": "All original383c control-flow/effects/constants/exports/strings/source lines/selector/callback/node arguments/refcounts/lock order; only26 nominal argument conversions plus paired source/assertion proof. Existing510b/78/etc remain frozen; no canonical write."
+}

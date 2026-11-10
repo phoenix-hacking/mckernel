@@ -1,0 +1,75 @@
+--- rejected-0a057/ADD-RANGE-TRANSACTION.rs
++++ classification-correction-1/ADD-RANGE-TRANSACTION.rs
+@@ -185,6 +185,59 @@
+         0
+     }
+ 
++    // Read-only visitor with the existing safe classifier, but no LWK-RAM
++    // validation of leaf physical addresses: remote/I/O/COW mappings are valid
++    // inputs, and the real RSS provider decides whether/how they are charged.
++    // Directory entries require the genuine size bit for a large-page visit;
++    // all missing entries skip, and no commit walk allocates or splits a table.
++    unsafe extern "C" fn commit_l1(a: *mut c_void, p: *mut CULong, b: CULong, _s: CULong, _e: CULong) -> CInt {
++        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
++        x86_visit_pte_leaf_result(state.arg, state.pt, p, b, 1, PTL1_SHIFT, state.funcp)
++    }
++    unsafe fn commit_level(
++        a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong,
++        shift: CInt, size: CULong, size_flag: CULong, direct: CInt,
++        pdir: CULong, child: X86VisitPteWalkFn,
++    ) -> CInt {
++        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
++        x86_visit_pte_level_result(state.arg, state.pt, p, b, s, e,
++            1, 1, 0, size, shift, size_flag, 1, direct, 0, pdir,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
++            Some(x86_pt_phys_to_virt_bridge), Some(child), a, state.funcp,
++            Some(x86_visit_pte_log_bridge))
++    }
++    unsafe extern "C" fn commit_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        commit_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, commit_walk_l1)
++    }
++    unsafe extern "C" fn commit_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        commit_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
++            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, commit_walk_l2)
++    }
++    unsafe extern "C" fn commit_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        x86_visit_pte_root_result(p, b, s, e, 1, 0, PFL4_PDIR_ATTR,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
++            Some(x86_pt_phys_to_virt_bridge), Some(commit_walk_l3), a)
++    }
++    unsafe extern "C" fn commit_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(commit_l1), a)
++    }
++    unsafe extern "C" fn commit_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(commit_l2), a)
++    }
++    unsafe extern "C" fn commit_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(commit_l3), a)
++    }
++    unsafe extern "C" fn commit_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l4(p, b, s, e, Some(commit_l4), a)
++    }
++
++    unsafe fn commit_accounting(pt: *mut c_void, start: CULong, end: CULong, range: *mut c_void) -> CInt {
++        let mut args = X86VisitPteArgs { pt, flags: X86_VPTEF_SKIP_NULL,
++            pgshift: 0, funcp: Some(commit_rss), arg: range };
++        x86_visit_pte_range_dispatch_result(pt, start, end,
++            (&mut args as *mut X86VisitPteArgs).cast(), Some(commit_walk_l4))
++    }
++
+     /// The add-range-only mapping transaction. Genuine mapping algorithms and
+     /// allocation/attribute/huge-page policy are reused; accounting is committed
+     /// only after full success, so abort needs no reconstruction of cleared RSS.
+@@ -208,11 +261,7 @@
+         if args.mapped_end != end {
+             crate::abort::panic(b"add-range success did not cover its full range\0".as_ptr().cast());
+         }
+-        // The actual safe visitor requires a real large-page size bit before
+-        // invoking a large-page callback, never allocates/splits missing tables,
+-        // and therefore accounts 4K leaves in a full directory as 4K, not 2M.
+-        let account = visit_pte_range_safe(pt, start as *mut c_void, end as *mut c_void,
+-            0, X86_VPTEF_SKIP_NULL, Some(commit_rss), range.cast());
++        let account = commit_accounting(pt, start, end, range.cast());
+         if account != 0 {
+             crate::abort::panic(b"add-range RSS commit violated mapped-range invariant\0".as_ptr().cast());
+         }

@@ -1,0 +1,201 @@
+--- a/kernel/rust/f03_terminate.rs
++++ b/kernel/rust/f03_terminate.rs
+@@ -93,9 +93,15 @@
+         // The C code reloads this field at the actual call.
+         unsafe { sync_child_event(addr_of!((*proc).monitoring_event).read()) };
+     }
++    // The ABI field and runtime provider use distinct Rust nominal types for the
++    // same selected C mcs_rwlock_lock: repr(C), align64, one four-byte ticket lock
++    // at offset0. Existing provider-module assertions bind its private slock and
++    // atomic head_tail offsets; the local assertions below and paired C guard bind
++    // the ABI view. Cast only these lock addresses at the existing unsafe calls;
++    // never copy the lock, borrow it across a call, or change its provider/state.
+     unsafe {
+-        locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+-        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast());
++        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+     }
+     if policy::terminate_process_exited_result(unsafe { addr_of!((*proc).status).read() }) != 0 {
+         if unsafe { debug_enabled(0) } {
+@@ -112,8 +118,8 @@
+             addr_of_mut!((*current).status).write(PS_EXITED);
+             addr_of_mut!((*current).exit_status).write(addr_of!((*proc).group_exit_status).read() as CInt);
+             policy::f03_thread_exit_signal_v1(current);
+-            locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+-            locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
++            locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
++            locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast());
+             process::release_thread(current);
+             crate::cls::preempt_enable();
+             schedule();
+@@ -135,13 +141,13 @@
+         addr_of_mut!((*proc).group_exit_status).write(exit_status as CULong);
+         addr_of_mut!((*current).exit_status).write(exit_status);
+         addr_of_mut!((*proc).status).write(PS_EXITED);
+-        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+-        locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
++        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast());
+         notify_host_exit(rc, sig);
+-        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+         process::process_list_detach_result(addr_of_mut!((*current).siblings_list));
+-        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+-        locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
++        locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+     }
+     let head = unsafe { addr_of_mut!((*proc).threads_list) };
+     let mut count: CInt = 0;
+@@ -174,7 +180,7 @@
+             }
+         }
+     }
+-    unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
++    unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr()) };
+     if !ids.is_null() {
+         let mut index: CInt = 0;
+         while index < count {
+@@ -186,7 +192,7 @@
+     // Preserve allocation-failure behavior: no peer kill, then the same active
+     // thread scan/scheduler loop. Do not add an error, timeout or lock shortcut.
+     loop {
+-        unsafe { locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
++        unsafe { locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr()) };
+         let mut found = false;
+         link = unsafe { addr_of!((*head).next).read() };
+         while link != head {
+@@ -197,14 +203,14 @@
+             }
+             link = unsafe { addr_of!((*link).next).read() };
+         }
+-        unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
++        unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr()) };
+         if !found { break; }
+         unsafe { schedule() };
+     }
+     unsafe {
+-        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+         process::process_list_add_tail_result(addr_of_mut!((*current).siblings_list), addr_of_mut!((*proc).threads_list));
+-        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+     }
+     let vm = unsafe { addr_of!((*proc).vm).read() };
+     unsafe { process::free_all_process_memory_range(vm) };
+@@ -227,9 +233,9 @@
+             if release_flag != 0 { unsafe { process::release_thread(reported) }; }
+         } else {
+             unsafe {
+-                locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++                locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+                 let _ = process::process_thread_report_detach_result(reported.cast(), offset_of!(Thread, report_proc) as CULong, null_mut(), addr_of_mut!((*reported).report_siblings_list));
+-                locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++                locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+                 process::release_thread(reported);
+             }
+         }
+@@ -242,7 +248,7 @@
+         while bucket < PROCESS_HASH_SIZE {
+             // Reload resource_set->process_hash as the C expression does.
+             let hash = unsafe { addr_of!((*resources).process_hash).read() };
+-            unsafe { locks::__mcs_rwlock_writer_lock(addr_of_mut!((*hash).lock[bucket]), lock.as_mut_ptr()) };
++            unsafe { locks::__mcs_rwlock_writer_lock(addr_of_mut!((*hash).lock[bucket]).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr()) };
+             let current_hash = unsafe { addr_of!((*resources).process_hash).read() };
+             let bucket_head = unsafe { addr_of_mut!((*current_hash).list[bucket]) };
+             let mut child_link = unsafe { addr_of!((*bucket_head).next).read() };
+@@ -251,7 +257,7 @@
+                 let next = unsafe { addr_of!((*child_link).next).read() };
+                 let child = unsafe { child_link.cast::<u8>().sub(offset_of!(Process, hash_list)).cast::<Process>() };
+                 let mut free_child: CInt = 0;
+-                unsafe { locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };
++                unsafe { locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*child).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast()) };
+                 match policy::terminate_child_action_result(
+                     (unsafe { addr_of!((*child).ppid_parent).read() } == proc) as CInt,
+                     (unsafe { addr_of!((*child).parent).read() } == proc) as CInt,
+@@ -265,8 +271,8 @@
+                     action @ (CHILD_REPARENT | CHILD_REPARENT_PTRACED) => {
+                         // The original order is exiting parent's lock, then pid1.
+                         unsafe {
+-                            locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());
+-                            locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());
++                            locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).children_lock).cast::<locks::McsRwlockLock>(), children.as_mut_ptr().cast());
++                            locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*pid1).children_lock).cast::<locks::McsRwlockLock>(), init_children.as_mut_ptr().cast());
+                         }
+                         // Keep the pre-lock switch decision; do not reload parent.
+                         let ordinary_child = action == CHILD_REPARENT;
+@@ -278,20 +284,20 @@
+                             ordinary_child as CInt,
+                         ) };
+                         unsafe {
+-                            locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());
+-                            locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());
++                            locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*pid1).children_lock).cast::<locks::McsRwlockLock>(), init_children.as_mut_ptr().cast());
++                            locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).children_lock).cast::<locks::McsRwlockLock>(), children.as_mut_ptr().cast());
+                         }
+                     }
+                     _ => {}
+                 }
+-                unsafe { locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };
++                unsafe { locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*child).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast()) };
+                 if policy::terminate_release_child_needed_result(free_child) != 0 {
+                     unsafe { process::release_process(child) };
+                 }
+                 child_link = next;
+             }
+             let unlock_hash = unsafe { addr_of!((*resources).process_hash).read() };
+-            unsafe { locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*unlock_hash).lock[bucket]), lock.as_mut_ptr()) };
++            unsafe { locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*unlock_hash).lock[bucket]).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr()) };
+             bucket += 1;
+         }
+     }
+@@ -301,9 +307,9 @@
+     unsafe {
+         policy::f03_finalize_process_v1(proc);
+         crate::cls::preempt_disable();
+-        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+         addr_of_mut!((*current).status).write(PS_EXITED);
+-        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
++        locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+         process::release_thread(current);
+         process::release_process_vm(vm);
+         crate::cls::preempt_enable();
+@@ -318,6 +324,18 @@
+     assert!(size_of::<CInt>() == 4);
+     assert!(size_of::<CULong>() == 8);
+     assert!(PROCESS_HASH_SIZE == 73);
++    // Exact nominal-type boundary; runtime-module private offsets are already
++    // asserted in lock_helpers/spinlock_helpers, not accessed or made public.
++    assert!(size_of::<crate::abi::McsRwlockLock>() == 64);
++    assert!(core::mem::align_of::<crate::abi::McsRwlockLock>() == 64);
++    assert!(offset_of!(crate::abi::McsRwlockLock, slock) == 0);
++    assert!(size_of::<locks::McsRwlockLock>() == 64);
++    assert!(core::mem::align_of::<locks::McsRwlockLock>() == 64);
++    assert!(size_of::<crate::abi::IhkSpinlock>() == 4);
++    assert!(core::mem::align_of::<crate::abi::IhkSpinlock>() == 4);
++    assert!(offset_of!(crate::abi::IhkSpinlock, head_tail) == 0);
++    assert!(size_of::<crate::spinlock_helpers::IhkSpinlock>() == 4);
++    assert!(core::mem::align_of::<crate::spinlock_helpers::IhkSpinlock>() == 4);
+     // Newly consumed list/lock/accounting fields: paired real C assertions.
+     assert!(offset_of!(Process, hash_list) == 0);
+     assert!(offset_of!(Process, update_lock) == 64);
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5408,6 +5408,15 @@
+ _Static_assert(__builtin_offsetof(struct thread, report_siblings_list) == 4368, "Rust terminate Thread.report_siblings_list ABI");
+ _Static_assert(__builtin_offsetof(struct thread, system_tsc) == 5040, "Rust terminate Thread.system_tsc ABI");
+ _Static_assert(__builtin_offsetof(struct thread, user_tsc) == 5048, "Rust terminate Thread.user_tsc ABI");
++#ifndef SPINLOCK_IN_MCS_RWLOCK
++#error "Rust terminate requires the selected ticket-spinlock MCS representation"
++#endif
++_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64
++    && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,
++    "Rust terminate ABI/runtime MCS lock representation");
++_Static_assert(sizeof(ihk_spinlock_t) == 4 && __alignof__(ihk_spinlock_t) == 4
++    && __builtin_offsetof(ihk_spinlock_t, head_tail) == 0,
++    "Rust terminate ABI/runtime ticket lock representation");
+ _Static_assert(sizeof(struct mcs_rwlock_node) == 64 && __alignof__(struct mcs_rwlock_node) == 64, "Rust terminate noirq node ABI");
+ _Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64, "Rust terminate irq node ABI");
+ _Static_assert(DDEBUG_DEFAULT == DDEBUG_NONE, "Rust terminate original debug default");

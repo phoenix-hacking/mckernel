@@ -1,0 +1,79 @@
+{
+  "status": "PASS_SAFE_BASELINE42_AND_SIX_CHANGED_ROLLBACK_RSS_CASES_HOST_ONLY",
+  "started_at": "2026-11-10T21:59:35.834314+00:00",
+  "finished_at": "2026-11-10T21:59:36.538830+00:00",
+  "request_sha256": "5787c7a16a6a0555d64793593485192480f56f21cda6775ac149103ec7f31469",
+  "review_sha256": "5b0deae129e79f59c6b65c7a5cd3c500b9256940289fd000f940a630342ad7c1",
+  "phases": [
+    {
+      "phase": 1,
+      "id": "compile-exact-old-new-add-range-production-path-adapter",
+      "exit": 0,
+      "ownership": {
+        "label": "phase-1",
+        "leader": 1117133,
+        "leader_birth": "43424191",
+        "status": 0,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      }
+    },
+    {
+      "phase": 2,
+      "id": "safe-observe-original-error-double-retirement",
+      "exit": 42,
+      "ownership": {
+        "label": "phase-2",
+        "leader": 1117161,
+        "leader_birth": "43424259",
+        "status": 42,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      }
+    },
+    {
+      "phase": 3,
+      "id": "new-rollback-and-RSS-leaf-classification",
+      "exit": 0,
+      "ownership": {
+        "label": "phase-3",
+        "leader": 1117162,
+        "leader_birth": "43424259",
+        "status": 0,
+        "leader_parent_joined": true,
+        "timed_out": false,
+        "leader_group_signalled": false,
+        "adopted_reaps": [],
+        "adopted_kills": [],
+        "whole_descendants_joined": true,
+        "remaining_direct_children": [],
+        "streams_closed": true,
+        "error": null
+      }
+    }
+  ],
+  "executable": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-2/add-range-rollback",
+    "bytes": 4512888,
+    "sha256": "ab2c030d45e05c79396a7a914097ba0d676d7212ce8357fd9f96e77eea258f72"
+  },
+  "all_three_positive_owned_records": true,
+  "kernel_runtime": false,
+  "native_admitted": false,
+  "old_UNKNOWN_released": false,
+  "original_acceptance": false
+}

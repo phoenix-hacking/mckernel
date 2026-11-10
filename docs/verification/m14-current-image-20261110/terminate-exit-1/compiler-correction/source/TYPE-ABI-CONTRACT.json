@@ -1,0 +1,41 @@
+{
+  "schema": "m14-terminate-local-runtime-lock-type-proof-v1",
+  "status": "SOURCE_PROVEN_BOUNDARY_PENDING_INDEPENDENT_REVIEW_AND_REAL_COMPILER",
+  "profile": "Existing x86_64/Linux6.12/PROFILE_ENABLE/nonUBSAN/nonTOFU/nonDCFA selector unchanged; actual arch-lock.h unconditionally defines SPINLOCK_IN_MCS_RWLOCK.",
+  "C_type": {
+    "path": "arch/x86_64/kernel/include/arch-lock.h",
+    "actual_fields": "mcs_rwlock_lock contains ihk_spinlock_t slock under SPINLOCK_IN_MCS_RWLOCK; align64 for !UBSAN. ihk_spinlock_t is union unsigned32 head_tail / unsigned16 head+tail atoffset0, size4/align4.",
+    "source": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "bytes": 4603,
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    "new_C_assertions": "Selected guard verifies this active representation macro, size64/align64/slockoffset0, ticket size4/align4/head_tailoffset0 before excluding original C terminate; existing18 field and node/do_kill/debug guards unchanged."
+  },
+  "ABI_view": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "McsRwlockLock": "repr(C,align64), pub slock:IhkSpinlock atoffset0; existing size/align/offset assertions2068..2070.",
+    "IhkSpinlock": "repr(C), pub head_tail:u32 atoffset0; existing size4/align4/offset assertions2059..2062."
+  },
+  "runtime_view": {
+    "lock_source": {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    "spinlock_source": {
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "bytes": 3105,
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    "McsRwlockLock": "repr(C,align64), private slock:spinlock_helpers::IhkSpinlock. Existing internal const checks size64/align64/slockoffset0.",
+    "IhkSpinlock": "repr(C), private head_tail:AtomicU32. Existing internal const checks size4/align4/head_tailoffset0. Atomic operations remain the actual selected ticket-spinlock providers, with reader/writer and IRQ/noIRQ semantics unchanged."
+  },
+  "conversion": "At exactly each26 diagnosed call, append .cast::<locks::McsRwlockLock>() only to its original first lock-address argument. Address and pointed storage are unchanged. No lock copy/value conversion/reference creation/provider substitute, new wrapper, unsafe shared-type refactor, public visibility change or ownership authority. All26 nodes and other arguments/order remain byte-preserved.",
+  "pointer_safety": "Original live Process/ProcessHash/PID1 object allocations and field alignment are retained; raw addresses meet same C/provider alignment. Runtime reads/mutates only the real four-byte atomic ticket word, not64-byte padding. No Rust reference spans callback/release/schedule. Caller original lock/IRQ/ref/lifetime prerequisites remain binding.",
+  "normal_compile_required": "New local Rust const checks both64-byte types/alignments and both4-byte ticket types; private runtime offsets retain existing module const proof rather than accessing private fields. Actual normal Rust/C compile on meaningful changed input must pass. This source proof grants no compiler/native/C-retirement acceptance."
+}

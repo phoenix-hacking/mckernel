@@ -1,0 +1,350 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -16605,27 +16605,58 @@
+         unsafe { super::vm_range_insert(vm, range) }
+     }
+ 
+-    /// Preserve page-table update flags and signed error forwarding.
++    /// Transactional preparation for a newly inserted, caller-owned range.
+     /// # Safety
+-    /// vm/range and backing address space stay live under original VM/PT
+-    /// exclusion throughout the synchronous existing update implementation.
++    /// The original caller holds range writer exclusion. Range/backing/VM remain
++    /// live through the same IRQ-save page-table lock. On error the transaction
++    /// has cleared/flushed ONLY its new PTE prefix and committed no RSS; caller
++    /// backing remains owned. No descriptor is freed by this stage.
+     #[no_mangle]
+     pub unsafe extern "C" fn process_add_range_update_bridge(
+-        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, attr: CULong,
++        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, _attr: CULong,
+     ) -> CInt {
+-        unsafe { super::update_process_page_table(vm, range, phys, attr) }
+-    }
+-
+-    /// Retain the original discarded removal status and NULL accounting output.
++        unsafe {
++            if vm.is_null() || range.is_null() || (*vm).address_space.is_null() {
++                return -super::EINVAL;
++            }
++            // The prior public updater intentionally ignored its flag argument
++            // and derived attributes from actual range flags + PF_POPULATE.
++            let attr = crate::x86_memory_helpers::arch_vrflag_to_ptattr(
++                (*range).flag, super::PF_POPULATE, core::ptr::null_mut());
++            let lock = core::ptr::addr_of_mut!((*vm).page_table_lock);
++            let irq = super::__ihk_mc_spinlock_lock(lock);
++            let error = crate::x86_memory_helpers::add_range_transaction::map(
++                (*(*vm).address_space).page_table, vm, (*range).start,
++                (*range).end, phys, attr, (*range).pgshift, range);
++            super::__ihk_mc_spinlock_unlock(lock, irq);
++            if error != 0 { super::process_update_page_table_log_bridge(error); }
++            error
++        }
++    }
++
++    /// Non-owning rollback after the paired updater has cleared its new PTEs.
+     /// # Safety
+-    /// The existing owner provides a live VM/process and original range writer
+-    /// exclusion. The backend owns removal, storage release and all field use;
+-    /// this adapter performs no access to removed ranges after its return.
++    /// Range writer exclusion and the exact just-inserted range remain owned by
++    /// the add-range orchestrator. This callback only detaches tree/cache; its
++    /// existing free callback subsequently retires descriptor storage ONCE.
++    /// It consumes no page/memobj/private_data backing and preserves the ABI.
+     #[no_mangle]
+     pub unsafe extern "C" fn process_add_range_remove_bridge(
+         vm: *mut ProcessVm, start: CULong, end: CULong,
+     ) {
+-        unsafe { let _ = super::remove_process_memory_range(vm, start, end, core::ptr::null_mut()); }
++        unsafe {
++            let range = super::process_lookup_memory_range_body_result(vm, start, end);
++            if range.is_null() || (*range).start != start || (*range).end != end {
++                // Do not return an ordinary error to a caller about to free
++                // backing when a supposedly owned descriptor cannot be found.
++                crate::abort::panic(b"add-range rollback lost its inserted descriptor\0".as_ptr().cast());
++            }
++            super::rb_erase(super::vm_range_rb_node(range),
++                core::ptr::addr_of_mut!((*vm).vm_range_tree).cast());
++            super::process_range_cache_replace_result(
++                core::ptr::addr_of_mut!((*vm).range_cache).cast(),
++                super::VM_RANGE_CACHE_SIZE as CInt, range.cast(), core::ptr::null_mut());
++        }
+     }
+ 
+     /// Preserve the existing split result and caller-owned range output.
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -10132,3 +10132,274 @@
+     pub(super) static x86_memory_kmalloc_file: [u8; 319] = TRACE_FILE_BYTES;
+ 
+ }
++
++// Add-range-only transaction. Existing public set/free/clear APIs and their
++// already qualified algorithms stay unchanged. No test callback is bound here.
++pub(crate) mod add_range_transaction {
++    use super::*;
++
++    // Keep the genuine SetRangeArgs at offset0. Existing walkers consume only
++    // that prefix; the owned sidecar records the newly mapped prefix for abort.
++    #[repr(C)]
++    struct AddArgs {
++        state: SetRangeArgs,
++        mapped_end: CULong,
++    }
++
++    const _: () = {
++        assert!(core::mem::offset_of!(AddArgs, state) == 0);
++        assert!(core::mem::offset_of!(AddArgs, mapped_end) == core::mem::size_of::<SetRangeArgs>());
++    };
++
++    unsafe fn remember(args: *mut c_void, base: CULong, end: CULong, size: CULong) {
++        let args = args.cast::<AddArgs>();
++        let mapped_end = core::cmp::min(end, base.wrapping_add(size));
++        if (*args).mapped_end < mapped_end { (*args).mapped_end = mapped_end; }
++    }
++
++    // This is a deliberate transaction phase, not a replacement RSS provider.
++    // The mandatory successful commit below invokes the real RSS provider for
++    // every mapped leaf/large entry. Failed transactions must charge nothing.
++    unsafe extern "C" fn defer_rss(
++        _range: *mut c_void, _phys: CULong, _size: CULong, _pgsize: CULong,
++    ) -> CInt { 0 }
++
++    unsafe extern "C" fn clear_prefix(
++        pt: *mut c_void, vm: *mut c_void, start: CULong, end: CULong,
++        free_physical: CInt, memobj: *mut c_void,
++    ) -> CInt {
++        if free_physical != 0 || !memobj.is_null() {
++            crate::abort::panic(b"add-range rollback attempted backing release\0".as_ptr().cast());
++        }
++        let result = clear_nonowning(pt, vm.cast(), start, end);
++        if result != 0 {
++            // Never let an ordinary caller-owned error escape with live new
++            // PTEs, after which the caller would free their backing allocation.
++            crate::abort::panic(b"add-range rollback could not clear new PTEs\0".as_ptr().cast());
++        }
++        0
++    }
++
++    unsafe extern "C" fn map_l1(
++        args: *mut c_void, ptep: *mut CULong, base: CULong, start: CULong, end: CULong,
++    ) -> CInt {
++        set_range_trace_enter(1, base, start, end);
++        let state = core::ptr::read(args.cast::<SetRangeArgs>());
++        let error = x86_set_range_leaf_body_result(args, ptep, base, start, end,
++            state.pt, state.vm, state.phys, state.attr,
++            read_volatile(core::ptr::addr_of!(X86_ATTR_MASK)), state.range,
++            Some(clear_prefix), Some(defer_rss), Some(x86_set_range_log_bridge));
++        if error == 0 { remember(args, base, end, PTL1_SIZE); }
++        set_range_trace_exit(1, ptep, base, start, end, error);
++        error
++    }
++
++    unsafe fn map_level(
++        level: CInt, args: *mut c_void, ptep: *mut CULong,
++        base: CULong, start: CULong, end: CULong, shift: CInt,
++        size: CULong, size_flag: CULong, direct: CInt, pdir: CULong,
++        child: X86SetRangeChildWalkFn,
++    ) -> CInt {
++        set_range_trace_enter(level, base, start, end);
++        let state = core::ptr::read(args.cast::<SetRangeArgs>());
++        let error = x86_set_range_level_body_result(args, ptep, base, start, end,
++            state.pt, state.vm, state.phys, state.attr,
++            read_volatile(core::ptr::addr_of!(X86_ATTR_MASK)), state.diff,
++            state.pgshift, shift, size, size_flag, direct, pdir, state.range,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
++            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
++            Some(child), Some(clear_prefix), Some(defer_rss),
++            Some(x86_set_range_log_bridge));
++        if error == 0 && direct != 0 && size_flag != 0 && *ptep & size_flag != 0 {
++            remember(args, base, end, size);
++        }
++        set_range_trace_exit(level, ptep, base, start, end, error);
++        error
++    }
++
++    unsafe extern "C" fn map_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        map_level(2, a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, map_walk_l1)
++    }
++    unsafe extern "C" fn map_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        map_level(3, a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
++            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, map_walk_l2)
++    }
++    unsafe extern "C" fn map_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        map_level(4, a, p, b, s, e, PTL4_SHIFT, 0, 0, 0, PFL4_PDIR_ATTR, map_walk_l3)
++    }
++    unsafe extern "C" fn map_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(map_l1), a)
++    }
++    unsafe extern "C" fn map_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(map_l2), a)
++    }
++    unsafe extern "C" fn map_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(map_l3), a)
++    }
++    unsafe extern "C" fn map_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l4(p, b, s, e, Some(map_l4), a)
++    }
++
++    // Clear only; preserve both caller backing and address-space-owned table
++    // metadata. In particular do not free a table before its TLB batch is acked.
++    // Empty tables remain reachable through the address space and are reused or
++    // destroyed by its genuine existing teardown, never leaked/unowned storage.
++    unsafe fn clear_level(
++        args: *mut c_void, ptep: *mut CULong, base: CULong,
++        start: CULong, end: CULong, shift: CInt, size: CULong,
++        size_flag: CULong, child: X86ClearChildWalkFn,
++    ) -> CInt {
++        let state = args.cast::<X86ClearRangeArgs>();
++        x86_clear_range_level_body_result(args, ptep, base, start, end,
++            shift, size, size_flag, 0, (*state).vm, (*state).addr,
++            core::ptr::addr_of_mut!((*state).nr_addr), (*state).max_nr_addr,
++            ihk_mc_get_processor_id(), 0, core::ptr::null_mut(),
++            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
++            Some(child), Some(remote_flush_tlb_array_cpumask),
++            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
++            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
++            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
++            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log))
++    }
++    unsafe extern "C" fn clear_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        clear_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, clear_walk_l1)
++    }
++    unsafe extern "C" fn clear_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        clear_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, clear_walk_l2)
++    }
++    unsafe extern "C" fn clear_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        x86_clear_range_root_body_result(a, p, b, s, e,
++            Some(x86_clear_phys_to_virt_bridge), Some(clear_walk_l3))
++    }
++    unsafe extern "C" fn clear_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(clear_range_l1), a)
++    }
++    unsafe extern "C" fn clear_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(clear_l2), a)
++    }
++    unsafe extern "C" fn clear_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(clear_l3), a)
++    }
++
++    /// Clear just the failed transaction's newly mapped prefix without allocation.
++    /// Caller holds the genuine page-table lock and range writer. No page, memobj
++    /// reference or descriptor is consumed. TLB acknowledgements finish before
++    /// this borrowed stack buffer or caller-owned backing can be retired.
++    unsafe fn clear_nonowning(pt: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong) -> CInt {
++        if end <= start { return 0; }
++        if x86_clear_range_validate_result(start, end, (*vm).region.user_start, (*vm).region.user_end) != 0 {
++            return -EINVAL;
++        }
++        let mut address = 0;
++        let mut args = X86ClearRangeArgs { free_physical: 0,
++            memobj: core::ptr::null_mut(), vm: vm.cast(), addr: &mut address,
++            nr_addr: 0, max_nr_addr: 1 };
++        let error = walk_pte_l4(pt, 0, start, end, Some(clear_l4),
++            (&mut args as *mut X86ClearRangeArgs).cast());
++        if args.nr_addr > 0 {
++            remote_flush_tlb_array_cpumask(vm.cast(), args.addr, args.nr_addr, ihk_mc_get_processor_id());
++        }
++        if error == -ENOENT { 0 } else { error }
++    }
++
++    unsafe extern "C" fn commit_rss(
++        range: *mut c_void, _pt: *mut c_void, ptep: *mut CULong,
++        base: *mut c_void, shift: CInt,
++    ) -> CInt {
++        let entry = read_volatile(ptep);
++        if entry == PTE_NULL || !matches!(shift, PTL1_SHIFT | PTL2_SHIFT | PTL3_SHIFT) {
++            return -EINVAL;
++        }
++        let size = 1u64 << shift;
++        let phys = entry & PT_PHYSMASK;
++        let charged = set_range_rss_add(range, phys, size, size);
++        let typed = range.cast::<crate::abi::VmRange>();
++        x86_set_range_log_bridge(if charged != 0 { X86_SET_RANGE_LOG_RSS_ADD } else { X86_SET_RANGE_LOG_RSS_SKIP },
++            shift, base as CULong, (*typed).start, (*typed).end, 0,
++            entry, phys, size, size, 0);
++        0
++    }
++
++    // Read-only visitor with the existing safe classifier, but no LWK-RAM
++    // validation of leaf physical addresses: remote/I/O/COW mappings are valid
++    // inputs, and the real RSS provider decides whether/how they are charged.
++    // Directory entries require the genuine size bit for a large-page visit;
++    // all missing entries skip, and no commit walk allocates or splits a table.
++    unsafe extern "C" fn commit_l1(a: *mut c_void, p: *mut CULong, b: CULong, _s: CULong, _e: CULong) -> CInt {
++        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
++        x86_visit_pte_leaf_result(state.arg, state.pt, p, b, 1, PTL1_SHIFT, state.funcp)
++    }
++    unsafe fn commit_level(
++        a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong,
++        shift: CInt, size: CULong, size_flag: CULong, direct: CInt,
++        pdir: CULong, child: X86VisitPteWalkFn,
++    ) -> CInt {
++        let state = core::ptr::read(a.cast::<X86VisitPteArgs>());
++        x86_visit_pte_level_result(state.arg, state.pt, p, b, s, e,
++            1, 1, 0, size, shift, size_flag, 1, direct, 0, pdir,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
++            Some(x86_pt_phys_to_virt_bridge), Some(child), a, state.funcp,
++            Some(x86_visit_pte_log_bridge))
++    }
++    unsafe extern "C" fn commit_l2(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        commit_level(a, p, b, s, e, PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1, PFL2_PDIR_ATTR, commit_walk_l1)
++    }
++    unsafe extern "C" fn commit_l3(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        commit_level(a, p, b, s, e, PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE,
++            x86_use_1gb_page_bridge(), PFL3_PDIR_ATTR, commit_walk_l2)
++    }
++    unsafe extern "C" fn commit_l4(a: *mut c_void, p: *mut CULong, b: CULong, s: CULong, e: CULong) -> CInt {
++        x86_visit_pte_root_result(p, b, s, e, 1, 0, PFL4_PDIR_ATTR,
++            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_virt_to_phys_bridge),
++            Some(x86_pt_phys_to_virt_bridge), Some(commit_walk_l3), a)
++    }
++    unsafe extern "C" fn commit_walk_l1(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l1(p, b, s, e, Some(commit_l1), a)
++    }
++    unsafe extern "C" fn commit_walk_l2(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l2(p, b, s, e, Some(commit_l2), a)
++    }
++    unsafe extern "C" fn commit_walk_l3(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l3(p, b, s, e, Some(commit_l3), a)
++    }
++    unsafe extern "C" fn commit_walk_l4(p: *mut c_void, b: CULong, s: CULong, e: CULong, a: *mut c_void) -> CInt {
++        walk_pte_l4(p, b, s, e, Some(commit_l4), a)
++    }
++
++    unsafe fn commit_accounting(pt: *mut c_void, start: CULong, end: CULong, range: *mut c_void) -> CInt {
++        let mut args = X86VisitPteArgs { pt, flags: X86_VPTEF_SKIP_NULL,
++            pgshift: 0, funcp: Some(commit_rss), arg: range };
++        x86_visit_pte_range_dispatch_result(pt, start, end,
++            (&mut args as *mut X86VisitPteArgs).cast(), Some(commit_walk_l4))
++    }
++
++    /// The add-range-only mapping transaction. Genuine mapping algorithms and
++    /// allocation/attribute/huge-page policy are reused; accounting is committed
++    /// only after full success, so abort needs no reconstruction of cleared RSS.
++    pub(crate) unsafe fn map(
++        pt: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong,
++        phys: CULong, attr: CULong, pgshift: CInt, range: *mut crate::abi::VmRange,
++    ) -> CInt {
++        let mut args = AddArgs { state: SetRangeArgs { pt, phys, attr, pgshift,
++            diff: start ^ phys, vm: vm.cast(), range: range.cast() }, mapped_end: start };
++        let error = set_range_top_wide_body(pt, vm.cast(), start, end, phys, attr,
++            pgshift, range.cast(), core::ptr::addr_of_mut!(args.state),
++            map_walk_l4, x86_set_range_log_bridge);
++        if error != 0 {
++            // Never clear a conflicting old PTE at/beyond the failed cursor.
++            let clear = clear_nonowning(pt, vm, start, args.mapped_end);
++            if clear != 0 {
++                crate::abort::panic(b"add-range rollback retained partial PTEs\0".as_ptr().cast());
++            }
++            return error;
++        }
++        if args.mapped_end != end {
++            crate::abort::panic(b"add-range success did not cover its full range\0".as_ptr().cast());
++        }
++        let account = commit_accounting(pt, start, end, range.cast());
++        if account != 0 {
++            crate::abort::panic(b"add-range RSS commit violated mapped-range invariant\0".as_ptr().cast());
++        }
++        0
++    }
++}

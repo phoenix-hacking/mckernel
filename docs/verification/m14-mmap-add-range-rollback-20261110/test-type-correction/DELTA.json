@@ -1,0 +1,68 @@
+{
+  "actual_failure": {
+    "diagnostic": "E0308 at rollback_regression.rs:68: actual Memobj.size is usize while end-start is u64. Compiler exit1 before any baseline/candidate runtime; Root reports all returned ownership positive/joined/noresidual. Original failed raw/output/request/test untouched.",
+    "family": "HOST_TEST_MEMOBJ_SIZE_SCALAR_TYPE_ONLY",
+    "request": {
+      "bytes": 10361,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/HOST-REQUEST.PROPOSED.json",
+      "sha256": "b3ac92fc323dd59eb2e082b72e5d345045d18a9a77d889be5d51582eab94eb2b"
+    },
+    "result": {
+      "bytes": 691,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-execution-1/RESULT.json",
+      "sha256": "fe94a7cb6d6370ed611361a7a035a0a79c5f3243b37599da1f7ad72e5b9d8165"
+    },
+    "stderr": {
+      "bytes": 464,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-execution-1/phase-1.stderr",
+      "sha256": "03da58da495a1978ff019f4b5017333133a52dd0c23211ddac824ebb680ba021"
+    }
+  },
+  "actual_type": {
+    "abi": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/input/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "conversion": "SizeT::try_from(end-start).expect(...) performs checked conversion rather than truncation. All controlled shape endpoints are nonnegative and bounded by4MiB; existing test data is unchanged.",
+    "declaration": "pub type SizeT = usize; actual Memobj.size field uses SizeT on selected x86_64 profile"
+  },
+  "at": "2026-11-10T21:55:49.488844+00:00",
+  "capture_successor": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-execution-2",
+  "mechanical_invariants": {
+    "all21_input_bindings_except_test_row": "unchanged including exact186 production source slices and43 PTE helpers",
+    "compile_flags_and_profile_unchanged": true,
+    "other_test_bytes_cases_expected_JSON_and_production_slices": "byte-identical",
+    "relative_include_binding": "Successor test stays in same private tests directory, so all #[path]/include! strings and their exact source files remain unchanged.",
+    "reverse_single_replacement_restores_old_test_bytes": true,
+    "source_ready_unchanged": {
+      "bytes": 5006,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/classification-correction-1/SOURCE-READY.SOURCE-ONLY.json",
+      "sha256": "509be00c2eb76857eda96717ae68f54fa1ef30374e17c07ccef6d616131625f2"
+    }
+  },
+  "new_test": {
+    "bytes": 14444,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/rollback_regression.memobj-size-correction-1.rs",
+    "sha256": "13f46b28491f77c542a3d154ed8104c911573b3faf6f435edf0626911800a4db"
+  },
+  "no_compiler_test_native_or_canonical_action_by_author": true,
+  "old_test": {
+    "bytes": 14377,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/tests/rollback_regression.rs",
+    "sha256": "241c0760d90c74ad8a183dd9dd877ca9fe3972e224f1faa0f231d368d9e97d3c"
+  },
+  "output_successor": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/host-output-2",
+  "patch": {
+    "bytes": 611,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/test-type-correction-1/MEMOBJ-SIZE-TYPE.patch",
+    "sha256": "05070dddc383b83a933042697cdd5c31c35bafb74342150f759429817b03e5f7"
+  },
+  "prior_material_GO": {
+    "bytes": 26078,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-review-source-acquisition-max-1/provider-correction-1/classification-correction-1/REVIEW.json",
+    "sha256": "7125711e5fad0510bf5cf169a4a7c81ec9ddef449401c02d5a1482b02e6b610f"
+  },
+  "schema": "m14-add-range-host-memobj-size-test-only-correction-v1",
+  "status": "FROZEN_NOT_EXECUTED"
+}

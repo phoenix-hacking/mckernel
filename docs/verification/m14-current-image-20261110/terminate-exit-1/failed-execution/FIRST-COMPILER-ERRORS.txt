@@ -1,0 +1,701 @@
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:97:47
+    |
+ 97 |         locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+    |         ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:98:41
+    |
+ 98 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:115:47
+    |
+115 |             locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |             --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |             |
+    |             arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:116:53
+    |
+116 |             locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+    |             --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |             |
+    |             arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:138:43
+    |
+138 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:139:49
+    |
+139 |         locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock), update.as_mut_ptr().cast());
+    |         --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:141:41
+    |
+141 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:143:43
+    |
+143 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:144:41
+    |
+144 |         locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:355:26
+    |
+355 | pub unsafe extern "C" fn __mcs_rwlock_reader_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+356 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:177:48
+    |
+177 |     unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
+    |              --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |              |
+    |              arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:363:26
+    |
+363 | pub unsafe extern "C" fn __mcs_rwlock_reader_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+364 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:189:50
+    |
+189 |         unsafe { locks::__mcs_rwlock_reader_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
+    |                  ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                  |
+    |                  arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:355:26
+    |
+355 | pub unsafe extern "C" fn __mcs_rwlock_reader_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+356 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:200:52
+    |
+200 |         unsafe { locks::__mcs_rwlock_reader_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr()) };
+    |                  --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                  |
+    |                  arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:363:26
+    |
+363 | pub unsafe extern "C" fn __mcs_rwlock_reader_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+364 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:205:41
+    |
+205 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:207:43
+    |
+207 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:230:49
+    |
+230 |                 locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |                 ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                 |
+    |                 arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:232:51
+    |
+232 |                 locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |                 --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                 |
+    |                 arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:245:54
+    |
+245 |             unsafe { locks::__mcs_rwlock_writer_lock(addr_of_mut!((*hash).lock[bucket]), lock.as_mut_ptr()) };
+    |                      ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                      |
+    |                      arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:254:64
+    |
+254 |                 unsafe { locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };
+    |                          ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                          |
+    |                          arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:268:67
+    |
+268 | ...                   locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());
+    |                       ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:269:67
+    |
+269 | ...                   locks::__mcs_rwlock_writer_lock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());
+    |                       ------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:307:26
+    |
+307 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+308 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:281:69
+    |
+281 | ...                   locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*pid1).children_lock), init_children.as_mut_ptr().cast());
+    |                       --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:282:69
+    |
+282 | ...                   locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).children_lock), children.as_mut_ptr().cast());
+    |                       --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                       |
+    |                       arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:287:66
+    |
+287 |                 unsafe { locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*child).update_lock), update.as_mut_ptr().cast()) };
+    |                          --------------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                          |
+    |                          arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:315:26
+    |
+315 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock_noirq(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+316 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:294:56
+    |
+294 |             unsafe { locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*unlock_hash).lock[bucket]), lock.as_mut_ptr()) };
+    |                      --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |                      |
+    |                      arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:304:41
+    |
+304 |         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         ------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:339:26
+    |
+339 | pub unsafe extern "C" fn __mcs_rwlock_writer_lock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+340 |     lock: *mut McsRwlockLock,
+    |     ------------------------
+
+error[E0308]: mismatched types
+   --> /src/kernel/rust/f03_terminate.rs:306:43
+    |
+306 |         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock), lock.as_mut_ptr());
+    |         --------------------------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `lock_helpers::McsRwlockLock`, found `abi::McsRwlockLock`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: `abi::McsRwlockLock` and `lock_helpers::McsRwlockLock` have similar names, but are actually distinct types
+note: `abi::McsRwlockLock` is defined in module `crate::abi` of the current crate
+   --> /src/kernel/rust/abi.rs:674:1
+    |
+674 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: `lock_helpers::McsRwlockLock` is defined in module `crate::lock_helpers` of the current crate
+   --> /src/kernel/rust/lock_helpers.rs:37:1
+    |
+ 37 | pub struct McsRwlockLock {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+note: function defined here
+   --> /src/kernel/rust/lock_helpers.rs:347:26
+    |
+347 | pub unsafe extern "C" fn __mcs_rwlock_writer_unlock(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+348 |     lock: *mut McsRwlockLock,
+    |     ------------------------

@@ -1,0 +1,55 @@
+{
+  "at": "2026-11-10T21:56:58.996677+00:00",
+  "authority": "Root actual followup after latest user d113: NUMA copy wrapper fast-exit capture failed after actual copy; direct wait UNKNOWN remains retained. SourceAcq diagnoses. f8 image actual PASS families joined and2GiB released; no new resource grant inferred.",
+  "fresh_admission": {
+    "aggregate_max_HOST_bytes": 4294967296,
+    "aggregate_max_jobs": 3,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "maximum_remaining_all_controller_worker_overhead_bytes": 1610612736,
+    "native_CPU_2_5_12GiB": "Separately retained; not borrowed/released",
+    "new_job_AS_ceiling_bytes": 2147483648,
+    "no_new_quota_or_lane": true,
+    "output_reservation_bytes": 33554432,
+    "retained_UNKNOWN_bytes": 536870912,
+    "rule": "Root fresh measured all existing controller/worker/container overhead plus both retained UNKNOWN slices plus this2GiB job must fit existing4GiB total. No other payload job overlaps while three job slots are charged; do not assume earlier overhead measurements remain current. Reject/wait if not admitted.",
+    "scratch_disk_floor_GiB": 12,
+    "two_retained_plus_new_jobs": 3
+  },
+  "new_packet": {
+    "cpu": 6,
+    "jobs": 1,
+    "max_address_space_bytes": 2147483648,
+    "same_profile": true,
+    "serial_commands": 3
+  },
+  "no_actions_by_preparer": true,
+  "ownership": "Exact3 positive Owner records/immediate per-record checks, all descendant waits/streams, no adopted/residual/UNKNOWN success and primary-preserving partial receipt remain unchanged. This packet cannot retire or release either other UNKNOWN owner.",
+  "request_unchanged": {
+    "bytes": 11107,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/test-type-correction-1/HOST-REQUEST.PROPOSED.json",
+    "sha256": "5787c7a16a6a0555d64793593485192480f56f21cda6775ac149103ec7f31469"
+  },
+  "retained_unknowns": [
+    {
+      "bytes": 268435456,
+      "cpu": 0,
+      "disposition": "Prior UNJOINED/UNKNOWN remains charged; no release inferred",
+      "jobs": 1
+    },
+    {
+      "bytes": 268435456,
+      "cpu": 7,
+      "disposition": "New NUMA-copy directwait UNKNOWN remains charged; no copy/kill replay or release by absence",
+      "jobs": 1
+    }
+  ],
+  "schema": "m14-mmap-host-type-correction-retained-resource-addendum-v1",
+  "source_flags_cases_expected_JSON_unchanged": true,
+  "status": "MANDATORY_CONSERVATIVE_ADMISSION_PRECONDITION_NOT_EXECUTED",
+  "test_delta_unchanged": {
+    "bytes": 4353,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-mmap-default-ownership-1/provider-correction-1/test-type-correction-1/DELTA.json",
+    "sha256": "cb00ab0fc321fb6fa343cdb53d230679e68da9dccce269b71a2cd33b19b5042f"
+  }
+}

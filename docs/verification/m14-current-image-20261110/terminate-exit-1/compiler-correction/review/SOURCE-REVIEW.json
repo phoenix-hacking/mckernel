@@ -1,0 +1,102 @@
+{
+  "schema": "mckernel.m14-terminate-real-compiler-lock-boundary-delta-review.v1",
+  "at_utc": "2026-11-10T21:37:41.365644+00:00",
+  "reviewer": "public_abi_join_max actual same-Root gpt-6.1-sol/MAX independent of SourceAcq correction author; Root sole canonical/admission/executor",
+  "status": "GO_EXACT_ONE_BOUNDED_26_E0308_LOCK_TYPE_CORRECTION_AFTER_ROOT_COMPOSITION_AND_FRESH_FAILED_BUILD_ADMISSION",
+  "ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/SOURCE-READY.json",
+    "bytes": 2595,
+    "sha256": "1eba3fc6b37d2b89fdc3f4843df1d72765bd99f874e9f8c89e28a41f2b52c18d"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/LOCK-TYPE-BOUNDARY-ONLY.patch",
+    "bytes": 14398,
+    "sha256": "a70481e62e82cf06cc52eb88f8c4d72d23c1426df868758dc50546e34a78bc24"
+  },
+  "new_module": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/candidate/kernel/rust/f03_terminate.rs",
+    "bytes": 21974,
+    "sha256": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+  },
+  "new_C_guard": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/candidate/kernel/syscall.c",
+    "bytes": 941598,
+    "sha256": "460e16897c497fbc63b7ec46922c85ccf0e8e8bccc58fdf37fc5b1603a6230c8"
+  },
+  "actual_failure": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/ACTUAL-COMPILER-DIAGNOSTICS.json",
+    "bytes": 11005,
+    "sha256": "940c44b1a9ee3d628d682c6ae97af4fbba0a859a6a91e57e77e49e598bdb5678"
+  },
+  "type_ABI": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/TYPE-ABI-CONTRACT.json",
+    "bytes": 3445,
+    "sha256": "33b0f9aafc9e3f0e9389e30bd4da60144ef05b59bc266b86bf2bf453a69d8819"
+  },
+  "source_delta": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/EXACT-SOURCE-DELTA.json",
+    "bytes": 4243,
+    "sha256": "b8a442fda17f7eebe294efa9ed03f9156e9a65eae03db28284a4e0b2ad9b688a"
+  },
+  "existing_boundary_reuse": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-ownership-1/compiler-correction-1/EXISTING-BOUNDARY-REUSE.json",
+    "bytes": 1894,
+    "sha256": "ee75939f4dce43727569e635aecd29f3857108427fb7b63a275f8ef42fab1f86"
+  },
+  "prior_full_source_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-review-publicabi-max-1/REVIEW.json",
+    "bytes": 19142,
+    "sha256": "34181e6b66ed3c0b194e7413e5b733fe8a057cd93ee89afec48eaf563c395554"
+  },
+  "prior_profile_correction_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/terminate-default-review-publicabi-max-1/correction-1/REVIEW.json",
+    "bytes": 7030,
+    "sha256": "db52a258f82029dd0f502b4c8303e21f2f78b891dcb53cd2353a503c2c439fcc"
+  },
+  "material_findings": [],
+  "actual_failed_family": {
+    "source_commit": "78a13f48716261ac2ed2e1cba8b42ada013f2797",
+    "failure_result": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/execution-1/RESULT.json",
+      "bytes": 10954,
+      "sha256": "0e4f5850fb8cf2de6c3ead89663710da5b795c0ae266072333ba4fa0cbcf7121"
+    },
+    "raw_stderr": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/execution-1/build-payload.stderr",
+      "bytes": 53454,
+      "sha256": "3c0e1305c188edc47856852e8318e63b31ddeedce2838ad1c559aacd8b0c5b99"
+    },
+    "retained_first_errors": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/execution-1/FIRST-COMPILER-ERRORS.txt",
+      "bytes": 32332,
+      "sha256": "fe5787f3636e92c4763a90aeb05b9829cfb04543c94dfd26a1c538928f1f3bf9"
+    },
+    "actual26": "Raw stderr has26 E0308 errors and no other coded error family. Every recorded source line/call matches preserved383c, and every mismatch is expected *mut lock_helpers::McsRwlockLock versus actual *mut abi::McsRwlockLock at the first lock-address argument. These are nominal Rust types, not evidence of wrong lock storage/provider/refcount or runtime behavior.",
+    "warnings_and_lifecycle": "All75 actual warnings and first failed source/78/result/captures retained, no waiver. Existing actual failed container exited2/nonOOM/Pid0/removed and Root owns its11 client captures. No Rust object,18C assertions, reader or new owner result is claimed from that failed compile."
+  },
+  "independent_exact_delta_checks": [
+    "All ready/candidate/failure/type/reuse pins match actual private/source bytes. Rebuilt two-file unified diff equals a70481 exact patch.",
+    "New Rust contains exactly26 explicit .cast::<locks::McsRwlockLock>() suffixes. Removing only those26 suffixes, one six-line explanatory comment and one local assertion block reproduces failed383c byte-for-byte. All26 error source lines exactly match the declared target call list.",
+    "C source460e1689 equals actual failed78 C preimage18c72274 with only the declared9-line selected representation guard/assertion insertion; reversing it reproduces preimage bytes. No other C body/line directive/selector/source-origin change.",
+    "All other arguments, including IRQ/noIRQ node pointers, and all call ordering, fields/values, locks/unlocks, references/releases/scheduling, callback choices, imports, exports, debug strings/sites and18 original paired fields remain unchanged. Prior341/db52 body/profile review is reused, not repeated.",
+    "No new provider, wrapper, type alias, global visibility change, lock-copy/value conversion, lock-node change or compiler/diagnostic flag modification."
+  ],
+  "representation_and_pointer_proof": {
+    "active_C": "Actual arch-lock.h defines SPINLOCK_IN_MCS_RWLOCK. Under selected !UBSAN, C struct mcs_rwlock_lock is64-byte/aligned64 with ihk_spinlock_t slock at0. Ticket word union is4-byte/aligned4 with head_tail at0. New selected C assertions enforce this exact active representation before C exclusion.",
+    "ABI_Rust": "Actual ff48 abi::McsRwlockLock is repr(C,align64) with public slock:IhkSpinlock at0; IhkSpinlock repr(C) has public u32 head_tail at0/size4/align4. Existing ABI checks already bind those fields; local constants repeat the changed boundary fact.",
+    "runtime_Rust": "Actual lock_helpers::McsRwlockLock repr(C,align64) contains private spinlock_helpers::IhkSpinlock at0. Its private ticket AtomicU32 field has size4/align4/offset0. Existing provider-module internal constant assertions prove private offsets; candidate accesses only public ABI offsets and public runtime type size/alignment, so it does not introduce a private-field access/visibility defect.",
+    "atomic_semantics": "Cast preserves the exact raw address and allocation provenance of original aligned/live field storage. No bits are moved or accessed through a new non-atomic path; actual ticket provider operates on the same aligned four-byte state. No exclusive reference, new initialization or lifetime is manufactured by the cast. Existing atomic ticket/IRQ provider semantics and caller ownership remain unchanged.",
+    "node_and_profile": "Same node objects and actual provider functions retain reader/writer/IRQ/noIRQ semantics. x86_64/Linux6.12/PROFILE_ENABLE/!UBSAN/!TOFU/!DCFA remains the only selected profile; alternative MCS representation is explicitly rejected by C guard, not silently reinterpreted.",
+    "prior_real_pattern": "Read actual process_helpers find_process/process_unlock and bridges15139/15156: ProcessHash ABI lock address passes to the already-qualified concrete runtime McsRwlockLock pointer with same IRQ node. New direct pointer cast uses that same existing representation boundary without integer roundtrip, helper/stub or broad type refactor. Prior b483 and full c664 lower-owner evidence is reused at its exact scope."
+  },
+  "new_assertions_and_real_next_check": {
+    "Rust": "Both64-byte type sizes/alignments and ABI slock0; both4-byte ticket sizes/alignments and ABI head_tail0. Runtime private offsets remain verified inside existing modules.",
+    "C": "Active SPINLOCK macro plus actual C lock64/align64/slock0 and ticket4/align4/head_tail0; existing18 field/node/debug/do_kill checks preserved. These still require the actual changed normal Rust/C compile, not source-only counting.",
+    "Root_next_action": "Compose only two reviewed focused hunks, freeze actual new source/captures/name/profile/resource admission and retry only the previously failed normal mckernel.img build. On actual buildPASS, run only the previously unstarted necessary reader; use genuine new object/map/provider identities. Do not recompile unchanged lower fixtures or rerun prior green C664/b483 tests.",
+    "still_unproved": "Correcting these precise static types is meaningful source input, not a new compilerPASS. New emitted Rust terminate/three exit bridges,18 real C/Rust assertions,26 callsite lowering/real import closure/unique owner/debug origins and final image/lifecycle remain actual result gates."
+  },
+  "preserved": "Original383c/510b/78 failure and all diagnostics unchanged; green c664 and partial b483 recoverable; other-owner source/private work, SourceAcq/P04Tests responsibility, current-free/native/source/UNKNOWN/service/account and sharedHOST4GiB/max3 reservations retained. No old TERMRESET/Direct-TID/generic/exec equivalent replay or source-wide hold inference.",
+  "operations_performed": "Read exact saved compiler diagnostics and finite private/source type declarations/assertions/reused bridge evidence; independently compare pinned diffs/reverse strings and error-site map; write only this review. No compiler/test/CMake/helper/ELF/Docker/network/native/source/canonical execution or mutation, no body re-audit or child agent.",
+  "acceptance_delta": 0,
+  "recursive_agents": false
+}
