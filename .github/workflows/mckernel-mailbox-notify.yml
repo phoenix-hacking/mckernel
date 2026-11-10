@@ -20,7 +20,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: mckernel-mailbox-notify
+  group: mckernel-mailbox-${{ github.event.inputs.event_id || 'setup' }}
   cancel-in-progress: false
 
 jobs:
@@ -60,8 +60,8 @@ jobs:
               report = inputs.body;
             } else if (context.eventName === 'push') {
               eventId = require('crypto').createHash('sha256')
-                .update('mckernel-mailbox-setup-v1:' + MAILBOX_NUMBER).digest('hex');
-              report = 'The McKernel notification mailbox is ready. This setup notice checks the bot posting path; it does not report an engineering blocker or confirm email delivery.';
+                .update('mckernel-mailbox-setup-v2:' + MAILBOX_NUMBER).digest('hex');
+              report = 'The McKernel notification mailbox supports sent, received and waiting receipts, with workstation checks every 10 minutes. ⏳ **WAITING: workstation activation and a verified first poll.** This setup notice checks the bot posting path; it does not report an engineering blocker or confirm email delivery.';
             } else reject();
             const {data: mailbox} = await github.rest.pulls.get({
               owner: OWNER, repo: REPO, pull_number: MAILBOX_NUMBER
@@ -83,9 +83,13 @@ jobs:
             // Only the fixed recipient above may be mentioned. Keep supplied
             // text as data, including shell syntax and attempted HTML markers.
             report = report.replace(/@/g, '\uff20').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const body = [marker, '@phoenix-hacking', '', report, '',
+            const body = [marker, '@phoenix-hacking', '',
+              '📤 **SENT — published in the GitHub mailbox.** The comment timestamp is the sent time.',
+              '📥 **Your email/phone receipt is unconfirmed.** Computer receipt and controller acceptance are reported separately below.',
+              '', report, '',
               'Reply here or reply to the GitHub notification email. Put `/mckernel-resume` or `/mckernel-instruct` alone on the first line, then put your concrete instruction on the following lines.',
-              'Replies are checked by the workstation mailbox poller. Existing source, ownership, policy and usage limits still apply.',
+              'The workstation checks for new replies every 10 minutes. Receipt updates distinguish queued instructions from controller acceptance; neither means the requested work is complete.',
+              'Existing source, ownership, policy and usage limits still apply.',
               'GitHub email routing depends on your subscription and notification settings; posting this notice does not confirm email delivery.'
             ].join('\n');
             const {data: comment} = await github.rest.issues.createComment({
