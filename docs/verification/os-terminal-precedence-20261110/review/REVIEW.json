@@ -1,0 +1,123 @@
+{
+  "schema": "mckernel.terminal-precedence.independent-source-test-review.v1",
+  "decision": "GO_EXACT_SEQUENTIAL_EXPECTED_BASELINE_FAILURE_THEN_ONE_CORRECTED_SEVEN_SELECTOR_RUN_AFTER_ROOT_FRESH_ADMISSION",
+  "reviewer": "/root/memory_error_cleanup_witness_high",
+  "routing": "Assigned existing actual Sol/HIGH; never/danger-full-access; no recursive spawning/private review only",
+  "reviewed_identities": {
+    "baseline_controller": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/baseline/scripts/run_os_goal.py",
+      "sha256": "33b5158563b05ed2773bf0040a4ed5b5f1892a27e24640cfc1679a483c6d50f8",
+      "incoming_commit": "8fa22bdc77da30d19f7c802fe520d3aa887c81f9"
+    },
+    "corrected_controller": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/candidate/scripts/run_os_goal.py",
+      "sha256": "454c01ec08767858787a2da8a060fc90d059d4030fa2675ab479a2a0c32b079f"
+    },
+    "source_patch": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/TERMINAL-PRECEDENCE.PRIVATE.patch",
+      "sha256": "9871a77d9f2c03f1dad080dcc40d2ee1d72fb751f23847d7288a2add2188f249"
+    },
+    "source_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/correction-1/SOURCE-PROOF.json",
+      "sha256": "21ce5f5726702a680ef314e3dc99e4fb359ebd714bb26167ed9ae127b9986f83"
+    },
+    "test_request": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/REQUEST.json",
+      "sha256": "82fedaba600ae100314400a56aa1cab0907acabb76bc8a7afeb3d9272ab021f3"
+    },
+    "test_patch": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/TESTS.PRIVATE.patch",
+      "sha256": "fedff0640e1ccf1ae5367f8e16670698b3cadc9e072d1611199eebca269cb830"
+    },
+    "candidate_tests": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-tests-1/candidate/scripts/tests/test_os_goal_continuous.py",
+      "sha256": "c4492236fa9166f0d24d7d934866891f5f27253eed0c77dc9cba4ab12b619fcd"
+    },
+    "current_actual_helper": {
+      "path": "/home/holden/mckernel/scripts/tests/test_os_goal_launcher.py",
+      "sha256": "60f51cbadc6fe91a849eed95d2a609fe84b8c920ebcf905396b82e4bb361cabf"
+    },
+    "current_plan": {
+      "path": "/home/holden/mckernel/CAMPAIGN.md",
+      "sha256": "c402d465bf58b9a2d6563e09492b93f6908b03bfd9daea3a0ab7813efe29e2e8"
+    },
+    "current_sample": {
+      "path": "/home/holden/mckernel/scripts/m14-m15-continuous-instruction.txt",
+      "sha256": "b8330194cc70aed97645e5a5715b9adb0e97e801543e3d29a968b814f2710ca1"
+    },
+    "composition_receipt": {
+      "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/root-composition-1/COMPOSITION.json",
+      "sha256": "96dd094be6877e9592f873d78dfb8be0483577a8606cae375e872ee44daa8ee2"
+    }
+  },
+  "rejected_unexecuted_source_candidate": {
+    "controller_sha256": "a65a6e325859d5e182e4257c151e998061118e671d72cb8b1a8f9502d0e03c1b",
+    "patch_sha256": "ee145183e7f8772d45fb0695d517af103916bf6ef66ae1a172272d1f97bbad7a",
+    "finding": "Unnecessary OR branch could honor a terminal code during an already accepted milestone checkpoint while retaining requested_milestones_complete reason. It is outside the focused cases and misattributes current cause. Exact correction removes only that branch; old candidate/proof remain unexecuted/immutable."
+  },
+  "source_findings": [
+    "Only Campaign.pause/request_checkpoint/run change; all other Campaign methods, module-level definitions/constants/OBJECTIVE/TERMINAL_CODES/arguments/eventhandling/recovery/stop classifiers unchanged by AST comparison. begin/stop behavior and26 self.rpc.call sites unchanged.",
+    "Run keeps existing current stop_now21/23 cause mapping first, then original terminal condition/codes before any ledger check. Only statusACTIVE without currentstop/checkpoint may enter opt-in milestone ledger. Saved/live terminalcomplete0/usageLimited21/budgetLimited22 are not rewritten tocheckpoint10.",
+    "Existing pause goal/get remains sole freshness read; actual goal/objective validation and active-to-paused RPC boundary unchanged. New boolean reports actual ACTIVE-to-paused result without altering terminal goal/status/OBJECTIVE/budget/ownership fields.",
+    "Milestone request reason is deferred until that activepause succeeded and no currentstop/stop_now appeared. Pause-read terminal declines checkpoint flag/steer and run loops to original terminal/hardstop handling. No new goal/start/activation/RPC call added.",
+    "Original nonmilestone reason=None request_checkpoint keeps same pause/save/flag/steer/notice effects; new returnvalue unused there. Signal/time work-window stopreason/deadline behavior unchanged. No broad checkpoint refactor or post-checkpoint terminal-cause promise added."
+  ],
+  "test_review": {
+    "selectors": [
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+    ],
+    "scenarios": {
+      "saved_terminal": 3,
+      "live_terminal_before_new_closed_ledger": 3,
+      "terminal_observed_by_existing_pause_read": 3,
+      "current_hardstop_priority_usage_and_policy": 2,
+      "existing_ACTIVE_checkpoint10": 1
+    },
+    "assertions": "Real temporary originalaccepted ledger, goal/status/exit/reason and stop_decision/journal identity/category/logdir, no goalset/threadstart/turnstart/steer for terminal/hardstop cases, no milestonecause contamination, savedterminal no resume; activecontrol preserves sole legitimate paused update/checkpoint10/OBJECTIVE.",
+    "actual_helper_dependency": "Current predirty helper60f51cba is retained. Its differences from incoming836b5f4a are unrelated unselected test methods; FakeRPC and goal AST are identical, as are top-level transport/config/model/effort/usage semantics. Fakeconfig computes same cached args.resources used by actual preflight, so selected model/resource assertions remain applicable. No global fixture edit/waiver.",
+    "isolation": "Selected MilestoneAcceptanceTests create temprepo/state/ledger/logjournal only; injected FakeRPC factory and scoped check_resources patch assert FakeRPC. No operational subprocess/RPC/server/model/credential/agent/goal/state/lease/kernel/hardware action; no broad helper tests selected.",
+    "expected_baseline": "Exactly same7selectors against incoming33b51585 should fail9terminal scenarios across5methods;2hardstop scenarios and existingACTIVEcontrol should pass. Source-derived expected outcome only, not observed.",
+    "expected_candidate": "Same7selectors once against454c01ec should pass12scenarios. Actual result/births/stdios/metrics remain Root execution obligation.",
+    "additional_signal_time_guards": [],
+    "additional_guard_reason": "No additional reruns justified: reason=None shared path retains identical operational effects; new boolean consumed only in opt-in milestone reason branch, and existingACTIVE checkpoint control exercises actual pause/steer. Do not rerun66/full130 or unrelated predirty suites."
+  },
+  "plan_sample_reconciliation": {
+    "current_manual": "SameRoot025232 remains active; six directSolHIGH/depth1, HOST0,6,7/max3jobs/4GiBTOTAL incl overhead; hours0/watchdog180/stall1200/maxrestart3 supersede incoming2/unlimitedstartup prose.",
+    "live_flags": "Both --repair-agent-failures and --stop-after-m14-m15 remain disabled on livecontroller; no reload/launcher-ownedstate/goal/budget/deadline/allowance edit authorized.",
+    "plan": "CAMPAIGNc402d465 corrects its2 accidental UNKNOWN labels and preserves source/native/UNKNOWN/SDK/ownership holds, progress and0credit. Sampleb8330194 explicitly declares itself guidance, not independent launch/resume authority, and matches currentlimits. Root composition receipt predates this narrow plan typo correction; actualcurrentplan SHA above is final reviewed binding.",
+    "preservation": "Root supplied exactFF incoming13paths and preservation of33 unrelateddirty paths as reconciled facts; no new gitcensus/restore or index/state edit by reviewer."
+  },
+  "smallest_execution_profile": {
+    "order": [
+      "Root compose exact staged c449 tests with original33b51585 controller; run7selectors ONCE expecting unittestnonzero from stated9terminal failures",
+      "Root apply ONLY corrected9871a77d source patch and verify454c01ec; rerun SAME7selectors ONCE expecting PASS"
+    ],
+    "payload": [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_saved_complete",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_usage_limited",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_milestone_checkpoint_preserves_recovered_budget_limited",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_live_terminal_update_precedes_newly_closed_milestone_checkpoint",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_current_hard_stop_precedes_terminal_and_closed_milestones",
+      "scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests.test_both_accepted_milestones_checkpoint_the_larger_goal"
+    ],
+    "limits": "One local serial CPU7 job; outer/controller+payload CPU7; AS1GiB/CPU45s/wall60s/KILL5s/core0 and bounded capture files. No overlap beyond shared3jobs/4GiBTOTAL incl overhead; fresh includedusage/capacity/admission and26GiB available/floors remain Root responsibility.",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "evidence": "Separate immutable baseline/candidate raw stdout/stderr/status/CPUwallRSS/PIDbirth/directwait receipts; expected baseline failure is planned evidence, not permission to broaden/retry. Unexpected failure STOP/exactreview; no automatic retries,66greens/full130 or controller launch."
+  },
+  "reviewer_operations": "Read-only CPU0 source/hash/AST/diff/fixture inspection and sole private REVIEW write; no tests/import/RPC/controller/goal/process/lease/state/canonical/index operations. One read-only comparison script initially referenced nonexistent on_event and stopped with KeyError; corrected read-only AST comparison completed without source/test execution.",
+  "remaining_defects": []
+}

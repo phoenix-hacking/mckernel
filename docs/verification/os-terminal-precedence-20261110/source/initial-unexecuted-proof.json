@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.terminal-precedence.private-source-correction.v1",
+  "status": "FROZEN_SOURCE_ONLY_PENDING_INDEPENDENT_REVIEW_AND_FOCUSED_TEST_ADMISSION",
+  "incoming_commit": "8fa22bdc77da30d19f7c802fe520d3aa887c81f9",
+  "incoming_parent_prefix": "3e63",
+  "baseline": {
+    "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/baseline/scripts/run_os_goal.py",
+    "sha256": "33b5158563b05ed2773bf0040a4ed5b5f1892a27e24640cfc1679a483c6d50f8",
+    "bytes": 129993,
+    "origin": "Exactgitshow8fa22:scripts/run_os_goal.py, canonicaluntouched"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/candidate/scripts/run_os_goal.py",
+    "sha256": "a65a6e325859d5e182e4257c151e998061118e671d72cb8b1a8f9502d0e03c1b",
+    "bytes": 130759
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/resume-20261110T025232Z-785c93f5/terminal-precedence-source-1/TERMINAL-PRECEDENCE.PRIVATE.patch",
+    "sha256": "ee145183e7f8772d45fb0695d517af103916bf6ef66ae1a172272d1f97bbad7a",
+    "changed_canonical_paths": [
+      "scripts/run_os_goal.py"
+    ]
+  },
+  "changed_methods_only": [
+    "Campaign.pause",
+    "Campaign.request_checkpoint",
+    "Campaign.run"
+  ],
+  "invariants": [
+    "Existingstop_nowcode21/23blockrunsbeforeledgerandisbyteidentical.",
+    "Existingterminalcodes0/10/20/21/22andblocked-repairwaitingconditionsstayunchanged. Savedterminalstatusesarehandledbeforeledger;onlyACTIVEcanrequestacceptancecheckpoint.",
+    "Theexistingpausegoal/getmayreadanewcomplete/usageLimited/budgetLimited/blocked/pausedstateafterrunselectedACTIVE. pauseonlyevermutatesactive\u2192pausedasbefore;itsnewbooleanresultidentifieswhetherthatlegitimateexistingtransitionactuallyoccurred.",
+    "Milestonereasonisassignedonlyafteranactualactive\u2192pausedtransitionandabsencenewstop. Declinedcheckpointdoesnotsetcheckpoint_requested/steer;runloopsbacktoactualterminal/hardstophandling.",
+    "NonpausedterminalupdatesduringanacceptedmilestonecheckpointretainTERMINAL_CODESratherthanbeingcoercedto10. Existinghardstopsandnonmilestonesignal/timecheckpointreasonretainprecedence.",
+    "Existingnonmilestonerequest_checkpoint()callersstillpause/steer/boundedcheckpointasbefore;newoptionalreasonisusedonlyforacceptedmilestones.",
+    "Campaign.begin,Campaign.stop,goalidentity/objective/constants/flags/eventhandling/recoverypolicyunchanged. NoadditionalRPCcallsite/method/goalset/threadstart/resume/turnstartorsteer.",
+    "Underlyinggoalstatusissavedunchangedfromactualexistingpause/goalevents;no goalcreation/reactivation/budget/holdreset."
+  ],
+  "narrow_live_race_rationale": "AnACTIVEsnapshotandacceptedledgercanprecedeanexistingpause-timegoal/getthatreturnsaterminalstatus. Merelymovingtheledgerblockwouldstillsetmilestonereason/checkpoint10andsendasteer. Thebooleanpauseoutcomeanddeferredreasonclosethisexactrace;nonpausedterminalhandlingalsohonorslaterexistinggoaleventswhilecheckpointdrains.",
+  "verification": "Sourcebyte/diff/RPCcallsite-countcomparisononly. Notests/import/compiler/parser/model/goal/controllerorlauncher-stateoperations. Separatetestownerhasfrozen11scenarios/7selectors.",
+  "operations": {
+    "canonical_index_publication_live_state_monitors_flags_or_goal_changes": false,
+    "tests_or_runtime_executed": false,
+    "recursive_agents": false
+  }
+}

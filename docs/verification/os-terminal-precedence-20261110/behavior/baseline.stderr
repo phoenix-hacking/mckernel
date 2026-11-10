@@ -1,0 +1,100 @@
+test_milestone_checkpoint_preserves_saved_complete (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... FAIL
+test_milestone_checkpoint_preserves_recovered_usage_limited (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... FAIL
+test_milestone_checkpoint_preserves_recovered_budget_limited (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... FAIL
+test_live_terminal_update_precedes_newly_closed_milestone_checkpoint (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... test_current_hard_stop_precedes_terminal_and_closed_milestones (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... ok
+test_both_accepted_milestones_checkpoint_the_larger_goal (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) ... ok
+
+======================================================================
+FAIL: test_milestone_checkpoint_preserves_saved_complete (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 427, in test_milestone_checkpoint_preserves_saved_complete
+    state, stopped = self.run_terminal_milestone_case(rpc, 0, "complete")
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 0
+
+======================================================================
+FAIL: test_milestone_checkpoint_preserves_recovered_usage_limited (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 437, in test_milestone_checkpoint_preserves_recovered_usage_limited
+    state, _ = self.run_terminal_milestone_case(rpc, 21, "usageLimited")
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 21
+
+======================================================================
+FAIL: test_milestone_checkpoint_preserves_recovered_budget_limited (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 446, in test_milestone_checkpoint_preserves_recovered_budget_limited
+    state, _ = self.run_terminal_milestone_case(rpc, 22, "budgetLimited")
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 22
+
+======================================================================
+FAIL: test_live_terminal_update_precedes_newly_closed_milestone_checkpoint (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) (status='complete')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 466, in test_live_terminal_update_precedes_newly_closed_milestone_checkpoint
+    self.run_terminal_milestone_case(rpc, expected, status)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 0
+
+======================================================================
+FAIL: test_live_terminal_update_precedes_newly_closed_milestone_checkpoint (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) (status='usageLimited')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 466, in test_live_terminal_update_precedes_newly_closed_milestone_checkpoint
+    self.run_terminal_milestone_case(rpc, expected, status)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 21
+
+======================================================================
+FAIL: test_live_terminal_update_precedes_newly_closed_milestone_checkpoint (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) (status='budgetLimited')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 466, in test_live_terminal_update_precedes_newly_closed_milestone_checkpoint
+    self.run_terminal_milestone_case(rpc, expected, status)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 22
+
+======================================================================
+FAIL: test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) (status='complete')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 492, in test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved
+    self.run_terminal_milestone_case(rpc, expected, status)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 0
+
+======================================================================
+FAIL: test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) (status='usageLimited')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 492, in test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved
+    self.run_terminal_milestone_case(rpc, expected, status)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 21
+
+======================================================================
+FAIL: test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved (scripts.tests.test_os_goal_continuous.MilestoneAcceptanceTests) (status='budgetLimited')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 492, in test_terminal_goal_discovered_by_checkpoint_pause_read_is_preserved
+    self.run_terminal_milestone_case(rpc, expected, status)
+  File "/home/holden/mckernel/scripts/tests/test_os_goal_continuous.py", line 387, in run_terminal_milestone_case
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 10 != 22
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.785s
+
+FAILED (failures=9)

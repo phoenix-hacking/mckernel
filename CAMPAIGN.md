@@ -1,89 +1,81 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T02:40Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T03:10Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Continuous recovery handoff — 2026-11-10
+## Current decision
 
-The user now requests continuous useful work until the original M14 and M15
-acceptances close, recording every stop and handing ordinary engineering failures
-to agents for repair and a meaningful retry. The latest instruction is to publish
-the recovery changes to GitHub; the user will bring up the workstation and start
-them. This is a repository-side controller update, not evidence of a new live
-workstation run or any additional accepted milestone gate. The last actual
-workstation checkpoint is retained below.
+**ACTIVE under explicit manual resume `20261110T025232Z-785c93f5`, same saved Root.**
+The prior211917 invocation ended normally BLOCKED/exit20 after three actual goal
+turns. Its audit is historical; this new invocation supplies a confirmed controller
+defect and does not release any original OS source, SDK, native or ownership hold.
+Root is actual Sol/MAX, sole compositor/index/publisher. A/B source/test turns are
+verified Sol/HIGH, never/danger-full-access; six direct owners maximum, depth1.
 
-`scripts/run_os_goal.py --repair-agent-failures` adds same-Root repair guidance and
-one diagnostic turn per unchanged BLOCKED goal. If no eligible work is available,
-the controller stays alive in `waiting_for_input`, preserves the goal and accepts
-queued user instructions without busy-looping model turns. Ordinary technical
-crashes retain the existing classified recovery/backoff path. An actual new
-policy, permission, usage or ownership hold is recorded with its own reason;
-historical errors are not relabeled as fresh rejections. Unknown delivery is
-reconciled before any retry. Repair ownership may escalate after a failed fix;
-ordinary engineering failure alone is not a terminal stop.
+Pinned remote `8fa22bdc77da30d19f7c802fe520d3aa887c81f9` was fetched, reviewed and
+fast-forwarded from exact parent3e63. All13 incoming paths were clean and collision
+free; the index stayed empty and all33 unrelated dirty tracked paths kept their
+bytes/deletions. IHK source, gitlink and bundle are outside the13 paths and stay
+unchanged. No source restore, production suite or qualified partial was replayed.
 
-Start on the existing workstation checkout after updating the work branch. Use a
-persistent terminal such as `tmux new-session -s mckernel` before this command;
-detach with Ctrl-b then d and reconnect with `tmux attach -t mckernel`.
+**Repair PASS:** the original accepted-ledger/terminal precedence defect is fixed.
+The incoming controller reproduced9 terminal failures (saved, live and checkpoint-
+read complete/usageLimited/budgetLimited). The exact correction passed all12
+selected FakeRPC scenarios in7 methods:9 terminal cases,2 current hard stops and
+1 existing active checkpoint control. Exit0/21/22, original cause/journal and full
+goal state are preserved without activation RPCs; legitimate active checkpoint10
+remains. Both payload waits joined/CPU7 released. No production controller ran.
 
-```bash
-cd /home/holden/mckernel
-git switch codex/local-native-staging-repair
-git pull --ff-only origin codex/local-native-staging-repair
-taskset -c 0,6,7 python3 -B scripts/run_os_goal.py \
-  --hours 0 --max-restarts -1 \
-  --repair-agent-failures --stop-after-m14-m15 \
-  --profile aggressive --max-agents 2 --build-jobs 3 --memory-gib 4 \
-  --startup-instruction-file scripts/m14-m15-continuous-instruction.txt
-```
+Independent review rejected one unused extra branch before testing; its original
+source packet remains frozen. The selected correction changes only pause outcome,
+deferred milestone reason and run-loop precedence. Unchanged signal/time behavior
+and the reported upstream66/130 results were reused at their actual scope.
+Raw evidence is `docs/verification/os-terminal-precedence-20261110/`; no credentials,
+account protocol, live state or historical archive was copied. All33 unrelated
+tracked dirty files/deletions remain preserved. This repair earns0 original credit.
 
-`--hours 0` removes the time cutoff; `--max-restarts -1` removes a numerical cap on
-eligible technical recovery. The current launcher reserves a 2-GiB planning share
-per child, so this launch selects two children within the existing 4-GiB aggregate
-HOST budget rather than expanding that budget. Existing owners must be reconciled
-before new work; native CPUs2–5, prior reservations, fresh operation admission and
-disk floors still apply. The launch resumes the saved Root and preserves its goal,
-budget and pending instructions. M14 acceptance remains before M15 acceptance.
+The running controller keeps its loaded code. Neither `--repair-agent-failures`
+nor `--stop-after-m14-m15` is enabled on this invocation. Incoming two-child,
+unlimited-restart and user-will-start prose is superseded by this live authorization;
+it is not a launch command. Existing technical recovery stays foreground-owned:
+hours0, watchdog180, stall1200, maximum3 restarts. No healthy reload or state edit.
 
-`--stop-after-m14-m15` checks every original file and integration gate in
-`docs/verification/m14-m15-closure-progress.json`. Both original milestone summary
-acceptances, every exact original gate and `original_criteria_unchanged` must be
-true; percentages and missing/duplicate gates cannot end the run. Completion
-checkpoints and pauses the larger saved whole-system goal without declaring that
-larger objective complete.
+| Remaining prerequisite | Actual consumer | Owner / smallest proof |
+| --- | --- | --- |
+| Eligible universal/generic provider disposition | OriginalM14F03/F06/I02 final matching build | Original hold authority; exact original scope and eligible genuine cohort, with no held/equivalent replay |
+| Complete remaining12 source/provider contracts | Existing qualified partial and original integrations | Original scope/ABI/callee/owner evidence; existing per-name UNKNOWN/NO_GO decisions remain closed |
+| Supported SDK/source-custody/native/currentfree bindings | Original default image, modules and native/application acceptance | Original source/native owners; matching supported artifacts and fresh operation-specific real gates |
 
-Check status or send a new concrete instruction from another terminal:
+Fresh normal included guard03:04:44% used/56% remaining, no service/spend hold.
+HOST CPUs0,6,7; max3 aggregate light jobs;4GiB TOTAL including all overhead;
+fresh at least26GiB available, host16/scratch12GiB disk floors. Retain18GiB prior
+reservations and4GiB host floor. Existing12GiB planner ceiling is not extra HOST
+RAM. Native CPUs2–5/12GiB stays separately held; CPU1 excluded. All UNKNOWN owners,
+scratch21/mutex27:4, expired attempts/nonces, source/service/usage/later stops persist.
+No prepaid/API fallback, goal/budget reset, hidden recovered mode or new controller.
 
-```bash
-python3 -B scripts/run_os_goal.py --status
-python3 -B scripts/run_os_goal.py --progress
-python3 -B scripts/run_os_goal.py --instruct 'Describe the new input or next authorized repair here.'
-```
+Original progress remains M14=51.48%, M15=50.97%,156 counted/73 verified,
+38/45 open leaves. Acceptance remains4/6+0/3 and1/8+0/4; this harness task earns0.
+EACH>=75% by2026-11-10T08:00Z remains the planning target, not a guarantee or stop.
+The original universal/generic source cohort, exact remaining providers and supported
+SDK/source-custody/native/currentfree bindings still prevent a final ETA. Original
+M14-before-M15 acceptance and all criteria/weights/history below remain unchanged.
+Generic/exec replay/equivalent=false; notification, wait, kill and process lanes
+retain their exact UNKNOWN/NO_GO. No kernel/native/MMIO/MSR operation is admitted.
 
-The Git common directory's `os-autopilot/stop-events.jsonl` is the append-only stop
-journal; `latest-stop.json` is its latest-record convenience view. In a normal
-checkout these are under `.git/os-autopilot/`. Records retain UTC time, category,
-reason, exit code, worker/server/watcher identities, thread/turn references,
-available error provenance, evidence paths and the next action. The journal also
-records monitored BLOCKED waiting and supervisor recovery decisions. Existing
-per-invocation RPC, stderr, console and watcher logs remain the detailed evidence.
-`--status` includes the latest stop diagnostic. This does not make the supervisor
-survive a workstation shutdown; starting the documented command is still needed
-after the machine comes back up.
+Next15-minute deliverable after this coherent publication requires a real eligible
+input for the three prerequisites above. The new harness adoption/repair/test task
+is complete; no original source, SDK or native admission was supplied by it.
+Critical-path blocker remains the held universal generic provider; original hold
+authority owns its disposition and Root owns integration. Full-image argv stays
+unset. No further ordinary engineering task is established from the incoming13
+paths, and no closed source audit or passing suite is queued again.
+This invocation's first impasse observation begins only after publication in actual
+Root turn `01a1c35f-2207-7663-b4d1-f8fe11d0abcc`. Its goal stays active; old invocation
+three-turn audits and timer wakes do not count toward the new audit.
 
-The final-push tracker workflow now restores the exact pinned IHK revision from
-the repository's existing source bundles using `restore_ihk_source.py`, removing
-the observed upstream submodule-fetch failure while retaining the original source
-identity checks. Focused controller, stop-log, repair, handoff, workflow and restore
-tests use fake RPC or synthetic Git repositories; they do not establish native
-McKernel runtime acceptance. Final focused validation passed 66 tests, the launch
-arguments passed a zero-model-call dry run, and `git diff --check` passed. The 130
-existing launcher/recovery tests have identical baseline/candidate failure sets
-on this partial checkout and constrained host (zero added failures); that broader
-suite is not green here and does not establish a production run.
+## Previous211917 source checkpoint (historical; new manual resume above is active)
 
-## Latest workstation checkpoint (before recovery update)
 
 **SOURCE/BINDING IMPASSE: same saved Root, invocation `20261109T211917Z-488788ba`.**
 Three actual Root goal turns have exhausted currently eligible work; after this
