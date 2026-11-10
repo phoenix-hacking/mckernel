@@ -1,0 +1,339 @@
+[
+    {
+        "Id": "8fc135478ff605d0287f8fd986da6707980b3f69ec6722bb045e04f6caa2dad2",
+        "Created": "2026-11-10T14:11:14.737990319Z",
+        "Path": "/usr/bin/env",
+        "Args": [
+            "-i",
+            "LANG=C",
+            "LC_ALL=C",
+            "PATH=/usr/sbin:/usr/bin:/sbin:/bin",
+            "TZ=UTC",
+            "/usr/bin/bash",
+            "--noprofile",
+            "--norc",
+            "-p",
+            "-e",
+            "-o",
+            "pipefail",
+            "/input/collect-asm-emission.sh"
+        ],
+        "State": {
+            "Status": "created",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "0001-01-01T00:00:00Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "ResolvConfPath": "",
+        "HostnamePath": "",
+        "HostsPath": "",
+        "LogPath": "",
+        "Name": "/mckernel-module-asm-emission-20261110-0708-1",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges"
+            ],
+            "Tmpfs": {
+                "/tmp": "rw,nodev,nosuid,noexec,size=32m"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 536870912,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "6",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 536870912,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 64,
+            "Ulimits": [
+                {
+                    "Name": "core",
+                    "Hard": 0,
+                    "Soft": 0
+                },
+                {
+                    "Name": "cpu",
+                    "Hard": 60,
+                    "Soft": 60
+                },
+                {
+                    "Name": "fsize",
+                    "Hard": 1073741824,
+                    "Soft": 1073741824
+                }
+            ],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2",
+                    "Target": "/source",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2",
+                    "Target": "/output",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/collect-asm-emission.sh",
+                    "Target": "/input/collect-asm-emission.sh",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/actual-inputs.sha256",
+                    "Target": "/input/actual-inputs.sha256",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1",
+                    "Target": "/capture"
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ],
+            "Init": true
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/47e7c34cd905dd49930cbc5564c398e6f58d44317e4dd54b396958f8ff5ee098-init/diff:/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/diff:/var/lib/docker/overlay2/fff00856c276031a055641a39e0919e79db7904afb0ce80a3d4f4db638a0269c/diff:/var/lib/docker/overlay2/d199f563791647ba171c6a6b30772ca85312af33440b39d08e6bb730f6e6013a/diff:/var/lib/docker/overlay2/f0749d426bb01c0f3b1cf8801b25513f92ffa67570954f3f881636dbf54f2b04/diff:/var/lib/docker/overlay2/b108a9aa871c34f689ca9dad26ceac43de807cd903f00a7ba1d77804cd2d8f1e/diff:/var/lib/docker/overlay2/fb2f4457a35c8482edb2928b3b235f4050018750bf17cdff8b8b1bb174b2c5d6/diff:/var/lib/docker/overlay2/6b8acc345c6edc4a5dfd53ec0ef55b3b54be94cb1082c09d8fba86f9fd66d001/diff:/var/lib/docker/overlay2/8fe2188ddb7c5e6ab9ab5a67a024ba8f7896b7a9cbe1f9cdae2a953e5ef7651d/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+                "MergedDir": "/var/lib/docker/overlay2/47e7c34cd905dd49930cbc5564c398e6f58d44317e4dd54b396958f8ff5ee098/merged",
+                "UpperDir": "/var/lib/docker/overlay2/47e7c34cd905dd49930cbc5564c398e6f58d44317e4dd54b396958f8ff5ee098/diff",
+                "WorkDir": "/var/lib/docker/overlay2/47e7c34cd905dd49930cbc5564c398e6f58d44317e4dd54b396958f8ff5ee098/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/actual-inputs.sha256",
+                "Destination": "/input/actual-inputs.sha256",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1",
+                "Destination": "/capture",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2",
+                "Destination": "/source",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2",
+                "Destination": "/output",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/collect-asm-emission.sh",
+                "Destination": "/input/collect-asm-emission.sh",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "8fc135478ff6",
+            "Domainname": "",
+            "User": "1000:1000",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "container=oci",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "CARGO_BUILD_JOBS=4",
+                "CMAKE_BUILD_PARALLEL_LEVEL=4",
+                "MAKEFLAGS=-j4",
+                "PYTHONDONTWRITEBYTECODE=1"
+            ],
+            "Cmd": [
+                "-i",
+                "LANG=C",
+                "LC_ALL=C",
+                "PATH=/usr/sbin:/usr/bin:/sbin:/bin",
+                "TZ=UTC",
+                "/usr/bin/bash",
+                "--noprofile",
+                "--norc",
+                "-p",
+                "-e",
+                "-o",
+                "pipefail",
+                "/input/collect-asm-emission.sh"
+            ],
+            "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+            "Volumes": null,
+            "WorkingDir": "/capture",
+            "Entrypoint": [
+                "/usr/bin/env"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "io.buildah.version": "1.43.1",
+                "license": "BSD-3-Clause",
+                "name": "rockylinux",
+                "org.mckernel.scope": "local development; no production evidence credit",
+                "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+                "org.opencontainers.image.licenses": "BSD-3-Clause",
+                "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+                "org.opencontainers.image.title": "rockylinux",
+                "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+                "org.opencontainers.image.version": "10",
+                "summary": "Rocky Linux Base image",
+                "vendor": "Rocky Enterprise Software Foundation",
+                "version": "10"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

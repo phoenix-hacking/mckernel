@@ -1,0 +1,288 @@
+{
+  "actual_fresh_admission": {
+    "bytes": 964,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/execution-1/ADMISSION.json",
+    "sha256": "20455fb65f8fe64027c31a36d2db51752ccf39ac6ad30f576dc7bc98d96ace0a"
+  },
+  "actual_jump_table_and_transform": {
+    "alignment": 8,
+    "entry_size_bytes": 16,
+    "exact_transform": "Raw short eb07 becomes same-length6690 NOP2 at all3 final code sites under selected objtool --hacks=jump_label; source check.c1900-1921 and arch/x86/include/asm/jump_label.h25-28 define it. No fake5B expansion or user-probe execution.",
+    "final_code_and_target_offsets": [
+      [
+        "0x9504",
+        "0x950d"
+      ],
+      [
+        "0x9534",
+        "0x953d"
+      ],
+      [
+        "0x9564",
+        "0x956d"
+      ]
+    ],
+    "final_size_bytes": 48,
+    "keys": [
+      "__tracepoint_mmap_lock_start_locking",
+      "__tracepoint_mmap_lock_acquire_returned",
+      "__tracepoint_mmap_lock_released"
+    ],
+    "literal_key_addend": "0xa = selected tracepoint.key offset8 + explicit objtool hack signal2",
+    "relocation_layout": "Each entry has2R_X86_64_PC32 text fields and1R_X86_64_PC64 exact tracepoint key; saved leaf and final relocation records agree after link relocation."
+  },
+  "actual_result": {
+    "bytes": 2685,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/execution-1/RESULT.json",
+    "sha256": "1690539400a21dc998fd2b9ff914651d10d3490b9c395bf3b96a5cb67907cf62"
+  },
+  "actual_trace_functions": [
+    {
+      "calling_convention": "extern C no arguments ->bool; actual paths normalize EAX to0/1, no stack or callee-saved register modification. All returns remain selected __x86_return_thunk relocations.",
+      "entry_ENDBR64": "f30f1efa",
+      "false_return_value": "xor eax,eax -> exact0",
+      "final_same_length_NOP2_at_plus4": "6690",
+      "final_text_offset": "0x9500",
+      "function": "m15_mmap_trace_start_enabled",
+      "leaf_size": 23,
+      "leaf_text_offset": "0x10",
+      "raw_short_jump_at_plus4": "eb07",
+      "return_thunks_at": [
+        "0x9508",
+        "0x9512"
+      ],
+      "true_return_value": "mov eax,1 -> exact1",
+      "unique_final_owners": [
+        {
+          "T_definitions": 0,
+          "module": "ihk"
+        },
+        {
+          "T_definitions": 0,
+          "module": "ihk-smp-x86_64"
+        },
+        {
+          "T_definitions": 1,
+          "module": "mcctrl"
+        }
+      ]
+    },
+    {
+      "calling_convention": "extern C no arguments ->bool; actual paths normalize EAX to0/1, no stack or callee-saved register modification. All returns remain selected __x86_return_thunk relocations.",
+      "entry_ENDBR64": "f30f1efa",
+      "false_return_value": "xor eax,eax -> exact0",
+      "final_same_length_NOP2_at_plus4": "6690",
+      "final_text_offset": "0x9530",
+      "function": "m15_mmap_trace_acquire_enabled",
+      "leaf_size": 23,
+      "leaf_text_offset": "0x40",
+      "raw_short_jump_at_plus4": "eb07",
+      "return_thunks_at": [
+        "0x9538",
+        "0x9542"
+      ],
+      "true_return_value": "mov eax,1 -> exact1",
+      "unique_final_owners": [
+        {
+          "T_definitions": 0,
+          "module": "ihk"
+        },
+        {
+          "T_definitions": 0,
+          "module": "ihk-smp-x86_64"
+        },
+        {
+          "T_definitions": 1,
+          "module": "mcctrl"
+        }
+      ]
+    },
+    {
+      "calling_convention": "extern C no arguments ->bool; actual paths normalize EAX to0/1, no stack or callee-saved register modification. All returns remain selected __x86_return_thunk relocations.",
+      "entry_ENDBR64": "f30f1efa",
+      "false_return_value": "xor eax,eax -> exact0",
+      "final_same_length_NOP2_at_plus4": "6690",
+      "final_text_offset": "0x9560",
+      "function": "m15_mmap_trace_release_enabled",
+      "leaf_size": 23,
+      "leaf_text_offset": "0x70",
+      "raw_short_jump_at_plus4": "eb07",
+      "return_thunks_at": [
+        "0x9568",
+        "0x9572"
+      ],
+      "true_return_value": "mov eax,1 -> exact1",
+      "unique_final_owners": [
+        {
+          "T_definitions": 0,
+          "module": "ihk"
+        },
+        {
+          "T_definitions": 0,
+          "module": "ihk-smp-x86_64"
+        },
+        {
+          "T_definitions": 1,
+          "module": "mcctrl"
+        }
+      ]
+    }
+  ],
+  "actual_typed_Rust_caller": {
+    "actual_Rust_caller_object_ELF": {
+      "bytes": 3362747,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/object-metadata/mcctrl_rust.o.readelf",
+      "sha256": "725b8ad6ecb94195d16f52e7020a67b00f1a9f65b362d1fb96fd72f4b92a42b4"
+    },
+    "actual_closed_three_member_mcctrl_response": {
+      "bytes": 126,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/mcctrl.mod",
+      "sha256": "2ca72ca8fbb1e6f7f5fa4077aa7ada1dd273dbff4c588c51f6889b057a9f12fb"
+    },
+    "declarations": [
+      {
+        "declaration": "fn m15_mmap_trace_start_enabled() -> bool;",
+        "function": "m15_mmap_trace_start_enabled",
+        "line": 53
+      },
+      {
+        "declaration": "fn m15_mmap_trace_acquire_enabled() -> bool;",
+        "function": "m15_mmap_trace_acquire_enabled",
+        "line": 54
+      },
+      {
+        "declaration": "fn m15_mmap_trace_release_enabled() -> bool;",
+        "function": "m15_mmap_trace_release_enabled",
+        "line": 55
+      },
+      {
+        "declaration": "fn m15_mmap_write_lock_warning();",
+        "function": "m15_mmap_write_lock_warning",
+        "line": 52
+      }
+    ],
+    "matching_final_module": {
+      "bytes": 2374656,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+      "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+    },
+    "source_profile_production_only": "Existing current actual .cmd records and source/profile review3d98 exclude m15_fixture/M15_USER_GATE_PROBE activation.",
+    "stage_source": {
+      "bytes": 8335,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_mm_write.rs",
+      "sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107"
+    }
+  },
+  "actual_warning_function": {
+    "UD2_bytes": "0f0b",
+    "UD2_final_offset": "0x9594",
+    "UD2_raw_offset": "0x14",
+    "bug_entry_fields": "s32 relative fault,s32 relative filename,u16 line,u16 flags",
+    "bug_table_size_bytes": 12,
+    "calling_convention": "extern C no arguments ->unit. Source-requested kernel warning trap/metadata and selected post-handler return path are emitted; the warning is not executed.",
+    "entry_ENDBR64": "f30f1efa",
+    "final_offset": "0x9590",
+    "flags": "0x0901 = BUGFLAG_WARNING1 | TAINT_WARN9<<8; no ONCE flag",
+    "function": "m15_mmap_write_lock_warning",
+    "leaf_offset": "0x10",
+    "leaf_size_bytes": 11,
+    "line": 24,
+    "relative_relocations": [
+      ".text+0x9594",
+      ".rodata+0x146"
+    ],
+    "selected_return_thunk_site": "0x9596",
+    "table_hex": "000000000000000018000109",
+    "unique_final_owners": [
+      {
+        "T_definitions": 0,
+        "module": "ihk"
+      },
+      {
+        "T_definitions": 0,
+        "module": "ihk-smp-x86_64"
+      },
+      {
+        "T_definitions": 1,
+        "module": "mcctrl"
+      }
+    ]
+  },
+  "all_exact_raw_outputs_match_Root_actual_receipt": {
+    "exit-status.tsv": {
+      "bytes": 87,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/exit-status.tsv",
+      "sha256": "2c8e3b25f366e7f3debed20ce7cb141a4cc4d145205004d714b0659f48f6425e"
+    },
+    "final-module-functions.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/final-module-functions.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-module-functions.stdout": {
+      "bytes": 4715,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/final-module-functions.stdout",
+      "sha256": "aeff1f2f03d12c6af6d33e6ab58b61254d94043be703a6ed41a2a8a84e7c7b2d"
+    },
+    "final-module-tables.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/final-module-tables.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-module-tables.stdout": {
+      "bytes": 1301,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/final-module-tables.stdout",
+      "sha256": "21e19538a9b310c4d1ad85e4c9030e73d2ee131e5969956ec10677fc690bea5b"
+    },
+    "input-identity.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/input-identity.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "input-identity.stdout": {
+      "bytes": 202,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/input-identity.stdout",
+      "sha256": "b778994ba0889deae8a3238941e075ef86c3836f9c72916e895866ffb2a842f3"
+    },
+    "leaf-instructions.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/leaf-instructions.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "leaf-instructions.stdout": {
+      "bytes": 6281,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/leaf-instructions.stdout",
+      "sha256": "ae72c19fc6ea2a61ebdd62528819c9cb76e9f1aba9be5d3b371747c270565e44"
+    },
+    "warning-bug-table.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/warning-bug-table.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "warning-bug-table.stdout": {
+      "bytes": 184,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/capture-1/warning-bug-table.stdout",
+      "sha256": "212e92e46c989483e4262e76745505a23d6199f1751f5bea82895d579485b2de"
+    }
+  },
+  "no_execution_semantics_claim": "Static emitted ABI/ownership proof only. No privileged body/warning/module load/native/currentfree/hardware or complete application behavior executed.",
+  "operations_by_source_owner": "Only saved outputs and targeted source/type declarations read; no compiler/objtool/parser/test/reader/probe/Docker/ASM reexecution.",
+  "raw_canonical_false_profile_claim_preserved": "The general parser object still contains actual_profile_and_emission_qualification=false. This separately bound actual-source/bytes/relocation/caller/final-owner proof supplies the precise condition the parser did not evaluate; no source/flag/helper mutation or automatic claim flip.",
+  "request": {
+    "bytes": 10219,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/REQUEST.json",
+    "sha256": "04c153c0ed429403f560be3fbf8c8d28fa926609c6d44710880791f00c479ff5"
+  },
+  "source_and_caller_inputs": {
+    "bytes": 10128,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/INPUTS.json",
+    "sha256": "2a953c6fd3fd26b254cf36d60a06e5625567d430087e8caa0a2c631afdbacbda"
+  },
+  "source_derived_oracles": {
+    "bytes": 7665,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/assembly-emission-qualification-1/ORACLES.json",
+    "sha256": "72b1eb851e49bb36b157723616b45b16994bce378b121bd461bb6998c4c72fb8"
+  },
+  "source_operation_review_sha256": "1ad51b8de5fd7c28a0c792b74eaa618467521d5bab4b25967eb8d8290445d8ea",
+  "status": "ACTUAL_SELECTED_ASM_EMISSION_AND_FINAL_MODULE_JOIN_PASS_READY_FOR_INDEPENDENT_ORIGINAL_LEAF_REVIEW"
+}

@@ -1,0 +1,39 @@
+{
+  "actual_Rust_caller": {
+    "call_line": 922,
+    "call_statement": "unsafe { native_reset_secondary_cpu_via_init(record.apic_id) };",
+    "immediately_preceding_safety_comments": "                // SAFETY: CPU read exclusion fixes this validated APIC target.\n                // The pending native wrapper owns its exact preemption bracket\n                // and returns before this Rust code can reach device_online.",
+    "stage_source": {
+      "bytes": 78237,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_cpu.rs",
+      "sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912"
+    }
+  },
+  "actual_Rust_caller_declaration": "fn native_reset_secondary_cpu_via_init(phys_apicid: u32);",
+  "actual_complete_function_body": "void native_reset_secondary_cpu_via_init(u32 phys_apicid)\n{\n\tpreempt_disable();\n\tsend_init_sequence(phys_apicid);\n\tpreempt_enable();\n}",
+  "actual_function_line": 713,
+  "actual_kernel_C_and_generated_Rust_ABI": "void(u32 phys_apicid), matching generated bindings in actualCAP3 and actual SMP externC declaration; opaque hardware identifier scalar, no McKernel object or Rust layout crosses ABI.",
+  "actual_provider_and_import": "Same Module.symvers/vmlinux.symvers uniquevmlinux EXPORT_SYMBOL_GPL empty namespace; actual SMP.ko U symbol and ELF relocation, exact records in IMPORT-PROVIDER-ABI.json.",
+  "actual_selected_Linux_translation_unit": {
+    "bytes": 37265,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/arch/x86/kernel/smpboot.c",
+    "sha256": "480cc27df7624447df9ec710f46623d4b0c77ce5fee5759f351ef97469bb5aec"
+  },
+  "basis": [
+    "All McKernel CPU selection, CPU reservation/lifetime, topology exclusion, uncertain-state ownership and module/application policy remain in the selected Rust SMP owner; this wrapper contains no McKernel state, ownership registry, allocation, callback, guest protocol or policy implementation.",
+    "The wrapper exposes the existing Linux-private send_init_sequence under balanced Linux preemption exclusion. Its entirestraightline body is those3existingLinux primitive calls; raw Linux reset implementation remains Linux-owned and unchanged.",
+    "The adapter compiles into the matching Linux kernelprovider, not an extra McKernel C object in ihk/SMP/mcctrl. Actual project component/final-link ownership maps contain Rust/reviewedASM plus permitted Kbuild-generated module/commonmetadata only.",
+    "Necessary Linux/Rust SDK C wrappers and platform kernel APIs remain legitimate platform dependencies; no claim that newC is retired, allC is allowed, allvmlinux is unchanged, or whole-system project C migration is accepted."
+  ],
+  "exact_patch": {
+    "bytes": 1121,
+    "path": "/home/holden/mckernel/host-kernel/kbuild/patches/0010-v2-x86-export-preempt-protected-secondary-reset.patch",
+    "sha256": "a3d7dcac45abbd712d79fbbebba7e7df08eae06037fc347d09415b48fb1db2c6"
+  },
+  "factual_origin": "A newly added kernel-side C ABI adapter; not described as unchanged inherited Linux.",
+  "held_native_source_runtime_scope": "No native reset or privileged operation executed; currentfree/native/cleanup/UNKNOWN/grant holds unchanged. Static accepted source/build bindings are reused, without reactivating held APIs or acceptedF01.",
+  "independent_decision_required": "Root independent whole-leaf/material reviewer must confirm this exact source-based platform classification before original technicalleaf credit. Any identified McKernel project implementation in this body must be stated precisely and resolved, rather than bypassed.",
+  "proposed_final_classification": "Permitted necessary Linux-host platform API adapter, outside the McKernel project implementations in the three Rust/ASM module artifacts. The original ownership criterion explicitly permits classified Linux support. This case is classified by exact complete3call body/location/interface/owner, not vmlinux namespace or C filename alone.",
+  "status": "EXPLICIT_NARROW_LINUX_PLATFORM_ADAPTER_CLASSIFICATION_READY_FOR_INDEPENDENT_MATERIAL_REVIEW",
+  "symbol": "native_reset_secondary_cpu_via_init"
+}

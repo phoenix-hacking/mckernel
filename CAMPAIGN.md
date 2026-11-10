@@ -1,24 +1,24 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T14:20:01.913014+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T14:39:48.032766+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE original closure engineering, same Root/live060029 run.** One whole
-original counted condition is newly verified: **M15-I02-bindings**. Actual kernel,
-Kbuild/config/toolchain/source and all three module artifact identities satisfy
-its entire technical HOST scope; independent original-condition reviewe90be144
-confirms no missing binding input. Original M14 acceptance precedes M15; neither
+**ACTIVE original closure engineering, same Root/live060029 run.** All three technical M15-I02
+conditions are now verified: **bindings, module ownership and ABI/modpost**. The
+whole stated conditions are demonstrated on the same real three artifacts;
+independent reviewe90be144/c95bfdd5 confirms no unmatched technical input. Original M14 acceptance precedes M15; neither
 milestone, a native/deployed cohort nor the complete module gate is accepted.
 
-**Verified checklist:** M14 **51.48%** (delta0.00pp), M15 **52.64%** (delta+1.67pp).
-The unchanged metric gives this one leaf100/5 children=20% ofI02, then20/12 original
-M15 gates=1.6666667pp. Counted checks156, verified74 (was73), open38M14/44M15.
-M15-I02 is20% checklist complete and still unaccepted. Original criteria, weights,
+**Verified checklist:** M14 **51.48%** (delta0.00pp), M15 **55.97%** (delta+3.33pp since the last published pair).
+The unchanged metric gives three leaves100each/5children=60% ofI02; these
+two new leaves add40/12 originalM15 gates=3.3333333pp. Counted checks156,
+verified76 (was74), open38M14/42M15. M15-I02 is60% checklist complete and still
+unaccepted. Original criteria, weights,
 denominators and four accepted M14/accepted M15-F01 scopes remain unchanged.
 No native or C-retirement credit. EACH>=75% by08:00 November10 Pacific (16:00Z)
-remains at risk: gains23.52/22.36pp still needed, no reliable final ETA while
+remains at risk: gains23.52/19.03pp still needed, no reliable final ETA while
 required held compute-provider and matching runtime/native inputs remain.
 PR3 progress comments only when the verified pair changes, once per update.
 
@@ -36,11 +36,12 @@ PR3 progress comments only when the verified pair changes, once per update.
   All other guards remain byte-identical. Source checkpoint8f7d0dc7 is pushed/
   fetched with all53 owned entries matched; source fix did not release held APIs.
 - Four exact production ASM reads PASS14:11:15Z; all hash/read exits0, empty
-  stderr, waits closed/owned8fc1 removed. SDK now qualifies actual ENDBR, raw
+  stderr, waits closed/owned8fc1 removed. Qualificationa09560b5/independentc95bfdd5 verifies actual ENDBR, raw
   short-jump→finalNOP2 objtool transformation, three key+0xa jump records,
   return thunks, warningUD2/12B bug table/0x901, exact callerABI and finalmcctrl
-  ownership. Two other technical leaf assessments/complete305import+type/provider
-  joins are independently under review. The newly added three-call Linux reset
+  ownership. The whole ownership and ABI/modpost conditions now pass, including complete
+  305import occurrences/218uniqueprovider/type joins and two explicit readonly
+  SMPassembly images inside the Rust object. The newly added three-call Linux reset
   adapter is explicitly classified as new platformC, not unchangedLinux or
   projectC retirement; no blanketC/provider exemption or claimflag waiver.
 - Matching currentRust1.95 whole70+6 library qualificatione530/independentb667:
@@ -75,8 +76,8 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M15-I02 module ownership/ABI-modpost | SDK completed actualsource/type/provider/ASM joins; SourceAcq MAX reviews WHOLE original conditions and new platform reset-adapter classification. Root credits only satisfied leaves; matched deployed/native cohort/ACCEPT remain separate |
-| M15-I03/I01 monitor caller ABI | P03 MAX reviews bounded source-metadata capture correctioncbc236; Root admits newCPU7/256MiB puremetadata read with positive owned joins while retaining oldUNKNOWN. P04 then freezes trusted matching develRPM acquisition/passiveoverlay/11ABI binding and realnamedRust ihkmond link to existingb7bc; no library rebuild or daemon/native |
+| M15-I02 module ownership/ABI-modpost | All three technicalleaves independentlyGO/credited; actual3KO ownership/ABI/modpost/source bindings pass. Remaining matched delivered/deployed/native cohort and originalACCEPT require their genuine held image/currentfree/runtime bindings, no repeated reader/build |
+| M15-I03/I01 monitor caller ABI | Corrected metadata read/positivejoinsPASS14:24; exactmatching systemd-devel0:257-23.el10_2.1/566409B/SHA9292 GETPASS14:36, oldUNKNOWNheld. P04 binds actualdownload to separate signature/NEVRA/Requires/passiveextract review, then actualheader/link namespace/11typedcalls and genuineRust monitor link to existingb7bc; no install/library rebuild/daemon/native |
 | M15-I03/P04 actual crash provider | Exact selected /usr/bin/crash ELF/version/source/header/BFD ownership absent; derive legitimate supported artifact, then match seven crash/elevenBFD exports. No fabricated symbols, wrapper/default/native substitute |
 
 **Single full-image critical-path blocker:** no admissible universal generic/exec
@@ -86,7 +87,7 @@ ownership exclusions and native UNKNOWN owners/leases/reservations/current-free
 stay binding. No held compute graph, boot/module load/MMIO/MSR/valid native dump,
 reset, source-authority bypass or dummy passing gate runs.
 
-Fresh controller guard2026-11-10T14:20:00.134520+00:00: 61%included used/39%remaining,
+Fresh controller guard2026-11-10T14:42:28.415380+00:00: 62%included used/38%remaining,
 no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
 allowance reset. Root/six actual task routes gpt-6.1-sol/MAX/depth1; one canonical
@@ -98,9 +99,9 @@ inferred from output/process absence. Correction uses disjoint output and normal
 positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
 pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
 
-Next15-minute deliverable: publish verified binding leaf and changed pair once to
-PR3; consume independent ownership/ABI leaf decisions and continue the admitted
-monitor-development input correction/acquisition toward its real Rust caller.
+Next15-minute deliverable: publish the two newly verified whole technical leaves
+and changed pair once to PR3; qualify the acquired development RPM and real
+header/link/11-API monitor input, then execute its reviewed named Rust build.
 Reuse all green producers/reader/ASM/CLI/library/cases, keep all holds and owned
 outcomes explicit, and checkpoint genuine original closure promptly.
 
