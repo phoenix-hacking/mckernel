@@ -1,11 +1,14 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T01:03Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T01:04Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**ACTIVE: same saved Root, manual invocation `20261109T211917Z-488788ba`.**
+**SOURCE/BINDING IMPASSE: same saved Root, invocation `20261109T211917Z-488788ba`.**
+Three actual Root goal turns have exhausted currently eligible work; after this
+checkpoint the normal goal control records BLOCKED. This is unfinished acceptance,
+with a healthy launcher and no unjoined workload or technical restart requirement.
 Root is actual Sol/MAX, sole canonical compositor/index/publisher. Existing direct
 owners are Sol/HIGH, cap6/depth1; completed owners are not stalled. No controller,
 goal, budget, native owner or original hold is reset.
@@ -92,11 +95,17 @@ established affirmative exact source/ABI/pointee/lock-lifetime/provider-owner co
 for `syscall_find_process_bridge` or `syscall_process_unlock_bridge`; both remain
 UNKNOWN/NO_GO before bodies. Its incomplete broader name search is recorded without
 claiming universal absence. Raw result: `docs/verification/m14-remaining-process-bridge-eligibility-20261110.json`.
-Impasse audit2/3: the first observation followed publication in Root turn
-`01a1c22e-0a85-7360-a753-8897d3d773f2`; this second observation is actual Root turn
-`01a1c2f6-1bb3-7fd1-b58d-2703e08f390a`. The same source/binding prerequisite remains
-missing after the bounded new check; the goal remains active. Timer wakes and old
-invocations do not count.
+Impasse audit3/3 completed in three consecutive actual Root goal turns:
+`01a1c22e-0a85-7360-a753-8897d3d773f2` after final publication,
+`01a1c2f6-1bb3-7fd1-b58d-2703e08f390a` after the bounded process-bridge result, and
+`01a1c2fb-3be3-7ef3-a932-e4c4acffa989` after revalidating the handoff, live controls
+and completed owners. The prior turn yielded a precise new scope decision and
+published it as `e81174ae`; no affirmative engineering input resulted. The same
+source/binding prerequisite is still missing. No timer wake or old invocation
+was counted. Normal BLOCKED status follows this final checkpoint; no automatic
+source-hold retry or mechanical resume is authorized. Further useful work needs
+a real eligible input for the three prerequisites above. The original goal,
+acceptance scope, target history and every source/native/resource hold persist.
 Fresh normal included guard 2026-11-10T00:57UTC: 42% used/58% remaining; no service/spend hold.
 HOST0/6/7,max3aggregateLIGHTjobs,4GiB TOTAL including all overhead/fresh26GiB and
 host16/scratch12GiB floors remain. Retained18GiB; separateheldnative2–5/12GiB;
