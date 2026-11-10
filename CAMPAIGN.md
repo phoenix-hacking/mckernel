@@ -1,7 +1,96 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T05:13Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T05:32Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+## Overnight preparation and awake guardian
+
+The current user request is to prepare the unattended run, push it to GitHub and
+keep the computer awake. The source preparation is complete; actual workstation
+activation remains unverified. This request concerns the new explicit overnight
+invocation. Earlier inert-adoption descriptions below remain historical records
+of those invocations; they are not evidence that services were started now.
+The original source/provider/SDK/native/account/resource holds remain binding.
+
+The existing `scripts/start_os_overnight.py` is the sole launch front door. Its
+reviewed default run has **hours0 (no timer cutoff), unlimited classified technical
+recoveries, repair-agent routing and stop-after-original-M14/M15 enabled**. The
+run shares **two child slots, three light HOST jobs on CPUs0,6,7 and 4 GiB TOTAL**.
+Explicit supplied argument lists still preserve their actual opt-ins. Normal
+account/usage and operation-specific ownership/resource checks remain required.
+There is no additional credit/API allowance and no original acceptance change.
+
+The guardian itself now runs under **idle, sleep and lid-switch inhibition** for
+its entire lifetime, including times when the model engine is blocked or stopped.
+The service cannot start an uninhibited guardian if the inhibitor is unavailable
+or its lock is refused. The wrapper's long-lived child can deliver READY/WATCHDOG
+with NotifyAccess=all. The guardian uses **Restart=always** and the existing
+**90-second systemd watchdog**, so unexpected clean exits are also restarted.
+The independent engine remains Restart=no and retains all exact ownership,
+checkpoint and uncertain-submission controls. No service restart invents a model
+start. An explicit systemd stop or shutdown still remains effective.
+
+On explicit installation/start, the launcher verifies that the current user's
+service manager is configured to remain available after logout. If needed, it
+uses supported noninteractive `loginctl enable-linger` for that numeric UID only,
+then reads the setting back. Failure leaves an explicit error before installing
+unit files; there is no sudo, credential request or privilege fallback. The
+read-only preparation command briefly tests the actual inhibitor permission;
+this probe releases its lock and is not the overnight service itself.
+
+After adopting this branch on `/home/holden/mckernel`, run from that checkout:
+
+```sh
+python3 -B scripts/start_os_overnight.py prepare
+python3 -B scripts/start_os_overnight.py start
+python3 -B scripts/start_os_overnight.py status
+```
+
+`prepare` checks the reviewed defaults, required executables, current user manager,
+logout persistence, inhibitor access, existing ownership, fresh HOST admission,
+GitHub identity/mailbox/workflow and the seeded public status file. It returns
+PREPARED, SETUP_NEEDED or BLOCKED with individual reasons. Linger-only SETUP_NEEDED
+is handled by explicit `start` if the OS permits it. Other blockers require their
+real missing input; no process is killed and no dirty file is discarded. The
+command starts no service or model, consumes no mailbox direction and grants no
+new authority. Actual model/allowance admission remains with the engine.
+
+`start` returning a request ID or systemd READY is not proof of a first poll.
+`status` now contains `readiness.monitoring_ready`, separate `work_state`, missing
+stages and next deadlines. Monitoring requires the current guardian's exact birth,
+held lease and fresh heartbeat, a successful mailbox poll after this guardian
+started, and a current remote-publication receipt whose hash matches the actual
+local text. A generated file, attempted GET, older guardian receipt or uncertain
+PUT does not establish readiness. A restart retains normal ten-minute network
+cadence, so a current first poll/publication can remain pending until the next due
+tick. A source-blocked model can still have fully ready awake monitoring.
+The monitoring receipt does not independently inspect an active inhibitor or the
+power supply. The new wake wrapper applies when the updated guardian unit starts;
+daemon-reload alone does not replace an already active older guardian. Preserve
+its normal owner/checkpoint transition before claiming the new wrapper is active.
+
+The guardian continues checking the supervisor every10 seconds, receiving GitHub
+directions and updating `status.txt` every600 seconds. When genuine inputs are
+missing it stays awake, records the blocker and waits for a real reply; it does
+not burn repeated model turns on unchanged input. Ordinary classified technical
+failures retain their repair/recovery route. Both original milestones closing
+pauses the requested model run, while the monitoring/mailbox service stays alive.
+
+The actual workstation checkout is not accessible from this preparation session.
+No real service, inhibitor, linger change, model or native workload was started.
+The latest inspected workstation checkpoint remains e1cd6833, with completed
+control repairs and the original source/binding impasse; the mailbox still has
+setup bot notices and no verified workstation poll. Do not describe this published
+preparation as a live overnight run. The monitor must be started on the computer,
+which must remain powered and connected. This configuration does not inhibit an
+intentional shutdown or protect against loss of power.
+
+Verification passed **255 focused tests**. The final generated guardian and
+engine units passed actual `systemd-analyze verify --man=no` with no diagnostics.
+Focused checks cover the new awake wrapper/notification routing, current-user
+linger readback, read-only preparation, current first-poll/publication readiness,
+existing explicit options, and retained failure/recovery/mailbox behavior.
+Evidence: `docs/verification/overnight-readiness-20261110/validation.json`.
 
 ## Generated M14/M15 status text
 

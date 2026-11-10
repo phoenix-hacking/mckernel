@@ -51,6 +51,16 @@ def render_units(repo, directory, *, python=None, path_environment=None):
     executable = python or sys.executable
     environment = path_environment if path_environment is not None else os.environ.get("PATH", "/usr/local/bin:/usr/bin:/bin")
     command = " ".join(_quote(v) for v in (executable, "-B", repo / "scripts/os_goal_service.py"))
+    inhibit = shutil.which("systemd-inhibit")
+    if not inhibit or not Path(inhibit).is_absolute():
+        raise RuntimeError("The guardian requires an absolute systemd-inhibit executable; no uninhibited fallback")
+    # The guardian keeps idle, suspend and lid handling inhibited while its
+    # separate engine is held/stopped. No power-off or shutdown inhibitor is taken.
+    # The long-lived Python child sends READY/WATCHDOG, so NotifyAccess=all lets
+    # systemd accept its notifications within the inhibitor wrapper's cgroup.
+    guardian_command = " ".join(_quote(v) for v in (
+        inhibit, "--what=idle:sleep:handle-lid-switch", "--mode=block", "--no-ask-password", "--who=McKernel guardian",
+        "--why=Keep overnight monitoring and the phone mailbox awake", "--")) + " " + command
     # WorkingDirectory is a single path, not an ExecStart-style quoted word.
     # Literal quotes would become part of the path and fail systemd validation.
     path = str(repo)
@@ -62,9 +72,9 @@ def render_units(repo, directory, *, python=None, path_environment=None):
     names = unit_names(directory)
     guardian = ("[Unit]\nDescription=McKernel independent supervisor watchdog and mailbox\n"
                 "After=network-online.target\nStartLimitIntervalSec=0\n\n[Service]\n"
-                "Type=notify\nNotifyAccess=main\nWatchdogSec=90\nRestart=on-failure\nRestartSec=5\n"
+                "Type=notify\nNotifyAccess=all\nWatchdogSec=90\nRestart=always\nRestartSec=5\n"
                 "TimeoutStartSec=60\nTimeoutStopSec=700\nKillMode=control-group\n" + shared
-                + "ExecStart=" + command + " guardian\n\n[Install]\nWantedBy=default.target\n")
+                + "ExecStart=" + guardian_command + " guardian\n\n[Install]\nWantedBy=default.target\n")
     engine = ("[Unit]\nDescription=McKernel model supervisor (owned by the guardian)\n"
               "StartLimitIntervalSec=0\n\n[Service]\nType=exec\nRestart=no\n"
               "TimeoutStopSec=700\nKillMode=process\n" + shared
@@ -117,6 +127,10 @@ def _legacy_owner(directory):
 
 
 def install_units(repo, directory):
+    # The explicit start must keep this user's monitor alive after logout.
+    # No sudo or interactive privilege fallback; failure remains observable.
+    from os_goal_power import ensure_linger
+    ensure_linger()
     root = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "systemd/user"
     root.mkdir(mode=0o700, parents=True, exist_ok=True)
     for name, content in render_units(repo, directory).items():
@@ -180,11 +194,13 @@ def _validated_arguments(repo, arguments):
 
 
 def status(repo, directory):
+    from os_goal_readiness import evaluate_readiness
     names = unit_names(directory)
     result = {"units": names, "mailbox_url": "https://github.com/phoenix-hacking/mckernel/pull/3",
               "state_directory": str(directory),
               "status_text_url": "https://github.com/phoenix-hacking/mckernel/blob/codex/mckernel-control-mailbox/status.txt",
-              "status_text_path": str(Path(directory) / "status.txt")}
+              "status_text_path": str(Path(directory) / "status.txt"),
+              "readiness": evaluate_readiness(directory)}
     try:
         result["status_text"] = read_json(Path(directory) / "status-text-state.json")
     except FileNotFoundError:
@@ -358,7 +374,7 @@ def guardian(repo, directory):
 def main(argv=None, *, engine_arguments=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", nargs="?", default="start",
-                        choices=("start", "status", "status-text", "stop", "dry-run", "guardian", "engine"))
+                        choices=("start", "prepare", "status", "status-text", "stop", "dry-run", "guardian", "engine"))
     args = parser.parse_args(argv)
     os.umask(0o077)
     directory = None
@@ -370,6 +386,9 @@ def main(argv=None, *, engine_arguments=None):
             return engine(REPO, directory) or 0
         if args.command == "start":
             result = start(REPO, directory, engine_arguments)
+        elif args.command == "prepare":
+            from os_goal_overnight_prepare import prepare_overnight
+            result = prepare_overnight(REPO, directory)
         elif args.command == "status-text":
             from os_goal_status_feed import StatusFeed
             result = StatusFeed(REPO, directory).tick(publish=False)
@@ -399,7 +418,7 @@ def main(argv=None, *, engine_arguments=None):
             except (OSError, ValueError, RuntimeError) as logging_error:
                 result["stop_log_error"] = type(logging_error).__name__
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 1 if result["status"] in {"FAILED", "GUARDIAN_NOT_LIVE", "ERROR"} else 0
+    return 1 if result["status"] in {"FAILED", "GUARDIAN_NOT_LIVE", "ERROR", "BLOCKED", "SETUP_NEEDED"} else 0
 
 
 if __name__ == "__main__":

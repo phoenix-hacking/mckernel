@@ -82,6 +82,17 @@ class GuardianTests(unittest.TestCase):
         self.guard.tick()
         self.launch.assert_called_once_with(None)
 
+    def test_new_guardian_instance_resets_receipt_freshness_without_new_goal_identity(self):
+        original_id = self.guard.guard["run_id"]
+        self.guard.close()
+        with patch.object(subject.time, "time", return_value=2000000000):
+            self.guard = subject.Guardian(self.directory, self.directory, launch_engine=self.launch,
+                                          mailbox_poll=self.mailbox, heartbeat=self.notify)
+        self.assertEqual(self.guard.guard["run_id"], original_id)
+        self.assertEqual(self.guard.guard["started_at"], 2000000000)
+        self.assertEqual(protocol.read_json(self.directory / "guardian.json")["started_at"], 2000000000)
+        self.launch.assert_not_called()
+
     def test_terminal_policy_and_budget_stops_keep_mailbox_alive_without_launch(self):
         for reason in ("signal_15", "quota_exhausted", "cyberPolicy", "permission_denied"):
             self.state["stop_reason"] = reason

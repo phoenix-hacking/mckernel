@@ -83,7 +83,7 @@ class Guardian:
         self.stopping = False
         self.guard = self._optional("guardian.json")
         self.guard.update(run_id=self.guard.get("run_id") or uuid4().hex,
-                          pid=os.getpid(), start=process_start(os.getpid()))
+                          pid=os.getpid(), start=process_start(os.getpid()), started_at=time.time())
         if not isinstance(self.guard["start"], str) or not self.guard["start"].isdigit():
             self.close()
             raise RuntimeError("Guardian process identity unavailable")

@@ -1,0 +1,111 @@
+{
+  "schema": "mckernel.overnight-readiness.v1",
+  "verified_at": "2026-11-10T05:32:39.244292+00:00",
+  "source_parent": "888cd26b7e5d7d7fc19e90b808177f70934c59ce",
+  "scope": "Prepare the existing launcher for an always-awake overnight M14/M15 run and publish to GitHub",
+  "tests": {
+    "run": 255,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS",
+    "seconds": 2.137,
+    "scope": "16 focused controller, service, mailbox, status, readiness, power, repair, provenance and instruction-order suites",
+    "external_operations": "Faked; no real model, native workload, user service installation or power helper execution"
+  },
+  "systemd_unit_validation": {
+    "command": "systemd-analyze verify --man=no <generated guardian and engine units>",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "units_started": false
+  },
+  "configuration": {
+    "hours": 0,
+    "max_restarts": -1,
+    "repair_agent_failures": true,
+    "stop_after_m14_m15": true,
+    "max_children": 2,
+    "aggregate_host_jobs": 3,
+    "aggregate_host_memory_gib": 4,
+    "host_cpus": [
+      0,
+      6,
+      7
+    ],
+    "mailbox_poll_seconds": 600,
+    "status_refresh_seconds": 600,
+    "guardian_watchdog_seconds": 90,
+    "guardian_restart": "always",
+    "engine_restart": "no",
+    "guardian_inhibitor": "idle:sleep:handle-lid-switch",
+    "inhibitor_mode": "block",
+    "guardian_notify_access": "all",
+    "linger": "Explicit start enables for the current numeric UID and verifies readback; preparation is read-only"
+  },
+  "readiness": {
+    "guardian_exact_birth_and_lease_required": true,
+    "current_guardian_started_at_required": true,
+    "current_successful_mailbox_poll_required": true,
+    "current_verified_publication_hash_required": true,
+    "monitoring_distinct_from_model_progress": true,
+    "historical_receipts_not_first_poll_proof": true
+  },
+  "workstation": {
+    "actual_checkout_accessible": false,
+    "actual_services_started": false,
+    "actual_inhibitor_acquired": false,
+    "actual_linger_changed": false,
+    "actual_first_poll_verified": false,
+    "current_agent_activity": "UNKNOWN"
+  },
+  "preserved": {
+    "explicit_service_options": true,
+    "instruction_chronology": true,
+    "original_m14_m15_acceptance": true,
+    "source_sdk_native_resource_holds": true,
+    "unknown_operation_outcomes": true,
+    "included_allowance_boundary": true
+  },
+  "files": {
+    "scripts/os_goal_service.py": {
+      "bytes": 22733,
+      "sha256": "5af4a9fb9092d0ccd8a5b69219c31e1085d1a1042b2ad911f1f7e7ceed898b59"
+    },
+    "scripts/os_goal_guardian.py": {
+      "bytes": 20116,
+      "sha256": "a8f3b7e7ff7426d6015c18573838563fec13b62f2eff66167d6701f86f861883"
+    },
+    "scripts/os_goal_power.py": {
+      "bytes": 2864,
+      "sha256": "ec7cbe644d265b67483f493592f90c950185920ab002f3cbd9770ab12e53462e"
+    },
+    "scripts/os_goal_readiness.py": {
+      "bytes": 11525,
+      "sha256": "5b0c0a96440699f7ee7a747acb72523508248aea2bbc372118446465ac4927ce"
+    },
+    "scripts/os_goal_overnight_prepare.py": {
+      "bytes": 6626,
+      "sha256": "c84dabf08378b0f7777eb77692c479bfdb136b9ec6f62ca7b2497ad1960b13f8"
+    },
+    "scripts/tests/test_os_goal_service.py": {
+      "bytes": 33631,
+      "sha256": "e6c39ada22c055244ec466fbc6f998675361b7c0acf990a7df54027186c2ddca"
+    },
+    "scripts/tests/test_os_goal_guardian.py": {
+      "bytes": 15343,
+      "sha256": "e478fd45a6ef29d269a6c4b3a7824d5728e6c319d71ce3e216f7b65b222c0667"
+    },
+    "scripts/tests/test_os_goal_power.py": {
+      "bytes": 6818,
+      "sha256": "d3a72f6e99362d9730ae181e877b250ff7a5b4e948ee9e282e57aed3337b9709"
+    },
+    "scripts/tests/test_os_goal_readiness.py": {
+      "bytes": 11103,
+      "sha256": "dfc3fe5236b0b5210674aea647c53dc5ac5978155bd29fc8247294bbd72fef0e"
+    },
+    "scripts/tests/test_os_goal_overnight_prepare.py": {
+      "bytes": 6437,
+      "sha256": "6194255e2dffb3a36b7a8ec1a86041dd46f6d599abfaeae5a4a642cb6cd324c9"
+    }
+  }
+}

@@ -4,6 +4,7 @@ import fcntl
 import hashlib
 import io
 import json
+import shlex
 from pathlib import Path
 import sys
 import tempfile
@@ -30,6 +31,7 @@ class ServiceTests(unittest.TestCase):
         self.arguments = ['--hours', '0', '--max-agents', '2', '--agent-windows', 'off']
         self.names = subject.unit_names(self.directory)
         self.systemctl = self.patch(subject, '_systemctl', return_value='inactive')
+        self.install_implementation = subject.install_units
         self.install = self.patch(subject, 'install_units', return_value=self.names)
         self.preflight = self.patch(subject, 'mailbox_preflight', return_value={'status': 'READ_ACCESS_VERIFIED'})
         self.patch(subject.shutil, 'which', side_effect=lambda name: '/fake/' + name)
@@ -64,8 +66,8 @@ class ServiceTests(unittest.TestCase):
         units = subject.render_units(self.repo, self.directory, python='/fake/python', path_environment='/fake/bin')
         self.assertEqual(set(units), set(self.names.values()))
         monitor, engine = units[self.names['guardian']], units[self.names['engine']]
-        for setting in ('Type=notify', 'NotifyAccess=main', 'WatchdogSec=90',
-                        'Restart=on-failure', 'KillMode=control-group'):
+        for setting in ('Type=notify', 'NotifyAccess=all', 'WatchdogSec=90',
+                        'Restart=always', 'KillMode=control-group'):
             self.assertIn(setting + '\n', monitor)
         self.assertIn(' guardian\n', monitor)
         self.assertNotIn('run_os_goal.py', monitor)
@@ -84,7 +86,36 @@ class ServiceTests(unittest.TestCase):
             self.assertIn('WorkingDirectory=' + str(repo).replace('%', '%%') + '\n', unit)
             self.assertNotIn('WorkingDirectory="', unit)
             self.assertIn('Environment="PATH=/fake/$cash/100%%bin"\n', unit)
-            self.assertIn('ExecStart="/fake/100%%$$python"', unit)
+            self.assertIn('"/fake/100%%$$python" "-B"', unit)
+
+    def test_guardian_inhibits_sleep_independently_and_routes_child_notifications(self):
+        units = subject.render_units(self.repo, self.directory, python='/fake/python')
+        monitor = units[self.names['guardian']]
+        engine = units[self.names['engine']]
+        fields = dict(line.split('=', 1) for line in monitor.splitlines() if '=' in line)
+        command = shlex.split(fields['ExecStart'])
+        self.assertEqual(command[0], '/fake/systemd-inhibit')
+        self.assertEqual(command[1:4], ['--what=idle:sleep:handle-lid-switch', '--mode=block', '--no-ask-password'])
+        self.assertEqual(command[command.index('--') + 1:],
+                         ['/fake/python', '-B', str(self.repo / 'scripts/os_goal_service.py'), 'guardian'])
+        self.assertEqual(fields['Type'], 'notify')
+        self.assertEqual(fields['NotifyAccess'], 'all', 'The notifying guardian is a child of the inhibitor')
+        self.assertEqual(fields['WatchdogSec'], '90')
+        self.assertEqual(fields['KillMode'], 'control-group')
+        self.assertNotIn('shutdown', command[1])
+        self.assertNotIn('handle-power-key', command[1])
+        self.assertNotIn('BindsTo=', monitor)
+        self.assertNotIn('PartOf=', monitor)
+        self.assertIn('ExecStart="/fake/python"', engine)
+        self.assertNotIn('systemd-inhibit', engine, 'Engine execution stays in its existing independent adapter')
+
+    def test_guardian_units_have_no_uninhibited_fallback_if_binary_missing_or_relative(self):
+        for resolved in (None, 'relative/systemd-inhibit'):
+            with self.subTest(resolved=resolved), patch.object(subject.shutil, 'which', return_value=resolved):
+                with self.assertRaisesRegex(RuntimeError, 'no uninhibited fallback'):
+                    subject.render_units(self.repo, self.directory, python='/fake/python')
+        self.exec.assert_not_called()
+        self.systemctl.assert_not_called()
 
     def test_busy_engine_prevents_config_overwrite_and_new_authorization(self):
         self.write(subject.CONFIG, {'preserved': 'prior invocation'})
@@ -474,6 +505,74 @@ class ServiceTests(unittest.TestCase):
         self.install.assert_not_called()
         self.preflight.assert_not_called()
         self.exec.assert_not_called()
+
+    def test_prepare_cli_is_read_only_and_does_not_authorize_or_install(self):
+        import os_goal_overnight_prepare as preparation
+        output = io.StringIO()
+        prepared = {'status': 'PREPARED', 'model_calls': 0, 'services_started': False,
+                    'monitoring': {'monitoring_ready': False}}
+        with patch.object(subject, 'REPO', self.repo), \
+                patch.object(subject, 'runtime_directory', return_value=self.directory), \
+                patch.object(preparation, 'prepare_overnight', return_value=prepared) as prepare, \
+                patch.object(guardian, 'authorize_start') as authorize, redirect_stdout(output):
+            self.assertEqual(subject.main(['prepare']), 0)
+        self.assertEqual(json.loads(output.getvalue()), prepared)
+        prepare.assert_called_once_with(self.repo, self.directory)
+        authorize.assert_not_called()
+        self.install.assert_not_called()
+        self.systemctl.assert_not_called()
+        self.exec.assert_not_called()
+
+    def test_status_live_guardian_does_not_imply_successful_first_mailbox_poll(self):
+        import os_goal_readiness as readiness
+        guard = self.live_guard()
+        guard.update(started_at=1900, heartbeat_at=1999)
+        self.write('guardian.json', guard)
+        self.write('mailbox-state.json', {'last_poll_at': 1999, 'next_poll_at': 2599,
+                                           'notices': {}, 'last_error': None})
+        with patch.object(subject, 'process_start', return_value=guard['start']), \
+                patch.object(subject, 'lease_free', return_value=False), \
+                patch.object(readiness, 'process_start', return_value=guard['start']), \
+                patch.object(readiness, 'lease_free', return_value=False), \
+                patch.object(readiness.time, 'time', return_value=2000):
+            result = subject.status(self.repo, self.directory)
+        self.assertTrue(result['guardian_live'])
+        self.assertTrue(result['readiness']['stages']['guardian']['ready'])
+        self.assertFalse(result['readiness']['monitoring_ready'])
+        self.assertIn('mailbox', result['readiness']['missing_stages'])
+
+    def test_unit_install_verifies_linger_before_files_and_daemon_reload(self):
+        import os_goal_power as power
+        config_home = self.repo / 'isolated-user-config'
+        units = config_home / 'systemd/user'
+        events = []
+        def verified_linger():
+            self.assertFalse(units.exists())
+            events.append('linger_verified')
+            return {'enabled': True}
+        def daemon_reload(*arguments, **kwargs):
+            self.assertEqual(arguments, ('daemon-reload',))
+            self.assertEqual(events, ['linger_verified'])
+            self.assertEqual({path.name for path in units.iterdir()}, set(self.names.values()))
+            events.append('daemon_reloaded')
+            return ''
+        self.systemctl.side_effect = daemon_reload
+        with patch.dict(subject.os.environ, {'XDG_CONFIG_HOME': str(config_home)}), \
+                patch.object(power, 'ensure_linger', side_effect=verified_linger):
+            result = self.install_implementation(self.repo, self.directory)
+        self.assertEqual(result, self.names)
+        self.assertEqual(events, ['linger_verified', 'daemon_reloaded'])
+        self.systemctl.assert_called_once_with('daemon-reload')
+
+    def test_failed_linger_verification_refuses_unit_files_and_daemon_reload(self):
+        import os_goal_power as power
+        config_home = self.repo / 'isolated-user-config'
+        with patch.dict(subject.os.environ, {'XDG_CONFIG_HOME': str(config_home)}), \
+                patch.object(power, 'ensure_linger', side_effect=RuntimeError('Linger could not be verified')), \
+                self.assertRaises(RuntimeError):
+            self.install_implementation(self.repo, self.directory)
+        self.assertFalse((config_home / 'systemd/user').exists())
+        self.systemctl.assert_not_called()
 
 
 
