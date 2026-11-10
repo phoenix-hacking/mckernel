@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T03:13Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T03:17Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -87,6 +87,104 @@ final checkpoint; no mechanical resume, held-equivalent replay or controller res
 is authorized by a source impasse. Further useful engineering needs a genuine new
 eligible input. Original objective, target history, criteria, reservations and
 all source/service/usage/native/later-stop controls remain unchanged.
+
+## Overnight launcher prepared for the next explicit start
+
+The user's follow-up requests unattended work all night while sleeping. The
+latest workstation checkpoint and terminal-precedence repair above are preserved. This helper is an option for a new explicit invocation; it does not
+replace, reconfigure or duplicate an existing live controller. Publishing the
+helper is not evidence that the workstation has launched it.
+
+After a normal checkpoint has released the existing watcher and worker leases,
+update the checkout and start:
+
+```bash
+cd /home/holden/mckernel
+git switch codex/local-native-staging-repair
+git pull --ff-only origin codex/local-native-staging-repair
+python3 -B scripts/start_os_overnight.py start
+```
+
+If an existing controller still owns the campaign, start returns EXISTING_OWNER
+and launches nothing. That is not confirmation that the existing process has
+acquired the overnight settings. Preserve that owner and use its normal handoff;
+do not force a reload, kill a process group or edit saved state.
+
+The helper detaches the supervised launcher from the terminal, redirects input
+away from the terminal and writes output to a private per-attempt overnight log.
+It runs under `systemd-inhibit --what=idle:sleep --mode=block --no-ask-password`,
+which acquires sleep protection before launching the command and releases it when
+the command exits. Missing or denied inhibition fails visibly, without an
+unattended prompt or uninhibited fallback. There is no outer retry loop: the
+existing watcher retains its classified recovery and genuine stop controls.
+
+For this new opt-in invocation only, the helper selects `--hours 0` (no time
+cutoff), `--max-restarts -1` (no numerical cap on eligible technical recovery),
+`--repair-agent-failures --stop-after-m14-m15`, and desktop agent windows off.
+Its separate `scripts/m14-m15-overnight-instruction.txt` applies those actual
+arguments without rewriting the current invocation's general instruction file.
+The default selects two direct children, three aggregate light HOST jobs on
+CPUs0,6,7 and 4 GiB TOTAL shared by all controller/worker overhead and work. This
+fits the launcher's current 2-GiB-per-child planner without increasing the actual
+HOST grant. Existing owners, reservations, fresh operation admission, disk floors
+and the separately held native owner remain unchanged.
+
+The existing repair mode gives ordinary engineering failures to same-Root owners
+for concrete fixes, independent focused review and meaningful retries. A blocked
+goal can remain in monitored waiting and accept real queued instructions without
+repeating unchanged model turns. Actual service, permission, usage, ownership and
+uncertain-delivery holds keep their own recorded causes. Both original M14/M15
+milestone acceptances and every original file/integration gate must close before
+the selected milestone checkpoint can pause the larger saved goal. Original
+terminal causes retain precedence; M14/M15 closure does not mean whole-system
+completion.
+
+```bash
+python3 -B scripts/start_os_overnight.py status
+python3 -B scripts/start_os_overnight.py stop
+python3 -B scripts/start_os_overnight.py dry-run
+```
+
+ACTIVE means this attempt's watcher and active worker are live, have matching
+birth/parent/session identities and hold the campaign leases. WAITING means the
+verified live controller is monitoring a BLOCKED goal. Popen success alone is
+STARTING. Historical or unrelated state never proves a live run. The command
+prints its receipt and console-log paths under the Git common directory's
+`os-autopilot/overnight/`; `overnight-latest.json` identifies the latest attempt.
+`stop` uses a pidfd and rechecks the watcher identity before requesting its normal
+checkpoint. It never signals unrelated work, a process group or native owners.
+`dry-run` prints the command without starting an inhibitor or making model calls.
+
+The workstation must stay powered, connected and logged in. Closing the launch
+terminal is supported; logout, reboot, power loss and administrative overrides
+are outside this helper's lifetime. No global power configuration is changed.
+The [systemd inhibitor documentation](https://www.freedesktop.org/software/systemd/man/latest/systemd-inhibit.html)
+describes the temporary sleep lock.
+
+The existing `os-autopilot/stop-events.jsonl` records stop reasons and evidence;
+`latest-stop.json` is its latest-record view. Existing RPC, console, stderr and
+watcher logs remain the detailed evidence. The ordinary
+`python3 -B scripts/run_os_goal.py --status` and `--progress` reports remain usable,
+and `--instruct 'concrete new input'` queues a real instruction.
+
+Overnight helper validation: 19 focused tests pass. A separate real-process
+synthetic smoke used only fake Python wrapper/watcher/worker processes: after the
+launching parent exited, status remained ACTIVE, console output stayed in the log,
+and exact-watcher stop checkpointed/joined the fake worker, released both leases
+and ended EXITED. No systemd service, model, native operation or real campaign ran
+in that smoke. All 91 focused controller, overnight, stop-log, repair, handoff,
+workflow and restore tests pass with the newer upstream terminal-precedence fix;
+the zero-model-call dry run and whitespace check also pass. These checks do not
+establish native McKernel acceptance.
+
+GitHub Actions follow-up for `8fa22bdc77da30d19f7c802fe520d3aa887c81f9`:
+[run42744577904](https://github.com/phoenix-hacking/mckernel/actions/runs/42744577904)
+successfully checked out the candidate and restored frozen IHK. The broad test
+discovery then reported failures/errors and was cancelled after about ten minutes,
+matching the configured timeout; the API/log does not explicitly identify the
+cancelling source. Later tracker validation was skipped and no summary artifact
+was produced. Full CI is not green. Triage the first actionable failing check and
+its baseline before repair/retry; increasing the timeout alone is not a fix.
 
 ## Previous211917 source checkpoint (historical; new manual resume above is active)
 
