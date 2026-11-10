@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-10T17:54:07.946902+00:00",
+  "updated_at": "2026-11-10T19:04:36.875448+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -54,7 +54,7 @@
         "M15-I03",
         "M15-I04"
       ],
-      "checklist_percent_complete": 55.97,
+      "checklist_percent_complete": 57.01,
       "file_acceptance_percent": 12.5,
       "integration_acceptance_percent": 0.0,
       "milestone_accepted": false,
@@ -840,7 +840,7 @@
         "M15-F02-native",
         "M15-F02-ACCEPT"
       ],
-      "percent_complete": 37.5,
+      "percent_complete": 50.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -3098,9 +3098,9 @@
       "id": "M15-F02-original-profile",
       "parent": "M15-F02",
       "title": "Original complete supported-profile source/toolchain/SDK qualification",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "unverified_or_blocked",
+      "status": "demonstrated_at_stated_scope",
       "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
       "done_when": "Reconstruct and bind the supported source/configuration/toolchain/transitive-SDK identities from the existing pinned recipes, then demonstrate matching executor qualification under that profile.",
       "verification_method": "Derive the required obligations and source/profile/provider identities from the actual supported source, headers, build recipes and retained matching evidence. Reuse proven checks; qualify only genuinely unmatched changed contracts. Actual native/device operations still require their real ownership/current-free/admission bindings; no source review or HOST fixture substitutes for matching final acceptance.",
@@ -3127,12 +3127,22 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m15-mcexec-matching-provider-20261110/execution/RESULT.json",
+        "docs/verification/m15-mcexec-matching-provider-20261110/qualification/QUALIFICATION.json",
+        "docs/verification/m15-mcexec-matching-provider-20261110/review/qualification-1/REVIEW.json"
       ],
       "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
-      "definition_status": "closure condition stated; source-derived engineering qualification remains open; actual operation admission remains separate",
+      "definition_status": "Whole original technical source/configuration/toolchain/transitive-SDK matching executor qualification condition demonstrated at supported HOST artifact scope; all other original leaves and higher acceptance remain separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-10T19:04:36.875448+00:00",
+      "current_engineering_evidence": "All8 actual current Rust1.95/native46d/16-source/typedNUMA/ASM/named executor/privateinstall phases PASS; complete598root/3ASM/119objectedge/124import/version/provider/normalRPATH/sourceprofile joins;66 positive process families; independent wholeconditionGOa6f13038. No old349/51 replay, Cretirement, deployed or native credit.",
+      "original_condition_review": {
+        "path": "docs/verification/m15-mcexec-matching-provider-20261110/review/qualification-1/REVIEW.json",
+        "sha256": "a6f130387ea40f2543f98a687980c9f4be899b7518a5282f08c0229cebd09068",
+        "decision": "Whole exact technical done_when satisfied at supported HOST artifact profile; not full file/ABIbehavior/deployed/native/milestone acceptance"
+      }
     },
     {
       "id": "M15-F02-deployed",
@@ -14523,25 +14533,24 @@
       ]
     },
     "latest_counted_closure": {
-      "at": "2026-11-10T14:39:48.032766+00:00",
+      "at": "2026-11-10T19:04:36.875448+00:00",
       "check_ids": [
-        "M15-I02-module-ownership",
-        "M15-I02-ABI-modpost"
+        "M15-F02-original-profile"
       ],
-      "whole_condition_review": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/REVIEW.json",
+      "whole_condition_review": "docs/verification/m15-mcexec-matching-provider-20261110/review/qualification-1/REVIEW.json",
       "M14_before_after": [
         51.48,
         51.48
       ],
-      "M15_before": 52.64,
-      "M15_after": 55.97,
-      "display_delta_pp": 3.33,
-      "exact_contribution": "2*100/5 immediatechildren /12 originalgates =3.3333333333percentagepoints",
+      "M15_before": 55.97,
+      "M15_after": 57.01,
+      "display_delta_pp": 1.04,
+      "exact_contribution": "100/8 immediateF02children /12 originalgates =1.0416666667percentagepoints",
       "counted_evidence_checks": 156,
-      "counted_verified_before": 74,
-      "counted_verified_after": 76,
+      "counted_verified_before": 76,
+      "counted_verified_after": 77,
       "M14_open": 38,
-      "M15_open": 42,
+      "M15_open": 41,
       "original_denominators_weights_criteria_unchanged": true,
       "accepted_gate_milestone_native_C_retirement_delta": 0
     },
@@ -14583,6 +14592,28 @@
         "counted_verified_after": 76,
         "M14_open": 38,
         "M15_open": 42,
+        "original_denominators_weights_criteria_unchanged": true,
+        "accepted_gate_milestone_native_C_retirement_delta": 0
+      },
+      {
+        "at": "2026-11-10T19:04:36.875448+00:00",
+        "check_ids": [
+          "M15-F02-original-profile"
+        ],
+        "whole_condition_review": "docs/verification/m15-mcexec-matching-provider-20261110/review/qualification-1/REVIEW.json",
+        "M14_before_after": [
+          51.48,
+          51.48
+        ],
+        "M15_before": 55.97,
+        "M15_after": 57.01,
+        "display_delta_pp": 1.04,
+        "exact_contribution": "100/8 immediateF02children /12 originalgates =1.0416666667percentagepoints",
+        "counted_evidence_checks": 156,
+        "counted_verified_before": 76,
+        "counted_verified_after": 77,
+        "M14_open": 38,
+        "M15_open": 41,
         "original_denominators_weights_criteria_unchanged": true,
         "accepted_gate_milestone_native_C_retirement_delta": 0
       }
@@ -14715,7 +14746,32 @@
         "candidate_known_fields_and_marker_case_PASS": true,
         "canonical_integrated_at": "2026-11-10T17:50:16.777987+00:00",
         "new_counted_delta": 0
+      },
+      "actual_real_image_build": {
+        "at": "2026-11-10T18:42:58.066348+00:00",
+        "source_commit": "20a7bd5e72afcbe639d3a55fa0d1eada6dce4777",
+        "image_sha256": "a54197260991e86de0a1a9b37ebd29a42c087503d16d871beb6a1bd2781dc3a0",
+        "image_bytes": 10295032,
+        "map_sha256": "c7dc4d0b3fcc7a3917bc9da15669be3da86c0f647bcb8eefa3b796496d641971",
+        "whole_Rust_object_sha256": "9d500c35c9054cacc44a4a4befd8ea14972c1dbf986fe961c412ede0d283d8a3",
+        "normal_CMake_graph_no_partial_injection": true,
+        "all_clients_joined_containers_removed": true,
+        "native_or_milestone_acceptance": false,
+        "independent_full_condition_review_pending": true
       }
+    },
+    "pending_changed_percentage_report": {
+      "M14": 51.48,
+      "M15": 57.01,
+      "previous_published_pair": [
+        51.48,
+        55.97
+      ],
+      "deltas_pp": [
+        0,
+        1.04
+      ],
+      "post_once_after_coherent_checkpoint": true
     }
   },
   "denominator_changes": [

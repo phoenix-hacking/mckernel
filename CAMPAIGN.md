@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T17:54:07.946902+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T19:10:37.446731+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -21,26 +21,40 @@ child notice is969. The whole-generic cohort/macro mapping is later local
 bookkeeping, not a scope field in that service error. No genuine restriction or
 control flag is silently cleared; no old rejected fixture is replayed.
 
-Current M14 verified provider baseline is joinedb4835b0a:140owners/115T+25data,
-10 genuine imports. The11 new process-pair functions compile/link with zero new
-data; old owners/bytes/relocations are preserved. Qualificationa668 and independent
-e7fea verify all six commands/positive joins. The129-owner e1a24697 baseline stays
-recoverable. Original7f39 stopped before execution on missing Rust flags and a
-Python3.8 dictionary expression; corrected6f018 passed without replaying old
-green producers. PublicABI now prepares coherent real kill/lower-provider closure;
-P03 reviews actual saved artifacts and P04 consumes this frontier into the image.
+**The real image now builds and links.** Normal current20a7 CMake configure
+PASS18:15:14 produced genuine driver/config/ABI/linker/F06 outputs with
+MAP_KERNEL_START0xfffffffffe800000. Actual named mckernel.img build and passive
+ELF/map read PASS18:42:58: imagea5419726/10,295,032B, mapc7dc4d0b/978,422B,
+wholeRustobject9d500c35/18,453,568B. Real ELF64 EXEC entry is arch_start at
+0xfffffffffe83cb10, two LOADs plus NOTE, no named undefined symbols or host
+interpreter. All20 client waits/streams and both containers closed/removed;
+peak513,519,616B/failcnt0/OOM0 under2GiB. No partial object was injected.
+The green image/map/all11objects/configs/link/cache/dependencies are preserved
+privately as stable-baseline20a7-1 before the next changed source cohort.
 
-The legacy-clone request1 initializer fix is integrated: baseline compile rejects
-the typed undefined marker read; the corrected real Rust/C protocol and known
-arguments pass17:49:51, all four process families joined. Only declaration
-initialization changed (source1804f7c2); no old undefined read was executed.
-P04Tests now implements genuine outer do_syscall accounting/monitor/preemption/
-response ownership. SourceAcq implements real interrupt_syscall and independently
-reviews the clone result. P04 owns the actual nightly compiler,
-compute-generated ABI/configuration and full mckernel.img build/link recipe.
-Routine current-source contracts are not an external inventory prerequisite.
-No lock/refcount/node-zeroing repair is justified by the pair review. A partial
-object is a prerequisite, not image completion or M14 acceptance.
+The physical source/configure/link blocker is resolved for this cohort. P04
+freezes full source/provider/ownership and original E1/E2 decisions; P03 reviews
+saved evidence. Retained C implementations, complete Rust default ownership,
+matching behavior/deployment/native and original acceptance remain separate.
+No historical rejection or genuine control flag was cleared to obtain this build.
+
+Root has privately composed the independently reviewed real Rust outerdo_syscall
+and interrupt_syscall changes with zero merge conflicts; both new modules are
+byte-identical to reviewed sources and preserve the tested clone initializer.
+Outer source/unsafe GO8ea828 plus both branch metadata checksPASS18:11;
+interrupt source GO164dca and coherent real provider codegen/link are retained.
+The next source cohort coalesces these guards with reviewed eligible host-cleanup/
+shared-context selectors, then uses the valid cache for normal incremental image
+build and actual Rust-entry/C-exclusion/provider/ABI ownership qualification.
+
+The genuine kill/provider continuation PASS18:38:45: joined14323447 has186 global
+owners/158functions+28data and16 typed partial imports. All143 old owner/relocation
+rows,43 new functions and exact3 GLOBAL32B debug descriptors are preserved;
+qualificationbda652/independent177bda confirms the stated partial scope. Initial
+prejoin failure was a predicted LOCAL binding/section shape; compiled f9ea and
+its first three reads were reused, only the three unstarted link/reads ran.
+Actual whole-image evidence resolves the16 edges (15Rust, existingC do_syscall);
+the partial frontier is not an image dependency or absent-algorithm inventory.
 
 **ACTIVE original closure engineering, same Root/live060029 run.** All three technical M15-I02
 conditions are now verified: **bindings, module ownership and ABI/modpost**. The
@@ -48,15 +62,16 @@ whole stated conditions are demonstrated on the same real three artifacts;
 independent reviewe90be144/c95bfdd5 confirms no unmatched technical input. Original M14 acceptance precedes M15; neither
 milestone, a native/deployed cohort nor the complete module gate is accepted.
 
-**Verified checklist:** M14 **51.48%** (delta0.00pp), M15 **55.97%** (delta0.00pp since14:44 publication; +3.33pp at that checkpoint).
-The unchanged metric gives three leaves100each/5children=60% ofI02; these
-two new leaves add40/12 originalM15 gates=3.3333333pp. Counted checks156,
-verified76 (was74), open38M14/42M15. M15-I02 is60% checklist complete and still
-unaccepted. Original criteria, weights,
-denominators and four accepted M14/accepted M15-F01 scopes remain unchanged.
-No native or C-retirement credit. EACH>=75% by08:00 November10 Pacific (16:00Z)
-remains at risk: gains23.52/19.03pp still needed, no reliable final ETA while
-required held compute-provider and matching runtime/native inputs remain.
+**Verified checklist:** M14 **51.48%** (delta0.00pp), M15 **57.01%**
+(delta+1.04pp since the last published55.97). Whole technical condition
+M15-F02-original-profile is demonstrated by the real eight-phase matching Rust/
+ASM/typed-NUMA executor build/provider/private-install result, qualificationdc0c
+and independent whole-condition reviewa6f13038. Four of eight F02 checks now pass
+(50% of that gate); contribution100/8/12=1.0416667pp. Counted checks156,
+verified77, open38M14/41M15. Three technical M15-I02 leaves remain60% ofI02.
+Original criteria, weights, denominators and four acceptedM14/acceptedM15-F01
+scopes are unchanged. No new file/milestone/native/C-retirement acceptance.
+The target was missed; gains23.52/17.99pp to75 remain. Continue useful closure;
 PR3 progress comments only when the verified pair changes, once per update.
 
 **08:00 Pacific target missed.** The verified pair at16:00Z remained51.48/55.97;
@@ -159,19 +174,20 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M14-I02 genuine process/kill providers / image consumer | PublicABI extends actualb483140/10U with genuine kill/lower owners; process-pair qualificationa668 and independente7fea are reused. Next proof is actual coherent source/ABI/provider closure and its real remaining imports, with no wrapper-only cycle |
-| M14-F03/I02 syscall ownership | Clone initializer source1804f7 is integrated after four-commandPASS17:49; P04Tests implements real outerdo_syscall, SourceAcq real interrupt_syscall with paired supported-profile selectors. Preserve original branches and stack-response/accounting/monitor semantics; qualify changed code before integration |
-| M14-I02 real full-image configuration/build | P04 binds real Rust1.95nightly, existing Linux6.12 source/build, actual generated compute config/ABI and mckernel.img linker target. Root integrates qualified providers and runs the reviewed matching command; no partial-link or Linux-only artifact substitutes |
+| M14-I02 actual first-image conditions | P04 freezes full a541/20a7/config/source/ABI/provider/owner qualification and precise E1/E2 decisions; P03 independently reviews saved outputs; Root credits only wholly satisfied technical leaves, no rebuild |
+| M14-F03/F06 changed Rust selection | Root composes reviewed outerdo_syscall/interrupt plus eligible reviewed host-cleanup/context selectors; P04/P03 bind/review one incremental named-image packet. Require actual new Rust owners, removed old C definitions, ABI/entry/LOAD/provider closure and cleanup |
+| M15-F02 original supported executor profile | Eight actual phasesPASS18:28/598Rust+3ASM/124imports/typedNUMA/privateinstall/66positivefamilies, independenta6f130 whole-profileGO. Root publishes verified technical closure; complete ABI/behavior/deployed/native remain open |
 
 
-**Single full-image critical-path blocker:** the complete genuine compute-provider
-and ownership graph, actual compute configuration and matching final command are
-not yet qualified. Root integrates; PublicABI/P03 own the immediate pair packet,
-P04Tests/SourceAcq the syscall/kill closure and P04 the real image build binding.
-Preserve actual HOLD-GENERIC/replayfalse/equivalentfalse controls, known rejected
-operations and native UNKNOWN owners/leases/reservations/current-free. Their
-unknown historical payload is not a blanket ban on deriving current contracts.
-No boot/module load/MMIO/MSR/valid native dump or dummy passing gate is admitted.
+**Current original-closure blocker:** complete selected Rust implementation/
+ownership and matching functional/native lifecycle proof remain open; physical
+image compilation/link is no longer missing. Root integrates; P04/P03 own actual
+image qualification, P04Tests/SourceAcq source/selector changes and independent
+cross-review, PublicABI coherent providers, SDK actual userspace qualification.
+Preserve genuine HOLD-GENERIC/replay controls, known prohibited operations and
+native UNKNOWN owners/leases/reservations/current-free. Unknown old payload is
+not an external current-source inventory requirement. No boot/module load/MMIO/
+MSR/valid native dump or dummy passing gate has run.
 
 Fresh controller guard17:35Z:68%included used/32%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
@@ -188,14 +204,14 @@ Prior verified source checkpoint4adf52e4248300e220dc4e6a55e50484b658a53b is
 pushed/fetched; all121 owned entries matched16:43:14Z. The changed pair55.97 was posted once in
 PR3 comment6770338341; no duplicate unchanged progress comment.
 
-Next15-minute deliverable: bind/review/admit P04's ready exact configure320cc
-against this published source and execute its real driverprobe/generated ABI, and prepare the genuine syscall/
-kill implementation changes in parallel. Publish the qualified pair and tested
-clone initializer as one coherent source/results checkpoint. Corrected Eclair
-six phasesPASS16:45 and native1.92 mcinspect six phasesPASS16:52 are retained;
-NUMA trusted extractionPASS17:24/reporta339 feeds SDK's four-call type/link join.
-No rebuild of those passing artifacts, percentage credit from source-only work,
-or change to the real native/deployed acceptance conditions.
+Next15-minute deliverable: publish already verified actual image/provider and
+executor-profile results now, without waiting for unrelated condition mapping.
+Finish the first-image E1/E2 saved-result review, then integrate the coherent
+reviewed Rust source/selector cohort and run its affected incremental image build.
+Retain the green baseline, normal CMake cache and all unchanged passing tests;
+qualify actual ownership/ABI changes, never source counts or partial objects as
+original acceptance. Publication delay is being corrected by separating ready
+validated checkpoint evidence from still-open source/acceptance tasks.
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)

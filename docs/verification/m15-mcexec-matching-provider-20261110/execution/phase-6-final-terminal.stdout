@@ -1,0 +1,417 @@
+[
+    {
+        "Id": "708610e6f2fa512ecd27943e846cb8c06300913be5a5027edb0a82f35c48278f",
+        "Created": "2026-11-10T18:28:33.160374701Z",
+        "Path": "/usr/bin/bash",
+        "Args": [
+            "--noprofile",
+            "--norc",
+            "-e",
+            "-c",
+            "ulimit -v 1048576; exec \"$@\"",
+            "mcexec-current-as-limit",
+            "/usr/bin/nm",
+            "--print-size",
+            "/output/executer/user/rust/mcexec_helpers.o",
+            "/output/executer/user/libmcexec.a",
+            "/output/executer/user/mcexec"
+        ],
+        "State": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-11-10T18:28:33.444504772Z",
+            "FinishedAt": "2026-11-10T18:28:33.461951875Z"
+        },
+        "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "ResolvConfPath": "/var/lib/docker/containers/708610e6f2fa512ecd27943e846cb8c06300913be5a5027edb0a82f35c48278f/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/708610e6f2fa512ecd27943e846cb8c06300913be5a5027edb0a82f35c48278f/hostname",
+        "HostsPath": "/var/lib/docker/containers/708610e6f2fa512ecd27943e846cb8c06300913be5a5027edb0a82f35c48278f/hosts",
+        "LogPath": "/var/lib/docker/containers/708610e6f2fa512ecd27943e846cb8c06300913be5a5027edb0a82f35c48278f/708610e6f2fa512ecd27943e846cb8c06300913be5a5027edb0a82f35c48278f-json.log",
+        "Name": "/mck-m15-mcexec-current-6-20261110-1",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges"
+            ],
+            "Tmpfs": {
+                "/tmp": "rw,nodev,nosuid,noexec,size=64m,mode=1777"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 1073741824,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "7",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 1073741824,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 64,
+            "Ulimits": [
+                {
+                    "Name": "core",
+                    "Hard": 0,
+                    "Soft": 0
+                },
+                {
+                    "Name": "cpu",
+                    "Hard": 120,
+                    "Soft": 120
+                },
+                {
+                    "Name": "fsize",
+                    "Hard": 67108864,
+                    "Soft": 67108864
+                },
+                {
+                    "Name": "nofile",
+                    "Hard": 128,
+                    "Soft": 128
+                }
+            ],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+                    "Target": "/usr/bin/cmake",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+                    "Target": "/usr/share/cmake",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+                    "Target": "/usr/lib64/libuv.so.1",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                    "Target": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/source",
+                    "Target": "/source",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/driver",
+                    "Target": "/driver",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/passive-extraction-1/extracted/numactl-devel/usr/include/numa.h",
+                    "Target": "/usr/include/numa.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/production-inputs-1/linker-prefix",
+                    "Target": "/qualified-numa",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/production-inputs-1/join_numa_inputs.py",
+                    "Target": "/input/join_numa_inputs.py",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1",
+                    "Target": "/output"
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ],
+            "Init": true
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/f4bd00778461738942321bf427dc535c1c2182e46cf2bb3edaf05bd0f2517395-init/diff:/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/diff:/var/lib/docker/overlay2/fff00856c276031a055641a39e0919e79db7904afb0ce80a3d4f4db638a0269c/diff:/var/lib/docker/overlay2/d199f563791647ba171c6a6b30772ca85312af33440b39d08e6bb730f6e6013a/diff:/var/lib/docker/overlay2/f0749d426bb01c0f3b1cf8801b25513f92ffa67570954f3f881636dbf54f2b04/diff:/var/lib/docker/overlay2/b108a9aa871c34f689ca9dad26ceac43de807cd903f00a7ba1d77804cd2d8f1e/diff:/var/lib/docker/overlay2/fb2f4457a35c8482edb2928b3b235f4050018750bf17cdff8b8b1bb174b2c5d6/diff:/var/lib/docker/overlay2/6b8acc345c6edc4a5dfd53ec0ef55b3b54be94cb1082c09d8fba86f9fd66d001/diff:/var/lib/docker/overlay2/8fe2188ddb7c5e6ab9ab5a67a024ba8f7896b7a9cbe1f9cdae2a953e5ef7651d/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+                "MergedDir": "/var/lib/docker/overlay2/f4bd00778461738942321bf427dc535c1c2182e46cf2bb3edaf05bd0f2517395/merged",
+                "UpperDir": "/var/lib/docker/overlay2/f4bd00778461738942321bf427dc535c1c2182e46cf2bb3edaf05bd0f2517395/diff",
+                "WorkDir": "/var/lib/docker/overlay2/f4bd00778461738942321bf427dc535c1c2182e46cf2bb3edaf05bd0f2517395/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+                "Destination": "/usr/lib64/libuv.so.1",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                "Destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/driver",
+                "Destination": "/driver",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/production-inputs-1/join_numa_inputs.py",
+                "Destination": "/input/join_numa_inputs.py",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1",
+                "Destination": "/output",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+                "Destination": "/usr/bin/cmake",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+                "Destination": "/usr/share/cmake",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/source",
+                "Destination": "/source",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/passive-extraction-1/extracted/numactl-devel/usr/include/numa.h",
+                "Destination": "/usr/include/numa.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/production-inputs-1/linker-prefix",
+                "Destination": "/qualified-numa",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "708610e6f2fa",
+            "Domainname": "",
+            "User": "1000:1000",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "OMP_NUM_THREADS=1",
+                "TMPDIR=/output/tmp",
+                "LC_ALL=C",
+                "PYTHONDONTWRITEBYTECODE=1",
+                "MAKEFLAGS=-j1",
+                "CMAKE_BUILD_PARALLEL_LEVEL=1",
+                "PATH=/usr/bin:/bin",
+                "LANG=C",
+                "TZ=UTC",
+                "CARGO_MAKEFLAGS=",
+                "container=oci",
+                "CARGO_BUILD_JOBS=4"
+            ],
+            "Cmd": [
+                "--noprofile",
+                "--norc",
+                "-e",
+                "-c",
+                "ulimit -v 1048576; exec \"$@\"",
+                "mcexec-current-as-limit",
+                "/usr/bin/nm",
+                "--print-size",
+                "/output/executer/user/rust/mcexec_helpers.o",
+                "/output/executer/user/libmcexec.a",
+                "/output/executer/user/mcexec"
+            ],
+            "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+            "Volumes": null,
+            "WorkingDir": "/output",
+            "Entrypoint": [
+                "/usr/bin/bash"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "io.buildah.version": "1.43.1",
+                "license": "BSD-3-Clause",
+                "mckernel.preparation-owner": "mcexec-matching-provider-build-1-production-packet-1",
+                "name": "rockylinux",
+                "org.mckernel.scope": "local development; no production evidence credit",
+                "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+                "org.opencontainers.image.licenses": "BSD-3-Clause",
+                "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+                "org.opencontainers.image.title": "rockylinux",
+                "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+                "org.opencontainers.image.version": "10",
+                "summary": "Rocky Linux Base image",
+                "vendor": "Rocky Enterprise Software Foundation",
+                "version": "10"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "713035d95df34159b22fa2eaae555ca2b755efde770f8cc377640ccf11cdd3c7",
+            "SandboxKey": "/var/run/docker/netns/713035d95df3",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

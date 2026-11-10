@@ -1,0 +1,74 @@
+/usr/bin/cmake -S/driver -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 mcexec
+make[1]: Entering directory '/output'
+/usr/bin/cmake -S/driver -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 5
+/usr/bin/make  -f CMakeFiles/Makefile2 executer/user/CMakeFiles/mcexec.dir/all
+make[2]: Entering directory '/output'
+/usr/bin/make  -f executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make executer/user/CMakeFiles/mcexec_rust_helpers.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /driver /source/executer/user /output /output/executer/user /output/executer/user/CMakeFiles/mcexec_rust_helpers.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make executer/user/CMakeFiles/mcexec_rust_helpers.dir/build
+make[3]: Entering directory '/output'
+[ 20%] Building Rust mcexec helpers
+cd /output/executer/user && /usr/bin/cmake -E make_directory /output/executer/user/rust
+cd /output/executer/user && /usr/bin/cmake -E env MAKEFLAGS= MCEXEC_BUILDID_RS=/output/executer/user/rust/mcexec_buildid_generated.rs /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name mcexec_helpers --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no --emit=obj=/output/executer/user/rust/mcexec_helpers.o /source/executer/user/rust/mcexec_helpers.rs
+make[3]: Leaving directory '/output'
+[ 20%] Built target mcexec_rust_helpers
+/usr/bin/make  -f executer/user/CMakeFiles/libmcexec.dir/build.make executer/user/CMakeFiles/libmcexec.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /driver /source/executer/user /output /output/executer/user /output/executer/user/CMakeFiles/libmcexec.dir/DependInfo.cmake "--color="
+Dependee "/output/executer/user/CMakeFiles/libmcexec.dir/DependInfo.cmake" is newer than depender "/output/executer/user/CMakeFiles/libmcexec.dir/depend.internal".
+Dependee "/output/executer/user/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/output/executer/user/CMakeFiles/libmcexec.dir/depend.internal".
+Scanning dependencies of target libmcexec
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f executer/user/CMakeFiles/libmcexec.dir/build.make executer/user/CMakeFiles/libmcexec.dir/build
+make[3]: Entering directory '/output'
+[ 40%] Building ASM object executer/user/CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o
+cd /output/executer/user && /usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DPROFILE_ENABLE -I/output/executer/user -I/output -I/source/ihk/linux/include -I/source/executer/user/arch/x86_64/include -I/source/executer/user -I/source/executer/user/arch/x86_64 -I/output/ihk/linux/include -g -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -o CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o -c /source/executer/user/arch/x86_64/archdep.S
+[ 60%] Linking ASM static library libmcexec.a
+cd /output/executer/user && /usr/bin/cmake -P CMakeFiles/libmcexec.dir/cmake_clean_target.cmake
+cd /output/executer/user && /usr/bin/cmake -E cmake_link_script CMakeFiles/libmcexec.dir/link.txt --verbose=1
+/usr/bin/ar cr libmcexec.a CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o
+/usr/bin/ranlib libmcexec.a
+make[3]: Leaving directory '/output'
+[ 60%] Built target libmcexec
+/usr/bin/make  -f executer/user/CMakeFiles/mcexec.dir/build.make executer/user/CMakeFiles/mcexec.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /driver /source/executer/user /output /output/executer/user /output/executer/user/CMakeFiles/mcexec.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f executer/user/CMakeFiles/mcexec.dir/build.make executer/user/CMakeFiles/mcexec.dir/build
+make[3]: Entering directory '/output'
+[ 80%] Linking C executable mcexec
+cd /output/executer/user && /usr/bin/cmake -E cmake_link_script CMakeFiles/mcexec.dir/link.txt --verbose=1
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/Scrt1.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o
+/usr/lib/gcc/x86_64-redhat-linux/14/crtbeginS.o
+rust/mcexec_helpers.o
+libmcexec.a
+/usr/lib64/librt.a
+/qualified-numa/libnuma.so
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libpthread.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libc.so
+/lib64/libc.so.6
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib64/libc_nonshared.a
+/lib64/ld-linux-x86-64.so.2
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc_s.so
+/lib64/libgcc_s.so.1
+/usr/lib/gcc/x86_64-redhat-linux/14/libgcc.a
+/usr/lib/gcc/x86_64-redhat-linux/14/crtendS.o
+/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+/usr/bin/cc -g -fPIE -pie -Wl,--trace -Wl,-Map=/output/mcexec.map -Wl,--dependency-file=CMakeFiles/mcexec.dir/link.d rust/mcexec_helpers.o -o mcexec  -Wl,-rpath,/qualified-numa: libmcexec.a /usr/lib64/librt.a /qualified-numa/libnuma.so -lpthread
+make[3]: Leaving directory '/output'
+[100%] Built target mcexec
+make[2]: Leaving directory '/output'
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 0
+make[1]: Leaving directory '/output'

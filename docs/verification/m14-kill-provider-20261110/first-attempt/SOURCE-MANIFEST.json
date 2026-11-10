@@ -1,0 +1,1555 @@
+{
+  "schema": "mckernel.coherent-current-kill-provider-source-selection.v1",
+  "status": "FROZEN_COHERENT_CURRENT_KILL43_LOWER_SOURCE_WITH_MATERIAL_GO_INTERRUPT_NO_EXECUTION",
+  "owner": "public_abi_join_max Sol/MAX private producer source only; SourceAcq owns interrupt_syscall implementation; Root canonical/executor",
+  "baseline": "b4835b0a9276376c3f523220b469062f3dff73c468279a5ce7557f7321769b13 actual140 owners",
+  "source_fragments": [
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "start_byte": 92,
+      "end_byte_exclusive": 156,
+      "start_line": 5,
+      "end_line": 8,
+      "slice_sha256": "d41eba1de35d9983d4ac1955a6cb742cecbfc3769511154f0e1092f0890321e9",
+      "bytes": 64,
+      "label": "actual spinlock type",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/spinlock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "start_byte": 646,
+      "end_byte_exclusive": 725,
+      "start_line": 31,
+      "end_line": 34,
+      "slice_sha256": "1304cd769740ea18278077e2a93fad28af4c9ba63f00de75f2615672ce49e405",
+      "bytes": 79,
+      "label": "McsRwlockNodeIrqsave",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "start_byte": 726,
+      "end_byte_exclusive": 819,
+      "start_line": 36,
+      "end_line": 39,
+      "slice_sha256": "8aff4ad59b036127a00b45823851203de34d5914721fd96739f0251aca86d087",
+      "bytes": 93,
+      "label": "McsRwlockLock",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "start_byte": 8803,
+      "end_byte_exclusive": 9016,
+      "start_line": 322,
+      "end_line": 328,
+      "slice_sha256": "f774f93c2653dd33718ce3120f946a3de4c871a29a9cccbb6b352ce99e84bc22",
+      "bytes": 213,
+      "label": "__mcs_rwlock_reader_lock_noirq",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "start_byte": 9017,
+      "end_byte_exclusive": 9234,
+      "start_line": 330,
+      "end_line": 336,
+      "slice_sha256": "cf5796918b0c37282e042bfb3b93c3726b9db9a516359309d6391aadf4c9b3de",
+      "bytes": 217,
+      "label": "__mcs_rwlock_reader_unlock_noirq",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "source_sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "start_byte": 748,
+      "end_byte_exclusive": 880,
+      "start_line": 26,
+      "end_line": 32,
+      "slice_sha256": "67b9184d219de1eaf829abda4c51910c2e3ab6e090c126950dea8b5aa8470952",
+      "bytes": 132,
+      "label": "actual Ddebug type",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/debug.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 99,
+      "end_byte_exclusive": 192,
+      "start_line": 7,
+      "end_line": 11,
+      "slice_sha256": "dca9e137833d10fde97ccd9636dddf32051abb15d9a9ca71af56a07da8870ebb",
+      "bytes": 93,
+      "label": "actual ListHead type",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 524,
+      "end_byte_exclusive": 639,
+      "start_line": 25,
+      "end_line": 28,
+      "slice_sha256": "8348f4124be30bcd56871d0ee3cad8792453cc01655f16406d49a406095edd4f",
+      "bytes": 115,
+      "label": "list_next",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 640,
+      "end_byte_exclusive": 755,
+      "start_line": 30,
+      "end_line": 33,
+      "slice_sha256": "d75268fdf838af39e927d0a643662cfd429a3dc8e605616ff9233bcd85287ff3",
+      "bytes": 115,
+      "label": "list_prev",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 756,
+      "end_byte_exclusive": 886,
+      "start_line": 35,
+      "end_line": 38,
+      "slice_sha256": "06ab1ff1746eb8061bed30a412f85654ea24276f9afc01f176789b4d14bbe630",
+      "bytes": 130,
+      "label": "set_next",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 887,
+      "end_byte_exclusive": 1017,
+      "start_line": 40,
+      "end_line": 43,
+      "slice_sha256": "7383f84c58ba67a86c653fb2064d2f169042d1aeb5a94f565438163796e00c86",
+      "bytes": 130,
+      "label": "set_prev",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 1149,
+      "end_byte_exclusive": 1364,
+      "start_line": 51,
+      "end_line": 57,
+      "slice_sha256": "8d721be09a5b8d1feb6fbff1a65600bed01ba3b450616da58adbb39d79541930",
+      "bytes": 215,
+      "label": "__list_add",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 1365,
+      "end_byte_exclusive": 1501,
+      "start_line": 59,
+      "end_line": 62,
+      "slice_sha256": "5b063ea7d9324c41dc007a58dcbe23390aa528b1ffeca9e1565be202c978e7d0",
+      "bytes": 136,
+      "label": "list_add",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+      "source_sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "start_byte": 1502,
+      "end_byte_exclusive": 1643,
+      "start_line": 64,
+      "end_line": 67,
+      "slice_sha256": "87fd1c01a2083bf6adb69505da75001b45e7d5688868704d46304be8fb0ee22b",
+      "bytes": 141,
+      "label": "list_add_tail",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/string.rs",
+      "source_sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      "start_byte": 5087,
+      "end_byte_exclusive": 5448,
+      "start_line": 223,
+      "end_line": 240,
+      "slice_sha256": "932dbcbc0486ead8cf5a06e7a15e64ffbbf1baad0f393d692e77ba993e125c80",
+      "bytes": 361,
+      "label": "memcpy",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/string.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/string.rs",
+      "source_sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      "start_byte": 6299,
+      "end_byte_exclusive": 6990,
+      "start_line": 285,
+      "end_line": 313,
+      "slice_sha256": "fc62abc7e4723b5e1b1dbb688f3e72cb9ce63fdda0beb3678dd41379fba3d224",
+      "bytes": 691,
+      "label": "__inline_memset",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/string.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "start_byte": 4801,
+      "end_byte_exclusive": 4883,
+      "start_line": 113,
+      "end_line": 113,
+      "slice_sha256": "485a68b1af387f80eb92f1021fd0cdc69395ee6639a88359c8930a55aa32766a",
+      "bytes": 82,
+      "label": "const KMALLOC_OOM_FMT:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/mem_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "start_byte": 128728,
+      "end_byte_exclusive": 128928,
+      "start_line": 4163,
+      "end_line": 4170,
+      "slice_sha256": "3f279bf71f02265e866cc02f366488225cfabc5cdfb07e233fdb14c4d5a3e7e0",
+      "bytes": 200,
+      "label": "actual OOM counter",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/mem_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "start_byte": 128929,
+      "end_byte_exclusive": 129378,
+      "start_line": 4172,
+      "end_line": 4191,
+      "slice_sha256": "4bb8e078e66973fd810cc16d8c4cbf44bd613a18cb017a53825444d16d3b649b",
+      "bytes": 449,
+      "label": "kmalloc_tracked",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/mem_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "start_byte": 129379,
+      "end_byte_exclusive": 129532,
+      "start_line": 4193,
+      "end_line": 4198,
+      "slice_sha256": "50387a253eeac79ba53062cf51aacb3a06a4ab124c578e710767a4ee5f0af2e4",
+      "bytes": 153,
+      "label": "kfree_tracked",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/mem_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 3708,
+      "end_byte_exclusive": 3769,
+      "start_line": 74,
+      "end_line": 74,
+      "slice_sha256": "52dd00bdfd7c60a87bfdbc712a56864447e21ae6cfa388517724546a688c7fd1",
+      "bytes": 61,
+      "label": "fn process_hold_thread_warn_bridge(",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 6673,
+      "end_byte_exclusive": 6759,
+      "start_line": 135,
+      "end_line": 135,
+      "slice_sha256": "7fdc3bb9b6d0db1b2b896c9cde0a9d87567e6118a976ceef7396a2ef87f0db59",
+      "bytes": 86,
+      "label": "fn process_release_thread_profile_bridge(",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 17329,
+      "end_byte_exclusive": 17380,
+      "start_line": 445,
+      "end_line": 445,
+      "slice_sha256": "2142e51bdc918d848f9fcdbcdbb99c1fdf047d0d96d9c0fe0e6072f66bc1b90d",
+      "bytes": 51,
+      "label": "const HASH_SIZE:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 15467,
+      "end_byte_exclusive": 15497,
+      "start_line": 397,
+      "end_line": 397,
+      "slice_sha256": "15acfd06b3581081d9795d26660f61475884a81667f13d86e1d596f6e30567f8",
+      "bytes": 30,
+      "label": "const PS_EXITED:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 14923,
+      "end_byte_exclusive": 14948,
+      "start_line": 375,
+      "end_line": 375,
+      "slice_sha256": "859c14c67e6dfbcf569b7cbcb7fe17386c68ea474ce4af9925b4efed549a5345",
+      "bytes": 25,
+      "label": "const EINVAL:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 29570,
+      "end_byte_exclusive": 29636,
+      "start_line": 700,
+      "end_line": 700,
+      "slice_sha256": "27ba26abe84f3f222a1ef0bf1430c7d2ed13e906688f8d8313ed25b0d6847797",
+      "bytes": 66,
+      "label": "type ProcessRefIncFn =",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 29636,
+      "end_byte_exclusive": 29717,
+      "start_line": 701,
+      "end_line": 701,
+      "slice_sha256": "cd7f8b111bc4ac0948e70d8af5f5a779227a157e9f0cfd084f057ef5eaad57be",
+      "bytes": 81,
+      "label": "type ProcessRefDecAndTestFn =",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 29847,
+      "end_byte_exclusive": 29913,
+      "start_line": 704,
+      "end_line": 704,
+      "slice_sha256": "0fa323d85bfc05153956550cbabd571d9a07630296e81755728ee5b17dc01adc",
+      "bytes": 66,
+      "label": "type ProcessHoldThreadWarnFn =",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 30277,
+      "end_byte_exclusive": 30355,
+      "start_line": 710,
+      "end_line": 710,
+      "slice_sha256": "a55b301a3966f853e228ed6852dbce17c8227ddfd493a40241e1fd3cea83a812",
+      "bytes": 78,
+      "label": "type ProcessThreadProfileFn =",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 30355,
+      "end_byte_exclusive": 30419,
+      "start_line": 711,
+      "end_line": 711,
+      "slice_sha256": "015d78cfe0623846d6ec3faf687c926a068979668c7fda4d57b75998e219c7df",
+      "bytes": 64,
+      "label": "type ProcessThreadActionFn =",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 30586,
+      "end_byte_exclusive": 30646,
+      "start_line": 714,
+      "end_line": 714,
+      "slice_sha256": "1c81235437f1f62b50626302d6e823e7b7b0b669c0c2e8d872c57a4526279bcc",
+      "bytes": 60,
+      "label": "type ProcessVmActionFn =",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 37886,
+      "end_byte_exclusive": 37972,
+      "start_line": 915,
+      "end_line": 918,
+      "slice_sha256": "8522a80ba1d43a51d18474e18d38ef8e60def301b4c957cc506972ecf58ba915",
+      "bytes": 86,
+      "label": "thread_hash",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 291413,
+      "end_byte_exclusive": 291732,
+      "start_line": 9996,
+      "end_line": 10006,
+      "slice_sha256": "6116885671b0ad4e8c31a78989097e609a39bd78add84aedb37455b28547c055",
+      "bytes": 319,
+      "label": "hold_thread",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 297751,
+      "end_byte_exclusive": 298245,
+      "start_line": 10163,
+      "end_line": 10176,
+      "slice_sha256": "0a46e37632d36fc44099ddf148f3c6060d180d914d3423b0e6447dbecdd818c3",
+      "bytes": 494,
+      "label": "release_thread",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 309696,
+      "end_byte_exclusive": 310322,
+      "start_line": 10493,
+      "end_line": 10514,
+      "slice_sha256": "6f303e37b95da9da66dc7b7b70024db038baafdc280e8e30c66b16b072effc7d",
+      "bytes": 626,
+      "label": "process_hold_thread_body_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 335989,
+      "end_byte_exclusive": 337300,
+      "start_line": 11432,
+      "end_line": 11473,
+      "slice_sha256": "b39f1eeafc169cdebbfbec5a9859b335510d91efac61c3ec155abbbdedefd79a",
+      "bytes": 1311,
+      "label": "process_release_thread_body_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 171072,
+      "end_byte_exclusive": 171392,
+      "start_line": 5779,
+      "end_line": 5790,
+      "slice_sha256": "d617c16647416f8a4ea1b603954894afccf56697cd0370fab5dddf42e5602448",
+      "bytes": 320,
+      "label": "process_ref_dec_and_test_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 172391,
+      "end_byte_exclusive": 172697,
+      "start_line": 5835,
+      "end_line": 5845,
+      "slice_sha256": "e6798d2d809adffa4acd62873f6323c225fb7c7763d0af550e4d3378722796da",
+      "bytes": 306,
+      "label": "process_ref_dec_and_test_direct_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 172097,
+      "end_byte_exclusive": 172390,
+      "start_line": 5822,
+      "end_line": 5833,
+      "slice_sha256": "92c6e9ebddba724a494ef43da35823dc1c7d833755fcf99814f8618c3417bf93",
+      "bytes": 293,
+      "label": "process_ref_inc_direct_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 289929,
+      "end_byte_exclusive": 290235,
+      "start_line": 9932,
+      "end_line": 9944,
+      "slice_sha256": "f8730707e8e70f8e801a94f5651c531f695c7cee18e661c779c5944cbd9e4287",
+      "bytes": 306,
+      "label": "process_ref_inc_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 290479,
+      "end_byte_exclusive": 290816,
+      "start_line": 9959,
+      "end_line": 9973,
+      "slice_sha256": "35a9bbd3c8806a49acc906a569f52c2bc5ca742f376d612c47cab6c9d3ce0742",
+      "bytes": 337,
+      "label": "process_ref_hold_body_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 290236,
+      "end_byte_exclusive": 290478,
+      "start_line": 9946,
+      "end_line": 9957,
+      "slice_sha256": "92001a466dee9e1714a95641c4a51cf49f54d3a0833a528adb678bc853d45b8a",
+      "bytes": 242,
+      "label": "process_hold_thread_warn_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 311465,
+      "end_byte_exclusive": 311716,
+      "start_line": 10567,
+      "end_line": 10578,
+      "slice_sha256": "10f708184e4ac91ae4c936ba05fa1d6522674b670aae681823f20279127c737e",
+      "bytes": 251,
+      "label": "process_thread_action_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 311717,
+      "end_byte_exclusive": 312003,
+      "start_line": 10580,
+      "end_line": 10592,
+      "slice_sha256": "b8c7c64b8d975840d9a8ae7700744a7ba8e05c0960a02f16ff1753617cbf9ff2",
+      "bytes": 286,
+      "label": "process_thread_profile_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 312004,
+      "end_byte_exclusive": 312239,
+      "start_line": 10594,
+      "end_line": 10605,
+      "slice_sha256": "a1ca8ce39d189c448ab6509be778a4bf5d7e11646b378dbd964934ac7d4e94d5",
+      "bytes": 235,
+      "label": "process_vm_action_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 174132,
+      "end_byte_exclusive": 174282,
+      "start_line": 5917,
+      "end_line": 5920,
+      "slice_sha256": "e45aca6047573490253d2c94eba8078e3668098bfedab408baf3ede759950b18",
+      "bytes": 150,
+      "label": "process_procfs_delete_thread_bridge",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 174283,
+      "end_byte_exclusive": 174421,
+      "start_line": 5922,
+      "end_line": 5925,
+      "slice_sha256": "c8ef2f4b64902f552ccea27c7709838e94abcce0a64a5c0a6f7f5140d81c74f8",
+      "bytes": 138,
+      "label": "process_destroy_thread_bridge",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 174422,
+      "end_byte_exclusive": 174555,
+      "start_line": 5927,
+      "end_line": 5930,
+      "slice_sha256": "57a12d78ed50b221e8022444be6ac18ee85da3ce36953af2643125b8511014c7",
+      "bytes": 133,
+      "label": "process_release_vm_bridge",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 278004,
+      "end_byte_exclusive": 278134,
+      "start_line": 9466,
+      "end_line": 9469,
+      "slice_sha256": "c3a4c4e3ecde1e53ec5b0fe6cf481a3b2d3e58a148e7e600acb85fedcbc8b842",
+      "bytes": 130,
+      "label": "process_hold_thread_warn_exited_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 170625,
+      "end_byte_exclusive": 170762,
+      "start_line": 5762,
+      "end_line": 5765,
+      "slice_sha256": "00a3902bd89755909971dac18ae3a902c66741b627cd3d05728f1741ea2356f9",
+      "bytes": 137,
+      "label": "process_ref_release_should_destroy_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 171747,
+      "end_byte_exclusive": 172096,
+      "start_line": 5807,
+      "end_line": 5820,
+      "slice_sha256": "dc361b3f6e5bdd4ba1cea447ee553798df2401b22fe91ba80f722390fc7b38c8",
+      "bytes": 349,
+      "label": "actual direct atomic helper",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 321189,
+      "end_byte_exclusive": 321377,
+      "start_line": 10920,
+      "end_line": 10926,
+      "slice_sha256": "ec5bd790b1acf91c248cdc61ff61d71fdd68e3e14da6660c5d77d0dd5cf2055f",
+      "bytes": 188,
+      "label": "actual field pointer helper",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 472054,
+      "end_byte_exclusive": 472816,
+      "start_line": 14669,
+      "end_line": 14687,
+      "slice_sha256": "d60d5766d0a451782c56a71340d6f20fda93efe1468a574eedbd12ddead43322",
+      "bytes": 762,
+      "label": "process_release_thread_profile_bridge",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "start_byte": 522366,
+      "end_byte_exclusive": 522620,
+      "start_line": 15755,
+      "end_line": 15758,
+      "slice_sha256": "a538617a8f3f47493e23ecc4963d30932cabcf1326700e094426879fbca81775",
+      "bytes": 254,
+      "label": "process_hold_thread_warn_bridge",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1114,
+      "end_byte_exclusive": 1139,
+      "start_line": 21,
+      "end_line": 21,
+      "slice_sha256": "859c14c67e6dfbcf569b7cbcb7fe17386c68ea474ce4af9925b4efed549a5345",
+      "bytes": 25,
+      "label": "const EINVAL:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1139,
+      "end_byte_exclusive": 1164,
+      "start_line": 22,
+      "end_line": 22,
+      "slice_sha256": "9abf6d76cf6b66d7aad2d94ae770176a61230a9631ec7b15a5fb52081acbadde",
+      "bytes": 25,
+      "label": "const ENOMEM:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1189,
+      "end_byte_exclusive": 1212,
+      "start_line": 24,
+      "end_line": 24,
+      "slice_sha256": "d954edd22b556d23e9ee2cc0fc37e4349fabdba5d478c540b605323f7ce4ca7d",
+      "bytes": 23,
+      "label": "const EPERM:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1308,
+      "end_byte_exclusive": 1331,
+      "start_line": 29,
+      "end_line": 29,
+      "slice_sha256": "2e650367cabe01cebc817304d6edd7592e519a1f24ee95ddb3c6fdebec74686d",
+      "bytes": 23,
+      "label": "const ESRCH:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1581,
+      "end_byte_exclusive": 1606,
+      "start_line": 40,
+      "end_line": 40,
+      "slice_sha256": "a783c9a57dc30111f27aaac5dcedd091f9baedbcb5c72908d47b50e2efca8f45",
+      "bytes": 25,
+      "label": "const SIGKILL:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1606,
+      "end_byte_exclusive": 1632,
+      "start_line": 41,
+      "end_line": 41,
+      "slice_sha256": "6d985084ba8940327470cd3654885dca8135c3755a63386f3cc362b1e5bb33ee",
+      "bytes": 26,
+      "label": "const SIGSTOP:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 52099,
+      "end_byte_exclusive": 52125,
+      "start_line": 1279,
+      "end_line": 1279,
+      "slice_sha256": "dfd0171ae5d94d0d34d03f5dac96d1fa116e5baae9e34e899249df50d8b7837c",
+      "bytes": 26,
+      "label": "const SIGCONT:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 52073,
+      "end_byte_exclusive": 52099,
+      "start_line": 1278,
+      "end_line": 1278,
+      "slice_sha256": "9d0e92a87c0ea1a86344054eaa5a57d0a8e09ade856e762ab54d2a8dfffce450",
+      "bytes": 26,
+      "label": "const SIGCHLD:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 2834,
+      "end_byte_exclusive": 2877,
+      "start_line": 75,
+      "end_line": 75,
+      "slice_sha256": "1aa4620c5ac4f96ef057a0a93de3754ce13f8d327d4cc67ec1b6145fc5f13cf4",
+      "bytes": 43,
+      "label": "const IHK_MC_AP_NOWAIT:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 3165,
+      "end_byte_exclusive": 3199,
+      "start_line": 83,
+      "end_line": 83,
+      "slice_sha256": "e2f670ed9f54b572a0b27f642c4e6b219bd1ef6016f15d8c68140edc02ef2c97",
+      "bytes": 34,
+      "label": "const PS_INTERRUPTIBLE:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 19159,
+      "end_byte_exclusive": 19189,
+      "start_line": 497,
+      "end_line": 497,
+      "slice_sha256": "69328f93286d7af30f1414795aea8ec20770dfa841f9de0f60b48efccf6b9b77",
+      "bytes": 30,
+      "label": "const PS_RUNNING:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 19189,
+      "end_byte_exclusive": 19220,
+      "start_line": 498,
+      "end_line": 498,
+      "slice_sha256": "38c79458628c5d4f8180060e160065e66a1ba20cdfd556dda57d99e04c296225",
+      "bytes": 31,
+      "label": "const PS_STOPPED:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 19220,
+      "end_byte_exclusive": 19250,
+      "start_line": 499,
+      "end_line": 499,
+      "slice_sha256": "d3b104c5b3be6b8c57bf404d308e5646954150b1d34036a0f4e8cf220222d5ce",
+      "bytes": 30,
+      "label": "const PS_TRACED:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 52295,
+      "end_byte_exclusive": 52325,
+      "start_line": 1286,
+      "end_line": 1286,
+      "slice_sha256": "15acfd06b3581081d9795d26660f61475884a81667f13d86e1d596f6e30567f8",
+      "bytes": 30,
+      "label": "const PS_EXITED:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 52266,
+      "end_byte_exclusive": 52295,
+      "start_line": 1285,
+      "end_line": 1285,
+      "slice_sha256": "81f4d4b965d5db7cca6d0d8e3d29feadaa17d3acadd131125f779eeae9d63c24",
+      "bytes": 29,
+      "label": "const PS_ZOMBIE:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 52225,
+      "end_byte_exclusive": 52266,
+      "start_line": 1284,
+      "end_line": 1284,
+      "slice_sha256": "a0b9f09ada0703d0bb884414a54a57991efc4ac41853d46caa99e09df55e0e00",
+      "bytes": 41,
+      "label": "const SIGNAL_STOP_CONTINUED:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 52871,
+      "end_byte_exclusive": 52902,
+      "start_line": 1304,
+      "end_line": 1304,
+      "slice_sha256": "01c5ef1868732eee47f910bef7a9e0684ea1f64fe22c6e443d08bfdb882429f3",
+      "bytes": 31,
+      "label": "const CLD_CONTINUED:",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1038649,
+      "end_byte_exclusive": 1042801,
+      "start_line": 31198,
+      "end_line": 31291,
+      "slice_sha256": "bedf575a9115e8c3f57f29baf0a162a14ac4980a5e947404c24fcff2d7dc5b84",
+      "bytes": 4152,
+      "label": "arch_do_kill_process_group_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1043572,
+      "end_byte_exclusive": 1045264,
+      "start_line": 31307,
+      "end_line": 31345,
+      "slice_sha256": "f6e5215ec8e7f6a30e1ab85299249a9f507d7de90a70709d83007ae46c3b171f",
+      "bytes": 1692,
+      "label": "arch_do_kill_direct_target_gate_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1045592,
+      "end_byte_exclusive": 1047900,
+      "start_line": 31352,
+      "end_line": 31400,
+      "slice_sha256": "31521a47e1c097449ed79c33d9b4386c1387d598665c56eca36faaca45169f59",
+      "bytes": 2308,
+      "label": "arch_do_kill_pending_enqueue_result",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1048072,
+      "end_byte_exclusive": 1054392,
+      "start_line": 31405,
+      "end_line": 31528,
+      "slice_sha256": "05fdbf7d104c6131156fcf32258b3e48ca9f1c902d11789d2878bd6f0add3d04",
+      "bytes": 6320,
+      "label": "f06_do_kill_wakeup_candidate",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1054564,
+      "end_byte_exclusive": 1061843,
+      "start_line": 31533,
+      "end_line": 31683,
+      "slice_sha256": "e6219b2cd55aaa4cd9657f74bcf1fd160d2b1eacd48c0b104d71fb0d824aad0f",
+      "bytes": 7279,
+      "label": "f06_do_kill_process_target_candidate",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1061931,
+      "end_byte_exclusive": 1067149,
+      "start_line": 31687,
+      "end_line": 31787,
+      "slice_sha256": "c7113e8a946da555ab17956e41bc2aab12f96f9cd59629e57d895bb0aee404ef",
+      "bytes": 5218,
+      "label": "f06_do_kill_thread_target_candidate",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1067237,
+      "end_byte_exclusive": 1068969,
+      "start_line": 31791,
+      "end_line": 31831,
+      "slice_sha256": "784c86bdc975389459bf0b086da343efe617756ff0552620ed9421df44e14330",
+      "bytes": 1732,
+      "label": "f06_do_kill_prepare_info_candidate",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1069141,
+      "end_byte_exclusive": 1078964,
+      "start_line": 31836,
+      "end_line": 32037,
+      "slice_sha256": "68fd52c31baf95b7d317cd2b0b678bc3beeee958c9974d783b90a73a4f6d10c0",
+      "bytes": 9823,
+      "label": "f06_full_do_kill_candidate",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "start_byte": 1084568,
+      "end_byte_exclusive": 1084969,
+      "start_line": 32162,
+      "end_line": 32169,
+      "slice_sha256": "dbf7e6572b757ceaae720631db6c0e41b0c53637eed44bab182615ef4b2d9e98",
+      "bytes": 401,
+      "label": "actual typed kill_thread export alias",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "source_sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      "start_byte": 1339,
+      "end_byte_exclusive": 1656,
+      "start_line": 57,
+      "end_line": 62,
+      "slice_sha256": "74f83a36b6685f78b2a2309415b860bbf0fbde808f5ebe3e4d6610af955523ce",
+      "bytes": 317,
+      "label": "actual lock geometry assertions",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "start_byte": 481,
+      "end_byte_exclusive": 525,
+      "start_line": 24,
+      "end_line": 24,
+      "slice_sha256": "06c7af820bd41bb1789c627be3cf2912e40a66e11b82d0156dba8631e48a23be",
+      "bytes": 44,
+      "label": "actual ticket geometry assertion",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/spinlock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "start_byte": 525,
+      "end_byte_exclusive": 570,
+      "start_line": 25,
+      "end_line": 25,
+      "slice_sha256": "4e12252eb2b505585dd59666faf1512d11b8bde2feeca4f3a162ed238bd44ee5",
+      "bytes": 45,
+      "label": "actual ticket geometry assertion",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/spinlock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "source_sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "start_byte": 570,
+      "end_byte_exclusive": 624,
+      "start_line": 26,
+      "end_line": 26,
+      "slice_sha256": "25ebc9c80cf1e9a07917a225e4510cf0ae77c550c1f4e717f39afc436b68c923",
+      "bytes": 54,
+      "label": "actual ticket geometry assertion",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/spinlock_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "start_byte": 31891,
+      "end_byte_exclusive": 32552,
+      "start_line": 1003,
+      "end_line": 1021,
+      "slice_sha256": "67ea77b7ca854321dd5c0af690a095dacd6958bbb3d3def6423e22644238baab",
+      "bytes": 661,
+      "label": "x86_syscall_write",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/x86_cpu_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "start_byte": 33411,
+      "end_byte_exclusive": 33568,
+      "start_line": 1053,
+      "end_line": 1056,
+      "slice_sha256": "e2e4277fc5465d30fbeaac3e461ef50cf8796e6ec9e78975ebecdf7bf59c2eac",
+      "bytes": 157,
+      "label": "ihk_mc_syscall_set_arg0",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/x86_cpu_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "start_byte": 33569,
+      "end_byte_exclusive": 33726,
+      "start_line": 1058,
+      "end_line": 1061,
+      "slice_sha256": "2458b86576e2bce25825164bf2f4b60dce9b4937c864f413b3c107a3fd85895f",
+      "bytes": 157,
+      "label": "ihk_mc_syscall_set_arg1",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/x86_cpu_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "source_sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde",
+      "start_byte": 33727,
+      "end_byte_exclusive": 33884,
+      "start_line": 1063,
+      "end_line": 1066,
+      "slice_sha256": "e8bb9cce6e61c8ee942ec69aabe4d5dca4c5b65268640f14f8afb095f8ad5c78",
+      "bytes": 157,
+      "label": "ihk_mc_syscall_set_arg2",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/x86_cpu_helpers.rs"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-ownership-1/candidate/kernel/rust/f03_interrupt_syscall.rs",
+      "source_sha256": "004e8dd5c5158858d5236386e9f250734567948b2fdcc5b6a14a497c4daf6436",
+      "start_byte": 0,
+      "end_byte_exclusive": 2600,
+      "start_line": 1,
+      "end_line": 60,
+      "slice_sha256": "004e8dd5c5158858d5236386e9f250734567948b2fdcc5b6a14a497c4daf6436",
+      "bytes": 2600,
+      "label": "exact independently reviewed interrupt_syscall postimage",
+      "selected_file": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/f03_interrupt_syscall.rs"
+    }
+  ],
+  "files": {
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/spinlock_helpers.rs": {
+      "bytes": 462,
+      "sha256": "87cca0023e1d2f2e10a61be7ee0017a46065b97d55b080d50a4514d4873ad4e5"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/lock_helpers.rs": {
+      "bytes": 1444,
+      "sha256": "50c22948f4c3a4c45331e19a91a9797f23848d63be03650a3624f67c7216ff18"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/debug.rs": {
+      "bytes": 305,
+      "sha256": "03c016d6d75ddac265298867df17d0739b89784e602f8e6404d778bb19f74e88"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/list_helpers.rs": {
+      "bytes": 1122,
+      "sha256": "764180ec2f971e8d5eb6210002c0c4bd23f1e99204d69cea5b0f3ec1970db6f5"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/string.rs": {
+      "bytes": 1154,
+      "sha256": "00953e40586fb67d02439819e8a9d3f1b503acbf3956b49e60f3bdcb7af023c2"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/mem_helpers.rs": {
+      "bytes": 1194,
+      "sha256": "aec18c0fb22f57accd8f4f1155287f907ba8e5e1cd5851b97d4d97da5c383161"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/process_helpers.rs": {
+      "bytes": 8919,
+      "sha256": "d82f462f7828eb5b9f54ee40ba1d5e1d402e02b5433061c85224950b6c77daea"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/profile.rs": {
+      "bytes": 188,
+      "sha256": "dd0fcb6945aba76ebd3ec0f3f5788eb97205bf4473d01ede5dfbd26d6a9d5d97"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/sched_helpers.rs": {
+      "bytes": 126,
+      "sha256": "47e5a316249e74554aa893213d380974e891e55b1955d0ac32c16be885725ed9"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs": {
+      "bytes": 40877,
+      "sha256": "2d9d103d5ac758a969ceb74dd78742ff1ecb65e72bd0916cfbf5881f4f63daa2"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/x86_cpu_helpers.rs": {
+      "bytes": 1209,
+      "sha256": "bfdbd128b1ad8c153cb541c1b31c3735687bc6108fe622ce2b9ef02f03b570c3"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/kill_provider_unit.rs": {
+      "bytes": 942,
+      "sha256": "bc979d36c028cd9effd890fdc618ee2c475034f215169c78b0922dd612531d08"
+    },
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/f03_interrupt_syscall.rs": {
+      "bytes": 2600,
+      "sha256": "004e8dd5c5158858d5236386e9f250734567948b2fdcc5b6a14a497c4daf6436"
+    }
+  },
+  "genuine_new_public_functions": [
+    "__mcs_rwlock_reader_lock_noirq",
+    "__mcs_rwlock_reader_unlock_noirq",
+    "__list_add",
+    "list_add",
+    "list_add_tail",
+    "memcpy",
+    "__inline_memset",
+    "kmalloc_tracked",
+    "kfree_tracked",
+    "thread_hash",
+    "hold_thread",
+    "release_thread",
+    "process_hold_thread_body_result",
+    "process_release_thread_body_result",
+    "process_ref_dec_and_test_result",
+    "process_ref_dec_and_test_direct_result",
+    "process_ref_inc_direct_result",
+    "process_ref_inc_result",
+    "process_ref_hold_body_result",
+    "process_hold_thread_warn_result",
+    "process_thread_action_result",
+    "process_thread_profile_result",
+    "process_vm_action_result",
+    "process_procfs_delete_thread_bridge",
+    "process_destroy_thread_bridge",
+    "process_release_vm_bridge",
+    "process_hold_thread_warn_exited_result",
+    "process_ref_release_should_destroy_result",
+    "process_release_thread_profile_bridge",
+    "process_hold_thread_warn_bridge",
+    "arch_do_kill_process_group_result",
+    "arch_do_kill_direct_target_gate_result",
+    "arch_do_kill_pending_enqueue_result",
+    "arch_do_kill_wakeup_result",
+    "arch_do_kill_process_target_result",
+    "arch_do_kill_thread_target_result",
+    "arch_do_kill_prepare_info_result",
+    "do_kill",
+    "syscall_do_kill_thread_bridge",
+    "ihk_mc_syscall_set_arg0",
+    "ihk_mc_syscall_set_arg1",
+    "ihk_mc_syscall_set_arg2",
+    "interrupt_syscall"
+  ],
+  "new_Rust_cfg": [
+    "f03_signal_process_bridges_candidate",
+    "enable_profile",
+    "native_linux_irq_work_v6_12",
+    "f03_interrupt_syscall_candidate"
+  ],
+  "existing_lower_owners_imported_no_recompile": [
+    "process_hash",
+    "__mcs_rwlock_reader_lock",
+    "__mcs_rwlock_reader_unlock",
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock_noirq",
+    "get_this_cpu_local_var",
+    "kprintf",
+    "cpu_disable_interrupt_save",
+    "cpu_restore_interrupt",
+    "sched_wakeup_thread",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu"
+  ],
+  "genuine_new_provider_frontier_not_stubbed": [
+    "_kmalloc",
+    "_kfree",
+    "destroy_thread",
+    "release_process_vm",
+    "procfs_delete_thread",
+    "profile_accumulate_events",
+    "profile_dealloc_thread_events",
+    "syscall_generic_forwarding"
+  ],
+  "macro_origin_limit": "Exact current body expressions file!/line! are preserved in selected source; this finite unit has its own actual source paths/lines. Actual emitted Ddebug/file/line/allocator provenance must be recorded and cannot be labeled final production-C debug-origin parity. P04 normal fullimage uses actual original source/config/origin rules. No historical fixture/body reused.",
+  "source_behavior_limits": "Reuse SourceAcq9b83 state/IRQ/ref/domain obligations; preserve LinuxUTI terminal path without invented IRQrestore, sig0/x86mask semantics and no runtime/Cretirement/image proof from this codegen. Imported body callbacks are genuine current no_mangle providers, not implemented as fake returns.",
+  "operations": "Private source selection and static syntax-boundary/identity checks only; no compiler/ELF/readback/link/test/payload execution.",
+  "preparation_only_declaration_correction": {
+    "prior_draft": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/preparation-draft-1",
+    "finding": "Source signature check before executable request caught sched_wakeup_thread has second CInt valid_states and CInt return. Exact genuine signature now bound; no source body or provider changed and no compiler ran.",
+    "actual_source": "kernel/rust/sched_helpers.rs:3363",
+    "actual_signature": "pub unsafe extern C fn sched_wakeup_thread(thread:*mut Thread,valid_states:CInt)->CInt",
+    "assertion_selection": "Static brace check corrected an assertion line-range carrying its original closing delimiter before any request/review/compiler; exact three assertion rows now selected. No body changed."
+  },
+  "preparation_import_scope": "Finite module scaffolding imports only types referenced by selected members; unused whole-module imports are omitted without lint suppression or body changes.",
+  "typed_actual_external_provider_contracts": [
+    {
+      "name": "_kmalloc",
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "first_line": 4103,
+      "actual_signature": "pub unsafe extern \"C\" fn _kmalloc(\n    size: CInt,\n    flag: CULong,\n    file: *mut i8,\n    line: CInt,\n) -> *mut c_void",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "_kfree",
+      "source": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "source_sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "first_line": 4130,
+      "actual_signature": "pub unsafe extern \"C\" fn _kfree(ptr: *mut c_void, file: *mut i8, line: CInt)",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "destroy_thread",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "first_line": 10110,
+      "actual_signature": "pub unsafe extern \"C\" fn destroy_thread(thread: *mut Thread)",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "release_process_vm",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "source_sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1",
+      "first_line": 10298,
+      "actual_signature": "pub unsafe extern \"C\" fn release_process_vm(vm: *mut ProcessVm)",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "procfs_delete_thread",
+      "source": "/home/holden/mckernel/kernel/rust/procfs.rs",
+      "source_sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      "first_line": 347,
+      "actual_signature": "pub unsafe extern \"C\" fn procfs_delete_thread(thread: *mut Thread)",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "profile_accumulate_events",
+      "source": "/home/holden/mckernel/kernel/rust/profile.rs",
+      "source_sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543",
+      "first_line": 405,
+      "actual_signature": "pub unsafe extern \"C\" fn profile_accumulate_events(thread: *mut Thread, proc: *mut Process)",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "profile_dealloc_thread_events",
+      "source": "/home/holden/mckernel/kernel/rust/profile.rs",
+      "source_sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543",
+      "first_line": 496,
+      "actual_signature": "pub unsafe extern \"C\" fn profile_dealloc_thread_events(thread: *mut Thread)",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    },
+    {
+      "name": "syscall_generic_forwarding",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "source_sha256": "11df0a7dbaeedcb009f5275e422f17eed444f4b513e7322e14f19e88566a2f1e",
+      "first_line": 2630,
+      "actual_signature": "pub unsafe extern \"C\" fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong",
+      "current_Rust_implementation_exists": true,
+      "actual_b483_owner_bound": false,
+      "next": "Actual emitted imports are forwarded to P04 fullimage normal current module/provider closure; no fake implementation or foreign inventory requirement."
+    }
+  ],
+  "supported_profile_selection": {
+    "kernel_CFG_source": "kernel/CMakeLists.txt:273 f03_signal_process_bridges_candidate,491-492 enable_profile under PROFILE_ENABLE",
+    "PROFILE_ENABLE": "CMakeLists.txt142 defaultON, matching production C -DPROFILE_ENABLE; no silent profile-off release callback",
+    "ABI": "Current ff48 has no enable_profile-dependent field layout; selected enable_tofu remains OFF matching retained b483 source/profile",
+    "source_lifetime": "Same Root explicitly authorized current genuine kill+lower source derivation; no held Direct-TID/TERMRESET fixture or equivalent, no generic/exec body selection or native operation."
+  },
+  "pending_interrupt_source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-ownership-1/candidate/kernel/rust/f03_interrupt_syscall.rs",
+    "sha256": "004e8dd5c5158858d5236386e9f250734567948b2fdcc5b6a14a497c4daf6436",
+    "incorporated": true,
+    "required_before_incorporation": "Actual P04Tests independent material source/type/guard GO and Root authorization; no unchecked module copied or compiled."
+  },
+  "new_required_lower_x86_setters": "Actual interrupt entry calls real arg0/1/2 setter roots plus unchanged private x86_syscall_write; absent b483 owners, selected genuine current source, no syscall argument shim.",
+  "retained_140_exact_named_lower_owners": {
+    "process_hash": [
+      {
+        "name": "process_hash",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 177,
+        "value": 0,
+        "size": 35
+      }
+    ],
+    "__mcs_rwlock_reader_lock": [
+      {
+        "name": "__mcs_rwlock_reader_lock",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 170,
+        "value": 0,
+        "size": 21
+      }
+    ],
+    "__mcs_rwlock_reader_unlock": [
+      {
+        "name": "__mcs_rwlock_reader_unlock",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 172,
+        "value": 0,
+        "size": 15
+      }
+    ],
+    "__mcs_rwlock_writer_lock_noirq": [
+      {
+        "name": "__mcs_rwlock_writer_lock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 107,
+        "value": 0,
+        "size": 12
+      }
+    ],
+    "__mcs_rwlock_writer_unlock_noirq": [
+      {
+        "name": "__mcs_rwlock_writer_unlock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 109,
+        "value": 0,
+        "size": 12
+      }
+    ],
+    "__ihk_mc_spinlock_lock_noirq": [
+      {
+        "name": "__ihk_mc_spinlock_lock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 32,
+        "value": 0,
+        "size": 91
+      }
+    ],
+    "__ihk_mc_spinlock_unlock_noirq": [
+      {
+        "name": "__ihk_mc_spinlock_unlock_noirq",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 36,
+        "value": 0,
+        "size": 59
+      }
+    ],
+    "get_this_cpu_local_var": [
+      {
+        "name": "get_this_cpu_local_var",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 78,
+        "value": 0,
+        "size": 99
+      }
+    ],
+    "kprintf": [
+      {
+        "name": "kprintf",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 61,
+        "value": 0,
+        "size": 706
+      }
+    ],
+    "cpu_disable_interrupt_save": [
+      {
+        "name": "cpu_disable_interrupt_save",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 38,
+        "value": 0,
+        "size": 6
+      }
+    ],
+    "cpu_restore_interrupt": [
+      {
+        "name": "cpu_restore_interrupt",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 41,
+        "value": 0,
+        "size": 5
+      }
+    ],
+    "sched_wakeup_thread": [
+      {
+        "name": "sched_wakeup_thread",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 24,
+        "value": 0,
+        "size": 14
+      }
+    ],
+    "ihk_mc_get_vector": [
+      {
+        "name": "ihk_mc_get_vector",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 112,
+        "value": 0,
+        "size": 37
+      }
+    ],
+    "ihk_mc_interrupt_cpu": [
+      {
+        "name": "ihk_mc_interrupt_cpu",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "section": 116,
+        "value": 0,
+        "size": 142
+      }
+    ]
+  },
+  "retained_baseline_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-1/producer-1/flag-correction-1/qualification-1/RESULT.json",
+    "sha256": "a668defd3f7680a3d8a197b67c711fb1a6ecaf74a08c5de1bae4f363b1c097b3",
+    "independent_review": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/process-pair-review-1/producer-1/flag-correction-1/actual-result-1/REVIEW.json",
+    "review_sha256": "e7fea84c8e186c892422ad00a516b751468613aa8c611d98c1414ae98bfbd1e6"
+  },
+  "unchanged_provider_source_identity_refs": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+    }
+  ],
+  "current_source_private_debug_expectations": [
+    {
+      "symbol_tokens": [
+        "IPI_DEBUG"
+      ],
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 238,
+      "source_expression": "line!() & 0x00ff_ffff",
+      "source_private_file": true
+    },
+    {
+      "symbol_tokens": [
+        "ENTER_DEBUG"
+      ],
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 700,
+      "source_expression": "line!() & 0x00ff_ffff",
+      "source_private_file": true
+    },
+    {
+      "symbol_tokens": [
+        "f03_interrupt_syscall",
+        "INTERRUPT_DEBUG"
+      ],
+      "file_utf8": "/home/holden/mckernel/kernel/syscall.c",
+      "function_utf8": "interrupt_syscall",
+      "line_flags": 5666,
+      "fmt_NULL": true,
+      "source_C_origin": true
+    }
+  ],
+  "required_metadata_normalization_delta": "Existing qualified relocation helper handles GLOBAL descriptors/NOBITS; actual new source includes three LOCAL writable __verbose Ddebug32 owners. New checker only normalizes one exact typed source-owned descriptor/range after verifying complete file/function/fmtNULL/line_flags/section/align and both relocations; no broad writable-data waiver or new ELF parser.",
+  "interrupt_material_boundary": {
+    "independent_source_GO_consumed": true,
+    "review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-review-p04tests-max-1/REVIEW.json",
+      "sha256": "164dca645edcf5b67c5337eb9a753cc207d5e38376de793abd51965bf39e2574"
+    },
+    "SOURCE_READY": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-ownership-1/SOURCE-READY.json",
+      "sha256": "012ef4f552b65c3208711627943627215fbe18119834281706362bdec47848c4"
+    },
+    "source_bindings": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/interrupt-syscall-ownership-1/SOURCE-BINDINGS.json",
+      "sha256": "08032f49a06e91d2579f473277d1b1cf0748e5dfeae1e4954cf8072d8e5d5b15"
+    },
+    "module_bytes_unchanged": true,
+    "no_optional_standalone_check_selected": "P04Tests metadata-only dc25 remains unrun; this coherent compile includes actual changed module/context/setters once."
+  },
+  "required_compile_environment": {
+    "MCKERNEL_INTERRUPT_SYSCALL_C_FILE": "/home/holden/mckernel/kernel/syscall.c"
+  }
+}

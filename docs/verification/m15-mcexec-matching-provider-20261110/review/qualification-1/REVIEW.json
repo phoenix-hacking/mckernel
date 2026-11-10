@@ -1,0 +1,181 @@
+{
+  "actual_artifacts": [
+    {
+      "bytes": 726,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/NUMA-PROVIDER-INPUTS.json",
+      "sha256": "4fcda56364eafc675109bccc07c9365fa21f1acaebfe89bb4f01ce0ea81c20b7"
+    },
+    {
+      "bytes": 18662,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/CMakeCache.txt",
+      "sha256": "a37b39fc28918b48ac67f2a8d00f46283421f4f334b38b79245d730d0a77f8d2"
+    },
+    {
+      "bytes": 110,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/rust/mcexec_buildid_generated.rs",
+      "sha256": "e38b5a1253d2ab4a8acb2c4eb6b910448772035f84891829c626813f584ed7aa"
+    },
+    {
+      "bytes": 763120,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/rust/mcexec_helpers.o",
+      "sha256": "122ffbef83fc563554dcc57c6da3580f881ecda421e8d37e063ab3b2b787500e"
+    },
+    {
+      "bytes": 2752,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o",
+      "sha256": "7a43b48397917e43cfe008cb64515805a012e9304c4d8921a144935525555d39"
+    },
+    {
+      "bytes": 2946,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/libmcexec.a",
+      "sha256": "eb866f7f55d69d6af481daa90ceaa4e319201f65c7b14925fd1b86a1d7356ddc"
+    },
+    {
+      "bytes": 398096,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/mcexec",
+      "sha256": "7e726dfd1c3a77763783b13db0069a13713989959e16dc37ffb09daee1ea8e57"
+    },
+    {
+      "bytes": 246,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/CMakeFiles/mcexec.dir/link.txt",
+      "sha256": "16399266d85e56f1887c5815760b5d33ec90a5ea8d3963ea620d2f0a443f58d8"
+    },
+    {
+      "bytes": 550,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/CMakeFiles/libmcexec.dir/flags.make",
+      "sha256": "6c97164eda5861b9489871a8e8e8ba12cc88eb7f930c9dbc0f65f89951b44107"
+    },
+    {
+      "bytes": 161420,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/mcexec.map",
+      "sha256": "b99dd59d9efb6bf1c313f4b588636ef0b0c4b899a26cd7f3646fc43496df9cf0"
+    },
+    {
+      "bytes": 2413,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/executer/user/cmake_install.cmake",
+      "sha256": "88a0b9eab5cde1913eeb9be6ee4eb255dcd11f51341431f5ae4c12cea52fcbf1"
+    },
+    {
+      "bytes": 21,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/install_manifest_mcexec_runtime.txt",
+      "sha256": "c002722a678d27bbaacda33912206621e2df3aa4a2ef1966c4291e554adf960b"
+    },
+    {
+      "bytes": 398096,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/stage/usr/local/bin/mcexec",
+      "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4"
+    }
+  ],
+  "at_utc": "2026-11-10T18:58:01.298809+00:00",
+  "data_review_note": "One reviewer byte-slice assertion initially included a NUL in a16-byte expectedstring; actual RPATH strings each occupy16bytes, with unchanged NUL at5371. Corrected the reviewer comparison only and verified exact preserved surrounding bytes. No SUT/source/qualifier defect, build replay or changed evidence.",
+  "decision": "GO_ACTUAL_MATCHING_PRODUCTION_ARTIFACT_AND_WHOLE_M15_F02_ORIGINAL_PROFILE_TECHNICAL_CONDITION",
+  "evidence": [
+    {
+      "bytes": 44796,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/qualification-1/QUALIFICATION.json",
+      "sha256": "dc0c975c362caba38100e13b5ca951cb864fc8ecba698096f24e72edf0115296"
+    },
+    {
+      "bytes": 1778,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/qualification-1/RESULT.json",
+      "sha256": "827ec9d4d195fa97b02b6da0bf1526265666db9a7fe9eb85446cbd4a68168450"
+    },
+    {
+      "bytes": 621506,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/qualification-1/PROVIDER-JOINS.json",
+      "sha256": "13df4bc7ca3a2ac285297941f70d90d89f9eb07fd27fd1563d35a9e840674ee9"
+    },
+    {
+      "bytes": 75374,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-2/RESULT.json",
+      "sha256": "1688e66234702044b43b63f6182674e90f6b045b610375d2883ed3b092c9d305"
+    },
+    {
+      "bytes": 1005,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-2/ADMISSION.json",
+      "sha256": "bb0c9a3cc89d7abf3d824ea60209352f922d20659a1376ef0204e05d64b71cf6"
+    },
+    {
+      "bytes": 27768,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-production-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "3b619036e41eea0ff41ffbca6037f0ca682161acfec71eccd16f83bcb819bf0c"
+    },
+    {
+      "bytes": 7195,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-production-review-source-acquisition-max-1/profile-field-correction-1/REVIEW.json",
+      "sha256": "5af7038b0ede28766f8bff6ba1b8e702d666b3bb2719a6a5ecd0ff3a05d7f33d"
+    }
+  ],
+  "material_findings": {
+    "diagnostics": "15actualRust warnings retained (unused/import/dead declarations, functionpointer-to-usize casts, two stat nominal pointee redeclarations). No warning waiver/newflags. Both stat declarations retain the same two-pointer->int CABI; unchanged aligned144B storage and retained actual-header LP64 proof support the exact carrier. This is not all-ABI/behavior acceptance. C witness Werror passed. Configure warning only unused BUILD_TARGET cachevariable, with actual x86_64 source/ASM path fixed by selecteddriver.",
+    "execution": "Eight exact reviewed serial create+phaseargv/profile10mounts9RO+RW, all exit0, all66 positive birth/parent/wholefamily waits and streams closed; no adopted reaps/kills/timeouts/residual/errors. Every exact createdCID finalPid0/nonOOM/exit0/removal receipt matches. Actual admission preserves oldCPU0/256MiB/job1 and sharedHOST4/max3; no unknown reservation released.",
+    "install": "Built7e726/stageddf655 both398096B0755 differ only inside5355..5370 normal16-byte RPATH slot /qualified-numa: -> /usr/local/lib64; terminator5371 remainsNUL. Actual15 changed bytes because leading slash is identical. Every other binarybyte equals, including implementation/data/symbol/version sections. Private runtime manifest exactly/usr/local/bin/mcexec; no hostdeployment/man/wholecohort claim.",
+    "ownership": "All598 emittedRust definitions (550FUNC/48OBJECT) have actual samekind/width finaldefinitions and Rust mapowner. Independent savednm membership/value/width comparison matches the complete actual emitted set; no count-to-coverage inference. Three genuineASM ranges330/9/7B from normalarchive match exact linkedtext bytes/hashes, with unique final NOTYPE source-bound symbols.119objectU close through118system edges plus actualswitch_ctx.",
+    "providers": "Actual124dynamicimport rows partition exactly117 real saved same46d libc definition/version/role joins,4 typedNUMA/versionedbe20 joins,3 specified unversioned optionalWEAK. Independent raw caller/provider row+version comparison matches actual savedreadelf and fullsame46d libc248be records. Real namespace report4fcda/header207180/runtimebe20 matches signed source/EQ join; C11Werror four-function witness passed with empty diagnostics. No unbound namedartifact projectprovider or invented absent external input.",
+    "source_configuration_toolchain": "Prior source/operation3b619 reused unchanged: current16source4adf/fdd, actual ab6a/5a268 fullRust body and normalASM, genuine195/70eb+46d/GCC14, exact generated8d110B/e38b; actual verbose flags/cache normalproductionrecipe match. No old3114 artifact substituted."
+  },
+  "next_action": "Root publishes only supported-profile technicalleaf evidence/credit if appropriate, keeping completeABIbehavior/deployed/native/aggregateI03/ACCEPT open; this owner returns to the concrete current M14 emitted-C selection repair.",
+  "no_payload_or_suite_execution_by_reviewer": true,
+  "operations": "Read exact prior source/operation references, actual execution/rawprofile/waits, saved nm/readelf/map/provider records and artifactbytes. Data-only comparisons and this private JSON write; no qualifier/helper import, checker/tool/compiler/CMake/RPM/ELF command/Docker/network/projectmain/API/native execution or canonical/source edit.",
+  "original_leaf_assessment": {
+    "basis": "Supported source/configuration/toolchain and actual transitive SDK/provider identities reconstructed from existing pinned production recipe; full current matching executor compiled/linked and private-staged under that profile. Existing matching typed/header/provider/ASM proof is reused only at unchanged scope. No remaining build-required input is absent. This demonstrates the matching production executor qualification expressly required by this leaf.",
+    "credit_or_acceptance_action": "Root alone reconciles original machineleaf and preserves M14-before-M15 acceptance without broadening acceptance or changing other leaf states. Reviewer makes no ledger/canonical mutation.",
+    "decision": "WHOLE_STATED_TECHNICAL_CONDITION_SATISFIED_FOR_ORIGINAL_SELECTED_SUPPORTED_HOST_ARTIFACT_PROFILE",
+    "exact_done_when": "Reconstruct and bind the supported source/configuration/toolchain/transitive-SDK identities from the existing pinned recipes, then demonstrate matching executor qualification under that profile.",
+    "id": "M15-F02-original-profile",
+    "independently_checked_ledger": {
+      "bytes": 860257,
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+      "sha256": "75d293e8c2d51d2c4d111f544f36058cc93b1f129979b28f4f9072684e819427"
+    }
+  },
+  "retained_raw_claim_limits": {
+    "C_retirement": false,
+    "all349_provider_parity": false,
+    "all51_data_ABI": false,
+    "complete_executor_behavior": false,
+    "deployed_cohort": false,
+    "native_or_currentfree_or_UNKNOWN_released": false,
+    "original_M14_acceptance": false,
+    "original_M15_acceptance": false,
+    "whole_public_ABI_accepted": false
+  },
+  "review_scope": "Exact current selected x86_64 Debug/PROFILE/WORK_IRQON optionalOFF supported executor profile and matching full artifact/privateinstall. Original-profile done_when is satisfied by actual production qualification, not by source/type fixture or source/symbol count. Original M15-F02 file and M15 milestone remain unaccepted.",
+  "reviewer": "source_acquisition_review_max; independent saved-data review, same Root, no children",
+  "schema": "mckernel.m15.mcexec-current-production-independent-material-review.v1",
+  "unchanged_open_original_conditions": [
+    {
+      "id": "M15-F02-complete-ABI-behavior",
+      "missing": "The complete supported Cbaseline\u2192currentRust entry/provider/behavior obligation join is not supplied by a build/symbol count. Compose retained matching source/layout/behavior proofs for actual current14sources and specifically qualify genuinely unmatched cases/protocol contracts from executer/include/uprotocol.h and matching selected syscall/moduleheaders. Do not reopen passing selectedSDK/ASM/NUMA/libdir proofs or demand an external inventory.",
+      "supplying_owner": "Root original executor/runtime ABI/behavior engineering owner; our sourcefdd/currentartifacts and actualheaders are available."
+    },
+    {
+      "id": "M15-F02-deployed",
+      "missing": "Actual reviewed deployed/installed cohort and its real executable/provider ownership join; this private DESTDIR artifact is scoped stage evidence only.",
+      "supplying_owner": "Root sole integrator/deployment executor after actual matchingcohort/admission."
+    },
+    {
+      "id": "M15-F02-native",
+      "missing": "Actual matching application/offload/process/lifecycle cases, observed cleanup and resource restoration after real ownership/current-free/admission. No mcexecmain or providerAPI/native call occurred in this producer.",
+      "supplying_owner": "Root sole native operation owner; preserved native/source/currentfree/UNKNOWN gates."
+    },
+    {
+      "id": "M15-I03-original-reproducibility, M15-I03-complete-ABI, M15-I03-static-dynamic",
+      "missing": "Whole delivered userspace set/cohort still requires original aggregate reproducibility, installed-header/publicABI and complete actual installed static/dynamic projectprovider joins. This namedmcexec component now has exact software inputs and actualprovider closure; no new unbound mcexec symbol or guessed absent external artifact is introduced as a blocker. Other current qualified tool/library results must be composed at their exact scope.",
+      "supplying_owner": "Root compositor and original current library/CLI/tool/ABI owners; derive only actual unmatched requirements from recipes/headers/source."
+    }
+  ]
+}

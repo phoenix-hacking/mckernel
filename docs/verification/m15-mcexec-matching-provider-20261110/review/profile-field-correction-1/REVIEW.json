@@ -1,0 +1,111 @@
+{
+  "at_utc": "2026-11-10T18:21:21.224336+00:00",
+  "cleanup_scope": {
+    "Root_only_permitted_action": "After fresh identity checks, remove only literal output-1/tmp and then output-1 with nonrecursive rmdir; each must still be real UID/GID1000 directory matching device/inode, tmp empty and output containing only that tmp. Use no symlink following, recursive removal, force deletion or parent/evidence path. Any changed identity/entry or rmdir failure stops cleanup; preserve evidence.",
+    "cleanup_executed_by_reviewer": false,
+    "currently_observed_real_empty_owned_directories": [
+      {
+        "device": 66306,
+        "entries": [
+          "tmp"
+        ],
+        "gid": 1000,
+        "inode": 2237394,
+        "mode": "0o40700",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1",
+        "uid": 1000
+      },
+      {
+        "device": 66306,
+        "entries": [],
+        "gid": 1000,
+        "inode": 2237395,
+        "mode": "0o40700",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/tmp",
+        "uid": 1000
+      }
+    ],
+    "new_capture": "Use disjoint execution-2 (or another absent Root-owned capture) and freshly recreate original output-1/tmp under unchanged request. Never overwrite execution-1 or its failed evidence.",
+    "reason": "Owned output contains only empty tmp and no payload data, so removing these two known empty directories restores original request fresh-output predicate without changing source/request/argv."
+  },
+  "decision": "GO_BOUNDED_ROOT_CAPTURE_FIELD_FIX_AND_POSITIVELY_OWNED_EMPTY_DIRECTORY_CLEANUP",
+  "failure_evidence": [
+    {
+      "bytes": 3657,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/RESULT.json",
+      "sha256": "8624e74dfee82531035e5430485492c6a3342ba3391955d3a8eeb949396b74d8"
+    },
+    {
+      "bytes": 2680,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/ownership.json",
+      "sha256": "bef346bb6b829dccde6025aae6fa995a31fb2b7798618958d69f677878bf77f4"
+    },
+    {
+      "bytes": 236,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/phase-1-OWNED-ID.json",
+      "sha256": "76eb3197e3bbf01de9a5a0781c0beedabf94e2e262da70cd60d806bdcda774c3"
+    },
+    {
+      "bytes": 3601,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/phase-1-CREATE-ARGV.json",
+      "sha256": "cb5b4caa6275be2be66192e6ab313331a382b1a7a7c958492aeec9f099677173"
+    },
+    {
+      "bytes": 17641,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/phase-1-profile.stdout",
+      "sha256": "6e8dd1e9264a813f2d10aa0d039a6a710d38b6bc1f5e0d177f8f670d8a4cf5d7"
+    },
+    {
+      "bytes": 17641,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/failure-final-terminal.stdout",
+      "sha256": "6e8dd1e9264a813f2d10aa0d039a6a710d38b6bc1f5e0d177f8f670d8a4cf5d7"
+    },
+    {
+      "bytes": 65,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/execution-1/failure-owned-remove.stdout",
+      "sha256": "2567568e6a0647f11b6ad5e5a9a078189da606d324ab728b22ac14a52ef9ab83"
+    }
+  ],
+  "old_CPU0_UNKNOWN_released": false,
+  "only_adapter_delta": {
+    "actual_tuple": "{(m[\"Source\"], m[\"Destination\"], not m[\"RW\"]) for m in inspect_record[\"Mounts\"]}",
+    "expected_tuple": "{(m[\"source\"], m[\"target\"], m[\"readonly\"]) for m in request[\"mounts\"]}",
+    "required_guards": [
+      "Expected readonly and actual RW must be literal bool; every actual Type must be bind.",
+      "Both original lists and both tuple sets have exact cardinality10; exact full tuple equality,9RO+one outputRW. No order assumption/duplicate collapse/target-only permission check.",
+      "All original image/source/argv/name/owner/security/resource/timeout/directwait/wholefamily/stream/daemon-ID terminal/removal guards remain unchanged.",
+      "Saved exact create argv already equals frozen prefix with sole phase-name substitution plus literal phase1 command; saved corrected10-tuple comparison matches. This does not replace fresh actual successor profile checks."
+    ]
+  },
+  "operations_by_reviewer": "Read saved failure/ownership/profile/create/removal receipts and lstat/list only two owned output directories; data comparisons and this private review write. No Docker/control/container/start/helper/compiler/test/RPM/ELF/network/canonical/source operation.",
+  "original_acceptance": false,
+  "prior_operation_GO_reused": {
+    "bytes": 27768,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-production-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "3b619036e41eea0ff41ffbca6037f0ca682161acfec71eccd16f83bcb819bf0c"
+  },
+  "request_unchanged": {
+    "bytes": 23449,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/REQUEST.json",
+    "sha256": "a239794ee18040e3c0e7b1fdde6250af4c0b659f84b2e799947a631ea2cbdef9"
+  },
+  "reviewer": "source_acquisition_review_max; private independent data-only review; no children",
+  "schema": "mckernel.m15.mcexec-capture-mount-field-correction-review.v1",
+  "supported_failure": {
+    "SUT_source_or_NUMA_helper_defect": false,
+    "actual_payloads_started": 0,
+    "cause": "Root expected-mount adapter indexed previous schema destination/read_only; this exact request uses target/readonly. Failure occurred before start.",
+    "container": {
+      "CPU": 7,
+      "at": "2026-11-10T18:18:56.793577+00:00",
+      "id": "d470af767ffee057e593adf4e4a98f6ada428717ee3d3884bd6ec48fd93ed47f",
+      "name": "mck-m15-mcexec-current-1-20261110-1",
+      "owner": "Root",
+      "reserved_memory": 1073741824
+    },
+    "diagnostic": "KeyError: 'destination'",
+    "never_started": "Saved profile and final inspect both Statecreated/Pid0/Runningfalse/StartedAtallzero. Saved phase list empty; seven control clients have positive births/waits/wholefamilies/streams, no adopted/residual/error/timeout.",
+    "positive_removal": "failure-owned-remove exit0 and exact immutable CID stdout match create+owned ID. No retirement inferred from process absence."
+  },
+  "unchanged_admission": "M14 next ready operation keeps priority. Root alone freshly admits CPU7/1GiB/onejob and all overhead plus old CPU0/256MiB/job1 inside HOST4GiB/max3/fresh26GiB and disk/native floors. All previous positive daemon-ID deadline/primary-failure/terminal/removal conditions remain. No resource/currentfree/hold release or broad retry."
+}

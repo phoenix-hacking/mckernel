@@ -1,0 +1,315 @@
+{
+  "status": "PASS_COHERENT_GENUINE_KILL_PREJOIN",
+  "called_before_ld_r": true,
+  "provider_sha256": "f9ea63f1e953ad009b313c75c9b894677a0b14f46f3f7e06c4f3d1f0a062d78e",
+  "actual_new_functions": {
+    "__mcs_rwlock_reader_lock_noirq": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "__mcs_rwlock_reader_unlock_noirq": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "__list_add": {
+      "kind": "T",
+      "bytes": 15
+    },
+    "list_add": {
+      "kind": "T",
+      "bytes": 18
+    },
+    "list_add_tail": {
+      "kind": "T",
+      "bytes": 19
+    },
+    "memcpy": {
+      "kind": "T",
+      "bytes": 192
+    },
+    "__inline_memset": {
+      "kind": "T",
+      "bytes": 235
+    },
+    "kmalloc_tracked": {
+      "kind": "T",
+      "bytes": 99
+    },
+    "kfree_tracked": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "thread_hash": {
+      "kind": "T",
+      "bytes": 35
+    },
+    "hold_thread": {
+      "kind": "T",
+      "bytes": 62
+    },
+    "release_thread": {
+      "kind": "T",
+      "bytes": 115
+    },
+    "process_hold_thread_body_result": {
+      "kind": "T",
+      "bytes": 75
+    },
+    "process_release_thread_body_result": {
+      "kind": "T",
+      "bytes": 177
+    },
+    "process_ref_dec_and_test_result": {
+      "kind": "T",
+      "bytes": 28
+    },
+    "process_ref_dec_and_test_direct_result": {
+      "kind": "T",
+      "bytes": 21
+    },
+    "process_ref_inc_direct_result": {
+      "kind": "T",
+      "bytes": 18
+    },
+    "process_ref_inc_result": {
+      "kind": "T",
+      "bytes": 33
+    },
+    "process_ref_hold_body_result": {
+      "kind": "T",
+      "bytes": 39
+    },
+    "process_hold_thread_warn_result": {
+      "kind": "T",
+      "bytes": 21
+    },
+    "process_thread_action_result": {
+      "kind": "T",
+      "bytes": 21
+    },
+    "process_thread_profile_result": {
+      "kind": "T",
+      "bytes": 15
+    },
+    "process_vm_action_result": {
+      "kind": "T",
+      "bytes": 21
+    },
+    "process_procfs_delete_thread_bridge": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "process_destroy_thread_bridge": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "process_release_vm_bridge": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "process_hold_thread_warn_exited_result": {
+      "kind": "T",
+      "bytes": 9
+    },
+    "process_ref_release_should_destroy_result": {
+      "kind": "T",
+      "bytes": 8
+    },
+    "process_release_thread_profile_bridge": {
+      "kind": "T",
+      "bytes": 32
+    },
+    "process_hold_thread_warn_bridge": {
+      "kind": "T",
+      "bytes": 27
+    },
+    "arch_do_kill_process_group_result": {
+      "kind": "T",
+      "bytes": 1063
+    },
+    "arch_do_kill_direct_target_gate_result": {
+      "kind": "T",
+      "bytes": 744
+    },
+    "arch_do_kill_pending_enqueue_result": {
+      "kind": "T",
+      "bytes": 505
+    },
+    "arch_do_kill_wakeup_result": {
+      "kind": "T",
+      "bytes": 708
+    },
+    "arch_do_kill_process_target_result": {
+      "kind": "T",
+      "bytes": 475
+    },
+    "arch_do_kill_thread_target_result": {
+      "kind": "T",
+      "bytes": 396
+    },
+    "arch_do_kill_prepare_info_result": {
+      "kind": "T",
+      "bytes": 138
+    },
+    "do_kill": {
+      "kind": "T",
+      "bytes": 1006
+    },
+    "syscall_do_kill_thread_bridge": {
+      "kind": "T",
+      "bytes": 12
+    },
+    "ihk_mc_syscall_set_arg0": {
+      "kind": "T",
+      "bytes": 13
+    },
+    "ihk_mc_syscall_set_arg1": {
+      "kind": "T",
+      "bytes": 13
+    },
+    "ihk_mc_syscall_set_arg2": {
+      "kind": "T",
+      "bytes": 13
+    },
+    "interrupt_syscall": {
+      "kind": "T",
+      "bytes": 203
+    }
+  },
+  "actual_new_debug_objects": {
+    "_RNvNtCsjSxraHYHbm2_18kill_provider_unit21f03_interrupt_syscall15INTERRUPT_DEBUG": {
+      "bytes": 32,
+      "bind": 1,
+      "file_utf8": "/home/holden/mckernel/kernel/syscall.c",
+      "function_utf8": "interrupt_syscall",
+      "line_flags": 5666,
+      "fmt_NULL": true,
+      "section": "__verbose",
+      "kind": "D"
+    },
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy28f06_do_kill_wakeup_candidate9IPI_DEBUG": {
+      "bytes": 32,
+      "bind": 1,
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 238,
+      "fmt_NULL": true,
+      "section": "__verbose",
+      "kind": "D"
+    },
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy26f06_full_do_kill_candidate11ENTER_DEBUG": {
+      "bytes": 32,
+      "bind": 1,
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 700,
+      "fmt_NULL": true,
+      "section": "__verbose",
+      "kind": "D"
+    }
+  },
+  "actual_new_genuine_U": [
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock_noirq",
+    "__mcs_rwlock_reader_lock",
+    "__mcs_rwlock_reader_unlock",
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "_kfree",
+    "_kmalloc",
+    "cpu_disable_interrupt_save",
+    "cpu_restore_interrupt",
+    "destroy_thread",
+    "get_this_cpu_local_var",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu",
+    "kprintf",
+    "memset",
+    "process_hash",
+    "procfs_delete_thread",
+    "profile_accumulate_events",
+    "profile_dealloc_thread_events",
+    "release_process_vm",
+    "sched_wakeup_thread",
+    "syscall_generic_forwarding"
+  ],
+  "actual_remaining_genuine_U": [
+    "_kfree",
+    "_kmalloc",
+    "destroy_thread",
+    "do_syscall",
+    "eventfd",
+    "f03_terminate_host_refcount_set_v1",
+    "f03_wait_release_process",
+    "f03_wait_release_thread",
+    "procfs_delete_thread",
+    "profile_accumulate_events",
+    "profile_dealloc_thread_events",
+    "release_process_vm",
+    "syscall_do_syscall_request_bridge",
+    "syscall_generic_forwarding",
+    "syscall_generic_forwarding_body_result",
+    "terminate_host_body_result"
+  ],
+  "actual_new_U_resolving_to_b483": [
+    "__ihk_mc_spinlock_lock_noirq",
+    "__ihk_mc_spinlock_unlock_noirq",
+    "__mcs_rwlock_reader_lock",
+    "__mcs_rwlock_reader_unlock",
+    "__mcs_rwlock_writer_lock_noirq",
+    "__mcs_rwlock_writer_unlock_noirq",
+    "cpu_disable_interrupt_save",
+    "cpu_restore_interrupt",
+    "get_this_cpu_local_var",
+    "ihk_mc_get_vector",
+    "ihk_mc_interrupt_cpu",
+    "kprintf",
+    "memset",
+    "process_hash",
+    "sched_wakeup_thread"
+  ],
+  "actual_new_U_requiring_fullimage_owners": [
+    "_kfree",
+    "_kmalloc",
+    "destroy_thread",
+    "procfs_delete_thread",
+    "profile_accumulate_events",
+    "profile_dealloc_thread_events",
+    "release_process_vm",
+    "syscall_generic_forwarding"
+  ],
+  "actual_source_debug": {
+    "_RNvNtCsjSxraHYHbm2_18kill_provider_unit21f03_interrupt_syscall15INTERRUPT_DEBUG": {
+      "bytes": 32,
+      "bind": 1,
+      "file_utf8": "/home/holden/mckernel/kernel/syscall.c",
+      "function_utf8": "interrupt_syscall",
+      "line_flags": 5666,
+      "fmt_NULL": true,
+      "section": "__verbose",
+      "kind": "D"
+    },
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy28f06_do_kill_wakeup_candidate9IPI_DEBUG": {
+      "bytes": 32,
+      "bind": 1,
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 238,
+      "fmt_NULL": true,
+      "section": "__verbose",
+      "kind": "D"
+    },
+    "_RNvNtNtCsjSxraHYHbm2_18kill_provider_unit14syscall_policy26f06_full_do_kill_candidate11ENTER_DEBUG": {
+      "bytes": 32,
+      "bind": 1,
+      "file_utf8": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/kill-provider-1/source/syscall_policy.rs",
+      "function_utf8": "do_kill",
+      "line_flags": 700,
+      "fmt_NULL": true,
+      "section": "__verbose",
+      "kind": "D"
+    }
+  },
+  "duplicate_strong_owners": [],
+  "runtime_or_native_claim": false
+}

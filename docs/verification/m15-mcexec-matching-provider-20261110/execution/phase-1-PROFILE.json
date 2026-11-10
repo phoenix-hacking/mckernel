@@ -1,0 +1,125 @@
+{
+  "HostConfig": {
+    "CapDrop": [
+      "ALL"
+    ],
+    "CpusetCpus": "7",
+    "Memory": 1073741824,
+    "MemorySwap": 1073741824,
+    "NetworkMode": "none",
+    "PidsLimit": 64,
+    "ReadonlyRootfs": true,
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,noexec,size=64m,mode=1777"
+    },
+    "Ulimits": [
+      {
+        "Hard": 0,
+        "Name": "core",
+        "Soft": 0
+      },
+      {
+        "Hard": 120,
+        "Name": "cpu",
+        "Soft": 120
+      },
+      {
+        "Hard": 67108864,
+        "Name": "fsize",
+        "Soft": 67108864
+      },
+      {
+        "Hard": 128,
+        "Name": "nofile",
+        "Soft": 128
+      }
+    ]
+  },
+  "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "Mounts": [
+    {
+      "Destination": "/source",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/source",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/driver",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/driver",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/usr/include/numa.h",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/passive-extraction-1/extracted/numactl-devel/usr/include/numa.h",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/qualified-numa",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/production-inputs-1/linker-prefix",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/output",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/usr/bin/cmake",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/usr/lib64/libuv.so.1",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/input/join_numa_inputs.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/libnuma-development-provider-1/production-inputs-1/join_numa_inputs.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/usr/share/cmake",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "Type": "bind"
+    }
+  ],
+  "User": "1000:1000"
+}

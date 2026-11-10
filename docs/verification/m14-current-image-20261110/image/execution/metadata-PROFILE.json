@@ -1,0 +1,64 @@
+{
+  "HostConfig": {
+    "CapDrop": [
+      "ALL"
+    ],
+    "CpusetCpus": "6",
+    "Memory": 536870912,
+    "MemorySwap": 536870912,
+    "NetworkMode": "none",
+    "PidsLimit": 64,
+    "ReadonlyRootfs": true,
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,noexec,size=16m,mode=1777"
+    },
+    "Ulimits": [
+      {
+        "Hard": 0,
+        "Name": "core",
+        "Soft": 0
+      },
+      {
+        "Hard": 120,
+        "Name": "cpu",
+        "Soft": 120
+      },
+      {
+        "Hard": 1073741824,
+        "Name": "fsize",
+        "Soft": 1073741824
+      }
+    ]
+  },
+  "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "Mounts": [
+    {
+      "Destination": "/work/output",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/producer/read_image_metadata.sh",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/named-build-1/read_image_metadata.sh",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/evidence",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/named-build-1/metadata",
+      "Type": "bind"
+    }
+  ],
+  "User": "1000:1000"
+}
