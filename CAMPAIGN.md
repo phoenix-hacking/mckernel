@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T10:54:18.267573+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T11:20:26.453734+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -32,10 +32,16 @@ there is no observed technical stall. Original M14 acceptance precedes M15.
   without restarting the healthy build; observed unknown samples stay preserved.
 - M15-I03 official binutils-devel2.41-63 and CMake/CMake-data3.31.8 acquisition,
   trusted signature/NEVRA/header/payload qualification and passive extraction PASS.
-  No package scripts ran. The first actual CMake loader phase identifies missing
-  libuv.so.1; its container is terminal/removed and later phases/build remain
-  unstarted. A MAX owner now reviews the bounded official capability-metadata
-  acquisition to derive the exact missing provider, without guessing its version.
+  The failed actual CMake loader identified libuv.so.1. Its original container is
+  terminal/removed; later metadata/build remain unstarted. Corrected BaseOS
+  metadata acquisition now passes both full checksums with scoped provider absence;
+  its original byte-envelope failure and Root expected-unique failure are retained.
+  AppStream descriptor/primary checksums also PASS. Two real libuv rows remain in
+  the raw report; Root selected the currentel10_2 row for the Rocky10.2 profile.
+  Exact libuv-1:1.52.1-1.el10_2.x86_64 RPM GET passes271123bytes/SHAeb323408;
+  trusted signature/header/NEVRA/ELF and passive overlay qualification are pending
+  the existing Docker owner's release. Installed-RPM facts stay separate from the
+  passive provider. No old packages, descriptors or passing primary were refetched.
 - M15-P04/I01/I04 controlled lifecycle regression PASS at10:38:48Z: the baseline
   actually published ACK/output with a live owned same-session descendant; the
   corrected wrapper positively retires/reaps it before publication and returns0
@@ -55,7 +61,7 @@ private signing keys or unqualified binaries are copied into the source checkpoi
 | Next original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
 | M14-I02/M15-I02 matching platform/module artifacts | Root sole build/container owner; current2GiB CPU6 build must produce real bzImage/vmlinux.o/symvers and all3.ko in one config/provider universe, retain generated bindings/commands/memory and positive terminal cleanup, then qualify emitted ownership/modpost |
-| M15-I03 complete public ABI / current mcinspect | Public ABI MAX source owner and separate MAX reviewer; derive official libuv capability metadata, acquire/trust/passively bind exact provider, finish only unstarted runtime metadata phases and named mcinspect/libdwarf/converter linkage/readback |
+| M15-I03 complete public ABI / current mcinspect | Public ABI MAX source owner and separate MAX reviewer; actual AppStream metadata and selected RPM size/hash PASS; trust/passively bind exact libuv provider after Docker-owner release, finish only unstarted runtime metadata phases and named mcinspect/libdwarf/converter linkage/readback |
 | M15-I01/I04 complete runtime/lifecycle | Root consumes P04 actual baseline/candidate retirement proof and publishes minimal correction; reuse P01-P05 slices, then qualify remaining complete selected/default/real-runtime/lifecycle conditions under genuine admission |
 
 Verified checklist remains M14=51.48%, M15=50.97%,156checks/73verified,38/45open;
@@ -86,10 +92,13 @@ headroom. Native2-5/12GiB and retained18GiB/UNKNOWN reservations stay held. Opti
 capacity/pool/handoff changes remain deferred. Guardian/mailbox and the restored
 20-minute closure assistance remain active; healthy owners are not restarted.
 
-Next15-minute deliverable: publish the qualified P04 correction and new verified
-source/config/provider receipts, continue the healthy matching build and record
-its actual next phase or precise diagnostic, and execute the independently
-reviewed libuv metadata acquisition within measured remaining shared resources.
+Next15-minute deliverable: continue the healthy matching build toward its actual
+link/module phase, retain exact diagnostics/memory and positive terminal cleanup.
+Corrected CPU6/512MiB artifact-reader packet4119a5bc has independentGO49905de7;
+execute only after actual producer success/owner release. In parallel finish the
+trusted libuv passive-overlay/loader successor for the next Docker-owner handoff.
+P04 correction/source/config receipts are published in ae89c6043; preserve all
+passing scopes and unchanged counted criteria. No competing Docker owner.
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)
 

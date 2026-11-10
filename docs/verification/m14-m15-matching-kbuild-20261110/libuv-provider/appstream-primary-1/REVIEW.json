@@ -1,0 +1,99 @@
+{
+  "schema": "mckernel.libuv-appstream-primary.independent-scoped-delta-review.v1",
+  "at": "2026-11-10T11:14:53.151963+00:00",
+  "reviewer": "/root/p03_cutover_source_max direct same-Root actualSol/MAX; no recursion",
+  "decision": "GO_EXACT_SINGLE_APPSTREAM_PRIMARY_CONTINUATION_PENDING_ROOT_FRESH_TOTAL_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/appstream-primary-1/REQUEST.json",
+    "bytes": 7805,
+    "sha256": "ecfcf475a48a8ab36a7bee11fc906e2ef84b978b14e7a87e866a33f28ee2f44a"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/appstream-primary-1/derive_libuv_provider.py",
+    "bytes": 11522,
+    "sha256": "5c25d204e0b2015f6dcf23bcbbb595ba50b795a4a63733b760701577c89ce446"
+  },
+  "prior_passed_stream_source": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/primary-envelope-correction-1/derive_libuv_provider.py",
+    "bytes": 11491,
+    "sha256": "a11c14d98717644870b93b759cb9014022e99dfb8ef0137b7e53af8d661e59f9"
+  },
+  "actual_retained_descriptor": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/appstream-descriptor-1/appstream-repomd.xml",
+    "bytes": 4459,
+    "sha256": "6f70a86b6c25be6dc98ee0c4cc0de36c88901d79329125a64221b3f9ccdc2d4a"
+  },
+  "actual_primary": {
+    "href": "repodata/3d01e7cc642a19e832f02e8a790a044e1c79a89c2ed6efa717db51f51291df32-primary.xml.gz",
+    "bytes": 2178044,
+    "sha256": "3d01e7cc642a19e832f02e8a790a044e1c79a89c2ed6efa717db51f51291df32",
+    "open_bytes": 26085865,
+    "open_sha256": "a63216cee0c3e27c8a906e2d15b83151070caaad0aa7bee510a78f6536c42df9"
+  },
+  "source_checks": {
+    "REQUESTecfcf475_exact": true,
+    "helper5c25d204_exact": true,
+    "prior_passed_stream_a11_preserved": true,
+    "all_function_and_class_algorithms_AST_unchanged": true,
+    "descriptor4460bounded_read_yields_exact4459_SHA6f70": true,
+    "single_actual_primary_sha256_fields": true,
+    "exact_2178044_and26085865_envelopes": true,
+    "only_original_scope_AppStream_and_capability": true,
+    "one_checksum_named_primary_URL": true,
+    "descriptor_same_hashed_bytes_parsed_no_reGET": true,
+    "exact_primary5fields_asserted_before_GET": true,
+    "CPU7_AS256_FSIZE64_tightenedCPU30_wall58": true,
+    "clean_environment_unchanged": true,
+    "fresh_disjoint_output_and_absent_proposal_paths": true,
+    "single_whole_libuv_disk_packet_256MiB": true,
+    "no_autoRPM_payload_or_program_execution": true
+  },
+  "actual_trigger": "Root supplies corrected BaseOS driver exit0/full compressed+open checksum PASS, peakRSS39,276KiB/AS256MiB and no actual requested provider. Preserve Root expecteduniqueFAIL as history; scoped absence is not a new transport/parser/software failure. Original40a9 authority allowed AppStream after exactly this absence. Root already retrieved AppStream descriptor successfully; no descriptor/BaseOS/RPM replay is allowed.",
+  "delta_scope": "Every function/class AST is identical to the actual passed a11 stream implementation: same TLS/no redirect, exclusive outputs,20s socket timeout, compressed/open size+SHA verification, exact x86_64capability/NEVRA/location selection, currentpackage clearing+root removal, actualRSS/RLIMIT receipts and separate inert RPM proposal. Only repo/origin, retained descriptor path/4459size/SHA, exact observed primary fields/bounds, and scoped notfound label change; CPU/wall bounds tighten.",
+  "next_admissible_operation": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "58s",
+      "/usr/bin/prlimit",
+      "--as=268435456:268435456",
+      "--cpu=30:30",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/appstream-primary-1/derive_libuv_provider.py"
+    ],
+    "environment_replace": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/appstream-primary-1",
+    "GET_url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/repodata/3d01e7cc642a19e832f02e8a790a044e1c79a89c2ed6efa717db51f51291df32-primary.xml.gz",
+    "GET_count": 1,
+    "compressed_bytes": 2178044,
+    "compressed_SHA256": "3d01e7cc642a19e832f02e8a790a044e1c79a89c2ed6efa717db51f51291df32",
+    "whole_open_bytes": 26085865,
+    "whole_open_SHA256": "a63216cee0c3e27c8a906e2d15b83151070caaad0aa7bee510a78f6536c42df9",
+    "source_signature_limit": "OfficialTLS plus exact retained repomd\u2194compressed/open primary checksums; no signed-repository/fullSDK acceptance. TrustedRocky exactRPM signature remains mandatory before any later payload use."
+  },
+  "Root_admission_and_outcome_conditions": [
+    "Fresh actual overhead+live2GiB kernel+256MiB metadata <=unchanged4GiB with max3HOSTjobs and CPU7 slot available. Preserve26GiB available/18GiB retained/native/UNKNOWN charges, host16/scratch12GiB floors and the one256MiB whole libuv metadata/disk/capture packet including earlier47.1MB BaseOS data. No allowance/packet multiplication or Docker/native owner release inferred.",
+    "Require this correction metadata directory new empty and RPM-FETCH-REQUEST.json absent. Preserve all original descriptors/source/failures and successful oldRPMs; no overwrite/unlink/refetch. Root captures actual PID/birth/argv/env/rawstdio, positive wait/closed streams and actualRSS/AS receipt.",
+    "Execute only exact CPU7 AS256MiB/CPU30s/wall58s+2s/FSIZE64MiB/core0 argv. Retained descriptor read is bounded4460bytes, must match4459/SHA6f70 and the entire exact primary row before the oneGET. No redirects/retries, other origin or repository fallback.",
+    "Acquisition PASS requires actual exit0 plus complete exact compressed2,178,044/SHA3d01e7cc and wholeopen26,085,865/SHAa63216ce. Scoped none/multiple is a truthful acquisition/selection result and proves no global absence. Only actual unique libuv.so.1()(64bit) provider data gates separate reviewed RPM GET/trust/extraction; no guessed version or package main.",
+    "First unexpected actualfailure stops with exactcommand/diagnostic/input/owner/blocker/nextaction; preserve original and actualnew outcomes. This is authorized second-repository continuation after verified absence, not a repeated envelope/software correction. Genuine auth/permission/service/spend/source/native/UNKNOWN holds remain binding."
+  ],
+  "future_scope": "After a real unique runtime row, Root separately reviews/admit exact RPM GET, trustedRocky signature/NEVRA and passive libuv-only payload overlay before changed-loader retry and unstartedqueries. No CMake/project main, compiler/test/native, oldgreen suite or originalacceptance/Cretirement is admitted by this metadata review.",
+  "operations": "Read only new request/helper, exact prior approved passed helper for targeted AST equality, and4460bounded bytes from the retained named AppStream descriptor. Stdlib AST/JSON/XML/byte/hash comparison and this private REVIEW.json write only. No helper import, decompression/runtime test, GET/network, source/green inventory, Docker/RPM/loader/compiler/SUT/canonical/control or recursiveagent action.",
+  "executed": false
+}

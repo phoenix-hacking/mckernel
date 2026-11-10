@@ -1,0 +1,102 @@
+{
+  "schema": "mckernel.libuv-primary-envelope.independent-bounded-delta-review.v1",
+  "at": "2026-11-10T11:05:41.688327+00:00",
+  "reviewer": "/root/p03_cutover_source_max direct same-Root Sol/MAX, no recursion",
+  "decision": "GO_EXACT_SINGLE_PRIMARY_METADATA_CORRECTION_PENDING_ROOT_FRESH_TOTAL_ADMISSION",
+  "request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/primary-envelope-correction-1/REQUEST.json",
+    "bytes": 8685,
+    "sha256": "5f2acc28608a5abcd8c62297150433da71c098d03ca4e4c52f9a8c3bdfa55e52"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/primary-envelope-correction-1/derive_libuv_provider.py",
+    "bytes": 11491,
+    "sha256": "a11c14d98717644870b93b759cb9014022e99dfb8ef0137b7e53af8d661e59f9"
+  },
+  "changed_input_descriptor": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/metadata/baseos-repomd.xml",
+    "bytes": 4452,
+    "sha256": "7274d2ac1ca54e18a78ae7d8b53c32d333b2003410bd1685eabb2cc9e02ec440"
+  },
+  "actual_primary": {
+    "href": "repodata/289dc9ca5dad8347c010b1fa65b78b94d3014156cc4457883e140bd190fddd0e-primary.xml.gz",
+    "bytes": 47105642,
+    "sha256": "289dc9ca5dad8347c010b1fa65b78b94d3014156cc4457883e140bd190fddd0e",
+    "open_bytes": 340549816,
+    "open_sha256": "b85892ea2b7ac582973b6e77764c85f1de215dcddb214260ce8c8fe3e27e5d81"
+  },
+  "source_checks": {
+    "REQUEST5f2acc_exact": true,
+    "drivera11c_exact": true,
+    "old1b4driver_preserved_and_reused_for_delta": true,
+    "same7prior_transport_path_checksum_helpers_AST": true,
+    "actual_descriptor_one_bounded_read_exact4452_SHA7274": true,
+    "exact_single_actual_primary_and_SHA256_fields": true,
+    "envelopes_exact_actual47105642_340549816": true,
+    "onlyBaseOSrepo_and_one_primary_GET": true,
+    "descriptor_parsed_same_bounded_bytes_without_reopen": true,
+    "exact_primary_record_literal_before_GET": true,
+    "parser_root_verified_and_completed_package_removed": true,
+    "whole_open_checksum_still_after_complete_parse": true,
+    "metrics_recorded_with_actual_operation_no_benchmark": true,
+    "sameCPU7_AS256_CPU60_wall120_FSIZE64_core0": true,
+    "fresh_disjoint_correction_paths": true,
+    "clean_environment_unchanged": true,
+    "no_autoRPM_or_subprocess_execution": true,
+    "same_exact_capability_x86selection_and_unique_status": true
+  },
+  "retained_original_failure": "Actual cff4ade9/94a16 primary-envelope failure occurred before primaryGET or parse; Root supplies positive joins/no residual. Original40a9request/1b4source/4452descriptor and old failure outputs remain. No successful repomd/RPM refetch or unchanged failure is admitted.",
+  "delta_reasoning": {
+    "byte_bounds": "Old32MiB/256MiB descriptor-derived rejection is corrected only to actual compressed47,105,642/open340,549,816. Both real SHA256 values and one checksum-named exactBaseOS location remain bound to the already retrieved descriptor; no blanket higher envelope/alternate source.",
+    "descriptor_reuse": "One4453byte bounded descriptor read must produce exact4452bytes/SHA7274; parse those exact already-hashed bytes and assert entire expected primary record beforeGET. No second descriptor open or networkGET.",
+    "stream_reclamation": "iterparse observes start/end, checks common metadata root, reads each package through its end, extracts only exactcapability/x86_64candidate fields, clears it and removes the cleared direct child from root. Parser read-ahead/current package +actual matching rows remain; the entire340.55MB openXML and47.1MB compressedfile are not loaded whole. Complete opened size/SHA remains mandatory after fullparse, even if a matching row appears early.",
+    "unchanged_memory": "AS hard/soft256MiB,CPU60s,wall120s,FSIZE64MiB/core0 unchanged. Openstream cumulativebyte bound does not allocate that many bytes. Actual resource.getrusage maxRSS and getrlimit(AS) are collected in normal receipts, not a separate benchmark. MemoryError/decompression/time failure stays a real failed candidate, never grounds for silent RAM widening.",
+    "reused_predicates": "Prior exact TLS/no-redirect origin, exclusive output, socket20s, actual compressedSHA/size, counted whole-openSHA/size, strictNEVRA/location/checksum and no autoRPMGET predicates remain, with identical AST for7unchanged helpers. No source/green inventory or test replay."
+  },
+  "next_admissible_operation": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "120s",
+      "/usr/bin/prlimit",
+      "--as=268435456:268435456",
+      "--cpu=60:60",
+      "--fsize=67108864:67108864",
+      "--core=0:0",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/primary-envelope-correction-1/derive_libuv_provider.py"
+    ],
+    "environment_replace": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "cwd": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/primary-envelope-correction-1",
+    "network_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/x86_64/os/repodata/289dc9ca5dad8347c010b1fa65b78b94d3014156cc4457883e140bd190fddd0e-primary.xml.gz",
+    "GET_count": 1,
+    "expected_compressed_bytes": 47105642,
+    "expected_compressed_SHA256": "289dc9ca5dad8347c010b1fa65b78b94d3014156cc4457883e140bd190fddd0e",
+    "expected_open_bytes": 340549816,
+    "expected_open_SHA256": "b85892ea2b7ac582973b6e77764c85f1de215dcddb214260ce8c8fe3e27e5d81"
+  },
+  "Root_admission_and_results": [
+    "Root freshly measures actual total overhead+healthy2GiB kernel+256MiB metadata <=unchanged4GiB and max3HOSTjobs, with CPU7 actually available. Preserve26GiB available requirement,18GiB/native/UNKNOWN reservations and host16/scratch12GiB floors plus the one shared256MiB libuv metadata/capture disk packet. No inferred headroom/nativeCPU borrowing or competing Dockerowner.",
+    "Require correction metadata directory new empty and generated RPM-FETCH-REQUEST.json absent, keeping original metadata/execution/code/RPM bytes intact. No unlink/overwrite/refetch; current one correction is the bounded successor of the actual observed envelope failure.",
+    "Capture actual direct PID/birth/argv/env/rawstdout/stderr/positivewait/closed streams and actual maxRSS/RLIMIT_AS from receipt. Match actual inherited AS256MiB hard/soft and enforce CPU60s/whole120s+2s retirement/FSIZE64MiB/core0; no library/container/program operation by reviewer.",
+    "Actual successful complete compressed47,105,642/SHA289dc9ca and wholeopen340,549,816/SHAb85892 checksums plus exactcapability row are mandatory. Require process exit0 and EXACT_UNIQUE_RUNTIME_PROVIDER_DERIVED before separate reviewedRPMGET. Multiple/none is only scoped selection/input; no globalabsence/SDK/runtime acceptance.",
+    "First unexpected corrected failure stops with actual rawcommand/diagnostic/input/owner/blocker/nextaction. Retain firstfailedcandidate and boundedcorrection; focused sameRoot escalation and meaningful changedinput are required before another attempt. No guessedversion/AppStream/errorfallback/source/account/policy bypass."
+  ],
+  "next_after_actual_unique_result": "Root separately reviews derived exact RPM proposal/size/SHA/NEVRA and admits one GET plus trustedRocky signature/passive runtime-only overlay. Only actual new libuv provider then allows changed-loader retry and previously unstartedqueries; no CMake/main/compiler/native action here.",
+  "original_holds": "SameRoot/SolMAX/finitecredits/sharedgrant; originalgeneric/exec/equivalentfalse/exact12/native/currentfree/UNKNOWN/source/service/account/spendholds and M14-before-M15 remain. No milestone/Cretirement acceptance.",
+  "operations": "Read only corrected request/source, exact prior source for targeted7helper AST equality, and4453bounded bytes from the named retained descriptor. Stdlib source/JSON/XML/byte/hash comparison and this private REVIEW.json write only; no helper import, decompression/GET/network/test/benchmark/Docker/RPM/loader/compiler/source/canonical/control action.",
+  "executed": false
+}
