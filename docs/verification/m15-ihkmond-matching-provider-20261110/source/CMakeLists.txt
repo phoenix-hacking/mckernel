@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.11)
+# Private exact ihkmond target; reuse actual matching libihk, no library/CLI replay.
+project(M15IhkmondMatchingProvider LANGUAGES C)
+include(GNUInstallDirs)
+set(ARCH "x86_64")
+option(ENABLE_KMSG_REDIRECT "Redirect kernel message to Linux's /dev/kmsg" OFF)
+option(IHK_ALLOW_CLI_C_FALLBACK "Select retained C CLI/library reference explicitly" OFF)
+set(IHK_USER_RUSTC "" CACHE FILEPATH "Pinned user Rust compiler; independent of compute RUSTC")
+set(IHKLIB_MATCHED_DSO "" CACHE FILEPATH "Actual matching native46d whole Rust libihk artifact")
+if(NOT IS_ABSOLUTE "${IHKLIB_MATCHED_DSO}" OR NOT EXISTS "${IHKLIB_MATCHED_DSO}")
+  message(FATAL_ERROR "Bind the exact newly qualified matching libihk DSO")
+endif()
+add_library(ihklib SHARED IMPORTED GLOBAL)
+set_target_properties(ihklib PROPERTIES IMPORTED_LOCATION "${IHKLIB_MATCHED_DSO}")
+# Same top production search; actual selected file must be bound before build.
+find_library(LIBUDEV udev)
+add_subdirectory(linux/user)

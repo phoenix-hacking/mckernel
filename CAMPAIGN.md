@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T14:39:48.032766+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T15:51:13.638197+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -11,7 +11,7 @@ whole stated conditions are demonstrated on the same real three artifacts;
 independent reviewe90be144/c95bfdd5 confirms no unmatched technical input. Original M14 acceptance precedes M15; neither
 milestone, a native/deployed cohort nor the complete module gate is accepted.
 
-**Verified checklist:** M14 **51.48%** (delta0.00pp), M15 **55.97%** (delta+3.33pp since the last published pair).
+**Verified checklist:** M14 **51.48%** (delta0.00pp), M15 **55.97%** (delta0.00pp since14:44 publication; +3.33pp at that checkpoint).
 The unchanged metric gives three leaves100each/5children=60% ofI02; these
 two new leaves add40/12 originalM15 gates=3.3333333pp. Counted checks156,
 verified76 (was74), open38M14/42M15. M15-I02 is60% checklist complete and still
@@ -60,14 +60,37 @@ PR3 progress comments only when the verified pair changes, once per update.
   and real defsABI. One libc read and qualificatione384 join five exact callable
   GLIBC2.2.5 definitions/version indices (including definedWEAK gethostname).
   Seven crash-host/eleven BFD export/provider joins remain unbound; no load/native.
-- Monitor actual fixed-path read52d returns scoped missing-input2 at13:49,
-  all children/waits closed/owned removed. Real libudev.so.1.7.10 SHA034fd62b,
-  installed systemd-libs0:257-23.el10_2.1.rocky.0.1, supplies all11 required exports
-  atLIBUDEV_183 (qualified3529c99e). Only libudev.h and development libudev.so
-  are missing. No global SDK-absent claim, guessed header or package install.
-  Root's first prestart capture wrongly required Docker mount-list order; source
-  payload never started, created object removed. Exacttuple+cardinality correction
-  fec16b preserves all sources/destinations/permissions and captured first payload.
+- Monitor trusted systemd-devel257-23.el10_2.1 signature/NEVRA/Requires and
+  passive header/linker extraction PASS14:50. Exact headerbd5d/runtime034fd
+  and signed symlink join through a private read-only namespace. Seven actual
+  phases PASS15:20: namespace/libcap provider read, configure, C11/Werror11-type
+  witness, named Rust1.95 ihkmond build, ELF read and private sbin install.
+  All exits0/nonOOM/containers removed/direct waits joined; P04 qualifies
+  actual11udev/twoIHK/libcap/provider/RPATH/stage ownership. Two new GCC3.0
+  unwind imports need their exact libgcc definition read; P03 reviews that narrow
+  new provider packet before full-result qualification.
+  No monitor main/service/device/native operation or library replay.
+- P01/P02 production-profile seven phases PASS15:33:51: real Rust1.95 named
+  reboot/stop targets, generated BUILDID8d288b8/WORK_IRQ=ON, one previously
+  unmatched source-branch case, ELF read and byte-equal0755 private installs.
+  Artifactscd50d3da/deab0312/configb04cd168; all seven process families/streams
+  positively joined. Old eight cases reused. Review caught shared/tmp writes;
+  exact TMPDIR/bytecode-only request53a174/GO96473 resolves them. Root's first
+  capture misread review.status instead of review.decision and stopped before
+  any payload; bounded capture correction is retained with the original failure.
+  DefaultOFF/complete production adoption/native lifecycle remain open.
+- Crash exact-target metadata query PASS15:16:52: one actual Rocky10.2 crash
+  9.0.1-1.el10 binary row, no development row in those two primaries. Exact
+  binary GET PASS15:31:06,5254636B/SHA46980f67; official AppStream source
+  descriptor GET PASS15:34:36,3183B/SHA5d710f1a. Both TLS200/exactURL/exit0/
+  all waits/streams joined. Separate trust/passiveELF and exact source-primary
+  qualification follow. Trusted passive signature/header/ELF PASS15:45:24, all18names defined and
+  data4/800/8/8 match; sourceprimaryPASS15:49:25 derives unique real42466145B/
+  SHA4494c025 sourceRPM. Function prototypes/consumed layouts/sourceBFD lineage
+  remain unqualified; bundledgdb16.2 metadata is not BFD2.41 compatibility.
+  The literal/usr/bin/crash absence and original wrong format/file query are
+  retained; no absent-file/query replay, guessed sourceRPM or crash main/load.
+
 
 Binding proof: docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified.
 Existing matching-kbuild/mcinspect/library/CLI/P04 raw source/artifact proof and all
@@ -76,9 +99,10 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M15-I02 module ownership/ABI-modpost | All three technicalleaves independentlyGO/credited; actual3KO ownership/ABI/modpost/source bindings pass. Remaining matched delivered/deployed/native cohort and originalACCEPT require their genuine held image/currentfree/runtime bindings, no repeated reader/build |
-| M15-I03/I01 monitor caller ABI | Corrected metadata read/positivejoinsPASS14:24; exactmatching systemd-devel0:257-23.el10_2.1/566409B/SHA9292 GETPASS14:36, oldUNKNOWNheld. P04 binds actualdownload to separate signature/NEVRA/Requires/passiveextract review, then actualheader/link namespace/11typedcalls and genuineRust monitor link to existingb7bc; no install/library rebuild/daemon/native |
-| M15-I03/P04 actual crash provider | Exact selected /usr/bin/crash ELF/version/source/header/BFD ownership absent; derive legitimate supported artifact, then match seven crash/elevenBFD exports. No fabricated symbols, wrapper/default/native substitute |
+| M15-I03/I01 monitor caller ABI | P04 qualifies actual seven-phase15:20 production Rust result; P03 independently reviews11typedudev/twoIHK/libcap/provider/RPATH/private-install joins. No rebuild, service or native credit |
+| M15-I01 P01/P02 production tools | SDK joins15:33 seven-phase actual config/unique Rust entries/ELF/import/install/cleanup; P04Tests actual-resultGOddbb12f1. Defaults and complete matched deployment/lifecycle remain open |
+| M15-I03/P04 actual crash provider | PublicABI freezes exact acquiredbinary signature/header/passiveELF plus source-primary/filename obligations; SourceAcq reviews. Trusted binarypassivePASS15:45/all18definitions/fourwidths; sourceprimaryPASS15:49 derives exact42466145B/SHA4494sourceRPM. Real source/header/BFD consumed contracts still must match |
+
 
 **Single full-image critical-path blocker:** no admissible universal generic/exec
 cohort under HOLD-GENERIC/replayfalse/equivalentfalse. Original hold authority owns
@@ -87,8 +111,7 @@ ownership exclusions and native UNKNOWN owners/leases/reservations/current-free
 stay binding. No held compute graph, boot/module load/MMIO/MSR/valid native dump,
 reset, source-authority bypass or dummy passing gate runs.
 
-Fresh controller guard2026-11-10T14:42:28.415380+00:00: 62%included used/38%remaining,
-no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
+Fresh controller guard15:34Z:63%included used/37%remaining, no stop/credit error. Same finite credit-run7c6ef3604bfb4008a917bba8cfb6cfaa;
 included first then authorized existing credits, no purchase/API/account/model or
 allowance reset. Root/six actual task routes gpt-6.1-sol/MAX/depth1; one canonical
 compositor/heavy/image owner. Actual HOST CPUs0/6/7,max3 jobs,4GiB TOTAL including
@@ -99,11 +122,17 @@ inferred from output/process absence. Correction uses disjoint output and normal
 positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
 pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
 
-Next15-minute deliverable: publish the two newly verified whole technical leaves
-and changed pair once to PR3; qualify the acquired development RPM and real
-header/link/11-API monitor input, then execute its reviewed named Rust build.
-Reuse all green producers/reader/ASM/CLI/library/cases, keep all holds and owned
-outcomes explicit, and checkpoint genuine original closure promptly.
+Latest source checkpointce2e06fce5cc696c35f034e8cc4f3d175ffd9516 is pushed/fetched,
+all31 owned entries matched14:44:03Z. The changed pair55.97 was posted once in
+PR3 comment6770338341; no duplicate unchanged progress comment.
+
+Next15-minute deliverable: publish qualified production-program and real monitor
+build results, execute the new unwind-definition and exact sourceRPM operations,
+and qualify their actual provider contracts. Parallel source owners prepare real
+matching eclair/mcexec/mcps target gaps from existing proofs; no source census. No producer/build/green-suite replay.
+Matching image/deployed/native proof remains separate; originalM14-I02-E1 still
+needs the exact held generic/exec disposition before any full compute command.
+
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)
 

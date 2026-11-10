@@ -1,0 +1,20 @@
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 ihkmond
+make[1]: Entering directory '/output'
+/usr/bin/cmake -S/source -B/output --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 1
+/usr/bin/make  -f CMakeFiles/Makefile2 linux/user/CMakeFiles/ihkmond.dir/all
+make[2]: Entering directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkmond.dir/build.make linux/user/CMakeFiles/ihkmond.dir/depend
+make[3]: Entering directory '/output'
+cd /output && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /source /source/linux/user /output /output/linux/user /output/linux/user/CMakeFiles/ihkmond.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output'
+/usr/bin/make  -f linux/user/CMakeFiles/ihkmond.dir/build.make linux/user/CMakeFiles/ihkmond.dir/build
+make[3]: Entering directory '/output'
+[100%] Generating ihkmond
+cd /output/linux/user && /usr/bin/cmake -E env IHKMOND_TMP=/tmp/ihkmond /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C linker=/usr/bin/cc /source/linux/user/rust/ihkmond.rs -C link-arg=/qualified-ihklib/libihk.so -C link-arg=/qualified-libudev/libudev.so -C link-arg=-Wl,-rpath,/usr/local/lib64 -o /output/linux/user/ihkmond
+make[3]: Leaving directory '/output'
+[100%] Built target ihkmond
+make[2]: Leaving directory '/output'
+/usr/bin/cmake -E cmake_progress_start /output/CMakeFiles 0
+make[1]: Leaving directory '/output'

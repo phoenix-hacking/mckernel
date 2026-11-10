@@ -1,0 +1,226 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x8190
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          51120 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         13
+  Size of section headers:           64 (bytes)
+  Number of section headers:         32
+  Section header string table index: 31
+
+Dynamic section at offset 0xbb48 contains 29 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [libcap.so.2]
+ 0x000000000000000c (INIT)               0x3000
+ 0x000000000000000d (FINI)               0x8558
+ 0x0000000000000019 (INIT_ARRAY)         0xb9c0
+ 0x000000000000001b (INIT_ARRAYSZ)       16 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0xb9d0
+ 0x000000000000001c (FINI_ARRAYSZ)       16 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x3f0
+ 0x0000000000000005 (STRTAB)             0x11e8
+ 0x0000000000000006 (SYMTAB)             0x660
+ 0x000000000000000a (STRSZ)              1585 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000003 (PLTGOT)             0xbd68
+ 0x0000000000000002 (PLTRELSZ)           1800 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x1a20
+ 0x0000000000000007 (RELA)               0x19c0
+ 0x0000000000000008 (RELASZ)             96 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x0000000000000018 (BIND_NOW)           
+ 0x000000006ffffffb (FLAGS_1)            Flags: NOW
+ 0x000000006ffffffe (VERNEED)            0x1910
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0x181a
+ 0x0000000000000024 (RELR)               0x2128
+ 0x0000000000000023 (RELRSZ)             32 (bytes)
+ 0x0000000000000025 (RELRENT)            8 (bytes)
+ 0x0000000000000000 (NULL)               0x0
+
+Symbol table '.dynsym' contains 123 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __isoc23_strtoul@GLIBC_2.38 (2)
+     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __snprintf_chk@GLIBC_2.3.4 (3)
+     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (4)
+     4: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND putchar@GLIBC_2.2.5 (4)
+     5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __errno_location@GLIBC_2.2.5 (4)
+     6: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTable
+     7: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND chroot@GLIBC_2.2.5 (4)
+     8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5 (4)
+     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fsetxattr@GLIBC_2.3 (5)
+    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND write@GLIBC_2.2.5 (4)
+    11: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fremovexattr@GLIBC_2.3 (5)
+    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fclose@GLIBC_2.2.5 (4)
+    13: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.2.5 (4)
+    14: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND chdir@GLIBC_2.2.5 (4)
+    15: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __stack_chk_fail@GLIBC_2.4 (6)
+    16: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND capset@GLIBC_2.2.5 (4)
+    17: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.2.5 (4)
+    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND close@GLIBC_2.2.5 (4)
+    19: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setgroups@GLIBC_2.2.5 (4)
+    20: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sched_yield@GLIBC_2.2.5 (4)
+    21: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND read@GLIBC_2.2.5 (4)
+    22: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fgets@GLIBC_2.2.5 (4)
+    23: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND execve@GLIBC_2.2.5 (4)
+    24: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __asprintf_chk@GLIBC_2.8 (7)
+    25: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND calloc@GLIBC_2.2.5 (4)
+    26: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcmp@GLIBC_2.2.5 (4)
+    27: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __memcpy_chk@GLIBC_2.3.4 (3)
+    28: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND syscall@GLIBC_2.2.5 (4)
+    29: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    30: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fopen64@GLIBC_2.2.5 (4)
+    31: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND prctl@GLIBC_2.2.5 (4)
+    32: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND capget@GLIBC_2.2.5 (4)
+    33: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fgetxattr@GLIBC_2.3 (5)
+    34: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND realloc@GLIBC_2.2.5 (4)
+    35: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __strcpy_chk@GLIBC_2.3.4 (3)
+    36: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __printf_chk@GLIBC_2.3.4 (3)
+    37: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __fread_chk@GLIBC_2.7 (8)
+    38: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND open64@GLIBC_2.2.5 (4)
+    39: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND removexattr@GLIBC_2.3 (5)
+    40: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setgid@GLIBC_2.2.5 (4)
+    41: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND waitpid@GLIBC_2.2.5 (4)
+    42: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND perror@GLIBC_2.2.5 (4)
+    43: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND getxattr@GLIBC_2.3 (5)
+    44: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND pipe2@GLIBC_2.9 (9)
+    45: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND exit@GLIBC_2.2.5 (4)
+    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fstat64@GLIBC_2.33 (10)
+    47: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setxattr@GLIBC_2.3 (5)
+    48: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    49: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setuid@GLIBC_2.2.5 (4)
+    50: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (4)
+    51: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fork@GLIBC_2.2.5 (4)
+    52: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __ctype_tolower_loc@GLIBC_2.3 (5)
+    53: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __ctype_b_loc@GLIBC_2.3 (5)
+    54: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __sprintf_chk@GLIBC_2.3.4 (3)
+    55: 0000000000004840   121 FUNC    GLOBAL DEFAULT   15 capsetp
+    56: 0000000000004350    75 FUNC    GLOBAL DEFAULT   15 cap_new_launcher
+    57: 00000000000048e0    86 FUNC    GLOBAL DEFAULT   15 cap_drop_bound
+    58: 0000000000007770   663 FUNC    GLOBAL DEFAULT   15 cap_iab_to_text
+    59: 0000000000004ab0    20 FUNC    GLOBAL DEFAULT   15 cap_get_secbits
+    60: 00000000000057c0    18 FUNC    GLOBAL DEFAULT   15 cap_set_mode
+    61: 0000000000006080   160 FUNC    GLOBAL DEFAULT   15 cap_fill_flag
+    62: 00000000000042d0   127 FUNC    GLOBAL DEFAULT   15 cap_iab_dup
+    63: 00000000000046c0    15 FUNC    GLOBAL DEFAULT   15 psx_load_syscalls
+    64: 00000000000050a0    66 FUNC    GLOBAL DEFAULT   15 cap_copy_int_check
+    65: 0000000000004b40    87 FUNC    GLOBAL DEFAULT   15 cap_prctlw
+    66: 0000000000008130    84 FUNC    GLOBAL DEFAULT   15 cap_set_nsowner
+    67: 00000000000046d0    48 FUNC    GLOBAL DEFAULT   15 cap_set_syscall
+    68: 0000000000004d30   164 FUNC    GLOBAL DEFAULT   15 cap_launcher_set_iab
+    69: 0000000000004940    56 FUNC    GLOBAL DEFAULT   15 cap_get_ambient
+    70: 0000000000006480   187 FUNC    GLOBAL DEFAULT   15 cap_iab_get_proc
+    71: 0000000000007700   112 FUNC    GLOBAL DEFAULT   15 cap_mode_name
+    72: 0000000000007b90   426 FUNC    GLOBAL DEFAULT   15 cap_iab_get_pid
+    73: 0000000000005190   275 FUNC    GLOBAL DEFAULT   15 cap_set_flag
+    74: 0000000000005e50   309 FUNC    GLOBAL DEFAULT   15 cap_compare
+    75: 0000000000004e50    78 FUNC    GLOBAL DEFAULT   15 cap_size
+    76: 0000000000004c00    91 FUNC    GLOBAL DEFAULT   15 cap_launcher_setuid
+    77: 0000000000004740    19 FUNC    GLOBAL DEFAULT   15 cap_set_proc
+    78: 0000000000004de0   110 FUNC    GLOBAL DEFAULT   15 cap_launcher_set_chroot
+    79: 00000000000043a0    55 FUNC    GLOBAL DEFAULT   15 cap_func_launcher
+    80: 0000000000005aa0    24 FUNC    GLOBAL DEFAULT   15 cap_setgroups
+    81: 00000000000043e0   211 FUNC    GLOBAL DEFAULT   15 cap_free
+    82: 0000000000005510    99 FUNC    GLOBAL DEFAULT   15 cap_clear
+    83: 0000000000007dd0   133 FUNC    GLOBAL DEFAULT   15 cap_get_file
+    84: 0000000000004b30    11 FUNC    GLOBAL DEFAULT   15 cap_prctl
+    85: 0000000000004cd0    91 FUNC    GLOBAL DEFAULT   15 cap_launcher_set_mode
+    86: 0000000000004760   120 FUNC    GLOBAL DEFAULT   15 capgetp
+    87: 0000000000005580   114 FUNC    GLOBAL DEFAULT   15 cap_clear_flag
+    88: 0000000000006640  2032 FUNC    GLOBAL DEFAULT   15 cap_from_text
+    89: 00000000000096e0    28 OBJECT  GLOBAL DEFAULT   18 __execable_dl_loader
+    90: 00000000000048c0    21 FUNC    GLOBAL DEFAULT   15 cap_get_bound
+    91: 0000000000004c60   111 FUNC    GLOBAL DEFAULT   15 cap_launcher_setgroups
+    92: 0000000000006200   298 FUNC    GLOBAL DEFAULT   15 cap_iab_set_vector
+    93: 0000000000004030    11 FUNC    GLOBAL DEFAULT   15 cap_max_bits
+    94: 0000000000006540   241 FUNC    GLOBAL DEFAULT   15 cap_iab_compare
+    95: 00000000000054a0    97 FUNC    GLOBAL DEFAULT   15 cap_iab_set_proc
+    96: 0000000000005f90   237 FUNC    GLOBAL DEFAULT   15 cap_get_mode
+    97: 0000000000006120    14 FUNC    GLOBAL DEFAULT   15 cap_fill
+    98: 0000000000004a00   154 FUNC    GLOBAL DEFAULT   15 cap_set_ambient
+    99: 0000000000006e30    56 FUNC    GLOBAL DEFAULT   15 cap_from_name
+   100: 0000000000004aa0    16 FUNC    GLOBAL DEFAULT   15 cap_reset_ambient
+   101: 00000000000044c0   131 FUNC    GLOBAL DEFAULT   15 cap_init
+   102: 0000000000007e60    97 FUNC    GLOBAL DEFAULT   15 cap_get_nsowner
+   103: 0000000000006f10  2029 FUNC    GLOBAL DEFAULT   15 cap_to_text
+   104: 0000000000007d40   133 FUNC    GLOBAL DEFAULT   15 cap_get_fd
+   105: 0000000000007b60    34 FUNC    GLOBAL DEFAULT   15 cap_proc_root
+   106: 0000000000004550   160 FUNC    GLOBAL DEFAULT   15 cap_dup
+   107: 0000000000006e70   155 FUNC    GLOBAL DEFAULT   15 cap_to_name
+   108: 0000000000007ed0   199 FUNC    GLOBAL DEFAULT   15 cap_set_fd
+   109: 00000000000050f0   147 FUNC    GLOBAL DEFAULT   15 cap_get_flag
+   110: 0000000000006330   325 FUNC    GLOBAL DEFAULT   15 cap_iab_fill
+   111: 00000000000047e0    81 FUNC    GLOBAL DEFAULT   15 cap_get_pid
+   112: 0000000000005920    18 FUNC    GLOBAL DEFAULT   15 cap_setuid
+   113: 0000000000007fa0   394 FUNC    GLOBAL DEFAULT   15 cap_set_file
+   114: 0000000000006130   196 FUNC    GLOBAL DEFAULT   15 cap_iab_get_vector
+   115: 00000000000042a0    48 FUNC    GLOBAL DEFAULT   15 cap_iab_init
+   116: 0000000000004ea0   228 FUNC    GLOBAL DEFAULT   15 cap_copy_ext
+   117: 0000000000005ac0   906 FUNC    GLOBAL DEFAULT   15 cap_launch
+   118: 0000000000004700    63 FUNC    GLOBAL DEFAULT   15 cap_get_proc
+   119: 0000000000004ba0    84 FUNC    GLOBAL DEFAULT   15 cap_launcher_callback
+   120: 0000000000007a10   322 FUNC    GLOBAL DEFAULT   15 cap_iab_from_text
+   121: 0000000000004f90   268 FUNC    GLOBAL DEFAULT   15 cap_copy_int
+   122: 0000000000004ad0    86 FUNC    GLOBAL DEFAULT   15 cap_set_secbits
+
+Version symbols section '.gnu.version' contains 123 entries:
+ Addr: 0x000000000000181a  Offset: 0x0000181a  Link: 5 (.dynsym)
+  000:   0 (*local*)       2 (GLIBC_2.38)    3 (GLIBC_2.3.4)   4 (GLIBC_2.2.5)
+  004:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   1 (*global*)      4 (GLIBC_2.2.5)
+  008:   4 (GLIBC_2.2.5)   5 (GLIBC_2.3)     4 (GLIBC_2.2.5)   5 (GLIBC_2.3)  
+  00c:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   6 (GLIBC_2.4)  
+  010:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  014:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  018:   7 (GLIBC_2.8)     4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   3 (GLIBC_2.3.4)
+  01c:   4 (GLIBC_2.2.5)   1 (*global*)      4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  020:   4 (GLIBC_2.2.5)   5 (GLIBC_2.3)     4 (GLIBC_2.2.5)   3 (GLIBC_2.3.4)
+  024:   3 (GLIBC_2.3.4)   8 (GLIBC_2.7)     4 (GLIBC_2.2.5)   5 (GLIBC_2.3)  
+  028:   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   5 (GLIBC_2.3)  
+  02c:   9 (GLIBC_2.9)     4 (GLIBC_2.2.5)   a (GLIBC_2.33)    5 (GLIBC_2.3)  
+  030:   1 (*global*)      4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)   4 (GLIBC_2.2.5)
+  034:   5 (GLIBC_2.3)     5 (GLIBC_2.3)     3 (GLIBC_2.3.4)   1 (*global*)   
+  038:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  03c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  040:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  044:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  048:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  04c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  050:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  054:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  058:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  05c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  060:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  064:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  068:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  06c:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  070:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  074:   1 (*global*)      1 (*global*)      1 (*global*)      1 (*global*)   
+  078:   1 (*global*)      1 (*global*)      1 (*global*)   
+
+Version needs section '.gnu.version_r' contains 1 entry:
+ Addr: 0x0000000000001910  Offset: 0x00001910  Link: 6 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 10
+  0x0010:   Name: GLIBC_ABI_DT_RELR  Flags: none  Version: 11
+  0x0020:   Name: GLIBC_2.33  Flags: none  Version: 10
+  0x0030:   Name: GLIBC_2.9  Flags: none  Version: 9
+  0x0040:   Name: GLIBC_2.7  Flags: none  Version: 8
+  0x0050:   Name: GLIBC_2.8  Flags: none  Version: 7
+  0x0060:   Name: GLIBC_2.4  Flags: none  Version: 6
+  0x0070:   Name: GLIBC_2.3  Flags: none  Version: 5
+  0x0080:   Name: GLIBC_2.2.5  Flags: none  Version: 4
+  0x0090:   Name: GLIBC_2.3.4  Flags: none  Version: 3
+  0x00a0:   Name: GLIBC_2.38  Flags: none  Version: 2

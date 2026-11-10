@@ -1,0 +1,19 @@
+[
+  "/usr/bin/taskset",
+  "-c",
+  "7",
+  "/usr/bin/timeout",
+  "--signal=TERM",
+  "--kill-after=2s",
+  "58s",
+  "/usr/bin/prlimit",
+  "--as=268435456:268435456",
+  "--cpu=30:30",
+  "--fsize=16777216:16777216",
+  "--core=0:0",
+  "--",
+  "/usr/bin/python3",
+  "-I",
+  "-B",
+  "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-primary-1/derive_crash_source.py"
+]

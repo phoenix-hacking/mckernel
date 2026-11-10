@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.16)
+project(McKernelBootToolsProductionProfile LANGUAGES NONE)
+# Narrow consumer of the actual production selector: no whole-image/subproject
+# configure, kernel probe, fallback source, Native main or device operation.
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "Production root default build type")
+set(CMAKE_INSTALL_LIBDIR lib64 CACHE PATH "Current Rocky/Linux runtime profile")
+include(GNUInstallDirs)
+get_filename_component(_packet "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
+set(P01P02_SOURCE_ROOT "${_packet}/source" CACHE PATH "Exact committed production boot tools")
+set(PROJECT_SOURCE_DIR "${P01P02_SOURCE_ROOT}")
+# Root CMake245-274 production values for prefix=/usr/local and smp-x86.
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(SBINDIR "${CMAKE_INSTALL_FULL_SBINDIR}")
+set(ETCDIR "${CMAKE_INSTALL_PREFIX}/etc")
+set(BUILD_TARGET smp-x86)
+set(ARCH x86_64)
+set(UNAME_R 6.12.0-211.44.1.el10_2.mckernel1.x86_64)
+if(CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+  set(KMODDIR "/lib/modules/${UNAME_R}/extra/mckernel")
+  set(MCKERNELDIR "${CMAKE_INSTALL_FULL_DATADIR}/mckernel/${BUILD_TARGET}")
+else()
+  set(KMODDIR "${CMAKE_INSTALL_PREFIX}/kmod")
+  set(MCKERNELDIR "${CMAKE_INSTALL_PREFIX}/${BUILD_TARGET}/kernel")
+endif()
+# Exact existing IHK metadata read returns8d288b8; same accepted module BUILDID.
+set(BUILDID 8d288b8)
+set(ENABLE_LINUX_WORK_IRQ_FOR_IKC ON CACHE BOOL "Production root default")
+include("${PROJECT_SOURCE_DIR}/scripts/rust/boot-tools/SelectRustBootTools.cmake")
+configure_file("${_packet}/qualification/production_work_irq.rs"
+  "${PROJECT_BINARY_DIR}/rust-boot-tools/production_work_irq.rs" COPYONLY)

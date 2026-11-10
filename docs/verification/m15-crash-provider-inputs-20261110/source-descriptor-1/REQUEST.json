@@ -1,0 +1,126 @@
+{
+  "Root_get": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "38s",
+      "/usr/bin/prlimit",
+      "--as=268435456:268435456",
+      "--cpu=30:30",
+      "--fsize=1048576:1048576",
+      "--core=0:0",
+      "--",
+      "/usr/bin/curl",
+      "--disable",
+      "--proto",
+      "=https",
+      "--proto-redir",
+      "=https",
+      "--max-redirs",
+      "0",
+      "--retry",
+      "0",
+      "--fail",
+      "--show-error",
+      "--silent",
+      "--tlsv1.2",
+      "--connect-timeout",
+      "10",
+      "--max-time",
+      "36",
+      "--max-filesize",
+      "1048576",
+      "--write-out",
+      "http_code=%{http_code}\nurl=%{url_effective}\nbytes=%{size_download}\n",
+      "--output",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/appstream-source-repomd.xml",
+      "https://download.rockylinux.org/pub/rocky/10.2/AppStream/source/tree/repodata/repomd.xml"
+    ],
+    "destination": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/appstream-source-repomd.xml",
+    "environment_replace": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "TZ": "UTC"
+    },
+    "expected_HTTP": 200,
+    "expected_effective_URL": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/source/tree/repodata/repomd.xml",
+    "expected_size_and_SHA256": "Unknown before this actual descriptor GET; record actual immutable bytes/size/SHA. Do not substitute the unrelated binary descriptor or guess checksum-named primary.",
+    "label": "crash-appstream-source-descriptor-get",
+    "maximum_body_bytes": 1048576,
+    "maximum_transfers": 1,
+    "must_not_exist_before": [
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/appstream-source-repomd.xml",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/fetch.stdout",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/fetch.stderr"
+    ],
+    "stderr": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/fetch.stderr",
+    "stdout": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-descriptor-1/fetch.stdout"
+  },
+  "actual_inputs": {
+    "actual_query_completion": {
+      "bytes": 902,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/next-inputs-1/format-file-correction-1/execution-1/RESULT.json",
+      "sha256": "0eaed7eb3fb2a8c92a780d6ff50f886877199d1c5436672da9898787d74afafd"
+    },
+    "corrected_actual_rows": {
+      "bytes": 8547,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/next-inputs-1/rows/CANDIDATES.json",
+      "sha256": "2ee72ba31cb4393f78752a3ef2c0a45745c03799e5a892200ed55004787264ec"
+    },
+    "exact_binary_rpm_get_proposal": {
+      "bytes": 14565,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/binary-acquisition-1/REQUEST.json",
+      "sha256": "6cb68e92791524e2d0bf11abbc059f61855f27b0b0189dc07526ebe5fea7a7ff"
+    },
+    "retained_real_Rocky_source_repository_authority": {
+      "bytes": 18336,
+      "path": "/home/holden/mckernel/host-kernel/rocky/source-lock.json",
+      "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded"
+    }
+  },
+  "failure_rule": "One failed candidate and one bounded meaningful correction; retain command/input/diagnostic/owner/blocker/next action, then focused same-Root escalation. No unchanged retry or permission/policy/auth/service/account/source/native hold bypass.",
+  "operations_by_preparer": "Exact current source lock and retained actual JSON reads, private request write only; no network/GET/parser payload/RPM/ELF/Docker/compiler/test/main/native/canonical operation.",
+  "original_consumer": "Actual /usr/bin/crash provider for original M15-I03/P04 seven crash and eleven BFD ABI edges. Real producer source/header/bundled-BFD provenance is required beyond binary dynamic names. No extra SDK inventory.",
+  "owner": "/root/public_abi_join_max source preparation; Root sole executor/compositor; no recursion",
+  "postgate_and_next": "Only after actual TLS200/exactURL/nonempty<=1MiB descriptor success and positive process/stream/descendant joins, freeze actual descriptor identity. Derive its unique primary row (location/size/SHA/open-size/open-SHA) from actual bytes and separately review exact checksum-named primary GET + streaming exact declared source-filename row query. If descriptor absent/malformed/multiple/overflow, preserve raw and stop; no alternate endpoint/retry. Exact source RPM download remains UNPROPOSED until actual source metadata supplies that filename/location/size/hash; no source artifact or header compatibility accepted here.",
+  "resource_profile": {
+    "AS_bytes": 268435456,
+    "CPU": [
+      7
+    ],
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 1048576,
+    "additional_disk_bytes": 4194304,
+    "admission": "Root fresh measured all-owner/controller/worker accounting and positive prior job release before serialCPU7 slot; never multiply shared grant or infer UNKNOWN retirement.",
+    "curl_seconds": 36,
+    "fresh_MemAvailable_min_GiB": 26,
+    "host_free_floor_GiB": 16,
+    "jobs": 1,
+    "native_CPUs2to5_and12GiB_remain_held": true,
+    "new_network_body_cap_bytes": 1048576,
+    "old_UNJOINED_CPU0_bytes": 268435456,
+    "old_UNJOINED_CPU0_jobs": 1,
+    "old_UNJOINED_released": false,
+    "scratch_free_floor_GiB": 12,
+    "shared_HOST_bytes": 4294967296,
+    "shared_HOST_jobs_max": 3,
+    "wall_seconds": 38
+  },
+  "schema": "mckernel.crash-real-source-descriptor-candidate.v1",
+  "scope": "No binary/devel/source RPM GET by this operation, no BaseOS/AppStream binary descriptor/primary/refetch/query replay, package install, trust import, image/Docker, ELF/loader/compile/CMake/test/crash main/extension/runtime/native/API. Signature/full source-pinned Rocky key and real source/header/BFD matching remain subsequent required work. Generic/exec/equivalentfalse/exact12/source/native/currentfree/UNKNOWN/service/account/credit holds unchanged.",
+  "source_route_derivation": {
+    "actual_binary_primary_sha256": "3d01e7cc642a19e832f02e8a790a044e1c79a89c2ed6efa717db51f51291df32",
+    "actual_binary_repo": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/",
+    "actual_declared_source_RPM_filename": "crash-9.0.1-1.el10.src.rpm",
+    "candidate_not_observed": true,
+    "derivation": "Use the actual supported release10.2 and AppStream section from the actual crash binary row. Apply the existing source-lock official Rocky source/tree metadata route instead of binary x86_64/os. This is ONE ordinary official metadata acquisition candidate, not a transport result or source-RPM URL/hash. No file location, source RPM checksum/size, BFD version or source compatibility is inferred. No mirror, alternate origin, direct source-RPM filename concatenation or repository sweep.",
+    "proposed_descriptor_URL": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/source/tree/repodata/repomd.xml",
+    "real_retained_source_repository_shape": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/"
+  },
+  "status": "FROZEN_UNEXECUTED_ONE_OFFICIAL_DESCRIPTOR_CANDIDATE_ONLY_PENDING_INDEPENDENT_REVIEW_AND_ROOT_ADMISSION"
+}
