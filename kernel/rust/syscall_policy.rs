@@ -1119,7 +1119,7 @@ pub struct SyscallCputimeOffsets {
 }
 
 #[repr(C, align(64))]
-struct McsRwlockNode {
+pub(crate) struct McsRwlockNode {
     count: IhkAtomic,
     type_: i8,
     locked: i8,

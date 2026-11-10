@@ -70,10 +70,14 @@ mod f03_forward_adapters;
 mod f03_ptrace_adapters;
 #[cfg(all(any(f03_forward_adapters_candidate, f03_host_cleanup_candidate), target_arch = "x86_64"))]
 mod f03_host_cleanup;
+#[cfg(f03_exit_group_bridges_candidate)]
+mod f03_exit_group;
 #[cfg(all(any(f03_forward_adapters_candidate, f03_credential_refresh_candidate), target_arch = "x86_64"))]
 mod f03_credential_refresh;
 #[cfg(all(f03_interrupt_syscall_candidate, target_arch = "x86_64"))]
 mod f03_interrupt_syscall;
+#[cfg(all(f03_terminate_candidate, target_arch = "x86_64"))]
+mod f03_terminate;
 #[cfg(f06_signal_ptrace_diagnostics_candidate)]
 mod f06_signal_ptrace_diagnostics;
 #[cfg(f06_signal_trap_info_candidate)]

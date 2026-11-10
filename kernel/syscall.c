@@ -5379,6 +5379,46 @@ void sync_child_event(struct mc_perf_event *event)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_F03_TERMINATE
+#if defined(ENABLE_TOFU) || defined(DCFA_KMOD)
+#error "Rust terminate selector requires the reviewed non-TOFU non-DCFA profile"
+#endif
+#if !(defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT))
+#error "Rust terminate requires the exact selected offload/policy/dispatch origin"
+#endif
+#if !defined(__x86_64__) || defined(ENABLE_UBSAN) || !defined(PROFILE_ENABLE)
+#error "Rust terminate requires x86_64 PROFILE and the non-UBSAN ABI"
+#endif
+/* New direct fields are checked by the actual changed image C compile. */
+_Static_assert(__builtin_offsetof(struct process, hash_list) == 0, "Rust terminate Process.hash_list ABI");
+_Static_assert(__builtin_offsetof(struct process, update_lock) == 64, "Rust terminate Process.update_lock ABI");
+_Static_assert(__builtin_offsetof(struct process, report_threads_list) == 152, "Rust terminate Process.report_threads_list ABI");
+_Static_assert(__builtin_offsetof(struct process, threads_lock) == 192, "Rust terminate Process.threads_lock ABI");
+_Static_assert(__builtin_offsetof(struct process, ppid_parent) == 280, "Rust terminate Process.ppid_parent ABI");
+_Static_assert(__builtin_offsetof(struct process, children_list) == 288, "Rust terminate Process.children_list ABI");
+_Static_assert(__builtin_offsetof(struct process, ptraced_children_list) == 304, "Rust terminate Process.ptraced_children_list ABI");
+_Static_assert(__builtin_offsetof(struct process, children_lock) == 320, "Rust terminate Process.children_lock ABI");
+_Static_assert(__builtin_offsetof(struct process, siblings_list) == 384, "Rust terminate Process.siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct process, ptraced_siblings_list) == 400, "Rust terminate Process.ptraced_siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct process, saved_cmdline) == 1136, "Rust terminate Process.saved_cmdline ABI");
+_Static_assert(__builtin_offsetof(struct process, utime) == 1312, "Rust terminate Process.utime ABI");
+_Static_assert(__builtin_offsetof(struct thread, exit_status) == 4188, "Rust terminate Thread.exit_status ABI");
+_Static_assert(__builtin_offsetof(struct thread, termsig) == 4196, "Rust terminate Thread.termsig ABI");
+_Static_assert(__builtin_offsetof(struct thread, siblings_list) == 4312, "Rust terminate Thread.siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct thread, report_siblings_list) == 4368, "Rust terminate Thread.report_siblings_list ABI");
+_Static_assert(__builtin_offsetof(struct thread, system_tsc) == 5040, "Rust terminate Thread.system_tsc ABI");
+_Static_assert(__builtin_offsetof(struct thread, user_tsc) == 5048, "Rust terminate Thread.user_tsc ABI");
+_Static_assert(sizeof(struct mcs_rwlock_node) == 64 && __alignof__(struct mcs_rwlock_node) == 64, "Rust terminate noirq node ABI");
+_Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64, "Rust terminate irq node ABI");
+_Static_assert(DDEBUG_DEFAULT == DDEBUG_NONE, "Rust terminate original debug default");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill), unsigned long (*)(struct thread *, int, int, int, struct siginfo *, int)), "Rust terminate do_kill ABI");
+extern void terminate(int rc, int sig);
+#else
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5239
+#else
+#line 5248
+#endif
 void terminate(int rc, int sig)
 {
 	struct resource_set *resource_set = get_this_cpu_local_var()->resource_set;
@@ -5668,6 +5708,12 @@ void terminate(int rc, int sig)
 	kprintf("%s: ERROR: returned from terminate() -> schedule()\n", __FUNCTION__);
 	panic("panic");
 }
+#endif /* MCKERNEL_RUST_F03_TERMINATE */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5528
+#else
+#line 5537
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int __process_cleanup_fd(struct process *, int);
@@ -5830,6 +5876,27 @@ interrupt_syscall(struct thread *thread, int sig)
 #line 5684
 #endif
 
+/* Original logical source positions; no provider or runtime selector. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_START_LINE 5679
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_AFTER_LINE 5698
+#else
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_START_LINE 5686
+#define MCKERNEL_EXIT_GROUP_ORIGINAL_AFTER_LINE 5705
+#endif
+#ifdef MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES
+#if !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) || !defined(PROFILE_ENABLE) || !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
+#error "Rust exit_group bridges require paired current syscall/debug/profile inputs"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust exit_group debug flags must match C DDEBUG_DEFAULT");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust exit_group filename must match actual C __FILE__");
+extern void exit_group_log_bridge(int pid);
+extern void exit_group_terminate_bridge(int status, int group);
+extern int exit_group_current_pid_bridge(void);
+#else
+#line MCKERNEL_EXIT_GROUP_ORIGINAL_START_LINE
 void
 exit_group_log_bridge(int pid)
 {
@@ -5849,6 +5916,8 @@ exit_group_current_pid_bridge(void)
 
 	return thread->proc->pid;
 }
+#endif /* MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES */
+#line MCKERNEL_EXIT_GROUP_ORIGINAL_AFTER_LINE
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_exit_group(int n, ihk_mc_user_context_t *ctx);

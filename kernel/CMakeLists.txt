@@ -293,6 +293,12 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
 			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
 			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+                # Genuine terminate orchestration for the current supported profile.
+                if (PROFILE_ENABLE AND NOT ENABLE_TOFU AND NOT DCFA_KMOD)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f03_terminate_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_terminate.rs")
+                endif()
                 # Genuine project interrupt_syscall paired only in this profile.
                 list(APPEND RUST_KERNEL_CFG "--cfg" "f03_interrupt_syscall_candidate")
                 list(APPEND RUST_KERNEL_SRCS
@@ -301,6 +307,12 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 list(APPEND RUST_KERNEL_CFG "--cfg" "f03_host_cleanup_candidate")
                 list(APPEND RUST_KERNEL_SRCS
                     "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_host_cleanup.rs")
+                # Three genuine exit_group edges, paired with the exact C/debug profile.
+                if (PROFILE_ENABLE)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f03_exit_group_bridges_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_exit_group.rs")
+                endif()
                 # Pair only the existing credential-refresh callbacks in this profile.
                 list(APPEND RUST_KERNEL_CFG "--cfg" "f03_credential_refresh_candidate")
                 if (NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS)
@@ -564,6 +576,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
             "MCKERNEL_PROCESS_C_FILE=${MCKERNEL_PROCESS_C_FILE}"
             "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
             "MCKERNEL_INTERRUPT_SYSCALL_C_FILE=${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
+            "MCKERNEL_TERMINATE_C_FILE=${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
 			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
 			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
 			"MCKERNEL_F06_SIGNAL_METADATA_RS=${MCKERNEL_F06_SIGNAL_METADATA_RS}"
@@ -748,10 +761,18 @@ if (RUST_KERNEL_ENABLED)
 				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_NATIVE_SIGNAL_BAD_FRAME;MCKERNEL_RUST_F06_PTRACE_REGSET_LOG;MCKERNEL_RUST_F06_SIGNAL_TRAP_INFO")
 		endif()
 		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
+            if (PROFILE_ENABLE AND NOT ENABLE_TOFU AND NOT DCFA_KMOD)
+                set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+                    COMPILE_DEFINITIONS MCKERNEL_RUST_F03_TERMINATE)
+            endif()
             set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
                 COMPILE_DEFINITIONS MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
                     MCKERNEL_RUST_F03_HOST_CLEANUP
                     MCKERNEL_RUST_F03_CREDENTIAL_REFRESH)
+            if (PROFILE_ENABLE)
+                set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+                    COMPILE_DEFINITIONS MCKERNEL_RUST_F03_EXIT_GROUP_BRIDGES)
+            endif()
 			if (NOT ENABLE_RUST_F06_SYSCALL_WHOLE)
 				set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
 				    COMPILE_DEFINITIONS MCKERNEL_RUST_F06_SIGNAL_CONTEXT)
