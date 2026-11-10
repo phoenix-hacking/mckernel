@@ -60,16 +60,20 @@ mod smp_ikc;
 mod spinlock_helpers;
 mod string;
 mod syscall_policy;
+#[cfg(f03_do_syscall_outer_candidate)]
+mod syscall_offload_entry;
 #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
 mod f06_rt_sigreturn_xrstor;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
 mod f03_forward_adapters;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
 mod f03_ptrace_adapters;
-#[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+#[cfg(all(any(f03_forward_adapters_candidate, f03_host_cleanup_candidate), target_arch = "x86_64"))]
 mod f03_host_cleanup;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
 mod f03_credential_refresh;
+#[cfg(all(f03_interrupt_syscall_candidate, target_arch = "x86_64"))]
+mod f03_interrupt_syscall;
 #[cfg(f06_signal_ptrace_diagnostics_candidate)]
 mod f06_signal_ptrace_diagnostics;
 #[cfg(f06_signal_trap_info_candidate)]

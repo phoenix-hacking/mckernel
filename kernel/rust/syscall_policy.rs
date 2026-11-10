@@ -2492,7 +2492,7 @@ static GENERIC_FORWARD_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) <
 #[cfg(not(mckernel_equivalence))]
 static OFFLOAD_WAIT_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
 
-fn syscall_owner_log_budget(state_slot: &AtomicU64, pid: CInt) -> bool {
+pub(crate) fn syscall_owner_log_budget(state_slot: &AtomicU64, pid: CInt) -> bool {
     let pid_bits = (pid as u32 as u64) << 32;
     let mut state = state_slot.load(Ordering::Relaxed);
 

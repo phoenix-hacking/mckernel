@@ -4148,6 +4148,47 @@ extern void syscall_offload_wait_reply(struct syscall_request *req,
 		struct syscall_response *res, int cpu, struct thread *thread);
 #endif
 
+/* Preserve the original logical C source locations in every fallback profile.
+ * The original last active #line is127 for the selected inner Rust dispatch
+ * cohort, or119 for the other C baseline. These private constants are source
+ * metadata only, never a provider or runtime selector. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && \
+    defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+    defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE 4128
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE 4431
+#else
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE 4135
+#define MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE 4438
+#endif
+/* Real Rust outer entry; existing inner OFFLOAD selection remains broader. */
+#ifdef MCKERNEL_RUST_DO_SYSCALL_OUTER
+#if !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || !defined(PROFILE_ENABLE) || \
+    !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS) || !defined(MCKERNEL_DO_SYSCALL_C_FILE)
+#error "Rust do_syscall outer requires its paired transport/profile/debug inputs"
+#endif
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust do_syscall debug flags must match C DDEBUG_DEFAULT");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust do_syscall filename must match actual C __FILE__");
+_Static_assert(sizeof(struct ddebug) == 32 && __alignof__(struct ddebug) == 8,
+    "Rust do_syscall Ddebug ABI");
+_Static_assert(__NR_exit_group == 231 && __NR_sched_setaffinity == 203 &&
+    IHK_SCD_REQ_THREAD_SPINNING == 0 && IHK_OS_MONITOR_KERNEL_OFFLOAD == 5 &&
+    PROFILE_SYSCALL_MAX == 2000, "Rust do_syscall protocol constants");
+_Static_assert(__builtin_offsetof(struct thread, in_syscall_offload) == 4792 &&
+    __builtin_offsetof(struct thread, profile) == 4796 &&
+    __builtin_offsetof(struct process, nohost) == 500,
+    "Rust do_syscall newly accessed fields require the actual C profile");
+_Static_assert(_Generic(&do_syscall,
+    long (*)(struct syscall_request *, int): 1, default: 0),
+    "Rust do_syscall entry ABI");
+#ifdef ENABLE_TOFU
+_Static_assert(__NR_ioctl == 16 && __NR_openat == 257 && MAX_FD_PDE == 1024,
+    "Rust do_syscall TOFU constants");
+#endif
+#else
+#line MCKERNEL_DO_SYSCALL_ORIGINAL_ENTRY_LINE
 long do_syscall(struct syscall_request *req, int cpu)
 {
 	struct syscall_response res;
@@ -4451,6 +4492,8 @@ schedule:
 	monitor->counter++;
 	return rc;
 }
+#endif /* MCKERNEL_RUST_DO_SYSCALL_OUTER */
+#line MCKERNEL_DO_SYSCALL_ORIGINAL_AFTER_LINE
 
 #ifndef MCKERNEL_RUST_SYSCALL_OFFLOAD
 long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx)
@@ -5714,7 +5757,7 @@ int process_cleanup_before_terminate(int pid)
 #endif
 
 
-#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS
+#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F03_HOST_CLEANUP)
 extern void terminate_host(int pid, struct thread *thread);
 #else
 void
@@ -5731,7 +5774,7 @@ terminate_host(int pid, struct thread *thread)
 			wait_thread_release_bridge, wait_process_release_bridge,
 			syscall_do_kill_thread_bridge);
 }
-#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */
+#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS || MCKERNEL_RUST_F03_HOST_CLEANUP */
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int syscall_ikc_send_bridge(void *channel, void *packet, int opt)
@@ -5754,6 +5797,14 @@ void eventfd(int type)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_F03_INTERRUPT_SYSCALL
+extern void interrupt_syscall(struct thread *thread, int sig);
+#else
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5657
+#else
+#line 5666
+#endif
 void
 interrupt_syscall(struct thread *thread, int sig)
 {
@@ -5772,6 +5823,12 @@ interrupt_syscall(struct thread *thread, int sig)
 	}
 	return;
 }
+#endif /* MCKERNEL_RUST_F03_INTERRUPT_SYSCALL */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5675
+#else
+#line 5684
+#endif
 
 void
 exit_group_log_bridge(int pid)
