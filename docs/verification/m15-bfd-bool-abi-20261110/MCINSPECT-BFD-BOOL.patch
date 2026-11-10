@@ -1,0 +1,20 @@
+--- a/executer/user/rust/mcinspect_helpers.rs
++++ b/executer/user/rust/mcinspect_helpers.rs
+@@ -77,7 +77,7 @@
+     fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
+     fn exit(status: c_int) -> !;
+     fn bfd_openr(filename: *const u8, target: *const u8) -> *mut c_void;
+-    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> c_int;
++    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> bool;
+     fn bfd_perror(message: *const u8);
+     fn mcinspect_bfd_get_symtab_upper_bound_bridge(abfd: *mut c_void) -> isize;
+     fn mcinspect_bfd_canonicalize_symtab_bridge(
+@@ -737,7 +737,7 @@
+         return -1;
+     }
+ 
+-    if unsafe { bfd_check_format(abfd, BFD_OBJECT) } == 0 {
++    if !unsafe { bfd_check_format(abfd, BFD_OBJECT) } {
+         unsafe {
+             bfd_perror(b"bfd_check_format\0".as_ptr());
+         }

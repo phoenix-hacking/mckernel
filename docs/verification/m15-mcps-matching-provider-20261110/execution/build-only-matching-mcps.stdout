@@ -1,0 +1,32 @@
+/usr/bin/cmake -S/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer -B/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 mcps
+make[1]: Entering directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+/usr/bin/cmake -S/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer -B/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build/CMakeFiles 3
+/usr/bin/make  -f CMakeFiles/Makefile2 CMakeFiles/mcps.dir/all
+make[2]: Entering directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+/usr/bin/make  -f CMakeFiles/mcps_rust_main.dir/build.make CMakeFiles/mcps_rust_main.dir/depend
+make[3]: Entering directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+cd /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build/CMakeFiles/mcps_rust_main.dir/DependInfo.cmake --color=
+make[3]: Leaving directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+/usr/bin/make  -f CMakeFiles/mcps_rust_main.dir/build.make CMakeFiles/mcps_rust_main.dir/build
+make[3]: Entering directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+[ 33%] Generating rust/mcps.o
+/usr/bin/cmake -E make_directory /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build/rust
+/usr/bin/cmake -E env MCPS_PREFIX=/usr/local MCPS_MCKERNELDIR=/usr/local/smp-x86/kernel /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name mcps --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C force-unwind-tables=no --emit=obj=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build/rust/mcps.o /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer/rust/mcps.rs
+make[3]: Leaving directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+[ 33%] Built target mcps_rust_main
+/usr/bin/make  -f CMakeFiles/mcps.dir/build.make CMakeFiles/mcps.dir/depend
+make[3]: Entering directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+cd /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/producer /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build/CMakeFiles/mcps.dir/DependInfo.cmake --color=
+make[3]: Leaving directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+/usr/bin/make  -f CMakeFiles/mcps.dir/build.make CMakeFiles/mcps.dir/build
+make[3]: Entering directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+[ 66%] Linking C executable mcps
+/usr/bin/cmake -E cmake_link_script CMakeFiles/mcps.dir/link.txt --verbose=1
+/usr/bin/cc -g -fPIE -pie rust/mcps.o -o mcps 
+make[3]: Leaving directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+[100%] Built target mcps
+make[2]: Leaving directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'
+/usr/bin/cmake -E cmake_progress_start /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build/CMakeFiles 0
+make[1]: Leaving directory '/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcps-matching-provider-build-1/output-1/build'

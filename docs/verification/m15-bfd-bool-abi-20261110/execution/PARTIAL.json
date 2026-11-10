@@ -1,0 +1,69 @@
+{
+  "C_final_state": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 0,
+    "FinishedAt": "2026-11-10T16:25:40.517487178Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-11-10T16:25:40.473559938Z",
+    "Status": "exited"
+  },
+  "C_header_phase": "PASS_ACTUAL_HEADER_COMPILER_IDENTITIES_C11_WERROR_BOOL_ASSERTIONS",
+  "C_owned_container_removed": true,
+  "Rust_phases": [
+    {
+      "at": "2026-11-10T16:25:41.010964+00:00",
+      "error_codes": [
+        "E0308",
+        "E0308"
+      ],
+      "expected_baseline": true,
+      "name": "eclair-baseline-signature",
+      "object": null,
+      "returncode": 1
+    },
+    {
+      "at": "2026-11-10T16:25:41.474982+00:00",
+      "error_codes": [],
+      "expected_baseline": false,
+      "name": "eclair-candidate-signature",
+      "object": {
+        "bytes": 184048,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1/eclair-candidate-signature.o",
+        "sha256": "dce12754172aa421ccf41ecf6c137f3c64699c66a86f35cdbb0987548348992e"
+      },
+      "returncode": 0
+    },
+    {
+      "at": "2026-11-10T16:25:41.544954+00:00",
+      "error_codes": [
+        "E0308"
+      ],
+      "expected_baseline": true,
+      "name": "mcinspect-baseline-signature",
+      "object": null,
+      "returncode": 1
+    },
+    {
+      "at": "2026-11-10T16:25:41.964829+00:00",
+      "error_codes": [],
+      "expected_baseline": false,
+      "name": "mcinspect-candidate-signature",
+      "object": {
+        "bytes": 165864,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/diagnostic-bfd-bool-correction-1/tests-1/output-1/mcinspect-candidate-signature.o",
+        "sha256": "26634d19248e23e03eefe2dd22a66f3cf893bbba9d91c4da4687e2fc9e065982"
+      },
+      "returncode": 0
+    }
+  ],
+  "old_UNJOINED_released": false,
+  "original_acceptance": false,
+  "owner": "Root",
+  "started_at": "2026-11-10T16:25:39.950679+00:00",
+  "status": "FAIL"
+}

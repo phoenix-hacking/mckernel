@@ -1,0 +1,843 @@
+{
+  "ELF_private_install": {
+    "DT_NEEDED": [
+      "libgcc_s.so.1",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2",
+      "libihk.so",
+      "libudev.so.1"
+    ],
+    "RUNPATH": [
+      "/usr/local/lib64"
+    ],
+    "actual_install_manifest": {
+      "bytes": 23,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/build-output/install_manifest.txt",
+      "sha256": "1e0381dc00658ba48aebe9551f9eb87b5133fc55cb805cd5695f2792b0a9a460"
+    },
+    "built_stage_byte_identical": true,
+    "bytes": 5769384,
+    "class": "ELF64 little-endian x86-64",
+    "interpreter": "/lib64/ld-linux-x86-64.so.2",
+    "mode": "0755",
+    "role": "Unchanged production install(PROGRAMS) under private DESTDIR only. Header compile object is never linked, no host install/service activation.",
+    "sha256": "b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447",
+    "stage": "/output/stage/usr/local/sbin/ihkmond",
+    "type": "DYN PIE"
+  },
+  "actual_artifacts": {
+    "libudev_abi.o": {
+      "bytes": 952,
+      "mode": "0o644",
+      "sha256": "0c1f07ad755a8fc5d21afb708e2bcc0a05b7fd9fe8cdb1216a39641fecec03aa"
+    },
+    "linux/user/ihkmond": {
+      "bytes": 5769384,
+      "mode": "0o755",
+      "sha256": "b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447"
+    },
+    "stage/usr/local/sbin/ihkmond": {
+      "bytes": 5769384,
+      "mode": "0o755",
+      "sha256": "b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447"
+    }
+  },
+  "actual_execution": {
+    "bytes": 9209,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/RESULT.json",
+    "sha256": "4842e6ebe659f43bd0bf5dbc00a864f47408ea3f0772bf47d58b20227cfbaa7a"
+  },
+  "actual_finished_at": "2026-11-10T15:20:01.335197+00:00",
+  "actual_input_identities": {
+    "header_private_package": {
+      "bytes": 9798,
+      "path": "/usr/include/libudev.h",
+      "resolved_path": "/usr/include/libudev.h",
+      "sha256": "bd5dcd4efe29f79c1c43f3b1d8cfbdb7cc359b51b3d1edeb1676f799496e159d"
+    },
+    "ihklib_matching_DSO": {
+      "bytes": 12095128,
+      "path": "/qualified-ihklib/libihk.so",
+      "resolved_path": "/qualified-ihklib/libihk.so",
+      "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2"
+    },
+    "libcap_owner_command": {
+      "argv": [
+        "/usr/bin/rpm",
+        "-qf",
+        "--qf",
+        "%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}\n",
+        "/usr/lib64/libcap.so.2"
+      ],
+      "returncode": 0,
+      "wait_joined": true
+    },
+    "library_API_main_service_executed": false,
+    "new_libcap_dependency": {
+      "bytes": 53168,
+      "path": "/usr/lib64/libcap.so.2",
+      "resolved_path": "/usr/lib64/libcap.so.2.69",
+      "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf"
+    },
+    "real_compiler": {
+      "bytes": 645792,
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "resolved_path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    "runtime_installed_image": {
+      "bytes": 299640,
+      "path": "/qualified-libudev/libudev.so",
+      "resolved_path": "/usr/lib64/libudev.so.1.7.10",
+      "sha256": "034fd62bb884d5ee2244966e96db2a40970de1a423f75057380fae67ea9d0cce"
+    },
+    "status": "PASS_ACTUAL_SIGNED_HEADER_PRIVATE_LINK_NAMESPACE_TO_INSTALLED_RUNTIME_AND_MATCHED_INPUTS"
+  },
+  "actual_namespace_provider_join": {
+    "bytes": 1808,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/build-output/PROVIDER-INPUTS.json",
+    "sha256": "1c4eb57f6b2ab89d08b23497f2a034c17f4f253a7623010f9907c5b37a4a3ae0"
+  },
+  "complete_selected_provider_graph": {
+    "actual_libc_definition_joins": 181,
+    "actual_libgcc_definition_joins": 14,
+    "actual_monitor_imports": 213,
+    "actual_platform_libc_definition_joins": 220,
+    "actual_platform_libgcc_definition_joins": 2,
+    "data_ownership": {
+      "ABI": "Actual libc optarg/environ OBJECT definitions each8B match selected LP64 pointer interfaces. optarg is explicit monitor extern; environ is qualified real195 std data. They are not project-owned data.",
+      "joins": [
+        {
+          "caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 29,
+            "kind": "OBJECT",
+            "name": "optarg@GLIBC_2.2.5",
+            "section": "UND",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "caller_version_index": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider_definition": {
+            "binding": "GLOBAL",
+            "bytes": 8,
+            "index": 1592,
+            "kind": "OBJECT",
+            "name": "optarg@@GLIBC_2.2.5",
+            "section": "31",
+            "value": 1926528,
+            "visibility": "DEFAULT"
+          },
+          "provider_definition_node": {
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider_version_index": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "required_edge": {
+            "index": 3,
+            "name": "GLIBC_2.2.5",
+            "provider": "libc.so.6"
+          }
+        },
+        {
+          "caller": {
+            "binding": "GLOBAL",
+            "bytes": 0,
+            "index": 120,
+            "kind": "OBJECT",
+            "name": "environ@GLIBC_2.2.5",
+            "section": "UND",
+            "value": 0,
+            "visibility": "DEFAULT"
+          },
+          "caller_version_index": {
+            "hidden": false,
+            "index": 3,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider_definition": {
+            "binding": "WEAK",
+            "bytes": 8,
+            "index": 298,
+            "kind": "OBJECT",
+            "name": "environ@@GLIBC_2.2.5",
+            "section": "31",
+            "value": 1928696,
+            "visibility": "DEFAULT"
+          },
+          "provider_definition_node": {
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "provider_version_index": {
+            "hidden": false,
+            "index": 2,
+            "name": "GLIBC_2.2.5"
+          },
+          "required_edge": {
+            "index": 3,
+            "name": "GLIBC_2.2.5",
+            "provider": "libc.so.6"
+          }
+        }
+      ]
+    },
+    "ihk": 2,
+    "inherited_exact_loader_edge_count": 1,
+    "libcap": {
+      "NEEDED": [
+        "libc.so.6"
+      ],
+      "SONAME": [
+        "libcap.so.2"
+      ],
+      "actual_defined_exports": 68,
+      "actual_identity": {
+        "bytes": 53168,
+        "path": "/usr/lib64/libcap.so.2",
+        "resolved_path": "/usr/lib64/libcap.so.2.69",
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf"
+      },
+      "actual_owner": "libcap|0|2.69|7.el10_1.1|x86_64",
+      "edge": "Actual udev NEEDEDlibcap.so.2 binds real2.69/70e8 provider; zero cap_-named imports, none fabricated. All actual versioned libcap libc dependencies join real libc definitions; libudev GCC dependencies also join newly captured real libgcc graph.",
+      "udev_named_cap_imports": []
+    },
+    "loader_reuse_limit": "Exact __tls_get_addr@GLIBC_2.3 loader edge already qualified in same b7bc successful link/real195 loader context is reused; no new separate ld export dump or runtime call is claimed.",
+    "optional_unversioned_weak": [
+      {
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 2,
+        "kind": "NOTYPE",
+        "name": "__gmon_start__",
+        "section": "UND",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 3,
+        "kind": "NOTYPE",
+        "name": "_ITM_deregisterTMCloneTable",
+        "section": "UND",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 4,
+        "kind": "NOTYPE",
+        "name": "_ITM_registerTMCloneTable",
+        "section": "UND",
+        "value": 0,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "WEAK",
+        "bytes": 0,
+        "index": 111,
+        "kind": "NOTYPE",
+        "name": "posix_spawn_file_actions_addchdir",
+        "section": "UND",
+        "value": 0,
+        "visibility": "DEFAULT"
+      }
+    ],
+    "per_row_table": {
+      "bytes": 445653,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/PROVIDER-JOINS.json",
+      "sha256": "ae797087e36c427fe7da01ee8ba6f36b96e267e8b85f1bc68a9fa8f786f821e4"
+    },
+    "provider_raws": {
+      "cap": {
+        "bytes": 15497,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/2/payload.stdout",
+        "sha256": "0f00d3abdba0495c66b709ad3333240b47c4862c5e57a724f90d270942626e07"
+      },
+      "gcc": {
+        "bytes": 25129,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/libgcc-unwind-provider-1/output/provider-exports.stdout",
+        "sha256": "2b95928cff1232b8f71e42031a1762d517672c1109e1946bf37169dc5c59d3fd"
+      },
+      "ihk": {
+        "bytes": 340691,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/production-execution-1/3/payload.stdout",
+        "sha256": "ab267d14614b3f7c6c2cf372b1b8fd291d1f4d89a3e3246665b1fe095f55b436"
+      },
+      "libc": {
+        "bytes": 337646,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p04-matching-provider-build-1/provider-closure-1/execution-1/payload.stdout",
+        "sha256": "248be21979833c4f20b70132acd63036e525fc2a4d79c47caca60c42e1359324"
+      },
+      "udev": {
+        "bytes": 32826,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/provider-readback-1/output/runtime-ELF.stdout",
+        "sha256": "0087fab568ac0507e6ec45e6badb49477ca2cb84789fe676e9b1b4e4f8ebda2c"
+      }
+    },
+    "udev": 11,
+    "unmatched_monitor_strong_rows": []
+  },
+  "eleven_typed_libudev_calls": {
+    "actual_C11_Werror_witness": {
+      "bytes": 1165,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/source/qualification/libudev_abi.c",
+      "sha256": "657d1f90c457669fa735a9f63639501d743028a9234228104ec94be24387cce8"
+    },
+    "actual_phase": {
+      "bytes": 1045,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/4/RESULT.json",
+      "sha256": "2a943163932801c37144e0bf3ebbcf9e33f0b5e48ba605151e2d8baa448a5617"
+    },
+    "actual_trusted_header_and_link": {
+      "bytes": 10689,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/passive-extraction-1/qualification-1/QUALIFICATION.json",
+      "sha256": "edc1d8dad12410dd2a927d1243e415561a90cb2d0f248e4246529763a2c8f4a2"
+    },
+    "compile_only_return0": true,
+    "header": {
+      "bytes": 9798,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/passive-extraction-1/extracted/systemd-devel/usr/include/libudev.h",
+      "sha256": "bd5dcd4efe29f79c1c43f3b1d8cfbdb7cc359b51b3d1edeb1676f799496e159d"
+    },
+    "proof": "All11 real selected signed-header function-pointer types compile C11-Werror. Three handles opaque, no layout/callback guessed. Actual caller positions/ownversion7/needlibudev.so.1 LIBUDEV_183 join installed034fd GLOBAL/FUNC/DEFAULT exports at ownversion2/actual definition2, with full per-row type/size/version graph. Private trusted header/link and installed runtime remain distinct.",
+    "types": [
+      {
+        "actual_Rust_declaration": "fn udev_new()->*mut c_void",
+        "exact_C_header_type": "struct udev *(void)",
+        "name": "udev_new"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_unref(ctx:*mut c_void)->*mut c_void",
+        "exact_C_header_type": "struct udev *(struct udev *)",
+        "name": "udev_unref"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_monitor_new_from_netlink(ctx:*mut c_void,name:*const c_char)->*mut c_void",
+        "exact_C_header_type": "struct udev_monitor *(struct udev *, const char *)",
+        "name": "udev_monitor_new_from_netlink"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_monitor_filter_add_match_subsystem_devtype(mon:*mut c_void,sub:*const c_char,dev:*const c_char)->c_int",
+        "exact_C_header_type": "int (struct udev_monitor *, const char *, const char *)",
+        "name": "udev_monitor_filter_add_match_subsystem_devtype"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_monitor_enable_receiving(mon:*mut c_void)->c_int",
+        "exact_C_header_type": "int (struct udev_monitor *)",
+        "name": "udev_monitor_enable_receiving"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_monitor_get_fd(mon:*mut c_void)->c_int",
+        "exact_C_header_type": "int (struct udev_monitor *)",
+        "name": "udev_monitor_get_fd"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_monitor_receive_device(mon:*mut c_void)->*mut c_void",
+        "exact_C_header_type": "struct udev_device *(struct udev_monitor *)",
+        "name": "udev_monitor_receive_device"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_monitor_unref(mon:*mut c_void)->*mut c_void",
+        "exact_C_header_type": "struct udev_monitor *(struct udev_monitor *)",
+        "name": "udev_monitor_unref"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_device_get_devnode(dev:*mut c_void)->*const c_char",
+        "exact_C_header_type": "const char *(struct udev_device *)",
+        "name": "udev_device_get_devnode"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_device_get_action(dev:*mut c_void)->*const c_char",
+        "exact_C_header_type": "const char *(struct udev_device *)",
+        "name": "udev_device_get_action"
+      },
+      {
+        "actual_Rust_declaration": "fn udev_device_unref(dev:*mut c_void)->*mut c_void",
+        "exact_C_header_type": "struct udev_device *(struct udev_device *)",
+        "name": "udev_device_unref"
+      }
+    ],
+    "witness_object": {
+      "bytes": 952,
+      "mode": "0o644",
+      "sha256": "0c1f07ad755a8fc5d21afb708e2bcc0a05b7fd9fe8cdb1216a39641fecec03aa"
+    }
+  },
+  "exact_remaining_original_conditions": [
+    {
+      "condition": "F08 deployed/native behavior",
+      "remaining": "Actual installed service and matched native IHK creation/destruction/kmsg/hung-up/recovery/cleanup behavior remains unrun. Old HOST/link/pre-daemon/worker/rollback proofs retain prior scope and are not credited again."
+    },
+    {
+      "condition": "I03 separately selected crash consumer",
+      "remaining": "Actual selected crash producer/header/used-prefix plus seven crash/eleven BFD source/export/type/provider joins are separately owned/open; monitor cannot accept them."
+    },
+    {
+      "condition": "I01 integrated delivery",
+      "remaining": "This monitor source/main/data/provider/private sbin role is bound; full coherent delivered-runtime/image/manifest/deployment across remaining original targets is Root-owned and not accepted by this one caller stage."
+    }
+  ],
+  "holds_and_credit": "Old sourceCPU0/256MiB/job1 UNJOINED/reserved, all source/generic/exec/replay/service/native/account/resource/UNKNOWN and M14-before-M15 preserved. No duplicate old F08 credit or file/milestone/image/native/C-retirement claim.",
+  "independent_operation_GO": {
+    "bytes": 20270,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-build-review-p03-max-1/REVIEW.json",
+    "sha256": "8e2ca8bcffa1930998a474b48eb27446833a919ee612e0e155fc858db6b33abb"
+  },
+  "main_and_body_ownership": {
+    "actual_project_Rust_main": {
+      "binding": "LOCAL",
+      "bytes": 14,
+      "index": 58,
+      "kind": "FUNC",
+      "name": "_RNvCs9H0TGHwLwvk_7ihkmond4main",
+      "section": "16",
+      "value": 524240,
+      "visibility": "HIDDEN"
+    },
+    "actual_project_Rust_run": {
+      "binding": "LOCAL",
+      "bytes": 3618,
+      "index": 42,
+      "kind": "FUNC",
+      "name": "_RNvCs9H0TGHwLwvk_7ihkmond3run",
+      "section": "16",
+      "value": 520608,
+      "visibility": "DEFAULT"
+    },
+    "classification": "Sole current Rust crate source/real195/std/actual static Rust main-run and compiler-generated C ABI main bind implementation. Qualified Rust std/compiler and system startup remain separate real providers. Dynamic definition count is not a project-body/source quota. No ihkmond.c or typed-witness object is in actual production link.",
+    "compiler_C_ABI_main": {
+      "binding": "GLOBAL",
+      "bytes": 46,
+      "index": 1243,
+      "kind": "FUNC",
+      "name": "main",
+      "section": "16",
+      "value": 531680,
+      "visibility": "DEFAULT"
+    },
+    "dynamic_defined_count": 1734,
+    "entrypoint": "0x7d530"
+  },
+  "new_unwind_gap_closed_by_actual_definitions": {
+    "actual_RPM_owner": "libgcc|0|14.3.1|4.4.el10|x86_64",
+    "actual_RPM_owner_raw": {
+      "bytes": 32,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/libgcc-unwind-provider-1/output/provider-owner.stdout",
+      "sha256": "0e54c72fcebbdc064261bc8edbb235f3ce8b1cd2552b526d9336114d009fa3e0"
+    },
+    "actual_provider_input": {
+      "bytes": 186528,
+      "path": "/usr/lib64/libgcc_s.so.1",
+      "resolved_path": "/usr/lib64/libgcc_s-14-20251022.so.1",
+      "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb"
+    },
+    "actual_provider_report": {
+      "bytes": 887,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/libgcc-unwind-provider-1/output/RESULT.json",
+      "sha256": "d5e3dfdadd246b97060f61f0bf2976a81884cbdfc283418537504eda0a168873"
+    },
+    "actual_raw_exports": {
+      "bytes": 25129,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/libgcc-unwind-provider-1/output/provider-exports.stdout",
+      "sha256": "2b95928cff1232b8f71e42031a1762d517672c1109e1946bf37169dc5c59d3fd"
+    },
+    "actual_read_result": {
+      "bytes": 5475,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/libgcc-unwind-provider-1/execution-1/RESULT.json",
+      "sha256": "fdfd44b9169eca7203d4ffb0866ebc2d731bd7bb8034fc3de915dac7de98999c"
+    },
+    "independent_read_GO": {
+      "bytes": 10542,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/qualification-1/libgcc-unwind-review-p03-max-1/REVIEW.json",
+      "sha256": "b6e6318ff07176933e83e307f20607c6789c386c974d32ac31f9996622f77a6c"
+    },
+    "proof": "Actual monitor dynsym212/213 own versionindex4/needlibgcc_s.so.1 GCC_3.0 now join real non-UND callable definitions, their provider dynsym positions/own GNU version entries and GCC_3.0 definition node. No inherited per-symbol coverage or guessed DeleteException was used. New passive read only, no monitor replay.",
+    "two_exact_joins": [
+      {
+        "caller": {
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 212,
+          "kind": "FUNC",
+          "name": "_Unwind_RaiseException@GCC_3.0",
+          "section": "UND",
+          "value": 0,
+          "visibility": "DEFAULT"
+        },
+        "caller_version_index": {
+          "hidden": false,
+          "index": 4,
+          "name": "GCC_3.0"
+        },
+        "provider_definition": {
+          "binding": "GLOBAL",
+          "bytes": 770,
+          "index": 193,
+          "kind": "FUNC",
+          "name": "_Unwind_RaiseException@@GCC_3.0",
+          "section": "14",
+          "value": 141936,
+          "visibility": "DEFAULT"
+        },
+        "provider_definition_node": {
+          "index": 2,
+          "name": "GCC_3.0"
+        },
+        "provider_version_index": {
+          "hidden": false,
+          "index": 2,
+          "name": "GCC_3.0"
+        },
+        "required_edge": {
+          "index": 4,
+          "name": "GCC_3.0",
+          "provider": "libgcc_s.so.1"
+        }
+      },
+      {
+        "caller": {
+          "binding": "GLOBAL",
+          "bytes": 0,
+          "index": 213,
+          "kind": "FUNC",
+          "name": "_Unwind_DeleteException@GCC_3.0",
+          "section": "UND",
+          "value": 0,
+          "visibility": "DEFAULT"
+        },
+        "caller_version_index": {
+          "hidden": false,
+          "index": 4,
+          "name": "GCC_3.0"
+        },
+        "provider_definition": {
+          "binding": "GLOBAL",
+          "bytes": 33,
+          "index": 86,
+          "kind": "FUNC",
+          "name": "_Unwind_DeleteException@@GCC_3.0",
+          "section": "14",
+          "value": 143968,
+          "visibility": "DEFAULT"
+        },
+        "provider_definition_node": {
+          "index": 2,
+          "name": "GCC_3.0"
+        },
+        "provider_version_index": {
+          "hidden": false,
+          "index": 2,
+          "name": "GCC_3.0"
+        },
+        "required_edge": {
+          "index": 4,
+          "name": "GCC_3.0",
+          "provider": "libgcc_s.so.1"
+        }
+      }
+    ]
+  },
+  "old_UNJOINED_source_reader_released": false,
+  "original_acceptance": false,
+  "owner": "p04_source_max actualSol/MAX; saved Root-result qualification only; Root sole executor/compositor/publisher",
+  "qualified_at": "2026-11-10T15:56:34.628692+00:00",
+  "qualifier_operations": {
+    "agents_spawned": 0,
+    "canonical_index_edits": 0,
+    "main_API_daemon_service_native": 0,
+    "new_compiler_library_CLI_header_ELFtool_oldbehavior_probe": 0,
+    "new_metadataquery_network_or_Docker": 0
+  },
+  "raw_stderr": [
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/1/payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/2/payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 108,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/3/payload.stderr",
+      "sha256": "dda9987a6cb183616061f8f508f8229e2ddebdac0a10645ddbc18e9f48507095"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/4/payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 267,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/5/payload.stderr",
+      "sha256": "db0eeef6e329c02aa536a3f352d89f430526502bb1abd90fbf19e34ad79006df"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/6/payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/7/payload.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "raw_stdout": [
+    {
+      "bytes": 1638,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/1/payload.stdout",
+      "sha256": "202afed8132de717912d791dd1c830e9040222fa28fe184fbe807b384a8d9b80"
+    },
+    {
+      "bytes": 15497,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/2/payload.stdout",
+      "sha256": "0f00d3abdba0495c66b709ad3333240b47c4862c5e57a724f90d270942626e07"
+    },
+    {
+      "bytes": 344,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/3/payload.stdout",
+      "sha256": "ef9648a40284cc6f71a828bd3b91ca4af6f1fd553166aadb16b51c8ff024c1fa"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/4/payload.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1679,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/5/payload.stdout",
+      "sha256": "4006fec62d9b06404e990eaddc3bbad974255941382422f3686ac7b7209768e7"
+    },
+    {
+      "bytes": 755391,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/6/payload.stdout",
+      "sha256": "82af71f7a7f6fea90f32f024f183e8f3fd8bb6db7db6cceda0e97f33041e9131"
+    },
+    {
+      "bytes": 88,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/production-execution-1/7/payload.stdout",
+      "sha256": "4db855d629c63e106c56e0edc963081cdb328014942b8355aba997cd4dbe14b5"
+    }
+  ],
+  "request": {
+    "bytes": 49125,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/REQUEST.json",
+    "sha256": "ffdc7ef9e80c0f6b4545bb2358ee720fb8d5bc7d533ad02bc6d86ed1a0e69f96"
+  },
+  "schema": "m15-ihkmond-matching-production-actual-qualification-v1",
+  "seven_return0_nonOOM_waits_streams_owned_removals": true,
+  "source_config_flags": {
+    "Rust_source": {
+      "bytes": 24060,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/source/linux/user/rust/ihkmond.rs",
+      "sha256": "988945b11275c57951c5ada75439c4f1d48ca91d3f0113056c626180eadf88df"
+    },
+    "actual_ELF_comments": [
+      "Linker: LLD 22.1.0 (/checkout/src/llvm-project/llvm a306f6a8c53494d32c171c346c6809c97124c697)",
+      "rustc version 1.95.0-nightly (c04308580 2026-02-18)",
+      "GCC: (GNU) 14.3.1 20251022 (Red Hat 14.3.1-4)"
+    ],
+    "actual_IHK_config": {
+      "bytes": 464,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/source/config.h",
+      "sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535"
+    },
+    "actual_Rust_compile_command": [
+      "cd /output/linux/user && /usr/bin/cmake -E env IHKMOND_TMP=/tmp/ihkmond /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C linker=/usr/bin/cc /source/linux/user/rust/ihkmond.rs -C link-arg=/qualified-ihklib/libihk.so -C link-arg=/qualified-libudev/libudev.so -C link-arg=-Wl,-rpath,/usr/local/lib64 -o /output/linux/user/ihkmond"
+    ],
+    "byte_exact_production_rule": {
+      "bytes": 2317,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/source/linux/user/CMakeLists.txt",
+      "sha256": "6c307dcfba44479a6a63b380dc059e7ddd4720b878ab24b05655f308d5831886"
+    },
+    "cache": {
+      "bytes": 15870,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/build-output/CMakeCache.txt",
+      "sha256": "9266b59d0be1e45b715113eb4408ab0f7f0b2a6213e80387508ac89614eea631"
+    },
+    "diagnostics": "Only preexisting unused std::fs::self and unused fallback CMake cache-variable warnings; no suppression/waiver, all phases0.",
+    "facts": "Original Rust988/real195/std, edition2021,opt2,debuginfo1,PIC,default unwind, IHKMOND_TMP=/tmp/ihkmond,KMSG_REDIRECT OFF,GCC2092 driver on46d, direct b7bc and genuine developer-prefix LIBUDEV; no fixture/C fallback/library/CLI rebuild.",
+    "real_compiler_std_bindings": {
+      "actual195_on46d_loader_closure": {
+        "bytes": 14290,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/LOADER-CLOSURE.json",
+        "sha256": "abdd794d3bafb6ea5717532a64b27f792c2f4a38eb13590b0e2da798fafa31cb"
+      },
+      "actual_newlibrary_run": {
+        "bytes": 7679,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/production-execution-1/RESULT.json",
+        "sha256": "0ffc181bec75a3ed6ce3c5fe2cb58a6ed4b7ceff7a500de4fe49e30b57ceba5c"
+      },
+      "needed_SDK_inputs_only": "QualifiedCMakebinary/moduledata/libuv + BFDscript/staticarchive/sframe/iberty + complete real195tree + actualDSO/RSP + privatecaller source/output. UnusedfourBFDheader mounts andallwhole70 metadata/archive payloads omitted; their qualifyingheader/providerproof is reused. No newtoolprobe/GET/providerinventory.",
+      "qualified_fullcompiler_std_binding": {
+        "bytes": 47937,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/COMPILER-BINDING.json",
+        "sha256": "978a22dab7d017d6daf201f6fffcc2eee2bc7a0d63b83c0af89a5361ca4e9b96"
+      },
+      "same_native_image_C_compiler_dependencies": {
+        "C_compiler": {
+          "bytes": 1375456,
+          "expected_sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+          "gid": 0,
+          "matches_expected": true,
+          "mode": "0o755",
+          "path": "/usr/bin/cc",
+          "resolved_path": "/usr/bin/gcc",
+          "rpm_owner": {
+            "argv": [
+              "/usr/bin/rpm",
+              "-qf",
+              "--qf",
+              "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+              "/usr/bin/cc"
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "gcc-14.3.1-4.4.el10.x86_64\n",
+            "wait_joined": true
+          },
+          "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+          "uid": 0
+        },
+        "Python_for_CMake_build_orchestration": {
+          "at_least_3_10": true,
+          "executable": "/usr/bin/python3",
+          "executable_identity": {
+            "bytes": 15800,
+            "expected_sha256": null,
+            "gid": 0,
+            "matches_expected": null,
+            "mode": "0o755",
+            "path": "/usr/bin/python3",
+            "resolved_path": "/usr/bin/python3.12",
+            "sha256": "42b3a3a44457f52d1aa661b115f6604605941aee0956d4edc64b80aa802c7828",
+            "uid": 0
+          },
+          "version": "3.12.14 (main, Aug 13 2026, 00:00:00) [GCC 14.3.1 20251022 (Red Hat 14.3.1-4)]",
+          "version_info": [
+            3,
+            12,
+            14
+          ]
+        },
+        "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "libc": {
+          "bytes": 2339896,
+          "expected_sha256": null,
+          "gid": 0,
+          "matches_expected": null,
+          "mode": "0o755",
+          "path": "/usr/lib64/libc.so.6",
+          "readelf": {
+            "GLIBC_2_38_symbols": {
+              "__isoc23_sscanf": true,
+              "__isoc23_strtol": true,
+              "__isoc23_strtoul": true
+            },
+            "argv": [
+              "/usr/bin/readelf",
+              "--wide",
+              "--dyn-syms",
+              "/usr/lib64/libc.so.6"
+            ],
+            "returncode": 0,
+            "selected_dynsym_lines": [
+              "1051: 000000000005afd0   317 FUNC    GLOBAL DEFAULT   16 __isoc23_sscanf@@GLIBC_2.38",
+              "1455: 0000000000050c10    28 FUNC    GLOBAL DEFAULT   16 __isoc23_strtol@@GLIBC_2.38",
+              "2580: 0000000000053d80    28 FUNC    GLOBAL DEFAULT   16 __isoc23_strtoul@@GLIBC_2.38"
+            ],
+            "stderr": "",
+            "wait_joined": true
+          },
+          "resolved_path": "/usr/lib64/libc.so.6",
+          "rpm_owner": {
+            "argv": [
+              "/usr/bin/rpm",
+              "-qf",
+              "--qf",
+              "%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+              "/usr/lib64/libc.so.6"
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "glibc-2.39-121.el10_2.x86_64\n",
+            "wait_joined": true
+          },
+          "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+          "uid": 0
+        }
+      },
+      "selected_real195_compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+    },
+    "top_driver": {
+      "bytes": 1003,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/source/CMakeLists.txt",
+      "sha256": "0564982b95ee67d9b3de167175dfd9df5eb7d4a8f4a2645a38ff298988263ee3"
+    }
+  },
+  "status": "PASS_NEW_MATCHED_MONITOR_TYPED_ABI_PROVIDER_ARTIFACT_AND_PRIVATE_STAGE__INDEPENDENT_REVIEW_PENDING",
+  "two_ihk_C_ABI_calls": {
+    "actual_definitions": [
+      {
+        "binding": "GLOBAL",
+        "bytes": 177,
+        "index": 656,
+        "kind": "FUNC",
+        "name": "ihklib_device_open",
+        "section": "11",
+        "value": 535040,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "bytes": 282,
+        "index": 952,
+        "kind": "FUNC",
+        "name": "ihk_os_get_eventfd",
+        "section": "11",
+        "value": 523888,
+        "visibility": "DEFAULT"
+      }
+    ],
+    "independent_provider_GO": {
+      "bytes": 70647,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-review-p03-max-1/qualification-1/REVIEW.json",
+      "sha256": "b667d389e2407512e2751037a72f1e16a382431844b84965394a447e2814aaf1"
+    },
+    "proof": "Exact current header/Rust declarations and independently qualified wholeRust b7bc source/public-private ABI, real input hash, actual defined GLOBAL/FUNC rows/global version and literal direct link/DT_NEEDEDlibihk.so establish source/type/provider ownership. No API or library/old suite replay.",
+    "real_provider": {
+      "bytes": 12095128,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/linux/user/libihk.so",
+      "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2"
+    },
+    "signature_joins": [
+      {
+        "C": "int (int), ihklib_private.h:97",
+        "caller_Rust": "fn(index:c_int)->c_int",
+        "name": "ihklib_device_open",
+        "producer_Rust": "accepted_host_root.assigned_memory_dependency_join.rs:34 pub unsafe extern C fn(index:c_int)->c_int"
+      },
+      {
+        "C": "int (int,int), ihklib.h:106",
+        "caller_Rust": "fn(index:c_int,kind:c_int)->c_int",
+        "name": "ihk_os_get_eventfd",
+        "producer_Rust": "ihklib_eventfd.rs:59 pub unsafe extern C fn(index:c_int,kind:c_int)->c_int"
+      }
+    ]
+  }
+}

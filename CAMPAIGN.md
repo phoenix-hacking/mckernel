@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T15:51:13.638197+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-10T16:36:48.075649+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -21,6 +21,10 @@ No native or C-retirement credit. EACH>=75% by08:00 November10 Pacific (16:00Z)
 remains at risk: gains23.52/19.03pp still needed, no reliable final ETA while
 required held compute-provider and matching runtime/native inputs remain.
 PR3 progress comments only when the verified pair changes, once per update.
+
+**08:00 Pacific target missed.** The verified pair at16:00Z remained51.48/55.97;
+criteria and all holds stay unchanged. Continue actual original closure beyond
+the soft target; no unchanged PR3 percentage comment.
 
 **Actual implementation/build/functional evidence:**
 
@@ -66,10 +70,22 @@ PR3 progress comments only when the verified pair changes, once per update.
   phases PASS15:20: namespace/libcap provider read, configure, C11/Werror11-type
   witness, named Rust1.95 ihkmond build, ELF read and private sbin install.
   All exits0/nonOOM/containers removed/direct waits joined; P04 qualifies
-  actual11udev/twoIHK/libcap/provider/RPATH/stage ownership. Two new GCC3.0
-  unwind imports need their exact libgcc definition read; P03 reviews that narrow
-  new provider packet before full-result qualification.
+  actual11udev/twoIHK/libcap/provider/RPATH/stage ownership. New GCC3.0
+  Raise/DeleteException definitions readPASS15:54; finalqualificationce856 and
+  independent71a1 join all213imports/typed13directcalls,220transitivelibc and
+  two udeV→gcc edges, actualRustmain/flags/RUNPATH and b9cf0755privatebytes.
   No monitor main/service/device/native operation or library replay.
+- Confirmed BFD2.41 bool ABI defect fixed in actual Eclair/mcinspect Rust
+  declarations and six caller conditions. Source2988/88b6 is integrated exactly.
+  Actual five-phase regressionPASS16:25:41: C11/Werror real-header assertions,
+  old completeRust callers fail exactE0308x2+x1, corrected wholecallers compile0
+  without warnings into newRELobjects. All14families joined; qualifiedbbac /
+  independentffaf. Type witnesses do not replace old63502/eclair production
+  artifacts; corrected matching-profile named builds/ELF/provider/stage follow.
+- Current Rust mcps five phasesPASS16:00:17; qualificationba472/independentb0ff
+  joins exact no_stdmain/panic/object/imports/config, noRPATH, byte-identical
+  bfbc0755 privateinstall and existing63502 dependency. Old23cases reused.
+  The newly found BFD issue remains open on that transitive oldprovider.
 - P01/P02 production-profile seven phases PASS15:33:51: real Rust1.95 named
   reboot/stop targets, generated BUILDID8d288b8/WORK_IRQ=ON, one previously
   unmatched source-branch case, ELF read and byte-equal0755 private installs.
@@ -99,9 +115,9 @@ keys enter source publication. All33 unrelated dirty/deleted paths are preserved
 
 | Next genuine original prerequisite / actual consumer | Owner and smallest completion proof |
 | --- | --- |
-| M15-I03/I01 monitor caller ABI | P04 qualifies actual seven-phase15:20 production Rust result; P03 independently reviews11typedudev/twoIHK/libcap/provider/RPATH/private-install joins. No rebuild, service or native credit |
-| M15-I01 P01/P02 production tools | SDK joins15:33 seven-phase actual config/unique Rust entries/ELF/import/install/cleanup; P04Tests actual-resultGOddbb12f1. Defaults and complete matched deployment/lifecycle remain open |
-| M15-I03/P04 actual crash provider | PublicABI freezes exact acquiredbinary signature/header/passiveELF plus source-primary/filename obligations; SourceAcq reviews. Trusted binarypassivePASS15:45/all18definitions/fourwidths; sourceprimaryPASS15:49 derives exact42466145B/SHA4494sourceRPM. Real source/header/BFD consumed contracts still must match |
+| M15-I03/I01 corrected diagnostics | Source2988/88b6 + wholecaller regression independentlyGO; Root publishes/fetches, then executes GOb241 exact Eclair six-phase currentRust195 build. PublicABI/P03 prepare/review corrected native1.92 mcinspect producer. Actual objects/imports/provider/RPATH/stage must join before replacement |
+| M15-I03/F02 current mcexec providers | Realnuma runtimebe20 supplies four typed/versioned exports; actual numactl-devel2.0.19-3 23091B/SHA42c4 GETPASS16:33. SDK binds new signature/header/link passive payload and current-sourcefdd producer; no repeated metadata or old349 parity claim |
+| M15-I03/P04 crash/BFD source compatibility | SourcePackage1/headerx86_64/newsignature/outerCPIOPASS16:30 report66d95; original src/header mismatch retained. P04 derives contained actual nested archive/spec/patch/source/used-layout operation, SourceAcq reviews. Binary18symbols/fourwidths don't prove source/BFD ABI |
 
 
 **Single full-image critical-path blocker:** no admissible universal generic/exec
@@ -122,14 +138,15 @@ inferred from output/process absence. Correction uses disjoint output and normal
 positive capture, preserving the oldUNKNOWN and counting both jobs. Optional16/
 pool/handoff work deferred; guardian/mailbox/restored20-minute assistance active.
 
-Latest source checkpointce2e06fce5cc696c35f034e8cc4f3d175ffd9516 is pushed/fetched,
-all31 owned entries matched14:44:03Z. The changed pair55.97 was posted once in
+Latest verified source checkpoint68bb719c3e9bba511b52586bf7380ac2ac59d6dc is
+pushed/fetched; all286 owned entries matched15:59:30Z. The changed pair55.97 was posted once in
 PR3 comment6770338341; no duplicate unchanged progress comment.
 
-Next15-minute deliverable: publish qualified production-program and real monitor
-build results, execute the new unwind-definition and exact sourceRPM operations,
-and qualify their actual provider contracts. Parallel source owners prepare real
-matching eclair/mcexec/mcps target gaps from existing proofs; no source census. No producer/build/green-suite replay.
+Next15-minute deliverable: publish the verified two-source BFD ABI correction,
+then execute reviewed corrected Eclair production phases and qualify actual new
+objects/link/provider/privateinstall. Finish signed NUMA header/link input for
+current mcexec and contained authenticated crash/BFD source contracts. Reuse
+monitor/mcps/P01/P02/BFD type/old41+72 proof; no unchanged producer replay.
 Matching image/deployed/native proof remains separate; originalM14-I02-E1 still
 needs the exact held generic/exec disposition before any full compute command.
 
