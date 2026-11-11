@@ -1,0 +1,27 @@
+{
+  "schema": "mckernel.f02.wire.Root-tool-capture.v1",
+  "scope": "ordinaryHOST_F02_ABI_slice_only",
+  "argv": "/usr/bin/python3 -I -B /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sdk-max-1/host-wire-witness-1/run_root_once.py /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/REVIEW.json 4a884e52165e1d293d1b243343f640709c38a87c67b2ab1c88a6132c52216ac8",
+  "tool_calls": [
+    {
+      "arguments": {
+        "cmd": "/usr/bin/python3 -I -B /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sdk-max-1/host-wire-witness-1/run_root_once.py /home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sourceacq-max-1/host-wire-witness-1/operation-1/REVIEW.json 4a884e52165e1d293d1b243343f640709c38a87c67b2ab1c88a6132c52216ac8",
+        "workdir": "/home/holden/mckernel",
+        "login": false,
+        "tty": false,
+        "yield_time_ms": 1000,
+        "max_output_tokens": 3500
+      },
+      "result": {
+        "chunk_id": "335b34",
+        "wall_time_seconds": 0.34426696,
+        "exit_code": 1,
+        "original_token_count": 218,
+        "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sdk-max-1/host-wire-witness-1/run_root_once.py\", line 16, in <module>\n    phase('descriptor-wire',a['create_argv'],a['expected_mounts'],512*2**20,64,a['max_wall_seconds'])\n  File \"/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/f02-complete-abi-behavior-review-sdk-max-1/host-wire-witness-1/phase-cpu7.py\", line 2, in phase\n    cid=call(label+'-create',argv).decode().strip();assert re.fullmatch('[0-9a-f]{64}',cid);owned.append(cid)\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/call_capture.py\", line 42, in call\n    if primary is not None:raise primary.with_traceback(primary_tb)\nAssertionError: ('descriptor-wire-create', 125)\n"
+      }
+    }
+  ],
+  "full_Root_tool_and_streams_joined": true,
+  "technical_error": "Docker CLI rejects unsupported --ulimit as before container creation",
+  "native_or_original_acceptance": false
+}

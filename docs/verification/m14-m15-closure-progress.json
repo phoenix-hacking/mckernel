@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T21:03:28.219853+00:00",
+  "updated_at": "2026-11-11T21:18:13.725212+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -3209,12 +3209,14 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m15-executor-abi-20261111/descriptor-cpuset-78word-1/independent-review/actual-result-1/QUALIFICATION.json"
       ],
       "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
       "definition_status": "closure condition stated; source-derived engineering qualification remains open; actual operation admission remains separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "current_partial_evidence": "Actual matched C/Rust195 descriptor+cpuset wire record624B/78words equal, source/header/layout/9client/container/Root closure qualified cde5037e. Complete supported executor behavior/native clauses remain open; no whole leaf credit."
     },
     {
       "id": "M15-F02-original-profile",
@@ -14979,27 +14981,18 @@
       }
     ],
     "last_published_percentage_report": {
-      "at": "2026-11-11T18:11:03.741257+00:00",
       "state": "POSTED_CONFIRMED",
-      "owner": "Root",
-      "comment_id": 6803610176,
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176",
-      "pair": {
-        "M14": 67.22,
-        "M15": 67.19
-      },
-      "M14": 67.22,
+      "at": "2026-11-11T21:05:15.076581+00:00",
+      "comment_id": 6807005440,
+      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6807005440",
+      "M14": 70.0,
       "M15": 67.19,
-      "delta_pp": {
-        "M14": 0.28,
-        "M15": 0.0
-      },
-      "verified_checks": 98,
-      "dedupe": "M14-03-05-DEFAULT@c7f765f0",
-      "source_results_publication": "PUSHED_FETCHED_VERIFIED",
-      "source_commit": "cddaec4da32ac5a801377dfe4b3a1917b9a198a3",
-      "fetched_owned_blobs_matching": 147,
-      "no_pending_report": true
+      "counted_verified": 99,
+      "counted_total": 156,
+      "dedupe": "M14-I01-E1@956fecb2",
+      "source_results_checkpoint": "fd709dcfe2f7945e0f8324703e04d46a30cb04e2",
+      "pushed_and_fetched": true,
+      "owned_blobs_matching": 12
     },
     "latest_functional_result": {
       "at": "2026-11-10T23:29:40.839467+00:00",
@@ -15493,14 +15486,7 @@
       "original_criteria_unchanged": true,
       "no_unchanged_green_reruns": true
     },
-    "pending_percentage_report": {
-      "state": "WAITING_FOR_CHECKPOINT_PUSH_AND_FETCH",
-      "dedupe": "M14-I01-E1@956fecb2",
-      "M14": 70.0,
-      "M15": 67.19,
-      "counted": 99,
-      "denominator": 156
-    },
+    "pending_percentage_report": null,
     "mcps_current_provider_pair": {
       "at": "2026-11-10T23:52:20.310699+00:00",
       "manifest_sha256": "af49d651c96db471701da99d130c060dfe52c1f5fc8ff1da3ff55b07837fe3d9",
@@ -15570,14 +15556,7 @@
       "review": "46a3823cefd457546cd3d56636aaa31fe61614d13dddcfbe671850699868521e",
       "native_or_other_DEFAULT_or_acceptance": false
     },
-    "pending_progress_report": {
-      "state": "WAITING_FOR_CHECKPOINT_PUSH_AND_FETCH",
-      "dedupe": "M14-I01-E1@956fecb2",
-      "M14": 70.0,
-      "M15": 67.19,
-      "counted": 99,
-      "denominator": 156
-    },
+    "pending_progress_report": null,
     "current_engineering_step": "E1 whole GO recorded; publish99/156 and70.00/67.19. Correct actual F02 Docker AS-option failure; normal controller compatibility and successful-account-read receipt fixes remain active.",
     "verified_whole_condition_history": [
       {
@@ -15777,6 +15756,29 @@
         "source_results_publication": "PUSHED_FETCHED_VERIFIED",
         "source_commit": "f2708fbe15368b95b057860d796e5a37e9c41541",
         "fetched_owned_blobs_matching": 86,
+        "no_pending_report": true
+      },
+      {
+        "at": "2026-11-11T18:11:03.741257+00:00",
+        "state": "POSTED_CONFIRMED",
+        "owner": "Root",
+        "comment_id": 6803610176,
+        "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176",
+        "pair": {
+          "M14": 67.22,
+          "M15": 67.19
+        },
+        "M14": 67.22,
+        "M15": 67.19,
+        "delta_pp": {
+          "M14": 0.28,
+          "M15": 0.0
+        },
+        "verified_checks": 98,
+        "dedupe": "M14-03-05-DEFAULT@c7f765f0",
+        "source_results_publication": "PUSHED_FETCHED_VERIFIED",
+        "source_commit": "cddaec4da32ac5a801377dfe4b3a1917b9a198a3",
+        "fetched_owned_blobs_matching": 147,
         "no_pending_report": true
       },
       {
@@ -16029,14 +16031,7 @@
       "native_or_image_original_acceptance": false,
       "counted_delta": 0
     },
-    "pending_changed_percentage_report": {
-      "state": "WAITING_FOR_CHECKPOINT_PUSH_AND_FETCH",
-      "dedupe": "M14-I01-E1@956fecb2",
-      "M14": 70.0,
-      "M15": 67.19,
-      "counted": 99,
-      "denominator": 156
-    },
+    "pending_changed_percentage_report": null,
     "current_image_history": [
       {
         "source": "6aae8273960583ec7fb194926292bd10ab1bc585",
@@ -16091,6 +16086,24 @@
       "sha256": "e4288d6a5d49a7df90da3d18ad88cc6f5fbbbd688f996ae6f234be14f60617bc",
       "native_or_controller_acceptance": false,
       "counted_delta": 0
+    },
+    "latest_F02_ABI_slice_execution": {
+      "status": "QUALIFIED_ACTUAL624B_78_LABELED_WORDS_EQUAL",
+      "at": "2026-11-11T21:09:10.275303+00:00",
+      "request_sha256": "84a7a647725aa48cdd3ff051a0dfa8429b04f94e9cf346eabf159158a46eeffd",
+      "operation_review_sha256": "6c838936e926d5528767f918d302f3050445a1c7779b52bb5c80e9116ef63602",
+      "result_sha256": "705ae75cce7626f689b87c41783fb5ab33eb733f22f340ea63557a2bc20ceaf6",
+      "actual_container": "f77e566b8cab07337d02ccab9c87cf491a1e5b5cf34490a5cfd36f6e1f7f9a6b",
+      "clients_positive": 9,
+      "all_waits_streams_Root_joined": true,
+      "owned_container_removed": true,
+      "actual_AS_in_container_bytes": 536870912,
+      "scoped_current_charge_retired": true,
+      "whole_F02_behavior_GO": false,
+      "counted_change": 0,
+      "preserved_first_failure": "Dockercreate125 unsupported --ulimit as; no container/compiler thenran",
+      "independent_qualification_sha256": "cde5037e004105fd698ef0ab3e8a013ecb4b8aa383775cd512f2ee1037e160c9",
+      "word_comparison_sha256": "bed857ea017b7e36473985e310c8be27bd8a2a6a469cd36270eea6b5e6be01ef"
     }
   },
   "denominator_changes": [

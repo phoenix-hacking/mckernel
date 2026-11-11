@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T21:03:28.219853+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T21:18:13.725212+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -10,16 +10,16 @@ M14-03-05-DEFAULT GOc7f765f0 remains counted on sourcec964/imagea2f00a61/map15b1
 All original criteria/weights/denominators and M14-before-M15 acceptance order stay
 unchanged. C4 and remaining FUNCTIONAL/native/parent/file/milestone conditions are
 open. Four accepted M14 files and M15-F01 remain closed at their exact scopes.
-PR3 receipt[6803610176](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176)
-is POSTED_CONFIRMED for the prior67.22/67.19 pair; the new pair awaits this checkpoint.
 New independent whole GO956fecb2 closes ONLY M14-I01-E1 on c964/a2f/15b:
 all13inputs/5052+5owners,163 source/header/generated dependencies, ABI/providers,
 callbacks, all unknown owners and positive saved producer/reader cleanup join
 literal E1. C4 are fully reviewed live project-C, not retired. I01 E1=100 while
 E2/E3/ACCEPT=0 yields original I01 mean25; M14 exact70.00, M15 unchanged67.19.
 [Whole E1 decision](docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json).
-Changed-pair dedupeM14-I01-E1@956fecb2 waits this source/results push+fetch; receipt
-6803610176 remains only the prior67.22/67.19 report. Do not duplicate that old pair.
+Checkpoint48 fd709dcf is pushed/fetched12ownedblobs. PR3receipt
+[6807005440](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6807005440)
+is POSTED_CONFIRMED for70.00/67.19,99/156, dedupeM14-I01-E1@956fecb2. No changed-pair
+report remains pending; publish again only for a further verified pair change.
 
 All33 unrelated tracked dirty paths and historical UNK2026-11-11T20:58:34.067193+00:00N/holds stay preserved.
 The missed75% November10 target is not a stop time.
@@ -68,12 +68,16 @@ fallback semantics. Load through the normal reviewed transition, never hotpatch,
 synthetic notification, fake failure, new run or budget reset.
 
 **Independent original closure:** SDK independent whole GO956fecb2 has closed literal M14-I01-E1 only; E2/E3
-and C retirement remain separate. SourceAcq reviews exact F02 HOST packet8184/
-parent24ab after critical new-generation qualification. First actualF02 packet8184 failed before compiler/container: Docker create125
-rejects unsupported --ulimit as. All3clients/fullRoot joined; P04Source prepares
-one bounded supported-profile successor with SourceAcq independent review. The
-four genuine C/Rust1.95/readelf commands compare one624B readonly unrelocated78-word record; this slice
-alone cannot close wholeF02 behavior. P04Source owns the small clone-disabled
+and C retirement remain separate. F02 corrected packet84a7/GO6c83 passed21:09:10Z after replacing unsupported
+DockerAS with real in-container prlimit512MiB before the identical four commands.
+ActualC9c9609/Rustcbbe14 ELF objects and both metadata captures are present;
+all9clients/Root joined, CIDf77e terminal0/nonOOM/removed and current512MiB retired.
+Independent savedQ cde5037e/bed857/bda687 now proves exact624B sharedrecorddba0bca9
+and all78labeled words equal, PLD776/ImageSection56/GetCpuSet96 withalign8;
+readonly/nonexecuting/unrelocated and allsource/header/cleanup joins PASS. Whole
+F02behavior/native remains open. [Actual ABI slice](docs/verification/m15-executor-abi-20261111/descriptor-cpuset-78word-1/PUBLICATION-SCOPE.json).
+Original create125 failure/3positiveclients and scoped retirement remain preserved.
+P04Source owns the small clone-disabled
 Rust diagnostic-provider candidate, P04Tests independent formatter/string/caller
 review; actual C3 requires later matching normal image proof.
 
@@ -87,8 +91,8 @@ This one altstack scope does not establish all original signal frame/register/
 xstate normal/error or lifecycle requirements. HOST materialization/installation/
 readback and current controller source are prerequisites, not native acceptance.
 
-**Preservation and execution:** checkpoint46 f0db9015 is pushed/fetched125owned
-blobs; next coherent checkpoint publishes actual staging/new generation/readback.
+**Preservation and execution:** checkpoint47 53456e37 is pushed/fetched61actual stage/new generation/readback
+blobs; checkpoint48 fd709dcf publishes the independent whole-E1 closure.
 No current payload job remains live; use fresh operation-specific admission within
 loaded HOST CPUs0,6,7/max3/4GiB TOTAL including overhead,26GiB availability and
 16/12GiB disk floors. Native CPUs2–5/12GiB stays separately held, CPU1 excluded.
