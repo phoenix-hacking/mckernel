@@ -102,6 +102,7 @@ endif()
 set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
 set(MCKERNEL_DO_MMAP_SELECTED OFF)
 set(MCKERNEL_DO_FORK_SELECTED OFF)
+set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -596,6 +597,14 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			    "${MCKERNEL_DO_SYSCALL_C_FILE}"
 			    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
 		endif()
+        # The reviewed ordinary-profile predicate also excludes broad adapters.
+        # Select only the two-argument policy bridge; all other adapters stay as-is.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT)
+            set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall2_bridge_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_syscall2_bridge.rs")
+        endif()
 		add_custom_command(
 		OUTPUT "${RUST_KERNEL_OBJ}"
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
@@ -1031,6 +1040,11 @@ if (MCKERNEL_DO_SYSCALL_OUTER_SELECTED)
         COMPILE_DEFINITIONS MCKERNEL_RUST_DO_SYSCALL_OUTER
         "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=${MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS}"
         "MCKERNEL_DO_SYSCALL_C_FILE=\"${MCKERNEL_DO_SYSCALL_C_FILE}\"")
+endif()
+
+if (MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
 endif()
 
 add_executable(mckernel.img ${MCKERNEL_SRCS})

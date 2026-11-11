@@ -66,6 +66,8 @@ mod f03_do_mmap;
 mod f03_do_fork;
 #[cfg(f03_do_syscall_outer_candidate)]
 mod syscall_offload_entry;
+#[cfg(f03_do_syscall2_bridge_candidate)]
+mod f03_do_syscall2_bridge;
 #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
 mod f06_rt_sigreturn_xrstor;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]

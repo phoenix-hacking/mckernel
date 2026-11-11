@@ -27459,7 +27459,7 @@ syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
 long
 syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1)
