@@ -106,6 +106,12 @@ static char *const futex_boot_argv[] = {
     "/bin/native-boot", "hidos", "allow_oversubscribe", NULL
 };
 #endif
+#if defined(ND_SIGNAL_ALTERNATE_REPEAT)
+/* Use the actual production Rust reboot parser with already-loaded modules. */
+static char *const signal_boot_argv[] = {
+    "/bin/native-boot", "-R", "-c1", "-m128M@0", "-o0", "-T0", NULL
+};
+#endif
 
 static uint64_t now_ns(void)
 {
@@ -512,6 +518,8 @@ int main(void)
     loaded = 3;
 #if defined(ND_FUTEX)
     if (helper("boot", "/bin/native-boot", futex_boot_argv, &safe)) { good = 0; goto finish; }
+#elif defined(ND_SIGNAL_ALTERNATE_REPEAT)
+    if (helper("boot", "/bin/native-boot", signal_boot_argv, &safe)) { good = 0; goto finish; }
 #else
     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
 #endif

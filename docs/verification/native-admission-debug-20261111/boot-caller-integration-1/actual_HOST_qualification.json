@@ -1,0 +1,405 @@
+{
+  "actual_C_data_witness": {
+    "NUL_separated_argv": [
+      "/bin/native-boot",
+      "-R",
+      "-c1",
+      "-m128M@0",
+      "-o0",
+      "-T0"
+    ],
+    "bytes": 41,
+    "exact_expected": {
+      "bytes": 41,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/boot-argv.expected",
+      "regular_no_symlink": true,
+      "sha256": "4ba0ab9c285c58b97716996ac7c334a748d1b4f9c8a30ecc8b049caa2da7e5d5"
+    },
+    "raw": {
+      "bytes": 41,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-3.stdout",
+      "regular_no_symlink": true,
+      "sha256": "4ba0ab9c285c58b97716996ac7c334a748d1b4f9c8a30ecc8b049caa2da7e5d5"
+    },
+    "scope": "ActualCarrayreadfromfullnewcollector source; onlystrlen/fwrite called, renamedguestmain nevercalled, no helper/boot/device/native/signal. Samearrayis passed to actualhelpercall inreviewedsource.",
+    "source": {
+      "bytes": 588,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/read_boot_argv.c",
+      "regular_no_symlink": true,
+      "sha256": "abf751e67582cb8c9b46daa7e874d64fc1af0155005172eaa5ac76361868be9f"
+    }
+  },
+  "actual_Rust_parser_config_witness": {
+    "exact_output": "PASS exact production parser/config: reserve=1 cpu=1 mem=128M@0 owner=0 sharing=0 sbin=/usr/local/sbin kernel=/usr/local/smp-x86/kernel buildid=8d288b8\n",
+    "raw": {
+      "bytes": 152,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-5.stdout",
+      "regular_no_symlink": true,
+      "sha256": "fafc99157aa9b5963862686611249c4086f0211c5c0992c13a375656f9227749"
+    },
+    "scope": "Actuallycalled unchangedproduction reboot::parse and Config::installed on thefiveexactflags; reserve=true,cpu1,mem128M@0,owner0,sharing=false andactualprefix/buildid/IRQtrampoline-defaults asserted. No Native construction,mcrebootmain,reboot::execute,IHKCLI/API/device/sysctl/service invocation, Hostfakecallback or gatewaymock.",
+    "source": {
+      "bytes": 1869,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/check_actual_reboot_parser.rs",
+      "regular_no_symlink": true,
+      "sha256": "3f3742737cb11688300906875e90aaddecec3ed123f21d240e2ab1cabfa5362d"
+    }
+  },
+  "actual_admission": {
+    "bytes": 525,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/ADMISSION.json",
+    "regular_no_symlink": true,
+    "sha256": "aea387d52d48945aa5ae0ab9680f0331e633fdd96f0cf5d6d666348238168c26"
+  },
+  "actual_artifacts": [
+    {
+      "bytes": 1029880,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector",
+      "regular_no_symlink": true,
+      "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914"
+    },
+    {
+      "bytes": 7667,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector.d",
+      "regular_no_symlink": true,
+      "sha256": "237125720083aacf3912ea79cfe9f3569841711cf96f365240328b00c66cc014"
+    },
+    {
+      "bytes": 649765,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector.map",
+      "regular_no_symlink": true,
+      "sha256": "95b7964534d2ca332f67096336b65aa9e0c06cc50ca736ff817d68382fb998bb"
+    },
+    {
+      "bytes": 39720,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/read_boot_argv",
+      "regular_no_symlink": true,
+      "sha256": "79734831c6601180c3c41c3657f3ae7cfdb421d9f231ed4c94f41a47a4084fa3"
+    },
+    {
+      "bytes": 4341064,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/check_actual_reboot_parser",
+      "regular_no_symlink": true,
+      "sha256": "506104c94e8a4545503ea38c053a1e0e365386fe599ed404b422864968c899ac"
+    }
+  ],
+  "actual_interval": {
+    "both_retained_UNKNOWN_released": false,
+    "finished_at": "2026-11-10T22:19:04.020423+00:00",
+    "five_exact_statuses": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "native_admitted": false,
+    "no_timeout_signals_adopted_reaps_or_residual": true,
+    "positive_birth_wait_wholefamily_streams": [
+      {
+        "exit": 0,
+        "expected_exit": 0,
+        "name": "changedproductioncollectorstaticbuild",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-1",
+          "leader": 1122982,
+          "leader_birth": "43540946",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "phase": 1
+      },
+      {
+        "exit": 0,
+        "expected_exit": 0,
+        "name": "compileactualCbootargvdatawitness",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-2",
+          "leader": 1122987,
+          "leader_birth": "43540967",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "phase": 2
+      },
+      {
+        "exit": 0,
+        "expected_exit": 0,
+        "name": "runactualCbootargvdataonly",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-3",
+          "leader": 1122992,
+          "leader_birth": "43540985",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "phase": 3
+      },
+      {
+        "exit": 0,
+        "expected_exit": 0,
+        "name": "compileactualunchangedproductionparserconfigwitness",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-4",
+          "leader": 1122993,
+          "leader_birth": "43540986",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "phase": 4
+      },
+      {
+        "exit": 0,
+        "expected_exit": 0,
+        "name": "runpureactualproductionparserconfig",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-5",
+          "leader": 1123006,
+          "leader_birth": "43541008",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "phase": 5
+      }
+    ],
+    "started_at": "2026-11-10T22:19:03.379195+00:00"
+  },
+  "actual_result": {
+    "bytes": 3414,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/RESULT.json",
+    "regular_no_symlink": true,
+    "sha256": "4d64bd5eeeced46bc61318fd68805f3c820d4dfe311379953427408eb5459991"
+  },
+  "actual_sources_and_frozen_parser_config": {
+    "source_change": "Onlytwo reviewedinsertions from806958->c48cbd: signal_boot_argv6tokens andexistingnamedhelper branch; f7apayloadargv/env/frame/helperenvironment/supervisor exactregionbytes unchanged, previouslyqualified0f0/c0f5. No originalsevenHOST/oldP01green test or provider/compiler suite replay.",
+    "sources": [
+      {
+        "bytes": 24604,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/native_diagnostic_guest_collector.c",
+        "sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8"
+      },
+      {
+        "bytes": 588,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/read_boot_argv.c",
+        "sha256": "abf751e67582cb8c9b46daa7e874d64fc1af0155005172eaa5ac76361868be9f"
+      },
+      {
+        "bytes": 1869,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/check_actual_reboot_parser.rs",
+        "sha256": "3f3742737cb11688300906875e90aaddecec3ed123f21d240e2ab1cabfa5362d"
+      },
+      {
+        "bytes": 41,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/boot-argv.expected",
+        "sha256": "4ba0ab9c285c58b97716996ac7c334a748d1b4f9c8a30ecc8b049caa2da7e5d5"
+      }
+    ],
+    "unchanged_actual_production_parser_config": [
+      {
+        "bytes": 12648,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/reboot.rs",
+        "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+      },
+      {
+        "bytes": 4395,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/platform.rs",
+        "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+      },
+      {
+        "bytes": 738,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/config.rs",
+        "sha256": "b04cd168bf10fc62e2303f2d2b127c89a50689a8248f920c586af08aaf2bc912"
+      }
+    ]
+  },
+  "bound_real_production_command": {
+    "argv": [
+      "/bin/native-boot",
+      "-R",
+      "-c1",
+      "-m128M@0",
+      "-o0",
+      "-T0"
+    ],
+    "configured_paths": "usr/local/sbin realRustCLIs + actualc664 atusr/local/smp-x86/kernel/mckernel.img; retainimages/mckernel.img. ActualnonfixtureLinuxcontrolprograms/providerbytes stillneeded.",
+    "guest_cpu": "CPU1 is logicalinsidefreshguest, not excludedHOSTCPU1; existingnativecpuset2-5/12GiBunchanged",
+    "native_boot_artifact": "ExistingqualifiedRustcd50d3da mcreboot ELF, reusedunchangednotrecompiled/executed",
+    "source_derived_reservation_order": "Givenactualcollector-preloadedSMP, actualunchangedo.reserve&&!acquired.smp branch reservesmem128M@0beforecpu1. Thenbuildid8dcheck/create/assigncpu/assignmem/loadactualconfiguredkernel/kargs/boot/chown. Source/callerorderbound, not runtimeinvoked or observed."
+  },
+  "material_GO": {
+    "bytes": 18820,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-boot-caller-review-p04tests-max-1/REVIEW.json",
+    "regular_no_symlink": true,
+    "sha256": "a6fa769fec882a1e6f504f267222bb982f5473510b97cb5324c5734a81eb83f7"
+  },
+  "new_collector": {
+    "ELF_scope": "Thisnewcollector was not separatelyreadelf/ELFparsed byqualifier or rerunthrougholdsevenunits. StrictactualELFguard will necessarilyvalidate9a55whennewderivedoverlayisactuallybuilt. Staticlinkcommand/source/header/map witnesspass does notclaimnativeexecution/ABI/runtimeacceptance.",
+    "actual": {
+      "bytes": 1029880,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/output-1/collector",
+      "regular_no_symlink": true,
+      "sha256": "9a553f4a33d4ed99b106bc4795bb34e75071dbbf08469115a0765f4f7f364914"
+    },
+    "compile": "ActualHOSTgcc9 -static -no-pie C11/O2/g1/Wall/Wextra/Werror/ND_SIGNAL_ALTERNATE_REPEAT=1; .d/map/trace captured, privateTMPDIR used. Collectoritselfneverexecuted.",
+    "source_sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8"
+  },
+  "original_condition_limits": [
+    "OriginalM14-06-02-FUNCTIONAL stillrequiresfullframe/altstack/registercontext/configuredxstate/normal+errorcondition; named16signalcasealoneisonescope, notwholeleaf. Priorqualifiedproofsreusedatdeclaredscope; no newscenarioquota.",
+    "Installedcurrent3actualfreshgate/source/effectiveview/pidfd refusals and allnative/cleanup/sourceUNKNOWNremain; bothplaceholder/hierarchyproposalsINERT. No controlfile/lock/lease/currentfreeproofcreated.",
+    "NewCPU7NUMAcopycapture1115511/birth43397623 remainsUNKNOWN despiteactualcopiedbe20/62328 bytes+daemonterminal/removal; noarchive-ready/release fromabsence. OldCPU0alsoremainsUNKNOWN.",
+    "Actualguestbase/Linuxinsmod/productionbootdependencies and transitiveproviders/metadata mustmaterialize; exactRootone-shotadmission/source/currentfreeandrestoreconditionsstillmissinggenuineengineeringprimitives. No nativecommandwithplaceholders emitted.",
+    "Preservedcompute1e64/c664/25filesonly; laterf8/currentproductionimageisnotthenativecohort. SourceDEFAULTstillOFF; no Cretirement/native/default/originalmilestoneacceptance."
+  ],
+  "owner": "P03 saved-data qualifier/source author; Root sole integration/execution, independent actual-resultreview required",
+  "qualifier_operations": "SavedJSON/text/fileSHA/size/modeonly. No SUTimport, test/compiler/linker/ELFparser/readelf/oldcheck/helper/serializer/Docker/network/native/canonical/control/installedcode execution.",
+  "raw_saved_proofs": [
+    {
+      "bytes": 881,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-1.stdout",
+      "regular_no_symlink": true,
+      "sha256": "c137225a1c2ee8bb11270b705f755b5ed934b4e10a1a362ebfea64ca91446615"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-1.stderr",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-2.stdout",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-2.stderr",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 41,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-3.stdout",
+      "regular_no_symlink": true,
+      "sha256": "4ba0ab9c285c58b97716996ac7c334a748d1b4f9c8a30ecc8b049caa2da7e5d5"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-3.stderr",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-4.stdout",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-4.stderr",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 152,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-5.stdout",
+      "regular_no_symlink": true,
+      "sha256": "fafc99157aa9b5963862686611249c4086f0211c5c0992c13a375656f9227749"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/execution-1/phase-5.stderr",
+      "regular_no_symlink": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "request": {
+    "bytes": 15273,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/REQUEST.json",
+    "regular_no_symlink": true,
+    "sha256": "7630d6fca1f3aaa6dbc79f5ce3555ab518c9f855ac821c1d7e058ed7a79d754b"
+  },
+  "resource_scope": {
+    "HOST_ceiling_bytes": 4294967296,
+    "actual_accounted_bytes": 2645315584,
+    "actual_jobs": 3,
+    "native": false,
+    "new_job": "CPU6/512MiBplannedfamily/per-processAS, afterheavyrelease; bothheldCPU0+CPU7/256MiBjobs counted, no allowanceborrowing",
+    "physical_peak": "Notmeasuredterminalpeak; no suchclaim"
+  },
+  "schema": "m14-f06-actual-real-boot-caller-HOST-qualification-v1",
+  "source_contract": {
+    "bytes": 13862,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+    "regular_no_symlink": true,
+    "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+  },
+  "status": "PASS_ACTUAL_REAL_BOOT_ARGV_PRODUCTION_PARSER_CONFIG_AND_NEW_STATIC_COLLECTOR_NOT_NATIVE_ACCEPTANCE"
+}

@@ -1,9 +1,23 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T06:54:51.213862+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T07:08:28.943637+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Matching named boot caller selected.** Root composed existing976B e64 after
+independentba68 sourceGO: canonical collector806958→c48, other3 named runtime
+sources unchanged. Exact9a55 static HOSTGCC9 collector/five positive HOST phases
+are reused; real staging still must run its existing strict ELF validation.
+P04Source assembles the full1e64/c664/threeKO/Linux/30ELF/base-overlay packet;
+PublicABI completes actual control/admission/registered-loader/source consumers,
+SourceAcq independently reviews. No native operation or reservation release.
+Whole03-04 remains open on actual required C wait70/slot0 and pending-signal
+C terminate136/12, not just the three newly Rust forwarders. SDK/P04Tests retain
+these exact clause gaps without a new zero-wholeimage requirement. P03 qualifies
+saved27-record f199 evidence and its physically preserved0ddffc baseline;
+P04Tests decides whole03-03 independently from actual mprotect/shmat/provider
+joins. No green build/case/metadata reruns; scores remain unchanged.
 
 **Named signal source integration complete; runtime remains unadmitted.** Root
 applied exactf7a fourfile postimages after independentfc550 sourceGO, including

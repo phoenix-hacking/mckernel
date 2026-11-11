@@ -1,0 +1,287 @@
+{
+  "at": "2026-11-10T22:17:49.291735+00:00",
+  "blocking_material_defects": [],
+  "candidate": {
+    "bytes": 24604,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/native_diagnostic_guest_collector.c",
+    "regular_no_symlink": true,
+    "sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8"
+  },
+  "decision": "GO_SOURCE_AND_EXACT_FIVE_HOST_PHASES_AFTER_ROOT_FRESH_ADMISSION",
+  "material_findings": [
+    {
+      "boundary": "Exact source delta and prior named-path/env preservation",
+      "evidence": "Independently reconstructed the976B e64d7 patch from actual806958 preimage to c48cbd candidate. Removing exactly the new6-line named signal argv declaration and2-line elif helper call restores every preimage byte. Thus payload argv/cwd/five environment entries, helper environment, serializer/supervisor/timeout/cleanup, all other feature/futex/default branches and existing f7a mutual-exclusion guard remain byte-exact. Prior0f0d actualHOST/c0f5 independent named proof reused without rerun.",
+      "result": "GO"
+    },
+    {
+      "boundary": "Genuine production supplier and config rather than fabricated boot logic",
+      "evidence": "Actual4493400B0755 cd50 staged Rust mcreboot ELF and immutable source36d32 reboot/7e837 platform/9bed main plus b04cd generated config match retained qualification4f1360. Actual main consumes argv.skip(1), then real parse/execute with installed config and Native. Only the new call arguments select existing production behavior; no new production backend/callback/template or default flag changed. HOST witnesses never call main/Native/execute.",
+      "result": "GO_AT_SOURCE_PREREQUISITE_SCOPE"
+    },
+    {
+      "actual_argv": [
+        "/bin/native-boot",
+        "-R",
+        "-c1",
+        "-m128M@0",
+        "-o0",
+        "-T0"
+      ],
+      "boundary": "Exact argv and real parser semantics",
+      "evidence": "Static C array decodes to the exact41B NUL-delimited expected file4ba0ab. Actual parser accepts -R reserve, -c1 cpu string1, -m128M@0, ownerSome0 and -T0 sharingfalse. Its remaining turbo/safe/halt/oversubscribe/ikc/extra/irq defaults, redirect0/interval-1/dump24 match all Rust witness assertions. Numeric owner skips lazy id/logname lookup. CPU1 is guest logical data, not this HOST CPU1 affinity or any host reservation expansion.",
+      "result": "GO"
+    },
+    {
+      "boundary": "Real preloaded-module/reservation/config/caller obligations",
+      "evidence": "Actual collector loads ihk, ihk-smp-x86_64 with trampoline524288, then mcctrl before the changed helper. With the real matching /proc/modules names, existing acquired.smp=false plus -R selects the existing reserve mem then cpu branch. Generated config has WORK_IRQ_ON, prefix/sbin=/usr/local/sbin, modules=/usr/local/kmod, kernel=/usr/local/smp-x86/kernel, BUILDID8d288b8. Unchanged execution source checks buildid, creates/assigns/loads/sets kargs/boots and owns rollback; exact hidos/options kargs remain a source derivation rather than observed native argv. Guest mapping must later supply exact c664 at configured path as well as existing images path; no f8/image substitution, module/provider/native proof inferred.",
+      "result": "GO_SOURCE_PLAN_ONLY"
+    },
+    {
+      "boundary": "C collector compile and C data witness cannot boot",
+      "evidence": "Phase1 is only cc9 C11/O2/g1/Wall/Wextra/Werror/ND_SIGNAL/static/no-pie plus actuald/map/trace, never collector argv execution. Phase2 includes same actual source with guest main renamed and defines a distinct HOST main that only loops signal_boot_argv and calls strlen/fwrite. No constructor/destructor initializer or hidden collector call occurs in this source. Phase3 calls only that data witness and requires exact41B output. Real collector guestPID1/root/mount/module/helper/boot/supervise/signal paths are not reached.",
+      "result": "GO_EXACT_PHASES_1_2_3"
+    },
+    {
+      "boundary": "Rust pure actual parser/config witness",
+      "evidence": "Witness3f374 imports exact unchanged production reboot/platform and generated config directly. It calls reboot::parse on exactly the C argv tail and Config::installed, asserts all relevant fields, then one exact PASS line. No Host implementation/test dummy/Native construction/execute/native main is called. The only live config environmental read is IHK_TRAMPOLINE_PHYS; exact clean env-i omits it, so the asserted empty trampoline matches the generated constructor. Per-import dead_code allowances are test-only and do not alter production compiler/ABI/semantics.",
+      "result": "GO_EXACT_PHASES_4_5"
+    },
+    {
+      "boundary": "Exact changed-input profile and no green reruns",
+      "evidence": "All five argv preserve clean env with literal private TMPDIR/TMP/TEMP, taskset CPU6 and Bash no-profile/no-rc fixed wrapper. Limits AS512MiB, CPU60s, fsize64MiB, no core; per-phasewall90s; C warnings are errors; actual HOST cc9/staticlibc and real195 pins reused. Rust test opt1/panicabort is a pure parser consumer profile, not a rebuilt cd50 production program. No old7 named tests, eight boot cases, serializers/providers/atomic/xstate green suite replay. Only new source collector/Carray/parser/config checks are proposed. AS is an imposed per-process limit, not a guaranteed aggregate family peak or success; actual outcomes/captures are still required.",
+      "result": "GO_AFTER_FRESH_ROOT_ADMISSION"
+    }
+  ],
+  "patch": {
+    "bytes": 976,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/PRODUCTION-REBOOT-ARGV.patch",
+    "regular_no_symlink": true,
+    "sha256": "e64d7dc7d327f7aa6cc48f6b6d58ad3481db7f5daf36dcb8d5ebd6ed694fe35a"
+  },
+  "preimage": {
+    "bytes": 24226,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/preimage/native_diagnostic_guest_collector.c",
+    "regular_no_symlink": true,
+    "sha256": "806958926967ef7aefe7d12ea8f3a143c3ded85ce4091cd485883cb78999a43f"
+  },
+  "request": {
+    "bytes": 15273,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/REQUEST.json",
+    "regular_no_symlink": true,
+    "sha256": "7630d6fca1f3aaa6dbc79f5ce3555ab518c9f855ac821c1d7e058ed7a79d754b"
+  },
+  "resource_and_ownership_preconditions": {
+    "failure": "On compiler/witness/Owner/trace/deadline failure stop, retain actual argv/source/input/stdout/stderr and best-effort partial phase/error receipt, preserve primary error and only exact authenticated existing family cleanup; no numeric/reapedPID/global fallback. Actual further retry requires meaningful changed relevant input and independent delta GO.",
+    "fresh_namespaces": "Root creates fresh owned0700 output-1/tmp and execution-1 at exact1000:1000 paths; reject any preexisting output/evidence namespace and preserve old outcomes. Exact request/source/config/tool pins must match before first launch. Source-only GO does not create these paths or authorize a native resource owner.",
+    "fresh_shared_accounting": "Root fresh MemAvailable>=26GiB, host/scratch16/12GiB disk floors+64MiB output. Count all current controller/worker/family overhead and retained CPU0/256MiB/job1 UNKNOWN plus CPU7/256MiB/job1 UNKNOWN. This CPU6/512MiB/job1 is the sole new serial payload within existing4GiB/max3; no heavy/other CPU6 owner or extra payload overlap. No native2-5/12GiB or retained18GiB borrowing/release.",
+    "positive_process_capture": "Root must use the validated positive-birth owned capture before every launch; exact5 returned phase records, each immediate authenticated birth/argv/expectedstatus/direct wait/whole-family/streams closure. Reject residual/UNKNOWN/adopted reaps/adopted kills/timeouts/signals before nextphase. Never infer cleanup from absent/fast-exit PID, and do not retire either unrelated UNKNOWN owner.",
+    "required_actual_oracles": "Five expected statuses0; phase3 exact41B NUL bytes; phase5 exact frozen PASS line; collector regular0755+actualsource/deps/map/trace/hash. No production collector executable appears in a runtime argv. Passing compile or prints alone do not qualify signal behavior/native readiness."
+  },
+  "retained_actual_and_native_limits": [
+    "The passed f7a path/env/serializer/helper/supervisor evidence remains at prior exact scope; no relabeling its HOST test data as process/native observations.",
+    "Named alternate-repeat16 handler scenario remains only one bounded part of full original M14-06-02-FUNCTIONAL; frame/context/xstate/normal/error obligations, wholeF06/default and M14 acceptance remain open.",
+    "Genuine guestbase Linux programs/libraries/NUMA-copy UNKNOWN disposition/current3 source/effective view/current-free/fresh one-shot native owner/pidfd/restoration are separate still-required inputs. No fake utilities, old gate nonce, guessed header/provider, hierarchy placeholder or source/API admission expansion.",
+    "No canonical source integration/boot/backend/controller/live state or native action is performed or granted by reviewer. Root alone may compose exact reviewed two hunks when appropriate."
+  ],
+  "reviewer": "p04_tests_max actual existing direct gpt-6.1-sol/MAX; independent of P03 author; no recursion; Root sole compositor/executor/publisher",
+  "reviewer_operations": {
+    "SUT_import_execution": false,
+    "canonical_edits": false,
+    "compiler_preprocessor_CMake_test_provider_main_Docker_network_native": false,
+    "new_agents": false,
+    "private_REVIEW_write_only": true,
+    "source_JSON_raw_bytes_hash_and_text_comparison": true
+  },
+  "schema": "m14-f06-named-production-boot-caller-independent-source-operation-review-v1",
+  "source_contract": {
+    "bytes": 13862,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+    "regular_no_symlink": true,
+    "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+  },
+  "source_only_C_retirement_or_default_original_acceptance": false,
+  "verified_frozen_input_count": 25,
+  "verified_frozen_inputs": [
+    {
+      "bytes": 12648,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/reboot.rs",
+      "regular_no_symlink": true,
+      "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+    },
+    {
+      "bytes": 4395,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/platform.rs",
+      "regular_no_symlink": true,
+      "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+    },
+    {
+      "bytes": 738,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/config.rs",
+      "regular_no_symlink": true,
+      "sha256": "b04cd168bf10fc62e2303f2d2b127c89a50689a8248f920c586af08aaf2bc912"
+    },
+    {
+      "bytes": 13862,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+      "regular_no_symlink": true,
+      "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+    },
+    {
+      "bytes": 645792,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "regular_no_symlink": true,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "bytes": 43555,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+      "regular_no_symlink": true,
+      "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+    },
+    {
+      "bytes": 24604,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/native_diagnostic_guest_collector.c",
+      "regular_no_symlink": true,
+      "sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8"
+    },
+    {
+      "bytes": 588,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/read_boot_argv.c",
+      "regular_no_symlink": true,
+      "sha256": "abf751e67582cb8c9b46daa7e874d64fc1af0155005172eaa5ac76361868be9f"
+    },
+    {
+      "bytes": 1869,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/check_actual_reboot_parser.rs",
+      "regular_no_symlink": true,
+      "sha256": "3f3742737cb11688300906875e90aaddecec3ed123f21d240e2ab1cabfa5362d"
+    },
+    {
+      "bytes": 41,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/boot-argv.expected",
+      "regular_no_symlink": true,
+      "sha256": "4ba0ab9c285c58b97716996ac7c334a748d1b4f9c8a30ecc8b049caa2da7e5d5"
+    },
+    {
+      "bytes": 4493400,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+      "regular_no_symlink": true,
+      "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818"
+    },
+    {
+      "bytes": 73773,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/qualification-1/QUALIFICATION.json",
+      "regular_no_symlink": true,
+      "sha256": "4f1360a0195865f1d9a08b56ab32878a48f556ddafd539adbfc57f1370a45671"
+    },
+    {
+      "bytes": 287,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/mcreboot_main.rs",
+      "regular_no_symlink": true,
+      "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+    },
+    {
+      "bytes": 287,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/scripts/rust/boot-tools/mcreboot_main.rs",
+      "regular_no_symlink": true,
+      "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+    },
+    {
+      "bytes": 12648,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/scripts/rust/boot-tools/reboot.rs",
+      "regular_no_symlink": true,
+      "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+    },
+    {
+      "bytes": 4395,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/scripts/rust/boot-tools/platform.rs",
+      "regular_no_symlink": true,
+      "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+    },
+    {
+      "bytes": 40960,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkconfig",
+      "regular_no_symlink": true,
+      "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b"
+    },
+    {
+      "bytes": 37776,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkosctl",
+      "regular_no_symlink": true,
+      "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672"
+    },
+    {
+      "bytes": 12095128,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/stage/lib64/libihk.so",
+      "regular_no_symlink": true,
+      "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2"
+    },
+    {
+      "bytes": 10396880,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/build/kernel/mckernel.img",
+      "regular_no_symlink": true,
+      "sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
+    },
+    {
+      "bytes": 976,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/PRODUCTION-REBOOT-ARGV.patch",
+      "regular_no_symlink": true,
+      "sha256": "e64d7dc7d327f7aa6cc48f6b6d58ad3481db7f5daf36dcb8d5ebd6ed694fe35a"
+    },
+    {
+      "bytes": 24226,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/preimage/native_diagnostic_guest_collector.c",
+      "regular_no_symlink": true,
+      "sha256": "806958926967ef7aefe7d12ea8f3a143c3ded85ce4091cd485883cb78999a43f"
+    },
+    {
+      "bytes": 19838,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/qualification-1/RESULT.json",
+      "regular_no_symlink": true,
+      "sha256": "0f0dcbb5767ac47017d405e705d5b0218074a298031fd7665a6e4a340045c6b7"
+    },
+    {
+      "bytes": 14873,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-named-host-review-source-acquisition-max-1/qualification-1/REVIEW.json",
+      "regular_no_symlink": true,
+      "sha256": "c0f5ab183dcf8a63167dbdf2706dd1fac5cd6f59b5bff996dae4eb43d87ffba6"
+    },
+    {
+      "bytes": 9922,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/SOURCE-CONTRACT.json",
+      "regular_no_symlink": true,
+      "sha256": "da7838390f3333490fe48693dfc8f6ba12f0d044341a269de26f63cd8f912102"
+    }
+  ]
+}
