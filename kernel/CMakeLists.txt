@@ -102,7 +102,10 @@ endif()
 set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
 set(MCKERNEL_DO_MMAP_SELECTED OFF)
 set(MCKERNEL_DO_FORK_SELECTED OFF)
+set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
+set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
+set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -574,6 +577,23 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                     "${CMAKE_CURRENT_SOURCE_DIR}/include/shm.h"
                     "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
                     "${CMAKE_CURRENT_SOURCE_DIR}/include/profile.h")
+                # Complete ptrace resume callback ownership only for the already
+                # qualified ordinary whole-F06 profile. Broad adapters stay off.
+                if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
+                    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT DCFA_KMOD AND
+                    NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
+                    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
+                    NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+                    set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED ON)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f06_ptrace_resume_callbacks_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_resume_callbacks.rs"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_ptrace_adapters.rs"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/kmalloc.h"
+                        "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/arch-lock.h"
+                        "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
+                endif()
                 # Current legacy-host fork entry; the separate owned transaction
                 # retains its original C selection and holds.
                 if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
@@ -604,6 +624,24 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
             list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall2_bridge_candidate")
             list(APPEND RUST_KERNEL_SRCS
                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_syscall2_bridge.rs")
+        endif()
+        # Close only the actual memory-host/three-argument provider frontier.
+        # Broad forwarding/owned transaction options keep their existing scope.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+            set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_memory_host_offload_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_memory_host_offload.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
+        # Narrow genuine context adapter; retain every existing generic/exec gate.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+            set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_policy_forward_context_bridge_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_policy_forward_context_bridge.rs")
         endif()
 		add_custom_command(
 		OUTPUT "${RUST_KERNEL_OBJ}"
@@ -1027,9 +1065,17 @@ if (RUST_KERNEL_ENABLED AND MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
 endif()
 
 # Apply after the existing source properties, which otherwise replace flags.
+if (MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED)
+    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)
+endif()
 if (MCKERNEL_DO_FORK_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_FORK)
+endif()
+if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
 endif()
 if (MCKERNEL_DO_MMAP_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
@@ -1045,6 +1091,11 @@ endif()
 if (MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
+endif()
+
+if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
 endif()
 
 add_executable(mckernel.img ${MCKERNEL_SRCS})

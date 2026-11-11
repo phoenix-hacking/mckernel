@@ -64,15 +64,19 @@ mod syscall_policy;
 mod f03_do_mmap;
 #[cfg(f03_do_fork_candidate)]
 mod f03_do_fork;
+#[cfg(f03_memory_host_offload_candidate)]
+mod f03_memory_host_offload;
 #[cfg(f03_do_syscall_outer_candidate)]
 mod syscall_offload_entry;
 #[cfg(f03_do_syscall2_bridge_candidate)]
 mod f03_do_syscall2_bridge;
+#[cfg(f03_policy_forward_context_bridge_candidate)]
+mod f03_policy_forward_context_bridge;
 #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
 mod f06_rt_sigreturn_xrstor;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
 mod f03_forward_adapters;
-#[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+#[cfg(all(any(f03_forward_adapters_candidate, f06_ptrace_resume_callbacks_candidate), target_arch = "x86_64"))]
 mod f03_ptrace_adapters;
 #[cfg(all(any(f03_forward_adapters_candidate, f03_host_cleanup_candidate), target_arch = "x86_64"))]
 mod f03_host_cleanup;

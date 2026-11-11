@@ -35451,3 +35451,8 @@ use self::f06_vdso_info::vdso_get_vdso_info;
 #[cfg(all(f03_signal_forward_defined_candidate, target_arch = "x86_64"))]
 #[path = "f03_signal_forward_defined_candidate.rs"]
 mod f03_signal_forward_defined_candidate;
+
+// Genuine resume callbacks; select together with the paired C exclusions.
+#[cfg(f06_ptrace_resume_callbacks_candidate)]
+#[path = "f06_ptrace_resume_callbacks.rs"]
+mod f06_ptrace_resume_callbacks;

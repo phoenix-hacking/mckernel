@@ -1076,20 +1076,20 @@ long syscall_copy_from_user_bridge(void *dst_addr,
 long syscall_copy_to_user_bridge(unsigned long dst_addr,
 		const void *src, size_t bytes);
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
-extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1);
-extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1, unsigned long arg2);
-extern long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1);
+extern long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
+extern long syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
 #else
-static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1);
-static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1, unsigned long arg2);
+static long syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1);
 #endif
-long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
-		unsigned long arg1, unsigned long arg2);
+#if (defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)) || defined(MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
+extern long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2); _Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_syscall3_bridge), syscall_do_syscall3_fn_t), "three-argument offload ABI"); _Static_assert(sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8, "current request ABI");
+#else
+static long syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
+#endif
+long syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0, unsigned long arg1, unsigned long arg2);
+
+
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long syscall_do_syscall_request_bridge(struct syscall_request *request,
 		int cpu);
@@ -4744,11 +4744,25 @@ ptrace_detach_cleanup_bridge(void *thread, unsigned long ptrace_offset,
 }
 #endif
 
+/* Preserve this original tracked-free origin in every C fallback profile. */
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE 4654
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE 4659
+#else
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE 4661
+#define MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE 4666
+#endif
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_detach_kfree_bridge(void *);
+#else
+#line MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE
 static void
 ptrace_detach_kfree_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
+#endif
+#line MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
@@ -4780,7 +4794,7 @@ ptrace_detach_thread_exit_signal_bridge(void *thread)
 }
 #endif
 
-#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS
+#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)
 extern long ptrace_detach_do_kill_bridge(void *, int, int, int,
 		const void *, int);
 extern void ptrace_detach_wakeup_bridge(void *, int);
@@ -5941,11 +5955,11 @@ long sys_exit_group(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
-static void
-clear_host_pte_log_bridge(long error)
-{
-	kprintf("clear_host_pte failed. %ld\n", error);
-}
+#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+void clear_host_pte_log_bridge(long error); _Static_assert(__builtin_types_compatible_p(__typeof__(&clear_host_pte_log_bridge), clear_host_pte_log_fn_t), "memory-host callback ABI");
+#else
+static void clear_host_pte_log_bridge(long error) { kprintf("clear_host_pte failed. %ld\n", error); }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
@@ -6054,18 +6068,18 @@ do_munmap_remove_range_bridge(void *vm, unsigned long start,
 }
 #endif
 
-static long
-do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
-{
-	return clear_host_pte(addr, len, holding_lock);
-}
+#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock); _Static_assert(__builtin_types_compatible_p(__typeof__(&do_munmap_clear_host_bridge), do_munmap_clear_host_fn_t), "memory-host callback ABI");
+#else
+static long do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock) { return clear_host_pte(addr, len, holding_lock); }
+#endif
 
-static int
-do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
-		int holding_lock)
-{
-	return set_host_vma(addr, len, prot, holding_lock);
-}
+#ifdef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock); _Static_assert(__builtin_types_compatible_p(__typeof__(&do_munmap_set_host_bridge), mprotect_set_host_vma_fn_t), "memory-host callback ABI");
+#else
+static int do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot, int holding_lock) { return set_host_vma(addr, len, prot, holding_lock); }
+#endif
+
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_FINISH)
 extern void f03_unmap_finish(void);
@@ -20856,7 +20870,7 @@ syscall_forward_context_bridge(int syscall_nr, void *ctx)
 			(ihk_mc_user_context_t *)ctx);
 }
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
 long
 syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
 {
@@ -25332,6 +25346,10 @@ ptrace_wakeup_thread_unlock_bridge(unsigned long thread_addr)
 #endif
 #line 24424
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_wakeup_log_bridge(int, int, int);
+#else
+#line 24425
 static void
 ptrace_wakeup_log_bridge(int event, int value, int result)
 {
@@ -25340,6 +25358,8 @@ ptrace_wakeup_log_bridge(int event, int value, int result)
 				value, result);
 	}
 }
+#endif
+#line 24433
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
 extern int ptrace_wakeup_clear_saved_bridge(unsigned long, unsigned long);
@@ -25367,12 +25387,18 @@ ptrace_wakeup_set_single_step_bridge(unsigned long thread_addr)
 #endif
 #line 24447
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_wakeup_update_lock_bridge(unsigned long, void *);
+#else
+#line 24448
 static void
 ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 24454
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
 extern int ptrace_wakeup_trace_syscall_bridge(unsigned long, unsigned long, int);
@@ -25388,12 +25414,18 @@ ptrace_wakeup_trace_syscall_bridge(unsigned long thread_addr,
 #endif
 #line 24462
 
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+extern void ptrace_wakeup_update_unlock_bridge(unsigned long, void *);
+#else
+#line 24463
 static void
 ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 24469
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
 extern unsigned long ptrace_wakeup_pending_take_bridge(unsigned long,
@@ -25412,6 +25444,58 @@ ptrace_wakeup_pending_take_bridge(unsigned long thread_addr,
 #endif
 #line 24479
 #endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#define MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE 24590
+#else
+#define MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE 24602
+#endif
+#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
+#if !defined(__x86_64__) || !defined(PROFILE_ENABLE) || defined(ENABLE_UBSAN) || \
+    !defined(SPINLOCK_IN_MCS_RWLOCK) || !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || \
+    !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || \
+    !defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) || \
+    !defined(MCKERNEL_RUST_F03_PTRACE_ENTRY) || \
+    !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
+#error "Rust ptrace resume callbacks require the paired current profile/types/providers"
+#endif
+extern int ptrace_wakeup_sig(int, long, long);
+_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
+    "Rust ptrace resume Ddebug flags must match C");
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
+    "Rust ptrace resume filename must match actual C __FILE__");
+_Static_assert(sizeof(int) == 4 && sizeof(unsigned int) == 4 && sizeof(long) == 8 && sizeof(unsigned long) == 8 && sizeof(void *) == 8,
+    "Rust ptrace resume scalar ABI");
+_Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64 && __builtin_offsetof(struct mcs_rwlock_node_irqsave, irqsave) == 0,
+    "Rust ptrace resume live IRQ node ABI");
+_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64 && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,
+    "Rust ptrace resume actual MCS lock ABI");
+_Static_assert(sizeof(struct siginfo) == 128 && __builtin_offsetof(struct sig_pending, info) == 24,
+    "Rust ptrace resume pending info ABI");
+_Static_assert(sizeof(struct ptrace_io_offsets) == 88 && sizeof(struct ptrace_syscall_ops) == 152 && __alignof__(struct ptrace_syscall_ops) == 8 && __builtin_offsetof(struct ptrace_syscall_ops, wakeup_fn) == 8,
+    "Rust ptrace resume real offset/ops table ABI");
+_Static_assert(sizeof(struct ddebug) == 32 && __alignof__(struct ddebug) == 8 && PTRACE_CONTROL_LOG_WAKEUP_ENTER == 4,
+    "Rust ptrace resume debug ABI/event");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_sig),
+    ptrace_wakeup_sig_fn_t), "Rust ptrace resume ptrace_wakeup_sig ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_update_lock_bridge),
+    void (*)(unsigned long, void *)), "Rust ptrace resume ptrace_wakeup_update_lock_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_update_unlock_bridge),
+    void (*)(unsigned long, void *)), "Rust ptrace resume ptrace_wakeup_update_unlock_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_kfree_bridge),
+    void (*)(void *)), "Rust ptrace resume ptrace_detach_kfree_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_log_bridge),
+    void (*)(int, int, int)), "Rust ptrace resume ptrace_wakeup_log_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_do_kill_bridge),
+    long (*)(void *, int, int, int, const void *, int)), "Rust ptrace resume ptrace_detach_do_kill_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_wakeup_bridge),
+    void (*)(void *, int)), "Rust ptrace resume ptrace_detach_wakeup_bridge ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill),
+    unsigned long (*)(struct thread *, int, int, int, struct siginfo *, int)), "Rust ptrace resume do_kill ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_wakeup_thread),
+    int (*)(struct thread *, int)), "Rust ptrace resume sched_wakeup_thread ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&kfree_tracked),
+    void (*)(void *, char *, int)), "Rust ptrace resume kfree_tracked ABI");
+#else
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 #line 24477
 #else
@@ -25527,6 +25611,8 @@ out:
 	return error;
 #endif
 }
+#endif /* MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS */
+#line MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE
 
 extern long ptrace_read_user(struct thread *thread, long addr, unsigned long *value);
 extern long ptrace_write_user(struct thread *thread, long addr, unsigned long value);
@@ -27468,19 +27554,18 @@ syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 }
 #endif
 
+#ifndef MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
 static long
 syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 		unsigned long arg1, unsigned long arg2)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
-
 	request.number = syscall_nr;
 	request.args[0] = arg0;
 	request.args[1] = arg1;
 	request.args[2] = arg2;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
-
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
@@ -27488,6 +27573,7 @@ syscall_policy_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
 {
 	return syscall_do_syscall3_bridge(syscall_nr, arg0, arg1, arg2);
 }
+#endif
 #endif
 #endif /* C forwarding adapters; Rust owns the explicit candidate selection. */
 
