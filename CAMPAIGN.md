@@ -1,9 +1,30 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T05:44:00.971999+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T06:50:42.350083+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Current native source diagnosis and M14 qualification.** At06:41:02Z the
+f199/1aee affected reader093446 passed:30 literal commands/27 outputs,13 clients
+and Root12070 joined0/CID05889 removed/512MiB released. P03 qualifies saved
+four-owner/mprotect-shmat/signal-context/provider evidence; SDK preserves its
+25-file green cohort before a cache writer. No producer or passing case reruns.
+The requested native diagnosis bundle is now source-bound under
+`docs/verification/native-admission-debug-20261111/`: all9 installed sources
+match81be; actual issuer/store and controller source,18-loader catalog/eight
+omissions, exact installed/private/canonical distinctions and missing request
+fields are visible. Native operation remains unadmitted. Static native12 capacity,
+controller run.lock and closed install-only lease do not grant an operation.
+Root assigned PublicABI the complete real supervisor/compositor/admission and
+registered parent dependency path; SourceAcq independently reviews authority,
+source/custody/effective-view and lifecycle. Missing routine integration is our
+engineering TODO, not an inferred new policy denial or external PID request.
+Next15min deliverable: P03 saved-image qualification with independent whole
+M14-03-03/04 DEFAULT decisions; P04Tests freezes exact already-qualified four
+named-case postimages for soleRoot integration; PublicABI returns actual complete
+native source delta and recovered loader pins. No native execution or release.
+Scores and original criteria unchanged; reuse confirmed PR3 receipt6788434691.
 
 **Whole F06 DEFAULT and original M15-I03 accepted at their exact scopes.**
 IndependentGOfef8a19d closes M14-F06-DEFAULT on7231/image19c5: all5 complete
@@ -16,7 +37,11 @@ order and allother conditions. C104/private-stage/live/native distinctions stay.
 Exactly2 further checks close:95/156 verified, M14=66.30%, M15=67.19%,
 combined+1.11/+1.19 displayed points from the last confirmed pair65.19/66.00.
 Foreground posted this new pair once in PR3 comment6788434691, confirmed;
-Root reuses it and finishes the source/results checkpoint without a duplicate.
+Root reuses it; checkpoint8053237f is pushed/fetched with112 matching owned
+blobs and all33dirty paths preserved. No progress report remains pending.
+Native issuer/independent review/partial binding evidence is public in that
+commit; substantive return6788871410 is POSTED_CONFIRMED, still blocked on real
+admission/source/parent-loader bindings, with no native release or execution.
 Next15min: run source-bound f199/cd27 affected image after independent operation
 GO, then minimum4-owner/mprotect-shmat/signal ABI+caller/provider reader; retain
 19c5/de6c oldgreen until verified. Source5-path jointGO937e/currentprotected

@@ -1,0 +1,219 @@
+{
+  "actual_production_boot_supplier": {
+    "actual_staged_equals_built": true,
+    "artifact": {
+      "bytes": 4493400,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+      "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818"
+    },
+    "guest_destination": "bin/native-boot",
+    "qualification": {
+      "bytes": 73773,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/qualification-1/QUALIFICATION.json",
+      "sha256": "4f1360a0195865f1d9a08b56ab32878a48f556ddafd539adbfc57f1370a45671"
+    },
+    "scope": "ActualRust main/nativeHost/execute symbols and normalprivateinstall/source/config proofs reused; explicitRust boottools selection in sourceproducer, sourceDefaultOFF remains. It is an ELF with existing fullproduction behavior, not a newbootimplementation. No main, Native::new or execute invoked by preparer/newHOSTwitness.",
+    "selected_original_source_rows": [
+      {
+        "actual_qualified_source_equal": true,
+        "bytes": 287,
+        "git_blob_sha1": "867837c01da4a1dcc56200adbe400b014280a398",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/mcreboot_main.rs",
+        "qualified_previous_source": {
+          "bytes": 287,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/scripts/rust/boot-tools/mcreboot_main.rs",
+          "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473"
+        },
+        "relative": "scripts/rust/boot-tools/mcreboot_main.rs",
+        "sha256": "9bed3da348b7d663d9599888a4d6b8f49af65679bc81d2e0613b67106ed69473",
+        "source_commit": "ce2e06fce5cc696c35f034e8cc4f3d175ffd9516"
+      },
+      {
+        "actual_qualified_source_equal": true,
+        "bytes": 12648,
+        "git_blob_sha1": "4d565174de31f4106ef3e876718b88166aa4c123",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/reboot.rs",
+        "qualified_previous_source": {
+          "bytes": 12648,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/scripts/rust/boot-tools/reboot.rs",
+          "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da"
+        },
+        "relative": "scripts/rust/boot-tools/reboot.rs",
+        "sha256": "36d32e918c2f69694bd8c3e54ff3041f57cac5ad511a524de11c313aec4986da",
+        "source_commit": "ce2e06fce5cc696c35f034e8cc4f3d175ffd9516"
+      },
+      {
+        "actual_qualified_source_equal": true,
+        "bytes": 4395,
+        "git_blob_sha1": "7124a3d6ccec829c17afd442ef1e955435ed6896",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source/scripts/rust/boot-tools/platform.rs",
+        "qualified_previous_source": {
+          "bytes": 4395,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01-p02-source-max-1/source/scripts/rust/boot-tools/platform.rs",
+          "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c"
+        },
+        "relative": "scripts/rust/boot-tools/platform.rs",
+        "sha256": "7e837af3533f3496f35fea94561d39b4cedf55334ebc8864ac34308dd1aef10c",
+        "source_commit": "ce2e06fce5cc696c35f034e8cc4f3d175ffd9516"
+      }
+    ],
+    "typed_generated_config": {
+      "bytes": 738,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/build/rust-boot-tools/config.rs",
+      "sha256": "b04cd168bf10fc62e2303f2d2b127c89a50689a8248f920c586af08aaf2bc912"
+    }
+  },
+  "candidate": {
+    "bytes": 24604,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/source/native_diagnostic_guest_collector.c",
+    "sha256": "c48cbdcbc3648f4e1d8838e451d6d578c5a0b2876fc6e2401aff26ee4372a5b8"
+  },
+  "exact_new_caller": {
+    "actual_parse_semantics": {
+      "-R": "reserve=true; necessary when collector alreadyloadedIHK/SMP/mcctrl",
+      "-T0": "sharing=false, explicitly disables time_sharing; turbo/safe/halt/oversubscribe/extra/ikc/irq remainrealdefaults",
+      "-c1": "guestlogicalCPU1; NOT hostCPU1/affinity expansion; nativeHOSTremains2-5",
+      "-m128M@0": "128MiB=134217728bytes on guestNUMAnode0; allretainedsupportedguestprofiles have CPU1/node0 capacity",
+      "-o0": "numericUID0 owner; skips id/logname lookup and realchown uses rootnumericUID",
+      "remaining_options": "redirect0/interval-1 so noihkmondlaunch; dump24; no CLI/API mutation before actualnativegate."
+    },
+    "argv": [
+      "/bin/native-boot",
+      "-R",
+      "-c1",
+      "-m128M@0",
+      "-o0",
+      "-T0"
+    ],
+    "call": "Existing helper(\"boot\", \"/bin/native-boot\", signal_boot_argv, &safe) in the same bootphase; no otherbranch/helper/timeout/ownership change.",
+    "helper_environment": "Unchanged PATH=/bin:/sbin:/usr/bin:/usr/sbin, LC_ALL=C; rootguest so Native.sudo=false; no credential helper/sudo needed insideguest.",
+    "module_and_reserve_order": {
+      "collector": "Existing three successfulloadhelpers run first: /modules/ihk.ko, /modules/ihk-smp-x86_64.ko ihk_trampoline=524288, /modules/mcctrl.ko. Actualguest/proc/modules names must match currentmodulebindings; anyfailedhelper stopsbeforeboot.",
+      "exact_frozen_branch": " if o.reserve&&!acquired.smp{if !reserve(h,&ctl,\"mem\",&o.mem){error!(\"error: reserving memory\")}acquired.mem=true;if !reserve(h,&ctl,\"cpu\",&o.cpus){error!(\"error: reserving CPUs\")}acquired.cpu=true;}",
+      "expected_source_derived_kargs": "hidos    dump_level=24   ",
+      "kargs_evidence_scope": "Static derivation from unchangedactualreboot.rs format-expression and parsedoptions, NOT an observednativeargument or executedfunction. Futureactualguest/nativeproof remainsrequired.",
+      "matching_kernel_path": "Actualconfig.kernel=/usr/local/smp-x86/kernel; guestbase must place exactc664 there andretain /images/mckernel.img for existingmanifest, with identicalbytes. No pathguess/interpreterwrapper.",
+      "order": [
+        "actualsource prechecks/getenforce/systemctl/pidof; realnon-systemdPID1 profile, no substitutedprograms or fakeoutputs",
+        "current/loadedIHK checking and normalLinuxVM sysctl/compact/sync baseline actions",
+        "ihkconfig0 reserve mem128M@0, then reserve cpu1 (explicitactualsourceorder)",
+        "getbuildid mustequal8d288b8; destroyonlyrealexistingmcosdevices insidefreshdisposableguestnamespace",
+        "ihkconfig0 create",
+        "ihkosctl0 assign cpu1",
+        "ihkosctl0 assign mem128M@0",
+        "ihkosctl0 load /usr/local/smp-x86/kernel/mckernel.img",
+        "ihkosctl0 kargs derivedhidos/options string",
+        "ihkosctl0 boot",
+        "realchown numeric0 actualguestdevices"
+      ],
+      "reboot_branch": "Givenactualmodulesloaded, acquired.smp=false; -R makes o.reserve&&!acquired.smp true, usingexactcurrentproduction branch."
+    },
+    "source_data_array": "signal_boot_argv under existingND_SIGNAL_ALTERNATE_REPEAT only"
+  },
+  "guestbase_required_mapping": [
+    {
+      "guest": "bin/native-boot",
+      "source": {
+        "bytes": 4493400,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818"
+      }
+    },
+    {
+      "guest": "usr/local/sbin/ihkconfig",
+      "source": {
+        "bytes": 40960,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkconfig",
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b"
+      }
+    },
+    {
+      "guest": "usr/local/sbin/ihkosctl",
+      "source": {
+        "bytes": 37776,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkosctl",
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672"
+      }
+    },
+    {
+      "guest": "usr/local/lib64/libihk.so",
+      "source": {
+        "bytes": 12095128,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/stage/lib64/libihk.so",
+        "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2"
+      }
+    },
+    {
+      "guest": "usr/local/smp-x86/kernel/mckernel.img",
+      "source": {
+        "bytes": 10396880,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/build/kernel/mckernel.img",
+        "sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
+      }
+    },
+    {
+      "guest": "images/mckernel.img",
+      "same_actual_c664": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
+    },
+    {
+      "guest": "modules/ihk.ko,modules/ihk-smp-x86_64.ko,modules/mcctrl.ko",
+      "source": "Reuse actual04f5/ae67/dc46 capture3 + Linux415b binding07810874; no newmodulebuild/reader."
+    },
+    {
+      "guest": "lib64/ld-linux-x86-64.so.2,lib64/libc.so.6",
+      "source": "Existing actualregular0853/b058 copiedsignalruntime inputs; no replay."
+    },
+    {
+      "guest": "lib64/libnuma.so.1",
+      "source": "Actualbe20copybytes exist but sourcecapture directwait UNKNOWN; donotqualify/replay/release and do not claim archive-ready until Root actualreconciliation."
+    },
+    {
+      "guest": "lib64/libgcc_s.so.1,lib64/libpthread.so.0,lib64/libz.so.1,lib64/libm.so.6",
+      "source": "RealDT_NEEDED from existingboottool/IHK/providerqualifications; actualimmutable46d copies/namespace+version joins needed, not guessedstandins. Priorqualifiedlibc/gcc/zlibscope reusedhonestly."
+    },
+    {
+      "guest": "sbin/insmod,bin/tee,bin/sync,bin/chown plusactual source-required discoveryutilities ifselected",
+      "source": "GenuineLinuxcontrolprograms and finiteactualNEEDEDclosure needed; currentliteraloldbaseabsent. No fakeutilities/no-op callbacks/oldfixture. A singleboundedpassiveselectedprogram/providercopy may supply these after independentreview and RootHOSTadmission; no utility/main/library/device execution."
+    }
+  ],
+  "original_leaf_scope": "OriginalM14-06-02-FUNCTIONAL covers fullsignalframe/altstack/registercontext/configuredxstate/normal+error scope. Thisnamed16altstackcase is onlyoneboundedneededscenario; reuseearlierqualifiedscopes, deriveactualmissingcases from originalledger/source withoutnewquota. DEFAULT/originalF6/I02/M14/native acceptance staysOPEN.",
+  "owner": "/root/p03_cutover_source_max private source; Root sole canonical/index/executor/compositor; otheredits preserved",
+  "patch": {
+    "bytes": 976,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/PRODUCTION-REBOOT-ARGV.patch",
+    "sha256": "e64d7dc7d327f7aa6cc48f6b6d58ad3481db7f5daf36dcb8d5ebd6ed694fe35a"
+  },
+  "preimage": {
+    "bytes": 24226,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/preimage/native_diagnostic_guest_collector.c",
+    "sha256": "806958926967ef7aefe7d12ea8f3a143c3ded85ce4091cd485883cb78999a43f"
+  },
+  "preserved_gates": "Bothplaceholder/hierarchysetupproposals INERT, installedcurrent3actualfreshgate/source/effectiveview/pidfd refusalstillunimplemented/unbound; oldCPU0 and newCPU7/256MiBjob UNKNOWN eachheld. No sourceAPI/admission expansion, newcontroller/lease/nonce/credit reset or native operation.",
+  "prior_named_contract_and_actual_HOST_reused": {
+    "actual_HOST_qualification": {
+      "bytes": 19838,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/qualification-1/RESULT.json",
+      "sha256": "0f0dcbb5767ac47017d405e705d5b0218074a298031fd7665a6e4a340045c6b7"
+    },
+    "exact_region_equality": {
+      "C_frame_serializer": true,
+      "helper_environment": true,
+      "payload_argv_and_env": true,
+      "supervisor": true
+    },
+    "independent_actual_HOST_review": {
+      "bytes": 14873,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-named-host-review-source-acquisition-max-1/qualification-1/REVIEW.json",
+      "sha256": "c0f5ab183dcf8a63167dbdf2706dd1fac5cd6f59b5bff996dae4eb43d87ffba6"
+    },
+    "scope": "Named /apps/signal.alternate-repeat argv/cwd/fiveenv, frame/streams, helperenv/supervisor and allprevious7HOSTchecks preserved. No rerun of those7checks or oldserializer/provider/atomic/xstate tests. Only new bootargs and actualproductionparser/config are new.",
+    "source_contract": {
+      "bytes": 9922,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/SOURCE-CONTRACT.json",
+      "sha256": "da7838390f3333490fe48693dfc8f6ba12f0d044341a269de26f63cd8f912102"
+    }
+  },
+  "purpose": "Fill existing /bin/native-boot with genuine alreadyqualified production Rust mcreboot.sh, not a fixture/newcontroller/dummycallback. Adapt only named-case existingcollector argv to its real parser and selected preloaded-module profile.",
+  "schema": "m14-f06-real-production-reboot-caller-source-v1",
+  "status": "FROZEN_SOURCE_AND_FOCUSED_HOST_REQUEST_REQUIRES_INDEPENDENT_REVIEW_ROOT_ADMISSION_NO_NATIVE_EXECUTION"
+}
