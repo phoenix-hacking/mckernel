@@ -1,0 +1,65 @@
+{
+  "qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/QUALIFICATION.json",
+    "bytes": 69046,
+    "sha256": "82c82622b0fa53ec24222f0f129ecf62292f83e9227200b5dc24b0007132d729"
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/RESULT.json",
+    "bytes": 1633,
+    "sha256": "f23a30fc77005841de984931fdb8453d85ad1dd69de244319244a7d66c9eef45"
+  },
+  "changed": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/MPROTECT-SIGNAL-CHANGED-PATH-JOINS.json",
+    "bytes": 94376,
+    "sha256": "6d635d8a30d8e29b96268df0420c3407da7fe687e395d0381a2265fbb8bc274f"
+  },
+  "tables": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/ACTUAL-CALLBACK-TABLES.json",
+    "bytes": 89963,
+    "sha256": "55e0f1f29bbb5527404503718cded654ec94d5ed0bb48b9fb623a9acb40b2da6"
+  },
+  "ABI": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/ACTUAL-ABI104-AND-SIGNAL-TYPES.json",
+    "bytes": 10116,
+    "sha256": "6f1e4ef5f7955d7d17d340e49b9da246e927cdc3a90436bbfb3160f925e4eccf"
+  },
+  "physical": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+    "bytes": 5775587,
+    "sha256": "f917b8a1098beb83bb3ce771a341a0a829093d47ffbb7e7fe6028e3a16a79a26"
+  },
+  "new_root_bytes": {
+    "mprotect_set_host_vma_bridge": 116,
+    "syscall_forward_context_bridge": 17,
+    "syscall_forward_rt_sigprocmask_bridge": 82,
+    "syscall_forward_sigaction_update_bridge": 107
+  },
+  "providers": 4571,
+  "imports": 259,
+  "remaining_C": [
+    {
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "previous_count": 13,
+      "actual_count": 9,
+      "removed": [
+        "mprotect_set_host_vma_bridge",
+        "syscall_forward_context_bridge",
+        "syscall_forward_rt_sigprocmask_bridge",
+        "syscall_forward_sigaction_update_bridge"
+      ],
+      "added": [],
+      "actual_names": [
+        "wait_host_wait4_bridge",
+        "terminate_mcexec_do_syscall_bridge",
+        "do_execveat",
+        "perf_event_open_do_syscall_bridge",
+        "terminate_mcexec",
+        "syscall_execveat_bridge",
+        "sys_perf_event_open",
+        "util_thread",
+        "syscall_util_indicate_clone_disabled_bridge"
+      ]
+    }
+  ]
+}

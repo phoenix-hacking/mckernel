@@ -1,0 +1,33 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8d0920 <syscall_forward_rt_sigprocmask_bridge>:
+fffffffffe8d0920:	55                   	push   %rbp
+fffffffffe8d0921:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8d0924:	41 56                	push   %r14
+fffffffffe8d0926:	53                   	push   %rbx
+fffffffffe8d0927:	48 81 ec e0 00 00 00 	sub    $0xe0,%rsp
+fffffffffe8d092e:	48 89 fb             	mov    %rdi,%rbx
+fffffffffe8d0931:	4c 8d b5 10 ff ff ff 	lea    -0xf0(%rbp),%r14
+fffffffffe8d0938:	48 b8 40 16 88 fe ff ff ff ff 	movabs $0xfffffffffe881640,%rax
+fffffffffe8d0942:	ba e0 00 00 00       	mov    $0xe0,%edx
+fffffffffe8d0947:	4c 89 f7             	mov    %r14,%rdi
+fffffffffe8d094a:	31 f6                	xor    %esi,%esi
+fffffffffe8d094c:	ff d0                	call   *%rax
+fffffffffe8d094e:	48 89 5d b8          	mov    %rbx,-0x48(%rbp)
+fffffffffe8d0952:	48 b8 f0 09 8d fe ff ff ff ff 	movabs $0xfffffffffe8d09f0,%rax
+fffffffffe8d095c:	bf 0e 00 00 00       	mov    $0xe,%edi
+fffffffffe8d0961:	4c 89 f6             	mov    %r14,%rsi
+fffffffffe8d0964:	ff d0                	call   *%rax
+fffffffffe8d0966:	48 81 c4 e0 00 00 00 	add    $0xe0,%rsp
+fffffffffe8d096d:	5b                   	pop    %rbx
+fffffffffe8d096e:	41 5e                	pop    %r14
+fffffffffe8d0970:	5d                   	pop    %rbp
+fffffffffe8d0971:	c3                   	ret
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

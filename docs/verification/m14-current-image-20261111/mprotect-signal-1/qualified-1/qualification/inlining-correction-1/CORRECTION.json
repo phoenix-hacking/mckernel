@@ -1,0 +1,37 @@
+{
+  "utc": "2026-11-11T07:18:33.673191+00:00",
+  "status": "BOUNDED_SAVED_DATA_METHOD_CORRECTION_NOT_SUT_CHANGE",
+  "original": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/qualify_saved_mprotect_signal.py",
+    "bytes": 32207,
+    "sha256": "1aec942eef9edc651762906125d2dca0702d8d52288c1a9905f61be82b8a4781"
+  },
+  "successor": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/inlining-correction-1/qualify_saved_mprotect_signal.py",
+    "bytes": 34493,
+    "sha256": "5444398a94f3d0e8b283a657cd9bbe325d2dfca3cee1ce6acef3555f8c0b6a2e"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/inlining-correction-1/QUALIFIER-INLINE-CORRECTION.patch",
+    "bytes": 10651,
+    "sha256": "785127f785a641190b75aca3f57da99a3df0afb0f49c09389ae7474ddefe7c83"
+  },
+  "diagnostic": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/qualifier-attempt-2.stderr",
+    "bytes": 844,
+    "sha256": "560956cbe8cc17d19bde96c5e6d3785af676a5a151a4ef8d7e650f4e708bd052"
+  },
+  "exact_new_authenticated_input": "Root 4b6f: saved sys_rt_sigprocmask inlines source callback; memset R64+0x17f and generic forwarding R64+0x199",
+  "saved_byte_analysis": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/SIGNAL-INLINE-SAVED-BYTE-ANALYSIS.json",
+    "bytes": 4098,
+    "sha256": "7cf3f50c479be063feb0bfe47896a3b5f466b994a2c07dd577071015010335cd"
+  },
+  "scope": "Only the exact signal caller assertion accepts the proven actual inlining and records its zero224/mask168/NR14/return/whole-function input-final relocation proof; method self-reference records actual successor. All source/clauses/guards unchanged.",
+  "attempt1_and_attempt2_preserved": true,
+  "no_SUT_or_source_action": true,
+  "unexecuted_preparation_draft": {
+    "directory": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/qualification-1/inlining-correction-1/preparation-draft-1",
+    "reason": "Static byte-window extent review corrected three indexing annotations before execution; same exact observed instructions/relocations, no changed source or observed SUT outcome."
+  }
+}

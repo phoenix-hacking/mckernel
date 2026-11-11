@@ -1,9 +1,31 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T07:18:06.985732+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T07:29:54.786469+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Original M14-03-03 DEFAULT verified.** Whole independenta50c/b2e0 joins
+actualf199/image1aee/82c qualification: all6 original VM regions,21roots/22real
+pointers/56 lower providers,116B Rust set-host and three real patches, mprotect88
+slot56/shmat152slot128, four104 ABI/4571+5 joins/259strong/zeroUND and26positive
+clients/two0nonOOMremovedcontainers. Exactly one check closes:96/156 verified,
+M14=66.67% (+0.37 displayed), M15=67.19% (unchanged). Original criteria,
+weights and denominators stay fixed; memory FUNCTIONAL/parent/file/native remain
+open. Overall emitted C13→9 is scoped image evidence, not complete C retirement.
+Root publishes/fetches this coherent checkpoint then exactly one changed-pair
+PR3 report using dedupe M14-03-03-DEFAULT@a50c053d. Prior6788434691 is retained.
+Whole03-04 separate01d7/f0d7 NO_GO remains required waitC70/slot0 and pending
+signal C136/local12; SDK and P03 own genuine narrow Rust corrections, P04Tests
+reviews changed ABI/selectors/cases. Reuse all passing producer/reader/body cases.
+The native locator is recovered/published4f71 with sourceGO0a940; source origins
+for all8 loader omissions/checker are available. PublicABI fixes actual b696
+controller compatibility/cleanup/deadline defects and completes real admission/
+source/lifecycle consumers; SourceAcq reviews/tests those changed interfaces.
+P04Source prepares actual matched c664 base/overlay/manifest and the reviewed
+exact RO immutable-package bind. Next15min: freeze two provider source fixes and
+ready new HOST staging/controller checks; Root executes only their reviewed
+commands after fresh shared admission. No native claim is released or run yet.
 
 **Genuine registered loader sources recovered; source gap reduced.** Root found
 exactcec6 loader at its registered producer sibling and all5 OWNER_FILES hash

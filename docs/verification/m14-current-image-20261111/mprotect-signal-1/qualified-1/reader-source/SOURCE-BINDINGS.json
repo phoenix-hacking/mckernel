@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "status": "FROZEN_ACTUAL_f199_SOURCE_BOUND_METADATA_INPUTS_NOT_EXECUTED",
+  "source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "IHK_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+  "canonical_integration": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/CANONICAL-INTEGRATION.json",
+    "bytes": 2071,
+    "sha256": "6f8030a6116794a990f1089c7fbbce46cabccb9e0e56a7c34eb5d848d265164f"
+  },
+  "joint_source_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-review-p04tests-max-1/REVIEW.json",
+    "bytes": 13060,
+    "sha256": "937e7afcc4928dc543014123ee5773ba97349881cad64a613c3beae1d2321809"
+  },
+  "composition": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/COMPOSITION.proposed.json",
+    "bytes": 2427,
+    "sha256": "d45e2dcdf542031d44dd46cfd7bd118e58eafe5d97675cac574b17e2b494ee2a"
+  },
+  "canonical_rows": [
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8",
+      "bytes": 62796
+    },
+    {
+      "path": "kernel/rust/f03_mprotect_host_provider.rs",
+      "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db",
+      "bytes": 1919
+    },
+    {
+      "path": "kernel/rust/f03_signal_forward_provider.rs",
+      "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467",
+      "bytes": 4336
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9",
+      "bytes": 4811
+    },
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947",
+      "bytes": 964476
+    }
+  ],
+  "old_required_modules_unchanged": {
+    "kernel/rust/f03_memory_host_offload.rs": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33",
+    "kernel/rust/f03_policy_forward_context_bridge.rs": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377",
+    "kernel/rust/f06_ptrace_resume_callbacks.rs": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0",
+    "kernel/rust/f03_do_fork.rs": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b",
+    "kernel/rust/f03_do_syscall2_bridge.rs": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685"
+  },
+  "actual_ABI": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "mprotect_source_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/CONTRACT.json",
+    "bytes": 7064,
+    "sha256": "ef6ef8c73708f396dcbfdbfe5078ff252e93ae2f401052ea65ade6a2a946cfd0"
+  },
+  "mprotect_source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/SOURCE-BINDINGS.json",
+    "bytes": 5624,
+    "sha256": "ecedf158be0a7537c570e22fe72660a8fb8ee1cbe7b23a1682fdea1ab1017ea1"
+  },
+  "signal_source_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/CONTRACT.json",
+    "bytes": 7085,
+    "sha256": "78ab0a7e10e63b8b79addcd37c63477d79df319ef5ac48e5c6a995cf546fc04c"
+  },
+  "signal_source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SOURCE-BINDINGS.json",
+    "bytes": 15050,
+    "sha256": "0fa58409ec51e7399fa07634a56fd95da4ee0d5da8dae8bcff7a77abb7790db2"
+  },
+  "signal_independent_source_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-review-p03-max-1/REVIEW.json",
+    "bytes": 28455,
+    "sha256": "b2de3296b33de51a23f13f51fddc13def04b97a20b8d0d09747a25610130d7f0"
+  },
+  "previous_current_physical_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/qualification-1/record-field-correction-1/QUALIFICATION.json",
+    "bytes": 178642,
+    "sha256": "0b57b8b60bd91be764e74915c0dba11140e2e9a2e101ccaae088c0f0f76b28c4"
+  },
+  "preserved_green19c5": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-image-p04source-max-1/stable-baseline7231-1/BASELINE.json",
+    "bytes": 26696,
+    "sha256": "de6c12876867610aa0e8b1b161d00ab7c0ba3d42da313ef4378bea61a4dc7d46"
+  },
+  "prior_qualified_reader_phase": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/correction-1/READER-PHASE.json",
+    "bytes": 26124,
+    "sha256": "2cdfd458d26574d82d54ac22d8d3793dc396e6d2ba4f2b9fea0cebb06d225f1d"
+  },
+  "prior_qualified_reader_helper": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input/read_joint_provider_metadata.sh",
+    "bytes": 9156,
+    "sha256": "af5642a4d5bd29a8499f7aa523c9cca311d53b77bde74c104ff1180288382a47"
+  },
+  "new_helper": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/input/read_mprotect_signal_metadata.sh",
+    "bytes": 6070,
+    "sha256": "c485e526e16b46ccd8ebceaa14f38bdcc14bf04d43b159657b8bc59369972b8f"
+  },
+  "new_oracles": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/OUTPUT-ORACLE.json",
+    "bytes": 9464,
+    "sha256": "12af7509d110be5da664f3780b78dd975e5fbabf42439053ea5d6c528ba9ca53"
+  },
+  "header_provider_scope": "Same genuine selecting cache/17-mount producer reala875 crash-header FILEPATH guard and qualified Linux6.12/IHK8d/real1.95/46d/MAP/compiler/profile inputs reused by SDK producer; reader needs no compiler/header/SDK overlay or tool probe.",
+  "actual_new_artifact_binding": "Not guessed here. SDK parent must gate this reader on actual f199 normal producer result/source/expected request, terminal0/nonOOM/Pid0/removed/positive clients+full outer completion/resource release; capture actual new hashes before qualifying. Old19c5 remains baseline only.",
+  "no_source_body_reaudit_or_payload": "Only source contracts/current data-layout declarations and source/integration pins were read for this metadata prep; no compiler/helper/tool/driver/test/native executed and no canonical edit."
+}

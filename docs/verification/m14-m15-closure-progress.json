@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T06:54:51.213862+00:00",
+  "updated_at": "2026-11-11T07:29:54.786469+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 66.3,
+      "checklist_percent_complete": 66.67,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
@@ -149,6 +149,13 @@
           "scope": "munmap writer-transaction correction passes12 cases, including missing-provider rejection before acquisition.",
           "level": "bounded_campaign_summary",
           "limits": "Not a whole-area or file acceptance."
+        },
+        {
+          "scope": "Complete original VM supported-default technical condition at f199/1aee",
+          "level": "whole_original_supported_default_technical_condition",
+          "verified": true,
+          "review": "docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/whole03-03/qualification-82c82622/REVIEW.json",
+          "limits": "FUNCTIONAL/native and parent/file acceptance remain separate; no holds released."
         }
       ],
       "remaining_actions": [
@@ -169,7 +176,7 @@
         "M14-03-03-DEFAULT",
         "M14-03-03-FUNCTIONAL"
       ],
-      "percent_complete": 33.33,
+      "percent_complete": 66.67,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -551,7 +558,7 @@
         "M14-F03-FUNCTIONAL",
         "M14-F03-ACCEPT"
       ],
-      "percent_complete": 40.0,
+      "percent_complete": 43.33,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -1582,9 +1589,9 @@
       "id": "M14-03-03-DEFAULT",
       "parent": "M14-03-03",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified",
       "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -1604,12 +1611,16 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/qualification/QUALIFICATION.json",
+        "docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/whole03-03/qualification-82c82622/REVIEW.json"
       ],
-      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "scope_limit": "Complete original VM supported-default technical scope on f199/image1aee; current C9 outside this region remains explicit. FUNCTIONAL/native/restoration, parent/file and milestone acceptance remain open.",
+      "definition_status": "whole original supported-default technical condition independently demonstrated at exact matched source/profile/image/provider scope",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T07:29:54.786469+00:00",
+      "current_engineering_evidence": "Independent whole GOa50c/b2e0 on f199/1aee and82c/f23: all six original VM regions,21roots/22real tablepointers/56lower providers,116B genuineRust set-host alias+three resolved code patches, mprotect88.slot56/shmat152.slot128, four104 ABI,4571+5 ownership joins/259strong/zeroUND/26 positiveclients and both0nonOOMremovedcontainers. CurrentC9 outside scope; whole03-04 NO_GO waitC70+signalterminationC136/12 retained."
     },
     {
       "id": "M14-03-03-FUNCTIONAL",
@@ -14616,16 +14627,16 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-11T05:44:00.971999+00:00",
+    "at": "2026-11-11T07:29:54.786469+00:00",
     "invocation": "20261110T060029Z-3fe88dab",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "counted_verified_before": 93,
-    "counted_verified_after": 95,
+    "counted_verified_before": 95,
+    "counted_verified_after": 96,
     "task_binding_rows_before": 391,
     "task_binding_rows_after": 391,
-    "change_reason": "Whole original F06 supported-default technical condition and explicit I03 integration ACCEPT independently pass; final milestone order and all other criteria/holds unchanged.",
+    "change_reason": "Exactly one complete original VM supported-default condition independently passes at f199/1aee; signal/wait/termination required C and native/final acceptance remain open.",
     "latest_source_backed_integration": {
       "at": "2026-11-10T14:39:48.032766+00:00",
       "original_checks": [
@@ -14656,37 +14667,35 @@
       ]
     },
     "latest_counted_closure": {
-      "at": "2026-11-11T05:44:00.971999+00:00",
+      "at": "2026-11-11T07:29:54.786469+00:00",
       "check_ids": [
-        "M14-F06-DEFAULT",
-        "M15-I03-ACCEPT"
+        "M14-03-03-DEFAULT"
       ],
       "whole_condition_reviews": [
-        "docs/verification/m14-current-image-20261111/f06-whole-default-1/f06-whole-default-review-sourceacq-max-1/REVIEW.json",
-        "docs/verification/m15-original-reproducibility-20261111/m15-i03-accept-review-sourceacq-max-1/REVIEW.json"
+        "docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/whole03-03/qualification-82c82622/REVIEW.json"
       ],
       "whole_condition_review_sha256s": [
-        "fef8a19d5dd97b2a1a6907e5ae4951960248f9e3ea0b4594dded44926cefef6f",
-        "3b9f222f66c90dd174be253b60726db6b54499a39260e3301acdc692608baa4d"
+        "a50c053da1a3dd33f884ad8a9ded0c7071eba4ec96cf58288437d60bdeac3691"
       ],
       "M14_before_after": [
-        65.19,
-        66.3
+        66.3,
+        66.67
       ],
       "M15_before_after": [
-        66.0,
+        67.19,
         67.19
       ],
       "counted_verified_before_after": [
-        93,
-        95
+        95,
+        96
       ],
       "exact": {
-        "M14": "1790/27",
+        "M14": "200/3",
         "M15": "248345/3696"
       },
-      "accepted_gate": "M15-I03",
-      "milestone_acceptance": false
+      "accepted_gate": null,
+      "milestone_acceptance": false,
+      "original_denominators_weights_criteria_unchanged": true
     },
     "counted_closure_history": [
       {
@@ -14794,6 +14803,37 @@
         "M15_open": 39,
         "original_denominators_weights_criteria_unchanged": true,
         "accepted_gate_milestone_native_delta": 0
+      },
+      {
+        "at": "2026-11-11T07:29:54.786469+00:00",
+        "check_ids": [
+          "M14-03-03-DEFAULT"
+        ],
+        "whole_condition_reviews": [
+          "docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/whole03-03/qualification-82c82622/REVIEW.json"
+        ],
+        "whole_condition_review_sha256s": [
+          "a50c053da1a3dd33f884ad8a9ded0c7071eba4ec96cf58288437d60bdeac3691"
+        ],
+        "M14_before_after": [
+          66.3,
+          66.67
+        ],
+        "M15_before_after": [
+          67.19,
+          67.19
+        ],
+        "counted_verified_before_after": [
+          95,
+          96
+        ],
+        "exact": {
+          "M14": "200/3",
+          "M15": "248345/3696"
+        },
+        "accepted_gate": null,
+        "milestone_acceptance": false,
+        "original_denominators_weights_criteria_unchanged": true
       }
     ],
     "last_published_percentage_report": {
@@ -15293,42 +15333,49 @@
       }
     },
     "next_original_closure": {
-      "at": "2026-11-10T23:56:49.835340+00:00",
-      "primary_original_gate": "M14-I02-E1/E2 and matched genuine F06 functional; M15-I01 complete-selected/linked and I03 complete-ABI",
-      "required_exact_operation": "/apps/signal.alternate-repeat with /case/work and LANG=C LC_ALL=C TZ=UTC through existing real nativeapplicationfrontdoor on exactpreservedc664/1e64 image/modules/runtimecohort",
-      "actual_own_engineering_gap": "Guest wrapper ELF classification/coreutils and getenforce provider bindings; saved signal qualification; genuine matched native owner/current-free/restoration remain required. E2 defaultoption hardcodesOFF despite explicit qualifiedwholeON.",
-      "next_eligible_command": "After operation GO/fresh admission, coreutils wrapper-corrected CPU0 packet0cdcb; E1 whole saved-result review now; E2 profile-scoped source-default then actual cmake-U/no-DON configure; no green image replay.",
-      "owners": {
-        "M14_I02_E1_independent_review": "public_abi_join_max",
-        "M14_I02_E2_default_source": "p04_source_max",
-        "signal_guest_provider": "p03_cutover_source_max",
-        "getenforce_provider": "source_acquisition_review_max",
-        "saved_signal_qualification": "p04_tests_max",
-        "M15_runtime_ABI_manifest": "sdk_binding_source_max",
-        "compositor_executor": "Root"
-      },
-      "parallel_original_M15": "MCPS exact bfbc+installed9af6 pairPASS/independent07faca74; SDK joins real component/source/header/provider manifests for I01 selected/linked and I03 ABI; no build or23case replay.",
-      "original_default_native_criteria_unchanged": true,
-      "new_counted_credit": 0,
-      "same_credit_identity_resource_UNKNOWN_holds_preserved": true,
-      "independent_M15_original_targets": [
-        "M15-F04-original-default",
-        "M15-F03-original-default",
-        "M15-I03-complete-ABI"
-      ]
+      "at": "2026-11-11T07:29:54.786469+00:00",
+      "primary_original_gate": "M14-03-04-DEFAULT and M14-06-02-FUNCTIONAL; shared M15-I04-native-admission",
+      "next_three_prerequisites": [
+        {
+          "original_check": "M14-03-04-DEFAULT",
+          "deliverable": "Genuine narrow Rust wait_host_wait4_bridge consumer-field/lifetime implementation and slot0 C exclusion",
+          "caller_consumer": "Rust wait4/waitid reap scan ->48B wait dependency slot0",
+          "owner": "sdk_binding_source_max",
+          "smallest_completion_proof": "Material source GO, changed-contract cases, actual affected image/table/provider ownership; no automatic zeroing or broad adapter"
+        },
+        {
+          "original_check": "M14-03-04-DEFAULT",
+          "deliverable": "Genuine public Rust terminate_mcexec from existing notify_host_exit, remove actual C136/local12 boundary",
+          "caller_consumer": "check_sig_pending R64 and current terminate path",
+          "owner": "p03_cutover_source_max; p04_tests_max independent review",
+          "smallest_completion_proof": "Reviewed typed ABI/narrow selectors, necessary changed check and affected image/caller/provider proof"
+        },
+        {
+          "original_check": "M14-06-02-FUNCTIONAL / M15-I04-native-admission",
+          "deliverable": "Complete callable current-control/resource/source/18-loader lifecycle plus real coherent c664 named base/overlay/manifest",
+          "caller_consumer": "normal container-owner -> runner -> diagnostic/backend -> QEMU/mcexec",
+          "owner": "public_abi_join_max and p04_source_max; source_acquisition_review_max independent review; Root admission/execution",
+          "smallest_completion_proof": "Correct three b696 controller defects, reviewed callable source and HOST staged inputs, genuine fresh native admission, exact case output/exit/retirement/restoration"
+        }
+      ],
+      "original_criteria_unchanged": true,
+      "no_unchanged_green_reruns": true
     },
     "pending_percentage_report": {
+      "at": "2026-11-11T07:29:54.786469+00:00",
+      "state": "PENDING_PUSH_FETCH_AND_DEDUPLICATED_POST",
       "owner": "Root",
-      "kind": "changed_pair_only",
-      "M14": 63.7,
-      "M15": 59.1,
-      "deltas_from_previous_published_pair": {
-        "M14": 9.44,
+      "pair": {
+        "M14": 66.67,
+        "M15": 67.19
+      },
+      "verified_checks": 96,
+      "delta_pp": {
+        "M14": 0.37,
         "M15": 0.0
       },
-      "dedupe_id": "M14-I02+F06-02-05-DEFAULT@ffb1a702+46a3823c",
-      "state": "POSTED_CONFIRMED",
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6784475191"
+      "dedupe": "M14-03-03-DEFAULT@a50c053d",
+      "source_results_publication": "PENDING_PUSH_FETCH"
     },
     "mcps_current_provider_pair": {
       "at": "2026-11-10T23:52:20.310699+00:00",
@@ -15400,26 +15447,20 @@
       "native_or_other_DEFAULT_or_acceptance": false
     },
     "pending_progress_report": {
-      "at": "2026-11-11T06:17:51.263893+00:00",
-      "state": "POSTED_CONFIRMED",
-      "posted_by": "foreground",
-      "comment_id": 6788434691,
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6788434691",
+      "at": "2026-11-11T07:29:54.786469+00:00",
+      "state": "PENDING_PUSH_FETCH_AND_DEDUPLICATED_POST",
+      "owner": "Root",
       "pair": {
-        "M14": 66.3,
+        "M14": 66.67,
         "M15": 67.19
       },
-      "verified_checks": 95,
-      "dedupe": "M14-F06-DEFAULT+M15-I03-ACCEPT@fef8a19d+3b9f222f",
-      "authority_instruction": "source-f187e4e1aa84543d841f743939efa08651aae417ad2f4f448e10da5376350918",
-      "source_results_publication": "PENDING_PUSH_FETCH",
-      "Root_duplicate_progress_comment": false,
-      "source_results_checkpoint": {
-        "state": "PUSHED_FETCHED_VERIFIED",
-        "commit": "8053237f09b3d9a1e42c11f9488c971b5e8372c8",
-        "at": "2026-11-11T06:29:35.482972+00:00",
-        "owned_blobs_matching": 112
-      }
+      "verified_checks": 96,
+      "delta_pp": {
+        "M14": 0.37,
+        "M15": 0.0
+      },
+      "dedupe": "M14-03-03-DEFAULT@a50c053d",
+      "source_results_publication": "PENDING_PUSH_FETCH"
     },
     "current_engineering_step": {
       "at": "2026-11-11T05:03:32.512072+00:00",
@@ -15647,6 +15688,27 @@
         "M14": 65.19,
         "M15": 66.0,
         "no_pending_report": true
+      },
+      {
+        "at": "2026-11-11T06:17:51.263893+00:00",
+        "state": "POSTED_CONFIRMED",
+        "posted_by": "foreground",
+        "comment_id": 6788434691,
+        "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6788434691",
+        "pair": {
+          "M14": 66.3,
+          "M15": 67.19
+        },
+        "verified_checks": 95,
+        "dedupe": "M14-F06-DEFAULT+M15-I03-ACCEPT@fef8a19d+3b9f222f",
+        "authority_instruction": "source-f187e4e1aa84543d841f743939efa08651aae417ad2f4f448e10da5376350918",
+        "source_results_publication": "PUSHED_FETCHED_VERIFIED",
+        "Root_duplicate_progress_comment": false,
+        "M14": 66.3,
+        "M15": 67.19,
+        "no_pending_report": true,
+        "source_commit": "8053237f09b3d9a1e42c11f9488c971b5e8372c8",
+        "fetched_owned_blobs_matching": 112
       }
     ],
     "native_source_diagnosis": {
@@ -15674,6 +15736,19 @@
       "seven_existing_HOST_cases_reused": true,
       "native_admitted": false,
       "counted_delta": 0
+    },
+    "latest_current_image": {
+      "source": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+      "image_sha256": "1aee02d2fb387e08ab6a771aa2e7d9d01a6673ad364a06685e3bc3e926bdb690",
+      "qualification": "docs/verification/m14-current-image-20261111/mprotect-signal-1/qualified-1/qualification/QUALIFICATION.json",
+      "qualification_sha256": "82c82622b0fa53ec24222f0f129ecf62292f83e9227200b5dc24b0007132d729",
+      "C_functions_before_after": [
+        13,
+        9
+      ],
+      "strong_imports": 259,
+      "strong_undefineds": 0,
+      "source_or_native_hold_released": false
     }
   },
   "denominator_changes": [
