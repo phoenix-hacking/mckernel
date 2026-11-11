@@ -1,0 +1,110 @@
+{
+  "original_check": "M14-03-03-DEFAULT",
+  "original_scope_as_Root_assigned": "mmap/munmap/mprotect/brk/remap, NUMA/process-VM and substantive callbacks",
+  "scope": "Only the current147B C mprotect_set_host_vma_bridge implementation and paired supported-profile Rust/C definition ownership; no whole check closure asserted.",
+  "actual_source_entry": {
+    "path": "kernel/syscall.c",
+    "lines": [
+      7194,
+      7198
+    ],
+    "body": "return set_host_vma(start, len, prot, holding_lock);",
+    "current_C_symbol": {
+      "name": "mprotect_set_host_vma_bridge",
+      "binding": "LOCAL",
+      "FUNC_bytes": 147,
+      "source_object_sha256": "3115d974864b265009a378e17838e2bc3f653d14b286f37458bcccad3d8394d2"
+    }
+  },
+  "ABI": {
+    "C_typedef_source": "kernel/syscall.c:711-712 mprotect_set_host_vma_fn_t",
+    "C_signature": "int (unsigned long, size_t, int, int)",
+    "Rust_signature": "unsafe extern C fn(CULong, SizeT, CInt, CInt) -> CInt",
+    "Rust_type_source": "kernel/rust/syscall_policy.rs:779 and kernel/rust/abi.rs",
+    "new_compile_time_guards": [
+      "C __builtin_types_compatible_p(new endpoint pointer, actual mprotect_set_host_vma_fn_t)",
+      "C sizeof(unsigned long)==8 && sizeof(size_t)==8 && sizeof(int)==4",
+      "Rust actual endpoint and unchanged provider match the exact unsafe extern C function type",
+      "Rust CInt4/align4, CULong8/align8, SizeT8/align8"
+    ],
+    "conversion_added": false
+  },
+  "actual_consumers": [
+    {
+      "table": "f03_mprotect_providers_v1",
+      "field": "set_host_vma",
+      "C_table_source": "kernel/syscall.c:7296-7321",
+      "Rust_decode": "F03MprotectProviders and sys_mprotect at kernel/rust/syscall_policy.rs:26901-26961",
+      "invocation": "mprotect_body_result:6008; after flush_tlb and while original range writer lock remains held",
+      "arguments": "start, rounded len, prot & (PROT_READ|PROT_WRITE|PROT_EXEC), 1",
+      "normal": "If protection changed, invalidate host PFN cache through native unchanged body; successful host result becomes success.",
+      "error": "Native branch still calls host invalidation after partial local change even if an earlier local error exists. Log nonzero host result; preserve first local error, otherwise return host result. Original range unlock follows host call/error logging.",
+      "bypass": "No new validation; zero len/straight range/unchanged protection follow existing complete caller branches."
+    },
+    {
+      "table": "f03_shmat_data_v1",
+      "field": "set_host_vma",
+      "C_table_source": "kernel/syscall.c:23889-23931",
+      "Rust_decode": "F03ShmatData/sys_shmat at kernel/rust/syscall_policy.rs:27244-27322",
+      "invocations": [
+        "shmat_body_result:4759 read-only attach",
+        "shmat_body_result:4801 failed-add rollback"
+      ],
+      "arguments": [
+        "addr,len,PROT_READ|PROT_EXEC,1",
+        "addr,len,PROT_READ|PROT_WRITE|PROT_EXEC,1"
+      ],
+      "normal": "Keep original list and range locks plus memobj reference live during synchronous call.",
+      "error": "Initial host error unlocks range/list, unreferences object and returns signed-int error promoted to long. Failed add invokes writable rollback and ignores its return, retaining original add error/ref/unlock/log order."
+    }
+  ],
+  "implementation": "New genuine Rust endpoint calls crate::f03_memory_host_offload::do_munmap_set_host_bridge with the exact four values and returns its CInt result. No local storage, new lock/reference/current lookup, log or callback substitute is introduced.",
+  "reachable_original_set_host": "kernel/syscall.c:5997-6022 obtains current thread, uses three typed GPR setters and returns set_host_vma_body_result unconditionally; the later __NR_mprotect/log block is unreachable. The already qualified f181 implementation preserves the reachable prefix using initialized zero-valid private context. It is unchanged by this patch.",
+  "unchanged_transitive_required_provider_edges": [
+    {
+      "edge": "new endpoint -> do_munmap_set_host_bridge",
+      "source": "kernel/rust/f03_memory_host_offload.rs",
+      "proof": "actual7231 strong Rust116B owner and current source f181 in reused joint joins"
+    },
+    {
+      "edge": "do_munmap_set_host_bridge -> current CPU lookup + actual setters0,1,2 + set_host_vma_body_result",
+      "source": "f181 plus cls/x86_cpu_helpers/syscall_policy",
+      "proof": "unchanged qualified complete source and nine actual changed behavior observations"
+    },
+    {
+      "edge": "native set_host_vma_body_result -> current_thread_ptr and clear_host_pte_body_result(vm,addr,len,holding,actualflagoffset,cpu,11,Some(Rust syscall_policy_do_syscall3_bridge),None)",
+      "source": "kernel/rust/syscall_policy.rs:5550-5582",
+      "semantics": "Keep mirror protection; invalidate PFNs with real munmap offload. No new host mprotect or error log."
+    },
+    {
+      "edge": "clear_host_pte_body_result -> genuine Rust policy3 -> syscall_do_syscall3_bridge -> real six-argument request builder + do_syscall",
+      "source": "unchanged syscall_policy and f181",
+      "semantics": "Actual72B request, signed long response, publish current CPU only when holding nonzero, restore -1 before return/log; final native set-host CInt cast unchanged."
+    }
+  ],
+  "selection": {
+    "new_cfg": "f03_mprotect_host_provider_candidate",
+    "new_C_macro": "MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER",
+    "pairing": "The cfg/module dependency and C macro are selected only by the existing MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED value. That value remains governed by the unchanged qualified ordinary-profile predicate plus owned transaction OFF.",
+    "profile_terms": [
+      "ENABLE_RUST_KERNEL",
+      "x86_64",
+      "MCKERNEL_HOST_IRQ_ABI=linux-6.12",
+      "ENABLE_UBSAN=OFF",
+      "PROFILE_ENABLE=ON",
+      "ENABLE_PERF=ON",
+      "ENABLE_RUSAGE=ON",
+      "ENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+      "ENABLE_TOFU=OFF",
+      "ENABLE_FUGAKU_HACKS=OFF",
+      "ENABLE_RUST_M14_SYSCALL_ADAPTERS=OFF",
+      "MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL=OFF",
+      "ENABLE_NATIVE_FORK_OWNED_TRANSACTION=OFF"
+    ],
+    "other_profiles": "Original static C endpoint remains in the else branch; no broader option/default/held operation changes.",
+    "old_memory5_source_change": false
+  },
+  "lifetime_and_IRQ": "No new borrow, node, flag, lock, IRQ/preemption or reference transition. The unchanged full caller owns locks/references across synchronous genuine provider. Existing real do_syscall owns blocking/publication/accounting/preemption/response; no tests/native actions here.",
+  "source_and_holds": "Routine actual current qualified endpoint only; no held generic/exec/owned590e/perf/util/credential/XPMEM selection, fixture replay, partial object or old rejected candidate is introduced.",
+  "acceptance": "SOURCE_ONLY_NOT_COMPILED; actual selected new Rust owner/C exclusion/two consumer table targets/normal image provider closure remain required. Whole M14-03-03-DEFAULT, other originals, runtime/native and broader migration remain open."
+}

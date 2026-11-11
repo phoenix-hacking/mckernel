@@ -1,0 +1,340 @@
+{
+  "schema": "mckernel.original-integration-gate-acceptance-review.v1",
+  "reviewed_at": "2026-11-11T05:24:37.282479+00:00",
+  "reviewer": "/root/source_acquisition_review_max",
+  "original_gate_id": "M15-I03",
+  "original_acceptance_check_id": "M15-I03-ACCEPT",
+  "decision": "GO_EXPLICITLY_ACCEPT_ORIGINAL_M15_I03_INTEGRATION_GATE_AT_DECLARED_MATCHING_SUPPORTED_PROFILES",
+  "original_gate_explicitly_accepted": true,
+  "original_applicable_child_conditions_satisfied": true,
+  "current_original_acceptance_row": {
+    "id": "M15-I03-ACCEPT",
+    "parent": "M15-I03",
+    "title": "Accept original M15-I03 scope",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "status": "unverified",
+    "owner": "Saved Root integration/review owner",
+    "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+    "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
+    "required_inputs": {
+      "original_requirement": "M15-I03",
+      "matching_evidence": "All original applicable child conditions; retain prior unchanged proof."
+    },
+    "dependencies": [
+      "M15-I03-HOST-ABI-link",
+      "M15-I03-complete-ABI",
+      "M15-I03-original-reproducibility",
+      "M15-I03-selection",
+      "M15-I03-source-replay",
+      "M15-I03-static-dynamic"
+    ],
+    "evidence": [
+      "CAMPAIGN.md",
+      "docs/verification/m14-m15-net-conversion-owner-assessment-20261106.json",
+      "docs/verification/m15-shared-abi-environment-results-20261106.json",
+      "docs/verification/m15-corrected-library-tool-cohort-results-20261106.json"
+    ],
+    "scope_limit": "",
+    "definition_status": "completion_condition_defined",
+    "execution_profile": "retained_evidence_review",
+    "counted_in_requirement_rollup": true
+  },
+  "current_original_parent_gate_row": {
+    "id": "M15-I03",
+    "parent": null,
+    "title": "Reproducible Rust userspace and dependency closure",
+    "kind": "original_integration_gate",
+    "target": "Executors, libraries and installed tools",
+    "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
+    "accepted": false,
+    "acceptance_percent": 0,
+    "demonstrated_scopes": {
+      "partial": "Supported Rust default selection and genuine HOST userspace compile/link/provider/type/error slices exist; exact IHK committed source replay is published.",
+      "limits": "HOST supplementation is not original complete SDK identity or actual installed static/dynamic project dependency closure."
+    },
+    "remaining_actions": [
+      "Bind reproducible original supported sources/configuration/toolchain/SDK for executors, libraries and installed tools.",
+      "Complete public ABI and actual static/dynamic project dependency closure across the complete delivered userspace set.",
+      "Join delivered installed artifact/provider ownership and exact build inputs to the matching admitted cohort; review original integration gate."
+    ],
+    "dependencies": [
+      "M14_ACCEPTANCE_ORDER",
+      "MATCHED_COHORT",
+      "NATIVE_OWNER_AND_CURRENT_FREE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "references": [
+      "CAMPAIGN.md",
+      "docs/verification/m14-m15-net-conversion-owner-assessment-20261106.json",
+      "docs/verification/m15-shared-abi-environment-results-20261106.json",
+      "docs/verification/m15-corrected-library-tool-cohort-results-20261106.json"
+    ],
+    "task_ids": [
+      "M15-I03-selection",
+      "M15-I03-HOST-ABI-link",
+      "M15-I03-source-replay",
+      "M15-I03-original-reproducibility",
+      "M15-I03-complete-ABI",
+      "M15-I03-static-dynamic",
+      "M15-I03-ACCEPT"
+    ],
+    "percent_complete": 85.71,
+    "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
+  },
+  "criterion_source": {
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "bytes": 910329,
+    "sha256": "94959629a1783d0ea04b8e7f788e31dab0a8e00e60d7e48955c137d0d394818d"
+  },
+  "original_milestone_criterion_source": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m15.json",
+    "bytes": 118812,
+    "sha256": "c5e0e84888c07541aa20f2d78611f87e1c9e04eb314dde16871b0d1abb579939"
+  },
+  "original_I03_subgoal_unchanged": {
+    "id": "M15-I03",
+    "title": "Rust executors, libraries and installed tools",
+    "status": "open",
+    "owner": null,
+    "next_action": "Prove selected Rust artifacts, CLI/exported-library ABI, dynamic/static project dependency closure and source/toolchain reproducibility.",
+    "proof": {
+      "implementation": {
+        "status": "unassessed",
+        "evidence": []
+      },
+      "focused_checks": {
+        "status": "unassessed",
+        "evidence": []
+      },
+      "production_link": {
+        "status": "unassessed",
+        "evidence": []
+      },
+      "native_validation": {
+        "status": "unassessed",
+        "evidence": []
+      }
+    }
+  },
+  "original_I03_subgoal_required_action": "Prove selected Rust artifacts, CLI/exported-library ABI, dynamic/static project dependency closure and source/toolchain reproducibility.",
+  "original_milestone_definition_preserved": "All project-owned runtime implementation in the supported delivered system outside M14 is Rust/reviewed assembly, including custom Linux modules, executors, libraries and installed tools. Account for actual selected/linked/deployed code and retain the functional baseline. Linux/third-party/generated boundaries require provenance, not relocation of project C.",
+  "original_milestone_boundary_preserved": {
+    "in_scope": [
+      "custom IHK/SMP/mcctrl Linux-loadable modules and transitive project callbacks",
+      "mcexec and project libraries/CLI/diagnostic/monitoring tools",
+      "project-owned installed runtime shell/expect programs",
+      "project-specific runtime helpers even if staged inside Rocky source/build trees"
+    ],
+    "separately_classified": [
+      "Rocky/Linux baseline APIs and legitimate generic platform support",
+      "unmodified third-party libc/BFD/libdwarf/toolchain code",
+      "generated Linux module metadata with no authored project runtime body",
+      "Python campaign/build/test orchestration and test fixtures",
+      "inactive retained C reference/fallback sources"
+    ],
+    "optional_products": "Crash extension, QLMPI/UTI and unsupported configurations need explicit delivery/scope dispositions; disabled is not converted. Final manifest cannot silently omit a delivered optional component.",
+    "working_C_policy": "Keep working C until an equivalent qualified Rust successor exists. Earlier host compatibility exceptions preserve behavior during migration and do not complete M15.",
+    "Linux_control_plane_C": "Explicitly reconfirmed by the user: Rocky/Linux-owned control-plane code may remain C. Project-owned custom runtime is the M14/M15 Rust target."
+  },
+  "six_original_child_decisions": [
+    {
+      "id": "M15-I03-selection",
+      "original_done_when": "Recorded qualified supported-profile recipes select Rust executors/libraries/tools, with their explicit guards retained.",
+      "decision": "DEMONSTRATED_AT_EXACT_DECLARED_SCOPE",
+      "proofs": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/m14-m15-net-conversion-owner-assessment-20261106.json",
+          "bytes": 3384,
+          "sha256": "7bf98caed1f3e8059bfb3f2575ba8bf59cdb642aaa4efe093b843ea079de47db"
+        },
+        {
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/runtime-selected-linked-abi-original-review-sourceacq-max-1/REVIEW.json",
+          "bytes": 46161,
+          "sha256": "508119440b350a3b6cafaca8200b752ea2ed19d79aab8da15d02af77c6b53f46"
+        }
+      ],
+      "finding": "Retained source selectors identify genuine Rust executor/IHK library/CLI and supported diagnostic/tool recipes with explicit qualified-profile guards. The current complete selected/linked508119 manifest, canonical8221 tuple and new unchanged thirteen-source repro8875 binding carry the current delivered source roles. Inactive reference/fallback/default-OFF branches and optional product dispositions remain explicit; no blanket all-config default or language-completion claim."
+    },
+    {
+      "id": "M15-I03-HOST-ABI-link",
+      "original_done_when": "Existing genuine HOST ABI/library/tool link records bind exact symbols/types/imports/provider identities at their limited recorded scopes.",
+      "decision": "DEMONSTRATED_AT_EXACT_DECLARED_SCOPE",
+      "proofs": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/m15-shared-abi-environment-results-20261106.json",
+          "bytes": 12349,
+          "sha256": "f259a70a1178873a079a2bf23d54fa93388676dd9d50b630aca4e4637bf6f5fb"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/m15-corrected-library-tool-cohort-results-20261106.json",
+          "bytes": 125325,
+          "sha256": "b4477769f1296162698068fe3d1840dd5f0ca8752d8f58357ed42f69349af6e0"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/m15-changed-cli-loader-results-20261109.json",
+          "bytes": 29952,
+          "sha256": "4fbb0e75344f74aa3e20b17fbc2ac4e2ee8306b7092be10370418cdfb4ada253"
+        }
+      ],
+      "finding": "The genuine HOST proof binds seventy function/six data roots, public/private signature and pre-access error roles, actual corrected provider dd974 and three real Rust tool links with fifteen recorded main results before valid dispatch. The changed two CLI ELF/loader bindings identify26be/57f3 to53079 and trusted HOST loader. These records satisfy the limited HOST child; they are not relabeled currentRocky complete SDK or live device execution."
+    },
+    {
+      "id": "M15-I03-source-replay",
+      "original_done_when": "The applicable publishedcheckpoint records exact changed committedIHKsource replay andmatchinggitlink/manifest/bundle. Latest unknownCLIcheckpoint6f4c7f244 binds cleanIHKb7b7111; historicalbalanced/dump proofkept at its scope.",
+      "decision": "DEMONSTRATED_AT_EXACT_DECLARED_SCOPE",
+      "proofs": [
+        {
+          "path": "/home/holden/mckernel-work/resume-20261109T155325Z-46b56314/unknown-action-checkpoint-1/PUBLISHED.json",
+          "bytes": 1579,
+          "sha256": "a585782392b889c11e49604b3997d98207e111ba949dcd98c7099e70075dd043"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/m15-retained-c-dump-source-replay-20261109.json",
+          "bytes": 3887,
+          "sha256": "f695fed9122d2e7475809582241196f0fc3b69cf24150594690a225f81c80ff7"
+        }
+      ],
+      "finding": "The applicable6f4c checkpoint records exact pushed/fetched b7b711 IHK gitlink/manifest/bundle entries. The later ed4e/8eb8 Git-only source replay records exact committed source tree0979, changed source digests, c323 bundle and positive exit0/direct wait; its publication-equality restriction remains literal. These historical replay identities are not falsely called current8d SDK/native results. Current8d source/header/buildID and artifact relationships are separately supplied by the current complete source/ABI/repro manifests."
+    },
+    {
+      "id": "M15-I03-original-reproducibility",
+      "original_done_when": "Reconstruct and bind all original supported source/configuration/compiler/SDK/transitive-provider identities using the existing recipes, acquire genuinely absent artifacts where permitted, and demonstrate matching reproducibility. Escalate only an exact unavailable artifact/access requirement with evidence.",
+      "decision": "WHOLE_ORIGINAL_CONDITION_DEMONSTRATED",
+      "proofs": [
+        {
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json",
+          "bytes": 42609,
+          "sha256": "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
+        },
+        {
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/qualification-1/QUALIFICATION.json",
+          "bytes": 20625,
+          "sha256": "aa831c2eca1fab5e239cc3b9fb29ded0ed9790d0b7af890d183434999fe1a73f"
+        },
+        {
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/qualification-1/WHOLE-I03-ORIGINAL-REPRODUCIBILITY.json",
+          "bytes": 23143,
+          "sha256": "0aa7504f09228203aa39db90835a34c564c23a1fc99378254f0e5b52d65138d8"
+        },
+        {
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/qualification-1/ACTUAL-PROGRAM-ABI-PROVIDER-AND-ROOT-JOINS.json",
+          "bytes": 778141,
+          "sha256": "6594c65c0b3bf121f471aead5aa700c0fae1454a058eac499b8c0a90fdbf93d2"
+        }
+      ],
+      "finding": "Whole8875 binds actualaa831/0aa750/6594 and4a6c/2a144: complete unchanged source/config/real195/immutable46d/GCC14 recipes produced new c5f0/7485/d333 installed0755 byte-equal programs. All330 imports are accounted by315 raw definition/version matches,three exact reused loader edges andtwelve actual-index0 optionalweak rows. The exact prior three-HOST-only original SDK gap is closed by genuine new reconstruction; nine other current normal producers are reused at their exact source/config/compiler/SDK/provider profiles. This is actual reproducibility evidence in addition to ABI/source review."
+    },
+    {
+      "id": "M15-I03-complete-ABI",
+      "original_done_when": "Derive the complete delivered userspace public ABI/provider obligations from installed headers, selected symbols/callers and actual build definitions; join every obligation to exact passing supported-profile artifact/header/provider evidence. Reuse matching typed/export/layout/link proof and qualify specific unmatched contracts; no externally authored inventory is required.",
+      "decision": "WHOLE_ORIGINAL_CONDITION_DEMONSTRATED",
+      "proofs": [
+        {
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/runtime-selected-linked-abi-original-review-sourceacq-max-1/cleanup-canonical-i03-successor-1/REVIEW.json",
+          "bytes": 49084,
+          "sha256": "8221a0175d192a59091766e24df2f4b3e7336bc21cb4c4822ce479e947678b65"
+        }
+      ],
+      "finding": "Whole8221/00e7 joins the complete delivered public header/caller/export/layout/provider obligations to exact current source and supported artifacts. The real canonical __error/readmem longjmp-across-Rust-Drop defect was repaired by selected33ed four postimages, genuinea875 header and matching already-executed productionb2b6/bcd plus seven exact cleanup cases. Publiccmd571/pc8,hidden guard boundaries,typed imports and final owner/stage records are actual, not a future unrun configure."
+    },
+    {
+      "id": "M15-I03-static-dynamic",
+      "original_done_when": "Actual complete installed static/dynamic dependency manifests resolve every project provider to its legitimate owner and exact admitted artifact/source/toolchain identities; original I03 review accepts closure.",
+      "decision": "WHOLE_ORIGINAL_CONDITION_DEMONSTRATED",
+      "proofs": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/m15-installed-dependencies-qualified-20261111/REVIEW.json",
+          "bytes": 33572,
+          "sha256": "131b919d34d2d0d26373ce02754298af6e02da74965842b82d173b81875f5cad"
+        }
+      ],
+      "finding": "Whole131b closes complete actual installed static/dynamic ownership using genuine selected linked source/object/archive/map,typed/versioned provider,RPATH/symlink/stage/process/plugin manifests. Every mandatory project provider maps to a legitimate exact owner and admitted artifact/source/compiler profile. Distinct private installations and logical prefixes are explicit; no single live deployed namespace, undeclared LD search waiver or HOST/native alias substitution is inferred."
+    }
+  ],
+  "parent_clause_decisions": [
+    {
+      "original_clause": "Every applicable original child condition is demonstrated on the required matching supported cohort",
+      "decision": "SATISFIED",
+      "basis": "Each of the exact six dependency rows is reviewed below against its stated condition. Current complete ABI, actual installed owner manifests and genuine Rocky reconstruction supply the original complete supported source/SDK/provider relation; retained focused HOST/source replay records are kept at their actual limited scopes and are not substituted for complete SDK or native validation."
+    },
+    {
+      "original_clause": "the original gate is explicitly accepted",
+      "decision": "SATISFIED_BY_THIS_INDEPENDENT_DECISION",
+      "basis": "This review explicitly accepts the original I03 integration gate on selected artifacts, CLI/exported-library ABI, dynamic/static dependency ownership and source/toolchain reproducibility. It is an original gate decision, not a readiness report or acceptance inferred from percentages."
+    },
+    {
+      "original_clause": "M15 final acceptance follows M14",
+      "decision": "PRESERVED",
+      "basis": "I03 integration acceptance grants neither M15 milestone acceptance nor native authority. Original M14 final acceptance must precede final M15 acceptance."
+    },
+    {
+      "original_clause": "Existing accepted scopes stay closed",
+      "decision": "PRESERVED",
+      "basis": "Existing accepted M14/M15 file and unchanged child proofs are reused without replay, source mutation or scope expansion."
+    }
+  ],
+  "matching_supported_cohort_finding": {
+    "decision": "MATCHED_AT_REQUIRED_DECLARED_ARTIFACT_SOURCE_CONFIGURATION_TOOLCHAIN_PROVIDER_PROFILES",
+    "basis": "The current complete manifests join actual canonical selected Rust source and guards,matching IHK8d/buildID/current public headers/Linux6.12/config106 dependencies,real Rust1.92 or1.95 roles as required by their own existing recipes,immutable46d native GCC14/BFD/DWARF/NUMA/udev/crash/system providers and exact normal linked/installed artifacts. The new threeRocky programs now supply the originally missing SDK relation. Cohort compatibility is proved by source/config/header/type/version/map/provider/install identities; it is not inferred from timestamps, child percentages or a common spelling.",
+    "whole_dependency_manifest": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/qualification-1/WHOLE-I03-ORIGINAL-REPRODUCIBILITY.json",
+      "bytes": 23143,
+      "sha256": "0aa7504f09228203aa39db90835a34c564c23a1fc99378254f0e5b52d65138d8"
+    },
+    "complete_selected_linked_manifest_review": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/runtime-selected-linked-abi-original-review-sourceacq-max-1/REVIEW.json",
+      "bytes": 46161,
+      "sha256": "508119440b350a3b6cafaca8200b752ea2ed19d79aab8da15d02af77c6b53f46"
+    },
+    "complete_public_ABI_review": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/runtime-selected-linked-abi-original-review-sourceacq-max-1/cleanup-canonical-i03-successor-1/REVIEW.json",
+      "bytes": 49084,
+      "sha256": "8221a0175d192a59091766e24df2f4b3e7336bc21cb4c4822ce479e947678b65"
+    },
+    "complete_installed_provider_review": {
+      "path": "/home/holden/mckernel/docs/verification/m15-installed-dependencies-qualified-20261111/REVIEW.json",
+      "bytes": 33572,
+      "sha256": "131b919d34d2d0d26373ce02754298af6e02da74965842b82d173b81875f5cad"
+    },
+    "complete_reproducibility_review": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json",
+      "bytes": 42609,
+      "sha256": "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
+    },
+    "historical_HOST_and_source_replay_scopes_not_promoted": true,
+    "one_live_deployment_or_single_combined_stage_not_claimed": true,
+    "same_source_role_constraints_preserved_across_profiles": true
+  },
+  "behavior_deployment_cleanup_scope_assessment": {
+    "behavior": "Retained exact applicable behavior/error/parser/ownership checks remain valid only for their bound unchanged source and support profiles. Genuine HOST main results explicitly stop before valid IHK device/dispatch. No new complete native/device/async/concurrent behavior is invented.",
+    "cleanup": "The actual selected cleanup boundary closes the concrete ABI/lifetime counterevidence before __error main restart or foreach continuation using the retained seven-case and normal production artifacts. Resource ownership is backed by positive direct/family/stream joins and scoped release in current producer receipts; no unknown owner is silently retired.",
+    "deployment": "Actual private installed artifacts and their RPATH/provider/logical-prefix relationships are qualified. This gate does not assert that all private roots form one presently deployed HOST/native filesystem.",
+    "why_no_new_native_or_deployment_quota": "OriginalI03 subgoal explicitly requires selected artifacts,CLI/exported-library ABI,dynamic/static project dependencies and source/toolchain reproducibility. The six declared applicable child conditions cover those exact obligations. No literal originalI03 clause requires a new valid device/boot case or live deployment step to accept these artifact/profile relations. Actual native/device and finalM15 acceptance retain their original separate requirements."
+  },
+  "language_and_optional_product_disposition": {
+    "C104_project_boundary": "The authored cleanupC104 boundary remains an explicitly owned project-C debt. Its typed provenance/ABI/provider/install relation can be accepted without misclassifying it as Linux/third-party or claiming Rust/ASM retirement.",
+    "remaining_functional_and_C_debt": "M14FUNCTIONAL/native/source/UNKNOWN holds,remaining original file/default/behavior conditions and every original largerM15 language-retirement requirement remain separate and binding.",
+    "optional_components": "The actually delivered cleanup shared extension is included in the complete manifests; disabled/unselected products are explicitly classified rather than counted as converted. No omitted delivered optional product is silently excused."
+  },
+  "unmatched_literal_original_I03_clause": null,
+  "smallest_additional_indispensable_input_or_command_for_I03_acceptance": null,
+  "decision_not_derived_from_percentage_or_row_count": true,
+  "new_test_build_provider_source_replay_or_native_execution_required": false,
+  "M15_milestone_accepted": false,
+  "M14_milestone_accepted_by_this_review": false,
+  "larger_system_complete": false,
+  "native_current_free_or_hold_release": false,
+  "existing_accepted_scopes_reopened": false,
+  "Root_sole_ledger_integration_and_publication": true,
+  "publication_context": "Root supplied already-published/fetched70435ce27b7673101c7cc955f97038357763c9cc and confirmedPR3 comment6787719852. This review neither reposts nor treats publication/percentages as technical proof.",
+  "reviewer_actions": {
+    "bounded_original_criterion_and_saved_machine_evidence_reads": true,
+    "private_review_write_only": true,
+    "source_body_or_old_green_audit_replay": false,
+    "SUT_tests_compilers_CMake_provider_or_ELF_tools": false,
+    "network_Docker_native_signal_or_permission_fallback": false,
+    "canonical_state_ledger_CAMPAIGN_edits": false,
+    "new_tracker_or_recursive_agents": false
+  }
+}

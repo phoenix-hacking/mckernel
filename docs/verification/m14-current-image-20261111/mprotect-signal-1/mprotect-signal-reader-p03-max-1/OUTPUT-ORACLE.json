@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "status": "FROZEN_EXPECTED_OUTPUTS_AND_ACTUAL_RESULT_ORACLES_NOT_EXECUTED",
+  "source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "helper": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-reader-p03-max-1/input/read_mprotect_signal_metadata.sh",
+    "bytes": 6070,
+    "sha256": "c485e526e16b46ccd8ebceaa14f38bdcc14bf04d43b159657b8bc59369972b8f"
+  },
+  "literal_command_count": 30,
+  "record_count": 27,
+  "required_stdout_files": [
+    "image-elf.stdout",
+    "image-symbols-relocations.stdout",
+    "affected-constituent-symbols-relocations.stdout",
+    "image-nm.stdout",
+    "image-map.stdout",
+    "artifact-identities.sha256",
+    "artifact-modes.stdout",
+    "regenerated-CMakeCache.txt",
+    "regenerated-compile_commands.json",
+    "regenerated-flags.make",
+    "regenerated-build.make",
+    "regenerated-link.txt",
+    "regenerated-link.d",
+    "regenerated-mckernel_rust.d",
+    "regenerated-mckernel_rust.raw.d",
+    "regenerated-Rust-build.make",
+    "C-tables-and-ABI-rodata.stdout",
+    "Rust-ABI104-rodata.stdout",
+    "image-tables-and-ABI-rodata.stdout",
+    "new-mprotect_set_host_vma_bridge-Rust-disassembly.stdout",
+    "new-mprotect_set_host_vma_bridge-final-disassembly.stdout",
+    "new-syscall_forward_context_bridge-Rust-disassembly.stdout",
+    "new-syscall_forward_context_bridge-final-disassembly.stdout",
+    "new-syscall_forward_rt_sigprocmask_bridge-Rust-disassembly.stdout",
+    "new-syscall_forward_rt_sigprocmask_bridge-final-disassembly.stdout",
+    "new-syscall_forward_sigaction_update_bridge-Rust-disassembly.stdout",
+    "new-syscall_forward_sigaction_update_bridge-final-disassembly.stdout"
+  ],
+  "non_output_gate_commands": 3,
+  "new_actual_Rust_symbols": [
+    "mprotect_set_host_vma_bridge",
+    "syscall_forward_context_bridge",
+    "syscall_forward_rt_sigprocmask_bridge",
+    "syscall_forward_sigaction_update_bridge"
+  ],
+  "actual_new_ownership": [
+    "Each exact4 name has one genuine GLOBAL FUNC Rust definition, actual nonempty input/final code and map placement; a genuine same-source/type alias is allowed and decoded by its actual shared code range, not disassembler spelling or an invented distinct-address quota.",
+    "Actual generic C object contains no LOCAL/GLOBAL FUNC definition for exact4 names; remaining declared C imports are joined to real new Rust providers. Actual current C ledger is observed, not predicted or used as a count quota."
+  ],
+  "new_immutable_table_targets": [
+    {
+      "symbol": "f03_mprotect_providers_v1",
+      "expected_bytes": 88,
+      "expected_align": 8,
+      "field": "set_host_vma",
+      "offset": 56,
+      "target": "mprotect_set_host_vma_bridge",
+      "type": "unsafe extern C fn(CULong,SizeT,CInt,CInt)->CInt",
+      "required_proof": "Actual readonly C input and final symbol/bytes, current R_X86_64_64 relocation+decoded final pointer to real Rust owner; source C __typeof__/Rust repr(C)11-pointer table order. Preserve all sibling fields; no table-label-only evidence."
+    },
+    {
+      "symbol": "f03_shmat_data_v1",
+      "expected_bytes": 152,
+      "expected_align": 8,
+      "field": "set_host_vma",
+      "offset": 128,
+      "target": "mprotect_set_host_vma_bridge",
+      "type": "unsafe extern C fn(CULong,SizeT,CInt,CInt)->CInt",
+      "required_proof": "Actual readonly19-field source table (8 SizeT then11 pointers) and Rust repr(C), preserved scalar/sibling fields; actual offset128 R64/final pointer/source/real Rust type join."
+    },
+    {
+      "symbol": "f03_perf_descriptor_layout_v1",
+      "expected_bytes": 40,
+      "expected_align": 8,
+      "field": "forward",
+      "offset": 32,
+      "target": "syscall_forward_context_bridge",
+      "type": "unsafe extern C fn(CInt,*mut c_void)->CLong",
+      "required_proof": "Actual readonly table/current offset32 relocation+final pointer join to new Rust context owner; not old LOCAL C .text+offset, not the separately unchanged policy10208 symbol. Reading this table does not invoke or qualify perf behavior."
+    }
+  ],
+  "two_actual_signal_edges": [
+    {
+      "caller": "do_sigaction",
+      "target": "syscall_forward_sigaction_update_bridge",
+      "type": "unsafe extern C fn(CInt,*const c_void)->CLong",
+      "proof": "Actual current Rust caller relocation/final code reference and new real Rust target; existing source/body retains validation, stored-action copies, same IRQsave lock/unlock before forwarding and ignored provider response."
+    },
+    {
+      "caller": "sys_rt_sigprocmask",
+      "target": "syscall_forward_rt_sigprocmask_bridge",
+      "type": "unsafe extern C fn(CULong)->CLong",
+      "proof": "Actual current Rust caller relocation/final code reference and new real Rust target; existing mask validation/copy/apply/error/ignored-result policies unchanged."
+    }
+  ],
+  "new_code_and_ABI": [
+    "Actual C/Rust compile records include paired f03_mprotect_host_provider_candidate/MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER and f03_signal_forward_provider_candidate/MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER, exact new module/header dependencies, unchanged source defaults/ordinary profile, broad/experimental/owned flags OFF.",
+    "Current fullff48 ABI and compiled real C _Static_assert/Rust const geometry: int4/long8/ulong8/SizeT8/pointer8; X86UserContext224 align8/gpr56, KSigAction32 align8/sa0/handler0/flags8, NR13/14. These are source+actual current compile bindings; ELF NOTYPE alone does not prove a prototype.",
+    "New mask/action lowering has genuine zero-valid stack context storage, real existing volatile setter0 or0/1/2/source field-read order and actual nr14/nr13 forwarding with exact signed return. Preserve complete six-slot payload/borrow lifetime; do not execute the hardware/offload/GS/provider/signal path. True optimized inlining/aliases are classified from actual bytes/relocations/type/source.",
+    "New mprotect endpoint preserves actual four arguments/CInt return to unchanged full f181 do_munmap_set_host_bridge/native set_host_vma_body_result chain. Reuse memory9 source/behavior proof and do not redisassemble that unchanged function merely to repeat it."
+  ],
+  "required_shared_current_proof": {
+    "prior30_selected_Rust_symbols": [
+      "do_syscall",
+      "interrupt_syscall",
+      "terminate_host",
+      "arch_rt_sigreturn_context_bridge",
+      "do_setresuid",
+      "do_setresgid",
+      "do_signal",
+      "arch_ptrace_regset_log_bridge",
+      "arch_native_signal_bad_frame_bridge",
+      "arch_rt_sigreturn_xrstor_bridge",
+      "terminate",
+      "exit_group_log_bridge",
+      "exit_group_terminate_bridge",
+      "exit_group_current_pid_bridge",
+      "do_mmap",
+      "do_fork",
+      "syscall_policy_do_syscall2_bridge",
+      "syscall_do_syscall3_bridge",
+      "syscall_policy_do_syscall3_bridge",
+      "clear_host_pte_log_bridge",
+      "do_munmap_clear_host_bridge",
+      "do_munmap_set_host_bridge",
+      "ptrace_wakeup_sig",
+      "ptrace_wakeup_update_lock_bridge",
+      "ptrace_wakeup_update_unlock_bridge",
+      "ptrace_detach_kfree_bridge",
+      "ptrace_detach_do_kill_bridge",
+      "ptrace_detach_wakeup_bridge",
+      "ptrace_wakeup_log_bridge",
+      "syscall_policy_forward_context_bridge"
+    ],
+    "provider_ownership": "All actual strong imported occurrences/final physical input+map/global/linker owners and zero requiredUND, with all prior30 actual allowed definitions/type/data retained. Compare nine unchanged constituent identities to prior0b57; only newly changed constituents get fresh ELF detail. Current f181/10208/2a00/fork/time bytes remain source-pinned.",
+    "ABI_and_data": "All four current104 C/Rust object+final832B arrays equal preserved1621 words, flexiblepids168 after nslots164. debug_constants96B/12words writablealign32 and current readonly/writable debug/callback data identities retained. Full captured ELF/binary slices support actual current geometry; no new helper/witness/compiler suite.",
+    "image_contract": "Actual new source/config/CMake regeneration/current defaultON/normal11-object link, realdriver.ko MAP substitution/config/linker unchanged, actual Rust arch_start/entry relation,2LOAD+NOTE/alloc coverage/noINTERP/DYNAMIC/runtime relocs and arch-C0 executable contract. Accept actual new addresses; do not demand equality to old entry.",
+    "cleanup": "Parent protected CLI capture and actual Root producer/reader positive PID/birth/direct+whole-family/streams/expected0/nonOOM/Pid0/owned-removal/current-release/full outer completion before lane handoff. Sampled/unavailable memory remains honestly scoped."
+  },
+  "unchanged_checks_reused_no_replay": [
+    "Signal canonical2bd3/old7payload vectors+14 C-Rust calls/real14-field ABI with exactff48/df163; new source reviewb2de covers genuine setter delegation and current lifetimes.",
+    "Memory9 cases4b33 and prior13/new104/currentdefault physical0b57/19c5/de6c, source440dd/905/297d/joint7d and whole01eec/whole03 7a877 at their exact scopes.",
+    "No old new13/wholeF06/xrstor/time/ptrace/memory function disassembly, suite, fixture, SDK/provider inventory, compiler or native/main probe is repeated."
+  ],
+  "qualification_semantics": "Saved-output qualification remains a later source/type/provider/byte/lifecycle join. This helper merely reads metadata; it does not accept an original condition, retire C, invoke a new parser framework, or release source/native/UNKNOWN/account/resource holds."
+}

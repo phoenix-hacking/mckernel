@@ -1,0 +1,65 @@
+{
+  "at": "2026-11-11T05:24:16.678226+00:00",
+  "actual_parent": "70435ce27b7673101c7cc955f97038357763c9cc",
+  "original_packets": [
+    {
+      "name": "mprotect",
+      "base": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/MPROTECT-HOST-PROVIDER.patch",
+      "sha256": "8da5962ce948c5b4ba77b28b955a8754f09f53da6f824c820ebcbea4e6f6201d"
+    },
+    {
+      "name": "signal",
+      "base": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-forward-provider-1/SIGNAL-FORWARD-PROVIDER.patch",
+      "sha256": "485e78b408f517e6169f54632e828ae7453ca0adbca1f9f51a36ac34a6d93e23"
+    }
+  ],
+  "initial": {
+    "kernel/CMakeLists.txt": "59fb96abd8bf18ca48f788376503495e8baba0ca39e9e02f7ee72b7121c5e685",
+    "kernel/rust/f03_mprotect_host_provider.rs": null,
+    "kernel/rust/f03_signal_forward_provider.rs": null,
+    "kernel/rust/lib.rs": "2b2cef5a65dd303ddf923bda67c7ebfe3ccc5360dfefac8910fe67c8e95477be",
+    "kernel/syscall.c": "9681968de471da4c6051b4b0faa1b402201f6e78ad1a659052042b60be8fed9a"
+  },
+  "candidate_rows": [
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8",
+      "bytes": 62796
+    },
+    {
+      "path": "kernel/rust/f03_mprotect_host_provider.rs",
+      "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db",
+      "bytes": 1919
+    },
+    {
+      "path": "kernel/rust/f03_signal_forward_provider.rs",
+      "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467",
+      "bytes": 4336
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9",
+      "bytes": 4811
+    },
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947",
+      "bytes": 964476
+    }
+  ],
+  "only_additive_conflicts_resolved": [
+    {
+      "packet": "signal",
+      "path": "kernel/CMakeLists.txt",
+      "type": "additions-only conflict; exact base retained once, current and incoming additions preserved",
+      "base_lines": 0,
+      "current_lines": 6,
+      "incoming_lines": 13
+    }
+  ],
+  "new_module_bytes_exact": true,
+  "canonical_written": false,
+  "source_compile_or_image_credit": false
+}

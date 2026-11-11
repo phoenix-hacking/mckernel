@@ -1,0 +1,97 @@
+{
+  "schema": "native12-preserving-field-classification-v1",
+  "status": "ISSUER_NATIVE12_FIELD_IS_RETAINED_CAPACITY_NOT_AN_OPERATION_CLAIM__ORIGINAL_ALLOCATION_STATUS_UNPROVED",
+  "owner": "/root/public_abi_join_max actual Sol/MAX",
+  "parent_result_preserved": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-owner-current-reconciliation-20261111T0514Z/RESULT.json",
+    "bytes": 6648,
+    "sha256": "04eac199eeb82b7dc3e49842e8b355e6e7dbe3d89ad62b291e5c924c3d3d828b",
+    "device": 66306,
+    "inode": 2243015,
+    "uid": 1000,
+    "mode": 384
+  },
+  "diagnostic": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-owner-current-reconciliation-20261111T0514Z/issuer-trace-1/ISSUER-TRACE.json",
+    "bytes": 27684,
+    "sha256": "a2eb860d3946c838d01b360ca02890153d9cdff5d0a3d508371816ab9a6fb013",
+    "device": 66306,
+    "inode": 2243023,
+    "uid": 1000,
+    "mode": 384
+  },
+  "new_finding": "The actual a15816 request writer is prepare_current.py:build_request, not install_issuer.py. It inserts native12=HELD as a literal. ROOT-ISSUE-AND-EXECUTE-ONCE.py supplies native_reservation_bytes=12*GIB as a literal capacity item. The first actual registered reservation is a current3 code-install reservation, not an original native allocation record.",
+  "classification": {
+    "meaning_of_this_native12_statement": "Static retained planning/capacity reservation in this install workflow. No native allocation is issued or looked up by the native12 assignment.",
+    "allocated_native_operation_claim_in_this_store": "Not identified: the one reached record is ROOT_CODE_INSTALL_ONLY with operation_reserved_bytes0, operation_planning_bytes4GiB and NON_ADDITIVE_WITHIN_RETAINED_12_GIB.",
+    "global_or_original_allocated_native_operation": "UNPROVED either way. No conclusion that native12 was never allocated, no new declaration of currentfree and no release follows from a literal retained-capacity field or this bounded store.",
+    "PID_tuple_requirement": "The retained-capacity field itself has no original holder-PID schema. Therefore a missing PID cannot by itself prove a lost native operation claim or justify an external per-name inventory. If an actual allocated/outcome-UNKNOWN native operation exists, its own source record must be joined. Otherwise the reservation scope must be reconciled through its actual original issuer and current Root authority."
+  },
+  "exact_registry_key_sourcecaller_checked": [
+    {
+      "store": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/ACTUAL-CAPACITY-CURRENT.json",
+      "key": "native_reservation_bytes",
+      "sourcecaller": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/ROOT-ISSUE-AND-EXECUTE-ONCE.py:141-149",
+      "source_value": "12*GIB literal",
+      "record_kind": "ROOT_CODE_INSTALL_ONLY capacity snapshot"
+    },
+    {
+      "store": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/reservations/install-c9e9624d1bada62e9635a740aba6e30e8432b47d0b560844911a54a2c36d95b5/request.json",
+      "key": "native12",
+      "sourcecaller": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/prepare_current.py:165-185",
+      "source_value": "HELD literal",
+      "record_kind": "Install request preserving pre-existing reservation; no native12 lookup"
+    },
+    {
+      "store": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/reservations/install-c9e9624d1bada62e9635a740aba6e30e8432b47d0b560844911a54a2c36d95b5/RESERVATION.json",
+      "key": "scope/allocation_mode/operation_reserved_bytes",
+      "sourcecaller": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/prepare_current.py:481-497",
+      "actual_value": {
+        "scope": "ROOT_CODE_INSTALL_ONLY",
+        "allocation_mode": "NON_ADDITIVE_WITHIN_RETAINED_12_GIB",
+        "operation_reserved_bytes": 0,
+        "operation_planning_bytes": 4294967296
+      },
+      "record_kind": "Current install record; not native allocation"
+    },
+    {
+      "store": "/var/lib/mckernel-install-<installnonce>/host-custody.json",
+      "key": "native12",
+      "sourcecaller": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/phase0-current.py:389",
+      "source_value": "Copied from request into HOST_INSTALL_RESOURCE_CUSTODY_V1; not a native registry"
+    },
+    {
+      "store": "/home/holden/mckernel/scripts/os_goal_resources.py",
+      "key": "resolve_resources/check_resources",
+      "sourcecaller": "current ordinary resource adapter",
+      "actual_value": "Planning/MemAvailable/scratch budget only; no native12/claim_generation lookup or persistent native claim store"
+    }
+  ],
+  "one_actual_native12_path_recovered": null,
+  "why_not": "Reached issuance/validation/registered-store chain is install-only and has no pointer to the earlier reservation issuer/native12 operation registry. No arbitrary registry/path/PID was guessed. No filesystem-wide claim absence asserted.",
+  "smallest_next_action": {
+    "owner": "Saved Root / issuer of the retained nativeCPU2\u20135/12GiB reservation, or an actual current native holder if one exists",
+    "first": "Root reviews this source-grounded classification. Recover the original reservation-scope/issuance record (or its registered store/key), not another current3 install PID. Determine whether it established only reserved native capacity or refers to an actual allocated/outcome-UNKNOWN native operation.",
+    "if_capacity_only": "Use existing authenticated Root resource/admission workflow to address that reserved scope and exact current native controls; do not invent an original operation PID requirement or silently release HELD. No native operation is granted by this read-only result.",
+    "if_actual_operation": "Bind its own original PID+birth+boot, lease path+device/inode, claim generation/current holder and positive restoration. Then derive only the exact existing read-only current-control join.",
+    "single_specific_mailbox_request_if_Root_cannot_recover_local_issuer": "Please identify the original issuance record or registry/key for the retained nativeCPU2\u20135/12GiB reservation. Does that record reserve capacity only, or reference an allocated/outcome-UNKNOWN native operation? If it references an operation, provide that existing claim/lease/holder record path and any current-holder/restoration successor. This does not request release of install4/V2/scratch21/mutex27:4 or authorize native execution.",
+    "why_precise": "Current3 source/registered store establishes a static retained-capacity field but supplies no original-issuer pointer. A missing external owner tuple is not assumed to be the only possible resolution."
+  },
+  "held_and_unknown_unchanged": [
+    "native12",
+    "original install4",
+    "V2 2",
+    "scratch21",
+    "mutex27:4",
+    "R3 persistent/source/outcome scopes"
+  ],
+  "controller_RootLease_not_native_authority": true,
+  "resource_release_or_grant": false,
+  "native_or_kernel_or_device_or_QEMU_mcexec_module_action": false,
+  "sudo_or_permission_fallback": false,
+  "old_nonce_or_policy_replay": false,
+  "external_message_or_mailbox_state_write": false,
+  "canonical_or_controller_or_goal_or_credit_write": false,
+  "recursive_agent": false,
+  "original_acceptance_delta": 0
+}

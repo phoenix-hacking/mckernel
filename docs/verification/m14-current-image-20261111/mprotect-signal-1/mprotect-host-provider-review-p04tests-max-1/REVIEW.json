@@ -1,0 +1,217 @@
+{
+  "actual_C_typedef": "typedef int (*mprotect_set_host_vma_fn_t)(unsigned long start,\n\t\tsize_t len, int prot, int holding_lock);",
+  "actual_two_consumers": [
+    {
+      "entire_initializer_unchanged": true,
+      "field": "set_host_vma",
+      "initializer_bytes": 465,
+      "initializer_sha256": "7ba1d0ca4da0579dd0a53ed88d20a455db04c566ae05079bcc13209e1850670b",
+      "table": "f03_mprotect_providers_v1"
+    },
+    {
+      "entire_initializer_unchanged": true,
+      "field": "set_host_vma",
+      "initializer_bytes": 984,
+      "initializer_sha256": "0fe79c361c31675e5d2d2ef3082527f955d9f1c52ab87bbcb3c71b5b5c482ca6",
+      "table": "f03_shmat_data_v1"
+    }
+  ],
+  "at": "2026-11-11T05:18:21.758582+00:00",
+  "decision": "GO_EXACT_FOUR_PATH_SOURCE_AND_MINIMUM_AFFECTED_PRODUCTION_VALIDATION_PLAN",
+  "exact_inputs": {
+    "bindings": {
+      "bytes": 5624,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/SOURCE-BINDINGS.json",
+      "sha256": "ecedf158be0a7537c570e22fe72660a8fb8ee1cbe7b23a1682fdea1ab1017ea1"
+    },
+    "contract": {
+      "bytes": 7064,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/CONTRACT.json",
+      "sha256": "ef6ef8c73708f396dcbfdbfe5078ff252e93ae2f401052ea65ade6a2a946cfd0"
+    },
+    "current_canonical_source_blobs_equal7231_preimages": true,
+    "docs_only235_preserves_source": true,
+    "patch": {
+      "bytes": 4650,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/MPROTECT-HOST-PROVIDER.patch",
+      "sha256": "8da5962ce948c5b4ba77b28b955a8754f09f53da6f824c820ebcbea4e6f6201d"
+    },
+    "postimages": [
+      {
+        "bytes": 61628,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/candidate/kernel/CMakeLists.txt",
+        "sha256": "67d36f7ffb6be39c386c6ea4265f62685e0caa19e893b062684587269b368f52"
+      },
+      {
+        "bytes": 4732,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/candidate/kernel/rust/lib.rs",
+        "sha256": "9b76f3eaba039d793755fbb8e90b8278cb8367f96f7337b05034f4d0043ae9ad"
+      },
+      {
+        "bytes": 962646,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/candidate/kernel/syscall.c",
+        "sha256": "9f640c4fce1c1808d80d25944d40e7204e72e152fc798fd28a37b7a367514c1f"
+      },
+      {
+        "bytes": 1919,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/candidate/kernel/rust/f03_mprotect_host_provider.rs",
+        "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db"
+      }
+    ],
+    "preimages": [
+      {
+        "bytes": 61222,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/preimage/kernel/CMakeLists.txt",
+        "sha256": "59fb96abd8bf18ca48f788376503495e8baba0ca39e9e02f7ee72b7121c5e685"
+      },
+      {
+        "bytes": 4655,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/preimage/kernel/rust/lib.rs",
+        "sha256": "2b2cef5a65dd303ddf923bda67c7ebfe3ccc5360dfefac8910fe67c8e95477be"
+      },
+      {
+        "bytes": 962259,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/preimage/kernel/syscall.c",
+        "sha256": "9681968de471da4c6051b4b0faa1b402201f6e78ad1a659052042b60be8fed9a"
+      }
+    ],
+    "ready": {
+      "bytes": 2640,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/SOURCE-READY.NOT-EXECUTED.json",
+      "sha256": "ae008f2e897b67bfc3d901afbe16148bd761972fdc20d417eb98a7ba6469cadc"
+    },
+    "recipe": {
+      "bytes": 2739,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-1/CHANGED-PATH-TEST-RECIPE.json",
+      "sha256": "cd182126555c016f2b086aba5382cc18ec7aebd9f2b431f825a962a5b0c172d7"
+    }
+  },
+  "material_findings": [
+    {
+      "condition": "Complete genuine implementation and actual ABI",
+      "evidence": "One new exported unsafe extern C endpoint forwards start:CULong,len:SizeT,prot:CInt,holding_lock:CInt in the original order to unchanged full f181 do_munmap_set_host_bridge and returns CInt directly. No conversion, storage, control branch, current lookup, log, lock, reference, callback substitute or duplicate algorithm is added. Actual C signature int(unsigned long,size_t,int,int) and the genuine Rust alias agree; exact C typedef and both Rust function const assignments/scalar checks are guarded for actual x86_64 4/8/8 ABI. Production compilation remains required.",
+      "result": "GO_SOURCE"
+    },
+    {
+      "condition": "Reachable C baseline matches the reused Rust provider",
+      "evidence": "Original C endpoint only returns set_host_vma(start,len,prot,held). That helper initializes the three relevant GPR arguments and unconditionally returns set_host_vma_body_result; its later mprotect/debug block is unreachable. Qualified f181 preserves this prefix with zero-valid private context. Selected native body keeps host mirror protection, invalidates PFNs through real munmap11, restores borrowed lock-state flag, stays quiet and returns exact CInt truncation. No unreachable legacy branch is resurrected.",
+      "result": "GO_SOURCE"
+    },
+    {
+      "condition": "Mprotect caller lifetime and error precedence",
+      "evidence": "mprotect_body_result retains original range writer lock through local protection updates, flush_tlb and synchronous host callback. For ro_changed, native profile invalidates even after an earlier local error, using start/roundedlen/protRWE/held1. Nonzero host result is logged; earlier local error wins, otherwise host_error becomes return; range unlock follows. Entire caller policy/source and callback table are unchanged, so no VmRange borrow gap, extra release or precedence change is introduced.",
+      "result": "GO_UNCHANGED_CALLER"
+    },
+    {
+      "condition": "Shmat attach/rollback and object/range ownership",
+      "evidence": "Read-only attach calls the same endpoint with addr,len,READ|EXEC,held1 while object ref/list/range locks stay live. Host failure unlocks range then list, unrefs/logs and returns signed-int host_error as long. Failed add performs WRITE-enabled rollback synchronously, ignores its return, retains original add_error and original unref/range+list unlock/log order. New endpoint performs no cleanup or ownership transfer.",
+      "result": "GO_UNCHANGED_CALLER"
+    },
+    {
+      "condition": "Real current-thread/offload/borrow/provider contract",
+      "evidence": "No new unsafe storage or escaped reference exists. f181 preserves real current CPU/CLS, three actual setters and native set_host_vma_body_result; held flag is published only for nonzero holding_lock and restored before return. Genuine policy3/full72-byte builder/real do_syscall keep original publication/accounting/preemption/response lifetime. Source440dd, actual9 and independent4b33 plus actual7231/Q0b57 provider closure are reused; no HOST controls stand in for production providers.",
+      "result": "GO_REUSED_QUALIFIED_PROVIDER"
+    },
+    {
+      "condition": "Narrow paired selector/module/C definition scope",
+      "evidence": "New cfg/module dependency and C macro both depend on unchanged MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED. Its original ordinary x86/Linux6.12/nonUBSAN/profile/perf/rusage/workIRQ/TofuOFF/FugakuOFF/broadOFF/experimentalOFF/ownedOFF predicate is unchanged. New module compile_error rejects incompatible source cfgs and requires the existing real provider. Original static C endpoint remains for other profiles. Module/dependency/export appear once; no cache/default/held flag or broad adapter is enabled.",
+      "result": "GO_SOURCE"
+    },
+    {
+      "condition": "Exact ownership allowlist, call sites and source origins",
+      "evidence": "All source pins match. C diff is one six-line region7193..7198, same30351 total physical lines, all other bytes unchanged. Both complete immutable table initializers and every existing caller remain byte-identical. Existing source/free/debug origins, prior13 providers/fork/clock/ptrace selections and old body fallbacks are preserved.",
+      "result": "GO_SOURCE"
+    }
+  ],
+  "minimum_necessary_new_validation": {
+    "binding": "Root integrates only focused reviewed hunks, then freezes actual new commit/source/profile/output/capture and retained current17mount genuine header/cache/SDK. Normal CMake dependency regeneration handles kernel CMake change; no clean/forced/old configure replay or tool/flag expansion.",
+    "extra_mirrored_HOST_runtime_fixture": "Unnecessary for this direct same-type four-value forwarding expression. No new argument transformation/control flow exists; unchanged complete provider normal/error/flag/quiet-int behavior already passed actual9. New actual compiler/type/real two-table/owner proof covers the changed boundary. A later material defect would require only its relevant changed-input check.",
+    "normal_production_argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "oracles": [
+      "Actual whole production Rust+C compile passes the new exact callback/scalar guards and paired cfg/C macro, with unchanged f181 selected.",
+      "One unique nonempty Rust-owned mprotect_set_host_vma_bridge and old147B C FUNC exclusion. Accept actual same-ABI source/map-proven alias to genuine do_munmap_set_host_bridge; do not require a fabricated separate code range.",
+      "Both real readonly table fields f03_mprotect_providers_v1.set_host_vma and f03_shmat_data_v1.set_host_vma join actual input relocations/final values/typed genuine Rust owner and real lower provider closure.",
+      "Reuse unchanged104 field proof and actual9 behavior evidence; preserve prior13/default selections, actual image/import/provider/entry/LOAD/noUND and positive capture/container/resource closure. Record observed C debt without count-only credit."
+    ],
+    "plan_only_not_execution_admission": true
+  },
+  "next_action": "Root may integrate exact reviewed source, then obtain separate operation review/fresh actual shared admission for normal incremental image plus minimal affected type/two-table/owner readback.",
+  "original_check": "M14-03-03-DEFAULT shared mprotect/shmat147B provider prerequisite only",
+  "preserved_preparation_failure": {
+    "bytes": 594,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-host-provider-review-p04tests-max-1/PREPARATION-FAILURE.json",
+    "sha256": "538d4aaeff6acfea0b76cc53f7cd98b285a3daa6d3ab52c35311135f49804d8d"
+  },
+  "remaining_material_source_defect": null,
+  "reused_evidence": {
+    "actual9_HOST": {
+      "bytes": 35073,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/qualification-1/QUALIFICATION.json",
+      "sha256": "0a6d374402468de20f07a64685336013301a95937d2bbdffd74f7a1a59c0c4c4"
+    },
+    "actual_context_header": {
+      "bytes": 2286,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    "actual_current_image": {
+      "bytes": 178642,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/qualification-1/record-field-correction-1/QUALIFICATION.json",
+      "sha256": "0b57b8b60bd91be764e74915c0dba11140e2e9a2e101ccaae088c0f0f76b28c4"
+    },
+    "actual_current_tables": {
+      "bytes": 102238,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/qualification-1/ACTUAL-CALLBACK-TABLES.json",
+      "sha256": "a14dcfa765d6533adedfa5ac7d870a2bd00f10a3252d00a5b1f2e2e6da68a871"
+    },
+    "actual_full_ABI": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "independent_actual9_GO": {
+      "bytes": 19911,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-review-source-acquisition-max-1/actual-result-1/REVIEW.json",
+      "sha256": "4b33ea054e9bea414d0a7014ceb821bdd117beae3e630774c1a1afcf2aee79c1"
+    },
+    "preserved_physical25": {
+      "bytes": 26696,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-image-p04source-max-1/stable-baseline7231-1/BASELINE.json",
+      "sha256": "de6c12876867610aa0e8b1b161d00ab7c0ba3d42da313ef4378bea61a4dc7d46"
+    },
+    "source_provider_GO": {
+      "bytes": 9524,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-review-publicabi-max-1/correction-1/REVIEW.json",
+      "sha256": "440dd803abbd8d1f1145deebb2cc5760b307df17dbc85ff97037b8ef803ba90e"
+    },
+    "unchanged_caller_policy": {
+      "bytes": 1240794,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+    },
+    "unchanged_full_provider": {
+      "bytes": 5930,
+      "path": "/home/holden/mckernel/kernel/rust/f03_memory_host_offload.rs",
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+    }
+  },
+  "reviewer": "/root/p04_tests_max actual Sol/MAX, independent of P04Source author; Root sole compositor/executor",
+  "reviewer_actions": "Only necessary source/caller/build/JSON reads and private review writes. No compiler/type/test/fixture/helper/ELF command/Docker/network/program/native/root/control execution or held/green replay.",
+  "schema": "m14-shared-mprotect-shmat-host-provider-independent-source-review-v1",
+  "source_only_limits": {
+    "C_retirement_or_native_runtime_PARENT_ACCEPT_claim": false,
+    "acceptance_delta": 0,
+    "actual_new_provider_compiled_or_linked": false,
+    "canonical_or_cache_or_goal_or_launcher_or_credit_mutated": false,
+    "whole_M14_03_03_DEFAULT_or_other_original_accepted": false
+  }
+}

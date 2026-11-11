@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T05:13:44.592502+00:00",
+  "updated_at": "2026-11-11T06:17:51.263893+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 65.19,
+      "checklist_percent_complete": 66.3,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
@@ -54,9 +54,9 @@
         "M15-I03",
         "M15-I04"
       ],
-      "checklist_percent_complete": 66.0,
+      "checklist_percent_complete": 67.19,
       "file_acceptance_percent": 12.5,
-      "integration_acceptance_percent": 0.0,
+      "integration_acceptance_percent": 25.0,
       "milestone_accepted": false,
       "original_file_gate_count": 8,
       "original_integration_gate_count": 4
@@ -636,6 +636,13 @@
           "scope": "GETREGSET/SETREGSET invalid element-length handling",
           "level": "focused_HOST_or_extracted_source_behavior",
           "limits": "28 invalid-length cases per language, existing xsave/copy error coverage; Linux ptrace control unavailable, no runtime parity claim."
+        },
+        {
+          "scope": "Whole original supported-default technical condition independentlyGO on7231/19c5/all5 originalregions/currentABI/provider/source/default/bodyproof",
+          "level": "whole_original_supported_default_technical_condition",
+          "verified": true,
+          "review": "docs/verification/m14-current-image-20261111/f06-whole-default-1/f06-whole-default-review-sourceacq-max-1/REVIEW.json",
+          "limits": "FUNCTIONAL/native/file and milestone acceptance remain open; C13 outside requiredscope notretired."
         }
       ],
       "remaining_actions": [
@@ -667,7 +674,7 @@
         "M14-F06-FUNCTIONAL",
         "M14-F06-ACCEPT"
       ],
-      "percent_complete": 46.67,
+      "percent_complete": 56.67,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -1265,17 +1272,20 @@
       "kind": "original_integration_gate",
       "target": "Executors, libraries and installed tools",
       "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
-      "accepted": false,
-      "acceptance_percent": 0,
+      "accepted": true,
+      "acceptance_percent": 100,
       "demonstrated_scopes": {
         "partial": "Supported Rust default selection and genuine HOST userspace compile/link/provider/type/error slices exist; exact IHK committed source replay is published.",
-        "limits": "HOST supplementation is not original complete SDK identity or actual installed static/dynamic project dependency closure."
+        "limits": "HOST supplementation is not original complete SDK identity or actual installed static/dynamic project dependency closure.",
+        "current_whole_original_acceptance": {
+          "accepted": true,
+          "review": "docs/verification/m15-original-reproducibility-20261111/m15-i03-accept-review-sourceacq-max-1/REVIEW.json",
+          "six_children_matched": true,
+          "M15_final_acceptance": false,
+          "limits": "Original I03 gate only; source/profile/stage/native and C104 distinctions preserved."
+        }
       },
-      "remaining_actions": [
-        "Bind reproducible original supported sources/configuration/toolchain/SDK for executors, libraries and installed tools.",
-        "Complete public ABI and actual static/dynamic project dependency closure across the complete delivered userspace set.",
-        "Join delivered installed artifact/provider ownership and exact build inputs to the matching admitted cohort; review original integration gate."
-      ],
+      "remaining_actions": [],
       "dependencies": [
         "M14_ACCEPTANCE_ORDER",
         "MATCHED_COHORT",
@@ -1297,8 +1307,17 @@
         "M15-I03-static-dynamic",
         "M15-I03-ACCEPT"
       ],
-      "percent_complete": 85.71,
-      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
+      "percent_complete": 100.0,
+      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance",
+      "accepted_at": "2026-11-11T05:44:00.971999+00:00",
+      "acceptance_evidence": [
+        "docs/verification/m15-original-reproducibility-20261111/m15-i03-accept-review-sourceacq-max-1/REVIEW.json"
+      ],
+      "original_remaining_actions_preserved": [
+        "Bind reproducible original supported sources/configuration/toolchain/SDK for executors, libraries and installed tools.",
+        "Complete public ABI and actual static/dynamic project dependency closure across the complete delivered userspace set.",
+        "Join delivered installed artifact/provider ownership and exact build inputs to the matching admitted cohort; review original integration gate."
+      ]
     },
     {
       "id": "M15-I04",
@@ -2540,9 +2559,9 @@
       "id": "M14-F06-DEFAULT",
       "parent": "M14-F06",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified",
       "owner": "Root sole compositor; original source/service and native admission authorities retain their holds",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2562,12 +2581,15 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-current-image-20261111/f06-whole-default-1/f06-whole-default-review-sourceacq-max-1/REVIEW.json"
       ],
-      "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "scope_limit": "Whole original supported-default architecture file technical condition only; FUNCTIONAL/native/restoration and F06 file/M14 acceptance remain open. Actual13 generic C debt outside required scope remains explicit.",
+      "definition_status": "whole literal original condition explicitly independently verified at declared matching scope",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T05:44:00.971999+00:00",
+      "current_engineering_evidence": "WholeGOfef8 bindsafb1/67e1/059a/afcb/91a3 actual7231/19c5/f15e/8168. All5 complete original region/lifetime/default maps;190 mapped unique currentRustowners/42+40+13lowerfamilies/27typedtablepointers/current4x104/all13changedbodybytes+relocations/current7source91cfg/25positiveclients/two0nonOOMremovedcontainers/fullRootcompletion. Matchingmodules at exactinputs reused, no old100d=current claim; no newcommand orNative/fileacceptance."
     },
     {
       "id": "M14-F06-FUNCTIONAL",
@@ -6597,9 +6619,9 @@
       "id": "M15-I03-ACCEPT",
       "parent": "M15-I03",
       "title": "Accept original M15-I03 scope",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "unverified",
+      "status": "verified",
       "owner": "Saved Root integration/review owner",
       "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
       "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
@@ -6619,12 +6641,15 @@
         "CAMPAIGN.md",
         "docs/verification/m14-m15-net-conversion-owner-assessment-20261106.json",
         "docs/verification/m15-shared-abi-environment-results-20261106.json",
-        "docs/verification/m15-corrected-library-tool-cohort-results-20261106.json"
+        "docs/verification/m15-corrected-library-tool-cohort-results-20261106.json",
+        "docs/verification/m15-original-reproducibility-20261111/m15-i03-accept-review-sourceacq-max-1/REVIEW.json"
       ],
-      "scope_limit": "",
-      "definition_status": "completion_condition_defined",
+      "scope_limit": "Explicit acceptance of original I03 reproducibility/dependency integration gate only at matched declared profiles; M15 final acceptance remains false until M14-before-M15 order and its remaining original conditions. C104/native/deployment/other gates unretired.",
+      "definition_status": "whole literal original condition explicitly independently verified at declared matching scope",
       "execution_profile": "retained_evidence_review",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T05:44:00.971999+00:00",
+      "current_engineering_evidence": "ExplicitwholeI03ACCEPT_GO3b9f matches all6 applicable childconditions including currentRockyrepro8875,canonicalABI8221/installeddeps131b/selectedsourceHOSTABI-sourceReplay; originalwholecriterion checked, no unmatchedclause/additionalcommand. Realstage/profile distinctions retained. FinalM15/native/default/language/C104/otherholdscope notaccepted."
     },
     {
       "id": "M15-I04-ACCEPT",
@@ -14591,16 +14616,16 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-11T05:13:44.592502+00:00",
+    "at": "2026-11-11T05:44:00.971999+00:00",
     "invocation": "20261110T060029Z-3fe88dab",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "counted_verified_before": 92,
-    "counted_verified_after": 93,
+    "counted_verified_before": 93,
+    "counted_verified_after": 95,
     "task_binding_rows_before": 391,
     "task_binding_rows_after": 391,
-    "change_reason": "Whole original M15 supported SDK/source/configuration/compiler/transitive-provider reproducibility closes from actualthreeRocky reconstructions; criteria/weights unchanged.",
+    "change_reason": "Whole original F06 supported-default technical condition and explicit I03 integration ACCEPT independently pass; final milestone order and all other criteria/holds unchanged.",
     "latest_source_backed_integration": {
       "at": "2026-11-10T14:39:48.032766+00:00",
       "original_checks": [
@@ -14631,34 +14656,37 @@
       ]
     },
     "latest_counted_closure": {
-      "at": "2026-11-11T05:13:44.592502+00:00",
+      "at": "2026-11-11T05:44:00.971999+00:00",
       "check_ids": [
-        "M15-I03-original-reproducibility"
+        "M14-F06-DEFAULT",
+        "M15-I03-ACCEPT"
       ],
       "whole_condition_reviews": [
-        "docs/verification/m15-original-reproducibility-20261111/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json"
+        "docs/verification/m14-current-image-20261111/f06-whole-default-1/f06-whole-default-review-sourceacq-max-1/REVIEW.json",
+        "docs/verification/m15-original-reproducibility-20261111/m15-i03-accept-review-sourceacq-max-1/REVIEW.json"
       ],
       "whole_condition_review_sha256s": [
-        "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
+        "fef8a19d5dd97b2a1a6907e5ae4951960248f9e3ea0b4594dded44926cefef6f",
+        "3b9f222f66c90dd174be253b60726db6b54499a39260e3301acdc692608baa4d"
       ],
       "M14_before_after": [
         65.19,
-        65.19
+        66.3
       ],
       "M15_before_after": [
-        64.81,
-        66.0
+        66.0,
+        67.19
       ],
       "counted_verified_before_after": [
-        92,
-        93
+        93,
+        95
       ],
-      "exact_M15_before_after": [
-        "239545/3696",
-        "81315/1232"
-      ],
-      "exact_M15_gain": "25/21 percentage points",
-      "parent_acceptance": false
+      "exact": {
+        "M14": "1790/27",
+        "M15": "248345/3696"
+      },
+      "accepted_gate": "M15-I03",
+      "milestone_acceptance": false
     },
     "counted_closure_history": [
       {
@@ -14769,20 +14797,22 @@
       }
     ],
     "last_published_percentage_report": {
-      "at": "2026-11-11T03:47:18.819180+00:00",
-      "M14": 64.26,
-      "M15": 64.81,
-      "deltas_from_previous_published_pair": {
-        "M14": 0.56,
-        "M15": 1.19
-      },
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6786391376",
-      "comment_id": 6786391376,
-      "posted_by": "foreground",
+      "at": "2026-11-11T06:17:51.263893+00:00",
       "state": "POSTED_CONFIRMED",
-      "dedupe": "M14-06-04-DEFAULT+M15-I03-static-dynamic@f0f001b2+131b919d",
-      "source_commit": "2cc813c2df6544c05394639094f6e9e93149f972",
-      "fetched_owned_blobs_matching": 60,
+      "posted_by": "foreground",
+      "comment_id": 6788434691,
+      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6788434691",
+      "pair": {
+        "M14": 66.3,
+        "M15": 67.19
+      },
+      "verified_checks": 95,
+      "dedupe": "M14-F06-DEFAULT+M15-I03-ACCEPT@fef8a19d+3b9f222f",
+      "authority_instruction": "source-f187e4e1aa84543d841f743939efa08651aae417ad2f4f448e10da5376350918",
+      "source_results_publication": "PENDING_PUSH_FETCH",
+      "Root_duplicate_progress_comment": false,
+      "M14": 66.3,
+      "M15": 67.19,
       "no_pending_report": true
     },
     "latest_functional_result": {
@@ -15368,21 +15398,21 @@
       "native_or_other_DEFAULT_or_acceptance": false
     },
     "pending_progress_report": {
-      "state": "WAIT_SOURCE_RESULTS_CHECKPOINT_PUSH_AND_FETCH",
-      "dedupe": "M14-06-01-DEFAULT+M14-06-03-DEFAULT+M15-I03-repro@eec34d75+7a877658+8875f4a2",
+      "at": "2026-11-11T06:17:51.263893+00:00",
+      "state": "POSTED_CONFIRMED",
+      "posted_by": "foreground",
+      "comment_id": 6788434691,
+      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6788434691",
       "pair": {
-        "M14": 65.19,
-        "M15": 66.0
+        "M14": 66.3,
+        "M15": 67.19
       },
-      "previous_published_pair": {
-        "M14": 64.26,
-        "M15": 64.81
-      },
-      "post_after_fetched_byte_confirmation": true,
-      "unpublished_intermediate_M14_pair": [
-        65.19,
-        64.81
-      ]
+      "verified_checks": 95,
+      "dedupe": "M14-F06-DEFAULT+M15-I03-ACCEPT@fef8a19d+3b9f222f",
+      "authority_instruction": "source-f187e4e1aa84543d841f743939efa08651aae417ad2f4f448e10da5376350918",
+      "source_results_publication": "PENDING_PUSH_FETCH",
+      "Root_duplicate_progress_comment": false,
+      "source_results_checkpoint": "PUBLICATION_IN_PROGRESS"
     },
     "current_engineering_step": {
       "at": "2026-11-11T05:03:32.512072+00:00",
@@ -15390,7 +15420,7 @@
         "M14-06-01-DEFAULT",
         "M14-06-03-DEFAULT"
       ],
-      "state": "WHOLE01_03_DEFAULT_AND_M15_REPRO_VERIFIED_PENDING_CHECKPOINT",
+      "state": "WHOLE_F06_DEFAULT_AND_I03_ACCEPT_VERIFIED_NEW_F199_IMAGE_PENDING_ADMISSION",
       "private_composition": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/COMPOSITION.proposed.json",
       "private_patch_sha256": "099ddd4d44fc5f7c7b1ce71eb58d5cf9f82819b49b810d6ce9a833045c8507e7",
       "failed_private_composition_preserved": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-1",
@@ -15462,7 +15492,19 @@
       "whole01_review_sha256": "eec34d75f2a792829fb6107560c2c55ad6b29593bd09a6c6f882890c18509703",
       "whole03_review_sha256": "7a8776583a9f3ea4a5299a1bd53bec48ae57868f0d652361293171d9b6f5c9d2",
       "counted_delta_since_last_published_pair": 3,
-      "M15_repro_whole_review_sha256": "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
+      "M15_repro_whole_review_sha256": "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427",
+      "new_source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+      "new4providers_original_checks": [
+        "M14-03-03-DEFAULT",
+        "M14-03-04-DEFAULT"
+      ],
+      "M15_I03_accepted": true,
+      "M15_final_accepted": false,
+      "new_f199_producer_result_sha256": "19ccee346d5371f93c2d41292847710a9cbf0fda50712d12d66a18268de83f97",
+      "new_f199_image_sha256": "1aee02d2fb387e08ab6a771aa2e7d9d01a6673ad364a06685e3bc3e926bdb690",
+      "new_f199_producer_positive_retirement": true,
+      "native_issuer_scope_review_sha256": "fb293aa900eef63c60ae71ef6f19aea5c2365e834003da9bf57ea3c1ad2b0d40",
+      "native_substantive_status_reply": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6788290057"
     },
     "verified_whole_condition_history": [
       {
@@ -15525,6 +15567,77 @@
         ],
         "exact_M14_gain": "25/27 percentage points",
         "parent_acceptance": false
+      },
+      {
+        "at": "2026-11-11T05:13:44.592502+00:00",
+        "check_ids": [
+          "M15-I03-original-reproducibility"
+        ],
+        "whole_condition_reviews": [
+          "docs/verification/m15-original-reproducibility-20261111/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json"
+        ],
+        "whole_condition_review_sha256s": [
+          "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
+        ],
+        "M14_before_after": [
+          65.19,
+          65.19
+        ],
+        "M15_before_after": [
+          64.81,
+          66.0
+        ],
+        "counted_verified_before_after": [
+          92,
+          93
+        ],
+        "exact_M15_before_after": [
+          "239545/3696",
+          "81315/1232"
+        ],
+        "exact_M15_gain": "25/21 percentage points",
+        "parent_acceptance": false
+      }
+    ],
+    "confirmed_progress_report_history": [
+      {
+        "at": "2026-11-11T03:47:18.819180+00:00",
+        "M14": 64.26,
+        "M15": 64.81,
+        "deltas_from_previous_published_pair": {
+          "M14": 0.56,
+          "M15": 1.19
+        },
+        "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6786391376",
+        "comment_id": 6786391376,
+        "posted_by": "foreground",
+        "state": "POSTED_CONFIRMED",
+        "dedupe": "M14-06-04-DEFAULT+M15-I03-static-dynamic@f0f001b2+131b919d",
+        "source_commit": "2cc813c2df6544c05394639094f6e9e93149f972",
+        "fetched_owned_blobs_matching": 60,
+        "no_pending_report": true
+      },
+      {
+        "at": "2026-11-11T05:16:26.644284+00:00",
+        "state": "POSTED_CONFIRMED",
+        "posted_by": "Root",
+        "id": 6787719852,
+        "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6787719852",
+        "pair": {
+          "M14": 65.19,
+          "M15": 66.0
+        },
+        "deltas_from_previous_pair": {
+          "M14": 0.93,
+          "M15": 1.19
+        },
+        "verified_checks": 93,
+        "dedupe": "M14-06-01-DEFAULT+M14-06-03-DEFAULT+M15-I03-repro@eec34d75+7a877658+8875f4a2",
+        "source_commit": "70435ce27b7673101c7cc955f97038357763c9cc",
+        "fetched_owned_blobs_matching": 30,
+        "M14": 65.19,
+        "M15": 66.0,
+        "no_pending_report": true
       }
     ]
   },

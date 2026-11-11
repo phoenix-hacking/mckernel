@@ -1,0 +1,134 @@
+{
+  "IHK_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+  "actual_Root_integration": {
+    "bytes": 2071,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/CANONICAL-INTEGRATION.json",
+    "sha256": "6f8030a6116794a990f1089c7fbbce46cabccb9e0e56a7c34eb5d848d265164f"
+  },
+  "combined_source_GO": {
+    "bytes": 13060,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-review-p04tests-max-1/REVIEW.json",
+    "sha256": "937e7afcc4928dc543014123ee5773ba97349881cad64a613c3beae1d2321809"
+  },
+  "current_qualified_cache": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/CMakeCache.txt",
+    "required_existing_fields": [
+      "MCKERNEL_CRASH_DEFS_HEADER:FILEPATH=/sdk/crash-9.0.1/defs.h",
+      "ENABLE_RUST_F06_SYSCALL_WHOLE:BOOL=ON",
+      "ENABLE_RUST_KERNEL:BOOL=ON",
+      "MCKERNEL_HOST_IRQ_ABI:STRING=linux-6.12",
+      "KERNEL_DIR:STRING=/output/build",
+      "ENABLE_NATIVE_FORK_OWNED_TRANSACTION:BOOL=OFF",
+      "ENABLE_RUST_M14_SYSCALL_ADAPTERS:BOOL=OFF"
+    ]
+  },
+  "existing_header_binding": {
+    "container_path": "/sdk/crash-9.0.1/defs.h",
+    "host_file": {
+      "bytes": 255081,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h",
+      "sha256": "a875242ef3f01c979e25e169149e810819e2194fcfa9281e425b3255d1fe6bfd"
+    },
+    "readonly_mount": "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h,dst=/sdk/crash-9.0.1/defs.h,readonly"
+  },
+  "expected_changed_five_source_rows": [
+    {
+      "bytes": 62796,
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8"
+    },
+    {
+      "bytes": 1919,
+      "path": "kernel/rust/f03_mprotect_host_provider.rs",
+      "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db"
+    },
+    {
+      "bytes": 4336,
+      "path": "kernel/rust/f03_signal_forward_provider.rs",
+      "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467"
+    },
+    {
+      "bytes": 4811,
+      "path": "kernel/rust/lib.rs",
+      "sha256": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9"
+    },
+    {
+      "bytes": 964476,
+      "path": "kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+    }
+  ],
+  "expected_current_source_rows": [
+    {
+      "bytes": 62796,
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8"
+    },
+    {
+      "bytes": 1919,
+      "path": "kernel/rust/f03_mprotect_host_provider.rs",
+      "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db"
+    },
+    {
+      "bytes": 4336,
+      "path": "kernel/rust/f03_signal_forward_provider.rs",
+      "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467"
+    },
+    {
+      "bytes": 4811,
+      "path": "kernel/rust/lib.rs",
+      "sha256": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9"
+    },
+    {
+      "bytes": 964476,
+      "path": "kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947"
+    },
+    {
+      "bytes": 5930,
+      "path": "kernel/rust/f03_memory_host_offload.rs",
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+    },
+    {
+      "bytes": 1495,
+      "path": "kernel/rust/f03_policy_forward_context_bridge.rs",
+      "sha256": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377"
+    },
+    {
+      "bytes": 7740,
+      "path": "kernel/rust/f06_ptrace_resume_callbacks.rs",
+      "sha256": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0"
+    },
+    {
+      "bytes": 1240794,
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+    }
+  ],
+  "old_required_modules_unchanged": {
+    "kernel/rust/f03_do_fork.rs": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b",
+    "kernel/rust/f03_do_syscall2_bridge.rs": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685",
+    "kernel/rust/f03_memory_host_offload.rs": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33",
+    "kernel/rust/f03_policy_forward_context_bridge.rs": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377",
+    "kernel/rust/f06_ptrace_resume_callbacks.rs": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0"
+  },
+  "preserved_baseline": {
+    "bytes": 26696,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-image-p04source-max-1/stable-baseline7231-1/BASELINE.json",
+    "sha256": "de6c12876867610aa0e8b1b161d00ab7c0ba3d42da313ef4378bea61a4dc7d46"
+  },
+  "schema": 1,
+  "source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "source_composition": {
+    "bytes": 2427,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/COMPOSITION.proposed.json",
+    "sha256": "d45e2dcdf542031d44dd46cfd7bd118e58eafe5d97675cac574b17e2b494ee2a"
+  },
+  "source_or_cache_mutated_by_preparer": false,
+  "source_patch": {
+    "bytes": 14443,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-1/MPROTECT-SIGNAL-OWNERSHIP.patch",
+    "sha256": "63b44f36d106fb7111ab050e980f75d8257b7988b516c1255cf42e8195c1713e"
+  },
+  "status": "ACTUAL_F199_ROOT_SOURCE_BOUND_FIVE_NEW_FOUR_RETAINED_BYTES_NORMAL_IMAGE_INPUT"
+}

@@ -1,0 +1,238 @@
+{
+  "create_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "create",
+    "--name",
+    "mck-m14-mprotect-signal-image-20261111-1",
+    "--label",
+    "mckernel.preparation-owner=m14-mprotect-signal-image-1",
+    "--init",
+    "--pull=never",
+    "--network=none",
+    "--ipc=private",
+    "--cpus=1",
+    "--cpuset-cpus=6",
+    "--memory=2g",
+    "--memory-swap=2g",
+    "--pids-limit=256",
+    "--ulimit",
+    "core=0:0",
+    "--ulimit",
+    "fsize=4294967296:4294967296",
+    "--ulimit",
+    "cpu=3600:3600",
+    "--user",
+    "1000:1000",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+    "--workdir",
+    "/work/output",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel,dst=/src,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2,dst=/source,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2,dst=/output,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake,dst=/usr/bin/cmake,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake,dst=/usr/share/cmake,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0,dst=/usr/lib64/libuv.so.1,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h,dst=/usr/include/bfd.h,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h,dst=/usr/include/ansidecl.h,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h,dst=/usr/include/symcat.h,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h,dst=/usr/include/diagnostics.h,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so,dst=/usr/lib64/libbfd.so,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a,dst=/usr/lib64/libbfd.a,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a,dst=/usr/lib64/libsframe.a,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a,dst=/usr/lib64/libiberty.a,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h,dst=/sdk/crash-9.0.1/defs.h,readonly",
+    "--entrypoint",
+    "/usr/bin/env",
+    "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "-i",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "LANG=C",
+    "LC_ALL=C",
+    "PATH=/usr/bin:/bin",
+    "TZ=UTC",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "CMAKE_BUILD_PARALLEL_LEVEL=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "TMPDIR=/tmp",
+    "TMP=/tmp",
+    "TEMP=/tmp",
+    "/usr/bin/cmake",
+    "--build",
+    "/work/output/build",
+    "--target",
+    "mckernel.img",
+    "--parallel",
+    "1",
+    "--verbose"
+  ],
+  "expected_mount_count": 17,
+  "expected_mounts": [
+    {
+      "destination": "/src",
+      "read_only": true,
+      "role": "Actual current production source, IHK submodule and readable Git metadata; one compositor freezes it for operation",
+      "source": "/home/holden/mckernel"
+    },
+    {
+      "destination": "/source",
+      "read_only": true,
+      "role": "Exact already-staged/prepared Linux source; generated O Makefile includes /source/Makefile",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2"
+    },
+    {
+      "destination": "/output",
+      "read_only": true,
+      "role": "Existing actual Linux output2/build, config106055, prepare/bzImage/module symbol universe. External probe writes only new M directory",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2"
+    },
+    {
+      "destination": "/work/output",
+      "read_only": false,
+      "role": "Existing genuine configured build/cache, reused for normal incremental graph; stablegreen20a copy is separate and preserved",
+      "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output"
+    },
+    {
+      "destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "read_only": true,
+      "role": "Entire actual qualified1.95 compiler/sysroot at same absolute path",
+      "source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu"
+    },
+    {
+      "destination": "/usr/bin/cmake",
+      "read_only": true,
+      "role": "Trusted CMake3.31.8 exact a2ec9c59 executable",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake"
+    },
+    {
+      "destination": "/usr/share/cmake",
+      "read_only": true,
+      "role": "Exact matching trusted CMake3.31.8 module tree",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake"
+    },
+    {
+      "destination": "/usr/lib64/libuv.so.1",
+      "read_only": true,
+      "role": "Actual qualified CMake runtime libuv e14ce16e; no system directory masking",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0"
+    },
+    {
+      "destination": "/usr/include/bfd.h",
+      "read_only": true,
+      "role": "Exact already-qualified BFD2.41 public-header closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h"
+    },
+    {
+      "destination": "/usr/include/ansidecl.h",
+      "read_only": true,
+      "role": "Exact already-qualified BFD2.41 public-header closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h"
+    },
+    {
+      "destination": "/usr/include/symcat.h",
+      "read_only": true,
+      "role": "Exact already-qualified BFD2.41 public-header closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h"
+    },
+    {
+      "destination": "/usr/include/diagnostics.h",
+      "read_only": true,
+      "role": "Exact already-qualified BFD2.41 public-header closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h"
+    },
+    {
+      "destination": "/usr/lib64/libbfd.so",
+      "read_only": true,
+      "role": "Exact already-qualified original BFD2.41 script/static-provider closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so"
+    },
+    {
+      "destination": "/usr/lib64/libbfd.a",
+      "read_only": true,
+      "role": "Exact already-qualified original BFD2.41 script/static-provider closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a"
+    },
+    {
+      "destination": "/usr/lib64/libsframe.a",
+      "read_only": true,
+      "role": "Exact already-qualified original BFD2.41 script/static-provider closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a"
+    },
+    {
+      "destination": "/usr/lib64/libiberty.a",
+      "read_only": true,
+      "role": "Exact already-qualified original BFD2.41 script/static-provider closure",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a"
+    },
+    {
+      "destination": "/sdk/crash-9.0.1/defs.h",
+      "read_only": true,
+      "role": "Single genuine actual crash9.0.1 header a875 required by already-selected production user-child configure guard; no user target is built",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h"
+    }
+  ],
+  "expected_returncode": 0,
+  "gate": "Final actual Root integration commit/receipt and combined sourceGO937e7a must be bound by SDK; independent operationGO and fresh Root shared admission required. Exact normal incremental target,17 unchanged mounts, no separate configure/clean/partial injection.",
+  "max_wall_seconds": 3600,
+  "payload_argv": [
+    "/usr/bin/cmake",
+    "--build",
+    "/work/output/build",
+    "--target",
+    "mckernel.img",
+    "--parallel",
+    "1",
+    "--verbose"
+  ],
+  "resource_candidate": {
+    "AS": "Actual2GiB cgroup cap; previous real image sampled highwater513519616B/nonOOM reused as profile context, not a prediction of this changed cohort peak.",
+    "CPU": [
+      6
+    ],
+    "CPU_seconds": 3600,
+    "FSIZE_bytes": 4294967296,
+    "container_memory_bytes": 2147483648,
+    "jobs": 1,
+    "memory_swap_bytes": 2147483648,
+    "new_output_disk_headroom_bytes": 4294967296,
+    "pids": 256,
+    "wall_seconds": 3600
+  }
+}

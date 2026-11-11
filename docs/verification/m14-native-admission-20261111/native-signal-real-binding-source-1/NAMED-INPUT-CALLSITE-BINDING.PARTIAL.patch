@@ -1,0 +1,355 @@
+--- a/supervisor_entry.py
++++ b/supervisor_entry.py
+@@ -47,12 +47,46 @@
+     finally:os.close(parent)
+ 
+ 
+-def verify_actual_operation_gates():
+-    # A frozen config and process liveness do not prove current controls,
+-    # stop/hold, weekly account, native ownership or resource admission.
+-    # Keep activation disabled until a separately reviewed live-gate adapter
+-    # binds those actual facts and the exact one-shot operation.
+-    raise RuntimeError('actual fresh operation gates are not implemented')
++NAMED_SIGNAL_INPUTS_SHA256 = '3d9ea266c1f3e32630a6dd0a38900cad3c64d30df3899352a6b561d44eb46769'
++
++
++def verify_actual_operation_gates(cfg, config_sha, root_fd, lease_fd):
++    """Bind the actual named input context before any source-owner operation.
++
++    These are input/custody checks, never a native admission. The registered
++    current3 parent has no live control/account/native-admission channel API.
++    Keep the precise refusal below until that real source interface is supplied;
++    a pinned config, Root lease or static capacity field cannot replace it.
++    """
++    if type(config_sha) is not str or len(config_sha)!=64 or any(c not in '0123456789abcdef' for c in config_sha):
++        fail('exact one-shot config digest required')
++    spec=cfg['named_signal_inputs']
++    if type(spec) is not dict or set(spec)!={'path','sha256'} or spec['sha256']!=NAMED_SIGNAL_INPUTS_SHA256:
++        fail('named signal input manifest binding')
++    fd,raw=root_bootstrap.pinned_root_file(spec['path'],NAMED_SIGNAL_INPUTS_SHA256)
++    try:
++        intent=json.loads(raw,object_pairs_hook=unique)
++        if (intent.get('schema')!='mckernel-named-signal-input-intent-v1' or
++            intent.get('authority','missing') is not None or
++            intent.get('status')!='SOURCE_ONLY_INPUT_BINDING_NO_AUTHORITY' or
++            intent.get('release_or_runtime_permission') is not False):
++            fail('named input manifest is not an admission')
++        if intent['payload']!={'argv':['/bin/mcexec','-t','1','0','/apps/signal.alternate-repeat'],
++            'cwd':'/case/work','environment':{'PATH':'/usr/bin:/bin','COKERNEL_PATH':'/apps','LANG':'C','LC_ALL':'C','TZ':'UTC'}}:
++            fail('exact named signal payload required')
++        source.root_private(root_fd)
++        lease=os.fstat(lease_fd)
++        if (root_fd==lease_fd or not stat.S_ISREG(lease.st_mode) or lease.st_uid!=0 or
++            lease.st_nlink!=1 or stat.S_IMODE(lease.st_mode)&0o077):
++            fail('inherited operation lease identity')
++        # SOURCE TODO: bind the real current control/account/native-admission
++        # verifier from its legitimate registered parent closure, using the
++        # actual inherited resource/source-owner channels. No such API occurs
++        # in the reached loader/PARENT source. Do not treat this input check,
++        # RootLease/FLOCK, intent JSON or static native12 as a positive grant.
++        raise RuntimeError('named inputs bound; registered current control/native-admission channel implementation absent')
++    finally:
++        os.close(fd)
+ 
+ 
+ def run(config_path,config_sha,root_fd,lease_fd):
+@@ -68,7 +102,7 @@
+     cfg=json.loads(raw,object_pairs_hook=unique)
+     keys={'nonce','boot_id','caps','watchdog_pid','watchdog_birth','owner','source_manifest',
+           'target','validator','supervisor_entry_path','supervisor_entry_sha','interpreter_sha',
+-          'deadline_boot','mount_poll_seconds','runtime'}
++          'deadline_boot','mount_poll_seconds','runtime','named_signal_inputs'}
+     if type(cfg) is not dict or set(cfg)!=keys:fail('supervisor config shape')
+     if type(cfg['runtime']) is not dict or set(cfg['runtime'])!={'path','sha256'}:fail('runtime config')
+     runtime_binding.verify_current(cfg['runtime']['path'],cfg['runtime']['sha256'])
+@@ -88,7 +122,7 @@
+         fail('owner or validator runtime differs from verified supervisor')
+     if type(target) is not dict or set(target)!={'pid','birth','mount_dev','mount_inode','hosts'}:fail('target config')
+     if type(manifest) is not dict or set(manifest)!={'path','sha256'}:fail('source manifest config')
+-    verify_actual_operation_gates()
++    verify_actual_operation_gates(cfg,config_sha,root_fd,lease_fd)
+     operation=None
+     try:
+         operation=operation_supervisor.OperationSupervisor.__new__(operation_supervisor.OperationSupervisor)
+--- a/compositor.py
++++ b/compositor.py
+@@ -15,9 +15,9 @@
+ import threading
+ 
+ # Both are intentionally unbound until separate review and admission.
+-PROFILE_SHA256 = None
+-ADAPTER_SOURCE_SHA256 = None
+-PIDFD_CUSTODY_SHA256 = None
++PROFILE_SHA256 = '0a290a419250485e47836df94cceaee1610b14a53724839e9ff5972fe2269e5c'
++ADAPTER_SOURCE_SHA256 = '6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3'
++PIDFD_CUSTODY_SHA256 = '3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'
+ PIDFD_CUSTODY_SOURCE = Path(__file__).parent / 'pidfd_custody.py'
+ ADAPTER_SOURCE = Path(__file__).parent / 'adapter.py'
+ CONTRACT_SHA256 = 'd4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd'
+@@ -88,7 +88,27 @@
+     _require(profile.get('status')==STATUS and profile.get('authority') is None and
+              profile.get('contract_sha256')==CONTRACT_SHA256 and
+              profile.get('composite_sha256')==COMPOSITE_SHA256,'profile binding differs')
++    _require(profile.get('named_signal_inputs_sha256')=='3d9ea266c1f3e32630a6dd0a38900cad3c64d30df3899352a6b561d44eb46769' and
++             profile.get('named_signal_inputs',{}).get('authority','missing') is None and
++             profile.get('old_graph_release') is False,'named signal input profile binding')
+     return raw
++
++
++def _require_named_current_channel(session,operation_custody):
++    # Existing adapter authentication remains real and must finish first. Its
++    # graph-observe-v1 bootstrap authenticates source/namespace custody only.
++    # It does not carry a current control/account/native-admission verifier or
++    # the new1e64 named source/effective-view binding. Do not enable old157 graph
++    # leaves or mistake SourcePlan/authorityNone for workload admission.
++    _require(operation_custody.nonce==session.operation_nonce and
++             session.bootstrap['nonce']==session.operation_nonce and
++             session.bootstrap['lease_sha256']==session.data.lease_sha256 and
++             session.bootstrap['custody_sha256']==session.custody_sha256,
++             'named operation and authenticated source custody differ')
++    # SOURCE TODO: consume the actual registered current parent/channel API;
++    # its real type/schema/source binding is not supplied in current3. No new
++    # Boolean receipt, guessed protocol or optional callback is accepted here.
++    raise RuntimeError('authenticated graph channel lacks registered named current admission/source binding')
+ 
+ 
+ def _check_graph(data, contract):
+@@ -208,6 +228,7 @@
+     try:
+         _require(type(session) is adapter.CustodySession and not session.closed,'adapter session absent')
+         first=session.data
++        _require_named_current_channel(session,operation_custody)
+         _check_graph(first,contract)
+         second=session.revalidate()
+         _require(second==first and not session.closed,'custody revalidation differs')
+--- /dev/null
++++ b/NAMED-SIGNAL-INPUTS.json
+@@ -0,0 +1,108 @@
++{
++  "authority": null,
++  "boot_supplier_argv": [
++    "/bin/native-boot",
++    "-R",
++    "-c1",
++    "-m128M@0",
++    "-o0",
++    "-T0"
++  ],
++  "catalog_run": false,
++  "cohort": {
++    "compute_baseline": {
++      "bytes": 12621,
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/BASELINE.json",
++      "sha256": "7e5edf18c5e3806134420ce86aed406640a4be95ba3990c22865f821a2bb3495"
++    },
++    "compute_qualification": {
++      "bytes": 58097,
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/QUALIFICATION.json",
++      "sha256": "0f6c7b01609b60791cc1bbb0253ea603d75d585b945bb6162da416515923bfbd"
++    },
++    "compute_source_commit": "1e64b165ff2a46e6ec7615e804b36c9a936172a8",
++    "module_binding": {
++      "bytes": 30444,
++      "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
++      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
++    },
++    "module_binding_reuse_scope": "Only099/IHK8d/Linux6.12/config106055 module facts; BINDINGS old100d image wording is not this nativec664 tuple."
++  },
++  "input_refs": {
++    "application": {
++      "bytes": 18736,
++      "mode": "0755",
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
++      "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d"
++    },
++    "compute_image": {
++      "bytes": 10396880,
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/build/kernel/mckernel.img",
++      "sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
++    },
++    "libc": {
++      "bytes": 2339896,
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
++      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
++    },
++    "loader": {
++      "bytes": 930600,
++      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
++      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
++    },
++    "three_modules": [
++      {
++        "bytes": 1521480,
++        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
++        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
++      },
++      {
++        "bytes": 13092960,
++        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
++        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
++      },
++      {
++        "bytes": 2374656,
++        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
++        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
++      }
++    ]
++  },
++  "live_fields_not_issued_here": [
++    "new operation nonce and clocks",
++    "Root current control/account authority",
++    "native capacity-scope disposition/admission",
++    "current source-owner and native-currentfree/restoration context",
++    "real inherited operation/custody channels",
++    "new named source/effective-view graph and deploy/stage manifest"
++  ],
++  "oracle": {
++    "exit_code": 0,
++    "stderr": "empty",
++    "stdout": "16 ordered handler=N in_alt=inside then delivery=16 alt_hits=16"
++  },
++  "original_checks": [
++    "M15-I04-native-admission",
++    "M14-06-02-FUNCTIONAL"
++  ],
++  "payload": {
++    "argv": [
++      "/bin/mcexec",
++      "-t",
++      "1",
++      "0",
++      "/apps/signal.alternate-repeat"
++    ],
++    "cwd": "/case/work",
++    "environment": {
++      "COKERNEL_PATH": "/apps",
++      "LANG": "C",
++      "LC_ALL": "C",
++      "PATH": "/usr/bin:/bin",
++      "TZ": "UTC"
++    }
++  },
++  "release_or_runtime_permission": false,
++  "schema": "mckernel-named-signal-input-intent-v1",
++  "status": "SOURCE_ONLY_INPUT_BINDING_NO_AUTHORITY"
++}
+--- /dev/null
++++ b/PROFILE.V2.SOURCE-ONLY.json
+@@ -0,0 +1,117 @@
++{
++  "authority": null,
++  "composite_sha256": "5aa4827ff9a66c89b27102e53f606da5527aaf317812a8b7ad53174a8840c6c2",
++  "contract_sha256": "d4b38335f7d1af1998b9999a676ae5eee40b2b640021a144d19169328d68e0fd",
++  "named_signal_inputs": {
++    "authority": null,
++    "boot_supplier_argv": [
++      "/bin/native-boot",
++      "-R",
++      "-c1",
++      "-m128M@0",
++      "-o0",
++      "-T0"
++    ],
++    "catalog_run": false,
++    "cohort": {
++      "compute_baseline": {
++        "bytes": 12621,
++        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/BASELINE.json",
++        "sha256": "7e5edf18c5e3806134420ce86aed406640a4be95ba3990c22865f821a2bb3495"
++      },
++      "compute_qualification": {
++        "bytes": 58097,
++        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/f06-successor-1/qualification-1/QUALIFICATION.json",
++        "sha256": "0f6c7b01609b60791cc1bbb0253ea603d75d585b945bb6162da416515923bfbd"
++      },
++      "compute_source_commit": "1e64b165ff2a46e6ec7615e804b36c9a936172a8",
++      "module_binding": {
++        "bytes": 30444,
++        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
++        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
++      },
++      "module_binding_reuse_scope": "Only099/IHK8d/Linux6.12/config106055 module facts; BINDINGS old100d image wording is not this nativec664 tuple."
++    },
++    "input_refs": {
++      "application": {
++        "bytes": 18736,
++        "mode": "0755",
++        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
++        "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d"
++      },
++      "compute_image": {
++        "bytes": 10396880,
++        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline1e64-wholeON-1/build/kernel/mckernel.img",
++        "sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f"
++      },
++      "libc": {
++        "bytes": 2339896,
++        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
++        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
++      },
++      "loader": {
++        "bytes": 930600,
++        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
++        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
++      },
++      "three_modules": [
++        {
++          "bytes": 1521480,
++          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
++          "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
++        },
++        {
++          "bytes": 13092960,
++          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
++          "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
++        },
++        {
++          "bytes": 2374656,
++          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
++          "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
++        }
++      ]
++    },
++    "live_fields_not_issued_here": [
++      "new operation nonce and clocks",
++      "Root current control/account authority",
++      "native capacity-scope disposition/admission",
++      "current source-owner and native-currentfree/restoration context",
++      "real inherited operation/custody channels",
++      "new named source/effective-view graph and deploy/stage manifest"
++    ],
++    "oracle": {
++      "exit_code": 0,
++      "stderr": "empty",
++      "stdout": "16 ordered handler=N in_alt=inside then delivery=16 alt_hits=16"
++    },
++    "original_checks": [
++      "M15-I04-native-admission",
++      "M14-06-02-FUNCTIONAL"
++    ],
++    "payload": {
++      "argv": [
++        "/bin/mcexec",
++        "-t",
++        "1",
++        "0",
++        "/apps/signal.alternate-repeat"
++      ],
++      "cwd": "/case/work",
++      "environment": {
++        "COKERNEL_PATH": "/apps",
++        "LANG": "C",
++        "LC_ALL": "C",
++        "PATH": "/usr/bin:/bin",
++        "TZ": "UTC"
++      }
++    },
++    "release_or_runtime_permission": false,
++    "schema": "mckernel-named-signal-input-intent-v1",
++    "status": "SOURCE_ONLY_INPUT_BINDING_NO_AUTHORITY"
++  },
++  "named_signal_inputs_sha256": "3d9ea266c1f3e32630a6dd0a38900cad3c64d30df3899352a6b561d44eb46769",
++  "old_graph_release": false,
++  "scope": "Named input intent only; existing157-member graph is not promoted into the1e64 source view. Source/native/current-control admission remains refused until its real existing parent/channel implementation is bound.",
++  "status": "SOURCE_ONLY_UNSELECTED_NOT_RELEASED"
++}

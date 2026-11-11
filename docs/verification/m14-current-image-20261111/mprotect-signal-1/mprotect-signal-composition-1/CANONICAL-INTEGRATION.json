@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-11T05:36:35.607904+00:00",
+  "source_commit": "f1992ec2c5f18bb3a7f139647edde6818c34991b",
+  "parent": "70435ce27b7673101c7cc955f97038357763c9cc",
+  "canonical_rows": [
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8",
+      "bytes": 62796
+    },
+    {
+      "path": "kernel/rust/f03_mprotect_host_provider.rs",
+      "sha256": "9b09bf0fa3241421335b4209a3d1e832b85cbf2696326243d8f8856931f099db",
+      "bytes": 1919
+    },
+    {
+      "path": "kernel/rust/f03_signal_forward_provider.rs",
+      "sha256": "337f496e3e7acdd76a694b97cc735adad57f6e6ed880390a1cd2b866f9bae467",
+      "bytes": 4336
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9",
+      "bytes": 4811
+    },
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947",
+      "bytes": 964476
+    }
+  ],
+  "review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/mprotect-signal-composition-review-p04tests-max-1/REVIEW.json",
+    "sha256": "937e7afcc4928dc543014123ee5773ba97349881cad64a613c3beae1d2321809"
+  },
+  "patch_sha256": "63b44f36d106fb7111ab050e980f75d8257b7988b516c1255cf42e8195c1713e",
+  "old_required_modules_unchanged": {
+    "kernel/rust/f03_memory_host_offload.rs": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33",
+    "kernel/rust/f03_policy_forward_context_bridge.rs": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377",
+    "kernel/rust/f06_ptrace_resume_callbacks.rs": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0",
+    "kernel/rust/f03_do_fork.rs": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b",
+    "kernel/rust/f03_do_syscall2_bridge.rs": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685"
+  },
+  "all33_unrelated_preserved": true,
+  "only_five_source_paths_committed": true,
+  "image_or_original_condition_credit": false
+}

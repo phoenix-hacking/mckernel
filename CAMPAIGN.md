@@ -1,9 +1,35 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T05:13:44.592502+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T05:44:00.971999+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Whole F06 DEFAULT and original M15-I03 accepted at their exact scopes.**
+IndependentGOfef8a19d closes M14-F06-DEFAULT on7231/image19c5: all5 complete
+originalregion maps/190 uniqueRustowners/27typedtables/current4x104/real
+provider/source/default/body/lifecycle joins. This is technical DEFAULT only;
+F06FUNCTIONAL/file/M14/native acceptance remain open. ExplicitGO3b9f222f
+accepts original M15-I03 integration gate from all6 verified children and their
+matched declared profiles; finalM15 remains false pending original M14-first
+order and allother conditions. C104/private-stage/live/native distinctions stay.
+Exactly2 further checks close:95/156 verified, M14=66.30%, M15=67.19%,
+combined+1.11/+1.19 displayed points from the last confirmed pair65.19/66.00.
+Foreground posted this new pair once in PR3 comment6788434691, confirmed;
+Root reuses it and finishes the source/results checkpoint without a duplicate.
+Next15min: run source-bound f199/cd27 affected image after independent operation
+GO, then minimum4-owner/mprotect-shmat/signal ABI+caller/provider reader; retain
+19c5/de6c oldgreen until verified. Source5-path jointGO937e/currentprotected
+capture is reused; no oldnine-memory/seven-signal-wire tests rerun. Native
+issuerfe9 proves this current3 native12 field is static retainedcapacity and its
+firststore is install-only/zero operationbytes; it does not by itself prove a
+lost native claim or globalfree. Root/SourceAcq trace the original scope/claim
+registry before proper authenticated admission; all actualUNKNOWNs remain.
+New f199 producer passed05:56:08Z (19ccee), image1aee02d2/mapfcf5a384/
+Rust01214130/C35975861;13clients and Root38667 joined0/CIDadfd removed/
+2GiB released. Only30-read/27-record affected qualification remains, with no
+rebuild. Native status reply6788290057 is confirmed; source binding is private
+and preserves gate refusals while actual parent/control/admission APIs are joined.
 
 **Original M15-I03 reproducibility verified.** WholeGO8875f4a2 joins frozen
 aa831/0aa750 and actual three Rocky46d+1.95 builds c5f0/7485/d333, current13
@@ -13,6 +39,9 @@ waits/terminal0 container removal. Nine unchanged supported producer/profile
 manifests are reused; original three-HOST SDK gap is closed by real reconstructions.
 Exactly one further check closes:93/156 verified; M14=65.19%, M15=66.00%.
 Combined gains from the last published pair are+0.93/+1.19 displayed points.
+Checkpoint70435ce2 is pushed/fetched with30 matching owned blobs/all33dirty
+paths preserved. Pair65.19/66.00 was posted exactly once in PR3 comment6787719852
+(POSTED_CONFIRMED); no progress report remains pending.
 I03 checklist85.71% remains unaccepted; M14-before-M15 parent order, native/
 deployment/default/runtime/C104 conditions remain separate. No new quota/metric
 or original criterion was added. Root publishes local3852(twoM14wholeGOs) and
