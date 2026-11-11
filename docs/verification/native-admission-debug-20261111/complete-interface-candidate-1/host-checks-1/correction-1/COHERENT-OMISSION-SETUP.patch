@@ -1,0 +1,45 @@
+--- a/native_contract_regression.py
++++ b/native_contract_regression.py
+@@ -428,7 +428,7 @@
+         admission.owner = owner
+         return owner
+ 
+-    def held_source(self, before_acquire=None):
++    def held_source(self, before_acquire=None, omit_from_cut=None):
+         a = self.admission(); owner = self.bind_owner(a)
+         source_paths = {PACKAGE + '/' + name + '.py' for name in ORIGINAL + NAMED + EXTRAS}
+         source_paths.add(PACKAGE + '/root_bootstrap.py')
+@@ -436,6 +436,9 @@
+         required = set(a.source_members) | set(owner.admitted_source_paths) | {owner.manifest_path}
+         required.update(ref['path'] for ref in self.manifest['artifacts'].values())
+         required.update(ref['path'] for ref in self.manifest['modules'])
++        if omit_from_cut is not None:
++            assert omit_from_cut in a.source_members and omit_from_cut in required
++            required.remove(omit_from_cut)
+         for path in sorted(required):
+             if path not in self.fs.files: self.fs.add(path, ('test-only consumed lower data:' + path).encode())
+         rows = [dict(target=p, host=p, content_sha256=sha(bytes(self.fs.files[p]['raw']))) for p in sorted(required)]
+@@ -617,9 +620,6 @@
+         assert any(row == ('fsync', journal_path) for row in e.fs.events[matching[0]+1:position])
+     collection = json.loads(e.comp._collect(a.plan))
+     assert collection['authority'] is None and len(a.source_members) == 29
+-    required = a.source_members[0]; saved = source.fds.pop(required)
+-    reject(source.collect, 'consumed diagnostic source/artifact file omitted')
+-    source.fds[required] = saved
+     reject(lambda: owner._call(['start', owner.container]), 'actual source/effective view required')
+     assert not [row for row in owner.calls if row[0] == 'call']
+     wrong = e.inspect(owner); wrong['Mounts'][0]['RW'] = True
+@@ -634,6 +634,13 @@
+     before = len(owner.calls); a.client.revoked = True
+     reject(lambda: owner._call(['start', owner.container]), 'test-only current controller veto')
+     assert len(owner.calls) == before
++    # Build a coherent source manifest/plan/epoch missing one real consumed
++    # member. Do not corrupt a held cut's descriptor-to-row invariant.
++    omitted = Environment(); missing = PACKAGE + '/adapter.py'
++    omitted_admission, omitted_source, _ = omitted.held_source(omit_from_cut=missing)
++    assert missing in omitted_admission.source_members and missing not in omitted_source.fds
++    assert all(row['host'] in omitted_source.fds for row in omitted_source.rows)
++    reject(omitted_source.collect, 'consumed diagnostic source/artifact file omitted')
+     return dict(registered_source_members=29, durable_unique_prior_flags=True,
+                 all_consumed_files_required=True, four_actual_binds_required=True,
+                 host_only_image_record=True, start_after_effective_acceptance=True,

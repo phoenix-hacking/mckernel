@@ -1,0 +1,229 @@
+{
+  "schema": "mckernel.native-retained-memory-scope-source-review.v1",
+  "at": "2026-11-11T08:09:47.708282+00:00",
+  "reviewer": "source_acquisition_review_max",
+  "decision": "RESOLVED_RETAINED18_COMPOSITION_NO_EVIDENCED_ADDITIONAL_R3_PERSISTENT4_MEMORY_CHARGE__NO_NEW_RELEASE_OR_NATIVE_ADMISSION",
+  "question": "Does preserved R3 persistent custody create an additional4GiB memory claim, or map into install4/V2_2/native12?",
+  "answer": "The actual issued R3 memory claim is distinct from the original install4 and was already retired at process-memory-only scope by accepted678ab. The resulting explicit18GiB list is original install4 + V2 2 + native12. Persistent R3 ownership/source UNKNOWN is preserved separately, with no additional numeric memory row in that disposition. No R3-to-one-of-these3 membership mapping is asserted or needed to compute18.",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/m14-r3-reboot-process-memory-disposition-20261105.json",
+      "bytes": 2291,
+      "sha256": "678ab265971ff032a82e204d1739ab6feb56d3969b607403bacf443a8fb0f231"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/request.json",
+      "bytes": 3143,
+      "sha256": "176074ffe7f98766e4b8b14c572082bf2e4af4256fd970c55fd9042d97ae0b2b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/RESERVATION.json",
+      "bytes": 1025,
+      "sha256": "97f8b093402985b5d937629afee2587053bfae42181e226c640d2ac985c73b92"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec/CAPTURE.json",
+      "bytes": 161,
+      "sha256": "bc1acc4935f8688a4a38e8920607f995c4fe40029e8a7ee536dbd411db2107e7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/post-reboot-review-private-1/control_stop.py",
+      "bytes": 26199,
+      "sha256": "d722a5aad301ff9764a8056699d5113a0277c3f35c2bcc4489d8b0e4c61663d8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/post-reboot-review-private-1/ENTRY.py",
+      "bytes": 2475,
+      "sha256": "1606a55e0bf96ae08089d092beec6de0b02209710fa80ac71964054d530ffa8e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/r3-post-reboot-observation-actual-1/receipt.json",
+      "bytes": 977,
+      "sha256": "fde3ccce789f6418b31a0a58aac5ada4a40c15837b827baa1c3c9fe708af3b98"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/r3-post-reboot-observation-actual-1/stdout.json",
+      "bytes": 480,
+      "sha256": "b7f298c959556f2be6dcea4ae445ad2b44edd7f28e68d014f8feaa42dbeb0f40"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/RESOURCE-PROPOSAL-CURRENT.json",
+      "bytes": 4250,
+      "sha256": "bfaf0d8a4d5b13d3c8fbd4d3bc629d4936d9d86854b2577ec954437eb8d61a94"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/reservations/install-c9e9624d1bada62e9635a740aba6e30e8432b47d0b560844911a54a2c36d95b5/RESERVATION.json",
+      "bytes": 1097,
+      "sha256": "8c2948ed544370b03547dc59a446d093c3f99b908442afade52a255aad816325"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-owner-current-reconciliation-20261111T0514Z/issuer-trace-1/RESULT.json",
+      "bytes": 7448,
+      "sha256": "fe9bb2e08ce0b017712adc1e9c9fdf877a811a13781f9d23ca0dd7bb9839a75f"
+    }
+  ],
+  "R3_issued_claim": {
+    "store_key": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-actual-caller-3/reservations/install-8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec",
+    "nonce": "8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec",
+    "scope": "ROOT_CODE_INSTALL_ONLY",
+    "status_as_issued": "RESERVED_UNKNOWN_UNTIL_ROOT_JOIN",
+    "request_sha256": "176074ffe7f98766e4b8b14c572082bf2e4af4256fd970c55fd9042d97ae0b2b",
+    "operation_reserved_bytes": 4294967296,
+    "additional_reserved_bytes": 4294967296,
+    "native_release": false,
+    "native_currentfree": null,
+    "source_identity": "Actual old R3 nonce8c12, not later c9 install publication.",
+    "actual_source_bound_observer": {
+      "entry": {
+        "path": "/home/holden/mckernel-work/m14-resume-20261105-1/post-reboot-review-private-1/ENTRY.py",
+        "bytes": 2475,
+        "sha256": "1606a55e0bf96ae08089d092beec6de0b02209710fa80ac71964054d530ffa8e"
+      },
+      "control": {
+        "path": "/home/holden/mckernel-work/m14-resume-20261105-1/post-reboot-review-private-1/control_stop.py",
+        "bytes": 26199,
+        "sha256": "d722a5aad301ff9764a8056699d5113a0277c3f35c2bcc4489d8b0e4c61663d8"
+      },
+      "function": "post_reboot_evidence",
+      "lines": [
+        80,
+        150
+      ],
+      "relevant_contract": "Checks this exact RES nonce/request/status and operation_reserved_bytes4294967296; output scope R3_PROCESS_MEMORY_ONLY with persistent/source UNKNOWN, no native/reservation release.",
+      "function_executed_by_this_review": false
+    }
+  },
+  "existing_accepted_disposition": {
+    "record": {
+      "path": "/home/holden/mckernel/docs/verification/m14-r3-reboot-process-memory-disposition-20261105.json",
+      "bytes": 2291,
+      "sha256": "678ab265971ff032a82e204d1739ab6feb56d3969b607403bacf443a8fb0f231"
+    },
+    "scope": "R3_PROCESS_MEMORY_ONLY",
+    "status": "PROCESS_MEMORY_CUSTODY_ENDED_BY_VERIFIED_REBOOT",
+    "r3_process_memory_reservation_retired_bytes": 4294967296,
+    "historical_aggregate_reserved_bytes": 23622320128,
+    "remaining_prior_reserved_bytes": 19327352832,
+    "exact_remaining_prior_reservations": {
+      "dfd0a93f_unknown_install_bytes": 4294967296,
+      "native_cpu2_5_bytes": 12884901888,
+      "v2_unknown_parent_bytes": 2147483648
+    },
+    "arithmetic": "23622320128 - 4294967296 = 19327352832 = 4294967296 + 2147483648 + 12884901888",
+    "historical_operation_outcome": "UNKNOWN",
+    "historical_direct_wait_status": "UNKNOWN",
+    "persistent_ownership": "UNKNOWN",
+    "source_exclusion": "UNKNOWN",
+    "replay_forbidden": true,
+    "nonce_consumed": true,
+    "no_new_disposition_created": true
+  },
+  "current_registered_source_consistency": {
+    "current3_resource_proposal": {
+      "path": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/RESOURCE-PROPOSAL-CURRENT.json",
+      "bytes": 4250,
+      "sha256": "bfaf0d8a4d5b13d3c8fbd4d3bc629d4936d9d86854b2577ec954437eb8d61a94"
+    },
+    "retained_native_bytes": 12884901888,
+    "retained_dfd_bytes": 4294967296,
+    "retained_v2_bytes": 2147483648,
+    "later_c9_first_store": {
+      "record": {
+        "path": "/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/reservations/install-c9e9624d1bada62e9635a740aba6e30e8432b47d0b560844911a54a2c36d95b5/RESERVATION.json",
+        "bytes": 1097,
+        "sha256": "8c2948ed544370b03547dc59a446d093c3f99b908442afade52a255aad816325"
+      },
+      "scope": "ROOT_CODE_INSTALL_ONLY",
+      "operation_reserved_bytes": 0,
+      "operation_planning_bytes": 4294967296,
+      "allocation_mode": "NON_ADDITIVE_WITHIN_RETAINED_12_GIB",
+      "different_nonce_and_claim_from_R3": true
+    },
+    "prior_native12_classification": "fe9/fb293 current3 native12 is static retained capacity, not proof of a currently issued Native operation. Reuse that source-scope distinction; it does not establish globalfree.",
+    "CAMPAIGN_only_human_source": {
+      "path": "/home/holden/mckernel/CAMPAIGN.md",
+      "sha256_at_read": "dc01f0ec223b60246f02f25f3dc68ba8068a03bdfea91578166c993422496f24",
+      "explicit_historical_ownership_clause_line": 1989,
+      "accepted_R3_transition_line": 2627,
+      "conclusion": "Explicit retained18 components and already accepted4GiB process-only transition agree with raw source/records. The old22/R3expired paragraph is historical, not a new present charge."
+    }
+  },
+  "source_input_facts_for_actual_native_admission": {
+    "schema_proposal": "mckernel.retained-memory-scope-facts.v1",
+    "retained_memory_rows": [
+      {
+        "id": "original_install_dfd0a93f",
+        "kind": "retained_memory_charge",
+        "bytes": 4294967296,
+        "status": "UNKNOWN_RETAINED",
+        "source_field": "remaining_prior_reservations.dfd0a93f_unknown_install_bytes"
+      },
+      {
+        "id": "V2_unknown_parent",
+        "kind": "retained_memory_charge",
+        "bytes": 2147483648,
+        "status": "UNKNOWN_RETAINED",
+        "source_field": "remaining_prior_reservations.v2_unknown_parent_bytes"
+      },
+      {
+        "id": "native_cpu2_5",
+        "kind": "retained_native_capacity",
+        "bytes": 12884901888,
+        "status": "HELD_CAPACITY_NOT_CURRENT_OPERATION_PROOF",
+        "source_field": "remaining_prior_reservations.native_cpu2_5_bytes"
+      }
+    ],
+    "retained_total_bytes": 19327352832,
+    "retained_other_than_native_capacity_bytes": 6442450944,
+    "R3_memory_row": {
+      "id": "R3_nonce8c12_process_memory",
+      "issued_bytes": 4294967296,
+      "current_process_charge_bytes": 0,
+      "disposition_source": {
+        "path": "/home/holden/mckernel/docs/verification/m14-r3-reboot-process-memory-disposition-20261105.json",
+        "bytes": 2291,
+        "sha256": "678ab265971ff032a82e204d1739ab6feb56d3969b607403bacf443a8fb0f231"
+      },
+      "basis": "Only the already accepted process-memory retirement; this review releases nothing."
+    },
+    "persistent_nonmemory_UNKNOWN_rows": [
+      {
+        "id": "R3_nonce8c12_persistent_custody",
+        "status": "UNKNOWN_PRESERVED",
+        "additional_memory_bytes": null,
+        "additional4GiB_memory_claim_established_in_this_bound_record": false
+      },
+      {
+        "id": "R3_source_exclusion",
+        "status": "UNKNOWN_PRESERVED"
+      },
+      {
+        "id": "scratch21",
+        "status": "HELD_PRESERVED"
+      },
+      {
+        "id": "mutex27:4",
+        "status": "HELD_PRESERVED"
+      }
+    ],
+    "required_bound_source_records": [
+      "actual97f8 R3 reservation and176074 request",
+      "accepted678ab process-memory-only disposition",
+      "currentbfaf resource proposal and8c294 c9 nonadditive publication store",
+      "this focused review exactSHA"
+    ],
+    "not_an_authority_boolean": true,
+    "Root_materialization": "Root may copy these exact reviewed facts/pins to its immutable root-owned scope input under actual normal source packaging. A path/SHA binding and exact schema/data validation may consume them; no approved=true or arbitrary caller retained_other6 default. This is engineering source input, not a grant or an external per-name permission packet."
+  },
+  "unresolved_and_preserved": {
+    "numeric18_composition_missing_record": null,
+    "numeric_R3_additive4_claim_proven": false,
+    "global_no_later_claim_or_native_allocation_completeness_proven": false,
+    "native_currentfree": null,
+    "actual_current_payloads_overhead_and_physical_native_owner": "Still require genuine fresh operation-specific Root admission/lease/flock/cgroup/kernel observations and exact current owned cleanup/restoration; not supplied by this static composition.",
+    "R3_persistent_outcome_or_source_exclusion_released": false,
+    "original_install_V2_native12_scratch21_mutex_released": false,
+    "smallest_future_trigger_if_new_numeric_claim_is_asserted": "An actual separately issued reservation/store key naming its bytes, resource kind, nonce and relation to accepted678ab. The preserved word UNKNOWN alone does not establish another4GiB charge. No global search or external operator question is indispensable for the resolved numeric premise."
+  },
+  "review_actions": "Read CAMPAIGN and exact already-reached registered source, R3 issue store and accepted raw disposition/observer records. Static JSON/hash/AST/range checks only. No legacy narrative log or review reading list, process/workdir census, denied-path retry, sudo/control/native/model/service calls, source execution, state edits, reservation release or canonical changes."
+}

@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T08:57:56.184168+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T09:35:19.308810+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,24 +14,44 @@ fullRoot. Exactly one original check closes:97/156 verified; M14=66.94%
 (+0.27 displayed), M15=67.19% (unchanged). Emitted C9→6 is scoped actual image
 ownership; remainingexec/perf/generalUTI debt is outside this region, not erased.
 FUNCTIONAL/native/parent/file/milestone acceptance stays open. Criteria/weights/
-denominators unchanged. Root publishes/fetches this checkpoint, then exactly one
-changed-pair PR3 report, dedupe M14-03-04-DEFAULT@2f3b9a32;6789915776 retained.
+denominators unchanged. Checkpointf2708fbe is pushed/fetched86matchingownedblobs; changed-pair PR3
+comment6791617739 is POSTED_CONFIRMED, dedupe M14-03-04-DEFAULT@2f3b9a32.
+Prior6789915776 retained; no percentage report remains pending.
 Green25filea437 preserves actual4b711/8f0f/fc09/3179 independently; no passing
 build/reader/wait/transaction case reran. Source6aae stays recoverable.
-Next original M14-F06-FUNCTIONAL/M15-I04 prerequisite: PublicABI's complete
-nativee5 has finite sourceNO_GO1c9 fordeadline/post-refresh workcaps and exact
-normalmckernel-code package layout. Rootreactivated implementerviafollowup;
-SourceAcq reviews only meaningfulfixedcontracts, P04Source binds4actual-source
-HOSTfamiliesincllate-response/duration/layout, controller1961 reused. SDK
-implements smallest normal29Python+static7f7codeinstaller specialization, no
-oldC9/expirednonce/release replay. Native scratch permission4f9 is separately
+Next original M14-F06-FUNCTIONAL/M15-I04 prerequisite: PublicABI's bounded
+successor9b422/patch4917 fixes deadline/post-refresh workcaps and the normal
+mckernel-code package layout; independent sourceGOc14f closes both1c9 source
+findings. P04Tests reviews four-family HOST request40e309/fixture82b908 and
+Root parentad816 onCPU0/256MiB. Actual operationGOe6e45 and fresh admission
+ran09:24:30Z: registered-context/capacity-claim canonical outputs PASS; third
+effective-source failed KeyError adapter.py at fixture621/source156 before its
+intended consumed-file omission assertion, fourth unstarted. Faileddcc37b2b/
+rawstderr preserved; all3Owner families/fullRoot9196dc joined, current256MiB
+released only. P04Source diagnoses smallest fixture-versus-source correction;
+P04Tests reviewed coherent missing-file/setup-order correction73ad/parentc87d:
+GO0a48. Actual remaining2 commands PASS09:35:06Z/e47755ee, exact unchanged
+external JSON/empty stderr/two positive families/fullRootcdc1e2. Current256MiB
+released; first2 PASS/controller1961 reused, no production/body change. Independent
+saved-result qualificationc5646bd1 joins all4 exact canonical outputs, source9b/
+c14f, five positive families including the retained failed fixture, both Root
+completions and current-only retirement. Source/patch/actual tests are published
+under native-admission-debug-20261111/complete-interface-candidate-1; this proves
+no installed/controller/native readiness or original acceptance. SDK's fixed30 installer64ed/patch6d8b binds corrected
+payload06661073/current Root/credit7c6; P03 reviews catalog/current-owner source
+and focused fake-test proposal: independent source/designGO5f7fefc5 is frozen.
+P04Source prepares only four changed actual-source controlled-effect families;
+Root executes after independent operationGO/fresh admission. No install/
+activation/oldC9/nonce replay.
+Native scratch permission4f9 is separately
 real: UID0/0755 bare stagingparent deniesUID1000; no payload/charge/output;
 owner-scopedgrant request6790932995 posted once. No sudo/path/chmod/remount
 fallback. Numeric retained18=install4+V2_2+native12 is resolved7f7; R3process4
 was already retired, persistentUNKNOWN is not a newnumeric4 charge. This is not
-nativecurrentfree/source/permission release. Next15min: freeze/review bounded
-native successor+4HOSTchecks and normalcodeinstaller patch; Rootexecutes only
-reviewedeligiblechecks, while awaiting actual scratch-owner provisioning.
+nativecurrentfree/source/permission release. Next15min: publish qualified9b
+source/fourHOST results, review/run finite normal-installer changed tests, and
+prepare only the reviewed code-publication operation while awaiting actual
+scratch-owner provisioning. Existing source/native/UNKNOWN controls remain.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
 integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6

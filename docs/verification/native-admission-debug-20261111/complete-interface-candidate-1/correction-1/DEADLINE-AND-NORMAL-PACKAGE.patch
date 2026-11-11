@@ -1,0 +1,263 @@
+--- a/package/native_diagnostic_container_owner.py
++++ b/package/native_diagnostic_container_owner.py
+@@ -109,6 +109,12 @@
+ 
+ def _json(value):
+     return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
++
++
++def normal_source_generation(path):
++    """Exact existing normal publisher layout; not an alternate source root."""
++    return type(path) is str and re.fullmatch(
++        r"/var/lib/mckernel-code-([0-9a-f]{64})/installed-source-\1", path) is not None
+ 
+ 
+ def directory(path):
+@@ -805,7 +811,7 @@
+         if package is not None:
+             # Only the typed Root native-admission path sets this exact source
+             # generation. Existing three-bind CLI/default profiles stay intact.
+-            need(type(package) is str and package.startswith("/var/lib/mckernel-native-"),
++            need(normal_source_generation(package),
+                  "named immutable package source")
+             index = argv.index("--env")
+             argv[index:index] = ["--mount", "type=bind,src=" + package + ",dst=" + package + ",readonly"]
+@@ -1148,7 +1154,7 @@
+               {"PATH": "/usr/bin:/bin", "HOME": "/tmp", "TMPDIR": "/tmp", "PYTHONDONTWRITEBYTECODE": "1"})
+ 
+ 
+-def execute_owner(owner):
++def execute_owner(owner, *, deadline=360):
+     """Install signal ownership before any acquisition, lookup or create."""
+     previous = {number: signal.getsignal(number) for number in OWNER_SIGNALS}
+     def interrupted(number, frame):
+@@ -1161,7 +1167,7 @@
+     for number in OWNER_SIGNALS:
+         signal.signal(number, interrupted)
+     try:
+-        owner.run()
++        owner.run(deadline=deadline)
+     except BaseException as exc:
+         owner._remember(exc)
+     finally:
+--- a/package/native_resource_admission.py
++++ b/package/native_resource_admission.py
+@@ -22,6 +22,13 @@
+ import runtime_binding
+ 
+ GIB=1024**3
++# Existing real DiagnosticOwner.run/start and post-start command bounds.
++OWNER_DEADLINE_SECONDS=360
++POST_START_STATUS_SECONDS=5+4*10  # wait + three exact ps queries + inspect
++FINAL_CAPTURE_SECONDS=3*3        # final wait, logs, inspect
++OWNED_CLEANUP_SECONDS=15         # original bounded _cleanup attempt
++RETIREMENT_RESERVE_SECONDS=FINAL_CAPTURE_SECONDS+OWNED_CLEANUP_SECONDS
++COMPLETION_RESERVE_SECONDS=POST_START_STATUS_SECONDS+RETIREMENT_RESERVE_SECONDS
+ UNKNOWN=[]
+ EXPECTED=dict(mckernel_image='c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f',
+  payload='77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d',
+@@ -222,6 +229,9 @@
+         spec=cfg['native']
+         need(type(spec) is dict and set(spec)=={'manifest','attempt_parent','source_manifest',
+           'source_package','profile','scope','controller','deadline_seconds'},'native config shape')
++        self.deadline_seconds=spec['deadline_seconds']
++        need(type(self.deadline_seconds) is int and self.deadline_seconds==OWNER_DEADLINE_SECONDS,
++             'exact supported native owner duration360 required')
+         need(spec['profile']=={'cpus':[2,3,4,5],'memory_bytes':12*GIB,'memory_swap_bytes':12*GIB,
+           'pids':512,'network':'none','heavy_jobs':1},'exact native execution profile')
+         # A static capacity label is not an allocated operation. The new Root-
+@@ -229,11 +239,11 @@
+         # scratch21/mutex/UNKNOWN are neither reused nor released by this object.
+         self.resource_scope=VerifiedResourceScope.__new__(VerifiedResourceScope)
+         self.resource_scope.__init__(spec['scope'],request)
+-        self._clocks()
++        self._clocks(required_seconds=self.deadline_seconds+COMPLETION_RESERVE_SECONDS)
+         package=spec['source_package']
+         need(type(package) is dict and set(package)=={'path','device','inode','uid','mode'},
+              'actual immutable package generation identity')
+-        need(type(package['path']) is str and package['path'].startswith('/var/lib/mckernel-native-'),
++        need(owner_module.normal_source_generation(package['path']),
+              'named immutable package path')
+         import inplace_custody
+         self.package_fd=inplace_custody.open_exact(package['path'])
+@@ -250,6 +260,7 @@
+         self.client=native_current_owner.CurrentOwnerSession.__new__(native_current_owner.CurrentOwnerSession)
+         self.client.__init__(controller['path'],controller['pid'],controller['birth'],
+                              controller['source_sha256'],self.nonce,self.config_sha)
++        self._clocks(required_seconds=self.deadline_seconds+COMPLETION_RESERVE_SECONDS)
+         self._capacity()
+         self.initial=physical_snapshot(True)
+         manifest=spec['manifest']
+@@ -260,10 +271,13 @@
+         self.owner=_bound_owner(owner_module,self,spec['attempt_parent'],manifest)
+         self.retained=owner_module.DiagnosticOwner._preflight(self.owner)
+         self._named_manifest(self.owner.manifest)
++        self.client.revalidate()
++        self._clocks(required_seconds=self.deadline_seconds+COMPLETION_RESERVE_SECONDS)
+         self.claim_fd=os.open('NATIVE-CLAIM-'+self.nonce+'.jsonl',
+           os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd)
+         self.open_fds.append(self.claim_fd)
+         self._record('REGISTERED_BEFORE_RESOURCE_ACQUISITION')
++        self._clocks(required_seconds=self.deadline_seconds+COMPLETION_RESERVE_SECONDS)
+         owner_module.DiagnosticOwner._acquire(self.owner)
+         self.development_fd=self.owner.lock;self.development_identity=file_identity(self.development_fd)
+         need(self.development_identity['uid']==0 and self.development_identity['nlink']==1,
+@@ -313,14 +327,32 @@
+         need(body==actual_bootstrap,'executed parent-verified bootstrap source differs')
+         self.loader=loader;self.loader_sha256=sys.argv[3]
+ 
+-    def _clocks(self):
++    def _clocks(self,required_seconds=0):
++        need(type(required_seconds) in (int,float) and math.isfinite(required_seconds) and
++             required_seconds>=0,'finite required native work allowance')
+         self.request.verify()
+         need(type(self.caps) is dict and set(self.caps)=={'utc','boot','mono','boot_id'} and
+           self.caps['boot_id']==self.boot_id==Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
+           'native current boot/caps')
++        remaining=[]
+         for k,now in [('utc',time.time()),('boot',time.clock_gettime(time.CLOCK_BOOTTIME)),('mono',time.monotonic())]:
+             need(type(self.caps[k]) in (int,float) and math.isfinite(self.caps[k]) and
+-              now<self.caps[k]<=now+600,'native finite one-shot clock bound')
++              now<self.caps[k]<=now+600 and now+required_seconds<=self.caps[k],
++              'native finite one-shot clock/work allowance')
++            remaining.append(self.caps[k]-now)
++        return min(remaining)
++
++    def work_timeout(self,timeout,start=False):
++        need(type(timeout) in (int,float) and math.isfinite(timeout) and timeout>0,
++             'finite native command timeout')
++        required=(self.deadline_seconds+COMPLETION_RESERVE_SECONDS if start else
++                  RETIREMENT_RESERVE_SECONDS)
++        left=self._clocks(required_seconds=required)
++        # Reserve exact owned capture+cleanup time. The real owner still owns
++        # command timeout/retirement and the watchdog retains all uncertainty.
++        allowed=min(timeout,left-RETIREMENT_RESERVE_SECONDS)
++        need(allowed>0,'native work allowance exhausted before command')
++        return allowed
+ 
+     def _capacity(self):
+         rows=[x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')]
+@@ -350,7 +382,7 @@
+             wrote=os.write(self.claim_fd,raw[n:]);need(wrote>0,'native claim journal');n+=wrote
+         os.fsync(self.claim_fd);os.fsync(self.root_fd)
+ 
+-    def verify(self,cleanup=False):
++    def verify(self,cleanup=False,required_seconds=RETIREMENT_RESERVE_SECONDS):
+         self.lease.verify()
+         need(self.state in ('CLAIMED','SOURCE_HELD','RUNNING','TERMINAL_CLEAN'),
+              'native operation admission no longer live')
+@@ -366,7 +398,11 @@
+                  'native source generation custody changed')
+         finally:os.close(named)
+         if not cleanup:
+-            self._clocks();self.resource_scope.verify();self.client.revalidate()
++            self._clocks(required_seconds=required_seconds)
++            self.resource_scope.verify();self.client.revalidate()
++            # A controller/account round trip can consume the whole allowance.
++            # A timely account reply is not permission after any native cap.
++            self._clocks(required_seconds=required_seconds)
+         return self
+ 
+     def source_held(self,source):
+@@ -375,11 +411,14 @@
+         self.source=source;self.state='SOURCE_HELD';self._record('SOURCE_HELD')
+ 
+     def launch(self,source):
+-        self.verify();need(self.state=='SOURCE_HELD' and source is self.source,'source/native lifetime')
+-        source.verify();self.state='RUNNING';self._record('NATIVE_RUNNING')
++        self.verify(required_seconds=self.deadline_seconds+COMPLETION_RESERVE_SECONDS)
++        need(self.state=='SOURCE_HELD' and source is self.source,'source/native lifetime')
++        source.verify()
++        self._clocks(required_seconds=self.deadline_seconds+COMPLETION_RESERVE_SECONDS)
++        self.state='RUNNING';self._record('NATIVE_RUNNING')
+         result=None;primary=None
+         try:
+-            result=self.owner_module.execute_owner(self.owner)
++            result=self.owner_module.execute_owner(self.owner,deadline=self.deadline_seconds)
+         except BaseException as error:
+             primary=error;self.failure=error
+         finally:
+@@ -482,16 +521,22 @@
+                      args[0][0] in ('ps','inspect','stop','kill','wait','logs','rm'),
+                      'revocation permits only actual owned bounded retirement commands')
+             admission.verify(cleanup=self.cleaning)
+-            if args and args[0] and args[0][0]=='start':
++            start=bool(args and args[0] and args[0][0]=='start')
++            if start:
+                 need(admission.source.effective is not None and admission.plan.effective_accepted,
+                      'actual source/effective view required before native start')
++            if not self.cleaning:
++                timeout=kwargs.get('timeout',args[1] if len(args)>1 else 10)
++                timeout=admission.work_timeout(timeout,start=start)
++                if len(args)>1:args=(args[0],timeout)+args[2:]
++                else:kwargs['timeout']=timeout
+             return super()._call(*args,**kwargs)
+     owner=BoundOwner(parent,manifest=manifest['path'],manifest_sha256=manifest['sha256'],
+                      nonce=admission.nonce[:32])
+     owner.admission_owner_module=module
+     owner.owner_repo,owner.owner_scratch,owner.owner_image=module.REPO,module.SCRATCH,module.IMAGE
+     owner.source_package=admission.cfg['native']['source_package']['path']
+-    need(type(owner.source_package) is str and owner.source_package.startswith('/var/lib/mckernel-native-'),
++    need(module.normal_source_generation(owner.source_package),
+          'exact root-owned named source generation required')
+     owner.admitted_source_paths=tuple(sorted(set(module.SOURCE_HASHES)|{module.SELF,module.IMAGE_RECORD}))
+     # Veto only; this callback grants nothing. The actual typed admission was
+--- a/package/native_source_binding.py
++++ b/package/native_source_binding.py
+@@ -36,6 +36,21 @@
+             st.st_nlink, st.st_size, st.st_mtime_ns)
+ 
+ 
++class NativeWorkLatch(CustodyLatch):
++    """Keep original durable source publication under fresh native work caps."""
++    def __init__(self,admission):
++        super().__init__('OWNER_HELD');self.admission=admission
++
++    def publish(self,token,action,*handles):
++        self.admission.verify()
++        def still_live():
++            # apply_plan already persisted prior flags. Recheck after that I/O
++            # and any controller round trip, immediately before its real ioctl.
++            self.admission._clocks(required_seconds=native.RETIREMENT_RESERVE_SECONDS)
++            return action()
++        return super().publish(token,still_live,*handles)
++
++
+ class NativeSourceCustody:
+     def __init__(self, admission):
+         # Supervisor preallocates and retains this object before any open.
+@@ -50,7 +65,7 @@
+              'actual named native admission required')
+         admission.verify()
+         self.lease, self.root_fd = admission.lease, admission.root_fd
+-        self.latch = CustodyLatch('OWNER_HELD')
++        self.latch = NativeWorkLatch(admission)
+         spec = admission.cfg['native']['source_manifest']
+         need(type(spec) is dict and set(spec) == {'path', 'sha256'}, 'source manifest pin')
+         self.manifest_fd, raw = native.root_bootstrap.pinned_root_file(spec['path'], spec['sha256'])
+@@ -99,7 +114,8 @@
+ 
+     def acquire(self):
+         need(self.state == 'PREPARED', 'source custody single acquisition')
+-        self.admission.verify(); token = self.latch.begin('OWNER_HELD')
++        self.admission.verify(required_seconds=self.admission.deadline_seconds+native.COMPLETION_RESERVE_SECONDS)
++        token = self.latch.begin('OWNER_HELD')
+         name = 'NATIVE-SOURCE-FLAGS-' + self.lease.nonce + '.jsonl'
+         self.journal = os.open(name, os.O_WRONLY | os.O_APPEND | os.O_CREAT |
+                                os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC,
+@@ -114,6 +130,7 @@
+             self.latch.retain(self.epoch)
+             self.epoch.__init__(roots, hashes, self.admission.caps['boot'])
+             self._verify_files()
++            self.admission.verify()
+             self.latch.commit(token, 'SOURCE_HELD', self)
+             self.state = 'HELD'; self._record('HELD')
+             return self
+@@ -152,6 +169,7 @@
+         if not cleanup:
+             need(self.epoch is not None, 'source epoch absent')
+             self.epoch.verify()
++            self.admission._clocks(required_seconds=native.RETIREMENT_RESERVE_SECONDS)
+         # Cleanup validates every exact held inode/immutable bit and mount
+         # topology even after work/account deadlines; it grants no further work.
+         return self
