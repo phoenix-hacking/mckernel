@@ -107,6 +107,7 @@ set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
 set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
 set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
 set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
+set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -656,6 +657,28 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/registers.h"
                 "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/signal.h")
         endif()
+        # Only the required host wait4 callback; retain broad/owned selections.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
+            MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND
+            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
+            set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wait_host_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wait_host_provider.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
+        # Export the existing real Rust exit-notification transaction only here.
+        # Reuse its body and ordinary signal profile; keep owned/broad paths off.
+        if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
+            set(MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_terminate_host_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
         # Narrow genuine context adapter; retain every existing generic/exec gate.
         if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
             set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
@@ -1117,6 +1140,16 @@ endif()
 if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+endif()
+
+if (MCKERNEL_WAIT_HOST_PROVIDER_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)
+endif()
+
+if (MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER)
 endif()
 
 if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)

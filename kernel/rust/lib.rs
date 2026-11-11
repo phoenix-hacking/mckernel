@@ -76,6 +76,8 @@ mod f03_do_syscall2_bridge;
 mod f03_policy_forward_context_bridge;
 #[cfg(f03_signal_forward_provider_candidate)]
 mod f03_signal_forward_provider;
+#[cfg(f03_wait_host_provider_candidate)]
+mod f03_wait_host_provider;
 #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
 mod f06_rt_sigreturn_xrstor;
 #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]

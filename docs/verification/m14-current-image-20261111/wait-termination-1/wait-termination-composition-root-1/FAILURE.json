@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-11T07:53:58.678645+00:00",
+  "failed": {
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/signal-termination-host-provider-1/SIGNAL-TERMINATE-HOST-PROVIDER.patch"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "error: patch failed: kernel/CMakeLists.txt:656\nerror: kernel/CMakeLists.txt: patch does not apply\n"
+  },
+  "canonical_unchanged": true,
+  "before": {
+    "kernel/CMakeLists.txt": "06e818515cb5a79e9e8355b1f10db1dd44c70d67312a238855a4df8c640dc7c8",
+    "kernel/syscall.c": "e2bb3e910dcaecf23a8e131b347b401d7baf372f3d749a073e03458c429f1947",
+    "kernel/rust/lib.rs": "fd4f23799012916658fa690bffb19116606b4c01dd23b6a14ef32879b58778b9",
+    "kernel/rust/f03_terminate.rs": "c32cbef93b4441aa8adc12090b9d02d3c9bedbcc8fd99aa3a1b6111f0f3dd328"
+  }
+}

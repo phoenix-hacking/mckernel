@@ -1,0 +1,160 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -656,6 +656,17 @@
+                 "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/registers.h"
+                 "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/signal.h")
+         endif()
++        # Export the existing real Rust exit-notification transaction only here.
++        # Reuse its body and ordinary signal profile; keep owned/broad paths off.
++        if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
++            set(MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED ON)
++            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_terminate_host_provider_candidate")
++            list(APPEND RUST_KERNEL_SRCS
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h"
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
++                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
++        endif()
+         # Narrow genuine context adapter; retain every existing generic/exec gate.
+         if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+             set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
+@@ -1119,6 +1130,11 @@
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+ endif()
+ 
++if (MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED)
++    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER)
++endif()
++
+ if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -5313,11 +5313,15 @@
+ }
+ 
+ #endif
++#ifndef MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER
++#line 5145
+ static long
+ terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)
+ {
+ 	return do_syscall(request, cpu);
+ }
++#endif
++#line 5150
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
+ extern void f03_terminate_host_refcount_set_v1(void *, int);
+@@ -5358,6 +5362,34 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER
++extern void terminate_mcexec(int rc, int sig);
++_Static_assert(__builtin_types_compatible_p(__typeof__(&terminate_mcexec),
++    void (*)(int, int)), "terminate_mcexec C ABI");
++_Static_assert(sizeof(int) == 4 && sizeof(long) == 8 &&
++    sizeof(unsigned long) == 8 && sizeof(void *) == 8,
++    "terminate_mcexec LP64 types");
++_Static_assert(sizeof(struct syscall_request) == 72 &&
++    _Alignof(struct syscall_request) == 8 &&
++    __builtin_offsetof(struct syscall_request, rtid) == 0 &&
++    __builtin_offsetof(struct syscall_request, ttid) == 4 &&
++    __builtin_offsetof(struct syscall_request, valid) == 8 &&
++    __builtin_offsetof(struct syscall_request, number) == 16 &&
++    __builtin_offsetof(struct syscall_request, args) == 24 &&
++    sizeof(((struct syscall_request *)0)->args) == 48,
++    "terminate_mcexec request ABI");
++_Static_assert(sizeof(struct cpu_local_var) == 8128 &&
++    _Alignof(struct cpu_local_var) == 64 &&
++    __builtin_offsetof(struct cpu_local_var, current) == 7848 &&
++    sizeof(struct thread) == 5568 && _Alignof(struct thread) == 64 &&
++    __builtin_offsetof(struct thread, proc) == 4304 &&
++    sizeof(struct process) == 1728 && _Alignof(struct process) == 64 &&
++    __builtin_offsetof(struct process, group_exit_status) == 424 &&
++    __builtin_offsetof(struct process, nohost) == 500,
++    "terminate_mcexec current thread/process ABI");
++_Static_assert(__NR_exit_group == 231, "terminate_mcexec exit-group number");
++#else
++#line 5190
+ void terminate_mcexec(int rc, int sig)
+ {
+ 	struct thread *mythread = get_this_cpu_local_var()->current;
+@@ -5371,6 +5403,8 @@
+ 			terminate_mcexec_cmpxchg_bridge,
+ 			terminate_mcexec_do_syscall_bridge);
+ }
++#endif
++#line 5203
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern unsigned long f03_sync_child_perf_read_v2(int);
+--- a/kernel/rust/f03_terminate.rs
++++ b/kernel/rust/f03_terminate.rs
+@@ -51,7 +51,17 @@
+ // Preserve the real C terminate_mcexec transaction at this call boundary, rather
+ // than calling the remaining project-C wrapper. Existing body/provider ABIs and
+ // ignored long result remain unchanged. No new callback mechanism is introduced.
+-unsafe fn notify_host_exit(rc: CInt, sig: CInt) {
++/// Notify the existing Linux executor of the original process exit transaction.
++///
++/// # Safety
++/// The original initialized per-CPU current Thread and its Process remain live
++/// throughout the synchronous selected body/offload call. The pending-signal
++/// caller has released its reader IRQ lock before entry. This entry adds no
++/// lock, reference, context change, request publication, or retained pointer.
++/// The body owns its existing field initialization and CAS/nohost protocol;
++/// its signed long result remains deliberately ignored by this void C ABI.
++#[cfg_attr(f03_terminate_host_provider_candidate, no_mangle)]
++pub unsafe extern "C" fn terminate_mcexec(rc: CInt, sig: CInt) {
+     let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+     let current = unsafe { addr_of!((*cpu).current).read() };
+     let proc = unsafe { addr_of!((*current).proc).read() };
+@@ -64,6 +74,35 @@
+         )
+     };
+ }
++
++// Actual production types, with no callback-address cast or stub provider.
++const _: unsafe extern "C" fn(CInt, CInt) = terminate_mcexec;
++const _: unsafe extern "C" fn(*mut CULong, CULong, CULong) -> CULong =
++    crate::atomic_helpers::atomic_cmpxchg_ulong;
++const _: unsafe extern "C" fn(*mut SyscallRequest, CInt) -> CLong = do_syscall;
++
++#[cfg(all(f03_terminate_host_provider_candidate, any(not(enable_perf),
++    not(enable_rusage), enable_fugaku_hacks, f03_forward_adapters_candidate,
++    f03_signal_forward_defined_candidate)))]
++compile_error!("terminate_mcexec public provider requires the paired ordinary profile");
++
++#[cfg(f03_terminate_host_provider_candidate)]
++const _: () = {
++    use core::mem::align_of;
++    use crate::abi::CpuLocalVar;
++    assert!(size_of::<CInt>() == 4 && size_of::<CLong>() == 8
++        && size_of::<CULong>() == 8 && size_of::<*mut c_void>() == 8);
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8
++        && offset_of!(SyscallRequest, rtid) == 0 && offset_of!(SyscallRequest, ttid) == 4
++        && offset_of!(SyscallRequest, valid) == 8 && offset_of!(SyscallRequest, number) == 16
++        && offset_of!(SyscallRequest, args) == 24);
++    assert!(size_of::<CpuLocalVar>() == 8128 && align_of::<CpuLocalVar>() == 64
++        && offset_of!(CpuLocalVar, current) == 7848);
++    assert!(size_of::<Thread>() == 5568 && align_of::<Thread>() == 64
++        && offset_of!(Thread, proc) == 4304);
++    assert!(size_of::<Process>() == 1728 && align_of::<Process>() == 64
++        && offset_of!(Process, group_exit_status) == 424 && offset_of!(Process, nohost) == 500);
++};
+ 
+ /// Preserve the original supported terminate transaction and void return ABI.
+ ///
+@@ -143,7 +182,7 @@
+         addr_of_mut!((*proc).status).write(PS_EXITED);
+         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+         locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast());
+-        notify_host_exit(rc, sig);
++        terminate_mcexec(rc, sig);
+         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
+         process::process_list_detach_result(addr_of_mut!((*current).siblings_list));
+         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());

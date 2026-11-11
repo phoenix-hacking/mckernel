@@ -1,0 +1,170 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T07:48:08.509335+00:00",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/controller_contract_regression.py"
+      ],
+      "expected_exit": 0,
+      "id": "three-observed-controller-contracts",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "actual_Campaign_constructor": false,
+        "actual_external_effects": 0,
+        "families": {
+          "cleanup": {
+            "all_shutdown_secondary_errors": true,
+            "native_or_resource_release": false,
+            "normal_shutdown_exit": 10,
+            "poll_close_order": [
+              "close:peer",
+              "close:pidfd:700",
+              "close:listener",
+              "unlink:socket"
+            ],
+            "poll_original_interrupt": true,
+            "receipt_preserved": true,
+            "shutdown_original_interrupt": true,
+            "uncertain_close_not_retried": true
+          },
+          "compatibility": {
+            "actual_compat_syscalls": [
+              [
+                434,
+                5101,
+                0
+              ],
+              [
+                434,
+                4100,
+                0
+              ]
+            ],
+            "data_native_grant": false,
+            "native_api_absent": true,
+            "verification_fd_custody": [
+              "server",
+              "client"
+            ]
+          },
+          "deadline": {
+            "expired_at": 60.0,
+            "fragments_cannot_renew": true,
+            "one_shared_deadline": 60,
+            "recv_calls": 2,
+            "send_calls": 1,
+            "timeouts": [
+              60.0,
+              40.0,
+              20.0
+            ]
+          }
+        },
+        "native_admission": false,
+        "status": "PASS_THREE_CHANGED_CONTROLLER_CONTRACTS"
+      },
+      "wall_seconds": 15
+    }
+  ],
+  "contract": {
+    "bytes": 3967,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/TEST-CONTRACT.json",
+    "sha256": "d8e8b83389b6f864ed4f9760b69784ed5d58a164408fb44b7a77e7241b2865f9"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1",
+  "expected": {
+    "bytes": 1200,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/EXPECTED.json",
+    "sha256": "5809d60bee0c93001e3e31a1a41ac70255c9945d724d1c199ad2eb44b563df64"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/output-1",
+  "inputs": {
+    "bytes": 3472,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/INPUTS.json",
+    "sha256": "7c22e5ccfffd0eea4bc72d65394832170b578c6ea4acbfe02e1ad52d255b9737"
+  },
+  "no_canonical_changes": true,
+  "no_execution_by_author": true,
+  "no_native_or_resource_admission_from_mocks": true,
+  "owner": "source_acquisition_review_max private test author; PublicABI source; Root sole compositor/executor",
+  "ownership": {
+    "failure": "Keep raw argv/streams/original error and actual child record; protected Owner retirement only. No source/controller/Native action or numeric/client process signal fallback. Preserve any real UNKNOWN/current slice if positive closure is absent.",
+    "final": "One complete exact external JSON and empty stderr, one positive real Owner row plus full outer Root tool completion/direct wait/streams before releasing only current256MiB/job1. Fake descriptor UNKNOWN is test data, never real owner retirement or permission.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive leader PID+birth",
+      "literal argv/cwd/current label",
+      "status0",
+      "leader_parent_joined=true",
+      "whole_descendants_joined=true",
+      "streams_closed=true",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-1"
+    ],
+    "record_count": 1
+  },
+  "preconditions": [
+    "Independent material review of exact revised-source fixture/oracle/profile required; sourceGO fb62 alone is not test execution GO.",
+    "Root fresh same-run guard/account/stop/hold and measured all slices/controllers/workers <=4GiB/max3, available>=26GiB, host16/scratch12 floors+2MiB; no Native borrowing or inferred release.",
+    "Pin every actual input/interpreter/helper, assert output/capture absent, then Root creates owned output-1/tmp. Keep old701c/ad675/b696 and7416/7207/9025/e3e2 evidence unchanged.",
+    "Use existing afe Owner with immediate real row checks and full Root handle completion. No real account/service/controller construction is part of this request."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 30,
+    "cpu": 7,
+    "cpu_seconds": 10,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "Existing pinned HOST Python3.8 pure/fake functional logic lane",
+    "max_address_space_bytes": 268435456,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "no_Docker_compiler_model_network_root_or_native_action": true,
+    "output_disk_reservation_bytes": 2097152,
+    "scratch_disk_floor_GiB": 12,
+    "wall_seconds": 15
+  },
+  "schema": "native-controller-three-changed-contracts-host-request-v1",
+  "source_bindings": {
+    "bytes": 3063,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/SOURCE-BINDINGS.json",
+    "sha256": "fc6c4fd3a1e2468d261bb34964584431fa20186b524b07322f2f8dd5cf417044"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_INDEPENDENT_TEST_PROFILE_REVIEW_ROOT_FRESH_ADMISSION"
+}

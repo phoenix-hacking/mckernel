@@ -1,0 +1,130 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -107,6 +107,7 @@
+ set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
+ set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
+ set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
++set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+ set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+ set(RUST_KERNEL_ENABLED OFF)
+@@ -656,6 +657,17 @@
+                 "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/registers.h"
+                 "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/signal.h")
+         endif()
++        # Only the required host wait4 callback; retain broad/owned selections.
++        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
++            MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND
++            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
++            set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED ON)
++            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wait_host_provider_candidate")
++            list(APPEND RUST_KERNEL_SRCS
++                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_wait_host_provider.rs"
++                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
++                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
++        endif()
+         # Narrow genuine context adapter; retain every existing generic/exec gate.
+         if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+             set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
+@@ -1119,6 +1131,11 @@
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+ endif()
+ 
++if (MCKERNEL_WAIT_HOST_PROVIDER_SELECTED)
++    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)
++endif()
++
+ if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -76,6 +76,8 @@
+ mod f03_policy_forward_context_bridge;
+ #[cfg(f03_signal_forward_provider_candidate)]
+ mod f03_signal_forward_provider;
++#[cfg(f03_wait_host_provider_candidate)]
++mod f03_wait_host_provider;
+ #[cfg(any(f06_rt_sigreturn_xrstor_candidate, f06_debug_constants_candidate))]
+ mod f06_rt_sigreturn_xrstor;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4968,14 +4968,14 @@
+ 			(struct list_head *)head);
+ }
+ 
+-#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)
++extern int wait_host_wait4_bridge(int pid, int options); _Static_assert(__builtin_types_compatible_p(__typeof__(&wait_host_wait4_bridge), wait_host_wait4_fn_t), "wait host callback ABI"); _Static_assert(sizeof(int)==4 && sizeof(long)==8 && sizeof(unsigned long)==8 && sizeof(void *)==8 && sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8 && __builtin_offsetof(struct syscall_request,rtid)==0 && __builtin_offsetof(struct syscall_request,ttid)==4 && __builtin_offsetof(struct syscall_request,valid)==8 && __builtin_offsetof(struct syscall_request,number)==16 && __builtin_offsetof(struct syscall_request,args)==24 && __NR_wait4==61, "wait host request ABI");
++#elif defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+ extern int wait_host_wait4_bridge(int pid, int options);
+ #else
+-static int
+-wait_host_wait4_bridge(int pid, int options)
++static int wait_host_wait4_bridge(int pid, int options)
+ {
+ 	struct syscall_request request IHK_DMA_ALIGN;
+-
+ 	request.number = __NR_wait4;
+ 	request.args[0] = pid;
+ 	request.args[1] = 0;
+--- /dev/null
++++ b/kernel/rust/f03_wait_host_provider.rs
+@@ -0,0 +1,55 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Required ordinary-profile host wait4 provider, independent of broad adapters.
++
++#[cfg(not(all(target_arch = "x86_64", native_linux_irq_work_v6_12, enable_profile, f03_do_syscall_outer_candidate)))]
++compile_error!("wait host provider requires the real supported do_syscall owner");
++#[cfg(f03_forward_adapters_candidate)]
++compile_error!("narrow wait host provider must not duplicate broad adapters");
++
++use core::mem::{align_of, offset_of, size_of};
++use core::ptr::addr_of_mut;
++use crate::abi::{CInt, CLong, CULong, SyscallRequest};
++
++const SYS_WAIT4: CULong = 61;
++type WaitHostFn = unsafe extern "C" fn(CInt, CInt) -> CInt;
++const _: WaitHostFn = wait_host_wait4_bridge;
++const _: unsafe extern "C" fn(*mut SyscallRequest, CInt) -> CLong =
++    crate::syscall_offload_entry::do_syscall;
++const _: unsafe extern "C" fn() -> CInt = crate::x86_local::ihk_mc_get_processor_id;
++const _: () = {
++    assert!(size_of::<CInt>() == 4 && align_of::<CInt>() == 4);
++    assert!(size_of::<CLong>() == 8 && size_of::<CULong>() == 8);
++    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
++    assert!(offset_of!(SyscallRequest, rtid) == 0);
++    assert!(offset_of!(SyscallRequest, ttid) == 4);
++    assert!(offset_of!(SyscallRequest, valid) == 8);
++    assert!(offset_of!(SyscallRequest, number) == 16);
++    assert!(offset_of!(SyscallRequest, args) == 24);
++};
++
++/// Preserve the original wait callback and its synchronous request lifetime.
++///
++/// The selected outer overwrites rtid/ttid before sending, send_syscall resets
++/// valid then publishes its packet copy. The selected nr61 launcher consumes
++/// args0/args2 via waitid; args1/args3..5 are not status/rusage destinations.
++/// Define those carrier bytes before the real full72B copy/publication instead
++/// of propagating the C entry's unspecified stack bytes. This is not a reply,
++/// ACK, new completion or a change to the caller's reap/lock/IRQ decisions.
++///
++/// # Safety
++/// The existing wait transaction owns the live current Thread/Process, CPU and
++/// initialized IKC channel across this real offload. No new reference or async
++/// ownership is acquired; no Rust reference escapes the synchronous call.
++#[no_mangle]
++pub unsafe extern "C" fn wait_host_wait4_bridge(pid: CInt, options: CInt) -> CInt {
++    let mut request = SyscallRequest {
++        rtid: 0,
++        ttid: 0,
++        valid: 0,
++        number: SYS_WAIT4,
++        args: [pid as CULong, 0, options as CULong, 0, 0, 0],
++    };
++    let cpu = unsafe { crate::x86_local::ihk_mc_get_processor_id() };
++    // The original C callback returns int, narrowing the actual long result.
++    unsafe { crate::syscall_offload_entry::do_syscall(addr_of_mut!(request), cpu) as CInt }
++}

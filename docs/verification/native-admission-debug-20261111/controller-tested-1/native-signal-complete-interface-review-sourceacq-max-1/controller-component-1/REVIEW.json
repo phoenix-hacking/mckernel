@@ -1,0 +1,137 @@
+{
+  "schema": "mckernel.current-owning-controller-component-independent-review.v1",
+  "reviewed_at": "2026-11-11T07:25:58.083134+00:00",
+  "reviewer": "source_acquisition_review_max",
+  "decision": "NO_GO_COMPONENT_INTEGRATION_PENDING_ONE_BOUNDED_RUNTIME_LIFECYCLE_DEADLINE_CORRECTION",
+  "scope": "Complete finite review of the frozen owning-controller account-data component only; full native source/effective-view/launch/release path is still being authored.",
+  "component_metadata": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/CONTROLLER-COMPONENT.json",
+    "bytes": 3805,
+    "sha256": "0f560d4a2dd1c4e8e79e418237f2b1e918aabc0f8ba7d8ef22d9b77991412d47"
+  },
+  "frozen_inputs": {
+    "source": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/candidate/controller/native_current_owner.py",
+      "bytes": 12405,
+      "sha256": "701c24b01f2713bc0ba632c006e355678825633b5398ea4257cba1dc036db4f3"
+    },
+    "controller": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/candidate/controller/run_os_goal.py",
+      "bytes": 135608,
+      "sha256": "ad67587ee7fab91440304b694e874b607b43e92aa9c39eb2feace75c3bab775a"
+    },
+    "preimage": {
+      "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+      "bytes": 134144,
+      "sha256": "6f5ae87f0844db5718530f2198c2206a0d8900f951482ce5588243b832dc17a0"
+    },
+    "patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/OWNING-CONTROLLER-COMPONENT.patch",
+      "bytes": 15261,
+      "sha256": "403546db03dbf908e2383ecea046c0e4d747d55b9f03ad03dd6eacc11a47e385"
+    },
+    "immutable_package_client_same_bytes": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/candidate/package/native_current_owner.py",
+      "bytes": 12405,
+      "sha256": "701c24b01f2713bc0ba632c006e355678825633b5398ea4257cba1dc036db4f3"
+    }
+  },
+  "material_findings": [
+    {
+      "id": "RUNTIME-PIDFD-38",
+      "source_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/candidate/controller/native_current_owner.py",
+      "lines": [
+        145,
+        202
+      ],
+      "fact": "Both server acceptance and Root client constructor call os.pidfd_open directly. The intended Root runtime is the retained pinned /usr/bin/python3 SHA298a9e83 (Python3.8), confirmed by the implementation owner; this runtime does not provide that Python API. The existing registered pidfd_compat068e is the available compatibility source.",
+      "effect": "The legitimate Root client cannot complete construction on its declared actual interpreter; a new interpreter/tool probe or assumed upgrade is not a repair.",
+      "minimum_correction": "Use the genuine registered pidfd_compat implementation through a copied/hash-pinned dependency for both controller and immutable client package, retaining exact PID/birth and pidfd liveness checks. Bind the actual owning-controller interpreter in the eventual transition packet."
+    },
+    {
+      "id": "CUSTODY-CLEANUP-ALL-EXITS",
+      "controller_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/candidate/controller/run_os_goal.py",
+      "controller_method": "Campaign.poll_native_owner_control",
+      "fact": "The except branch calls self.save before close; if receipt persistence raises, no cleanup is attempted. Campaign.run finally does not close native_owner_control on normal stop, checkpoint, exception or KeyboardInterrupt. CurrentOwnerServer.close and CurrentOwnerSession.close stop cleanup at the first close/lstat/unlink failure after setting closed=True, preventing later handles from being attempted and a later close from retrying. Client handle fields are initialized only after first path validation, so an externally preallocated failed client may not support close at its first error boundary.",
+      "effect": "Owned data-channel sockets/pidfds/path can survive a completed/error handoff or remain unaccounted while the owning process continues shutdown. A secondary receipt/cleanup error can replace the original failure. No Native/resource release follows, but the stated component lifecycle contract is not met.",
+      "minimum_correction": "Put all owned-channel cleanup behind finally before/independent of diagnostic writes, close the service in the existing Campaign.run shutdown finally, initialize client handle/closed fields before validations, and attempt every owned handle even when another close fails. Preserve primary exception/KeyboardInterrupt and record secondary cleanup/receipt errors without deleting or releasing any Native/source/resource lease. The future NativeGate must still preallocate and retain the Root client before constructor as already specified."
+    },
+    {
+      "id": "TOTAL-FRAME-DEADLINE",
+      "source_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/candidate/controller/native_current_owner.py",
+      "lines": [
+        60,
+        68,
+        142,
+        163,
+        195,
+        214
+      ],
+      "fact": "receive() loops over independent sock.recv calls while the socket has a 15-second timeout. Each successful partial read renews that timeout; there is no absolute deadline for the whole length header plus body. MAX_FRAME bounds bytes, not elapsed time. The server calls this synchronously inside the sole owning Campaign event loop.",
+      "effect": "A stalled/fragmented control frame can keep that loop blocked far beyond the stated bounded handoff interval, delaying stop/checkpoint/account monitoring. No payload execution is needed to establish this source-level error.",
+      "minimum_correction": "Apply one monotonic absolute deadline across the entire framed handoff (header/body and relevant send/read boundary), updating each operation timeout from remaining time and failing when it expires. Do not create another controller, permission fallback, unbounded wait or native grant."
+    }
+  ],
+  "sound_unchanged_findings": {
+    "existing_real_controller_methods": {
+      "begin": {
+        "original_lines": [
+          1442,
+          1644
+        ],
+        "candidate_lines": [
+          1467,
+          1669
+        ],
+        "AST_equal": true
+      },
+      "record_rate_limits": {
+        "original_lines": [
+          1082,
+          1119
+        ],
+        "candidate_lines": [
+          1107,
+          1144
+        ],
+        "AST_equal": true
+      },
+      "refresh_credit_budget": {
+        "original_lines": [
+          1121,
+          1215
+        ],
+        "candidate_lines": [
+          1146,
+          1240
+        ],
+        "AST_equal": true
+      }
+    },
+    "owning_context": "Actual Campaign.run calls the component only after self.controlled; _owning_context checks actual worker PID/birth, saved Root thread, same initialized credit guard/argument ID and source bytes. No Campaign/RPC/CreditBudget object or allowance is constructed.",
+    "account_and_credit": "The snapshot uses actual self.rpc account/read and same self.refresh_credit_budget in the owning context. Wrong account sets the existing stop fields; unknown/exhausted accounting does not return a snapshot. Existing stop/checkpoint/hold fields remain vetoes.",
+    "transport_identity": "Root peer credentials plus actual birth/pidfd, request nonce/config SHA/sequence/challenge, same source SHA, Root thread/credit ID and boot-relative freshness are checked; normal response has authority=None and native_grant=False.",
+    "existing_instruction_stop_check": "Campaign.deliver_instruction already checks stop_reason/checkpoint; no new post-account-stop instruction fallthrough finding is asserted.",
+    "source_recovery": "Genuine recovered loader/module source origin is separately GO0a94098d; it is not Native admission.",
+    "full_native_readiness": false
+  },
+  "focused_test_obligations_after_source_correction": [
+    "Exercise the actual changed compatibility import/call boundary with declared pinned interpreter compatibility; no runtime upgrade or live pidfd/process probe by this review.",
+    "Use controlled account/RPC data fixtures in the owning adapter, preserving real budget/account mutator semantics, to prove same-run positive data-only response and actual unknown/exhausted/stop refusal. No actual API/service call or Native permission.",
+    "Fault the receipt after component/FD construction and ordinary shutdown/KeyboardInterrupt boundaries; require every owned channel handle cleanup attempt while preserving original error and secondary diagnostics. No Native/source/retained reservation release.",
+    "Fragment a finite mocked frame under a fake monotonic clock so header/body cannot extend the one total deadline; prove stale/EOF/invalid binding remains refusal. No live socket/controller or native action required."
+  ],
+  "review_execution": {
+    "author_modules_imported_or_executed": false,
+    "compiler_tests_or_helpers_run": false,
+    "controller_API_or_service_calls": false,
+    "native_SUDO_or_process_signals": false,
+    "canonical_or_launcher_state_edited": false,
+    "recursive_agents_or_broad_search": false
+  },
+  "handoff": {
+    "implementation_owner": "/root/public_abi_join_max",
+    "correction_scope": "Preserve frozen0f560/701c/ad675/4035; one bounded source successor covers exactly the complete findings above. Full native completion remains separate and may consume this corrected component after review.",
+    "root_role": "Root alone composes/adopts any reviewed source and admits execution; no component/live transition/native grant now."
+  }
+}

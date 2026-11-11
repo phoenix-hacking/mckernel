@@ -1,0 +1,130 @@
+{
+  "actual_CPU_or_do_syscall_or_waitid_executed": false,
+  "case_count": 6,
+  "cases": [
+    {
+      "configured_cpu": 0,
+      "cpu_lookups": 1,
+      "events": [
+        "cpu",
+        "send",
+        "send-return"
+      ],
+      "id": "pid-one-success",
+      "natural_alignment": true,
+      "options": 0,
+      "pid": 1,
+      "reply": 1,
+      "request_hex": "000000000000000000000000000000003d00000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "return": 1,
+      "sent_cpu": 0,
+      "snapshot_within_call_only": true,
+      "syscall_calls": 1,
+      "writable_during_callback": true
+    },
+    {
+      "configured_cpu": 6,
+      "cpu_lookups": 1,
+      "events": [
+        "cpu",
+        "send",
+        "send-return"
+      ],
+      "id": "max-pid-option-bit-error",
+      "natural_alignment": true,
+      "options": 16777216,
+      "pid": 2147483647,
+      "reply": -10,
+      "request_hex": "000000000000000000000000000000003d00000000000000ffffff7f0000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+      "return": -10,
+      "sent_cpu": 6,
+      "snapshot_within_call_only": true,
+      "syscall_calls": 1,
+      "writable_during_callback": true
+    },
+    {
+      "configured_cpu": 7,
+      "cpu_lookups": 1,
+      "events": [
+        "cpu",
+        "send",
+        "send-return"
+      ],
+      "id": "min-pid-sign-options-interrupted",
+      "natural_alignment": true,
+      "options": -2147483648,
+      "pid": -2147483648,
+      "reply": -4,
+      "request_hex": "000000000000000000000000000000003d0000000000000000000080ffffffff000000000000000000000080ffffffff000000000000000000000000000000000000000000000000",
+      "return": -4,
+      "sent_cpu": 7,
+      "snapshot_within_call_only": true,
+      "syscall_calls": 1,
+      "writable_during_callback": true
+    },
+    {
+      "configured_cpu": 6,
+      "cpu_lookups": 1,
+      "events": [
+        "cpu",
+        "send",
+        "send-return"
+      ],
+      "id": "negative-pid-all-option-bits",
+      "natural_alignment": true,
+      "options": -1,
+      "pid": -1,
+      "reply": 0,
+      "request_hex": "000000000000000000000000000000003d00000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000000000000000000",
+      "return": 0,
+      "sent_cpu": 6,
+      "snapshot_within_call_only": true,
+      "syscall_calls": 1,
+      "writable_during_callback": true
+    },
+    {
+      "configured_cpu": 0,
+      "cpu_lookups": 1,
+      "events": [
+        "cpu",
+        "send",
+        "send-return"
+      ],
+      "id": "wide-positive-return-narrows",
+      "natural_alignment": true,
+      "options": 16777218,
+      "pid": 123,
+      "reply": 4294967297,
+      "request_hex": "000000000000000000000000000000003d000000000000007b0000000000000000000000000000000200000100000000000000000000000000000000000000000000000000000000",
+      "return": 1,
+      "sent_cpu": 0,
+      "snapshot_within_call_only": true,
+      "syscall_calls": 1,
+      "writable_during_callback": true
+    },
+    {
+      "configured_cpu": 7,
+      "cpu_lookups": 1,
+      "events": [
+        "cpu",
+        "send",
+        "send-return"
+      ],
+      "id": "wide-negative-return-narrows",
+      "natural_alignment": true,
+      "options": 2,
+      "pid": 456,
+      "reply": -4294967297,
+      "request_hex": "000000000000000000000000000000003d00000000000000c80100000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000",
+      "return": -1,
+      "sent_cpu": 7,
+      "snapshot_within_call_only": true,
+      "syscall_calls": 1,
+      "writable_during_callback": true
+    }
+  ],
+  "native_execution": false,
+  "original_acceptance": false,
+  "scope": "new-whole-wait-host-provider-with-explicit-controlled-lower-effects",
+  "status": "PASS"
+}

@@ -51,7 +51,17 @@ unsafe fn thread_from_siblings(link: *mut AbiListHead) -> *mut Thread {
 // Preserve the real C terminate_mcexec transaction at this call boundary, rather
 // than calling the remaining project-C wrapper. Existing body/provider ABIs and
 // ignored long result remain unchanged. No new callback mechanism is introduced.
-unsafe fn notify_host_exit(rc: CInt, sig: CInt) {
+/// Notify the existing Linux executor of the original process exit transaction.
+///
+/// # Safety
+/// The original initialized per-CPU current Thread and its Process remain live
+/// throughout the synchronous selected body/offload call. The pending-signal
+/// caller has released its reader IRQ lock before entry. This entry adds no
+/// lock, reference, context change, request publication, or retained pointer.
+/// The body owns its existing field initialization and CAS/nohost protocol;
+/// its signed long result remains deliberately ignored by this void C ABI.
+#[cfg_attr(f03_terminate_host_provider_candidate, no_mangle)]
+pub unsafe extern "C" fn terminate_mcexec(rc: CInt, sig: CInt) {
     let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
     let current = unsafe { addr_of!((*cpu).current).read() };
     let proc = unsafe { addr_of!((*current).proc).read() };
@@ -64,6 +74,35 @@ unsafe fn notify_host_exit(rc: CInt, sig: CInt) {
         )
     };
 }
+
+// Actual production types, with no callback-address cast or stub provider.
+const _: unsafe extern "C" fn(CInt, CInt) = terminate_mcexec;
+const _: unsafe extern "C" fn(*mut CULong, CULong, CULong) -> CULong =
+    crate::atomic_helpers::atomic_cmpxchg_ulong;
+const _: unsafe extern "C" fn(*mut SyscallRequest, CInt) -> CLong = do_syscall;
+
+#[cfg(all(f03_terminate_host_provider_candidate, any(not(enable_perf),
+    not(enable_rusage), enable_fugaku_hacks, f03_forward_adapters_candidate,
+    f03_signal_forward_defined_candidate)))]
+compile_error!("terminate_mcexec public provider requires the paired ordinary profile");
+
+#[cfg(f03_terminate_host_provider_candidate)]
+const _: () = {
+    use core::mem::align_of;
+    use crate::abi::CpuLocalVar;
+    assert!(size_of::<CInt>() == 4 && size_of::<CLong>() == 8
+        && size_of::<CULong>() == 8 && size_of::<*mut c_void>() == 8);
+    assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8
+        && offset_of!(SyscallRequest, rtid) == 0 && offset_of!(SyscallRequest, ttid) == 4
+        && offset_of!(SyscallRequest, valid) == 8 && offset_of!(SyscallRequest, number) == 16
+        && offset_of!(SyscallRequest, args) == 24);
+    assert!(size_of::<CpuLocalVar>() == 8128 && align_of::<CpuLocalVar>() == 64
+        && offset_of!(CpuLocalVar, current) == 7848);
+    assert!(size_of::<Thread>() == 5568 && align_of::<Thread>() == 64
+        && offset_of!(Thread, proc) == 4304);
+    assert!(size_of::<Process>() == 1728 && align_of::<Process>() == 64
+        && offset_of!(Process, group_exit_status) == 424 && offset_of!(Process, nohost) == 500);
+};
 
 /// Preserve the original supported terminate transaction and void return ABI.
 ///
@@ -143,7 +182,7 @@ pub unsafe extern "C" fn terminate(rc: CInt, sig: CInt) {
         addr_of_mut!((*proc).status).write(PS_EXITED);
         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
         locks::__mcs_rwlock_writer_unlock_noirq(addr_of_mut!((*proc).update_lock).cast::<locks::McsRwlockLock>(), update.as_mut_ptr().cast());
-        notify_host_exit(rc, sig);
+        terminate_mcexec(rc, sig);
         locks::__mcs_rwlock_writer_lock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());
         process::process_list_detach_result(addr_of_mut!((*current).siblings_list));
         locks::__mcs_rwlock_writer_unlock(addr_of_mut!((*proc).threads_lock).cast::<locks::McsRwlockLock>(), lock.as_mut_ptr());

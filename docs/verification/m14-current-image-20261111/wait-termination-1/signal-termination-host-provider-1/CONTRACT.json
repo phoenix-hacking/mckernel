@@ -1,0 +1,105 @@
+{
+  "schema": "m14-signal-termination-host-provider-contract-v1",
+  "original_condition": "M14-03-04-DEFAULT",
+  "specific_gap": "Actual Rust check_sig_pending859 R64+0x30c still binds C terminate_mcexec136 plus local C do_syscall bridge12. This patch supplies that public void ABI with the already-selected complete Rust notification transaction.",
+  "actual_current_boundary": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-signal-whole-default-review-sdk-max-1/SIGNAL-PENDING-BOUNDARY.json",
+    "bytes": 12589,
+    "sha256": "94f825c80d034f8eaefd1f5e17b6e8cf5e5ff4cafa502a47955f9c98d0863f8d"
+  },
+  "implementation": {
+    "files_changed": 3,
+    "existing_real_body": "kernel/rust/f03_terminate.rs notify_host_exit renamed to terminate_mcexec; same complete brace/body bytes b8ad8afc9725178fa000c2eef52e5330e9bf7d29846b1972e27fdb456f4f2a9a",
+    "public_signature": "pub unsafe extern C fn terminate_mcexec(rc:CInt,sig:CInt)->()",
+    "conditional_public_export": "#[cfg_attr(f03_terminate_host_provider_candidate, no_mangle)] on the actual complete function body, not a linker alias or placeholder endpoint",
+    "existing_selected_terminate_call": "Renames its direct notify_host_exit(rc,sig) call only; no other orchestration body/debug/log/error/ordering line changes.",
+    "new_data_debug_or_ownership_state": false,
+    "new_request_initialization_or_packet_protocol": false,
+    "policy_body_or_existing_provider_source_modified": false
+  },
+  "C_baseline_and_preservation": {
+    "current_supported_wrapper": "get_this_cpu_local_var()->current->proc; naturally aligned uninitialized local request IHK_DMA_ALIGN; same real Rust terminate_mcexec_body_result; CPU;231; actual process offsets; selected atomic_cmpxchg_ulong and 12B local exact do_syscall adapter; ignore long return.",
+    "selected_C_exclusions": [
+      "terminate_mcexec",
+      "terminate_mcexec_do_syscall_bridge"
+    ],
+    "fallback": "Both original bodies preserved verbatim under !MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER; no supported platform option/default removed.",
+    "logical_origin": "New preprocessor branches restore original C logical lines5145/5150 for local adapter and5190/5203 for public wrapper. Original C lines remain insertion-only. No #line or source identity relaxation."
+  },
+  "ABI": {
+    "public": "C void(int,int) == Rust unsafe extern C fn(CInt,CInt)->()",
+    "LP64": {
+      "CInt": 4,
+      "CLong": 8,
+      "CULong": 8,
+      "pointer": 8
+    },
+    "request": {
+      "size": 72,
+      "align": 8,
+      "rtid": 0,
+      "ttid": 4,
+      "valid": 8,
+      "number": 16,
+      "args": 24,
+      "args_bytes": 48,
+      "IHK_DMA_ALIGN": "Actual selected x86 memconst.h defines empty; natural align8 preserved."
+    },
+    "current_lookup": {
+      "CpuLocalVar_size": 8128,
+      "CpuLocalVar_align": 64,
+      "current_offset": 7848,
+      "Thread_size": 5568,
+      "Thread_align": 64,
+      "proc_offset": 4304,
+      "Process_size": 1728,
+      "Process_align": 64,
+      "group_exit_status_offset": 424,
+      "nohost_offset": 500
+    },
+    "104_word_scope": "Current matching four104-word arrays and real ff48 layout are reused at exact cohort. Some new current/status/nohost offsets are not in104; paired new real C/Rust compile assertions explicitly cover those fields. No claim104 proves unlisted fields.",
+    "typed_guards": "Actual public function, cmpxchg and syscall pointer constants have exact unsafe extern C types with no cast. Real C __typeof__ check and real struct sizeof/align/offset guards match the new Rust compile assertions. No fixture header/provider."
+  },
+  "transaction": {
+    "entry": "Original initialized live per-CPU current nonidle Thread and Process, valid original call context. Wrapper performs the same raw pointer reads; does not null-normalize or invent early success.",
+    "storage": "MaybeUninit<SyscallRequest>::uninit is used as raw storage only. It is never assume_init, converted to a typed value/reference, published or retained here. It is live and writable for the complete synchronous body/offload call.",
+    "group_claim": "Existing Rust body reads status; if bit0x0000000100000000 already claimed, returns0 without request reads. Otherwise status=confirmed|((rc as unsigned&255)<<8)|(sig as unsigned&255), same SeqCst native atomic_cmpxchg_ulong. CAS observed!=old returns0 without offload.",
+    "nohost": "After successful CAS, current nohost!=0 returns0 without request read. Otherwise same selected syscall callback must exist; body writes number231, args0 from the actual current group status, then nohost=1 before synchronous offload. CAS/group/nohost ordering unchanged.",
+    "defined_initialized_fields": "Unchanged selected Rust body already writes args1..5 zero after the genuine number/args0/nohost writes. This patch adds no zero-fill. Actual current C wrapper already invokes this same selected Rust body. do_syscall preparation overwrites rtid/ttid; send preparation sets valid0 before complete72B copy; packet publish is the existing Releasevalid1. All72 bytes are accounted for at the copy boundary, not presumed initialized merely from MaybeUninit.",
+    "actual_Linux_consumer": "Current qualified mcexec_helpers::act_exit reads sr.number and sr.args0 only. It preserves existing status plan/report/stopservers/signal/exit behavior; args1..5 are unused by this exact consumer. No Linux consumer operation or signal is invoked by source preparation.",
+    "signed_result": "Body/do_syscall retain CLong signed errors/replies; actual public C void ABI ignores them exactly like the baseline wrapper and old private helper. No ACK, zero-return, timeout, cancel or completion is manufactured.",
+    "CPU_and_accounting": "Get processor ID at same call boundary. Existing do_syscall excludes NR231 from in_syscall_offload increment and retains monitor, profile, scheduler, nested work and native lifecycle behavior. This patch changes no CPU selection/accounting/counter.",
+    "locks_lifetime": "No lock/ref acquisition or IRQ/preemption alteration introduced. No exclusive Rust reference spans a callback/offload; raw current/process/request borrows remain original. No process/thread/resource or request survives release through a retained pointer."
+  },
+  "actual_callers": [
+    {
+      "caller": "check_sig_pending",
+      "branch": "Current in_syscall_offload nonzero/current live thread; scans real common/private pending nodes under original reader IRQ lock; deliverable default nonignored signal yields found2; sets interrupted; releases matching reader IRQ lock before terminate_mcexec(0,sig).",
+      "lifetime": "Original perCPU/current/thread/process remain live across synchronous entry; selected sig captured before unlock. New entry does not revisit pending nodes, recreate context, change locking or request fields."
+    },
+    {
+      "caller": "existing Rust terminate",
+      "branch": "Same post threads/update unlock call where notify_host_exit(rc,sig) already ran. Only local function name changes; the real body bytes and ignored result are unchanged."
+    },
+    {
+      "caller": "original C terminate/check_sig_pending fallbacks",
+      "branch": "Original callers and declarations remain unchanged. Outside new paired selector they continue to resolve the same retained C wrapper."
+    }
+  ],
+  "selection": {
+    "supplier": "MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED existing ordinary predicate",
+    "required": "Rust kernel+x86_64+Linux6.12+!UBSAN+PROFILE/PERF/RUSAGE+Linux work IRQ+!TOFU+!Fugaku+!broad adapters+!experimental; wholeF06 selectedON, owned forkOFF and DCFAOFF. Existing f03_terminate module is already selected under this profile.",
+    "new_cfg": "f03_terminate_host_provider_candidate",
+    "new_C_macro": "MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER",
+    "paired_boolean": "MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED",
+    "deps": "Actual existing termination module remains in current Rust sources; new real cls/process/syscall/x86DMA headers are tracked. No module/lib.rs/body addition or default change.",
+    "outside_profile": "Public no_mangle attr absent, existing internal call uses mangled Rust helper; original C public wrapper/local adapter remain, all original platform options and fallbacks intact."
+  },
+  "eligibility": {
+    "new_scoped_input": "Root explicitly requested separate concrete assessment/port of this actual selected Rust equivalent at user/source4b6f boundary; routine consumer/source/type/provider work is same-Root engineering.",
+    "restriction_disposition": "No actual named source/operation ban has been evidenced for this source-only exact existing body export. Prior comments documenting forwarding debt/HOLD are preserved, not treated as a release or new universal ban.",
+    "retained": "Known held generic/exec/owned590e/TID/XPMEM/TERMRESET/prohibited fixtures, partial-request/ACK/equivalent replay, native/owner/currentfree/auth/account/resource UNKNOWN all remain binding. No body/fixture/request/native call is proposed or executed here.",
+    "broader_whole04": "Existing required wait70/table48 remains SDK-owned. This source patch alone closes no original DEFAULT or FUNCTIONAL condition and retires no C until actual matching production owner/caller/provider proof."
+  },
+  "minimum_changed_validation": "Independent material source/ABI/selector review; then ordinary complete production image compile plus real typed C/Rust guards and one affected saved image/relocation ownership qualification. No new mirrored transaction fixture, old signal/TERMRESET/body cases or provider probes."
+}

@@ -1,0 +1,55 @@
+{
+  "actual_source": {
+    "bytes": 3063,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/SOURCE-BINDINGS.json",
+    "sha256": "fc6c4fd3a1e2468d261bb34964584431fa20186b524b07322f2f8dd5cf417044"
+  },
+  "cases": [
+    {
+      "id": "supported-Python38-compat-and-new-FD-custody",
+      "oracle": "Exact434/pid/flags calls to explicit fake syscall effect; both actual acquisition sites retain700. Constructor and send/receive real bodies execute with fake process/socket/time/budget data. Returned data says native_grantFalse. No real pidfd/syscall.",
+      "vectors": [
+        "actual server accept and actual client construction/revalidation through real open_pidfd fallback without os.pidfd_open",
+        "actual server adoption and cleanup of PidfdVerificationError.fd",
+        "actual preallocated client adoption and cleanup of PidfdVerificationError.fd"
+      ]
+    },
+    {
+      "id": "all-owned-cleanup-interruption-priority",
+      "oracle": "Exact four owned-close attempts before diagnostic; error identity and exception/context graph, no uncertain retry and no native/resource lease release.",
+      "vectors": [
+        "actual Campaign.poll: ordinary owning-context failure, actual peer close KeyboardInterrupt, then receipt OSError; same interruption escapes after all peer/pidfd/listener/path attempts; sticky UNKNOWN close cannot retry",
+        "actual Campaign.run: original KeyboardInterrupt plus nested close KeyboardInterrupt, stop/receipt/output-close errors; same original escapes with every secondary reachable and all own-channel cleanup/RPC/output attempts",
+        "actual normal paused shutdown control returns10 with CLOSED data channel"
+      ]
+    },
+    {
+      "id": "one-absolute-whole-frame-deadline",
+      "oracle": "Timeouts exactly60,40,20; send1/recv2; actual remaining() refuses at60 despite successful partial reads. No sleeping/live socket.",
+      "vectors": [
+        "actual send consumes20 fake seconds; fragmented receive header consumes20 and body fragment consumes20 under same absolute60 deadline"
+      ]
+    }
+  ],
+  "external_complete_oracle": {
+    "bytes": 1200,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/EXPECTED.json",
+    "sha256": "5809d60bee0c93001e3e31a1a41ac70255c9945d724d1c199ad2eb44b563df64"
+  },
+  "fixture": {
+    "bytes": 15906,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-controller-correction-tests-sourceacq-max-1/controller_contract_regression.py",
+    "sha256": "be21b013a27076dd9c32b957f6f0728ec00220ce02a008e3083a51f8b4a3c4ac"
+  },
+  "lower_effects": "Explicit process birth/UID/PID/pidfd/socket/fcntl/syscall/clock/random/bootstrap data/output/storage/RPC-close controls only. Fixture never delegates these to actual OS/account/state methods. Source files are only read. Campaign.__init__/begin/stop/save/output effects are not used as live controller methods. Only actual changed poll/run bodies and whole component/compat bodies are under test.",
+  "no_author_execution": true,
+  "not_acceptance": [
+    "No full18-module native source/effective-view/launch/release qualification",
+    "No live account/auth/billing/credit gate or native allocation/admission",
+    "No C retirement, app/native/default/FUNCTIONAL/milestone acceptance",
+    "No old green test suite, generic/exec/ACK/DIRECT-TID/TERMRESET/590e fixture"
+  ],
+  "schema": "native-controller-three-observed-contract-test-v1",
+  "scope": "Three original b696 contracts through actual revised component7207, genuine compat068e and full actual Campaign ClassDef6fe65. No real controller construction, process/socket/syscall/account/model/ledger/service/native effects.",
+  "supported_runtime": "Actual pinned HOST /usr/bin/python3 ->python3.8, asserted inside fixture; no runtime upgrade or toolversion probe."
+}

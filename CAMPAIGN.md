@@ -1,9 +1,49 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T07:29:54.786469+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T08:13:28.361396+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Reviewed wait/termination source is canonical; new image is next.** Root
+integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6
+and actualwait6case PASS3c75/d61a. Both additive CMake conflicts and original
+failed177e46 are preserved; no body rewrite or broad flag change. Current
+selected Rust/C typed guards must now compile through the normal mckernel.img
+target, with actualwait48slot0/pending-signal target/C70+136+12 exclusions and
+provider/104ABI/LOAD/cleanup evidence before whole03-04 credit. SDK owns the
+actualcommit-bound2GiB producer/affected reader; P04Tests reviews the operation.
+No new counted gain;66.67/67.19 and96/156/PR3receipt6789915776 stay confirmed.
+Controller274 protectedHOST command passed07:58:23Z: all3 exact compatibility/
+cleanup/deadline families, zero external effects, one positivefamily/fullRoot0,
+currentCPU7/256MiB released. Qualified1961 component7207/068e/6fe65 and its
+real code are published as PRIVATE CANDIDATE ONLY, not loaded/installed/native
+READY. PublicABI completes full18-module/resource/source lifecycle separately.
+Actual stagingc66 stopped beforeadmission/payload: selectedSCRATCH is UID0,
+mode0755 and not writable by UID1000. Root830878 joined1, no output/job or
+native change; no sudo/path/permission fallback. SourceAcq traces the genuine
+scratch-owner provisioning/admission path and preservedScratch21 scope. This
+permission condition does not stop the independent original image build.
+Next15min: SDK freeze exactnewsource producer; independent operationGO; Root
+freshly admit/run normalimage then affectedreader. Preserve f199/1aee/0ddffc.
+
+**Ready changed checks and production composition.** Waitaafb/9122 passed
+07:51:16Z: compile0/runtime0/all6 external rows,2 positive families/fullRoot0
+and currentCPU6/2GiB/job1 released; savedqualificationd61a/f543 confirms actual
+432wirebytes/conversions/CPUonce/sendonce/livecapture. Terminationf010 has
+independent sourceGOe9a6; unchanged bodycases are reused and new production
+typeguards/normalimage are the necessary changed proof. Root's first private
+composition failed only at CMake656 (177e46 retained); fresh756e resolves exactly
+2 empty-base additions-only conflicts with both selectors/cfgs/dependencies/C
+macros preserved. P04Tests reviews that actual5pathcomposition before apply.
+SDK freezes the subsequent source-bound producer/reader after Rootactualcommit.
+Native-controller561e successor has sourceGOfb62 after focused e3e2 interruption
+priority diagnosis; oldb696/7416 failures remain, no unchanged retry. Actual
+three-family test274d is frozen and SDK reviews exactfixture+Rootparent6032.
+Root runs only that protectedCPU7/256MiB command after GO/freshadmission, with
+no real account/ledger/service/native effects. PublicABI finishes the real18
+module success path; P04Source's actualc664 stagingc66a awaits P03 source/operation
+review. These are engineering/admission steps, not new service/policy denials.
 
 **Original M14-03-03 DEFAULT verified.** Whole independenta50c/b2e0 joins
 actualf199/image1aee/82c qualification: all6 original VM regions,21roots/22real
@@ -13,8 +53,9 @@ clients/two0nonOOMremovedcontainers. Exactly one check closes:96/156 verified,
 M14=66.67% (+0.37 displayed), M15=67.19% (unchanged). Original criteria,
 weights and denominators stay fixed; memory FUNCTIONAL/parent/file/native remain
 open. Overall emitted C13→9 is scoped image evidence, not complete C retirement.
-Root publishes/fetches this coherent checkpoint then exactly one changed-pair
-PR3 report using dedupe M14-03-03-DEFAULT@a50c053d. Prior6788434691 is retained.
+Checkpointfdbe7559 is pushed/fetched76matchingownedblobs; changed-pair PR3
+comment6789915776 is POSTED_CONFIRMED, dedupe M14-03-03-DEFAULT@a50c053d.
+Prior6788434691 is retained; no percentage report remains pending.
 Whole03-04 separate01d7/f0d7 NO_GO remains required waitC70/slot0 and pending
 signal C136/local12; SDK and P03 own genuine narrow Rust corrections, P04Tests
 reviews changed ABI/selectors/cases. Reuse all passing producer/reader/body cases.

@@ -4968,14 +4968,14 @@ wait_process_list_add_tail_bridge(void *entry, void *head)
 			(struct list_head *)head);
 }
 
-#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_HOST_PROVIDER)
+extern int wait_host_wait4_bridge(int pid, int options); _Static_assert(__builtin_types_compatible_p(__typeof__(&wait_host_wait4_bridge), wait_host_wait4_fn_t), "wait host callback ABI"); _Static_assert(sizeof(int)==4 && sizeof(long)==8 && sizeof(unsigned long)==8 && sizeof(void *)==8 && sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8 && __builtin_offsetof(struct syscall_request,rtid)==0 && __builtin_offsetof(struct syscall_request,ttid)==4 && __builtin_offsetof(struct syscall_request,valid)==8 && __builtin_offsetof(struct syscall_request,number)==16 && __builtin_offsetof(struct syscall_request,args)==24 && __NR_wait4==61, "wait host request ABI");
+#elif defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS)
 extern int wait_host_wait4_bridge(int pid, int options);
 #else
-static int
-wait_host_wait4_bridge(int pid, int options)
+static int wait_host_wait4_bridge(int pid, int options)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
-
 	request.number = __NR_wait4;
 	request.args[0] = pid;
 	request.args[1] = 0;
@@ -5313,11 +5313,15 @@ terminate_mcexec_cmpxchg_bridge(unsigned long *value,
 }
 
 #endif
+#ifndef MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER
+#line 5145
 static long
 terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)
 {
 	return do_syscall(request, cpu);
 }
+#endif
+#line 5150
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
 extern void f03_terminate_host_refcount_set_v1(void *, int);
@@ -5358,6 +5362,34 @@ long sys_waitid(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER
+extern void terminate_mcexec(int rc, int sig);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&terminate_mcexec),
+    void (*)(int, int)), "terminate_mcexec C ABI");
+_Static_assert(sizeof(int) == 4 && sizeof(long) == 8 &&
+    sizeof(unsigned long) == 8 && sizeof(void *) == 8,
+    "terminate_mcexec LP64 types");
+_Static_assert(sizeof(struct syscall_request) == 72 &&
+    _Alignof(struct syscall_request) == 8 &&
+    __builtin_offsetof(struct syscall_request, rtid) == 0 &&
+    __builtin_offsetof(struct syscall_request, ttid) == 4 &&
+    __builtin_offsetof(struct syscall_request, valid) == 8 &&
+    __builtin_offsetof(struct syscall_request, number) == 16 &&
+    __builtin_offsetof(struct syscall_request, args) == 24 &&
+    sizeof(((struct syscall_request *)0)->args) == 48,
+    "terminate_mcexec request ABI");
+_Static_assert(sizeof(struct cpu_local_var) == 8128 &&
+    _Alignof(struct cpu_local_var) == 64 &&
+    __builtin_offsetof(struct cpu_local_var, current) == 7848 &&
+    sizeof(struct thread) == 5568 && _Alignof(struct thread) == 64 &&
+    __builtin_offsetof(struct thread, proc) == 4304 &&
+    sizeof(struct process) == 1728 && _Alignof(struct process) == 64 &&
+    __builtin_offsetof(struct process, group_exit_status) == 424 &&
+    __builtin_offsetof(struct process, nohost) == 500,
+    "terminate_mcexec current thread/process ABI");
+_Static_assert(__NR_exit_group == 231, "terminate_mcexec exit-group number");
+#else
+#line 5190
 void terminate_mcexec(int rc, int sig)
 {
 	struct thread *mythread = get_this_cpu_local_var()->current;
@@ -5371,6 +5403,8 @@ void terminate_mcexec(int rc, int sig)
 			terminate_mcexec_cmpxchg_bridge,
 			terminate_mcexec_do_syscall_bridge);
 }
+#endif
+#line 5203
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern unsigned long f03_sync_child_perf_read_v2(int);
