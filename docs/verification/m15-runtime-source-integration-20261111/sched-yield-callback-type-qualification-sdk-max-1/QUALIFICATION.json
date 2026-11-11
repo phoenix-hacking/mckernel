@@ -1,0 +1,375 @@
+{
+  "Root_full_completion": {
+    "bytes": 264,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "6c475db735b7b6b514f772bfa91ee941b21dd441d9530a9477f2bbe60588442a"
+  },
+  "actual_authoritative_result": {
+    "bytes": 4331,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/RESULT.json",
+    "sha256": "abf405231d83a750bfd53c2e75b662142bfa50f8b1b8badb095fcc0130ee53da"
+  },
+  "actual_execution": {
+    "bytes": 8841,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/execution-1/RESULT.json",
+    "sha256": "b5862847c2511295edcc4a2226410cb888b7fef31beff6b4160f7491bc087780"
+  },
+  "actual_regression": {
+    "baseline_E0308": [
+      {
+        "children": [
+          {
+            "children": [],
+            "code": null,
+            "level": "note",
+            "message": "expected fn pointer `unsafe extern \"C\" fn(_, _, Option<unsafe extern \"C\" fn(*mut c_void) -> *mut c_void>, _) -> _`\n      found fn item `unsafe extern \"C\" fn(_, _, *mut c_void, _) -> _ {pthread_create}`",
+            "rendered": null,
+            "spans": []
+          }
+        ],
+        "code": {
+          "code": "E0308",
+          "explanation": "Expected type did not match the received type.\n\nErroneous code examples:\n\n```compile_fail,E0308\nfn plus_one(x: i32) -> i32 {\n    x + 1\n}\n\nplus_one(\"Not a number\");\n//       ^^^^^^^^^^^^^^ expected `i32`, found `&str`\n\nif \"Not a bool\" {\n// ^^^^^^^^^^^^ expected `bool`, found `&str`\n}\n\nlet x: f32 = \"Not a float\";\n//     ---   ^^^^^^^^^^^^^ expected `f32`, found `&str`\n//     |\n//     expected due to this\n```\n\nThis error occurs when an expression was used in a place where the compiler\nexpected an expression of a different type. It can occur in several cases, the\nmost common being when calling a function and passing an argument which has a\ndifferent type than the matching type in the function declaration.\n"
+        },
+        "message": "mismatched types",
+        "spans": [
+          {
+            "byte_end": 1958,
+            "byte_start": 1944,
+            "column_end": 68,
+            "column_start": 54,
+            "expansion": null,
+            "file_name": "/input/baseline.callback.rs",
+            "is_primary": true,
+            "label": "expected fn pointer, found fn item",
+            "line_end": 75,
+            "line_start": 75,
+            "suggested_replacement": null,
+            "suggestion_applicability": null,
+            "text": [
+              {
+                "highlight_end": 68,
+                "highlight_start": 54,
+                "text": "const _MCK_EXPORTED_CALLBACK_TYPE: MckHeaderCreate = pthread_create;"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "code": null,
+            "level": "note",
+            "message": "expected enum `Option<unsafe extern \"C\" fn(_, _, Option<unsafe extern \"C\" fn(*mut c_void) -> *mut c_void>, _) -> _>`\n   found enum `Option<unsafe extern \"C\" fn(_, _, *mut c_void, _) -> _>`",
+            "rendered": null,
+            "spans": []
+          }
+        ],
+        "code": {
+          "code": "E0308",
+          "explanation": "Expected type did not match the received type.\n\nErroneous code examples:\n\n```compile_fail,E0308\nfn plus_one(x: i32) -> i32 {\n    x + 1\n}\n\nplus_one(\"Not a number\");\n//       ^^^^^^^^^^^^^^ expected `i32`, found `&str`\n\nif \"Not a bool\" {\n// ^^^^^^^^^^^^ expected `bool`, found `&str`\n}\n\nlet x: f32 = \"Not a float\";\n//     ---   ^^^^^^^^^^^^^ expected `f32`, found `&str`\n//     |\n//     expected due to this\n```\n\nThis error occurs when an expression was used in a place where the compiler\nexpected an expression of a different type. It can occur in several cases, the\nmost common being when calling a function and passing an argument which has a\ndifferent type than the matching type in the function declaration.\n"
+        },
+        "message": "mismatched types",
+        "spans": [
+          {
+            "byte_end": 2042,
+            "byte_start": 2019,
+            "column_end": 83,
+            "column_start": 60,
+            "expansion": null,
+            "file_name": "/input/baseline.callback.rs",
+            "is_primary": true,
+            "label": "expected `Option<unsafe extern \"C\" fn(...) -> ...>`, found `*mut c_void`",
+            "line_end": 76,
+            "line_start": 76,
+            "suggested_replacement": null,
+            "suggestion_applicability": null,
+            "text": [
+              {
+                "highlight_end": 83,
+                "highlight_start": 60,
+                "text": "const _MCK_CACHED_CALLBACK_TYPE: Option<MckHeaderCreate> = None::<PthreadCreateFn>;"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "baseline_object_absent": true,
+    "candidate_REL": {
+      "ELF_class": 64,
+      "host_file": {
+        "bytes": 4400,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/candidate.o",
+        "sha256": "86a90ae614ba378916f2bd70fff4eda461725c05727dc3d7dd0bc5208c9df36b"
+      },
+      "little_endian": true,
+      "machine": "x86_64",
+      "type": "REL"
+    },
+    "candidate_full_source_and_typed_suffix_compile0": true,
+    "candidate_warning": {
+      "message": "type alias MckHeaderCreate is never used",
+      "origin": "Only appended compile-time witness alias at candidate.callback.rs79, plus summary; retained literal diagnostics, no suppression/Werror waiver or warning-clean claim."
+    },
+    "raws": {
+      "actual-C11-header.stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/actual-C11-header.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "actual-C11-header.stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/actual-C11-header.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "pthread_callback_header.d": {
+        "bytes": 3350,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/pthread_callback_header.d",
+        "sha256": "a22e569a9f81894e320c371a6e3b3ec48e48c2c4df74e78579ab2fd68b26663d"
+      },
+      "whole-baseline-callback-types.stderr": {
+        "bytes": 4747,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/whole-baseline-callback-types.stderr",
+        "sha256": "16edaceaac41ef56a046f69601deeab924e592754f8071f166f451bfbcc655d2"
+      },
+      "whole-baseline-callback-types.stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/whole-baseline-callback-types.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "whole-candidate-callback-types.stderr": {
+        "bytes": 1299,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/whole-candidate-callback-types.stderr",
+        "sha256": "3b2c85ed69abf9b01d0c319f2f6fe16f4bc4025b4497e6f346d83d546c532d63"
+      },
+      "whole-candidate-callback-types.stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/output-1/whole-candidate-callback-types.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "specific_primary_lines": [
+      75,
+      76
+    ],
+    "statuses": [
+      0,
+      1,
+      0
+    ]
+  },
+  "inputs": {
+    "bytes": 8206,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/INPUTS.json",
+    "sha256": "08dfd2a679dd49e5158742686c0f48c7eef47adfdefd9eadb5062db614d70fca"
+  },
+  "owner": "/root/sdk_binding_source_max",
+  "ownership": {
+    "actual_CID": "4a55fed1a137135db19417cdd488a8631a3a5b6ead07cf8d7c42a34fa101c3af",
+    "all9_outer_clients_positive_birth_directwait_streams_and_no_errors": true,
+    "memory_evidence": {
+      "bytes": 439,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/execution-1/payload-MEMORY.json",
+      "sha256": "3c96a9f76a27322731c81ed95f8fc6535bc10a601cb95be01c864be813ee029e"
+    },
+    "memory_scope": "One early sample/highwater5984256B is not the actual terminal/full compiler peak. No exact peak0 or universal1GiB fit claimed.",
+    "new_job_release": {
+      "bytes": 267,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/execution-1/RESOURCE-RELEASE.json",
+      "sha256": "3b1dc907d1e35ce7e2e00e63dec2fb09eb33f3e110d09d8e666c8f2e68bb0be5"
+    },
+    "same_exact_create_argv_and_profile": true,
+    "terminal": {
+      "ExitCode": 0,
+      "OOMKilled": false,
+      "Pid": 0,
+      "removed": true
+    },
+    "terminal_receipt": {
+      "bytes": 13392,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/execution-1/payload-TERMINAL.json",
+      "sha256": "255f95dbd487e8b6053f2c51a4e1a3d5809945def09d0acd4fdbe7ae2c102d29"
+    },
+    "three_actual_inner_records": [
+      {
+        "label": "actual-C11-header",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "actual-C11-header",
+          "leader": 7,
+          "leader_birth": "44362311",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "status": 0
+      },
+      {
+        "label": "whole-baseline-callback-types",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "whole-baseline-callback-types",
+          "leader": 9,
+          "leader_birth": "44362314",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 1,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "status": 1
+      },
+      {
+        "label": "whole-candidate-callback-types",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "whole-candidate-callback-types",
+          "leader": 13,
+          "leader_birth": "44362317",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        },
+        "status": 0
+      }
+    ]
+  },
+  "prior_independent_source_operation_GO": {
+    "bytes": 19422,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-review-p03-max-1/REVIEW.json",
+    "sha256": "23a1455b6fe89733a0105dc8c98164425b7444359d2149a104d647d0640bdebe"
+  },
+  "production_candidate": {
+    "bytes": 1793,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/candidate/executer/user/rust/libsched_yield.rs",
+    "sha256": "994320f31a1e421f78a93ee56ca40d24bd94d24a130b2b26effce838d5573ea8"
+  },
+  "qualified_at": "2026-11-11T00:44:18.901622+00:00",
+  "qualified_specific_contract": "Both exported pthread_create and cached actual provider alias agree with genuine pthread.h callback void*(*)(void*) at supportedLP64 profile, via nullable unsafe externC carrier. Only two unchanged special clone syscall args use address conversion; real cached call keeps callback typed. This closes the demonstrated erased-callback source/type gap, not real pthread execution.",
+  "qualifier_operations": "Saved JSON/text/source-prefix/diagnostic/ELF-header bytes and receipts only; no compiler/driver/parser/test/ELFtool/provider/runtime/native/container/network execution, no peer/canonical writes.",
+  "real_C_header_contract": {
+    "actual_C11_flags": {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        "-MD",
+        "-MF",
+        "/output/pthread_callback_header.d",
+        "-MT",
+        "pthread_callback_header",
+        "/input/pthread_callback_header.c"
+      ],
+      "expected_exit": 0,
+      "label": "actual-C11-header",
+      "timeout": 30
+    },
+    "actual_header_inputs": [
+      {
+        "bytes": 48572,
+        "path": "/usr/include/pthread.h",
+        "sha256": "4e158171d8a2282a180752bfb572da7ec0cc42b59f6d73dac22e9ed06b73d0f8"
+      },
+      {
+        "bytes": 3072,
+        "path": "/usr/include/bits/pthreadtypes.h",
+        "sha256": "c47d28c26504ebda1e15d82b9ae74d288c9d68e757c7f37456dc39b131131035"
+      },
+      {
+        "bytes": 1838,
+        "path": "/usr/include/bits/pthreadtypes-arch.h",
+        "sha256": "adf5a36ccf71cf7252c97627b133285f53d3d66b499838bb717845dcd8d93571"
+      }
+    ],
+    "new_header_or_provider_stub": false,
+    "stdout_stderr_empty": true,
+    "typed_header_witness": {
+      "bytes": 3794,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/pthread_callback_header.c",
+      "sha256": "82285f28ffa7488382c7ea639faf8fe951bb7c7a37a7dc18d38520c2c9f85269"
+    },
+    "whole_original_C_prefix": {
+      "bytes": 2839,
+      "path": "/home/holden/mckernel/executer/user/libsched_yield.c",
+      "sha256": "0a7bd4e7a0aeea866d75c397398d58055ab8eb5e185f57af5aeb96fc077f78b9"
+    }
+  },
+  "request": {
+    "bytes": 13162,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/REQUEST.json",
+    "sha256": "8ea5f0462e2e68b4da49276195ea79aba1eb87c1eba37a40eec19ad34db100e5"
+  },
+  "schema": "mckernel-actual-pthread-callback-header-whole-source-type-qualification-v1",
+  "scope_limits": [
+    "This is actual source/type/header/fullbody codegen qualification, not the normal sched_yield production DSO/private install or its provider/link/default/runtime acceptance.",
+    "Cbaseline/type witness is nonshipped and did not call pthread/interposer/syscall/dlsym. Candidate.o is a test object with suffix, not substituted into the future production target.",
+    "No validNULL callback, arbitrary dlsymNULL, concurrency/reentrancy/cache safety, errno/thread/runtime/native behavior or source-held replay is accepted.",
+    "No source/canonical/index/default/Cretirement/original I01/I03/M15 or percentage change. Root original M14-before-M15 and all actual holds/dispositions remain."
+  ],
+  "source_patch": {
+    "bytes": 1155,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/PTHREAD-CALLBACK-TYPE.patch",
+    "sha256": "0a2fc03861cbf373f44562aaac76d1bc7571d878bf51bbba8d577ddc93d69ccc"
+  },
+  "source_prefix_joins": [
+    {
+      "exact_complete_source_prefix": {
+        "bytes": 1569,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/baseline/executer/user/rust/libsched_yield.rs",
+        "sha256": "ca22211d2a069230898127994c2489250b61d552b2bda72f5f9e3a845c338a7f"
+      },
+      "name": "baseline",
+      "shared_no_cast_type_suffix": {
+        "bytes": 872,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/CALLBACK-TYPE-SUFFIX.rs",
+        "sha256": "44fd221285e4fdf5f751f7861f53104b57f525160a8d97ea31c516c0feb2869a"
+      },
+      "whole_source_plus_suffix": {
+        "bytes": 2441,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/baseline.callback.rs",
+        "sha256": "4190d8d4a6fbfa9929915a6c0cefde74e8bb2bfcafdb141c37b1e07527443be1"
+      }
+    },
+    {
+      "exact_complete_source_prefix": {
+        "bytes": 1793,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/candidate/executer/user/rust/libsched_yield.rs",
+        "sha256": "994320f31a1e421f78a93ee56ca40d24bd94d24a130b2b26effce838d5573ea8"
+      },
+      "name": "candidate",
+      "shared_no_cast_type_suffix": {
+        "bytes": 872,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/CALLBACK-TYPE-SUFFIX.rs",
+        "sha256": "44fd221285e4fdf5f751f7861f53104b57f525160a8d97ea31c516c0feb2869a"
+      },
+      "whole_source_plus_suffix": {
+        "bytes": 2665,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-tests-sourceacq-max-1/candidate.callback.rs",
+        "sha256": "3f9fa57467824640bef677a994cc4f84506f7111d5b5dcca6e3647d5eeb118da"
+      }
+    }
+  ],
+  "status": "PASS_ACTUAL_GENUINE_HEADER_AND_COMPLETE_SOURCE_TYPED_CALLBACK_RECONCILIATION_PENDING_INDEPENDENT_RESULT_REVIEW"
+}

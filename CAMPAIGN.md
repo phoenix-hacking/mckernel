@@ -5,6 +5,22 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 ## Current decision
 
+**Current M15 selection/link/ABI integration.** Root composed the exact reviewed
+P03 three-path3afce authoritative MCKERNELDIR correction and callback0a2 typed
+pthread interface; canonical bytes match qualified candidates91175/b6c97/4c95/
+994320. Actual P03 fullRust/config/guard/installed bytes5ad75 and mcstat/shared
+callback six-phase764c95 qualification plus independent1a7f/2f2d are retained;
+no producer or passing behavior case reran. All33 unrelated dirty paths remain.
+SourceAcq reviews complete-selected/linked/ABI against the actual canonical
+composition108aa. The concrete remaining source boundary is the separately
+qualified cleanup library33ed/headera875 still in its private production tree;
+SDK owns its exact canonical/input disposition, with no native or zero-C clause
+added. The one new cap-ng guest copy/ELF/RPM operation passed01:48:18 with all
+waits/streams/container removal joined and CPU0/256MiB released. PublicABI joins
+that saved final dependency before any actual native signal admission. Next15min:
+finish the whole three-condition decision and exact cleanup source/header
+composition; independently qualify guest closure. No new counted credit yet.
+
 **Two original F06 DEFAULT regions verified.** Independent46a3823c closes
 M14-06-02-DEFAULT and M14-06-05-DEFAULT on the genuine supported defaultf374/
 100d cohort: complete required Rust/ASM implementations, unique ownership and
@@ -14,7 +30,9 @@ remains unaccepted. Current85/156 verified: M14=63.70%, M15=59.10%, a9.44-point
 displayed M14 gain from last published54.26. Original immediate-child weights
 are unchanged (02/05 each have DEFAULT+FUNCTIONAL, not an extra ACCEPT child).
 Only I02's matching-build gate is newly accepted; no other hold/gate is cleared.
-Publish this coherent changed pair once after fetched-byte verification.
+Checkpoint677768e9 is pushed/fetched with190 matching owned blobs and all33
+unrelated dirty paths preserved. Pair63.70/59.10 was posted once in PR3
+comment6784475191; no percentage report is pending.
 
 
 **Original M14-I02 matching supported build gate accepted.** Root records the
@@ -26,8 +44,7 @@ M15=59.10%. Combined new E2/E3/ACCEPT gain from last published54.26 is8.33
 displayed M14 points; weights/criteria/denominators are unchanged. M14 has1/3
 accepted integration gates and4/6 accepted files. Whole M14/M15, F03/F06 migration,
 functional/native/restoration and reviewed C32 retirement remain open. No service,
-source or resource hold is cleared. This pair is pending one source-backed PR3
-progress comment after fetched-byte verification of this checkpoint.
+source or resource hold is cleared. This intermediate pair was superseded by the combined63.70/59.10 checkpoint and its confirmed PR3 report.
 
 
 **E2/E3 technical conditions verified before the explicit gate decision above.** Independent whole-condition GOs
@@ -43,8 +60,7 @@ ran. All156 new warning lines and the repaired Root72-vs-10 postcheck failure
 remain raw. Two original checks close:82/156 verified; M14=59.81% (+5.55
 displayed points, exact5.5555556), M15=59.10% (unchanged). At this intermediate technical step I02 checklist was75%,
 before its explicit original gate decision above; native, F06 functional,
-all-file Rust migration and parent M14 acceptance remain separate. Publish this
-changed pair once from this coherent source/results checkpoint.
+all-file Rust migration and parent M14 acceptance remain separate. This intermediate pair was superseded by the combined63.70/59.10 checkpoint and its confirmed PR3 report.
 
 The three independently reviewed signal-oracle source fixes are integrated:
 real nested MXCSR observations/numbered syscalls, full valid signal-mask comparison

@@ -1,0 +1,105 @@
+{
+  "C_baseline": {
+    "bytes": 2839,
+    "path": "/home/holden/mckernel/executer/user/libsched_yield.c",
+    "sha256": "0a7bd4e7a0aeea866d75c397398d58055ab8eb5e185f57af5aeb96fc077f78b9"
+  },
+  "actual_CMake": {
+    "bytes": 29480,
+    "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+    "sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e"
+  },
+  "actual_header_verification_boundary": {
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "known_provider_context": "Actual same-image GCC14.3.1/glibc2.39-121.el10_2 compiler/libc bindings retained in real195 library/CLI/monitor supplier receipts.",
+    "new_header_bytes_or_compile_not_observed_by_this_source_owner": true,
+    "required_witness": "C11 -Wall -Wextra -Werror -fsyntax-only header witness asserts exact pthread_create signature plus callback/pthread_t pointer and relevant size/align facts, using actual system headers. Independent SourceAcq owns source/profile; no new probe lane required.",
+    "source": "Genuine image /usr/include/pthread.h in required C witness batch; no private fabricated header or host-header substitution."
+  },
+  "at": "2026-11-11T00:22:51.680803+00:00",
+  "baseline": {
+    "bytes": 1569,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/baseline/executer/user/rust/libsched_yield.rs",
+    "sha256": "ca22211d2a069230898127994c2489250b61d552b2bda72f5f9e3a845c338a7f"
+  },
+  "candidate": {
+    "bytes": 1793,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/candidate/executer/user/rust/libsched_yield.rs",
+    "sha256": "994320f31a1e421f78a93ee56ca40d24bd94d24a130b2b26effce838d5573ea8"
+  },
+  "canonical_source_edited": false,
+  "correction": {
+    "new_type": "type PthreadStartRoutine = Option<unsafe extern \"C\" fn(*mut c_void) -> *mut c_void>;",
+    "nullability": "Option retains the C function-pointer null representation and does not introduce an accepted NULL-callback domain or new reject branch. Actual pthread provider/header valid-call preconditions remain authoritative; an invalid callback is not made a supported case.",
+    "preserved": [
+      "sched_yield result0",
+      "dlsym RTLD_NEXT literal pthread_create and one mutable ORIG cache",
+      "SYS_CLONE56 and CLONE_VM0x100",
+      "same callback address repeated as newsp and parent_tidptr; remaining varargs zero",
+      "ignored syscall result and original cached pthread_create return/error",
+      "thread/attr/arg pointer forwarding and order",
+      "no errno operation/new validation/fallback/stub/runtime call",
+      "retained C baseline and canonical sources",
+      "existing unsynchronized cache/concurrency/lifetime limitations are not expanded or declared accepted"
+    ],
+    "safety": "unsafe extern C callback type expresses foreign caller/pointer validity obligations without claiming a safe arbitrary callback. Thread/attr/arg lifetimes and callback return/argument ABI remain unchanged; actual caller is the real pthread provider.",
+    "syscall_address_boundary": "After unchanged dlsym/cache action and before unchanged special clone call, map Some(entry) to its raw address and None to NULL only for the two identical Linux syscall address arguments. This narrow address-domain conversion preserves original hook bits/order; cached provider ABI stays a typed function pointer, not erased.",
+    "use": "Use that exact callback type in exported pthread_create and cached PthreadCreateFn. The same callback value is forwarded to the real function; no new callback invocation or alternate function body."
+  },
+  "exact_C_baseline_contract": {
+    "cached_function_pointer": "int (*)(pthread_t *, const pthread_attr_t *, void *(*)(void *), void *)",
+    "export": "int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg)",
+    "selected_target": "Current x86_64 ENABLE_RUST_USER_TOOLS/RUNTIME_TOOL_RUSTC uses full Rust PIC object; target sched_yield SHARED, link dl, version1.0.0, install CMAKE_INSTALL_LIBDIR.",
+    "source_lines": "C baseline lines33..57: real dlsym RTLD_NEXT, special syscall clone/CLONE_VM with same callback address in newsp and parent_tidptr, then real orig_pthread_create with callback unchanged."
+  },
+  "gap": {
+    "actual_Rust_cached_function_callback_before": "*mut c_void",
+    "actual_Rust_export_callback_before": "*mut c_void",
+    "obligation": "A real typed callback function pointer, taking void* and returning void*, joins both exported pthread_create and cached actual provider call. Address size/name or a cast-hidden check is insufficient.",
+    "observed_runtime_corruption": false
+  },
+  "holds_and_scope": "No pthread/interposer/syscall/clone/dlsym/program/API/native execution, old case replay, compiler call, source/default/C retirement or original acceptance. Canonical and other private work remain untouched.",
+  "owner": "/root/sdk_binding_source_max",
+  "patch": {
+    "bytes": 1155,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/sched-yield-callback-type-correction-1/PTHREAD-CALLBACK-TYPE.patch",
+    "sha256": "0a2fc03861cbf373f44562aaac76d1bc7571d878bf51bbba8d577ddc93d69ccc"
+  },
+  "producer_status": "Pending independent source/type GO and actual focused result. Compatible real mcstat+sched_yield named-target producer packet is conditional; no build/runtime launch.",
+  "schema": "mckernel-selected-pthread-interposer-typed-callback-source-contract-v1",
+  "source": {
+    "bytes": 1569,
+    "path": "/home/holden/mckernel/executer/user/rust/libsched_yield.rs",
+    "sha256": "ca22211d2a069230898127994c2489250b61d552b2bda72f5f9e3a845c338a7f"
+  },
+  "status": "PRIVATE_SOURCE_READY_NOT_EXECUTED_REQUIRES_INDEPENDENT_REAL_HEADER_WHOLE_SOURCE_TYPE_REGRESSION",
+  "whole_Rust_regression": {
+    "compiler": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "execution_owner": "/root",
+    "flags": [
+      "--crate-name",
+      "libsched_yield",
+      "--crate-type",
+      "lib",
+      "--edition=2021",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=1",
+      "-C",
+      "relocation-model=pic",
+      "-C",
+      "force-unwind-tables=no"
+    ],
+    "independent_preparation_owner": "/root/source_acquisition_review_max",
+    "real_compiler_bindings": {
+      "bytes": 47937,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/COMPILER-BINDING.json",
+      "sha256": "978a22dab7d017d6daf201f6fffcc2eee2bc7a0d63b83c0af89a5361ca4e9b96"
+    },
+    "required": "Compile complete unchanged baseline/candidate with only appended strict typed const checks for actual exported function and cached function-pointer alias against the C-header callback type; baseline must fail exact mismatch and candidate compile. No reduced body/cast-only witness/fake function/provider/link or runtime.",
+    "this_source_owner_executed_tests_compiler_or_payload": false
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "actual_defect": {
+    "authoritative_current_profile": "/usr/local/smp-x86/kernel/mckernel.img",
+    "existing_receipts_scope": "a852 old Rust ELF and selection/private-install prove the old generated path only; no corrected production path or corrected Eclair namespace join can be inferred.",
+    "old_selected_config": "/usr/local/smp-x86_64/kernel/mckernel.img",
+    "origin": "Root BUILD_TARGET=smp-x86 selects ARCH=x86_64. Old two consumers recomputed smp-ARCH instead of using the same MCKERNELDIR that installs the actual image. The retained Expect template shares the original path defect."
+  },
+  "authoritative_source": {
+    "MCKERNELDIR_definition": "CMakeLists.txt265-273: prefix /usr uses ${CMAKE_INSTALL_FULL_DATADIR}/mckernel/${BUILD_TARGET}; other prefixes use ${CMAKE_INSTALL_PREFIX}/${BUILD_TARGET}/kernel.",
+    "actual_image_install": "kernel/CMakeLists.txt installs mckernel.img to ${MCKERNELDIR}; this source file is not changed.",
+    "selection": "CMakeLists.txt22/27 maps BUILD_TARGET=smp-x86 to ARCH=x86_64; smp-arm64->arm64.",
+    "source_text": [
+      "if (CMAKE_INSTALL_PREFIX STREQUAL \"/usr\")",
+      "set(MCKERNELDIR \"${CMAKE_INSTALL_FULL_DATADIR}/mckernel/${BUILD_TARGET}\")",
+      "set(MCKERNELDIR \"${CMAKE_INSTALL_PREFIX}/${BUILD_TARGET}/kernel\")",
+      "install(TARGETS \"mckernel.img\" DESTINATION \"${MCKERNELDIR}\")"
+    ],
+    "top_CMake": {
+      "bytes": 14215,
+      "path": "/home/holden/mckernel/CMakeLists.txt",
+      "sha256": "eb47132388de4fec0f50b4e25d7633da87dec3c9b251a93ac1a3bc2201f642fc"
+    }
+  },
+  "focused_changed_input_obligations": [
+    "P04Tests owns concrete focused tests/operation packet after its current E2 operation review. Recover existing isolated selector producer, bind the actual authoritative BUILD_TARGET/MCKERNELDIR production definitions; its old ARCH/prefix-only fixture lacks MCKERNELDIR and must not supply a guessed replacement path.",
+    "Configure generated Rust and Expect values against actual ordinary prefix/x86 target, a custom prefix, and /usr+GNUInstallDirs datadir branch (including genuine configured datadir variation where selected). Exact expected path is authoritative MCKERNELDIR/mckernel.img for both, not smp-ARCH. Do not compile unrelated targets or rerun old parser/six-case/PTYSuite/link successes.",
+    "The newly interpolated MCKERNELDIR must receive the same existing literal-value rejection as prefix/ARCH on the Rust selection. Preserve default/explicit selector and installed basename/mode semantics; do not invent an Expect interpreter availability/result.",
+    "After source+focused-operation GO, one genuinely changed supported-profile P03 named producer/ELF/private-install qualification is necessary: olda852 contains the old path. Reuse body/parser/controlled-PTY proofs; do not rerun them. Corrected Eclair supplier/current private-pair namespace is separately bound when that packet is composed."
+  ],
+  "owner": "/root/p03_cutover_source_max; Root sole compositor/index/executor",
+  "patch": {
+    "bytes": 1224,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/P03-AUTHORITATIVE-KERNEL-PATH.patch",
+    "sha256": "3afce472d800763e5cbce5691416b8d2f0512d67fa18534cba39089d6f11840a"
+  },
+  "precise_semantics": {
+    "Expect": "Only the -k path word consumes MCKERNELDIR. Double quotes retain a single Tcl argument for ordinary configured paths containing whitespace in the explicit Expect fallback; INST_DIR/eclair prefix and all expect/send/state/timeout/wait/exit statements remain byte-identical. No Expect execution/parity result is claimed.",
+    "Rust": "Only config::KERNEL compile-time path uses MCKERNELDIR; ECLAIR remains @prefix@/bin/eclair, main still passes both exact strings to Pty::spawn. No parser/PTY/FD/argv ordering/state/exit/error code changes.",
+    "literal_guard": "Existing Rust selector regex and error diagnostic stay exact; add MCKERNELDIR to the already-guarded configured values because it is now interpolated into a Rust string. prefix and ARCH checks remain. DefaultOFF, explicit selection/fallback, installed basename and PROGRAMS0755, compiler supplier/flags/target/dependencies unchanged.",
+    "supported_scope": "No x86 path or /usr/share constant is hardcoded. Authoritative custom prefix, BUILD_TARGET and GNUInstallDirs /usr datadir paths flow through MCKERNELDIR. Original supported fallback/profile scope is retained; no native or default acceptance from source."
+  },
+  "prepared_at": "2026-11-11T00:20:41.415540+00:00",
+  "preparer_operations": "Only exact three current source preimages, existing producer/selector and frozen source receipts read; three private candidates/patch/contract written. No CMake/compile/parser/PTY/test/ELF/tool/main/native execution or canonical/peer modification.",
+  "remaining_original_conditions": [
+    "Source fix alone grants no P03 complete behavior/default/native/install/deployed cohort or I01/I03/M15 acceptance.",
+    "Actual supported matching producer/installed path/provider namespace and original source/native/currentfree/held/UNKNOWN conditions remain.",
+    "No canonical changes to current f374/E2 source cohort; Root alone integrates the exact reviewed three-line patch after necessary tests and custody."
+  ],
+  "retained_proofs_reused_without_replay": {
+    "old_generated_bad_config": {
+      "bytes": 114,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-output-1/on/rust-eclair-backtrace/config.rs",
+      "sha256": "a76f590b53cf315a88fde1fb94c62d6f6574b091014101d05506764b00abd22c"
+    },
+    "old_isolated_selector_producer": {
+      "bytes": 322,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-production-cutover-1/selection-source/CMakeLists.txt",
+      "sha256": "12d6b5b5d26bcc6202c1fc45203ebef7f6353859cf2c87d1b98978304782fc2c"
+    },
+    "parser_and_controlled_PTY": {
+      "bytes": 1583,
+      "path": "/home/holden/mckernel/docs/verification/m15-p03-runtime-selection-20261110/behavior/RESULT.json",
+      "sha256": "bd3755621252e043b8d8ef6254938e6f6ea8a920a352d8c3b1a98b79ec2bc6b7"
+    },
+    "producer": {
+      "bytes": 2002,
+      "path": "/home/holden/mckernel/docs/verification/m15-p03-host-producer-20261110/RESULT.json",
+      "sha256": "5df681814035feaaf61691b00f94ebe35fbe43f029ad3be6508ad2c6a936c348"
+    },
+    "selection_install": {
+      "bytes": 6832,
+      "path": "/home/holden/mckernel/docs/verification/m15-p03-runtime-selection-20261110/selection/RESULT.json",
+      "sha256": "2ef1c275f6cc5551ffd57d04b256e6f2355cb0f0df1fe1f4084405a81bfe70d9"
+    }
+  },
+  "review_owner": "Root selects separate independent source/operation reviewer before execution; author does not self-approve",
+  "schema": "m15-p03-authoritative-kernel-path.source-contract.v1",
+  "source_changes": [
+    {
+      "after_literal": "pub const KERNEL:&str=\"@MCKERNELDIR@/mckernel.img\";",
+      "baseline": {
+        "bytes": 110,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/baseline/scripts/rust/eclair-backtrace/config.rs.in",
+        "sha256": "27acdd3d59e11969ac95bbc58f8debcefdc2a369e4ff1148e308b35cde6d1806"
+      },
+      "before_literal": "pub const KERNEL:&str=\"@prefix@/smp-@ARCH@/kernel/mckernel.img\";",
+      "candidate": {
+        "bytes": 97,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/candidate/scripts/rust/eclair-backtrace/config.rs.in",
+        "sha256": "91175ca74c3e3dc6413c1bc68a694160b64cb27ae2855adf03d371544be477bb"
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/rust/eclair-backtrace/config.rs.in",
+      "relative_path": "scripts/rust/eclair-backtrace/config.rs.in"
+    },
+    {
+      "after_literal": "spawn $INST_DIR/bin/eclair -k \"@MCKERNELDIR@/mckernel.img\" -i -l",
+      "baseline": {
+        "bytes": 1524,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/baseline/scripts/eclair-dump-backtrace.exp.in",
+        "sha256": "f32ada2d0c61351286f1318f9caa1ea764a64ceb9ccc658cd62ee487595a4ee3"
+      },
+      "before_literal": "spawn $INST_DIR/bin/eclair -k $INST_DIR/smp-@ARCH@/kernel/mckernel.img -i -l",
+      "candidate": {
+        "bytes": 1512,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/candidate/scripts/eclair-dump-backtrace.exp.in",
+        "sha256": "b6c97afd408c0eea9e25b21295c35268dc5c075b6f7aa3e3c2eed33c144ad7cd"
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/eclair-dump-backtrace.exp.in",
+      "relative_path": "scripts/eclair-dump-backtrace.exp.in"
+    },
+    {
+      "after_literal": "foreach(_value prefix ARCH MCKERNELDIR)",
+      "baseline": {
+        "bytes": 2273,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/baseline/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+        "sha256": "15a0adbda3d6d9491de881ceef65a31a2854372056896d0456787976b1390817"
+      },
+      "before_literal": "foreach(_value prefix ARCH)",
+      "candidate": {
+        "bytes": 2285,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-correction-1/candidate/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+        "sha256": "4c95a8b6d0fc7432a43d13fbdc143eee0157e5e9f9a5f72196cbc6071faa8c80"
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake",
+      "relative_path": "scripts/rust/eclair-backtrace/SelectRustEclairBacktrace.cmake"
+    }
+  ],
+  "status": "FROZEN_THREE_LINE_SOURCE_CORRECTION_AWAITING_INDEPENDENT_REVIEW_FOCUSED_TESTS_AND_MATCHING_PRODUCER",
+  "test_owner": "/root/p04_tests_max under Root followup after current E2 operation review; no tests/preparer execution",
+  "unchanged_body_pins": [
+    {
+      "bytes": 352,
+      "path": "/home/holden/mckernel/scripts/rust/eclair-backtrace/eclair_main.rs",
+      "sha256": "295c495f3400d35bd0b965910b7e19b3d9114b121a81bb8ab99a6b674bd5f8be"
+    },
+    {
+      "bytes": 3713,
+      "path": "/home/holden/mckernel/scripts/rust/eclair-backtrace/eclair_backtrace.rs",
+      "sha256": "1d69aa1a5840b31787c813698131b96af567ccd35f51ec2665e61d07d5aab865"
+    },
+    {
+      "bytes": 2304,
+      "path": "/home/holden/mckernel/scripts/rust/eclair-backtrace/eclair_native.rs",
+      "sha256": "b6e82247f81e32ceb857069baa788a808d3052f8aae48c3586c85c8a7b127e2a"
+    }
+  ]
+}

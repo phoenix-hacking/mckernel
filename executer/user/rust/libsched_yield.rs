@@ -16,10 +16,12 @@ pub struct PthreadAttr {
     _private: [u8; 0],
 }
 
+type PthreadStartRoutine = Option<unsafe extern "C" fn(*mut c_void) -> *mut c_void>;
+
 type PthreadCreateFn = unsafe extern "C" fn(
     thread: *mut PthreadT,
     attr: *const PthreadAttr,
-    start_routine: *mut c_void,
+    start_routine: PthreadStartRoutine,
     arg: *mut c_void,
 ) -> c_int;
 
@@ -44,7 +46,7 @@ pub extern "C" fn sched_yield() -> c_int {
 pub unsafe extern "C" fn pthread_create(
     thread: *mut PthreadT,
     attr: *const PthreadAttr,
-    start_routine: *mut c_void,
+    start_routine: PthreadStartRoutine,
     arg: *mut c_void,
 ) -> c_int {
     if unsafe { ORIG_PTHREAD_CREATE }.is_null() {
@@ -53,12 +55,15 @@ pub unsafe extern "C" fn pthread_create(
         }
     }
 
+    let start_address = start_routine.map_or(ptr::null_mut(), |entry| {
+        entry as *const () as *mut c_void
+    });
     unsafe {
         syscall(
             SYS_CLONE,
             CLONE_VM,
-            start_routine,
-            start_routine,
+            start_address,
+            start_address,
             0 as c_long,
             0 as c_long,
             0 as c_long,
