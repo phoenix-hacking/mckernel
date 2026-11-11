@@ -1,0 +1,710 @@
+{
+  "id": "M14-06-01-DEFAULT",
+  "decision": "GO_WHOLE_LITERAL_SUPPORTED_DEFAULT_CONDITION_PENDING_INDEPENDENT_REVIEW_ROOT_RECORDING",
+  "original_task": {
+    "counted_in_requirement_rollup": true,
+    "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+    "dependencies": [
+      "HOLD-GENERIC",
+      "MMAP-XPMEM-CONTRACT",
+      "PROVIDER-CLOSURE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+    "evidence": [
+      "CAMPAIGN.md"
+    ],
+    "execution_profile": "ordinary_HOST",
+    "id": "M14-06-01-DEFAULT",
+    "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+    "parent": "M14-06-01",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "required_inputs": {
+      "missing_before_execution": [
+        "Establish current final supported-default coverage and ABI/provider ownership for all named wrapper/translation behavior.",
+        "Qualify matching TLS, clone and memory/shm translation behavior on admissible coherent image."
+      ],
+      "original_requirement": "M14-06-01",
+      "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+      "target": "arch/x86_64/kernel/syscall.c"
+    },
+    "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+    "status": "open_or_unverified",
+    "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+    "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+  },
+  "unchanged_original_done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+  "source_mapping_reference": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-leaf-decisions-p04tests-max-1/DECISIONS.json",
+    "bytes": 140030,
+    "sha256": "6a7eceef0cbb405db4d8cc74580f243458f52b450fa171f55454e2ee75b908d1"
+  },
+  "actual_scoped_roots": [
+    {
+      "name": "sys_prctl",
+      "final": {
+        "index": 1768,
+        "name": "sys_prctl",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685210320,
+        "bytes": 285
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7114,
+          "name": "sys_prctl",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4335,
+          "value": 0,
+          "bytes": 285
+        },
+        "section": ".ltext.sys_prctl",
+        "placement": {
+          "address": 18446744073685210320,
+          "bytes": 285
+        }
+      }
+    },
+    {
+      "name": "arch_syscall_forward_context_bridge",
+      "final": {
+        "index": 4897,
+        "name": "arch_syscall_forward_context_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684627888,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4775,
+          "name": "arch_syscall_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 973,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.arch_syscall_forward_context_bridge",
+        "placement": {
+          "address": 18446744073684627888,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "sys_arch_prctl",
+      "final": {
+        "index": 881,
+        "name": "sys_arch_prctl",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685187584,
+        "bytes": 48
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7041,
+          "name": "sys_arch_prctl",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4228,
+          "value": 0,
+          "bytes": 48
+        },
+        "section": ".ltext.sys_arch_prctl",
+        "placement": {
+          "address": 18446744073685187584,
+          "bytes": 48
+        }
+      }
+    },
+    {
+      "name": "do_arch_prctl",
+      "final": {
+        "index": 505,
+        "name": "do_arch_prctl",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684668880,
+        "bytes": 346
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4941,
+          "name": "do_arch_prctl",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1179,
+          "value": 0,
+          "bytes": 346
+        },
+        "section": ".ltext.do_arch_prctl",
+        "placement": {
+          "address": 18446744073684668880,
+          "bytes": 346
+        }
+      }
+    },
+    {
+      "name": "sys_clone",
+      "final": {
+        "index": 4003,
+        "name": "sys_clone",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685189392,
+        "bytes": 548
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7048,
+          "name": "sys_clone",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4234,
+          "value": 0,
+          "bytes": 548
+        },
+        "section": ".ltext.sys_clone",
+        "placement": {
+          "address": 18446744073685189392,
+          "bytes": 548
+        }
+      }
+    },
+    {
+      "name": "sys_fork",
+      "final": {
+        "index": 1425,
+        "name": "sys_fork",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685193088,
+        "bytes": 71
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7059,
+          "name": "sys_fork",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4252,
+          "value": 0,
+          "bytes": 71
+        },
+        "section": ".ltext.sys_fork",
+        "placement": {
+          "address": 18446744073685193088,
+          "bytes": 71
+        }
+      }
+    },
+    {
+      "name": "sys_vfork",
+      "final": {
+        "index": 4804,
+        "name": "sys_vfork",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685233136,
+        "bytes": 71
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7195,
+          "name": "sys_vfork",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4451,
+          "value": 0,
+          "bytes": 71
+        },
+        "section": ".ltext.sys_vfork",
+        "placement": {
+          "address": 18446744073685233136,
+          "bytes": 71
+        }
+      }
+    },
+    {
+      "name": "sys_clone3",
+      "final": {
+        "index": 4452,
+        "name": "sys_clone3",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685189952,
+        "bytes": 1109
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7049,
+          "name": "sys_clone3",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4236,
+          "value": 0,
+          "bytes": 1109
+        },
+        "section": ".ltext.sys_clone3",
+        "placement": {
+          "address": 18446744073685189952,
+          "bytes": 1109
+        }
+      }
+    },
+    {
+      "name": "obtain_clone_cpuid",
+      "final": {
+        "index": 4146,
+        "name": "obtain_clone_cpuid",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684946080,
+        "bytes": 1074
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4285,
+          "name": "obtain_clone_cpuid",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 2872,
+          "value": 0,
+          "bytes": 1074
+        },
+        "section": ".ltext.obtain_clone_cpuid",
+        "placement": {
+          "address": 18446744073684946080,
+          "bytes": 1074
+        }
+      }
+    },
+    {
+      "name": "arch_clone_body_result",
+      "final": {
+        "index": 3296,
+        "name": "arch_clone_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684587376,
+        "bytes": 153
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4611,
+          "name": "arch_clone_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 788,
+          "value": 0,
+          "bytes": 153
+        },
+        "section": ".ltext.arch_clone_body_result",
+        "placement": {
+          "address": 18446744073684587376,
+          "bytes": 153
+        }
+      }
+    },
+    {
+      "name": "arch_fork_body_result",
+      "final": {
+        "index": 482,
+        "name": "arch_fork_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684601152,
+        "bytes": 53
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4661,
+          "name": "arch_fork_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 849,
+          "value": 0,
+          "bytes": 53
+        },
+        "section": ".ltext.arch_fork_body_result",
+        "placement": {
+          "address": 18446744073684601152,
+          "bytes": 53
+        }
+      }
+    },
+    {
+      "name": "arch_vfork_body_result",
+      "final": {
+        "index": 2563,
+        "name": "arch_vfork_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684628944,
+        "bytes": 53
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4784,
+          "name": "arch_vfork_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 995,
+          "value": 0,
+          "bytes": 53
+        },
+        "section": ".ltext.arch_vfork_body_result",
+        "placement": {
+          "address": 18446744073684628944,
+          "bytes": 53
+        }
+      }
+    },
+    {
+      "name": "sys_mmap",
+      "final": {
+        "index": 4384,
+        "name": "sys_mmap",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685200848,
+        "bytes": 1348
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7098,
+          "name": "sys_mmap",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4309,
+          "value": 0,
+          "bytes": 1348
+        },
+        "section": ".ltext.sys_mmap",
+        "placement": {
+          "address": 18446744073685200848,
+          "bytes": 1348
+        }
+      }
+    },
+    {
+      "name": "arch_mmap_body_result",
+      "final": {
+        "index": 4078,
+        "name": "arch_mmap_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684606528,
+        "bytes": 1294
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4686,
+          "name": "arch_mmap_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 858,
+          "value": 0,
+          "bytes": 1294
+        },
+        "section": ".ltext.arch_mmap_body_result",
+        "placement": {
+          "address": 18446744073684606528,
+          "bytes": 1294
+        }
+      }
+    },
+    {
+      "name": "arch_do_mmap_bridge",
+      "final": {
+        "index": 4154,
+        "name": "arch_do_mmap_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684594528,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4627,
+          "name": "arch_do_mmap_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 810,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.arch_do_mmap_bridge",
+        "placement": {
+          "address": 18446744073684594528,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "do_mmap",
+      "final": {
+        "index": 3880,
+        "name": "do_mmap",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684679216,
+        "bytes": 8971
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4307,
+          "name": "do_mmap",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1191,
+          "value": 0,
+          "bytes": 8971
+        },
+        "section": ".ltext.do_mmap",
+        "placement": {
+          "address": 18446744073684679216,
+          "bytes": 8971
+        }
+      }
+    },
+    {
+      "name": "sys_shmget",
+      "final": {
+        "index": 3133,
+        "name": "sys_shmget",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685228560,
+        "bytes": 338
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7172,
+          "name": "sys_shmget",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4424,
+          "value": 0,
+          "bytes": 338
+        },
+        "section": ".ltext.sys_shmget",
+        "placement": {
+          "address": 18446744073685228560,
+          "bytes": 338
+        }
+      }
+    },
+    {
+      "name": "arch_shmget_body_result",
+      "final": {
+        "index": 816,
+        "name": "arch_shmget_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684624512,
+        "bytes": 296
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4763,
+          "name": "arch_shmget_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 959,
+          "value": 0,
+          "bytes": 296
+        },
+        "section": ".ltext.arch_shmget_body_result",
+        "placement": {
+          "address": 18446744073684624512,
+          "bytes": 296
+        }
+      }
+    },
+    {
+      "name": "do_shmget",
+      "final": {
+        "index": 2645,
+        "name": "do_shmget",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684697392,
+        "bytes": 2993
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4629,
+          "name": "do_shmget",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1210,
+          "value": 0,
+          "bytes": 2993
+        },
+        "section": ".ltext.do_shmget",
+        "placement": {
+          "address": 18446744073684697392,
+          "bytes": 2993
+        }
+      }
+    },
+    {
+      "name": "do_fork",
+      "final": {
+        "index": 2139,
+        "name": "do_fork",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684670192,
+        "bytes": 6323
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4943,
+          "name": "do_fork",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1183,
+          "value": 0,
+          "bytes": 6323
+        },
+        "section": ".ltext.do_fork",
+        "placement": {
+          "address": 18446744073684670192,
+          "bytes": 6323
+        }
+      }
+    }
+  ],
+  "new_actual_do_fork_owner": {
+    "name": "do_fork",
+    "final": {
+      "index": 2139,
+      "name": "do_fork",
+      "binding": "GLOBAL",
+      "type": "FUNC",
+      "visibility": 0,
+      "section_index": 1,
+      "value": 18446744073684670192,
+      "bytes": 6323
+    },
+    "owner": {
+      "object": "rust/mckernel_rust.o",
+      "input": {
+        "index": 4943,
+        "name": "do_fork",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1183,
+        "value": 0,
+        "bytes": 6323
+      },
+      "section": ".ltext.do_fork",
+      "placement": {
+        "address": 18446744073684670192,
+        "bytes": 6323
+      }
+    }
+  },
+  "clause_decisions": {
+    "complete_original_region_implementation_selection_mapping": "All scoped wrapper/TLS/clone/memory-SHM roots from existing6a7 mapping are genuine current Rust/allowed assembly. Sole named live C provider do_fork is now full reviewed7de implementation with actual6323-byte Rust owner and exact C exclusion. Accepted F02/provider behavior and previously qualified source mapping are reused; no body placeholder or new callback model.",
+    "compatible_actual_ABI_providers": "SourceGO3955 complete normal/error/direct-call/lifetime contracts plus actual104 C/Rust object+image words, sevenarg caller ABI, nativeTID/request/flexiblepids ownership and every current physical import/provider join. ELF NOTYPE alone is never a prototype.",
+    "unique_supported_default_definition": "Genuine source-defaultON/E2 proof1f1d unchanged; exactf839 selectors compile under ordinary supported profile and normal incremental namedimage. One global Rust do_fork, no C definition, all scoped roots actual unique Rust/allowed owners. No opt-in -DON or held/private owner.",
+    "no_held_guessed_projectC_or_elided_behavior": "Exact normal11 production object link/no partial injection, zero namedUND, complete physical provider ownership, actual nontrivial Rust fork and local clone-report/gettid helpers. Other generic C remains outside this specific workarea and is explicit migration debt, not a new or satisfied whole-file criterion."
+  },
+  "applicable_verification_reuse": "Reuse accepted F02/unchanged TLS/clone/memory/SHM contracts and original valid applicable receipts at their exact scope; this new source is independently material-reviewed then compiled/selected/ABI/provider-qualified in a genuine default image. No native behavior result is fabricated. M14-06-02-FUNCTIONAL/new native behavior and remaining file DEFAULT requirements stay separate.",
+  "remaining_for_this_literal_condition": [],
+  "remaining_other_conditions": [
+    "M14-06-file-DEFAULT still requires current live two-argument time-forwarding C55 provider removal and full original file scope; separate changed lane.",
+    "M14-06-02-FUNCTIONAL/native application/current-free/restoration acceptance remains open.",
+    "Generic project-C migration debt is observed27 FUNC rows; no whole M14/file/native gate or score is changed by qualifier."
+  ],
+  "no_canonical_or_credit_changes": true
+}

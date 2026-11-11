@@ -1,9 +1,33 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T02:11:42.554088+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T02:27:48.644789+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Original M15-I03 complete-ABI technical condition verified.** Independent
+wholeGO8221a017 binds actual canonicald6/fetched6e72 and selectedtuple00e7 to
+genuinea875 header, five exact production recipe blocks, public571-byte entry,
+pc8/layout,16 roots/all44 imports/provider versions/hidden guards and0755 stage.
+Seven actual cleanup casesfb10 and normalproductionb2b6/bcd prove exactly-once
+release before real main/foreach restarts; unchanged components reuse508119.
+No producer, tool or green case reran. Exactly one original check closes:
+88/156 verified, M14=63.70%, M15=63.62% (+1.19 displayed M15 points).
+I03 checklist57.14%, unaccepted; C104 retirement/default/deployment/backend/
+async/concurrent/native/parent acceptance stay separate. Post this changed
+pair once after fetched-byte checkpoint confirmation.
+
+Fork source/body/build/104ABI12638 passes, but P03 correctly retains whole
+M14-06-01-DEFAULT open: actual mmap/MAP_FIXED/munmap paths still use live C
+clear/set-host and3-argument offload/log bridges. P04 owns their genuine Rust
+provider repair; no native or zero-wholefile requirement was invented. Time
+source78eb/tests12 remain valid; only fork-context hunks need rebase8f131,
+with identical reviewed added/removed source lines/module872a. P03 reviews
+that bounded composition; SDK prepares actual new header configure+incremental
+image packet. Next15min: finish this ready time owner image and qualify the
+new memory-provider source. Exact native holder/restoration binding40bafb
+remains the single runtime blocker, owned by Root/original native-resource
+holder; all existing reservations/controls and original criteria remain.
 
 **Crash cleanup repair is canonical.** Rootd6bce8fd applies exactly the reviewed
 33ed four-path Rust/C-boundary/selector fix after the fork owner positively
