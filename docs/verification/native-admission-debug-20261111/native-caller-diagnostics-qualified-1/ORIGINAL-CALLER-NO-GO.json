@@ -1,0 +1,164 @@
+{
+  "actual_model_effort": {
+    "bytes": 394,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-frontdoor-callsite-review-p04tests-max-1/MODEL-EFFORT-READBACK.json",
+    "sha256": "78f13182021839174036014aa7bb79c9d7d6d50ae77b9c385ebe8bae476a2287"
+  },
+  "actual_original_acceptance_or_retirement": false,
+  "at": "2026-11-11T23:16:49.103955+00:00",
+  "contract": {
+    "bytes": 12007,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/NATIVE-FRONTDOOR-CONTRACT.json",
+    "sha256": "caff3836ff3ac5119bd2cea5e8c9732dca679a15e6549faacb82607948d909c0"
+  },
+  "decision": "NO_GO_CURRENT_49FA_CALLER_DIAGNOSTIC_01",
+  "driver": {
+    "bytes": 95481,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/normal_native_once.PROPOSED.py",
+    "sha256": "49fa1d69a6b78c4376190aa4267e4b4ad2b760d6386fa84919ee876a527a41b5"
+  },
+  "findings": [
+    {
+      "bounded_required_correction": [
+        "Capture original exception/traceback immediately; preserve same raw primary and exact custody classification.",
+        "Before UNKNOWN hold, guard diagnostic serialization/reporting of the full original context; retain original native objects/FDs and UNKNOWN state, without attempting inappropriate native FD drain/retirement.",
+        "For terminal/prelaunch cleanup, keep pop-before-one-close and attempt every remaining handle before any formatting/reporting. Guard complete bounded diagnostic emission of all primary/secondary contexts, including formatting/report failures.",
+        "Do not add or relax a gate, authority, profile, source flag, numeric close retry, native cleanup, timeout or acceptance condition."
+      ],
+      "complete_finding_family": true,
+      "evidence": [
+        "main retains raw primary object, but uncertain postlaunch output contains only error_type before an indefinite custody-preserving pause. Original message/traceback never reaches visible/durable raw capture from this branch.",
+        "After close_all, final summary lists only secondary labels. With an existing primary, main reraises only primary; distinct secondary close errors lose type/errno/message/traceback when this process exits.",
+        "Raw exception objects in memory are not the promised failure diagnostic record; original lower-owner records may exist but do not substitute for new caller exceptions and caller-owned close failures."
+      ],
+      "id": "CALLER-DIAGNOSTIC-01",
+      "new_tests": {
+        "bytes": 5070,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-frontdoor-callsite-review-p04tests-max-1/NEW-CALLSITE-TEST-PROPOSAL.json",
+        "sha256": "02dbdf75387b5e3b73de745013329a5457533774c472f9dbdcebe907a7ef5e7a"
+      },
+      "repair_owner": "PublicABI bounded fresh successor; original49fa remains frozen/unexecuted",
+      "severity": "BLOCKING_NEW_CALLSITE_FAILURE_CAPTURE",
+      "source_locations": [
+        {
+          "line": 292,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/normal_native_once.PROPOSED.py"
+        },
+        {
+          "line": 299,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/normal_native_once.PROPOSED.py"
+        },
+        {
+          "line": 312,
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/normal_native_once.PROPOSED.py"
+        }
+      ]
+    }
+  ],
+  "function_spans": {
+    "canonical": {
+      "first_line": 64,
+      "last_line": 65,
+      "sha256": "9234d110b0f120c0ea274f998b59165120c66341dd942a9cae50121ca7002ca2"
+    },
+    "check_caps": {
+      "first_line": 76,
+      "last_line": 88,
+      "sha256": "1c3e32b4abaeee766b96b484f0a296a451434a3c08b0fa109354681111fde914"
+    },
+    "close_all": {
+      "first_line": 55,
+      "last_line": 61,
+      "sha256": "dda7b766d3788430f2a078f56df55dfd37dda0027c723ef6b126b70a8c48b0e5"
+    },
+    "close_once": {
+      "first_line": 42,
+      "last_line": 52,
+      "sha256": "4f122d115c8dbfb7f84be8f1576a0f1019e08c6a2bf4acc5f11adff412ff2d39"
+    },
+    "main": {
+      "first_line": 285,
+      "last_line": 321,
+      "sha256": "d146f33c2d14bc12cd531bfb70981986921877a4f69176e78d88a4d76a8894d6"
+    },
+    "need": {
+      "first_line": 31,
+      "last_line": 33,
+      "sha256": "4b7ce4e3f5cc94aeb02df1d8396484f2faedebdc5d053d8c6640c4357d3bfc2b"
+    },
+    "own": {
+      "first_line": 36,
+      "last_line": 39,
+      "sha256": "9d4276463ed16643a054e555783d6fa8a7208469be4db5eabe217d0c9241da16"
+    },
+    "prepare_source_manifest": {
+      "first_line": 118,
+      "last_line": 150,
+      "sha256": "e9a71e3a8912ec83a02ba49d337ec025dbc6d60d2cace4bde6872bfccc872a1d"
+    },
+    "run": {
+      "first_line": 153,
+      "last_line": 282,
+      "sha256": "2311d45adcaadecb0a2f24a60108d6fdb6b5314164126643659f73730ec7b19f"
+    },
+    "save_control": {
+      "first_line": 91,
+      "last_line": 115,
+      "sha256": "ac9327174b75b9e24e76afcbf8dcd053d85b507b0fcef1e281bc0f4f9ca9d5fa"
+    },
+    "unique": {
+      "first_line": 68,
+      "last_line": 73,
+      "sha256": "2f79be327bff2268138978554898e8d23ad5ab3a139abfa585b59e90322518ae"
+    }
+  },
+  "literal_argv_template": {
+    "bytes": 97132,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/NATIVE-ROOT-ARGV.TEMPLATE.PRIVATE.json",
+    "sha256": "5db756187a6106dfc1e264d21542f82cda91f893c0170b7d888bae2c7f303740"
+  },
+  "live_Root_native_account_source_or_canonical_actions": false,
+  "next_action": "PublicABI freeze one bounded diagnostic successor; P04Tests bind actual failure-function tests/one HOST packet; SourceAcq independent source+operation review; Root sole fresh admission/executor.",
+  "request": {
+    "bytes": 3190,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/NATIVE-FRONTDOOR.REQUEST.PROPOSED.json",
+    "sha256": "29243913516d4e8fad4778379662d050b5e6248387a839671a7113089f4f86e2"
+  },
+  "reviewer": "/root/p04_tests_max",
+  "schema": "mckernel.native-new-frontdoor-focused-callsite-review.v1",
+  "scope": "New caller/capture/profile/failure-path only; no duplicated source53/auth/native API inventory.",
+  "source_and_test_execution": false,
+  "source_core": {
+    "bytes": 40489,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/SOURCE-BINDING-CORE.json",
+    "sha256": "e9243a348b3d3da681982f17703bd7e1325f4f7097a9c9d69b20b5eaff999838"
+  },
+  "source_preparation_or_native_execution_GO": false,
+  "source_ready": {
+    "bytes": 1755,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/new-native-runtime-binding-publicabi-max-1/NATIVE-FRONTDOOR.READY.NOT-EXECUTED.json",
+    "sha256": "0703b00b8b1f4ba6f008b919a6abae9a028c9434ae38a43c926f315123c9e141"
+  },
+  "verified_unaffected": [
+    {
+      "item": "GENUINE_REGISTERED_CALLSITE",
+      "result": "No direct caller/API argument-return-state mismatch observed. Exact bootstrap call args, watchdog.supervise()/retire() order and functional_pass return are consistent; SourceAcq owns independent source/API review."
+    },
+    {
+      "item": "OWN_FD_CUSTODY",
+      "result": "own/close_once/close_all preserve consume-before-oneclose, raw exception retention, no numeric retry and full other-FD attempt ordering. These should stay unchanged."
+    },
+    {
+      "item": "UNKNOWN_NATIVE_CUSTODY",
+      "result": "Postattempt uncertain branch retains original process/objects/FDs and makes no absence-based release. No diagnostic fix may alter that ownership."
+    },
+    {
+      "item": "PROFILE_AND_LITERAL_BYTES",
+      "result": "Actual argv positions0..23 embed exactly49fa source at21, registered immutable Python3.8/CPU6/AS512/FSIZE64/nofile512/core0, only actualRootinputpath/hash slots22/23. Native separate2-5/12GiB profile, same caps<=600/min429/deadline360 and external HOST4/max3/fresh26/floors remain conditional required current admission."
+    },
+    {
+      "item": "DYNAMIC_ROOT_FIELDS",
+      "result": "New actual Root creates nonce/PID/birth/rootFD/cfg and source-plan identities; referenced external admission remains DATA, not grant. Existing source/native/account/UNKNOWN permissions are unchanged; SourceAcq source/API proof remains separate."
+    }
+  ]
+}

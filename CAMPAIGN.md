@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T23:22:31.087722+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T23:51:17.466335+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -127,7 +127,7 @@ through watchdog/supervisor_entry; callerRootselfPID/caps/config/rootFD must be
 issued by its real owning process after validated preparation.
 
 **Four canonical native-source inputs are ACTUALLY PREPARED.** Exact7f6c/0181
-under operationGOef781 and freshRoot ee59 passed23:12:34Z, fullTool1a0a8f exit0,
+under operationGOef781 and freshRoot ee59 passed after23:12:30Z freshadmission, fullTool1a0a8f exit0,
 4exchanges/archives and no ownclose errors. Ownernow3ecb; runner/backend/qmp
 bytesunchanged/newnlink1; alloldinodes/aliases/flags retained andqmp0664 preserved.
 Actualresult2f511be0/refreeze53d5e5b7fa/inodeplan6a783669 feed Pub nativepacket;
@@ -143,7 +143,7 @@ altstackhits,0/emptyerr and positive ownedrestoration. Whole frame/register/xsta
 normal/error remains separate. No green build/stage/install/readback/test replay.
 
 **Corrected kernel-parent setup ACTUALLY PASS.** Sourcecf204/request756f under
-SDK operationGOdb2c and freshRoot69e3 passed23:16:23Z, fullToolfc5ae8 exit0.
+SDK operationGOdb2c and freshRoot69e3 passed 23:16:28Z, fullToolfc5ae8 exit0.
 All3actualgroups are empty, all5scalars exact including childpids.max512;
 resultbe464ded/Rootreadonly65f57135 are retained. IndependentSDKQa45d59d1
 qualifies actual waits/emptygroups/scalars; Root retired only current256MiB/job1
@@ -159,6 +159,25 @@ separately fixes newwrapper49fa diagnostic persistence per finite NO_GObbec9cde:
 preserve original traceback plus all secondary close errors through reporting
 and retained-custody waits. P04Tests reviews only that bounded delta/two families.
 No first-native run or original acceptance is claimed.
+
+**Native-caller diagnostics are ACTUALLY QUALIFIED.** Corrected metadata d48a
+under SDK operationGO72276ce6 passed23:42:37Z, one protectedCPU0/256MiB child
+1597171/b52682379 and fullRootd5fd93 exit0/positivefamily+streams. All2families/
+3controls actualOBSERVATIONS byteequal external5e644f4a. P04TestsQ4cbbacfb binds
+0ca_source/sourceGOeea84+bb4f; Root retired only current256MiB/job1(a83c48ba).
+No main/run/pause/account/native endpoint ran; no replay is needed.
+[Actual diagnostic source and tests](docs/verification/native-admission-debug-20261111/native-caller-diagnostics-qualified-1/PUBLICATION-SCOPE.json).
+
+**Next internal native composition:** corrected same-runtime provider e81/8d063
+has SourceAcq source/profileGOefa8 after exactly3 bounded lifetime/journal/
+diagnostic fixes; flags and native execution remain unissued. P04Tests prepares
+only changed provider wiring checks, reusing11diagnostic helper bodies/Q4cbb.
+The initial immutableRoot4keyinput/host-admissionDATA has no pre-read writer yet.
+P04Source owns its smallest normal same-Root materialization using existing
+0ca save_control/pinner/walk; Pub owns protected direct-argv outercapture.
+Do not invent a hidden issuer, callertrue grant, newcontroller or oldlease.
+RealRoot creates its later native nonce/PID; genuine fresh source/currentfree/
+claim/caps/pidfd gates and positive runtime/native/source restoration stay required.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
