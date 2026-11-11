@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-10T23:56:49.835340+00:00",
+  "updated_at": "2026-11-11T00:06:05.881892+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 51.48,
+      "checklist_percent_complete": 54.26,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 0.0,
       "milestone_accepted": false,
@@ -706,6 +706,12 @@
           "scope": "Source publication and multiple explicit HOST relocatable cohorts",
           "level": "partial_prerequisite",
           "limits": "Does not satisfy this final matching integration gate."
+        },
+        {
+          "scope": "Whole original E1 technical source/SDK/toolchain/provider/fullimage/matchingmodule binding",
+          "level": "verified_at_declared_source_or_HOST_scope",
+          "evidence": "docs/verification/m14-i02-e1-qualified-20261110/REVIEW.json",
+          "limits": "Only E1; source-default E2, E3, parent/file/milestone/native acceptance remain open"
         }
       ],
       "remaining_actions": [
@@ -728,7 +734,7 @@
         "M14-I02-E3",
         "M14-I02-ACCEPT"
       ],
-      "percent_complete": 0.0,
+      "percent_complete": 25.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -2663,9 +2669,9 @@
       "id": "M14-I02-E1",
       "parent": "M14-I02",
       "title": "Obtain eligible universal generic/exec cohort and actual source-custody/SDK/toolchain bindings.",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified_at_declared_source_or_HOST_scope",
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
       "done_when": "Obtain eligible universal generic/exec cohort and actual source-custody/SDK/toolchain bindings; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Source/config/toolchain, genuine linker/provider closure, image and matching module identities are reproducible from the bound inputs; a partial ld-r is not the result.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2685,12 +2691,18 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-i02-e1-qualified-20261110/ASSESSMENT.json",
+        "docs/verification/m14-i02-e1-qualified-20261110/REVIEW.json",
+        "docs/verification/m14-current-image-20261110/mmap-1/qualification/QUALIFICATION.json",
+        "docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json"
       ],
       "scope_limit": "Original integration criterion; no new quota or independent completion weight.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "Whole original E1 technical source/SDK/toolchain/provider/image/module binding condition independently verified; E2 default selection, E3, parent and native acceptance remain separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "actual_scope": "Qualified f253 current compute full image100d with exact Linux6.12/config106055/Rust1.95/currentIHK8d and matching099 three-module ABI/import/source cohort; no extra zero-C/custody/native criterion, no held flag cleared",
+      "verified_at": "2026-11-11T00:06:05.881892+00:00"
     },
     {
       "id": "M14-I02-E2",
@@ -15192,15 +15204,14 @@
     "pending_percentage_report": {
       "owner": "Root",
       "kind": "changed_pair_only",
-      "M14": 51.48,
+      "M14": 54.26,
       "M15": 59.1,
       "deltas_from_previous_published_pair": {
-        "M14": 0.0,
-        "M15": 1.04
+        "M14": 2.78,
+        "M15": 0.0
       },
-      "dedupe_id": "M15-F03-original-default@736d8592",
-      "state": "POSTED_CONFIRMED",
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6782340657"
+      "dedupe_id": "M14-I02-E1@7745ce95",
+      "state": "PENDING_SOURCE_PUBLICATION_BEFORE_ONE_COMMENT"
     },
     "mcps_current_provider_pair": {
       "at": "2026-11-10T23:52:20.310699+00:00",
@@ -15209,6 +15220,17 @@
       "new_counted_credit": 0,
       "positive_job_retired": true,
       "scope": "Private two-file0755 copy only; saved23case/source/producer reuse; no process/runtime/deployment acceptance"
+    },
+    "i02_E1_whole_condition": {
+      "at": "2026-11-11T00:06:05.881892+00:00",
+      "original_check": "M14-I02-E1",
+      "review_sha256": "7745ce954c6d380cecd5bc1912b8fe772e1433af0fdd58724ceb7af315493aba",
+      "source": "f2535305aaef51dd9b15a798f6cab1a16f29e575",
+      "new_counted_credit": 1,
+      "counted_verified": 80,
+      "counted_total": 156,
+      "criterion_weights_unchanged": true,
+      "E2_E3_parent_native_acceptance": false
     }
   },
   "denominator_changes": [

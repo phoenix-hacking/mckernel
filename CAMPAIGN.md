@@ -1,12 +1,23 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-10T23:56:49.835340+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T00:06:05.881892+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Current original closure work.** M14-I02-E1 is under PublicABI whole-condition
-review of assessment3f13aabb, qualifiedf253/image100d and the exact Linux6.12/
+**Original M14-I02-E1 now verified.** Independent whole-conditionGO7745ce95
+joins eligiblef253 source/fullimage100d, actual Linux6.12/config106055/Rust1.95
+SDK/toolchain and currentIHK8d to all three matching099 modules and genuine ABI/
+provider ownership. All4553+5 owners/318strongimports resolve; reviewed C32 debt
+is retained without adding a zero-C prerequisite to this technical leaf. No new
+build/probe/test/native operation was required. Exactly one original check closes:
+80/156 verified, M14=54.26% (+2.78 displayed points), M15=59.10% (unchanged).
+M14-I02 is25% checklist, unaccepted; E2 default selection, E3, parent, functional
+and native/restoration acceptance remain open. No actual hold or control flag is
+cleared. Publish this changed pair once after its source/evidence checkpoint.
+
+**Current original closure work.** M14-I02-E1 is now verified by PublicABI whole-condition
+review7745ce95 of assessment3f13aabb, qualifiedf253/image100d and the exact Linux6.12/
 Rust1.95/config106055/three-module cohort. No additional zero-C or external
 inventory prerequisite is added. E2 remains open: P04 prepares a profile-scoped
 F06 default correction; actual cache-unset/no-explicit-ON production configure
@@ -34,7 +45,7 @@ cleanup library to complete-selected/linked/ABI manifests. Known project-C debt
 is classified; complete linkage/default/deployment/native conditions remain open.
 No additional percentage change is claimed from these prerequisites.
 
-**Original M15-F03-original-default technical leaf now verified.** Actual whole
+**Prior checkpoint18: original M15-F03-original-default technical leaf verified.** Actual whole
 qualificationa3a44aa4 and independent736d8592 join current bool-corrected mcinspect
 source/profile/toolchain/wholetool/private install with18 direct and five actual
 ZSTD definitions,106 required/13 optional transitive imports and21 version needs.
@@ -420,8 +431,8 @@ owned blobs matching and all33 unrelated dirty paths preserved. Pair51.48/59.10
 was posted once in PR3 comment6782340657; no duplicate or pending report. The missed
 16:00Z75%-each target remains recorded and is not a stop time or changed criterion.
 
-Next15-minute deliverable: finish whole M14-I02-E1 review and checkpoint it only
-on whole-condition GO. In parallel P04 freezes the minimal supported-profile E2
+Next15-minute deliverable: checkpoint the now-whole-GO M14-I02-E1 technical leaf
+and publish the changed pair once. In parallel P04 freezes the minimal supported-profile E2
 default correction and actual cmake-U operation; P03's independently reviewed
 coreutils/unstarted-read successor takes the next admitted CPU0 lane. SourceAcq
 qualifies the actual getenforce row; P04Tests finishes saved27-output signal
@@ -1502,7 +1513,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 
 | Milestone | Checklist progress | Accepted file goals | Accepted integration gates |
 | --- | ---: | ---: | ---: |
-| M14 | 51.48% | 4/6 | 0/3 |
+| M14 | 54.26% | 4/6 | 0/3 |
 | M15 | 59.10% | 1/8 | 0/4 |
 
 | Requirement | Checklist complete | Accepted | Defined scope / remaining obligation |
@@ -1524,7 +1535,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M14-F05 | 100.00% | yes | Mappings, PTEs, walkers, TLB, usercopy/process-VM supported scope |
 | M14-F06 | 23.33% | no | x86_64 architecture compute syscalls |
 | M14-I01 | 0.00% | no | Account for all emitted supported compute code, including headers, macros/callbacks and unknown owners; zero live project compute-C implementations |
-| M14-I02 | 0.00% | no | Reproducible default source/config/toolchain and matched image/modules |
+| M14-I02 | 25.00% | no | Reproducible default source/config/toolchain and matched image/modules |
 | M14-I03 | 0.00% | no | Matching useful applications, process/memory/thread/signal behavior and native lifecycle/resource restoration on that image |
 | M15-F01 | 100.00% | yes | Accepted original MM compatibility wrappers |
 | M15-F02 | 50.00% | no | Rust executor qualification |
