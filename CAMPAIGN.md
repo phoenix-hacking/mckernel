@@ -1,9 +1,26 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T04:01:02.270313+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T05:11:22.520664+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Two original architecture DEFAULT conditions verified.** Independent whole
+GOeec34d75 closes M14-06-01-DEFAULT and7a877658 closes M14-06-03-DEFAULT
+on source7231/image19c5 and actual Q0b57. Required scoped roots,13 genuine
+Rust/C exclusions,19 ptrace/6 unmap/2 clear slots,19 context edges,four104 ABI
+copies,4569+5 providers/264 strong imports/zeroUND and all25 positive clients/
+two removed0nonOOM containers satisfy their unchanged technical conditions.
+Exactly2 checks close:92/156 verified, M14=65.19% (+0.93 displayed),
+M15=64.81% (unchanged). FUNCTIONAL/native/restoration, whole F06 DEFAULT
+review/acceptance and remaining C13 stay separate. No criteria/weights changed.
+Next15min: publish/fetch this counted checkpoint and one changed-pair PR3 report;
+SourceAcq decides frozen M15repro0aa7504f, SDK assesses the now-enabled original
+whole F06 DEFAULT condition. Next concrete source lanes are sharedmprotect/
+shmat147B (M14-03-03-DEFAULT) and3 signal/context endpoints (03-04-DEFAULT),
+private source-only pending independent review; no source/tree changed after7231.
+The genuine native holder/current-free/restoration binding remains the runtime
+blocker, owned by Root/original native-resource holder; no reservation is cleared.
 
 **Current execution: joint provider image passed04:34:14Z.** Source7231
 normal mckernel.img target returned0, producing genuine19c5e24e/10,662,800B,

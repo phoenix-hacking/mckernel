@@ -1,0 +1,12 @@
+{
+  "schema": "whole03-independent-raw-table-data-parser-failure-v1",
+  "at": "2026-11-11T04:48:23.967999+00:00",
+  "owner": "/root/p04_tests_max",
+  "raw_tool_chunk": "bee080",
+  "failed_check": "Data-only readelf symbol-row size token parsing before any table extraction",
+  "diagnostic": "ValueError: invalid literal for int() with base 10: '0x20000'",
+  "affected_raw": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1/image-symbols-relocations.stdout",
+  "affected_raw_sha256": "2fb5d42dd6c0e173303b37cbf9eb26ec306e1f0b0cdf321efbbf054797b99557",
+  "bounded_correction": "Limit to the actual nineteen target/table symbol names and parse GNU readelf Size values as explicit hex0x or decimal. No source/producer/provider/runtime is executed.",
+  "actual_image_or_SUT_failure": false
+}
