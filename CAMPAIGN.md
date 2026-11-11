@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T18:08:10.984654+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T18:28:13.998799+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -92,6 +92,26 @@ EXPECTED line33 still pinsc664 and exact guard367 enforces it. PublicABI owns a
 private minimal normal package/profile/catalog/cohort rebind; SourceAcq independently
 reviews; Root alone composes/adopts after actual gates. No immutable installed edit,
 caller-hash substitution, new issuer/readback replay, staging or native run is issued.
+Private a2f source-readydff22833 is now frozen: admission candidate1e7ced65,
+patchbcf40149, exact30catalogd42de826/hashchain7fce7504/payload1d08b2b2.
+Only EXPECTED.mckernel_image changes; every method and other29members stay exact.
+SourceAcq reviews only those dependent bindings. P04Tests supplies the missing
+executable HOST packet from focusedproposal4329850f: pure actual _named_manifest
+accepts exacta2f tuple, rejects stalec664/wrongimage/missingimage/wrongpayload.
+SourceGO7752 confirms all30 exact source/catalog/profile bindings. Packet6330/
+parent352e/operationGO28cc ran once18:24:11Z under freshCPU7/256MiB shared admission:
+allfive exact pure guard cases PASS, actualstdout oracleb08/stderr0 and one positive
+owned family. Root terminal0/noSession57b5 and current-job retirement2da9 follow
+actualresult86ba; independent savedQ1235e899 joins all22pins and exact output,
+no rerun. This is equality-guard
+proof only, not native/current-free permission. Reused c14f/c564/1961/fe88/ebce
+scopes remain; no new issuer/installed/controller/staging/native action. Scores stay
+67.22/67.19 with receipt6803610176; no unchanged PR3 post.
+SDK now prepares only the exact changed normal fixed30 adoption source/input
+proposal: new catalogue/SOURCE_DIR/installer/phase0/completion/waiter/source-profile
+bindings, with genuine authority/nonce/inode/effective-view outputs left unissued.
+Root alone composes/adopts later after review; no new issuer or installed edit.
+[Reviewed candidate and actual HOST result](docs/verification/native-admission-debug-20261111/a2f-cohort-binding-1/PUBLICATION-SCOPE.json).
 
 **Separate actual native prerequisites:** Owner-scoped writable staging parent
 is still missing: selected parentUID0/0755 is not UID1000 writable; one exact request
