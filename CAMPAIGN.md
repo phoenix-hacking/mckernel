@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T23:03:23.226463+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T23:22:31.087722+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -93,6 +93,17 @@ survivingforeground1129750. Normalstart loaded39a under actual223223Z invocation
 read31/newowner/same finiteledger and untouchedholds are independently GO842ec545.
 No stop/start/receipt replay. This is real controller activation, not native grant.
 
+**Actual first-native prerequisite attempt failed before mutation.** Reviewed
+e6b/83c under captureGOd82 and fresh9032/newowner/admission70d8 executed23:08:02Z.
+The helper incorrectly required `/sys/fs/cgroup/pids/pids.max` on the v1 root,
+which has no such scalar. Actualactions=[]; all3children remain absent; sudo
+1586751/b52474803 wait1/streams closed and fullRoot exit1 are retained. P04Source
+owns the bounded genuine root/nonroot validation correction; SDK independently
+qualified current-family retirement74721792; Root recorded only256MiB/job1
+retirement6c455bbb. SDK reviews the changed source/capture.
+No unchanged rerun, partialgroup deletion, permission fallback or native claim.
+[Actual source/review/failure](docs/verification/native-admission-debug-20261111/v1-kernel-parent-first-attempt-1/PUBLICATION-SCOPE.json).
+
 **Next actual first-native step:** PublicABI binds actualnewowner to installed
 468d code30/strict1cf/e428 and matchingc964/a2f/f133/c886/38b6. Real prerequisite
 checks found3 nativecgroup parents/five scalars ENOENT (existingv1-kernel-parent
@@ -115,11 +126,39 @@ Genuine frontdoor is root_bootstrap.launch_named_native_from_registered_loader
 through watchdog/supervisor_entry; callerRootselfPID/caps/config/rootFD must be
 issued by its real owning process after validated preparation.
 
+**Four canonical native-source inputs are ACTUALLY PREPARED.** Exact7f6c/0181
+under operationGOef781 and freshRoot ee59 passed23:12:34Z, fullTool1a0a8f exit0,
+4exchanges/archives and no ownclose errors. Ownernow3ecb; runner/backend/qmp
+bytesunchanged/newnlink1; alloldinodes/aliases/flags retained andqmp0664 preserved.
+Actualresult2f511be0/refreeze53d5e5b7fa/inodeplan6a783669 feed Pub nativepacket;
+SourceAcq savedresultGOab93015a confirms the exact actions/53rowcut/closure;
+Root retired only current128MiB/job1. No source
+flag clear, installed edit, native claim or acceptance.
+[Exact source preparation](docs/verification/native-admission-debug-20261111/four-canonical-source-preparation-1/PUBLICATION-SCOPE.json).
+
 After those inputs and fresh claim/current-free/source-effective/caps/pidfd custody
 admission, run only `/bin/mcexec -t 1 0 /apps/signal.alternate-repeat` via that
 frontdoor, fixedcase/work+PATH/COKERNEL/LANG/LC_ALL/TZ, require16handlers/deliveries/
 altstackhits,0/emptyerr and positive ownedrestoration. Whole frame/register/xstate
 normal/error remains separate. No green build/stage/install/readback/test replay.
+
+**Corrected kernel-parent setup ACTUALLY PASS.** Sourcecf204/request756f under
+SDK operationGOdb2c and freshRoot69e3 passed23:16:23Z, fullToolfc5ae8 exit0.
+All3actualgroups are empty, all5scalars exact including childpids.max512;
+resultbe464ded/Rootreadonly65f57135 are retained. IndependentSDKQa45d59d1
+qualifies actual waits/emptygroups/scalars; Root retired only current256MiB/job1
+(b7897a59). All current payload jobs are now retired separately; native/currentfree/
+source admission remain unclaimed.
+
+**Current native input/callsite repairs:** actual selected runtime298a at
+`/usr/bin/python3.8` is Root-owned0755/nlink1 but flags524288/noimmutable,
+observed999f281a. Existing installed runtime_binding55/root_bootstrap42/
+watchdog105 genuinely require immutable runtime. P04Source derives its legitimate
+provider/provisioning contract; no flag, interpreter or path changed. PublicABI
+separately fixes newwrapper49fa diagnostic persistence per finite NO_GObbec9cde:
+preserve original traceback plus all secondary close errors through reporting
+and retained-custody waits. P04Tests reviews only that bounded delta/two families.
+No first-native run or original acceptance is claimed.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal

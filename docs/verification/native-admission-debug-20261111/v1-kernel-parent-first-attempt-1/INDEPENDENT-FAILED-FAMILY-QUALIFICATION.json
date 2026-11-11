@@ -1,0 +1,97 @@
+{
+  "actual_scope": {
+    "helper_pid_birth_sampled_or_nonchild_wait_invented": false,
+    "helper_self_reported_pid": 1586754,
+    "original_outer_tool": {
+      "chunk_id": "9c979a",
+      "exit_code": 1,
+      "remaining_session": null
+    },
+    "planned_new_family_bytes": 268435456,
+    "planned_new_jobs": 1,
+    "sudo_direct_client": {
+      "birth": "52474803",
+      "direct_wait_joined": true,
+      "exit_code": 1,
+      "lifecycle_UNKNOWN": false,
+      "pid": 1586751,
+      "secondary_errors": [],
+      "streams_closed": true
+    }
+  },
+  "all_historical_native_and_source_UNKNOWNs_preserved": true,
+  "at_utc": "2026-11-11T23:10:31.361225+00:00",
+  "current_free": "UNKNOWN",
+  "decision": "GO_RETIRE_ONLY_CURRENT_FAILED_KERNEL_PARENT_CAPTURE_FOREGROUND_FAMILY_256MIB_JOB1",
+  "eligible_next_input": "P04Source must supply source-supported bounded root-pids prevalidation correction preserving new nonroot child pids.max write/readback, all five limits, same UID/namespace/absence/FD/resource guards. Independent exact delta review, new capture output and Root fresh admission before any corrected one-shot; no unchanged replay.",
+  "evidence": [
+    {
+      "bytes": 2049,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/execution-1/RESULT.json",
+      "sha256": "90999effe53fdc04181ce4e11e4f86b5aa6a766d484b3cf8542d8d3b0428e796"
+    },
+    {
+      "bytes": 875,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/execution-1/CLIENTS.json",
+      "sha256": "00ffbf8d68fa04ff17d13ef6a5e36d470dbe7cf9b39361615145b2262855ed86"
+    },
+    {
+      "bytes": 610,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/execution-1/kernel-parent-prepare.stdout",
+      "sha256": "34b75aab8bc50b3debecdb4034ba54bfca7102e10b2dce175ed771787fa3015a"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/execution-1/kernel-parent-prepare.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 810,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/execution-1/ROOT-TOOL-FINAL.json",
+      "sha256": "c8d8964443bb2dc5573133c6a8966668a23294be944fa214c42ad0ded175feb5"
+    },
+    {
+      "bytes": 948,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/execution-1/ADMISSION.json",
+      "sha256": "c4be63041f254073b657771a2505083ec5831a7377baa94659451f12f01ae60f"
+    },
+    {
+      "bytes": 4777,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/prepare_kernel_parent.py",
+      "sha256": "83c75ab88b7e49409c5ec8830c38003f55d3c8a8e2ca84c9c75bab351ee5baf7"
+    },
+    {
+      "bytes": 9057,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-kernel-parent-root-capture-p04source-max-1/run_root_once.py",
+      "sha256": "a6c38da227b8e943221a9804d3252016f0e1133a7523e56780387d5601074525"
+    },
+    {
+      "bytes": 1548,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-kernel-parent-root-capture-p04source-max-1/ROOT-CURRENT-ADMISSION.ACTUAL.json",
+      "sha256": "70d8fd3856d4e680264452da6657b498976d3a02aab9920b9417a8807d1bd1d1"
+    },
+    {
+      "bytes": 6632,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-kernel-parent-current-review-sdk-max-1/capture-binding-1/REVIEW.json",
+      "sha256": "d82ffd0edc9dea0a604e7f202e40a59153f4986c3394512c178f35406e2bec33"
+    }
+  ],
+  "first_failed_predicate": {
+    "actual_actions": [],
+    "actual_errno": 2,
+    "actual_error_type": "FileNotFoundError",
+    "actual_path": "/sys/fs/cgroup/pids/pids.max",
+    "mutation_intent_records": 0,
+    "raw_records": 1,
+    "source": "prepare_kernel_parent.py main parent prevalidation for controls calls scalar(parent/name) before event ALL_THREE_CHILDREN_ABSENT_PARENTS_VERIFIED"
+  },
+  "functional_or_kernel_setup_success": false,
+  "helper_failure_status_retained": "PARTIAL_OR_FAILED_KERNEL_CONFIGURATION_UNKNOWN_RETAINED",
+  "mutation_disposition": "83c performs its whole parent/absence/scalar prevalidation before first mkdir or scalar write. It failed at pids root scalar read with actions[] and no BEFORE_MKDIR/BEFORE_NEW_SCALAR_WRITE; source and actual output support no cgroup objects/scalar mutations in this attempt. Root must still freshly check actual target absence for a meaningful successor; do not infer currentfree or delete anything.",
+  "native12GiB_reservation_released": false,
+  "native_claim_or_runtime_grant": false,
+  "retirement_authority_boundary": "This saved-result decision permits Root alone to record only this actual current268435456-byte/job1 process charge as retired. It does not itself edit accounting/state/lease, clear raw helper UNKNOWN wording, or retire historical/native/source/kernel reservations.",
+  "reviewer_actions": "Saved raw source/result/ownership/capture JSON reads and this private qualification only. No target import, process signal/wait, helper/sudo/kernel/compiler/test/native/account/controller/state/lease or canonical action.",
+  "schema": "mckernel.f06-v1-root-pids-prevalidation-failed-result-current-process-qualification.v1",
+  "source_bound_family_route": "Original protected e088 direct Popen handle waited foreground sudo1586751/b52474803 exit1; sudo synchronously waited env/taskset exec into actual no-spawn83c helper1586754. Stdout is complete one final failure JSON, stderr0, original managed outer tool is terminal1/noSession. No alternate PID retirement or permission fallback is used."
+}

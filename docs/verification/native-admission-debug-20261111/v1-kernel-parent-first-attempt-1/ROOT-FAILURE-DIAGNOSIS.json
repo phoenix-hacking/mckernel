@@ -1,0 +1,37 @@
+{
+  "actions": [],
+  "affected_helper": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/v1-kernel-parent-1/prepare_kernel_parent.py",
+    "sha256": "83c75ab88b7e49409c5ec8830c38003f55d3c8a8e2ca84c9c75bab351ee5baf7"
+  },
+  "all_three_targets_currently_absent": true,
+  "at": "2026-11-11T23:09:09.726384+00:00",
+  "cause": {
+    "diagnostic": "[Errno 2] No such file or directory: '/sys/fs/cgroup/pids/pids.max'",
+    "errno": 2,
+    "type": "FileNotFoundError"
+  },
+  "current_capture_review": "d82ffd0edc9dea0a604e7f202e40a59153f4986c3394512c178f35406e2bec33",
+  "current_free": "UNKNOWN",
+  "current_identity_observations": [
+    {
+      "absent": true,
+      "pid": 1586751,
+      "recorded_birth": "52474803"
+    },
+    {
+      "absent": true,
+      "pid": 1586754,
+      "recorded_birth": null
+    }
+  ],
+  "fullRoot_exit": 1,
+  "historical_unknowns_retained": true,
+  "independent_owner": "/root/sdk_binding_source_max",
+  "native_admission": false,
+  "next_action": "source-backed bounded root/nonroot pids parent prevalidation correction, fresh reviewed successor only; never rerun unchanged e6b",
+  "original_request": "e6b586a38b1b159a99f0d89171085d910d8567e97f81b47d981f9ae77ffbf4c6",
+  "positive_actual_client_wait_and_streams": true,
+  "source_owner": "/root/p04_source_max",
+  "status": "FAILED_EXISTING_ROOT_PIDS_MAX_PREVALIDATION_BEFORE_ANY_MUTATION"
+}

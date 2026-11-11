@@ -111,6 +111,12 @@ def _json(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
 
 
+def normal_source_generation(path):
+    """Exact existing normal publisher layout; not an alternate source root."""
+    return type(path) is str and re.fullmatch(
+        r"/var/lib/mckernel-code-([0-9a-f]{64})/installed-source-\1", path) is not None
+
+
 def directory(path):
     raw = os.fspath(path)
     value = Path(raw)
@@ -442,7 +448,7 @@ class CommandLedger:
 COMMAND_LEDGER = CommandLedger()
 
 
-def bounded_command(argv, timeout, *, env=None, ledger=None):
+def bounded_command(argv, timeout, *, env=None, ledger=None, admission_check=None):
     """Drain bounded pipes without communicate()'s unbounded memory capture."""
     need(type(timeout) in (int, float) and math.isfinite(timeout) and timeout > 0, "command deadline")
     end = time.monotonic() + timeout
@@ -465,6 +471,8 @@ def bounded_command(argv, timeout, *, env=None, ledger=None):
                 os.set_blocking(stream.fileno(), False)
                 selector.register(stream, selectors.EVENT_READ, index)
             while selector.get_map():
+                if admission_check is not None:
+                    admission_check()  # veto only; ignored return is never permission
                 remaining = end - time.monotonic()
                 need(remaining > 0, "command timeout")
                 for key, _ in selector.select(min(remaining, 0.1)):
@@ -545,7 +553,8 @@ class DockerBackend:
         env = {"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C"}
         if "SUDO_ASKPASS" in os.environ:
             env["SUDO_ASKPASS"] = os.environ["SUDO_ASKPASS"]
-        return bounded_command(argv, timeout, env=env, ledger=self.children)
+        return bounded_command(argv, timeout, env=env, ledger=self.children,
+                               admission_check=getattr(self, "admission_check", None))
 
 
 def _manifest_identity(path, digest):
@@ -787,7 +796,7 @@ class DiagnosticOwner:
                 "--attempt-parent", str(self.parent), "--nonce", self.nonce]
 
     def _create_argv(self):
-        return ["create", "--pull=never", "--attach=stdout", "--attach=stderr", "--init", "--name", self.name, "--label", self.label,
+        argv = ["create", "--pull=never", "--attach=stdout", "--attach=stderr", "--init", "--name", self.name, "--label", self.label,
                 "--cpus=4", "--cpuset-cpus=2-5", "--cgroup-parent=/mckernel-dev",
                 "--memory=12g", "--memory-swap=12g", "--pids-limit=512", "--cap-drop=ALL",
                 "--security-opt=no-new-privileges", "--read-only", "--network=none",
@@ -798,6 +807,15 @@ class DiagnosticOwner:
                 "--mount", "type=bind,src=" + str(self.parent) + ",dst=" + str(self.parent),
                 "--env", "HOME=/tmp", "--env", "TMPDIR=/tmp", "--env", "PYTHONDONTWRITEBYTECODE=1",
                 "--workdir=" + str(self.parent), "--entrypoint=/usr/bin/python3", IMAGE, *self._inside_args()]
+        package = getattr(self, "source_package", None)
+        if package is not None:
+            # Only the typed Root native-admission path sets this exact source
+            # generation. Existing three-bind CLI/default profiles stay intact.
+            need(normal_source_generation(package),
+                 "named immutable package source")
+            index = argv.index("--env")
+            argv[index:index] = ["--mount", "type=bind,src=" + package + ",dst=" + package + ",readonly"]
+        return argv
 
     def _profile(self, row, image):
         self._owned(row, self.container)
@@ -869,6 +887,9 @@ class DiagnosticOwner:
                  type(mount.get("ReadOnly", False)) is bool, "requested mount options")
             requested.append((mount.get("Source"), mount.get("Target"), mount.get("ReadOnly", False)))
         expected_mounts = [(REPO, REPO, True), (SCRATCH, SCRATCH, True), (str(self.parent), str(self.parent), False)]
+        package = getattr(self, "source_package", None)
+        if package is not None:
+            expected_mounts.append((package, package, True))
         need(sorted(requested) == sorted(expected_mounts), "requested mount identities")
         tmpfs = 0
         for mount in row.get("Mounts", []):
@@ -1133,7 +1154,7 @@ def _inside(parent, nonce, owner_sha, manifest, manifest_sha256):
               {"PATH": "/usr/bin:/bin", "HOME": "/tmp", "TMPDIR": "/tmp", "PYTHONDONTWRITEBYTECODE": "1"})
 
 
-def execute_owner(owner):
+def execute_owner(owner, *, deadline=360):
     """Install signal ownership before any acquisition, lookup or create."""
     previous = {number: signal.getsignal(number) for number in OWNER_SIGNALS}
     def interrupted(number, frame):
@@ -1146,7 +1167,7 @@ def execute_owner(owner):
     for number in OWNER_SIGNALS:
         signal.signal(number, interrupted)
     try:
-        owner.run()
+        owner.run(deadline=deadline)
     except BaseException as exc:
         owner._remember(exc)
     finally:
