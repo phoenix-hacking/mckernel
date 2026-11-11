@@ -1,0 +1,226 @@
+{
+  "C4": [
+    {
+      "actual_source_first_line": 8005,
+      "actual_source_last_line": 8242,
+      "bytes": 1659,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "9e3c6e0d5378b029e1bc9ba6c35df456799de4f6f5e8c64575500be4efbcd5b3",
+      "symbol": "do_execveat"
+    },
+    {
+      "actual_source_first_line": 8245,
+      "actual_source_last_line": 8251,
+      "bytes": 12,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "f821d0512fb8010a1e9cfa354444cf587a950d4b22425179ba95876c1c42fc45",
+      "symbol": "syscall_execveat_bridge"
+    },
+    {
+      "actual_source_first_line": 29500,
+      "actual_source_last_line": 29602,
+      "bytes": 1260,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "648b0a2c35eb19bc6e5ab08798092c075b74d2a42228a9b5164c70d3e9fea1c4",
+      "symbol": "util_thread"
+    },
+    {
+      "actual_source_first_line": 29645,
+      "actual_source_last_line": 29650,
+      "bytes": 34,
+      "reviewed_live_project_C_not_retired": true,
+      "source_body_sha256": "82b9fa3f5da42e4c5edc55f9ca34544c52e3e78a2c00a76c14eba12bf2c79040",
+      "symbol": "syscall_util_indicate_clone_disabled_bridge"
+    }
+  ],
+  "actual_Root_CID_lifecycles": [
+    {
+      "phase": "configure",
+      "positive": true,
+      "root_completion": {
+        "bytes": 2413,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/source-set-gate-correction-1/execution-1/ROOT-EXEC-COMPLETION.json",
+        "sha256": "390d4cde8f77ac20a8ed88014d1423bd14196d08d9a90c39e6729ca9438ea476"
+      },
+      "terminal": {
+        "bytes": 20569,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/source-set-gate-correction-1/execution-1/configure-TERMINAL.json",
+        "sha256": "0c52e832b011d2d79c9de47b322caaa8d360a2497484faece32b0b7fb7e31849"
+      }
+    },
+    {
+      "phase": "build",
+      "positive": true,
+      "root_completion": {
+        "bytes": 2413,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/source-set-gate-correction-1/execution-1/ROOT-EXEC-COMPLETION.json",
+        "sha256": "390d4cde8f77ac20a8ed88014d1423bd14196d08d9a90c39e6729ca9438ea476"
+      },
+      "terminal": {
+        "bytes": 20555,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/source-set-gate-correction-1/execution-1/build-TERMINAL.json",
+        "sha256": "ee1dffa2ff25efb4daf915343bed040ee61a72a641a4ad31afd4af4fe7ca48e6"
+      }
+    },
+    {
+      "phase": "metadata",
+      "positive": true,
+      "root_completion": {
+        "bytes": 2551,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/reader-1/qualified-producer-binding-1/execution-1/ROOT-EXEC-COMPLETION.json",
+        "sha256": "ed3224ec5c5e34a74977a3b808691c6be4d66b4baa5913c190c6c8bf0cc5a8c2"
+      },
+      "terminal": {
+        "bytes": 9763,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/reader-1/qualified-producer-binding-1/execution-1/metadata-TERMINAL.json",
+        "sha256": "70e200dae345db16e9f986d0919615fcd4cc5452f67b3a09a2fb846bf4c9947e"
+      }
+    }
+  ],
+  "actual_Rust_caller_contracts": "util_thread and syscall_execveat_bridge are declared CInt; syscall_util_thread_bridge sign-extends CInt as CLong. utilthr_migrate preserves original mode-before-call/ignored result. Clone-disabled diagnostic is void. Paired actual C/Rust assertions bind UtiAttr136/flags128/context224/request72 align8.",
+  "actual_link_argv_and13identity_rows_exact_manifest": true,
+  "actual_operations": [
+    {
+      "positive_original_client_families": 20,
+      "positive_phases": 2,
+      "result": {
+        "bytes": 28898,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/source-set-gate-correction-1/execution-1/RESULT.json",
+        "sha256": "bc331c7173f1db51bd08d4feaa9ea7b87c2301f59bbe7a66885253a04a243458"
+      },
+      "role": "producer"
+    },
+    {
+      "positive_original_client_families": 12,
+      "positive_phases": 1,
+      "result": {
+        "bytes": 17717,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/reader-1/qualified-producer-binding-1/execution-1/RESULT.json",
+        "sha256": "20295eacb8d60dba2d1cb18fd6a0cb6a2c724f7d37d99f89e1ba009fdf63cfeb"
+      },
+      "role": "reader"
+    }
+  ],
+  "actual_typed_C4_contracts": {
+    "CInt_bytes": 4,
+    "CLong_bytes": 8,
+    "CULong_bytes": 8,
+    "SyscallRequest_align": 8,
+    "SyscallRequest_bytes": 72,
+    "UtiAttr_bytes": 136,
+    "UtiAttr_flags_offset": 128,
+    "basis": "Existing actual production C static assertions and Rust const assertions plus current full104 emitted equality; ELF NOTYPE alone is not used as prototype proof.",
+    "context_bytes": 224,
+    "pointer_bytes": 8
+  },
+  "all5052_unique_names_and_address_size_type_input_joins_exact": true,
+  "all5057_named_globalweak_owners_exhaustive": true,
+  "arch_start_Rust_and_ELF_entry_equal": true,
+  "dependency_record": {
+    "all159_current_selected_paths_exact": true,
+    "project_Rust": 159,
+    "remaining_generated_or_upstream": [
+      "/work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+      "/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs",
+      "/sdk/mckernel-core-195/libcore.rmeta",
+      "/work/output/build/kernel/rust/freestanding/libcompiler_builtins.rmeta"
+    ],
+    "total": 163
+  },
+  "dispatch": {
+    "actual_relocations": 117,
+    "all_actual_relocations_and_other_bytes_match": true,
+    "entries": 4025,
+    "table_real_Rust_owner_and_C_carrier_distinct": true
+  },
+  "generated_linker_global_owners": 5,
+  "no_extra25file_hash_round_or_readelf_build_runtime": true,
+  "physical_global_weak_owners": 5052,
+  "preserved_independent15identity_bindings_reused": {
+    "bytes": 22331,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/PRESERVED-COHORT-AND-INDEPENDENT-RECEIPTS.json",
+    "sha256": "03956a173c904b07c33db93bf2b7d221ea3df2143e173562005f630ea06fa6ef"
+  },
+  "real_Rust_do_syscall1421": {
+    "final": {
+      "binding": "GLOBAL",
+      "bytes": 1421,
+      "index": 4032,
+      "name": "do_syscall",
+      "section_index": 1,
+      "type": "FUNC",
+      "value": 18446744073684811472,
+      "visibility": 0
+    },
+    "name": "do_syscall",
+    "owner": {
+      "input": {
+        "binding": "GLOBAL",
+        "bytes": 1421,
+        "index": 4683,
+        "name": "do_syscall",
+        "section_index": 1494,
+        "type": "FUNC",
+        "value": 0,
+        "visibility": 0
+      },
+      "object": "rust/mckernel_rust.o",
+      "placement": {
+        "address": 18446744073684811472,
+        "bytes": 1421
+      },
+      "section": ".ltext.do_syscall"
+    }
+  },
+  "schema": 1,
+  "selected_link_constituents": 13,
+  "six_current_sources": [
+    {
+      "bytes": 967651,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e"
+    },
+    {
+      "bytes": 1247778,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+    },
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 65125,
+      "path": "/home/holden/mckernel/kernel/rust/abi_checks.c",
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+    },
+    {
+      "bytes": 74700,
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "581bc9398e486ad398c4ecc9e4e5445f236213af2543022a421881d904c471df"
+    },
+    {
+      "bytes": 5257,
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "sha256": "5e41a37bf262dd91169c19bad2b69bdb06d9d5ea82582a1efd2bd82024b70575"
+    }
+  ],
+  "six_genuine_c964_Git_blobs_equal_bound_current_SHA": true,
+  "source_selected_exec_bridge": "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS active selects global12B bridge; inactive static source duplicate is not an additional emitted implementation.",
+  "status": "PASS_SAVED_DATA_AND_SOURCE_ONLY_INDEPENDENT_REVIEW",
+  "strong_imports": {
+    "actual_script_provider_occurrences": 5,
+    "generated_import_names": [
+      "__stop___verbose",
+      "__start___verbose",
+      "_end",
+      "_head",
+      "vsyscall_page"
+    ],
+    "no_named_UND_or_unmapped_or_mismatch": true,
+    "script_assignments_are_known_providers_not_missing_object_candidates": true,
+    "total": 255,
+    "unique_actual_object_provider_occurrences": 250
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T20:58:34.067193+00:00",
+  "updated_at": "2026-11-11T21:03:28.219853+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 67.22,
+      "checklist_percent_complete": 70.0,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
@@ -705,6 +705,12 @@
           "scope": "Bounded admitted F06 HOST object zero-C text/data/bss and unique Rust entries",
           "level": "partial_prerequisite",
           "limits": "Does not satisfy this final matching integration gate."
+        },
+        {
+          "scope": "Complete literal M14-I01-E1 selected/emitted source/header/macro/callback/provider manifest on c964/a2f",
+          "level": "verified_original_child_condition",
+          "limits": "C4 reviewed live project-C; E2/E3/acceptance/native remain open.",
+          "review": "docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json"
         }
       ],
       "remaining_actions": [
@@ -729,7 +735,7 @@
         "M14-I01-E3",
         "M14-I01-ACCEPT"
       ],
-      "percent_complete": 0.0,
+      "percent_complete": 25.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -2653,21 +2659,17 @@
       "id": "M14-I01-E1",
       "parent": "M14-I01",
       "title": "Establish final selected/emitted compute ownership manifest across original sources, headers, macros, callbacks and unknown owners.",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
-      "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
+      "status": "verified_original_ownership_manifest_condition",
+      "owner": "Root sole compositor; independent whole-condition SDK review",
       "done_when": "Establish final selected/emitted compute ownership manifest across original sources, headers, macros, callbacks and unknown owners; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. The ownership manifest covers original sources, emitted headers/macros/callbacks and every unknown owner, and distinguishes legitimate Linux/third-party/generated code from project runtime.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
       "required_inputs": {
         "original_requirement": "M14-I01",
         "target": null,
         "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
-        "missing_before_execution": [
-          "Establish final selected/emitted compute ownership manifest across original sources, headers, macros, callbacks and unknown owners.",
-          "Verify each live project compute implementation is Rust or permitted assembly and real ABI/provider ownership is unique in supported default final image.",
-          "Retire live C only after complete replacement and actual final selection/link proof; retained references and compiler-elided source do not prove replacement."
-        ]
+        "missing_before_execution": []
       },
       "dependencies": [
         "HOLD-GENERIC",
@@ -2677,12 +2679,18 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json"
       ],
       "scope_limit": "Original integration criterion; no new quota or independent completion weight.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "original_complete_ownership_manifest_condition_defined_and_verified_at_matching_supported_scope",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T21:03:28.219853+00:00",
+      "whole_condition_review_sha256": "956fecb27ed293d818efe8bea692819e98dc1bc83323f3e59a83d25a8bdd5fcd",
+      "matching_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+      "matching_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "verification_scope": "Literal whole selected/emitted ownership manifest only; four reviewed live project-C functions remain. E2/E3/C retirement/native/parent acceptance stay open."
     },
     {
       "id": "M14-I01-E2",
@@ -14641,16 +14649,16 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-11T20:58:34.067193+00:00",
+    "at": "2026-11-11T21:03:28.219853+00:00",
     "invocation": "20261110T060029Z-3fe88dab",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "counted_verified_before": 97,
-    "counted_verified_after": 98,
+    "counted_verified_before": 98,
+    "counted_verified_after": 99,
     "task_binding_rows_before": 391,
     "task_binding_rows_after": 391,
-    "change_reason": "Exactly the whole original03-05 DEFAULT leaf passes independent review on actualmatchingimage. No criterion, weight, denominator, acceptedfile or native/milestone state changes.",
+    "change_reason": "Record only independently verified literal M14-I01-E1; original I01 four-child mean0->25 and milestone+25/9; E2/E3/native unchanged.",
     "latest_source_backed_integration": {
       "at": "2026-11-10T14:39:48.032766+00:00",
       "original_checks": [
@@ -14681,36 +14689,35 @@
       ]
     },
     "latest_counted_closure": {
-      "at": "2026-11-11T17:58:23.106070+00:00",
+      "at": "2026-11-11T21:03:28.219853+00:00",
       "check_ids": [
-        "M14-03-05-DEFAULT"
+        "M14-I01-E1"
       ],
       "whole_condition_reviews": [
-        "docs/verification/m14-current-image-20261111/perf-supported-default-1/whole-review/REVIEW.json"
+        "docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json"
       ],
       "whole_condition_review_sha256s": [
-        "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377"
+        "956fecb27ed293d818efe8bea692819e98dc1bc83323f3e59a83d25a8bdd5fcd"
       ],
-      "original_private_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
       "M14_before_after": [
-        66.94,
-        67.22
+        67.22,
+        70.0
       ],
       "M15_before_after": [
         67.19,
         67.19
       ],
       "exact": {
-        "M14": "605/9",
+        "M14": "70",
         "M15": "248345/3696"
       },
       "counted_verified_before_after": [
-        97,
-        98
+        98,
+        99
       ],
-      "exact_M14_delta_pp": "5/18",
+      "exact_M14_delta_pp": "25/9",
       "display_delta_pp": {
-        "M14": 0.28,
+        "M14": 2.78,
         "M15": 0.0
       },
       "accepted_gate": null,
@@ -14889,6 +14896,46 @@
         "accepted_gate": null,
         "milestone_acceptance": false,
         "original_denominators_weights_criteria_unchanged": true
+      },
+      {
+        "at": "2026-11-11T17:58:23.106070+00:00",
+        "check_ids": [
+          "M14-03-05-DEFAULT"
+        ],
+        "whole_condition_reviews": [
+          "docs/verification/m14-current-image-20261111/perf-supported-default-1/whole-review/REVIEW.json"
+        ],
+        "whole_condition_review_sha256s": [
+          "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377"
+        ],
+        "original_private_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
+        "M14_before_after": [
+          66.94,
+          67.22
+        ],
+        "M15_before_after": [
+          67.19,
+          67.19
+        ],
+        "exact": {
+          "M14": "605/9",
+          "M15": "248345/3696"
+        },
+        "counted_verified_before_after": [
+          97,
+          98
+        ],
+        "exact_M14_delta_pp": "5/18",
+        "display_delta_pp": {
+          "M14": 0.28,
+          "M15": 0.0
+        },
+        "accepted_gate": null,
+        "milestone_acceptance": false,
+        "original_denominators_weights_criteria_unchanged": true,
+        "matching_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+        "matching_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "remaining_C_functions": 4
       },
       {
         "at": "2026-11-11T17:58:23.106070+00:00",
@@ -15447,27 +15494,12 @@
       "no_unchanged_green_reruns": true
     },
     "pending_percentage_report": {
-      "at": "2026-11-11T09:00:58.919790+00:00",
-      "state": "POSTED_CONFIRMED",
-      "owner": "Root",
-      "comment_id": 6791617739,
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6791617739",
-      "pair": {
-        "M14": 66.94,
-        "M15": 67.19
-      },
-      "M14": 66.94,
+      "state": "WAITING_FOR_CHECKPOINT_PUSH_AND_FETCH",
+      "dedupe": "M14-I01-E1@956fecb2",
+      "M14": 70.0,
       "M15": 67.19,
-      "delta_pp": {
-        "M14": 0.27,
-        "M15": 0.0
-      },
-      "verified_checks": 97,
-      "dedupe": "M14-03-04-DEFAULT@2f3b9a32",
-      "source_results_publication": "PUSHED_FETCHED_VERIFIED",
-      "source_commit": "f2708fbe15368b95b057860d796e5a37e9c41541",
-      "fetched_owned_blobs_matching": 86,
-      "no_pending_report": true
+      "counted": 99,
+      "denominator": 156
     },
     "mcps_current_provider_pair": {
       "at": "2026-11-10T23:52:20.310699+00:00",
@@ -15539,29 +15571,14 @@
       "native_or_other_DEFAULT_or_acceptance": false
     },
     "pending_progress_report": {
-      "at": "2026-11-11T09:00:58.919790+00:00",
-      "state": "POSTED_CONFIRMED",
-      "owner": "Root",
-      "comment_id": 6791617739,
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6791617739",
-      "pair": {
-        "M14": 66.94,
-        "M15": 67.19
-      },
-      "M14": 66.94,
+      "state": "WAITING_FOR_CHECKPOINT_PUSH_AND_FETCH",
+      "dedupe": "M14-I01-E1@956fecb2",
+      "M14": 70.0,
       "M15": 67.19,
-      "delta_pp": {
-        "M14": 0.27,
-        "M15": 0.0
-      },
-      "verified_checks": 97,
-      "dedupe": "M14-03-04-DEFAULT@2f3b9a32",
-      "source_results_publication": "PUSHED_FETCHED_VERIFIED",
-      "source_commit": "f2708fbe15368b95b057860d796e5a37e9c41541",
-      "fetched_owned_blobs_matching": 86,
-      "no_pending_report": true
+      "counted": 99,
+      "denominator": 156
     },
-    "current_engineering_step": "Qualified actual a2f HOST stage and new generation468d/strict30 physical readback; prepare normal controller transition and real successful-poll receipt fix; independently review I01-E1 and F02 ABI slice.",
+    "current_engineering_step": "E1 whole GO recorded; publish99/156 and70.00/67.19. Correct actual F02 Docker AS-option failure; normal controller compatibility and successful-account-read receipt fixes remain active.",
     "verified_whole_condition_history": [
       {
         "at": "2026-11-11T03:34:18.768392+00:00",
@@ -16012,7 +16029,14 @@
       "native_or_image_original_acceptance": false,
       "counted_delta": 0
     },
-    "pending_changed_percentage_report": null,
+    "pending_changed_percentage_report": {
+      "state": "WAITING_FOR_CHECKPOINT_PUSH_AND_FETCH",
+      "dedupe": "M14-I01-E1@956fecb2",
+      "M14": 70.0,
+      "M15": 67.19,
+      "counted": 99,
+      "denominator": 156
+    },
     "current_image_history": [
       {
         "source": "6aae8273960583ec7fb194926292bd10ab1bc585",
@@ -16057,9 +16081,9 @@
     ],
     "latest_native_status_reply": {
       "state": "POSTED_CONFIRMED",
-      "comment_id": 6806161137,
-      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6806161137",
-      "scope": "actual scoped-parent provision only; newer stage/code/readback return pending checkpoint47 publication"
+      "comment_id": 6806920440,
+      "url": "https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6806920440",
+      "scope": "actual stage/new generation/strict30 return; no native claim"
     },
     "new_generation_code_only_qualification": {
       "decision": "GO",

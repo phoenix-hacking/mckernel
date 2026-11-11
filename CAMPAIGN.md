@@ -1,17 +1,26 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T20:58:34.067193+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T21:03:28.219853+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Original closure is98/156: M14=67.22%, M15=67.19%.** Whole original
+**Original closure is99/156: M14=70.00%, M15=67.19%.** Whole original
 M14-03-05-DEFAULT GOc7f765f0 remains counted on sourcec964/imagea2f00a61/map15b10db2.
 All original criteria/weights/denominators and M14-before-M15 acceptance order stay
 unchanged. C4 and remaining FUNCTIONAL/native/parent/file/milestone conditions are
 open. Four accepted M14 files and M15-F01 remain closed at their exact scopes.
 PR3 receipt[6803610176](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176)
-is POSTED_CONFIRMED for this pair; do not repeat an unchanged percentage report.
+is POSTED_CONFIRMED for the prior67.22/67.19 pair; the new pair awaits this checkpoint.
+New independent whole GO956fecb2 closes ONLY M14-I01-E1 on c964/a2f/15b:
+all13inputs/5052+5owners,163 source/header/generated dependencies, ABI/providers,
+callbacks, all unknown owners and positive saved producer/reader cleanup join
+literal E1. C4 are fully reviewed live project-C, not retired. I01 E1=100 while
+E2/E3/ACCEPT=0 yields original I01 mean25; M14 exact70.00, M15 unchanged67.19.
+[Whole E1 decision](docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json).
+Changed-pair dedupeM14-I01-E1@956fecb2 waits this source/results push+fetch; receipt
+6803610176 remains only the prior67.22/67.19 report. Do not duplicate that old pair.
+
 All33 unrelated tracked dirty paths and historical UNK2026-11-11T20:58:34.067193+00:00N/holds stay preserved.
 The missed75% November10 target is not a stop time.
 
@@ -46,7 +55,10 @@ outcomes remain old-only. Do not reissue or reread this successful generation.
 **Current concrete next action:** PublicABI owns the existing normal same-Root
 controller transition proposal, preserving guardian/mailbox, saved goal/thread,
 finite7c6 credit run/cumulative budget, actual interpreter and resource owners.
-No controller activation or native run is claimed. SDK implements the confirmed
+Actual AnacondaPython3.9 lacks os.pidfd_open/signal.pidfd_send_signal, so the
+current signal_exact stop route refuses before signaling. PubABI owns the narrow
+genuine pidfd compatibility correction; P04Tests tests independently before any
+normal stop/transition. No controller activation or native run is claimed. SDK implements the confirmed
 RPC poll receipt liveness correction; P03 prepares focused tests and SourceAcq
 reviews the changed source after current F02 review. Successful account/rateLimits/read
 responses must carry actual method/id/response time/owner context through SAME
@@ -55,12 +67,12 @@ cannot substitute. Preserve25s/equality/allhold/credit guards and notification-o
 fallback semantics. Load through the normal reviewed transition, never hotpatch,
 synthetic notification, fake failure, new run or budget reset.
 
-**Independent original closure:** SDK independently decides literal M14-I01-E1
-from P04Source assessment0987582e/current5052+5manifest/163dependencies/C4contracts
-on the saved c964/a2f cohort. E1 is not credited pending that whole verdict; E2/E3
+**Independent original closure:** SDK independent whole GO956fecb2 has closed literal M14-I01-E1 only; E2/E3
 and C retirement remain separate. SourceAcq reviews exact F02 HOST packet8184/
-parent24ab after critical new-generation qualification. Its four genuine C/Rust1.95/
-readelf commands compare one624B readonly unrelocated78-word record; this slice
+parent24ab after critical new-generation qualification. First actualF02 packet8184 failed before compiler/container: Docker create125
+rejects unsupported --ulimit as. All3clients/fullRoot joined; P04Source prepares
+one bounded supported-profile successor with SourceAcq independent review. The
+four genuine C/Rust1.95/readelf commands compare one624B readonly unrelocated78-word record; this slice
 alone cannot close wholeF02 behavior. P04Source owns the small clone-disabled
 Rust diagnostic-provider candidate, P04Tests independent formatter/string/caller
 review; actual C3 requires later matching normal image proof.

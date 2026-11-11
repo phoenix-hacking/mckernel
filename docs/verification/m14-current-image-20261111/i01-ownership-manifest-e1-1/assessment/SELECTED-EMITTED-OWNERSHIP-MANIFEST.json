@@ -1,0 +1,629 @@
+{
+  "E2_E3_or_C4_retirement_claimed": false,
+  "Rust": {
+    "bytes": 21579336,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+    "sha256": "a15699ebd17b7d7293b9b748bfc0301e3eedfd6e2482f1851218c0875903ca73"
+  },
+  "actual_selected_Rust_dependency_record": {
+    "bytes": 13414,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-mckernel_rust.raw.d",
+    "sha256": "b298ac1866bb776d172bf04b5eb4f16bb14d6af9dc974e9e0260b94c448ae29e"
+  },
+  "actual_selected_Rust_sources": [
+    "/src/kernel/rust/lib.rs",
+    "/src/kernel/rust/abi.rs",
+    "/src/kernel/rust/abort.rs",
+    "/src/kernel/rust/affinity.rs",
+    "/src/kernel/rust/ap.rs",
+    "/src/kernel/rust/atomic_helpers.rs",
+    "/src/kernel/rust/bitmap.rs",
+    "/src/kernel/rust/bitops.rs",
+    "/src/kernel/rust/builtin_dma.rs",
+    "/src/kernel/rust/cls.rs",
+    "/src/kernel/rust/cls_helpers.rs",
+    "/src/kernel/rust/debug.rs",
+    "/src/kernel/rust/devobj.rs",
+    "/src/kernel/rust/fileobj.rs",
+    "/src/kernel/rust/fork_control_guest.rs",
+    "/src/kernel/rust/fork_child_credits.rs",
+    "/src/kernel/rust/fork_constructed_credits.rs",
+    "/src/kernel/rust/fork_final_ack.rs",
+    "/src/kernel/rust/fork_runnable_child.rs",
+    "/src/kernel/rust/fork_control_registry.rs",
+    "/src/kernel/rust/freeze.rs",
+    "/src/kernel/rust/futex.rs",
+    "/src/kernel/rust/gencore.rs",
+    "/src/kernel/rust/hash.rs",
+    "/src/kernel/rust/host_helpers.rs",
+    "/src/kernel/rust/hugefileobj.rs",
+    "/src/kernel/rust/ikc_manycore.rs",
+    "/src/kernel/rust/ikc_master.rs",
+    "/src/kernel/rust/ikc_queue.rs",
+    "/src/kernel/rust/init.rs",
+    "/src/kernel/rust/list_helpers.rs",
+    "/src/kernel/rust/listeners.rs",
+    "/src/kernel/rust/llist.rs",
+    "/src/kernel/rust/lock_helpers.rs",
+    "/src/kernel/rust/mem_helpers.rs",
+    "/src/kernel/rust/mikc.rs",
+    "/src/kernel/rust/numparse.rs",
+    "/src/kernel/rust/object_helpers.rs",
+    "/src/kernel/rust/page_alloc.rs",
+    "/src/kernel/rust/page_helpers.rs",
+    "/src/kernel/rust/pager.rs",
+    "/src/kernel/rust/plist.rs",
+    "/src/kernel/rust/process_helpers.rs",
+    "/src/kernel/rust/process_verbose_data.rs",
+    "/src/kernel/rust/procfs.rs",
+    "/src/kernel/rust/profile.rs",
+    "/src/kernel/rust/pte_helpers.rs",
+    "/src/kernel/rust/rbtree.rs",
+    "/src/kernel/rust/refcount_helpers.rs",
+    "/src/kernel/rust/rlimit_helpers.rs",
+    "/src/kernel/rust/sched_helpers.rs",
+    "/src/kernel/rust/shmid_helpers.rs",
+    "/src/kernel/rust/f06_shmget_dispatch.rs",
+    "/src/kernel/rust/shmobj.rs",
+    "/src/kernel/rust/smp_ikc.rs",
+    "/src/kernel/rust/spinlock_helpers.rs",
+    "/src/kernel/rust/string.rs",
+    "/src/kernel/rust/syscall_policy.rs",
+    "/src/kernel/rust/f06_signal_tail.rs",
+    "/src/kernel/rust/f06_mmap_flags.rs",
+    "/src/kernel/rust/f06_prctl_set_register.rs",
+    "/src/kernel/rust/f06_prctl_get_register.rs",
+    "/src/kernel/rust/f06_mmap_dispatch_bridge.rs",
+    "/src/kernel/rust/f06_ptrace_context.rs",
+    "/src/kernel/rust/f06_ptrace_alloc.rs",
+    "/src/kernel/rust/f06_vdso_add_range.rs",
+    "/src/kernel/rust/f06_vdso_set_range.rs",
+    "/src/kernel/rust/f06_process_vm_entry.rs",
+    "/src/kernel/rust/arch_copy_to_user_bridge.rs",
+    "/src/kernel/rust/arch_copy_from_user_bridge.rs",
+    "/src/kernel/rust/arch_syscall_forward_context_bridge.rs",
+    "/src/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs",
+    "/src/kernel/rust/arch_rt_sigreturn_set_signal_bridge.rs",
+    "/src/kernel/rust/arch_rt_sigreturn_check_signal_bridge.rs",
+    "/src/kernel/rust/f06_rt_sigreturn_alloc_free.rs",
+    "/src/kernel/rust/f06_clone_reader_lock.rs",
+    "/src/kernel/rust/f06_clone_reader_unlock.rs",
+    "/src/kernel/rust/f06_ptrace_find_thread.rs",
+    "/src/kernel/rust/f06_ptrace_thread_unlock.rs",
+    "/src/kernel/rust/f06_clone_ptrace_provider_abi.rs",
+    "/src/kernel/rust/f06_obtain_clone_cpuid.rs",
+    "/src/kernel/rust/f06_vdso_info.rs",
+    "/src/kernel/rust/f06_ptrace_resume_callbacks.rs",
+    "/src/kernel/rust/f03_perf_owner.rs",
+    "/src/kernel/rust/f03_perf_owner/descriptors.rs",
+    "/src/kernel/rust/f03_perf_owner/events.rs",
+    "/src/kernel/rust/f03_perf_owner/groups.rs",
+    "/src/kernel/rust/f03_perf_owner/monitors.rs",
+    "/src/kernel/rust/f03_perf_owner/thread_counters.rs",
+    "/src/kernel/rust/f03_perf_owner/maps.rs",
+    "/src/kernel/rust/f03_perf_owner/runtime.rs",
+    "/src/kernel/rust/f03_perf_owner/process_targets.rs",
+    "/src/kernel/rust/f03_perf_owner/target_process.rs",
+    "/src/kernel/rust/f03_perf_owner/forward_gate.rs",
+    "/src/kernel/rust/f03_perf_owner/transactions.rs",
+    "/src/kernel/rust/f03_perf_owner/callbacks.rs",
+    "/src/kernel/rust/f03_perf_owner/hardware.rs",
+    "/src/kernel/rust/f03_perf_owner/fork_copy.rs",
+    "/src/kernel/rust/f03_perf_owner/copy_borrows.rs",
+    "/src/kernel/rust/f03_perf_owner/lifecycle.rs",
+    "/src/kernel/rust/f03_perf_owner/entry.rs",
+    "/src/kernel/rust/f03_perf_owner/terminal.rs",
+    "/src/kernel/rust/f03_do_mmap.rs",
+    "/src/kernel/rust/f03_do_fork.rs",
+    "/src/kernel/rust/f03_memory_host_offload.rs",
+    "/src/kernel/rust/f03_mprotect_host_provider.rs",
+    "/src/kernel/rust/syscall_offload_entry.rs",
+    "/src/kernel/rust/f03_do_syscall2_bridge.rs",
+    "/src/kernel/rust/f03_policy_forward_context_bridge.rs",
+    "/src/kernel/rust/f03_signal_forward_provider.rs",
+    "/src/kernel/rust/f03_wait_host_provider.rs",
+    "/src/kernel/rust/f06_rt_sigreturn_xrstor.rs",
+    "/src/kernel/rust/f03_ptrace_adapters.rs",
+    "/src/kernel/rust/f03_host_cleanup.rs",
+    "/src/kernel/rust/f03_exit_group.rs",
+    "/src/kernel/rust/f03_credential_refresh.rs",
+    "/src/kernel/rust/f03_interrupt_syscall.rs",
+    "/src/kernel/rust/f03_terminate.rs",
+    "/src/kernel/rust/f06_signal_ptrace_diagnostics.rs",
+    "/src/kernel/rust/f06_signal_trap_info.rs",
+    "/src/kernel/rust/native_signal.rs",
+    "/src/kernel/rust/native_fault.rs",
+    "/src/kernel/rust/native_futex.rs",
+    "/src/kernel/rust/native_xstate.rs",
+    "/src/kernel/rust/sysfs.rs",
+    "/src/kernel/rust/timer.rs",
+    "/src/kernel/rust/tofu_uapi.rs",
+    "/src/kernel/rust/ubsan.rs",
+    "/src/kernel/rust/waitq.rs",
+    "/src/kernel/rust/x86_coredump.rs",
+    "/src/kernel/rust/x86_cpu_helpers.rs",
+    "/src/kernel/rust/x86_cpu_log_providers.rs",
+    "/src/kernel/rust/x86_local.rs",
+    "/src/kernel/rust/x86_memory_helpers.rs",
+    "/src/kernel/rust/x86_memory_loggers.rs",
+    "/src/kernel/rust/x86_memory_logger_bridges.rs",
+    "/src/kernel/rust/x86_perfctr.rs",
+    "/src/kernel/rust/x86_setup.rs",
+    "/src/kernel/rust/x86_vsyscall.rs",
+    "/src/kernel/rust/../../host-kernel/native-rust/abi/vdso.rs",
+    "/src/kernel/rust/native_vdso.rs",
+    "/src/kernel/rust/../../host-kernel/native-rust/zero_pages.rs",
+    "/src/kernel/rust/clone3.rs",
+    "/src/kernel/rust/xpmem_helpers.rs",
+    "/src/kernel/rust/zeroobj.rs",
+    "/src/kernel/rust/f03_perf_attr_callbacks.rs",
+    "/src/kernel/rust/f03_prlimit.rs",
+    "/src/kernel/rust/f06_native_signal_restore_fp.rs",
+    "/src/kernel/rust/f06_ptrace_xstate_copy_to.rs",
+    "/src/kernel/rust/f06_ptrace_xstate_copy_from.rs",
+    "/src/kernel/rust/f06_vdso_setup_log.rs",
+    "/src/kernel/rust/f06_vdso_state.rs",
+    "/src/kernel/rust/f06_vdso_storage.rs",
+    "/src/kernel/rust/f06_ptrace_user_bridges.rs",
+    "/src/kernel/rust/f06_ptrace_gpregs_bridges.rs",
+    "/src/kernel/rust/f06_prctl_log.rs",
+    "/src/kernel/rust/f06_prctl_log_storage.rs",
+    "/src/kernel/rust/f06_vdso_map_log.rs",
+    "/src/kernel/rust/f03_perf_event_attr_abi.rs"
+  ],
+  "all_original_holds_unchanged": true,
+  "callbacks": {
+    "C_dispatch_carrier": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 16,
+        "index": 3503,
+        "name": "f03_syscall_dispatch_binding_v1",
+        "section_index": 45,
+        "type": "OBJECT",
+        "value": 18446744073685681456,
+        "visibility": 0
+      },
+      "name": "f03_syscall_dispatch_binding_v1",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 16,
+          "index": 234,
+          "name": "f03_syscall_dispatch_binding_v1",
+          "section_index": 8,
+          "type": "OBJECT",
+          "value": 3056,
+          "visibility": 0
+        },
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "placement": {
+          "address": 18446744073685678400,
+          "bytes": 3072
+        },
+        "section": ".rodata"
+      }
+    },
+    "actual_handler_table_and_C_carrier_separately_owned": {
+      "bytes": 371777,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-COMPLETE-03-05-REGION-OWNER-JOINS.json",
+      "sha256": "8747210846c11399216a581997c4c280d545d8a5c5795893f90ed85809a5e46e"
+    },
+    "actual_table_entries": 4025,
+    "all_table_data_and_current_relocations_in_existing_join": true,
+    "native_dispatch_Rust_table": {
+      "final": {
+        "binding": "GLOBAL",
+        "bytes": 32200,
+        "index": 4562,
+        "name": "f03_syscall_handler_table_v1",
+        "section_index": 325,
+        "type": "OBJECT",
+        "value": 18446744073685762648,
+        "visibility": 0
+      },
+      "name": "f03_syscall_handler_table_v1",
+      "owner": {
+        "input": {
+          "binding": "GLOBAL",
+          "bytes": 32200,
+          "index": 8451,
+          "name": "f03_syscall_handler_table_v1",
+          "section_index": 6401,
+          "type": "OBJECT",
+          "value": 0,
+          "visibility": 0
+        },
+        "object": "rust/mckernel_rust.o",
+        "placement": {
+          "address": 18446744073685762648,
+          "bytes": 32200
+        },
+        "section": ".lrodata.f03_syscall_handler_table_v1"
+      }
+    },
+    "retained_F06_ptrace_unmap_clear_host_mprotect_shmat_tables": "Existing independently qualified typed table slots and lower providers are reused at unchanged source/profile; current physical ownership is resolved through5052+5 map, not assumed from Rust wrapper names."
+  },
+  "exact_current_13_constituents": [
+    {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2848,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/mem.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "four retained reviewed project C functions plus honestly C-origin ABI/debug/callback/carrier data",
+      "global_definitions": 89,
+      "identity": {
+        "bytes": 183672,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "sha256": "0ade1bb0cdb58dee3c081c7e420b064bacf9c8ecf19c9193283764430f98d260"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "runtime_FUNC_rows": 4,
+      "runtime_FUNC_size_sum": 2965,
+      "strong_imports": 122,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2864,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/process.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2880,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "permitted existing architecture assembly glue with labels/entries independently of ELF FUNC tagging",
+      "global_definitions": 1,
+      "identity": {
+        "bytes": 2344,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2872,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "permitted existing architecture assembly glue with labels/entries independently of ELF FUNC tagging",
+      "global_definitions": 10,
+      "identity": {
+        "bytes": 16056,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 13,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2888,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2888,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "permitted existing architecture assembly glue with labels/entries independently of ELF FUNC tagging",
+      "global_definitions": 2,
+      "identity": {
+        "bytes": 5568,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "project Rust implementations including inlined/monomorphized source and qualified generated Rust metadata",
+      "global_definitions": 4502,
+      "identity": {
+        "bytes": 21579336,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+        "sha256": "a15699ebd17b7d7293b9b748bfc0301e3eedfd6e2482f1851218c0875903ca73"
+      },
+      "object": "rust/mckernel_rust.o",
+      "runtime_FUNC_rows": 4377,
+      "runtime_FUNC_size_sum": 1141161,
+      "strong_imports": 114,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "genuine matched1.95 upstream core Rust provider, not project-authored C or HOST std",
+      "global_definitions": 430,
+      "identity": {
+        "bytes": 2545640,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/core.o",
+        "sha256": "91548b340ced7612ce194f8f52bcbedbd56715255c488a3f0cd00054e1669061"
+      },
+      "object": "/sdk/mckernel-core-195/core.o",
+      "runtime_FUNC_rows": 475,
+      "runtime_FUNC_size_sum": 88024,
+      "strong_imports": 6,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    {
+      "classification": "genuine upstream integer Rust source facade under production normal graph, not HOST archive/float stub",
+      "global_definitions": 9,
+      "identity": {
+        "bytes": 134576,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/freestanding/compiler_builtins.o",
+        "sha256": "51edd36dc16f0c18661711e97bf74bfd69fd8c52cd1fb041b3b1b6ccd54cd412"
+      },
+      "object": "rust/freestanding/compiler_builtins.o",
+      "runtime_FUNC_rows": 19,
+      "runtime_FUNC_size_sum": 4830,
+      "strong_imports": 0,
+      "weak_definitions": 9,
+      "weak_imports": 0
+    }
+  ],
+  "full_existing5052_physical_owner_rows": {
+    "bytes": 6655279,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/OWNER-PROVIDER-JOINS.json",
+    "sha256": "ef312db79ab9c9d5173bae3d26f89e9a475236a7f49885d8d324c3ae18de512e"
+  },
+  "generated_or_external_dependency_records": {
+    "generated_metadata_and_canonical_normal_builtin_rmeta": [
+      "/work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+      "/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs",
+      "/work/output/build/kernel/rust/freestanding/libcompiler_builtins.rmeta"
+    ],
+    "qualified_RO_core_rmeta": [
+      "/sdk/mckernel-core-195/libcore.rmeta"
+    ]
+  },
+  "generic_C": {
+    "bytes": 183672,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "sha256": "0ade1bb0cdb58dee3c081c7e420b064bacf9c8ecf19c9193283764430f98d260"
+  },
+  "headers_macros_and_generated_behavior": {
+    "C_and_AS_actual_commands": {
+      "bytes": 74310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-compile_commands.json",
+      "sha256": "ec7de0d710dec207452dbf734a0f7075a92423043ac914bc7d1c999da8cb144c"
+    },
+    "C_table_storage_is_not_Rust_behavior": "C-origin readonly/mutable ABI/debug/carrier data remains named as C storage; callable targets are separately linked to genuine Rust/allowed-assembly providers.",
+    "actual_C_static_assertions_and_complete104_equality": {
+      "bytes": 10547,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-ABI104-AND-PERF-TYPES.json",
+      "sha256": "894014e5e9a78752919c94b6fff526e0cf1c6c1bfc44b81666c99a9faad149b8"
+    },
+    "emitted_inline_and_macro_code_owner": "Code emitted from original headers/macros/inlines belongs to its actual current linked constituent. The only executable C constituent has the four explicitly reviewed bodies; accepted file/region proofs supply implementation mapping, rather than claiming compiler-elided source was replaced.",
+    "generated_linker_symbols": "Five actual script assignments, not unexplained zero-sized imports or project behavior.",
+    "paired_actual_C_definitions_and96Rust_cfg": {
+      "bytes": 22616,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-RUST-C-NORMAL-PROVIDER-AND-LINK-COMMANDS.json",
+      "sha256": "ea3ebd6146a331d3dcccd99768069f9e410fcf110213abc94c11d533ae2097a3"
+    },
+    "platform_linux": "Existing reviewed Linux vDSO/time/rng/PV/HV pages and matched IHK/Linux6.12/099 module/header sources retain legitimate platform ownership; no project C behavior is relabeled as Linux/blob.",
+    "source_include_binding": {
+      "container_path": "/sdk/crash-9.0.1/defs.h",
+      "host_file": {
+        "bytes": 255081,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h",
+        "sha256": "a875242ef3f01c979e25e169149e810819e2194fcfa9281e425b3255d1fe6bfd"
+      },
+      "readonly_mount": "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h,dst=/sdk/crash-9.0.1/defs.h,readonly"
+    },
+    "unnamed_local_and_padding": "No ownership claim is based only on global symbol count: saved13 constituent section map, full final5597-symbol/726-section data, allocated-section LOAD coverage and the LOCAL do_execveat mapping remain part of the manifest.",
+    "upstream_runtime": "Actual matched1.95 core and canonical normal-generated integer builtins use genuine retained upstream Rust bodies and kernel ABI/ISA profile."
+  },
+  "image": {
+    "bytes": 13349576,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+    "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a"
+  },
+  "linker_defined_5": [
+    {
+      "map_address": "0xfffffffffe801000",
+      "owner": "actual generated production linker-script assignment",
+      "symbol": {
+        "binding": "GLOBAL",
+        "bytes": 0,
+        "index": 1524,
+        "name": "_head",
+        "section_index": 1,
+        "type": "NOTYPE",
+        "value": 18446744073684389888,
+        "visibility": 0
+      }
+    },
+    {
+      "map_address": "0xfffffffffe93a6e8",
+      "owner": "actual generated production linker-script assignment",
+      "symbol": {
+        "binding": "GLOBAL",
+        "bytes": 0,
+        "index": 1646,
+        "name": "__stop___verbose",
+        "section_index": 3,
+        "type": "NOTYPE",
+        "value": 18446744073685673704,
+        "visibility": 0
+      }
+    },
+    {
+      "map_address": "0xfffffffffe937628",
+      "owner": "actual generated production linker-script assignment",
+      "symbol": {
+        "binding": "GLOBAL",
+        "bytes": 0,
+        "index": 1826,
+        "name": "__start___verbose",
+        "section_index": 3,
+        "type": "NOTYPE",
+        "value": 18446744073685661224,
+        "visibility": 0
+      }
+    },
+    {
+      "map_address": "0xfffffffffe963000",
+      "owner": "actual generated production linker-script assignment",
+      "symbol": {
+        "binding": "GLOBAL",
+        "bytes": 0,
+        "index": 4003,
+        "name": "vsyscall_page",
+        "section_index": 708,
+        "type": "NOTYPE",
+        "value": 18446744073685839872,
+        "visibility": 0
+      }
+    },
+    {
+      "map_address": "0xfffffffffe9ae000",
+      "owner": "actual generated production linker-script assignment",
+      "symbol": {
+        "binding": "GLOBAL",
+        "bytes": 0,
+        "index": 5220,
+        "name": "_end",
+        "section_index": 709,
+        "type": "NOTYPE",
+        "value": 18446744073686147072,
+        "visibility": 0
+      }
+    }
+  ],
+  "map": {
+    "bytes": 1274247,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+    "sha256": "15b10db2310f91d83ac72f28fdeae0ea361d6bd152f64bca1a42976e2cfa3e98"
+  },
+  "original_source_scope_map": [
+    {
+      "disposition": "accepted original scope retained",
+      "original_requirement": "M14-F01",
+      "source": "kernel/mem.c"
+    },
+    {
+      "disposition": "accepted original scope retained",
+      "original_requirement": "M14-F02",
+      "source": "kernel/process.c"
+    },
+    {
+      "disposition": "current exact C4 reviewed;03-03/04/05 whole DEFAULT and genuine dispatch/outer/host ownership retained; file acceptance remains open",
+      "original_requirement": "M14-F03",
+      "source": "kernel/syscall.c"
+    },
+    {
+      "disposition": "accepted original scope retained",
+      "original_requirement": "M14-F04",
+      "source": "arch/x86_64/kernel/cpu.c"
+    },
+    {
+      "disposition": "accepted original scope retained",
+      "original_requirement": "M14-F05",
+      "source": "arch/x86_64/kernel/memory.c"
+    },
+    {
+      "disposition": "whole supported DEFAULT technical proof retained; FUNCTIONAL/file acceptance separate",
+      "original_requirement": "M14-F06",
+      "source": "arch/x86_64/kernel/syscall.c"
+    }
+  ],
+  "physical_mismatches": [],
+  "reviewed_but_unretired_project_C": {
+    "bytes": 20797,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/C4-SOURCE-OWNER-CONTRACTS.json",
+    "sha256": "22f0146493e251163b070ffaea860768acd24f55c1371c07caec9f9a2db8d659"
+  },
+  "schema": "original-M14-I01-E1-finite-selected-emitted-composition-v1",
+  "source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+  "strong_imports": {
+    "all_current_joins": {
+      "bytes": 6655279,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/OWNER-PROVIDER-JOINS.json",
+      "sha256": "ef312db79ab9c9d5173bae3d26f89e9a475236a7f49885d8d324c3ae18de512e"
+    },
+    "named_unresolved": [],
+    "occurrences": 255
+  },
+  "unknown_owners": [],
+  "unreviewed_project_C": []
+}
