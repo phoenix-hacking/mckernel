@@ -1,9 +1,30 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T01:28:43.207429+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T02:11:42.554088+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Crash cleanup repair is canonical.** Rootd6bce8fd applies exactly the reviewed
+33ed four-path Rust/C-boundary/selector fix after the fork owner positively
+closed and its25-file cohort was independently preserved (f88b2c33). Source
+postimages9ea/9e03/1b0a/2050 and genuine crash9.0.1 headera875 match the seven
+actual cleanup casesd73f/fb10 and normal six-phase libraryb2b6/bcd. No producer
+reran; no old M14 cache, request or configure was changed. Every future selecting
+configure requires the exact ROa875 header and FILEPATH argument; its separate
+operation still needs normal review/admission. SDK/SourceAcq join actual canonical
+source/header/profile/artifact tuples before any I03 credit. New projectC104 is
+explicit ABI-boundary debt, not C retirement or final Rust/native acceptance.
+
+The guest static chain has independent wholeGO1293 on30ELFs/3116 matched
+required definition+COPY joins/89 exactoptional dispositions/331 version nodes/
+67 dependency edges and no missing mandatory provider. Native40bafb traces the
+real blocker: original native12 holder PID/birth/lease/claim-generation and
+positive restoration remain unbound, while installed RootLease proves controller
+ownership only. Root/native owner must reconcile those exact records; no absent
+control file, HOST retirement or user urgency releases the native12/install4/V2
+2/scratch21/mutex27:4 scopes. Work continues on eligible Rust source/default
+conditions; no accepting gate stub, placeholder lock or native attempt is made.
 
 **Two original M15 I01 technical accounting conditions verified.** Independent
 wholeGO50811944 on published/fetchedb019 and finaldualmanifest2d256 closes
@@ -30,7 +51,8 @@ Whole30 guest static providers now close with no required missing edge; genuine
 native authority/currentfree/setup/restoration remain under real gates. Next15min:
 qualify the saved fork body/provider result, then select qualified cleanup with
 its genuine header binding. Preserve all original criteria, source/native/UNKNOWN/resource
-controls. Post this changed pair once only after fetched checkpoint verification.
+controls. Checkpointf77d7005 is pushed/fetched with29matching owned blobs/all33dirty
+paths preserved; pair63.70/62.43 posted once in PR3 comment6784925530.
 
 **Current M15 selection/link/ABI integration.** Root composed the exact reviewed
 P03 three-path3afce authoritative MCKERNELDIR correction and callback0a2 typed

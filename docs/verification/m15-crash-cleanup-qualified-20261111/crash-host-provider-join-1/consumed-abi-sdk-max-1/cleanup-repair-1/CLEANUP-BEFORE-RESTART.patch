@@ -1,0 +1,341 @@
+--- a/executer/user/rust/ldump2mcdump_helpers.rs
++++ b/executer/user/rust/ldump2mcdump_helpers.rs
+@@ -218,14 +218,21 @@
+     static mut machdep: *mut MachdepTable;
+ 
+     fn register_extension(table: *mut CommandTableEntry);
+-    fn symbol_value(name: *mut c_char) -> c_ulong;
+-    fn readmem(
++    // The real C command boundary owns crash's opaque setjmp environments.
++    // Providers still receive their original arguments and error flags.
++    fn cmd_ldump2mcdump();
++    fn mck_crash_guarded_symbol_value(
++        restart: *mut c_void, name: *mut c_char, value: *mut c_ulong,
++    ) -> c_int;
++    fn mck_crash_guarded_readmem(
++        restart: *mut c_void,
+         addr: c_ulonglong,
+         type_: c_int,
+         buf: *mut c_void,
+         size: c_long,
+         msg: *mut c_char,
+         flags: c_ulong,
++        result: *mut c_int,
+     ) -> c_int;
+     fn getopt(argc: c_int, argv: *mut *mut c_char, optstring: *const c_char) -> c_int;
+     fn strcpy(dst: *mut c_char, src: *const c_char) -> *mut c_char;
+@@ -686,19 +693,31 @@
+ }
+ 
+ #[cfg(ldump2_full_body)]
+-unsafe fn read_or_return(addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong) -> c_int {
+-    readmem(
++unsafe fn read_or_return(
++    restart: *mut c_void, addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong,
++) -> Option<c_int> {
++    let mut result = 0;
++    if mck_crash_guarded_readmem(
++        restart,
+         addr as c_ulonglong,
+         KVADDR,
+         buf,
+         size as c_long,
+         cstr_mut(EMPTY),
+         flags,
+-    )
++        &raw mut result,
++    ) == 0 {
++        // A genuine crash longjmp was caught entirely in C. Return normally
++        // through every Rust owner before the C command entry resumes it.
++        None
++    } else {
++        Some(result)
++    }
+ }
+ 
+ #[cfg(ldump2_full_body)]
+ unsafe fn read_dump_pages(
++    restart: *mut c_void,
+     dump_page_set: *const IhkDumpPageSet,
+     mem_chunks: *mut DumpMemChunks,
+     count_only: bool,
+@@ -712,11 +731,12 @@
+     while i < (*dump_page_set).count {
+         let mut ihk_dump_page = MaybeUninit::<IhkDumpPage>::uninit();
+         if read_or_return(
++            restart,
+             ihk_dump_page_addr,
+             ihk_dump_page.as_mut_ptr().cast::<c_void>(),
+             size_of::<IhkDumpPage>(),
+             FAULT_ON_ERROR,
+-        ) != TRUE {
++        ) != Some(TRUE) {
+             return -1;
+         }
+         let ihk_dump_page = ihk_dump_page.assume_init();
+@@ -730,11 +750,12 @@
+ 
+         memset(map_buf.cast::<c_void>(), 0, map_size);
+         if read_or_return(
++            restart,
+             ihk_dump_page_addr.wrapping_add(size_of::<IhkDumpPage>() as c_ulong),
+             map_buf.cast::<c_void>(),
+             map_size,
+             FAULT_ON_ERROR,
+-        ) != TRUE {
++        ) != Some(TRUE) {
+             return -1;
+         }
+ 
+@@ -784,7 +805,7 @@
+ 
+ #[no_mangle]
+ #[cfg(ldump2_full_body)]
+-pub unsafe extern "C" fn cmd_ldump2mcdump() {
++pub unsafe extern "C" fn mck_ldump2mcdump_rust_body(restart: *mut c_void) {
+     // Private acknowledgment proposal: retain existing failure observations and
+     // data-writing behavior, but never acknowledge a partial conversion.
+     let mut conversion_complete = true;
+@@ -826,30 +847,37 @@
+         }
+     }
+ 
+-    let symbol_dump_page_set = symbol_value(cstr_mut(DUMP_MEM_SYMBOL));
++    let mut symbol_dump_page_set = 0;
++    if mck_crash_guarded_symbol_value(
++        restart, cstr_mut(DUMP_MEM_SYMBOL), &raw mut symbol_dump_page_set,
++    ) == 0 {
++        return;
++    }
+     let mut dump_page_set_addr: c_ulong = 0;
+     if read_or_return(
++        restart,
+         symbol_dump_page_set,
+         addr_of_mut!(dump_page_set_addr).cast::<c_void>(),
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+-    ) != TRUE {
++    ) != Some(TRUE) {
+         return;
+     }
+ 
+     let mut dump_page_set = MaybeUninit::<IhkDumpPageSet>::uninit();
+     if read_or_return(
++        restart,
+         dump_page_set_addr,
+         dump_page_set.as_mut_ptr().cast::<c_void>(),
+         size_of::<IhkDumpPageSet>(),
+         FAULT_ON_ERROR,
+-    ) != TRUE {
++    ) != Some(TRUE) {
+         return;
+     }
+     let dump_page_set = dump_page_set.assume_init();
+ 
+     let mut mem_num: c_int = 0;
+-    if read_dump_pages(&dump_page_set, null_mut(), true, &raw mut mem_num) != 0 {
++    if read_dump_pages(restart, &dump_page_set, null_mut(), true, &raw mut mem_num) != 0 {
+         return;
+     }
+ 
+@@ -863,18 +891,24 @@
+     }
+     memset(mem_chunks.cast::<c_void>(), 0, mem_size);
+ 
+-    if read_dump_pages(&dump_page_set, mem_chunks, false, &raw mut mem_num) != 0 {
+-        return;
+-    }
+-
+-    let symbol_bootstrap_mem = symbol_value(cstr_mut(BOOTSTRAP_MEM_SYMBOL));
++    if read_dump_pages(restart, &dump_page_set, mem_chunks, false, &raw mut mem_num) != 0 {
++        return;
++    }
++
++    let mut symbol_bootstrap_mem = 0;
++    if mck_crash_guarded_symbol_value(
++        restart, cstr_mut(BOOTSTRAP_MEM_SYMBOL), &raw mut symbol_bootstrap_mem,
++    ) == 0 {
++        return;
++    }
+     let mut bootstrap_mem: c_ulong = 0;
+     if read_or_return(
++        restart,
+         symbol_bootstrap_mem,
+         addr_of_mut!(bootstrap_mem).cast::<c_void>(),
+         size_of::<c_ulong>(),
+         FAULT_ON_ERROR,
+-    ) != TRUE {
++    ) != Some(TRUE) {
+         return;
+     }
+     (*mem_chunks).kernel_base = bootstrap_mem
+@@ -1099,8 +1133,11 @@
+                 cpsize = bsize;
+             }
+             memset(buf, 0, cpsize);
+-            let read_mem_ret =
+-                read_or_return(ptov(addr), buf, cpsize, FAULT_ON_ERROR | RETURN_ON_ERROR);
++            let Some(read_mem_ret) = read_or_return(
++                restart, ptov(addr), buf, cpsize, FAULT_ON_ERROR | RETURN_ON_ERROR,
++            ) else {
++                return;
++            };
+             if read_mem_ret == TRUE {
+                 if !bfd_set_section_contents(
+                     abfd,
+--- /dev/null
++++ b/executer/user/ldump2_crash_error_boundary.c
+@@ -0,0 +1,104 @@
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++ * Narrow remaining C ABI debt: setjmp's returns-twice semantics stay in C.
++ * All conversion, allocation ownership and BFD work remain in the Rust body.
++ * Includes the exact selected crash header; no pc/jmp_buf layout is guessed.
++ */
++#ifndef MCKERNEL_CRASH_DEFS_HEADER
++#error The nonlocal boundary requires the selected actual crash provider header
++#endif
++#include MCKERNEL_CRASH_DEFS_HEADER
++#include <setjmp.h>
++#include <string.h>
++
++#define INTERNAL __attribute__((visibility("hidden")))
++
++_Static_assert(_Generic(&pc, struct program_context **: 1, default: 0),
++               "actual crash context pointer ABI");
++_Static_assert(sizeof(pc->main_loop_env) == sizeof(jmp_buf) &&
++               sizeof(pc->foreach_loop_env) == sizeof(jmp_buf),
++               "use actual header-declared opaque jump environments");
++_Static_assert(_Generic(&readmem,
++    int (*)(ulonglong, int, void *, long, char *, ulong): 1, default: 0),
++    "actual readmem ABI");
++_Static_assert(_Generic(&symbol_value, ulong (*)(char *): 1, default: 0),
++               "actual symbol_value ABI");
++
++struct mck_crash_restart {
++    struct program_context *host;
++    jmp_buf saved_main;
++    jmp_buf saved_foreach;
++    int pending; /* 0: ordinary return, 1: original main, 2: original foreach */
++};
++
++extern void mck_ldump2mcdump_rust_body(void *) INTERNAL;
++
++static void restore_targets(struct mck_crash_restart *scope)
++{
++    memcpy(scope->host->main_loop_env, scope->saved_main, sizeof(jmp_buf));
++    memcpy(scope->host->foreach_loop_env, scope->saved_foreach, sizeof(jmp_buf));
++}
++
++/* These setjmp frames are BELOW the calling Rust frame. The provider's real
++ * longjmp therefore crosses only C frames, then becomes an ordinary Rust
++ * return. The original opaque environments remain live in the command caller.
++ * Crash's normal synchronous command context keeps pc stable through calls.
++ */
++int INTERNAL
++mck_crash_guarded_readmem(void *opaque, ulonglong addr, int type, void *buf,
++                          long size, char *msg, ulong flags, int *result)
++{
++    struct mck_crash_restart *scope = opaque;
++    if (setjmp(scope->host->main_loop_env) != 0) {
++        scope->pending = 1;
++        restore_targets(scope);
++        return 0;
++    }
++    if (setjmp(scope->host->foreach_loop_env) != 0) {
++        scope->pending = 2;
++        restore_targets(scope);
++        return 0;
++    }
++    *result = readmem(addr, type, buf, size, msg, flags);
++    restore_targets(scope);
++    return 1;
++}
++
++int INTERNAL
++mck_crash_guarded_symbol_value(void *opaque, char *name, ulong *value)
++{
++    struct mck_crash_restart *scope = opaque;
++    if (setjmp(scope->host->main_loop_env) != 0) {
++        scope->pending = 1;
++        restore_targets(scope);
++        return 0;
++    }
++    if (setjmp(scope->host->foreach_loop_env) != 0) {
++        scope->pending = 2;
++        restore_targets(scope);
++        return 0;
++    }
++    *value = symbol_value(name);
++    restore_targets(scope);
++    return 1;
++}
++
++/* This is the sole public command entry, still void(void). All Rust owners
++ * have returned and dropped before the original destination is resumed. Real
++ * readmem flags and __error diagnostics/foreach selection are never replaced
++ * or replayed. Ordinary returned provider values, including false/zero, remain
++ * distinct from an intercepted nonlocal transfer.
++ */
++void cmd_ldump2mcdump(void)
++{
++    struct mck_crash_restart scope;
++    scope.host = pc;
++    scope.pending = 0;
++    memcpy(scope.saved_main, pc->main_loop_env, sizeof(jmp_buf));
++    memcpy(scope.saved_foreach, pc->foreach_loop_env, sizeof(jmp_buf));
++    mck_ldump2mcdump_rust_body(&scope);
++    restore_targets(&scope);
++    if (scope.pending == 2)
++        RESUME_FOREACH();
++    if (scope.pending == 1)
++        RESTART();
++}
+--- a/executer/user/CMakeLists.txt
++++ b/executer/user/CMakeLists.txt
+@@ -605,7 +605,26 @@
+ 		add_custom_target(ldump2mcdump_rust_helpers DEPENDS "${LDUMP2MCDUMP_RUST_OBJ}")
+ 		set_source_files_properties("${LDUMP2MCDUMP_RUST_OBJ}"
+ 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+-		set(LDUMP2MCDUMP_SRCS "${LDUMP2MCDUMP_RUST_OBJ}")
++		# The real crash provider may longjmp. Keep returns-twice in this small
++		# C ABI boundary, below Rust owners, using the exact provider's header.
++		set(MCKERNEL_CRASH_DEFS_HEADER "" CACHE FILEPATH "Selected actual crash provider defs.h")
++		if (NOT CMAKE_SYSTEM_NAME STREQUAL "Linux" OR
++		    NOT IS_ABSOLUTE "${MCKERNEL_CRASH_DEFS_HEADER}" OR
++		    NOT EXISTS "${MCKERNEL_CRASH_DEFS_HEADER}" OR
++		    NOT MCKERNEL_CRASH_DEFS_HEADER MATCHES "^/[A-Za-z0-9_./+-]+$")
++			message(FATAL_ERROR "Rust ldump2mcdump requires the absolute selected crash provider header")
++		endif()
++		file(SHA256 "${MCKERNEL_CRASH_DEFS_HEADER}" _ldump2_crash_defs_sha256)
++		if (NOT _ldump2_crash_defs_sha256 STREQUAL "a875242ef3f01c979e25e169149e810819e2194fcfa9281e425b3255d1fe6bfd")
++			message(FATAL_ERROR "Crash nonlocal boundary requires the reviewed crash9.0.1 provider header")
++		endif()
++		set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
++			"${MCKERNEL_CRASH_DEFS_HEADER}")
++		set(_ldump2_crash_boundary "${CMAKE_CURRENT_SOURCE_DIR}/ldump2_crash_error_boundary.c")
++		set_source_files_properties("${_ldump2_crash_boundary}" PROPERTIES
++			OBJECT_DEPENDS "${MCKERNEL_CRASH_DEFS_HEADER}"
++			COMPILE_DEFINITIONS "MCKERNEL_CRASH_DEFS_HEADER=\"${MCKERNEL_CRASH_DEFS_HEADER}\"")
++		set(LDUMP2MCDUMP_SRCS "${LDUMP2MCDUMP_RUST_OBJ}" "${_ldump2_crash_boundary}")
+ 	endif()
+ endif()
+ 
+--- a/executer/user/cmake/SelectRustVmcore2mckdump.cmake
++++ b/executer/user/cmake/SelectRustVmcore2mckdump.cmake
+@@ -7,10 +7,13 @@
+   endif()
+   # Source presence is necessary; source/fixture/SDK/native acceptance is a separate root decision.
+   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+-    "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs")
++    "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs"
++    "${CMAKE_CURRENT_SOURCE_DIR}/ldump2_crash_error_boundary.c")
+   file(SHA256 "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs" _vmcore_ack_source_sha256)
+-  if(NOT _vmcore_ack_source_sha256 STREQUAL "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a")
+-    message(FATAL_ERROR "Rust vmcore wrapper requires the exact jointly reviewed ACK producer; current unmodified converter is incompatible")
++  file(SHA256 "${CMAKE_CURRENT_SOURCE_DIR}/ldump2_crash_error_boundary.c" _vmcore_restart_source_sha256)
++  if(NOT _vmcore_ack_source_sha256 STREQUAL "9ea23c781d37c200674b71a67b4e5723d9571b8de7402cfef634881ff305c366" OR
++     NOT _vmcore_restart_source_sha256 STREQUAL "9e03cdc4eb792e08f23f4335b8755851abb015185c41d69a3f82c7c5a286fea2")
++    message(FATAL_ERROR "Rust vmcore wrapper requires the exact jointly reviewed ACK producer and nonlocal boundary")
+   endif()
+   set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
+   if(NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}" OR NOT EXISTS "${MCKERNEL_RUNTIME_TOOL_RUSTC}")

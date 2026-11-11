@@ -1,0 +1,116 @@
+{
+  "actual_new_pc_provider_row": {
+    "raw": "  4268: 0000000000d4c5a8     8 OBJECT  GLOBAL DEFAULT   29 pc",
+    "source_definition": "Already extracted crash global_data.c:35..36, actual struct program_context and pc=&program_context;8B realELF role matches typed actuala875. No new ELFtool/probe/readback."
+  },
+  "actual_provider_header": {
+    "bytes": 255081,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h",
+    "sha256": "a875242ef3f01c979e25e169149e810819e2194fcfa9281e425b3255d1fe6bfd"
+  },
+  "actual_tools_extraction": {
+    "bytes": 1478,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/next-error-source-1/extracted/RESULT.json",
+    "sha256": "82d9bac8e9bd4296cd382c8a3e8dda0f95faa7d992104522427bf30aec297ec9"
+  },
+  "actual_tools_operation": {
+    "bytes": 1105,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/next-error-source-1/execution-1/RESULT.json",
+    "sha256": "dd8befdeabbeb7f4f221e78f94c411fb8181cfc171ee5df6c1c02e2ba5b94862"
+  },
+  "at_utc": "2026-11-10T20:20:31.343908+00:00",
+  "authenticated_tools": {
+    "bytes": 177533,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/next-error-source-1/extracted/source/crash-9.0.1/tools.c",
+    "sha256": "d3155bcfff67d045c97b63490ba91011b5b8f1d5281eecdaa3f290b982ba303f"
+  },
+  "boundary_preconditions": [
+    "Original crash command context and pc remain live/stable during synchronous provider calls; original main/foreach environments refer to still-live caller frames.",
+    "Original opaque jmp_buf objects are copied/restored by Cmemcpy using actual header sizeof; no layout/offset/size is manually encoded in Rust or C.",
+    "Nested synchronous commands have independent stack scopes and restore caller environments; no global/TLS latch is added.",
+    "This fixes known synchronous real-provider nonlocal transfer. Asynchronous signal cancellation outside guarded provider calls, DROP_CORE/signal/process-exit behavior, real loader/default/deployed/native lifetime acceptance remain separately unproved; no signal masking or handler replacement is added."
+  ],
+  "explicit_remaining_C_debt": {
+    "all_conversion_and_owning_Drop_algorithms": "Remain in unchanged Rust body except explicit context threading/tagged error propagation.",
+    "internal_functions": [
+      "mck_crash_guarded_readmem",
+      "mck_crash_guarded_symbol_value"
+    ],
+    "path": "executer/user/ldump2_crash_error_boundary.c",
+    "public_entry": "cmd_ldump2mcdump(void)",
+    "why_required": "Stable Rust does not express C returns-twice/setjmp semantics. Both setjmp capture frames and the final resume reside in C; no longjmp crosses a Rust frame on these synchronous provider error paths. This is new project C ABI debt, not C-retired/unchanged platform code or all-Rust acceptance."
+  },
+  "focused_regression_proposal": {
+    "bytes": 10517,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/REGRESSION-PROPOSED.json",
+    "sha256": "562df4725a44901f6391ce81e54de8b96f8bd63066bdc743b5750b3c6fea1f89"
+  },
+  "new_header_qualification": {
+    "bytes": 14424,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/actual-header-qualification-1/QUALIFICATION.json",
+    "sha256": "0d1d92633214881063acb9142105f2dc024aed4be872d21b5eda9135ab0cd103"
+  },
+  "new_selected_inputs": [
+    "Exact actual crash defs.ha875, supplied to MCKERNEL_CRASH_DEFS_HEADER in the real producer and source-specific compilation dependency; olddefs0cb cannot compile this pc boundary.",
+    "Actual pc global export and normal libc setjmp/longjmp (and any emitted memcpy) types/provider identities must be joined to the new actual Cobject/final link before artifact qualification. No object/provider names are guessed as final emitted facts."
+  ],
+  "owner": "/root/sdk_binding_source_max actual same-Root Sol/MAX; no children; Root sole canonical/execution/publisher",
+  "patch": {
+    "bytes": 13188,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/CLEANUP-BEFORE-RESTART.patch",
+    "sha256": "33ed93aa685eb0d8fc014b6ee37db7ded18fd447a3568dd5a3fa09b32a5dd45c"
+  },
+  "preparer_operations": "Current exact authenticated source/header/real build-definition reads, standard-library string/byte diffs and private candidate/manifest/patch writes only. No compiler/test/CMake/ELFtool/helper execution, archive extraction, Docker/network, main/library/API/native or canonical mutation.",
+  "schema": "mckernel.crash-cleanup-before-restart-private-source-candidate.v1",
+  "source_body_semantics": "Real readmem/symbol_value are called once with original arguments and FAULT/RETURN flags. Actual __error remains inside the real provider and chooses original restart/foreach/exit/diagnostics. C returns-twice frames capture synchronous provider longjmp below Rust, restore original opaque typed environments, return tagged interruption; Rust returns normally through existing RAII; sole outer C command resumes the exact original main/foreach target only after the Rust body returns. No second provider call, flags-only substitution, fake __error or Rust/guessed pc/jmp_buf layout.",
+  "source_files": [
+    {
+      "before_bytes": 32826,
+      "before_sha256": "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a",
+      "candidate": {
+        "bytes": 33990,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/rust/ldump2mcdump_helpers.rs",
+        "sha256": "9ea23c781d37c200674b71a67b4e5723d9571b8de7402cfef634881ff305c366"
+      },
+      "path": "executer/user/rust/ldump2mcdump_helpers.rs"
+    },
+    {
+      "before_bytes": null,
+      "before_sha256": null,
+      "candidate": {
+        "bytes": 3800,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/ldump2_crash_error_boundary.c",
+        "sha256": "9e03cdc4eb792e08f23f4335b8755851abb015185c41d69a3f82c7c5a286fea2"
+      },
+      "path": "executer/user/ldump2_crash_error_boundary.c"
+    },
+    {
+      "before_bytes": 29480,
+      "before_sha256": "c66bfc9e5f904fcc37d07412b197d04bdcbdb7a4f434c4469715379b674eda6e",
+      "candidate": {
+        "bytes": 30773,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/CMakeLists.txt",
+        "sha256": "1b0a5736da8c3af8b3408bdeec0544350af5ee9cd21f40545e41281c0e14b66b"
+      },
+      "path": "executer/user/CMakeLists.txt"
+    },
+    {
+      "before_bytes": 2426,
+      "before_sha256": "b082d79c183cc3a19d872bc3252303b71871081036a89f9235d7ab049ed48c81",
+      "candidate": {
+        "bytes": 2689,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/consumed-abi-sdk-max-1/cleanup-repair-1/candidate/executer/user/cmake/SelectRustVmcore2mckdump.cmake",
+        "sha256": "205047fccc539b325286f5eb7d4817b34c37b4fdea0b360c6705f0987f90b4c6"
+      },
+      "path": "executer/user/cmake/SelectRustVmcore2mckdump.cmake"
+    }
+  ],
+  "source_inspection_of_actual_error": "Actualtools.c96..197 formats before checking nullfmt, prints/flushes real configured streams, handlesDROP_CORE, then FATAL selectsforeach, FATAL_RESTART/main selectsRUNTIMErestart, otherwise clean_exit. The repair never invents a nullformat, magicerrorlevel, diagnostic replay or altered IN_FOREACH/RUNTIME flag.",
+  "status": "PRIVATE_IMPLEMENTATION_NOT_COMPILED_NOT_TESTED_NOT_INTEGRATED",
+  "success_and_return_error_behavior": "Existing wrappers/defaultOFF/ACK strings and ordinary conversion/return flags2/3 logic remain unchanged. Even a legitimate returnedzero symbol is distinct from an intercepted jump. Final physical-copy path returns before extra diagnostics/ACK only on actual intercepted transfer, as the original nonlocal path would.",
+  "unchanged_scopes": [
+    "Actual11BFD source ABI/consume-on-close proofs and old normal/focused behavior proofs retained only at original scope.",
+    "No fullimage/modules/tool/oldfixture/51/349/72/41 or productionBFD rebuild/test replay.",
+    "M14 acceptance priority/native/currentfree/source/UNKNOWN/service/account/resource controls preserved."
+  ]
+}
