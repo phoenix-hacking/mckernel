@@ -628,6 +628,8 @@ class Campaign:
         self.last_activity = time.monotonic()
         self.stopping = False
         self.controlled = False
+        self.native_owner_control = None
+        self.native_owner_control_failed = False
         self.output = LiveOutput(self.log_dir, quiet=args.quiet, agent_windows=args.agent_windows)
         self.output.primary = self.state.get("thread_id")
         # Saved hints belong to the preceding launcher instance, never this monitor.
@@ -650,6 +652,56 @@ class Campaign:
             self.state['capture_progress_registration'] = dict(
                 directory=str(path), registered_at=utc(), terminal=False,
                 direct_child_joined=False, release_authorized=False)
+
+    def poll_native_owner_control(self):
+        """Service this owning controller only; replies never grant native RAM."""
+        if not self.controlled or self.native_owner_control_failed:
+            return
+        try:
+            import native_current_owner
+            if self.native_owner_control is None:
+                self.native_owner_control = native_current_owner.CurrentOwnerServer.__new__(native_current_owner.CurrentOwnerServer)
+                self.native_owner_control.__init__(self)
+                self.save(native_current_owner=dict(path=self.native_owner_control.path,
+                    pid=os.getpid(), birth=self.native_owner_control.start,
+                    source_sha256=native_current_owner.LOADED_SOURCE_SHA256,
+                    scope="controller_account_data_only_not_native_admission"))
+            self.native_owner_control.poll()
+        except Exception as error:
+            # Close every own data-channel handle BEFORE a possibly failing
+            # receipt. Neither cleanup nor receipt loss changes native custody.
+            self.native_owner_control_failed = True
+            secondary = []
+            primary_interrupt = getattr(error, "interrupt", None)
+            if self.native_owner_control is not None:
+                try:self.native_owner_control.close()
+                except BaseException as close_error:secondary.append(close_error)
+            # Select any real interruption BEFORE fallible diagnostics. The
+            # close wrapper retains nested KeyboardInterrupt/SystemExit too.
+            for close_error in secondary:
+                interrupt = (close_error if isinstance(close_error, (KeyboardInterrupt, SystemExit))
+                             else getattr(close_error, "interrupt", None))
+                if primary_interrupt is None and interrupt is not None:
+                    primary_interrupt = interrupt
+            try:
+                self.save(native_current_owner_error=str(error),
+                          native_current_owner_close_errors=[str(x) for x in secondary])
+            except BaseException as receipt_error:
+                receipt_error.native_primary_error = error
+                receipt_error.native_close_errors = secondary
+                if primary_interrupt is not None:
+                    primary_interrupt.native_secondary_errors = secondary + [receipt_error]
+                    raise primary_interrupt from error
+                raise
+            if primary_interrupt is not None:
+                primary_interrupt.native_secondary_errors = secondary
+                raise primary_interrupt from error
+            for close_error in secondary:
+                interrupt = (close_error if isinstance(close_error, (KeyboardInterrupt, SystemExit))
+                             else getattr(close_error, "interrupt", None))
+                if interrupt is not None:
+                    interrupt.native_primary_error = error
+                    raise interrupt
 
     def poll_capture_progress(self):
         """Read two registered hints only; never dispatch, signal or grant clearance."""
@@ -1856,6 +1908,7 @@ class Campaign:
                         "method": None, "mutating": False})
                     code = 24
                     break
+                self.poll_native_owner_control()
                 self.deliver_instruction()
                 self.rpc.pump(timeout=1)
                 self.output.flush()
@@ -1906,40 +1959,68 @@ class Campaign:
                     "class": failure["class"], "error": failure["error"], "method": failure["method"]})
             self.output.notice(str(error))
         finally:
-            # Capture the actual reason/goal before shutdown may pause it. Keep
-            # the original diagnostic identity; old failures are not relabelled.
-            stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
-                                 stop_reason=self.stop_reason, phase="stopping",
-                                 active_turns=dict(self.active))
+            # Preserve an already propagating interruption and any interruption
+            # acquired while closing the data channel across ALL later cleanup.
+            native_primary = sys.exc_info()[1]
+            native_close_interrupt = (native_primary if isinstance(native_primary, (KeyboardInterrupt, SystemExit))
+                                      else getattr(native_primary, "interrupt", None))
+            native_close_errors = []
+            if self.native_owner_control is not None:
+                try:self.native_owner_control.close()
+                except BaseException as native_error:
+                    native_close_errors.append(native_error)
+                    if native_close_interrupt is None:
+                        native_close_interrupt = (native_error if isinstance(native_error, (KeyboardInterrupt, SystemExit))
+                                                  else getattr(native_error, "interrupt", None))
+            # Retain exception objects before formatting or persistence.
+            self.native_owner_control_cleanup_errors = native_close_errors
             try:
-                self.stop()
-            finally:
+                self.state["native_current_owner_close_errors"] = [str(x) for x in native_close_errors]
+                # Capture the actual reason/goal before shutdown may pause it. Keep
+                # the original diagnostic identity; old failures are not relabelled.
+                stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
+                                     stop_reason=self.stop_reason, phase="stopping",
+                                     active_turns=dict(self.active))
                 try:
-                    close_errors = []
-                    try:
-                        if self.rpc:
-                            self.rpc.close()
-                    except Exception as error:
-                        close_errors.append(str(error))
-                    known = getattr(self.rpc, "close_errors", None)
-                    if isinstance(known, list):
-                        close_errors = known + close_errors
-                    self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
-                              server_close_errors=close_errors, cleanup_verified=False,
-                              stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
-                                  "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
-                                  "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
-                    if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
-                        request = self.state["guardian_checkpoint_request"]
-                        self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
-                                  "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
-                    self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
-                                                exit_code=code, snapshot=stop_snapshot)
-                    self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
-                                       + "; " + (self.stop_reason or "goal status") + ".")
-                    self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
+                    self.stop()
                 finally:
-                    self.output.close()
+                    try:
+                        close_errors = []
+                        try:
+                            if self.rpc:
+                                self.rpc.close()
+                        except Exception as error:
+                            close_errors.append(str(error))
+                        known = getattr(self.rpc, "close_errors", None)
+                        if isinstance(known, list):
+                            close_errors = known + close_errors
+                        self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
+                                  server_close_errors=close_errors, cleanup_verified=False,
+                                  stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
+                                      "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
+                                      "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
+                        if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
+                            request = self.state["guardian_checkpoint_request"]
+                            self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
+                                      "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
+                        self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
+                                                    exit_code=code, snapshot=stop_snapshot)
+                        self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
+                                           + "; " + (self.stop_reason or "goal status") + ".")
+                        self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
+                    finally:
+                        self.output.close()
+            except BaseException as native_cleanup_error:
+                native_close_errors.append(native_cleanup_error)
+                if native_close_interrupt is None:
+                    native_close_interrupt = (native_cleanup_error if isinstance(native_cleanup_error, (KeyboardInterrupt, SystemExit))
+                                              else getattr(native_cleanup_error, "interrupt", None))
+                raise
+            finally:
+                if native_close_interrupt is not None:
+                    native_close_interrupt.native_primary_error = native_primary
+                    native_close_interrupt.native_secondary_errors = list(native_close_errors)
+                    raise native_close_interrupt
         return code
 
 

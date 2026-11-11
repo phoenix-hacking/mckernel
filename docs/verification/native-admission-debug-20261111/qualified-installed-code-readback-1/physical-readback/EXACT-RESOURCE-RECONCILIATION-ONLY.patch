@@ -1,0 +1,151 @@
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/readback_code.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/readback_code.py
+@@ -28,6 +28,19 @@
+ SCOPE='ROOT_CODE_INSTALL_ONLY'
+ SCHEMA='mckernel.fixed30.root-tool-capture.v1'
+ RETAINED_FAILURES=[]
++
++# One actual independently reconciled producer; never a generic allow-UNKNOWN.
++# The ordinary strict path below remains. These immutable input identities bind
++# only the new code-readback branch, and confer no operation/native authority.
++RECONCILED_NONCE='2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f'
++RECONCILED_CALLER_SHA='e4a294466bcea2aa01cdb90a4d0d40a74a0247991c36d2cb484123eef0d0b190'
++RECONCILED_ACTUAL_SHA='e62a0c9399fec02e208cc734fe3169651504dbe6dc67cfc17439341e49d4f038'
++RECONCILED_FULL_SHA='4bf86e15c83120d699e1fd69520c311b8199ec34b2156f16787e12164214b8f2'
++RECONCILED_ROOT_CANON_SHA='1da27ed23e6c49e775fd79b7f7a0cfee1e0153ffec2f857a2d83bed3ca6c1c80'
++DISPOSITION_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-current-ownership-review-sourceacq-max-1/corrected-producer-1/RESULT.json'
++DISPOSITION_SHA='ee63defa3229ed398d1bfb06795fdb9b11084b9cffc575f50af396216b43a5c3'
++RETIREMENT_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-corrected-operation-root-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json'
++RETIREMENT_SHA='56e11fe1c050fbca23ebda1d735c889ead11fe6ce3ae6f48757af19a8f4e0c7e'
+ 
+ 
+ def need(ok,message):
+@@ -256,6 +269,67 @@
+     return full,final
+ 
+ 
++
++def exact_reconciled_caller(root_record,actual_raw,nonce,terminal_raw,terminal,handles):
++    # All normal tool/capture parsing happened first. This branch accepts only
++    # the exact already-reviewed historical resource-audit UNKNOWN, without
++    # rewriting its caller object or declaring resource/overall acceptance.
++    need(nonce==RECONCILED_NONCE and sha(actual_raw)==RECONCILED_ACTUAL_SHA and
++         sha(terminal_raw)==RECONCILED_CALLER_SHA and
++         sha(canon(root_record))==RECONCILED_ROOT_CANON_SHA,
++         'UNKNOWN caller is not the exact reconciled current producer')
++    need(terminal.get('status')=='UNKNOWN_REQUIRES_ROOT_RECONCILIATION' and
++         terminal.get('resource_unknown') is True and terminal.get('observation_errors')==['ValueError'] and
++         root_record.get('caller_resource_observation')=='UNKNOWN_RETAINED' and
++         root_record.get('overall_resource_acceptance') is False and
++         root_record.get('actual_outer_functions_cell_completed_before_this_capsule') is True and
++         root_record.get('completion_scope')=='ACTUAL_ROOT_TOOL_WAIT_AND_STREAM_CLOSURE_ONLY_NOT_RESOURCE_OR_NATIVE_ACCEPTANCE',
++         'exact caller resource uncertainty must remain explicit')
++    raw,st=read_regular(DISPOSITION_PATH,handles,DISPOSITION_SHA)
++    disposition=parse(raw);disposition_ref=ref(DISPOSITION_PATH,raw,st)
++    need(root_record.get('independent_disposition')==disposition_ref and
++         disposition.get('schema')=='mckernel.fixed30.corrected-producer-current-scope-review.v1' and
++         disposition.get('scope')=='ROOT_CODE_INSTALL_ONLY_CURRENT_PROCESS_MEMORY_AND_INSTALLED_CODE_PROVENANCE' and
++         disposition.get('nonce')==nonce,'exact independent current disposition absent')
++    decision=disposition['decision'];inputs=disposition['actual_inputs']
++    need(decision.get('producer_DATA_and_catalogue_provenance')=='GO_AT_EXACT_RETAINED_SCOPE' and
++         decision.get('current_operation_Root_lease')=='ACTUAL_VERIFIED_CLOSED_COMPLETE' and
++         decision.get('historical_resource_observation')=='UNKNOWN_RETAINED' and
++         decision.get('authorizes_live_operation') is False and
++         decision.get('republish_required') is False and
++         decision.get('native_release') is False and decision.get('native_currentfree') is None,
++         'independent disposition code-only scope differs')
++    need(inputs['source_request']['sha256']==REQUEST_SHA and
++         inputs['actual_caller_source']['sha256']=='05ea0c9e8c1904869a3eb7072a9a197b480ad78209cc19c2aac4ae5c1ae39e8d' and
++         inputs['profile']['sha256']==PROFILE_SHA and
++         inputs['actual_Root_terminal']['sha256']=='024688482277311b5967595aed51d2543552ddf084abf5553bc09ef51606eddf' and
++         inputs['actual_Root_initial_and_full_chain']['sha256']=='2d81f8aab27683fbcda299931157eaf3dc425588bbf5b28674819169154305f1' and
++         root_record.get('actual_values')==inputs['actual_values'] and
++         root_record.get('caller_terminal')==inputs['actual_caller_terminal'],
++         'reconciled source or actual tool/caller identity differs')
++    positive=disposition['positive_current_custody'];unknown=disposition['unknown_preserved']
++    need(positive['producer_full_line_sha256']==RECONCILED_FULL_SHA and
++         positive['final_lease_disposition']=='VERIFIED_CLOSED' and positive['final_outcome']=='COMPLETE' and
++         terminal['observed_roles']==positive['independently_observed_roles'] and
++         unknown['caller_raw_status']==terminal['status'] and unknown['resource_unknown'] is True and
++         unknown['observation_errors']==terminal['observation_errors'] and
++         unknown['timed_out'] is False and unknown['data_error'] is None,
++         'reconciled actual role/DATA/UNKNOWN tuple differs')
++    retirement_raw,retirement_st=read_regular(RETIREMENT_PATH,handles,RETIREMENT_SHA)
++    retirement_ref=ref(RETIREMENT_PATH,retirement_raw,retirement_st)
++    need(root_record.get('current_process_only_retirement')==retirement_ref,
++         'Root actual current-process-only retirement identity differs')
++    return {'independent_disposition':disposition_ref,
++      'current_process_only_retirement':retirement_ref,
++      'caller_terminal_raw_status':terminal['status'],'caller_resource_unknown':True,
++      'observation_errors':list(terminal['observation_errors']),
++      'historical_resource_observation':'UNKNOWN_RETAINED','overall_resource_acceptance':False,
++      'exact_historical_peak_or_exception_cause_proven':False,
++      'caller_peak_rss_observed_bytes':terminal['caller_peak_rss_bytes'],
++      'host_control_peak_rss_observed_bytes':terminal['host_control_observed_peak_bytes'],
++      'scope':'Only exact complete code-producer/custody evidence permits this readonly30-file verification; resource audit and all other UNKNOWN outcomes remain.'}
++
++
+ def run_readback(root_record,handles):
+     entering,preexec,tool_terminal=check_tool_chain(root_record)
+     actual_raw,_=capture_ref(root_record,'actual_values',str(HERE/'ACTUAL-VALUES-CURRENT.json'),handles)
+@@ -265,13 +339,24 @@
+     need(preexec.get('reservation_dir')==reservation_dir,'actual nonce-derived caller reservation differs')
+     terminal_raw,_=capture_ref(root_record,'caller_terminal',reservation_dir+'/CALLER-TERMINAL.json',handles)
+     terminal=parse(terminal_raw)
+-    need(tool_terminal==terminal and terminal.get('status')=='FULL_DATA_CAPTURED_AWAIT_ROOT_SESSION_JOIN' and
+-         terminal.get('timed_out') is False and terminal.get('resource_unknown') is False and terminal.get('data_error') is None and
++    strict_caller=(terminal.get('status')=='FULL_DATA_CAPTURED_AWAIT_ROOT_SESSION_JOIN' and
++                   terminal.get('resource_unknown') is False)
++    reconciliation=None
++    if not strict_caller:
++        reconciliation=exact_reconciled_caller(root_record,actual_raw,nonce,terminal_raw,terminal,handles)
++    need(tool_terminal==terminal and (strict_caller or reconciliation is not None) and
++         terminal.get('timed_out') is False and terminal.get('data_error') is None and
+          type(terminal.get('sudo_direct_wait_status')) is int and terminal['sudo_direct_wait_status']==0 and
+          terminal.get('native_release') is False and terminal.get('native_currentfree') is None and
+          terminal.get('reservation_release') is False,'original caller/full Root terminal not positively complete')
+     raw,_=read_regular(reservation_dir+'/RESERVATION.json',handles);reservation=parse(raw)
++    if reconciliation is not None:
++        need(sha(raw)=='6f1f2b3db437f1ccc7486ab2957966ecf024ac87aa7e3742ae429c0ce380ae83',
++             'exact reconciled reservation differs')
+     raw,_=read_regular(reservation_dir+'/request.json',handles,expected=reservation['request_sha256']);request=parse(raw)
++    if reconciliation is not None:
++        need(sha(raw)=='c315bb15da880a1f16dc4d5c678c9a7efc7285eecb97900bcef84873a5fb52c0',
++             'exact reconciled actual request differs')
+     need(reservation.get('nonce')==nonce and reservation.get('scope')==SCOPE and reservation.get('native_release') is False and
+          reservation.get('native_currentfree') is None and reservation.get('actual_values_sha256')==sha(actual_raw) and request.get('nonce')==nonce and request.get('profile_sha256')==PROFILE_SHA and
+          preexec.get('driver')==reservation.get('driver'),'actual selected reservation/caller/request differs')
+@@ -288,6 +373,10 @@
+              item.get('length')==len(raw) and item.get('sha256')==sha(raw),'exact actual closed caller capture differs')
+         if item['name']=='stdout.capture':stdout,stdout_st=raw,st
+     full,final=check_data(stdout,terminal,request,reservation,stdout_st)
++    if reconciliation is not None:
++        need(sha(canon(full))==RECONCILED_FULL_SHA and len(stdout)==12974 and
++             sha(stdout)=='58d17edb91680f39087c3291178f9127506bf6dee74989c21d9e3a29b2d7d2d4',
++             'exact reconciled full producer/closed capture differs')
+     # First installed namespace access occurs only AFTER every gate above.
+     closure_path=str(HERE/'SOURCE-CLOSURE.json')
+     raw,closure_st=read_regular(closure_path,handles,expected=CLOSURE_SHA,mode=0o600,limit=CLOSURE_BYTES)
+@@ -318,13 +407,21 @@
+     for name,fd,before in held:
+         need(stable(before)==stable(os.fstat(fd)) and flags(fd)&IMMUTABLE and
+              stable(before)==stable(os.stat(name,dir_fd=directory,follow_symlinks=False)),'installed member changed across complete read: '+name)
+-    return {'status':'FIXED30_ORDINARY_READBACK_VERIFIED_CODE_ONLY','scope':SCOPE,'authority':None,'nonce':nonce,
++    result={'status':'FIXED30_ORDINARY_READBACK_VERIFIED_CODE_ONLY','scope':SCOPE,'authority':None,'nonce':nonce,
+       'destination':destination,'directory_identity':ident(directory_before),'files':rows,'count':30,'total_bytes':TOTAL_BYTES,
+       'source_closure':ref(closure_path,raw,closure_st),'root_capture_sha256':sha(canon(root_record)),
+       'full_actual_producer_data':full,'full_actual_disposition_data':final,
+       'caller_terminal_sha256':sha(terminal_raw),'native_release':False,'native_currentfree':None,
+       'controller_activated':False,'native_runtime_ready':False,'historical_outcomes':'UNCHANGED',
+       'provenance':'Root actual full tool/stream join + caller original direct wait + matched full producer DATA; no arbitrary JSON grants an operation.'}
++    if reconciliation is not None:
++        result['status']='FIXED30_ORDINARY_READBACK_VERIFIED_CODE_ONLY_WITH_RESOURCE_AUDIT_UNKNOWN'
++        result['code_readback_status']='VERIFIED_ALL30'
++        result['historical_resource_observation']='UNKNOWN_RETAINED'
++        result['overall_resource_acceptance']=False
++        result['scoped_resource_reconciliation']=reconciliation
++        result['original_caller_terminal']=parse(terminal_raw)
++    return result
+ 
+ 
+ def retained_info(error):

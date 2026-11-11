@@ -1,0 +1,25 @@
+{
+  "tool": "exec_command",
+  "arguments": {
+    "cmd": "'/usr/bin/taskset' '-c' '0' '/usr/bin/prlimit' '--as=134217728' '--cpu=20' '--fsize=16777216' '--nofile=96:96' '--core=0' '/usr/bin/env' '-i' 'PATH=/usr/bin:/bin' 'LANG=C' 'LC_ALL=C' 'TZ=UTC' 'PYTHONDONTWRITEBYTECODE=1' '/usr/bin/python3' '-I' '-B' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/readback_code.py' '--root-capture' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-EXEC-COMPLETION.ACTUAL.json' '--root-capture-sha256' 'eba51efdf2b73d15ec680acc64cc65c524baaca58879f79147108f168394994b' '--output' '/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/output-1/RESULT.json'",
+    "workdir": "/home/holden/mckernel",
+    "login": false,
+    "tty": false,
+    "yield_time_ms": 1000,
+    "max_output_tokens": 4500
+  },
+  "result": {
+    "chunk_id": "902087",
+    "wall_time_seconds": 0.000035673,
+    "exit_code": 0,
+    "original_token_count": 36,
+    "output": "{\"bytes\":401674,\"files\":30,\"native_runtime_ready\":false,\"status\":\"FIXED30_ORDINARY_READBACK_VERIFIED_CODE_ONLY_WITH_RESOURCE_AUDIT_UNKNOWN\"}\n"
+  },
+  "admission_tool": {
+    "chunk_id": "15cdba",
+    "wall_time_seconds": 0.0000268,
+    "exit_code": 0,
+    "original_token_count": 289,
+    "output": "{\"status\": \"ADMITTED_EXACT_READONLY_PACKET\", \"argv\": [\"/usr/bin/taskset\", \"-c\", \"0\", \"/usr/bin/prlimit\", \"--as=134217728\", \"--cpu=20\", \"--fsize=16777216\", \"--nofile=96:96\", \"--core=0\", \"/usr/bin/env\", \"-i\", \"PATH=/usr/bin:/bin\", \"LANG=C\", \"LC_ALL=C\", \"TZ=UTC\", \"PYTHONDONTWRITEBYTECODE=1\", \"/usr/bin/python3\", \"-I\", \"-B\", \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/readback_code.py\", \"--root-capture\", \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/ROOT-EXEC-COMPLETION.ACTUAL.json\", \"--root-capture-sha256\", \"eba51efdf2b73d15ec680acc64cc65c524baaca58879f79147108f168394994b\", \"--output\", \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/output-1/RESULT.json\"], \"cwd\": \"/home/holden/mckernel\", \"capture_root\": \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-publicabi-max-1/producer-resource-reconciliation-1/root-execution-1\"}\n"
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T12:26:22.889833+00:00",
+  "author_execution": false,
+  "canonical_changes": false,
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=134217728",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/exact_tuple_regression.py",
+        "exact-producer-tuple"
+      ],
+      "expected_exit": 0,
+      "id": "exact-producer-tuple",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "family": "exact-producer-readback-boundary",
+        "result": {
+          "actual_tuple": {
+            "actual_FULL_sha256": "4bf86e15c83120d699e1fd69520c311b8199ec34b2156f16787e12164214b8f2",
+            "all_actual_metadata_gates": true,
+            "exact_nonce": "2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f",
+            "historical_resource_observation": "UNKNOWN_RETAINED",
+            "installed_namespace_access": false,
+            "namespace_boundary_calls": 1,
+            "native_currentfree": null,
+            "native_release": false,
+            "original_unknown_unchanged": true,
+            "overall_resource_acceptance": false,
+            "root_capsule_sha256": "eba51efdf2b73d15ec680acc64cc65c524baaca58879f79147108f168394994b"
+          },
+          "issuer_Root_account_native_action": false,
+          "prior_FD_primary_AS_proofs_reused": true,
+          "real_FD_or_installed_access": false,
+          "rejections": [
+            {
+              "actual_entrypoint": "exact_reconciled_caller",
+              "diagnostic": "UNKNOWN caller is not the exact reconciled current producer",
+              "id": "changed-nonce",
+              "namespace_boundary_calls": 0
+            },
+            {
+              "actual_entrypoint": "exact_reconciled_caller",
+              "diagnostic": "UNKNOWN caller is not the exact reconciled current producer",
+              "id": "changed-caller",
+              "namespace_boundary_calls": 0
+            },
+            {
+              "actual_entrypoint": "run_readback",
+              "diagnostic": "exact actual closed caller capture differs",
+              "id": "changed-FULL",
+              "namespace_boundary_calls": 0
+            },
+            {
+              "actual_entrypoint": "run_readback",
+              "diagnostic": "Root actual tool terminal is nonzero or still has a session",
+              "id": "bad-tool-wait",
+              "namespace_boundary_calls": 0
+            },
+            {
+              "actual_entrypoint": "check_data",
+              "diagnostic": "actual keeper/installer waits absent",
+              "id": "bad-keeper-wait",
+              "namespace_boundary_calls": 0
+            },
+            {
+              "actual_entrypoint": "check_data",
+              "diagnostic": "actual producer/lease disposition incomplete",
+              "id": "bad-lease",
+              "namespace_boundary_calls": 0
+            },
+            {
+              "actual_entrypoint": "run_readback",
+              "diagnostic": "UNKNOWN caller is not the exact reconciled current producer",
+              "id": "unbound-UNKNOWN",
+              "namespace_boundary_calls": 0
+            }
+          ]
+        },
+        "status": "PASS"
+      },
+      "wall_seconds": 25
+    }
+  ],
+  "contract": {
+    "bytes": 3847,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/TEST-CONTRACT.json",
+    "sha256": "2d721277d534fc13eb468bd1f7af6eff2dbe764126686cdf6257cd4f3e2078f3"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1",
+  "expected": {
+    "bytes": 2370,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/EXPECTED.json",
+    "sha256": "81dd258dbea36af870e5b2e5d8fb0c1269447f2774af41ddf1a56f6561bf0b42"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/output-1",
+  "inputs": {
+    "bytes": 25540,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/INPUTS.json",
+    "sha256": "b0a8fe4eb444c66f30713d59ef8164460639196a4c69b2b4821515a89c255a18"
+  },
+  "not_proved": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/TEST-CONTRACT.json governs the finite boundary-only scope.",
+  "ownership": {
+    "final": "Root positive outer full tool/session/direct-wait/stream closure remains mandatory before current128MiB/job1 release only.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive exact PID/birth/argv/cwd",
+      "status0",
+      "leader_parent_joined",
+      "whole_descendants_joined",
+      "streams_closed",
+      "not timed_out",
+      "not leader_group_signalled",
+      "no adopted_reaps/kills/remaining children",
+      "error null"
+    ],
+    "labels": [
+      "phase-1"
+    ],
+    "record_count": 1
+  },
+  "preconditions": [
+    "SourceAcq exact source/fixture/oracle/argv/profile/protected-parent GO before Root alone executes.",
+    "Fresh actual same-run account/control/source/stop/ownership admission. All current worker/controller/payload charges inside shared4GiB/max3; require fresh26GiB and host16/scratch12GiB floors plus16MiB planned growth.",
+    "Pin exact files/interpreter/helper. Output/capture roots must be absent. Root alone creates private output/tmp/capture after admission; no alternate native staging or permission workaround.",
+    "Run exactly one serial controlled-metadata HOST command. Stop on unexpected outcome, preserve full returned Owner/Root metadata, no unchanged retry or passing-suite replay.",
+    "No real issuer, sudo, installed namespace, Root/account/nonce or native call. Source/lease/permission/native UNKNOWN outcomes remain at exact existing scopes; process-only retirement is not a global release."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 60,
+    "cpu": 0,
+    "cpu_seconds_per_command": 10,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "max_address_space_bytes": 134217728,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "output_disk_reservation_bytes": 16777216,
+    "planning_not_enforced_aggregate": true,
+    "scratch_disk_floor_GiB": 12,
+    "wall_seconds_per_command": 25
+  },
+  "root_parent_proposal": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/ROOT-PARENT.PROPOSED.py",
+  "schema": "exact-producer-readback-functional-boundary-host-request-v1",
+  "source_bindings": {
+    "bytes": 11400,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/SOURCE-BINDINGS.json",
+    "sha256": "52c96a7d9822c90669d7c4c8c6c47706ddda169dc11de00d1c2eef67cfab2952"
+  },
+  "source_design_GO": {
+    "bytes": 12249,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-readback-review-sourceacq-max-1/producer-resource-reconciliation-1/REVIEW.source.json",
+    "sha256": "a24f4156875f8b84ad85facc79c4f09686d2ff0f15152e0c62b1a57134b6eb93"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_SOURCEACQ_OPERATION_GO_AND_FRESH_ROOT_ADMISSION"
+}

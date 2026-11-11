@@ -1,0 +1,56 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T12:29:45.221675+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "6e617a478179ca038cc359b6323dc242c5e6237d05fd6e6cd6e080c13af1a746",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=134217728",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1/exact_tuple_regression.py",
+        "exact-producer-tuple"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-exact-tuple-tests-p04source-max-1",
+      "exit": 0,
+      "id": "exact-producer-tuple",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-1",
+        "leader": 1391240,
+        "leader_birth": "48645120",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "bcf55518b367cdc5627e97db026e139d0be7e528ba259e6fb8ac5acb83961489",
+  "started_at": "2026-11-11T12:29:45.123243+00:00",
+  "status": "PASS_EXACT_PRODUCER_READBACK_BOUNDARY_PENDING_SAVED_QUALIFICATION"
+}

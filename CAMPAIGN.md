@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T12:15:34.296154+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T12:40:38.074391+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,7 +14,7 @@ open at their original scope. Four accepted M14 files and accepted M15-F01 remai
 closed. Original criteria/weights/denominators and M14-before-M15 acceptance
 are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
 PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
-Last source/results checkpoint48b29684 is pushed/fetched83ownedblobs; all33
+Last source/results checkpoint757701fc is pushed/fetched41ownedblobs; all33
 unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
@@ -41,13 +41,23 @@ ONLY the new current2GiB/job process retirement, recorded56e11. Raw historical
 resource cause/time/peak/compliance remain UNKNOWN; no source/native/Scratch hold
 is released. NEW honest Root capsuleeba51 records actual tool/stream closure,
 exact caller/values refs and overall_resource_acceptance=false. Original snapshot
-false and raw caller UNKNOWN are untouched. Strict c843/a422/9fcc remains NO_GO.
-PublicABI owns the minimum exact-tuple reader/contract/request correction against
-ee63/eba51, SourceAcq independently reviews, and Root then freshly admits the
-readonly UID1000 operation. Required next result: all30 normal-layout immutable
-Root-owned file dev/inode/mode/size/SHA/catalogue agreement, UID1000 readability
-and positive owned closure. No issuer replay, overall install/native acceptance
-or controller activation follows from producer success alone.
+false and raw caller UNKNOWN are untouched. Strict c843/a422/9fcc was not run.
+New reader1c1b/request22f870 pins only ee63/eba51/actual2c4c metadata; independent
+sourceGOa24 and actual focused62589 (one accepted boundary/seven rejections,
+positive onefamily/Root673a5e0/noSession) qualify72edd. OperationGO2e32 permitted
+actual fresh CPU0/128MiB readonly command: tool902087 exit0/noSession, all30
+UID1000 files/401674B matched exact immutable Root-owned normal paths, catalog,
+dev/inode/mode/size/SHA and before/after cohort. Result2834 explicitly reports
+VERIFIED_ALL30_CODE_ONLY_WITH_RESOURCE_AUDIT_UNKNOWN/overallfalse/nativefalse,
+no read-close or secondary errors. FullRoot107ac/current128MiB/job is retired;
+Independent whole code-only qualificationebce confirms all30 actual files and
+positive Root closure. No new issuer/nonce, private journal read or native action
+occurred. PublicABI sourceGO3d332 confirms existing3-path controller55a against
+reused1961/fb62 and actual2c4c modules. Root integrated exact6fe65/7207/068e
+source bytes at12:39:22Z; healthy loaded controller stays unchanged. Actual
+authority-ordered safe transition,
+staging permission, native claim/current-free/restoration and original behavior
+remain distinct prerequisites. Installer/readback success closes no original check.
 
 **Independent M14-03-05-DEFAULT:** P03 integrates actual mckfd/VM/Thread/open/
 group/monitor/counter and hostFD lifecycle source on6aae/4b711 under corrected
