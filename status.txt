@@ -1,10 +1,10 @@
 McKernel M14/M15 progress and agent status
 
-Generated UTC: 2026-11-11T10:25:49.753740Z
-Generated America/Boise: 2026-11-11T03:25:49.753740-07:00
-Treat this snapshot as stale after UTC: 2026-11-11T10:40:49.753740Z; America/Boise: 2026-11-11T03:40:49.753740-07:00 (15 minutes after generation; check for a newer report).
-Ledger updated UTC: 2026-11-11T10:23:04.707331Z
-Source commit: 094c52c6e1dc0ed42e76e2f393926f095d395bff
+Generated UTC: 2026-11-11T10:35:56.237405Z
+Generated America/Boise: 2026-11-11T03:35:56.237405-07:00
+Treat this snapshot as stale after UTC: 2026-11-11T10:50:56.237405Z; America/Boise: 2026-11-11T03:50:56.237405-07:00 (15 minutes after generation; check for a newer report).
+Ledger updated UTC: 2026-11-11T10:30:15.591317Z
+Source commit: 48b296840b50c6ff0dd4b5a6cfe23ea1d7aad06d
 Canonical ledger: docs/verification/m14-m15-closure-progress.json; human plan: CAMPAIGN.md.
 This is a derived view, not new acceptance or execution authority. Checklist percentages are not accepted milestones, engineering hours or converted LOC.
 Scope: Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.
@@ -23,39 +23,39 @@ WORKSTATION AND AGENTS
 Snapshot attribution: CURRENT: exact worker/watcher births verified and heartbeat <=120 seconds old.
 Worker exact birth verified: True; watcher exact birth verified: True; guardian exact birth verified: True
 Controller phase: running; goal: active
-State heartbeat UTC: 2026-11-11T10:25:44.814475Z; state updated UTC: 2026-11-11T10:25:47.240763Z
-State heartbeat age seconds: 4.9
+State heartbeat UTC: 2026-11-11T10:35:51.896317Z; state updated UTC: 2026-11-11T10:35:52.521132Z
+State heartbeat age seconds: 4.3
 Guardian phase: SUPERVISED; reason: UNKNOWN
-Watcher event: heartbeat; observation UTC: 2026-11-11T10:25:45.471210Z
-Mailbox last attempt UTC: 2026-11-11T10:25:27.810694Z; last successful poll UTC: 2026-11-11T10:25:27.810694Z
-Mailbox next GET UTC: 2026-11-11T10:35:27.810694Z; error: UNKNOWN
-Saved roster records: 12; saved active-turn records: 5.
-Fresh controller snapshot active-turn count: 5
+Watcher event: heartbeat; observation UTC: 2026-11-11T10:35:47.085756Z
+Mailbox last attempt UTC: 2026-11-11T10:35:34.432419Z; last successful poll UTC: 2026-11-11T10:35:34.432419Z
+Mailbox next GET UTC: 2026-11-11T10:45:34.432419Z; error: UNKNOWN
+Saved roster records: 12; saved active-turn records: 3.
+Fresh controller snapshot active-turn count: 3
 Per-agent models, efforts and assignments are unavailable unless explicitly recorded; no defaults are inferred.
 AGENT 01a18bc3-e072-7810-9426-75101b0856c0 | ACTIVE TURN OBSERVED | label=dispatcher | saved status=inProgress | turn=01a1c449-1acc-7da3-91f7-484cd1bfd5c9
-  Recorded agent metadata: controller role=Root (recorded primary thread) | last event UTC=2026-11-11T10:25:33.562711Z | quiet_seconds=13.7 | child=True
+  Recorded agent metadata: controller role=Root (recorded primary thread) | last event UTC=2026-11-11T10:35:38.502683Z | quiet_seconds=14.0 | child=True
 AGENT 01a1aefa-52af-7e70-bf6e-4fcc59f43aae | SAVED / NOT VERIFIED LIVE | label=/root/m15_public_abi_high | saved status=notLoaded | turn=01a1c477-0efa-74e1-9813-d874abbfcae9
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:22:02.223619Z | quiet_seconds=93825.0 | retired=True | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:22:02.223619Z | quiet_seconds=94430.3 | retired=True | child=True
 AGENT 01a1aefa-8217-7003-b4a3-24d19c899ac3 | SAVED / NOT VERIFIED LIVE | label=/root/m15_cli_high | saved status=notLoaded | turn=01a1c471-cfd2-7e00-b46d-d0203c63e33d
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:18:41.834808Z | quiet_seconds=94025.4 | retired=True | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:18:41.834808Z | quiet_seconds=94630.7 | retired=True | child=True
 AGENT 01a1b070-8040-7fb2-b4b1-7810bac365ff | SAVED / NOT VERIFIED LIVE | label=/root/memory_error_cleanup_witness_high | saved status=notLoaded | turn=01a1c47f-e21d-7683-94f8-cdcf8b7b6d0e
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:39:08.481595Z | quiet_seconds=92798.8 | retired=True | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:39:08.481595Z | quiet_seconds=93404.0 | retired=True | child=True
 AGENT 01a1b2d8-359e-7bf3-b724-988d8fc445e2 | SAVED / NOT VERIFIED LIVE | label=/root/create_empty_entry_parity_high | saved status=notLoaded | turn=01a1c47c-67ed-7fb3-9fbf-e155877ddfaa
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:22:17.867756Z | quiet_seconds=93809.4 | retired=True | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:22:17.867756Z | quiet_seconds=94414.7 | retired=True | child=True
 AGENT 01a1c241-1f88-7d11-9f7b-b05891b5cdbb | SAVED / NOT VERIFIED LIVE | label=/root/scheduler_debug_data_review_high | saved status=notLoaded | turn=01a1c47d-45bf-7051-8442-022e17470bf8
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:22:37.207402Z | quiet_seconds=93790.0 | retired=True | child=True
-AGENT 01a1c486-9c93-7e31-a8dd-7819b0d25da7 | SAVED / NOT VERIFIED LIVE | label=/root/source_acquisition_review_max | saved status=completed | turn=01a1ca20-1d03-7980-8088-6c60642c201c
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:24:10.047159Z | quiet_seconds=97.2 | retired=True | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-10T08:22:37.207402Z | quiet_seconds=94395.3 | retired=True | child=True
+AGENT 01a1c486-9c93-7e31-a8dd-7819b0d25da7 | ACTIVE TURN OBSERVED | label=/root/source_acquisition_review_max | saved status=inProgress | turn=01a1ca2b-0267-75e0-bf2a-b98b4808ef72
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:35:24.299576Z | quiet_seconds=28.2 | child=True
 AGENT 01a1c489-b62c-7043-8b88-ffc381b2b85b | ACTIVE TURN OBSERVED | label=/root/p03_cutover_source_max | saved status=inProgress | turn=01a1ca16-1441-76c2-ae01-d6908d69cb4c
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:25:25.921836Z | quiet_seconds=21.3 | child=True
-AGENT 01a1c48c-c4ee-76b2-bb6a-1ff91b84086c | ACTIVE TURN OBSERVED | label=/root/sdk_binding_source_max | saved status=inProgress | turn=01a1ca22-dc3c-7e10-aab2-fa9ce5bc2191
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:25:30.275151Z | quiet_seconds=17.0 | child=True
-AGENT 01a1c48d-020a-7c21-b545-256b222c8e0d | ACTIVE TURN OBSERVED | label=/root/p04_source_max | saved status=inProgress | turn=01a1ca1a-c5e5-71d0-a5cc-a11fcbc64667
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:25:38.290870Z | quiet_seconds=9.0 | child=True
-AGENT 01a1c48d-4d96-7cc3-b733-73a97973152f | ACTIVE TURN OBSERVED | label=/root/p04_tests_max | saved status=inProgress | turn=01a1ca18-b3be-7fe0-bfc8-059e7c7caa18
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:25:07.265656Z | quiet_seconds=40.0 | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:35:44.484693Z | quiet_seconds=8.0 | child=True
+AGENT 01a1c48c-c4ee-76b2-bb6a-1ff91b84086c | SAVED / NOT VERIFIED LIVE | label=/root/sdk_binding_source_max | saved status=completed | turn=01a1ca22-dc3c-7e10-aab2-fa9ce5bc2191
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:32:03.928079Z | quiet_seconds=228.6 | retired=True | child=True
+AGENT 01a1c48d-020a-7c21-b545-256b222c8e0d | SAVED / NOT VERIFIED LIVE | label=/root/p04_source_max | saved status=completed | turn=01a1ca1a-c5e5-71d0-a5cc-a11fcbc64667
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:27:51.528375Z | quiet_seconds=481.0 | retired=True | child=True
+AGENT 01a1c48d-4d96-7cc3-b733-73a97973152f | SAVED / NOT VERIFIED LIVE | label=/root/p04_tests_max | saved status=completed | turn=01a1ca26-49f4-7d53-b5f6-99ac0e08d03e
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:35:15.604282Z | quiet_seconds=36.9 | retired=True | child=True
 AGENT 01a1c49c-6dc0-7701-bcb0-d982c36c4070 | SAVED / NOT VERIFIED LIVE | label=/root/public_abi_join_max | saved status=completed | turn=01a1ca05-8f51-7a72-9fc5-cc0193068a4f
-  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:24:20.004113Z | quiet_seconds=87.2 | retired=True | child=True
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-11T10:24:20.004113Z | quiet_seconds=692.5 | retired=True | child=True
 Last stop diagnostic attribution: matches saved worker invocation
 Recorded stop: technical_failure | server_error
 Recorded error: UNKNOWN | Reconnecting... 2/5
@@ -64,7 +64,7 @@ Instruction receipts: WAITING=0; ACCEPTED=20; NOT_QUEUED=31. Acceptance is not c
 Last controller instruction: source-d25b66ae802bce148e331fc8c52d4264f6b8126d455cad088be6c3149a4891b8 | accepted_by_server | accepted timestamp=2026-11-11T10:17:52.460645Z
 
 ATTRIBUTED NOTES
-Last verified publication before this rendering: 2026-11-11T10:15:43.040014Z
+Last verified publication before this rendering: 2026-11-11T10:25:49.827882Z
 The progress ledger is the current working-tree snapshot; checkout HEAD does not assert it is committed or that a milestone is accepted.
 
 ALL CANONICAL REQUIREMENTS AND ORIGINAL GATES
