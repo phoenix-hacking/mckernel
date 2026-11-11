@@ -1,4 +1,6 @@
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
 
 #include <signal.h>
 #include <stdio.h>
@@ -17,8 +19,12 @@ int main(void) {
     if (sigprocmask(SIG_SETMASK, NULL, &baseline) != 0 || sigaction(SIGUSR1, &sa, NULL) != 0 || raise(SIGUSR1) != 0 ||
         sigprocmask(SIG_SETMASK, NULL, &after) != 0) return EXIT_FAILURE;
     sigemptyset(&required);
-    int restored = sigismember(&baseline, SIGUSR1) == sigismember(&after, SIGUSR1) &&
-                   sigismember(&baseline, SIGUSR2) == sigismember(&after, SIGUSR2);
+    int restored = 1;
+    for (int signo = 1; signo < NSIG; ++signo) {
+        int before_member = sigismember(&baseline, signo);
+        int after_member = sigismember(&after, signo);
+        if (before_member < 0 || after_member < 0 || before_member != after_member) restored = 0;
+    }
     printf("handled=%d observed_blocked=%d restored=%d\n", handled, observed_blocked, restored);
     return (handled == 1 && observed_blocked == 1 && restored) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

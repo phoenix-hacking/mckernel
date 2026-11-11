@@ -1,9 +1,57 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T00:06:05.881892+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T01:28:43.207429+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Two original F06 DEFAULT regions verified.** Independent46a3823c closes
+M14-06-02-DEFAULT and M14-06-05-DEFAULT on the genuine supported defaultf374/
+100d cohort: complete required Rust/ASM implementations, unique ownership and
+real ABI/providers. FUNCTIONAL/native/ACCEPT remain open. 01 still consumes C
+fork4797,03 seven Cptrace resume callbacks,04 the55B time fallback; whole F06
+remains unaccepted. Current85/156 verified: M14=63.70%, M15=59.10%, a9.44-point
+displayed M14 gain from last published54.26. Original immediate-child weights
+are unchanged (02/05 each have DEFAULT+FUNCTIONAL, not an extra ACCEPT child).
+Only I02's matching-build gate is newly accepted; no other hold/gate is cleared.
+Publish this coherent changed pair once after fetched-byte verification.
+
+
+**Original M14-I02 matching supported build gate accepted.** Root records the
+explicit independent whole-parent ACCEPT_GO ffb1a702 after E1/E2/E3 all pass at
+their original scopes. Actual f374 default source/config/SDK, the clean matching
+normal image100d and real04f5/ae67/dc46 modules satisfy this original build gate.
+This closes exactly the original ACCEPT child:83/156 verified; M14=62.59%,
+M15=59.10%. Combined new E2/E3/ACCEPT gain from last published54.26 is8.33
+displayed M14 points; weights/criteria/denominators are unchanged. M14 has1/3
+accepted integration gates and4/6 accepted files. Whole M14/M15, F03/F06 migration,
+functional/native/restoration and reviewed C32 retirement remain open. No service,
+source or resource hold is cleared. This pair is pending one source-backed PR3
+progress comment after fetched-byte verification of this checkpoint.
+
+
+**E2/E3 technical conditions verified before the explicit gate decision above.** Independent whole-condition GOs
+1f1d7bd2/591774e1 qualify f374/defaultwiringe682/0ae, the genuine production
+cache-unset configure (no explicitON), defaultON/driver/MAP/10-of-72 proof01f3
+and the required normal image build9ac8. Both build/hash containers exited0,
+nonOOM/Pid0/removed with17 positive clients and Root50196 joined. All16
+image/map/wholeRust/C10/config/linker identities reproduce100d/6f119/4a1f,
+matched to exact04f5/ae67/dc46 module identities. Actual4553+5 owners/318strong
+imports/zeroUND and clean matching replay satisfy the technical clauses; the
+reviewed C32 remains explicit migration debt. No old ELF/module/provider replay
+ran. All156 new warning lines and the repaired Root72-vs-10 postcheck failure
+remain raw. Two original checks close:82/156 verified; M14=59.81% (+5.55
+displayed points, exact5.5555556), M15=59.10% (unchanged). At this intermediate technical step I02 checklist was75%,
+before its explicit original gate decision above; native, F06 functional,
+all-file Rust migration and parent M14 acceptance remain separate. Publish this
+changed pair once from this coherent source/results checkpoint.
+
+The three independently reviewed signal-oracle source fixes are integrated:
+real nested MXCSR observations/numbered syscalls, full valid signal-mask comparison
+and actual2047-byte altstack error input. Prior physical3ELF/27-output b587/619
+qualification is reused. No signal/main/FP/native execution or functional credit
+is inferred from source integration.
+
 
 **Original M14-I02-E1 now verified.** Independent whole-conditionGO7745ce95
 joins eligiblef253 source/fullimage100d, actual Linux6.12/config106055/Rust1.95
@@ -14,15 +62,27 @@ build/probe/test/native operation was required. Exactly one original check close
 80/156 verified, M14=54.26% (+2.78 displayed points), M15=59.10% (unchanged).
 M14-I02 is25% checklist, unaccepted; E2 default selection, E3, parent, functional
 and native/restoration acceptance remain open. No actual hold or control flag is
-cleared. Publish this changed pair once after its source/evidence checkpoint.
+cleared. Checkpointdabd1ad6 is published/fetched with all six owned blobs matching. The
+changed pair was posted once in PR3 comment6782855643; no report is pending.
 
-**Current original closure work.** M14-I02-E1 is now verified by PublicABI whole-condition
-review7745ce95 of assessment3f13aabb, qualifiedf253/image100d and the exact Linux6.12/
-Rust1.95/config106055/three-module cohort. No additional zero-C or external
-inventory prerequisite is added. E2 remains open: P04 prepares a profile-scoped
-F06 default correction; actual cache-unset/no-explicit-ON production configure
-and its effective inputs must pass before default-source credit. Greenf253's25
-image/object/config/cache files are now preserved separately before another build.
+**Prior E2 postgate failure, repaired without configure replay.**
+Sourcef374/defaultwiring0ae ran the reviewed real production cmake-U/no-DON
+operation: actual configure exit0, defaultON and genuine driverELF; owned container
+terminal0/nonOOM/Pid0/removed and all11 client waits plus Root1076 exit1 are joined.
+Root's postcheck incorrectly compared all72 project compile rows with the10 image
+rows and asserted before metadata execution. The failure is preserved under
+f06-default-wiring-p04source-max-1/default-observation-1/execution-1; its current
+2GiB job is positively retired. P04 corrects only exact-target validation;
+P04Tests reviews the bounded successor and Root runs only the unstarted20-command
+metadata reader. No configure/image replay or E2 credit from CMake0 alone.
+
+**Current original closure work.** E1/E2/E3 technical conditions are now
+independently verified on the genuine default source/image/module cohort.
+Root records the literal I02-ACCEPT decision using every required child; no
+other milestone gate is inferred. Greenf253 and the new default reproduction
+remain recoverable. P04 derives the current genuine Rust fork-provider repair:
+actualC do_fork4797 supplies Rust clone/fork/vfork. P04Tests separately maps
+complete F06 DEFAULT regions and required fallback/embedded provider ownership.
 
 For M14-06-02-FUNCTIONAL, the actual guest-input run failed only when readelf
 was applied to the tee shebang wrapper. All10 copied files and passing insmod
@@ -431,15 +491,20 @@ owned blobs matching and all33 unrelated dirty paths preserved. Pair51.48/59.10
 was posted once in PR3 comment6782340657; no duplicate or pending report. The missed
 16:00Z75%-each target remains recorded and is not a stop time or changed criterion.
 
-Next15-minute deliverable: checkpoint the now-whole-GO M14-I02-E1 technical leaf
-and publish the changed pair once. In parallel P04 freezes the minimal supported-profile E2
-default correction and actual cmake-U operation; P03's independently reviewed
-coreutils/unstarted-read successor takes the next admitted CPU0 lane. SourceAcq
-qualifies the actual getenforce row; P04Tests finishes saved27-output signal
-qualification; SDK closes concrete selected/linked/ABI manifest gaps from real
-component artifacts and the now-qualified MCPS pair. Root admits/executes only
-reviewed changed packets, promptly joins/releases each job and publishes its own
-coherent verified result. Genuine native behavior/restoration remains separate.
+Next15-minute deliverable: publish the now-accepted I02 source/results checkpoint
+and changed pair once, preserving every other open gate. Source owners advance
+the exact fork and clock-fallback provider repairs; no build/native/zero-C quota
+is added to the accepted matching-build scope.
+For M14-06-02-FUNCTIONAL, PublicABI joins actual audit/econf/PAM inputs and only
+real remaining guest dependencies, then Root composes genuine authenticated source/
+owner/current-free/restoration admission. F06 DEFAULT decisions retain exact fork
+and clock-fallback project-C boundaries; source owners advance eligible genuine
+replacements. SDK/SourceAcq join actual mcstat/libsched764c and P03's corrected
+mode-only saved check with source/config/provider/install evidence for whole
+M15-I01 selected/linked and I03 ABI. Root composes reviewed callback/path sources
+before canonical selection credit. Reuse passing compiles/configs/parser/PTY/
+module/ABI results, preserve raw failures and all genuine holds; no unproved
+percentage, old native nonce or unchanged green suite is replayed.
 
 
 ## Previous06:00 input assessment (historical; supplier assumption corrected below)
@@ -1513,7 +1578,7 @@ Every original requirement and concrete evidence step is defined in [the machine
 
 | Milestone | Checklist progress | Accepted file goals | Accepted integration gates |
 | --- | ---: | ---: | ---: |
-| M14 | 54.26% | 4/6 | 0/3 |
+| M14 | 63.70% | 4/6 | 1/3 |
 | M15 | 59.10% | 1/8 | 0/4 |
 
 | Requirement | Checklist complete | Accepted | Defined scope / remaining obligation |
@@ -1524,18 +1589,18 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M14-03-04 | 50.00% | no | Signal masks/actions/altstack, futex/robust cleanup, time/wait/wake and restart |
 | M14-03-05 | 50.00% | no | Credentials/limits/scheduling, SHM/perf/file wrappers, validation and forwarding |
 | M14-06-01 | 0.00% | no | Architecture wrappers, TLS/arch_prctl and clone/mmap/shm ABI translation |
-| M14-06-02 | 0.00% | no | Signal/rt_sigreturn frames, alternate stack, context and xstate restoration |
+| M14-06-02 | 50.00% | no | Signal/rt_sigreturn frames, alternate stack, context and xstate restoration |
 | M14-06-03 | 33.33% | no | Ptrace registers/debug state and correct stop/wakeup/event ordering |
 | M14-06-04 | 0.00% | no | vDSO/process mappings and time-page/TSC publication |
-| M14-06-05 | 0.00% | no | Cross-process memory/move-pages, target references and NUMA callback lifetime |
+| M14-06-05 | 50.00% | no | Cross-process memory/move-pages, target references and NUMA callback lifetime |
 | M14-F01 | 100.00% | yes | Allocator, heap, references, faults/page maintenance, counters/diagnostics |
 | M14-F02 | 100.00% | yes | Creation/unwind, VM ranges, PID/TID lifetime, scheduling, inheritance/publication |
 | M14-F03 | 40.00% | no | Generic compute syscalls |
 | M14-F04 | 100.00% | yes | Primitives, startup/interrupts, context/TLS, FPU/xstate, diagnostics |
 | M14-F05 | 100.00% | yes | Mappings, PTEs, walkers, TLB, usercopy/process-VM supported scope |
-| M14-F06 | 23.33% | no | x86_64 architecture compute syscalls |
+| M14-F06 | 33.33% | no | x86_64 architecture compute syscalls |
 | M14-I01 | 0.00% | no | Account for all emitted supported compute code, including headers, macros/callbacks and unknown owners; zero live project compute-C implementations |
-| M14-I02 | 25.00% | no | Reproducible default source/config/toolchain and matched image/modules |
+| M14-I02 | 100.00% | yes | Reproducible default source/config/toolchain and matched image/modules |
 | M14-I03 | 0.00% | no | Matching useful applications, process/memory/thread/signal behavior and native lifecycle/resource restoration on that image |
 | M15-F01 | 100.00% | yes | Accepted original MM compatibility wrappers |
 | M15-F02 | 50.00% | no | Rust executor qualification |
@@ -2654,7 +2719,7 @@ Historical architecture cursor (5, current selection must be re-established):
 
 - [ ] M14-I01: account for all emitted supported compute code, including headers,
   macros/callbacks and unknown owners; zero live project compute-C implementations.
-- [ ] M14-I02: reproducible default source/config/toolchain and matched image/modules.
+- [x] M14-I02: reproducible default source/config/toolchain and matched image/modules.
 - [ ] M14-I03: matching useful applications, process/memory/thread/signal behavior
   and native lifecycle/resource restoration on that image. Then accept M14.
 

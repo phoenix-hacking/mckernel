@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T00:06:05.881892+00:00",
+  "updated_at": "2026-11-11T01:33:54.144012+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,9 +32,9 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 54.26,
+      "checklist_percent_complete": 63.7,
       "file_acceptance_percent": 66.67,
-      "integration_acceptance_percent": 0.0,
+      "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
       "original_file_gate_count": 6,
       "original_integration_gate_count": 3
@@ -320,7 +320,7 @@
         "M14-06-02-DEFAULT",
         "M14-06-02-FUNCTIONAL"
       ],
-      "percent_complete": 0.0,
+      "percent_complete": 50.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -414,7 +414,7 @@
         "M14-06-05-DEFAULT",
         "M14-06-05-FUNCTIONAL"
       ],
-      "percent_complete": 0.0,
+      "percent_complete": 50.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -648,7 +648,7 @@
         "M14-F06-FUNCTIONAL",
         "M14-F06-ACCEPT"
       ],
-      "percent_complete": 23.33,
+      "percent_complete": 33.33,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -699,8 +699,8 @@
       "kind": "original_integration_gate",
       "target": null,
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
-      "accepted": false,
-      "acceptance_percent": 0,
+      "accepted": true,
+      "acceptance_percent": 100,
       "demonstrated_scopes": [
         {
           "scope": "Source publication and multiple explicit HOST relocatable cohorts",
@@ -734,8 +734,11 @@
         "M14-I02-E3",
         "M14-I02-ACCEPT"
       ],
-      "percent_complete": 25.0,
-      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
+      "percent_complete": 100.0,
+      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance",
+      "accepted_at": "2026-11-11T01:28:43.207429+00:00",
+      "acceptance_scope": "Original matching supported build gate only, sourcef374/default100d/currentIHK8d/real099threeKO; otherM14gates/native/C32migration/wholemilestone remain separate",
+      "acceptance_decision_evidence": "docs/verification/m14-i02-e3-qualified-20261111/PARENT-ACCEPT-REVIEW.json"
     },
     {
       "id": "M14-I03",
@@ -1927,9 +1930,9 @@
       "id": "M14-06-02-DEFAULT",
       "parent": "M14-06-02",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified_at_declared_source_or_HOST_scope",
       "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -1948,12 +1951,16 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-f06-default-leaves-20261111/DECISIONS.json",
+        "docs/verification/m14-f06-default-leaves-20261111/REVIEW.json"
       ],
       "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "Whole original DEFAULT condition independently verified on matched supported default image; FUNCTIONAL and ACCEPT remain separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T01:33:54.144012+00:00",
+      "independent_review_sha256": "46a3823cefd457546cd3d56636aaa31fe61614d13dddcfbe671850699868521e"
     },
     {
       "id": "M14-06-02-FUNCTIONAL",
@@ -2147,9 +2154,9 @@
       "id": "M14-06-05-DEFAULT",
       "parent": "M14-06-05",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified_at_declared_source_or_HOST_scope",
       "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2168,12 +2175,16 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-f06-default-leaves-20261111/DECISIONS.json",
+        "docs/verification/m14-f06-default-leaves-20261111/REVIEW.json"
       ],
       "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "Whole original DEFAULT condition independently verified on matched supported default image; FUNCTIONAL and ACCEPT remain separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T01:33:54.144012+00:00",
+      "independent_review_sha256": "46a3823cefd457546cd3d56636aaa31fe61614d13dddcfbe671850699868521e"
     },
     {
       "id": "M14-06-05-FUNCTIONAL",
@@ -2708,9 +2719,9 @@
       "id": "M14-I02-E2",
       "parent": "M14-I02",
       "title": "Build/link reproducibly from exact default source/config/toolchain into coherent matching image and modules with all real providers.",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified_at_declared_source_or_HOST_scope",
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
       "done_when": "Build/link reproducibly from exact default source/config/toolchain into coherent matching image and modules with all real providers; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Source/config/toolchain, genuine linker/provider closure, image and matching module identities are reproducible from the bound inputs; a partial ld-r is not the result.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2730,20 +2741,26 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-i02-e2-default-build-20261111/WHOLE-E2-REVIEW.json",
+        "docs/verification/m14-i02-e2-default-build-20261111/default-operation/required-named-image-1/whole-E2-qualification-1/QUALIFICATION.json",
+        "docs/verification/m14-i02-e2-default-build-20261111/default-operation/required-named-image-1/execution-1/RESULT.json"
       ],
       "scope_limit": "Original integration criterion; no new quota or independent completion weight.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "Whole original technical condition independently verified at declared ordinaryHOST scope; parent/native/C-retirement remain separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T01:20:32.133433+00:00",
+      "actual_scope": "Actual supported-default production-U/no-DON configure/defaultON and required normal image reproduce all16 qualified100d identities and real099matching3KO; technical only",
+      "independent_review_sha256": "1f1d7bd2e364bf754fb55751cb7104fd23ab57f52e68e804fd4ab9560b402cab"
     },
     {
       "id": "M14-I02-E3",
       "parent": "M14-I02",
       "title": "Record actual artifact/source ownership and clean matching replay; code publication or partial links alone are insufficient.",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "verified_at_declared_source_or_HOST_scope",
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
       "done_when": "Record actual artifact/source ownership and clean matching replay; code publication or partial links alone are insufficient; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Source/config/toolchain, genuine linker/provider closure, image and matching module identities are reproducible from the bound inputs; a partial ld-r is not the result.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2763,12 +2780,17 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-i02-e3-qualified-20261111/REVIEW.json",
+        "docs/verification/m14-i02-e2-default-build-20261111/default-operation/required-named-image-1/whole-E2-qualification-1/QUALIFICATION.json"
       ],
       "scope_limit": "Original integration criterion; no new quota or independent completion weight.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "Whole original technical condition independently verified at declared ordinaryHOST scope; parent/native/C-retirement remain separate",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T01:20:32.133433+00:00",
+      "actual_scope": "Actual full emitted/source/provider ownership and clean matching default-source normal replay; reviewedC32 stays migrationdebt and parent/native acceptance remains separate",
+      "independent_review_sha256": "591774e1475c6b66087e2ca9b3296d882e419f96b4a5c545579c34936230c723"
     },
     {
       "id": "M14-I03-E1",
@@ -6145,9 +6167,9 @@
       "id": "M14-I02-ACCEPT",
       "parent": "M14-I02",
       "title": "Accept original M14-I02 scope",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "unverified",
+      "status": "accepted_original_integration_scope",
       "owner": "Saved Root integration/review owner",
       "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
       "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
@@ -6162,12 +6184,15 @@
       ],
       "evidence": [
         "CAMPAIGN.md",
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-i02-e3-qualified-20261111/PARENT-ACCEPT-REVIEW.json"
       ],
       "scope_limit": "",
-      "definition_status": "completion_condition_defined",
+      "definition_status": "Explicit original matching supported build gate accepted after all three original children and independent literal whole-parent decision; no wholeM14/native/C-retirement acceptance",
       "execution_profile": "retained_evidence_review",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T01:28:43.207429+00:00",
+      "independent_review_sha256": "ffb1a702dbad8f641198dc3bb9cd3e4c43d2f61e3c7b07529a314d40591dfc11"
     },
     {
       "id": "M14-I03-ACCEPT",
@@ -15204,13 +15229,13 @@
     "pending_percentage_report": {
       "owner": "Root",
       "kind": "changed_pair_only",
-      "M14": 54.26,
+      "M14": 63.7,
       "M15": 59.1,
       "deltas_from_previous_published_pair": {
-        "M14": 2.78,
+        "M14": 9.44,
         "M15": 0.0
       },
-      "dedupe_id": "M14-I02-E1@7745ce95",
+      "dedupe_id": "M14-I02+F06-02-05-DEFAULT@ffb1a702+46a3823c",
       "state": "PENDING_SOURCE_PUBLICATION_BEFORE_ONE_COMMENT"
     },
     "mcps_current_provider_pair": {
@@ -15231,6 +15256,56 @@
       "counted_total": 156,
       "criterion_weights_unchanged": true,
       "E2_E3_parent_native_acceptance": false
+    },
+    "E2_actual_configure_postgate_repair": {
+      "source": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f",
+      "real_configure_exit": 0,
+      "actual_default": "ON",
+      "failure": "Rootpostgate counted72wholeprojectrowsagainst10image rows; metadataunstarted",
+      "owner": "p04_source_max correction; p04_tests_max independentdelta; Rootexecution",
+      "failed_current_job_positive_release": true,
+      "next": "Onlycorrecttargetpostgate andpreviouslyunstarted20-commandmetadataafterGO/freshadmission",
+      "new_counted_credit": 0,
+      "corrected_metadata_PASS": true,
+      "required_normal_image_PASS": true,
+      "all16_reproduce100d": true,
+      "wholeE2_GO": "1f1d7bd2",
+      "repair_complete": true
+    },
+    "i02_E2_E3_whole_conditions": {
+      "at": "2026-11-11T01:20:32.133433+00:00",
+      "checks": [
+        "M14-I02-E2",
+        "M14-I02-E3"
+      ],
+      "reviews": [
+        "1f1d7bd2e364bf754fb55751cb7104fd23ab57f52e68e804fd4ab9560b402cab",
+        "591774e1475c6b66087e2ca9b3296d882e419f96b4a5c545579c34936230c723"
+      ],
+      "source": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f",
+      "all16_reproduce100d": true,
+      "new_counted_credit": 2,
+      "verified": 82,
+      "total": 156,
+      "parent_or_native_accepted": false
+    },
+    "i02_original_gate_acceptance": {
+      "at": "2026-11-11T01:28:43.207429+00:00",
+      "accepted": true,
+      "review_sha256": "ffb1a702dbad8f641198dc3bb9cd3e4c43d2f61e3c7b07529a314d40591dfc11",
+      "all_original_children_verified": true,
+      "explicit_Root_acceptance": true,
+      "scope": "Original matching supported build gate only, sourcef374/default100d/currentIHK8d/real099threeKO; otherM14gates/native/C32migration/wholemilestone remain separate",
+      "wholeM14_or_native_or_Cretirement": false
+    },
+    "F06_two_DEFAULT_closures": {
+      "at": "2026-11-11T01:33:54.144012+00:00",
+      "checks": [
+        "M14-06-02-DEFAULT",
+        "M14-06-05-DEFAULT"
+      ],
+      "review": "46a3823cefd457546cd3d56636aaa31fe61614d13dddcfbe671850699868521e",
+      "native_or_other_DEFAULT_or_acceptance": false
     }
   },
   "denominator_changes": [

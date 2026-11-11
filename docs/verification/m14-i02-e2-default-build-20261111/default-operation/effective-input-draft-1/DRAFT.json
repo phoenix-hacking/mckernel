@@ -1,0 +1,808 @@
+{
+  "schema": 1,
+  "at": "2026-11-11T00:38:41.986681+00:00",
+  "status": "DRAFT_ONLY_PENDING_ACTUAL_ROOT_20_METADATA_POSITIVE_CAPTURE_AND_MATCH",
+  "source_commit": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f",
+  "actual_code_source": "Read-only postconfigure source/cachedfiles, Root freezingcohort; no compiler/helper/Make/SUT execution.",
+  "baseline": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef2535305-mmap-1/BASELINE.json",
+    "bytes": 12255,
+    "sha256": "28d6a80bd5ff9c1e076a55a3fa65c977a5af0bb62f2208589ec9949e9523f576"
+  },
+  "baseline_Rust_recipe": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-wiring-p04source-max-1/default-observation-1/baseline-rust-build.make",
+    "bytes": 17719,
+    "sha256": "1416f80484c3ee25343040def0219006589680684c1e498480a77e0e66425edf"
+  },
+  "current_Rust_recipe": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+    "bytes": 17719,
+    "sha256": "1416f80484c3ee25343040def0219006589680684c1e498480a77e0e66425edf"
+  },
+  "Rust_recipe_bytes_equal": true,
+  "actual_generated_Rust_argv": [
+    "cd",
+    "/work/output/build/kernel",
+    "&&",
+    "/usr/bin/cmake",
+    "-E",
+    "env",
+    "MAKEFLAGS=",
+    "MCKERNEL_RUST_VERSION=1.8.0",
+    "MCKERNEL_RUST_BUILDID=8d288b8",
+    "MCKERNEL_X86_ENABLE_SSE=1",
+    "MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c",
+    "MCKERNEL_DO_SYSCALL_C_FILE=/src/kernel/syscall.c",
+    "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=0",
+    "MCKERNEL_PROCESS_C_FILE=/src/kernel/process.c",
+    "MCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+    "MCKERNEL_INTERRUPT_SYSCALL_C_FILE=/src/kernel/syscall.c",
+    "MCKERNEL_TERMINATE_C_FILE=/src/kernel/syscall.c",
+    "MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c",
+    "MCKERNEL_F06_CLONE_CPUID_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs",
+    "MCKERNEL_F06_SIGNAL_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "mckernel_rust",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "-Z",
+    "dep-info-omit-d-target",
+    "-Z",
+    "binary-dep-depinfo",
+    "--cfg",
+    "process_verbose_data",
+    "--cfg",
+    "process_verbose_local_companions",
+    "--cfg",
+    "f06_signal_context_candidate",
+    "--cfg",
+    "f06_do_signal_whole_candidate",
+    "--cfg",
+    "f06_do_signal_reuse_qualified_context",
+    "--cfg",
+    "f06_rt_sigreturn_xrstor_candidate",
+    "--cfg",
+    "f06_debug_constants_candidate",
+    "--cfg",
+    "f06_signal_ptrace_diagnostics_candidate",
+    "--cfg",
+    "f06_signal_trap_info_candidate",
+    "--cfg",
+    "f03_io_diagnostic_callbacks_candidate",
+    "--cfg",
+    "f03_mincore_candidate",
+    "--cfg",
+    "f03_move_pages_candidate",
+    "--cfg",
+    "f03_sched_bridges_candidate",
+    "--cfg",
+    "f03_signal_process_bridges_candidate",
+    "--cfg",
+    "f03_dispatch_context_candidate",
+    "--cfg",
+    "f03_leaf_callbacks_candidate",
+    "--cfg",
+    "native_linux_irq_work_v6_12",
+    "--cfg",
+    "f03_syscall_entry_candidate",
+    "--cfg",
+    "f03_futex_atomic_candidate",
+    "--cfg",
+    "f03_futex_no_uaccess_candidate",
+    "--cfg",
+    "process_global_storage_candidate",
+    "--cfg",
+    "f03_syscall_table_candidate",
+    "--cfg",
+    "f03_ptrace_entry_candidate",
+    "--cfg",
+    "f03_syscall_table_clone3",
+    "--cfg",
+    "f03_terminate_candidate",
+    "--cfg",
+    "f03_interrupt_syscall_candidate",
+    "--cfg",
+    "f03_host_cleanup_candidate",
+    "--cfg",
+    "f03_exit_group_bridges_candidate",
+    "--cfg",
+    "f03_credential_refresh_candidate",
+    "--cfg",
+    "f03_prlimit_body_candidate",
+    "--cfg",
+    "f03_do_exit_supported_candidate",
+    "--cfg",
+    "f03_unmap_begin_selected_candidate",
+    "--cfg",
+    "f03_unmap_remove_selected_candidate",
+    "--cfg",
+    "f03_unmap_finish_selected_candidate",
+    "--cfg",
+    "f03_mmap_page_callback_candidate",
+    "--cfg",
+    "f03_wait_release_selected_candidate",
+    "--cfg",
+    "f03_wait_process_release_selected_candidate",
+    "--cfg",
+    "f03_terminate_refcount_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_find_selected_candidate",
+    "--cfg",
+    "f03_ptrace_io_unlock_selected_candidate",
+    "--cfg",
+    "f06_mmap_flag_providers",
+    "--cfg",
+    "f06_prctl_set_register_candidate",
+    "--cfg",
+    "f06_prctl_get_register_candidate",
+    "--cfg",
+    "f06_mmap_dispatch_bridge_candidate",
+    "--cfg",
+    "f06_ptrace_context_candidate",
+    "--cfg",
+    "f06_ptrace_alloc_candidate",
+    "--cfg",
+    "f06_vdso_add_range_candidate",
+    "--cfg",
+    "f06_vdso_set_range_candidate",
+    "--cfg",
+    "f06_process_vm_entry_candidate",
+    "--cfg",
+    "f03_exit_waitq_wake_selected_candidate",
+    "--cfg",
+    "f06_copy_to_user_candidate",
+    "--cfg",
+    "f06_copy_from_user_candidate",
+    "--cfg",
+    "f06_forward_context_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_syscall_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_set_signal_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_check_signal_candidate",
+    "--cfg",
+    "f06_clone_reader_lock_candidate",
+    "--cfg",
+    "f06_clone_reader_unlock_candidate",
+    "--cfg",
+    "f06_ptrace_find_thread_candidate",
+    "--cfg",
+    "f06_ptrace_thread_unlock_candidate",
+    "--cfg",
+    "f06_obtain_clone_cpuid_candidate",
+    "--cfg",
+    "f06_shmget_dispatch_candidate",
+    "--cfg",
+    "f06_native_signal_restore_fp_candidate",
+    "--cfg",
+    "f06_vdso_info_candidate",
+    "--cfg",
+    "f06_ptrace_xstate_copy_to_candidate",
+    "--cfg",
+    "f06_ptrace_xstate_copy_from_candidate",
+    "--cfg",
+    "f06_vdso_setup_log_candidate",
+    "--cfg",
+    "f06_vdso_state_candidate",
+    "--cfg",
+    "f06_vdso_storage_candidate",
+    "--cfg",
+    "f06_ptrace_user_bridges_candidate",
+    "--cfg",
+    "f06_ptrace_gpregs_bridges_candidate",
+    "--cfg",
+    "f06_prctl_log_candidate",
+    "--cfg",
+    "f06_prctl_log_storage_candidate",
+    "--cfg",
+    "f06_vdso_map_log_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_alloc_candidate",
+    "--cfg",
+    "f06_rt_sigreturn_free_candidate",
+    "--cfg",
+    "f03_perf_alloc_bridges_selected_candidate",
+    "--cfg",
+    "f03_perf_counter_control_bridges_selected_candidate",
+    "--cfg",
+    "f03_perf_provider_next3_bridges_selected_candidate",
+    "--cfg",
+    "f03_perf_event_provider_bridges_selected_candidate",
+    "--cfg",
+    "f03_sync_child_event_candidate",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "enable_rusage",
+    "--cfg",
+    "f03_do_mmap_candidate",
+    "--cfg",
+    "f03_do_syscall_outer_candidate",
+    "--emit=obj=/work/output/build/kernel/rust/mckernel_rust.o,dep-info=/work/output/build/kernel/rust/mckernel_rust.raw.d",
+    "/src/kernel/rust/lib.rs"
+  ],
+  "actual_generated_Rust_cfgs": [
+    "process_verbose_data",
+    "process_verbose_local_companions",
+    "f06_signal_context_candidate",
+    "f06_do_signal_whole_candidate",
+    "f06_do_signal_reuse_qualified_context",
+    "f06_rt_sigreturn_xrstor_candidate",
+    "f06_debug_constants_candidate",
+    "f06_signal_ptrace_diagnostics_candidate",
+    "f06_signal_trap_info_candidate",
+    "f03_io_diagnostic_callbacks_candidate",
+    "f03_mincore_candidate",
+    "f03_move_pages_candidate",
+    "f03_sched_bridges_candidate",
+    "f03_signal_process_bridges_candidate",
+    "f03_dispatch_context_candidate",
+    "f03_leaf_callbacks_candidate",
+    "native_linux_irq_work_v6_12",
+    "f03_syscall_entry_candidate",
+    "f03_futex_atomic_candidate",
+    "f03_futex_no_uaccess_candidate",
+    "process_global_storage_candidate",
+    "f03_syscall_table_candidate",
+    "f03_ptrace_entry_candidate",
+    "f03_syscall_table_clone3",
+    "f03_terminate_candidate",
+    "f03_interrupt_syscall_candidate",
+    "f03_host_cleanup_candidate",
+    "f03_exit_group_bridges_candidate",
+    "f03_credential_refresh_candidate",
+    "f03_prlimit_body_candidate",
+    "f03_do_exit_supported_candidate",
+    "f03_unmap_begin_selected_candidate",
+    "f03_unmap_remove_selected_candidate",
+    "f03_unmap_finish_selected_candidate",
+    "f03_mmap_page_callback_candidate",
+    "f03_wait_release_selected_candidate",
+    "f03_wait_process_release_selected_candidate",
+    "f03_terminate_refcount_selected_candidate",
+    "f03_ptrace_io_find_selected_candidate",
+    "f03_ptrace_io_unlock_selected_candidate",
+    "f06_mmap_flag_providers",
+    "f06_prctl_set_register_candidate",
+    "f06_prctl_get_register_candidate",
+    "f06_mmap_dispatch_bridge_candidate",
+    "f06_ptrace_context_candidate",
+    "f06_ptrace_alloc_candidate",
+    "f06_vdso_add_range_candidate",
+    "f06_vdso_set_range_candidate",
+    "f06_process_vm_entry_candidate",
+    "f03_exit_waitq_wake_selected_candidate",
+    "f06_copy_to_user_candidate",
+    "f06_copy_from_user_candidate",
+    "f06_forward_context_candidate",
+    "f06_rt_sigreturn_syscall_candidate",
+    "f06_rt_sigreturn_set_signal_candidate",
+    "f06_rt_sigreturn_check_signal_candidate",
+    "f06_clone_reader_lock_candidate",
+    "f06_clone_reader_unlock_candidate",
+    "f06_ptrace_find_thread_candidate",
+    "f06_ptrace_thread_unlock_candidate",
+    "f06_obtain_clone_cpuid_candidate",
+    "f06_shmget_dispatch_candidate",
+    "f06_native_signal_restore_fp_candidate",
+    "f06_vdso_info_candidate",
+    "f06_ptrace_xstate_copy_to_candidate",
+    "f06_ptrace_xstate_copy_from_candidate",
+    "f06_vdso_setup_log_candidate",
+    "f06_vdso_state_candidate",
+    "f06_vdso_storage_candidate",
+    "f06_ptrace_user_bridges_candidate",
+    "f06_ptrace_gpregs_bridges_candidate",
+    "f06_prctl_log_candidate",
+    "f06_prctl_log_storage_candidate",
+    "f06_vdso_map_log_candidate",
+    "f06_rt_sigreturn_alloc_candidate",
+    "f06_rt_sigreturn_free_candidate",
+    "f03_perf_alloc_bridges_selected_candidate",
+    "f03_perf_counter_control_bridges_selected_candidate",
+    "f03_perf_provider_next3_bridges_selected_candidate",
+    "f03_perf_event_provider_bridges_selected_candidate",
+    "f03_sync_child_event_candidate",
+    "enable_profile",
+    "enable_perf",
+    "enable_rusage",
+    "f03_do_mmap_candidate",
+    "f03_do_syscall_outer_candidate"
+  ],
+  "generated_Rust_argv_equal_to_qualified100d": true,
+  "actual_cfg_count": 86,
+  "C_compilation_database": {
+    "current": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/compile_commands.json",
+      "bytes": 73070,
+      "sha256": "1cf8863f3d196bc65996910f8b6468cd2f65ab0860f680d3dff01cfc25c61aba"
+    },
+    "baseline": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef2535305-mmap-1/build/compile_commands.json",
+      "bytes": 73070,
+      "sha256": "1cf8863f3d196bc65996910f8b6468cd2f65ab0860f680d3dff01cfc25c61aba"
+    },
+    "all72rows_exact_object_equal": true,
+    "exact10target_mapping_reused": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-wiring-p04source-max-1/default-observation-1/postgate-correction-1/ACTUAL-TARGET-MAPPING.json",
+      "bytes": 20628,
+      "sha256": "da9137a1ac18a3d154b1f5d317d5b2e56acb05ea7dd2ae8b6671c76ed7e2889c"
+    }
+  },
+  "cache": {
+    "baseline": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef2535305-mmap-1/build/CMakeCache.txt",
+      "bytes": 30123,
+      "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+    },
+    "current": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/CMakeCache.txt",
+      "bytes": 30123,
+      "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+    },
+    "actual_default_option": {
+      "type": "BOOL",
+      "value": "ON"
+    },
+    "effective_value_changes": [],
+    "type_only_changes": [],
+    "source_proof": "Rootactual-U/no-DON configure completed0 in originalfailedpostgate capture; fullsourcee682/f374 andmaterial0ae preserved. No finalacceptance fromcachealone."
+  },
+  "postconfigure_25_identities": [
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/config.h",
+        "bytes": 1055,
+        "sha256": "ca251af0e69e4c82df042063bb9ffc180cbba2bd1c34f246d7589f44ed7bfa3f"
+      },
+      "baseline_sha256": "ca251af0e69e4c82df042063bb9ffc180cbba2bd1c34f246d7589f44ed7bfa3f",
+      "equal": true,
+      "mtime_ns": 1794334512188412032
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/ihk/config.h",
+        "bytes": 464,
+        "sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535"
+      },
+      "baseline_sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535",
+      "equal": true,
+      "mtime_ns": 1794334512188412032
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/config/smp-x86.lds",
+        "bytes": 915,
+        "sha256": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd"
+      },
+      "baseline_sha256": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd",
+      "equal": true,
+      "mtime_ns": 1794334514432472512
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+        "bytes": 10588200,
+        "sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2"
+      },
+      "baseline_sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2",
+      "equal": true,
+      "mtime_ns": 1794351934473308487
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+        "bytes": 991255,
+        "sha256": "6f11926be391d76579a60f37a60297585c629b81f980a844e4c70f60b39c6cd9"
+      },
+      "baseline_sha256": "6f11926be391d76579a60f37a60297585c629b81f980a844e4c70f60b39c6cd9",
+      "equal": true,
+      "mtime_ns": 1794351934473308487
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+        "bytes": 2848,
+        "sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c"
+      },
+      "baseline_sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c",
+      "equal": true,
+      "mtime_ns": 1794351933945291612
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "bytes": 248752,
+        "sha256": "7559299363060b0cafbbec97ed2b00412fa71c19bc4caf17caa7478adfaf5e38"
+      },
+      "baseline_sha256": "7559299363060b0cafbbec97ed2b00412fa71c19bc4caf17caa7478adfaf5e38",
+      "equal": true,
+      "mtime_ns": 1794351934349304524
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "bytes": 2864,
+        "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+      },
+      "baseline_sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd",
+      "equal": true,
+      "mtime_ns": 1794351933985292890
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "bytes": 2880,
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "baseline_sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0",
+      "equal": true,
+      "mtime_ns": 1794351934017293913
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "bytes": 2344,
+        "sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a"
+      },
+      "baseline_sha256": "dce0972b3291f970d49a5fa6d64f25c587423aafa63efc8b47bcfdbdfb679c7a",
+      "equal": true,
+      "mtime_ns": 1794351933785286498
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "bytes": 2872,
+        "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+      },
+      "baseline_sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1",
+      "equal": true,
+      "mtime_ns": 1794351933817287521
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "bytes": 16056,
+        "sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44"
+      },
+      "baseline_sha256": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44",
+      "equal": true,
+      "mtime_ns": 1794351933833288032
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "bytes": 2888,
+        "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+      },
+      "baseline_sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85",
+      "equal": true,
+      "mtime_ns": 1794351933865289055
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "bytes": 2888,
+        "sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972"
+      },
+      "baseline_sha256": "9c4761b951ed58bbfc9c732d5d8cb844ca90751397686e2e25988d6252b0b972",
+      "equal": true,
+      "mtime_ns": 1794351933897290078
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "bytes": 5568,
+        "sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5"
+      },
+      "baseline_sha256": "ebd728290101289164a887deb52dc7977d896e9627a2cb1323fd649db89055c5",
+      "equal": true,
+      "mtime_ns": 1794351933913290589
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+        "bytes": 19117720,
+        "sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912"
+      },
+      "baseline_sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912",
+      "equal": true,
+      "mtime_ns": 1794351933713284196
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/CMakeCache.txt",
+        "bytes": 30123,
+        "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+      },
+      "baseline_sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a",
+      "equal": true,
+      "mtime_ns": 1794342372399132134
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/compile_commands.json",
+        "bytes": 73070,
+        "sha256": "1cf8863f3d196bc65996910f8b6468cd2f65ab0860f680d3dff01cfc25c61aba"
+      },
+      "baseline_sha256": "1cf8863f3d196bc65996910f8b6468cd2f65ab0860f680d3dff01cfc25c61aba",
+      "equal": true,
+      "mtime_ns": 1794356611599338929
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "bytes": 759,
+        "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+      },
+      "baseline_sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+      "equal": true,
+      "mtime_ns": 1794334514484473914
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.d",
+        "bytes": 10828,
+        "sha256": "914d3e14ac5133b0ea3bc8e5c2f812186ceb428f50202b412a341b0ed3150e29"
+      },
+      "baseline_sha256": "914d3e14ac5133b0ea3bc8e5c2f812186ceb428f50202b412a341b0ed3150e29",
+      "equal": true,
+      "mtime_ns": 1794351933749285347
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.raw.d",
+        "bytes": 11616,
+        "sha256": "47bbd389b3d388aeed96db701e064d9885912edbb2198f2caa21e2c215ecf7c1"
+      },
+      "baseline_sha256": "47bbd389b3d388aeed96db701e064d9885912edbb2198f2caa21e2c215ecf7c1",
+      "equal": true,
+      "mtime_ns": 1794351914976685276
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/ORIGIN-BINDING.json",
+        "bytes": 5208,
+        "sha256": "5d8287b93dcb9226d0d305b9ceaae62bff5f1ed0a49f12102d70b449d70e87d8"
+      },
+      "baseline_sha256": "5d8287b93dcb9226d0d305b9ceaae62bff5f1ed0a49f12102d70b449d70e87d8",
+      "equal": true,
+      "mtime_ns": 1794356611535336843
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.json",
+        "bytes": 1184,
+        "sha256": "f4b74627879a40571a9ebeb8a2eed177fab0a984ee78720a4d7d16f24fb3e7dd"
+      },
+      "baseline_sha256": "f4b74627879a40571a9ebeb8a2eed177fab0a984ee78720a4d7d16f24fb3e7dd",
+      "equal": true,
+      "mtime_ns": 1794356611535336843
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+        "bytes": 1248,
+        "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58"
+      },
+      "baseline_sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58",
+      "equal": true,
+      "mtime_ns": 1794356611535336843
+    },
+    {
+      "current": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/tmp.resolve_MODULES_END/driver.ko",
+        "bytes": 145296,
+        "sha256": "712f062a26e5c7db4d656021f62bd6b94cca3b09a926f3e8476cc93d44f45794"
+      },
+      "baseline_sha256": "712f062a26e5c7db4d656021f62bd6b94cca3b09a926f3e8476cc93d44f45794",
+      "equal": true,
+      "mtime_ns": 1794356611055321195
+    }
+  ],
+  "link_inputs": {
+    "current_link": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    "baseline_link": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baselinef2535305-mmap-1/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    "link_argv_equal": true,
+    "config_and_linker_byte_equality_recorded_in_25rows": true,
+    "source_provider_compiler_roles": "SourceRootonefileCMake-only composition and all actualcache/compiler/source/pairedselector commandbindings reused. No RootABI/provider/header/Rust/C/ASM implementation change. Matchingmodule099/IHK8d/config106 qualified and unaffected."
+  },
+  "normal_graph": {
+    "decision_draft": "ORDINARY_NAMED_IMAGE_REQUIRED_AFTER_METADATA_MATCH",
+    "reason": "MandatoryRootconfigure regenerated an explicit Rustinput newer than currentRustobject. Identical recipe/codeinput contents/currentimage hashes do not make GNUmake targetup-to-date.",
+    "actual_explicit_dependency_line": "kernel/rust/mckernel_rust.o: kernel/rust/f06-origin/f06_signal_metadata.rs",
+    "actual_raw_and_normalized_Rust_dep_input": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+    "dependency": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+      "bytes": 1248,
+      "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58"
+    },
+    "dependency_mtime_ns": 1794356611535336843,
+    "Rust_object": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 19117720,
+      "sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912"
+    },
+    "Rust_object_mtime_ns": 1794351933713284196,
+    "generated_dependency_observations": [
+      {
+        "identity": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+          "bytes": 1248,
+          "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58"
+        },
+        "mtime_ns": 1794356611535336843,
+        "newer_than_Rust_object": true
+      },
+      {
+        "identity": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs",
+          "bytes": 201,
+          "sha256": "71e4b0ab7f5ca612e4cd06bf2150e2e6b7b5e3e39717e466cfb626b1ce249a48"
+        },
+        "mtime_ns": 1794356611535336843,
+        "newer_than_Rust_object": true
+      },
+      {
+        "identity": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_rt_sigreturn_origin.cmake",
+          "bytes": 188,
+          "sha256": "d0a87599d45cd199cd28046ee0faaea9429fddc852dc7ce2f859718876a103a3"
+        },
+        "mtime_ns": 1794356611535336843,
+        "newer_than_Rust_object": true
+      },
+      {
+        "identity": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_rt_sigreturn_origin.h",
+          "bytes": 268,
+          "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+        },
+        "mtime_ns": 1794356611535336843,
+        "newer_than_Rust_object": true
+      },
+      {
+        "identity": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/compiler_depend.ts",
+          "bytes": 121,
+          "sha256": "bd590b2a34fcfd82b9f0ea0432ce2511e34ffb559477d60efded8f22b0a01f24"
+        },
+        "mtime_ns": 1794334514480473806,
+        "newer_than_Rust_object": false
+      }
+    ],
+    "Rust_then_link": "NormalRust target regensdue newerrequiredmetadata; image link depends onthatRustobject. Do not forceclean/ad hoccompiler; Rootstandard cmake--build mckernel.img--parallel1--verbose after review/freshadmission.",
+    "source_CMake_file_is_not_compiled_dependency": "No CMakeLists prerequisite in unchangedRustbuild recipe. The real trigger is regenerateddeclaredmetadata, not a blanket commit/sourcecount rule.",
+    "no_actual_build_or_test_or_graphprobe_run": true
+  },
+  "actual20capture_match_required": {
+    "current_expected_metadata_identities": [
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/CMakeCache.txt",
+        "bytes": 30123,
+        "sha256": "e720c6a793e586ff0a4702a2312cb1712cb09c7dce6ca1667ce9e2689024261a"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/compile_commands.json",
+        "bytes": 73070,
+        "sha256": "1cf8863f3d196bc65996910f8b6468cd2f65ab0860f680d3dff01cfc25c61aba"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+        "bytes": 17719,
+        "sha256": "1416f80484c3ee25343040def0219006589680684c1e498480a77e0e66425edf"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+        "bytes": 6957,
+        "sha256": "3272e04f16bf78166dc97864ac10bd4fe8133115cfec3b7c8b709b1d2dd0b875"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+        "bytes": 47670,
+        "sha256": "9b04a2a90bd8c42b1dd83242d1147e856648e988b5e6b7fb215d82b5cb99371d"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+        "bytes": 759,
+        "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/link.d",
+        "bytes": 1290,
+        "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.d",
+        "bytes": 10828,
+        "sha256": "914d3e14ac5133b0ea3bc8e5c2f812186ceb428f50202b412a341b0ed3150e29"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.raw.d",
+        "bytes": 11616,
+        "sha256": "47bbd389b3d388aeed96db701e064d9885912edbb2198f2caa21e2c215ecf7c1"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/config.h",
+        "bytes": 1055,
+        "sha256": "ca251af0e69e4c82df042063bb9ffc180cbba2bd1c34f246d7589f44ed7bfa3f"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/ihk/config.h",
+        "bytes": 464,
+        "sha256": "01628a5a3edb44b73d0b0fc63eeb04be063998944156396594d13565924b6535"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/config/smp-x86.lds",
+        "bytes": 915,
+        "sha256": "b95d62a32abad215818adbde3597fad0607d4d14dddc7fc9adea09d9cd133bbd"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/ORIGIN-BINDING.json",
+        "bytes": 5208,
+        "sha256": "5d8287b93dcb9226d0d305b9ceaae62bff5f1ed0a49f12102d70b449d70e87d8"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.json",
+        "bytes": 1184,
+        "sha256": "f4b74627879a40571a9ebeb8a2eed177fab0a984ee78720a4d7d16f24fb3e7dd"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs",
+        "bytes": 1248,
+        "sha256": "0da870f9f48a4500f57d593a776a5f7d38b03d37cd1abd78baf4a27f8520fd58"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/tmp.resolve_MODULES_END/driver.c",
+        "bytes": 109,
+        "sha256": "913006c252ee84b8b9d4235938e44c33b74b3b51eddb82689de149d3e45e6ce3"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/tmp.resolve_MODULES_END/Makefile",
+        "bytes": 157,
+        "sha256": "f39c695817beb9876f610e305f6b0b38b01435da3df6d508ae6bd6e3c0a036f2"
+      }
+    ],
+    "source_and_recipe_freeze": "Rootnewmetadata operation must0/nonOOM/Pid0/removal/fullpositivewaitfamilies and actual20capturedata matchthese source/config/command/identity records; rejectunexpectedmutation and retainexactdiagnostic. NewdriverELFread and SHA/statrecords must independentlyjoin actualfiles.",
+    "not_a_final_E2_decision": true
+  },
+  "original_acceptance_or_credit": false,
+  "canonical_cache_source_or_index_changed": false
+}

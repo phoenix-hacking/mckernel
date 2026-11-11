@@ -1,0 +1,3 @@
+obj-m := driver.o
+all:
+	make -j1 LLVM=1 LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64 -C /output/build M=/work/output/build/tmp.resolve_MODULES_END modules
