@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T05:11:22.520664+00:00",
+  "updated_at": "2026-11-11T05:13:44.592502+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -54,7 +54,7 @@
         "M15-I03",
         "M15-I04"
       ],
-      "checklist_percent_complete": 64.81,
+      "checklist_percent_complete": 66.0,
       "file_acceptance_percent": 12.5,
       "integration_acceptance_percent": 0.0,
       "milestone_accepted": false,
@@ -1297,7 +1297,7 @@
         "M15-I03-static-dynamic",
         "M15-I03-ACCEPT"
       ],
-      "percent_complete": 71.43,
+      "percent_complete": 85.71,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -5748,9 +5748,9 @@
       "id": "M15-I03-original-reproducibility",
       "parent": "M15-I03",
       "title": "Complete original supported source/config/toolchain/SDK reproducibility",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "unverified_or_blocked",
+      "status": "verified",
       "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
       "done_when": "Reconstruct and bind all original supported source/configuration/compiler/SDK/transitive-provider identities using the existing recipes, acquire genuinely absent artifacts where permitted, and demonstrate matching reproducibility. Escalate only an exact unavailable artifact/access requirement with evidence.",
       "verification_method": "Derive the required obligations and source/profile/provider identities from the actual supported source, headers, build recipes and retained matching evidence. Reuse proven checks; qualify only genuinely unmatched changed contracts. Actual native/device operations still require their real ownership/current-free/admission bindings; no source review or HOST fixture substitutes for matching final acceptance.",
@@ -5775,12 +5775,16 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m15-original-reproducibility-20261111/m15-i03-original-reproducibility-sdk-max-1/qualification-1/WHOLE-I03-ORIGINAL-REPRODUCIBILITY.json",
+        "docs/verification/m15-original-reproducibility-20261111/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json"
       ],
-      "scope_limit": "HOST/focused proof is credited only at stated scope, not as complete original SDK/deployed/native qualification.",
-      "definition_status": "closure condition stated; source-derived engineering qualification remains open; actual operation admission remains separate",
+      "scope_limit": "Original technical reproducibility child only; explicit I03 parent/M15 acceptance, default/runtime/native/installed deployment and C104 retirement remain separate.",
+      "definition_status": "whole unchanged original supported source/configuration/compiler/SDK/transitive-provider reproducibility condition independently demonstrated",
       "execution_profile": "ordinary_HOST",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-11T05:13:44.592502+00:00",
+      "current_engineering_evidence": "WholeGO8875 bindsaa831/0aa750/42bee/6594 andactual4a6c/2a144: three real Rocky46d/GCC14/Rust1.95 mcrebootc5f0/mcstop7485/P03d333 reconstructed fromcurrent13canonicalsource/config identities; built=0755stage/twoequalconfigs/all8inner13outerpositive/terminal0removed/released. All330imports covered exactlyonce(315rawlibc/gccmatches+3retainedTLSloader+12actualindex0optionalweak); nineunchangednormalproducer/profilemanifests and508119/8221/131b reused. EarlierthreeHOST-onlySDKgap closed byactualbuilds, no additionalcommand/native/parent inference."
     },
     {
       "id": "M15-I03-complete-ABI",
@@ -14587,16 +14591,16 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-11T05:11:22.520664+00:00",
+    "at": "2026-11-11T05:13:44.592502+00:00",
     "invocation": "20261110T060029Z-3fe88dab",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "counted_verified_before": 90,
-    "counted_verified_after": 92,
+    "counted_verified_before": 92,
+    "counted_verified_after": 93,
     "task_binding_rows_before": 391,
     "task_binding_rows_after": 391,
-    "change_reason": "Two whole original architecture DEFAULT conditions independently pass on actual7231 current image; original criteria/weights/denominators unchanged.",
+    "change_reason": "Whole original M15 supported SDK/source/configuration/compiler/transitive-provider reproducibility closes from actualthreeRocky reconstructions; criteria/weights unchanged.",
     "latest_source_backed_integration": {
       "at": "2026-11-10T14:39:48.032766+00:00",
       "original_checks": [
@@ -14627,36 +14631,33 @@
       ]
     },
     "latest_counted_closure": {
-      "at": "2026-11-11T05:11:22.520664+00:00",
+      "at": "2026-11-11T05:13:44.592502+00:00",
       "check_ids": [
-        "M14-06-01-DEFAULT",
-        "M14-06-03-DEFAULT"
+        "M15-I03-original-reproducibility"
       ],
       "whole_condition_reviews": [
-        "docs/verification/m14-current-image-20261111/joint-providers-1/fork-default-whole-review-p03-max-1/REVIEW.json",
-        "docs/verification/m14-current-image-20261111/joint-providers-1/f06-ptrace-default-whole-review-p04tests-max-1/REVIEW.json"
+        "docs/verification/m15-original-reproducibility-20261111/m15-i03-original-reproducibility-review-sourceacq-max-1/REVIEW.json"
       ],
       "whole_condition_review_sha256s": [
-        "eec34d75f2a792829fb6107560c2c55ad6b29593bd09a6c6f882890c18509703",
-        "7a8776583a9f3ea4a5299a1bd53bec48ae57868f0d652361293171d9b6f5c9d2"
+        "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
       ],
       "M14_before_after": [
-        64.26,
+        65.19,
         65.19
       ],
       "M15_before_after": [
         64.81,
-        64.81
+        66.0
       ],
       "counted_verified_before_after": [
-        90,
-        92
+        92,
+        93
       ],
-      "exact_M14_before_after": [
-        "1735/27",
-        "1760/27"
+      "exact_M15_before_after": [
+        "239545/3696",
+        "81315/1232"
       ],
-      "exact_M14_gain": "25/27 percentage points",
+      "exact_M15_gain": "25/21 percentage points",
       "parent_acceptance": false
     },
     "counted_closure_history": [
@@ -15368,16 +15369,20 @@
     },
     "pending_progress_report": {
       "state": "WAIT_SOURCE_RESULTS_CHECKPOINT_PUSH_AND_FETCH",
-      "dedupe": "M14-06-01-DEFAULT+M14-06-03-DEFAULT@eec34d75+7a877658",
+      "dedupe": "M14-06-01-DEFAULT+M14-06-03-DEFAULT+M15-I03-repro@eec34d75+7a877658+8875f4a2",
       "pair": {
         "M14": 65.19,
-        "M15": 64.81
+        "M15": 66.0
       },
       "previous_published_pair": {
         "M14": 64.26,
         "M15": 64.81
       },
-      "post_after_fetched_byte_confirmation": true
+      "post_after_fetched_byte_confirmation": true,
+      "unpublished_intermediate_M14_pair": [
+        65.19,
+        64.81
+      ]
     },
     "current_engineering_step": {
       "at": "2026-11-11T05:03:32.512072+00:00",
@@ -15385,7 +15390,7 @@
         "M14-06-01-DEFAULT",
         "M14-06-03-DEFAULT"
       ],
-      "state": "WHOLE01_03_DEFAULT_VERIFIED_M15_REPRO_FINAL_REVIEW_PENDING",
+      "state": "WHOLE01_03_DEFAULT_AND_M15_REPRO_VERIFIED_PENDING_CHECKPOINT",
       "private_composition": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/COMPOSITION.proposed.json",
       "private_patch_sha256": "099ddd4d44fc5f7c7b1ce71eb58d5cf9f82819b49b810d6ce9a833045c8507e7",
       "failed_private_composition_preserved": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-1",
@@ -15455,7 +15460,9 @@
         "ABI_copies": 4
       },
       "whole01_review_sha256": "eec34d75f2a792829fb6107560c2c55ad6b29593bd09a6c6f882890c18509703",
-      "whole03_review_sha256": "7a8776583a9f3ea4a5299a1bd53bec48ae57868f0d652361293171d9b6f5c9d2"
+      "whole03_review_sha256": "7a8776583a9f3ea4a5299a1bd53bec48ae57868f0d652361293171d9b6f5c9d2",
+      "counted_delta_since_last_published_pair": 3,
+      "M15_repro_whole_review_sha256": "8875f4a296430e73098e910a2c12f7fed4b35c2198f2af60e6aebbc19ec06427"
     },
     "verified_whole_condition_history": [
       {
@@ -15484,6 +15491,39 @@
           88,
           90
         ],
+        "parent_acceptance": false
+      },
+      {
+        "at": "2026-11-11T05:11:22.520664+00:00",
+        "check_ids": [
+          "M14-06-01-DEFAULT",
+          "M14-06-03-DEFAULT"
+        ],
+        "whole_condition_reviews": [
+          "docs/verification/m14-current-image-20261111/joint-providers-1/fork-default-whole-review-p03-max-1/REVIEW.json",
+          "docs/verification/m14-current-image-20261111/joint-providers-1/f06-ptrace-default-whole-review-p04tests-max-1/REVIEW.json"
+        ],
+        "whole_condition_review_sha256s": [
+          "eec34d75f2a792829fb6107560c2c55ad6b29593bd09a6c6f882890c18509703",
+          "7a8776583a9f3ea4a5299a1bd53bec48ae57868f0d652361293171d9b6f5c9d2"
+        ],
+        "M14_before_after": [
+          64.26,
+          65.19
+        ],
+        "M15_before_after": [
+          64.81,
+          64.81
+        ],
+        "counted_verified_before_after": [
+          90,
+          92
+        ],
+        "exact_M14_before_after": [
+          "1735/27",
+          "1760/27"
+        ],
+        "exact_M14_gain": "25/27 percentage points",
         "parent_acceptance": false
       }
     ]

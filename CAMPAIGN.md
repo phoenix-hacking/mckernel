@@ -1,9 +1,25 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T05:11:22.520664+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T05:13:44.592502+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Original M15-I03 reproducibility verified.** WholeGO8875f4a2 joins frozen
+aa831/0aa750 and actual three Rocky46d+1.95 builds c5f0/7485/d333, current13
+source/config identities, all330 imports(315realdefinitions/3TLSloader/12
+exactoptionalweak), matching0755 private installs and8inner+13outer positive
+waits/terminal0 container removal. Nine unchanged supported producer/profile
+manifests are reused; original three-HOST SDK gap is closed by real reconstructions.
+Exactly one further check closes:93/156 verified; M14=65.19%, M15=66.00%.
+Combined gains from the last published pair are+0.93/+1.19 displayed points.
+I03 checklist85.71% remains unaccepted; M14-before-M15 parent order, native/
+deployment/default/runtime/C104 conditions remain separate. No new quota/metric
+or original criterion was added. Root publishes local3852(twoM14wholeGOs) and
+this M15whole checkpoint together, then one final changed-pair PR3 report; the
+unpublished65.19/64.81 intermediate pair needs no duplicate report. Next15min:
+finish the now-enabled wholeF06DEFAULT assessment and the two independently
+reviewed source packets for actual remaining mprotect/signal C endpoints.
 
 **Two original architecture DEFAULT conditions verified.** Independent whole
 GOeec34d75 closes M14-06-01-DEFAULT and7a877658 closes M14-06-03-DEFAULT
