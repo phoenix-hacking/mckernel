@@ -65,6 +65,11 @@ pub unsafe extern "C" fn terminate_mcexec(rc: CInt, sig: CInt) {
     let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
     let current = unsafe { addr_of!((*cpu).current).read() };
     let proc = unsafe { addr_of!((*current).proc).read() };
+    // The actual terminal callers released their original IRQ/hash/update
+    // locks. Drain only this current Process before its real exit-group/nohost
+    // transition; nonlast do_exit never enters this Process-wide hook.
+    #[cfg(f03_perf_owner_protocol)]
+    unsafe { policy::f03_perf_owner::terminal_current_process() };
     let mut request = MaybeUninit::<SyscallRequest>::uninit();
     let _ = unsafe {
         policy::terminate_mcexec_body_result(
@@ -128,6 +133,9 @@ pub unsafe extern "C" fn terminate(rc: CInt, sig: CInt) {
     let mut init_children = MaybeUninit::<McsRwlockNode>::uninit();
     let mut accounting = MaybeUninit::<TimeSpec>::uninit();
 
+    #[cfg(f03_perf_owner_protocol)]
+    unsafe{crate::f03_perf_owner::sync_monitor(proc,current);}
+    #[cfg(not(f03_perf_owner_protocol))]
     if !unsafe { addr_of!((*proc).monitoring_event).read() }.is_null() {
         // The C code reloads this field at the actual call.
         unsafe { sync_child_event(addr_of!((*proc).monitoring_event).read()) };

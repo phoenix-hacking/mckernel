@@ -3667,19 +3667,25 @@ pub unsafe extern "C" fn handle_interrupt(vector:CInt,regs:*mut X86UserContext) 
                 if core::ptr::addr_of!((*fd).padding).read()>0 {break;}
                 fd=core::ptr::addr_of!((*fd).next).read();
             }
+            // The IRQ path needs only these copied scalar fields. Snapshot
+            // them while the actual descriptor-list lock still proves storage
+            // live; no heap allocation, event borrow or deferred pin is needed.
+            let selected = !fd.is_null();
+            let (selected_signal, selected_fd) = if selected {
+                (core::ptr::addr_of!((*fd).padding).read(),
+                 core::ptr::addr_of!((*fd).fd).read())
+            } else { (0, -1) };
             x86_main_unlock(lock,irq);
-            if !fd.is_null() {
-                // Preserve original post-unlock pointer lifetime; do not invent
-                // a hold/ACK or silently move these reads under the lock.
+            if selected {
                 let mut storage=core::mem::MaybeUninit::<crate::abi::SigInfo>::uninit();
                 let info=storage.as_mut_ptr();
                 core::ptr::write_bytes(info.cast::<u8>(),0,size_of::<crate::abi::SigInfo>());
-                core::ptr::addr_of_mut!((*info).si_signo).write(core::ptr::addr_of!((*fd).padding).read());
+                core::ptr::addr_of_mut!((*info).si_signo).write(selected_signal);
                 let fault=core::ptr::addr_of_mut!((*info).sifields.sigfault).cast::<crate::abi::SigInfoFault>();
                 core::ptr::addr_of_mut!((*fault).si_addr).write(core::ptr::addr_of!((*regs).gpr.rip).read() as *mut c_void);
                 let poll=core::ptr::addr_of_mut!((*info).sifields.sigpoll).cast::<crate::abi::SigInfoPoll>();
-                core::ptr::addr_of_mut!((*poll).si_fd).write(core::ptr::addr_of!((*fd).fd).read());
-                x86_main_signal(core::ptr::addr_of!((*fd).padding).read(),regs.cast(),info);
+                core::ptr::addr_of_mut!((*poll).si_fd).write(selected_fd);
+                x86_main_signal(selected_signal,regs.cast(),info);
             } else {
                 x86_main_signal(x86_main_irq_constants[21] as CInt,regs.cast(),core::ptr::null_mut());
             }
@@ -5455,6 +5461,10 @@ mod context_switch_entry {
             }
             super::ihk_mc_init_user_tlsbase((*next).uctx, (*next).tlsblock_base);
             if x86_switch_context_perf_enabled != 0 {
+                #[cfg(f03_perf_owner_protocol)]
+                crate::f03_perf_owner::switch_monitor(next,x86_switch_context_geometry[4] as CInt,x86_switch_context_geometry[5] as CInt);
+                #[cfg(not(f03_perf_owner_protocol))]
+                {
                 let process = (*next).proc;
                 if !(*process).monitoring_event.is_null() {
                     if (*process).perf_status == x86_switch_context_geometry[4] as CInt {
@@ -5464,6 +5474,7 @@ mod context_switch_entry {
                         perf_reset((*process).monitoring_event);
                         perf_start((*process).monitoring_event);
                     }
+                }
                 }
             }
             if x86_switch_context_profile_enabled != 0 {

@@ -1,0 +1,204 @@
+{
+  "actual": {
+    "Root_external_admission": {
+      "bytes": 912,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/ROOT-EXTERNAL-ADMISSION.json",
+      "sha256": "541234175f79c4fcca0bc5cfa129e94625c9928f91799c1db8fad9c6bc509fe6"
+    },
+    "Root_full_completion": {
+      "bytes": 2712,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "afb4eb900fc2aaf7f40beac392a0a4f45aa944a4c9ff1bc207841227b109de22"
+    },
+    "compiler_stderr": {
+      "bytes": 7735,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/execution-1/phase-1.stderr",
+      "sha256": "058faa5e3b1ba39adcf429bec39a38ed7e196e3c537be1eacdba1abbe66dd26d"
+    },
+    "compiler_stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/execution-1/phase-1.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inner_admission": {
+      "bytes": 573,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/execution-1/ADMISSION.json",
+      "sha256": "4734ac7c6dd8fc30a2f8acd6bbb6c51f750c557729d1ee9b4debb01a6bdd49a1"
+    },
+    "ownership": {
+      "bytes": 374,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/execution-1/ownership.json",
+      "sha256": "9b5799678ae205841fd32546cd55e3348cbe1ab18809b30390994ce80b1a96b8"
+    },
+    "result": {
+      "bytes": 2557,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/execution-1/RESULT.json",
+      "sha256": "c8eb17c980394637f4cd006142b48f971be4bb388c8a0ff200f074adec378a6d"
+    }
+  },
+  "at": "2026-11-11T15:31:53.112631+00:00",
+  "current_owned_lifecycle": {
+    "Root_may_record_current_only_retirement": true,
+    "actual_Root_session_remaining": null,
+    "actual_Root_tool_chunk": "193109",
+    "actual_Root_tool_exit": 1,
+    "actual_ownership_record": {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "phase-1",
+      "leader": 1442340,
+      "leader_birth": "49698897",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 1,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    },
+    "admitted_MemAvailable_bytes": 29297913856,
+    "admitted_inner_overhead_bytes": 1493602304,
+    "admitted_inner_total_bytes": 3641085952,
+    "all_current_job_bytes": 2147483648,
+    "all_current_job_count": 1,
+    "all_one_attempt_process_handles_closed": true,
+    "no_runtime_family_created": true,
+    "not_retired": [
+      "Modeled VM host-route debts (runtime never executed)",
+      "All native allocations/capacity/current-free gates",
+      "Retained18GiB, Scratch21 and mutex27:4",
+      "Historical/source/globalOFD/normallease UNKNOWNs",
+      "Any other job/reservation/owner",
+      "Service/account/credit holds"
+    ],
+    "positive_basis": "The exact compiler leader/birth has actual parent wait/status1, whole descendant family join, streams closure and no adopted reap/kill, residual/error/timeout/group signal. The original synchronous Root invocation itself has full initial=final exit1/noSession and captured outer traceback. No absence-only inference or new census is used.",
+    "retirement_scope": "Only this failed a3f81/9767 CPU6 HOST compiler process family 2GiB/job1. Root owns recording release, not this review.",
+    "reviewer_did_not_edit_resource_state": true
+  },
+  "decision": "QUALIFIED_ACTUAL_FIRST_HOST_EXECUTABLE_COMPILE_FAILURE_AND_GO_CURRENT_PROCESS_MEMORY_JOB_RETIREMENT_ONLY",
+  "failed_check": {
+    "actual_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648",
+      "--cpu=60",
+      "--fsize=67108864",
+      "--nofile=64",
+      "--",
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LANG=C",
+      "LC_ALL=C",
+      "TZ=UTC",
+      "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/tmp",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "--crate-name",
+      "perf_owner_changed_families",
+      "--edition=2021",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=1",
+      "-C",
+      "force-unwind-tables=no",
+      "--cfg",
+      "native_linux_irq_work_v6_12",
+      "--cfg",
+      "enable_profile",
+      "--cfg",
+      "enable_perf",
+      "--cfg",
+      "enable_rusage",
+      "--cfg",
+      "f03_perf_owner_protocol",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/main.rs",
+      "-o",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/perf-owner-changed-families"
+    ],
+    "actual_cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1",
+    "actual_exit": 1,
+    "compiler_source_errors": 9,
+    "compiler_warnings": 4,
+    "error_groups": [
+      {
+        "code": "E0425",
+        "count": 2,
+        "diagnostic": "Missing projected SyscallFindProcessFn and SyscallProcessUnlockFn exact source aliases",
+        "location": "production/syscall_policy.rs1148/1149",
+        "owner": "/root/p04_tests_max"
+      },
+      {
+        "code": "E0425",
+        "count": 2,
+        "diagnostic": "Missing projected actual ENOENT source constant",
+        "location": "production/syscall_policy.rs1377/1547",
+        "owner": "/root/p04_tests_max"
+      },
+      {
+        "code": "E0609",
+        "count": 2,
+        "diagnostic": "Test reads nonexistent EventLayout.pp_reset; bind the actual original reset constant/provider contract",
+        "location": "production/f03_perf_owner/counter_epoch_family.rs359/362",
+        "owner": "/root/p04_tests_max"
+      },
+      {
+        "code": "E0308",
+        "count": 2,
+        "diagnostic": "Actual ProcessVm.proc is *mut c_void; fixture compares *mut Process without explicit type conversion",
+        "location": "production/f03_perf_owner/vm_drain_family.rs147/259",
+        "owner": "/root/p04_source_max"
+      },
+      {
+        "code": "E0308",
+        "count": 1,
+        "diagnostic": "Actual ProcessVm.proc is *mut c_void; typed backing assignment needs explicit pointer conversion",
+        "location": "owner_case_driver.rs19",
+        "owner": "/root/p04_tests_max"
+      }
+    ],
+    "executable_produced": false,
+    "old_source_and_all_75_plus_compiler_pins_still_exact": true,
+    "ordinary_source_failure": "No timeout, signal, capture error or OOM diagnosis is present; this is an actual HOST compiler diagnostic failure. No Docker existed for this operation. Four runtime families were not started.",
+    "original_failure_primary_preserved": "AssertionError: compile-actual18-owner-units-common-four-callers-and-real-ABI",
+    "phase": "compile-actual18-owner-units-common-four-callers-and-real-ABI",
+    "raw_traceback_retained": true,
+    "runtime_executed": false,
+    "unchanged_whole_production_TYPE_proof": "ed8ca29c is a distinct full native46d metadata proof; these failures are this first executable fixture/projection inputs, not evidence that actual production metadata regressed."
+  },
+  "image_or_C_retirement": false,
+  "native_grant": false,
+  "next_action": {
+    "execution": "Root sole executor, only after actual changed successor and operation GO plus fresh shared HOST4/max3/26+floors admission. No unchanged retry or green metadata/old suite replay.",
+    "independent_review": "Inspect only meaningful source/field/alias/constant/oracle/path/pin/capture delta against retained 22400 operation review and already qualified unchanged bodies. No production rewrite, lint waiver, type erasure of actual ownership, stale oracle or unexplained profile change.",
+    "required_changed_input": "One frozen bounded fixture/projection/counter/common+two-VM-cast successor covering all nine diagnostics; original a3f81/9767/raw c8eb failure unchanged.",
+    "source_owner": "/root/p04_tests_max plus disjoint two-VM-cast author /root/p04_source_max"
+  },
+  "original_acceptance": false,
+  "parent": {
+    "bytes": 5659,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/run_root_once.py",
+    "sha256": "9767abb38a3c0a8c9a3d64d8bfdbd3c01d49327685d1183f631ba735c1a3f8b1"
+  },
+  "prior_operation_review": {
+    "bytes": 29491,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-four-family-operation-review-sourceacq-max-1/REVIEW.json",
+    "sha256": "22400f23308c1a3aaddaff48db4ebd358c54d8c7748e77c960480f35980cf8eb"
+  },
+  "request": {
+    "bytes": 18192,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/REQUEST.json",
+    "sha256": "a3f81da5d70b04f37fa638cc059e00163d3af8291c94d146421c0ce408285686"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_payload_execution": false,
+  "reviewer_source_or_canonical_changes": false,
+  "runtime_PASS": false,
+  "schema": 1
+}

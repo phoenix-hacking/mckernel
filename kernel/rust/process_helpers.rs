@@ -5880,6 +5880,8 @@ pub unsafe extern "C" fn process_free_callback_result(
         return -EINVAL;
     };
 
+    #[cfg(f03_perf_owner_protocol)]
+    unsafe { crate::f03_perf_owner::retire_process_before_free(ptr.cast()); }
     free(ptr);
     0
 }
@@ -8240,6 +8242,12 @@ pub unsafe extern "C" fn process_create_thread_body_result(
         return null_mut();
     }
 
+    #[cfg(f03_perf_owner_protocol)]
+    if unsafe { crate::f03_perf_owner::prepare_thread(thread.cast(),nowait_flag) }.is_err() {
+        let _ = process_thread_action_result(thread,Some(free_thread_fn));
+        return null_mut();
+    }
+
     let proc = process_alloc_result(process_size, nowait_flag, Some(alloc_fn));
     let vm = process_alloc_result(vm_size, nowait_flag, Some(alloc_fn));
     let asp = create_address_space_fn(1);
@@ -8427,6 +8435,12 @@ pub unsafe extern "C" fn process_create_thread_body_result(
             release_address_space_fn,
             free_thread_fn,
         );
+    }
+
+    #[cfg(f03_perf_owner_protocol)]
+    if unsafe { crate::f03_perf_owner::prepare_created_thread(thread.cast(),nowait_flag) }.is_err() {
+        return process_create_thread_cleanup(thread,proc,vm,asp,thread_sigcommon_offset,
+            free_fn,release_address_space_fn,free_thread_fn);
     }
 
     let _ = vm_address_space_offset;
@@ -9543,23 +9557,21 @@ pub unsafe extern "C" fn process_mckfd_close_all_result(
     next_offset: CULong,
     close_offset: CULong,
 ) -> CInt {
-    let mut current = head;
-    let mut closed = 0;
-
-    while !current.is_null() {
-        let base = current.cast::<u8>();
-        let close_slot = base.wrapping_add(close_offset as usize);
-        let close_cb = *(close_slot.cast::<Option<ProcessMckfdCloseFn>>());
-        if let Some(close_cb) = close_cb {
-            let _ = close_cb(current, core::ptr::null_mut());
-            closed += 1;
+    let mut current=head;
+    let mut closed=0;
+    while !current.is_null(){
+        let base=current.cast::<u8>();
+        #[cfg(f03_perf_owner_protocol)]
+        {
+            match unsafe{crate::f03_perf_owner::vm_mark_close_locked(current.cast())}{
+                Ok(true)=>{closed+=1;current=*(base.add(next_offset as usize).cast::<*mut c_void>());continue;},
+                Ok(false)=>{},Err(error)=>return error,
+            }
         }
-
-        current = *(base
-            .wrapping_add(next_offset as usize)
-            .cast::<*mut c_void>());
+        let close_cb=*(base.add(close_offset as usize).cast::<Option<ProcessMckfdCloseFn>>());
+        if let Some(close_cb)=close_cb{let _=close_cb(current,null_mut());closed+=1;}
+        current=*(base.add(next_offset as usize).cast::<*mut c_void>());
     }
-
     closed
 }
 
@@ -9602,6 +9614,12 @@ pub unsafe extern "C" fn process_mckfd_free_result(
         return 0;
     };
 
+    #[cfg(f03_perf_owner_protocol)]
+    match crate::f03_perf_owner::retire_process_descriptor(fdp.cast::<crate::abi::Mckfd>(), free) {
+        Ok(true) => return 1, // logically drained; last real pin owns final free
+        Ok(false) => {},     // original unregistered/nonperf callback path
+        Err(error) => return error, // keep the actual managed outcome retained
+    }
     free(fdp);
     1
 }
@@ -10108,6 +10126,10 @@ pub(crate) unsafe fn chain_thread_checked(thread: *mut Thread) -> CInt {
 
 #[no_mangle]
 pub unsafe extern "C" fn destroy_thread(thread: *mut Thread) {
+    #[cfg(f03_perf_owner_protocol)]
+    crate::f03_perf_owner::retire_thread_before_destroy(thread);
+    #[cfg(f03_perf_owner_protocol)]
+    unsafe { crate::f03_perf_owner::retire_thread_before_destroy(thread); }
     let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
     let _ = process_destroy_thread_body_result(
         thread.cast(),
@@ -10717,6 +10739,9 @@ pub unsafe extern "C" fn process_release_process_body_result(
     {
         return 0;
     }
+
+    #[cfg(f03_perf_owner_protocol)]
+    unsafe { crate::f03_perf_owner::retire_process_before_free(proc.cast()); }
 
     let resource_set = process_current_resource_set_result(Some(current_resource_set_fn));
     let _ = process_resource_process_action_result(resource_set, proc, Some(hash_detach_fn));
@@ -11534,8 +11559,12 @@ pub unsafe extern "C" fn process_release_vm_body_result(
     let lock_addr = (proc as CULong).wrapping_add(proc_mckfd_lock_offset);
     let irqstate = process_spin_lock_result(lock_addr, Some(lock_fn));
     let mckfd_head = field_ptr(proc, proc_mckfd_offset);
-    process_mckfd_close_all_result(mckfd_head, mckfd_next_offset, mckfd_close_offset);
-    let _ = process_spin_unlock_result(lock_addr, irqstate, Some(unlock_fn));
+    let close_result=process_mckfd_close_all_result(mckfd_head,mckfd_next_offset,mckfd_close_offset);
+    let _ = process_spin_unlock_result(lock_addr,irqstate,Some(unlock_fn));
+    #[cfg(f03_perf_owner_protocol)]
+    if close_result<0{return close_result;} // retain exact final-VM debt; no callback/free/retry
+    #[cfg(not(f03_perf_owner_protocol))]
+    let _=close_result;
 
     let free_cb_slot = vm
         .cast::<u8>()
@@ -11726,8 +11755,12 @@ unsafe fn process_release_vm_checked_inner(
     let lock_addr = (proc as CULong).wrapping_add(proc_mckfd_lock_offset);
     let irqstate = process_spin_lock_result(lock_addr, Some(lock_fn));
     let mckfd_head = field_ptr(proc, proc_mckfd_offset);
-    process_mckfd_close_all_result(mckfd_head, mckfd_next_offset, mckfd_close_offset);
-    let _ = process_spin_unlock_result(lock_addr, irqstate, Some(unlock_fn));
+    let close_result=process_mckfd_close_all_result(mckfd_head,mckfd_next_offset,mckfd_close_offset);
+    let _ = process_spin_unlock_result(lock_addr,irqstate,Some(unlock_fn));
+    #[cfg(f03_perf_owner_protocol)]
+    if close_result<0{return close_result;} // retain exact final-VM debt; no callback/free/retry
+    #[cfg(not(f03_perf_owner_protocol))]
+    let _=close_result;
 
     let free_cb = *(vm.cast::<u8>().wrapping_add(vm_free_cb_offset as usize)
         .cast::<Option<ProcessVmFreeCallback>>());
@@ -13764,6 +13797,10 @@ pub unsafe extern "C" fn process_clone_thread_body_result(
             ) < 0 {
                 break 'construct ProcessCloneCleanup::Thread;
             }
+            #[cfg(f03_perf_owner_protocol)]
+            if crate::f03_perf_owner::prepare_thread(thread,(*config).nowait).is_err() {
+                break 'construct ProcessCloneCleanup::Thread;
+            }
             if process_clone_thread_base_state_body_result(
                 thread.cast(), org.cast(), offset_of!(Thread, cpu_set) as CULong,
                 size_of::<CpuSet>() as CULong, offset_of!(Thread, in_kernel) as CULong,
@@ -13905,6 +13942,13 @@ pub unsafe extern "C" fn process_clone_thread_body_result(
                 let _ = process_clone_on_fork_vm_body_result(
                     v.cast(), offset_of!(CpuLocalVar, on_fork_vm) as CULong, null_mut(),
                 );
+                #[cfg(f03_perf_owner_protocol)]
+                if crate::f03_perf_owner::copy_descriptors((*org).proc,proc,(*org).vm,
+                    (*config).nowait,(*config).file.cast_mut(),(*config).lines[3],(*config).lines[4])<0 {
+                    break 'construct ProcessCloneCleanup::Mckfd;
+                }
+                #[cfg(not(f03_perf_owner_protocol))]
+                {
                 let lock = core::ptr::addr_of_mut!((*proc).mckfd_lock) as CULong;
                 let irqstate = process_spin_lock_result(lock, Some(process_spin_lock_bridge));
                 let mut cur = (*(*org).proc).mckfd.cast::<Mckfd>();
@@ -13940,6 +13984,7 @@ pub unsafe extern "C" fn process_clone_thread_body_result(
                     cur = (*cur).next;
                 }
                 let _ = process_spin_unlock_result(lock, irqstate, Some(process_spin_unlock_bridge));
+                }
                 let _ = process_clone_copy_vm_thread_state_result(
                     (*thread).vm.cast(), (*org).vm.cast(),
                     offset_of!(ProcessVm, vdso_addr) as CULong,
@@ -13949,6 +13994,15 @@ pub unsafe extern "C" fn process_clone_thread_body_result(
                 process_clone_fixed_log(
                     (*config).debug[2], b"fork(): copy_user_ranges() OK\n\0".as_ptr().cast(),
                 );
+            }
+            // Complete actual per-executing-Thread/group/monitor setup while
+            // still private and BEFORE sigcommon share/new ref effects and the
+            // later Linux fork. No allocation/failure enters void scheduling.
+            #[cfg(f03_perf_owner_protocol)]
+            if crate::f03_perf_owner::prepare_cloned_thread(org,thread,(*config).nowait).is_err() {
+                break 'construct if process_clone_shares_vm_result(clone_flags)!=0 {
+                    ProcessCloneCleanup::Fp
+                } else { ProcessCloneCleanup::Mckfd };
             }
             // From here, fork failures drain fork resources; CLONE_VM failures
             // deliberately enter the original FP-only path without invented unrefs.
@@ -15431,6 +15485,8 @@ mod remaining_process_thread_page_release {
     /// No pointer is dereferenced, inspected or accessed after this synchronous free.
     #[no_mangle]
     pub unsafe extern "C" fn process_free_thread_pages_bridge(thread: *mut c_void) {
+        #[cfg(f03_perf_owner_protocol)]
+        unsafe { crate::f03_perf_owner::retire_thread_before_destroy(thread.cast()); }
         // SAFETY: Original tracked free operation exactly once; the existing
         // backend owns null handling, tracking, locking and actual page release.
         unsafe {

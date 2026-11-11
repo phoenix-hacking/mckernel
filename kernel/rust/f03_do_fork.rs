@@ -356,6 +356,10 @@ pub unsafe extern "C" fn do_fork(clone_flags: CInt, newsp: CULong,
             request1.args[0] = policy::clone_host_parent_flags_result(clone_flags, (*(*oldproc).ppid_parent).pid) as CULong;
             (*newproc).pid = do_syscall(&mut request1, ihk_mc_get_processor_id()) as CInt;
             if (*newproc).pid < 0 {
+                // The real host fork failed: release only the pending parent
+                // transaction gate, never close an inherited parent fd.
+                #[cfg(f03_perf_owner_protocol)]
+                policy::f03_perf_owner::finish_child_host_route(newproc, false);
                 kprintf(b"ERROR: forking host process\n\0".as_ptr().cast());
                 error = (*newproc).pid;
                 break 'prepared;
@@ -368,9 +372,17 @@ pub unsafe extern "C" fn do_fork(clone_flags: CInt, newsp: CULong,
             space.cast::<u8>().add(offset_of!(AddressSpace, nslots) + size_of::<CInt>())
                 .cast::<CInt>().write((*(*new).proc).pid);
             if debug(6) { kprintf(b"fork(): new pid: %d\n\0".as_ptr().cast(), (*(*new).proc).pid); }
-            let event = (*oldproc).monitoring_event;
-            if !event.is_null() && (*event.cast::<PerfEventAttr>()).flags & 2 != 0 {
-                (*newproc).monitoring_event = (*oldproc).monitoring_event;
+            // The selected Linux consumer actually forked an independent
+            // child fd table. Activate its prebound route/monitor association
+            // while the pending parent transaction gate still protects it.
+            #[cfg(f03_perf_owner_protocol)]
+            policy::f03_perf_owner::inherit_monitor_after_host_clone(oldproc, newproc);
+            #[cfg(not(f03_perf_owner_protocol))]
+            {
+                let event = (*oldproc).monitoring_event;
+                if !event.is_null() && (*event.cast::<PerfEventAttr>()).flags & 2 != 0 {
+                    (*newproc).monitoring_event = (*oldproc).monitoring_event;
+                }
             }
         }
         if policy::clone_parent_tid_store_needed_result(clone_flags) != 0 {
@@ -426,6 +438,13 @@ pub unsafe extern "C" fn do_fork(clone_flags: CInt, newsp: CULong,
         crate::sched_helpers::runq_add_thread(new, cpuid);
         if ptrace_event != 0 { schedule(); }
         return child_tid as CULong;
+    }
+    // Every ordinary pre-publication error releases a still-pending parent
+    // gate before the original cleanup. This is idempotent after either host
+    // outcome and never changes a successfully activated child's fd ownership.
+    #[cfg(f03_perf_owner_protocol)]
+    if clone_flags & CLONE_VM == 0 {
+        policy::f03_perf_owner::finish_child_host_route(newproc, false);
     }
     if free_mod_argument {
         policy::f03_clone_release_mod_argument_v1(new, SOURCE_FILE, 7792);

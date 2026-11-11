@@ -21975,11 +21975,18 @@ perf_event_open_counter_alloc_bridge(void *thread, void *event)
 #line 21113
 
 
+#ifdef MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL
+extern long perf_event_open_do_syscall_bridge(struct syscall_request *,int);
+#else
+#line 21115
 static long
 perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)
 {
 	return do_syscall(request, cpu);
 }
+#endif
+#line 21120
+
 #endif /*ENABLE_PERF*/
 #ifdef ENABLE_PERF
 #line 21118
@@ -22420,6 +22427,17 @@ perf_event_open_attr_freq_bridge(const void *attr)
 #line 21470
 
 
+#ifdef MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL
+/* Genuine immutable headers; layout/source participation only, no activation. */
+const unsigned long f03_perf_owner_entry_constants_v1[12]={
+ sizeof(struct perf_event_attr),sizeof(struct mckfd),sizeof(struct mc_perf_event),__alignof__(struct mc_perf_event),
+ PERF_TYPE_RAW,PERF_TYPE_HARDWARE,PERF_TYPE_HW_CACHE,
+ PERF_FORMAT_TOTAL_TIME_ENABLED|PERF_FORMAT_TOTAL_TIME_RUNNING|PERF_FORMAT_ID,
+ 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,F_SETSIG,
+};
+extern long sys_perf_event_open(int,ihk_mc_user_context_t *);
+#else
+#line 21472
 long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
 {
 	struct syscall_request request IHK_DMA_ALIGN;
@@ -22477,6 +22495,9 @@ long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx)
 			syscall_mckfd_lock_bridge,
 			syscall_mckfd_unlock_bridge);
 }
+#endif
+#line 21529
+
 #endif /* ENABLE_PERF */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

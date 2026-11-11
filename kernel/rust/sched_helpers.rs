@@ -2162,6 +2162,12 @@ pub unsafe extern "C" fn sched_idle_loop_body_result(
 ) -> ! {
     unsafe { sched_idle_begin_body_result(cpu_addr, offsets, values, callbacks) };
     loop {
+        // begin released the real runqueue lock and enabled interrupts. Each
+        // iteration returns via the original enable_interrupt or STI/HLT path.
+        // This genuine idle process-context boundary is outside P/R/S/IRQ and
+        // retires VM/Thread perf owners even if no later user syscall occurs.
+        #[cfg(f03_perf_owner_protocol)]
+        unsafe { crate::f03_perf_owner::drain_safe_point() };
         unsafe { sched_idle_iteration_body_result(cpu_addr, monitor_addr, offsets, values, callbacks) };
     }
 }

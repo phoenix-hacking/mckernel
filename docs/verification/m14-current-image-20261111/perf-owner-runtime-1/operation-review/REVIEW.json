@@ -1,0 +1,510 @@
+{
+  "VM_family": {
+    "full_finite_external_oracle": "2 opens, close/drain2/2, one P lock, first outside drain one published event+one backing free/debt+1, final drain two pairs/debt+2, no abort frees/no host close/no fabricated ACK, two retained unresolved-record allocations and repeated drain no retry. Full actual observations compared internally and all scalar fields compared by Root.",
+    "honest_retained_scope": "Positive actor Process/Thread/VM backing remains quarantined through observation. This tests real descriptor-close/free subparticipants under P, not final zero-ref VM destruction. Its two real modeled route-debt records persist into the following rollback family; physical HOST process exit does not acknowledge them.",
+    "last_pin": "Unpinned descriptor/event freed outside P first; retained descriptor storage pin prevents first event/descriptor free and origin retirement until the actual pin drops. Last-pin drop then safe drain frees the second pair once and returns origin bitmap.",
+    "no_blocking_effect_under_P": "Observed zero tracked allocations/frees/host calls/S/hash while P is held; trace cloning and physical drain occur only after unlock and modeled IRQ restoration.",
+    "real_calls": "Two real open_from_body transactions, genuine P lookup and DescriptorPin, then actual process_mckfd_close_all_result -> process_mckfd_drain_free_result -> process_mckfd_free_result for both descriptors under one P guard.",
+    "source": {
+      "bytes": 14594,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/f03_perf_owner/vm_drain_family.rs",
+      "sha256": "e854a3dc334e6144bde946fc6485ac639fe6ea41eb18da3971dbe3af4fc4987a"
+    }
+  },
+  "at": "2026-11-11T15:24:14.773534+00:00",
+  "authority_and_limits": {
+    "all_retained_holds_preserved": true,
+    "image_or_C_retirement": false,
+    "native_grant": false,
+    "new_framework_or_agents": false,
+    "original_acceptance": false,
+    "reviewer_changed_source_or_canonical": false,
+    "reviewer_executed_payload": false,
+    "reviewer_imported_fixture_or_helper": false
+  },
+  "decision": "GO_EXACT_FIRST_HOST_COMPILE_LINK_AND_CONDITIONAL_FOUR_ACTUAL_OWNER_RUNTIME_FAMILIES_PENDING_FRESH_ROOT_ADMISSION",
+  "dependency_projection": {
+    "bytes": 71825,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/PROJECTION.DRAFT.json",
+    "sha256": "c86b05a7186cfc81762c46747537a4a733d5b0a1377306493148b0decdf90742"
+  },
+  "expected": {
+    "bytes": 8502,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/EXPECTED.json",
+    "sha256": "17f69541df9ee26777ed953efd1b53ed1c04c2d4b09aff9190ec5992f5586182"
+  },
+  "inputs": {
+    "bytes": 21466,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/INPUTS.json",
+    "sha256": "3a509229bae93d1e807e689f1d2c8cd6a194ceeae015b145c661385744fed08e"
+  },
+  "material_findings": [],
+  "next_owner_action": "Root alone may fresh-admit exact9767 protected parent and a3f81 two-command batch. Preserve actual first compile/link/runtime diagnostics; no metadata/old-green replay. Qualify actual new results before source/image/DEFAULT decisions.",
+  "operation": {
+    "Root_capture_and_admission_required": [
+      "Root pins this exact REVIEW and 9767 parent before invocation; fresh current same-Root stop/account/credit guard remains valid.",
+      "Measure actual current jobs and all controller/worker/daemon overhead before parent/payload. CPU6 exclusive, one 2GiB family plus ALL overhead/current payloads <=4GiB TOTAL and max3; this parent represents no other payload overlap.",
+      "Fresh MemAvailable>=26GiB; host16GiB and scratch12GiB floors plus128MiB output growth, no borrowing native CPUs2-5 or CPU1.",
+      "Both literal commands retain CPU6/no-file64/fsize64MiB/clean env/private TMP; compile AS2GiB CPU60 wall90 and runtime AS256MiB CPU15 wall15; shared2GiB job is not multiplied for linker/children.",
+      "Retain complete initial Root tool response and every original-session wait through positive terminal exit/noSession and streams; inspect all two Owner records and actual executable/result/input post-readback.",
+      "Only Root may retire this current CPU6/2GiB/job after actual complete owned process-family and outer-tool closure. Keep all modeled route debt, retained18/native/Scratch/source/global/historical UNKNOWNs and account/service holds."
+    ],
+    "failure": "Any compiler/link/oracle/limit/ownership failure stops conditional sequence, preserves actual raw streams and best-effort guarded failure RESULT, rethrows original exception and grants no automatic resource release. Failed input cannot be retried unchanged.",
+    "fresh_outputs_absent_at_review": true,
+    "literal_commands": [
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=2147483648",
+          "--cpu=60",
+          "--fsize=67108864",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TZ=UTC",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "perf_owner_changed_families",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=1",
+          "-C",
+          "force-unwind-tables=no",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--cfg",
+          "f03_perf_owner_protocol",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/main.rs",
+          "-o",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/perf-owner-changed-families"
+        ],
+        "diagnostics": "Capture all warnings and errors unchanged; no warning-free claim; dangerous_implicit_autorefs remains enabled",
+        "expected_exit": 0,
+        "id": "compile-actual18-owner-units-common-four-callers-and-real-ABI",
+        "required_output": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/perf-owner-changed-families",
+        "required_stdout": "empty",
+        "wall_seconds": 90
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=268435456",
+          "--cpu=15",
+          "--fsize=67108864",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TZ=UTC",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/output-1/perf-owner-changed-families"
+        ],
+        "conditional": "Only after actual first command exits0, genuine ELF produced, all pinned sources unchanged and immediate positive Owner family join",
+        "expected_exit": 0,
+        "id": "four-new-actual-owner-functional-families-with-captured-epoch",
+        "required_stderr": "empty",
+        "required_stdout_json_lines": [
+          {
+            "family": "positive-target-and-monitor",
+            "observation": {
+              "monitor": {
+                "all_three_actor_maps_retired": true,
+                "all_three_actor_records_detached": true,
+                "child_group_entries": 1,
+                "child_has_no_perf_descriptor": true,
+                "child_has_no_permanent_process_reference_edge": true,
+                "child_map_bits_after_tool_storage_drop": 1,
+                "child_monitor_inherited": true,
+                "child_monitor_survives_operation_release": true,
+                "child_monitor_survives_tool_storage_drop": true,
+                "child_process_record_detached": true,
+                "child_process_terminal_clears_monitor": true,
+                "child_real_operation_uses_bound_mapping": true,
+                "child_thread_terminal_clears_only_its_map": true,
+                "clone_preparation_succeeded": true,
+                "close_result": 0,
+                "origin_held_until_descriptor_storage_retired": true,
+                "origin_retired_after_descriptor_storage_drop": true,
+                "remote_enable_result": 0,
+                "remote_had_no_perf_descriptor": true,
+                "remote_map_retired_by_tool_close": true,
+                "remote_monitor_cleared_by_tool_close": true,
+                "remote_monitor_installed": true,
+                "remote_temporary_process_reference_balanced": true,
+                "tool_descriptor_unlinked": true
+              },
+              "target": {
+                "overflow_body_calls": 0,
+                "overflow_error": -22,
+                "overflow_final_ref": 2147483647,
+                "positive_body_ref": 2,
+                "positive_final_ref": 1,
+                "positive_result": -4294967301,
+                "zero_body_calls": 0,
+                "zero_error": -22,
+                "zero_final_ref": 0
+              }
+            }
+          },
+          {
+            "family": "executing-thread-and-captured-epoch",
+            "observation": {
+              "actor_monitor_not_resurrected": true,
+              "actor_monitor_owned_bits": 2,
+              "actor_old_bits_released_after_sequence": true,
+              "aggregate_start_calls": 1,
+              "aggregate_start_mask_matches_actual_actor_maps": true,
+              "all_actor_records_detached": true,
+              "child_close_preserves_inherited_and_foreign_bits": true,
+              "child_delayed_operation_release_bitmap": 9223372036854775809,
+              "child_group_entries_after_append": 3,
+              "child_inherited_indices_differ_from_actor": true,
+              "child_inherited_owned_bits": 2,
+              "child_new_open_adds_exactly_one_owned_bit": true,
+              "child_new_open_avoids_both_inherited_counters": true,
+              "child_old_mappings_stable_across_append": true,
+              "child_operations_hold_three_actual_mapping_bits": true,
+              "child_terminal_leaves_only_foreign_bit": true,
+              "close_results": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "critical_effect_order_preserved": true,
+              "hook_actor_monitor_cleared": true,
+              "hook_fired_once": true,
+              "hook_group_entries_after_append": 3,
+              "hook_late_actor_mapping_error": -22,
+              "hook_late_member_mapped_for_child": true,
+              "hook_old_actor_operation_bits_retained": true,
+              "init_calls": 2,
+              "init_indices_match_actual_actor_maps": true,
+              "init_statuses": [
+                -71,
+                0
+              ],
+              "initial_group_entries": 2,
+              "late_constructor_atomic_values": [
+                0,
+                0
+              ],
+              "late_constructor_atomic_writes": 2,
+              "late_constructor_count_then_period_order": true,
+              "late_constructor_window_valid": true,
+              "no_late_member_scheduler_reset_or_init": true,
+              "open_results": [
+                710,
+                711,
+                712,
+                713
+              ],
+              "original_start_continues_after_nonzero_init": true,
+              "reset_targets_and_order_match_original_two_member_epoch": true,
+              "reset_zero_writes": 4,
+              "scheduler_original_count_state_written": true,
+              "tool_origin_bits_retired_after_storage_drop": true
+            }
+          },
+          {
+            "family": "p-held-vm-drain-and-last-pin",
+            "observation": {
+              "actual_admitted_pin_retained": true,
+              "actual_head_detached_under_p": true,
+              "actual_schedule_calls": 0,
+              "actual_two_host_opens": 2,
+              "after_last_pin_drop": {
+                "abort_event_frees": 0,
+                "descriptor_backing_frees": 2,
+                "origin_bitmap_matches_expected": true,
+                "pinned_event_or_descriptor_freed": true,
+                "published_event_frees": 2,
+                "unresolved_host_route_delta": 2
+              },
+              "before_last_pin_drop": {
+                "abort_event_frees": 0,
+                "descriptor_backing_frees": 1,
+                "origin_bitmap_matches_expected": true,
+                "pinned_event_or_descriptor_freed": false,
+                "published_event_frees": 1,
+                "unresolved_host_route_delta": 1
+              },
+              "blocked_wait_or_native_behavior_proven": false,
+              "close_all_result": 2,
+              "drain_free_result": 2,
+              "final_unresolved_record_allocation_delta": 2,
+              "irq_restored_after_p": true,
+              "no_host_close_or_fabricated_ack_in_vm_drains": true,
+              "origin_bitmap_unchanged_under_p": true,
+              "positive_actor_vm_links_preserved": true,
+              "repeated_drain_has_no_retry": true,
+              "under_p_allocations": 0,
+              "under_p_frees": 0,
+              "under_p_hash_actions": 0,
+              "under_p_host_calls": 0,
+              "under_p_process_lock_entries": 1,
+              "under_p_state_lock_entries": 0
+            }
+          },
+          {
+            "family": "allocation-group-hostfd-rollback",
+            "observation": {
+              "allocation_failure": {
+                "abort_event_frees": 0,
+                "all_host_calls_on_tool_route": true,
+                "close_requests": 0,
+                "descriptor_backing_frees": 0,
+                "descriptor_list_restored": true,
+                "exact_72byte_close_carrier": true,
+                "host_calls": 0,
+                "map_restored": true,
+                "published_event_frees": 0,
+                "result": -12,
+                "tracked_allocations_restored": true,
+                "unresolved_host_debt_delta": 0
+              },
+              "cleanup_fullwidth_error_observed": true,
+              "final_descriptor_list_empty": true,
+              "final_local_map_empty": true,
+              "invalid_group": {
+                "abort_event_frees": 1,
+                "all_host_calls_on_tool_route": true,
+                "close_requests": 0,
+                "descriptor_backing_frees": 0,
+                "descriptor_list_restored": true,
+                "exact_72byte_close_carrier": true,
+                "host_calls": 0,
+                "map_restored": true,
+                "published_event_frees": 0,
+                "result": -22,
+                "tracked_allocations_restored": true,
+                "unresolved_host_debt_delta": 0
+              },
+              "member_host_error": {
+                "abort_event_frees": 1,
+                "all_host_calls_on_tool_route": true,
+                "close_requests": 0,
+                "descriptor_backing_frees": 0,
+                "descriptor_list_restored": true,
+                "exact_72byte_close_carrier": true,
+                "host_calls": 1,
+                "map_restored": true,
+                "published_event_frees": 0,
+                "result": -4294967301,
+                "tracked_allocations_restored": true,
+                "unresolved_host_debt_delta": 0
+              },
+              "posthost_close_unknown": {
+                "abort_event_frees": 1,
+                "all_host_calls_on_tool_route": true,
+                "close_requests": 1,
+                "descriptor_backing_frees": 0,
+                "descriptor_list_restored": true,
+                "exact_72byte_close_carrier": true,
+                "host_calls": 2,
+                "map_restored": true,
+                "published_event_frees": 0,
+                "result": -12,
+                "tracked_allocations_restored": false,
+                "unresolved_host_debt_delta": 1
+              },
+              "posthost_mckfd_failure": {
+                "abort_event_frees": 1,
+                "all_host_calls_on_tool_route": true,
+                "close_requests": 1,
+                "descriptor_backing_frees": 0,
+                "descriptor_list_restored": true,
+                "exact_72byte_close_carrier": true,
+                "host_calls": 2,
+                "map_restored": true,
+                "published_event_frees": 0,
+                "result": -12,
+                "tracked_allocations_restored": true,
+                "unresolved_host_debt_delta": 0
+              },
+              "published_leader_close_result": 0,
+              "published_leader_descriptor_free_once": true,
+              "published_leader_event_free_once": true,
+              "published_leader_restores_actor_baseline": true,
+              "standalone_host_error": {
+                "abort_event_frees": 1,
+                "all_host_calls_on_tool_route": true,
+                "close_requests": 0,
+                "descriptor_backing_frees": 0,
+                "descriptor_list_restored": true,
+                "exact_72byte_close_carrier": true,
+                "host_calls": 1,
+                "map_restored": true,
+                "published_event_frees": 0,
+                "result": -4294967301,
+                "tracked_allocations_restored": true,
+                "unresolved_host_debt_delta": 0
+              },
+              "unknown_live_debt_record_delta": 1,
+              "unknown_second_drain_has_no_retry": true
+            }
+          }
+        ],
+        "wall_seconds": 15
+      }
+    ],
+    "payload_effects": "One ordinary actual Rust1.95 HOST standard-target compile/link, then one conditional process executing the four actual-source families with controlled lower effects. No native/kernel PMU, real host-FD provider, blocked scheduler, source install/controller/staging/permission work, image/CMake/canonical action.",
+    "phase_gates": "Before payload, exact request/review/input/compiler/Owner/shared guard pins. Immediate positive leader and birth, exact exit/status, direct-parent and whole descendants and streams after EACH command, no timeout/group signal/adopted reap/kill/residual/error. Runtime cannot start until compile0/actual nonempty ELF and unchanged inputs. Full4 JSONL and empty runtime stderr required; warnings retained.",
+    "profile": {
+      "batch_wall_seconds": 120,
+      "cpu": 6,
+      "current_accounting": "All3 prior compiler CURRENT2GiB/job charges positively retired by exact Root records, latest2a19; historical/service/source/Native/Scratch/UNKNOWN unchanged. This request itself grants or releases none.",
+      "fresh_MemAvailable_floor_GiB": 26,
+      "host_disk_floor_GiB": 16,
+      "jobs": 1,
+      "kind": "Qualified retained real Rust1.95 HOST standard target/sysroot/link profile from e27/aafb; CPU6 serial new executable compiler+conditional runtime, 2GiB shared reservation includes descendant linker work; all controller/worker overhead counted",
+      "max_address_space_bytes": 2147483648,
+      "max_aggregate_HOST_bytes": 4294967296,
+      "max_aggregate_jobs": 3,
+      "output_disk_reservation_bytes": 134217728,
+      "output_max_file_bytes": 67108864,
+      "runtime_address_space_bytes": 268435456,
+      "runtime_processes": 1,
+      "runtime_threads": 1,
+      "scratch_disk_floor_GiB": 12
+    }
+  },
+  "request": {
+    "bytes": 18192,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/REQUEST.json",
+    "sha256": "a3f81da5d70b04f37fa638cc059e00163d3af8291c94d146421c0ce408285686"
+  },
+  "reused_qualified_boundaries": {
+    "captured_epoch_source_correction": {
+      "bytes": 9692,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/scheduler-epoch-correction-1/REVIEW.json",
+      "sha256": "bdd6587c119855cae4399bebc78190128d6ccc3b8b3a845f145c423d92c4bc9a"
+    },
+    "common_source_and_original_epoch_finding": {
+      "bytes": 13911,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "6bbb8bc323bba35026bbcc0e8c0d6838770560d14891c0f303607f3c6032105d"
+    },
+    "corrected_counter_oracle": {
+      "bytes": 6459,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-runtime-family-source-review-sourceacq-max-1/counter-epoch-oracle-correction-1/REVIEW.json",
+      "sha256": "a6aa268e9845a816238cfab42750d31aaf0882fffffb1496967819ddf1a581f5"
+    },
+    "disjoint_compiler_scheduler_composition": {
+      "bytes": 12716,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/compiler-scheduler-composition-1/REVIEW.json",
+      "sha256": "c8c265f293b6e3df617117246002c83f9160e22569d8352bfaee5387ca94c6a0"
+    },
+    "events_explicit_borrow": {
+      "bytes": 6724,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "2f31eafb02209c16e50c0cb9c8a869327dce238f582f292ec324d8968db23478"
+    },
+    "lower_effects": {
+      "bytes": 12366,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-lower-effects-review-publicabi-max-1/REVIEW.json",
+      "sha256": "b85d4130de6ad27ef94e9eddac5369a93e0ff6d37d5c0d6cbde9e67211b59342"
+    },
+    "monitor_rollback_and_old_counter_finding": {
+      "bytes": 13824,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-runtime-family-source-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "05ca20ba85c80b1a9951c9d90165acc376eab9669fb718e4a978828476c6a673"
+    },
+    "typed_PMU_tables": {
+      "bytes": 13920,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-host-bindings-review-publicabi-max-1/REVIEW.json",
+      "sha256": "0eecdafb4246474958a21a03e5f372e3c45737a7333db54bef8bc36b62a60b4b"
+    },
+    "whole_source_TYPE_only": {
+      "bytes": 16047,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/escalation-events-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "ed8ca29c5370dc005bd1e6bf957395a0966c13ed7fb61eb97f2972f888c11de1"
+    }
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "root_parent": {
+    "bytes": 5659,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/run_root_once.py",
+    "sha256": "9767abb38a3c0a8c9a3d64d8bfdbd3c01d49327685d1183f631ba735c1a3f8b1"
+  },
+  "schema": 1,
+  "scope": "Independent source/projection/oracle/profile/capture review of exact a3f81 request and 9767 protected Root parent. Not a compiler/link/runtime PASS or native/image/default/original-check acceptance.",
+  "source_materialization": {
+    "bytes": 17865,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/SOURCE-MATERIALIZATION.json",
+    "sha256": "e31c9ad10e114524c2769d538370bf828f15f79c1ae510abde8226f8e4390470"
+  },
+  "source_projection": {
+    "F02_release_closure_complete_functions": 27,
+    "F02_release_exact_typed_aliases": 16,
+    "all_75_file_pins_plus_compiler_independently_match": true,
+    "appended_owner_suffixes_only": {
+      "descriptors.rs": "Actual registry R address getter",
+      "entry.rs": "Actual five entry callback address getter",
+      "events.rs": "Actual state S address getter through a live EventPin",
+      "f03_perf_owner.rs": "Declared HOST family modules, test observation include and common caller"
+    },
+    "copy_effect_boundary": "HOST copy bridges copy between actual live initialized fixture buffers outside project locks; no actual user/kernel address space or native instruction is exercised.",
+    "declared_dependency_projection_items": {
+      "alias": 44,
+      "complete": 24,
+      "constant": 12,
+      "contiguous_complete_functions": 1,
+      "item": 52
+    },
+    "facade_plus_units_exact_prefixes": 19,
+    "full_cbea_plus_explicit_events15979_effective_source_retained": true,
+    "lock_and_caller_observation": "Actual P/R/S addresses are registered. Genuine DescriptorPin/EventPin retains storage during address observation; process lookup unlock precedes target body/release. Hook is one shot after actual registered S unlock, no held P/R/S/hash and restored modeled IRQ. No project owner/ref/gate/group/waitq success substitution.",
+    "production_body_mutation": false,
+    "production_owner_units": 18,
+    "projection_validation": "All 133 recorded items compared with pinned source: 24 complete prefixes; 44 exact aliases; 12 source constants; 46 other exact source slices; five complete private modules reconstructed by removing only the exact recorded typed tail and inserted newline; one exact repr(C,align64) McsRwlockNodeIrqsave; one exact contiguous complete-function interval.",
+    "rbtree_complete_byte_identity": true,
+    "release_lower_contract": "Controlled lookup never changes refcounts. The actual target CAS owns increment and full actual F02 Process/VM release bodies own decrement/branch. Base refs stay positive; unreachable final-destructor/address-space callbacks abort rather than supply fake success. No zero-ref destruction or blocked-wait proof is claimed.",
+    "rust_source_files": 44,
+    "typed_table_tails": "All five literal PRIVATE_TABLE_TAILS match 1c86 and their recorded hashes. Removing each tail/newline restores the exact original complete module (recorded module hash excludes terminal newline); no original provider body rewritten. REAL_X86_SOURCE_TAIL is exact.",
+    "waitq": "Complete actual waitq and dependencies retained. The only schedule endpoint increments a counter then aborts; all four families and final caller require zero schedule calls. This is the explicitly admitted nonblocking HOST scope."
+  },
+  "whole_common_and_oracles": {
+    "controlled_actor_storage": "Real aligned ABI Process/Thread/VM backing, initialized integral/raw-pointer fields and positive base refs. Real P/Process lookup registration. Actual Tool/Actor metadata preparation; private inherited children start unprepared as the real fork path requires.",
+    "counter": "Exact corrected927 case/a6aa. One captured epoch/complete HardwareLeases across reset/reset/start; actual constructor count0/period0 retained within exact real late-open interval, complete critical order [0,1,6,7,2,0,2,3,4,5], late scheduler writes outside interval refused, backend init[-71,0] does not skip final original start. Foreign/inherited/late counter bits and delayed invalidated Thread release have full external fields.",
+    "family_order": [
+      "positive-target-and-monitor",
+      "executing-thread-and-captured-epoch",
+      "p-held-vm-drain-and-last-pin",
+      "allocation-group-hostfd-rollback"
+    ],
+    "monitor": "Exact a011 case and reused 05ca findings: no-FD remote/inherited monitor, genuine descriptor storage/origin retirement and child maps/operation/Thread+Process terminal hooks.",
+    "not_yet_proved": "Real executable type/link and all four runtime results remain UNPROVED until this first actual HOST compiler and conditional executable run. Whole metadata ed8ca is not executable proof.",
+    "request_external_expected_literal_equal": true,
+    "rollback": "Exact2ad case/05ca. OOM/invalid group/full signed host errors, abort versus published free origins, actual initialized72B NR3 Tool close after posthost Mckfd failure, ENOMEM primary with full-width cleanup error, +1 genuine unresolved route debt and no retry.",
+    "serialization": "Common Debug-to-JSON handles only actual scalar/array/nested observations; no expected-value substitution. All fields retained. Four observed structs are asserted, emitted and then compared with the exact full four-row external JSON by Root.",
+    "state_continuity": "Trace resets are observation-only and do not clear live allocation/registry/debt state. VM modeled debt2 remains; rollback uses its real baseline and adds1. No numeric fake host-FD close, ACK or registry reset.",
+    "target": "Actual complete with_remote_target has positive1->2->1 and full-width -4294967301 result, zero/max count refusals and actual release after hash unlock, with complete external scalar checks."
+  }
+}

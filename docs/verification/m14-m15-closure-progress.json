@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T14:21:52.130237+00:00",
+  "updated_at": "2026-11-11T15:41:37.909787+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -15523,7 +15523,7 @@
       "no_pending_report": true
     },
     "current_engineering_step": {
-      "at": "2026-11-11T14:21:52.130237+00:00",
+      "at": "2026-11-11T14:33:22.966843+00:00",
       "original_checks": [
         "M15-I04-native-admission",
         "M14-06-02-FUNCTIONAL"
@@ -15670,7 +15670,17 @@
         "type_scope_only": true,
         "original_check_credit": 0,
         "whole_Rust_type_qualification_sha256": "ed8ca29c5370dc005bd1e6bf957395a0966c13ed7fb61eb97f2972f888c11de1",
-        "whole_Rust_type_retirement_record_sha256": "2a19fd6a576e99727e1957f5ec701a061ab7a470c584b3dc9bf83f1a11534175"
+        "whole_Rust_type_retirement_record_sha256": "2a19fd6a576e99727e1957f5ec701a061ab7a470c584b3dc9bf83f1a11534175",
+        "runtime_lower_effects_independent_review_sha256": "b85d4130de6ad27ef94e9eddac5369a93e0ff6d37d5c0d6cbde9e67211b59342",
+        "runtime_lower_effects_review_scope": "GO_TYPED_CONTROLLED_HOST_EFFECTS_ONLY_NOT_SCENARIOS_OR_NATIVE",
+        "runtime_lower_requirements": [
+          "actual purearg0getter",
+          "explicit P/S lockclassregistration whereverorderclaimed",
+          "no ownership/ref/group/waitq/schedulebody substitution"
+        ],
+        "runtime_packet_owner": "P04Tests",
+        "runtime_packet_state": "NOT_YET_FROZEN_ACTUAL_COMMON_FIXTURE_AND_CALLER_BODY_CLOSURE_PENDING",
+        "runtime_missing_input_supplier": "OUR_EXISTING_P04Tests_SOURCE_OWNER_NO_EXTERNAL_INVENTORY_OR_NATIVE_PREREQUISITE"
       },
       "readback_source_delta_GO_sha256": "cbf7c0de4b28d2357f746d89af1a8d81c969d96af5b4df6700356cdb4d7b110b",
       "readback_changed_controls_request_sha256": "e47631489a0a9e62c1c7b58192f284bf52ed6353230b42c31b34ade2072ee5cc",
@@ -16017,6 +16027,57 @@
       "strong_imports": 257,
       "strong_undefineds": 0,
       "source_or_native_hold_released": false
+    },
+    "latest_perf_runtime_attempt": {
+      "at": "2026-11-11T15:31:50.748798+00:00",
+      "original_checks": [
+        "M14-03-05-DEFAULT",
+        "M14-03-05-FUNCTIONAL"
+      ],
+      "request_sha256": "a3f81da5d70b04f37fa638cc059e00163d3af8291c94d146421c0ce408285686",
+      "operation_review_sha256": "22400f23308c1a3aaddaff48db4ebd358c54d8c7748e77c960480f35980cf8eb",
+      "status": "FAILED_COMPILE_PRESERVED_NO_RUNTIME_CASE_EXECUTED",
+      "finished_at": "2026-11-11T15:25:23.470038+00:00",
+      "compile_exit": 1,
+      "errors": 9,
+      "warnings": 4,
+      "result_sha256": "c8eb17c980394637f4cd006142b48f971be4bb388c8a0ff200f074adec378a6d",
+      "Root_completion_sha256": "afb4eb900fc2aaf7f40beac392a0a4f45aa944a4c9ff1bc207841227b109de22",
+      "owners": {
+        "common_projection_counter": "P04Tests",
+        "VM_pointer_comparisons": "P04Source",
+        "independent_failure_and_delta_review": "SourceAcq"
+      },
+      "next_action": "Freeze and review only bounded fixture/projection delta, then freshly admit changed compile/link plus four-family runtime. Reuse TYPE and all production ownership/oracles.",
+      "canonical_kernel_or_selectors_changed": false,
+      "new_counted_delta": 0,
+      "native_or_unknown_holds_released": false,
+      "failure_qualification_sha256": "9d2fcee3b8e6a75c152fdf8eb0085c990ccab5f44141a6dd9d8ed4952d501853",
+      "current_process_retirement_sha256": "f75cc52d64f7228b4eceddf9f28715d8b35380931429263deac1811fc95831a8",
+      "current_process_charge_retired": true
+    },
+    "latest_perf_runtime_pass": {
+      "at": "2026-11-11T15:41:37.909787+00:00",
+      "finished_at": "2026-11-11T15:37:51.615246+00:00",
+      "status": "QUALIFIED_HOST_FOUR_FAMILY_PASS_ACTUAL_IMAGE_PENDING",
+      "request_sha256": "961fe69a97282f32b66e6f37d5948a0c82a820fa6d3ce0704f0393e912b445ff",
+      "result_sha256": "85cf2df50cb9cafa76014324a56503b35708501ce60c0be8aefba1d01da70d2b",
+      "independent_qualification_sha256": "26bfc03fb22206bb90074a0a5868933383eaf8b9876aac442fab4b624a2d7e67",
+      "Root_completion_sha256": "39b1d40c8ddc08b8490e0f63b4c89aa5622e8a2d6acb0a24c3e156894235c94a",
+      "compiler_exit": 0,
+      "runtime_exit": 0,
+      "functional_families": 4,
+      "stdout_bytes": 6820,
+      "runtime_stderr_bytes": 0,
+      "compiler_warning_count": 4,
+      "executable_bytes": 6197824,
+      "executable_sha256": "0360422d7f0b1bbe897245ef3fa2d9ba7fd6caa46d6b80864690e7fe8a56547a",
+      "current_charge_retired": true,
+      "canonical29_source_paths_integrated": true,
+      "normal_image_operation_next": true,
+      "actual_new_image_or_original_DEFAULT_accepted": false,
+      "new_counted_delta": 0,
+      "native_blockedwait_and_UNKNOWN_limits_unchanged": true
     }
   },
   "denominator_changes": [

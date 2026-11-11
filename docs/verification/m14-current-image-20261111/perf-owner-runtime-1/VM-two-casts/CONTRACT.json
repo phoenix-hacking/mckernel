@@ -1,0 +1,39 @@
+{
+  "status": "PRIVATE_TWO_COMPARISON_ABI_CORRECTION_NOT_COMPILED",
+  "at_utc": "2026-11-11T15:32:22.132044+00:00",
+  "author": "/root/p04_source_max",
+  "scope": "Only the two failed VM backpointer comparisons in the actual-source runtime driver; independent composition by P04Tests and source/operation review required.",
+  "actual_error": "Two E0308 comparisons: ProcessVm.proc is *mut c_void but local process is *mut abi::Process.",
+  "actual_abi": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "field": "ProcessVm.proc: *mut c_void",
+    "field_line": 1434,
+    "process_source": "Thread.proc: *mut Process",
+    "c_void_already_imported": true
+  },
+  "old_expression": "(*vm).proc == process",
+  "new_expression": "(*vm).proc == process.cast::<c_void>()",
+  "changed_original_lines": [
+    147,
+    259
+  ],
+  "validity": "A raw thin pointer cast changes only the pointee type. It retains the same address and provenance and forms no reference or additional dereference. Existing positive/quarantined actor/Process/VM lifetime and all assertions stay in force.",
+  "preservation": {
+    "reverse_exact_two_token_replacements_restores_original_e854": true,
+    "all262_lines_preserved_except_the_two_comparisons": true,
+    "scalar_fields_nested_external_goldens_calls_order_debt_and_cleanup_unchanged": true,
+    "no_production_source_common_binding_or_other_family_modified": true,
+    "no_lint_suppression_or_unsafe_lifetime_cast_or_oracle_weakening": true
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/vm-drain-compile-correction-1/INPUTS.json",
+    "bytes": 2266,
+    "sha256": "2699ec7cae59c01bc72c6ea085a4a7847a2f044dd7125689dd7def24a54dd125"
+  },
+  "type_link_runtime_correctness": "UNPROVED until separately reviewed actual compiler/runtime.",
+  "execution": "No compiler, test, helper, runtime, native or canonical/cache/index action by author."
+}

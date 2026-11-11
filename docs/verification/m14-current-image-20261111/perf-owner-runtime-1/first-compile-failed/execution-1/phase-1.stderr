@@ -1,0 +1,136 @@
+error[E0425]: cannot find type `SyscallFindProcessFn` in this scope
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/syscall_policy.rs:1148:21
+     |
+1148 |     find_fn: Option<SyscallFindProcessFn>,
+     |                     ^^^^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+help: you might be missing a type parameter
+     |
+1131 | pub unsafe extern "C" fn perf_ioctl_body_result<SyscallFindProcessFn>(
+     |                                                ++++++++++++++++++++++
+
+error[E0425]: cannot find type `SyscallProcessUnlockFn` in this scope
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/syscall_policy.rs:1149:23
+     |
+  22 | type SyscallMckfdUnlockFn = unsafe extern "C" fn(*mut c_void, CLong);
+     | --------------------------------------------------------------------- similarly named type alias `SyscallMckfdUnlockFn` defined here
+...
+1149 |     unlock_fn: Option<SyscallProcessUnlockFn>,
+     |                       ^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: a type alias with a similar name exists
+     |
+1149 -     unlock_fn: Option<SyscallProcessUnlockFn>,
+1149 +     unlock_fn: Option<SyscallMckfdUnlockFn>,
+     |
+help: you might be missing a type parameter
+     |
+1131 | pub unsafe extern "C" fn perf_ioctl_body_result<SyscallProcessUnlockFn>(
+     |                                                ++++++++++++++++++++++++
+
+error[E0425]: cannot find value `ENOENT` in this scope
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/syscall_policy.rs:1377:10
+     |
+1377 |         -ENOENT
+     |          ^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `ENOENT` in this scope
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/syscall_policy.rs:1547:17
+     |
+1547 |         return -ENOENT as CLong;
+     |                 ^^^^^^ not found in this scope
+
+warning: unreachable statement
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/syscall_policy.rs:2046:5
+     |
+2002 | /         return unsafe { crate::f03_perf_owner::open_from_body(crate::f03_perf_owner::Open {
+2003 | |             request,
+2004 | |             thread,
+2005 | |             proc,
+...    |
+2042 | |             unlock_fn,
+2043 | |         }) };
+     | |____________- any code following this expression is unreachable
+...
+2046 | /     if request.is_null() || thread.is_null() || proc.is_null() || attr.is_null() {
+2047 | |         return -EINVAL as CLong;
+2048 | |     }
+     | |_____^ unreachable statement
+     |
+     = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/syscall_policy.rs:2808:9
+     |
+2805 |         { return unsafe{crate::f03_perf_owner::descriptor_read(sfd,ctx)}; }
+     |           -------------------------------------------------------------- any code following this expression is unreachable
+...
+2808 |         let buf_addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+error[E0609]: no field `pp_reset` on type `&f03_perf_counter_control_v1::EventLayout`
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/f03_perf_owner/counter_epoch_family.rs:359:65
+    |
+359 |     assert_eq!(unsafe { (*actor_process).perf_status }, control.pp_reset);
+    |                                                                 ^^^^^^^^ unknown field
+    |
+    = note: available fields are: `group_leader`, `sibling_list`, `group_entry`, `counter_id`, `state` ... and 17 others
+
+error[E0609]: no field `pp_reset` on type `&f03_perf_counter_control_v1::EventLayout`
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/f03_perf_owner/counter_epoch_family.rs:362:62
+    |
+362 |     unsafe { super::lifecycle::switch_monitor(actor, control.pp_reset, control.pp_count) };
+    |                                                              ^^^^^^^^ unknown field
+    |
+    = note: available fields are: `group_leader`, `sibling_list`, `group_entry`, `counter_id`, `state` ... and 17 others
+
+error[E0308]: mismatched types
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/f03_perf_owner/vm_drain_family.rs:147:74
+    |
+147 |     assert!(!vm.is_null() && unsafe { (*actor).vm == vm && (*vm).proc == process });
+    |                                                                          ^^^^^^^ expected `*mut c_void`, found `*mut Process`
+    |
+    = note: expected raw pointer `*mut std::ffi::c_void`
+               found raw pointer `*mut abi::Process`
+
+error[E0308]: mismatched types
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/f03_perf_owner/vm_drain_family.rs:259:30
+    |
+259 |             && (*vm).proc == process && (*process).refcount.counter > 0 && (*vm).refcount.counter > 0 },
+    |                              ^^^^^^^ expected `*mut c_void`, found `*mut Process`
+    |
+    = note: expected raw pointer `*mut std::ffi::c_void`
+               found raw pointer `*mut abi::Process`
+
+error[E0308]: mismatched types
+  --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/../owner_case_driver.rs:19:118
+   |
+19 | ...rocess.vm=&mut *value.vm;value.vm.proc=&mut *value.process;
+   |                             ------------- ^^^^^^^^^^^^^^^^^^^ expected `*mut c_void`, found `&mut Process`
+   |                             |
+   |                             expected due to the type of this binding
+   |
+   = note:    expected raw pointer `*mut std::ffi::c_void`
+           found mutable reference `&mut abi::Process`
+
+warning: unnecessary `unsafe` block
+  --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/spinlock_effects.rs:10:127
+   |
+10 | ...e");assert!(crate::host_effects::irq_enabled());unsafe{crate::host_perf_bindings::after_state_unlock()};}
+   |                                                    ^^^^^^ unnecessary `unsafe` block
+   |
+   = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/production/f03_perf_owner/callbacks.rs:116:25
+    |
+114 |             let result=unsafe{super::target_process::with_remote_target(pid,node.as_mut_ptr().cast(),
+    |                        ------ because it's nested under this `unsafe` block
+115 |                 super::super::f03_process_cleanup_find,super::super::f03_process_cleanup_unlock,
+116 |                 |target|unsafe{enable(&pin,&event,thread,target,true)})};
+    |                         ^^^^^^ unnecessary `unsafe` block
+
+error: aborting due to 9 previous errors; 4 warnings emitted
+
+Some errors have detailed explanations: E0308, E0425, E0609.
+For more information about an error, try `rustc --explain E0308`.

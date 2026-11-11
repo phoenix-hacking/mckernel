@@ -1,0 +1,118 @@
+{
+  "Root_sole_compositor_executor_admission_and_credit": true,
+  "candidate_or_canonical_mutation": false,
+  "case_inputs": {
+    "counter_epoch_family.rs": {
+      "bytes": 25898,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/counter_epoch_family.rs",
+      "sha256": "b4c1a7f0d9f9b8bfd9e3d81dd9c270be767e528577682eeddd0c38db1bec6053"
+    },
+    "monitor_family.rs": {
+      "bytes": 14217,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/monitor_family.rs",
+      "sha256": "a01100a3dc882fc41f7e404e845382878de29ed7586931cc57c69ecfcdd88332"
+    },
+    "rollback_family.rs": {
+      "bytes": 15412,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/rollback_family.rs",
+      "sha256": "2ad6362bfa0d174bad795e5307be92f74a2051ee9068496ba5cc62b2f8edaec7"
+    }
+  },
+  "children_spawned": false,
+  "counter_unit_decision": {
+    "SDK_confirmation": "Author confirmed both exact C providers are the same and all AtomicSet constructor stores will remain traced. No alternate provider identity or trace suppression is legitimate.",
+    "actual_source_basis": {
+      "C_tables": {
+        "bytes": 967619,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/syscall.c",
+        "sha256": "ba41f4428674275ed0d73c6a7d54d08e48249af4d7920fd9bd7390b264e2dd40"
+      },
+      "Rust_helper": {
+        "bytes": 1247778,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/syscall_policy.rs",
+        "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+      },
+      "allocation_helper": "syscall_policy.rs::perf_event_alloc_init_body_result20888-20999 always atomic_set(event.count,0), then atomic_set(period_left,sample_period).",
+      "same_original_provider_identity": "C f03_perf_allocation_binding_v1.atomic_set at22356 and f03_perf_counter_providers_v1.atomic_set at21694 both sync_child_count_set_bridge."
+    },
+    "common_projection_and_test_operation": "PENDING; current b4c1 must not be called a passing or runnable case.",
+    "decision": "NO_GO_PERF_CASE_01_CONSTRUCTOR_ATOMIC_STORE_MISCLASSIFIED_AS_SCHEDULER_RESET",
+    "finding": "The late open within clear_then_append_after_state_unlock genuinely initializes the new event count through the same atomic-set endpoint. The full-trace match unconditionally sets late_was_reset_or_initialized for ANY AtomicSet at late_count. Exact declared lower semantics trace that constructor write too, so no_late_member_reset_or_init cannot truthfully be true merely because the corrected scheduler excluded the late member.",
+    "minimum_test_only_correction": "Preserve original b4c1 and all raw construction effects. Retain/verify the expected constructor count/period writes and distinguish subsequent scheduler phase using an actual hook/constructor-completion boundary or honest source-callsite attribution. Continue forbidding any late scheduler reset/PMU InitRaw. Change no production ownership/math/provider identity or filtering to make a failing oracle pass.",
+    "other_expected_values_source_basis": "Initial2member group, Actor2maps, Child2owned+foreignbit, ChildnewOrigin onefreecounter, late append3members/Childprebinding/ActorlateEINVAL, original2resets+2init[-71,0]+aggregateStart, captured old indices and delayed data-only release are consistent with declared actual4-counter fixture and real APIs. Constructor-vs-reset trace classification is the only confirmed finite defect.",
+    "positive_fidelity": "Four real opens/ordinary closes create every owner/key/group/map. Real remote enable and private child inheritance prebind counters; declared foreign bit is set before Child CounterSlot exists. Actual new Child open cannot collide with inherited/foreign bits; genuine outstanding Operation tokens and post-Thread-retirement sentinel test prevent stale bitmap writes. Late clear+append occurs only from explicitly controlled lower S-unlock scheduling after all kernel/hash/IRQ exclusions are restored.",
+    "source_writer": "/root/p03_cutover_source_max; SDK owns only literal lower trace/table unit"
+  },
+  "created_utc": "2026-11-11T15:00:11.734373+00:00",
+  "decision": "GO_ROLLBACK_AND_MONITOR_UNIT_SOURCE_ORACLES_NO_GO_ONE_COUNTER_TRACE_ORACLE_FAMILY_COMMON_FIXTURE_PENDING",
+  "monitor_unit_decision": {
+    "decision": "GO_AT_DELIVERED_SOURCE_AND_LITERAL_SCALAR_ORACLE_SCOPE_ONLY",
+    "finite_oracles": [
+      "Remote positive Process refcount returns to its initial value after actual enable; no perf FD is required on the remote target, and actual private Child clone preparation inherits monitor+one map without a permanent Process reference edge or FD.",
+      "Only real Tool DescriptorPin storage is retained across close. Close unlinks descriptor and detaches its remote target; actual remote map retires, while Tool origin remains until that storage pin drops. After last storage/drop/drain the Tool origin retires even though Child monitor/EventPin still lives.",
+      "Actual child Operation tokens retain the real EventKey/GroupRef-derived map after Tool origin disappears. Index equality is compared against genuine leases and bitmap, not a hardcoded counter or generation. The child association survives Operation release.",
+      "Actual pre-free Thread hook clears its owned map, Process hook clears/detaches its association, then remote/Tool hooks detach all three. Actor backing stays genuinely allocated and quarantined for final scalar reads; metadata absence is observed through existing() pointer comparison, not a freed-object dereference."
+    ],
+    "lock_and_error_safety": "The child observation obtains monitor pin/GroupRead and HardwareLeases under the same R, explicitly finishes/releases R-owned snapshot+pin, drops R, and only then inspects/expects/drops returned leases. No oracle panic path drops an active R-acquiring lease under R.",
+    "real_source_fidelity": "Real callbacks::ioctl -> with_remote_target increment-unless-zero/unlock/body/release, real clone lifecycle/Process-owned inherited slot, actual descriptor close/storage pin, HardwareLeases capture/release and genuine Thread/Process terminal hooks supply ownership behavior. Child has no copied perf descriptor; no EventKey/generation/refcount/monitor/table is forged."
+  },
+  "not_proved": [
+    "Any runtime outcome or runnable request",
+    "Complete common fixture, type/link and supported HOST profile",
+    "Genuine kernel PMU/IRQ/hash/wait scheduler/usercopy providers",
+    "Actual native/source/controller/resource/UNKNOWN release",
+    "Original M14-03-05 DEFAULT/FUNCTIONAL or any milestone"
+  ],
+  "required_common_fixture_bindings_still_pending": [
+    "Freeze exact complete18 production ownership modules/facade and actual constructor/allocator/pure getter/setter/waitq/Process-VM lower call closure. Retain cbea plus15979 source bytes and declare every test-only footer/projection; actual full production metadata PASS is not proof this HOST projected crate compiles/links.",
+    "Rollback Tool and monitor Tool+remote, and counter Tool+Actor, must be fully initialized positive backing with real prepare_thread+prepare_created_thread/Process metadata completed BEFORE baseline/trace capture. Monitor/counter Child must instead be initialized private but UNPREPARED, because each family itself calls real prepare_thread then prepare_cloned_thread exactly once.",
+    "Allocate actual whole typed ABI objects/attrs/72-byte requests/contexts with genuine alignment and complete initialization, real production Open offsets/callback types/provider count4. Register the actual remote Process with controlled hash lookup; no fake positive reference provider or lifetime framework.",
+    "Monitor storage_pin is the only escaped Tool DescriptorPin. Do not retain hidden descriptor/event/operation guards across origin/storage observations. Keep all typed actor backing allocated/quarantined through every terminal/sentinel scalar observation and explicit UNKNOWN debt record.",
+    "Reuse exact a215/b85 effects only at their declared HOST scope. Allocation records/IDs/layouts and freed origins remain actual; reset_trace clears observations/scripts only, never project state/allocations. Hash lookup/IRQ/spinlock/host reply remain explicitly controlled effects, not native providers.",
+    "Bind actual production static origin file/line data and typed PMU/allocator tables. Both allocation/control atomic-set providers have the same actual identity; trace legitimate constructor stores rather than hide them. No unresolved schedule success stub: Root permits actual waitq with fail-closed schedule endpoint and actual schedule_calls==0 only, no blocked-wait/native scheduler claim.",
+    "Register every actual modeled P and Event-S address through pinned append-only observation helpers deriving genuine addresses; default Registry classification cannot substitute for P/S checks. One-shot counter hook must fire synchronously only after S/R/P/hash/IRQ exclusion drops, never outlive its stack HookState, and failure must terminate rather than continue with a stale hook.",
+    "Main must compare/serialize the COMPLETE returned observation against the exact literal external canonical row; no selected booleans, copied expected output or hardcoded success stand-in. Final common source/factory/type/link/projection plus exact compiler/runtime argv/profile/capture/fresh admission review remains separate."
+  ],
+  "reused_inputs": {
+    "actual_events_borrow_delta_GO": {
+      "bytes": 6724,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-events-autoref-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "2f31eafb02209c16e50c0cb9c8a869327dce238f582f292ec324d8968db23478"
+    },
+    "actual_whole_candidate_metadata_qualification": {
+      "bytes": 16047,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/escalation-events-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "ed8ca29c5370dc005bd1e6bf957395a0966c13ed7fb61eb97f2972f888c11de1"
+    },
+    "coherent_source_material_GO": {
+      "bytes": 12716,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/compiler-scheduler-composition-1/REVIEW.json",
+      "sha256": "c8c265f293b6e3df617117246002c83f9160e22569d8352bfaee5387ca94c6a0"
+    },
+    "lower_adapter": {
+      "bytes": 15813,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/host_lower_effects.rs",
+      "sha256": "a2151e8f310350f8249904cb28cbddf79659c12968412a7cc1e0d7657380ad79"
+    },
+    "lower_adapter_GO": {
+      "bytes": 12366,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-lower-effects-review-publicabi-max-1/REVIEW.json",
+      "sha256": "b85d4130de6ad27ef94e9eddac5369a93e0ff6d37d5c0d6cbde9e67211b59342"
+    }
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_source_edit_or_import_compiler_helper_or_runtime_execution": false,
+  "rollback_unit_decision": {
+    "decision": "GO_AT_DELIVERED_SOURCE_AND_LITERAL_SCALAR_ORACLE_SCOPE_ONLY",
+    "finite_oracles": [
+      "First allocation ENOMEM yields no host call/event free and exact preprepared actor baseline. Invalid group EINVAL yields real unpublished abort free and no host call. Standalone and grouped host failures preserve signed HOST_ERROR below -2^32, one host call, abort origin, old maps/list/allocation IDs.",
+      "A real successfully published leader is later closed through actual begin_close_gate and close_if_managed, initialized context and actual setter; one published-event free and one actual descriptor free are distinguished by allocation identity/size plus true allocation/free origin file/line.",
+      "After real host fd202 succeeds, failure of only actual Mckfd allocation returns original ENOMEM and sends one full initialized72-byte close request NR3/arg0=202, all route/unused bytes independently expected zero; actual tool Thread/Process identities are observed from lower records.",
+      "A scripted fullwidth negative close result preserves primary ENOMEM, records its full signed cleanup error and one genuine unresolved host Record. All local map/list state is restored, one live debt allocation remains, and a second real safe drain sends no host retry."
+    ],
+    "real_source_fidelity": "Actual transactions::open_from_body/Open, EventPin and Prepared allocation/publication/Drop, real maps and real drain/close/gates execute all ownership choices. Only the specified allocator fault and host/forward replies are controlled lower inputs. No replacement ref/group/list/debt implementation appears in the case.",
+    "vacuity_checks": "Boolean carrier/route flags on zero-host/zero-close paths are paired with literal expected call counts. Nonzero close cases require exactly2host/1close, full carrier equality and actual reply error; allocation/debt results are observed after real production drains rather than trace reset."
+  },
+  "schema": "mckernel.perf-runtime-finite-case-source-oracle-review.v1",
+  "scope": "Only three delivered actual-source runtime case/oracle units at their explicit controlled HOST lower boundary. No common crate/factory/projection/type/link/operation or runtime PASS is asserted. Actual completed whole-Rust metadata result is reused only for genuine candidate source type closure."
+}

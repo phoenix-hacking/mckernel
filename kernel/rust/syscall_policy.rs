@@ -3512,29 +3512,45 @@ unsafe fn syscall_mckfd_find(
     core::ptr::null_mut()
 }
 
+// A found managed perf descriptor carries its real pre-unlock lifetime pin.
+// The original unregistered/nonperf path keeps its existing callback contract.
+struct MckfdLookup {
+    pointer: *mut u8,
+    #[cfg(f03_perf_owner_protocol)]
+    _perf_pin: Option<crate::f03_perf_owner::DescriptorPin>,
+}
+impl MckfdLookup {
+    fn empty() -> Self {
+        Self { pointer: core::ptr::null_mut(),
+            #[cfg(f03_perf_owner_protocol)] _perf_pin: None }
+    }
+}
+
 unsafe fn syscall_mckfd_find_locked(
     thread: *mut c_void,
     fd: CInt,
     offsets: *const SyscallMckfdOffsets,
     lock_fn: Option<SyscallMckfdLockFn>,
     unlock_fn: Option<SyscallMckfdUnlockFn>,
-) -> *mut u8 {
+) -> Result<MckfdLookup, CInt> {
     let proc = syscall_mckfd_proc(thread, offsets);
-    let Some(lock_fn) = lock_fn else {
-        return core::ptr::null_mut();
-    };
-    let Some(unlock_fn) = unlock_fn else {
-        return core::ptr::null_mut();
-    };
-    if proc.is_null() {
-        return core::ptr::null_mut();
-    }
-
+    let Some(lock_fn) = lock_fn else { return Ok(MckfdLookup::empty()); };
+    let Some(unlock_fn) = unlock_fn else { return Ok(MckfdLookup::empty()); };
+    if proc.is_null() { return Ok(MckfdLookup::empty()); }
     let lock = syscall_mckfd_lock_ptr(proc, offsets);
     let irqstate = lock_fn(lock);
     let fdp = syscall_mckfd_find(proc, fd, offsets);
+    // Registration/kind is established by the actual perf publisher/copy path,
+    // never by an arbitrary data value or callback address. R is acquired only
+    // AFTER the genuine P lock, and the pin is taken BEFORE P is released.
+    #[cfg(f03_perf_owner_protocol)]
+    let managed = crate::f03_perf_owner::pin_managed_locked(
+        proc.cast::<Process>(), fdp.cast::<Mckfd>());
     unlock_fn(lock, irqstate);
-    fdp
+    #[cfg(f03_perf_owner_protocol)]
+    let managed = managed?;
+    Ok(MckfdLookup { pointer: fdp,
+        #[cfg(f03_perf_owner_protocol)] _perf_pin: managed })
 }
 
 unsafe fn syscall_mckfd_long_callback(entry: *mut u8, offset: SizeT) -> Option<SyscallMckfdLongFn> {
@@ -3563,7 +3579,18 @@ pub unsafe extern "C" fn syscall_read_body_result(
         return -(EINVAL as CLong);
     }
 
-    let fdp = syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn);
+    let found = match syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn) {
+        Ok(found) => found,
+        Err(error) => return error as CLong,
+    };
+    let fdp = found.pointer;
+    // G is a genuine process-context wait gate, never acquired under P/R.
+    // Closing rejects queued stale callers before any numeric-host-fd use;
+    // an already admitted operation may finish before the unique host close.
+    #[cfg(f03_perf_owner_protocol)]
+    let _perf_forward_guard = if let Some(pin) = found._perf_pin.as_ref() {
+        match unsafe { pin.forward() } { Ok(guard) => Some(guard), Err(error) => return error as CLong }
+    } else { None };
     if !fdp.is_null() {
         if let Some(read_fn) = syscall_mckfd_long_callback(fdp, (*offsets).mckfd_read_cb_offset) {
             return read_fn(fdp.cast::<c_void>(), ctx);
@@ -3594,7 +3621,18 @@ pub unsafe extern "C" fn syscall_ioctl_body_result(
         return -(EINVAL as CLong);
     }
 
-    let fdp = syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn);
+    let found = match syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn) {
+        Ok(found) => found,
+        Err(error) => return error as CLong,
+    };
+    let fdp = found.pointer;
+    // G is a genuine process-context wait gate, never acquired under P/R.
+    // Closing rejects queued stale callers before any numeric-host-fd use;
+    // an already admitted operation may finish before the unique host close.
+    #[cfg(f03_perf_owner_protocol)]
+    let _perf_forward_guard = if let Some(pin) = found._perf_pin.as_ref() {
+        match unsafe { pin.forward() } { Ok(guard) => Some(guard), Err(error) => return error as CLong }
+    } else { None };
     if let Some(tofu_fn) = tofu_fn {
         let mut handled = 0;
         let tofu_rc = tofu_fn(thread, fd, cmd, arg, &mut handled);
@@ -3630,7 +3668,18 @@ pub unsafe extern "C" fn syscall_fcntl_body_result(
         return -(EINVAL as CLong);
     }
 
-    let fdp = syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn);
+    let found = match syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn) {
+        Ok(found) => found,
+        Err(error) => return error as CLong,
+    };
+    let fdp = found.pointer;
+    // G is a genuine process-context wait gate, never acquired under P/R.
+    // Closing rejects queued stale callers before any numeric-host-fd use;
+    // an already admitted operation may finish before the unique host close.
+    #[cfg(f03_perf_owner_protocol)]
+    let _perf_forward_guard = if let Some(pin) = found._perf_pin.as_ref() {
+        match unsafe { pin.forward() } { Ok(guard) => Some(guard), Err(error) => return error as CLong }
+    } else { None };
     if !fdp.is_null() {
         if let Some(fcntl_fn) = syscall_mckfd_int_callback(fdp, (*offsets).mckfd_fcntl_cb_offset) {
             return fcntl_fn(fdp.cast::<c_void>(), ctx) as CLong;
@@ -3665,6 +3714,20 @@ pub unsafe extern "C" fn syscall_close_body_result(
         return -(EINVAL as CLong);
     }
 
+    #[cfg(f03_perf_owner_protocol)]
+    let _perf_process_close = match unsafe{crate::f03_perf_owner::begin_close_gate(proc.cast())}{
+        Ok(gate)=>gate,Err(error)=>return error as CLong,
+    };
+
+    #[cfg(f03_perf_owner_protocol)]
+    {
+        match unsafe { crate::f03_perf_owner::close_if_managed(thread,fd,syscall_nr,ctx,forward_fn,free_fn) } {
+            Ok(Some(result)) => return result,
+            Ok(None) => {},
+            Err(error) => return error as CLong,
+        }
+    }
+
     let lock = syscall_mckfd_lock_ptr(proc, offsets);
     let irqstate = lock_fn.unwrap()(lock);
     if let Some(close_path_fn) = close_path_fn {
@@ -3687,6 +3750,12 @@ pub unsafe extern "C" fn syscall_close_body_result(
         return forward_fn(syscall_nr, ctx);
     }
 
+    #[cfg(f03_perf_owner_protocol)]
+    let _copy_close = match unsafe{crate::f03_perf_owner::mark_copy_close_under_p(proc.cast(),cur.cast())}{
+        Ok(guard)=>guard,
+        Err(error)=>{unlock_fn.unwrap()(lock,irqstate);return error as CLong;},
+    };
+
     let next = syscall_mckfd_next(cur, offsets);
     if prev.is_null() {
         *headp = next;
@@ -3695,6 +3764,9 @@ pub unsafe extern "C" fn syscall_close_body_result(
     }
     syscall_mckfd_set_next(cur, offsets, core::ptr::null_mut());
     unlock_fn.unwrap()(lock, irqstate);
+
+    #[cfg(f03_perf_owner_protocol)]
+    if let Err(error)=unsafe{_copy_close.wait_unlinked()}{return error as CLong;}
 
     if let Some(close_fn) = syscall_mckfd_int_callback(cur, (*offsets).mckfd_close_cb_offset) {
         close_fn(cur.cast::<c_void>(), ctx);
@@ -3731,7 +3803,18 @@ pub unsafe extern "C" fn do_mmap_mckfd_dispatch_body_result(
         return -(EINVAL as CLong);
     }
 
-    let fdp = syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn);
+    let found = match syscall_mckfd_find_locked(thread, fd, offsets, lock_fn, unlock_fn) {
+        Ok(found) => found,
+        Err(error) => return error as CLong,
+    };
+    let fdp = found.pointer;
+    // G is a genuine process-context wait gate, never acquired under P/R.
+    // Closing rejects queued stale callers before any numeric-host-fd use;
+    // an already admitted operation may finish before the unique host close.
+    #[cfg(f03_perf_owner_protocol)]
+    let _perf_forward_guard = if let Some(pin) = found._perf_pin.as_ref() {
+        match unsafe { pin.forward() } { Ok(guard) => Some(guard), Err(error) => return error as CLong }
+    } else { None };
     if fdp.is_null() {
         return 0;
     }
@@ -21415,6 +21498,54 @@ pub unsafe extern "C" fn perf_event_open_body_result(
     lock_fn: Option<SyscallMckfdLockFn>,
     unlock_fn: Option<SyscallMckfdUnlockFn>,
 ) -> CLong {
+    #[cfg(f03_perf_owner_protocol)]
+    {
+        // Actual selected inputs/types are forwarded unchanged. The new module
+        // owns publication, genuine routing and every transaction rollback.
+        return unsafe { crate::f03_perf_owner::open_from_body(crate::f03_perf_owner::Open {
+            request,
+            thread,
+            proc,
+            attr,
+            pid,
+            group_fd,
+            perf_event_open_nr,
+            cpu,
+            mckfd_size,
+            mckfd_alloc_flags,
+            event_pid_offset,
+            event_counter_id_offset,
+            proc_mckfd_offset,
+            mckfd_next_offset,
+            mckfd_fd_offset,
+            mckfd_data_offset,
+            event_group_leader_offset,
+            event_sibling_list_offset,
+            event_group_entry_offset,
+            event_nr_siblings_offset,
+            event_pmc_status_offset,
+            thread_pmc_alloc_map_offset,
+            proc_mckfd_lock_offset,
+            mckfd_sig_no_offset,
+            mckfd_read_cb_offset,
+            mckfd_ioctl_cb_offset,
+            mckfd_mmap_cb_offset,
+            mckfd_close_cb_offset,
+            mckfd_fcntl_cb_offset,
+            event_alloc_fn,
+            counter_alloc_fn,
+            syscall_fn,
+            mckfd_alloc_fn,
+            read_fn,
+            ioctl_fn,
+            mmap_fn,
+            close_fn,
+            fcntl_fn,
+            lock_fn,
+            unlock_fn,
+        }) };
+    }
+
     if request.is_null() || thread.is_null() || proc.is_null() || attr.is_null() {
         return -EINVAL as CLong;
     }
@@ -26198,48 +26329,48 @@ mod f03_perf_counter_control_v1 {
     };
 
     #[repr(C)]
-    struct EventLayout {
-        group_leader: SizeT,
-        sibling_list: SizeT,
-        group_entry: SizeT,
-        counter_id: SizeT,
-        state: SizeT,
-        use_invariant_tsc: SizeT,
-        base_user_tsc: SizeT,
-        stopped_user_tsc: SizeT,
-        user_accum_count: SizeT,
-        base_system_tsc: SizeT,
-        stopped_system_tsc: SizeT,
-        system_accum_count: SizeT,
-        count: SizeT,
-        attr: SizeT,
-        hw_config: SizeT,
-        extra_reg_reg: SizeT,
-        kernel_mode: CInt,
-        user_mode: CInt,
-        inactive_state: CInt,
-        active_state: CInt,
-        pp_count: CInt,
-        pp_none: CInt,
+    pub(super) struct EventLayout {
+        pub(super) group_leader: SizeT,
+        pub(super) sibling_list: SizeT,
+        pub(super) group_entry: SizeT,
+        pub(super) counter_id: SizeT,
+        pub(super) state: SizeT,
+        pub(super) use_invariant_tsc: SizeT,
+        pub(super) base_user_tsc: SizeT,
+        pub(super) stopped_user_tsc: SizeT,
+        pub(super) user_accum_count: SizeT,
+        pub(super) base_system_tsc: SizeT,
+        pub(super) stopped_system_tsc: SizeT,
+        pub(super) system_accum_count: SizeT,
+        pub(super) count: SizeT,
+        pub(super) attr: SizeT,
+        pub(super) hw_config: SizeT,
+        pub(super) extra_reg_reg: SizeT,
+        pub(super) kernel_mode: CInt,
+        pub(super) user_mode: CInt,
+        pub(super) inactive_state: CInt,
+        pub(super) active_state: CInt,
+        pub(super) pp_count: CInt,
+        pub(super) pp_none: CInt,
     }
 
     #[repr(C)]
-    struct Providers {
-        attr_flags: Option<PerfCounterAttrFlagsFn>,
-        extra_set: Option<PerfCounterExtraSetFn>,
-        init_raw: Option<PerfCounterInitRawFn>,
-        mask_check: Option<PerfCounterMaskCheckFn>,
-        set_period: Option<PerfEventIntFn>,
-        counter_start: Option<PerfCounterStartFn>,
-        counter_stop: Option<PerfCounterStopFn>,
-        event_update: Option<PerfEventUpdateFn>,
-        read_value: Option<PerfReadValueFn>,
-        atomic_set: Option<SyncChildAtomic64SetFn>,
+    pub(super) struct Providers {
+        pub(super) attr_flags: Option<PerfCounterAttrFlagsFn>,
+        pub(super) extra_set: Option<PerfCounterExtraSetFn>,
+        pub(super) init_raw: Option<PerfCounterInitRawFn>,
+        pub(super) mask_check: Option<PerfCounterMaskCheckFn>,
+        pub(super) set_period: Option<PerfEventIntFn>,
+        pub(super) counter_start: Option<PerfCounterStartFn>,
+        pub(super) counter_stop: Option<PerfCounterStopFn>,
+        pub(super) event_update: Option<PerfEventUpdateFn>,
+        pub(super) read_value: Option<PerfReadValueFn>,
+        pub(super) atomic_set: Option<SyncChildAtomic64SetFn>,
     }
 
     unsafe extern "C" {
-        static f03_perf_event_layout_v1: EventLayout;
-        static f03_perf_counter_providers_v1: Providers;
+        pub(super) static f03_perf_event_layout_v1: EventLayout;
+        pub(super) static f03_perf_counter_providers_v1: Providers;
     }
 
     unsafe fn current_thread() -> *mut Thread {
@@ -26401,16 +26532,16 @@ mod f03_perf_descriptor_entries_v1 {
     };
 
     #[repr(C)]
-    struct CloseLayout {
-        counter_id: SizeT,
-        extra_reg_reg: SizeT,
-        extra_reg_idx: SizeT,
-        fcntl_nr: CInt,
-        forward: Option<SyscallForwardContextFn>,
+    pub(super) struct CloseLayout {
+        pub(super) counter_id: SizeT,
+        pub(super) extra_reg_reg: SizeT,
+        pub(super) extra_reg_idx: SizeT,
+        pub(super) fcntl_nr: CInt,
+        pub(super) forward: Option<SyscallForwardContextFn>,
     }
 
     unsafe extern "C" {
-        static f03_perf_descriptor_layout_v1: CloseLayout;
+        pub(super) static f03_perf_descriptor_layout_v1: CloseLayout;
     }
 
     /// Close the actual event and release its original counter allocation maps.
@@ -26478,36 +26609,36 @@ mod f03_perf_read_entries_v1 {
     };
 
     #[repr(C)]
-    struct ReadLayout {
-        attr: SizeT,
-        pid: SizeT,
-        use_invariant_tsc: SizeT,
-        count: SizeT,
-        child_count_total: SizeT,
-        base_user_tsc: SizeT,
-        stopped_user_tsc: SizeT,
-        user_accum_count: SizeT,
-        base_system_tsc: SizeT,
-        stopped_system_tsc: SizeT,
-        system_accum_count: SizeT,
-        group_leader: SizeT,
-        nr_siblings: SizeT,
-        sibling_list: SizeT,
-        group_entry: SizeT,
-        read_format: SizeT,
-        group_flag: CULong,
+    pub(super) struct ReadLayout {
+        pub(super) attr: SizeT,
+        pub(super) pid: SizeT,
+        pub(super) use_invariant_tsc: SizeT,
+        pub(super) count: SizeT,
+        pub(super) child_count_total: SizeT,
+        pub(super) base_user_tsc: SizeT,
+        pub(super) stopped_user_tsc: SizeT,
+        pub(super) user_accum_count: SizeT,
+        pub(super) base_system_tsc: SizeT,
+        pub(super) stopped_system_tsc: SizeT,
+        pub(super) system_accum_count: SizeT,
+        pub(super) group_leader: SizeT,
+        pub(super) nr_siblings: SizeT,
+        pub(super) sibling_list: SizeT,
+        pub(super) group_entry: SizeT,
+        pub(super) read_format: SizeT,
+        pub(super) group_flag: CULong,
     }
 
     #[repr(C)]
-    struct ReadProviders {
-        attr_flags: Option<PerfReadAttrFlagsFn>,
-        update: Option<PerfEventUpdateFn>,
-        atomic_read: Option<SyscallAtomic64ReadFn>,
+    pub(super) struct ReadProviders {
+        pub(super) attr_flags: Option<PerfReadAttrFlagsFn>,
+        pub(super) update: Option<PerfEventUpdateFn>,
+        pub(super) atomic_read: Option<SyscallAtomic64ReadFn>,
     }
 
     unsafe extern "C" {
-        static f03_perf_read_layout_v1: ReadLayout;
-        static f03_perf_read_providers_v1: ReadProviders;
+        pub(super) static f03_perf_read_layout_v1: ReadLayout;
+        pub(super) static f03_perf_read_providers_v1: ReadProviders;
     }
 
     /// Read the actual event accounting through the complete existing Rust body.
@@ -26611,6 +26742,9 @@ mod f03_perf_read_entries_v1 {
     pub unsafe extern "C" fn f03_perf_read_v1(
         sfd: *mut Mckfd, ctx: *mut X86UserContext,
     ) -> CLong {
+        #[cfg(f03_perf_owner_protocol)]
+        { return unsafe{crate::f03_perf_owner::descriptor_read(sfd,ctx)}; }
+
         // SAFETY: Same actual register/long descriptor storage as the C entry.
         let buf_addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
         let count = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) };
@@ -26694,6 +26828,9 @@ mod f03_perf_ioctl_entry_v1 {
     pub unsafe extern "C" fn f03_perf_ioctl_v1(
         sfd: *mut Mckfd, ctx: *mut X86UserContext,
     ) -> CInt {
+        #[cfg(f03_perf_owner_protocol)]
+        { return unsafe{crate::f03_perf_owner::descriptor_ioctl(sfd,ctx)}; }
+
         // SAFETY: Exact unsigned-int narrowing before promotion to the helper ABI.
         let cmd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as u32;
         let event = unsafe { (*sfd).data } as *mut core::ffi::c_void;
@@ -34234,9 +34371,14 @@ pub unsafe extern "C" fn f03_do_exit_supported_v2(code: CInt) {
         f03_thread_exit_signal_v1(thread);
     }
     // SAFETY: C reloads thread->proc here, after notification callbacks.
+    #[cfg(f03_perf_owner_protocol)]
+    unsafe{crate::f03_perf_owner::sync_monitor(addr_of!((*thread).proc).read(),thread);}
+    #[cfg(not(f03_perf_owner_protocol))]
+    {
     let current_proc = unsafe { addr_of!((*thread).proc).read() };
     let event = unsafe { addr_of!((*current_proc).monitoring_event).read() };
     unsafe { f03_do_exit_existing_sync_child_v2(event) };
+    }
     unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.as_mut_ptr()) };
     // SAFETY: Same original release edge. No Thread access follows this release.
     unsafe { crate::process_helpers::release_thread(thread) };
@@ -35456,3 +35598,8 @@ mod f03_signal_forward_defined_candidate;
 #[cfg(f06_ptrace_resume_callbacks_candidate)]
 #[path = "f06_ptrace_resume_callbacks.rs"]
 mod f06_ptrace_resume_callbacks;
+
+// Private coherent-candidate wiring only. No CMake cfg activation is included.
+#[cfg(f03_perf_owner_protocol)]
+#[path = "f03_perf_owner.rs"]
+pub(crate) mod f03_perf_owner;

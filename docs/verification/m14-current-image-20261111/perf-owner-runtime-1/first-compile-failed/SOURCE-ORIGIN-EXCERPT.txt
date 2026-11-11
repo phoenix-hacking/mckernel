@@ -1,0 +1,60 @@
+OLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
+long
+syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
+{
+	return syscall_forward_context_bridge(syscall_nr, ctx);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long
+syscall_mckfd_lock_bridge(void *lock)
+{
+	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+syscall_mckfd_unlock_bridge(void *lock, long irqstate)
+{
+	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock, irqstate);
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_mckfd_alloc_origin_file_v1[] = __FILE__;
+const int f03_mckfd_alloc_origin_line_v1 = __LINE__ + 6;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void *
+syscall_alloc_bridge(size_t size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+const char f03_mckfd_free_origin_file_v1[] = __FILE__;
+const int f03_mckfd_free_origin_line_v1 = __LINE__ + 6;
+#endif
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+syscall_mckfd_free_bridge(void *fdp)
+{
+	kfree_tracked(fdp, __FILE__, __LINE__);
+}
+#endif
+
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && !defined(ENABLE_TOFU)
+extern long
+syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
+		unsigned long arg, int *handled);
+#else
+long
+syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
+		unsigned long arg, int *handled)
+{
+#ifdef ENABLE_TOFU
+	struct thread *thread = threadp;
+	extern

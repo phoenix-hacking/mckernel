@@ -1,0 +1,47 @@
+warning: unreachable statement
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/compiler-correction-1/production/syscall_policy.rs:2050:5
+     |
+2006 | /         return unsafe { crate::f03_perf_owner::open_from_body(crate::f03_perf_owner::Open {
+2007 | |             request,
+2008 | |             thread,
+2009 | |             proc,
+...    |
+2046 | |             unlock_fn,
+2047 | |         }) };
+     | |____________- any code following this expression is unreachable
+...
+2050 | /     if request.is_null() || thread.is_null() || proc.is_null() || attr.is_null() {
+2051 | |         return -EINVAL as CLong;
+2052 | |     }
+     | |_____^ unreachable statement
+     |
+     = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+    --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/compiler-correction-1/production/syscall_policy.rs:2812:9
+     |
+2809 |         { return unsafe{crate::f03_perf_owner::descriptor_read(sfd,ctx)}; }
+     |           -------------------------------------------------------------- any code following this expression is unreachable
+...
+2812 |         let buf_addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unnecessary `unsafe` block
+  --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/compiler-correction-1/spinlock_effects.rs:10:127
+   |
+10 | ...e");assert!(crate::host_effects::irq_enabled());unsafe{crate::host_perf_bindings::after_state_unlock()};}
+   |                                                    ^^^^^^ unnecessary `unsafe` block
+   |
+   = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/runtime-fixture-1/compiler-correction-1/production/f03_perf_owner/callbacks.rs:116:25
+    |
+114 |             let result=unsafe{super::target_process::with_remote_target(pid,node.as_mut_ptr().cast(),
+    |                        ------ because it's nested under this `unsafe` block
+115 |                 super::super::f03_process_cleanup_find,super::super::f03_process_cleanup_unlock,
+116 |                 |target|unsafe{enable(&pin,&event,thread,target,true)})};
+    |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: 4 warnings emitted
+

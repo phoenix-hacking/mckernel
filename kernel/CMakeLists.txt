@@ -108,6 +108,7 @@ set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
 set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
 set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
 set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED OFF)
+set(MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -686,6 +687,36 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
             list(APPEND RUST_KERNEL_SRCS
                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_policy_forward_context_bridge.rs")
         endif()
+        # Select the reviewed real perf owner only with all ordinary lifecycle
+        # and host-route providers. No held/broad/owned option is enabled here.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
+            MCKERNEL_DO_FORK_SELECTED AND MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND
+            MCKERNEL_WAIT_HOST_PROVIDER_SELECTED AND MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED AND
+            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
+            set(MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_perf_owner_protocol")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/callbacks.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/copy_borrows.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/descriptors.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/entry.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/events.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/fork_copy.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/forward_gate.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/groups.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/hardware.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/lifecycle.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/maps.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/monitors.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/process_targets.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/runtime.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/target_process.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/terminal.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/thread_counters.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/transactions.rs"
+)
+        endif()
 		add_custom_command(
 		OUTPUT "${RUST_KERNEL_OBJ}"
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
@@ -1115,6 +1146,10 @@ endif()
 if (MCKERNEL_DO_FORK_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_FORK)
+endif()
+if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
+    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL)
 endif()
 if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY

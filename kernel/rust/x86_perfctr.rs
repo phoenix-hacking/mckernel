@@ -576,3 +576,18 @@ const _: () = {
     let _ = set_perfctr_x86 as unsafe fn(CInt, CInt, CInt, CInt, CInt, CInt) -> CInt;
     let _ = set_fixed_counter as unsafe fn(CInt, CInt, bool) -> CInt;
 };
+
+// PRIVATE managed-owner candidate only. The actual current Thread extra-index
+// reservation was acquired under R before S; this bounded primitive never
+// guesses ownership from extra_reg.reg and never touches a foreign Thread map.
+#[cfg(f03_perf_owner_protocol)]
+pub(crate) unsafe fn managed_set_extra_reserved(event:*mut McPerfEvent,index:CInt)->CInt {
+    if event.is_null() || (index!=EXTRA_REG_RSP_0&&index!=EXTRA_REG_RSP_1) {return -EINVAL;}
+    unsafe {
+        (*event).extra_reg.idx=index;
+        (*event).hw_config&=!0xff;
+        (*event).hw_config|=ihk_mc_get_extra_reg_event(index);
+        (*event).extra_reg.reg=if index==EXTRA_REG_RSP_0 {MSR_OFFCORE_RSP_0}else{MSR_OFFCORE_RSP_1};
+        wrmsr((*event).extra_reg.reg,(*event).extra_reg.config);
+    }0
+}

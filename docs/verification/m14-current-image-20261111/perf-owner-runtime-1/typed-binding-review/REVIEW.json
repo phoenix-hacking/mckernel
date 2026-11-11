@@ -1,0 +1,187 @@
+{
+  "ABI_width_and_narrowing": {
+    "actual_scalars": "Uses ff48 CInt=i32/CLong=i64/CULong=u64/SizeT=usize and actual Thread/X86UserContext. Original 104Balign8 attr prefix, extra{CULongconfig,u32reg,CIntidx}, McPerfEvent prefix exactly match pinned x86 declarations.",
+    "counter_init": "Table callback is actual(CInt,CULong,CInt)->CInt. Lower x86 init accepts u32code; wrapper code asu32 matches the genuine perf_counter_init_raw_bridge in pinned syscall_policy.rs34874-34877 and selected !POSTK_DEBUG_TEMP_FIX_29 header prototype. It is not an invented truncation or profile-wide u64 acceptance.",
+    "perfpage": "PerfMmapPage follows actual C header field/union capability representation and reserved948B region, capabilities40/data_head1024/total1040. Existing compile-time offset/size assertions stay, but no compiler proof is claimed here.",
+    "signed_and_64bit": "Init/start/stop/extra/validate results remain CInt; PMUread/eventupdate are actual CULong. Mmap/context forward/copy results stay signed CLong. Counts use actual aligned8B AtomicI64 access matching original atomic64 callback widths; no pointer-to32bit conversion."
+  },
+  "all_eight_source_pins_match_actual_saved_bytes": true,
+  "controlled_effects_and_default_paths": {
+    "explicit_scripts": "PMUfacts startNone. Init/start/stop/read/extra,mmap and context-forward queues use expect on missing inputs; mappings/validation/extra descriptors require exact configured entries. No unbound script silently returns success.",
+    "legacy_path": "Legacy extra programming logs then panics rather than supplying false success; legacy allocation logs and calls the original pure selector. assert_no_legacy_calls fails managed cases if they used either path; it does not remove those trace records.",
+    "mmap": "Every reply is explicitly scripted; nonnegative result must designate a registered actual writable HOST span covering length. No address/storage is invented. Full source mapping transaction is outside this adapter.",
+    "pure_mask_predicate": "Any-valid-bit mask predicate matches the actual selected x86 body, using explicitly configured regular/fixed masks. Pure mapping/attribute/availability metadata effects are not a native hardware call.",
+    "raw_fixture_configuration": "configure_raw_event_for_fixture explicitly supplies one controlled raw type4/config1/flags2 device input and4counters/0x0f mask. It seeds no init/start/stop/read/extra/mmap/forward success reply. It is neither a native PMU fact nor an ownership scenario.",
+    "trace_integrity": "All modeled events append to trace, including genuine constructor AtomicSet stores. perf_trace clones complete trace. Only explicitly named reset_perf_trace clears the trace at setup; it refuses discarding a pending hook and does not clear counters/owners/scripts. Configuration setters alter input tables, not recorded effect history.",
+    "usercopy": "A nonzero scripted signed result is returned exactly. Otherwise success requires an actually registered checked HOST destination range and performs the real HOST byte copy; absent/unwritable registration returns -EFAULT. Thus an empty copy script does not produce a dummy0 with no copy. Source bytes/result are logged. This is a synchronous controlled buffer primitive, not kernel usercopy proof."
+  },
+  "decision": "GO_AT_EXPLICIT_HOST_LOWER_BINDING_BOUNDARY_ONLY__TYPE_LINK_RUNTIME_UNPROVED",
+  "locks_hooks_and_ownership_boundary": {
+    "PMU_context": "Hardware-step lower callbacks reject hash borrow and P/R or nestedS; permit only no tracked lock or one declared State lock. They use prior a215 typed lower model, not native IRQ/preemption instructions.",
+    "blocking_effects": "Usercopy/mmap/context forwarding require all tracked locks/hash borrows absent. Setup also requires unlocked effects. Atomic/pure metadata functions are actual-width primitives, not lifetime ownership.",
+    "one_shot_hook": "Hook setup is explicit and refuses replacing an armed hook. after_state_unlock fires only with empty held/hash sets and restored modeled IRQ, consumes hook before invocation and records HookFired once. P04 common contract wires it only after delegated actual registered State-class unlock; component does not itself claim that whole-fixture projection/wiring is proven.",
+    "real_bodies_required": "No event/group/reference/lifetime/waitq/schedule/gate/transaction algorithm is implemented here. Typed table tails bind original source entry/accessor/allocator/free bodies and controlled lower primitives. Real caller source and final common projection remain with P04/P03/SDK; no source refcount/group success is forged."
+  },
+  "material_findings": [],
+  "not_claimed": [
+    "native PMU/hardware/usercopy/mapping behavior",
+    "production provider/ownership/lifetime closure from a model",
+    "actual fixture compile/link/type/runtime acceptance",
+    "M14-03-05 DEFAULT/FUNCTIONAL or milestone credit",
+    "native/source/controller/resource or UNKNOWN release"
+  ],
+  "prior_lower_adapter_GO_reused": {
+    "bytes": 12366,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-lower-effects-review-publicabi-max-1/REVIEW.json",
+    "sha256": "b85d4130de6ad27ef94e9eddac5369a93e0ff6d37d5c0d6cbde9e67211b59342"
+  },
+  "private_table_tail_joins": [
+    {
+      "actual_original_module": "f03_perf_counter_control_v1",
+      "join": "Original reprC EventLayout/Providers types, named fields and actual original callback aliases. All event offsets use original FullMcPerfEvent and actual HwPerfEventExtra.reg. Kernel/user modes2/1 are actual header values; original state/pp constants remain controlled same-profile binding.",
+      "tail_exports": [
+        "f03_perf_event_layout_v1",
+        "f03_perf_counter_providers_v1"
+      ]
+    },
+    {
+      "actual_original_module": "f03_perf_read_entries_v1",
+      "join": "Original reprC ReadLayout/ReadProviders; full original event offsets/read-format and group_flag8; actual genuine attr-flags/read-value bodies remain source-owned, lower update/atomic signatures match.",
+      "tail_exports": [
+        "f03_perf_read_layout_v1",
+        "f03_perf_read_providers_v1"
+      ]
+    },
+    {
+      "actual_original_module": "f03_perf_descriptor_entries_v1",
+      "join": "Original reprC CloseLayout; actual event counter/extra fields via offset_of; x86 fcntl72, actual signed(CInt,*mutc_void)->CLong forward callback. No replacement close/ref/group body.",
+      "tail_exports": [
+        "f03_perf_descriptor_layout_v1"
+      ]
+    },
+    {
+      "actual_original_module": "f03_perf_mmap_entry_v1",
+      "join": "Original reprC MmapBinding and actual PerfDoMmapFn8argument signature; normal anonymous0x20/protwrite2/capbit2 and original perfpage offsets. Existing mmap body/callback consumes it; no mapping transaction rewritten.",
+      "tail_exports": [
+        "f03_perf_mmap_binding_v1"
+      ]
+    },
+    {
+      "actual_original_module": "f03_perf_alloc_entry_v1",
+      "join": "Original reprC PerfAllocationBinding; genuine existing allocation/free/hw-init bridges, original atomic callback types and explicit lower device-map/validate/extra inputs. Flags2 actual NOWAIT, hardware0/cache3/raw4/refcycles9 actual headers; no owner constructor clone.",
+      "tail_exports": [
+        "f03_perf_allocation_binding_v1"
+      ]
+    }
+  ],
+  "projection_and_validation_boundary": {
+    "component_not_whole_fixture": "Reviewed immutable1c86 unit/strings plus exact original pinned type/body sources only. Actual append locations and full original-statement/prefix equality in newly frozen runtime-fixture-1 belong to the separate whole-source/operation reviewer. No mutable common files or scenarios were edited/re-authored here.",
+    "necessary_next_step": "SourceAcq may consume this scoped component GO in the frozen runtime request review; Root separately admits/runs actual compile/runtime only after whole fixture/source/oracle/profile GO. No new header/ABI/old passing suite replay is requested.",
+    "type_and_link": "EXPLICITLY_UNPROVED until actual qualified HOST Rust fixture compile. This source/signature review is not a typecheck/link success, all-golden runtime result, native/provider proof or operation admission."
+  },
+  "real_x86_tail": {
+    "exact_function_body_joins": [
+      {
+        "actual_function": "ihk_mc_perfctr_alloc",
+        "body_bytes_equal": true,
+        "original_body_sha256": "289026d8b73ff54ee94b419e3c34e5d0ac7d5c064a0e61473430d8ac608d3a8c",
+        "tail_body_sha256": "289026d8b73ff54ee94b419e3c34e5d0ac7d5c064a0e61473430d8ac608d3a8c",
+        "tail_function": "host_actual_legacy_perfctr_alloc",
+        "tokens_except_whitespace_equal": true
+      },
+      {
+        "actual_function": "hw_perf_event_init",
+        "body_bytes_equal": true,
+        "original_body_sha256": "aa37d624037af50ad51ff43e3dd9c5ab5aa84271c56f65da2b6d65fc3a812dbb",
+        "tail_body_sha256": "aa37d624037af50ad51ff43e3dd9c5ab5aa84271c56f65da2b6d65fc3a812dbb",
+        "tail_function": "host_actual_hw_perf_event_init",
+        "tokens_except_whitespace_equal": true
+      },
+      {
+        "actual_function": "ihk_mc_event_set_period",
+        "body_bytes_equal": true,
+        "original_body_sha256": "aa37d624037af50ad51ff43e3dd9c5ab5aa84271c56f65da2b6d65fc3a812dbb",
+        "tail_body_sha256": "aa37d624037af50ad51ff43e3dd9c5ab5aa84271c56f65da2b6d65fc3a812dbb",
+        "tail_function": "host_actual_ihk_mc_event_set_period",
+        "tokens_except_whitespace_equal": true
+      },
+      {
+        "actual_function": "ihk_mc_event_update",
+        "body_bytes_equal": true,
+        "original_body_sha256": "aa37d624037af50ad51ff43e3dd9c5ab5aa84271c56f65da2b6d65fc3a812dbb",
+        "tail_body_sha256": "aa37d624037af50ad51ff43e3dd9c5ab5aa84271c56f65da2b6d65fc3a812dbb",
+        "tail_function": "host_actual_ihk_mc_event_update",
+        "tokens_except_whitespace_equal": true
+      },
+      {
+        "actual_function": "counter_bit",
+        "body_bytes_equal": false,
+        "original_body_sha256": "5e0cc86bd21a1310693228b32528f8aa8a76ce72fc4c41bea05c15f1df38c243",
+        "tail_body_sha256": "ac8370e8aadc884c8ed336b72c73936db197a0de771fca3497f332948455f932",
+        "tail_function": "counter_bit",
+        "tokens_except_whitespace_equal": true
+      }
+    ],
+    "no_hardware_instructions": "The selected tail contains only those original pure/noop bodies, constants and reexports. Original rdmsr/wrmsr/rdpmc/IRQ/GS/CPUID/native hardware paths are not appended or called by this component.",
+    "scope": "Existing pure legacy counter selector reads real Thread.pmc_alloc_map; no ownership reservation is fabricated. Actual hw_perf_event_init/set_period/event_update bodies are genuine selected no-op0 functions, not newly substituted success stubs. All four function bodies are byte-identical; counter_bit differs only formatting. Names are isolated for tracing only."
+  },
+  "reviewer": "/root/public_abi_join_max",
+  "reviewer_actions": "Named frozen component+eight pinned source/header byte reads and bounded actual type/function-body comparisons; private REVIEW write only. No Rust/compiler/test/import/module/fixture execution, no adapter/common/production/canonical edit or new scenarios, no recursive agents.",
+  "schema": "mckernel.perf.host-bindings.finite-ABI-effect-component-review.v1",
+  "seven_typed_exports": [
+    "f03_perf_event_layout_v1",
+    "f03_perf_counter_providers_v1",
+    "f03_perf_read_layout_v1",
+    "f03_perf_read_providers_v1",
+    "f03_perf_descriptor_layout_v1",
+    "f03_perf_mmap_binding_v1",
+    "f03_perf_allocation_binding_v1"
+  ],
+  "source_pins": [
+    {
+      "bytes": 1247778,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/syscall_policy.rs",
+      "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+    },
+    {
+      "bytes": 23378,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/f03_perf_owner/hardware.rs",
+      "sha256": "0d7ca949b101b3faa35eb18051bfa6d2e37fd1451db32c65d572c35ca49e4cf3"
+    },
+    {
+      "bytes": 4908,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/f03_perf_owner/runtime.rs",
+      "sha256": "667d4c3b39734879d6fad59480eb6861d91549fbfc055c01c8b95ff0e7c3bef1"
+    },
+    {
+      "bytes": 16866,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/x86_perfctr.rs",
+      "sha256": "f4d8351d685d1968b1902ed877ed52fe66b35093f2aed72a63a0c717b33a9379"
+    },
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 8775,
+      "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+    },
+    {
+      "bytes": 2397,
+      "path": "/home/holden/mckernel/lib/include/ihk/perfctr.h",
+      "sha256": "c075498676943becced5b999376d16f60f78e5a9c1d0098b2bf2c484d70eed47"
+    },
+    {
+      "bytes": 9548,
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    }
+  ],
+  "unit": {
+    "bytes": 22829,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/host_perf_bindings.rs",
+    "sha256": "1c86e16223732bd96aefb5743f42f91b38f630129fee139bd416acf1b16f36d1"
+  }
+}

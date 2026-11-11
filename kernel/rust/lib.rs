@@ -186,3 +186,9 @@ mod f06_prctl_log;
 mod f06_prctl_log_storage;
 #[cfg(f06_vdso_map_log_candidate)]
 mod f06_vdso_map_log;
+
+// Private perf owner candidate only; no CMake/default activation in this patch.
+#[cfg(f03_perf_owner_protocol)]
+pub(crate) use syscall_policy::f03_perf_owner;
+#[cfg(all(f03_perf_owner_protocol,not(all(target_arch="x86_64",enable_perf,f03_sync_child_event_candidate))))]
+compile_error!("managed perf ownership requires its genuine ordinary x86/perf/header provider profile");

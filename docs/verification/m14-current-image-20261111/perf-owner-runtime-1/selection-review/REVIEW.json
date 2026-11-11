@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "verdict": "GO_SELECTION_SOURCE_ONLY",
+  "at_utc": "2026-11-11T15:31:13.271249+00:00",
+  "reviewer": "/root/p04_source_max",
+  "source_author": "/root/p03_cutover_source_max",
+  "scope": "Independent material review of only the three additive CMake production-selection hunks and their exact bindings to the previously qualified 28 production files. Existing body/type/lifecycle evidence is reused; this review grants no execution or acceptance.",
+  "inputs": {
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 1816,
+      "sha256": "af879a714e265d158d6c21ed32012c099eac6b52dde2298abb4bc2f02f2a73a8"
+    },
+    "SOURCE-MANIFEST.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/SOURCE-MANIFEST.json",
+      "bytes": 26595,
+      "sha256": "6195c46405c0c6f9581b81d2a684671071d0badc48805e6ce05330c7fc73615a"
+    },
+    "SELECTION-CONTRACT.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/SELECTION-CONTRACT.json",
+      "bytes": 5008,
+      "sha256": "5ee007c24f01919e57ce376c1e2e4f30acfb220fe927d05cec03fe945658d67f"
+    },
+    "PERF-OWNER-SELECTION.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/PERF-OWNER-SELECTION.patch",
+      "bytes": 3492,
+      "sha256": "ca17e73d5dc9c94ac6ceee78767086632ba578613ecd26e70c06e14546c66cb0"
+    },
+    "PERF-OWNER-PRODUCTION-AND-SELECTION.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/PERF-OWNER-PRODUCTION-AND-SELECTION.patch",
+      "bytes": 294566,
+      "sha256": "034f4b33bc52039a6fd73de8b9615eaac01540264c5c66d6a8a34564f7635771"
+    }
+  },
+  "reused_actual_TYPE": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/escalation-events-1/actual-result-1/QUALIFICATION.json",
+    "bytes": 16047,
+    "sha256": "ed8ca29c5370dc005bd1e6bf957395a0966c13ed7fb61eb97f2972f888c11de1"
+  },
+  "reused_TYPE_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/COMPILED-SOURCE-MANIFEST.json",
+    "bytes": 45823,
+    "sha256": "0a69d59700266222c736dad72632d26be8f7aa68385d61245740774a273391c1"
+  },
+  "checks": {
+    "body_files_identical_to_actual_TYPE_manifest_and_overlay": 28,
+    "additional_selection_file": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 67075,
+      "sha256": "de2bcd1241ae01e5fcd2d7235d744e518fb3963df17e692bfbc5f035bc4744c1"
+    },
+    "canonical_CMake_preimage": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 64654,
+      "sha256": "c4d8002f088ccf7f2be54899d811e247a40e587b3391e2778efa8b95f13015df"
+    },
+    "canonical_existing_preimages_match": 10,
+    "new_paths_absent_in_canonical": 19,
+    "selection_patch_reconstructs_one_CMake_candidate_in_memory": true,
+    "full_patch_reconstructs_all29_candidates_in_memory": true,
+    "only_three_additive_CMake_hunks": true,
+    "selector_initially_reset_OFF": true,
+    "enclosing_condition": "ENABLE_RUST_KERNEL AND ARCH STREQUAL x86_64",
+    "exact_predicate": "MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND\n            MCKERNEL_DO_FORK_SELECTED AND MCKERNEL_DO_SYSCALL_OUTER_SELECTED AND\n            MCKERNEL_WAIT_HOST_PROVIDER_SELECTED AND MCKERNEL_TERMINATE_HOST_PROVIDER_SELECTED AND\n            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD",
+    "qualified_profile_requires": [
+      "Rust kernel",
+      "x86_64",
+      "linux-6.12 IRQ ABI",
+      "!UBSAN",
+      "PROFILE",
+      "PERF",
+      "RUSAGE",
+      "Linux WORKIRQ",
+      "!TOFU",
+      "!Fugaku",
+      "!broad M14 adapters",
+      "!experimental signal",
+      "whole F06 ON",
+      "current do_fork/outer/wait/termination providers",
+      "!owned-fork transaction",
+      "!DCFA"
+    ],
+    "single_added_Rust_cfg": "f03_perf_owner_protocol",
+    "exact19_source_dependencies": [
+      "kernel/rust/f03_perf_owner.rs",
+      "kernel/rust/f03_perf_owner/callbacks.rs",
+      "kernel/rust/f03_perf_owner/copy_borrows.rs",
+      "kernel/rust/f03_perf_owner/descriptors.rs",
+      "kernel/rust/f03_perf_owner/entry.rs",
+      "kernel/rust/f03_perf_owner/events.rs",
+      "kernel/rust/f03_perf_owner/fork_copy.rs",
+      "kernel/rust/f03_perf_owner/forward_gate.rs",
+      "kernel/rust/f03_perf_owner/groups.rs",
+      "kernel/rust/f03_perf_owner/hardware.rs",
+      "kernel/rust/f03_perf_owner/lifecycle.rs",
+      "kernel/rust/f03_perf_owner/maps.rs",
+      "kernel/rust/f03_perf_owner/monitors.rs",
+      "kernel/rust/f03_perf_owner/process_targets.rs",
+      "kernel/rust/f03_perf_owner/runtime.rs",
+      "kernel/rust/f03_perf_owner/target_process.rs",
+      "kernel/rust/f03_perf_owner/terminal.rs",
+      "kernel/rust/f03_perf_owner/thread_counters.rs",
+      "kernel/rust/f03_perf_owner/transactions.rs"
+    ],
+    "existing_real_Rust_command_consumes_cfg_and_dependencies": true,
+    "paired_C_macro": "MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL",
+    "paired_C_source": "kernel/syscall.c",
+    "paired_macro_APPENDED_after_all_base_source_properties": true,
+    "other_CMake_bytes_and_prior_selections_unchanged": true,
+    "new_option_cache_default_flag_or_command_extra": false,
+    "HOST_fixture_or_lower_effect_module_in_production_sources": false
+  },
+  "entry_pairing": [
+    {
+      "name": "perf_event_open_do_syscall_bridge",
+      "selected_C": "extern long (struct syscall_request *, int); full original static definition remains in else",
+      "selected_Rust": "no_mangle unsafe extern C (*mut SyscallRequest,CInt)->CLong calling genuine do_syscall"
+    },
+    {
+      "name": "sys_perf_event_open",
+      "selected_C": "extern long (int,ihk_mc_user_context_t *); complete original C definition remains in else",
+      "selected_Rust": "no_mangle unsafe extern C (CInt,*mut X86UserContext)->CLong calling real validation helper and managed transaction",
+      "header_participation": "actual C 12-word constants record retained; emitted equality/type/provider/image proof still required"
+    }
+  ],
+  "findings": [],
+  "decision": "No material defect identified in this bounded selection-source change. It may be integrated only by Root after the remaining actual runtime/material gates, then consumed by a separately reviewed and admitted source-bound normal-image operation.",
+  "pending_gates": [
+    "Actual four-family runtime PASS and applicable independent material review",
+    "Root actual canonical commit and 29 exact postimages, dirty-work and IHK preservation",
+    "Concrete image operation/profile GO and fresh shared admission",
+    "Actual Rust owners, matching C exclusions, C/Rust ABI/constants/provider/link/cleanup and observed complete C ledger",
+    "Original DEFAULT/FUNCTIONAL/native/parent criteria at their exact scope"
+  ],
+  "preserved": {
+    "canonical_unselected_state": true,
+    "unsupported_and_held_profiles_excluded": true,
+    "existing_exec_util_C_debt_and_all_holds": true,
+    "C6_to_C4_is_prediction_only": true
+  },
+  "reviewer_actions": {
+    "only_read_source_and_saved_evidence_and_wrote_this_private_review": true,
+    "CMake_compiler_helper_test_image_or_native_executed": false,
+    "candidate_canonical_cache_index_or_live_state_changed": false
+  }
+}

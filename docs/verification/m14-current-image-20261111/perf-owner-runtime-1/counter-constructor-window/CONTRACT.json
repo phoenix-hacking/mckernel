@@ -1,0 +1,121 @@
+{
+  "status": "ONE_BOUNDED_TEST_ONLY_CONSTRUCTOR_VS_SCHEDULER_ORACLE_CORRECTION_NOT_EXECUTED",
+  "at_utc": "2026-11-11T15:02:32.664540+00:00",
+  "author": "p03_cutover_source_max",
+  "preserved_failed_candidate": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/counter-epoch-oracle-correction-1/baseline/counter_epoch_family.rs",
+    "bytes": 25898,
+    "sha256": "b4c1a7f0d9f9b8bfd9e3d81dd9c270be767e528577682eeddd0c38db1bec6053"
+  },
+  "original_unchanged_path": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/counter_epoch_family.rs",
+    "bytes": 25898,
+    "sha256": "b4c1a7f0d9f9b8bfd9e3d81dd9c270be767e528577682eeddd0c38db1bec6053"
+  },
+  "independent_case_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-runtime-family-source-review-sourceacq-max-1/REVIEW.json",
+    "bytes": 13824,
+    "sha256": "05ca20ba85c80b1a9951c9d90165acc376eab9669fb718e4a978828476c6a673"
+  },
+  "actual_frozen_constructor_source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/syscall_policy.rs",
+    "bytes": 1247778,
+    "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+  },
+  "constructor_function": "perf_event_alloc_init_body_result",
+  "real_same_endpoint": "Allocation and counter-control atomic_set both point to sync_child_count_set_bridge; no endpoint distinction introduced.",
+  "exact_observation_boundaries": [
+    "Hook records effects::perf_trace().len() immediately BEFORE and AFTER the actual open_for call; no trace reset/filter/suppression occurs inside the hook.",
+    "Same complete effect trace is cloned immediately after actual lifecycle::switch_monitor returns and before subsequent close/retirement cleanup.",
+    "Actual late.count and late.hw.period_left addresses come from the genuine late EventPin typed FullMcPerfEvent, not invented offsets or addresses.",
+    "All AtomicSet effects remain present. Late target stores inside the measured real open window must match constructor goldens; late target stores outside that window in the switch trace fail the scheduler oracle.",
+    "InitRaw, CounterStart and original two-event reset stores remain traced/verified without provider replacement or hiding constructor calls."
+  ],
+  "literal_attribute_inputs": {
+    "frequency": 0,
+    "sample_period": 0,
+    "unchanged_type": "RAW",
+    "unchanged_config": 1,
+    "inherit_flag_bit": 1
+  },
+  "constructor_golden_rows": [
+    {
+      "field": "late.count",
+      "operation": "AtomicSet",
+      "value": 0,
+      "ordinal": 0
+    },
+    {
+      "field": "late.hw.period_left",
+      "operation": "AtomicSet",
+      "value": 0,
+      "ordinal": 1
+    }
+  ],
+  "new_scalar_expected_fields": {
+    "late_constructor_window_valid": true,
+    "late_constructor_atomic_writes": 2,
+    "late_constructor_atomic_values": [
+      0,
+      0
+    ],
+    "late_constructor_count_then_period_order": true
+  },
+  "renamed_scalar_field": {
+    "old": "no_late_member_reset_or_init",
+    "new": "no_late_member_scheduler_reset_or_init",
+    "expected": true
+  },
+  "critical_effect_tags": {
+    "0": "old leader reset count0",
+    "1": "HookFired",
+    "6": "actual late constructor count0",
+    "7": "actual late constructor period_left0",
+    "2": "old member reset count0",
+    "3": "old leader InitRaw-71",
+    "4": "old member InitRaw0",
+    "5": "aggregate CounterStart actual Actor map"
+  },
+  "critical_literal_order": [
+    0,
+    1,
+    6,
+    7,
+    2,
+    0,
+    2,
+    3,
+    4,
+    5
+  ],
+  "all_other_ownership_callers_inputs_goldens_and_source_unchanged": true,
+  "test_source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/counter-epoch-oracle-correction-1/counter_epoch_family.rs",
+    "bytes": 29192,
+    "sha256": "927006d9f4d4facc613311796fe41d1ed45b00b03e6631c0e895a078ef1c8981"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/counter-epoch-oracle-correction-1/COUNTER-ORACLE-CORRECTION.patch",
+    "bytes": 10164,
+    "sha256": "f765dc8a8cfc120bab2d066236bc169d8c2c2f13d649b7a3a8abcc55910657e1"
+  },
+  "bounded_edit_groups": [
+    "constructor-observation-fields",
+    "literal-constructor-goldens",
+    "actual-open-boundary-storage",
+    "measure-real-call-boundaries",
+    "pin-literal-existing-attribute-input",
+    "initialize-observation-boundaries",
+    "bound-switch-observation-before-cleanup",
+    "actual-typed-period-address",
+    "classify-without-removing-trace-effects",
+    "observe-constructor-count-and-period-not-forbidden-reset",
+    "serialize-actual-constructor-values",
+    "serialize-constructor-fields",
+    "literal-complete-critical-order-includes-constructor"
+  ],
+  "production_common_provider_or_other_family_edits": false,
+  "compiler_runtime_native_or_control_execution": false,
+  "typecheck_and_runtime_result_unproved": true,
+  "next": "P04Tests binds corrected actual file/four new fields/one renamed field to common serializer. SourceAcq focused review of this sole correction. Root alone admits compilation/runtime after actual remaining gates."
+}
