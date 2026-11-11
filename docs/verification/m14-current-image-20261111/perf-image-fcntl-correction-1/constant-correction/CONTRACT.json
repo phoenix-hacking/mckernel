@@ -1,0 +1,124 @@
+{
+  "status": "ONE_BOUNDED_GENUINE_FCNTL_CONSTANT_SOURCE_BINDING_CORRECTION_NOT_EXECUTED",
+  "at_utc": "2026-11-11T15:53:28.011377+00:00",
+  "author": "p03_cutover_source_max",
+  "basis_actual_failed_source_commit": "afb1fced3e3b1ec7d27a5539e085be5f6b841dc6",
+  "actual_failed_request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/REQUEST.json",
+    "bytes": 29087,
+    "sha256": "766ec460085252c2dbfd5f7b16cbed668ddd1a97d740cdeeb0b38c96f666c18b"
+  },
+  "actual_failed_source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/SOURCE-BINDINGS.json",
+    "bytes": 10866,
+    "sha256": "25bfa813ff1ab8bbfb7ce0aaa296c86328f38f0b2cd51a82d54c919abc13cdcf"
+  },
+  "actual_failed_RESULT": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/execution-1/RESULT.json",
+    "bytes": 13683,
+    "sha256": "f595c49a2b4c5f17bfc299646ea62c552932fd56a5502d9b25a7f9815143a53a"
+  },
+  "full_failed_stderr": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/execution-1/build-payload.stderr",
+    "bytes": 80071,
+    "sha256": "61b034377e76131831eb4636725c02213c752e76765929fd8df5fcb2a913a5ee"
+  },
+  "retained_exact_diagnostic_excerpt": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/actual-failed-diagnostic.stderr",
+    "bytes": 383,
+    "sha256": "754ece66529367ab81a2df081f88b9163ecc393f1933f7e69be6f3f753ca624c"
+  },
+  "actual_failure": "C compile after successful full production Rust object; new C96B/12word entry table named F_SETSIG which selected McKernel headers do not declare. This is an ordinary new data-initializer binding defect, not an ownership/runtime/provider failure.",
+  "logical_vs_physical_location": {
+    "compiler_logical": "kernel/syscall.c:21478:48 under preserved #line",
+    "physical_source_line": 22436,
+    "actual_symbol": "f03_perf_owner_entry_constants_v1[12]",
+    "rule": "No #line/source body movement or diagnostic source rewriting."
+  },
+  "authoritative_definition": {
+    "actual_header": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/uapi/asm-generic/fcntl.h",
+      "bytes": 5594,
+      "sha256": "0908276bc4c3da9314d4986bd07c19f9ce8f403f602d40a8be0599249db95515"
+    },
+    "definition": "#define F_SETSIG 10",
+    "line": 114,
+    "scope": "Matching retained actual Linux6.12 UAPI; read-only evidence, not a new include/import or provider change."
+  },
+  "existing_selected_contract": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 967619,
+        "sha256": "ba41f4428674275ed0d73c6a7d54d08e48249af4d7920fd9bd7390b264e2dd40"
+      },
+      "caller": "original perf_fcntl fallback",
+      "exact_argument": "10, 0xf, __builtin_offsetof(struct mckfd, sig_no)",
+      "meaning": "Original set_sig_cmd10 and setown_ex15; original callback/context/forward semantics untouched."
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1247778,
+        "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+      },
+      "caller": "f03_perf_descriptor_entries_v1::f03_perf_fcntl_v1",
+      "exact_argument": "10, 0xf, offset_of!(Mckfd, padding), f03_perf_descriptor_layout_v1.forward"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/f03_perf_owner/callbacks.rs",
+        "bytes": 12467,
+        "sha256": "b15c4f8af18fe5f466fe248a2af9f6e77dc86b10a07dc3e8470b13ff45e8b160"
+      },
+      "caller": "new managed callbacks::fcntl",
+      "exact_condition": "if command==10",
+      "meaning": "Same original signal-number command; original P-protected field update and existing forward call unchanged."
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/f03_perf_owner/entry.rs",
+        "bytes": 4579,
+        "sha256": "4e5c66ebc689bfc0b61acd5212b66a4b686a25babb5be7fb42a3ef61d9d21bf0"
+      },
+      "caller": "new production entry::sys_perf_event_open",
+      "exact_condition": "constants[11]!=10",
+      "meaning": "Existing typed entry already checks this exact original contract value; Rust bytes unchanged."
+    }
+  ],
+  "exact_source_change": {
+    "from": " 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,F_SETSIG,",
+    "to": " 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,10, /* original perf_fcntl set_sig_cmd */",
+    "changed_occurrences": 1,
+    "changed_lines": 1,
+    "reason": "Use the existing source/header-proven original literal in this new table; do not assume a Linux UAPI macro is imported into the separate McKernel include domain."
+  },
+  "no_numeric_guess_or_fake_ABI": true,
+  "no_new_header_include_macro_provider_namespace": true,
+  "constant_table_words_and_type_unchanged": {
+    "words": 12,
+    "C_type": "const unsigned long[12]",
+    "bytes_on_qualified_LP64": 96,
+    "intended_word11_value": 10
+  },
+  "all_other_C_bytes_and_all_Rust_KCMake_headers_production_bodies_runtime_inputs_unchanged": true,
+  "failed_cohort_preserved": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/baseline/kernel/syscall.c",
+    "bytes": 967619,
+    "sha256": "ba41f4428674275ed0d73c6a7d54d08e48249af4d7920fd9bd7390b264e2dd40"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/candidate/kernel/syscall.c",
+    "bytes": 967651,
+    "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/PERF-FCNTL-CONSTANT-BINDING.patch",
+    "bytes": 545,
+    "sha256": "6fbd4c86e1d595e9122b7b23ce62a671a7dc8f3d6d827871529076269086d3b9"
+  },
+  "actual_Rust_TYPE_and_four_family_runtime_reused": "Exact unchanged production Rust bytes; no wholeRust metadata/HOST family replay. Existing failednormal build produced real Rust object before C failure; normal dependency graph determines necessary work after reviewed new input.",
+  "next": "PublicABI focused constant/type/scope review; Root alone integrates one reviewed C line, binds genuine actual commit/source readback, and admits only necessary failed normal image check in separately reviewed successor. No unchanged retry or test suite replay.",
+  "CMake_compiler_test_image_native_or_canonical_execution_by_preparer": false,
+  "no_original_acceptance_C_retirement_or_hold_release": true
+}

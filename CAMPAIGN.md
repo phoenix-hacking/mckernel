@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T15:41:37.909787+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T15:56:09.014836+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,7 +14,7 @@ open at their original scope. Four accepted M14 files and accepted M15-F01 remai
 closed. Original criteria/weights/denominators and M14-before-M15 acceptance
 are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
 PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
-Last source/results checkpoint66e7c671 is pushed/fetched85ownedblobs; all33
+Last source/results checkpointafb1fced is pushed/fetched195ownedblobs; all33
 unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
@@ -71,15 +71,24 @@ actualkernelPMU/native and historicalUNKNOWN limits stay explicit. First runtime
 compilec8eb/afb4/nineerrors/no case remains preserved; bounded fixture961f fixes
 only exact missing aliases/ENOENT, resetconstant/shadow and Vm.proc pointer types.
 WholeTYPEed8ca/three earliercompiler attempts remain reused, no metadata replay.
-Root integrated all29 exact production/selection paths fromaf879/6195/034f after
+Root integrated/committed/pushed afb1fced all29 exact production/selection paths
+fromaf879/6195/034f after
 sourceGO4900df73 and runtimeGO26bfc, with all33unrelateddirtypaths preserved;
 integration7c08eca7. This changes source selection only: actual new image,
 providers/C exclusions/originalDEFAULT are still pending. P03 normal74fe image/
 affected-reader proposal28ab has independent conditional operationGOc6f842cb:
 normal17mount/CPU6/2GiBproducer and separately admitted26passivereads/512MiB.
-Next: bind actual canonical commit and qualifiedruntime/source/current-owner
-inputs into final reviewed operation, admit and run the normalincremental
-mckernel.img target once, then reader after positive producer retirement.
+Actual commit-bound producer766ec/operationGO496a ran15:49:38–15:50:03Z.
+Rustproduction object compiled, then C syscall compilation failed on genuine
+F_SETSIG undeclared at reported21478. Resultf595c49a/stderr61b03437/fullRoot
+2d28cd7d retain the exact sourceafb1/profile/command; exit2/Pid0/nonOOM/CID2ccb
+removed, alltooloutput preserved. SourceAcqbb64 qualified11clients/current2GiB;
+Root retired only that charge in4d7d53db. One-line originalF_SETSIG=10 correction
+84b98/6fbd has independent sourceGOe00af192: matchingLinux6.12header and existing
+C/Rustcallers alluse10; allotherCbytes/linecounts/Rustbodies/oracles unchanged.
+Root integrated exact9f5aa63d. Next: bind a fresh normal producer successor to
+actualcommit and rerun affected compilation;
+reader only after producerPASS/positive retirement. No green runtime replay.
 Require actual unique Rust perf owners, pairedC exclusions, allrequiredABI104/
 callback/lowerproviders/zero strongUND/LOAD/newentry/currentCledger and cleanup,
 followed by independent whole original03-05 decision. SourceGOs/HOST PASS alone

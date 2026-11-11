@@ -1,0 +1,125 @@
+{
+  "actual_existing_caller_joins": [
+    {
+      "caller": "original perf_fcntl fallback",
+      "exact_existing_contract": "10, 0xf, __builtin_offsetof(struct mckfd, sig_no)",
+      "source": {
+        "bytes": 967619,
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "ba41f4428674275ed0d73c6a7d54d08e48249af4d7920fd9bd7390b264e2dd40"
+      }
+    },
+    {
+      "caller": "f03_perf_descriptor_entries_v1::f03_perf_fcntl_v1",
+      "exact_existing_contract": "10, 0xf, offset_of!(Mckfd, padding), f03_perf_descriptor_layout_v1.forward",
+      "source": {
+        "bytes": 1247778,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+      }
+    },
+    {
+      "caller": "new managed callbacks::fcntl",
+      "exact_existing_contract": "if command==10",
+      "source": {
+        "bytes": 12467,
+        "path": "/home/holden/mckernel/kernel/rust/f03_perf_owner/callbacks.rs",
+        "sha256": "b15c4f8af18fe5f466fe248a2af9f6e77dc86b10a07dc3e8470b13ff45e8b160"
+      }
+    },
+    {
+      "caller": "new production entry::sys_perf_event_open",
+      "exact_existing_contract": "constants[11]!=10",
+      "source": {
+        "bytes": 4579,
+        "path": "/home/holden/mckernel/kernel/rust/f03_perf_owner/entry.rs",
+        "sha256": "4e5c66ebc689bfc0b61acd5212b66a4b686a25babb5be7fb42a3ef61d9d21bf0"
+      }
+    }
+  ],
+  "authoritative_header_join": {
+    "actual_header": {
+      "bytes": 5594,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/include/uapi/asm-generic/fcntl.h",
+      "sha256": "0908276bc4c3da9314d4986bd07c19f9ce8f403f602d40a8be0599249db95515"
+    },
+    "exact_definition": "#define F_SETSIG\t10\t/* for sockets. */",
+    "line": 114,
+    "meaning": "Actual retained matching Linux6.12 x86/Linux UAPI defines F_SETSIG10. This is data evidence only, not a new include domain, header/sysroot/provider dependency or a guessed numeric API."
+  },
+  "baseline": {
+    "bytes": 967619,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/baseline/kernel/syscall.c",
+    "sha256": "ba41f4428674275ed0d73c6a7d54d08e48249af4d7920fd9bd7390b264e2dd40"
+  },
+  "candidate": {
+    "bytes": 967651,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/candidate/kernel/syscall.c",
+    "sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e"
+  },
+  "contract": {
+    "bytes": 6874,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/CONTRACT.json",
+    "sha256": "724ec20de6cbe196fb973b4311e077bee1fca74e1dfc05374ad35545e45795e7"
+  },
+  "decision": "GO_ONE_LINE_GENUINE_CONSTANT_BINDING_ONLY_PENDING_NORMAL_IMAGE_COMPILER",
+  "failed_actual_input": {
+    "diagnostic": "/src/kernel/syscall.c:21478:48: error: 'F_SETSIG' undeclared here (not in a function)",
+    "location": "Logical21478 maps via preserved#line to physical22436, finalword11 of f03_perf_owner_entry_constants_v1[12]. The newly selected C data word assumes an unimported Linux macro; the actual original C command contract was already literal10.",
+    "raw_stderr": {
+      "bytes": 80071,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/execution-1/build-payload.stderr",
+      "sha256": "61b034377e76131831eb4636725c02213c752e76765929fd8df5fcb2a913a5ee"
+    },
+    "request": {
+      "bytes": 29087,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/REQUEST.json",
+      "sha256": "766ec460085252c2dbfd5f7b16cbed668ddd1a97d740cdeeb0b38c96f666c18b"
+    },
+    "result": {
+      "bytes": 13683,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/execution-1/RESULT.json",
+      "sha256": "f595c49a2b4c5f17bfc299646ea62c552932fd56a5502d9b25a7f9815143a53a"
+    },
+    "source_commit": "afb1fced3e3b1ec7d27a5539e085be5f6b841dc6"
+  },
+  "holds": "All source/native/resource/ownership/UNKNOWN and prior acceptance scopes unchanged; Root sole canonical compositor/executor with fresh reviewed operation admission.",
+  "literal_source_delta": {
+    "all_Rust_CMake_profiles_oracles_and_other_sources_unchanged_by_this_patch": true,
+    "all_line_directive_lines_identical": true,
+    "all_other_C_bytes_identical": true,
+    "canonical_preimage_still_matches_failed_baseline": true,
+    "changed_source_lines": 1,
+    "from": " 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,F_SETSIG,",
+    "full_line_count_equal": true,
+    "no_new_include_macro_or_header_binding": true,
+    "occurrences": 1,
+    "to": " 1UL<<63,__NR_perf_event_open,IHK_MC_AP_NOWAIT,10, /* original perf_fcntl set_sig_cmd */"
+  },
+  "material_findings": [],
+  "necessary_next_regression": {
+    "action": "Root may integrate/publish ONLY this exact C-line correction after rechecking ba41 preimage; bind the real new source/commit into separately reviewed fresh normal mckernel.img operation. The next necessary normal compiler is the focused regression for the exact failed C check.",
+    "owner": "Root with SDK normal-image operation owner",
+    "reuse": "Reuse the successful full production Rust compile/object and all18 actual HOST/unit greens at exact matching scope. Do not manually rerun unchanged suites/providers/ABI metadata or the old failing source. The normal build dependency graph decides necessary object work.",
+    "still_unproved": "No C/image compiler/link/actual artifact result from candidate9f5 is claimed; any new failure is retained and repaired as its actual family. Source-only GO grants no C retirement, wholeDEFAULT/FUNCTIONAL/native or milestone credit."
+  },
+  "patch": {
+    "bytes": 545,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/PERF-FCNTL-CONSTANT-BINDING.patch",
+    "sha256": "6fbd4c86e1d595e9122b7b23ce62a671a7dc8f3d6d827871529076269086d3b9"
+  },
+  "reviewed_ready": {
+    "bytes": 2087,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-fcntl-constant-binding-correction-p03-max-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "84b98d76de1f88d3ba0686c4c85da8b9ae66302ed7fe124e97b5b8dbdbb789f3"
+  },
+  "reviewer": "/root/public_abi_join_max",
+  "reviewer_actions": "Exact candidate/baseline/contract/raw failure/header/caller byte reads and pure one-line/#line/source comparison; exclusive private REVIEW write only. No preprocessor/compiler/HOST/runtime/native/source import or command execution; no canonical/adapter/oracle/source edits or recursive agents.",
+  "schema": "mckernel.perf.first-image-fcntl-source-constant-review.v1",
+  "type_and_value_join": {
+    "actual_production_meaning": "Unchanged original C perf_fcntl passes set_sig_cmd10; genuine Rust f03_perf_fcntl_v1 passes10; new managed callbacks::fcntl compares command10. No fcntl argument/body/forwarding/lifetime/ownership/error/oracle behavior changes.",
+    "selected_type": "Qualified LP64 unsigned long/actual ff48 CULong=u64, 12words/96B. Value10 is exactly representable; same exported symbol/word index and existing Rust constants[11]!=10 guard.",
+    "selection": "Only the new immutable constants array inside MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL changes. All cfg/selection/C fallback and other11 constants stay byte-identical.",
+    "unchanged_C_declaration": "const unsigned long f03_perf_owner_entry_constants_v1[12]"
+  }
+}
