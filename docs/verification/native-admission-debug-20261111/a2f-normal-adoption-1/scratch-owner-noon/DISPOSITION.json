@@ -1,0 +1,34 @@
+{
+  "status": "READONLY_DISPOSITION_COMPLETE_OPERATOR_ACTION_REQUIRED_NO_AUTHORIZED_PROVISIONING_ENDPOINT_OR_GRANT_SUPPLIED",
+  "at": "2026-11-11T19:16:34.200164+00:00",
+  "owner": "/root/p03_cutover_source_max",
+  "actual_observation": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-owner-noon-disposition-p03-max-1/OBSERVATION.json",
+    "bytes": 2252,
+    "sha256": "d8ca247a3cddac5c6d00c5d533498da3b16f3745d25f25610fd8502af4d3c5df"
+  },
+  "existing_known_interfaces": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-owner-noon-disposition-p03-max-1/EXISTING-OWNER-INTERFACES.json",
+    "bytes": 5083,
+    "sha256": "b030874ad0316f6bc668a0f7a1911a2703a173711e678efee9caf9912a2566b7"
+  },
+  "minimum_single_operator_request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-owner-noon-disposition-p03-max-1/MINIMUM-OPERATOR-REQUEST.json",
+    "bytes": 6715,
+    "sha256": "52297a2ac208edc5c5ed976ab12a18f2e950478f574f2c18367d8e61188063d6"
+  },
+  "exact_parent_binding_disposition": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-owner-noon-disposition-p03-max-1/SCOPED-PARENT-BINDING-DISPOSITION.json",
+    "bytes": 3207,
+    "sha256": "f0c6d66c6c858b3d9eb9a97ed4b6a3404d93009f64e2d3d37a19d930aa04018d"
+  },
+  "current_a2f_handoff": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/FUNCTIONAL-HANDOFF.SOURCE-ONLY.json",
+    "bytes": 40040,
+    "sha256": "4baab82d569d97f11d5a6b69f4e26dc1bd8fb4ceeb6eb9cd9d21c6b217dd41fc"
+  },
+  "suggested_substantive_PR3_reply_for_Root_only": "Workstation-operator action is required for staging. Current canonical /home/holden/mckernel-work/scratch is UID0:0 mode0755 (dev66306/inode49551073); UID1000 can search but cannot create. The registered /dev/loop44 view at scratch-readonly-20261105 remains ro and is a different identity. No authorized staging-parent provisioning endpoint or returned grant exists in the established records/current known source; Scratch21 cleanup/read-only inspectors are not such grants. Please have the UID0 filesystem/mount operator provide /home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent as a canonical UID1000:1000 mode0700 parent in the intended namespace, with1GiB output planning space above host16GiB/scratch12GiB floors. Preserve the exact loop44 RO mapping and every Scratch21 old object/hold. Return the actual namespace/mount/dev/inode/UID/mode/effective-access/capacity and explicit scoped grant readback; leave native-signal-c964-a2f00a61-stage-20261111-1 beneath it absent. The existing stager supports that parent, but Root must review a new exact --output/parent-identity binding; the frozen a2f command cannot silently use it. No staging/permission/native action or release was performed.",
+  "no_PR3_or_other_message_sent_by_preparer": true,
+  "no_sudo_remount_chmod_chown_elevation_alternate_path_creation_or_rejected_payload_retry": true,
+  "all_preserved_owners_UNKNOWNs_and_goal_credit_controls_unchanged": true
+}

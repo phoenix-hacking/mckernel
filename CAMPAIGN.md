@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T18:28:13.998799+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T19:19:44.860313+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -111,7 +111,42 @@ SDK now prepares only the exact changed normal fixed30 adoption source/input
 proposal: new catalogue/SOURCE_DIR/installer/phase0/completion/waiter/source-profile
 bindings, with genuine authority/nonce/inode/effective-view outputs left unissued.
 Root alone composes/adopts later after review; no new issuer or installed edit.
+PublicABI owns the specific future-generation strict completion/readback contract;
+SourceAcq reviews SDK changed30-source/hash-chain and exact normal operation as frozen.
+Old2c4c/ee63/eba51 UNKNOWN disposition stays bound ONLY to that generation. A
+successor requires its own positive producer/caller/lease/Root/client/stream closure
+and UID1000 physical30-file proof. Nonce/inode/issuer/effective-view outputs stay
+unissued until actual reviewed Root admission; no stale-digest substitution.
+SDK source8529/3be2 has independentGO4297. Original concrete Ocb110/4b900
+was rejected17962 before execution: operative RESOURCE wait_literalda47/EXPECTED8076
+mismatched selectedc06f/EXPECTEDab752. OriginalO stays intact. Fresh correction-1
+2f652/a82d selects actual resourcef670/c06 at its real newHERE; callerddfb/wrapper229c/
+profile5f13 and derived pins preserve all12 algorithm/observer bodies. SourceAcq
+sourceGO7848 reviewed that exact chain. P04Tests826b/operationGO6709 ran19:01:26Z:
+both actual-supervise external rows PASS; modeledUNKNOWN/releasefalse retained,
+one real family/fullRoot7c96 joined/current256MiB retired dd0d; independentQ7f106
+joins all17pins/8function transfer. Strict reader d2e/396201 has conditionalGOaed6.
+Final normal9fieldGO2696/detailed2ed6 allowed one actual fresh admission attempt.
+Wrapper229c then exited1 before any nonce/caller/sudo/Rootrole/install/lease:
+line131 compared fresh eventprimary to a controller state read before event scan.
+Rawfailure d51e/failedrecord63c0 and all7 absent outputs remain intact. Independent
+preissueQ8cf3 proves complete process scope; Root cancelled ONLY plannedCPU6/2GiB/
+job in ec7c. No account/credit/window checks after131 are claimed proved. SDK
+now diagnoses exact event/state scope+ordering; primary equality/25s/currentgoal/
+owner/service/SAMEfinitecredit guards stay intact. SourceAcq independently reviews
+one meaningful private successor; no blind229c retry or stale status/account reset.
 [Reviewed candidate and actual HOST result](docs/verification/native-admission-debug-20261111/a2f-cohort-binding-1/PUBLICATION-SCOPE.json).
+
+P03 noon disposition9c4b confirms no callable authorized provisioner in the5
+established interfaces: workstation-operator action is required. One minimum
+request52297 asks for canonical scoped parent
+`/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent`,
+UID1000:GID1000/0700/create-search and1GiB reserve above host16/scratch12 floors,
+with actual namespace/mount/dev/inode/UID/mode/access/capacity receipt. Preserve
+Scratch21 exact oldobjects and ROloop44/mount974 mapping; final stage output stays
+absent. Existing stager supports scoped parent, but frozen a2f4baab/58043 --output
+needs an explicit reviewed parent/identity binding successor after a genuine grant.
+No sudo/permission/remount/alternate-path fallback or operator action occurred.
 
 **Separate actual native prerequisites:** Owner-scoped writable staging parent
 is still missing: selected parentUID0/0755 is not UID1000 writable; one exact request

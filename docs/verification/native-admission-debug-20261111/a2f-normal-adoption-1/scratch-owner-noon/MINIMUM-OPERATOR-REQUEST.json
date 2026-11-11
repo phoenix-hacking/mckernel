@@ -1,0 +1,111 @@
+{
+  "schema": "mckernel.minimum-workstation-scratch-owner-request.v1",
+  "related_request": "6790932995 existing pending scratch permission request; this is one substantive bounded followup, not a duplicate issue",
+  "noon_request": "MCKERNEL-NOON-BLOCKER-FOLLOWUP-20261111T1909Z",
+  "requester": "Root sole integration/PR3 reply owner",
+  "responsible_operator": "Workstation operator administering the UID0-owned filesystem and mount namespace at /home/holden/mckernel-work/scratch",
+  "operator_action_required": true,
+  "existing_authorized_callable_endpoint_or_returned_grant_available": false,
+  "single_minimum_request": "Provide one explicitly authorized canonical scoped staging parent for the current c964/a2f image, with UID1000 create/search access, while keeping every preserved Scratch21/RO object and hold intact; do not precreate the final stage output.",
+  "intended_namespace": {
+    "current_consumer_mount_namespace": "mnt:[4026531841]",
+    "canonical_Scratch_ancestor": "/home/holden/mckernel-work/scratch",
+    "current_ancestor_identity": {
+      "path": "/home/holden/mckernel-work/scratch",
+      "device": 66306,
+      "inode": 49551073,
+      "UID": 0,
+      "GID": 0,
+      "mode": "0o755",
+      "type": "directory",
+      "symlink": false,
+      "access_W": false,
+      "access_X": true,
+      "available_bytes": 121299435520,
+      "exact_mount_rows": []
+    },
+    "requested_parent": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent",
+    "requested_parent_UID": 1000,
+    "requested_parent_GID": 1000,
+    "requested_parent_mode": "0700",
+    "required_effective_access": "UID1000 needs search on all ancestors and read/write/search on this one scoped parent to create/own the fresh0700 final output. No broad write grant on existing Scratch root, no access change to old objects.",
+    "workstation_owner_must_confirm_intended_filesystem": "Supply actual authoritative source/device/UUID/fstype/mount identity for the intended writable canonical parent in the real Root/executor namespace. Current canonical directory66306 is not the registered preserved loop44 view; a pathname alone cannot resolve that mismatch. This request authorizes no remount or alternate-path action by the agents.",
+    "output_must_remain_absent": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1"
+  },
+  "capacity_scope": {
+    "purpose": "Only existing a2f stage:43 real base files81798929B+21dirs plus actual base/archive/overlay/materialization receipts. No build/native execution.",
+    "required_new_output_planning_bytes": 1073741824,
+    "retain_host_free_floor_bytes": 17179869184,
+    "retain_scratch_free_floor_bytes": 12884901888,
+    "fresh_capacity_receipt_required_on_actual_selected_filesystem": true,
+    "memory_CPU_or_native_release_or_new_job_grant": false,
+    "later_staging_execution": "Root separately reviews/admit exact CPU0/AS1GiB/wall300 existing profile inside HOST4GiB/max3/fresh26GiB/all overhead; this filesystem request does not grant that operation."
+  },
+  "protected_scope": {
+    "preserved_RO_view": {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105",
+      "device": 1836,
+      "inode": 2,
+      "UID": 1000,
+      "GID": 1000,
+      "mode": "0o700",
+      "type": "directory",
+      "symlink": false,
+      "access_W": false,
+      "access_X": true,
+      "available_bytes": 47613485056,
+      "exact_mount_row": "974 29 7:44 / /home/holden/mckernel-work/scratch-readonly-20261105 ro,nosuid,nodev,relatime shared:623 - ext4 /dev/loop44 ro,norecovery"
+    },
+    "registered_volume_source": "/dev/loop44",
+    "registered_volume_device": "7:44",
+    "registered_mount_id": 974,
+    "registered_old_UUID": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "Scratch21_checkpoint": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch21-build-failure-checkpoint-20261001.json",
+      "bytes": 3895,
+      "sha256": "905bf242c7e7fa83a0e46c3d1c2de49f8bf118b9b7c17717f67387f1424226d2"
+    },
+    "protected_original_objects": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "device": 1831,
+        "inode": 57687,
+        "mode": "0600",
+        "uid": 1000,
+        "gid": 1000,
+        "size": 269,
+        "sha256": "7be39d1cf3bebcf4e586716badf2e3be366fae928ce2b39ce21fa6db770a7134"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+        "device": 1831,
+        "inode": 57688,
+        "mode": "0600",
+        "uid": 1000,
+        "gid": 1000,
+        "size": 269,
+        "sha256": "eeb41f3a01bf2b31e5ff15232ba31ab6cf92676b8587963d1faffeace44451f5"
+      }
+    ],
+    "all_original_Scratch21_evidence_output_mutex_archive_sentinels_and_request_leases_retained": true,
+    "do_not_unlink_chmod_chown_remount_reuse_or_release_old_objects": true,
+    "new_scoped_parent_not_authority_over_old_volume": true,
+    "native18_source_resource_cleanup_UNKNOWN_and_credit7c6_unchanged": true
+  },
+  "operator_receipt_Root_needs": [
+    "Explicit authorized filesystem/mount operator and permission scope tied to this existing6790932995/noon followup and c964/a2f stage only",
+    "Actual intended mount namespace identity and canonical parent/ancestor path, mountID/source/device major:minor/UUID/fstype/options; preserve exact ROloop44 mapping separately",
+    "Actual scoped-parent lstat dev/inode/UID/GID/mode/type/no-symlink plus effective UID1000 ancestor search and parent read/write/search access; final output still absent and exclusive",
+    "Fresh available bytes and allocated planning capacity on actual output filesystem, retaining host16GiB/scratch12GiB floors plus1GiB output reserve",
+    "Affirmative preservation disposition for exact Scratch21 exclusions/evidence/retained RO view and all existing native/source/resourceUNKNOWNs; no historical release inferred"
+  ],
+  "receipt_form": "Use the existing actual owner/admission record or operator response with these concrete readbacks; no new service/API/framework or invented third-party inventory format is required. Root then binds the exact returned identity through existing review/admission.",
+  "agents_may_act_now": false,
+  "commands_or_permissions_issued_here": false,
+  "new_output_or_parent_created_here": false,
+  "minimum_binding_consequence": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-owner-noon-disposition-p03-max-1/SCOPED-PARENT-BINDING-DISPOSITION.json",
+    "bytes": 3207,
+    "sha256": "f0c6d66c6c858b3d9eb9a97ed4b6a3404d93009f64e2d3d37a19d930aa04018d"
+  }
+}
