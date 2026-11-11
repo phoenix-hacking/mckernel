@@ -1102,7 +1102,31 @@ extern unsigned long syscall_virt_to_phys_bridge(void *addr);
 #else
 static unsigned long syscall_virt_to_phys_bridge(void *addr);
 #endif
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+extern long syscall_forward_context_bridge(int syscall_nr, void *ctx);
+extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
+extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_context_bridge),
+    syscall_forward_context_fn_t), "signal context forwarding ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_rt_sigprocmask_bridge),
+    syscall_forward_sigmask_fn_t), "signal mask forwarding ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_forward_sigaction_update_bridge),
+    syscall_sigaction_forward_fn_t), "signal action forwarding ABI");
+_Static_assert(sizeof(int) == 4 && _Alignof(int) == 4 && sizeof(long) == 8
+    && sizeof(unsigned long) == 8 && sizeof(void *) == 8, "signal scalar ABI");
+_Static_assert(sizeof(ihk_mc_user_context_t) == 224 && _Alignof(ihk_mc_user_context_t) == 8
+    && __builtin_offsetof(ihk_mc_user_context_t, gpr) == 56, "signal context ABI");
+_Static_assert(sizeof(struct k_sigaction) == 32 && _Alignof(struct k_sigaction) == 8
+    && __builtin_offsetof(struct k_sigaction, sa) == 0
+    && __builtin_offsetof(struct sigaction, sa_handler) == 0
+    && __builtin_offsetof(struct sigaction, sa_flags) == 8, "signal action ABI");
+_Static_assert(__NR_rt_sigaction == 13 && __NR_rt_sigprocmask == 14,
+    "signal forwarding syscall numbers");
+#else
+#line 1082
 static long syscall_forward_context_bridge(int syscall_nr, void *ctx);
+#endif
+#line 1083
 void syscall_tsc_to_ts_bridge(unsigned long tsc, void *ts);
 unsigned long syscall_timespec_to_jiffy_bridge(const void *ts);
 void syscall_ts_add_bridge(void *dst, const void *src);
@@ -7190,12 +7214,12 @@ static int mprotect_change_bridge(struct process_vm *vm,
 	return change_prot_process_memory_range(vm, range, protflags);
 }
 #endif
-
-static int mprotect_set_host_vma_bridge(unsigned long start, size_t len,
-		int prot, int holding_lock)
-{
-	return set_host_vma(start, len, prot, holding_lock);
-}
+#ifdef MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER
+extern int mprotect_set_host_vma_bridge(unsigned long, size_t, int, int); _Static_assert(__builtin_types_compatible_p(__typeof__(&mprotect_set_host_vma_bridge), mprotect_set_host_vma_fn_t), "mprotect host callback ABI"); _Static_assert(sizeof(unsigned long)==8 && sizeof(size_t)==8 && sizeof(int)==4, "mprotect host scalar ABI");
+#else
+static int mprotect_set_host_vma_bridge(unsigned long start, size_t len, int prot, int holding_lock)
+{ return set_host_vma(start, len, prot, holding_lock); }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void mprotect_flush_nfo_bridge(void)
@@ -20424,7 +20448,7 @@ syscall_process_unlock_bridge(void *proc, void *lock_arg)
 }
 #endif
 
-#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD)
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && (defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD) || defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER))
 extern long syscall_forward_rt_sigprocmask_bridge(unsigned long sigmask);
 #else
 long
@@ -20539,7 +20563,7 @@ long sys_set_robust_list(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-#ifdef MCKERNEL_RUST_F03_SIGNAL_FORWARD
+#if defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD) || defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
 extern long syscall_forward_sigaction_update_bridge(int sig, const void *actp);
 #else
 long
@@ -20863,12 +20887,16 @@ long sys_fcntl(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
+#line 20167
 static long
 syscall_forward_context_bridge(int syscall_nr, void *ctx)
 {
 	return syscall_generic_forwarding(syscall_nr,
 			(ihk_mc_user_context_t *)ctx);
 }
+#endif
+#line 20173
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && !defined(MCKERNEL_RUST_F03_POLICY_FORWARD_CONTEXT_BRIDGE)
 long

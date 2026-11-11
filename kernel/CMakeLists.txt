@@ -106,6 +106,7 @@ set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
 set(MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED OFF)
 set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
+set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -636,6 +637,25 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
                 "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
         endif()
+        # The mprotect/shmat endpoint has the same complete host-VMA contract.
+        if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_mprotect_host_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_mprotect_host_provider.rs")
+        endif()
+        # Only the three current signal/context providers, with the paired C ABI.
+        # Keep the experimental/broad forwarding candidates and owned fork off.
+        if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND ENABLE_RUST_F06_SYSCALL_WHOLE AND
+            NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION AND NOT DCFA_KMOD)
+            set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_signal_forward_provider_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_signal_forward_provider.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/ihk/context.h"
+                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/registers.h"
+                "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/signal.h")
+        endif()
         # Narrow genuine context adapter; retain every existing generic/exec gate.
         if (MCKERNEL_RUST_F06_WHOLE_DEFAULT AND NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
             set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED ON)
@@ -1075,7 +1095,8 @@ if (MCKERNEL_DO_FORK_SELECTED)
 endif()
 if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
-        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD)
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
+        MCKERNEL_RUST_F03_MPROTECT_HOST_PROVIDER)
 endif()
 if (MCKERNEL_DO_MMAP_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
@@ -1091,6 +1112,11 @@ endif()
 if (MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_SYSCALL2_BRIDGE)
+endif()
+
+if (MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_SIGNAL_FORWARD_PROVIDER)
 endif()
 
 if (MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED)
