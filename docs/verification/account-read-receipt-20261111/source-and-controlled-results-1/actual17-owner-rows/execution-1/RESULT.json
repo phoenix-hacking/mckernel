@@ -1,0 +1,56 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T21:51:18.430330+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "189a29faa1e43d7dc84f4cc0200fbe7a8946c3ddcbbda1e715f7aa8c632073e7",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/owner_liveness_regression.py",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1/OBSERVATIONS.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1",
+      "exit": 0,
+      "id": "changed-owner-liveness-only",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-1",
+        "leader": 1562814,
+        "leader_birth": "52014437",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "21d8f766c46d5e14daa07268766fd0b4102abbab38f5eeb258636e7f0c14b5cf",
+  "started_at": "2026-11-11T21:51:18.278154+00:00",
+  "status": "PASS_CHANGED_OWNER_LIVENESS_BRANCH_PENDING_SAVED_QUALIFICATION"
+}

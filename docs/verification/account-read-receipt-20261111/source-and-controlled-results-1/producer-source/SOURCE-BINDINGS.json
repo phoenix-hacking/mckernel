@@ -1,0 +1,78 @@
+{
+  "all_other_project_source_untouched": true,
+  "baseline": {
+    "bytes": 139343,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/preimage/scripts/run_os_goal.py",
+    "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+  },
+  "byte_preserved_accounting_body": {
+    "full_nonlocation_AST_equal": true,
+    "new": "Campaign._record_rate_limits_accounting",
+    "old": "Campaign.record_rate_limits"
+  },
+  "candidate": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/candidate/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "candidate_source_only": true,
+  "canonical_edits": false,
+  "canonical_preimage": {
+    "bytes": 139343,
+    "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+    "sha256": "6fe65a95407c54cf01a220a333453fa76146653df926b97627f6a79d9f8e2e0b"
+  },
+  "credit_identity": "existing current owner/credit_run_id/budget only; no replacement allowance",
+  "line_map": {
+    "Campaign._record_rate_limits_accounting": 1418,
+    "Campaign.record_rate_limits": 1316,
+    "Campaign.refresh_credit_budget": 1457
+  },
+  "notification_only_transport_fallback_tail_byte_equal": true,
+  "schema_version": 1,
+  "scope": "private run_os_goal.py receipt producer and one pure validator; no runtime activation",
+  "target_import_or_execution": false,
+  "unchanged_dependencies": [
+    {
+      "bytes": 5178,
+      "path": "/home/holden/mckernel/scripts/os_goal_credits.py",
+      "sha256": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+    },
+    {
+      "bytes": 39730,
+      "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+      "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+    }
+  ],
+  "unchanged_existing_methods": [
+    "RPC.send",
+    "RPC.pump_stderr",
+    "RPC.close",
+    "Campaign.poll_native_owner_control",
+    "Campaign.poll_capture_progress",
+    "Campaign.save",
+    "Campaign.record_stop_diagnostic",
+    "Campaign.remember_started_turn",
+    "Campaign.review_blocked_goal",
+    "Campaign.register_instruction_capture_progress",
+    "Campaign.deliver_instruction",
+    "Campaign.on_signal",
+    "Campaign.on_watchdog",
+    "Campaign.remember_goal",
+    "Campaign.remember_child_provenance",
+    "Campaign.record_child_capacity",
+    "Campaign.record_failure",
+    "Campaign._record_rate_limits_accounting",
+    "Campaign.event",
+    "Campaign.instructions",
+    "Campaign.recovery_goal_allowed",
+    "Campaign.prepare_fresh_goal",
+    "Campaign.manual_resume_instruction",
+    "Campaign.begin",
+    "Campaign.transport_error_record",
+    "Campaign.pause",
+    "Campaign.request_checkpoint",
+    "Campaign.stop",
+    "Campaign.run"
+  ]
+}

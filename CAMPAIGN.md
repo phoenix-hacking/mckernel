@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T21:18:13.725212+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T22:03:03.416356+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -52,37 +52,47 @@ remain recorded. Old2c4c resource-audit UNK2026-11-11T20:58:34.067193+00:00N and
 outcomes remain old-only. Do not reissue or reread this successful generation.
 [Actual source/review/result bundle](docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/PUBLICATION-SCOPE.json).
 
-**Current concrete next action:** PublicABI owns the existing normal same-Root
-controller transition proposal, preserving guardian/mailbox, saved goal/thread,
-finite7c6 credit run/cumulative budget, actual interpreter and resource owners.
-Actual AnacondaPython3.9 lacks os.pidfd_open/signal.pidfd_send_signal, so the
-current signal_exact stop route refuses before signaling. Root integrated only reviewed9bc3 lazycanonicalwatcher wrappers after actual
-Anaconda3.9 fivecasePASSae6486/independentQfae688. Wrongbirth/kernelerror/FDclose
-checks pass, oneOwner/fullRoot positive; current256MiB retired. Loaded oldguardian
-is unchanged. PubABI freezes exact guardian-only technicalrecovery/adopt-active
-operation because ordinarySIGTERM deliberately queues modelstop. No live signal or
-unitrestart is issued. [Actual repair](docs/verification/workstation-pidfd-compatibility-20261111/canonical-wrapper-reuse-1/PUBLICATION-SCOPE.json). No controller activation or native run is claimed. SDK39a/16ed has implemented the real RPC poll receipt; P03 binds actualsource
-tests and Rootconsumer43935 is under SourceAcq independent materialreview. SourceAcq
-reviews the changed source after current F02 review. Successful account/rateLimits/read
-responses must carry actual method/id/response time/owner context through SAME
-ledger and state persistence before a success receipt; heartbeat/request time
-cannot substitute. Preserve25s/equality/allhold/credit guards and notification-only
-fallback semantics. Load through the normal reviewed transition, never hotpatch,
-synthetic notification, fake failure, new run or budget reset.
+**Actual guardian compatibility recovery is complete.** Corrected1c10/GO8a44 ran
+21:45:45–51Z. Oldguardian761845/inhibitor761844 have positive pidfd/manager/cgroup
+closure; normal coldstart produced1561218/b51981693 +parent1561217/b51981691,
+SUPERVISED under SAME88169/Root/7c6. Engine roles762046/762048/762050 and births,
+delivery and native/model owners are unchanged. IndependentQ9c97 permits only
+completed recovery256MiB/job retirement, recorded. Root's separate preflight
+failed from missing pathlib import and its orchestrator incorrectly continued;
+the reviewed parent's fresh admission passed. Missing outer audit/whole-run peak
+remain unproved; no backdated grant or global UNKNOWN release.
+[Exact source/result/audit](docs/verification/workstation-pidfd-compatibility-20261111/guardian-only-recovery-1/PUBLICATION-SCOPE.json).
 
-**Independent original closure:** SDK independent whole GO956fecb2 has closed literal M14-I01-E1 only; E2/E3
-and C retirement remain separate. F02 corrected packet84a7/GO6c83 passed21:09:10Z after replacing unsupported
-DockerAS with real in-container prlimit512MiB before the identical four commands.
-ActualC9c9609/Rustcbbe14 ELF objects and both metadata captures are present;
-all9clients/Root joined, CIDf77e terminal0/nonOOM/removed and current512MiB retired.
-Independent savedQ cde5037e/bed857/bda687 now proves exact624B sharedrecorddba0bca9
-and all78labeled words equal, PLD776/ImageSection56/GetCpuSet96 withalign8;
-readonly/nonexecuting/unrelocated and allsource/header/cleanup joins PASS. Whole
-F02behavior/native remains open. [Actual ABI slice](docs/verification/m15-executor-abi-20261111/descriptor-cpuset-78word-1/PUBLICATION-SCOPE.json).
-Original create125 failure/3positiveclients and scoped retirement remain preserved.
-P04Source owns the small clone-disabled
-Rust diagnostic-provider candidate, P04Tests independent formatter/string/caller
-review; actual C3 requires later matching normal image proof.
+**Account-read source/controlled behavior is qualified and canonical, not yet
+loaded by the worker.** SDK39a SourceGO5a06 and actual18-method Qbbefe preserve
+original accounting/finite7c6/notification fallback while recording authenticated
+response identity/time and durable state/ledger receipt. Root integrated only
+scripts/run_os_goal.py at21:49. Consumer43935 terminal-owner gap is retained;
+9032 adds live-state checks at both bookends (sourceGOadef). Actual17new rows
+passed21:51:18Z,bdd42/Qa174: live pair+16Z/X/x/unknown refusals,44stat26state/
+9ledger1validator; no18 replay. Both actual families/Root closed and charges
+retired. No live account/issuer/control effect from these tests.
+[Qualified source/results](docs/verification/account-read-receipt-20261111/source-and-controlled-results-1/PUBLICATION-SCOPE.json).
+
+**Next actual activation:** the existing foreground is the surviving custodian,
+verified1129750/b43666307 outside oldworker762048/server762050, proof7ed70144.
+PublicABI freezes literal EXISTING normal stop/checkpoint/positive-wait/start argv
+and source/review/capture handoff for that foreground BEFORE any stop request;
+no new detached runner/controller. Foreground remains active to execute after
+independent review and final handoff acceptance under explicit680671 authorization.
+Preserve actualguardian1561218/mailbox, SAMEgoal/thread/7c6/cumulativebudget and
+resource owners. New invocation/PID/birth/logdir and genuine successful-read receipt
+must be proven after load; no old762 pins copied or actual owner records preissued.
+
+**Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
+counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
+on realC/Rust195objects, source/header and9client/container/Root cleanup; wholeF02
+behavior remains open. Source-ready tinyclone-disabled provider5dd6/independent29b0
+stays PRIVATE for a later necessary image, no C3 claim/currenta2f reset. Maskrestore
+source contract3df4/e77f/f2dd explicitly needs initialUSR1+USR2unblocked; nextcase
+payload/oracle/collector design stays unissued behind firstrepeat cleanup.
+Requested blocker-return6807553710 is confirmed.70.00/67.19 receipt6807005440 stays
+the sole current percentage report; nonew original check from these repairs.
 
 **Actual native prerequisites remain:** reviewed normal controller transition,
 authenticated effective source/claim/current-free/caps/pidfd custody and positive

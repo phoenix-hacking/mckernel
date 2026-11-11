@@ -1,0 +1,280 @@
+{
+  "actual_admission": {
+    "bytes": 572,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/execution-1/ADMISSION.json",
+    "sha256": "2d7daf27d940ccdeaff3fbe6667b7a454af976cccbf47c73fe36e8d8e9b4c0dc"
+  },
+  "actual_closure": {
+    "all_waits_streams_joined": true,
+    "full_original_exec_capture_preserved": true,
+    "literal_argv_and_cwd_equal": true,
+    "outer_exit": 0,
+    "outer_noSession": true,
+    "outer_tool_chunk": "16ef69",
+    "owner": {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "phase-1",
+      "leader": 1559214,
+      "leader_birth": "51943228",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    },
+    "remaining_direct_children": []
+  },
+  "actual_detail": {
+    "bytes": 6098,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/output-1/OBSERVATIONS.json",
+    "sha256": "b2e6bc951d36297c2c5bacf446b2122c6ade47fb80336e5eb704ae33715e1037"
+  },
+  "actual_owner_file": {
+    "bytes": 374,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/execution-1/ownership.json",
+    "sha256": "38dd4b68cee90eab06a5b02a45589818a89a7aab5f63444ab27d0c7b74187179"
+  },
+  "actual_resource_scope": {
+    "CPU": 0,
+    "actual_MemAvailable_bytes": 29264056320,
+    "actual_all_current_overhead_bytes": 1505742848,
+    "all_historical_native_Scratch_source_permission_service_account_UNKNOWNs_unchanged": true,
+    "no_new_retirement_gate": true,
+    "one_job_bytes": 268435456,
+    "only_current256MiB_job_retired_by_Root": true
+  },
+  "actual_result": {
+    "bytes": 2102,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/execution-1/RESULT.json",
+    "sha256": "45d5280a0952c73795004bb540ecb7ba28efbe311fbe1b58181b41423038a239"
+  },
+  "actual_semantics": {
+    "errors": 0,
+    "failures": 0,
+    "fake_amounts_and_run_identifiers_are_private_test_data_only": true,
+    "methods": [
+      "test_consumer_bounded_bookends_and_postcoherence_freshness",
+      "test_consumer_holds_owner_expiry_and_timestamps",
+      "test_consumer_no_notification_reads_matching_durable_receipt",
+      "test_credit_state_write_failure_is_not_success",
+      "test_current_owner_clock_and_method_validation",
+      "test_existing_notification_fallback_unchanged",
+      "test_hold_after_observe_vetoes_success",
+      "test_ledger_write_failure_is_not_success",
+      "test_newer_spend_notification_vetoes_read",
+      "test_newer_unknown_notification_vetoes_read",
+      "test_newer_valid_notification_retains_time_and_same_ledger",
+      "test_newer_valid_read_follows_notification",
+      "test_no_notification_poll_persists_original_guard",
+      "test_receipt_state_write_failure_is_not_success",
+      "test_rpc_receive_id_time_and_wrong_reply",
+      "test_saved_receipt_not_inherited_by_new_campaign",
+      "test_successful_read_never_grants_timeout_fallback",
+      "test_timestamps_without_rpc_cannot_create_or_revive_receipt"
+    ],
+    "observations": [
+      {
+        "bookend_reads_before_accept": [
+          4,
+          2
+        ],
+        "bounded_mismatch_reads": [
+          6,
+          3
+        ],
+        "expiry_during_bookends_rejected": true,
+        "test": "test_consumer_bounded_bookends_and_postcoherence_freshness",
+        "validation_after_coherence": true
+      },
+      {
+        "consumer_holds_rejected": 7,
+        "exact_25s_rejected": true,
+        "test": "test_consumer_holds_owner_expiry_and_timestamps",
+        "timestamp_not_authority": true,
+        "wrong_birth_rejected": true
+      },
+      {
+        "consumer_actual_normal_importer": true,
+        "no_notification": true,
+        "no_refresh_or_issuer_call": true,
+        "same_durable_ledger": true,
+        "test": "test_consumer_no_notification_reads_matching_durable_receipt"
+      },
+      {
+        "failed_boundary": "credit_state_after_real_observe",
+        "spent": "50",
+        "test": "test_credit_state_write_failure_is_not_success",
+        "usable": false
+      },
+      {
+        "accepted_below_25s": true,
+        "exact_25s_rejected": true,
+        "future_rejected": true,
+        "holds_veto": true,
+        "owner_mismatches_rejected": 4,
+        "test": "test_current_owner_clock_and_method_validation"
+      },
+      {
+        "age_seconds": 1.0,
+        "notification_only_fallback": true,
+        "same_rpc": true,
+        "test": "test_existing_notification_fallback_unchanged"
+      },
+      {
+        "hold_after_observe": true,
+        "hold_preserved": true,
+        "test": "test_hold_after_observe_vetoes_success",
+        "usable": false
+      },
+      {
+        "failed_boundary": "ledger",
+        "test": "test_ledger_write_failure_is_not_success",
+        "usable": false
+      },
+      {
+        "newest": "spend_notification",
+        "older_read_fresh": true,
+        "sequence": 3,
+        "test": "test_newer_spend_notification_vetoes_read",
+        "usable": false
+      },
+      {
+        "newest": "unknown_notification",
+        "older_read_fresh": true,
+        "sequence": 3,
+        "test": "test_newer_unknown_notification_vetoes_read",
+        "usable": false
+      },
+      {
+        "newest": "notification",
+        "remaining": "70",
+        "sequence": 3,
+        "spent": "30",
+        "test": "test_newer_valid_notification_retains_time_and_same_ledger",
+        "unchanged_receive_clock": true
+      },
+      {
+        "newest": "read",
+        "remaining": "80",
+        "sequence": 3,
+        "spent": "20",
+        "test": "test_newer_valid_read_follows_notification"
+      },
+      {
+        "no_notification": true,
+        "persistence_order": [
+          "ledger_durable",
+          "receipt_state_durable"
+        ],
+        "remaining": "50",
+        "source": "read",
+        "spent": "50",
+        "test": "test_no_notification_poll_persists_original_guard"
+      },
+      {
+        "failed_boundary": "receipt_state",
+        "test": "test_receipt_state_write_failure_is_not_success",
+        "usable": false
+      },
+      {
+        "error_does_not_publish": true,
+        "receive_delay_ns": 1000000000,
+        "reply_id": 1,
+        "test": "test_rpc_receive_id_time_and_wrong_reply",
+        "wrong_id_does_not_complete": true
+      },
+      {
+        "same_ledger_retained": true,
+        "saved_receipt_not_inherited": true,
+        "test": "test_saved_receipt_not_inherited_by_new_campaign"
+      },
+      {
+        "later_read_attempts": 3,
+        "successful_poll_is_not_notification_fallback": true,
+        "test": "test_successful_read_never_grants_timeout_fallback"
+      },
+      {
+        "heartbeat_and_mtime_never_sufficient": true,
+        "stale_not_revived": true,
+        "test": "test_timestamps_without_rpc_cannot_create_or_revive_receipt"
+      }
+    ],
+    "real_account_or_controller_actions": false,
+    "stderr_bytes": 0,
+    "stdout_entire_external_JSON_equal": true,
+    "tests_run": 18,
+    "unittest_each_method_ok": true
+  },
+  "actual_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/execution-1/phase-1.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_stdout": {
+    "bytes": 1155,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/execution-1/phase-1.stdout",
+    "sha256": "12073e4b20c102fb99e690b84e50b97f2ac9afa04320d2823397d5a8f0084ab2"
+  },
+  "all21_input_reference_rows_match": true,
+  "at": "2026-11-11T21:42:53.025329+00:00",
+  "consumer": {
+    "bytes": 7888,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-consumer-root-1/correction-1/current_account_snapshot.py",
+    "sha256": "43935afcd79375e9e19a37c71ecab5c901561434dc6a31b9df63157c94c3798a"
+  },
+  "current_retirement": {
+    "bytes": 507,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+    "sha256": "2744374af9a973db86f90a3109cdcbadf32f3e0c02451be8282a6706d438134d"
+  },
+  "decision": "GO_SAVED18_CONTROLLED_RECEIPT_AND_CONSUMER_CONTRACTS_AT_TESTED_SCOPE",
+  "distinct_input_paths": 20,
+  "expected": {
+    "bytes": 1249,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/EXPECTED.json",
+    "sha256": "3b55aeab351c614306d1ecf8747854925242e6f01f1124282f686341057500b6"
+  },
+  "fixture": {
+    "bytes": 36823,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/test_account_read_receipts.py",
+    "sha256": "4597898c22835a6fcf291e207aaedeb613d3fd6773dca1f70085af27451cce4d"
+  },
+  "full_Root_completion": {
+    "bytes": 1104,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "c447ab10e28f1a92ece778cc94cceebb69b0b8816be0d5b63e5804ce962c703d"
+  },
+  "inputs": {
+    "bytes": 4984,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/INPUTS.json",
+    "sha256": "d4a6b32cb113262290a9c0219e28bfbec9db506b5228c1fcd3d9d414c82124ec"
+  },
+  "operation_review": {
+    "bytes": 12644,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-review-sourceacq-max-1/consumer-binding-1/REVIEW.json",
+    "sha256": "defa67298e5c94ede4af7281fd0ba1ae38337e106b482c14d5b11f2fe06ba4d5"
+  },
+  "original_acceptance_delta": 0,
+  "parent": {
+    "bytes": 5452,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/run_root_once.py",
+    "sha256": "5b05ac071f3a547c3b25b7760dc7a4f9a507fa974ae41d2e017b93d0ad9ab143"
+  },
+  "request": {
+    "bytes": 7692,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/REQUEST.json",
+    "sha256": "491f34491affb886851693d66ba80f532d4408ae03d175e0d8a260036e08b32c"
+  },
+  "schema": "independent_saved_account_receipt18_contract_qualification_v1",
+  "scope": "Saved actual controlled HOST results only. No target/source/test/import/account/control or kernel action by reviewer; no replay. Passing methods do not establish untested process-state liveness or actual account/admission authority.",
+  "source": {
+    "bytes": 155857,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-source-sdk-max-1/candidate/scripts/run_os_goal.py",
+    "sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870"
+  },
+  "unproved": "Production current-owner liveness at consumer stat boundary remains a separate concrete source finding; tests use the current live process for both modeled roles and test wrong birth, not terminal matching-birth states. Actual same-account poll, normal transition, loaded source, expected actual owner context and future operation remain unissued."
+}

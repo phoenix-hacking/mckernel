@@ -1,0 +1,56 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T21:39:26.981953+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "491f34491affb886851693d66ba80f532d4408ae03d175e0d8a260036e08b32c",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/test_account_read_receipts.py",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1/output-1/OBSERVATIONS.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/consumer-binding-1",
+      "exit": 0,
+      "id": "focused-account-read-receipt-contracts",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-1",
+        "leader": 1559214,
+        "leader_birth": "51943228",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "defa67298e5c94ede4af7281fd0ba1ae38337e106b482c14d5b11f2fe06ba4d5",
+  "started_at": "2026-11-11T21:39:26.188182+00:00",
+  "status": "PASS_FOCUSED_ACCOUNT_READ_RECEIPT_CONTRACTS_PENDING_SAVED_QUALIFICATION"
+}

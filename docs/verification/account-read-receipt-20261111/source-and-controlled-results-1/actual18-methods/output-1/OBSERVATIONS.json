@@ -1,0 +1,135 @@
+{
+  "errors": 0,
+  "failures": 0,
+  "observations": [
+    {
+      "bookend_reads_before_accept": [
+        4,
+        2
+      ],
+      "bounded_mismatch_reads": [
+        6,
+        3
+      ],
+      "expiry_during_bookends_rejected": true,
+      "test": "test_consumer_bounded_bookends_and_postcoherence_freshness",
+      "validation_after_coherence": true
+    },
+    {
+      "consumer_holds_rejected": 7,
+      "exact_25s_rejected": true,
+      "test": "test_consumer_holds_owner_expiry_and_timestamps",
+      "timestamp_not_authority": true,
+      "wrong_birth_rejected": true
+    },
+    {
+      "consumer_actual_normal_importer": true,
+      "no_notification": true,
+      "no_refresh_or_issuer_call": true,
+      "same_durable_ledger": true,
+      "test": "test_consumer_no_notification_reads_matching_durable_receipt"
+    },
+    {
+      "failed_boundary": "credit_state_after_real_observe",
+      "spent": "50",
+      "test": "test_credit_state_write_failure_is_not_success",
+      "usable": false
+    },
+    {
+      "accepted_below_25s": true,
+      "exact_25s_rejected": true,
+      "future_rejected": true,
+      "holds_veto": true,
+      "owner_mismatches_rejected": 4,
+      "test": "test_current_owner_clock_and_method_validation"
+    },
+    {
+      "age_seconds": 1.0,
+      "notification_only_fallback": true,
+      "same_rpc": true,
+      "test": "test_existing_notification_fallback_unchanged"
+    },
+    {
+      "hold_after_observe": true,
+      "hold_preserved": true,
+      "test": "test_hold_after_observe_vetoes_success",
+      "usable": false
+    },
+    {
+      "failed_boundary": "ledger",
+      "test": "test_ledger_write_failure_is_not_success",
+      "usable": false
+    },
+    {
+      "newest": "spend_notification",
+      "older_read_fresh": true,
+      "sequence": 3,
+      "test": "test_newer_spend_notification_vetoes_read",
+      "usable": false
+    },
+    {
+      "newest": "unknown_notification",
+      "older_read_fresh": true,
+      "sequence": 3,
+      "test": "test_newer_unknown_notification_vetoes_read",
+      "usable": false
+    },
+    {
+      "newest": "notification",
+      "remaining": "70",
+      "sequence": 3,
+      "spent": "30",
+      "test": "test_newer_valid_notification_retains_time_and_same_ledger",
+      "unchanged_receive_clock": true
+    },
+    {
+      "newest": "read",
+      "remaining": "80",
+      "sequence": 3,
+      "spent": "20",
+      "test": "test_newer_valid_read_follows_notification"
+    },
+    {
+      "no_notification": true,
+      "persistence_order": [
+        "ledger_durable",
+        "receipt_state_durable"
+      ],
+      "remaining": "50",
+      "source": "read",
+      "spent": "50",
+      "test": "test_no_notification_poll_persists_original_guard"
+    },
+    {
+      "failed_boundary": "receipt_state",
+      "test": "test_receipt_state_write_failure_is_not_success",
+      "usable": false
+    },
+    {
+      "error_does_not_publish": true,
+      "receive_delay_ns": 1000000000,
+      "reply_id": 1,
+      "test": "test_rpc_receive_id_time_and_wrong_reply",
+      "wrong_id_does_not_complete": true
+    },
+    {
+      "same_ledger_retained": true,
+      "saved_receipt_not_inherited": true,
+      "test": "test_saved_receipt_not_inherited_by_new_campaign"
+    },
+    {
+      "later_read_attempts": 3,
+      "successful_poll_is_not_notification_fallback": true,
+      "test": "test_successful_read_never_grants_timeout_fallback"
+    },
+    {
+      "heartbeat_and_mtime_never_sufficient": true,
+      "stale_not_revived": true,
+      "test": "test_timestamps_without_rpc_cannot_create_or_revive_receipt"
+    }
+  ],
+  "private_console": "[21:39:26Z][os-goal] Usage/billing stop: credit_budget_unknown\n[21:39:26Z][os-goal] Usage read transport failed; current validated notification already persisted the unchanged credit guard.\n[21:39:26Z][os-goal] Usage/billing stop: private_fixture_existing_stop\n[21:39:26Z][os-goal] Usage/billing stop: credit_budget_unknown\n[21:39:26Z][os-goal] Usage/billing stop: credit_budget_unknown\n[21:39:26Z][os-goal] Usage/billing stop: included_usage_unknown\n[21:39:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 1/2.\n[21:39:26Z][os-goal] Usage reporting temporarily unavailable; retrying read-only balance check 2/2.\n",
+  "source_sha256": "39a03dd8bb33ea943cad02897dee9b6b113187eee30d33ed22a89886b944d870",
+  "tests_run": 18,
+  "unittest_diagnostics": "test_consumer_bounded_bookends_and_postcoherence_freshness (__main__.FocusedReceiptTests) ... ok\ntest_consumer_holds_owner_expiry_and_timestamps (__main__.FocusedReceiptTests) ... ok\ntest_consumer_no_notification_reads_matching_durable_receipt (__main__.FocusedReceiptTests) ... ok\ntest_credit_state_write_failure_is_not_success (__main__.FocusedReceiptTests) ... ok\ntest_current_owner_clock_and_method_validation (__main__.FocusedReceiptTests) ... ok\ntest_existing_notification_fallback_unchanged (__main__.FocusedReceiptTests) ... ok\ntest_hold_after_observe_vetoes_success (__main__.FocusedReceiptTests) ... ok\ntest_ledger_write_failure_is_not_success (__main__.FocusedReceiptTests) ... ok\ntest_newer_spend_notification_vetoes_read (__main__.FocusedReceiptTests) ... ok\ntest_newer_unknown_notification_vetoes_read (__main__.FocusedReceiptTests) ... ok\ntest_newer_valid_notification_retains_time_and_same_ledger (__main__.FocusedReceiptTests) ... ok\ntest_newer_valid_read_follows_notification (__main__.FocusedReceiptTests) ... ok\ntest_no_notification_poll_persists_original_guard (__main__.FocusedReceiptTests) ... ok\ntest_receipt_state_write_failure_is_not_success (__main__.FocusedReceiptTests) ... ok\ntest_rpc_receive_id_time_and_wrong_reply (__main__.FocusedReceiptTests) ... ok\ntest_saved_receipt_not_inherited_by_new_campaign (__main__.FocusedReceiptTests) ... ok\ntest_successful_read_never_grants_timeout_fallback (__main__.FocusedReceiptTests) ... ok\ntest_timestamps_without_rpc_cannot_create_or_revive_receipt (__main__.FocusedReceiptTests) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.656s\n\nOK\n"
+}

@@ -1,0 +1,129 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T21:47:06.399933+00:00",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/owner_liveness_regression.py",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1/OBSERVATIONS.json"
+      ],
+      "expected_exit": 0,
+      "id": "changed-owner-liveness-only",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "RPC_Campaign_observe_or_writes": 0,
+        "ledger_reads": 9,
+        "live_rows": 1,
+        "old18_methods_executed": 0,
+        "proc_reads": 44,
+        "rejected_rows": 16,
+        "state_reads": 26,
+        "status": "PASS_CHANGED_OWNER_LIVENESS_BRANCH",
+        "validator_calls": 1
+      },
+      "wall_seconds": 15
+    }
+  ],
+  "contract": {
+    "bytes": 3260,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/TEST-CONTRACT.json",
+    "sha256": "6df139b5b3dec3015541c04958853d93ba216ca989c83a5a266eba6c74468a9b"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1",
+  "expected": {
+    "bytes": 250,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/EXPECTED.json",
+    "sha256": "513d62581e46ab22b0bd4390a6e661f5ab3ae980a5c61270a7707299f67149ce"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1",
+  "inputs": {
+    "bytes": 5652,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/INPUTS.json",
+    "sha256": "79dc4522690ec5f308399a9e92de1fd9b01755cd4ef0b3a5afdf0ea0f4dca564"
+  },
+  "no_canonical_changes": true,
+  "no_execution_by_author": true,
+  "no_native_or_resource_admission_from_mocks": true,
+  "owner": "P03 changed-path private tests only; Root source/executor; SourceAcq material/operation review",
+  "ownership": {
+    "failure": "Keep raw argv/streams/original error and actual child record; protected Owner retirement only. No source/controller/Native action or numeric/client process signal fallback. Preserve any real UNKNOWN/current slice if positive closure is absent.",
+    "final": "Exact external JSON/empty stderr, one positive afe Owner family plus full outer Root tool completion/direct wait/streams before only current256MiB/job release; no native/source/oldUNKNOWN retirement.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive leader PID+birth",
+      "literal argv/cwd/current label",
+      "status0",
+      "leader_parent_joined=true",
+      "whole_descendants_joined=true",
+      "streams_closed=true",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-1"
+    ],
+    "record_count": 1
+  },
+  "preconditions": [
+    "Independent focused actual9032 source delta GOadef plus changed17-row fixture/oracle/profile operation GO required; no source-only actualaccount/current-owner admission.",
+    "Root fresh current guard/account/stop/hold and existing sharedHOST CPU0/256MiB/max3/4GiB TOTAL/all overhead/26GiB availability/host16+scratch12GiB disk floors plus unchanged64MiB test reservation; no borrowing or other retirement.",
+    "Exact all input/interpreter/afe pins, fresh output/capture absent then reused protected parent creates only private test paths.",
+    "Reuse actual18PASS45d528/bbefe and SDK39a/5a06; no old18, RPC/Campaign/observe or account/issuer/controller/native action.",
+    "Only positive afe direct-birth/wait/streams plus full outerRoot completion permits current256MiB/job retirement; unknown outcomes remain charged."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 30,
+    "cpu": 0,
+    "cpu_seconds": 10,
+    "disk_budget_note": "64MiB planning reservation for finite serial private model/log/atomic-temp/source-copy files plus captured1MiB stdout/stderr and receipts; no aggregate hard-cap or observed-peak claim. Original two-field controller fixture2MiB is not reused as a claim for this real private ledger fixture.",
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "Existing protected HOST Python3.9 actual-source/private-lower-effect test lane",
+    "max_address_space_bytes": 268435456,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "no_Docker_compiler_model_network_root_or_native_action": true,
+    "output_disk_reservation_bytes": 67108864,
+    "scratch_disk_floor_GiB": 12,
+    "wall_seconds": 15
+  },
+  "schema": "changed_owner_liveness_host_request_v1",
+  "source_bindings": {
+    "bytes": 2689,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-read-receipt-tests-p03-max-1/owner-liveness-correction-1/SOURCE-BINDINGS.json",
+    "sha256": "1eccd641b5ec240f5f8953f6e6f335851ce1c96234effbb95e7ddce1eb7ccd1d"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_INDEPENDENT_TEST_PROFILE_REVIEW_ROOT_FRESH_ADMISSION"
+}

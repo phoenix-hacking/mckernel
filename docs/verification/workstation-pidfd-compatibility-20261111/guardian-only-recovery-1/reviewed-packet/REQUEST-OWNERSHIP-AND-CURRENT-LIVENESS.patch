@@ -1,0 +1,38 @@
+--- previous/recover_exact_guardian.py
++++ corrected/recover_exact_guardian.py
+@@ -1,6 +1,10 @@
+-import datetime,hashlib,importlib.util,json,os,pathlib,select,signal,sys,time
+-HERE=pathlib.Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1');ROOT=pathlib.Path('/home/holden/mckernel');STATE=ROOT/'.git/os-autopilot';OUT=HERE/'operation-output-1'
+-Q=json.loads((HERE/'REQUEST.PROPOSED.json').read_text());OWN=json.loads((HERE/'CURRENT-OWNERSHIP.json').read_text());R={x['role']:x for x in OWN['roles']}
++import datetime,hashlib,importlib.util,json,math,os,pathlib,select,signal,sys,time
++HERE=pathlib.Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1');ROOT=pathlib.Path('/home/holden/mckernel');STATE=ROOT/'.git/os-autopilot';OUT=HERE/'operation-output-1'
++Q=json.loads((HERE/'REQUEST.PROPOSED.json').read_text())
++OWN_RAW=pathlib.Path(Q['current_ownership']['path']).read_bytes()
++if len(OWN_RAW)!=Q['current_ownership']['bytes'] or hashlib.sha256(OWN_RAW).hexdigest()!=Q['current_ownership']['sha256']:
++ raise RuntimeError('request-bound original ownership record changed')
++OWN=json.loads(OWN_RAW);R={x['role']:x for x in OWN['roles']}
+ def need(ok,msg):
+  if not ok:raise RuntimeError(msg)
+ def digest(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+@@ -14,6 +18,12 @@
+ def engine_healthy():
+  s=json.loads((STATE/'state.json').read_text());g=json.loads((STATE/'guardian.json').read_text());w=json.loads((STATE/'watcher.json').read_text())
+  need(s['thread_id']==OWN['root'] and s['guardian_run_id']==w['guardian_run_id']==g['run_id']==OWN['guardian_run_id'],'Root/guardian run changed')
++ need((w.get('watcher_pid'),w.get('watcher_start'))==(R['watcher']['pid'],R['watcher']['birth']),'current watcher record identity differs')
++ at=w.get('at');need(type(at) in (int,float) and math.isfinite(at),'current watcher heartbeat malformed')
++ age=time.time()-at;need(0<=age<=90,'current watcher heartbeat stale or future')
++ need((s.get('worker_pid'),s.get('worker_start'))==(R['worker']['pid'],R['worker']['birth']),'current state worker identity differs')
++ need((w.get('worker_pid'),w.get('worker_start'))==(R['worker']['pid'],R['worker']['birth']),'current watcher worker identity differs')
++ need((s.get('server_pid'),s.get('server_start'))==(R['server']['pid'],R['server']['birth']),'current state server identity differs')
+  need(s.get('stop_reason') is None and s.get('phase')=='running' and (s.get('goal') or {}).get('status')=='active' and not any(s.get(k) for k in holdkeys),'current stop or hold')
+  need(not g.get('user_stop') and not g.get('checkpoint') and not g.get('launch'),'guardian stop/checkpoint/launch exists')
+  need(not (STATE/'guardian-stop.json').exists(),'normal stop request appeared')
+@@ -42,7 +52,7 @@
+  cgpath=pathlib.Path('/sys/fs/cgroup/systemd')/R['guardian']['systemd_cgroup'].lstrip('/')/'cgroup.procs'
+  oldmembers=[int(x) for x in cgpath.read_text().split()];need(set(oldmembers)=={R['guardian']['pid'],R['inhibitor_parent']['pid']},'guardian unit has other current members; preserve/reconcile')
+  record('CGROUP-BEFORE.json',dict(path=str(cgpath),members=oldmembers,unit=u['ControlGroup']))
+- oldinv=u['InvocationID'];record('PRE-ACTION.json',dict(roles=[same(x) for x in R],unit=u,guardian=g,last_instruction=s.get('last_instruction')))
++ oldinv=u['InvocationID'];record('PRE-ACTION.json',dict(roles=[same(x) for x in R],unit=u,guardian=g,watcher=w,state_worker_server={k:s.get(k) for k in ('worker_pid','worker_start','server_pid','server_start')},last_instruction=s.get('last_instruction')))
+  polls=[]
+  for role in ('guardian','inhibitor_parent'):
+   fd=watch_os_goal.pidfd_open(R[role]['pid']);fds.append((role,fd));same(role);p=select.poll();p.register(fd,select.POLLIN);need(not p.poll(0),'old owner already terminal');polls.append((role,p))

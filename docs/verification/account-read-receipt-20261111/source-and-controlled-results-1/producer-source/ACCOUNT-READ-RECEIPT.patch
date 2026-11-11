@@ -1,0 +1,375 @@
+--- a/scripts/run_os_goal.py
++++ b/scripts/run_os_goal.py
+@@ -31,7 +31,7 @@
+                                resource_environment, resource_instructions)
+ from os_goal_windows import window_capability
+ from os_goal_instructions import reconcile_instructions
+-from os_goal_credits import (CreditBudget, available_balance, billing_policy,
++from os_goal_credits import (CreditBudget, available_balance, amount, billing_policy,
+                              credit_budget_argument)
+ from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure, classify_service_failure,
+                                classify_usage_failure)
+@@ -333,12 +333,148 @@
+         self.file.close()
+ 
+ 
++def _account_value_sha256(value):
++    """Private content binding; never publish account values in diagnostics."""
++    return hashlib.sha256(json.dumps(value, sort_keys=True,
++                                     separators=(",", ":")).encode("utf-8")).hexdigest()
++
++
++def accepted_account_observation(state, ledger, owner, now_utc_ns, now_mono_ns,
++                                 max_age_seconds=25):
++    """Validate one durable current-owner observation; perform no I/O or refresh.
++
++    ``owner`` must be obtained independently by the invoking current-owner
++    consumer.  A receipt is evidence of an observation, never execution authority.
++    The newest received observation wins, including a newer rejection/pending
++    observation; this deliberately never falls back to an older success.
++    """
++    def require(value, message):
++        if not value:
++            raise ValueError(message)
++
++    def finite_primary(limits):
++        require(isinstance(limits, dict), "account limits missing")
++        primary = limits.get("primary")
++        require(isinstance(primary, dict), "account primary missing")
++        used = primary.get("usedPercent")
++        require(isinstance(used, (int, float)) and not isinstance(used, bool)
++                and math.isfinite(used) and 0 <= used <= 100,
++                "account primary unknown")
++        require(primary.get("windowDurationMins") == 10080,
++                "account primary window unsupported")
++
++    require(isinstance(state, dict) and isinstance(ledger, dict)
++            and isinstance(owner, dict), "account snapshot shape")
++    require(isinstance(max_age_seconds, (int, float))
++            and not isinstance(max_age_seconds, bool)
++            and math.isfinite(max_age_seconds) and 0 < max_age_seconds <= 25,
++            "account observation age bound")
++    require(type(now_utc_ns) is int and type(now_mono_ns) is int,
++            "account observation clock shape")
++    candidates = [state.get(name) for name in
++                  ("last_account_observation", "last_account_notification",
++                   "successful_account_read") if state.get(name) is not None]
++    require(bool(candidates), "no durable account observation")
++    for item in candidates:
++        require(isinstance(item, dict) and item.get("schema_version") == 1,
++                "account observation shape")
++        require(type(item.get("received_mono_ns")) is int
++                and type(item.get("sequence")) is int,
++                "account observation ordering missing")
++    newest = max(candidates, key=lambda item: (item["received_mono_ns"],
++                                              item["sequence"]))
++    require(newest.get("status") == "ACCEPTED",
++            "newest account observation not accepted")
++    require(newest.get("owner") == owner, "account observation owner mismatch")
++    required = ("boot_id", "log_dir", "thread_id", "worker_pid", "worker_start",
++                "server_pid", "server_start", "credit_run_id", "credit_budget",
++                "credit_ledger_path")
++    require(all(owner.get(key) is not None for key in required),
++            "account observation owner incomplete")
++    require(state.get("phase") == "running" and not state.get("stop_reason")
++            and not state.get("credit_budget_error"), "account owner not running")
++    require(state.get("auth_mode") == "chatgpt", "account authentication unknown")
++    for key in ("log_dir", "thread_id", "worker_pid", "server_pid",
++                "worker_start", "server_start", "repo", "guardian_run_id"):
++        require(state.get(key) == owner.get(key), "account current owner mismatch")
++    goal = state.get("goal")
++    require(isinstance(goal, dict) and goal.get("status") == "active"
++            and isinstance(goal.get("objective"), str) and bool(goal["objective"])
++            and _account_value_sha256(goal["objective"])
++                == owner.get("goal_objective_sha256")
++            and goal.get("threadId", owner["thread_id"]) == owner["thread_id"],
++            "account saved goal mismatch or stopped")
++    for key in ("worker_pid", "server_pid"):
++        require(type(owner.get(key)) is int and owner[key] > 0,
++                "account owner pid invalid")
++    for key in ("worker_start", "server_start"):
++        require(isinstance(owner.get(key), str) and owner[key].isascii()
++                and owner[key].isdigit(), "account owner birth invalid")
++    transport = state.get("transport_failure") or {}
++    require(not (newest.get("source") == "read"
++                 and transport.get("method") == "account/rateLimits/read"
++                 and transport.get("channel_unusable")),
++            "failed transport requires original notification-only fallback")
++    require(newest.get("server_pid") == owner["server_pid"],
++            "account response server mismatch")
++    source = newest.get("source")
++    require((source == "read" and newest.get("method") == "account/rateLimits/read"
++             and type(newest.get("request_id")) is int)
++            or (source == "notification"
++                and newest.get("method") == "account/rateLimits/updated"
++                and newest.get("request_id") is None),
++            "account observation source mismatch")
++    require(type(newest.get("received_utc_ns")) is int,
++            "account observation UTC missing")
++    for now, received in ((now_utc_ns, newest["received_utc_ns"]),
++                          (now_mono_ns, newest["received_mono_ns"])):
++        require(0 <= now - received < max_age_seconds * 1000000000,
++                "account observation stale")
++    limits = state.get("last_rate_limits")
++    finite_primary(limits)
++    require(_account_value_sha256(limits) == newest.get("rate_limits_sha256"),
++            "account observation limits mismatch")
++    require(state.get("credit_budget") == ledger,
++            "account durable credit snapshot mismatch")
++    require(_account_value_sha256(ledger) == newest.get("credit_record_sha256"),
++            "account observation credit mismatch")
++    require(type(ledger.get("schema_version")) is int
++            and ledger.get("schema_version") in (1, 2)
++            and ledger.get("id") == owner["credit_run_id"]
++            and amount(ledger.get("budget"), positive=True)
++                == amount(owner["credit_budget"], positive=True),
++            "account original credit identity mismatch")
++    initial = amount(ledger.get("initial_balance"))
++    minimum = amount(ledger.get("minimum_balance"))
++    last = amount(ledger.get("last_balance"))
++    spent = amount(ledger.get("spent"))
++    remaining = amount(ledger.get("remaining"))
++    budget = amount(ledger.get("budget"), positive=True)
++    require(minimum <= initial and minimum <= last
++            and spent >= initial - minimum
++            and remaining == max(Decimal(0), budget - spent)
++            and (ledger["schema_version"] != 1
++                 or (last <= initial and spent == initial - minimum)),
++            "account retained credit accounting inconsistent")
++    require(last == available_balance(limits),
++            "account observation credit balance mismatch")
++    require(remaining > 0, "account credit exhausted or unknown")
++    require(newest.get("state_limits_and_credit_persisted") is True,
++            "account observation persistence unconfirmed")
++    return dict(newest)
++
++
+ class RPC:
+     """JSON-lines transport; waiting and goal observation consume no model tokens."""
+     def __init__(self, argv, log_dir, on_event):
+         self.on_event = on_event
+         self.next_id = 0
+         self.responses = {}
++        self.pending_methods = {}
++        self.response_contexts = {}
++        self.account_receive_sequence = 0
++        self.last_account_read_completion = None
++        self.last_account_notification = None
+         self.buffer = b""
+         self.events = (log_dir / "protocol.jsonl").open("a", buffering=1)
+         self.stderr = (log_dir / "server.stderr.log").open("ab")
+@@ -368,9 +504,43 @@
+         while b"\n" in self.buffer:
+             line, self.buffer = self.buffer.split(b"\n", 1)
+             message = json.loads(line)
++            # Time the decoded receive, not the eventual return from call():
++            # a newer notification may be consumed before a read is returned.
++            self.account_receive_sequence += 1
++            received_utc_ns = time.time_ns()
++            received_mono_ns = time.monotonic_ns()
+             if "method" not in message:
+-                self.responses[message["id"]] = message
++                ident = message["id"]
++                if self.pending_methods.get(ident) == "account/rateLimits/read":
++                    result = message.get("result")
++                    limits = result.get("rateLimits") if isinstance(result, dict) else None
++                    self.response_contexts[ident] = {
++                        "schema_version": 1, "source": "read",
++                        "method": "account/rateLimits/read", "request_id": ident,
++                        "received_at": datetime.fromtimestamp(
++                            received_utc_ns / 1000000000, timezone.utc).isoformat(),
++                        "received_utc_ns": received_utc_ns,
++                        "received_mono_ns": received_mono_ns,
++                        "sequence": self.account_receive_sequence,
++                        "server_pid": self.proc.pid,
++                        "rate_limits_sha256": _account_value_sha256(limits),
++                        "response_error": "error" in message,
++                    }
++                self.responses[ident] = message
+                 continue
++            if message.get("method") == "account/rateLimits/updated":
++                limits = (message.get("params") or {}).get("rateLimits")
++                self.last_account_notification = {
++                    "schema_version": 1, "source": "notification",
++                    "method": "account/rateLimits/updated", "request_id": None,
++                    "received_at": datetime.fromtimestamp(
++                        received_utc_ns / 1000000000, timezone.utc).isoformat(),
++                    "received_utc_ns": received_utc_ns,
++                    "received_mono_ns": received_mono_ns,
++                    "sequence": self.account_receive_sequence,
++                    "server_pid": self.proc.pid,
++                    "rate_limits_sha256": _account_value_sha256(limits),
++                }
+             self.events.write(json.dumps({"at": utc(), "event": message}) + "\n")
+             if "id" in message:
+                 if message["method"] == USER_INPUT_METHOD:
+@@ -399,8 +569,11 @@
+                 self.on_event({"method": "launcher/serverStderr", "params": {"delta": value}})
+ 
+     def call(self, method, params, timeout=45.0):
++        if method == "account/rateLimits/read":
++            self.last_account_read_completion = None
+         self.next_id += 1
+         ident = self.next_id
++        self.pending_methods[ident] = method
+         self.events.write(json.dumps({"at": utc(), "request": method, "id": ident}) + "\n")
+         try:
+             self.send({"id": ident, "method": method, "params": params})
+@@ -410,11 +583,17 @@
+                     raise RecoverableFailure("App-server request timed out: " + method)
+                 self.pump(min(1.0, max(0.0, deadline - time.monotonic())))
+         except (RecoverableFailure, BrokenPipeError, ConnectionResetError) as error:
++            self.pending_methods.pop(ident, None)
++            self.response_contexts.pop(ident, None)
+             if not hasattr(error, "rpc_method"):
+                 error.rpc_method = method
+                 error.rpc_mutating = method not in READ_ONLY_RPC_METHODS
+             raise
+         response = self.responses.pop(ident)
++        self.pending_methods.pop(ident, None)
++        completion = self.response_contexts.pop(ident, None)
++        if method == "account/rateLimits/read":
++            self.last_account_read_completion = completion
+         if "error" in response:
+             raise RuntimeError(method + ": " + json.dumps(response["error"]))
+         return response["result"]
+@@ -624,6 +803,9 @@
+         self.state.pop("transport_shutdown_pause", None)
+         self.state.pop("transport_startup", None)
+         self.state.pop("transport_failure", None)
++        for key in ("successful_account_read", "last_account_observation",
++                    "last_account_notification"):
++            self.state.pop(key, None)
+         self.last_credit_notification = None
+         self.last_activity = time.monotonic()
+         self.stopping = False
+@@ -1131,7 +1313,109 @@
+                         "require_active": active, "class": "service_transient",
+                         "error": failure["error"], "method": None})
+ 
+-    def record_rate_limits(self, limits, *, notification=False):
++    def record_rate_limits(self, limits, *, notification=False,
++                           read_completion=None):
++        context = None
++        if self.rpc is not None:
++            if notification:
++                context = getattr(self.rpc, "last_account_notification", None)
++            elif read_completion is getattr(self.rpc, "last_account_read_completion", None):
++                context = read_completion
++        previous = self.state.get("last_account_observation")
++        previous_limits = self.state.get("last_rate_limits")
++        order = lambda item: (item["received_mono_ns"], item["sequence"])
++        late_read = (context is not None and previous is not None
++                     and order(context) < order(previous))
++        if context is not None:
++            if context.get("rate_limits_sha256") != _account_value_sha256(limits):
++                raise ValueError("account receive payload mismatch")
++            context = dict(context, status="PENDING")
++            if not late_read:
++                fields = {"last_account_observation": context}
++                if notification:
++                    fields["last_account_notification"] = context
++                self.save(**fields)
++        # Original accounting, including the original durable ledger and all
++        # real holds.  Even a late read remains conservatively accounted.
++        self._record_rate_limits_accounting(limits, notification=notification)
++        if context is None:
++            return
++        if late_read:
++            # pump() can consume a newer notification before call() returns an
++            # older read.  Restore its actual limits, never its freshness clock.
++            # Re-observe through the SAME conservative cumulative ledger: an
++            # upward snapshot never refunds allowance or clears any real hold.
++            if _account_value_sha256(previous_limits) != previous.get("rate_limits_sha256"):
++                raise ValueError("newer account observation payload mismatch")
++            self.save(last_rate_limits=previous_limits)
++            context = dict(previous, status="PENDING")
++            if not self.stop_reason and not self.stop_now \
++                    and previous.get("status") == "ACCEPTED":
++                self._record_rate_limits_accounting(previous_limits, notification=False)
++            else:
++                rejected = dict(context, status="REJECTED")
++                fields = {"last_account_observation": rejected}
++                if context.get("source") == "notification":
++                    fields["last_account_notification"] = rejected
++                self.save(**fields)
++                return
++        newest = self.state.get("last_account_observation")
++        if newest is None or order(newest) != order(context):
++            return
++        publish_notification = context.get("source") == "notification"
++        if self.stop_reason or self.stop_now or self.credit_guard is None \
++                or self.state.get("credit_budget_error"):
++            rejected = dict(context, status="REJECTED")
++            fields = {"last_account_observation": rejected}
++            if publish_notification:
++                fields["last_account_notification"] = rejected
++            self.save(**fields)
++            return
++        # Starting/paused/blocked workers still use the original accounting.
++        # Only the actual running saved-goal owner can publish this new receipt.
++        if self.state.get("phase") != "running" \
++                or (self.state.get("goal") or {}).get("status") != "active":
++            return
++        saved = json.loads(self.state_path.read_text())
++        ledger = json.loads(self.credit_guard.path.read_text())
++        if saved.get("last_rate_limits") != self.state.get("last_rate_limits") \
++                or saved.get("credit_budget") != ledger:
++            raise ValueError("account durable publication mismatch")
++        def birth(pid):
++            raw = Path("/proc/%d/stat" % pid).read_text()
++            return raw.rsplit(")", 1)[1].split()[19]
++        worker_pid = os.getpid()
++        server_pid = self.rpc.proc.pid
++        owner = {
++            "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
++            "repo": str(self.repo), "guardian_run_id": self.state.get("guardian_run_id"),
++            "log_dir": str(self.log_dir), "thread_id": self.state.get("thread_id"),
++            "goal_objective_sha256": _account_value_sha256(
++                (self.state.get("goal") or {}).get("objective")),
++            "worker_pid": worker_pid, "worker_start": birth(worker_pid),
++            "server_pid": server_pid, "server_start": birth(server_pid),
++            "credit_run_id": self.credit_guard.identifier,
++            "credit_budget": str(self.credit_guard.budget),
++            "credit_ledger_path": str(self.credit_guard.path),
++        }
++        accepted = dict(context, status="ACCEPTED", owner=owner,
++                        credit_record_sha256=_account_value_sha256(ledger),
++                        state_limits_and_credit_persisted=True)
++        trial = dict(saved, last_account_observation=accepted)
++        if publish_notification:
++            trial["last_account_notification"] = accepted
++        else:
++            trial["successful_account_read"] = accepted
++        accepted_account_observation(trial, ledger, owner,
++                                     time.time_ns(), time.monotonic_ns())
++        fields = {"last_account_observation": accepted}
++        if publish_notification:
++            fields["last_account_notification"] = accepted
++        else:
++            fields["successful_account_read"] = accepted
++        self.save(**fields)
++
++    def _record_rate_limits_accounting(self, limits, *, notification=False):
+         if notification:
+             self.last_credit_notification = None
+         previous = self.state.get("last_rate_limits") or {}
+@@ -1196,9 +1480,17 @@
+                 prior = self.state.get("transport_failure") or {}
+                 if prior.get("method") == "account/rateLimits/read" and prior.get("channel_unusable"):
+                     self.save(transport_failure=None)
+-                self.record_rate_limits(result.get("rateLimits"))
++                self.record_rate_limits(
++                    result.get("rateLimits"), read_completion=getattr(
++                        self.rpc, "last_account_read_completion", None))
+                 return
+             except Exception as error:
++                completion = getattr(self.rpc, "last_account_read_completion", None)
++                if isinstance(completion, dict) and completion.get("response_error"):
++                    previous = self.state.get("last_account_observation")
++                    order = lambda item: (item["received_mono_ns"], item["sequence"])
++                    if previous is None or order(completion) >= order(previous):
++                        self.save(last_account_observation=dict(completion, status="REJECTED"))
+                 if getattr(error, "rpc_mutating", False):
+                     self.save(transport_uncertain={"at": utc(), "method": error.rpc_method,
+                               "error": str(error), "reason": "nested_mutating_rpc_delivery_uncertain"})

@@ -1,0 +1,196 @@
+{
+  "FD_cleanup": {
+    "close_errors": [],
+    "same_reviewed_oneclose_finally_path_executed_and_child_exit0": true,
+    "two_pinned_pidfds": 2
+  },
+  "actual_terminal_pidfd_events": {
+    "guardian": [
+      [
+        3,
+        1
+      ]
+    ],
+    "inhibitor_parent": [
+      [
+        4,
+        1
+      ]
+    ]
+  },
+  "cgroup_positive_closure": {
+    "all_old_member_pidfds_terminal": true,
+    "guardian_lock_kernel_fd_closure": "terminal process closes its own FD; actual new constructor must acquire same guardian FLOCK before publishing new identity",
+    "native_or_model_release": false,
+    "old_known_members": [
+      761844,
+      761845
+    ],
+    "proof": {
+      "basis": "explicit original manager ControlGroup cleared plus old invocation terminal/reaped and two terminal pidfds; no missing-only free inference",
+      "kernel_members": null,
+      "manager_ControlGroup": "",
+      "path": "/sys/fs/cgroup/systemd/user.slice/user-1000.slice/user@1000.service/mckernel-guardian-4757c1121e29.service/cgroup.procs"
+    }
+  },
+  "current_accepted_delivery_before_after_equal": {
+    "delivered_at": "2026-11-11T21:36:55.294399+00:00",
+    "id": "source-3d96527bf23156ac8eeaed5550b68328c7997c098dcd0e48d693ab198cad88e7",
+    "status": "accepted_by_server",
+    "submitted_at": "2026-11-11T21:36:54.220741+00:00",
+    "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "turn_id": "01a1cb00-afa7-7e33-b707-c35b089d352f"
+  },
+  "native_or_model_acceptance": false,
+  "new_guardian": {
+    "checkpoint": null,
+    "heartbeat_at": 1794433550.9633503,
+    "launch": null,
+    "mailbox_error": null,
+    "phase": "SUPERVISED",
+    "pid": 1561218,
+    "reason": null,
+    "run_id": "88169fc42ce44bba925917703eae8c20",
+    "start": "51981693",
+    "started_at": 1794433550.9462776,
+    "user_stop": null,
+    "watcher_retirement": null
+  },
+  "new_manager": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-guardian-4757c1121e29.service",
+    "ExecMainCode": "0",
+    "ExecMainExitTimestampMonotonic": "0",
+    "ExecMainPID": "1561217",
+    "ExecMainStartTimestampMonotonic": "303622328257",
+    "ExecMainStatus": "0",
+    "InvocationID": "1333245e9e12419b9cfc32fcda6acb2b",
+    "MainPID": "1561217",
+    "NRestarts": "1",
+    "Result": "success",
+    "SubState": "running"
+  },
+  "nonchild_wait_claim": false,
+  "old_guardian": {
+    "birth": "37669071",
+    "cgroup_sha256": "bafadd3a1b825f05603b16d2a69601fde8f459031bfe0b017c23c40e4fe1b776",
+    "cmdline_sha256": "9f0276ef1900eec034c58f695fed9dba9f4c75f4cdc0380ede4cd5321bcb0d79",
+    "pid": 761845,
+    "ppid": 761844,
+    "role": "guardian",
+    "stat_sha256": "0253e0d5d028967c555592e241be6d17cfc52c584852b1d571482311eb06cd06",
+    "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-guardian-4757c1121e29.service",
+    "uid": 1000
+  },
+  "old_inhibitor": {
+    "birth": "37669070",
+    "cgroup_sha256": "bafadd3a1b825f05603b16d2a69601fde8f459031bfe0b017c23c40e4fe1b776",
+    "cmdline_sha256": "c0e01b359b8155c319fd60abce152b3884ad67b41994e5ae93a77a2ab430a067",
+    "pid": 761844,
+    "ppid": 1392,
+    "role": "inhibitor_parent",
+    "stat_sha256": "847285af3d00e07d271bd3253be702f0a05c8a38fe28b43f32cad23ab4391cc4",
+    "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-guardian-4757c1121e29.service",
+    "uid": 1000
+  },
+  "old_manager": {
+    "ActiveState": "activating",
+    "ControlGroup": "",
+    "ExecMainCode": "1",
+    "ExecMainExitTimestampMonotonic": "303617321038",
+    "ExecMainPID": "761844",
+    "ExecMainStartTimestampMonotonic": "160496119452",
+    "ExecMainStatus": "1",
+    "InvocationID": "2afa18d68bad4acd8ffe2c67a8ae715c",
+    "MainPID": "0",
+    "NRestarts": "0",
+    "Result": "exit-code",
+    "SubState": "auto-restart"
+  },
+  "raw_new_heartbeat_scope": "Final new guardian record is saved. Two advancing heartbeat observations are required by the exact executed helper; the first transient local observation was not separately serialized. No extra observation is fabricated.",
+  "refs": {
+    "ACTION-ATTEMPTED.json": {
+      "bytes": 705,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/ACTION-ATTEMPTED.json",
+      "sha256": "bb00058538da658c11bcde2393cd0010a096145bb3361200894492c805d2b98b"
+    },
+    "CGROUP-AND-ORIGINAL-FD-CLOSURE.json": {
+      "bytes": 664,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/CGROUP-AND-ORIGINAL-FD-CLOSURE.json",
+      "sha256": "c633395abf871629b9803cc99757f20a8a303984de2f4dadbd69eb997fd970dd"
+    },
+    "CGROUP-BEFORE.json": {
+      "bytes": 277,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/CGROUP-BEFORE.json",
+      "sha256": "c6884b174511dac8c44113a69c0b4fa577f5a73708f14567aca5671734774cb0"
+    },
+    "OLD-PIDFD-TERMINAL.json": {
+      "bytes": 1320,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-PIDFD-TERMINAL.json",
+      "sha256": "297e6725a59b39aa3e51db8891771bda7ee6a45b21821c78b97dceefd8c38709"
+    },
+    "OLD-UNIT-TERMINAL.json": {
+      "bytes": 383,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/OLD-UNIT-TERMINAL.json",
+      "sha256": "e17bc4f9a1ba380255d9151f127cf172eee4c64e4a559b40f9d755570576bbce"
+    },
+    "PRE-ACTION.json": {
+      "bytes": 3378,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/PRE-ACTION.json",
+      "sha256": "2c73093146c6643d46990ae0b7b0e775fbb714f0480094abb8129e5c92ec010d"
+    },
+    "RESULT.json": {
+      "bytes": 4353,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/RESULT.json",
+      "sha256": "6efca0718c7f241ac9980765ac48ba662ec331487d46d947216f17ae7c48d578"
+    },
+    "UNIT-AFTER.json": {
+      "bytes": 452,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/UNIT-AFTER.json",
+      "sha256": "2464a85fc89f197b7e58de6e5aaaa139159aed05a1f381907be79b288a3c1328"
+    },
+    "UNIT-BEFORE.json": {
+      "bytes": 450,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/UNIT-BEFORE.json",
+      "sha256": "4b49cb9a699693ab4c9f10cbbd10c5a5da7c480b59ad3df1c78e3c02f2d5a630"
+    },
+    "ownership.json": {
+      "bytes": 1507,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/guardian-only-recovery-1/cgroup-closure-correction-1/ownership-reference-and-liveness-correction-1/operation-output-1/ownership.json",
+      "sha256": "55b18799663eccfef2b6270df4a7075fa1e39fc8893e5e8f52952cb78c55785d"
+    }
+  },
+  "same_credit_run": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+  "same_guardian_run": "88169fc42ce44bba925917703eae8c20",
+  "same_original_engine_roles": [
+    {
+      "birth": "37669552",
+      "cmdline_sha256": "f98ee7f8fc849b925274aa16f9b65c9b7efc54e4e7fb43d467d00745d223477a",
+      "pid": 762046,
+      "ppid": 762044,
+      "state": "S",
+      "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-engine-4757c1121e29.service",
+      "uid": 1000
+    },
+    {
+      "birth": "37669559",
+      "cmdline_sha256": "87fe63762581de5456e47c43e097ae723ed158c0b4aed1aec6d73ca107b3acd9",
+      "pid": 762048,
+      "ppid": 762046,
+      "state": "S",
+      "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-engine-4757c1121e29.service",
+      "uid": 1000
+    },
+    {
+      "birth": "37669567",
+      "cmdline_sha256": "7c08dc3b1135fc11811a61f0e78ba406bbbbc2219b33661e4e49fa3195928e20",
+      "pid": 762050,
+      "ppid": 762048,
+      "state": "S",
+      "systemd_cgroup": "/user.slice/user-1000.slice/user@1000.service/mckernel-engine-4757c1121e29.service",
+      "uid": 1000
+    }
+  ],
+  "same_original_root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "schema": "actual-guardian-only-recovery-saved-joins-v1"
+}
