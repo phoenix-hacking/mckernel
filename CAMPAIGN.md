@@ -15,10 +15,11 @@ separately proved; failed qualifier evidence and bounded correction are retained
 Remaining C4 and FUNCTIONAL/native/parent/file/milestone obligations stay open.
 Four accepted M14 files and accepted M15-F01 keep their exact scopes. Criteria,
 weights, denominators and M14-before-M15 acceptance order are unchanged.
-EACH75% by2026-11-10T16:00Z was missed, not a stop time. Checkpoint43 publication
-is in progress; sourcec964 and 25-file preserved a2f cohort remain recoverable.
-Last confirmed PR3 receipt6791617739 covers66.94/67.19; the new67.22/67.19 report
-is pending source/results push+fetched-byte confirmation. Do not repeat oldpair.
+EACH75% by2026-11-10T16:00Z was missed, not a stop time. Checkpoint43 cddaec4d is
+pushed/fetched147 matching owned blobs; sourcec964 and preserved25-file a2f cohort
+remain recoverable. [PR3receipt6803610176](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176)
+is POSTED_CONFIRMED for67.22/67.19, dedupeM14-03-05-DEFAULT@c7f765f0. No report
+is pending; post again only after a verified percentage changes.
 All33 unrelated dirty paths and every historical UNKNOWN/hold remain preserved.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
