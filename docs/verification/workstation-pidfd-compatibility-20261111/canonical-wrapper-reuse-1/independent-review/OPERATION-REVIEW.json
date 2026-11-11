@@ -1,0 +1,300 @@
+{
+  "actual_selected_interpreter": {
+    "bytes": 15880080,
+    "path": "/home/holden/anaconda3/bin/python3",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "all_other_holds_preserved": true,
+  "at": "2026-11-11T21:24:51.335295+00:00",
+  "decision": "GO_EXACT_FIVE_CONTROLLED_CASES_AFTER_FRESH_ROOT_HOST_ADMISSION",
+  "effort": "max",
+  "exact_Root_argv_prefix": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/run_root_once.py"
+  ],
+  "exact_child_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456",
+    "--cpu=10",
+    "--fsize=4194304",
+    "--nofile=64",
+    "--",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/output-1/tmp",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/pidfd_compatibility_cases.py"
+  ],
+  "five_cases": [
+    {
+      "case": "missing_builtins_real_wrapper_syscall_ABI",
+      "close_calls": [
+        777
+      ],
+      "errno": null,
+      "expected_exception": null,
+      "syscall_numbers": [
+        434,
+        424
+      ],
+      "verdict": "SOURCE_AND_ORACLE_CONSISTENT_ACTUAL_RUNTIME_PENDING"
+    },
+    {
+      "case": "birth_mismatch_no_send",
+      "close_calls": [
+        777
+      ],
+      "errno": null,
+      "expected_exception": "ValueError",
+      "syscall_numbers": [
+        434
+      ],
+      "verdict": "SOURCE_AND_ORACLE_CONSISTENT_ACTUAL_RUNTIME_PENDING"
+    },
+    {
+      "case": "open_errno_no_handle_or_send",
+      "close_calls": [],
+      "errno": 38,
+      "expected_exception": "OSError",
+      "syscall_numbers": [
+        434
+      ],
+      "verdict": "SOURCE_AND_ORACLE_CONSISTENT_ACTUAL_RUNTIME_PENDING"
+    },
+    {
+      "case": "send_errno_still_closes_once",
+      "close_calls": [
+        777
+      ],
+      "errno": 3,
+      "expected_exception": "ProcessLookupError",
+      "syscall_numbers": [
+        434,
+        424
+      ],
+      "verdict": "SOURCE_AND_ORACLE_CONSISTENT_ACTUAL_RUNTIME_PENDING"
+    },
+    {
+      "case": "close_failure_observable_no_retry",
+      "close_calls": [
+        777
+      ],
+      "errno": 5,
+      "expected_exception": "OSError",
+      "syscall_numbers": [
+        434,
+        424
+      ],
+      "verdict": "SOURCE_AND_ORACLE_CONSISTENT_ACTUAL_RUNTIME_PENDING"
+    }
+  ],
+  "fixture_findings": {
+    "Python3_8_AST_parses_only": 8,
+    "all_input_file_SHA_and_sizes_match": 27,
+    "full_whole_actual_functions_used": [
+      "candidate signal_exact",
+      "canonical watch_os_goal.pidfd_open",
+      "canonical watch_os_goal.pidfd_send_signal",
+      "canonical watch_os_goal._linux_pidfd_syscall"
+    ],
+    "no_injected_fake_watcher_or_mirrored_predicate": true,
+    "no_real_kernel_effects": "No real pidfd is opened, no synthetic fd777 reaches OS close, and no actual process/signal/controller/account/native operation is invoked. Source read/hash and normal stdlib/module imports alone remain real.",
+    "normal_import": "Fixture-only scripts path resolves actual watch_os_goal module, exact __file__/SHA and actual function globals. Production adds no path override or helper copy.",
+    "only_controlled_lower_effects": [
+      "watcher os/signal/ctypes references, with builtins absent and fake CDLL.syscall endpoint",
+      "genuine ctypes scalar classes,size and errno TLS retained",
+      "candidate process_start point-read and os.close; fake numeric kill/killpg fail closed"
+    ],
+    "oracle": "External full6323B five-row JSON covers typed syscall434/424, zero flags/null info, identity/order, exact exception errno, sole close and exhausted scripts. Expected rows are not computed by candidate predicate.",
+    "runtime_report": "Unmocked initial3.9.12/runtime/executable/builtin availability/Linux/x86_64/pointer8 metadata is compared to the pinned actual capability expectation; controlled effects begin inside each case."
+  },
+  "material_findings": [],
+  "model": "gpt-6.1-sol",
+  "old_nine_case_not_reviewed_or_executed_by_me": true,
+  "parent_capture": {
+    "algorithm_unchanged": true,
+    "exact_two_substitutions": [
+      {
+        "after": "00c28c123c9f0b03288c62f10e1173c99392a0b1a3c357f6724bb223259b5908",
+        "before": "fd181e12aa262d58ca3513c0d57395d924a38e2d62d127cb6d8fe0c40070e8a3"
+      },
+      {
+        "after": "pidfd_compatibility_cases=5",
+        "before": "pidfd_compatibility_cases=9"
+      }
+    ],
+    "owner_helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "parent": {
+      "bytes": 5520,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/run_root_once.py",
+      "sha256": "4cfffd8bc6ef588864371ffa438b45385471d63020db32c42e73bd6d7469e6a5"
+    },
+    "protected_parent_basis": {
+      "bytes": 5552,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/run_root_once.py",
+      "sha256": "3c2f29de097328cb90a92c9ee34fa540e31f6658d73cf51234f3ec86d3eae809"
+    },
+    "required_result": "One actual positive leader birth/status0/direct+whole-family waits/closedstreams/no timeout/group signal/adopted reaps or kills/residual children, full expected JSON and emptyerr. Innerclosure is not outerRoot resource retirement."
+  },
+  "profile": {
+    "CPU_seconds": 10,
+    "Root_actual_fresh_admission_required": true,
+    "all_controller_worker_overhead_inside_shared4": true,
+    "conservative_other_HOST_job_slots": 1,
+    "conservative_other_HOST_reserved_bytes": 268435456,
+    "cpu": 0,
+    "file_size_limit_bytes": 4194304,
+    "fresh_MemAvailable_floor_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "jobs": 1,
+    "max_address_space_bytes": 268435456,
+    "no_CPU1_or_native_borrow": true,
+    "other_payload_rule": "Root must freshly reconcile zero or atmost1 separately admitted other HOST job<=256MiB on another allowed CPU; no peer grant/release follows.",
+    "output_disk_reservation_bytes": 16777216,
+    "scratch_disk_floor_bytes": 12884901888,
+    "shared_HOST_total_bytes": 4294967296,
+    "shared_jobs_max": 3,
+    "wall_seconds": 20
+  },
+  "refs": {
+    "EXPECTED.json": {
+      "bytes": 6323,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/EXPECTED.json",
+      "sha256": "b59c0b515375b91e46031549ca06a7ea4cbb5a30669190c95e139e517220bbb3"
+    },
+    "FOCUSED-TEST-CONTRACT.json": {
+      "bytes": 2777,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/FOCUSED-TEST-CONTRACT.json",
+      "sha256": "d739fdf1a2a16bc97af003f90cf4bcba9bb3495261a6812cd9d85200a29c2706"
+    },
+    "INPUTS.json": {
+      "bytes": 6976,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/INPUTS.json",
+      "sha256": "19f3323a82da6dde474fc7e753db33f894c7a87e29a7943afd49b372201ae87b"
+    },
+    "PARENT-BINDING.json": {
+      "bytes": 1310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/PARENT-BINDING.json",
+      "sha256": "e72967910d55fdc6f58eff9f42ade75f99ab0deb7d65ccdf86c50f26e9d7b68b"
+    },
+    "READY.json": {
+      "bytes": 4071,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/READY.json",
+      "sha256": "18c5a34ea1827d170845f9fa15aab554e96342e06ce7b7a80830155922c5d65c"
+    },
+    "REQUEST.json": {
+      "bytes": 14357,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/REQUEST.json",
+      "sha256": "00c28c123c9f0b03288c62f10e1173c99392a0b1a3c357f6724bb223259b5908"
+    },
+    "SOURCE-REVIEW.json": {
+      "bytes": 5579,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/SOURCE-REVIEW.json",
+      "sha256": "1664deceddee67912d95e0bffa3dd00ebde70af48474bcf660acea5028cc7cf4"
+    },
+    "pidfd_compatibility_cases.py": {
+      "bytes": 5867,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/pidfd_compatibility_cases.py",
+      "sha256": "011eeb7f1ff424b258d954c0bd7fa8c70c907dbce24b4f7b1fb881f73e840490"
+    },
+    "run_root_once.py": {
+      "bytes": 5520,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/run_root_once.py",
+      "sha256": "4cfffd8bc6ef588864371ffa438b45385471d63020db32c42e73bd6d7469e6a5"
+    }
+  },
+  "required_Root_review_arguments": [
+    "absolute path of this exact REVIEW.json",
+    "SHA256 of this exact REVIEW.json"
+  ],
+  "reviewer": "/root/p04_source_max",
+  "reviewer_actual_model_evidence": {
+    "bytes": 594,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/profile-inheritance-correction-1/MODEL-EFFORT-READBACK.json",
+    "sha256": "7d56d630ffddfd91e2b263e61b545671f81b4b4c10fd3468eadb8fd90bf7b5cf"
+  },
+  "reviewer_import_test_helper_controller_native_or_account_execution": false,
+  "runtime_PASS_or_resource_grant_inferred": false,
+  "runtime_gates": [
+    "Actual Root account/stop/source/resource controls and fresh CPU0 ownership; no hold is released by this review.",
+    "Actual sharedHOST4GiB/max3 includes all controller/worker overhead, this256MiB/job and atmost one separately admitted peer<=256MiB; fresh26GiB available and original host16/scratch12 floors plus16MiB disk reservation. Larger/additional live peer prevents admission.",
+    "Exact source/interpreter/fixture/oracle/argv pins and fresh output/capture namespaces rechecked immediately before this one command.",
+    "Require actual complete externalJSON/emptyerr/exit0 and all protected family/stream/FD/child closure. No old9case or helper-green replay.",
+    "Require full outerRoot tool terminal/noSession before current-only256MiB/job release; all other native/source/account/Scratch/resource UNKNOWN holds remain.",
+    "No real guardian controller reload or source transition is granted; actual normal reviewed source adoption/retirement/new-source load remains separate."
+  ],
+  "schema": "focused-lazy-canonical-pidfd-source-operation-review-v1",
+  "scope": "Exact actualAnaconda3.9 fake/lower-effect fixture only. No real pidfd/signal/controller operation, canonical integration, guardian reload or native authority.",
+  "selected_actual_source": {
+    "bytes": 9688,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/candidate/scripts/os_goal_guard_protocol.py",
+    "sha256": "9bc35f56234b30e892828b6f75b4f909896b4125f4d4397e3a02fa810f602d09"
+  },
+  "selected_source_contract": {
+    "bytes": 6465,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/CONTRACT.json",
+    "sha256": "7aebce08e3bf36539d54f217cc65b746bbff5ac03e398327cad2c4a87ce9fdd5"
+  },
+  "selected_source_ready": {
+    "bytes": 2576,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "fef2c6709f365a279c7405e49368388114c62e323720f2b65254dc7e174239ba"
+  },
+  "source_findings": {
+    "canonical_pidfd_helper_source_spans_with_final_LF_verified": [
+      {
+        "name": "_linux_pidfd_syscall",
+        "source": {
+          "bytes": 39730,
+          "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+          "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+        },
+        "source_span_sha256": "e048f0209a404264b03944bda3b00a1b0a0b2467e1033525dc645a0b9d6f939a"
+      },
+      {
+        "name": "pidfd_open",
+        "source": {
+          "bytes": 39730,
+          "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+          "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+        },
+        "source_span_sha256": "e13190c8c59ee67f131fd300d5c34164243bfa4f504275f21f649ff1553bbf8e"
+      },
+      {
+        "name": "pidfd_send_signal",
+        "source": {
+          "bytes": 39730,
+          "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+          "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+        },
+        "source_span_sha256": "5b4c2f0ed5fdc6722f8b207182c61c57ca80a8ccfb6001463a65abc60f3d6f75"
+      }
+    ],
+    "exact_identity_and_close": "Real canonical wrappers open a pidfd, then real protocol checks exact positive digit-string/current birth before sending; exactly one finally close of the acquired fd, no numeric signal fallback.",
+    "lazy_import_safety": "Full protocol and canonical watcher are imported normally; no control main/import-time signal_exact call. Pinned canonical watcher normal dependency closure defines functions/constants only and remains unchanged.",
+    "loaded_guardian_scope": "No fresh CLI or fixture import updates an already-loaded guardian; real retirement/source loading is separately gated.",
+    "only_changed_function": "signal_exact",
+    "other_complete_definition_source_spans_byte_equal": 9
+  },
+  "superseded_old_nine_case_packet": {
+    "bytes": 17275,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/REQUEST.json",
+    "sha256": "fd181e12aa262d58ca3513c0d57395d924a38e2d62d127cb6d8fe0c40070e8a3"
+  }
+}

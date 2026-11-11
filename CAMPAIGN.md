@@ -56,10 +56,13 @@ outcomes remain old-only. Do not reissue or reread this successful generation.
 controller transition proposal, preserving guardian/mailbox, saved goal/thread,
 finite7c6 credit run/cumulative budget, actual interpreter and resource owners.
 Actual AnacondaPython3.9 lacks os.pidfd_open/signal.pidfd_send_signal, so the
-current signal_exact stop route refuses before signaling. PubABI owns the narrow
-genuine pidfd compatibility correction; P04Tests tests independently before any
-normal stop/transition. No controller activation or native run is claimed. SDK implements the confirmed
-RPC poll receipt liveness correction; P03 prepares focused tests and SourceAcq
+current signal_exact stop route refuses before signaling. Root integrated only reviewed9bc3 lazycanonicalwatcher wrappers after actual
+Anaconda3.9 fivecasePASSae6486/independentQfae688. Wrongbirth/kernelerror/FDclose
+checks pass, oneOwner/fullRoot positive; current256MiB retired. Loaded oldguardian
+is unchanged. PubABI freezes exact guardian-only technicalrecovery/adopt-active
+operation because ordinarySIGTERM deliberately queues modelstop. No live signal or
+unitrestart is issued. [Actual repair](docs/verification/workstation-pidfd-compatibility-20261111/canonical-wrapper-reuse-1/PUBLICATION-SCOPE.json). No controller activation or native run is claimed. SDK39a/16ed has implemented the real RPC poll receipt; P03 binds actualsource
+tests and Rootconsumer43935 is under SourceAcq independent materialreview. SourceAcq
 reviews the changed source after current F02 review. Successful account/rateLimits/read
 responses must carry actual method/id/response time/owner context through SAME
 ledger and state persistence before a success receipt; heartbeat/request time

@@ -1,0 +1,88 @@
+{
+  "actual_runtime_type_or_import_correctness": "UNPROVED_UNTIL_ROOT_ADMITTED_COMMAND",
+  "at": "2026-11-11T21:20:17.780830+00:00",
+  "cases": 5,
+  "commands": 1,
+  "contract": {
+    "bytes": 2777,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/FOCUSED-TEST-CONTRACT.json",
+    "sha256": "d739fdf1a2a16bc97af003f90cf4bcba9bb3495261a6812cd9d85200a29c2706"
+  },
+  "expected": {
+    "bytes": 6323,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/EXPECTED.json",
+    "sha256": "b59c0b515375b91e46031549ca06a7ea4cbb5a30669190c95e139e517220bbb3"
+  },
+  "fixture": {
+    "bytes": 5867,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/pidfd_compatibility_cases.py",
+    "sha256": "011eeb7f1ff424b258d954c0bd7fa8c70c907dbce24b4f7b1fb881f73e840490"
+  },
+  "inputs": {
+    "bytes": 6976,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/INPUTS.json",
+    "sha256": "19f3323a82da6dde474fc7e753db33f894c7a87e29a7943afd49b372201ae87b"
+  },
+  "literal_Root_invocation": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/run_root_once.py",
+    "<P04Source REVIEW.json>",
+    "<exact REVIEW sha256>"
+  ],
+  "literal_payload_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456",
+    "--cpu=10",
+    "--fsize=4194304",
+    "--nofile=64",
+    "--",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/output-1/tmp",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/pidfd_compatibility_cases.py"
+  ],
+  "live_guardian_or_native_or_account_actions": false,
+  "model_effort": {
+    "bytes": 386,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/MODEL-EFFORT-READBACK.json",
+    "sha256": "5c803ae601e89c385ab70e3d96a53dd47261d07b7937c4026061d28701566ef0"
+  },
+  "old_copied_helpers_packet_preserved_unexecuted": true,
+  "output_and_execution_roots_absent": true,
+  "parent": {
+    "bytes": 5520,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/run_root_once.py",
+    "sha256": "4cfffd8bc6ef588864371ffa438b45385471d63020db32c42e73bd6d7469e6a5"
+  },
+  "parent_binding": {
+    "bytes": 1310,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/PARENT-BINDING.json",
+    "sha256": "e72967910d55fdc6f58eff9f42ade75f99ab0deb7d65ccdf86c50f26e9d7b68b"
+  },
+  "request": {
+    "bytes": 14357,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/REQUEST.json",
+    "sha256": "00c28c123c9f0b03288c62f10e1173c99392a0b1a3c357f6724bb223259b5908"
+  },
+  "schema": 1,
+  "source_fixture_helper_parent_executed_by_author": false,
+  "source_review": {
+    "bytes": 5579,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/SOURCE-REVIEW.json",
+    "sha256": "1664deceddee67912d95e0bffa3dd00ebde70af48474bcf660acea5028cc7cf4"
+  },
+  "status": "FROZEN_FIVE_LAZY_CANONICAL_PIDFD_CASES_READY_FOR_INDEPENDENT_OPERATION_REVIEW_UNEXECUTED"
+}

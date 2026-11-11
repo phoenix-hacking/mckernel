@@ -1,0 +1,34 @@
+{
+  "actual_check_performed": "read-only source parse and stdlib attribute inspection on the same executable as exact guardian/watcher/worker /proc/exe; no module/project import or pidfd syscall/effect",
+  "actual_observation": {
+    "bytes": 13113,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/CURRENT-CONTROLS.json",
+    "sha256": "57dea73774601ca7af46f26a59a514578a3092c5f3ea3a396c5e432770f3e14f"
+  },
+  "failed_source_predicate": {
+    "actual_value": true,
+    "immediate_error": "RuntimeError(\"Identity-safe pidfd signalling unavailable\")",
+    "line": 88,
+    "path": "/home/holden/mckernel/scripts/os_goal_guard_protocol.py",
+    "text": "not hasattr(os, \"pidfd_open\") or not hasattr(signal, \"pidfd_send_signal\")"
+  },
+  "hold_preserved": "This source/runtime defect makes its phase1 current NO_GO until reviewed repair actually reaches the owning guardian; no source/native/account/permission/resource hold is waived.",
+  "normal_effect_order": "service stop only persists stop request; already-loaded Guardian._user_stop persists user_stop/sending then calls its imported signal_exact; this runtime predicate raises before fd open or signal. No actual stop request was issued here.",
+  "preserved_initial_transition_proposal": {
+    "bytes": 2202,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/READY.NOT-EXECUTED.json",
+    "sha256": "a710ab376e3cb684d9530a442e98f6bc4671a684ab06de7fd6b00b4b47165413"
+  },
+  "runtime": {
+    "argv0": "/home/holden/anaconda3/bin/python3",
+    "current_readonly_diagnostic_interpreter": "/home/holden/anaconda3/bin/python3",
+    "effect_scope": "stdlib attribute inspection only; no pidfd acquisition/signalling",
+    "has_os_pidfd_open": false,
+    "has_signal_pidfd_send_signal": false,
+    "resolved_executable": "/home/holden/anaconda3/bin/python3.9",
+    "same_executable": true,
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "schema": "mckernel.guardian-normal-stop-pidfd-capability-no-go.v1",
+  "status": "NO_GO_UNCORRECTED_NORMAL_STOP_AT_ACTUAL_RUNTIME"
+}

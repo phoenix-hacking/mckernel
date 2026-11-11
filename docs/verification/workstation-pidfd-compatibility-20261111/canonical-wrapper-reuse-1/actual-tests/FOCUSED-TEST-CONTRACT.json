@@ -1,0 +1,61 @@
+{
+  "actual_interpreter": {
+    "bytes": 15880080,
+    "path": "/home/holden/anaconda3/bin/python3",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "actual_real_builtin_capabilities_required": {
+    "os.pidfd_open": false,
+    "signal.pidfd_send_signal": false
+  },
+  "actual_version_required": [
+    3,
+    9,
+    12
+  ],
+  "at": "2026-11-11T21:20:17.780830+00:00",
+  "canonical_dependency": {
+    "bytes": 39730,
+    "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+    "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+  },
+  "cases": [
+    "missing_builtins_real_wrapper_syscall_ABI",
+    "birth_mismatch_no_send",
+    "open_errno_no_handle_or_send",
+    "send_errno_still_closes_once",
+    "close_failure_observable_no_retry"
+  ],
+  "controlled_effects": [
+    "Watcher os/uname/strerror/ctypes.CDLL syscall endpoint, signal builtins absent; real ctypes scalar classes/errno TLS remain.",
+    "Protocol process_start exact point result and finally os.close are recorded lower effects.",
+    "Script exhaustion and unexpected syscall numbers refuse; no real pidfd_open/pidfd_send_signal/kill/process/service/account effect."
+  ],
+  "expected": {
+    "bytes": 6323,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/EXPECTED.json",
+    "sha256": "b59c0b515375b91e46031549ca06a7ea4cbb5a30669190c95e139e517220bbb3"
+  },
+  "no_actual_loaded_guardian_source_update": true,
+  "no_existing_suite_replay": true,
+  "original_acceptance": false,
+  "same_five_external_rows_preserved_from_unexecuted_old_packet": true,
+  "schema": 1,
+  "source": {
+    "bytes": 9688,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/candidate/scripts/os_goal_guard_protocol.py",
+    "sha256": "9bc35f56234b30e892828b6f75b4f909896b4125f4d4397e3a02fa810f602d09"
+  },
+  "source_review": {
+    "bytes": 5579,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/SOURCE-REVIEW.json",
+    "sha256": "1664deceddee67912d95e0bffa3dd00ebde70af48474bcf660acea5028cc7cf4"
+  },
+  "status": "FIVE_CHANGED_DISPATCH_CASES_IMPLEMENTED_RUNTIME_UNPROVED",
+  "superseded_packet": {
+    "bytes": 17275,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/REQUEST.json",
+    "sha256": "fd181e12aa262d58ca3513c0d57395d924a38e2d62d127cb6d8fe0c40070e8a3"
+  },
+  "unchanged_wrapper_and_builtin_platform_tests_reused_without_replay": true
+}

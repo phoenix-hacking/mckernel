@@ -1,0 +1,56 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-11T21:25:47.490116+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "00c28c123c9f0b03288c62f10e1173c99392a0b1a3c357f6724bb223259b5908",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=4194304",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/pidfd_compatibility_cases.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1",
+      "exit": 0,
+      "id": "actual-anaconda-lazy-canonical-pidfd-five-cases",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "actual-anaconda-lazy-canonical-pidfd-five-controlled-cases",
+        "leader": 1555075,
+        "leader_birth": "51861345",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "25e903d44a6d5185c055f117fdddd447d46d90ce7ca93ec08d31d73999ad9736",
+  "started_at": "2026-11-11T21:25:47.356299+00:00",
+  "status": "PASS_ACTUAL_ANACONDA_PIDFD_COMPATIBILITY_PENDING_SAVED_QUALIFICATION"
+}

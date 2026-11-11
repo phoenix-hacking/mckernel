@@ -1,0 +1,109 @@
+{
+  "actual_runtime_or_live_source_loaded": false,
+  "all_other_definition_source_spans_equal": [
+    "EngineLaunchDeferred",
+    "read_json",
+    "atomic_json",
+    "process_start",
+    "lease_free",
+    "goal_digest",
+    "recovery_blocker",
+    "checkpoint_request",
+    "validate_recovery_proof"
+  ],
+  "at": "2026-11-11T21:20:17.780830+00:00",
+  "baseline": {
+    "bytes": 9802,
+    "path": "/home/holden/mckernel/scripts/os_goal_guard_protocol.py",
+    "sha256": "597d61bbedf7e1ff8b5d7c8d5b167b1e635ee2a9cee577074c4a4b0f4b861d3f"
+  },
+  "candidate": {
+    "bytes": 9688,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/candidate/scripts/os_goal_guard_protocol.py",
+    "sha256": "9bc35f56234b30e892828b6f75b4f909896b4125f4d4397e3a02fa810f602d09"
+  },
+  "contract": {
+    "bytes": 6465,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/CONTRACT.json",
+    "sha256": "7aebce08e3bf36539d54f217cc65b746bbff5ac03e398327cad2c4a87ce9fdd5"
+  },
+  "decision": "GO_SOURCE_ONLY_LAZY_CANONICAL_PIDFD_REUSE",
+  "exact_new_function": "def signal_exact(pid, birth, signum):\n    from watch_os_goal import pidfd_open, pidfd_send_signal\n    fd = pidfd_open(pid)\n    try:\n        if not isinstance(birth, str) or not birth.isdigit() or process_start(pid) != birth:\n            raise ValueError(\"Process birth differs; no signal sent\")\n        pidfd_send_signal(fd, signum)\n    finally:\n        os.close(fd)",
+  "model_effort": {
+    "bytes": 386,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/guardian-pidfd-compatibility-p04tests-max-1/canonical-wrapper-reuse-1/MODEL-EFFORT-READBACK.json",
+    "sha256": "5c803ae601e89c385ab70e3d96a53dd47261d07b7937c4026061d28701566ef0"
+  },
+  "no_controller_or_native_or_acceptance": true,
+  "only_changed_function": "signal_exact",
+  "patch": {
+    "bytes": 723,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/LAZY-CANONICAL-PIDFD-WRAPPER-ONLY.patch",
+    "sha256": "3acc41574f3112007624702738f1c37386dca22c72fe7f9a2f165de321132ab3"
+  },
+  "required_next_proof": "One independently reviewed five-case actual Anaconda3.9 HOST command; genuine guardian owner retirement/new-source loading is a separate Root gate.",
+  "reviewer": "/root/p04_tests_max",
+  "schema": 1,
+  "shared_wrapper_source_and_imports": [
+    {
+      "bytes": 39730,
+      "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+      "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+    },
+    {
+      "bytes": 4021,
+      "path": "/home/holden/mckernel/scripts/os_goal_transport.py",
+      "sha256": "ad2eb154f2b278194878483ea3d3114e2d25642aaf0a74ea8f42f5a3a5ba8a5c"
+    },
+    {
+      "bytes": 8069,
+      "path": "/home/holden/mckernel/scripts/os_goal_handoff.py",
+      "sha256": "00572ac9faf386d0d74c081e1a270daca5579d03d292e34e7ad563aad05298c2"
+    },
+    {
+      "bytes": 13341,
+      "path": "/home/holden/mckernel/scripts/os_goal_stop_log.py",
+      "sha256": "46cded4b59ed1a0d625400c5868a2a168799e38107bbb3f047c153fb2d497ef0"
+    }
+  ],
+  "source_findings": [
+    "Local import selects the canonical watcher wrappers; no copied helpers/ctypes/global import/path changes in production.",
+    "Post-open exact digit-string/current birth check is byte-identical, and finally performs one close of that same returned pidfd.",
+    "Unchanged watcher uses real pidfd builtins when callable, otherwise original Linux x86_64 syscall434/424 ABI and errno; no numeric kill route.",
+    "Matching scripts import closure remains pinned. The fixture imports the actual watcher normally, then substitutes only its lower effects; no fake package or helper-body replacement."
+  ],
+  "source_ready": {
+    "bytes": 2576,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-controller-normal-transition-proposal-publicabi-max-1/current-468d-generation-1/pidfd-compatibility-repair-1/canonical-wrapper-reuse-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "fef2c6709f365a279c7405e49368388114c62e323720f2b65254dc7e174239ba"
+  },
+  "unchanged_wrapper_source_spans": [
+    {
+      "name": "_linux_pidfd_syscall",
+      "source": {
+        "bytes": 39730,
+        "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+        "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+      },
+      "source_span_sha256": "e048f0209a404264b03944bda3b00a1b0a0b2467e1033525dc645a0b9d6f939a"
+    },
+    {
+      "name": "pidfd_open",
+      "source": {
+        "bytes": 39730,
+        "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+        "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+      },
+      "source_span_sha256": "e13190c8c59ee67f131fd300d5c34164243bfa4f504275f21f649ff1553bbf8e"
+    },
+    {
+      "name": "pidfd_send_signal",
+      "source": {
+        "bytes": 39730,
+        "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+        "sha256": "9a105b4f37f61bed7ffbffd848ed0f02d2e792e4797a38609761e98480e7a1bb"
+      },
+      "source_span_sha256": "5b4c2f0ed5fdc6722f8b207182c61c57ca80a8ccfb6001463a65abc60f3d6f75"
+    }
+  ]
+}

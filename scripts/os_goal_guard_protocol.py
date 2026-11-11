@@ -85,13 +85,12 @@ def lease_free(directory, name):
 
 
 def signal_exact(pid, birth, signum):
-    if not hasattr(os, "pidfd_open") or not hasattr(signal, "pidfd_send_signal"):
-        raise RuntimeError("Identity-safe pidfd signalling unavailable")
-    fd = os.pidfd_open(pid)
+    from watch_os_goal import pidfd_open, pidfd_send_signal
+    fd = pidfd_open(pid)
     try:
         if not isinstance(birth, str) or not birth.isdigit() or process_start(pid) != birth:
             raise ValueError("Process birth differs; no signal sent")
-        signal.pidfd_send_signal(fd, signum, None, 0)
+        pidfd_send_signal(fd, signum)
     finally:
         os.close(fd)
 
