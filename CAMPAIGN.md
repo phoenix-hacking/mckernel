@@ -1,7 +1,19 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T22:03:03.416356+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T22:28:51.901598+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+## Launcher checkpoint: signal_15
+
+The authorized normal transition has signaled this retiring invocation. Stop all
+new dispatch; allsix childturns are completed and every payload/Root execution
+session is closed. Only bounded checkpoint publication remains. Future goal
+continuations are paused by the launcher; do not resume during shutdown or mark
+the OS complete. A subsequent actual launcher invocation authorizes continuation
+under the SAME savedRoot/goal/finite7c6 and preserved owners/UNKNOWNs. The surviving
+foreground owns oldengine positive retirement and later normalstart. Finalhandoff
+55a/bc1/dc06/GOd8e and exactprivate refs below remain selected; afternewload prove
+the actualnewowner/readreceipt, then nativeadmission and firstrepeatcase.
 
 ## Current decision
 
@@ -74,15 +86,24 @@ passed21:51:18Z,bdd42/Qa174: live pair+16Z/X/x/unknown refusals,44stat26state/
 retired. No live account/issuer/control effect from these tests.
 [Qualified source/results](docs/verification/account-read-receipt-20261111/source-and-controlled-results-1/PUBLICATION-SCOPE.json).
 
-**Next actual activation:** the existing foreground is the surviving custodian,
-verified1129750/b43666307 outside oldworker762048/server762050, proof7ed70144.
-PublicABI freezes literal EXISTING normal stop/checkpoint/positive-wait/start argv
-and source/review/capture handoff for that foreground BEFORE any stop request;
-no new detached runner/controller. Foreground remains active to execute after
-independent review and final handoff acceptance under explicit680671 authorization.
-Preserve actualguardian1561218/mailbox, SAMEgoal/thread/7c6/cumulativebudget and
-resource owners. New invocation/PID/birth/logdir and genuine successful-read receipt
-must be proven after load; no old762 pins copied or actual owner records preissued.
+**Normal activation handoff is FINAL and accepted by the surviving foreground.**
+SelectedREADY55a35daf/privateargvbc1caa6b/contractdc064d8e have independent final
+GOd8e826ea. All11 existing commands use `/usr/bin/taskset -c 0` and originaltails;
+old197/649 lackedaffinity, cf079/misplaced-- failedactualprobe and unshared4fdGO
+is withdrawn. Foreground1129750/b43666307 read/accepted selectedhandoff and is
+performingfreshcurrentownership/account/delivery/sharedHOST checks before its
+single normalstop. Allsix childturns are COMPLETED; currentpayloadjobs0 and all
+issuedRoottool sessions closed. No newdispatch and NO stop from thisengine.
+Rootfinishes ordinarycheckpoint; foregroundretainscustody throughpositiveoldengine
+waits/streams/leases/unitclosure and genuinelylater normalSAME-Root/7c6 start.
+[Final review and closed-operation disposition](docs/verification/native-admission-debug-20261111/foreground-normal-activation-handoff-1/PUBLICATION-SCOPE.json).
+
+After actualload, bind NEWinvocation/logdir/PIDbirths and genuine39a/9032 successful
+account/rateLimits/read receipt (source_kind=read, method/requestid/timestamps,
+durableSAMEledger/newowner, no newer veto). A generic accepted notification is
+insufficient. Then use existing468d/c964/a2f/f133/c886/38b6 source inputs for actual
+nativeclaim/current-free/caps admission and exactrepeatcase/restoration; no passing
+replay, newallowance/controller, staleoldPID copy or historicalUNKNOWN release.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
