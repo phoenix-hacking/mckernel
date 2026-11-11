@@ -1,19 +1,20 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T22:28:51.901598+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T23:03:23.226463+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Launcher checkpoint: signal_15
+## Current invocation: explicitly resumed
 
-The authorized normal transition has signaled this retiring invocation. Stop all
-new dispatch; allsix childturns are completed and every payload/Root execution
-session is closed. Only bounded checkpoint publication remains. Future goal
-continuations are paused by the launcher; do not resume during shutdown or mark
-the OS complete. A subsequent actual launcher invocation authorizes continuation
-under the SAME savedRoot/goal/finite7c6 and preserved owners/UNKNOWNs. The surviving
-foreground owns oldengine positive retirement and later normalstart. Finalhandoff
-55a/bc1/dc06/GOd8e and exactprivate refs below remain selected; afternewload prove
-the actualnewowner/readreceipt, then nativeadmission and firstrepeatcase.
+ACTIVE under manual invocation20261111T223223Z-fb7f73db. This new user authorization
+supersedes retiring signal_15/pause banners. Same savedRoot/goal and finite7c6
+continue; no goal/launcher/budget reset. Actualnewworker1575383/b52260962,
+server1575385/b52260969, watcher1575381/b52260954 and guardian1561218/b51981693
+are live. SDK39a/7207/068e are loaded; actual9032 consumption of genuine read31
+at22:33:21 has independent activationQ842ec545, sourceoutcomeb8ef0bc8. Later live
+read37 is a different observation, not substituted for captured31. New operations
+still need their own fresh current-owner/account/resource/source admission.
+ActualRoot and resumed owners areSol/MAX; permissiondanger-full-access/never,
+UID1000, same six-owner ceiling/depth1/currentHOST0,6,7/max3/4GiB and nativeheld12.
 
 ## Current decision
 
@@ -33,7 +34,7 @@ Checkpoint48 fd709dcf is pushed/fetched12ownedblobs. PR3receipt
 is POSTED_CONFIRMED for70.00/67.19,99/156, dedupeM14-I01-E1@956fecb2. No changed-pair
 report remains pending; publish again only for a further verified pair change.
 
-All33 unrelated tracked dirty paths and historical UNK2026-11-11T20:58:34.067193+00:00N/holds stay preserved.
+All33 unrelated tracked dirty paths and historical UNKNOWN/holds stay preserved.
 The missed75% November10 target is not a stop time.
 
 **Actual blockers cleared:** the specifically authorized scoped parent was created
@@ -60,7 +61,7 @@ eebd/GO3e1b physically read all30 immutable Root-owned normal-layout files/40167
 matching catalogd42/dev/inode/mode/size/SHA. Result1cf843/fullRoot85d54 and saved
 independent whole code-only Qe4288d6a corroborate current2GiB+128MiB retirements
 d168/039681 only. The first receipt-output-parent failure and exact0700 repair
-remain recorded. Old2c4c resource-audit UNK2026-11-11T20:58:34.067193+00:00N and old failed lease/OFD/source
+remain recorded. Old2c4c resource-audit UNKNOWN and old failed lease/OFD/source
 outcomes remain old-only. Do not reissue or reread this successful generation.
 [Actual source/review/result bundle](docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/PUBLICATION-SCOPE.json).
 
@@ -75,8 +76,7 @@ the reviewed parent's fresh admission passed. Missing outer audit/whole-run peak
 remain unproved; no backdated grant or global UNKNOWN release.
 [Exact source/result/audit](docs/verification/workstation-pidfd-compatibility-20261111/guardian-only-recovery-1/PUBLICATION-SCOPE.json).
 
-**Account-read source/controlled behavior is qualified and canonical, not yet
-loaded by the worker.** SDK39a SourceGO5a06 and actual18-method Qbbefe preserve
+**Account-read source/controlled behavior is qualified and now loaded in the new worker.** SDK39a SourceGO5a06 and actual18-method Qbbefe preserve
 original accounting/finite7c6/notification fallback while recording authenticated
 response identity/time and durable state/ledger receipt. Root integrated only
 scripts/run_os_goal.py at21:49. Consumer43935 terminal-owner gap is retained;
@@ -86,24 +86,40 @@ passed21:51:18Z,bdd42/Qa174: live pair+16Z/X/x/unknown refusals,44stat26state/
 retired. No live account/issuer/control effect from these tests.
 [Qualified source/results](docs/verification/account-read-receipt-20261111/source-and-controlled-results-1/PUBLICATION-SCOPE.json).
 
-**Normal activation handoff is FINAL and accepted by the surviving foreground.**
-SelectedREADY55a35daf/privateargvbc1caa6b/contractdc064d8e have independent final
-GOd8e826ea. All11 existing commands use `/usr/bin/taskset -c 0` and originaltails;
-old197/649 lackedaffinity, cf079/misplaced-- failedactualprobe and unshared4fdGO
-is withdrawn. Foreground1129750/b43666307 read/accepted selectedhandoff and is
-performingfreshcurrentownership/account/delivery/sharedHOST checks before its
-single normalstop. Allsix childturns are COMPLETED; currentpayloadjobs0 and all
-issuedRoottool sessions closed. No newdispatch and NO stop from thisengine.
-Rootfinishes ordinarycheckpoint; foregroundretainscustody throughpositiveoldengine
-waits/streams/leases/unitclosure and genuinelylater normalSAME-Root/7c6 start.
-[Final review and closed-operation disposition](docs/verification/native-admission-debug-20261111/foreground-normal-activation-handoff-1/PUBLICATION-SCOPE.json).
+**Normal foreground activation is ACTUALLY COMPLETE.** The authorized normalstop
+has positive oldworker/server/watcher/manager/cgroup/run+watch closure and exit10;
+checkpoint4bff57ce was pushed/fetched. Final55a/bc1/dc06/GOd8e was executed only by
+survivingforeground1129750. Normalstart loaded39a under actual223223Z invocation;
+read31/newowner/same finiteledger and untouchedholds are independently GO842ec545.
+No stop/start/receipt replay. This is real controller activation, not native grant.
 
-After actualload, bind NEWinvocation/logdir/PIDbirths and genuine39a/9032 successful
-account/rateLimits/read receipt (source_kind=read, method/requestid/timestamps,
-durableSAMEledger/newowner, no newer veto). A generic accepted notification is
-insufficient. Then use existing468d/c964/a2f/f133/c886/38b6 source inputs for actual
-nativeclaim/current-free/caps admission and exactrepeatcase/restoration; no passing
-replay, newallowance/controller, staleoldPID copy or historicalUNKNOWN release.
+**Next actual first-native step:** PublicABI binds actualnewowner to installed
+468d code30/strict1cf/e428 and matchingc964/a2f/f133/c886/38b6. Real prerequisite
+checks found3 nativecgroup parents/five scalars ENOENT (existingv1-kernel-parent
+e6b setup is preparation, not claim); runner/backend/qmp actualnlink2 violate
+unchanged NativeSourceCustody97/inplace107; canonicalowner463 differs from loaded
+qualified3ecb and fails retirement665 equality. Exact4file normal preparation
+d59f15 proposes reviewed3ecb canonicaladoption plus same-byte nlink1 inputs, with
+allpreimage identities/flags/holds preserved. SourceAcq materialGO5167457b is complete. Root readonlyflagsacef6226 confirms
+all4exactpreimages, noimmutable/append flags and preservedqmp0664; no mutation
+has run. SDK setupGO5c939 is complete; P04Source binds its existing protected
+fast-exit-safe capture and SDK reviews only that outer delta. Root alone acts
+after exact operationGO and fresh scoped admission. The first readonly Root
+preflight failed only an overbroad unrelated-process readability assertion;
+no payload issued and no denied access retried. Actual ownedtree~495MiB,
+MemAvailable~29.27GB/disk~120.84GB and3targets absent were observed, not grants. No flagclear,
+source fallback, native reservation release, new framework or guessedfree grant.
+Pub must freeze the actual existing verified-byte Root-context/bootstrap command,
+not a nonexistent root_parent.py or a literal root_bootstrap.py withoutnative main.
+Genuine frontdoor is root_bootstrap.launch_named_native_from_registered_loader
+through watchdog/supervisor_entry; callerRootselfPID/caps/config/rootFD must be
+issued by its real owning process after validated preparation.
+
+After those inputs and fresh claim/current-free/source-effective/caps/pidfd custody
+admission, run only `/bin/mcexec -t 1 0 /apps/signal.alternate-repeat` via that
+frontdoor, fixedcase/work+PATH/COKERNEL/LANG/LC_ALL/TZ, require16handlers/deliveries/
+altstackhits,0/emptyerr and positive ownedrestoration. Whole frame/register/xstate
+normal/error remains separate. No green build/stage/install/readback/test replay.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
@@ -115,7 +131,7 @@ payload/oracle/collector design stays unissued behind firstrepeat cleanup.
 Requested blocker-return6807553710 is confirmed.70.00/67.19 receipt6807005440 stays
 the sole current percentage report; nonew original check from these repairs.
 
-**Actual native prerequisites remain:** reviewed normal controller transition,
+**Actual native prerequisites remain:** authenticated normal Root/native issuance,
 authenticated effective source/claim/current-free/caps/pidfd custody and positive
 restoration. Retained native12 capacity is not an operation claim. The exact first
 case stays `/bin/mcexec -t 1 0 /apps/signal.alternate-repeat`, cwd`/case/work`,
@@ -133,7 +149,7 @@ loaded HOST CPUs0,6,7/max3/4GiB TOTAL including overhead,26GiB availability and
 Same saved Root/goal/SolMAX/six direct owners, no recursive agents or state edits.
 Included allowance first, then existing signed-in credits under SAME finite7c6;
 stop on actual user/service/auth/account/spend/unknown/exhaustion hold. Genuine
-source/rejected-operation/native/Scratch/UNK2026-11-11T20:58:34.067193+00:00N controls are not released by
+source/rejected-operation/native/Scratch/UNKNOWN controls are not released by
 these results. Guardian/mailbox and20-minute assistance remain active.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
