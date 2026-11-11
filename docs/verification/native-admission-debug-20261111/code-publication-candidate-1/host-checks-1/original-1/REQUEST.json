@@ -1,0 +1,1396 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T09:50:30.167135+00:00",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/code_package_regression.py",
+        "exact-fixed-catalogue"
+      ],
+      "expected_exit": 0,
+      "id": "exact-fixed-catalogue",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "controller1961_rerun": false,
+        "family": "exact-fixed-catalogue",
+        "real_account": false,
+        "real_install": false,
+        "real_nonce": false,
+        "real_root_or_native": false,
+        "result": {
+          "completion": {
+            "accepted_rows": [
+              {
+                "name": "adapter.py",
+                "sha256": "6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3",
+                "size": 18271
+              },
+              {
+                "name": "compositor.py",
+                "sha256": "987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b",
+                "size": 15056
+              },
+              {
+                "name": "custody_protocol_v2.py",
+                "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb",
+                "size": 4452
+              },
+              {
+                "name": "deferred_fork.py",
+                "sha256": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f",
+                "size": 12001
+              },
+              {
+                "name": "graph_observations.py",
+                "sha256": "df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed",
+                "size": 9505
+              },
+              {
+                "name": "graph_producer.py",
+                "sha256": "58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5",
+                "size": 10033
+              },
+              {
+                "name": "graph_server.py",
+                "sha256": "1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074",
+                "size": 5764
+              },
+              {
+                "name": "immutable_epoch.py",
+                "sha256": "018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20",
+                "size": 4429
+              },
+              {
+                "name": "inplace_custody.py",
+                "sha256": "70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e",
+                "size": 13865
+              },
+              {
+                "name": "materializer.py",
+                "sha256": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37",
+                "size": 18424
+              },
+              {
+                "name": "native_current_owner.py",
+                "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622",
+                "size": 16267
+              },
+              {
+                "name": "native_diagnostic_container_owner.py",
+                "sha256": "3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6",
+                "size": 60024
+              },
+              {
+                "name": "native_resource_admission.py",
+                "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b",
+                "size": 43352
+              },
+              {
+                "name": "native_source_binding.py",
+                "sha256": "3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca",
+                "size": 15188
+              },
+              {
+                "name": "operation_supervisor.py",
+                "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90",
+                "size": 9775
+              },
+              {
+                "name": "operation_watchdog.py",
+                "sha256": "debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77",
+                "size": 12077
+              },
+              {
+                "name": "ownership_latch.py",
+                "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390",
+                "size": 4183
+              },
+              {
+                "name": "pidfd_compat.py",
+                "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+                "size": 3875
+              },
+              {
+                "name": "pidfd_custody.py",
+                "sha256": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e",
+                "size": 10423
+              },
+              {
+                "name": "retained-scope-facts.json",
+                "sha256": "7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362",
+                "size": 12746
+              },
+              {
+                "name": "root_bootstrap.py",
+                "sha256": "7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328",
+                "size": 18995
+              },
+              {
+                "name": "root_owner_entry.py",
+                "sha256": "dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472",
+                "size": 4074
+              },
+              {
+                "name": "runtime_binding.py",
+                "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414",
+                "size": 3350
+              },
+              {
+                "name": "source_freeze.py",
+                "sha256": "2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228",
+                "size": 10475
+              },
+              {
+                "name": "split_inventory.py",
+                "sha256": "9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04",
+                "size": 4799
+              },
+              {
+                "name": "supervisor_entry.py",
+                "sha256": "a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd",
+                "size": 14804
+              },
+              {
+                "name": "union_owner.py",
+                "sha256": "955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb",
+                "size": 20741
+              },
+              {
+                "name": "union_server_guarded.py",
+                "sha256": "3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229",
+                "size": 12973
+              },
+              {
+                "name": "verified_owner_loader.py",
+                "sha256": "cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29",
+                "size": 6058
+              },
+              {
+                "name": "verify_scripts_fd.py",
+                "sha256": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f",
+                "size": 5695
+              }
+            ],
+            "refusals": [
+              {
+                "diagnostic": "source closure shape",
+                "id": "old23"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "missing-real-module"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "extra-python"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "same-count-wrong-member"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "changed-hash"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "changed-size"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "reordered"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "duplicate"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "nested"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "traversal"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "bool-version"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "bool-count"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "bool-size"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "changed-source-dir"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "missing7f7-same-count"
+              }
+            ]
+          },
+          "installer": {
+            "accepted_rows": [
+              {
+                "name": "adapter.py",
+                "sha256": "6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3",
+                "size": 18271
+              },
+              {
+                "name": "compositor.py",
+                "sha256": "987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b",
+                "size": 15056
+              },
+              {
+                "name": "custody_protocol_v2.py",
+                "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb",
+                "size": 4452
+              },
+              {
+                "name": "deferred_fork.py",
+                "sha256": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f",
+                "size": 12001
+              },
+              {
+                "name": "graph_observations.py",
+                "sha256": "df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed",
+                "size": 9505
+              },
+              {
+                "name": "graph_producer.py",
+                "sha256": "58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5",
+                "size": 10033
+              },
+              {
+                "name": "graph_server.py",
+                "sha256": "1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074",
+                "size": 5764
+              },
+              {
+                "name": "immutable_epoch.py",
+                "sha256": "018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20",
+                "size": 4429
+              },
+              {
+                "name": "inplace_custody.py",
+                "sha256": "70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e",
+                "size": 13865
+              },
+              {
+                "name": "materializer.py",
+                "sha256": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37",
+                "size": 18424
+              },
+              {
+                "name": "native_current_owner.py",
+                "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622",
+                "size": 16267
+              },
+              {
+                "name": "native_diagnostic_container_owner.py",
+                "sha256": "3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6",
+                "size": 60024
+              },
+              {
+                "name": "native_resource_admission.py",
+                "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b",
+                "size": 43352
+              },
+              {
+                "name": "native_source_binding.py",
+                "sha256": "3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca",
+                "size": 15188
+              },
+              {
+                "name": "operation_supervisor.py",
+                "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90",
+                "size": 9775
+              },
+              {
+                "name": "operation_watchdog.py",
+                "sha256": "debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77",
+                "size": 12077
+              },
+              {
+                "name": "ownership_latch.py",
+                "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390",
+                "size": 4183
+              },
+              {
+                "name": "pidfd_compat.py",
+                "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+                "size": 3875
+              },
+              {
+                "name": "pidfd_custody.py",
+                "sha256": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e",
+                "size": 10423
+              },
+              {
+                "name": "retained-scope-facts.json",
+                "sha256": "7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362",
+                "size": 12746
+              },
+              {
+                "name": "root_bootstrap.py",
+                "sha256": "7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328",
+                "size": 18995
+              },
+              {
+                "name": "root_owner_entry.py",
+                "sha256": "dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472",
+                "size": 4074
+              },
+              {
+                "name": "runtime_binding.py",
+                "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414",
+                "size": 3350
+              },
+              {
+                "name": "source_freeze.py",
+                "sha256": "2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228",
+                "size": 10475
+              },
+              {
+                "name": "split_inventory.py",
+                "sha256": "9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04",
+                "size": 4799
+              },
+              {
+                "name": "supervisor_entry.py",
+                "sha256": "a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd",
+                "size": 14804
+              },
+              {
+                "name": "union_owner.py",
+                "sha256": "955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb",
+                "size": 20741
+              },
+              {
+                "name": "union_server_guarded.py",
+                "sha256": "3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229",
+                "size": 12973
+              },
+              {
+                "name": "verified_owner_loader.py",
+                "sha256": "cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29",
+                "size": 6058
+              },
+              {
+                "name": "verify_scripts_fd.py",
+                "sha256": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f",
+                "size": 5695
+              }
+            ],
+            "refusals": [
+              {
+                "diagnostic": "source closure shape",
+                "id": "old23"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "missing-real-module"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "extra-python"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "same-count-wrong-member"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "changed-hash"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "changed-size"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "reordered"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "duplicate"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "nested"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "traversal"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "bool-version"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "bool-count"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "bool-size"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "changed-source-dir"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "missing7f7-same-count"
+              }
+            ]
+          },
+          "phase0": {
+            "accepted_rows": [
+              {
+                "name": "adapter.py",
+                "sha256": "6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3",
+                "size": 18271
+              },
+              {
+                "name": "compositor.py",
+                "sha256": "987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b",
+                "size": 15056
+              },
+              {
+                "name": "custody_protocol_v2.py",
+                "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb",
+                "size": 4452
+              },
+              {
+                "name": "deferred_fork.py",
+                "sha256": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f",
+                "size": 12001
+              },
+              {
+                "name": "graph_observations.py",
+                "sha256": "df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed",
+                "size": 9505
+              },
+              {
+                "name": "graph_producer.py",
+                "sha256": "58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5",
+                "size": 10033
+              },
+              {
+                "name": "graph_server.py",
+                "sha256": "1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074",
+                "size": 5764
+              },
+              {
+                "name": "immutable_epoch.py",
+                "sha256": "018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20",
+                "size": 4429
+              },
+              {
+                "name": "inplace_custody.py",
+                "sha256": "70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e",
+                "size": 13865
+              },
+              {
+                "name": "materializer.py",
+                "sha256": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37",
+                "size": 18424
+              },
+              {
+                "name": "native_current_owner.py",
+                "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622",
+                "size": 16267
+              },
+              {
+                "name": "native_diagnostic_container_owner.py",
+                "sha256": "3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6",
+                "size": 60024
+              },
+              {
+                "name": "native_resource_admission.py",
+                "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b",
+                "size": 43352
+              },
+              {
+                "name": "native_source_binding.py",
+                "sha256": "3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca",
+                "size": 15188
+              },
+              {
+                "name": "operation_supervisor.py",
+                "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90",
+                "size": 9775
+              },
+              {
+                "name": "operation_watchdog.py",
+                "sha256": "debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77",
+                "size": 12077
+              },
+              {
+                "name": "ownership_latch.py",
+                "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390",
+                "size": 4183
+              },
+              {
+                "name": "pidfd_compat.py",
+                "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+                "size": 3875
+              },
+              {
+                "name": "pidfd_custody.py",
+                "sha256": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e",
+                "size": 10423
+              },
+              {
+                "name": "retained-scope-facts.json",
+                "sha256": "7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362",
+                "size": 12746
+              },
+              {
+                "name": "root_bootstrap.py",
+                "sha256": "7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328",
+                "size": 18995
+              },
+              {
+                "name": "root_owner_entry.py",
+                "sha256": "dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472",
+                "size": 4074
+              },
+              {
+                "name": "runtime_binding.py",
+                "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414",
+                "size": 3350
+              },
+              {
+                "name": "source_freeze.py",
+                "sha256": "2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228",
+                "size": 10475
+              },
+              {
+                "name": "split_inventory.py",
+                "sha256": "9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04",
+                "size": 4799
+              },
+              {
+                "name": "supervisor_entry.py",
+                "sha256": "a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd",
+                "size": 14804
+              },
+              {
+                "name": "union_owner.py",
+                "sha256": "955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb",
+                "size": 20741
+              },
+              {
+                "name": "union_server_guarded.py",
+                "sha256": "3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229",
+                "size": 12973
+              },
+              {
+                "name": "verified_owner_loader.py",
+                "sha256": "cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29",
+                "size": 6058
+              },
+              {
+                "name": "verify_scripts_fd.py",
+                "sha256": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f",
+                "size": 5695
+              }
+            ],
+            "refusals": [
+              {
+                "diagnostic": "source closure shape",
+                "id": "old23"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "missing-real-module"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "extra-python"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "same-count-wrong-member"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "changed-hash"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "changed-size"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "reordered"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "duplicate"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "nested"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "traversal"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "bool-version"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "bool-count"
+              },
+              {
+                "diagnostic": "source row values",
+                "id": "bool-size"
+              },
+              {
+                "diagnostic": "source closure shape",
+                "id": "changed-source-dir"
+              },
+              {
+                "diagnostic": "source closure membership",
+                "id": "missing7f7-same-count"
+              }
+            ]
+          }
+        },
+        "status": "PASS",
+        "unchanged_wait_IPC_executed": false
+      },
+      "wall_seconds": 15
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/code_package_regression.py",
+        "root-immutable-proof"
+      ],
+      "expected_exit": 0,
+      "id": "root-immutable-proof",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "controller1961_rerun": false,
+        "family": "root-immutable-proof",
+        "real_account": false,
+        "real_install": false,
+        "real_nonce": false,
+        "real_root_or_native": false,
+        "result": {
+          "actual_install": false,
+          "owned_fds_retained": true,
+          "proof": {
+            "directory_identity": {
+              "device": 77,
+              "inode": 800
+            },
+            "files": [
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1000
+                },
+                "name": "adapter.py",
+                "sha256": "6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1001
+                },
+                "name": "compositor.py",
+                "sha256": "987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1002
+                },
+                "name": "custody_protocol_v2.py",
+                "sha256": "587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1003
+                },
+                "name": "deferred_fork.py",
+                "sha256": "b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1004
+                },
+                "name": "graph_observations.py",
+                "sha256": "df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1005
+                },
+                "name": "graph_producer.py",
+                "sha256": "58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1006
+                },
+                "name": "graph_server.py",
+                "sha256": "1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1007
+                },
+                "name": "immutable_epoch.py",
+                "sha256": "018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1008
+                },
+                "name": "inplace_custody.py",
+                "sha256": "70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1009
+                },
+                "name": "materializer.py",
+                "sha256": "c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1010
+                },
+                "name": "native_current_owner.py",
+                "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1011
+                },
+                "name": "native_diagnostic_container_owner.py",
+                "sha256": "3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1012
+                },
+                "name": "native_resource_admission.py",
+                "sha256": "afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1013
+                },
+                "name": "native_source_binding.py",
+                "sha256": "3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1014
+                },
+                "name": "operation_supervisor.py",
+                "sha256": "1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1015
+                },
+                "name": "operation_watchdog.py",
+                "sha256": "debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1016
+                },
+                "name": "ownership_latch.py",
+                "sha256": "fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1017
+                },
+                "name": "pidfd_compat.py",
+                "sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1018
+                },
+                "name": "pidfd_custody.py",
+                "sha256": "3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1019
+                },
+                "name": "retained-scope-facts.json",
+                "sha256": "7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1020
+                },
+                "name": "root_bootstrap.py",
+                "sha256": "7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1021
+                },
+                "name": "root_owner_entry.py",
+                "sha256": "dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1022
+                },
+                "name": "runtime_binding.py",
+                "sha256": "629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1023
+                },
+                "name": "source_freeze.py",
+                "sha256": "2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1024
+                },
+                "name": "split_inventory.py",
+                "sha256": "9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1025
+                },
+                "name": "supervisor_entry.py",
+                "sha256": "a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1026
+                },
+                "name": "union_owner.py",
+                "sha256": "955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1027
+                },
+                "name": "union_server_guarded.py",
+                "sha256": "3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1028
+                },
+                "name": "verified_owner_loader.py",
+                "sha256": "cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29"
+              },
+              {
+                "identity": {
+                  "device": 77,
+                  "inode": 1029
+                },
+                "name": "verify_scripts_fd.py",
+                "sha256": "34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f"
+              }
+            ],
+            "journal_identity": {
+              "device": 77,
+              "inode": 700
+            },
+            "journal_sha256": "ffaa8d5ced036620503acddee7721744bab3f6c5d5ac23a7713c9fbe17641579"
+          },
+          "refusals": [
+            {
+              "diagnostic": "directory not immutable",
+              "id": "directory-uid"
+            },
+            {
+              "diagnostic": "directory not immutable",
+              "id": "directory-mode"
+            },
+            {
+              "diagnostic": "directory not immutable",
+              "id": "directory-mutable"
+            },
+            {
+              "diagnostic": "install journal identity",
+              "id": "journal-uid"
+            },
+            {
+              "diagnostic": "installed file identity",
+              "id": "file-uid"
+            },
+            {
+              "diagnostic": "installed file identity",
+              "id": "file-mode"
+            },
+            {
+              "diagnostic": "installed file identity",
+              "id": "file-mutable"
+            },
+            {
+              "diagnostic": "installed file identity",
+              "id": "file-inode"
+            },
+            {
+              "diagnostic": "installed file bytes",
+              "id": "file-content"
+            },
+            {
+              "diagnostic": "writer disposition sequence",
+              "id": "missing-writer-close"
+            },
+            {
+              "diagnostic": "writer identity sequence",
+              "id": "writer-inode-mismatch"
+            },
+            {
+              "diagnostic": "install terminal journal",
+              "id": "unknown-writer"
+            },
+            {
+              "diagnostic": "installed membership",
+              "id": "29-physical-files"
+            },
+            {
+              "diagnostic": "installed membership",
+              "id": "same-count-wrong-member"
+            },
+            {
+              "diagnostic": "installed membership",
+              "id": "extra-parser"
+            },
+            {
+              "diagnostic": "incomplete install journal",
+              "id": "incomplete-journal"
+            }
+          ]
+        },
+        "status": "PASS",
+        "unchanged_wait_IPC_executed": false
+      },
+      "wall_seconds": 15
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/code_package_regression.py",
+        "current-root-credit-caps"
+      ],
+      "expected_exit": 0,
+      "id": "current-root-credit-caps",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "controller1961_rerun": false,
+        "family": "current-root-credit-caps",
+        "real_account": false,
+        "real_install": false,
+        "real_nonce": false,
+        "real_root_or_native": false,
+        "result": {
+          "actual_account_call": false,
+          "ledger_mutation": false,
+          "positives": [
+            {
+              "caps": {
+                "boot_deadline": 2120,
+                "boot_id": "3ba4f2ca-4323-433d-bfb8-7859268121b6",
+                "deadline": 1120,
+                "monotonic_deadline": 3120
+              },
+              "included_percent": 6,
+              "remaining_credit": "50000"
+            },
+            {
+              "caps": {
+                "boot_deadline": 2120,
+                "boot_id": "3ba4f2ca-4323-433d-bfb8-7859268121b6",
+                "deadline": 1120,
+                "monotonic_deadline": 3120
+              },
+              "included_percent": 100,
+              "remaining_credit": "50000"
+            }
+          ],
+          "refusals": [
+            {
+              "diagnostic": "launcher paused or accounting unknown",
+              "id": "stop"
+            },
+            {
+              "diagnostic": "launcher paused or accounting unknown",
+              "id": "auth"
+            },
+            {
+              "diagnostic": "launcher paused or accounting unknown",
+              "id": "unknown-account"
+            },
+            {
+              "diagnostic": "launcher owner differs",
+              "id": "old-actor"
+            },
+            {
+              "diagnostic": "current owner role changed",
+              "id": "changed-actor-birth"
+            },
+            {
+              "diagnostic": "current owner role changed",
+              "id": "changed-actor-uid"
+            },
+            {
+              "diagnostic": "publication nonce differs",
+              "id": "closed-nonce"
+            },
+            {
+              "diagnostic": "persisted credit guard differs",
+              "id": "different-credit-id"
+            },
+            {
+              "diagnostic": "persisted credit guard differs",
+              "id": "state-ledger-diff"
+            },
+            {
+              "diagnostic": "current account service hold",
+              "id": "spend-hold"
+            },
+            {
+              "diagnostic": "current account service hold",
+              "id": "service-hold"
+            },
+            {
+              "diagnostic": "usage observation stale or held",
+              "id": "stale-account"
+            },
+            {
+              "diagnostic": "owner cap actual admission binding",
+              "id": "source-pin-mismatch"
+            },
+            {
+              "diagnostic": "owner cap actual admission binding",
+              "id": "owner-cap-digest"
+            },
+            {
+              "diagnostic": "owner cap actual admission binding",
+              "id": "unbound-profile-sha"
+            },
+            {
+              "diagnostic": "current one-shot publication cutoff",
+              "id": "over180-cap"
+            },
+            {
+              "diagnostic": "current one-shot publication cutoff",
+              "id": "expired-cap"
+            },
+            {
+              "diagnostic": "current publication binding differs",
+              "id": "native-release"
+            },
+            {
+              "diagnostic": "publication resource reservation differs",
+              "id": "borrowed12-profile"
+            },
+            {
+              "diagnostic": "current credit-run binding",
+              "id": "schema-bool"
+            },
+            {
+              "diagnostic": "current credit-run binding",
+              "id": "credit-id"
+            },
+            {
+              "diagnostic": "current credit-run binding",
+              "id": "credit-budget"
+            },
+            {
+              "diagnostic": "current credit-run accounting",
+              "id": "reset-initial"
+            },
+            {
+              "diagnostic": "current credit-run accounting",
+              "id": "inconsistent-spent"
+            },
+            {
+              "diagnostic": "current credit-run accounting",
+              "id": "exhausted"
+            },
+            {
+              "diagnostic": "Credit amount must be a finite number",
+              "id": "unknown-finite-balance"
+            },
+            {
+              "diagnostic": "current signed-in finite balance differs",
+              "id": "unlimited"
+            },
+            {
+              "diagnostic": "Credit amount must be a finite number",
+              "id": "amount-True"
+            },
+            {
+              "diagnostic": "Credit amount is outside the supported range",
+              "id": "amount--1"
+            },
+            {
+              "diagnostic": "Credit amount is outside the supported range",
+              "id": "amount-NaN"
+            },
+            {
+              "diagnostic": "Credit budget must be positive",
+              "id": "amount-0"
+            }
+          ]
+        },
+        "status": "PASS",
+        "unchanged_wait_IPC_executed": false
+      },
+      "wall_seconds": 15
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/code_package_regression.py",
+        "dependent-pins-boundary"
+      ],
+      "expected_exit": 0,
+      "id": "dependent-pins-boundary",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "controller1961_rerun": false,
+        "family": "dependent-pins-boundary",
+        "real_account": false,
+        "real_install": false,
+        "real_nonce": false,
+        "real_root_or_native": false,
+        "result": {
+          "drift_refusals": [
+            "selected source hash drift",
+            "selected source path drift",
+            "privilege argv drift"
+          ],
+          "fixed30_closure": true,
+          "installer_or_issuer_executed": false,
+          "normal_privilege_argv": true,
+          "root_parent_actor_only": true,
+          "source_paths_and_hashes": true,
+          "unchanged_ipc_sha256": "eda1ff0139c3bbf0c713009fc7728eccf3418cc7ce5d028731bc443837d49bbe",
+          "unchanged_wait_sha256": "2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719"
+        },
+        "status": "PASS",
+        "unchanged_wait_IPC_executed": false
+      },
+      "wall_seconds": 15
+    }
+  ],
+  "contract": {
+    "bytes": 3460,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/TEST-CONTRACT.json",
+    "sha256": "e71548fe2d9b3bb5d68c02a62f4e5881f1edbfa233690129b78780da7a110183"
+  },
+  "corrected_source": {
+    "bytes": 1937,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "64ed6331ca864479d7e32de30d40c1e8c844e844ac7322adadbfaa8ae934dfc5"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1",
+  "expected": {
+    "bytes": 37490,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/EXPECTED.json",
+    "sha256": "eb20e0e3f859395ef883269305e2152c757b69a4621a203c78ee5fc9de1978dc"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/output-1",
+  "inputs": {
+    "bytes": 36849,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/INPUTS.json",
+    "sha256": "dd4c48a0040619983542015630c75d3b6ceba7a340b8ab66fc81aec7df3de9a3"
+  },
+  "no_author_execution": true,
+  "no_canonical_changes": true,
+  "not_proved": "No actual code package publication/immutable readback/current controller/native resource/source/custody grant or original FUNCTIONAL/parent acceptance.",
+  "owner": "/root/p04_source_max actual Sol/MAX test author; SDK independent operation reviewer; Root sole executor/compositor",
+  "ownership": {
+    "failure": "Stop first unexpected diagnostic/oracle/ownership result; preserve actual primary exception/rawstreams/returned Owner rows and partial receipts. Only qualified exact-owned cleanup; no numeric/reaped fallback or automatic UNKNOWN release.",
+    "final": "Four exact full JSON/empty stderr and four positive Owner records plus full Root outer direct wait/tool completion/streams before retiring only current HOST256MiB/job1. Fake held/source/account data grants no real action or historical release.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive exact leaderPID+birth/literalargv/cwd/currentlabel",
+      "status0",
+      "leader_parent_joined",
+      "whole_descendants_joined",
+      "streams_closed",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-1",
+      "phase-2",
+      "phase-3",
+      "phase-4"
+    ],
+    "record_count": 4
+  },
+  "preconditions": [
+    "Independent exact SDK operation GO for this finite fixture/source nodes/oracles/argv/Root parent proposal; P03source/design5f7 alone is not actual test admission.",
+    "Root fresh same-run current account/control/stop/hold guard, actual all-work/overhead<=4GiB/max3, available>=26GiB and host16/scratch12GiB disk floors plus32MiB. Native2-5/12GiB remains separate/held; no multiplication or inferred releases.",
+    "Check every actual source/script/data/interpreter/helper pin and fresh output/capture nonexistence before Root alone creates output-1/tmp/execution-1. Actual scratch permission4f9, source/native/UNKNOWN holds remain unchanged; this is ordinary private HOST fake testing, not an alternative install/staging actor/path.",
+    "Execute four literal serial Python3.8 commands via unchanged qualified Ownerafe740 with immediate full ownership and exact external full JSON checks before next child. No source main/issuer/Root/installer/nonce/ioctl/account/ledger/service/controller/VM/native action inside fixture; no controller1961/wait/IPC/oldgreen replay.",
+    "Root captures full returned exec/tool metadata and joins its outer owner before current HOST release. Parent failure capture remains protected; any unresolved ownership retains UNKNOWN and exact evidence."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 80,
+    "cpu": 7,
+    "cpu_seconds_per_command": 10,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "max_address_space_bytes": 268435456,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "no_real_privilege_install_nonce_account_service_ledger_native_VM_action": true,
+    "output_disk_reservation_bytes": 33554432,
+    "planning_reservation_not_enforced_aggregate": true,
+    "scratch_disk_floor_GiB": 12,
+    "wall_seconds_per_command": 15
+  },
+  "root_parent_proposal": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/ROOT-PARENT.PROPOSED.py",
+  "schema": "fixed30-code-package-four-family-host-request-v1",
+  "source_bindings": {
+    "bytes": 34428,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-tests-p04source-max-1/SOURCE-BINDINGS.json",
+    "sha256": "872f46f779ff0d66caf55e56ea5149e996f5a072b9227cf4f0c6e91ffd36de5a"
+  },
+  "source_design_GO": {
+    "bytes": 22511,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-specialization-review-p03-max-1/REVIEW.json",
+    "sha256": "5f7fefc5dac7ccb2caa3b555b840b1b7f930bf4c1b84389ace2b5ecd488293d9"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_INDEPENDENT_SDK_OPERATION_GO_AND_FRESH_ROOT_ADMISSION"
+}

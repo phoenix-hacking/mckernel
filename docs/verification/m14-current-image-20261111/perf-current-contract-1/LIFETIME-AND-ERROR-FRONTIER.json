@@ -1,0 +1,106 @@
+{
+  "status": "CONCRETE_CURRENT_SOURCE_OWNERSHIP_FRONTIER_REQUIRES_REVIEW_BEFORE_CANDIDATE_ACTIVATION",
+  "source_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/CURRENT-PERF-CONTRACT.json",
+    "bytes": 10796,
+    "sha256": "fe13b10d9b7902004060fe79af25e3c46f4b49b6f2aa1dfd02205663db4a9509"
+  },
+  "unchanged_exact_technical_counterevidence": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "function": "perf_event_open_body_result",
+      "first_line": 21376,
+      "last_line": 21508,
+      "signature_and_body_sha256": "bfe55e45538c772dc593396378545f9ed1413760566164eaf566f76e581d62dc",
+      "bytes": 3610,
+      "exact_same_signature_and_body_as_original_ownership_NO_GO": true
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "function": "perf_event_open_group_body_result",
+      "first_line": 21128,
+      "last_line": 21208,
+      "signature_and_body_sha256": "69c02e05f3053abb24a47f2dba9f5345d36c8342f356943224b7808ff05feb76",
+      "bytes": 2853,
+      "exact_same_signature_and_body_as_original_ownership_NO_GO": true
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "function": "perf_close_body_result",
+      "first_line": 20654,
+      "last_line": 20687,
+      "signature_and_body_sha256": "992065221751910841d07a36e063a10e28de5b0714cb27245c9c0a5ed24b19dd",
+      "bytes": 1285,
+      "exact_same_signature_and_body_as_original_ownership_NO_GO": true
+    }
+  ],
+  "stage_rows": [
+    {
+      "stage": "before allocation",
+      "current_error": "null attr/copy/frequency callback -> -EINVAL; usercopy -> -EFAULT; unsupported validation -> exact -ENOENT/-EINVAL",
+      "required_resource_result": "No event/group/counter/host-FD/descriptor ownership committed."
+    },
+    {
+      "stage": "event allocation/map/init",
+      "current_error": "exact allocator status; event allocator already frees on its own init/map failure",
+      "required_resource_result": "Single owner for successful allocation; never double-free on helper-owned failure."
+    },
+    {
+      "stage": "counter selection failure",
+      "current_error": "Return negative counter result after successful event allocation. Open body has no event-free or explicit rollback callback at this point.",
+      "required_resource_result": "Release unpublished event and any actual extra/hardware reservation exactly once; define selected-not-reserved counter behavior."
+    },
+    {
+      "stage": "group lookup/type/insert failure",
+      "current_error": "Missing proc/descriptor/data or null list prev gives -EINVAL. Current code may have written event.group_leader before a later list check; no kind/pin/lock supplied.",
+      "required_resource_result": "No unsafe cast before type/liveness; no externally visible half-link/counter bit. Release live pins and private event on every error."
+    },
+    {
+      "stage": "host-FD error after group mutation",
+      "current_error": "Exact negative result returned; pmc bit not committed. Current open body does not remove inserted member/decrement sibling/reset leader bit or free event.",
+      "required_resource_result": "Roll back only transaction-owned group/member changes and release private event/references without disturbing a concurrent valid owner."
+    },
+    {
+      "stage": "descriptor allocation failure after host FD success",
+      "current_error": "Return -ENOMEM while host descriptor has already been obtained and pmc/group state changed. No host-close/event unwind is in this helper signature.",
+      "required_resource_result": "Define genuine matching host-close/counter/group/event rollback and exact-once ownership; no fabricated close callback or unexplained leaked fd."
+    },
+    {
+      "stage": "late missing publish callback/provider",
+      "current_error": "Publish may return -EINVAL after allocation/host-FD work; only event_alloc/mckfd_alloc were prevalidated by outer body.",
+      "required_resource_result": "Validate actual mandatory callback/type/layout contract before resource creation or provide a complete proved rollback on all late errors."
+    },
+    {
+      "stage": "normal descriptor read/mmap/ioctl/fcntl versus close",
+      "current_error": "Raw pointer from unlocked lookup may race descriptor/event destruction.",
+      "required_resource_result": "One explicit in-flight reference before escape, validated kind, exact release after callback; no ABA by numeric fd or callback address alone."
+    },
+    {
+      "stage": "fork/copy/failed clone unwind",
+      "current_error": "Child lock and optional postcopy dup do not protect parent descriptor before bytecopy. Current descriptor publisher does not establish initialized dup/opt semantics.",
+      "required_resource_result": "Parent-side live source pin prior to copy, actual child ownership and unwind matching its references. Do not reinterpret measurement count."
+    },
+    {
+      "stage": "leader/member close and final VM",
+      "current_error": "Current close frees event directly; group links and other copied descriptors can still refer to it; VM invokes close under parent descriptor lock.",
+      "required_resource_result": "Define independent descriptor, in-flight, pending-group and member->leader ownership edges, lock ordering and final destruction. No same-lock recursion, blocking host wait under spinlock or callback-only fix."
+    }
+  ],
+  "minimum_new_protocol_required": {
+    "kind": "A source-defined publisher/copy invariant and typed resolve operation under genuine lookup exclusion; exact descriptor identity/generation binds an actual perf owner before data->event cast. Callback identity may only be evidence if all real participants establish and preserve that explicit invariant; it is not already a type contract.",
+    "references": "Real descriptor-storage, in-flight-operation, pending-open and group-member ownership edges with balanced release; counter/event-count values are not references.",
+    "locking": "Document actual IRQ-save mckfd lock order and a compatible group/owner synchronization mechanism; never wait or offload under spinlock, never add recursive mckfd lock to final-VM callback.",
+    "copy_and_close": "The exact current shared find/free/clone-copy/VM-drain providers must participate. A perf-only callback layer cannot retroactively protect escaped pointers or already-started copies.",
+    "representation": "A separately reviewed Rust-owned owner/sidecar could retain current C struct sizes, but no such existing API or meaning is fabricated here; opt/count/other fields cannot silently change meaning."
+  },
+  "not_valid_repairs": [
+    "group_fd=-1-only or dropping supported groups",
+    "counter count/refcount reinterpretation",
+    "callback-address equality alone as already-established kind",
+    "pin first acquired inside perf callback",
+    "locking close with mckfd_lock while VM already holds it",
+    "holding descriptor spinlock through host do_syscall",
+    "new dummy universal backend or fake provider",
+    "old fixture/interleaving/compiler/whole-crate replay or held mode flag clearing"
+  ]
+}

@@ -1,0 +1,1238 @@
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/install-source-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install-source-current.py
+@@ -15,11 +15,38 @@
+ import sys
+ import time
+ 
+-CLOSURE_SHA256='81be55d5bf48ff462d291683ef1a26238b27581026bc5ffacc488125b6667ba6'
+-SOURCE_DIR='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-source-10/package'
++CLOSURE_SHA256='56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5'
++# This fixed catalogue is the reviewed native code package only. No arbitrary closure CLI.
++SOURCE_DIR='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package'
++FIXED_FILES=(('adapter.py', 18271, '6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3'), ('compositor.py', 15056, '987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b'), ('custody_protocol_v2.py', 4452, '587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb'), ('deferred_fork.py', 12001, 'b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'), ('graph_observations.py', 9505, 'df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed'), ('graph_producer.py', 10033, '58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5'), ('graph_server.py', 5764, '1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074'), ('immutable_epoch.py', 4429, '018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20'), ('inplace_custody.py', 13865, '70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e'), ('materializer.py', 18424, 'c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37'), ('native_current_owner.py', 16267, '7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622'), ('native_diagnostic_container_owner.py', 60024, '3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6'), ('native_resource_admission.py', 43352, 'afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b'), ('native_source_binding.py', 15188, '3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca'), ('operation_supervisor.py', 9775, '1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90'), ('operation_watchdog.py', 12077, 'debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77'), ('ownership_latch.py', 4183, 'fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390'), ('pidfd_compat.py', 3875, '068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'), ('pidfd_custody.py', 10423, '3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'), ('retained-scope-facts.json', 12746, '7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362'), ('root_bootstrap.py', 18995, '7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328'), ('root_owner_entry.py', 4074, 'dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472'), ('runtime_binding.py', 3350, '629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414'), ('source_freeze.py', 10475, '2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228'), ('split_inventory.py', 4799, '9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04'), ('supervisor_entry.py', 14804, 'a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd'), ('union_owner.py', 20741, '955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb'), ('union_server_guarded.py', 12973, '3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229'), ('verified_owner_loader.py', 6058, 'cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29'), ('verify_scripts_fd.py', 5695, '34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f'))
++
++def fixed_catalog(closure):
++    """Pure strict validation of this one fixed 29-code/one-static-data catalogue."""
++    if (type(closure) is not dict or set(closure)!={'version','source_directory','python_files','contract_files','files'} or
++        type(closure['version']) is not int or closure['version']!=1 or
++        closure['source_directory']!=SOURCE_DIR or type(closure['python_files']) is not int or closure['python_files']!=29 or
++        type(closure['contract_files']) is not int or closure['contract_files']!=1 or
++        type(closure['files']) is not list or len(closure['files'])!=30):
++        raise ValueError('source closure shape')
++    actual=[];names=set()
++    for row in closure['files']:
++        if type(row) is not dict or set(row)!={'name','size','sha256'}:
++            raise ValueError('source row')
++        name=row['name']
++        if (type(name) is not str or not name or name in ('.','..') or '/' in name or name in names or
++            type(row['size']) is not int or not 0<=row['size']<=2097152 or
++            type(row['sha256']) is not str or len(row['sha256'])!=64 or
++            any(c not in '0123456789abcdef' for c in row['sha256'])):
++            raise ValueError('source row values')
++        names.add(name);actual.append((name,row['size'],row['sha256']))
++    if tuple(actual)!=FIXED_FILES:
++        raise ValueError('source closure membership')
++    return closure['files']
++
++
+ # New-run bound from the actual 2026-11-05 included-only event; it is an outer
+ # ceiling, not a grant, a reset allowance, or a revival of the previous packet.
+-WEEKLY_UTC_CAP_NS=1794518606*1000000000
++MAX_OPERATION_NS=180*1000000000
+ GETFLAGS=0x80086601
+ SETFLAGS=0x40086602
+ IMMUTABLE=0x10
+@@ -79,7 +106,7 @@
+     if actual_controller!=release['controller_pid'] or proc_birth(release['controller_pid'])!=release['controller_birth']:
+         fail('controller no longer owns operation')
+     if not (release['issued_boot_ns']<=boot<release['deadline_boot_ns'] and
+-            mono<release['deadline_mono_ns'] and utc<release['utc_cap_ns']<=min(WEEKLY_UTC_CAP_NS,utc+180*1000000000)):
++            mono<release['deadline_mono_ns'] and utc<release['utc_cap_ns']<=utc+MAX_OPERATION_NS):
+         fail('actual time bound exceeded')
+ 
+ 
+@@ -251,22 +278,14 @@
+     closure_raw=read_stable(closure_fd,MAX_SOURCE)
+     if sha(closure_raw)!=CLOSURE_SHA256:fail('source closure differs')
+     closure=json.loads(closure_raw,object_pairs_hook=unique)
+-    if set(closure)!={'version','source_directory','python_files','contract_files','files'} or type(closure['version']) is not int or closure['version']!=1 or closure['source_directory']!=SOURCE_DIR or closure['python_files']!=20 or closure['contract_files']!=3 or len(closure['files'])!=23:
+-        fail('source closure shape')
+-    parser_source=os.open('parser',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=source_fd);_HELD.append(parser_source)
+-    blobs=[];names=set()
+-    for item in closure['files']:
+-        if type(item) is not dict or set(item)!={'name','size','sha256'}:fail('source row')
+-        name=item['name']
+-        if type(name) is not str or not name or name in names or not hex64(item['sha256']) or type(item['size']) is not int or not 0<=item['size']<=MAX_SOURCE:fail('source row values')
+-        parts=name.split('/')
+-        if len(parts) not in (1,2) or any(x in ('','.','..') for x in parts) or (len(parts)==2 and parts[0]!='parser'):fail('source relative path')
+-        names.add(name);clock_check(release)
+-        fd=os.open(parts[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parser_source if len(parts)==2 else source_fd);_HELD.append(fd)
++    rows=fixed_catalog(closure)
++    blobs=[]
++    for item in rows:
++        name=item['name'];clock_check(release)
++        fd=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=source_fd);_HELD.append(fd)
+         raw=read_stable(fd,MAX_SOURCE)
+         if len(raw)!=item['size'] or sha(raw)!=item['sha256']:fail('source bytes differ')
+         blobs.append((item,raw))
+-    if sum(name.endswith('.py') for name in names)!=20 or not {'GRAPH-CONTRACT.json','parser/contract.json','parser/repaircontract.json','parser/candidate_data.py'}.issubset(names):fail('closure membership')
+     claim='INSTALL-'+release['nonce']+'.jsonl'
+     journal_fd=os.open(claim,os.O_WRONLY|os.O_APPEND|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd);_HELD.append(journal_fd)
+     os.fsync(root_fd)
+@@ -280,19 +299,13 @@
+         os.fchmod(out,0o755);ost=os.fstat(out)
+         if ost.st_uid!=0 or stat.S_IMODE(ost.st_mode)!=0o755:fail('code directory mode')
+         journal(journal_fd,{'state':'DIRECTORY_CREATED','identity':ident(ost)})
+-        journal(journal_fd,{'state':'BEFORE_MKDIR','name':'parser'})
+-        os.mkdir('parser',0o755,dir_fd=out);os.fsync(out)
+-        parser_out=os.open('parser',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=out);_HELD.append(parser_out)
+-        os.fchmod(parser_out,0o755);pst=os.fstat(parser_out)
+-        if pst.st_uid!=0 or stat.S_IMODE(pst.st_mode)!=0o755:fail('parser directory mode')
+-        journal(journal_fd,{'state':'DIRECTORY_CREATED','name':'parser','identity':ident(pst)})
+         for item,raw in blobs:
+-            clock_check(release);name=item['name'];parts=name.split('/');parent=parser_out if len(parts)==2 else out
++            clock_check(release);name=item['name'];parent=out
+             journal(journal_fd,{'state':'BEFORE_CREATE','name':name,'sha256':item['sha256']})
+-            wfd=os.open(parts[-1],os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o444,dir_fd=parent);_HELD.append(wfd)
++            wfd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o444,dir_fd=parent);_HELD.append(wfd)
+             os.fchmod(wfd,0o444);write_all(wfd,raw);os.fsync(wfd);os.fsync(parent);written=ident(os.fstat(wfd))
+             finish_writer(wfd,journal_fd,name,written)
+-            check=os.open(parts[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent);_HELD.append(check)
++            check=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent);_HELD.append(check)
+             st=os.fstat(check)
+             if st.st_uid!=0 or st.st_nlink!=1 or stat.S_IMODE(st.st_mode)!=0o444 or ident(st)!=written or sha(read_stable(check,MAX_SOURCE))!=item['sha256']:fail('installed file verification')
+             prior=flags(check);journal(journal_fd,{'state':'BEFORE_IMMUTABLE','name':name,'identity':ident(st),'prior_flags':prior})
+@@ -301,9 +314,8 @@
+             if sha(read_stable(check,MAX_SOURCE))!=item['sha256'] or ident(os.fstat(check))!=written:fail('immutable reread differs')
+             os.fsync(check);os.fsync(parent)
+             journal(journal_fd,{'state':'FILE_HELD','name':name,'identity':ident(st),'sha256':item['sha256']})
+-        top={x for x in names if '/' not in x}|{'parser'};nested={x.split('/')[1] for x in names if x.startswith('parser/')}
+-        if set(os.listdir(out))!=top or set(os.listdir(parser_out))!=nested:fail('installed membership changed')
+-        for label,fd in (('parser',parser_out),('root',out)):
++        if set(os.listdir(out))!={item['name'] for item,_ in blobs}:fail('installed membership changed')
++        for label,fd in (('root',out),):
+             before=flags(fd);journal(journal_fd,{'state':'BEFORE_DIRECTORY_IMMUTABLE','name':label,'identity':ident(os.fstat(fd)),'prior_flags':before})
+             fcntl.ioctl(fd,SETFLAGS,struct.pack('I',before|IMMUTABLE))
+             if not flags(fd)&IMMUTABLE:fail('directory immutable absent')
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/phase0-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/phase0-current.py
+@@ -14,6 +14,35 @@
+ import time
+ 
+ MAX = 2 * 1024 * 1024
++
++# This fixed catalogue is the reviewed native code package only. No arbitrary closure CLI.
++SOURCE_DIR='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package'
++FIXED_FILES=(('adapter.py', 18271, '6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3'), ('compositor.py', 15056, '987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b'), ('custody_protocol_v2.py', 4452, '587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb'), ('deferred_fork.py', 12001, 'b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'), ('graph_observations.py', 9505, 'df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed'), ('graph_producer.py', 10033, '58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5'), ('graph_server.py', 5764, '1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074'), ('immutable_epoch.py', 4429, '018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20'), ('inplace_custody.py', 13865, '70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e'), ('materializer.py', 18424, 'c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37'), ('native_current_owner.py', 16267, '7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622'), ('native_diagnostic_container_owner.py', 60024, '3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6'), ('native_resource_admission.py', 43352, 'afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b'), ('native_source_binding.py', 15188, '3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca'), ('operation_supervisor.py', 9775, '1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90'), ('operation_watchdog.py', 12077, 'debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77'), ('ownership_latch.py', 4183, 'fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390'), ('pidfd_compat.py', 3875, '068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'), ('pidfd_custody.py', 10423, '3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'), ('retained-scope-facts.json', 12746, '7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362'), ('root_bootstrap.py', 18995, '7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328'), ('root_owner_entry.py', 4074, 'dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472'), ('runtime_binding.py', 3350, '629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414'), ('source_freeze.py', 10475, '2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228'), ('split_inventory.py', 4799, '9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04'), ('supervisor_entry.py', 14804, 'a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd'), ('union_owner.py', 20741, '955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb'), ('union_server_guarded.py', 12973, '3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229'), ('verified_owner_loader.py', 6058, 'cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29'), ('verify_scripts_fd.py', 5695, '34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f'))
++
++def fixed_catalog(closure):
++    """Pure strict validation of this one fixed 29-code/one-static-data catalogue."""
++    if (type(closure) is not dict or set(closure)!={'version','source_directory','python_files','contract_files','files'} or
++        type(closure['version']) is not int or closure['version']!=1 or
++        closure['source_directory']!=SOURCE_DIR or type(closure['python_files']) is not int or closure['python_files']!=29 or
++        type(closure['contract_files']) is not int or closure['contract_files']!=1 or
++        type(closure['files']) is not list or len(closure['files'])!=30):
++        raise ValueError('source closure shape')
++    actual=[];names=set()
++    for row in closure['files']:
++        if type(row) is not dict or set(row)!={'name','size','sha256'}:
++            raise ValueError('source row')
++        name=row['name']
++        if (type(name) is not str or not name or name in ('.','..') or '/' in name or name in names or
++            type(row['size']) is not int or not 0<=row['size']<=2097152 or
++            type(row['sha256']) is not str or len(row['sha256'])!=64 or
++            any(c not in '0123456789abcdef' for c in row['sha256'])):
++            raise ValueError('source row values')
++        names.add(name);actual.append((name,row['size'],row['sha256']))
++    if tuple(actual)!=FIXED_FILES:
++        raise ValueError('source closure membership')
++    return closure['files']
++
++
+ GETFLAGS = 0x80086601
+ SETFLAGS = 0x40086602
+ IMMUTABLE = 0x10
+@@ -208,25 +237,14 @@
+     if digest(closure_raw) != install.CLOSURE_SHA256:
+         fail('source closure digest')
+     closure = json.loads(closure_raw, object_pairs_hook=install.unique)
+-    if set(closure) != {'version', 'source_directory', 'python_files', 'contract_files', 'files'} or closure['source_directory'] != install.SOURCE_DIR or closure['python_files'] != 20 or closure['contract_files'] != 3 or len(closure['files']) != 23:
++    rows = fixed_catalog(closure)
++    if install.SOURCE_DIR != SOURCE_DIR:
+         fail('source closure shape')
+-    parser = held_open('parser', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=source_fd)
+-    names = set()
+-    for row in closure['files']:
+-        exact_keys(row, ('name', 'size', 'sha256'))
+-        name = row['name']
+-        if type(name) is not str or name in names:
+-            fail('source name')
+-        parts = name.split('/')
+-        if len(parts) not in (1, 2) or any(p in ('', '.', '..') for p in parts) or (len(parts) == 2 and parts[0] != 'parser'):
+-            fail('source relative name')
+-        names.add(name)
+-        fd = held_open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parser if len(parts) == 2 else source_fd)
++    for row in rows:
++        fd = held_open(row['name'], os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=source_fd)
+         raw = install.read_stable(fd, MAX)
+-        if type(row['size']) is not int or len(raw) != row['size'] or digest(raw) != row['sha256']:
++        if len(raw) != row['size'] or digest(raw) != row['sha256']:
+             fail('source bytes differ')
+-    if sum(name.endswith('.py') for name in names) != 20 or not {'GRAPH-CONTRACT.json', 'parser/contract.json', 'parser/repaircontract.json', 'parser/candidate_data.py'} <= names:
+-        fail('source closure membership')
+ 
+ 
+ def run(request, install, issuer, prelim, completion, closure_raw, wait_raw, review_raw, verified_source_pins, channel, root_parent_pid, root_parent_birth):
+@@ -255,12 +273,12 @@
+         fail('retirement authority type')
+     issuer._parent_alive(prelim,root_parent_pid,root_parent_birth,channel)
+     issuer.require_outer_ancestor(prelim, request['outer_pid'], request['outer_birth'])
+-    if type(request['weekly_used_percent']) not in (int, float) or not 0 <= request['weekly_used_percent'] < 100 or type(request['weekly_observed_utc_ns']) is not int or not 0 <= time.time_ns() - request['weekly_observed_utc_ns'] <= 30000000000 or request['service_status'] != 'NO_NEW_REJECTION':
++    if type(request['weekly_used_percent']) not in (int, float) or not 0 <= request['weekly_used_percent'] <= 100 or type(request['weekly_observed_utc_ns']) is not int or not 0 <= time.time_ns() - request['weekly_observed_utc_ns'] <= 30000000000 or request['service_status'] != 'NO_NEW_REJECTION':
+         fail('fresh actual included status required')
+     for key in ('deadline_boot_ns','deadline_mono_ns','utc_cap_ns','phase1_deadline_boot_ns','receipt_expires_boot_ns','host_floor_bytes','scratch_floor_bytes','min_mem_available_bytes','join_capture_reserve_ns','term_grace_ns','kill_grace_ns','join_grace_ns'):
+         if type(request[key]) is not int or request[key] <= 0:
+             fail('positive admitted bound required: ' + key)
+-    if request['host_floor_bytes'] < 16 * 1024**3 or request['scratch_floor_bytes'] < 12 * 1024**3 or request['min_mem_available_bytes'] < 24 * 1024**3:
++    if request['host_floor_bytes'] < 16 * 1024**3 or request['scratch_floor_bytes'] < 12 * 1024**3 or request['min_mem_available_bytes'] < 26 * 1024**3:
+         fail('capacity floor')
+     if not 1000000000 <= request['join_capture_reserve_ns'] <= 30000000000:
+         fail('join reserve')
+@@ -278,7 +296,7 @@
+         owner['nonce'] != request['nonce'] or owner['native_release'] is not False or
+         owner['status'] != 'APPROVED_IF_VERIFIED' or not install.hex64(owner['review_sha256']) or
+         type(review_raw) is not bytes or len(review_raw) > MAX or digest(review_raw) != owner['review_sha256'] or
+-        owner['manual_invocation'] != '20261105T221223Z-74c11d83' or
++        owner['manual_invocation'] != '20261110T060029Z-3fe88dab' or
+         owner['one_shot_admission_id'] != request['one_shot_admission_id'] or
+         not install.hex64(request['profile_sha256']) or owner['profile_sha256'] != request['profile_sha256'] or
+         owner['outer_pid'] != request['outer_pid'] or owner['outer_birth'] != request['outer_birth'] or
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/root-install-direct-child-successor-4/install_completion.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/install_completion.py
+@@ -7,6 +7,35 @@
+ import time
+ 
+ MAX_JOURNAL=4*1024*1024
++
++# This fixed catalogue is the reviewed native code package only. No arbitrary closure CLI.
++SOURCE_DIR='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package'
++FIXED_FILES=(('adapter.py', 18271, '6a2bc93c6e49cf69cdd14b86168476f3c5609a70f4873348bf1002cceb5fc8e3'), ('compositor.py', 15056, '987a00408b578c63f28ef1634d7fb4207ec5218258c9546da3864a0f28f1b63b'), ('custody_protocol_v2.py', 4452, '587cebf7b8359a1711f078882a012a701e290902dc4376d1bc6e4c03f7ce8cbb'), ('deferred_fork.py', 12001, 'b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'), ('graph_observations.py', 9505, 'df7bb673c206585318a4e41a58486c05548d9981b81074baeb29437f458114ed'), ('graph_producer.py', 10033, '58a46e9a51fe721fdd21a12958db9bc658aa591558c5b6a4ff3f640d02e053f5'), ('graph_server.py', 5764, '1ddf26217ce626882baa3b6a8ffe06af0bb16329e281ed78ac1c36dff4592074'), ('immutable_epoch.py', 4429, '018c15192472a3d8c5d598561969f78bc24e93a88e7c4bbecd9b79515c42dc20'), ('inplace_custody.py', 13865, '70307b730512cb56c3f63738fe9fc8c14a1603bb6ec4227e05db3ab36115890e'), ('materializer.py', 18424, 'c3115c13a29dde74f6d316b64d26a6266c5a5cfeed877ef19de088844e09ba37'), ('native_current_owner.py', 16267, '7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622'), ('native_diagnostic_container_owner.py', 60024, '3ecb921f3169f0116829d835cd4f1268bfe3f04ad9059f6494831fdb731fddd6'), ('native_resource_admission.py', 43352, 'afe83dc21462e92aee5642d425e65031c4f0d6eaa8d6bc73ee4c60f55775948b'), ('native_source_binding.py', 15188, '3fec8b716a8ad991eaf12949a7c42688733465b9931d13d1942b060d8cc282ca'), ('operation_supervisor.py', 9775, '1a1e1ed738a5fa8a62f010bacbb2a06b529f577fe93d37539e19f6c839b2be90'), ('operation_watchdog.py', 12077, 'debaf3c6ba43e09f632cf33505c7aabf72ba4dd18cf25b6a934b26ced3c5bb77'), ('ownership_latch.py', 4183, 'fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390'), ('pidfd_compat.py', 3875, '068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'), ('pidfd_custody.py', 10423, '3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e'), ('retained-scope-facts.json', 12746, '7f7f4f58c733d6f42d631a1821241e3a632b823e981236038b03e675bdd4e362'), ('root_bootstrap.py', 18995, '7753d3ee7b05419fa3211afc910e65aec9c0086ae9dc1f2d5ff82ac1fb977328'), ('root_owner_entry.py', 4074, 'dc29c94ec726cac5840863f7cf1beb57bb950b2dc13ae8d68657a1f86792c472'), ('runtime_binding.py', 3350, '629b7b65d8d28169dffa71d86fbddeda8e1e0ef87f0dc4e91b264f8175717414'), ('source_freeze.py', 10475, '2a3cea45022e2104b6faa1ed8561ef9db1000a8a3734d94a1f17efab50ec8228'), ('split_inventory.py', 4799, '9bc54a33407c8abaed384a5d998fa3cea34d7f15179349e27e6122c09849de04'), ('supervisor_entry.py', 14804, 'a47aba63261aa94492b95614b0a53b899ee20bc359c8de321bd2f07ec34eb2cd'), ('union_owner.py', 20741, '955d879ff8fc0da6b81457bcea53415254a96367b9e23825bf07e8efb89ae2bb'), ('union_server_guarded.py', 12973, '3f96123f1a62ed427235c59f802452811522f62d5c5b4e5d84385c392a54a229'), ('verified_owner_loader.py', 6058, 'cec6e9506f29f07584ec5304c8deeb532a9d255be842b2faa55957c97a1f5c29'), ('verify_scripts_fd.py', 5695, '34bd9802c507b3408b685c6233f0a2f711edbdf7a6f31c5dcd3eaba70128ba8f'))
++
++def fixed_catalog(closure):
++    """Pure strict validation of this one fixed 29-code/one-static-data catalogue."""
++    if (type(closure) is not dict or set(closure)!={'version','source_directory','python_files','contract_files','files'} or
++        type(closure['version']) is not int or closure['version']!=1 or
++        closure['source_directory']!=SOURCE_DIR or type(closure['python_files']) is not int or closure['python_files']!=29 or
++        type(closure['contract_files']) is not int or closure['contract_files']!=1 or
++        type(closure['files']) is not list or len(closure['files'])!=30):
++        raise ValueError('source closure shape')
++    actual=[];names=set()
++    for row in closure['files']:
++        if type(row) is not dict or set(row)!={'name','size','sha256'}:
++            raise ValueError('source row')
++        name=row['name']
++        if (type(name) is not str or not name or name in ('.','..') or '/' in name or name in names or
++            type(row['size']) is not int or not 0<=row['size']<=2097152 or
++            type(row['sha256']) is not str or len(row['sha256'])!=64 or
++            any(c not in '0123456789abcdef' for c in row['sha256'])):
++            raise ValueError('source row values')
++        names.add(name);actual.append((name,row['size'],row['sha256']))
++    if tuple(actual)!=FIXED_FILES:
++        raise ValueError('source closure membership')
++    return closure['files']
++
++
+ MAX_PROC=131072
+ CREATION_MODEL_SHA256='6d72c6db01f60c8d66fb55bd0d3e179cbc5666f86164e1a9a7fd2342d09612bd'
+ # The verified bootstrap or same-process phase-zero loader must set these pins.
+@@ -100,8 +129,8 @@
+     raw=install.read_stable(closure_fd,install.MAX_SOURCE)
+     if install.sha(raw)!=install.CLOSURE_SHA256:raise ValueError('closure digest')
+     closure=json.loads(raw,object_pairs_hook=install.unique)
+-    files=closure['files'];names={row['name'] for row in files}
+-    if len(files)!=23 or len(names)!=23:raise ValueError('closure membership')
++    files=fixed_catalog(closure);names={row['name'] for row in files}
++    if install.SOURCE_DIR!=SOURCE_DIR:raise ValueError('closure membership')
+     name='INSTALL-'+nonce+'.jsonl'
+     fd=held_open(held,name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=root_fd)
+     st=os.fstat(fd)
+@@ -116,25 +145,22 @@
+         last.get('closure_sha256')!=install.CLOSURE_SHA256 or any(r.get('state') in ('UNKNOWN_RETAINED','WRITER_CLOSURE_UNKNOWN') for r in records)):
+         raise ValueError('install terminal journal')
+     out=held_open(held,'installed-source-'+nonce,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=code_fd)
+-    sub=held_open(held,'parser',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=out)
+-    for fd_dir in (out,sub):
++    for fd_dir in (out,):
+         st=os.fstat(fd_dir)
+         if st.st_uid!=0 or stat.S_IMODE(st.st_mode)!=0o755 or not install.flags(fd_dir)&install.IMMUTABLE:raise ValueError('directory not immutable')
+     if install.ident(os.fstat(out))!=last.get('identity'):raise ValueError('output inode differs')
+-    parser_created=[r for r in records if r.get('state')=='DIRECTORY_CREATED' and r.get('name')=='parser']
+-    root_freeze=[r for r in records if r.get('state')=='BEFORE_DIRECTORY_IMMUTABLE' and r.get('name')=='root']
+-    parser_freeze=[r for r in records if r.get('state')=='BEFORE_DIRECTORY_IMMUTABLE' and r.get('name')=='parser']
+-    if (len(parser_created)!=1 or len(root_freeze)!=1 or len(parser_freeze)!=1 or
+-        parser_created[0].get('identity')!=install.ident(os.fstat(sub)) or
+-        parser_freeze[0].get('identity')!=install.ident(os.fstat(sub)) or
+-        root_freeze[0].get('identity')!=install.ident(os.fstat(out))):raise ValueError('directory journal identity')
+-    top={n for n in names if '/' not in n}|{'parser'};nested={n.split('/')[1] for n in names if n.startswith('parser/')}
+-    if set(os.listdir(out))!=top or set(os.listdir(sub))!=nested:raise ValueError('installed membership')
++    root_created=[r for r in records if r.get('state')=='DIRECTORY_CREATED']
++    root_freeze=[r for r in records if r.get('state')=='BEFORE_DIRECTORY_IMMUTABLE']
++    expected_identity=install.ident(os.fstat(out))
++    if (len(root_created)!=1 or root_created[0].get('name') is not None or root_created[0].get('identity')!=expected_identity or
++        len(root_freeze)!=1 or root_freeze[0].get('name')!='root' or root_freeze[0].get('identity')!=expected_identity):
++        raise ValueError('directory journal identity')
++    if set(os.listdir(out))!=names:raise ValueError('installed membership')
+     result=[]
+     for row in files:
+-        need_time(template);name=row['name'];parts=name.split('/');directory=sub if len(parts)==2 else out
++        need_time(template);name=row['name'];directory=out
+         finished=verify_writer_sequence(records,row)
+-        f=held_open(held,parts[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=directory);st=os.fstat(f)
++        f=held_open(held,name,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=directory);st=os.fstat(f)
+         if (not stat.S_ISREG(st.st_mode) or st.st_uid!=0 or st.st_nlink!=1 or stat.S_IMODE(st.st_mode)!=0o444 or
+             not same_json(install.ident(st),finished['identity']) or st.st_size!=row['size'] or not install.flags(f)&install.IMMUTABLE):raise ValueError('installed file identity')
+         if install.sha(install.read_stable(f,install.MAX_SOURCE))!=row['sha256']:raise ValueError('installed file bytes')
+@@ -289,7 +315,7 @@
+     model=verify_creation_model(install,owner_fd,template,intent)
+     if not phase1 and frame.get('result',{}).get('creation_model')!=model:raise ValueError('result model differs')
+     issuer.fresh_controls(prelim,install,template,intent['phase1_deadline_boot_ns'] if phase1 else template['deadline_boot_ns'])
+-    if (intent['service_status']!='NO_NEW_REJECTION' or type(intent['weekly_used_percent']) not in (int,float) or not 0<=intent['weekly_used_percent']<100 or
++    if (intent['service_status']!='NO_NEW_REJECTION' or type(intent['weekly_used_percent']) not in (int,float) or not 0<=intent['weekly_used_percent']<=100 or
+         type(intent['weekly_observed_utc_ns']) is not int or (phase1 and not 0<=time.time_ns()-intent['weekly_observed_utc_ns']<=30000000000)):
+         raise ValueError('included usage/service')
+     release_fd=opened('INSTALL-RELEASE-'+nonce+'.json');install.root_file(release_fd)
+@@ -369,7 +395,7 @@
+         not install.hex64(owner.get('review_sha256')) or install.sha(review_raw)!=owner['review_sha256'] or
+         result.get('native_release') is not False or result.get('native_currentfree') is not None or
+         result.get('global_descendants')!='UNKNOWN' or type(result.get('installer_wait_status')) is not int or result.get('installer_wait_status')!=0 or
+-        type(result.get('install_proof')) is not dict or len(result['install_proof'].get('files',[]))!=23 or
++        type(result.get('install_proof')) is not dict or len(result['install_proof'].get('files',[]))!=30 or
+         type(result.get('captures')) is not list or len(result['captures'])!=2 or any(row.get('writer_closed') is not True for row in result['captures'])):
+         raise ValueError('conditional operation-only retirement authority absent')
+     return {'scope':'ROOT_CODE_INSTALL_ONLY','nonce':result['nonce'],'native_release':False}
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/preliminary-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/preliminary-current.py
+@@ -3,6 +3,7 @@
+ Not an execution release; no result implies current-free or native cleanup.
+ """
+ import errno,hashlib,json,math,os,resource,signal,stat,subprocess,sys,time
++from decimal import Decimal, InvalidOperation
+ from pathlib import Path
+ 
+ HERE=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1/postjoin-daemon-metadata-observer-source-1')
+@@ -13,14 +14,20 @@
+ RETAINED_READER=HERE.parent.parent/'DISPATCHER-SOL-MAX-20261030-1'/'sdk21-nonheld13-owner-source-1'/'sdk13_daemon_metadata_reader.v4.py'
+ RETAINED_READER_SHA='ef5eadb127f024275e10cbe2d4c8b2f2a8cf1a3fe301a20cd7d23a627df1d9f8'
+ RELEASE=HERE/'ROOT-PRELIMINARY-RELEASE.ACTUAL.json';OUTPUT=HERE/'preliminary-direct-parent-1';INNER=HERE/'preliminary-observation-1'
+-CURRENT=Path('/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3')
++CURRENT=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1')
+ CONTROLS=CURRENT/'ACTUAL-CONTROLS-CURRENT.json';CAPACITY=CURRENT/'ACTUAL-CAPACITY-CURRENT.json'
+ LAUNCHER_STATE=Path('/home/holden/mckernel/.git/os-autopilot/state.json')
+-USAGE_EVIDENCE=Path('/home/holden/mckernel/docs/verification/m14-current-included-usage-20261105.json')
++USAGE_EVIDENCE=CURRENT/'ACTUAL-ACCOUNT-CURRENT.json'
+ SCRATCH_VIEW='/home/holden/mckernel-work/scratch-readonly-20261105'
+ PYTHON='/usr/bin/python3.8';GATE_FD=197
+ TIME_UTC=1793774133; TIME_BOOT=1571567.6959065471; TIME_MONO=1556229.568859425
+ BOOT_ID='3ba4f2ca-4323-433d-bfb8-7859268121b6'
++EXPECTED_ACTORS={'watcher': (762046, 762044, '37669552'), 'worker': (762048, 762046, '37669559'), 'server': (762050, 762048, '37669567')}
++MANUAL_INVOCATION='20261110T060029Z-3fe88dab'
++CREDIT_RUN_ID='7c6ef3604bfb4008a917bba8cfb6cfaa'
++CREDIT_BUDGET='<PRIVATE_CONFIGURED_CREDIT_CAP>'
++CREDIT_INITIAL='<PRIVATE_CONFIGURED_CREDIT_CAP>'
++CREDIT_LEDGER=Path('/home/holden/mckernel/.git/os-autopilot/credit-runs/7c6ef3604bfb4008a917bba8cfb6cfaa.json')
+ REQUIRED_RELEASE_KEYS=frozenset(('status','operation','parent_sha256','observer_sha256','packet_sha256','daemon_reader_sha256','retained_reader_sha256','python_sha256','paid_fallback','weekly_used_percent','service_status','controls_sha256','capacity_sha256','weekly_observed_utc','expiry_utc','operation_nonce','nonce_verified_fresh','actual_tighter_caps','source_host_bindings'))
+ VARIABLE_TARGETS=frozenset(('/work','/out/build','/src/scripts','/out/source/linux-6.12.0-211.44.1.el10_2'))
+ GATE='import os,sys; fd=int(sys.argv[1]); b=os.read(fd,1); os.close(fd); b==b"G" or sys.exit(71); os.execv(sys.executable,[sys.executable,"-I","-B",sys.argv[2]])'
+@@ -133,117 +140,146 @@
+     return caps
+ 
+ 
+-def publication_evidence_checks(controls,capacity,state,usage,usage_sha,source_sha,now,boot,mono,actor):
+-    """Validate actual current publication-only facts, never native authority."""
++def amount(value, *, positive=False):
++    if isinstance(value, bool) or not isinstance(value, (str, int, float)):
++        raise ValueError("Credit amount must be a finite number")
++    text = str(value)
++    if len(text) > 64:
++        raise ValueError("Credit amount is too long")
++    try:
++        number = Decimal(text)
++    except InvalidOperation as error:
++        raise ValueError("Invalid credit amount") from error
++    if not number.is_finite() or number < 0 or number > Decimal("1e12"):
++        raise ValueError("Credit amount is outside the supported range")
++    if positive and number == 0:
++        raise ValueError("Credit budget must be positive")
++    return number
++
++
++def credit_record_checks(record, limits):
++    """Read-only validation of the SAME persisted cumulative guard, never reset it."""
++    if (type(record) is not dict or type(record.get('schema_version')) is not int or record['schema_version']!=2 or
++        record.get('id')!=CREDIT_RUN_ID or amount(record.get('budget'),positive=True)!=amount(CREDIT_BUDGET,positive=True)):
++        raise ValueError('current credit-run binding')
++    initial=amount(record.get('initial_balance'));minimum=amount(record.get('minimum_balance'))
++    previous=amount(record.get('last_balance'));spent=amount(record.get('spent'));remaining=amount(record.get('remaining'))
++    if (initial!=amount(CREDIT_INITIAL) or minimum>initial or minimum>previous or spent<initial-minimum or remaining!=max(Decimal(0),amount(CREDIT_BUDGET)-spent) or
++        spent>=amount(CREDIT_BUDGET) or remaining<=0 or previous<=0):
++        raise ValueError('current credit-run accounting')
++    if (type(limits) is not dict or not {'primary','credits','rateLimitReachedType','spendControlReached'}<=set(limits) or limits['rateLimitReachedType'] is not None or (limits['spendControlReached'] is not None and limits['spendControlReached'] is not False)):
++        raise ValueError('current account service hold')
++    c=limits.get('credits')
++    if (type(c) is not dict or c.get('hasCredits') is not True or c.get('unlimited') is not False or amount(c.get('balance'))!=previous):
++        raise ValueError('current signed-in finite balance differs')
++    return remaining
++
++
++def publication_evidence_checks(controls,capacity,state,usage,usage_sha,source_sha,now,boot,mono,actor,credit_record=None):
++    """Same normal publication scope, current Root/account/budget/caps, no native authority."""
+     from datetime import datetime,timezone
+     thread='01a18bc3-e072-7810-9426-75101b0856c0'
+     required_control={'scope','thread_id','native_release','native_currentfree','usage_sha256','nonce','binding','caps',
+-                      'owner_cap','owner_cap_sha256'}
++                      'owner_cap','owner_cap_sha256','credit_run_id','credit_budget'}
+     required_capacity={'scope','thread_id','native_release','native_currentfree','billing_mode','same_thread',
+                        'generic_c_request_still_held','nonce','binding','caps','native_reservation_bytes',
+                        'dfd_unknown_bytes','v2_unknown_bytes','publication_max_bytes','planning_ceiling_bytes',
+                        'non_additive','native_workloads_barred','other_host_compilation_barred','shared_overhead_bytes',
+                        'owner_cap_sha256','independent_review_sha256','independent_review_status',
+-                       'scratch_mount_id','scratch_mount_device','scratch_mount_source'}
+-    required_state={'thread_id','phase','stop_reason','weekly_usage_error','weekly_confirmation_pending',
+-                    'server_pid','server_start','worker_pid','worker_start','last_rate_limits'}
++                       'scratch_mount_id','scratch_mount_device','scratch_mount_source','credit_run_id','credit_budget'}
+     if (type(controls) is not dict or type(capacity) is not dict or
+         not required_control<=set(controls) or not required_capacity<=set(capacity) or
+-        controls.get('scope')!='ROOT_CODE_INSTALL_ONLY' or capacity.get('scope')!='ROOT_CODE_INSTALL_ONLY' or
+-        controls.get('thread_id')!=thread or capacity.get('thread_id')!=thread or
+-        controls.get('native_release') is not False or capacity.get('native_release') is not False or
+-        controls.get('native_currentfree') is not None or capacity.get('native_currentfree') is not None or
+-        capacity.get('billing_mode')!='included_only' or capacity.get('same_thread') is not True or
+-        capacity.get('generic_c_request_still_held') is not True or
+-        controls.get('usage_sha256')!=usage_sha):raise ValueError('current publication binding differs')
+-    nonce=controls.get('nonce')
++        controls['scope']!='ROOT_CODE_INSTALL_ONLY' or capacity['scope']!='ROOT_CODE_INSTALL_ONLY' or
++        controls['thread_id']!=thread or capacity['thread_id']!=thread or
++        controls['native_release'] is not False or capacity['native_release'] is not False or
++        controls['native_currentfree'] is not None or capacity['native_currentfree'] is not None or
++        capacity['billing_mode']!='included_first_same_durable_credit_budget' or capacity['same_thread'] is not True or
++        capacity['generic_c_request_still_held'] is not True or controls['usage_sha256']!=usage_sha or
++        any(x['credit_run_id']!=CREDIT_RUN_ID or x['credit_budget']!=CREDIT_BUDGET for x in (controls,capacity))):
++        raise ValueError('current publication binding differs')
++    nonce=controls['nonce']
++    prohibited=('c9e9624d1bada62e9635a740aba6e30e8432b47d0b560844911a54a2c36d95b5',
++                'b692f980fa10bda5271b39112fd8d454f33b622106e79eb9a4791c0c50abfde1',
++                'dfd0a93f86905adc253dff7a4c83df722e498ba61d96c8fe524a6b7c3f2dacf0',
++                '8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec',
++                '7aacc19ad888e4944212c7933ef02e85fd391044496265b6014ea751e2bb5654',
++                'b3f11a200351e7b1a252e6e609597ff65c8a92a4fbc88f68e63034b481cfb6f3')
+     if (type(nonce) is not str or len(nonce)!=64 or any(c not in '0123456789abcdef' for c in nonce) or
+-        nonce in ('dfd0a93f86905adc253dff7a4c83df722e498ba61d96c8fe524a6b7c3f2dacf0',
+-                  '8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec',
+-                  '7aacc19ad888e4944212c7933ef02e85fd391044496265b6014ea751e2bb5654',
+-                  'b3f11a200351e7b1a252e6e609597ff65c8a92a4fbc88f68e63034b481cfb6f3') or
+-        capacity.get('nonce')!=nonce):raise ValueError('publication nonce differs')
+-    if (type(state) is not dict or not required_state<=set(state) or state.get('thread_id')!=thread or state.get('phase')!='running' or
++        nonce in prohibited or capacity['nonce']!=nonce):raise ValueError('publication nonce differs')
++    if (type(state) is not dict or state.get('thread_id')!=thread or state.get('phase')!='running' or
+         state.get('stop_reason') is not None or state.get('weekly_usage_error') is not None or
+-        state.get('weekly_confirmation_pending') is not False):raise ValueError('launcher paused or usage unknown')
+-    if (state.get('server_pid')!=22545 or state.get('server_start')!='301128' or
+-        state.get('worker_pid')!=22543 or state.get('worker_start')!='301120'):
+-        raise ValueError('launcher owner differs')
+-    # The previous launcher's old-epoch cutoff remains historical. A new cap
+-    # comes only from the selected current Root admission and exact review.
++        state.get('weekly_confirmation_pending') is not False or state.get('credit_budget_error') is not None or
++        state.get('auth_mode')!='chatgpt' or (state.get('goal') or {}).get('status')!='active'):
++        raise ValueError('launcher paused or accounting unknown')
++    for role in ('server','worker'):
++        if (state.get(role+'_pid'),state.get(role+'_start'))!=(EXPECTED_ACTORS[role][0],EXPECTED_ACTORS[role][2]):
++            raise ValueError('launcher owner differs')
++    if (state.get('resume_instruction') or {}).get('invocation')!=MANUAL_INVOCATION:
++        raise ValueError('current invocation differs')
++    limits=state.get('last_rate_limits')
++    if state.get('credit_budget')!=credit_record:raise ValueError('persisted credit guard differs')
++    credit_record_checks(credit_record,limits)
++    if type(usage) is not dict or usage.get('source_event')!='account/rateLimits/updated':
++        raise ValueError('actual account notification required')
++    try:
++        observed=datetime.fromisoformat(usage['at'])
++        if observed.tzinfo is None or observed.utcoffset()!=timezone.utc.utcoffset(observed):raise ValueError()
++        primary=usage['primary'];percent=primary['usedPercent'];reset=primary['resetsAt'];age=now-observed.timestamp()
++    except (KeyError,TypeError,ValueError,OverflowError):raise ValueError('usage observation malformed')
++    if (not 0<=age<=30 or type(primary) is not dict or type(percent) not in (int,float) or
++        not math.isfinite(percent) or not 0<=percent<=100 or primary.get('windowDurationMins')!=10080 or
++        type(reset) is not int or reset<=now or limits.get('primary')!=primary or
++        usage.get('rateLimitReachedType') is not None or (usage.get('spendControlReached') is not None and usage.get('spendControlReached') is not False)):
++        raise ValueError('usage observation stale or held')
++    issued_credit=usage.get('credit_guard')
++    if (type(issued_credit) is not dict or issued_credit.get('id')!=CREDIT_RUN_ID or
++        issued_credit.get('budget')!=CREDIT_BUDGET or
++        issued_credit.get('initial_balance')!=credit_record.get('initial_balance') or
++        amount(credit_record['spent'])<amount(issued_credit.get('spent')) or
++        usage.get('credit_run_id')!=CREDIT_RUN_ID or usage.get('credit_budget')!=CREDIT_BUDGET):
++        raise ValueError('issued cumulative allowance differs')
+     cap=controls['owner_cap']
+     cap_keys={'version','record_type','scope','manual_invocation','owner_pid','owner_birth','boot_id','nonce',
+               'preliminary_sha256','profile_sha256','parent_manifest_sha256','child_manifest_sha256','driver_sha256',
+               'independent_review_sha256','native_release','native_currentfree',
+               'issued_utc_ns','expiry_utc_ns','issued_boot_ns','expiry_boot_ns','issued_mono_ns','expiry_mono_ns'}
+     if type(cap) is not dict or set(cap)!=cap_keys:raise ValueError('owner cap schema')
+-    def h64(v):return type(v) is str and len(v)==64 and all(x in '0123456789abcdef' for x in v)
+-    cap_raw=(json.dumps(cap,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
+-    cap_hash=hashlib.sha256(cap_raw).hexdigest()
++    def h64(v):return type(v) is str and len(v)==64 and all(c in '0123456789abcdef' for c in v)
++    cap_hash=hashlib.sha256((json.dumps(cap,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()).hexdigest()
+     if (type(cap['version']) is not int or cap['version']!=1 or cap['record_type']!='ROOT_PUBLICATION_ONE_SHOT_CAP_V1' or
+-        cap['scope']!='ROOT_CODE_INSTALL_ONLY' or cap['manual_invocation']!='20261105T221223Z-74c11d83' or
+-        type(cap['owner_pid']) is not int or cap['owner_pid']!=22545 or cap['owner_birth']!='301128' or
++        cap['scope']!='ROOT_CODE_INSTALL_ONLY' or cap['manual_invocation']!=MANUAL_INVOCATION or
++        type(cap['owner_pid']) is not int or cap['owner_pid']!=EXPECTED_ACTORS['server'][0] or cap['owner_birth']!=EXPECTED_ACTORS['server'][2] or
+         cap['boot_id']!=BOOT_ID or cap['nonce']!=nonce or cap['preliminary_sha256']!=source_sha or
+-        not h64(cap['profile_sha256']) or not h64(cap['parent_manifest_sha256']) or not h64(cap['child_manifest_sha256']) or not h64(cap['driver_sha256']) or
+-        not h64(cap['independent_review_sha256']) or
++        any(not h64(cap[k]) for k in ('profile_sha256','parent_manifest_sha256','child_manifest_sha256','driver_sha256','independent_review_sha256')) or
+         cap['native_release'] is not False or cap['native_currentfree'] is not None or
+         controls['owner_cap_sha256']!=cap_hash or capacity['owner_cap_sha256']!=cap_hash or
+-        capacity['independent_review_sha256']!=cap['independent_review_sha256'] or
+-        capacity['independent_review_status']!='PASS_ACTUAL_INSTALL_ONLY'):
++        capacity['independent_review_sha256']!=cap['independent_review_sha256'] or capacity['independent_review_status']!='PASS_ACTUAL_INSTALL_ONLY'):
+         raise ValueError('owner cap actual admission binding')
+-    if (type(usage) is not dict or not {'at','primary','source_event','rateLimitReachedType','spendControlReached'}<=set(usage) or
+-        usage.get('source_event')!='account/rateLimits/updated' or
+-        usage.get('rateLimitReachedType') is not None or usage.get('spendControlReached') is not None):
+-        raise ValueError('usage service rejection or unknown')
+-    try:
+-        observed=datetime.fromisoformat(usage['at'])
+-        if observed.tzinfo is None or observed.utcoffset()!=timezone.utc.utcoffset(observed):raise ValueError()
+-        age=now-observed.timestamp()
+-        primary=usage['primary'];rate=state['last_rate_limits']
+-        percent=primary['usedPercent'];reset=primary['resetsAt']
+-    except (KeyError,TypeError,ValueError,OverflowError):raise ValueError('usage observation malformed')
+-    if (not 0<=age<=30 or type(primary) is not dict or type(percent) not in (int,float) or
+-        not math.isfinite(percent) or not 0<=percent<100 or primary.get('windowDurationMins')!=10080 or
+-        type(reset) is not int or reset<=now or type(rate) is not dict or
+-        not {'primary','rateLimitReachedType','spendControlReached'}<=set(rate) or
+-        rate.get('primary')!=primary or rate.get('rateLimitReachedType') is not None or
+-        rate.get('spendControlReached') is not None):raise ValueError('usage observation stale or exhausted')
+-    caps=controls.get('caps');binding=controls.get('binding')
++    caps=controls['caps'];binding=controls['binding']
+     if (type(caps) is not dict or set(caps)!={'boot_deadline','monotonic_deadline','deadline','boot_id'} or
+-        caps['boot_id']!=BOOT_ID or capacity.get('caps')!=caps or capacity.get('binding')!=binding):
++        caps['boot_id']!=BOOT_ID or capacity['caps']!=caps or capacity['binding']!=binding):
+         raise ValueError('current publication caps differ')
+     for key,clock,issued_key,expiry_key in (('deadline',now,'issued_utc_ns','expiry_utc_ns'),
+                                           ('boot_deadline',boot,'issued_boot_ns','expiry_boot_ns'),
+                                           ('monotonic_deadline',mono,'issued_mono_ns','expiry_mono_ns')):
+-        bound=caps[key];issued=cap[issued_key];expiry=cap[expiry_key];current_ns=int(clock*1_000_000_000)
+-        if (type(bound) not in (int,float) or not math.isfinite(bound) or
+-            type(issued) is not int or type(expiry) is not int or
+-            not 0<issued<=current_ns<expiry<=issued+180_000_000_000 or
+-            not clock<bound<=expiry/1_000_000_000):raise ValueError('current one-shot publication cutoff')
+-    if cap['expiry_utc_ns']>reset*1_000_000_000 or caps['deadline']>reset:raise ValueError('weekly cutoff')
+-    if state.get('weekly_effective_boot_id')==BOOT_ID:
+-        for cap_key,state_key in (('expiry_utc_ns','weekly_effective_end'),
+-                                  ('expiry_boot_ns','weekly_effective_boot_end'),
+-                                  ('expiry_mono_ns','weekly_effective_monotonic_end')):
+-            inherited=state.get(state_key)
+-            if type(inherited) not in (int,float) or not math.isfinite(inherited) or cap[cap_key]>inherited*1_000_000_000:
+-                raise ValueError('current inherited cutoff')
+-    expected={'watcher':(22540,1392,'301112'),'worker':(22543,22540,'301120'),
+-              'server':(22545,22543,'301128')}
+-    if type(binding) is not dict or set(binding)!=set(expected):raise ValueError('actual owner roles differ')
+-    for role,(pid,ppid,birth) in expected.items():
++        bound=caps[key];issued=cap[issued_key];expiry=cap[expiry_key];current_ns=int(clock*1000000000)
++        if (type(bound) not in (int,float) or not math.isfinite(bound) or type(issued) is not int or type(expiry) is not int or
++            not 0<issued<=current_ns<expiry<=issued+180000000000 or not clock<bound<=expiry/1000000000):
++            raise ValueError('current one-shot publication cutoff')
++    if type(binding) is not dict or set(binding)!=set(EXPECTED_ACTORS):raise ValueError('actual owner roles differ')
++    for role,(pid,ppid,birth) in EXPECTED_ACTORS.items():
+         row=binding[role]
+-        if type(row) is not dict or row.get('pid')!=pid or row.get('ppid')!=ppid or row.get('start')!=birth:
++        if type(row) is not dict or (row.get('pid'),row.get('ppid'),row.get('start'))!=(pid,ppid,birth):
+             raise ValueError('current owner role binding')
+         live=actor(pid)
+-        if live.get('pid')!=pid or live.get('ppid')!=ppid or str(live.get('birth'))!=birth or live.get('uid')!=1000:
++        if (live.get('pid'),live.get('ppid'),str(live.get('birth')),live.get('uid'))!=(pid,ppid,birth,1000):
+             raise ValueError('current owner role changed')
+     gib=1024**3
+-    if (capacity.get('native_reservation_bytes')!=12*gib or capacity.get('dfd_unknown_bytes')!=4*gib or
+-        capacity.get('v2_unknown_bytes')!=2*gib or capacity.get('publication_max_bytes')!=4*gib or
+-        capacity.get('planning_ceiling_bytes')!=12*gib or capacity.get('non_additive') is not True or
+-        capacity.get('native_workloads_barred') is not True or capacity.get('other_host_compilation_barred') is not True or
+-        type(capacity.get('shared_overhead_bytes')) is not int or not 0<=capacity['shared_overhead_bytes']<=2*gib):
++    if (capacity['native_reservation_bytes']!=12*gib or capacity['dfd_unknown_bytes']!=4*gib or
++        capacity['v2_unknown_bytes']!=2*gib or capacity['publication_max_bytes']!=2*gib or
++        capacity['planning_ceiling_bytes']!=4*gib or capacity['non_additive'] is not False or
++        capacity['native_workloads_barred'] is not True or capacity['other_host_compilation_barred'] is not True or
++        type(capacity['shared_overhead_bytes']) is not int or capacity['shared_overhead_bytes']!=2*gib):
+         raise ValueError('publication resource reservation differs')
+     return caps
+ 
+@@ -280,20 +316,19 @@
+ 
+ def controller_checks(controls,capacity,now):
+     if Path('/proc/sys/kernel/random/boot_id').read_text().strip()!=BOOT_ID:raise ValueError('current boot identity differs')
+-    if type(controls) is not dict or type(controls.get('caps')) is not dict or controls['caps'].get('boot_id')!=BOOT_ID:
+-        raise ValueError('current publication boot binding')
+     raw,state_ref=read_bound(LAUNCHER_STATE,2<<20);usage_raw,usage_ref=read_bound(USAGE_EVIDENCE,65536)
++    credit_raw,credit_ref=read_bound(CREDIT_LEDGER,65536)
+     source_raw,_=read_bound(Path(__file__),2<<20)
+-    for ref in (state_ref,usage_ref):
++    for ref in (state_ref,usage_ref,credit_ref):
+         if ref['uid']!=1000 or stat.S_IMODE(ref['mode'])!=0o600:raise ValueError('current owner evidence mode')
+     def live(pid):
+         row=identity(pid);row['uid']=os.stat('/proc/%d'%pid).st_uid
+-        raw=Path('/proc/%d/stat'%pid).read_text().rsplit(')',1)[1].split()
+-        if not raw or raw[0] in ('Z','X','x'):raise ValueError('owner process unavailable')
++        fields=Path('/proc/%d/stat'%pid).read_text().rsplit(')',1)[1].split()
++        if not fields or fields[0] in ('Z','X','x'):raise ValueError('owner process unavailable')
+         return row
+     return publication_evidence_checks(controls,capacity,strict_json(raw),strict_json(usage_raw),
+             hashlib.sha256(usage_raw).hexdigest(),hashlib.sha256(source_raw).hexdigest(),
+-            now,time.clock_gettime(time.CLOCK_BOOTTIME),time.monotonic(),live)
++            now,time.clock_gettime(time.CLOCK_BOOTTIME),time.monotonic(),live,strict_json(credit_raw))
+ 
+ def validate_sealed(expected=None):
+     root,release,release_bytes=root_release(RELEASE)
+@@ -453,9 +488,4 @@
+     return 0 if status['positive_wait4_join'] and child.returncode==0 and not status['evidence_error'] and not status['signals'] and not stop_signal and status['query_custody']=='NO_QUERY_IN_PACKET_DESCENDANT_ESCAPE_UNPROVEN' else 2
+ 
+ if __name__=='__main__':
+-    try:result=main()
+-    except BaseException as exc:
+-        try:early_identity=identity(os.getpid())
+-        except BaseException:early_identity=None
+-        print(json.dumps({'status':'UNKNOWN_PARENT_EARLY_FAILURE','parent_identity':early_identity,'error':type(exc).__name__+': '+str(exc),'current_free':False,'physical_release':False},sort_keys=True),file=sys.stderr);sys.exit(2)
+-    sys.exit(result)
++    raise RuntimeError('normal code-publication reader only; no standalone historical observer')
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/prepare-install-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare-install-current.py
+@@ -7,10 +7,10 @@
+ from datetime import datetime
+ from pathlib import Path
+ 
+-PRELIM=Path('/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/preliminary-current.py')
+-PRELIM_SHA='3611b4cd2eed1ad4a99386abbde5ba111e2b3b17f3834bc4d007a29dbe28e593'
+-OUTER_PID=22545
+-OUTER_BIRTH='301128'
++PRELIM=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/preliminary-current.py')
++PRELIM_SHA='7342da356f761486313e48e4cdb468a56529ad4a37daa469a37e9ecdfe7ca508'
++OUTER_PID=762050
++OUTER_BIRTH='37669567'
+ 
+ 
+ def proc(pid):
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/issuer-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/issuer-current.py
+@@ -41,7 +41,7 @@
+ def bounds(install,template,deadline):
+     now=time.clock_gettime_ns(time.CLOCK_BOOTTIME)
+     if not (type(deadline) is int and template['issued_boot_ns']<=now<deadline<=template['deadline_boot_ns'] and
+-            time.monotonic_ns()<template['deadline_mono_ns'] and time.time_ns()<template['utc_cap_ns']<=min(install.WEEKLY_UTC_CAP_NS,time.time_ns()+180*1000000000)):raise ValueError('operation caps')
++            time.monotonic_ns()<template['deadline_mono_ns'] and time.time_ns()<template['utc_cap_ns']<=time.time_ns()+install.MAX_OPERATION_NS):raise ValueError('operation caps')
+ 
+ 
+ def require_outer_ancestor(prelim,pid,birth):
+@@ -225,7 +225,7 @@
+     require_outer_ancestor(prelim,intent['outer_pid'],intent['outer_birth'])
+     bounds(install,template,deadline);verify_direct_tools(install,intent,template);install.verify_base_runtime(template['interpreter']);install.verify_host_receipt(host_fd,template)
+     completion.verify_creation_model(install,owner_fd,template,intent);fresh_controls(prelim,install,template,deadline)
+-    if type(intent['weekly_used_percent']) not in (int,float) or not 0<=intent['weekly_used_percent']<100 or intent['service_status']!='NO_NEW_REJECTION' or type(intent['weekly_observed_utc_ns']) is not int or not 0<=time.time_ns()-intent['weekly_observed_utc_ns']<=30000000000:
++    if type(intent['weekly_used_percent']) not in (int,float) or not 0<=intent['weekly_used_percent']<=100 or intent['service_status']!='NO_NEW_REJECTION' or type(intent['weekly_observed_utc_ns']) is not int or not 0<=time.time_ns()-intent['weekly_observed_utc_ns']<=30000000000:
+         raise ValueError('fresh included usage/service required')
+     root_check=install.open_exact(template['operation_path'],template['operation_ancestors'],True)
+     code_check=install.open_exact(template['code_path'],template['code_ancestors'],True,True)
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/direct-entry-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py
+@@ -9,9 +9,9 @@
+ import types
+ 
+ BASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'
+-HERE=BASE+'/root-install-direct-child-successor-4'
+-CURRENT='/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3'
+-PACKAGE=BASE+'/root-install-source-10/package'
++HERE='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1'
++CURRENT='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1'
++PACKAGE='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-real-binding-source-1/complete-interface-1/complete-candidate-2/correction-1/package'
+ PRELIM=CURRENT+'/preliminary-current.py'
+ IPC=BASE+'/root-install-parent-successor-1/parent_control.py'
+ PINS={'ownership_latch':'fb264b1e6f12852e6a11c44239089a015a02e25019f9094af586422398bfa390',
+@@ -19,14 +19,14 @@
+       'pidfd_compat':'068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c',
+       'pidfd_custody':'3b22cac50183723456e6701031f00bdc446c04641c08c5864f1a379b5407686e',
+       'deferred_fork':'b28d2f3483fb90c858479b65c9cebe6bd1b586c01902f004ec44964da6b4625f'}
+-INSTALL_SHA='d87594a07ecd27d0760b418cb51c64f67f0b01e889d5c3b587cadd080944d8f5'
+-ISSUER_SHA='de48242140656c3f38dec2aaac98651501d972e93f5a9f8560e2aa452098701c'
+-COMPLETION_SHA='dbb97b2423be0d4ed69dd10ebe5b60275e9e4dee6043c253165fb7a296659f0a'
+-PHASE_SHA='8f0931bb2d7170d57e4c980dc2966d2eb31ec1006607deb5f5340aaae2a2eb43'
++INSTALL_SHA='8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c'
++ISSUER_SHA='db5086a8f7574a6536ffe31d5d2a443ddfaaf1c51244223ddb7288936c9bd2d3'
++COMPLETION_SHA='06b0501d38d9c3bc0b5e1b919676cd9eb727ece8f7c5997bf8d40248c60f2e22'
++PHASE_SHA='f0771fbd3bfe4dcf7cfa89f6259e46011fb96fb81786113365ab4ea75118fab5'
+ WAIT_SHA='2ed1a7a3cc5cd72d70d6c4a3a05f8b4f2dcc524fcada7ae75a84e099b2ce5719'
+ IPC_SHA='eda1ff0139c3bbf0c713009fc7728eccf3418cc7ce5d028731bc443837d49bbe'
+-CLOSURE_SHA='81be55d5bf48ff462d291683ef1a26238b27581026bc5ffacc488125b6667ba6'
+-PRELIM_SHA='3611b4cd2eed1ad4a99386abbde5ba111e2b3b17f3834bc4d007a29dbe28e593'
++CLOSURE_SHA='56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5'
++PRELIM_SHA='7342da356f761486313e48e4cdb468a56529ad4a37daa469a37e9ecdfe7ca508'
+ HELD=[]
+ CLOSE_HISTORY=[]
+ LOAD_STATE='NEW'
+@@ -126,8 +126,8 @@
+         issuer,_,issuer_raw=module('install_issuer',CURRENT+'/issuer-current.py',ISSUER_SHA)
+         phase,_,_=module('direct_phase0',CURRENT+'/phase0-current.py',PHASE_SHA)
+         _,wait_raw=verified(CURRENT+'/WAIT-INSTALL-CODE-current.py',WAIT_SHA)
+-        _,closure_raw=verified(BASE+'/root-install-source-10/SOURCE-CLOSURE.json',CLOSURE_SHA)
+-        verified(HERE+'/DIRECT-MODEL.json','98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04')
++        _,closure_raw=verified(CURRENT+'/SOURCE-CLOSURE.json',CLOSURE_SHA)
++        verified(BASE+'/root-install-direct-child-successor-4/DIRECT-MODEL.json','98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04')
+         pins={'issuer_sha256':hashlib.sha256(issuer_raw).hexdigest(),'completion_sha256':hashlib.sha256(completion_raw).hexdigest(),'ipc_sha256':hashlib.sha256(ipc_raw).hexdigest()}
+         completion.SOURCE_PINS=dict(pins)
+         LOADED={'install':install,'issuer':issuer,'completion':completion,'prelim':prelim,'phase':phase,
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/root_parent-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py
+@@ -228,7 +228,7 @@
+     if type(nonce) is not str or len(nonce)!=64 or any(c not in '0123456789abcdef' for c in nonce):raise ValueError('nonce')
+     if type(caps) is not dict or set(caps)!={'boot_ns','mono_ns','utc_ns'} or any(type(x) is not int for x in caps.values()):raise ValueError('clock caps')
+     if (type(actor_pids) is not list or len(actor_pids)!=3 or
+-        any(type(x) is not int for x in actor_pids) or set(actor_pids)!={22540,22543,22545}):
++        any(type(x) is not int for x in actor_pids) or set(actor_pids)!={762046,762048,762050}):
+         raise ValueError('three actual launcher actors required')
+     if ipc.remaining(caps)<=75000000000:raise ValueError('60s + 5s stop + 10s join reserve required')
+     if signal.getitimer(signal.ITIMER_REAL)!=(0.0,0.0) or signal.SIGALRM in signal.pthread_sigmask(signal.SIG_BLOCK,()):raise ValueError('preexisting alarm or blocked SIGALRM')
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/BOOTSTRAP-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/BOOTSTRAP-current.py
+@@ -3,12 +3,12 @@
+ from decimal import Decimal
+ 
+ BASE='/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1'
+-PARENT_PATH='/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/root_parent-current.py'
+-ENTRY_PATH='/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/direct-entry-current.py'
++PARENT_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/root_parent-current.py'
++ENTRY_PATH='/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/direct-entry-current.py'
+ DATA_PATH=BASE+'/root-install-caller-data-output-1/data_output.py'
+ DATA_SHA='6e1197061e4c7f99abcea965c6b1fd6beb18556497174ed38e725dbbeeef3b22'
+-PARENT_SHA='0bc38e189a838588e805b7e8b8f5b299f30d6aa6552be6164f1bb5afa90374e0'
+-ENTRY_SHA='aed73ede9edc9cfd9a1966b7abba346f824bfcb66005bce9ea4bcd1949c2ce02'
++PARENT_SHA='fc2b4942ec04f1ed1f301cf47a2dd12bd36cd517989ddc4e514b91422e42066b'
++ENTRY_SHA='c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48'
+ MAX=2097152
+ hold=[]
+ 
+@@ -110,7 +110,7 @@
+     parent=load('root_parent',PARENT_PATH,parent_raw)
+     parent.EXPECTED_CAPTURE=(capture.st_dev,capture.st_ino)
+     request=json.loads(admission_raw,object_pairs_hook=unique)
+-    if type(request) is not dict or request.get('outer_pid')!=22545 or request.get('outer_birth')!='301128':raise ValueError('actual Root outer identity')
++    if type(request) is not dict or request.get('outer_pid')!=762050 or request.get('outer_birth')!='37669567':raise ValueError('actual Root outer identity')
+     prelim=sys.modules['reviewed_controller_reader'];issuer=sys.modules['install_issuer']
+     issuer.require_outer_ancestor(prelim,request['outer_pid'],request['outer_birth'])
+     controls_raw,_=prelim.read_bound(prelim.CONTROLS,1<<20);capacity_raw,_=prelim.read_bound(prelim.CAPACITY,1<<20)
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/prepare_current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare_current.py
+@@ -7,27 +7,28 @@
+ import argparse,hashlib,json,math,os,resource,secrets,select,signal,stat,sys,time,types
+ from decimal import Decimal
+ from pathlib import Path
++import pathlib
+ 
+ BASE=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/WEEKLY-ONLY-20261029-1/DISPATCHER-MAX-PREFERRED-20261030-1')
+-HERE=Path('/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3')
++HERE=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1')
+ PARENT=HERE
+ CHILD=HERE
+-PREP=Path('/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/prepare-install-current.py')
+-PREP_SHA='64499993c4ea287c7b1e494ec4553e21b449d5539f491de555d1358be92471f8'
+-PARENT_SHA='c8b32f8081f7ac5051c80271bb0b476e69422b1a61c4c159ba3c9aee7ac59228'
+-PROFILE_SHA='5fbc46a61b406d8d0c118f464219d0d6a96e7f582beb3055b1f061089c7db613'
+-BOOT_SHA='5b193f16cb251784c65a847b80ec1509b65386cf33b8392fe04b789e627f1529'
+-CHILD_SHA='aed73ede9edc9cfd9a1966b7abba346f824bfcb66005bce9ea4bcd1949c2ce02'
+-CHILD_MANIFEST_SHA='f72b44c9e6b2c6308c7dc02e3683cd5360a086b313dc6d6b588eb4f3fbfaf928'
+-CLOSURE_SHA='81be55d5bf48ff462d291683ef1a26238b27581026bc5ffacc488125b6667ba6'
++PREP=Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/prepare-install-current.py')
++PREP_SHA='69cb7331c2b3d106714f3b61f441b3f782ff597ae37379ddc0e2dda02f99e440'
++PARENT_SHA='22c49acb6e0a1450d1c3e0da61b01a6a3ac0b07013366949f3738e90ff8f1873'
++PROFILE_SHA='da76a4572dacc41439a09823c8e5b2bc1578e5f2feaf9ddf036ca2a1b98e5661'
++BOOT_SHA='927483d66ff9bf2cbfae451793b15ffc8a75d92c7234062143cdaa91e508237f'
++CHILD_SHA='c5ee9db292a1834bda2ef6b41740a3cae91bc93826d1d23f56699dd7f3ce7c48'
++CHILD_MANIFEST_SHA='91bea7db612daa31bc2c18f25c8f46be750375c2778360bc8397aedaaffe4b26'
++CLOSURE_SHA='56df8d9ba9ee78c8955b80861bb1fcbc39305f64439129b1174e457d91c85ce5'
+ IPC_SHA='eda1ff0139c3bbf0c713009fc7728eccf3418cc7ce5d028731bc443837d49bbe'
+ MODEL_SHA='98ea72583a41f747f01c5bdb04b545319fc08cedf443366a6c2637a35562ed04'
+ OLD_NONCE='b692f980fa10bda5271b39112fd8d454f33b622106e79eb9a4791c0c50abfde1'
+-OUTER=22545;OUTER_BIRTH='301128';INVOCATION='20261105T221223Z-74c11d83'
++OUTER=762050;OUTER_BIRTH='37669567';INVOCATION='20261110T060029Z-3fe88dab'
+ CURRENT_BOOT='3ba4f2ca-4323-433d-bfb8-7859268121b6'
+ OWNED=[]
+ STOP_SIGNALS=(signal.SIGINT,signal.SIGTERM,signal.SIGHUP,signal.SIGQUIT,signal.SIGALRM)
+-MAX=2*1024*1024;BUDGET=12*1024**3;UTC_CAP=1794518606*10**9
++MAX=2*1024*1024;BUDGET=4*1024**3;MAX_OPERATION_SECONDS=180
+ 
+ 
+ def fail(message):raise ValueError(message)
+@@ -124,7 +125,7 @@
+     if type(actual) is not dict or set(actual)!=keys or type(actual['version']) is not int or actual['version']!=1:fail('actual values shape')
+     now_boot=time.clock_gettime_ns(time.CLOCK_BOOTTIME);now_utc=time.time_ns();now_mono=time.monotonic_ns()
+     percent=actual['weekly_used_percent']
+-    if (type(percent) not in (int,float) or not math.isfinite(percent) or not 0<=percent<100 or
++    if (type(percent) not in (int,float) or not math.isfinite(percent) or not 0<=percent<=100 or
+         type(actual['weekly_observed_utc_ns']) is not int or not 0<=now_utc-actual['weekly_observed_utc_ns']<=30000000000 or
+         not h64(actual['usage_evidence_sha256']) or actual['service_status']!='NO_NEW_REJECTION' or
+         type(actual['sampled_boot_ns']) is not int or not 0<=now_boot-actual['sampled_boot_ns']<=30000000000):fail('fresh included usage and control status')
+@@ -135,8 +136,8 @@
+         fail('actual nonce or usage differs from owner controls')
+     extra=actual['additional_reserved_bytes'];reserve=actual['sudo_overhead_reserved_bytes'];observed=actual['sudo_overhead_observed_bytes']
+     if (any(type(x) is not int or x<0 for x in (extra,reserve,observed)) or
+-        not 512*1024**2<=reserve<=2*1024**3 or observed>reserve-512*1024**2 or extra<4*1024**3 or
+-        6*1024**3+extra+reserve>BUDGET or live['capacity_data'].get('shared_overhead_bytes')!=reserve):
++        not 512*1024**2<=reserve<=2*1024**3 or observed>reserve or extra!=2*1024**3 or
++        extra+reserve>BUDGET or live['capacity_data'].get('shared_overhead_bytes')!=reserve):
+         fail('aggregate or host-control reservation')
+     if actual['controls_sha256']!=live['controls_sha256'] or actual['capacity_sha256']!=live['capacity_sha256']:fail('actual controls changed')
+     if not h64(actual['interpreter_sha256']) or type(actual['retire_operation_only']) is not bool:fail('runtime or retirement')
+@@ -145,7 +146,7 @@
+     ns=lambda x:int(Decimal(str(x))*10**9);caps=live['caps']
+     if not (now_boot+75000000000<actual['deadline_boot_ns']<=min(ns(caps['boot_deadline']),now_boot+180000000000) and
+         now_mono+75000000000<actual['deadline_mono_ns']<=min(ns(caps['monotonic_deadline']),now_mono+180000000000) and
+-        now_utc+75000000000<actual['utc_cap_ns']<=min(ns(caps['deadline']),UTC_CAP,now_utc+180000000000) and
++        now_utc+75000000000<actual['utc_cap_ns']<=min(ns(caps['deadline']),now_utc+MAX_OPERATION_SECONDS*1000000000) and
+         now_boot<actual['phase1_deadline_boot_ns']<=actual['receipt_expires_boot_ns']<=actual['deadline_boot_ns'] and
+         1000000000<=actual['join_capture_reserve_ns']<=30000000000):fail('tighter actual clock caps')
+     return now_boot
+@@ -157,7 +158,7 @@
+         fs=os.statvfs(path)
+         if fs.f_bavail*fs.f_frsize<floor:fail('actual storage floor')
+     rows=[line for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:')]
+-    if len(rows)!=1 or int(rows[0].split()[1])*1024<24*1024**3:fail('actual memory floor')
++    if len(rows)!=1 or int(rows[0].split()[1])*1024<26*1024**3:fail('actual memory floor')
+     st=os.stat('/var/lib')
+     if st.st_uid!=0 or not stat.S_ISDIR(st.st_mode) or stat.S_IMODE(st.st_mode)&0o022:fail('Root-controlled parent')
+ 
+@@ -175,7 +176,7 @@
+       'retire_operation_only':actual['retire_operation_only']}
+     request={'nonce':nonce,'outer_pid':OUTER,'outer_birth':OUTER_BIRTH,'one_shot_admission_id':admission_id,
+       'operation_parent':'/var/lib','code_parent_parent':'/var/lib','scratch_path':'/home/holden/mckernel-work/scratch-readonly-20261105',
+-      'host_floor_bytes':16*1024**3,'scratch_floor_bytes':12*1024**3,'min_mem_available_bytes':24*1024**3,
++      'host_floor_bytes':16*1024**3,'scratch_floor_bytes':12*1024**3,'min_mem_available_bytes':26*1024**3,
+       'owner_release':owner,'owner_release_sha256':digest(canon(owner)),'profile_sha256':PROFILE_SHA,
+       'native12':'HELD','scratch21':'HELD','mutex27_4':'HELD','v2_birth':None,'retained_2gib_bytes':2*1024**3,
+       'native_currentfree':None,'no_unlisted_later_operation':'UNKNOWN'}
+@@ -345,8 +346,8 @@
+         type(installer) is not dict or set(installer)!={'pid','birth','pidfd_terminal','keeper_direct_wait_status'} or installer['pidfd_terminal'] is not True or type(installer['keeper_direct_wait_status']) is not int or installer['keeper_direct_wait_status']!=0):fail('terminal wait evidence')
+     if proof.get('source_closure_sha256')!=CLOSURE_SHA or proof.get('native_release') is not False or proof.get('native_currentfree') is not None or proof.get('global_descendants')!='UNKNOWN':fail('proof scope')
+     files=proof.get('install_proof',{}).get('files')
+-    closure=json.loads(read(BASE/'root-install-source-10'/'SOURCE-CLOSURE.json',CLOSURE_SHA),object_pairs_hook=unique)
+-    if type(files) is not list or len(files)!=23:fail('full 23-file proof absent')
++    closure=json.loads(read(HERE/'SOURCE-CLOSURE.json',CLOSURE_SHA),object_pairs_hook=unique)
++    if type(files) is not list or len(files)!=30:fail('full 30-file proof absent')
+     expected={(r['name'],r['sha256']) for r in closure['files']}
+     if {(r.get('name'),r.get('sha256')) for r in files if type(r) is dict}!=expected:fail('proof membership/hashes')
+     for role,producer in (('root_parent',root),('keeper',keeper),('installer',installer)):
+@@ -356,6 +357,22 @@
+     return {'full_sha256':digest(lines[0]),'producer_root_parent':root,'producer_terminals':terminals,'lease_disposition':'VERIFIED_CLOSED','outcome':'COMPLETE'}
+ 
+ 
++def overhead():
++    rows={}
++    for p in pathlib.Path('/proc').iterdir():
++        if not p.name.isdigit():continue
++        try:
++            t=(p/'stat').read_text();v=t[t.rfind(')')+2:].split();rows[int(p.name)]=(int(v[1]),int(v[21])*os.sysconf('SC_PAGE_SIZE'),t[t.find('(')+1:t.rfind(')')])
++        except (OSError,ValueError,IndexError):pass
++    w={761845,762046,762048,762050,os.getpid()}
++    w.update(p for p,v in rows.items() if v[2] in ('codex','codex-code-mode','dockerd','containerd'))
++    while True:
++        children={p for p,v in rows.items() if v[0] in w}
++        if children<=w:break
++        w.update(children)
++    return sum(rows[p][1] for p in w if p in rows)
++
++
+ def caller_rss():
+     with Path('/proc/self/status').open('r') as stream:text=stream.read(65537)
+     if len(text)>65536:raise ValueError('caller status bound')
+@@ -371,15 +388,16 @@
+         if (time.clock_gettime_ns(time.CLOCK_BOOTTIME)>=request['deadline_boot_ns'] or
+             time.monotonic_ns()>=request['deadline_mono_ns'] or time.time_ns()>=request['utc_cap_ns']):timed_out=True
+         try:
++            if overhead()>BUDGET:errors.append('AGGREGATE_HOST4_RSS_EXCEEDED');resource_unknown=True
+             rss_peak=max(rss_peak,caller_rss())
+             if rss_peak>512*1024**2:errors.append('CALLER_RSS_RESERVE_EXCEEDED');resource_unknown=True
+         except (OSError,ValueError):errors.append('CALLER_RSS_UNKNOWN');resource_unknown=True
+         if len(errors)>64:errors=errors[-64:]
+-        if len(observed)<3 and not timed_out:
++        if not timed_out:
+             try:
+                 tree=owned_tree(child_pid,child_birth);roles=identify_roles(tree,child_pid,bootstrap,wait_literal)
+                 root_roles={row['pid'] for row in roles.values()}
+-                host_bytes=caller_rss()+actual['sudo_overhead_observed_bytes']+sum(row['rss_bytes'] for pid,(row,_) in tree.items() if pid not in root_roles)
++                host_bytes=caller_rss()+actual['sudo_overhead_observed_bytes']+sum(row['rss_bytes'] for pid,(row,_) in tree.items())
+                 host_peak=max(host_peak,host_bytes)
+                 if host_bytes>actual['sudo_overhead_reserved_bytes']:
+                     errors.append('HOST_CONTROL_RESERVE_EXCEEDED');resource_unknown=True
+@@ -474,7 +492,7 @@
+     os.sched_setaffinity(0,{6})
+     if os.sched_getaffinity(0)!={6}:fail('CPU6 narrowing failed')
+     nonce=actual['nonce'];admission_id=actual['one_shot_admission_id']
+-    if nonce in (OLD_NONCE,'dfd0a93f86905adc253dff7a4c83df722e498ba61d96c8fe524a6b7c3f2dacf0','8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec','7aacc19ad888e4944212c7933ef02e85fd391044496265b6014ea751e2bb5654','b3f11a200351e7b1a252e6e609597ff65c8a92a4fbc88f68e63034b481cfb6f3') or not h64(nonce) or not h64(admission_id):fail('fresh nonce')
++    if nonce in ('c9e9624d1bada62e9635a740aba6e30e8432b47d0b560844911a54a2c36d95b5',OLD_NONCE,'dfd0a93f86905adc253dff7a4c83df722e498ba61d96c8fe524a6b7c3f2dacf0','8c12bd228ca26f54732752129977b7310a74234a5d8812faaaa8658be5925bec','7aacc19ad888e4944212c7933ef02e85fd391044496265b6014ea751e2bb5654','b3f11a200351e7b1a252e6e609597ff65c8a92a4fbc88f68e63034b481cfb6f3') or not h64(nonce) or not h64(admission_id):fail('fresh nonce')
+     for name in ('mckernel-install-'+nonce,'mckernel-code-'+nonce):
+         if os.path.lexists('/var/lib/'+name):fail('nonce output already exists')
+     request=build_request(actual,live,child,args.operation_review_sha256,nonce,admission_id);raw=canon(request);request_sha=digest(raw)
+@@ -489,7 +507,7 @@
+     reservation={'status':'RESERVED_UNKNOWN_UNTIL_ROOT_JOIN','scope':'ROOT_CODE_INSTALL_ONLY','nonce':nonce,'admission_id':admission_id,
+        'root_server':live['outer'],'driver':self_row,'request_sha256':request_sha,'operation_review_sha256':args.operation_review_sha256,
+        'proposal_sha256':digest(proposal_raw),'actual_values_sha256':args.actual_values_sha256,'operation_reserved_bytes':0,
+-       'operation_planning_bytes':4*1024**3,'allocation_mode':'NON_ADDITIVE_WITHIN_RETAINED_12_GIB',
++       'operation_planning_bytes':2*1024**3,'allocation_mode':'CURRENT_SHARED_HOST4_WITH_ALL_OVERHEAD_NO_NATIVE_BORROW',
+        'additional_reserved_bytes':actual['additional_reserved_bytes'],'sudo_overhead_reserved_bytes':actual['sudo_overhead_reserved_bytes'],
+        'future_sudo_and_root_pid_birth':'ROOT_SESSION_MUST_OBSERVE_AND_REGISTER','native_currentfree':None,'native_release':False,
+        'no_unlisted_later_operation':'UNKNOWN','nonce_replay_forbidden':True}
+--- /home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3/ROOT-ISSUE-AND-EXECUTE-ONCE.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py
+@@ -1,5 +1,8 @@
+ """Materialize Root's reviewed current inputs, then enter the existing caller once."""
+ import datetime
++import argparse
++import ast
++import pathlib
+ import hashlib
+ import json
+ import os
+@@ -7,7 +10,7 @@
+ import secrets
+ import time
+ 
+-HERE = Path('/home/holden/mckernel-work/m14-resume-20261105-1/current-owner-publication-private-3')
++HERE = Path('/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1')
+ REPO = Path('/home/holden/mckernel')
+ BOOT = '3ba4f2ca-4323-433d-bfb8-7859268121b6'
+ GIB = 1024**3
+@@ -30,147 +33,183 @@
+         os.close(fd)
+     return digest(raw)
+ 
+-assert os.getuid() == 1000 and os.geteuid() == 1000
+-assert 6 in os.sched_getaffinity(0)
+-os.sched_setaffinity(0, {6})
+-assert Path('/proc/sys/kernel/random/boot_id').read_text().strip() == BOOT
+-review_path = HERE / 'ROOT-INDEPENDENT-REVIEW.ACTUAL.json'
+-review_raw = review_path.read_bytes()
+-review_sha = digest(review_raw)
+-assert review_sha == 'a5cb9698e742631d49fb72de7afcd3b53d9db6c6d2652c74626f2505ece2d68d'
+-review = json.loads(review_raw)
+-for name, key in [('prepare_current.py', 'driver_sha256'), ('RESOURCE-PROPOSAL-CURRENT.json', 'proposal_sha256'),
+-                  ('FROZEN-SOURCE.json', 'parent_manifest_sha256'), ('SOURCE-BOUND.json', 'child_manifest_sha256')]:
+-    assert digest((HERE / name).read_bytes()) == review[key], name
+-
+-state = json.loads((REPO / '.git/os-autopilot/state.json').read_bytes())
+-assert state['phase'] == 'running' and state['stop_reason'] is None
+-assert state['weekly_usage_error'] is None and state['weekly_confirmation_pending'] is False
+-binding = {}
+-overhead = 0
+-for role, pid, ppid, birth in [('watcher', 22540, 1392, '301112'), ('worker', 22543, 22540, '301120'),
+-                               ('server', 22545, 22543, '301128')]:
+-    fields = Path('/proc/%d/stat' % pid).read_text().rsplit(')', 1)[1].split()
+-    assert fields[0] not in ('Z', 'X', 'x') and int(fields[1]) == ppid and fields[19] == birth
+-    assert os.stat('/proc/%d' % pid).st_uid == 1000
+-    binding[role] = {'pid': pid, 'ppid': ppid, 'start': birth}
+-    rss = [row for row in Path('/proc/%d/status' % pid).read_text().splitlines() if row.startswith('VmRSS:')]
+-    assert len(rss) == 1
+-    overhead += int(rss[0].split()[1]) * 1024
+-assert overhead < 1536 * 1024**2
+-
+-scratch = '/home/holden/mckernel-work/scratch-readonly-20261105'
+-mount_rows = [row.split() for row in Path('/proc/self/mountinfo').read_text().splitlines()
+-              if len(row.split()) > 5 and row.split()[4] == scratch]
+-assert len(mount_rows) == 1
+-mount = mount_rows[0]
+-dash = mount.index('-')
+-assert mount[dash + 1] == 'ext4' and 'ro' in mount[5].split(',')
+-assert 'ro' in mount[dash + 3].split(',') and 'norecovery' in mount[dash + 3].split(',')
+-headroom = {}
+-for path, floor in [('/var/lib', 16 * GIB), (scratch, 12 * GIB)]:
+-    fs = os.statvfs(path)
+-    headroom[path] = fs.f_bavail * fs.f_frsize
+-    assert headroom[path] >= floor
+-memory = [row for row in Path('/proc/meminfo').read_text().splitlines() if row.startswith('MemAvailable:')]
+-assert len(memory) == 1
+-available = int(memory[0].split()[1]) * 1024
+-assert available >= 28 * GIB  # Conservative 22 GiB historical + 2 GiB HOST + 4 GiB floor.
+-
+-# Obtain the actual current event; never print or retain its credits fields.
+-protocol = REPO / '.git/os-autopilot/runs/20261105T221223Z-74c11d83/protocol.jsonl'
+-with protocol.open('rb') as stream:
+-    stream.seek(0, 2)
+-    stream.seek(max(0, stream.tell() - 4 * 1024 * 1024))
+-    lines = stream.read().splitlines()
+-usage = None
+-for raw in reversed(lines):
+-    try:
+-        row = json.loads(raw)
+-    except (ValueError, UnicodeError):
+-        continue
+-    event = row.get('event', {})
+-    if event.get('method') == 'account/rateLimits/updated':
+-        rate = event['params']['rateLimits']
+-        usage = {'at': row['at'], 'source_event': event['method'], 'primary': rate['primary'],
+-                 'rateLimitReachedType': rate.get('rateLimitReachedType'),
+-                 'spendControlReached': rate.get('spendControlReached')}
+-        break
+-assert usage is not None
+-observed = datetime.datetime.fromisoformat(usage['at']).timestamp()
+-assert 0 <= time.time() - observed < 25
+-assert usage['rateLimitReachedType'] is None and usage['spendControlReached'] is None
+-assert usage['primary'] == state['last_rate_limits']['primary']
+-assert usage['primary']['windowDurationMins'] == 10080 and 0 <= usage['primary']['usedPercent'] < 100
+-usage_path = REPO / 'docs/verification/m14-current-included-usage-20261105.json'
+-usage_raw = canonical(usage)
+-fd = os.open(str(usage_path), os.O_WRONLY | os.O_TRUNC | os.O_NOFOLLOW)
+-try:
+-    assert os.fstat(fd).st_uid == 1000
+-    os.fchmod(fd, 0o600)
+-    os.write(fd, usage_raw)
+-    os.fsync(fd)
+-finally:
+-    os.close(fd)
+-
+-nonce = secrets.token_hex(32)
+-for name in ('mckernel-install-' + nonce, 'mckernel-code-' + nonce):
+-    assert not os.path.lexists('/var/lib/' + name)
+-utc = time.time_ns()
+-boot = time.clock_gettime_ns(time.CLOCK_BOOTTIME)
+-mono = time.monotonic_ns()
+-# Whole-second bounds avoid float/Decimal rounding widening the selected cap.
+-deadlines = {'deadline': (utc + 150_000_000_000) // 10**9,
+-             'boot_deadline': (boot + 150_000_000_000) // 10**9,
+-             'monotonic_deadline': (mono + 150_000_000_000) // 10**9, 'boot_id': BOOT}
+-cap = {'version': 1, 'record_type': 'ROOT_PUBLICATION_ONE_SHOT_CAP_V1', 'scope': 'ROOT_CODE_INSTALL_ONLY',
+-       'manual_invocation': '20261105T221223Z-74c11d83', 'owner_pid': 22545, 'owner_birth': '301128',
+-       'boot_id': BOOT, 'nonce': nonce, 'preliminary_sha256': digest((HERE / 'preliminary-current.py').read_bytes()),
+-       'profile_sha256': digest((HERE / 'PROFILE.SOURCE-ONLY.json').read_bytes()),
+-       'parent_manifest_sha256': review['parent_manifest_sha256'], 'child_manifest_sha256': review['child_manifest_sha256'],
+-       'driver_sha256': review['driver_sha256'], 'independent_review_sha256': review_sha,
+-       'native_release': False, 'native_currentfree': None, 'issued_utc_ns': utc, 'issued_boot_ns': boot,
+-       'issued_mono_ns': mono, 'expiry_utc_ns': deadlines['deadline'] * 10**9,
+-       'expiry_boot_ns': deadlines['boot_deadline'] * 10**9, 'expiry_mono_ns': deadlines['monotonic_deadline'] * 10**9}
+-assert cap['expiry_utc_ns'] <= usage['primary']['resetsAt'] * 10**9
+-cap_sha = write_once(HERE / 'ROOT-ONE-SHOT-CAP.ACTUAL.json', cap)
+-common = {'scope': 'ROOT_CODE_INSTALL_ONLY', 'thread_id': '01a18bc3-e072-7810-9426-75101b0856c0',
+-          'native_release': False, 'native_currentfree': None, 'nonce': nonce, 'binding': binding,
+-          'caps': deadlines, 'owner_cap_sha256': cap_sha}
+-controls = dict(common, usage_sha256=digest(usage_raw), owner_cap=cap)
+-capacity = dict(common, billing_mode='included_only', same_thread=True, generic_c_request_still_held=True,
+-                native_reservation_bytes=12*GIB, dfd_unknown_bytes=4*GIB, v2_unknown_bytes=2*GIB,
+-                publication_max_bytes=4*GIB, planning_ceiling_bytes=12*GIB, non_additive=True,
+-                native_workloads_barred=True, other_host_compilation_barred=True, shared_overhead_bytes=2*GIB,
+-                independent_review_sha256=review_sha, independent_review_status='PASS_ACTUAL_INSTALL_ONLY',
+-                supervisor=binding['server'], scratch_mount_id=int(mount[0]), scratch_mount_device=mount[2],
+-                scratch_mount_source=mount[dash + 2])
+-controls_sha = write_once(HERE / 'ACTUAL-CONTROLS-CURRENT.json', controls)
+-capacity_sha = write_once(HERE / 'ACTUAL-CAPACITY-CURRENT.json', capacity)
+-actual = {'version': 1, 'nonce': nonce, 'one_shot_admission_id': secrets.token_hex(32),
+-          'weekly_used_percent': usage['primary']['usedPercent'], 'weekly_observed_utc_ns': int(observed * 10**9),
+-          'usage_evidence_sha256': digest(usage_raw), 'service_status': 'NO_NEW_REJECTION', 'sampled_boot_ns': boot,
+-          'additional_reserved_bytes': 4*GIB, 'sudo_overhead_reserved_bytes': 2*GIB,
+-          'sudo_overhead_observed_bytes': overhead, 'deadline_boot_ns': cap['expiry_boot_ns'],
+-          'deadline_mono_ns': cap['expiry_mono_ns'], 'utc_cap_ns': cap['expiry_utc_ns'],
+-          'phase1_deadline_boot_ns': cap['expiry_boot_ns'] - 70_000_000_000,
+-          'receipt_expires_boot_ns': cap['expiry_boot_ns'] - 40_000_000_000,
+-          'join_capture_reserve_ns': 10_000_000_000, 'term_grace_ns': 5_000_000_000,
+-          'kill_grace_ns': 5_000_000_000, 'join_grace_ns': 10_000_000_000, 'retire_operation_only': True,
+-          'controls_sha256': controls_sha, 'capacity_sha256': capacity_sha,
+-          'interpreter_sha256': digest(Path('/usr/bin/python3').resolve(strict=True).read_bytes())}
+-actual_path = HERE / 'ACTUAL-VALUES-CURRENT.json'
+-actual_sha = write_once(actual_path, actual)
+-write_once(HERE / 'ROOT-DYNAMIC-ADMISSION.ACTUAL.json',
+-           {'status': 'ADMITTED_CODE_PUBLICATION_ONCE', 'nonce': nonce, 'review_sha256': review_sha,
+-            'controls_sha256': controls_sha, 'capacity_sha256': capacity_sha, 'actual_sha256': actual_sha,
+-            'headroom_bytes': headroom, 'memory_available_bytes': available, 'control_rss_bytes': overhead,
+-            'native_release': False, 'native_currentfree': None, 'historical_reservation_release': False})
+-reservation_parent = HERE / 'reservations'
+-os.mkdir(str(reservation_parent), 0o700)
+-print(json.dumps({'status': 'ENTERING_REVIEWED_PUBLICATION_CALLER_ONCE', 'nonce': nonce,
+-                  'usage_percent': usage['primary']['usedPercent'], 'cap_seconds': 150}), flush=True)
+-os.execv('/usr/bin/python3', ['/usr/bin/python3', '-I', '-B', str(HERE / 'prepare_current.py'),
+-         '--actual-values', str(actual_path), '--actual-values-sha256', actual_sha,
+-         '--operation-review', str(review_path), '--operation-review-sha256', review_sha,
+-         '--reservation-parent', str(reservation_parent), '--execute'])
++def aggregate_rss():
++    rows={}
++    for p in pathlib.Path('/proc').iterdir():
++        if not p.name.isdigit():continue
++        try:
++            t=(p/'stat').read_text();v=t[t.rfind(')')+2:].split();rows[int(p.name)]=(int(v[1]),int(v[21])*os.sysconf('SC_PAGE_SIZE'),t[t.find('(')+1:t.rfind(')')])
++        except (OSError,ValueError,IndexError):pass
++    w={761845,762046,762048,762050,os.getpid()}
++    w.update(p for p,v in rows.items() if v[2] in ('codex','codex-code-mode','dockerd','containerd'))
++    while True:
++        children={p for p,v in rows.items() if v[0] in w}
++        if children<=w:break
++        w.update(children)
++    return sum(rows[p][1] for p in w if p in rows)
++
++def main():
++    assert os.getuid() == 1000 and os.geteuid() == 1000
++    assert 6 in os.sched_getaffinity(0)
++    os.sched_setaffinity(0, {6})
++    assert Path('/proc/sys/kernel/random/boot_id').read_text().strip() == BOOT
++    parser=argparse.ArgumentParser()
++    parser.add_argument('--operation-review',required=True)
++    parser.add_argument('--operation-review-sha256',required=True)
++    args=parser.parse_args()
++    review_path=Path(args.operation_review)
++    assert review_path.is_absolute() and len(args.operation_review_sha256)==64 and all(c in '0123456789abcdef' for c in args.operation_review_sha256)
++    review_raw=review_path.read_bytes();review_sha=digest(review_raw)
++    assert review_sha==args.operation_review_sha256
++    review=json.loads(review_raw)
++    expected={'status':'PASS_ACTUAL_INSTALL_ONLY','scope':'ROOT_CODE_INSTALL_ONLY',
++              'proposal_sha256':digest((HERE/'RESOURCE-PROPOSAL-CURRENT.json').read_bytes()),
++              'driver_sha256':digest((HERE/'prepare_current.py').read_bytes()),
++              'parent_manifest_sha256':digest((HERE/'FROZEN-SOURCE.json').read_bytes()),
++              'child_manifest_sha256':digest((HERE/'SOURCE-BOUND.json').read_bytes()),
++              'native_release':False,'native_currentfree':None,'retire_operation_only':True}
++    assert review==expected
++    for item in json.loads((HERE/'RESOURCE-PROPOSAL-CURRENT.json').read_bytes())['source_bindings'].values():
++        assert digest(Path(item['path']).read_bytes())==item['sha256']
++    state = json.loads((REPO / '.git/os-autopilot/state.json').read_bytes())
++    assert state['phase'] == 'running' and state['stop_reason'] is None
++    assert state['weekly_usage_error'] is None and state['weekly_confirmation_pending'] is False
++    binding = {}
++    overhead = 0
++    for role, pid, ppid, birth in [('watcher', 762046, 762044, '37669552'), ('worker', 762048, 762046, '37669559'), ('server', 762050, 762048, '37669567')]:
++        fields = Path('/proc/%d/stat' % pid).read_text().rsplit(')', 1)[1].split()
++        assert fields[0] not in ('Z', 'X', 'x') and int(fields[1]) == ppid and fields[19] == birth
++        assert os.stat('/proc/%d' % pid).st_uid == 1000
++        binding[role] = {'pid': pid, 'ppid': ppid, 'start': birth}
++        rss = [row for row in Path('/proc/%d/status' % pid).read_text().splitlines() if row.startswith('VmRSS:')]
++        assert len(rss) == 1
++        overhead += int(rss[0].split()[1]) * 1024
++    overhead=aggregate_rss()
++    assert overhead < 2 * GIB
++
++    scratch = '/home/holden/mckernel-work/scratch-readonly-20261105'
++    mount_rows = [row.split() for row in Path('/proc/self/mountinfo').read_text().splitlines()
++                  if len(row.split()) > 5 and row.split()[4] == scratch]
++    assert len(mount_rows) == 1
++    mount = mount_rows[0]
++    dash = mount.index('-')
++    assert mount[dash + 1] == 'ext4' and 'ro' in mount[5].split(',')
++    assert 'ro' in mount[dash + 3].split(',') and 'norecovery' in mount[dash + 3].split(',')
++    headroom = {}
++    for path, floor in [('/var/lib', 16 * GIB), (scratch, 12 * GIB)]:
++        fs = os.statvfs(path)
++        headroom[path] = fs.f_bavail * fs.f_frsize
++        assert headroom[path] >= floor
++    memory = [row for row in Path('/proc/meminfo').read_text().splitlines() if row.startswith('MemAvailable:')]
++    assert len(memory) == 1
++    available = int(memory[0].split()[1]) * 1024
++    assert available >= 26 * GIB  # Retained18 + currentHOST4 + floor4, no native borrow.
++
++    # Obtain the actual current event; never print or retain its credits fields.
++    protocol = REPO / '.git/os-autopilot/runs/20261110T060029Z-3fe88dab/protocol.jsonl'
++    with protocol.open('rb') as stream:
++        stream.seek(0, 2)
++        stream.seek(max(0, stream.tell() - 4 * 1024 * 1024))
++        lines = stream.read().splitlines()
++    usage = None
++    for raw in reversed(lines):
++        try:
++            row = json.loads(raw)
++        except (ValueError, UnicodeError):
++            continue
++        event = row.get('event', {})
++        if event.get('method') == 'account/rateLimits/updated':
++            rate = event['params']['rateLimits']
++            usage = {'at': row['at'], 'source_event': event['method'], 'primary': rate['primary'],
++                     'rateLimitReachedType': rate.get('rateLimitReachedType'),
++                     'spendControlReached': rate.get('spendControlReached')}
++            break
++    assert usage is not None
++    observed = datetime.datetime.fromisoformat(usage['at']).timestamp()
++    assert 0 <= time.time() - observed < 25
++    assert usage['rateLimitReachedType'] is None and (usage['spendControlReached'] is None or usage['spendControlReached'] is False)
++    assert usage['primary'] == state['last_rate_limits']['primary']
++    assert state.get('auth_mode')=='chatgpt' and state.get('credit_budget_error') is None
++    credit_path=REPO/'.git/os-autopilot/credit-runs/7c6ef3604bfb4008a917bba8cfb6cfaa.json'
++    credit=json.loads(credit_path.read_bytes())
++    assert credit==state['credit_budget'] and credit.get('id')=='7c6ef3604bfb4008a917bba8cfb6cfaa' and credit.get('budget')=='<PRIVATE_CONFIGURED_CREDIT_CAP>'
++    from decimal import Decimal
++    assert Decimal(credit['remaining'])>0 and Decimal(credit['spent'])<Decimal(credit['budget'])
++    usage.update(credit_run_id=credit['id'],credit_budget=credit['budget'],credit_guard=credit)
++    assert usage['primary']['windowDurationMins'] == 10080 and 0 <= usage['primary']['usedPercent'] <= 100
++    usage_path=HERE/'ACTUAL-ACCOUNT-CURRENT.json'
++    usage_raw=canonical(usage)
++    write_once(usage_path,usage)
++
++    nonce = secrets.token_hex(32)
++    for name in ('mckernel-install-' + nonce, 'mckernel-code-' + nonce):
++        assert not os.path.lexists('/var/lib/' + name)
++    utc = time.time_ns()
++    boot = time.clock_gettime_ns(time.CLOCK_BOOTTIME)
++    mono = time.monotonic_ns()
++    # Whole-second bounds avoid float/Decimal rounding widening the selected cap.
++    deadlines = {'deadline': (utc + 150_000_000_000) // 10**9,
++                 'boot_deadline': (boot + 150_000_000_000) // 10**9,
++                 'monotonic_deadline': (mono + 150_000_000_000) // 10**9, 'boot_id': BOOT}
++    cap = {'version': 1, 'record_type': 'ROOT_PUBLICATION_ONE_SHOT_CAP_V1', 'scope': 'ROOT_CODE_INSTALL_ONLY',
++           'manual_invocation': '20261110T060029Z-3fe88dab', 'owner_pid': 762050, 'owner_birth': '37669567',
++           'boot_id': BOOT, 'nonce': nonce, 'preliminary_sha256': digest((HERE / 'preliminary-current.py').read_bytes()),
++           'profile_sha256': digest((HERE / 'PROFILE.SOURCE-ONLY.json').read_bytes()),
++           'parent_manifest_sha256': review['parent_manifest_sha256'], 'child_manifest_sha256': review['child_manifest_sha256'],
++           'driver_sha256': review['driver_sha256'], 'independent_review_sha256': review_sha,
++           'native_release': False, 'native_currentfree': None, 'issued_utc_ns': utc, 'issued_boot_ns': boot,
++           'issued_mono_ns': mono, 'expiry_utc_ns': deadlines['deadline'] * 10**9,
++           'expiry_boot_ns': deadlines['boot_deadline'] * 10**9, 'expiry_mono_ns': deadlines['monotonic_deadline'] * 10**9}
++    assert cap['expiry_utc_ns'] <= usage['primary']['resetsAt'] * 10**9
++    cap_sha = write_once(HERE / 'ROOT-ONE-SHOT-CAP.ACTUAL.json', cap)
++    common = {'scope': 'ROOT_CODE_INSTALL_ONLY', 'thread_id': '01a18bc3-e072-7810-9426-75101b0856c0',
++              'native_release': False, 'native_currentfree': None, 'nonce': nonce, 'binding': binding,
++              'credit_run_id':credit['id'],'credit_budget':credit['budget'],
++              'caps': deadlines, 'owner_cap_sha256': cap_sha}
++    controls = dict(common, usage_sha256=digest(usage_raw), owner_cap=cap)
++    capacity = dict(common, billing_mode='included_first_same_durable_credit_budget', same_thread=True, generic_c_request_still_held=True,
++                    native_reservation_bytes=12*GIB, dfd_unknown_bytes=4*GIB, v2_unknown_bytes=2*GIB,
++                    publication_max_bytes=2*GIB, planning_ceiling_bytes=4*GIB, non_additive=False,
++                    native_workloads_barred=True, other_host_compilation_barred=True, shared_overhead_bytes=2*GIB,
++                    independent_review_sha256=review_sha, independent_review_status='PASS_ACTUAL_INSTALL_ONLY',
++                    supervisor=binding['server'], scratch_mount_id=int(mount[0]), scratch_mount_device=mount[2],
++                    scratch_mount_source=mount[dash + 2])
++    controls_sha = write_once(HERE / 'ACTUAL-CONTROLS-CURRENT.json', controls)
++    capacity_sha = write_once(HERE / 'ACTUAL-CAPACITY-CURRENT.json', capacity)
++    actual = {'version': 1, 'nonce': nonce, 'one_shot_admission_id': secrets.token_hex(32),
++              'weekly_used_percent': usage['primary']['usedPercent'], 'weekly_observed_utc_ns': int(observed * 10**9),
++              'usage_evidence_sha256': digest(usage_raw), 'service_status': 'NO_NEW_REJECTION', 'sampled_boot_ns': boot,
++              'additional_reserved_bytes': 2*GIB, 'sudo_overhead_reserved_bytes': 2*GIB,
++              'sudo_overhead_observed_bytes': overhead, 'deadline_boot_ns': cap['expiry_boot_ns'],
++              'deadline_mono_ns': cap['expiry_mono_ns'], 'utc_cap_ns': cap['expiry_utc_ns'],
++              'phase1_deadline_boot_ns': cap['expiry_boot_ns'] - 70_000_000_000,
++              'receipt_expires_boot_ns': cap['expiry_boot_ns'] - 40_000_000_000,
++              'join_capture_reserve_ns': 10_000_000_000, 'term_grace_ns': 5_000_000_000,
++              'kill_grace_ns': 5_000_000_000, 'join_grace_ns': 10_000_000_000, 'retire_operation_only': True,
++              'controls_sha256': controls_sha, 'capacity_sha256': capacity_sha,
++              'interpreter_sha256': digest(Path('/usr/bin/python3').resolve(strict=True).read_bytes())}
++    prelim_raw=(HERE/'preliminary-current.py').read_bytes()
++    # Only definitions are loaded from the pinned current reader, no legacy observer entrypoint.
++    import types
++    prelim=types.ModuleType('_reviewed_publication_preflight');prelim.__file__=str(HERE/'preliminary-current.py')
++    exec(compile(prelim_raw,prelim.__file__,'exec'),prelim.__dict__)
++    prelim.controller_checks(controls,capacity,time.time())
++    prelim.verify_scratch_mount(capacity)
++    actual_path = HERE / 'ACTUAL-VALUES-CURRENT.json'
++    actual_sha = write_once(actual_path, actual)
++    write_once(HERE / 'ROOT-DYNAMIC-ADMISSION.ACTUAL.json',
++               {'status': 'ADMITTED_CODE_PUBLICATION_ONCE', 'nonce': nonce, 'review_sha256': review_sha,
++                'controls_sha256': controls_sha, 'capacity_sha256': capacity_sha, 'actual_sha256': actual_sha,
++                'headroom_bytes': headroom, 'memory_available_bytes': available, 'control_rss_bytes': overhead,
++                'native_release': False, 'native_currentfree': None, 'historical_reservation_release': False})
++    reservation_parent = HERE / 'reservations'
++    os.mkdir(str(reservation_parent), 0o700)
++    print(json.dumps({'status': 'ENTERING_REVIEWED_PUBLICATION_CALLER_ONCE', 'nonce': nonce,
++                      'usage_percent': usage['primary']['usedPercent'], 'cap_seconds': 150}), flush=True)
++    os.execv('/usr/bin/python3', ['/usr/bin/python3', '-I', '-B', str(HERE / 'prepare_current.py'),
++             '--actual-values', str(actual_path), '--actual-values-sha256', actual_sha,
++             '--operation-review', str(review_path), '--operation-review-sha256', review_sha,
++             '--reservation-parent', str(reservation_parent), '--execute'])
++
++
++if __name__=='__main__':main()

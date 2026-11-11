@@ -1,0 +1,246 @@
+{
+  "status": "CURRENT_SOURCE_TECHNICAL_NO_GO_CONFIRMED_MINIMUM_PARTICIPATING_SCOPE_DERIVED",
+  "at": "2026-11-11T10:24:47.210341+00:00",
+  "scope": "Independent read-only M14-03-05 perf shared ownership review. No candidate, execution, source flag release or acceptance.",
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 1689,
+      "sha256": "28c492a823eb6771005f2a9ccaaa02b208a545427538e18a274a96cc18ff4e5c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/CURRENT-PERF-CONTRACT.json",
+      "bytes": 10796,
+      "sha256": "fe13b10d9b7902004060fe79af25e3c46f4b49b6f2aa1dfd02205663db4a9509"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/LIFETIME-AND-ERROR-FRONTIER.json",
+      "bytes": 7203,
+      "sha256": "c9a3b62559122523a41bee6443086b57321d3a6ef9a319b63b9e8c9d22799cb2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/SOURCE-BINDINGS.json",
+      "bytes": 11052,
+      "sha256": "9550a5a2118907c309f96e844f533cc09e8ef8aae34dde7e0853790de68268d4"
+    }
+  ],
+  "supplemental_current_sources": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_do_fork.rs",
+      "bytes": 32328,
+      "sha256": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_terminate.rs",
+      "bytes": 24237,
+      "sha256": "f62d22c9f5b395617135f84869aebc100270cab34fdee2f810e980c29ba739f3"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "bytes": 256003,
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    }
+  ],
+  "actual_source_fragments": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "first_line": 3515,
+      "last_line": 3538,
+      "bytes": 693,
+      "sha256": "3ed6e533b4fc27ff322ef86fb59188f9de5ae2c0fd8605faa1f663ff9a6fc456",
+      "fact": "Shared descriptor find unlocks before returning its raw descriptor. A callback-local pin occurs after this escape."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "first_line": 3644,
+      "last_line": 3707,
+      "bytes": 1896,
+      "sha256": "43765ec9cb0707b8ebe8ce6f3642d315e9f48b0ebb6e4daf9610f68aea36e77f",
+      "fact": "Ordinary close unlinks under process mckfd_lock P, then close_cb and free execute after unlock, before forwarding host close."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "first_line": 19831,
+      "last_line": 19891,
+      "bytes": 1844,
+      "sha256": "05dad4165c20cf460056bfe560faf28f478d6a869f8700fa9eae709656cc185d",
+      "fact": "Group read walks leader and sibling pointers and copies to user between list reads; live-event references alone do not stabilize concurrent list mutation."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "first_line": 20518,
+      "last_line": 20623,
+      "bytes": 3206,
+      "sha256": "13a926a7e1aab4c3934cf747956952633aed47377e4cdf85c4255dae4c1014af",
+      "fact": "Enable publishes raw Process.monitoring_event locally or under the found-process hash lock; stop/reset/refresh branches have distinct semantics."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "first_line": 34230,
+      "last_line": 34243,
+      "bytes": 879,
+      "sha256": "647636a1352fafa3c68322293388c5dc0ac778580a866561f9bb8b375c1574fe",
+      "fact": "Selected do_exit reloads proc, loads monitoring_event and invokes sync_child_event while retaining its existing process update-lock/IRQ/preemption ordering."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_do_fork.rs",
+      "first_line": 360,
+      "last_line": 379,
+      "bytes": 1302,
+      "sha256": "41464da530d6e51966f3115426366da79d1ac9da11bae3b7ea34251e4a0de74f",
+      "fact": "Selected do_fork dereferences the parent monitoring event attr and publishes the same pointer in child when inherit is set; both need a live owning/pinned edge."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/f03_terminate.rs",
+      "first_line": 122,
+      "last_line": 139,
+      "bytes": 1145,
+      "sha256": "6f3991f786634b65104414f5b6b7e2c4cfde1adf04567296a299bf98b8f1fbd3",
+      "fact": "Selected termination checks then separately reloads monitoring_event before sync_child_event; raw pointer validity is not established by non-null."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 5450,
+      "last_line": 5470,
+      "bytes": 1181,
+      "sha256": "024a41090393407f995dcc5c93f1a9e39d07a4323e5309b55833f77faac2f020",
+      "fact": "Selected scheduler reads next Process.monitoring_event repeatedly and performs reset/start; lifetime acquisition must fit its existing IRQ/scheduling context."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "first_line": 3660,
+      "last_line": 3697,
+      "bytes": 2642,
+      "sha256": "3be3ff0f359d0aa35696080836c0093440a1a55860393cbd8ad483183e7e164a",
+      "fact": "Selected PMI chooses descriptor under P, then reads only sig_no/fd after unlock and calls set_signal. Snapshotting those scalars under P is sufficient for this dereference boundary."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 13899,
+      "last_line": 13943,
+      "bytes": 2621,
+      "sha256": "6ea10dabe5648551c13ff224d5bf8d242a6077914c982444d23cc43af3fba3b0",
+      "fact": "Fork copy holds only private child P, reads/copies parent descriptor and invokes copied dup callback. Parent storage/event ownership must be acquired before copy, not inside a later callback."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 14025,
+      "last_line": 14038,
+      "bytes": 855,
+      "sha256": "1a85c57654f9c387f370001b07edcdd001bd35d5284b3993f437034395965794",
+      "fact": "Failed fork drains copied descriptor nodes without close/dup undo; newly acquired managed ownership requires a matching explicit unwind."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 11712,
+      "last_line": 11732,
+      "bytes": 861,
+      "sha256": "548320838fa12a0925549c0bae5d171fc50aba1a883c2aa46d911415b5bf85ec",
+      "fact": "Actual last-VM path already holds P while close_all calls close callbacks. A perf close callback cannot recursively acquire P or wait/offload there."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 10730,
+      "last_line": 10749,
+      "bytes": 891,
+      "sha256": "6062ea777289e73329b1e1c3f8bf6a450bb37ccb7a18f778e5dee652328c6e7f",
+      "fact": "Final Process release frees main-thread pages before taking P and draining descriptor nodes; deferred counter teardown cannot rely on that Thread allocation remaining live."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "first_line": 11433,
+      "last_line": 11473,
+      "bytes": 1298,
+      "sha256": "eeb798b5e6bd6e2eab76f66ac6922b08f6970f25098d161e0609779e214c8097",
+      "fact": "Actual last Thread release destroys Thread before releasing VM. An event->Thread long-lived reference can retain VM->descriptor->event and form a retirement cycle."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_perfctr.rs",
+      "first_line": 317,
+      "last_line": 351,
+      "bytes": 1297,
+      "sha256": "c5cba7f082038a9afb9c0ddc83f7072a89423660aeb7324fde761268bdf22cd0",
+      "fact": "Actual extra-register setter reads/writes current Thread allocation map, may select alternate register and reserves only on successful local claim; map release must consume the real claim."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_perfctr.rs",
+      "first_line": 433,
+      "last_line": 449,
+      "bytes": 427,
+      "sha256": "f756363506f1477f49b6616745f1562c80095a8fcb249ad132c5c8175adc6ddc",
+      "fact": "Actual counter allocator only scans Thread.pmc_alloc_map; current open reserves the bit after host offload, so selection is not an exclusive reservation."
+    }
+  ],
+  "required_protocol_obligations": [
+    {
+      "id": "PERF-DESCRIPTOR-IDENTITY-AND-ESCAPE",
+      "obligation": "Only real perf publication/copy establishes managed kind, descriptor identity and generation. Acquire descriptor/event use ownership under P before returning from shared lookup; then drop P before callbacks. Resolve never casts arbitrary data from signalfd/XPMEM or treats callback-address equality as an already-established kind. Every actual free/unpublish/copy path must preserve or retire that identity exactly once."
+    },
+    {
+      "id": "PERF-GROUP-AND-OPEN-ROLLBACK",
+      "obligation": "Pin the actual group-fd event before unlock, preserve the existing accepted group-fd domain and stabilize leader/member topology for all traversals. Pending open owns its event, group reference/link contribution and exclusive counter reservation across unlocked host offload. Error unwind removes only its own link/count/mask/reservation and event; a post-host-success failure must close the real host fd. No whole prior-mask restore that can erase concurrent valid ownership."
+    },
+    {
+      "id": "PERF-COUNTER-OWNER",
+      "obligation": "Reserve under a real synchronized owner identity before other opens can select the same bit. Counter measurement count remains data. Track creator Thread identity and actual extra-register acquisitions independently of whichever thread closes. The real Thread destruction path must disconnect/retire the map owner before freeing it; late event retirement must not dereference a dead Thread. Do not introduce an event->Thread->VM->descriptor->event lifetime cycle."
+    },
+    {
+      "id": "PERF-MONITORING-EDGE",
+      "obligation": "Process.monitoring_event is a distinct owning edge, not a borrow protected by descriptor reference alone. Define synchronized publication/replacement/clear, reader pin acquisition and final detach for ioctl, inherited fork, scheduler reset/start, do_exit and terminate/sync-child. Pin before inherited attr dereference and child publication; unwind child ownership on failed clone. A bare load followed by refcount increment is not safe against concurrent final free."
+    },
+    {
+      "id": "PERF-GROUP-OPERATION-STATE",
+      "obligation": "A stable group traversal must remain valid through read/start/reset/stop/sync-child and concurrent close/open; protect mutable accounting/state consistently. Capture/pin any snapshot under its lock and release spinlocks before usercopy/offload. Do not hold a new registry spinlock through the existing full body merely because its root event was pinned."
+    },
+    {
+      "id": "PERF-CLOSE-FORK-VM-RETIREMENT",
+      "obligation": "Ordinary close removes visibility once, copied descriptors acquire actual parent-side ownership before copying, failed fork undoes acquired ownership, last-VM close is safe with P already held, and final descriptor drain cannot double-drop or free pinned storage. Any deferred destruction must have an actual drain trigger and keep every data owner it still accesses alive, without retaining the Thread/VM cycle. The new protocol must cover Linux numeric-fd close/reuse versus in-flight forwarded operations as well as pointer storage."
+    },
+    {
+      "id": "PERF-LOCK-ORDER",
+      "obligation": "Define a total order compatible with existing P-held VM and copy routes. A possible proposal order is P then a new IRQ-safe registry lock R for brief resolve/mutation only, with no R-to-P acquisition, host request, usercopy, blocking wait or callbacks under R. Process-hash/update/runqueue/IRQ callers of monitoring operations must be included in the real lock graph; finalization occurs outside all relevant spinlocks or only enqueues a bounded retire record there. This is a required source proof, not an approved lock implementation."
+    }
+  ],
+  "minimum_actual_participants": [
+    {
+      "source": "kernel/rust/syscall_policy.rs",
+      "responsibility": "Perf open/validation/publish/group and all participating descriptor lookup read/ioctl/fcntl/mmap/close boundaries; typed callbacks, group/accounting traversals, monitoring publication/clear and selected do_exit reader."
+    },
+    {
+      "source": "kernel/rust/process_helpers.rs",
+      "responsibility": "Parent-protected copy, acquired-reference unwind, P-held VM close, final descriptor drain and real Thread destruction/map-owner retirement."
+    },
+    {
+      "source": "kernel/rust/f03_do_fork.rs",
+      "responsibility": "Real monitoring inheritance and failed-child ownership retirement."
+    },
+    {
+      "source": "kernel/rust/f03_terminate.rs",
+      "responsibility": "Actual sync-child monitoring read pin and terminal detach."
+    },
+    {
+      "source": "kernel/rust/x86_cpu_helpers.rs",
+      "responsibility": "Scheduler monitoring access and PMI scalar snapshot or otherwise genuine pre-unlock pin."
+    },
+    {
+      "source": "kernel/rust/x86_perfctr.rs",
+      "responsibility": "Actual counter/extra-register reservation and owner-map access; real hardware/IRQ contract remains required."
+    },
+    {
+      "source": "new proposed private Rust perf ownership module plus lib.rs/CMake/C entry guards",
+      "responsibility": "Concrete registry/ref/state/token representation and paired qualified selection with current Mckfd80/event ABI preserved. No implementation has been supplied or approved."
+    }
+  ],
+  "scope_limits": {
+    "new_production_source_written": false,
+    "compiler_or_fixture_or_native_run": false,
+    "old_held_fixture_replayed": false,
+    "counter_count_reinterpreted_as_reference": false,
+    "broad_flag_or_hold_released": false,
+    "technical_DEFAULT_or_parent_accepted": false
+  },
+  "next_action": {
+    "owner": "/root/p03_cutover_source_max",
+    "input": "Freeze ownership-proposal-1 concrete participating fields, transitions, lock graph, cleanup triggers and unresolved semantic decisions. Independent reviewer will assess exact bytes before any candidate."
+  }
+}

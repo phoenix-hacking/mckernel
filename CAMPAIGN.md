@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T09:35:19.308810+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T10:30:15.591317+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -37,21 +37,44 @@ saved-result qualificationc5646bd1 joins all4 exact canonical outputs, source9b/
 c14f, five positive families including the retained failed fixture, both Root
 completions and current-only retirement. Source/patch/actual tests are published
 under native-admission-debug-20261111/complete-interface-candidate-1; this proves
-no installed/controller/native readiness or original acceptance. SDK's fixed30 installer64ed/patch6d8b binds corrected
+no installed/controller/native readiness or original acceptance. Source/test
+checkpoint094c52c6 is pushed/fetched98matchingownedblobs; all33 dirty paths
+preserved/indexempty. Native source return6792502502 is POSTED_CONFIRMED;
+it reports source/HOST progress and actual pending dependencies, no new score.
+SDK's fixed30 installer64ed/patch6d8b binds corrected
 payload06661073/current Root/credit7c6; P03 reviews catalog/current-owner source
 and focused fake-test proposal: independent source/designGO5f7fefc5 is frozen.
 P04Source prepares only four changed actual-source controlled-effect families;
-Root executes after independent operationGO/fresh admission. No install/
+actual994c/8c3 operation ran10:00:15Z: exact catalogue, Root-only immutable
+proof and currentRoot/credit/caps canonical JSON PASS. Failed fourth492a is
+preserved: fixture selected serve instead of the actual run actor guard. Bounded
+one-token68b994/ece1 successor passed10:06:34Z/98dd; first3 reused. Independent
+whole4 HOST qualificationfe88 joins exact30/154-event proof/31vetoes/dependent
+pins, five positive owned families and fullRoot4a7ffb1/eae0500 with scoped current
+CPU7/256MiB release. Source64ed/oracles/privilege+wait/IPC algorithms unchanged.
+The separate UID1000 readback41fb has finite sourceNO_GO408d: close-once/custody,
+all-close/primary/report failure preservation and finite-positive AS. Pub's bounded
+successore04a/f8f196 preserves all DATA/catalog/path guards; independentcbf7
+sourceGO closes all3 findings. P04Source froze two actual-method failure controls
+e476/parent0a9cd; SDK reviews the exact operation before fresh Root admission.
+Actual code-publication9fieldPASS/nonce/caps remain unissued. No install/
 activation/oldC9/nonce replay.
 Native scratch permission4f9 is separately
 real: UID0/0755 bare stagingparent deniesUID1000; no payload/charge/output;
 owner-scopedgrant request6790932995 posted once. No sudo/path/chmod/remount
 fallback. Numeric retained18=install4+V2_2+native12 is resolved7f7; R3process4
 was already retired, persistentUNKNOWN is not a newnumeric4 charge. This is not
-nativecurrentfree/source/permission release. Next15min: publish qualified9b
-source/fourHOST results, review/run finite normal-installer changed tests, and
-prepare only the reviewed code-publication operation while awaiting actual
-scratch-owner provisioning. Existing source/native/UNKNOWN controls remain.
+nativecurrentfree/source/permission release. Next15min: publish qualified fixed30
+source/fourHOST results; finish bounded readback delta/two controls, then final
+normal code-only operation review/fresh admission and all30 UID1000 readback.
+P03/P04Tests independently advance actual M14-03-05 perf lifetime protocol from
+6aae/4b711/c9a3, including monitoring/fork/PMI/scheduler/VM-drain/Thread teardown
+participants and real counter/host/group rollback; no count-as-reference or
+long-lived Thread cycle, selector activation or old held-fixture replay. SourceAcq
+material review is required before activation. Controller binding1f0d/55a3 stays
+private/unloaded pending genuine safe same-Root transition, not a new start.
+Actual scratch-owner provisioning remains separately pending. Existing source/
+native/UNKNOWN controls and original criteria remain; no new counted gain.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
 integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6

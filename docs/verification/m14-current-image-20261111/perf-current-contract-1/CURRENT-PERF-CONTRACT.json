@@ -1,0 +1,113 @@
+{
+  "status": "CURRENT_ORIGINAL_M14_03_05_PERF_SOURCE_ABI_BEHAVIOR_CONTRACT_DERIVED_NOT_ACTIVATION",
+  "at": "2026-11-11T10:08:50.528245+00:00",
+  "new_input": "Root assignment under user source-71d986 authorizes ordinary current participating-source contract derivation only; no old perf fixture/body operation or generic/exec replay is authorized.",
+  "original_scope": "M14-03-05 credentials/limits/scheduling, SHM/perf/file wrappers, validation and forwarding. This packet covers exact current sys_perf_event_open plus12B offload callback versus genuine existing Rust entry/body and participating descriptor ownership.",
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/SOURCE-BINDINGS.json",
+    "bytes": 11052,
+    "sha256": "9550a5a2118907c309f96e844f533cc09e8ef8aae34dde7e0853790de68268d4"
+  },
+  "physical_owners": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/CURRENT-PHYSICAL-OWNERS.json",
+    "bytes": 20505,
+    "sha256": "ec575182ff05763f747e93cff7f3d1ab0d3a6c19407050b64df114d63479eefb"
+  },
+  "profile": {
+    "source_commit": "6aae8273960583ec7fb194926292bd10ab1bc585",
+    "image_sha256": "4b711cd9a361068d8c5b4e7e7fb6852e3124a0f7f97dc0401a77086c1897fc60",
+    "IHK": "8d288b8 matching retained module/source cohort",
+    "architecture": "x86_64",
+    "host_irq_abi": "linux-6.12",
+    "ENABLE_PERF": "ON",
+    "ENABLE_RUST_F06_SYSCALL_WHOLE": "ON",
+    "ENABLE_RUST_M14_SYSCALL_ADAPTERS": "OFF",
+    "ENABLE_UBSAN": "OFF",
+    "ENABLE_TOFU": "OFF",
+    "held_owned_fork_and_generic_exec_modes": "No flag changes, no entry into held590e/TID/exec/replay modes"
+  },
+  "public_abi": {
+    "entry": "long sys_perf_event_open(int n, ihk_mc_user_context_t *ctx); n is not used by current body, syscall table x86 number298 selects this C entry.",
+    "offload_callback": "long (*)(struct syscall_request *, int cpu); current C perf_event_open_do_syscall_bridge returns genuine do_syscall(request,cpu) unchanged; Rust type PerfOpenSyscallFn = unsafe extern C fn(*mut SyscallRequest,CInt)->CLong.",
+    "arguments": "ctx arg0 user attr address, arg1 narrowed C int pid, arg2 narrowed C int validation cpu, arg3 narrowed C int group_fd, arg4 unsigned-long flags. Actual offload cpu is ihk_mc_get_processor_id(), separate from validation cpu.",
+    "request": {
+      "genuine_layout": "SyscallRequest size72 align8; current C stack declaration also IHK_DMA_ALIGN. Valid/rtid/ttid remain owned by genuine offload preparation/publication, not invented by the perf wrapper.",
+      "defined_payload": "Current C and Rust Linux-FD helper both set number=perf_event_open_nr and all six args=0. The selected real Rust act_perf_event_open ignores its wait/request pointer and invokes the no-arg provider; provider currently opens /dev/null read-only and returns its actual signed result through do_syscall_return. Existing accepted wire correction is reused; no need to replay it."
+    },
+    "descriptor": {
+      "C": "struct mckfd next,fd,sig_no,data,opt,read_cb,ioctl_cb,mmap_cb,close_cb,fcntl_cb,dup_cb",
+      "Rust": "repr(C) Mckfd size80; fd8,data16,read_cb32,dup_cb72. Rust padding at12 is the C sig_no storage, not a kind or refcount. Existing genuine C offset tables supply all addresses.",
+      "kind": "No current explicit semantic kind/generation/reference/closing state in this ABI. fd equality and an arbitrary CLong data value do not prove a live mc_perf_event.",
+      "nullable_callbacks": "Existing helpers accept Option<unsafe extern C fn> at exact C callback widths; public provider and offset guards must be validated before allocating or publishing any new resource."
+    },
+    "event": "Real mc_perf_event has copied perf_event_attr, hardware/extra-reg state, counter_id, atomic64 count (counter value), child_count_total, pmc_status, parent/group_leader/sibling/group lists and nr_siblings. count is explicitly measurement data, not a lifetime reference. No reinterpretation of count/opt/unused fields is permitted without a new actual ABI/owner contract.",
+    "attribute": "Reuse exact real PerfEventAttr from f03_perf_event_attr_abi.rs and genuine mc_perf_event.h. Full actual size usercopy must succeed before typed/bitfield reads; do not invent another Linux-header approximation."
+  },
+  "ordered_actual_success_path": [
+    {
+      "step": 1,
+      "operation": "Use current CPU-local thread and thread->proc, borrow original live ctx; full-sized attr copy_from_user into private stack storage.",
+      "obligation": "Keep ctx/thread/proc and stack request/attribute live through the synchronous call; copy failure returns -EFAULT before event allocation."
+    },
+    {
+      "step": 2,
+      "operation": "Validate cpu,flags,type,read_format,frequency,sample period.",
+      "obligation": "Preserve current branch order: cpu>0 or flags>0/unsupported type/unsupported read-format/frequency gives -ENOENT; nonfrequency negative/sign-bit sample-period returns -EINVAL even if another unsupported flag was seen. cpu<=0 domain is retained; no new pid/group restrictions."
+    },
+    {
+      "step": 3,
+      "operation": "Allocate unpublished event, initialize its whole bytes to zero, copy attr, initialize actual lists/count/hardware fields and map/init using genuine providers.",
+      "obligation": "Allocator/init failure returns exact signed status; existing event allocation helper frees its own event on mapping/init failure. Successful event ownership passes only to current open transaction, never a fabricated pin."
+    },
+    {
+      "step": 4,
+      "operation": "Set event.pid, invoke genuine x86 ihk_mc_perfctr_alloc, save counter_id.",
+      "obligation": "Current x86 provider scans thread.pmc_alloc_map for a zero bit; it selects an index and does not reserve it. Current open sets the map only after successful host-FD return. A new concurrency contract must define real reservation and which thread owns it; no count-as-reference or assumed early reservation."
+    },
+    {
+      "step": 5,
+      "operation": "If group_fd=-1, make event its own group leader/status0; else resolve group_fd from proc.mckfd, take its data as leader, append group_entry and increment nr_siblings. OR selected counter bit into chosen leader.pmc_status.",
+      "obligation": "Preserve all originally supported valid group descriptor values. Establish actual descriptor kind, live owner and retained group reservation before interpreting data. Serialize mutation with close/group mutation and retain leader throughout later offload/publication. Do not restrict to group_fd=-1 or leader-only as a shortcut."
+    },
+    {
+      "step": 6,
+      "operation": "Write exact perf request number and all six zero args; synchronously call genuine do_syscall on actual current CPU. On fd>=0 set thread pmc map bit.",
+      "obligation": "Release IRQ-save descriptor/group locks before offload. Retain real references/reservations while it waits. Propagate signed negative results exactly, no unsigned conversion, duplicate call or invented errno transformation."
+    },
+    {
+      "step": 7,
+      "operation": "Allocate descriptor, initialize fd/sig_no=-1/data=event and actual read/ioctl/mmap/close/fcntl callbacks, then insert under proc.mckfd_lock and return fd.",
+      "obligation": "Define all later-consumed descriptor state, including opt/dup ownership, before visibility. Current publish helper writes neither opt nor dup_cb and its allocator signature does not promise zeroed descriptor storage; this contract does not assume an unobserved allocator guarantee. Publication establishes one explicit descriptor->event ownership edge."
+    }
+  ],
+  "actual_participating_lifetime_paths": [
+    {
+      "source": "kernel/rust/syscall_policy.rs:syscall_mckfd_find_locked plus syscall_read/ioctl/fcntl and do_mmap descriptor paths",
+      "actual": "Finds under proc.mckfd_lock but unlocks before returning raw descriptor and invoking callback.",
+      "required": "Acquire an explicit live descriptor/event operation reference under the same lookup exclusion before pointer escape; release only after the real callback. A pin added inside perf callback is already too late for descriptor storage."
+    },
+    {
+      "source": "kernel/rust/syscall_policy.rs:syscall_close_body_result",
+      "actual": "Unlink/next=null under proc lock, unlock, invoke close_cb then free descriptor and forward Linux close.",
+      "required": "Remove lookup visibility atomically, consume one close state, defer descriptor/event frees until real in-flight/group references retire. Preserve external close ordering/return and no double callback/free."
+    },
+    {
+      "source": "kernel/rust/syscall_policy.rs:f03_perf_close_v1/perf_close_body_result",
+      "actual": "Read event from descriptor.data, clear current-thread pmc/extra map bits and directly free event; no member unlink, leader reparent or reference decrement.",
+      "required": "Define counter lease owner across threads/fork and group leader/member edges. Counter bits are allocation state, not lifetime. Close must release exactly its actual ownership without invalidating another real descriptor or member."
+    },
+    {
+      "source": "kernel/rust/process_helpers.rs:current selected process clone loop plus process_mckfd_copy_body_result",
+      "actual": "Holds child proc.mckfd_lock, walks parent list and shallow-copies full80-byte descriptor, pushes child descriptor, then only afterwards calls an optional dup callback.",
+      "required": "Acquire live source descriptor/event under parent lookup exclusion BEFORE copying. Define actual inherited ownership/counter/group semantics and rollback; a postcopy dup callback alone cannot protect the source. No generic descriptor-size/layout change is assumed."
+    },
+    {
+      "source": "kernel/rust/process_helpers.rs:process_release_vm_body_result/process_release_vm_checked_inner -> process_mckfd_close_all_result",
+      "actual": "Final-VM path holds process mckfd_lock while invoking each callback with ctx=null. Nodes are drained/freed through later real process cleanup.",
+      "required": "Close must support both after-unlock ordinary close and under-lock VM teardown with no recursive same-lock acquisition or waiting for pins while locked. Last-owner destruction/defer and descriptor drain must honor the same live-reference protocol."
+    }
+  ],
+  "normal_and_error_contract": "See LIFETIME-AND-ERROR-FRONTIER.json for exact stage obligations. This source derivation establishes present behavior and the missing protocol; it does not bless current undefined pointer use/leaks or claim a new tested implementation.",
+  "source_or_execution_changed": false,
+  "whole_leaf_or_NATIVE_acceptance": false
+}
