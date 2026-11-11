@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T16:07:59.880097+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T16:35:21.427903+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,7 +14,7 @@ open at their original scope. Four accepted M14 files and accepted M15-F01 remai
 closed. Original criteria/weights/denominators and M14-before-M15 acceptance
 are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
 PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
-Last source/results checkpoint6ad55936 is pushed/fetched31ownedblobs; all33
+Last source/results checkpoint2c3997f1 is pushed/fetched26ownedblobs; all33
 unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
@@ -99,6 +99,33 @@ No fabricatedRustsymbol/stub/checkdisabling/blindhostarchive is allowed. Derive
 and repair the actual matching source/toolchain dependency, then affected-only
 validation and normalimage after meaningful changedinput/exactGO/freshadmission.
 Both failed cohorts and all green runtime/TYPE/source scopes remain intact.
+Second source diagnosis e267 identifies actual object-only/bareld omission of
+nine genuine core provider classes, including bounds and Result<i32> formatting;
+the existing panic handler is terminal, not their definition. SDK now binds
+retained Linux6.12 rust/Makefile core recipe (no_fp_fmt_parse/edition2024/
+obj+metadata/sysroot=/dev/null) to real1.95/kernel flags. P04Source owns the
+matched compiler-builtins source/profile unit consuming that new core metadata;
+SDK owns core+consumer repair and first literal dependency compile packet.
+No ownership body/check/handler changes or blindHOSTarchive/panicbuiltinstub.
+FIRSTcore87afd/materialGOdd40/operationGOc7db ran16:21:19–32Z and PASSED:
+core.o91548(2,545,640B), metadata7ec5(62,088,310B), depsb63 and three realELF/
+symbol-reloc/disasm reads. Resulte01/fullRootc39/Qc044 verify367source deps,
+all9clients/removedCIDa637/nonOOM/fullRoot52585exit0; current2GiB retired3253.
+Material/ISA Q8b21 verifiesall9coreproviders/439executable sections and no
+SIMD/MMX/x87 observed; six actualimports stay explicit. SSE2ABIwarning retained.
+Actualsamecoremetadatabuiltinsad8c/operationGO7b9a ran16:33:33–36Z and failed
+only intermediateCGUobject output in read-onlyCWD, result2c7d/stderr84c2/fullRoot
+d325/removedCIDf80b. SourceAcq qualifies scoped current2GiBretirement; SDK owns
+one bounded recipe output/CWD binding to its existing granted privateRWdirectory,
+P04Source independently reviews. Source/55flags/coreROmetadata/readonlyimage
+remain unchanged. Preserve failedoutput; no permissionwidening/coregreenrerun.
+Next freshly admitted changedbuiltincompiler follows exactGO/currentretirement.
+SDK consumerCMake d330/e9f has conditionalsourceGO24fbb; actualcore->builtins->
+fullconsumer metadata+realobjectlink is required before normalimage/reader.
+P04Tests newfinitecore-boundary source1aa8/EXPECTED3b9c has independent3b823
+source/oracleGO: normal+fourfatal cases cover nine classes; execution waits
+actualcompatiblebuiltins/core bytes/producerclosure/exactoperationGO/admission.
+No HOSTnativepanic/old18suite replay or originalcredit from these prerequisites.
 Reader follows only producerPASS/fullpositive retirement; no unchanged retry.
 Require actual unique Rust perf owners, pairedC exclusions, allrequiredABI104/
 callback/lowerproviders/zero strongUND/LOAD/newentry/currentCledger and cleanup,

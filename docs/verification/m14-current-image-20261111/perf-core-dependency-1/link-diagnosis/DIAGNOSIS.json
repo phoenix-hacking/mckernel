@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "status": "ACTUAL_LINK_PROVIDER_GAP_DIAGNOSED_SOURCE_REPAIR_RECOMMENDATION_ONLY",
+  "at_utc": "2026-11-11T16:07:31.168192+00:00",
+  "owner": "/root/p04_source_max",
+  "scope": "Independent second diagnosis of the genuine new Rust core link-failure family after the F_SETSIG C constant correction. No source implementation, compiler, test, linker, archive probe or native action by this reviewer.",
+  "actual_failure": {
+    "source_commit": "6ad55936c5238bc4c573ddafbc3abaabfe0710de",
+    "request": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/REQUEST.json",
+      "bytes": 33762,
+      "sha256": "4f89f1c296de252668e2924c1d882aad16b1c2f3f2dc19b7ea9a6d58ea38f1d0"
+    },
+    "RESULT": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/RESULT.json",
+      "bytes": 13711,
+      "sha256": "a4dd96a2a4693c18110c9d92a464d8dfa5a90811fd2640baa767bf270c2e5e70"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/build-payload.stderr",
+      "bytes": 142006,
+      "sha256": "f4ed9a501d1fe45722c545604f0ac44dbbc1c0029588eaa1aded1274af6e404a"
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/build-payload.stdout",
+      "bytes": 13805,
+      "sha256": "8dbeda12a3e1c20db0daa15270fd83741d6fe8acc3c9dfdda70a7acef6630cd3"
+    },
+    "independent_actual_result_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-review-sourceacq-max-1/fcntl-constant-correction-1/actual-result-1/QUALIFICATION.json",
+      "bytes": 17087,
+      "sha256": "35891f6d7fdfa57a7fbc455c570657adfc0326b27fd3878fe18e5012c70a51a7"
+    },
+    "new_family": "C now compiles and bare /usr/bin/ld is reached; out-of-line core providers are missing. Actual former C failure remains preserved.",
+    "new_image_accepted": false,
+    "runtime18_unit_four_family_PASS_reused_unchanged": true
+  },
+  "distinct_undefined": {
+    "core::result::unwrap_failed": 9,
+    "core::panicking::panic": 71,
+    "core::option::unwrap_failed": 17,
+    "core::panicking::panic_fmt": 17,
+    "core::option::expect_failed": 44,
+    "core::panicking::panic_bounds_check": 2,
+    "<i32 as core::fmt::Display>::fmt": 1,
+    "<i32 as core::fmt::LowerHex>::fmt": 1,
+    "<i32 as core::fmt::UpperHex>::fmt": 1
+  },
+  "explicit_undefined_lines": 163,
+  "raw_caller_sidecar": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-rust-core-link-diagnosis-p04source-max-1/UNRESOLVED-CALLERS.json",
+    "bytes": 86933,
+    "sha256": "f5fd7c48de97cd63b90542626429643394db906d36182a2178307805d8696f81"
+  },
+  "actual_build_design": {
+    "Rust_command": "cd /work/output/build/kernel && /usr/bin/cmake -E env MAKEFLAGS= MCKERNEL_RUST_VERSION=1.8.0 MCKERNEL_RUST_BUILDID=8d288b8 MCKERNEL_X86_ENABLE_SSE=1 MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c MCKERNEL_DO_SYSCALL_C_FILE=/src/kernel/syscall.c MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=0 MCKERNEL_PROCESS_C_FILE=/src/kernel/process.c MCKERNEL_PROCESS_DDEBUG_FLAGS=0 MCKERNEL_INTERRUPT_SYSCALL_C_FILE=/src/kernel/syscall.c MCKERNEL_TERMINATE_C_FILE=/src/kernel/syscall.c MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c MCKERNEL_F06_CLONE_CPUID_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs MCKERNEL_F06_SIGNAL_METADATA_RS=/work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --crate-name mckernel_rust --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=2 -C code-model=large -C relocation-model=static -C no-redzone=yes -C force-frame-pointers=yes -C overflow-checks=off -C force-unwind-tables=no -C no-vectorize-loops -C no-vectorize-slp -C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma -Z dep-info-omit-d-target -Z binary-dep-depinfo --cfg process_verbose_data --cfg process_verbose_local_companions --cfg f06_signal_context_candidate --cfg f06_do_signal_whole_candidate --cfg f06_do_signal_reuse_qualified_context --cfg f06_rt_sigreturn_xrstor_candidate --cfg f06_debug_constants_candidate --cfg f06_signal_ptrace_diagnostics_candidate --cfg f06_signal_trap_info_candidate --cfg f03_io_diagnostic_callbacks_candidate --cfg f03_mincore_candidate --cfg f03_move_pages_candidate --cfg f03_sched_bridges_candidate --cfg f03_signal_process_bridges_candidate --cfg f03_dispatch_context_candidate --cfg f03_leaf_callbacks_candidate --cfg native_linux_irq_work_v6_12 --cfg f03_syscall_entry_candidate --cfg f03_futex_atomic_candidate --cfg f03_futex_no_uaccess_candidate --cfg process_global_storage_candidate --cfg f03_syscall_table_candidate --cfg f03_ptrace_entry_candidate --cfg f03_syscall_table_clone3 --cfg f03_terminate_candidate --cfg f03_interrupt_syscall_candidate --cfg f03_host_cleanup_candidate --cfg f03_exit_group_bridges_candidate --cfg f03_credential_refresh_candidate --cfg f03_prlimit_body_candidate --cfg f03_do_exit_supported_candidate --cfg f03_unmap_begin_selected_candidate --cfg f03_unmap_remove_selected_candidate --cfg f03_unmap_finish_selected_candidate --cfg f03_mmap_page_callback_candidate --cfg f03_wait_release_selected_candidate --cfg f03_wait_process_release_selected_candidate --cfg f03_terminate_refcount_selected_candidate --cfg f03_ptrace_io_find_selected_candidate --cfg f03_ptrace_io_unlock_selected_candidate --cfg f06_mmap_flag_providers --cfg f06_prctl_set_register_candidate --cfg f06_prctl_get_register_candidate --cfg f06_mmap_dispatch_bridge_candidate --cfg f06_ptrace_context_candidate --cfg f06_ptrace_alloc_candidate --cfg f06_vdso_add_range_candidate --cfg f06_vdso_set_range_candidate --cfg f06_process_vm_entry_candidate --cfg f03_exit_waitq_wake_selected_candidate --cfg f06_copy_to_user_candidate --cfg f06_copy_from_user_candidate --cfg f06_forward_context_candidate --cfg f06_rt_sigreturn_syscall_candidate --cfg f06_rt_sigreturn_set_signal_candidate --cfg f06_rt_sigreturn_check_signal_candidate --cfg f06_clone_reader_lock_candidate --cfg f06_clone_reader_unlock_candidate --cfg f06_ptrace_find_thread_candidate --cfg f06_ptrace_thread_unlock_candidate --cfg f06_obtain_clone_cpuid_candidate --cfg f06_shmget_dispatch_candidate --cfg f06_native_signal_restore_fp_candidate --cfg f06_vdso_info_candidate --cfg f06_ptrace_xstate_copy_to_candidate --cfg f06_ptrace_xstate_copy_from_candidate --cfg f06_vdso_setup_log_candidate --cfg f06_vdso_state_candidate --cfg f06_vdso_storage_candidate --cfg f06_ptrace_user_bridges_candidate --cfg f06_ptrace_gpregs_bridges_candidate --cfg f06_prctl_log_candidate --cfg f06_prctl_log_storage_candidate --cfg f06_vdso_map_log_candidate --cfg f06_rt_sigreturn_alloc_candidate --cfg f06_rt_sigreturn_free_candidate --cfg f03_perf_alloc_bridges_selected_candidate --cfg f03_perf_counter_control_bridges_selected_candidate --cfg f03_perf_provider_next3_bridges_selected_candidate --cfg f03_perf_event_provider_bridges_selected_candidate --cfg f03_sync_child_event_candidate --cfg enable_profile --cfg enable_perf --cfg enable_rusage --cfg f03_do_mmap_candidate --cfg f06_ptrace_resume_callbacks_candidate --cfg f03_do_fork_candidate --cfg f03_do_syscall_outer_candidate --cfg f03_do_syscall2_bridge_candidate --cfg f03_memory_host_offload_candidate --cfg f03_mprotect_host_provider_candidate --cfg f03_signal_forward_provider_candidate --cfg f03_wait_host_provider_candidate --cfg f03_terminate_host_provider_candidate --cfg f03_policy_forward_context_bridge_candidate --cfg f03_perf_owner_protocol --emit=obj=/work/output/build/kernel/rust/mckernel_rust.o,dep-info=/work/output/build/kernel/rust/mckernel_rust.raw.d /src/kernel/rust/lib.rs",
+    "image_link_command": "/usr/bin/ld -e arch_start -T /work/output/build/kernel/config/smp-x86.lds --build-id -Map=/work/output/build/kernel/mckernel.img.map --dependency-file=CMakeFiles/mckernel.img.dir/link.d CMakeFiles/mckernel.img.dir/mem.c.o CMakeFiles/mckernel.img.dir/syscall.c.o CMakeFiles/mckernel.img.dir/process.c.o CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o rust/mckernel_rust.o -o mckernel.img",
+    "Rust_crate_type": "lib",
+    "Rust_emit": "obj and dep-info only",
+    "kernel_freestanding_flags": [
+      "panic=abort",
+      "code-model=large",
+      "relocation-model=static",
+      "no-redzone=yes",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "force-unwind-tables=no"
+    ],
+    "image_link": "bare ld with 10 C/ASM constituents plus mckernel_rust.o, no core or other Rust archive; rustc is not performing final link",
+    "existing_panic_terminal": "kernel/rust/lib.rs #[panic_handler] -> x86_setup::early_panic() then nonreturning spin loop",
+    "existing_terminal_behavior": "early_panic emits !, saved EARLY_PHASE and newline through genuine debugcon; it does not format PanicInfo. Handler still exists and is not a definition of the separate core functions."
+  },
+  "matched_source_facts": {
+    "core_source_root": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core",
+    "sources": {
+      "Cargo.toml": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/Cargo.toml",
+        "bytes": 1414,
+        "sha256": "234c3bd2559267eefe9daf6f2b96c63ce4c3e8cb79c11a9d871ed2a493c9413a"
+      },
+      "src/lib.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/lib.rs",
+        "bytes": 12484,
+        "sha256": "e274e9d5ccee70b26d254f9bf9f41df337c482bc7e5d0ff8b9115992b18fbe75"
+      },
+      "src/panicking.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs",
+        "bytes": 18998,
+        "sha256": "805a33d479ebcdf2c640f43fb01b7a6707038bc248b4830d15f30a8a60d40303"
+      },
+      "src/option.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+        "bytes": 99047,
+        "sha256": "9029212daf02c14124586536e64577e18b43c83d56403f643a031303e271f422"
+      },
+      "src/result.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+        "bytes": 73702,
+        "sha256": "fc9cedba2ca1bb3d07b07d0f15160ed0277ed9a9cbc91fa5045125a73cdacb1d"
+      },
+      "src/fmt/num.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs",
+        "bytes": 37800,
+        "sha256": "0beb56ce116b6dcee9c25677aca707ec28aa5ff0ec5fd7d5255f212c392022cb"
+      }
+    },
+    "panic_fmt": "core/src/panicking.rs:60 constructs the actual PanicInfo and invokes the Rust lang panic_impl at79-80; this resolves to the existing kernel panic handler. It is not itself supplied by that handler.",
+    "panic": "core/src/panicking.rs:138 calls panic_fmt with a static Arguments value.",
+    "Option_failures": "option.rs:2235 unwrap_failed and2244 expect_failed call the genuine panic/panic_display routes.",
+    "Result_and_i32_format": "result.rs:1866 unwrap_failed(&str,&dyn fmt::Debug) invokes panic with Debug formatting. Real Result<_,i32>::expect sites therefore retain the i32 Debug vtable; fmt/num.rs Debug dispatch pulls Display/LowerHex/UpperHex.",
+    "bounds": "Two actual checked-index edges remain: maps.rs:273 HardwareLeases::capture_locked and thread_counters.rs:230 CounterSlot::abort_new_extra. Compiler-generated panic_bounds_check is a real safety provider, not an optional diagnostic.",
+    "panic_abort": "Existing panic=abort forbids unwinding; it does not inline or define every core panic/unwrap/fmt body. Matched source marks these bodies cold/noinline under this strategy.",
+    "immediate_abort_not_a_drop_in": "Matched panicking.rs:35-40 explicitly rejects the old panic_immediate_abort feature and says immediate-abort requires rebuilding core. Changing the panic strategy would also bypass the existing kernel PanicInfo terminal path and is not the recommended bounded repair."
+  },
+  "root_cause": "New ownership units introduced live assert/checked-arithmetic/Option/Result safety branches and their formatting vtables into an object-only freestanding integration that previously needed no such external out-of-line core providers. Typecheck and the HOST runtime use different final-link closures; their PASS does not supply these image definitions.",
+  "recommended_minimal_real_provider_route": {
+    "principle": "Preserve all 28 production bodies, checks, invariants, failure messages and existing kernel panic handler. Correct the kernel Rust dependency/link closure rather than rewrite the ownership protocol or invent Rust ABI exports.",
+    "implementation_owner": "SDK source repair; PublicABI independent material review",
+    "steps": [
+      "Reuse an already retained core/builtins provider only if its exact compiler identity, target and kernel codegen profile are actually proven. Compiler version alone is insufficient evidence for a prebuilt HOST core archive.",
+      "Otherwise produce a kernel-profile core closure from this same actual Rust1.95 source/compiler with the applicable large/static/no-redzone/no-SSE/panic-abort settings. Bind the real compiler-builtins and memory helper dependencies the selected objects actually need; do not guess them.",
+      "Compile mckernel_rust against that exact core metadata (and any matching companion crates). Rebuilding core with a different crate disambiguator while leaving the previous Rust object unchanged cannot correctly supply its symbol identities.",
+      "Consume the real compiler-owned closure in the normal image link. A rustc-produced static archive using the qualified kernel core/sysroot is one valid integration shape; alternatively retain object output plus its exact compatible core archive/dependency closure. The concrete recipe belongs to the separately reviewed repair packet. Keep bare image entry/linker/physical image contract and no HOST CRT/libstd.",
+      "Allow genuine core panic paths to construct PanicInfo and reach the existing handler. Do not add a second handler or manually export guessed mangled core symbols."
+    ],
+    "minimal_changed_scope": "Build/dependency integration only where possible (kernel/CMakeLists and a bounded build rule/sysroot/provider binding); lib.rs existing handler already provides the terminal. No ownership-algebra body rewrite required by this diagnosis.",
+    "not_claimed": "No newly built archive, archive profile, dependency completeness, successful future build or runtime/native qualification is asserted."
+  },
+  "rejected_shortcuts": [
+    "Suppressing/removing assertions or checked indexing; unchecked success fallbacks or new stubs",
+    "Adding only a duplicate panic handler",
+    "Blindly linking the HOST libcore/libstd archive or compiling just core sources into the existing object with mismatched metadata",
+    "Guessing unstable Rust ABI/mangled export signatures",
+    "Using immediate-abort or unwind policy changes merely to avoid the missing providers"
+  ],
+  "necessary_changed_verification": [
+    "Independent exact recipe/source/profile review and fresh Root execution admission",
+    "One required normal source-bound build consuming the real new provider closure; no unchanged four-family runtime/body suite replay solely for a dependency-only change",
+    "Saved actual link/ELF/map evidence: all nine original symbols have genuine unique definitions/routes, no new strong UND/unsupported HOST imports, selected core/helper objects satisfy kernel codegen restrictions, handler path remains nonreturning, and all prior source/C-exclusion/provider/cleanup conditions remain intact",
+    "Any actual new compiler/link diagnostic is retained and corrected only after meaningful source/input changes"
+  ],
+  "local_source_bindings": {
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 67075,
+      "sha256": "de2bcd1241ae01e5fcd2d7235d744e518fb3963df17e692bfbc5f035bc4744c1"
+    },
+    "kernel/rust/lib.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "bytes": 5257,
+      "sha256": "5e41a37bf262dd91169c19bad2b69bdb06d9d5ea82582a1efd2bd82024b70575"
+    },
+    "kernel/rust/x86_setup.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+      "bytes": 29158,
+      "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe"
+    },
+    "kernel/rust/f03_perf_owner/maps.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/f03_perf_owner/maps.rs",
+      "bytes": 24344,
+      "sha256": "152c4b01994bd0745cd8e5c8303b412a380bfb342ad3cfa1817a08139a4debae"
+    },
+    "kernel/rust/f03_perf_owner/thread_counters.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/f03_perf_owner/thread_counters.rs",
+      "bytes": 12222,
+      "sha256": "9fcc361f0db718d31570687de1f6806ea35611e6e2e38cf211792e1bdb494f65"
+    }
+  },
+  "holds": "All original image/DEFAULT/FUNCTIONAL/native/account/source/UNKNOWN gates remain unchanged. Failure/current resource retirement is Root-owned; no disposition or resource release by this diagnosis."
+}

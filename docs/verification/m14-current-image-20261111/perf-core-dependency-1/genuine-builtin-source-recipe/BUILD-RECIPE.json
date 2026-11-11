@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "status": "FIRST_COHERENT_REAL_BUILTINS_COMPILE_RECIPE_UNEXECUTED_NOT_OPERATION_ADMISSION",
+  "owner": "/root/p04_source_max",
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-BINDINGS.json",
+    "bytes": 7041,
+    "sha256": "9cbc665df15374a34e68b3098a8aac9a85e3ae2de830ccc493253628676e9b72"
+  },
+  "source_profile": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-PROFILE.json",
+    "bytes": 4248,
+    "sha256": "d3bd15adce508333de19d3dbe8f75a14d2fa1a510c580aa9b63ddb7d9114b184"
+  },
+  "cwd": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins",
+  "environment_additions": {},
+  "argv": [
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "compiler_builtins",
+    "--crate-type",
+    "rlib",
+    "--edition=2024",
+    "--sysroot=/dev/null",
+    "-C",
+    "metadata=mckernel_kernel_195_builtins",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "-Z",
+    "dep-info-omit-d-target",
+    "-Z",
+    "binary-dep-depinfo",
+    "--extern",
+    "core=/core-output/libcore.rmeta",
+    "-L",
+    "dependency=/core-output",
+    "--cfg",
+    "feature=\"compiler-builtins\"",
+    "--cfg",
+    "feature=\"no-asm\"",
+    "--cfg",
+    "intrinsics_enabled",
+    "--cfg",
+    "optimizations_enabled",
+    "--cfg",
+    "feature=\"unstable-intrinsics\"",
+    "--cfg",
+    "feature=\"mem-unaligned\"",
+    "--emit=obj=/core-output/compiler_builtins.o,metadata=/core-output/libcompiler_builtins.rmeta,dep-info=/core-output/compiler_builtins.raw.d",
+    "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs"
+  ],
+  "parent_integration_owner": "SDK owns concrete source/profile/operation and final core+consumer CMake integration. Root alone executes after review/admission.",
+  "exact_core_interface_agreed_with_SDK": {
+    "crate_name": "core",
+    "metadata_identity": "mckernel_kernel_195",
+    "edition": 2024,
+    "sysroot": "/dev/null",
+    "target": "native default; no --target",
+    "planned_core_metadata_host": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+    "planned_core_object_host": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/core.o",
+    "core_metadata_consumed_container": "/core-output/libcore.rmeta",
+    "same_new_core_not_HOST_metadata": true,
+    "actual_core_bytes_size_SHA_not_claimed_before_its_producer": true
+  },
+  "outputs": [
+    {
+      "container": "/core-output/compiler_builtins.o",
+      "host": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/compiler_builtins.o"
+    },
+    {
+      "container": "/core-output/libcompiler_builtins.rmeta",
+      "host": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcompiler_builtins.rmeta"
+    },
+    {
+      "container": "/core-output/compiler_builtins.raw.d",
+      "host": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/compiler_builtins.raw.d"
+    }
+  ],
+  "gates_before_actual_compile": [
+    "Exact first-core producer must positively pass, close owned waits and produce genuine nonempty core.o/libcore.rmeta at the agreed paths; bind its actual hashes, compiler/profile and metadata identity in the final actual operation.",
+    "Root sole output/cache owner; core output files stay immutable inputs. The three new builtins output files must be absent before execution; no overwrite/retry of old outcomes.",
+    "Independent source/profile/operation review and fresh actual shared HOST admission; this recipe allocates no extra job or resources.",
+    "Readonly actual toolchain/source mount, readonly new core inputs and the one owned output boundary are supplied by the SDK/Root concrete operation; no new Docker invocation by this unit."
+  ],
+  "post_compile_obligations": [
+    "Retain actual compiler stdout/stderr/status/dep-info and real owned lifecycle result; do not infer success from this source recipe.",
+    "Require object and metadata nonempty, exact compiler-produced core dependency and only applicable library source roots. Bind actual outputs and the complete emitted dependencies in SDK final integration.",
+    "SDK must compile the real kernel consumer against BOTH these actual rebuilt core and builtins metadata with no HOST fallback; actual final link supplies both genuine objects/providers and reports remaining imports.",
+    "Preserve all28 production bodies, real assertions/index checks/messages and PanicInfo handler; no unchanged whole runtime/body-suite replay solely for a dependency integration."
+  ],
+  "resources": "Not an execution request: the final SDK/Root reviewed packet supplies aggregate HOST CPU/RAM/time/disk/Owner bounds. No compiler or payload may be run from this preparation."
+}

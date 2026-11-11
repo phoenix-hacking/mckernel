@@ -1,0 +1,1000 @@
+{
+  "source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-image-operation-sdk-max-1/fcntl-constant-correction-1/execution-1/build-payload.stderr",
+    "bytes": 142006,
+    "sha256": "f4ed9a501d1fe45722c545604f0ac44dbbc1c0029588eaa1aded1274af6e404a"
+  },
+  "explicit_rows": 163,
+  "distinct_symbols": {
+    "core::result::unwrap_failed": 9,
+    "core::panicking::panic": 71,
+    "core::option::unwrap_failed": 17,
+    "core::panicking::panic_fmt": 17,
+    "core::option::expect_failed": 44,
+    "core::panicking::panic_bounds_check": 2,
+    "<i32 as core::fmt::Display>::fmt": 1,
+    "<i32 as core::fmt::LowerHex>::fmt": 1,
+    "<i32 as core::fmt::UpperHex>::fmt": 1
+  },
+  "compressed_repeated_panic_notice_not_expanded": true,
+  "rows": [
+    {
+      "stderr_line": 1815,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<(), i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RINvMs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptorsNtB6_8Prepared7publishNCNvNtB8_12transactions4opensk_0EBc_+0x296): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1816,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<(), i32>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RINvMs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptorsNtB6_8Prepared7publishNCNvNtB8_9fork_copy4copy0EBc_+0x26d): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1818,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RINvNtCskWZGD7wR08e_4core3ptr13drop_in_placeINtNtB4_6option6OptionNtNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptors13DescriptorPinEEB1a_+0x63): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1819,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RINvNtCskWZGD7wR08e_4core3ptr13drop_in_placeINtNtB4_6option6OptionNtNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptors13DescriptorPinEEB1a_+0x88): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1821,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::descriptors::Prepared as core::ops::drop::Drop>::drop':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:278:(.ltext._RINvNtCskWZGD7wR08e_4core3ptr13drop_in_placeINtNtB4_6option6OptionNtNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptors8PreparedEEB1a_+0x53): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1823,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RINvNtCskWZGD7wR08e_4core3ptr13drop_in_placeNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy11MckfdLookupEBK_+0x63): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1824,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RINvNtCskWZGD7wR08e_4core3ptr13drop_in_placeNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy11MckfdLookupEBK_+0x88): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1827,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<(), i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4Plan10add_locked+0x20c): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1829,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::maps::Purpose>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4Plan13commit_locked+0x2d9): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1831,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease, i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4Plan13commit_locked+0x30a): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1833,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::EventKey>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4Plan13commit_locked+0x329): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1835,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::Plan>::commit_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:230:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4Plan13commit_locked+0x349): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1837,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4Plan19thread_count_locked+0x77): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1839,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::runtime::RuntimeWindow>::enter':",
+      "raw": "/src/kernel/rust/f03_perf_owner/runtime.rs:54:(.ltext._RNvMs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner7runtimeNtB5_13RuntimeWindow5enter+0x34f): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1841,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_8GroupRef14release_locked+0x52): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1843,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::release_owner_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:105:(.ltext._RNvMs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_8GroupRef14release_locked+0x77): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1845,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRef>::mark_nonstandalone_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:178:(.ltext._RNvMs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_8GroupRef25mark_nonstandalone_locked+0x40): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1847,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:57:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases14capture_locked+0x512): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1849,
+      "symbol": "core::panicking::panic_bounds_check",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::capture_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:273:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases14capture_locked+0x58f): undefined reference to `core::panicking::panic_bounds_check'"
+    },
+    {
+      "stderr_line": 1851,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:57:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases14release_locked+0x176): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1853,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases14release_locked+0x1ab): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1855,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::release_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:299:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases14release_locked+0x1cb): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1857,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases14release_locked+0x1f0): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1859,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterSlot>::runtime':",
+      "raw": "/src/kernel/rust/f03_perf_owner/thread_counters.rs:235:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases7runtime+0xb3): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1861,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases7runtime+0xce): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1863,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::runtime':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:282:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_14HardwareLeases7runtime+0xee): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1865,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_8EventPin14release_locked+0xa8): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1867,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::release_owner_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:105:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_8EventPin14release_locked+0xcd): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1869,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<u64>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_8EventPin27retire_if_unobserved_locked+0xfe): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1871,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRef>::retire_event_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:244:(.ltext._RNvMs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_8EventPin27retire_if_unobserved_locked+0x123): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1873,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs3_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_15DescriptorEvent12close_locked+0x109): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1874,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs3_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_15DescriptorEvent12close_locked+0x12e): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1876,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRef>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs3_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_15DescriptorEvent19commit_group_locked+0x23c): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1878,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRead>::finish_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:389:(.ltext._RNvMs5_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_9GroupRead13finish_locked+0x42): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1880,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs5_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_9GroupRead13finish_locked+0x67): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1881,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8monitorsNtB4_11MonitorSlot13detach_locked+0xa8): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1882,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8monitorsNtB4_11MonitorSlot25detach_from_target_locked+0xf1): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1884,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&core::mem::manually_drop::ManuallyDrop<mckernel_rust::syscall_policy::f03_perf_owner::events::EventPin>>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvMs_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8monitorsNtB4_11MonitorSlot25detach_from_target_locked+0x116): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1886,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::drain_deferred':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x1a86): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1887,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::drain_deferred':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/groups.rs:536:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x1aab): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1889,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::events::drain_origins':",
+      "raw": "/src/kernel/rust/f03_perf_owner/events.rs:478:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x2016): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1891,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::drain_deferred':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:520:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x203b): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1893,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::drain_safe_point':",
+      "raw": "/src/kernel/rust/f03_perf_owner.rs:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x2079): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1894,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::drain_safe_point':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner.rs:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x209e): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1896,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::drain_deferred':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:116:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x20d9): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1897,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::drain_deferred':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:117:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x20fe): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1899,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::drain_safe_point':",
+      "raw": "/src/kernel/rust/f03_perf_owner.rs:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x2123): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1901,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::drain_deferred':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:124:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x2148): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1903,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<unsafe extern \"C\" fn(*mut core::ffi::c_void)>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x216d): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1905,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::drain_ready':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:466:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x2192): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1907,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::drain_deferred':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:293:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x21b7): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1909,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::release_owner_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:105:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner16drain_safe_point+0x21f5): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1911,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::process_targets::retire_before_free':",
+      "raw": "/src/kernel/rust/f03_perf_owner/process_targets.rs:113:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner26retire_process_before_free+0x513): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1913,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner26retire_process_before_free+0x538): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1915,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::process_targets::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/process_targets.rs:25:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner26retire_process_before_free+0x55d): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1917,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner26retire_process_before_free+0x582): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1919,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptors15retire_unlinked+0x255): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1920,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptors15retire_unlinked+0x27a): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1922,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::unregister':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:64:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrows10unregister+0x56): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1923,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::unregister':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/copy_borrows.rs:60:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrows10unregister+0xc5): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1925,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrows10unregister+0xea): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1927,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:54:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrows10unregister+0x10f): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1929,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrows7release+0x55): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1931,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:54:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrows7release+0x7a): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1933,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<unsafe extern \"C\" fn(*mut core::ffi::c_void) -> i64>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12transactions12lock_process+0x5c): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1935,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<unsafe extern \"C\" fn(*mut core::ffi::c_void, i64)>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12transactions12lock_process+0x72): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1937,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<unsafe extern \"C\" fn(*mut mckernel_rust::abi::SyscallRequest, i32) -> i64>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12transactions4host+0xae): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1939,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<mckernel_rust::syscall_policy::f03_perf_owner::monitors::Target, i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner15process_targets6ensure+0x476): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1941,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:57:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps15release_binding+0x102): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1943,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps15release_binding+0x15b): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1945,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_binding':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:112:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps15release_binding+0x180): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1947,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps15release_binding+0x1a5): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1949,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:57:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps28retire_thread_before_destroy+0x362): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1951,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::retire_thread_before_destroy':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:98:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps28retire_thread_before_destroy+0x404): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1953,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps28retire_thread_before_destroy+0x429): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1955,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<(), i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4maps28retire_thread_before_destroy+0x45f): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1957,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner5entry5fcntl+0x262): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1958,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner5entry5fcntl+0x287): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1960,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::events::release_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/events.rs:92:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6events14release_locked+0x83): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1961,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::events::release_locked':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/events.rs:87:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6events14release_locked+0xa8): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1963,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6events14release_locked+0xcd): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1965,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10reset_walk+0x65c): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1967,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::index':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:278:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10reset_walk+0x67c): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1969,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterSlot>::abort_new_extra':",
+      "raw": "/src/kernel/rust/f03_perf_owner/thread_counters.rs:230:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x19e6): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1971,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x1a01): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1972,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x1a17): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1974,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::index':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:278:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x1a37): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1976,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::abort_new_extra':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:292:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x1a5c): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1978,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x1a77): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1980,
+      "symbol": "core::panicking::panic_bounds_check",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterSlot>::abort_new_extra':",
+      "raw": "/src/kernel/rust/f03_perf_owner/thread_counters.rs:230:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware10start_walk+0x1a8d): undefined reference to `core::panicking::panic_bounds_check'"
+    },
+    {
+      "stderr_line": 1982,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware11stop_locked+0xcf9): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 1984,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::index':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:278:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware11stop_locked+0xd19): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 1986,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mut mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRead>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware11stop_locked+0xd3e): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1988,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware7capture+0x5fb): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1989,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware7capture+0x620): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1991,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRead>::finish_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:389:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8hardware7capture+0x645): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1993,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::descriptors::CloseToken>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8terminal24terminal_current_process+0xa54): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1995,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8terminal24terminal_current_process+0xa79): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1996,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner8terminal24terminal_current_process+0xa9e): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 1998,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks12prepare_call+0x723): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 1999,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks12prepare_call+0x748): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2000,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks15read_size_valid+0xef): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2002,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks4read+0x19a6): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2003,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks4read+0x19cb): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2005,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks4read+0x19e6): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2007,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::index':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:278:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks4read+0x1a06): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2009,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:57:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks4read+0x1a2b): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2011,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks5ioctl+0x785): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2012,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks5ioctl+0x7aa): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2014,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::callbacks::enable':",
+      "raw": "/src/kernel/rust/f03_perf_owner/callbacks.rs:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks6enable+0xcbf): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2016,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks6enable+0xd39): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2018,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks8callback+0x328): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2019,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9callbacks8callback+0x34d): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2021,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mut mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::PreparedBorrow>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9fork_copy16copy_descriptors+0x9fa): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2023,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::lifecycle::sync_monitor':",
+      "raw": "/src/kernel/rust/f03_perf_owner/lifecycle.rs:93:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle12sync_monitor+0x303): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2025,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<&mckernel_rust::syscall_policy::f03_perf_owner::thread_counters::CounterLease>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle12sync_monitor+0xa64): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2027,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::HardwareLeases>::index':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:278:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle12sync_monitor+0xa84): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2029,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::process_targets::ProcessHandle>, i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle21clear_current_monitor+0x284): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2031,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<&mut mckernel_rust::syscall_policy::f03_perf_owner::monitors::Target, i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle21clear_current_monitor+0x2be): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2033,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::lifecycle::prepare_cloned_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/lifecycle.rs:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle21prepare_cloned_thread+0x1026): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2035,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner9lifecycle21prepare_cloned_thread+0x104b): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2036,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_14PreparedBorrowNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x185): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2038,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:54:(.ltext._RNvXs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_14PreparedBorrowNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x1aa): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2040,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner15process_targetsNtB5_13ProcessHandleNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x175): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2042,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::process_targets::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/process_targets.rs:25:(.ltext._RNvXs0_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner15process_targetsNtB5_13ProcessHandleNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x19a): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2044,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptorsNtB5_13DescriptorPinNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x63): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2045,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptorsNtB5_13DescriptorPinNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x88): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2047,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::CopyPin as core::ops::drop::Drop>::drop':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:153:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_7CopyPinNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x366): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2049,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_7CopyPinNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x38b): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2050,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_7CopyPinNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x3b0): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2052,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:54:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_7CopyPinNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x3d5): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2054,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::maps::release_thread':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:57:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4PlanNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x296): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2056,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4PlanNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x407): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2058,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::Plan>::abort_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/maps.rs:238:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4PlanNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x42c): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2059,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::maps::Plan>::abort_locked':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/maps.rs:238:(.ltext._RNvXs1_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner4mapsNtB5_4PlanNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x451): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2061,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_8GroupRefNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x165): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2063,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::groups::release_owner_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:105:(.ltext._RNvXs2_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_8GroupRefNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x18a): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2065,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_11CloseBorrowNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x195): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2067,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::copy_borrows::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/copy_borrows.rs:54:(.ltext._RNvXs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12copy_borrowsNtB5_11CloseBorrowNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x1ba): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2069,
+      "symbol": "core::result::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::result::Result<(), i32>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1185:(.ltext._RNvXs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_15DescriptorEventNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x129): undefined reference to `core::result::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2071,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_15DescriptorEventNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x221): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2073,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::events::queue_origin_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/events.rs:108:(.ltext._RNvXs4_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6eventsNtB5_15DescriptorEventNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x246): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2075,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::descriptors::Prepared as core::ops::drop::Drop>::drop':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:278:(.ltext._RNvXs5_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner11descriptorsNtB5_8PreparedNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x53): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2077,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext._RNvXs6_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_9GroupReadNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x145): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2079,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::groups::MemberRetirement as core::ops::drop::Drop>::drop':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:425:(.ltext._RNvXs8_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner6groupsNtB5_16MemberRetirementNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x145): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2081,
+      "symbol": "<i32 as core::fmt::Display>::fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<i32 as core::fmt::Debug>::fmt':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs:91:(.ltext._RNvXsQ_NtNtCskWZGD7wR08e_4core3fmt3numlNtB7_5Debug3fmt+0x17): undefined reference to `<i32 as core::fmt::Display>::fmt'"
+    },
+    {
+      "stderr_line": 2082,
+      "symbol": "<i32 as core::fmt::LowerHex>::fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<i32 as core::fmt::Debug>::fmt':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs:87:(.ltext._RNvXsQ_NtNtCskWZGD7wR08e_4core3fmt3numlNtB7_5Debug3fmt+0x24): undefined reference to `<i32 as core::fmt::LowerHex>::fmt'"
+    },
+    {
+      "stderr_line": 2083,
+      "symbol": "<i32 as core::fmt::UpperHex>::fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<i32 as core::fmt::Debug>::fmt':",
+      "raw": "/usr/bin/ld: /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs:89:(.ltext._RNvXsQ_NtNtCskWZGD7wR08e_4core3fmt3numlNtB7_5Debug3fmt+0x31): undefined reference to `<i32 as core::fmt::UpperHex>::fmt'"
+    },
+    {
+      "stderr_line": 2085,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<unsafe extern \"C\" fn(*mut mckernel_rust::abi::SyscallRequest, i32) -> i64>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext._RNvXs_NtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy14f03_perf_owner12transactionsNtB4_11TransactionNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop+0x125): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2087,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::lifecycle::switch_monitor':",
+      "raw": "/src/kernel/rust/f03_perf_owner/lifecycle.rs:103:(.ltext.arch_switch_context+0x433): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2089,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext.arch_switch_context+0xeae): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2091,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<mckernel_rust::syscall_policy::f03_perf_owner::groups::GroupRead>::finish_locked':",
+      "raw": "/src/kernel/rust/f03_perf_owner/groups.rs:389:(.ltext.arch_switch_context+0xed3): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2093,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::lifecycle::switch_monitor':",
+      "raw": "/src/kernel/rust/f03_perf_owner/lifecycle.rs:113:(.ltext.arch_switch_context+0x1069): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2095,
+      "symbol": "core::option::expect_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<usize>>::expect':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:971:(.ltext.arch_switch_context+0x108e): undefined reference to `core::option::expect_failed'"
+    },
+    {
+      "stderr_line": 2097,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext.do_mmap_mckfd_dispatch_body_result+0x23e): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2098,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext.do_mmap_mckfd_dispatch_body_result+0x263): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2100,
+      "symbol": "core::option::unwrap_failed",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `<core::option::Option<mckernel_rust::syscall_policy::f03_perf_owner::descriptors::Prepared>>::unwrap':",
+      "raw": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1016:(.ltext.perf_event_open_body_result+0xf50): undefined reference to `core::option::unwrap_failed'"
+    },
+    {
+      "stderr_line": 2102,
+      "symbol": "core::panicking::panic_fmt",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::mark_vm_close_under_p':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:325:(.ltext.process_mckfd_close_all_result+0x2d5): undefined reference to `core::panicking::panic_fmt'"
+    },
+    {
+      "stderr_line": 2104,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext.syscall_close_body_result+0x835): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2105,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext.syscall_close_body_result+0x85a): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2106,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext.syscall_fcntl_body_result+0x269): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2107,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:103:(.ltext.syscall_fcntl_body_result+0x28e): undefined reference to `core::panicking::panic'"
+    },
+    {
+      "stderr_line": 2108,
+      "symbol": "core::panicking::panic",
+      "caller": "/usr/bin/ld: rust/mckernel_rust.o: in function `mckernel_rust::syscall_policy::f03_perf_owner::descriptors::release':",
+      "raw": "/usr/bin/ld: /src/kernel/rust/f03_perf_owner/descriptors.rs:102:(.ltext.syscall_ioctl_body_result+0x2e0): undefined reference to `core::panicking::panic'"
+    }
+  ]
+}
