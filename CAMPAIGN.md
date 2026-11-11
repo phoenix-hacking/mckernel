@@ -1,9 +1,28 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T07:08:28.943637+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T07:18:06.985732+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Genuine registered loader sources recovered; source gap reduced.** Root found
+exactcec6 loader at its registered producer sibling and all5 OWNER_FILES hash
+pins; independent0a940 review verifies all14 recovered source copies and the
+producer manifest. All8 catalog omissions plus sibling checker now have genuine
+source origins. No external locator/user artifact is needed. Published evidence
+is under `docs/verification/native-admission-debug-20261111/recovered-loader-1/`;
+it is source evidence, not a relocated executable package/native grant. PublicABI
+now completes actual18-module config plus current-control/account/resource and
+source/effective-view consumers; SourceAcq reviews source/lifecycle. P04Source
+assembles the matched c664 base/overlay; canonicalc50 bootargv support is pushed/
+fetched9blobs. Current controller, real holds and all UNKNOWN outcomes remain.
+For whole03-03 P03 fixes only saved qualifier's inlining assertion from actual
+memset+0x17f/genericforward+0x199, proving224Bzero/NR14/caller path; passing
+producer/reader/cases stay reused. P04Tests independently decides memory scope.
+Whole03-04 stays open on required Cwait70 and signaltermination136/12; material
+04ef permits ordinary narrow provider preparation, with actual consumer fields
+and genuine holds preserved. SDK owns that implementation, not an external
+contract inventory. Scores remain unchanged; no duplicate PR3 progress report.
 
 **Matching named boot caller selected.** Root composed existing976B e64 after
 independentba68 sourceGO: canonical collector806958→c48, other3 named runtime
