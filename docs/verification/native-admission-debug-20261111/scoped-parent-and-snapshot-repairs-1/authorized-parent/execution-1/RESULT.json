@@ -1,0 +1,51 @@
+{
+  "status": "PASS_EXACT_SCOPED_PARENT_PROVISION_AND_REAL_UID1000_READBACK_PENDING_INDEPENDENT_RESULT_QUALIFICATION",
+  "at": "2026-11-11T19:52:54.527556+00:00",
+  "started_at": "2026-11-11T19:52:54.401260+00:00",
+  "request_sha256": "3048f317a6fc3ecaaa35451e7742ff87f17b6ed9aa0d0b1f242d58ec7b748dcb",
+  "review_sha256": "acf6847d153d6a226120a98fdd88e1bc35bd282ccd2096b977ab96a91ee3f2c2",
+  "provisioner_sha256": "0218d5a616f6a65c6104562bbbb7ee3a6573044a4b4f1eff8402cafaf1197233",
+  "receipt_sha256": "3a0a947dca78cd07374b01a307ee6c8f249f58c50a48d210e4c680813fc03d42",
+  "clients": [
+    {
+      "attempt_id": 0,
+      "label": "scoped-parent-provision",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--core=0",
+        "--cpu=30",
+        "--fsize=8388608",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import hashlib,os,stat,sys\np,h=sys.argv[1:];f=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)\ntry:\n b=os.fstat(f);assert stat.S_ISREG(b.st_mode) and b.st_nlink==1 and b.st_size<=65536\n r=b''\n while len(r)<b.st_size:\n  x=os.read(f,min(65536,b.st_size-len(r)));assert x;r+=x\n a=os.fstat(f);assert (a.st_dev,a.st_ino,a.st_size,a.st_mtime_ns,a.st_mode)==(b.st_dev,b.st_ino,b.st_size,b.st_mtime_ns,b.st_mode)\n assert hashlib.sha256(r).hexdigest()==h\nfinally:os.close(f)\nsys.argv=[p];exec(compile(r,p,'exec'),{'__name__':'__main__','__file__':p,'__source_sha256__':h})\n",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/provision_scoped_parent.py",
+        "0218d5a616f6a65c6104562bbbb7ee3a6573044a4b4f1eff8402cafaf1197233"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1525073,
+      "birth": "51304047",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    }
+  ],
+  "all_waits_streams_joined": true,
+  "remaining_direct_children": [],
+  "scope_only_exact_new_parent": true,
+  "staging_or_native_not_executed": true,
+  "other_holds_released": false
+}

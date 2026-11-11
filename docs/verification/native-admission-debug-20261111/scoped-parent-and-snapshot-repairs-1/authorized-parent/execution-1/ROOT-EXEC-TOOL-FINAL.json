@@ -1,0 +1,20 @@
+[
+  {
+    "tool": "exec_command",
+    "arguments": {
+      "cmd": "/usr/bin/taskset -c 7 /usr/bin/prlimit --as=268435456 --core=0 --cpu=60 --fsize=8388608 /usr/bin/python3 -I -B /home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-provision-p03-max-1/run_root_once.py /home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-review-p04source-max-1/REVIEW.json acf6847d153d6a226120a98fdd88e1bc35bd282ccd2096b977ab96a91ee3f2c2",
+      "workdir": "/home/holden/mckernel",
+      "login": false,
+      "tty": false,
+      "yield_time_ms": 1000,
+      "max_output_tokens": 3000
+    },
+    "result": {
+      "chunk_id": "5bf528",
+      "wall_time_seconds": 0.022751486,
+      "exit_code": 0,
+      "original_token_count": 55,
+      "output": "{\"status\": \"PASS_EXACT_SCOPED_PARENT_ONLY\", \"target\": \"/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent\", \"new_created\": true, \"final_output_absent\": true, \"Root_qualification_pending\": true}\n"
+    }
+  }
+]

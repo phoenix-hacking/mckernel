@@ -1,0 +1,657 @@
+{
+  "actual_HOST_process_ownership": {
+    "inner_closure": {
+      "bytes": 249,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/INNER-CLOSURE.json",
+      "sha256": "8a68b1930c2a3c1eb0ab5483c97ff5702223e1084e917d5411cb915a307ea6b9"
+    },
+    "one_real_positive_direct_PIDbirth_wholefamily_streams_exact0_noerror": true,
+    "ownership_file": {
+      "bytes": 414,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/ownership.json",
+      "sha256": "6d378c788800ff0c4407f236f58633603242cd5bd598a2dd91ca3202007b2306"
+    },
+    "record": {
+      "adopted_kills": [],
+      "adopted_reaps": [],
+      "error": null,
+      "label": "actual-account-snapshot-four-families-primary01",
+      "leader": 1526096,
+      "leader_birth": "51319796",
+      "leader_group_signalled": false,
+      "leader_parent_joined": true,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "timed_out": false,
+      "whole_descendants_joined": true
+    },
+    "remaining_owned_children": [],
+    "separation": "Only actual HOST Python fixture1526096/b51319796 was executed. All controller/protocol/ledger/clock/credit data in its20 rows were explicitly controlled lower inputs, not live account/authority outcomes."
+  },
+  "actual_admission": {
+    "bytes": 666,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/ADMISSION.json",
+    "sha256": "52546f8e2c108404c617fe5388ef30cd7991971127b9b73b08a7ce54d18577cc"
+  },
+  "actual_case_joins": [
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 2
+      },
+      "diagnostic": null,
+      "exception": null,
+      "name": "coherent_latest_snapshot_returns_pure_data",
+      "outcome": "pure_data_returned",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 2,
+        "protocol": 2,
+        "state": 4,
+        "time": 3
+      },
+      "diagnostic": null,
+      "exception": null,
+      "name": "same_primary_new_credit_only_accepts_after_ledger_catches_up",
+      "outcome": "pure_data_returned",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 3,
+        "protocol": 3,
+        "state": 6,
+        "time": 3
+      },
+      "diagnostic": {
+        "attempt": 3,
+        "event_at": "2023-11-14T22:13:20+00:00",
+        "primary_changed_known_fields": [],
+        "same_credit_record": true,
+        "same_event_credit": true,
+        "same_full_primary": true,
+        "same_observed_balance": false,
+        "same_scope": true,
+        "state_after_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_before_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_changed_fields": []
+      },
+      "exception": "AssertionError",
+      "name": "same_primary_new_credit_two_old_matching_copies_refuse",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 2,
+        "protocol": 2,
+        "state": 4,
+        "time": 3
+      },
+      "diagnostic": null,
+      "exception": null,
+      "name": "changed_bookend_retries_then_returns_coherent_snapshot",
+      "outcome": "pure_data_returned",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 3,
+        "protocol": 3,
+        "state": 6,
+        "time": 3
+      },
+      "diagnostic": {
+        "attempt": 3,
+        "event_at": "2023-11-14T22:13:20+00:00",
+        "primary_changed_known_fields": [],
+        "same_credit_record": true,
+        "same_event_credit": true,
+        "same_full_primary": false,
+        "same_observed_balance": true,
+        "same_scope": true,
+        "state_after_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_before_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_changed_fields": []
+      },
+      "exception": "AssertionError",
+      "name": "full_primary_extra_field_no_older_fallback",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "latest_event_age25_no_older_fallback",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 2
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "fresh_event_expires_at_acceptance",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "latest_spend_hold_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "before_bookend_hold_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "after_bookend_unknown_accounting_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "ValueError",
+      "name": "latest_credit_unknown_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "ValueError",
+      "name": "latest_credit_exhausted_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "original_durable_ledger_identity_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "same_root_worker_birth_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "same_run_after_bookend_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "ValueError",
+      "name": "nonfinite_ledger_balance_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "coherent_bool_primary_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 1,
+        "time": 2
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "latest_event_bool_primary_no_older_fallback",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol"
+      ],
+      "scripts_remaining": {
+        "ledger": 1,
+        "protocol": 0,
+        "state": 1,
+        "time": 2
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "first_bookend_missing_primary_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 1,
+        "time": 2
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "name": "second_bookend_out_of_range_primary_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 1
+      }
+    }
+  ],
+  "actual_result": {
+    "bytes": 2048,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/RESULT.json",
+    "sha256": "588b0438ad59dfbe445f675dd3eac8c860009abb940d0494f0d1183fee3b89fe"
+  },
+  "actual_tool": {
+    "all_full_original_responses_preserved_in_completion": true,
+    "chunk_id": "18732a",
+    "exit_code": 0,
+    "full_output": "{\"status\": \"PASS\", \"commands\": 1, \"account_snapshot_families\": 4, \"account_snapshot_vectors\": 20, \"finished_at\": \"2026-11-11T19:55:32.079614+00:00\"}\n",
+    "session_id": null
+  },
+  "all29_input_bytes_SHA_still_match": true,
+  "at": "2026-11-11T19:58:08.454189+00:00",
+  "current_only_retirement": {
+    "Root_already_recorded": {
+      "bytes": 379,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "8454c77b7a0dd4307176b909b59d550b17871ec79d2bd1b5114ca994c43d30d6"
+    },
+    "corroborates": "ONLY actual CPU0/256MiB/job1 after full positive owned and Root closure. No new retirement gate or peer/global/historical/native/Scratch/account/source/normallease release."
+  },
+  "decision": "GO_QUALIFIED_ACTUAL_CORRECTED_ACCOUNT_SNAPSHOT_FOUR_CONTROLLED_RECORD_FAMILIES_20_FULL_VECTOR_RESULTS_ONLY",
+  "external_oracles": {
+    "bytes": 19978,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/EXPECTED.json",
+    "sha256": "67d8c6d42d5891864e6b5d1f56bcbfb32c1ee74ce388db2e27ee7c9ab7c6e459"
+  },
+  "failed_candidate_history": "Unexecuted a673/fc18316vector packet and rejected D/dece20/00d140 remain preserved. Original actual S229c/d51e snapshot failure and its exact process-only8cf/ec7 retirement remain distinct. No historical failed compared values reconstructed or relabeled harmless.",
+  "fixture": {
+    "bytes": 4447,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/account_snapshot_cases.py",
+    "sha256": "130ca3289270dfead206db3f07870a25c4b497330518cd73ba419664c6b20946"
+  },
+  "full20row_JSON_matches_external_and_request_exactly": true,
+  "full_Root_completion": {
+    "bytes": 1422,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/ROOT-EXEC-COMPLETION.json",
+    "sha256": "5eb16c8272e5d0be0294055bda988c51330412d41d55801741e35820fa451950"
+  },
+  "inputs": {
+    "bytes": 8493,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/INPUTS.json",
+    "sha256": "44a4b6f9615a567453de6f477308ddb417c29b2b30ac1314d6b0a089da2addbb"
+  },
+  "material_findings": [],
+  "meaningful_proven_behavior": "Coherent latest tuple returns unchanged controlled data; SAME-primary/new-credit event cannot use two stale equal credit copies, and succeeds only after controlled ledger+state catch up. Three-attempt bound, no older fallback/full-primary extra fields,25s at entry/acceptance, both bookend/event holds/unknown/exhausted and actual original Root/run/ledger identity/nonfinite refuse. Boolean, missing-primary and second-bookend101 refuse at precise guard with no later retry/read. Real stdlib math is supplied to full three-function AST projection; no predicate mirror or live state.",
+  "native_currentfree": null,
+  "native_release": false,
+  "next_action": "Join this actual changed-function qualification with source25078 and independent strict-reader E data binding to freeze fresh exact9field code-only normal publication review. Owning Root must still freshly sample actual service/account/credit/actors/leases/resources and invoke new E once; no failed D/S retry, state overwrite, new allowance or actual account query by reviewer.",
+  "operation_GO": {
+    "bytes": 12962,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-review-sourceacq-max-1/primary-guard-correction-1/REVIEW.json",
+    "sha256": "0c1a3886f1691166a4e00b2159948c73a17838325b492ea044c8fd6f8efbb3ca"
+  },
+  "original_acceptance_or_actual_account_issuer_admission": false,
+  "request": {
+    "bytes": 31805,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/REQUEST.json",
+    "sha256": "2a61d65233a3ca834e6d6c02a768ed58b6a37fe44ec6aaaf60da2c96fcb0f488"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_actions": {
+    "helper_fixture_wrapper_accountAPI_issuer_nonce_sudo_install_control_native_or_canonical_state_action": false,
+    "private_actual_account_credit_cap_balance_secret_values_logged": false,
+    "saved_artifact_source_pin_JSON_reads_and_private_qualification_only": true
+  },
+  "schema": 1,
+  "scope": "Saved actual source/pin/full external output/owned completion qualification. No helper/test/wrapper/account/issuer/native replay. Pure controlled-record semantics only; no actual account or credit eligibility inferred.",
+  "source": {
+    "bytes": 20163,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "9daec4d582c13e58ca2ac467e1a0566440f17497eaad621c07df6ef6987695c3"
+  },
+  "source_implementation_GO": {
+    "bytes": 12135,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-fixed30-adoption-review-sourceacq-max-1/normal-operation-1/correction-1/account-snapshot-correction-1/implementation-1/correction-1/REVIEW.json",
+    "sha256": "25078afef64836b311bc3ca2d90bd480e40f785047130c72f16a6771872f2e2e"
+  },
+  "stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/actual-account-snapshot-four-families-primary01.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "bytes": 12449,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/account-snapshot-helper-tests-p04tests-max-1/primary-guard-correction-1/execution-1/actual-account-snapshot-four-families-primary01.stdout",
+    "sha256": "5e08775fc26e3fd66926ff4e676bf42395ac0e666f31ae0f29a8b31feb93e616"
+  }
+}

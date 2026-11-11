@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T19:19:44.860313+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T20:01:38.338464+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -79,6 +79,30 @@ no build/reader/green suite was replayed. Four remaining C functions, modeled
 VM/rollback uncertainty, native behavior and historical UNKNOWN outcomes remain.
 Public evidence: [complete checkpoint](docs/verification/m14-current-image-20261111/perf-supported-default-1/PUBLICATION-SCOPE.json).
 
+**New actual scoped-parent repair passed19:52:54Z.** Explicit operator grant6805178926
+was consumed ONLY for the named parent. Packet3048/GOacf684/provisioner0218 ran
+once: actualparentdev66306/inode49551867 UID1000:GID1000/0700, durablefsync and
+realUID1000RWX/search PASS, finaloutput absent. Existing ancestor ownership/mode
+and ROloop44/mount974 stay unchanged; no oldobjects/native/control changes.
+Actualresult672b/receipt3a0a/fullRoot5a58/current256retire54fb have independent
+qualification34759. This resolves ONLY that scoped permission, not native grants.
+P03 currenta2fstager successor6ab1/2da888 binds realparent and unchanged43inputs/
+81798929B/21dirs; exact output is the authorized parent plus
+`native-signal-c964-a2f00a61-stage-20261111-1`. P04Source reviews; Root runs after
+fresh bounded HOST admission, never oldroot/c664 output or repair replay.
+
+**Coherent account helper correction passed20 vectors19:55:32Z.** InitialD
+source00d140 NO_GO and old229c actualpreissuefailure stay intact. Ecb347/811707/
+wrapper9dae adds only shared numeric/nonbool/finite primary validation; sourceGO25078.
+Corrected2a61/GO0c1a ran once: four actual-helper families/20 fullvectors PASS,
+actualresult588b/fullRoot5eb1/oneOwner/current256retire8454; independentQ749b
+joins all29pins and exactsource. No live account/controller/issuer effects from
+these controlled tests. SourceAcq final E9field operation approval and fresh actual
+normal admission precede a single normalproducer. All passed observer/equality/
+image/reader scopes are reused; no badsource or green-suite replay.
+[Actual repair evidence](docs/verification/native-admission-debug-20261111/scoped-parent-and-snapshot-repairs-1/PUBLICATION-SCOPE.json).
+No additional original check is counted from these prerequisite repairs.
+
 **Next original M14-06-02-FUNCTIONAL / M15-I04-native-admission:** P03 froze
 source-only matching handoff4baab82d with exactc964/a2f at BOTH guest image paths,
 qualified099/IHK8d/config106055/threeKOs, existing guest43files/30ELFs and actual
@@ -135,6 +159,14 @@ job in ec7c. No account/credit/window checks after131 are claimed proved. SDK
 now diagnoses exact event/state scope+ordering; primary equality/25s/currentgoal/
 owner/service/SAMEfinitecredit guards stay intact. SourceAcq independently reviews
 one meaningful private successor; no blind229c retry or stale status/account reset.
+SDK diagnosiscd31/source observation34d0 and independent diagnosis5263 establish
+non-atomic acquisition, not the unrecorded failed interleaving. Controller persists
+limits before the durable credit observation, so stable state/ledger pairs alone
+are insufficient. The bounded successor must join the same fresh event/controller
+primary AND finite credit observation to both original ledger/state last_balance,
+with full equality/25s/goal-owner-service/SAMEcredit guards, two bookends, immediate
+hold/unknown veto and max3 local consistency attempts. It writes no launcher state.
+No new operation/nonce is issued by this source work.
 [Reviewed candidate and actual HOST result](docs/verification/native-admission-debug-20261111/a2f-cohort-binding-1/PUBLICATION-SCOPE.json).
 
 P03 noon disposition9c4b confirms no callable authorized provisioner in the5
@@ -147,6 +179,10 @@ Scratch21 exact oldobjects and ROloop44/mount974 mapping; final stage output sta
 absent. Existing stager supports scoped parent, but frozen a2f4baab/58043 --output
 needs an explicit reviewed parent/identity binding successor after a genuine grant.
 No sudo/permission/remount/alternate-path fallback or operator action occurred.
+[Noon mailbox return6805126092](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6805126092)
+is POSTED_CONFIRMED for request1909, linking published/fetched121-file checkpoint
+daf859c8 and the exact minimum operator request. It is a requested blocker reply,
+not a duplicate percentage report; no operator receipt has arrived.
 
 **Separate actual native prerequisites:** Owner-scoped writable staging parent
 is still missing: selected parentUID0/0755 is not UID1000 writable; one exact request

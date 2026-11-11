@@ -1,0 +1,70 @@
+{
+  "all_first15_prepared_inputs_oracles_unchanged": true,
+  "effects": "Complete three source AST functions with synthetic JSON local record/read/clock scripts only. No source main/issuer/controller/account API/real records/write/nonce/exec/native call.",
+  "families": [
+    {
+      "name": "coherent_accept",
+      "obligation": "Latest fresh event/controller/ledger tuple returns exact unchanged synthetic records as data only; never authority.",
+      "vectors": [
+        "coherent_latest_snapshot_returns_pure_data"
+      ]
+    },
+    {
+      "name": "interleaving_stabilizes",
+      "obligation": "New event credits cannot pass with two equal stale credit copies; bookend changes force a retry. Only subsequent coherent records accept.",
+      "vectors": [
+        "same_primary_new_credit_only_accepts_after_ledger_catches_up",
+        "changed_bookend_retries_then_returns_coherent_snapshot"
+      ]
+    },
+    {
+      "name": "persistent_mismatch_refuses",
+      "obligation": "Exactly3 attempts refuse persistent event/ledger mismatch and full-primary extra-field mismatch with no older fallback; controlled diagnostics only.",
+      "vectors": [
+        "same_primary_new_credit_two_old_matching_copies_refuse",
+        "full_primary_extra_field_no_older_fallback"
+      ]
+    },
+    {
+      "name": "hold_unknown_stale_veto",
+      "obligation": "Immediate current hold/unknown/exhaustion/stale or acceptance-time expiry, original ledger ID, fixed Root/run and nonfinite vetoes; no further attempt or query.",
+      "vectors": [
+        "latest_event_age25_no_older_fallback",
+        "fresh_event_expires_at_acceptance",
+        "latest_spend_hold_immediate_veto",
+        "before_bookend_hold_immediate_veto",
+        "after_bookend_unknown_accounting_immediate_veto",
+        "latest_credit_unknown_immediate_veto",
+        "latest_credit_exhausted_immediate_veto",
+        "original_durable_ledger_identity_veto",
+        "same_root_worker_birth_veto",
+        "same_run_after_bookend_veto",
+        "nonfinite_ledger_balance_immediate_veto"
+      ]
+    }
+  ],
+  "only_new_explicit_nonfinite_vector": true,
+  "previous_actual_preissue_failure_and_unknown_source_accounting_unmodified": true,
+  "selected_actual_functions": [
+    "amount",
+    "available_balance",
+    "current_account_snapshot"
+  ],
+  "source": {
+    "bytes": 19625,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+    "sha256": "dece20d578bf7a71e4b369ce221ab7d23904da210f76f6757a30e7bea51700ab"
+  },
+  "source_contract": {
+    "bytes": 3428,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/ACCOUNT-SNAPSHOT-CONTRACT.json",
+    "sha256": "fade7d7ef6afab0bf468d8b3b2deef464bd9b5d6f958101ffa2fe407b4faa994"
+  },
+  "source_predicate_or_helper_reimplementation": false,
+  "source_proposal": {
+    "bytes": 1993,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/FOCUSED-TEST-PROPOSAL.json",
+    "sha256": "04932de49c66981624aecd7d450c3bddcb4f3b5e623f0103db3337b59ff85051"
+  },
+  "vector_count": 16
+}

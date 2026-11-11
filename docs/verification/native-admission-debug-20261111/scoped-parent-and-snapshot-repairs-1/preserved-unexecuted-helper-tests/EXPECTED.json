@@ -1,0 +1,695 @@
+{
+  "cases": [
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 2
+      },
+      "diagnostic": null,
+      "exception": null,
+      "live_account_queries_or_writes": 0,
+      "message": null,
+      "name": "coherent_latest_snapshot_returns_pure_data",
+      "outcome": "pure_data_returned",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "returned": {
+        "credit": {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        },
+        "observed_timestamp": 1700000000.0,
+        "state": {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        "usage": {
+          "at": "2023-11-14T22:13:20+00:00",
+          "primary": {
+            "resetsAt": 1700600000,
+            "usedPercent": 50,
+            "windowDurationMins": 10080
+          },
+          "rateLimitReachedType": null,
+          "source_event": "account/rateLimits/updated",
+          "spendControlReached": false
+        }
+      },
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 2,
+        "protocol": 2,
+        "state": 4,
+        "time": 3
+      },
+      "diagnostic": null,
+      "exception": null,
+      "live_account_queries_or_writes": 0,
+      "message": null,
+      "name": "same_primary_new_credit_only_accepts_after_ledger_catches_up",
+      "outcome": "pure_data_returned",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "returned": {
+        "credit": {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        },
+        "observed_timestamp": 1700000000.0,
+        "state": {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        "usage": {
+          "at": "2023-11-14T22:13:20+00:00",
+          "primary": {
+            "resetsAt": 1700600000,
+            "usedPercent": 50,
+            "windowDurationMins": 10080
+          },
+          "rateLimitReachedType": null,
+          "source_event": "account/rateLimits/updated",
+          "spendControlReached": false
+        }
+      },
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 3,
+        "protocol": 3,
+        "state": 6,
+        "time": 3
+      },
+      "diagnostic": {
+        "attempt": 3,
+        "event_at": "2023-11-14T22:13:20+00:00",
+        "primary_changed_known_fields": [],
+        "same_credit_record": true,
+        "same_event_credit": true,
+        "same_full_primary": true,
+        "same_observed_balance": false,
+        "same_scope": true,
+        "state_after_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_before_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_changed_fields": []
+      },
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": null,
+      "name": "same_primary_new_credit_two_old_matching_copies_refuse",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 2,
+        "protocol": 2,
+        "state": 4,
+        "time": 3
+      },
+      "diagnostic": null,
+      "exception": null,
+      "live_account_queries_or_writes": 0,
+      "message": null,
+      "name": "changed_bookend_retries_then_returns_coherent_snapshot",
+      "outcome": "pure_data_returned",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "returned": {
+        "credit": {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        },
+        "observed_timestamp": 1700000000.0,
+        "state": {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        "usage": {
+          "at": "2023-11-14T22:13:20+00:00",
+          "primary": {
+            "resetsAt": 1700600000,
+            "usedPercent": 50,
+            "windowDurationMins": 10080
+          },
+          "rateLimitReachedType": null,
+          "source_event": "account/rateLimits/updated",
+          "spendControlReached": false
+        }
+      },
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 3,
+        "protocol": 3,
+        "state": 6,
+        "time": 3
+      },
+      "diagnostic": {
+        "attempt": 3,
+        "event_at": "2023-11-14T22:13:20+00:00",
+        "primary_changed_known_fields": [],
+        "same_credit_record": true,
+        "same_event_credit": true,
+        "same_full_primary": false,
+        "same_observed_balance": true,
+        "same_scope": true,
+        "state_after_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_before_updated_at": "CONTROLLED-STATE-STAMP",
+        "state_changed_fields": []
+      },
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": null,
+      "name": "full_primary_extra_field_no_older_fallback",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "latest_event_age25_no_older_fallback",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 2
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "fresh_event_expires_at_acceptance",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state",
+        "time"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "latest_spend_hold_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "before_bookend_hold_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "after_bookend_unknown_accounting_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "ValueError",
+      "live_account_queries_or_writes": 0,
+      "message": "Prepaid-credit balance is unknown",
+      "name": "latest_credit_unknown_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "ValueError",
+      "live_account_queries_or_writes": 0,
+      "message": "Prepaid credits are exhausted",
+      "name": "latest_credit_exhausted_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "original_durable_ledger_identity_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 1,
+        "time": 0
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "same_root_worker_birth_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 2,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "AssertionError",
+      "live_account_queries_or_writes": 0,
+      "message": "",
+      "name": "same_run_after_bookend_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger",
+        "state"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    },
+    {
+      "calls": {
+        "ledger": 1,
+        "protocol": 1,
+        "state": 1,
+        "time": 1
+      },
+      "diagnostic": null,
+      "exception": "ValueError",
+      "live_account_queries_or_writes": 0,
+      "message": "Credit amount is outside the supported range",
+      "name": "nonfinite_ledger_balance_immediate_veto",
+      "outcome": "refused",
+      "read_trace": [
+        "state",
+        "protocol",
+        "time",
+        "ledger"
+      ],
+      "returned": null,
+      "scripts_remaining": {
+        "ledger": 0,
+        "protocol": 0,
+        "state": 0,
+        "time": 0
+      }
+    }
+  ],
+  "issuer_or_account_or_source_state_or_credit_ledger_executed_or_mutated": false,
+  "scope": "ACTUAL_ACCOUNT_SNAPSHOT_HELPER_CONTROLLED_LOWER_ONLY"
+}

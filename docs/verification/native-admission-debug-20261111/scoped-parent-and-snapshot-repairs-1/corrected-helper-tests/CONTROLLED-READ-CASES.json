@@ -1,0 +1,3329 @@
+{
+  "cases": [
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "coherent_latest_snapshot_returns_pure_data",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "90",
+          "remaining": "51979.8011050000",
+          "spent": "100"
+        },
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "same_primary_new_credit_only_accepts_after_ledger_catches_up",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ],
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "90",
+          "remaining": "51979.8011050000",
+          "spent": "100"
+        },
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "90",
+          "remaining": "51979.8011050000",
+          "spent": "100"
+        },
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "90",
+          "remaining": "51979.8011050000",
+          "spent": "100"
+        }
+      ],
+      "name": "same_primary_new_credit_two_old_matching_copies_refuse",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ],
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ],
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "90",
+            "remaining": "51979.8011050000",
+            "spent": "100"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        },
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "changed_bookend_retries_then_returns_coherent_snapshot",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ],
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 49,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        },
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        },
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "full_primary_extra_field_no_older_fallback",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "futureField": "MUST_MATCH_FULL_PRIMARY",
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ],
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "futureField": "MUST_MATCH_FULL_PRIMARY",
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ],
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "futureField": "MUST_MATCH_FULL_PRIMARY",
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [],
+      "name": "latest_event_age25_no_older_fallback",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:05+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "fresh_event_expires_at_acceptance",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000025
+      ]
+    },
+    {
+      "ledgers": [],
+      "name": "latest_spend_hold_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": true
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [],
+      "name": "before_bookend_hold_immediate_veto",
+      "protocols": [],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": "CONTROLLED_HOLD",
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": []
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "after_bookend_unknown_accounting_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": "CONTROLLED_UNKNOWN",
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [],
+      "name": "latest_credit_unknown_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": null,
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [],
+      "name": "latest_credit_exhausted_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "0",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "00000000000000000000000000000000",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "original_durable_ledger_identity_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [],
+      "name": "same_root_worker_birth_veto",
+      "protocols": [],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "WRONG-BIRTH"
+        }
+      ],
+      "times": []
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "same_run_after_bookend_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "OTHER-RUN"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "NaN",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "nonfinite_ledger_balance_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "coherent_bool_primary_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": true,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": true,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": true,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "latest_event_bool_primary_no_older_fallback",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          },
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": true,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "first_bookend_missing_primary_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010
+      ]
+    },
+    {
+      "ledgers": [
+        {
+          "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+          "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+          "last_balance": "80",
+          "remaining": "51969.8011050000",
+          "spent": "110"
+        }
+      ],
+      "name": "second_bookend_out_of_range_primary_immediate_veto",
+      "protocols": [
+        [
+          {
+            "at": "2023-11-14T22:13:20+00:00",
+            "event": {
+              "method": "account/rateLimits/updated",
+              "params": {
+                "rateLimits": {
+                  "credits": {
+                    "balance": "80",
+                    "hasCredits": true,
+                    "unlimited": false
+                  },
+                  "limitId": "CONTROLLED-LIMIT",
+                  "limitName": "CONTROLLED-NAME",
+                  "normalModelSlug": "CONTROLLED-MODEL",
+                  "planType": "CONTROLLED-PLAN",
+                  "primary": {
+                    "resetsAt": 1700600000,
+                    "usedPercent": 50,
+                    "windowDurationMins": 10080
+                  },
+                  "rateLimitReachedType": null,
+                  "spendControlReached": false
+                }
+              }
+            }
+          }
+        ]
+      ],
+      "states": [
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 50,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        },
+        {
+          "auth_hold": null,
+          "auth_mode": "chatgpt",
+          "billing_hold": null,
+          "credit_budget": {
+            "budget": "[REDACTED_PRIVATE_CREDIT_CAP]",
+            "id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+            "last_balance": "80",
+            "remaining": "51969.8011050000",
+            "spent": "110"
+          },
+          "credit_budget_error": null,
+          "last_rate_limits": {
+            "credits": {
+              "balance": "80",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "limitId": "CONTROLLED-LIMIT",
+            "limitName": "CONTROLLED-NAME",
+            "normalModelSlug": "CONTROLLED-MODEL",
+            "planType": "CONTROLLED-PLAN",
+            "primary": {
+              "resetsAt": 1700600000,
+              "usedPercent": 101,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "spendControlReached": false
+          },
+          "log_dir": "/CONTROLLED_REPO/.git/os-autopilot/runs/20261110T060029Z-3fe88dab",
+          "phase": "running",
+          "policy_hold": null,
+          "resume_instruction": {
+            "invocation": "20261110T060029Z-3fe88dab"
+          },
+          "server_pid": 762050,
+          "server_start": "37669567",
+          "service_hold": null,
+          "stop_reason": null,
+          "thread_id": "CONTROLLED-ROOT-THREAD",
+          "updated_at": "CONTROLLED-STATE-STAMP",
+          "weekly_confirmation_pending": false,
+          "weekly_usage_error": null,
+          "worker_pid": 762048,
+          "worker_start": "37669559"
+        }
+      ],
+      "times": [
+        1700000010,
+        1700000010
+      ]
+    }
+  ],
+  "scope": "SYNTHETIC_LOCAL_RECORDS_ONLY_NO_REAL_ACCOUNT_OR_CREDIT_INPUTS"
+}
