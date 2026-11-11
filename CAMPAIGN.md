@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T16:35:21.427903+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T17:10:12.955568+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -118,8 +118,39 @@ only intermediateCGUobject output in read-onlyCWD, result2c7d/stderr84c2/fullRoo
 d325/removedCIDf80b. SourceAcq qualifies scoped current2GiBretirement; SDK owns
 one bounded recipe output/CWD binding to its existing granted privateRWdirectory,
 P04Source independently reviews. Source/55flags/coreROmetadata/readonlyimage
-remain unchanged. Preserve failedoutput; no permissionwidening/coregreenrerun.
-Next freshly admitted changedbuiltincompiler follows exactGO/currentretirement.
+remain unchanged. Firstfailedcharge independently97daa/Root843f retired.
+CWD-only9527/sourceGO776a/operationGO1a60 ran16:42:12–16Z; outputplacement is
+fixed, then actualcodegen rejected upstream full_availability::roundevenf
+float(float): SSEregisterreturn withSSEdisabled (macros.rs471). Savedf17537f2/
+stderreb058bd3/fullRootef38 retainall9clients/CID3758ownedremove; SourceAcq
+qualifies onlycurrent2GiBretirement. Core7ec5 remains unchanged and no valid
+builtins tuple is adopted. Focusedescalation: P04Source actualsecond diagnosis,
+SDK genuinekernel-required integerbuiltin/source-selection repair, PublicABI
+independentprofile/ABIreview. Preserve kernelnoSIMD/core/checks/handler; no
+floatstubs/SSEenable/blindarchive/mismatchedmetadata or requiredproviderdrops.
+Use actual6coreimportfrontier (only__udivti3 builtin root) to derive complete
+needed genuine closure, then freeze changedcompilerpacket forreview/admission.
+No unchanged retry, green core/TYPE/runtime replay or original credit.
+Second diagnosis5380533e derives8 unchanged upstream integer files (no upstream
+no-float feature) supplying complete__udivti3 semantics. FIRST integer1f6c/
+facade8b9c/materialGOc4fe/operationGO8b4f ran16:58:11–13Z and PASSED. Actual
+object8cf38cfa(134,528B), metadata7068131f(76,400B), deps5c90 and three ELF/
+symbol/disasm captures exist. Result109745aa/fullRoot1d94b874 verifycontainer
+exit0/nonOOM/removed/all9clients/Root59549→b51692exit0/noSession; actualcore7ec5
+unchanged. IndependentQ6187/currentretirecf53 and material7ef323 qualifyactualpaired
+metadata/provider/import/ISA: genuine__udivti3,zeroUND/noSIMD4830bytes. RawSSE2targetABIwarning stays explicit. No partialprevious
+builtins artifact adopted. P04Tests finiteboundary extensionca6c/d484/f647 has
+independentsourceGO8bd51: samefive normal/fatal outcomes plusfouru128 quotient
+wordpairs, exactmap/ELF relocation owner must be selectedintegerobject, notHOST
+libgcc. Bind actualfourproviderfiles and producerqualification/retirement, then
+freeze/exactreview/admit7commands. SDK integerconsumerdelta bfa2/581b/template37ea has sourceGO44ef and complete
+actualproviderbinding41ade/22775. Root integratedexact2paths afterdependency
+Q/retire/materialGO (record9333e3e8). Theoldfloatinglib.rs proposal wasnever
+canonical. Next: actualcommit-bound configurecoreSDK+normalnamedimage/affected
+reader via interface06cd whilefinitecoreboundarypacket isreviewed/executesin
+its releasedexclusiveHOSTlane. Firstcanonicalbuiltin generation isnecessary
+production; standaloneH/core/TYPE/old18tests are reused.
+No core/TYPE/old18family rerun; invariant/handler/requiredwhole03-05 scope remains.
 SDK consumerCMake d330/e9f has conditionalsourceGO24fbb; actualcore->builtins->
 fullconsumer metadata+realobjectlink is required before normalimage/reader.
 P04Tests newfinitecore-boundary source1aa8/EXPECTED3b9c has independent3b823

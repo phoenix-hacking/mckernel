@@ -1,0 +1,1637 @@
+
+/core-output/compiler_builtins.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 18          	sub    $0x18,%rsp
+  11:	4d 89 c6             	mov    %r8,%r14
+  14:	49 89 c9             	mov    %rcx,%r9
+  17:	48 89 d3             	mov    %rdx,%rbx
+  1a:	49 0f bd c0          	bsr    %r8,%rax
+  1e:	83 f0 3f             	xor    $0x3f,%eax
+  21:	4c 0f bd e1          	bsr    %rcx,%r12
+  25:	41 83 f4 3f          	xor    $0x3f,%r12d
+  29:	41 83 cc 40          	or     $0x40,%r12d
+  2d:	4d 85 c0             	test   %r8,%r8
+  30:	44 0f 45 e0          	cmovne %eax,%r12d
+  34:	48 0f bd ca          	bsr    %rdx,%rcx
+  38:	83 f1 3f             	xor    $0x3f,%ecx
+  3b:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  40:	48 0f bd c6          	bsr    %rsi,%rax
+  44:	83 f0 3f             	xor    $0x3f,%eax
+  47:	83 c0 40             	add    $0x40,%eax
+  4a:	48 85 d2             	test   %rdx,%rdx
+  4d:	0f 45 c1             	cmovne %ecx,%eax
+  50:	44 89 e1             	mov    %r12d,%ecx
+  53:	29 c1                	sub    %eax,%ecx
+  55:	76 2b                	jbe    82 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x82>
+  57:	83 f8 3f             	cmp    $0x3f,%eax
+  5a:	76 52                	jbe    ae <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0xae>
+  5c:	48 89 f0             	mov    %rsi,%rax
+  5f:	4c 09 c8             	or     %r9,%rax
+  62:	48 c1 e8 20          	shr    $0x20,%rax
+  66:	0f 84 b3 00 00 00    	je     11f <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x11f>
+  6c:	48 89 f0             	mov    %rsi,%rax
+  6f:	31 d2                	xor    %edx,%edx
+  71:	49 f7 f1             	div    %r9
+  74:	49 89 c2             	mov    %rax,%r10
+  77:	48 89 d6             	mov    %rdx,%rsi
+  7a:	45 31 db             	xor    %r11d,%r11d
+  7d:	e9 4d 02 00 00       	jmp    2cf <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2cf>
+  82:	45 31 d2             	xor    %r10d,%r10d
+  85:	4c 39 ce             	cmp    %r9,%rsi
+  88:	48 89 d8             	mov    %rbx,%rax
+  8b:	4c 19 f0             	sbb    %r14,%rax
+  8e:	41 bb 00 00 00 00    	mov    $0x0,%r11d
+  94:	0f 82 37 02 00 00    	jb     2d1 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2d1>
+  9a:	4c 29 ce             	sub    %r9,%rsi
+  9d:	4c 19 f3             	sbb    %r14,%rbx
+  a0:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  a6:	45 31 db             	xor    %r11d,%r11d
+  a9:	e9 23 02 00 00       	jmp    2d1 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2d1>
+  ae:	41 83 fc 5f          	cmp    $0x5f,%r12d
+  b2:	76 20                	jbe    d4 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0xd4>
+  b4:	45 89 c8             	mov    %r9d,%r8d
+  b7:	48 89 d8             	mov    %rbx,%rax
+  ba:	48 c1 e8 20          	shr    $0x20,%rax
+  be:	0f 84 a4 01 00 00    	je     268 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x268>
+  c4:	48 89 d8             	mov    %rbx,%rax
+  c7:	31 d2                	xor    %edx,%edx
+  c9:	49 f7 f0             	div    %r8
+  cc:	48 89 c1             	mov    %rax,%rcx
+  cf:	e9 9d 01 00 00       	jmp    271 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x271>
+  d4:	83 f9 20             	cmp    $0x20,%ecx
+  d7:	73 5a                	jae    133 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x133>
+  d9:	b1 40                	mov    $0x40,%cl
+  db:	28 c1                	sub    %al,%cl
+  dd:	48 89 f2             	mov    %rsi,%rdx
+  e0:	48 0f ad da          	shrd   %cl,%rbx,%rdx
+  e4:	48 89 d8             	mov    %rbx,%rax
+  e7:	48 d3 e8             	shr    %cl,%rax
+  ea:	4d 89 ca             	mov    %r9,%r10
+  ed:	4d 0f ad f2          	shrd   %cl,%r14,%r10
+  f1:	4d 89 f0             	mov    %r14,%r8
+  f4:	49 d3 e8             	shr    %cl,%r8
+  f7:	f6 c1 40             	test   $0x40,%cl
+  fa:	48 0f 44 c2          	cmove  %rdx,%rax
+  fe:	4d 0f 44 c2          	cmove  %r10,%r8
+ 102:	48 89 c1             	mov    %rax,%rcx
+ 105:	4c 09 c1             	or     %r8,%rcx
+ 108:	48 c1 e9 20          	shr    $0x20,%rcx
+ 10c:	0f 84 e0 01 00 00    	je     2f2 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2f2>
+ 112:	31 d2                	xor    %edx,%edx
+ 114:	49 f7 f0             	div    %r8
+ 117:	49 89 c2             	mov    %rax,%r10
+ 11a:	e9 db 01 00 00       	jmp    2fa <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2fa>
+ 11f:	89 f0                	mov    %esi,%eax
+ 121:	31 d2                	xor    %edx,%edx
+ 123:	41 f7 f1             	div    %r9d
+ 126:	41 89 c2             	mov    %eax,%r10d
+ 129:	89 d6                	mov    %edx,%esi
+ 12b:	45 31 db             	xor    %r11d,%r11d
+ 12e:	e9 9c 01 00 00       	jmp    2cf <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2cf>
+ 133:	48 89 7d d0          	mov    %rdi,-0x30(%rbp)
+ 137:	b9 60 00 00 00       	mov    $0x60,%ecx
+ 13c:	44 29 e1             	sub    %r12d,%ecx
+ 13f:	4c 89 ca             	mov    %r9,%rdx
+ 142:	4c 0f ad f2          	shrd   %cl,%r14,%rdx
+ 146:	4d 89 f0             	mov    %r14,%r8
+ 149:	49 d3 e8             	shr    %cl,%r8
+ 14c:	89 4d cc             	mov    %ecx,-0x34(%rbp)
+ 14f:	f6 c1 40             	test   $0x40,%cl
+ 152:	4c 0f 44 c2          	cmove  %rdx,%r8
+ 156:	44 89 c7             	mov    %r8d,%edi
+ 159:	48 ff c7             	inc    %rdi
+ 15c:	45 31 d2             	xor    %r10d,%r10d
+ 15f:	45 31 db             	xor    %r11d,%r11d
+ 162:	48 89 7d c0          	mov    %rdi,-0x40(%rbp)
+ 166:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+ 170:	ba 40 00 00 00       	mov    $0x40,%edx
+ 175:	29 c2                	sub    %eax,%edx
+ 177:	49 89 f0             	mov    %rsi,%r8
+ 17a:	89 d1                	mov    %edx,%ecx
+ 17c:	49 0f ad d8          	shrd   %cl,%rbx,%r8
+ 180:	48 89 d8             	mov    %rbx,%rax
+ 183:	48 d3 e8             	shr    %cl,%rax
+ 186:	f6 c2 40             	test   $0x40,%dl
+ 189:	49 0f 44 c0          	cmove  %r8,%rax
+ 18d:	89 d1                	mov    %edx,%ecx
+ 18f:	2b 4d cc             	sub    -0x34(%rbp),%ecx
+ 192:	0f 82 b5 01 00 00    	jb     34d <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x34d>
+ 198:	48 89 c2             	mov    %rax,%rdx
+ 19b:	48 09 fa             	or     %rdi,%rdx
+ 19e:	48 c1 ea 20          	shr    $0x20,%rdx
+ 1a2:	74 0c                	je     1b0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x1b0>
+ 1a4:	31 d2                	xor    %edx,%edx
+ 1a6:	48 f7 f7             	div    %rdi
+ 1a9:	49 89 c7             	mov    %rax,%r15
+ 1ac:	eb 09                	jmp    1b7 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x1b7>
+ 1ae:	66 90                	xchg   %ax,%ax
+ 1b0:	31 d2                	xor    %edx,%edx
+ 1b2:	f7 f7                	div    %edi
+ 1b4:	41 89 c7             	mov    %eax,%r15d
+ 1b7:	4c 89 c8             	mov    %r9,%rax
+ 1ba:	49 f7 e7             	mul    %r15
+ 1bd:	4d 89 f0             	mov    %r14,%r8
+ 1c0:	4d 0f af c7          	imul   %r15,%r8
+ 1c4:	49 01 d0             	add    %rdx,%r8
+ 1c7:	48 89 c2             	mov    %rax,%rdx
+ 1ca:	48 d3 e2             	shl    %cl,%rdx
+ 1cd:	f6 c1 40             	test   $0x40,%cl
+ 1d0:	48 89 d7             	mov    %rdx,%rdi
+ 1d3:	41 bd 00 00 00 00    	mov    $0x0,%r13d
+ 1d9:	49 0f 45 fd          	cmovne %r13,%rdi
+ 1dd:	49 0f a5 c0          	shld   %cl,%rax,%r8
+ 1e1:	f6 c1 40             	test   $0x40,%cl
+ 1e4:	4c 0f 45 c2          	cmovne %rdx,%r8
+ 1e8:	4c 89 f8             	mov    %r15,%rax
+ 1eb:	48 d3 e0             	shl    %cl,%rax
+ 1ee:	f6 c1 40             	test   $0x40,%cl
+ 1f1:	48 89 c2             	mov    %rax,%rdx
+ 1f4:	49 0f 45 d5          	cmovne %r13,%rdx
+ 1f8:	45 31 ed             	xor    %r13d,%r13d
+ 1fb:	4d 0f a5 fd          	shld   %cl,%r15,%r13
+ 1ff:	f6 c1 40             	test   $0x40,%cl
+ 202:	4c 0f 45 e8          	cmovne %rax,%r13
+ 206:	49 01 d2             	add    %rdx,%r10
+ 209:	4d 11 eb             	adc    %r13,%r11
+ 20c:	48 29 fe             	sub    %rdi,%rsi
+ 20f:	4c 19 c3             	sbb    %r8,%rbx
+ 212:	48 0f bd cb          	bsr    %rbx,%rcx
+ 216:	83 f1 3f             	xor    $0x3f,%ecx
+ 219:	b8 7f 00 00 00       	mov    $0x7f,%eax
+ 21e:	48 0f bd c6          	bsr    %rsi,%rax
+ 222:	83 f0 3f             	xor    $0x3f,%eax
+ 225:	83 c0 40             	add    $0x40,%eax
+ 228:	48 85 db             	test   %rbx,%rbx
+ 22b:	0f 45 c1             	cmovne %ecx,%eax
+ 22e:	41 39 c4             	cmp    %eax,%r12d
+ 231:	0f 86 42 01 00 00    	jbe    379 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x379>
+ 237:	83 f8 3f             	cmp    $0x3f,%eax
+ 23a:	48 8b 7d c0          	mov    -0x40(%rbp),%rdi
+ 23e:	0f 86 2c ff ff ff    	jbe    170 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x170>
+ 244:	48 89 f0             	mov    %rsi,%rax
+ 247:	4c 09 c8             	or     %r9,%rax
+ 24a:	48 c1 e8 20          	shr    $0x20,%rax
+ 24e:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+ 252:	0f 84 8d 01 00 00    	je     3e5 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x3e5>
+ 258:	48 89 f0             	mov    %rsi,%rax
+ 25b:	31 d2                	xor    %edx,%edx
+ 25d:	49 f7 f1             	div    %r9
+ 260:	48 89 d6             	mov    %rdx,%rsi
+ 263:	e9 86 01 00 00       	jmp    3ee <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x3ee>
+ 268:	89 d8                	mov    %ebx,%eax
+ 26a:	31 d2                	xor    %edx,%edx
+ 26c:	41 f7 f0             	div    %r8d
+ 26f:	89 c1                	mov    %eax,%ecx
+ 271:	48 0f a4 f2 20       	shld   $0x20,%rsi,%rdx
+ 276:	48 89 d0             	mov    %rdx,%rax
+ 279:	48 c1 e8 20          	shr    $0x20,%rax
+ 27d:	74 0d                	je     28c <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x28c>
+ 27f:	48 89 d0             	mov    %rdx,%rax
+ 282:	31 d2                	xor    %edx,%edx
+ 284:	49 f7 f0             	div    %r8
+ 287:	49 89 c3             	mov    %rax,%r11
+ 28a:	eb 0a                	jmp    296 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x296>
+ 28c:	89 d0                	mov    %edx,%eax
+ 28e:	31 d2                	xor    %edx,%edx
+ 290:	41 f7 f0             	div    %r8d
+ 293:	41 89 c3             	mov    %eax,%r11d
+ 296:	89 f0                	mov    %esi,%eax
+ 298:	48 c1 e2 20          	shl    $0x20,%rdx
+ 29c:	48 09 c2             	or     %rax,%rdx
+ 29f:	48 89 d0             	mov    %rdx,%rax
+ 2a2:	48 c1 e8 20          	shr    $0x20,%rax
+ 2a6:	74 0d                	je     2b5 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2b5>
+ 2a8:	48 89 d0             	mov    %rdx,%rax
+ 2ab:	31 d2                	xor    %edx,%edx
+ 2ad:	49 f7 f0             	div    %r8
+ 2b0:	48 89 d6             	mov    %rdx,%rsi
+ 2b3:	eb 09                	jmp    2be <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2be>
+ 2b5:	89 d0                	mov    %edx,%eax
+ 2b7:	31 d2                	xor    %edx,%edx
+ 2b9:	41 f7 f0             	div    %r8d
+ 2bc:	89 d6                	mov    %edx,%esi
+ 2be:	4d 89 da             	mov    %r11,%r10
+ 2c1:	49 c1 e2 20          	shl    $0x20,%r10
+ 2c5:	49 09 c2             	or     %rax,%r10
+ 2c8:	49 c1 eb 20          	shr    $0x20,%r11
+ 2cc:	49 09 cb             	or     %rcx,%r11
+ 2cf:	31 db                	xor    %ebx,%ebx
+ 2d1:	4c 89 17             	mov    %r10,(%rdi)
+ 2d4:	4c 89 5f 08          	mov    %r11,0x8(%rdi)
+ 2d8:	48 89 77 10          	mov    %rsi,0x10(%rdi)
+ 2dc:	48 89 5f 18          	mov    %rbx,0x18(%rdi)
+ 2e0:	48 89 f8             	mov    %rdi,%rax
+ 2e3:	48 83 c4 18          	add    $0x18,%rsp
+ 2e7:	5b                   	pop    %rbx
+ 2e8:	41 5c                	pop    %r12
+ 2ea:	41 5d                	pop    %r13
+ 2ec:	41 5e                	pop    %r14
+ 2ee:	41 5f                	pop    %r15
+ 2f0:	5d                   	pop    %rbp
+ 2f1:	c3                   	ret
+ 2f2:	31 d2                	xor    %edx,%edx
+ 2f4:	41 f7 f0             	div    %r8d
+ 2f7:	41 89 c2             	mov    %eax,%r10d
+ 2fa:	4c 89 c8             	mov    %r9,%rax
+ 2fd:	49 f7 e2             	mul    %r10
+ 300:	49 89 d3             	mov    %rdx,%r11
+ 303:	48 89 c1             	mov    %rax,%rcx
+ 306:	4c 89 f0             	mov    %r14,%rax
+ 309:	49 f7 e2             	mul    %r10
+ 30c:	4c 01 d8             	add    %r11,%rax
+ 30f:	48 83 d2 00          	adc    $0x0,%rdx
+ 313:	0f 95 c2             	setne  %dl
+ 316:	48 39 ce             	cmp    %rcx,%rsi
+ 319:	49 89 d8             	mov    %rbx,%r8
+ 31c:	49 19 c0             	sbb    %rax,%r8
+ 31f:	41 0f 92 c0          	setb   %r8b
+ 323:	41 08 d0             	or     %dl,%r8b
+ 326:	74 1a                	je     342 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x342>
+ 328:	49 ff ca             	dec    %r10
+ 32b:	45 31 db             	xor    %r11d,%r11d
+ 32e:	49 01 f1             	add    %rsi,%r9
+ 331:	49 11 de             	adc    %rbx,%r14
+ 334:	49 29 c9             	sub    %rcx,%r9
+ 337:	49 19 c6             	sbb    %rax,%r14
+ 33a:	4c 89 ce             	mov    %r9,%rsi
+ 33d:	4c 89 f3             	mov    %r14,%rbx
+ 340:	eb 8f                	jmp    2d1 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2d1>
+ 342:	45 31 db             	xor    %r11d,%r11d
+ 345:	48 29 ce             	sub    %rcx,%rsi
+ 348:	48 19 c3             	sbb    %rax,%rbx
+ 34b:	eb 84                	jmp    2d1 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2d1>
+ 34d:	4d 89 cf             	mov    %r9,%r15
+ 350:	89 d1                	mov    %edx,%ecx
+ 352:	4d 0f ad f7          	shrd   %cl,%r14,%r15
+ 356:	4d 89 f0             	mov    %r14,%r8
+ 359:	49 d3 e8             	shr    %cl,%r8
+ 35c:	f6 c2 40             	test   $0x40,%dl
+ 35f:	4d 0f 44 c7          	cmove  %r15,%r8
+ 363:	48 89 c1             	mov    %rax,%rcx
+ 366:	4c 09 c1             	or     %r8,%rcx
+ 369:	48 c1 e9 20          	shr    $0x20,%rcx
+ 36d:	74 2c                	je     39b <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x39b>
+ 36f:	31 d2                	xor    %edx,%edx
+ 371:	49 f7 f0             	div    %r8
+ 374:	48 89 c1             	mov    %rax,%rcx
+ 377:	eb 29                	jmp    3a2 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x3a2>
+ 379:	4c 39 ce             	cmp    %r9,%rsi
+ 37c:	48 89 d8             	mov    %rbx,%rax
+ 37f:	4c 19 f0             	sbb    %r14,%rax
+ 382:	72 0e                	jb     392 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x392>
+ 384:	49 83 c2 01          	add    $0x1,%r10
+ 388:	49 83 d3 00          	adc    $0x0,%r11
+ 38c:	4c 29 ce             	sub    %r9,%rsi
+ 38f:	4c 19 f3             	sbb    %r14,%rbx
+ 392:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+ 396:	e9 36 ff ff ff       	jmp    2d1 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2d1>
+ 39b:	31 d2                	xor    %edx,%edx
+ 39d:	41 f7 f0             	div    %r8d
+ 3a0:	89 c1                	mov    %eax,%ecx
+ 3a2:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+ 3a6:	4c 89 c8             	mov    %r9,%rax
+ 3a9:	48 f7 e1             	mul    %rcx
+ 3ac:	4d 89 f0             	mov    %r14,%r8
+ 3af:	4c 0f af c1          	imul   %rcx,%r8
+ 3b3:	49 01 d0             	add    %rdx,%r8
+ 3b6:	48 39 c6             	cmp    %rax,%rsi
+ 3b9:	48 89 da             	mov    %rbx,%rdx
+ 3bc:	4c 19 c2             	sbb    %r8,%rdx
+ 3bf:	73 12                	jae    3d3 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x3d3>
+ 3c1:	48 ff c9             	dec    %rcx
+ 3c4:	49 01 ca             	add    %rcx,%r10
+ 3c7:	49 83 d3 00          	adc    $0x0,%r11
+ 3cb:	4c 01 ce             	add    %r9,%rsi
+ 3ce:	4c 11 f3             	adc    %r14,%rbx
+ 3d1:	eb 07                	jmp    3da <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x3da>
+ 3d3:	49 01 ca             	add    %rcx,%r10
+ 3d6:	49 83 d3 00          	adc    $0x0,%r11
+ 3da:	48 29 c6             	sub    %rax,%rsi
+ 3dd:	4c 19 c3             	sbb    %r8,%rbx
+ 3e0:	e9 ec fe ff ff       	jmp    2d1 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2d1>
+ 3e5:	89 f0                	mov    %esi,%eax
+ 3e7:	31 d2                	xor    %edx,%edx
+ 3e9:	41 f7 f1             	div    %r9d
+ 3ec:	89 d6                	mov    %edx,%esi
+ 3ee:	49 01 c2             	add    %rax,%r10
+ 3f1:	49 83 d3 00          	adc    $0x0,%r11
+ 3f5:	e9 d5 fe ff ff       	jmp    2cf <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem+0x2cf>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	73 07                	jae    10 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x10>
+   9:	31 c0                	xor    %eax,%eax
+   b:	e9 2f 01 00 00       	jmp    13f <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x13f>
+  10:	48 0f bd ce          	bsr    %rsi,%rcx
+  14:	48 83 f1 3f          	xor    $0x3f,%rcx
+  18:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  1d:	48 0f bd c7          	bsr    %rdi,%rax
+  21:	48 83 f0 3f          	xor    $0x3f,%rax
+  25:	48 29 c1             	sub    %rax,%rcx
+  28:	89 c8                	mov    %ecx,%eax
+  2a:	49 89 f0             	mov    %rsi,%r8
+  2d:	49 d3 e0             	shl    %cl,%r8
+  30:	4c 39 c7             	cmp    %r8,%rdi
+  33:	48 83 d8 00          	sbb    $0x0,%rax
+  37:	49 89 f1             	mov    %rsi,%r9
+  3a:	89 c1                	mov    %eax,%ecx
+  3c:	49 d3 e1             	shl    %cl,%r9
+  3f:	4c 29 cf             	sub    %r9,%rdi
+  42:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  48:	49 d3 e0             	shl    %cl,%r8
+  4b:	48 39 f7             	cmp    %rsi,%rdi
+  4e:	73 08                	jae    58 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x58>
+  50:	4c 89 c0             	mov    %r8,%rax
+  53:	e9 e7 00 00 00       	jmp    13f <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x13f>
+  58:	49 89 c2             	mov    %rax,%r10
+  5b:	4d 85 c9             	test   %r9,%r9
+  5e:	78 08                	js     68 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x68>
+  60:	4c 89 c0             	mov    %r8,%rax
+  63:	4c 89 d1             	mov    %r10,%rcx
+  66:	eb 31                	jmp    99 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x99>
+  68:	4c 89 d1             	mov    %r10,%rcx
+  6b:	48 ff c9             	dec    %rcx
+  6e:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  74:	49 d3 e2             	shl    %cl,%r10
+  77:	49 d1 e9             	shr    $1,%r9
+  7a:	31 c0                	xor    %eax,%eax
+  7c:	49 89 fb             	mov    %rdi,%r11
+  7f:	4d 29 cb             	sub    %r9,%r11
+  82:	49 0f 49 c2          	cmovns %r10,%rax
+  86:	49 0f 49 fb          	cmovns %r11,%rdi
+  8a:	4c 09 c0             	or     %r8,%rax
+  8d:	4d 89 d0             	mov    %r10,%r8
+  90:	48 39 f7             	cmp    %rsi,%rdi
+  93:	0f 82 a6 00 00 00    	jb     13f <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x13f>
+  99:	49 ff c8             	dec    %r8
+  9c:	48 85 c9             	test   %rcx,%rcx
+  9f:	0f 84 91 00 00 00    	je     136 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x136>
+  a5:	48 89 ce             	mov    %rcx,%rsi
+  a8:	48 83 e6 03          	and    $0x3,%rsi
+  ac:	0f 84 97 00 00 00    	je     149 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x149>
+  b2:	45 31 d2             	xor    %r10d,%r10d
+  b5:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  c0:	49 89 fb             	mov    %rdi,%r11
+  c3:	49 01 fb             	add    %rdi,%r11
+  c6:	4c 89 df             	mov    %r11,%rdi
+  c9:	4c 29 cf             	sub    %r9,%rdi
+  cc:	48 ff c7             	inc    %rdi
+  cf:	49 0f 48 fb          	cmovs  %r11,%rdi
+  d3:	49 ff c2             	inc    %r10
+  d6:	4c 39 d6             	cmp    %r10,%rsi
+  d9:	75 e5                	jne    c0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0xc0>
+  db:	48 89 ce             	mov    %rcx,%rsi
+  de:	4c 29 d6             	sub    %r10,%rsi
+  e1:	48 83 f9 04          	cmp    $0x4,%rcx
+  e5:	72 4f                	jb     136 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x136>
+  e7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  f0:	48 01 ff             	add    %rdi,%rdi
+  f3:	49 89 fa             	mov    %rdi,%r10
+  f6:	4d 29 ca             	sub    %r9,%r10
+  f9:	49 ff c2             	inc    %r10
+  fc:	4c 0f 48 d7          	cmovs  %rdi,%r10
+ 100:	4d 01 d2             	add    %r10,%r10
+ 103:	4c 89 d7             	mov    %r10,%rdi
+ 106:	4c 29 cf             	sub    %r9,%rdi
+ 109:	48 ff c7             	inc    %rdi
+ 10c:	49 0f 48 fa          	cmovs  %r10,%rdi
+ 110:	48 01 ff             	add    %rdi,%rdi
+ 113:	49 89 fa             	mov    %rdi,%r10
+ 116:	4d 29 ca             	sub    %r9,%r10
+ 119:	49 ff c2             	inc    %r10
+ 11c:	4c 0f 48 d7          	cmovs  %rdi,%r10
+ 120:	4d 01 d2             	add    %r10,%r10
+ 123:	4c 89 d7             	mov    %r10,%rdi
+ 126:	4c 29 cf             	sub    %r9,%rdi
+ 129:	48 ff c7             	inc    %rdi
+ 12c:	49 0f 48 fa          	cmovs  %r10,%rdi
+ 130:	48 83 c6 fc          	add    $0xfffffffffffffffc,%rsi
+ 134:	75 ba                	jne    f0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0xf0>
+ 136:	49 21 f8             	and    %rdi,%r8
+ 139:	4c 09 c0             	or     %r8,%rax
+ 13c:	48 d3 ef             	shr    %cl,%rdi
+ 13f:	48 85 d2             	test   %rdx,%rdx
+ 142:	74 03                	je     147 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x147>
+ 144:	48 89 3a             	mov    %rdi,(%rdx)
+ 147:	5d                   	pop    %rbp
+ 148:	c3                   	ret
+ 149:	48 89 ce             	mov    %rcx,%rsi
+ 14c:	48 83 f9 04          	cmp    $0x4,%rcx
+ 150:	73 9e                	jae    f0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0xf0>
+ 152:	eb e2                	jmp    136 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmoddi4+0x136>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	31 c0                	xor    %eax,%eax
+   6:	39 f7                	cmp    %esi,%edi
+   8:	0f 82 0c 01 00 00    	jb     11a <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x11a>
+   e:	0f bd ce             	bsr    %esi,%ecx
+  11:	83 f1 1f             	xor    $0x1f,%ecx
+  14:	b8 3f 00 00 00       	mov    $0x3f,%eax
+  19:	0f bd c7             	bsr    %edi,%eax
+  1c:	83 f0 1f             	xor    $0x1f,%eax
+  1f:	29 c1                	sub    %eax,%ecx
+  21:	89 f0                	mov    %esi,%eax
+  23:	d3 e0                	shl    %cl,%eax
+  25:	39 c7                	cmp    %eax,%edi
+  27:	48 83 d9 00          	sbb    $0x0,%rcx
+  2b:	41 89 f1             	mov    %esi,%r9d
+  2e:	41 d3 e1             	shl    %cl,%r9d
+  31:	44 29 cf             	sub    %r9d,%edi
+  34:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  3a:	41 d3 e0             	shl    %cl,%r8d
+  3d:	39 f7                	cmp    %esi,%edi
+  3f:	73 08                	jae    49 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x49>
+  41:	44 89 c0             	mov    %r8d,%eax
+  44:	e9 d1 00 00 00       	jmp    11a <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x11a>
+  49:	45 85 c9             	test   %r9d,%r9d
+  4c:	78 05                	js     53 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x53>
+  4e:	44 89 c0             	mov    %r8d,%eax
+  51:	eb 2d                	jmp    80 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x80>
+  53:	48 ff c9             	dec    %rcx
+  56:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  5c:	41 d3 e2             	shl    %cl,%r10d
+  5f:	41 d1 e9             	shr    $1,%r9d
+  62:	31 c0                	xor    %eax,%eax
+  64:	41 89 fb             	mov    %edi,%r11d
+  67:	45 29 cb             	sub    %r9d,%r11d
+  6a:	41 0f 49 c2          	cmovns %r10d,%eax
+  6e:	41 0f 49 fb          	cmovns %r11d,%edi
+  72:	44 09 c0             	or     %r8d,%eax
+  75:	45 89 d0             	mov    %r10d,%r8d
+  78:	39 f7                	cmp    %esi,%edi
+  7a:	0f 82 9a 00 00 00    	jb     11a <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x11a>
+  80:	41 ff c8             	dec    %r8d
+  83:	48 85 c9             	test   %rcx,%rcx
+  86:	0f 84 86 00 00 00    	je     112 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x112>
+  8c:	48 89 ce             	mov    %rcx,%rsi
+  8f:	48 83 e6 03          	and    $0x3,%rsi
+  93:	0f 84 8a 00 00 00    	je     123 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x123>
+  99:	45 31 d2             	xor    %r10d,%r10d
+  9c:	0f 1f 40 00          	nopl   0x0(%rax)
+  a0:	41 89 fb             	mov    %edi,%r11d
+  a3:	41 01 fb             	add    %edi,%r11d
+  a6:	44 89 df             	mov    %r11d,%edi
+  a9:	44 29 cf             	sub    %r9d,%edi
+  ac:	ff c7                	inc    %edi
+  ae:	41 0f 48 fb          	cmovs  %r11d,%edi
+  b2:	49 ff c2             	inc    %r10
+  b5:	4c 39 d6             	cmp    %r10,%rsi
+  b8:	75 e6                	jne    a0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0xa0>
+  ba:	48 89 ce             	mov    %rcx,%rsi
+  bd:	4c 29 d6             	sub    %r10,%rsi
+  c0:	48 83 f9 04          	cmp    $0x4,%rcx
+  c4:	72 4c                	jb     112 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x112>
+  c6:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+  d0:	01 ff                	add    %edi,%edi
+  d2:	41 89 fa             	mov    %edi,%r10d
+  d5:	45 29 ca             	sub    %r9d,%r10d
+  d8:	41 ff c2             	inc    %r10d
+  db:	44 0f 48 d7          	cmovs  %edi,%r10d
+  df:	45 01 d2             	add    %r10d,%r10d
+  e2:	44 89 d7             	mov    %r10d,%edi
+  e5:	44 29 cf             	sub    %r9d,%edi
+  e8:	ff c7                	inc    %edi
+  ea:	41 0f 48 fa          	cmovs  %r10d,%edi
+  ee:	01 ff                	add    %edi,%edi
+  f0:	41 89 fa             	mov    %edi,%r10d
+  f3:	45 29 ca             	sub    %r9d,%r10d
+  f6:	41 ff c2             	inc    %r10d
+  f9:	44 0f 48 d7          	cmovs  %edi,%r10d
+  fd:	45 01 d2             	add    %r10d,%r10d
+ 100:	44 89 d7             	mov    %r10d,%edi
+ 103:	44 29 cf             	sub    %r9d,%edi
+ 106:	ff c7                	inc    %edi
+ 108:	41 0f 48 fa          	cmovs  %r10d,%edi
+ 10c:	48 83 c6 fc          	add    $0xfffffffffffffffc,%rsi
+ 110:	75 be                	jne    d0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0xd0>
+ 112:	41 21 f8             	and    %edi,%r8d
+ 115:	44 09 c0             	or     %r8d,%eax
+ 118:	d3 ef                	shr    %cl,%edi
+ 11a:	48 85 d2             	test   %rdx,%rdx
+ 11d:	74 02                	je     121 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x121>
+ 11f:	89 3a                	mov    %edi,(%rdx)
+ 121:	5d                   	pop    %rbp
+ 122:	c3                   	ret
+ 123:	48 89 ce             	mov    %rcx,%rsi
+ 126:	48 83 f9 04          	cmp    $0x4,%rcx
+ 12a:	73 a4                	jae    d0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0xd0>
+ 12c:	eb e4                	jmp    112 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodsi4+0x112>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodti4:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodti4>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	53                   	push   %rbx
+   5:	48 83 ec 28          	sub    $0x28,%rsp
+   9:	4c 89 c3             	mov    %r8,%rbx
+   c:	49 89 c8             	mov    %rcx,%r8
+   f:	48 89 d1             	mov    %rdx,%rcx
+  12:	48 89 f2             	mov    %rsi,%rdx
+  15:	48 89 fe             	mov    %rdi,%rsi
+  18:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1a: R_X86_64_64	.ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem
+  22:	48 8d 7d d0          	lea    -0x30(%rbp),%rdi
+  26:	ff d0                	call   *%rax
+  28:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+  2c:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
+  30:	48 85 db             	test   %rbx,%rbx
+  33:	74 0f                	je     44 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv12___udivmodti4+0x44>
+  35:	48 8b 4d e8          	mov    -0x18(%rbp),%rcx
+  39:	48 8b 75 e0          	mov    -0x20(%rbp),%rsi
+  3d:	48 89 33             	mov    %rsi,(%rbx)
+  40:	48 89 4b 08          	mov    %rcx,0x8(%rbx)
+  44:	48 83 c4 28          	add    $0x28,%rsp
+  48:	5b                   	pop    %rbx
+  49:	5d                   	pop    %rbp
+  4a:	c3                   	ret
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	73 04                	jae    d <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0xd>
+   9:	31 c0                	xor    %eax,%eax
+   b:	5d                   	pop    %rbp
+   c:	c3                   	ret
+   d:	48 0f bd ce          	bsr    %rsi,%rcx
+  11:	48 83 f1 3f          	xor    $0x3f,%rcx
+  15:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  1a:	48 0f bd c7          	bsr    %rdi,%rax
+  1e:	48 83 f0 3f          	xor    $0x3f,%rax
+  22:	48 29 c1             	sub    %rax,%rcx
+  25:	89 ca                	mov    %ecx,%edx
+  27:	48 89 f0             	mov    %rsi,%rax
+  2a:	48 d3 e0             	shl    %cl,%rax
+  2d:	48 39 c7             	cmp    %rax,%rdi
+  30:	48 83 da 00          	sbb    $0x0,%rdx
+  34:	49 89 f1             	mov    %rsi,%r9
+  37:	89 d1                	mov    %edx,%ecx
+  39:	49 d3 e1             	shl    %cl,%r9
+  3c:	4c 29 cf             	sub    %r9,%rdi
+  3f:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  45:	49 d3 e0             	shl    %cl,%r8
+  48:	48 39 f7             	cmp    %rsi,%rdi
+  4b:	73 05                	jae    52 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x52>
+  4d:	4c 89 c0             	mov    %r8,%rax
+  50:	5d                   	pop    %rbp
+  51:	c3                   	ret
+  52:	4d 85 c9             	test   %r9,%r9
+  55:	78 05                	js     5c <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x5c>
+  57:	4c 89 c0             	mov    %r8,%rax
+  5a:	eb 30                	jmp    8c <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x8c>
+  5c:	48 ff ca             	dec    %rdx
+  5f:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  65:	89 d1                	mov    %edx,%ecx
+  67:	49 d3 e2             	shl    %cl,%r10
+  6a:	49 d1 e9             	shr    $1,%r9
+  6d:	31 c0                	xor    %eax,%eax
+  6f:	48 89 f9             	mov    %rdi,%rcx
+  72:	4c 29 c9             	sub    %r9,%rcx
+  75:	49 0f 49 c2          	cmovns %r10,%rax
+  79:	48 0f 49 f9          	cmovns %rcx,%rdi
+  7d:	4c 09 c0             	or     %r8,%rax
+  80:	4d 89 d0             	mov    %r10,%r8
+  83:	48 39 f7             	cmp    %rsi,%rdi
+  86:	0f 82 a0 00 00 00    	jb     12c <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x12c>
+  8c:	49 ff c8             	dec    %r8
+  8f:	48 85 d2             	test   %rdx,%rdx
+  92:	0f 84 8e 00 00 00    	je     126 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x126>
+  98:	48 89 d1             	mov    %rdx,%rcx
+  9b:	48 83 e1 03          	and    $0x3,%rcx
+  9f:	0f 84 89 00 00 00    	je     12e <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x12e>
+  a5:	31 f6                	xor    %esi,%esi
+  a7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  b0:	49 89 fa             	mov    %rdi,%r10
+  b3:	49 01 fa             	add    %rdi,%r10
+  b6:	4c 89 d7             	mov    %r10,%rdi
+  b9:	4c 29 cf             	sub    %r9,%rdi
+  bc:	48 ff c7             	inc    %rdi
+  bf:	49 0f 48 fa          	cmovs  %r10,%rdi
+  c3:	48 ff c6             	inc    %rsi
+  c6:	48 39 f1             	cmp    %rsi,%rcx
+  c9:	75 e5                	jne    b0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0xb0>
+  cb:	48 89 d1             	mov    %rdx,%rcx
+  ce:	48 29 f1             	sub    %rsi,%rcx
+  d1:	48 83 fa 04          	cmp    $0x4,%rdx
+  d5:	72 4f                	jb     126 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x126>
+  d7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  e0:	48 01 ff             	add    %rdi,%rdi
+  e3:	48 89 fa             	mov    %rdi,%rdx
+  e6:	4c 29 ca             	sub    %r9,%rdx
+  e9:	48 ff c2             	inc    %rdx
+  ec:	48 0f 48 d7          	cmovs  %rdi,%rdx
+  f0:	48 01 d2             	add    %rdx,%rdx
+  f3:	48 89 d6             	mov    %rdx,%rsi
+  f6:	4c 29 ce             	sub    %r9,%rsi
+  f9:	48 ff c6             	inc    %rsi
+  fc:	48 0f 48 f2          	cmovs  %rdx,%rsi
+ 100:	48 01 f6             	add    %rsi,%rsi
+ 103:	48 89 f2             	mov    %rsi,%rdx
+ 106:	4c 29 ca             	sub    %r9,%rdx
+ 109:	48 ff c2             	inc    %rdx
+ 10c:	48 0f 48 d6          	cmovs  %rsi,%rdx
+ 110:	48 01 d2             	add    %rdx,%rdx
+ 113:	48 89 d7             	mov    %rdx,%rdi
+ 116:	4c 29 cf             	sub    %r9,%rdi
+ 119:	48 ff c7             	inc    %rdi
+ 11c:	48 0f 48 fa          	cmovs  %rdx,%rdi
+ 120:	48 83 c1 fc          	add    $0xfffffffffffffffc,%rcx
+ 124:	75 ba                	jne    e0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0xe0>
+ 126:	4c 21 c7             	and    %r8,%rdi
+ 129:	48 09 f8             	or     %rdi,%rax
+ 12c:	5d                   	pop    %rbp
+ 12d:	c3                   	ret
+ 12e:	48 89 d1             	mov    %rdx,%rcx
+ 131:	48 83 fa 04          	cmp    $0x4,%rdx
+ 135:	73 a9                	jae    e0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0xe0>
+ 137:	eb ed                	jmp    126 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivdi3+0x126>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	31 c0                	xor    %eax,%eax
+   6:	39 f7                	cmp    %esi,%edi
+   8:	0f 82 ec 00 00 00    	jb     fa <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xfa>
+   e:	0f bd ce             	bsr    %esi,%ecx
+  11:	83 f1 1f             	xor    $0x1f,%ecx
+  14:	b8 3f 00 00 00       	mov    $0x3f,%eax
+  19:	0f bd c7             	bsr    %edi,%eax
+  1c:	83 f0 1f             	xor    $0x1f,%eax
+  1f:	29 c1                	sub    %eax,%ecx
+  21:	89 f0                	mov    %esi,%eax
+  23:	d3 e0                	shl    %cl,%eax
+  25:	39 c7                	cmp    %eax,%edi
+  27:	48 83 d9 00          	sbb    $0x0,%rcx
+  2b:	41 89 f0             	mov    %esi,%r8d
+  2e:	41 d3 e0             	shl    %cl,%r8d
+  31:	44 29 c7             	sub    %r8d,%edi
+  34:	ba 01 00 00 00       	mov    $0x1,%edx
+  39:	d3 e2                	shl    %cl,%edx
+  3b:	39 f7                	cmp    %esi,%edi
+  3d:	73 04                	jae    43 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0x43>
+  3f:	89 d0                	mov    %edx,%eax
+  41:	5d                   	pop    %rbp
+  42:	c3                   	ret
+  43:	45 85 c0             	test   %r8d,%r8d
+  46:	78 04                	js     4c <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0x4c>
+  48:	89 d0                	mov    %edx,%eax
+  4a:	eb 2c                	jmp    78 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0x78>
+  4c:	48 ff c9             	dec    %rcx
+  4f:	41 b9 01 00 00 00    	mov    $0x1,%r9d
+  55:	41 d3 e1             	shl    %cl,%r9d
+  58:	41 d1 e8             	shr    $1,%r8d
+  5b:	31 c0                	xor    %eax,%eax
+  5d:	41 89 fa             	mov    %edi,%r10d
+  60:	45 29 c2             	sub    %r8d,%r10d
+  63:	41 0f 49 c1          	cmovns %r9d,%eax
+  67:	41 0f 49 fa          	cmovns %r10d,%edi
+  6b:	09 d0                	or     %edx,%eax
+  6d:	44 89 ca             	mov    %r9d,%edx
+  70:	39 f7                	cmp    %esi,%edi
+  72:	0f 82 82 00 00 00    	jb     fa <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xfa>
+  78:	ff ca                	dec    %edx
+  7a:	48 85 c9             	test   %rcx,%rcx
+  7d:	74 77                	je     f6 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xf6>
+  7f:	48 89 ce             	mov    %rcx,%rsi
+  82:	48 83 e6 03          	and    $0x3,%rsi
+  86:	74 74                	je     fc <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xfc>
+  88:	45 31 c9             	xor    %r9d,%r9d
+  8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  90:	41 89 fa             	mov    %edi,%r10d
+  93:	41 01 fa             	add    %edi,%r10d
+  96:	44 89 d7             	mov    %r10d,%edi
+  99:	44 29 c7             	sub    %r8d,%edi
+  9c:	ff c7                	inc    %edi
+  9e:	41 0f 48 fa          	cmovs  %r10d,%edi
+  a2:	49 ff c1             	inc    %r9
+  a5:	4c 39 ce             	cmp    %r9,%rsi
+  a8:	75 e6                	jne    90 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0x90>
+  aa:	48 89 ce             	mov    %rcx,%rsi
+  ad:	4c 29 ce             	sub    %r9,%rsi
+  b0:	48 83 f9 04          	cmp    $0x4,%rcx
+  b4:	72 40                	jb     f6 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xf6>
+  b6:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+  c0:	01 ff                	add    %edi,%edi
+  c2:	89 f9                	mov    %edi,%ecx
+  c4:	44 29 c1             	sub    %r8d,%ecx
+  c7:	ff c1                	inc    %ecx
+  c9:	0f 48 cf             	cmovs  %edi,%ecx
+  cc:	01 c9                	add    %ecx,%ecx
+  ce:	89 cf                	mov    %ecx,%edi
+  d0:	44 29 c7             	sub    %r8d,%edi
+  d3:	ff c7                	inc    %edi
+  d5:	0f 48 f9             	cmovs  %ecx,%edi
+  d8:	01 ff                	add    %edi,%edi
+  da:	89 f9                	mov    %edi,%ecx
+  dc:	44 29 c1             	sub    %r8d,%ecx
+  df:	ff c1                	inc    %ecx
+  e1:	0f 48 cf             	cmovs  %edi,%ecx
+  e4:	01 c9                	add    %ecx,%ecx
+  e6:	89 cf                	mov    %ecx,%edi
+  e8:	44 29 c7             	sub    %r8d,%edi
+  eb:	ff c7                	inc    %edi
+  ed:	0f 48 f9             	cmovs  %ecx,%edi
+  f0:	48 83 c6 fc          	add    $0xfffffffffffffffc,%rsi
+  f4:	75 ca                	jne    c0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xc0>
+  f6:	21 d7                	and    %edx,%edi
+  f8:	09 f8                	or     %edi,%eax
+  fa:	5d                   	pop    %rbp
+  fb:	c3                   	ret
+  fc:	48 89 ce             	mov    %rcx,%rsi
+  ff:	48 83 f9 04          	cmp    $0x4,%rcx
+ 103:	73 bb                	jae    c0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xc0>
+ 105:	eb ef                	jmp    f6 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivsi3+0xf6>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivti3:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___udivti3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	49 89 c8             	mov    %rcx,%r8
+   b:	48 89 d1             	mov    %rdx,%rcx
+   e:	48 89 f2             	mov    %rsi,%rdx
+  11:	48 89 fe             	mov    %rdi,%rsi
+  14:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16: R_X86_64_64	.ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem
+  1e:	48 8d 7d e0          	lea    -0x20(%rbp),%rdi
+  22:	ff d0                	call   *%rax
+  24:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+  28:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+  2c:	48 83 c4 20          	add    $0x20,%rsp
+  30:	5d                   	pop    %rbp
+  31:	c3                   	ret
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	0f 82 01 01 00 00    	jb     10e <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x10e>
+   d:	48 0f bd ce          	bsr    %rsi,%rcx
+  11:	48 83 f1 3f          	xor    $0x3f,%rcx
+  15:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  1a:	48 0f bd c7          	bsr    %rdi,%rax
+  1e:	48 83 f0 3f          	xor    $0x3f,%rax
+  22:	48 29 c1             	sub    %rax,%rcx
+  25:	89 c8                	mov    %ecx,%eax
+  27:	48 89 f2             	mov    %rsi,%rdx
+  2a:	48 d3 e2             	shl    %cl,%rdx
+  2d:	48 39 d7             	cmp    %rdx,%rdi
+  30:	48 83 d8 00          	sbb    $0x0,%rax
+  34:	48 89 f2             	mov    %rsi,%rdx
+  37:	89 c1                	mov    %eax,%ecx
+  39:	48 d3 e2             	shl    %cl,%rdx
+  3c:	48 29 d7             	sub    %rdx,%rdi
+  3f:	48 39 f7             	cmp    %rsi,%rdi
+  42:	0f 82 c6 00 00 00    	jb     10e <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x10e>
+  48:	48 85 d2             	test   %rdx,%rdx
+  4b:	78 0d                	js     5a <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x5a>
+  4d:	49 89 f8             	mov    %rdi,%r8
+  50:	48 85 c0             	test   %rax,%rax
+  53:	75 27                	jne    7c <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x7c>
+  55:	e9 ac 00 00 00       	jmp    106 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x106>
+  5a:	48 d1 ea             	shr    $1,%rdx
+  5d:	49 89 f8             	mov    %rdi,%r8
+  60:	49 29 d0             	sub    %rdx,%r8
+  63:	4c 0f 48 c7          	cmovs  %rdi,%r8
+  67:	49 39 f0             	cmp    %rsi,%r8
+  6a:	0f 82 9b 00 00 00    	jb     10b <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x10b>
+  70:	48 ff c8             	dec    %rax
+  73:	48 85 c0             	test   %rax,%rax
+  76:	0f 84 8a 00 00 00    	je     106 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x106>
+  7c:	48 89 c1             	mov    %rax,%rcx
+  7f:	48 83 e1 03          	and    $0x3,%rcx
+  83:	0f 84 8a 00 00 00    	je     113 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x113>
+  89:	31 f6                	xor    %esi,%esi
+  8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  90:	4c 89 c7             	mov    %r8,%rdi
+  93:	4c 01 c7             	add    %r8,%rdi
+  96:	49 89 f8             	mov    %rdi,%r8
+  99:	49 29 d0             	sub    %rdx,%r8
+  9c:	49 ff c0             	inc    %r8
+  9f:	4c 0f 48 c7          	cmovs  %rdi,%r8
+  a3:	48 ff c6             	inc    %rsi
+  a6:	48 39 f1             	cmp    %rsi,%rcx
+  a9:	75 e5                	jne    90 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x90>
+  ab:	48 89 c1             	mov    %rax,%rcx
+  ae:	48 29 f1             	sub    %rsi,%rcx
+  b1:	48 83 f8 04          	cmp    $0x4,%rax
+  b5:	72 4f                	jb     106 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x106>
+  b7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  c0:	4d 01 c0             	add    %r8,%r8
+  c3:	4c 89 c6             	mov    %r8,%rsi
+  c6:	48 29 d6             	sub    %rdx,%rsi
+  c9:	48 ff c6             	inc    %rsi
+  cc:	49 0f 48 f0          	cmovs  %r8,%rsi
+  d0:	48 01 f6             	add    %rsi,%rsi
+  d3:	48 89 f7             	mov    %rsi,%rdi
+  d6:	48 29 d7             	sub    %rdx,%rdi
+  d9:	48 ff c7             	inc    %rdi
+  dc:	48 0f 48 fe          	cmovs  %rsi,%rdi
+  e0:	48 01 ff             	add    %rdi,%rdi
+  e3:	48 89 fe             	mov    %rdi,%rsi
+  e6:	48 29 d6             	sub    %rdx,%rsi
+  e9:	48 ff c6             	inc    %rsi
+  ec:	48 0f 48 f7          	cmovs  %rdi,%rsi
+  f0:	48 01 f6             	add    %rsi,%rsi
+  f3:	49 89 f0             	mov    %rsi,%r8
+  f6:	49 29 d0             	sub    %rdx,%r8
+  f9:	49 ff c0             	inc    %r8
+  fc:	4c 0f 48 c6          	cmovs  %rsi,%r8
+ 100:	48 83 c1 fc          	add    $0xfffffffffffffffc,%rcx
+ 104:	75 ba                	jne    c0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0xc0>
+ 106:	89 c1                	mov    %eax,%ecx
+ 108:	49 d3 e8             	shr    %cl,%r8
+ 10b:	4c 89 c7             	mov    %r8,%rdi
+ 10e:	48 89 f8             	mov    %rdi,%rax
+ 111:	5d                   	pop    %rbp
+ 112:	c3                   	ret
+ 113:	48 89 c1             	mov    %rax,%rcx
+ 116:	48 83 f8 04          	cmp    $0x4,%rax
+ 11a:	73 a4                	jae    c0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0xc0>
+ 11c:	eb e8                	jmp    106 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umoddi3+0x106>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	89 f8                	mov    %edi,%eax
+   6:	39 f7                	cmp    %esi,%edi
+   8:	0f 82 c8 00 00 00    	jb     d6 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd6>
+   e:	0f bd ce             	bsr    %esi,%ecx
+  11:	83 f1 1f             	xor    $0x1f,%ecx
+  14:	ba 3f 00 00 00       	mov    $0x3f,%edx
+  19:	0f bd d0             	bsr    %eax,%edx
+  1c:	83 f2 1f             	xor    $0x1f,%edx
+  1f:	29 d1                	sub    %edx,%ecx
+  21:	89 f2                	mov    %esi,%edx
+  23:	d3 e2                	shl    %cl,%edx
+  25:	39 d0                	cmp    %edx,%eax
+  27:	48 83 d9 00          	sbb    $0x0,%rcx
+  2b:	89 f2                	mov    %esi,%edx
+  2d:	d3 e2                	shl    %cl,%edx
+  2f:	29 d0                	sub    %edx,%eax
+  31:	39 f0                	cmp    %esi,%eax
+  33:	0f 82 9d 00 00 00    	jb     d6 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd6>
+  39:	85 d2                	test   %edx,%edx
+  3b:	78 0c                	js     49 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0x49>
+  3d:	89 c7                	mov    %eax,%edi
+  3f:	48 85 c9             	test   %rcx,%rcx
+  42:	75 1a                	jne    5e <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0x5e>
+  44:	e9 89 00 00 00       	jmp    d2 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd2>
+  49:	d1 ea                	shr    $1,%edx
+  4b:	89 c7                	mov    %eax,%edi
+  4d:	29 d7                	sub    %edx,%edi
+  4f:	0f 48 f8             	cmovs  %eax,%edi
+  52:	39 f7                	cmp    %esi,%edi
+  54:	72 7e                	jb     d4 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd4>
+  56:	48 ff c9             	dec    %rcx
+  59:	48 85 c9             	test   %rcx,%rcx
+  5c:	74 74                	je     d2 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd2>
+  5e:	48 89 c8             	mov    %rcx,%rax
+  61:	48 83 e0 03          	and    $0x3,%rax
+  65:	74 71                	je     d8 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd8>
+  67:	31 f6                	xor    %esi,%esi
+  69:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+  70:	41 89 f8             	mov    %edi,%r8d
+  73:	41 01 f8             	add    %edi,%r8d
+  76:	44 89 c7             	mov    %r8d,%edi
+  79:	29 d7                	sub    %edx,%edi
+  7b:	ff c7                	inc    %edi
+  7d:	41 0f 48 f8          	cmovs  %r8d,%edi
+  81:	48 ff c6             	inc    %rsi
+  84:	48 39 f0             	cmp    %rsi,%rax
+  87:	75 e7                	jne    70 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0x70>
+  89:	48 89 c8             	mov    %rcx,%rax
+  8c:	48 29 f0             	sub    %rsi,%rax
+  8f:	48 83 f9 04          	cmp    $0x4,%rcx
+  93:	72 3d                	jb     d2 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd2>
+  95:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  a0:	01 ff                	add    %edi,%edi
+  a2:	89 fe                	mov    %edi,%esi
+  a4:	29 d6                	sub    %edx,%esi
+  a6:	ff c6                	inc    %esi
+  a8:	0f 48 f7             	cmovs  %edi,%esi
+  ab:	01 f6                	add    %esi,%esi
+  ad:	89 f7                	mov    %esi,%edi
+  af:	29 d7                	sub    %edx,%edi
+  b1:	ff c7                	inc    %edi
+  b3:	0f 48 fe             	cmovs  %esi,%edi
+  b6:	01 ff                	add    %edi,%edi
+  b8:	89 fe                	mov    %edi,%esi
+  ba:	29 d6                	sub    %edx,%esi
+  bc:	ff c6                	inc    %esi
+  be:	0f 48 f7             	cmovs  %edi,%esi
+  c1:	01 f6                	add    %esi,%esi
+  c3:	89 f7                	mov    %esi,%edi
+  c5:	29 d7                	sub    %edx,%edi
+  c7:	ff c7                	inc    %edi
+  c9:	0f 48 fe             	cmovs  %esi,%edi
+  cc:	48 83 c0 fc          	add    $0xfffffffffffffffc,%rax
+  d0:	75 ce                	jne    a0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xa0>
+  d2:	d3 ef                	shr    %cl,%edi
+  d4:	89 f8                	mov    %edi,%eax
+  d6:	5d                   	pop    %rbp
+  d7:	c3                   	ret
+  d8:	48 89 c8             	mov    %rcx,%rax
+  db:	48 83 f9 04          	cmp    $0x4,%rcx
+  df:	73 bf                	jae    a0 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xa0>
+  e1:	eb ef                	jmp    d2 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodsi3+0xd2>
+
+Disassembly of section .ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodti3:
+
+0000000000000000 <_RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int4udiv9___umodti3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	49 89 c8             	mov    %rcx,%r8
+   b:	48 89 d1             	mov    %rdx,%rcx
+   e:	48 89 f2             	mov    %rsi,%rdx
+  11:	48 89 fe             	mov    %rdi,%rsi
+  14:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16: R_X86_64_64	.ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem
+  1e:	48 8d 7d e0          	lea    -0x20(%rbp),%rdi
+  22:	ff d0                	call   *%rax
+  24:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  28:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+  2c:	48 83 c4 20          	add    $0x20,%rsp
+  30:	5d                   	pop    %rbp
+  31:	c3                   	ret
+
+Disassembly of section .ltext.__udivdi3:
+
+0000000000000000 <__udivdi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	73 04                	jae    d <__udivdi3+0xd>
+   9:	31 c0                	xor    %eax,%eax
+   b:	5d                   	pop    %rbp
+   c:	c3                   	ret
+   d:	48 0f bd ce          	bsr    %rsi,%rcx
+  11:	48 83 f1 3f          	xor    $0x3f,%rcx
+  15:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  1a:	48 0f bd c7          	bsr    %rdi,%rax
+  1e:	48 83 f0 3f          	xor    $0x3f,%rax
+  22:	48 29 c1             	sub    %rax,%rcx
+  25:	89 ca                	mov    %ecx,%edx
+  27:	48 89 f0             	mov    %rsi,%rax
+  2a:	48 d3 e0             	shl    %cl,%rax
+  2d:	48 39 c7             	cmp    %rax,%rdi
+  30:	48 83 da 00          	sbb    $0x0,%rdx
+  34:	49 89 f1             	mov    %rsi,%r9
+  37:	89 d1                	mov    %edx,%ecx
+  39:	49 d3 e1             	shl    %cl,%r9
+  3c:	4c 29 cf             	sub    %r9,%rdi
+  3f:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  45:	49 d3 e0             	shl    %cl,%r8
+  48:	48 39 f7             	cmp    %rsi,%rdi
+  4b:	73 05                	jae    52 <__udivdi3+0x52>
+  4d:	4c 89 c0             	mov    %r8,%rax
+  50:	5d                   	pop    %rbp
+  51:	c3                   	ret
+  52:	4d 85 c9             	test   %r9,%r9
+  55:	78 05                	js     5c <__udivdi3+0x5c>
+  57:	4c 89 c0             	mov    %r8,%rax
+  5a:	eb 30                	jmp    8c <__udivdi3+0x8c>
+  5c:	48 ff ca             	dec    %rdx
+  5f:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  65:	89 d1                	mov    %edx,%ecx
+  67:	49 d3 e2             	shl    %cl,%r10
+  6a:	49 d1 e9             	shr    $1,%r9
+  6d:	31 c0                	xor    %eax,%eax
+  6f:	48 89 f9             	mov    %rdi,%rcx
+  72:	4c 29 c9             	sub    %r9,%rcx
+  75:	49 0f 49 c2          	cmovns %r10,%rax
+  79:	48 0f 49 f9          	cmovns %rcx,%rdi
+  7d:	4c 09 c0             	or     %r8,%rax
+  80:	4d 89 d0             	mov    %r10,%r8
+  83:	48 39 f7             	cmp    %rsi,%rdi
+  86:	0f 82 a0 00 00 00    	jb     12c <__udivdi3+0x12c>
+  8c:	49 ff c8             	dec    %r8
+  8f:	48 85 d2             	test   %rdx,%rdx
+  92:	0f 84 8e 00 00 00    	je     126 <__udivdi3+0x126>
+  98:	48 89 d1             	mov    %rdx,%rcx
+  9b:	48 83 e1 03          	and    $0x3,%rcx
+  9f:	0f 84 89 00 00 00    	je     12e <__udivdi3+0x12e>
+  a5:	31 f6                	xor    %esi,%esi
+  a7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  b0:	49 89 fa             	mov    %rdi,%r10
+  b3:	49 01 fa             	add    %rdi,%r10
+  b6:	4c 89 d7             	mov    %r10,%rdi
+  b9:	4c 29 cf             	sub    %r9,%rdi
+  bc:	48 ff c7             	inc    %rdi
+  bf:	49 0f 48 fa          	cmovs  %r10,%rdi
+  c3:	48 ff c6             	inc    %rsi
+  c6:	48 39 f1             	cmp    %rsi,%rcx
+  c9:	75 e5                	jne    b0 <__udivdi3+0xb0>
+  cb:	48 89 d1             	mov    %rdx,%rcx
+  ce:	48 29 f1             	sub    %rsi,%rcx
+  d1:	48 83 fa 04          	cmp    $0x4,%rdx
+  d5:	72 4f                	jb     126 <__udivdi3+0x126>
+  d7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  e0:	48 01 ff             	add    %rdi,%rdi
+  e3:	48 89 fa             	mov    %rdi,%rdx
+  e6:	4c 29 ca             	sub    %r9,%rdx
+  e9:	48 ff c2             	inc    %rdx
+  ec:	48 0f 48 d7          	cmovs  %rdi,%rdx
+  f0:	48 01 d2             	add    %rdx,%rdx
+  f3:	48 89 d6             	mov    %rdx,%rsi
+  f6:	4c 29 ce             	sub    %r9,%rsi
+  f9:	48 ff c6             	inc    %rsi
+  fc:	48 0f 48 f2          	cmovs  %rdx,%rsi
+ 100:	48 01 f6             	add    %rsi,%rsi
+ 103:	48 89 f2             	mov    %rsi,%rdx
+ 106:	4c 29 ca             	sub    %r9,%rdx
+ 109:	48 ff c2             	inc    %rdx
+ 10c:	48 0f 48 d6          	cmovs  %rsi,%rdx
+ 110:	48 01 d2             	add    %rdx,%rdx
+ 113:	48 89 d7             	mov    %rdx,%rdi
+ 116:	4c 29 cf             	sub    %r9,%rdi
+ 119:	48 ff c7             	inc    %rdi
+ 11c:	48 0f 48 fa          	cmovs  %rdx,%rdi
+ 120:	48 83 c1 fc          	add    $0xfffffffffffffffc,%rcx
+ 124:	75 ba                	jne    e0 <__udivdi3+0xe0>
+ 126:	4c 21 c7             	and    %r8,%rdi
+ 129:	48 09 f8             	or     %rdi,%rax
+ 12c:	5d                   	pop    %rbp
+ 12d:	c3                   	ret
+ 12e:	48 89 d1             	mov    %rdx,%rcx
+ 131:	48 83 fa 04          	cmp    $0x4,%rdx
+ 135:	73 a9                	jae    e0 <__udivdi3+0xe0>
+ 137:	eb ed                	jmp    126 <__udivdi3+0x126>
+
+Disassembly of section .ltext.__udivmoddi4:
+
+0000000000000000 <__udivmoddi4>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	73 07                	jae    10 <__udivmoddi4+0x10>
+   9:	31 c0                	xor    %eax,%eax
+   b:	e9 2f 01 00 00       	jmp    13f <__udivmoddi4+0x13f>
+  10:	48 0f bd ce          	bsr    %rsi,%rcx
+  14:	48 83 f1 3f          	xor    $0x3f,%rcx
+  18:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  1d:	48 0f bd c7          	bsr    %rdi,%rax
+  21:	48 83 f0 3f          	xor    $0x3f,%rax
+  25:	48 29 c1             	sub    %rax,%rcx
+  28:	89 c8                	mov    %ecx,%eax
+  2a:	49 89 f0             	mov    %rsi,%r8
+  2d:	49 d3 e0             	shl    %cl,%r8
+  30:	4c 39 c7             	cmp    %r8,%rdi
+  33:	48 83 d8 00          	sbb    $0x0,%rax
+  37:	49 89 f1             	mov    %rsi,%r9
+  3a:	89 c1                	mov    %eax,%ecx
+  3c:	49 d3 e1             	shl    %cl,%r9
+  3f:	4c 29 cf             	sub    %r9,%rdi
+  42:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  48:	49 d3 e0             	shl    %cl,%r8
+  4b:	48 39 f7             	cmp    %rsi,%rdi
+  4e:	73 08                	jae    58 <__udivmoddi4+0x58>
+  50:	4c 89 c0             	mov    %r8,%rax
+  53:	e9 e7 00 00 00       	jmp    13f <__udivmoddi4+0x13f>
+  58:	49 89 c2             	mov    %rax,%r10
+  5b:	4d 85 c9             	test   %r9,%r9
+  5e:	78 08                	js     68 <__udivmoddi4+0x68>
+  60:	4c 89 c0             	mov    %r8,%rax
+  63:	4c 89 d1             	mov    %r10,%rcx
+  66:	eb 31                	jmp    99 <__udivmoddi4+0x99>
+  68:	4c 89 d1             	mov    %r10,%rcx
+  6b:	48 ff c9             	dec    %rcx
+  6e:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  74:	49 d3 e2             	shl    %cl,%r10
+  77:	49 d1 e9             	shr    $1,%r9
+  7a:	31 c0                	xor    %eax,%eax
+  7c:	49 89 fb             	mov    %rdi,%r11
+  7f:	4d 29 cb             	sub    %r9,%r11
+  82:	49 0f 49 c2          	cmovns %r10,%rax
+  86:	49 0f 49 fb          	cmovns %r11,%rdi
+  8a:	4c 09 c0             	or     %r8,%rax
+  8d:	4d 89 d0             	mov    %r10,%r8
+  90:	48 39 f7             	cmp    %rsi,%rdi
+  93:	0f 82 a6 00 00 00    	jb     13f <__udivmoddi4+0x13f>
+  99:	49 ff c8             	dec    %r8
+  9c:	48 85 c9             	test   %rcx,%rcx
+  9f:	0f 84 91 00 00 00    	je     136 <__udivmoddi4+0x136>
+  a5:	48 89 ce             	mov    %rcx,%rsi
+  a8:	48 83 e6 03          	and    $0x3,%rsi
+  ac:	0f 84 97 00 00 00    	je     149 <__udivmoddi4+0x149>
+  b2:	45 31 d2             	xor    %r10d,%r10d
+  b5:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  c0:	49 89 fb             	mov    %rdi,%r11
+  c3:	49 01 fb             	add    %rdi,%r11
+  c6:	4c 89 df             	mov    %r11,%rdi
+  c9:	4c 29 cf             	sub    %r9,%rdi
+  cc:	48 ff c7             	inc    %rdi
+  cf:	49 0f 48 fb          	cmovs  %r11,%rdi
+  d3:	49 ff c2             	inc    %r10
+  d6:	4c 39 d6             	cmp    %r10,%rsi
+  d9:	75 e5                	jne    c0 <__udivmoddi4+0xc0>
+  db:	48 89 ce             	mov    %rcx,%rsi
+  de:	4c 29 d6             	sub    %r10,%rsi
+  e1:	48 83 f9 04          	cmp    $0x4,%rcx
+  e5:	72 4f                	jb     136 <__udivmoddi4+0x136>
+  e7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  f0:	48 01 ff             	add    %rdi,%rdi
+  f3:	49 89 fa             	mov    %rdi,%r10
+  f6:	4d 29 ca             	sub    %r9,%r10
+  f9:	49 ff c2             	inc    %r10
+  fc:	4c 0f 48 d7          	cmovs  %rdi,%r10
+ 100:	4d 01 d2             	add    %r10,%r10
+ 103:	4c 89 d7             	mov    %r10,%rdi
+ 106:	4c 29 cf             	sub    %r9,%rdi
+ 109:	48 ff c7             	inc    %rdi
+ 10c:	49 0f 48 fa          	cmovs  %r10,%rdi
+ 110:	48 01 ff             	add    %rdi,%rdi
+ 113:	49 89 fa             	mov    %rdi,%r10
+ 116:	4d 29 ca             	sub    %r9,%r10
+ 119:	49 ff c2             	inc    %r10
+ 11c:	4c 0f 48 d7          	cmovs  %rdi,%r10
+ 120:	4d 01 d2             	add    %r10,%r10
+ 123:	4c 89 d7             	mov    %r10,%rdi
+ 126:	4c 29 cf             	sub    %r9,%rdi
+ 129:	48 ff c7             	inc    %rdi
+ 12c:	49 0f 48 fa          	cmovs  %r10,%rdi
+ 130:	48 83 c6 fc          	add    $0xfffffffffffffffc,%rsi
+ 134:	75 ba                	jne    f0 <__udivmoddi4+0xf0>
+ 136:	49 21 f8             	and    %rdi,%r8
+ 139:	4c 09 c0             	or     %r8,%rax
+ 13c:	48 d3 ef             	shr    %cl,%rdi
+ 13f:	48 85 d2             	test   %rdx,%rdx
+ 142:	74 03                	je     147 <__udivmoddi4+0x147>
+ 144:	48 89 3a             	mov    %rdi,(%rdx)
+ 147:	5d                   	pop    %rbp
+ 148:	c3                   	ret
+ 149:	48 89 ce             	mov    %rcx,%rsi
+ 14c:	48 83 f9 04          	cmp    $0x4,%rcx
+ 150:	73 9e                	jae    f0 <__udivmoddi4+0xf0>
+ 152:	eb e2                	jmp    136 <__udivmoddi4+0x136>
+
+Disassembly of section .ltext.__udivmodsi4:
+
+0000000000000000 <__udivmodsi4>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	31 c0                	xor    %eax,%eax
+   6:	39 f7                	cmp    %esi,%edi
+   8:	0f 82 0c 01 00 00    	jb     11a <__udivmodsi4+0x11a>
+   e:	0f bd ce             	bsr    %esi,%ecx
+  11:	83 f1 1f             	xor    $0x1f,%ecx
+  14:	b8 3f 00 00 00       	mov    $0x3f,%eax
+  19:	0f bd c7             	bsr    %edi,%eax
+  1c:	83 f0 1f             	xor    $0x1f,%eax
+  1f:	29 c1                	sub    %eax,%ecx
+  21:	89 f0                	mov    %esi,%eax
+  23:	d3 e0                	shl    %cl,%eax
+  25:	39 c7                	cmp    %eax,%edi
+  27:	48 83 d9 00          	sbb    $0x0,%rcx
+  2b:	41 89 f1             	mov    %esi,%r9d
+  2e:	41 d3 e1             	shl    %cl,%r9d
+  31:	44 29 cf             	sub    %r9d,%edi
+  34:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  3a:	41 d3 e0             	shl    %cl,%r8d
+  3d:	39 f7                	cmp    %esi,%edi
+  3f:	73 08                	jae    49 <__udivmodsi4+0x49>
+  41:	44 89 c0             	mov    %r8d,%eax
+  44:	e9 d1 00 00 00       	jmp    11a <__udivmodsi4+0x11a>
+  49:	45 85 c9             	test   %r9d,%r9d
+  4c:	78 05                	js     53 <__udivmodsi4+0x53>
+  4e:	44 89 c0             	mov    %r8d,%eax
+  51:	eb 2d                	jmp    80 <__udivmodsi4+0x80>
+  53:	48 ff c9             	dec    %rcx
+  56:	41 ba 01 00 00 00    	mov    $0x1,%r10d
+  5c:	41 d3 e2             	shl    %cl,%r10d
+  5f:	41 d1 e9             	shr    $1,%r9d
+  62:	31 c0                	xor    %eax,%eax
+  64:	41 89 fb             	mov    %edi,%r11d
+  67:	45 29 cb             	sub    %r9d,%r11d
+  6a:	41 0f 49 c2          	cmovns %r10d,%eax
+  6e:	41 0f 49 fb          	cmovns %r11d,%edi
+  72:	44 09 c0             	or     %r8d,%eax
+  75:	45 89 d0             	mov    %r10d,%r8d
+  78:	39 f7                	cmp    %esi,%edi
+  7a:	0f 82 9a 00 00 00    	jb     11a <__udivmodsi4+0x11a>
+  80:	41 ff c8             	dec    %r8d
+  83:	48 85 c9             	test   %rcx,%rcx
+  86:	0f 84 86 00 00 00    	je     112 <__udivmodsi4+0x112>
+  8c:	48 89 ce             	mov    %rcx,%rsi
+  8f:	48 83 e6 03          	and    $0x3,%rsi
+  93:	0f 84 8a 00 00 00    	je     123 <__udivmodsi4+0x123>
+  99:	45 31 d2             	xor    %r10d,%r10d
+  9c:	0f 1f 40 00          	nopl   0x0(%rax)
+  a0:	41 89 fb             	mov    %edi,%r11d
+  a3:	41 01 fb             	add    %edi,%r11d
+  a6:	44 89 df             	mov    %r11d,%edi
+  a9:	44 29 cf             	sub    %r9d,%edi
+  ac:	ff c7                	inc    %edi
+  ae:	41 0f 48 fb          	cmovs  %r11d,%edi
+  b2:	49 ff c2             	inc    %r10
+  b5:	4c 39 d6             	cmp    %r10,%rsi
+  b8:	75 e6                	jne    a0 <__udivmodsi4+0xa0>
+  ba:	48 89 ce             	mov    %rcx,%rsi
+  bd:	4c 29 d6             	sub    %r10,%rsi
+  c0:	48 83 f9 04          	cmp    $0x4,%rcx
+  c4:	72 4c                	jb     112 <__udivmodsi4+0x112>
+  c6:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+  d0:	01 ff                	add    %edi,%edi
+  d2:	41 89 fa             	mov    %edi,%r10d
+  d5:	45 29 ca             	sub    %r9d,%r10d
+  d8:	41 ff c2             	inc    %r10d
+  db:	44 0f 48 d7          	cmovs  %edi,%r10d
+  df:	45 01 d2             	add    %r10d,%r10d
+  e2:	44 89 d7             	mov    %r10d,%edi
+  e5:	44 29 cf             	sub    %r9d,%edi
+  e8:	ff c7                	inc    %edi
+  ea:	41 0f 48 fa          	cmovs  %r10d,%edi
+  ee:	01 ff                	add    %edi,%edi
+  f0:	41 89 fa             	mov    %edi,%r10d
+  f3:	45 29 ca             	sub    %r9d,%r10d
+  f6:	41 ff c2             	inc    %r10d
+  f9:	44 0f 48 d7          	cmovs  %edi,%r10d
+  fd:	45 01 d2             	add    %r10d,%r10d
+ 100:	44 89 d7             	mov    %r10d,%edi
+ 103:	44 29 cf             	sub    %r9d,%edi
+ 106:	ff c7                	inc    %edi
+ 108:	41 0f 48 fa          	cmovs  %r10d,%edi
+ 10c:	48 83 c6 fc          	add    $0xfffffffffffffffc,%rsi
+ 110:	75 be                	jne    d0 <__udivmodsi4+0xd0>
+ 112:	41 21 f8             	and    %edi,%r8d
+ 115:	44 09 c0             	or     %r8d,%eax
+ 118:	d3 ef                	shr    %cl,%edi
+ 11a:	48 85 d2             	test   %rdx,%rdx
+ 11d:	74 02                	je     121 <__udivmodsi4+0x121>
+ 11f:	89 3a                	mov    %edi,(%rdx)
+ 121:	5d                   	pop    %rbp
+ 122:	c3                   	ret
+ 123:	48 89 ce             	mov    %rcx,%rsi
+ 126:	48 83 f9 04          	cmp    $0x4,%rcx
+ 12a:	73 a4                	jae    d0 <__udivmodsi4+0xd0>
+ 12c:	eb e4                	jmp    112 <__udivmodsi4+0x112>
+
+Disassembly of section .ltext.__udivmodti4:
+
+0000000000000000 <__udivmodti4>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	53                   	push   %rbx
+   5:	48 83 ec 28          	sub    $0x28,%rsp
+   9:	4c 89 c3             	mov    %r8,%rbx
+   c:	49 89 c8             	mov    %rcx,%r8
+   f:	48 89 d1             	mov    %rdx,%rcx
+  12:	48 89 f2             	mov    %rsi,%rdx
+  15:	48 89 fe             	mov    %rdi,%rsi
+  18:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1a: R_X86_64_64	.ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem
+  22:	48 8d 7d d0          	lea    -0x30(%rbp),%rdi
+  26:	ff d0                	call   *%rax
+  28:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+  2c:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
+  30:	48 85 db             	test   %rbx,%rbx
+  33:	74 0f                	je     44 <__udivmodti4+0x44>
+  35:	48 8b 4d e8          	mov    -0x18(%rbp),%rcx
+  39:	48 8b 75 e0          	mov    -0x20(%rbp),%rsi
+  3d:	48 89 33             	mov    %rsi,(%rbx)
+  40:	48 89 4b 08          	mov    %rcx,0x8(%rbx)
+  44:	48 83 c4 28          	add    $0x28,%rsp
+  48:	5b                   	pop    %rbx
+  49:	5d                   	pop    %rbp
+  4a:	c3                   	ret
+
+Disassembly of section .ltext.__udivsi3:
+
+0000000000000000 <__udivsi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	31 c0                	xor    %eax,%eax
+   6:	39 f7                	cmp    %esi,%edi
+   8:	0f 82 ec 00 00 00    	jb     fa <__udivsi3+0xfa>
+   e:	0f bd ce             	bsr    %esi,%ecx
+  11:	83 f1 1f             	xor    $0x1f,%ecx
+  14:	b8 3f 00 00 00       	mov    $0x3f,%eax
+  19:	0f bd c7             	bsr    %edi,%eax
+  1c:	83 f0 1f             	xor    $0x1f,%eax
+  1f:	29 c1                	sub    %eax,%ecx
+  21:	89 f0                	mov    %esi,%eax
+  23:	d3 e0                	shl    %cl,%eax
+  25:	39 c7                	cmp    %eax,%edi
+  27:	48 83 d9 00          	sbb    $0x0,%rcx
+  2b:	41 89 f0             	mov    %esi,%r8d
+  2e:	41 d3 e0             	shl    %cl,%r8d
+  31:	44 29 c7             	sub    %r8d,%edi
+  34:	ba 01 00 00 00       	mov    $0x1,%edx
+  39:	d3 e2                	shl    %cl,%edx
+  3b:	39 f7                	cmp    %esi,%edi
+  3d:	73 04                	jae    43 <__udivsi3+0x43>
+  3f:	89 d0                	mov    %edx,%eax
+  41:	5d                   	pop    %rbp
+  42:	c3                   	ret
+  43:	45 85 c0             	test   %r8d,%r8d
+  46:	78 04                	js     4c <__udivsi3+0x4c>
+  48:	89 d0                	mov    %edx,%eax
+  4a:	eb 2c                	jmp    78 <__udivsi3+0x78>
+  4c:	48 ff c9             	dec    %rcx
+  4f:	41 b9 01 00 00 00    	mov    $0x1,%r9d
+  55:	41 d3 e1             	shl    %cl,%r9d
+  58:	41 d1 e8             	shr    $1,%r8d
+  5b:	31 c0                	xor    %eax,%eax
+  5d:	41 89 fa             	mov    %edi,%r10d
+  60:	45 29 c2             	sub    %r8d,%r10d
+  63:	41 0f 49 c1          	cmovns %r9d,%eax
+  67:	41 0f 49 fa          	cmovns %r10d,%edi
+  6b:	09 d0                	or     %edx,%eax
+  6d:	44 89 ca             	mov    %r9d,%edx
+  70:	39 f7                	cmp    %esi,%edi
+  72:	0f 82 82 00 00 00    	jb     fa <__udivsi3+0xfa>
+  78:	ff ca                	dec    %edx
+  7a:	48 85 c9             	test   %rcx,%rcx
+  7d:	74 77                	je     f6 <__udivsi3+0xf6>
+  7f:	48 89 ce             	mov    %rcx,%rsi
+  82:	48 83 e6 03          	and    $0x3,%rsi
+  86:	74 74                	je     fc <__udivsi3+0xfc>
+  88:	45 31 c9             	xor    %r9d,%r9d
+  8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  90:	41 89 fa             	mov    %edi,%r10d
+  93:	41 01 fa             	add    %edi,%r10d
+  96:	44 89 d7             	mov    %r10d,%edi
+  99:	44 29 c7             	sub    %r8d,%edi
+  9c:	ff c7                	inc    %edi
+  9e:	41 0f 48 fa          	cmovs  %r10d,%edi
+  a2:	49 ff c1             	inc    %r9
+  a5:	4c 39 ce             	cmp    %r9,%rsi
+  a8:	75 e6                	jne    90 <__udivsi3+0x90>
+  aa:	48 89 ce             	mov    %rcx,%rsi
+  ad:	4c 29 ce             	sub    %r9,%rsi
+  b0:	48 83 f9 04          	cmp    $0x4,%rcx
+  b4:	72 40                	jb     f6 <__udivsi3+0xf6>
+  b6:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+  c0:	01 ff                	add    %edi,%edi
+  c2:	89 f9                	mov    %edi,%ecx
+  c4:	44 29 c1             	sub    %r8d,%ecx
+  c7:	ff c1                	inc    %ecx
+  c9:	0f 48 cf             	cmovs  %edi,%ecx
+  cc:	01 c9                	add    %ecx,%ecx
+  ce:	89 cf                	mov    %ecx,%edi
+  d0:	44 29 c7             	sub    %r8d,%edi
+  d3:	ff c7                	inc    %edi
+  d5:	0f 48 f9             	cmovs  %ecx,%edi
+  d8:	01 ff                	add    %edi,%edi
+  da:	89 f9                	mov    %edi,%ecx
+  dc:	44 29 c1             	sub    %r8d,%ecx
+  df:	ff c1                	inc    %ecx
+  e1:	0f 48 cf             	cmovs  %edi,%ecx
+  e4:	01 c9                	add    %ecx,%ecx
+  e6:	89 cf                	mov    %ecx,%edi
+  e8:	44 29 c7             	sub    %r8d,%edi
+  eb:	ff c7                	inc    %edi
+  ed:	0f 48 f9             	cmovs  %ecx,%edi
+  f0:	48 83 c6 fc          	add    $0xfffffffffffffffc,%rsi
+  f4:	75 ca                	jne    c0 <__udivsi3+0xc0>
+  f6:	21 d7                	and    %edx,%edi
+  f8:	09 f8                	or     %edi,%eax
+  fa:	5d                   	pop    %rbp
+  fb:	c3                   	ret
+  fc:	48 89 ce             	mov    %rcx,%rsi
+  ff:	48 83 f9 04          	cmp    $0x4,%rcx
+ 103:	73 bb                	jae    c0 <__udivsi3+0xc0>
+ 105:	eb ef                	jmp    f6 <__udivsi3+0xf6>
+
+Disassembly of section .ltext.__udivti3:
+
+0000000000000000 <__udivti3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	49 89 c8             	mov    %rcx,%r8
+   b:	48 89 d1             	mov    %rdx,%rcx
+   e:	48 89 f2             	mov    %rsi,%rdx
+  11:	48 89 fe             	mov    %rdi,%rsi
+  14:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16: R_X86_64_64	.ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem
+  1e:	48 8d 7d e0          	lea    -0x20(%rbp),%rdi
+  22:	ff d0                	call   *%rax
+  24:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+  28:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+  2c:	48 83 c4 20          	add    $0x20,%rsp
+  30:	5d                   	pop    %rbp
+  31:	c3                   	ret
+
+Disassembly of section .ltext.__umoddi3:
+
+0000000000000000 <__umoddi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	0f 82 01 01 00 00    	jb     10e <__umoddi3+0x10e>
+   d:	48 0f bd ce          	bsr    %rsi,%rcx
+  11:	48 83 f1 3f          	xor    $0x3f,%rcx
+  15:	b8 7f 00 00 00       	mov    $0x7f,%eax
+  1a:	48 0f bd c7          	bsr    %rdi,%rax
+  1e:	48 83 f0 3f          	xor    $0x3f,%rax
+  22:	48 29 c1             	sub    %rax,%rcx
+  25:	89 c8                	mov    %ecx,%eax
+  27:	48 89 f2             	mov    %rsi,%rdx
+  2a:	48 d3 e2             	shl    %cl,%rdx
+  2d:	48 39 d7             	cmp    %rdx,%rdi
+  30:	48 83 d8 00          	sbb    $0x0,%rax
+  34:	48 89 f2             	mov    %rsi,%rdx
+  37:	89 c1                	mov    %eax,%ecx
+  39:	48 d3 e2             	shl    %cl,%rdx
+  3c:	48 29 d7             	sub    %rdx,%rdi
+  3f:	48 39 f7             	cmp    %rsi,%rdi
+  42:	0f 82 c6 00 00 00    	jb     10e <__umoddi3+0x10e>
+  48:	48 85 d2             	test   %rdx,%rdx
+  4b:	78 0d                	js     5a <__umoddi3+0x5a>
+  4d:	49 89 f8             	mov    %rdi,%r8
+  50:	48 85 c0             	test   %rax,%rax
+  53:	75 27                	jne    7c <__umoddi3+0x7c>
+  55:	e9 ac 00 00 00       	jmp    106 <__umoddi3+0x106>
+  5a:	48 d1 ea             	shr    $1,%rdx
+  5d:	49 89 f8             	mov    %rdi,%r8
+  60:	49 29 d0             	sub    %rdx,%r8
+  63:	4c 0f 48 c7          	cmovs  %rdi,%r8
+  67:	49 39 f0             	cmp    %rsi,%r8
+  6a:	0f 82 9b 00 00 00    	jb     10b <__umoddi3+0x10b>
+  70:	48 ff c8             	dec    %rax
+  73:	48 85 c0             	test   %rax,%rax
+  76:	0f 84 8a 00 00 00    	je     106 <__umoddi3+0x106>
+  7c:	48 89 c1             	mov    %rax,%rcx
+  7f:	48 83 e1 03          	and    $0x3,%rcx
+  83:	0f 84 8a 00 00 00    	je     113 <__umoddi3+0x113>
+  89:	31 f6                	xor    %esi,%esi
+  8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  90:	4c 89 c7             	mov    %r8,%rdi
+  93:	4c 01 c7             	add    %r8,%rdi
+  96:	49 89 f8             	mov    %rdi,%r8
+  99:	49 29 d0             	sub    %rdx,%r8
+  9c:	49 ff c0             	inc    %r8
+  9f:	4c 0f 48 c7          	cmovs  %rdi,%r8
+  a3:	48 ff c6             	inc    %rsi
+  a6:	48 39 f1             	cmp    %rsi,%rcx
+  a9:	75 e5                	jne    90 <__umoddi3+0x90>
+  ab:	48 89 c1             	mov    %rax,%rcx
+  ae:	48 29 f1             	sub    %rsi,%rcx
+  b1:	48 83 f8 04          	cmp    $0x4,%rax
+  b5:	72 4f                	jb     106 <__umoddi3+0x106>
+  b7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  c0:	4d 01 c0             	add    %r8,%r8
+  c3:	4c 89 c6             	mov    %r8,%rsi
+  c6:	48 29 d6             	sub    %rdx,%rsi
+  c9:	48 ff c6             	inc    %rsi
+  cc:	49 0f 48 f0          	cmovs  %r8,%rsi
+  d0:	48 01 f6             	add    %rsi,%rsi
+  d3:	48 89 f7             	mov    %rsi,%rdi
+  d6:	48 29 d7             	sub    %rdx,%rdi
+  d9:	48 ff c7             	inc    %rdi
+  dc:	48 0f 48 fe          	cmovs  %rsi,%rdi
+  e0:	48 01 ff             	add    %rdi,%rdi
+  e3:	48 89 fe             	mov    %rdi,%rsi
+  e6:	48 29 d6             	sub    %rdx,%rsi
+  e9:	48 ff c6             	inc    %rsi
+  ec:	48 0f 48 f7          	cmovs  %rdi,%rsi
+  f0:	48 01 f6             	add    %rsi,%rsi
+  f3:	49 89 f0             	mov    %rsi,%r8
+  f6:	49 29 d0             	sub    %rdx,%r8
+  f9:	49 ff c0             	inc    %r8
+  fc:	4c 0f 48 c6          	cmovs  %rsi,%r8
+ 100:	48 83 c1 fc          	add    $0xfffffffffffffffc,%rcx
+ 104:	75 ba                	jne    c0 <__umoddi3+0xc0>
+ 106:	89 c1                	mov    %eax,%ecx
+ 108:	49 d3 e8             	shr    %cl,%r8
+ 10b:	4c 89 c7             	mov    %r8,%rdi
+ 10e:	48 89 f8             	mov    %rdi,%rax
+ 111:	5d                   	pop    %rbp
+ 112:	c3                   	ret
+ 113:	48 89 c1             	mov    %rax,%rcx
+ 116:	48 83 f8 04          	cmp    $0x4,%rax
+ 11a:	73 a4                	jae    c0 <__umoddi3+0xc0>
+ 11c:	eb e8                	jmp    106 <__umoddi3+0x106>
+
+Disassembly of section .ltext.__umodsi3:
+
+0000000000000000 <__umodsi3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	89 f8                	mov    %edi,%eax
+   6:	39 f7                	cmp    %esi,%edi
+   8:	0f 82 c8 00 00 00    	jb     d6 <__umodsi3+0xd6>
+   e:	0f bd ce             	bsr    %esi,%ecx
+  11:	83 f1 1f             	xor    $0x1f,%ecx
+  14:	ba 3f 00 00 00       	mov    $0x3f,%edx
+  19:	0f bd d0             	bsr    %eax,%edx
+  1c:	83 f2 1f             	xor    $0x1f,%edx
+  1f:	29 d1                	sub    %edx,%ecx
+  21:	89 f2                	mov    %esi,%edx
+  23:	d3 e2                	shl    %cl,%edx
+  25:	39 d0                	cmp    %edx,%eax
+  27:	48 83 d9 00          	sbb    $0x0,%rcx
+  2b:	89 f2                	mov    %esi,%edx
+  2d:	d3 e2                	shl    %cl,%edx
+  2f:	29 d0                	sub    %edx,%eax
+  31:	39 f0                	cmp    %esi,%eax
+  33:	0f 82 9d 00 00 00    	jb     d6 <__umodsi3+0xd6>
+  39:	85 d2                	test   %edx,%edx
+  3b:	78 0c                	js     49 <__umodsi3+0x49>
+  3d:	89 c7                	mov    %eax,%edi
+  3f:	48 85 c9             	test   %rcx,%rcx
+  42:	75 1a                	jne    5e <__umodsi3+0x5e>
+  44:	e9 89 00 00 00       	jmp    d2 <__umodsi3+0xd2>
+  49:	d1 ea                	shr    $1,%edx
+  4b:	89 c7                	mov    %eax,%edi
+  4d:	29 d7                	sub    %edx,%edi
+  4f:	0f 48 f8             	cmovs  %eax,%edi
+  52:	39 f7                	cmp    %esi,%edi
+  54:	72 7e                	jb     d4 <__umodsi3+0xd4>
+  56:	48 ff c9             	dec    %rcx
+  59:	48 85 c9             	test   %rcx,%rcx
+  5c:	74 74                	je     d2 <__umodsi3+0xd2>
+  5e:	48 89 c8             	mov    %rcx,%rax
+  61:	48 83 e0 03          	and    $0x3,%rax
+  65:	74 71                	je     d8 <__umodsi3+0xd8>
+  67:	31 f6                	xor    %esi,%esi
+  69:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+  70:	41 89 f8             	mov    %edi,%r8d
+  73:	41 01 f8             	add    %edi,%r8d
+  76:	44 89 c7             	mov    %r8d,%edi
+  79:	29 d7                	sub    %edx,%edi
+  7b:	ff c7                	inc    %edi
+  7d:	41 0f 48 f8          	cmovs  %r8d,%edi
+  81:	48 ff c6             	inc    %rsi
+  84:	48 39 f0             	cmp    %rsi,%rax
+  87:	75 e7                	jne    70 <__umodsi3+0x70>
+  89:	48 89 c8             	mov    %rcx,%rax
+  8c:	48 29 f0             	sub    %rsi,%rax
+  8f:	48 83 f9 04          	cmp    $0x4,%rcx
+  93:	72 3d                	jb     d2 <__umodsi3+0xd2>
+  95:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  a0:	01 ff                	add    %edi,%edi
+  a2:	89 fe                	mov    %edi,%esi
+  a4:	29 d6                	sub    %edx,%esi
+  a6:	ff c6                	inc    %esi
+  a8:	0f 48 f7             	cmovs  %edi,%esi
+  ab:	01 f6                	add    %esi,%esi
+  ad:	89 f7                	mov    %esi,%edi
+  af:	29 d7                	sub    %edx,%edi
+  b1:	ff c7                	inc    %edi
+  b3:	0f 48 fe             	cmovs  %esi,%edi
+  b6:	01 ff                	add    %edi,%edi
+  b8:	89 fe                	mov    %edi,%esi
+  ba:	29 d6                	sub    %edx,%esi
+  bc:	ff c6                	inc    %esi
+  be:	0f 48 f7             	cmovs  %edi,%esi
+  c1:	01 f6                	add    %esi,%esi
+  c3:	89 f7                	mov    %esi,%edi
+  c5:	29 d7                	sub    %edx,%edi
+  c7:	ff c7                	inc    %edi
+  c9:	0f 48 fe             	cmovs  %esi,%edi
+  cc:	48 83 c0 fc          	add    $0xfffffffffffffffc,%rax
+  d0:	75 ce                	jne    a0 <__umodsi3+0xa0>
+  d2:	d3 ef                	shr    %cl,%edi
+  d4:	89 f8                	mov    %edi,%eax
+  d6:	5d                   	pop    %rbp
+  d7:	c3                   	ret
+  d8:	48 89 c8             	mov    %rcx,%rax
+  db:	48 83 f9 04          	cmp    $0x4,%rcx
+  df:	73 bf                	jae    a0 <__umodsi3+0xa0>
+  e1:	eb ef                	jmp    d2 <__umodsi3+0xd2>
+
+Disassembly of section .ltext.__umodti3:
+
+0000000000000000 <__umodti3>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	49 89 c8             	mov    %rcx,%r8
+   b:	48 89 d1             	mov    %rdx,%rcx
+   e:	48 89 f2             	mov    %rsi,%rdx
+  11:	48 89 fe             	mov    %rdi,%rsi
+  14:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16: R_X86_64_64	.ltext._RNvNtNtCs2uLDHyDyFrz_17compiler_builtins3int19specialized_div_rem12u128_div_rem
+  1e:	48 8d 7d e0          	lea    -0x20(%rbp),%rdi
+  22:	ff d0                	call   *%rax
+  24:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  28:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+  2c:	48 83 c4 20          	add    $0x20,%rsp
+  30:	5d                   	pop    %rbp
+  31:	c3                   	ret

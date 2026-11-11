@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "decision": "GO_MINIMAL_INTEGER_SOURCE_CMAKE_DELTA_SOURCE_ONLY",
+  "at_utc": "2026-11-11T17:06:10.443204+00:00",
+  "reviewer": "/root/p04_source_max",
+  "author": "/root/sdk_binding_source_max",
+  "scope": "Only the two-path delta from prior24fbb source integration: canonical integer template, exact @ONLY generation, dependencies and actual writable binary CWD. Earlier core/order/codegen/body material proofs reused; no compiler or CMake execution.",
+  "inputs": {
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 2697,
+      "sha256": "bfa2f3f0c2ef9f7c0558fec3d865c5fcf148e466447db7617bc0169f462b96f3"
+    },
+    "SOURCE-MANIFEST.PROPOSED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/SOURCE-MANIFEST.PROPOSED.json",
+      "bytes": 3767,
+      "sha256": "ce73ea43141832541a3a2ef89003797c9b4b934cbd60fff49e6e912228256caf"
+    },
+    "CONSUMER-CONTRACT.PROPOSED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/CONSUMER-CONTRACT.PROPOSED.json",
+      "bytes": 11095,
+      "sha256": "2b43c0a1addff684416ead237e2b03796d58596f867b22842714f5e4f717db18"
+    },
+    "INTEGER-CONSUMER-SOURCE-DELTA.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/INTEGER-CONSUMER-SOURCE-DELTA.patch",
+      "bytes": 6433,
+      "sha256": "4d39adbe567c9e2227bfe88a8b2fd23e2745d927afac2a91a5498956f7bf518a"
+    },
+    "FULL-CORE-INTEGER-CONSUMER.PROPOSED.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/FULL-CORE-INTEGER-CONSUMER.PROPOSED.patch",
+      "bytes": 12032,
+      "sha256": "c66c520375ab9f64c63028de514f104287eaa9607254efb33af6f0dcf574cc0d"
+    }
+  },
+  "candidates": [
+    {
+      "bytes": 74700,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/candidate/kernel/CMakeLists.txt",
+      "sha256": "581bc9398e486ad398c4ecc9e4e5445f236213af2543022a421881d904c471df"
+    },
+    {
+      "bytes": 2170,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/consumer-integration-1/integer-source-correction-1/candidate/kernel/rust/compiler_builtins_integer.rs.in",
+      "sha256": "37ea8f6026d2f1d6d33317f93a231311dec4cbb77c4537a3089182f9c0c33ac9"
+    }
+  ],
+  "reused": {
+    "prior_CMake_source_GO": {
+      "bytes": 7887,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-consumer-cmake-review-p04source-max-1/REVIEW.json",
+      "sha256": "24fbb36c1120d6fc43e8e79b192feac59fd4ad329ed0bacf558bcaa010e1d297"
+    },
+    "reviewed_integer_source_GO": {
+      "bytes": 13547,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-review-publicabi-max-1/REVIEW.json",
+      "sha256": "c4fe53515a932c7b8b20fe8e199a94411691e1245c8bb8280841e9113fae610a"
+    },
+    "actual_facade": {
+      "bytes": 2743,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input/compiler_builtins_integer.rs",
+      "sha256": "8b9c11a4dcf8fae9c5a9c53d2bce342fcf67da11fde50623d41423afc07102f2"
+    },
+    "actual_core_output_tuple": {
+      "bytes": 5750,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/CORE-OUTPUT-TUPLE.json",
+      "sha256": "5989484c3d49660b1f53079d8cb97543cb0fd4f71ddd347caf4489df6f88dcdc"
+    },
+    "actual_core_material": {
+      "bytes": 5310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "8b21f19d339e7a318ac3649a38156a166eb69be4b296abe8c34efc4a3fff7a57"
+    }
+  },
+  "checks": {
+    "delta_and_full_patches_both_exactly_reconstruct_only_two_candidates": true,
+    "current_CMake_canonical_preimage_matches_de2bcd": true,
+    "new_canonical_template_path_absent_at_review": true,
+    "template_byte_identical_to_independently_reviewed_H_template37ea8f60": true,
+    "only_three_same_path_tokens_interpolated_via_ONLY": true,
+    "rendered_source_byte_identical_to_actual_H_input8b9c11a4": true,
+    "actual_source_package_literal_path_satisfies_existing_guard": true,
+    "all8_exact_upstream_source_dependencies_explicit": [
+      "src/macros.rs",
+      "src/int/udiv.rs",
+      "src/int/specialized_div_rem/mod.rs",
+      "src/int/specialized_div_rem/norm_shift.rs",
+      "src/int/specialized_div_rem/binary_long.rs",
+      "src/int/specialized_div_rem/delegate.rs",
+      "src/int/specialized_div_rem/trifecta.rs",
+      "src/int/specialized_div_rem/asymmetric.rs"
+    ],
+    "template_generated_source_compiler_core_and_existing_normalizer_dependencies_present": true,
+    "actual_existing_binary_directory_RW_CWD_not_sourceRO": true,
+    "shared12_codegen_settings_and6_builtin_cfgs_identical_to24fbb": true,
+    "builtins_COMMAND_tokens_preserved_except_generated_source_path_value": true,
+    "core_to_local_generated_integer_builtins_to_full_consumer_metadata_order_preserved": true,
+    "explicit_newcore_and_newbuiltins_metadata_sysroot_devnull_preserved": true,
+    "both_real_objects_direct_image_link_preserved": true,
+    "core_externalRO_not_generated_localbuiltin_generated_preserved": true,
+    "remaining_consumer_command_and_all_later_source_selection_Cguards_byte_identical": true,
+    "all28_Rust_C_bodies_handler_checks_oracles_and_prior_selectors_unchanged": true,
+    "no_partial_SDK_integer_object_injection_or_optional_mode": true
+  },
+  "decision_scope": "No material source defect. Root may compose these exact2 paths. The normal graph must generate this exact integer source and compile its canonical builtins output before the unchanged whole consumer; a passing standalone H object is proof reuse, not an injection substitute. Original acceptance remains gated by the actual normal production build and image/provider qualification.",
+  "actual_binding_note": "Proposal null future builtin/consumer fields remain honest. Later actual H109745/8cf3+7068/source qualification and Root retirement may be bound by the final operation without altering this source review; no invented pre-proof/external verification gate.",
+  "findings": [],
+  "remaining": [
+    "Root exact source commit/readbacks and concrete necessary provider-path configure/build operation binding",
+    "Fresh independently reviewed/admitted normal graph compilation of canonical generated builtins plus whole consumer",
+    "Actual metadata/helper imports/link/ISA/ABI104/owner/C-exclusion/LOAD/cleanup and original scope qualification"
+  ],
+  "actions": {
+    "private_review_only": true,
+    "candidate_canonical_cache_index_or_source_edited": false,
+    "CMake_compiler_test_helper_image_native_or_container_executed": false
+  },
+  "no_acceptance_or_resource_permission_grant": true
+}

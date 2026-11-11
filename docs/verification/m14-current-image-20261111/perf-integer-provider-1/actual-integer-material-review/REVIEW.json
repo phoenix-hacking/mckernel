@@ -1,0 +1,183 @@
+{
+  "at_utc": "2026-11-11T16:56:02.360712+00:00",
+  "checks": {
+    "body_equality": "All eight current source byte counts and SHA256 values match the frozen contract and independent5380 closure. The facade points to those exact readonly upstream sources; no hand-copied/shortened function or macro.",
+    "compiler_argv": {
+      "helper_equals_literal_request": true,
+      "new": "/producer/compiler_builtins_integer.rs",
+      "old": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs",
+      "sole_changed_index": 54,
+      "tokens": 55,
+      "unchanged_prefix_tokens": 54
+    },
+    "core_binding": {
+      "bytes": 62088310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+      "sha256": "7ec5faeecbe4c7bd2c865000bf4e4b66367269f3bd5bbb0fc1c46015ee014aa9"
+    },
+    "domain_and_helpers": "Complete u32/u64/u128 quotient/remainder/combined families and original helper branches retained. x86_64/pointer64/no-asm selects original trifecta u128 algorithm with original checked u64 half-division. Full nonzero u128 divisor domain remains; original intrinsic-unreachable zero-divisor behavior is unchanged.",
+    "exact_module_selection": [
+      "Original whole macros.rs via macro_use",
+      "crate::int::specialized_div_rem at original mod.rs, retaining original norm_shift/binary_long/delegate/trifecta/asymmetric child modules",
+      "Original whole crate::int::udiv"
+    ],
+    "facade_attributes": "Original upstream root prefix from first crate attribute through the cfg(test) extern crate core is byte-identical. no_std, no_builtins and compiler_builtins/intrinsics/linkage attributes retained; no new algorithm or function body.",
+    "future_template": "Replacing the sole MCKERNEL_RUST_BUILTINS_PACKAGE placeholder with the exact selected upstream package reproduces the complete2743B facade byte-for-byte. Future canonical/CMake source integration is separate.",
+    "no_float_codegen_selection": "No float/math/all-int-traits/support root is declared. This is an explicit required-provider source cut, not an invented Cargo feature. Original unused crate feature attributes do not alter the unchanged no-SIMD target flags.",
+    "output_namespace": "Previously corrected workdir /core-output retained; exact7ec5 core metadata is a readonly file bind over fresh output root. No source/core metadata/output of failed whole-builtins cohorts is adopted.",
+    "profile": "Same actual1.95 compiler and native target selection, edition2024/sysroot=/dev/null, panicabort/O2/large/static/no-redzone/no-unwind/frame-pointers/no-vectorization/all listed SIMD features disabled, same metadata seed and original cfg inputs. No SSE enable, HOST library, target-metadata substitution or assertion/check removal.",
+    "typed_export": "Actual unchanged int/udiv.rs160 declares pub extern C fn __udivti3(n:u128,d:u128)->u128 and delegates to u128_div_rem(n,d).0. Original intrinsics! catch-all generates its genuine unmangled weak C-ABI export; no fabricated Rust mangled name or handwritten ABI shim.",
+    "unchanged_source_files": {
+      "src/int/specialized_div_rem/asymmetric.rs": {
+        "bytes": 3289,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/asymmetric.rs",
+        "sha256": "27f5bf70a35109f9d4e4e1ad1e8003aa17da5a1e436bf3e63a493d7528a3a566"
+      },
+      "src/int/specialized_div_rem/binary_long.rs": {
+        "bytes": 26904,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/binary_long.rs",
+        "sha256": "6bdb94c349705e68ca17ae6ac53a87658d2e0b1860ee72d73c53cc9d171062ae"
+      },
+      "src/int/specialized_div_rem/delegate.rs": {
+        "bytes": 15133,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/delegate.rs",
+        "sha256": "138d75dd0eaa2f442a55a1b6f4032b9096901d88e2d114c34753936bdca727b3"
+      },
+      "src/int/specialized_div_rem/mod.rs": {
+        "bytes": 10960,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/mod.rs",
+        "sha256": "51d9f03ff12422ae770ddc8f9ec721da5576cafdb4d657b040eedee969bc6778"
+      },
+      "src/int/specialized_div_rem/norm_shift.rs": {
+        "bytes": 5320,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/norm_shift.rs",
+        "sha256": "3be7ee0dea545c1f702d9daf67dad2b624bf7b17b075c8b90d3d3f7b53df4c21"
+      },
+      "src/int/specialized_div_rem/trifecta.rs": {
+        "bytes": 20452,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/trifecta.rs",
+        "sha256": "87eef69da255b809fd710b14f2eb3f9f59e3dac625f8564ebc8ba78f9763523b"
+      },
+      "src/int/udiv.rs": {
+        "bytes": 6819,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/udiv.rs",
+        "sha256": "1e00dbc9721832469cef87465124b51f8856074344ad1fee120b276e5b2b1dab"
+      },
+      "src/macros.rs": {
+        "bytes": 16947,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/macros.rs",
+        "sha256": "e3943300cc00a95501b2d1059aa1a6d385e547da4806d3b3051a184dbf3ec8b2"
+      }
+    }
+  },
+  "decision": "GO",
+  "execution_gates": [
+    "SourceAcq exact protected-operation/source-custody delta GO",
+    "Root fresh CPU6/2GiB/j1 admission under existing aggregate HOST4GiB/max3/fresh26GiB and disk floors",
+    "Actual compiler diagnostic/artifact/metadata/dependency/ISA results and positive lifecycle closure are future observations; no consumer/fatal-test/CMake prerequisite is added to this first compiler"
+  ],
+  "findings": [],
+  "limits": [
+    "No compiler/type/link/output ISA success asserted; initial actual code generation remains unproved.",
+    "Existing actual core SSE2 ABI warning remains retained, not waived by source selection.",
+    "No full provider/image/default/functional/native acceptance or operation grant from this material review."
+  ],
+  "preserved": {
+    "all28_perf_bodies_checks_and_handler_unchanged": true,
+    "all_resource_source_native_UNKNOWN_holds_retained": true,
+    "core7ec5_unchanged": true,
+    "failed_float_cohort": {
+      "bytes": 9140,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/RESULT.json",
+      "sha256": "f17537f2d4996b6d1df7887f317e79b452dba74e42c5d739e90ae9feeeb736ef"
+    },
+    "original_acceptance": false
+  },
+  "ready": {
+    "bytes": 9658,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "9ade84872e0d5f66ca51f8f8c873e1035544f91ceae7b374109f5b5a25d375dc"
+  },
+  "remaining_actual_provider_obligations": {
+    "future_whole_consumer_frontier": "Unobserved until actual consumer recompilation with new core and new integer-builtins metadata. Any actual new necessary import remains a required provider, never silently dropped.",
+    "observed_builtin_root": "__udivti3",
+    "observed_core_imports": [
+      "memcpy",
+      "memset",
+      "bcmp",
+      "memcmp",
+      "__udivti3",
+      "_RNvCs59BO7kP62uP_7___rustc17rust_begin_unwind"
+    ],
+    "other_observed_roots": "memcpy/memset/bcmp/memcmp and existing terminal Rust panic-handler symbol remain genuine later image ownership/link obligations; none is declared resolved by this facade."
+  },
+  "reused": {
+    "actual_core_material_provider_ISA_qualification": {
+      "bytes": 5310,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "8b21f19d339e7a318ac3649a38156a166eb69be4b296abe8c34efc4a3fff7a57"
+    },
+    "actual_core_output_tuple": {
+      "bytes": 5750,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/CORE-OUTPUT-TUPLE.json",
+      "sha256": "5989484c3d49660b1f53079d8cb97543cb0fd4f71ddd347caf4489df6f88dcdc"
+    },
+    "actual_core_six_imports": {
+      "bytes": 13042,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/ELF-PROVIDERS-IMPORTS.json",
+      "sha256": "89c49cfc254ad1d0b2dfb2e4d38f7816f5b55dd91120c3a838a59344f525b33d"
+    },
+    "independent_integer_source_diagnosis": {
+      "bytes": 13628,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-diagnosis-p04source-max-1/DIAGNOSIS.json",
+      "sha256": "5380533eb625786daf44091a791fc3c241dda5ced39df04dd4b2595fd91ef73b"
+    },
+    "previous_corrected_CWD_operation_profile": {
+      "bytes": 21458,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/cwd-output-correction-1/REVIEW.json",
+      "sha256": "1a60abb3c4a0bbf29fd827e845c53661c5f36db1bfdbedd387e83064b10c4585"
+    }
+  },
+  "review_effects": "UID1000 ordinary source/saved-byte reads and stdlib equality/parsing only; no reviewed helper/source imported or executed, no compiler/tool/test/Docker/runtime/native/canonical/index/account/controller action.",
+  "reviewed": {
+    "facade": {
+      "bytes": 2743,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input/compiler_builtins_integer.rs",
+      "sha256": "8b9c11a4dcf8fae9c5a9c53d2bce342fcf67da11fde50623d41423afc07102f2"
+    },
+    "future_normal_build_template": {
+      "bytes": 2170,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/compiler_builtins_integer.rs.in",
+      "sha256": "37ea8f6026d2f1d6d33317f93a231311dec4cbb77c4537a3089182f9c0c33ac9"
+    },
+    "helper": {
+      "bytes": 1524,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input/build_builtins.sh",
+      "sha256": "7c9cab9cbe107b0f12702c73a391fc4c0d3267784843ae229f602cf29b63fe50"
+    },
+    "inputs": {
+      "bytes": 15249,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/INPUTS.json",
+      "sha256": "50274f5117ef1b23b7e062fdd2ff2492dca17aa03d6c3573f84c04eefa388a21"
+    },
+    "request": {
+      "bytes": 24684,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/REQUEST.json",
+      "sha256": "1f6ccf36101336780e95f667565b52186c258ebbcbbfc919a4956fa9cfe427d7"
+    },
+    "runner": {
+      "bytes": 8909,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/run_root_once.py",
+      "sha256": "9b61bbddb43a2d8463c43fbdfa9e38ce3b564599846f2ea397206c8412d8141d"
+    },
+    "source_contract": {
+      "bytes": 8837,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/INTEGER-SOURCE-CONTRACT.json",
+      "sha256": "3b5c53ea1b0ea31d815e58ad4b4236722a905f21c6b82f7d48565d6fd7bfba10"
+    }
+  },
+  "reviewer": "/root/public_abi_join_max; actual Sol/MAX",
+  "schema": 1,
+  "scope": "Finite integer facade, unchanged upstream eight-file dependency closure, original ABI and same actual core/kernel compilation profile. This permits the first real compiler only after independent operation GO and fresh Root admission.",
+  "status": "GO_MATERIAL_SOURCE_PROFILE_FOR_FIRST_GENUINE_INTEGER_BUILTINS_COMPILE"
+}

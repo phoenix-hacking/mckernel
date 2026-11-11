@@ -1,0 +1,464 @@
+{
+  "at_utc": "2026-11-11T16:52:42.366318+00:00",
+  "builtins_phase": {
+    "create_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mck-m14-perf-integer-builtins-dependency-20261111-1",
+      "--label",
+      "mckernel.preparation-owner=m14-perf-integer-builtins-dependency-1",
+      "--init",
+      "--pull=never",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=6",
+      "--memory=2g",
+      "--memory-swap=2g",
+      "--pids-limit=256",
+      "--ulimit",
+      "core=0:0",
+      "--ulimit",
+      "fsize=4294967296:4294967296",
+      "--ulimit",
+      "cpu=3600:3600",
+      "--user",
+      "1000:1000",
+      "--read-only",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+      "--workdir",
+      "/core-output",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input,dst=/producer,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1,dst=/core-output",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta,dst=/core-output/libcore.rmeta,readonly",
+      "--entrypoint",
+      "/usr/bin/env",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "-i",
+      "BASH_ENV=",
+      "ENV=",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "TMPDIR=/tmp",
+      "TMP=/tmp",
+      "TEMP=/tmp",
+      "/usr/bin/bash",
+      "--noprofile",
+      "--norc",
+      "/producer/build_builtins.sh"
+    ],
+    "expected_mount_count": 4,
+    "expected_mounts": [
+      {
+        "destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+        "read_only": true,
+        "role": "Same genuine1.95 compiler and entire actual Rust builtins/libm source tree",
+        "source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu"
+      },
+      {
+        "destination": "/producer",
+        "read_only": true,
+        "role": "Exact genuine55token compiler recipe plus necessary passive new-object capture helper",
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input"
+      },
+      {
+        "destination": "/core-output",
+        "read_only": false,
+        "role": "Fresh isolated builtins object/metadata/depfile and passive output only",
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1"
+      },
+      {
+        "destination": "/core-output/libcore.rmeta",
+        "read_only": true,
+        "role": "Actual new source-built core metadata7ec5, file bind prevents accidental overwrite; first core outputs never RW",
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta"
+      }
+    ],
+    "expected_returncode": 0,
+    "genuine_recipe_argv_exact_equal": false,
+    "genuine_recipe_argv_only_delta": {
+      "index": 54,
+      "new": "/producer/compiler_builtins_integer.rs",
+      "old": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs",
+      "reason": "Actual whole upstream float-returning exports are incompatible with actual noSIMD kernel ABI; use complete actual required genuine integer helper closure."
+    },
+    "literal_compiler_argv": [
+      "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "--crate-name",
+      "compiler_builtins",
+      "--crate-type",
+      "rlib",
+      "--edition=2024",
+      "--sysroot=/dev/null",
+      "-C",
+      "metadata=mckernel_kernel_195_builtins",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "-Z",
+      "dep-info-omit-d-target",
+      "-Z",
+      "binary-dep-depinfo",
+      "--extern",
+      "core=/core-output/libcore.rmeta",
+      "-L",
+      "dependency=/core-output",
+      "--cfg",
+      "feature=\"compiler-builtins\"",
+      "--cfg",
+      "feature=\"no-asm\"",
+      "--cfg",
+      "intrinsics_enabled",
+      "--cfg",
+      "optimizations_enabled",
+      "--cfg",
+      "feature=\"unstable-intrinsics\"",
+      "--cfg",
+      "feature=\"mem-unaligned\"",
+      "--emit=obj=/core-output/compiler_builtins.o,metadata=/core-output/libcompiler_builtins.rmeta,dep-info=/core-output/compiler_builtins.raw.d",
+      "/producer/compiler_builtins_integer.rs"
+    ],
+    "max_wall_seconds": 3600,
+    "output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1",
+    "passive_new_output_commands": [
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-S",
+        "/core-output/compiler_builtins.o"
+      ],
+      [
+        "/usr/bin/readelf",
+        "-W",
+        "-s",
+        "-r",
+        "/core-output/compiler_builtins.o"
+      ],
+      [
+        "/usr/bin/objdump",
+        "-drw",
+        "/core-output/compiler_builtins.o"
+      ]
+    ]
+  },
+  "canonical_or_current_kernel_cache_consumed_or_mutated": false,
+  "capture_reuse": {
+    "actual_call_mock_and_producer_GO": {
+      "bytes": 13596,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-review-source-acquisition-max-1/capture-correction-1/REVIEW.json",
+      "sha256": "a53471287daea2779bf0cd6b7ea926cf52f04b6a2cf267ad930ee02559f7a16a"
+    },
+    "exact_CPU6_capture_references": [
+      {
+        "bytes": 4791,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase-cpu6.py",
+        "sha256": "7266db32ace8e167a14cc8a97cd91315f35356f117609da2c7a02cf97d7c2db3"
+      }
+    ],
+    "exact_protected_call": {
+      "bytes": 3449,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/call_capture.py",
+      "sha256": "e088b7ecbc27598e450395eb9c18672da2696c8c4da8bc1c8e4b492b8f2037b4"
+    },
+    "parent_reviewed_corrected_phase": {
+      "bytes": 4791,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase.py",
+      "sha256": "4ca162e1a0e68d236a1f22abbeb7b88849e04e6ffac62049ce28604646acc01b"
+    },
+    "prior_exactCPU6operationreview": {
+      "bytes": 18098,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-operation-review-publicabi-max-1/do-mmap-incremental-1/REVIEW.json",
+      "sha256": "36195ced4b9f98fa57a5d0c819471b8ce7b9083e5dc060a45a86321d958197ed"
+    },
+    "scope": "Exact e088 call and7266 phase plus actual5695/e609/983b selected definitions; registeredattemptbeforePopen, allpostPopen protected/finally/directwait+primarysecondaryUNKNOWN; no group/permission fallback. Source/profile/namespace changes only; no new capture framework."
+  },
+  "completed_prerequisites": {
+    "actual_core_Root_completion": {
+      "bytes": 2496,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "c39be2db4cf53d1b20027f99acc6b59c1a1cc8dd7afbca33ae40523de903354d"
+    },
+    "actual_core_current_only_retirement": {
+      "bytes": 939,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "3253b70fac6da2794c659ede8892c0b600e6ca06b69783db781587ce51355f99"
+    },
+    "actual_core_independent_qualification": {
+      "bytes": 21225,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-core-compile-operation-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "c044223125e51db884803bb112951e543c8d44a4fee9a2df5efe2989aedb41ee"
+    },
+    "actual_core_output_tuple": {
+      "bytes": 5750,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/CORE-OUTPUT-TUPLE.json",
+      "sha256": "5989484c3d49660b1f53079d8cb97543cb0fd4f71ddd347caf4489df6f88dcdc"
+    },
+    "actual_core_provider_frontier": {
+      "bytes": 13042,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/ELF-PROVIDERS-IMPORTS.json",
+      "sha256": "89c49cfc254ad1d0b2dfb2e4d38f7816f5b55dd91120c3a838a59344f525b33d"
+    },
+    "actual_core_result": {
+      "bytes": 10455,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/execution-1/RESULT.json",
+      "sha256": "e01d1ba413305c086b3d44d1428b85b343e43d18710ea68ba9fbd5b3d75c39e6"
+    },
+    "first_core_operation_GO": {
+      "bytes": 13607,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-core-compile-operation-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "c7db91fc9009bd93579c1d8f8b065b872a0153322d9c4eb34240ac411ff72910"
+    },
+    "first_core_repair_contract": {
+      "bytes": 6256,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/REPAIR-CONTRACT.json",
+      "sha256": "dfe8d833c2ea4a1e90c0d6fe460f680f7d32c5e7c975411172afd953e8ff34c5"
+    },
+    "first_core_source_material_GO": {
+      "bytes": 12496,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/REVIEW.json",
+      "sha256": "dd40c65f4d0b2661f6e2e1b13398a67a341950813e419a4f23ce6ebed68e23fb"
+    },
+    "float_codegen_current_only_retirement": {
+      "bytes": 935,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "44ac07fecc173605f1607a8fde2a5fef8d73ee0c08cb916da3c9692e3aeaeec6"
+    },
+    "float_codegen_failed_Root_completion": {
+      "bytes": 2975,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "ef38bdcbe28463430bf79e60bc29c975f09ef7a53bbbe539627420b3710fe84e"
+    },
+    "float_codegen_failed_result": {
+      "bytes": 9140,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/RESULT.json",
+      "sha256": "f17537f2d4996b6d1df7887f317e79b452dba74e42c5d739e90ae9feeeb736ef"
+    },
+    "float_codegen_failed_stderr": {
+      "bytes": 820,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/builtins-build-payload.stderr",
+      "sha256": "eb058bd35548927a7684954de09b6bc9eeb3246fca6ae246e0becacd07aefb06"
+    },
+    "float_codegen_independent_qualification": {
+      "bytes": 19187,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/cwd-output-correction-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "9e1066a71efdd9e3b40528aa33b76d15edaa20fa2dc8f8db0906150dba55a4d6"
+    },
+    "genuine_builtins_recipe": {
+      "bytes": 6124,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/BUILD-RECIPE.json",
+      "sha256": "a99d9c7647db735455ca0e011934dc9ef824c034c30073a98f2f605792a7ee45"
+    },
+    "genuine_builtins_source_binding": {
+      "bytes": 7041,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-BINDINGS.json",
+      "sha256": "9cbc665df15374a34e68b3098a8aac9a85e3ae2de830ccc493253628676e9b72"
+    },
+    "genuine_builtins_source_profile": {
+      "bytes": 4248,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-p04source-max-1/builtin-build-unit/SOURCE-PROFILE.json",
+      "sha256": "d3bd15adce508333de19d3dbe8f75a14d2fa1a510c580aa9b63ddb7d9114b184"
+    },
+    "integer_closure_source_diagnosis": {
+      "bytes": 13628,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-builtin-integer-closure-diagnosis-p04source-max-1/DIAGNOSIS.json",
+      "sha256": "5380533eb625786daf44091a791fc3c241dda5ced39df04dd4b2595fd91ef73b"
+    },
+    "prior_builtin_source_operation_GO": {
+      "bytes": 18558,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "7b9a2ddeeabe704b6bb7f7ef06c326b0dbc9402c648b2af068ef7709e3508fd0"
+    },
+    "prior_failed_builtin_Root_completion": {
+      "bytes": 2895,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "d3255800616c047768d8ea132b0332fafbd2c27f4df34469a91e0da6cf8a3aae"
+    },
+    "prior_failed_builtin_current_only_retirement": {
+      "bytes": 835,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+      "sha256": "843f6c375b2e6c18acb8013c081d7b583c4c0472f2a491b650b8b96997c49362"
+    },
+    "prior_failed_builtin_independent_qualification": {
+      "bytes": 17242,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+      "sha256": "97daa81e969377ec26e9134c488dbfc0d4e02f38931af3537831b9a9290c6fbd"
+    },
+    "prior_failed_builtin_result": {
+      "bytes": 9303,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/RESULT.json",
+      "sha256": "2c7d8e3503f25bbc695f84a4a90183c3a29b59aea6e0c528e6c98eae4b0d84e2"
+    },
+    "prior_failed_builtin_stderr": {
+      "bytes": 538,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/builtins-build-payload.stderr",
+      "sha256": "84c2d5e5bdf9201703ef8b95048fc7ddfd2edd1ba41ff32452986aaa64dec681"
+    }
+  },
+  "consumer_image_or_native_authorized": false,
+  "core_companion_object_record": {
+    "bytes": 2545640,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/core.o",
+    "sha256": "91548b340ced7612ce194f8f52bcbedbd56715255c488a3f0cd00054e1669061"
+  },
+  "core_metadata_identity": "mckernel_kernel_195",
+  "core_metadata_input": {
+    "bytes": 62088310,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/first-core-compile-1/output-1/libcore.rmeta",
+    "sha256": "7ec5faeecbe4c7bd2c865000bf4e4b66367269f3bd5bbb0fc1c46015ee014aa9"
+  },
+  "core_rebuilt_or_metadata_overwritten": false,
+  "inputs": {
+    "bytes": 15249,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/INPUTS.json",
+    "sha256": "50274f5117ef1b23b7e062fdd2ff2492dca17aa03d6c3573f84c04eefa388a21"
+  },
+  "integer_source_contract": {
+    "bytes": 8837,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/INTEGER-SOURCE-CONTRACT.json",
+    "sha256": "3b5c53ea1b0ea31d815e58ad4b4236722a905f21c6b82f7d48565d6fd7bfba10"
+  },
+  "metadata_identity": "mckernel_kernel_195_builtins",
+  "no_new_source_body_or_assertion_changes": true,
+  "original_acceptance": false,
+  "output_files": [
+    "compiler_builtins.o",
+    "libcompiler_builtins.rmeta",
+    "compiler_builtins.raw.d",
+    "builtins-elf.stdout",
+    "builtins-symbols-relocations.stdout",
+    "builtins-disassembly.stdout"
+  ],
+  "owner": "SDK preparer; Root sole fresh admission/execution",
+  "phase_order": [
+    "builtins-build"
+  ],
+  "preserved_prior_cwd_fix_provenance": {
+    "actual_failure": "Rustc writes a relative CGU intermediate even with absolute final --emit outputs; old CWD was source-package RO.",
+    "all_source_codegen_core_metadata_and_permissions_unchanged": true,
+    "fresh_output_and_capture_only": true,
+    "genuine55_compiler_argv_unchanged": true,
+    "new_workdir": "/core-output",
+    "new_workdir_is_already_reviewed_RW_output_namespace": true,
+    "no_partial_old_builtin_artifact_adopted": true,
+    "old_workdir": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins",
+    "prior_failure_and_current_retirement": {
+      "prior_builtin_source_operation_GO": {
+        "bytes": 18558,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/REVIEW.json",
+        "sha256": "7b9a2ddeeabe704b6bb7f7ef06c326b0dbc9402c648b2af068ef7709e3508fd0"
+      },
+      "prior_failed_builtin_Root_completion": {
+        "bytes": 2895,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/ROOT-EXEC-COMPLETION.json",
+        "sha256": "d3255800616c047768d8ea132b0332fafbd2c27f4df34469a91e0da6cf8a3aae"
+      },
+      "prior_failed_builtin_current_only_retirement": {
+        "bytes": 835,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/CURRENT-PROCESS-MEMORY-RETIREMENT.json",
+        "sha256": "843f6c375b2e6c18acb8013c081d7b583c4c0472f2a491b650b8b96997c49362"
+      },
+      "prior_failed_builtin_independent_qualification": {
+        "bytes": 17242,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/actual-result-1/QUALIFICATION.json",
+        "sha256": "97daa81e969377ec26e9134c488dbfc0d4e02f38931af3537831b9a9290c6fbd"
+      },
+      "prior_failed_builtin_result": {
+        "bytes": 9303,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/RESULT.json",
+        "sha256": "2c7d8e3503f25bbc695f84a4a90183c3a29b59aea6e0c528e6c98eae4b0d84e2"
+      },
+      "prior_failed_builtin_stderr": {
+        "bytes": 538,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/execution-1/builtins-build-payload.stderr",
+        "sha256": "84c2d5e5bdf9201703ef8b95048fc7ddfd2edd1ba41ff32452986aaa64dec681"
+      }
+    },
+    "scope": "Historical9527 CWD correction against preceding whole-root attempt only; current integer source-token delta is separately explicit.",
+    "superseded_only_for_new_source_root": true
+  },
+  "resources": {
+    "build": {
+      "AS": "Actual2GiB cgroup cap; previous real image sampled highwater513519616B/nonOOM reused as profile context, not a prediction of this changed cohort peak.",
+      "CPU": [
+        6
+      ],
+      "CPU_seconds": 3600,
+      "FSIZE_bytes": 4294967296,
+      "container_memory_bytes": 2147483648,
+      "jobs": 1,
+      "memory_swap_bytes": 2147483648,
+      "new_output_disk_headroom_bytes": 4294967296,
+      "pids": 256,
+      "wall_seconds": 3600
+    },
+    "serialization": "Root only; one CPU6/2GiB-j1 namedimage/cache owner, all overhead/current payloads insideHOST4GiB/max3/fresh26GiB+floors; later passive metadata is separately SDK/PublicABI bound and serialized after positive producer closure. Native2-5/12GiB andCPU1/retained owners remain untouched.",
+    "shared": "HOST CPUs0,6,7/max3jobs/4GiBTOTAL including all controllers/worker/daemon/helper/container/otherjobs. FreshMemAvailable>=26GiB; host16/scratch12GiB floors plus5GiB batch headroom. Native2-5/12GiB/CPU1/retained18GiB unchanged. Actual540/a41 releases old currentHOST512MiB/twojobs only; retain missing-wait history/all other holds and UNKNOWNs. Root fresh admission, not assumed free."
+  },
+  "root_parent_entrypoint": {
+    "argv_prefix": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/run_root_once.py"
+    ],
+    "login": false,
+    "max_output_tokens": 5000,
+    "required_positional_arguments": [
+      "actual new independent material/operation GO absolute path",
+      "matching actual SHA256"
+    ],
+    "tty": false,
+    "workdir": "/home/holden/mckernel",
+    "yield_time_ms": 1000
+  },
+  "root_requirements": [
+    "Firstcore7ec5/9154 never rebuilt. Both failed whole-builtins cohorts retained, including actual new float ABI failure f175/eb058/ef38/Q9e106 and Root current-only retirement44ac. Meaningful new source facade cuts unneeded float declarations while preserving all8 genuine integer/helper bodies and all other54 compiler tokens; no SSE enable, target mismatch, stub or accepted partial output.",
+    "Source/profile/material and exact capture/operation review then fresh current-only Root CPU6/2GiB/j1 grant inside HOST4GiB/max3/alloverhead/fresh26GiB and host16/scratch12 floors+5GiB output headroom; all other holds unchanged.",
+    "Actual firstcore e01/c39/c044/current-only3253 must remain exact; source/input/meta RO identities before and after. No rebuild/copy/modify core or old HOST fallback.",
+    "Real compiler correctness and full no-SIMD builtin/libm/intrinsic ABI remains UNPROVED. Preserve actual diagnostic if incompatible rather than change feature/ABI or insert stubs during execution.",
+    "All actual registered clients/births/direct+wholefamily/streams/terminal/nonOOM/Pid0/owned removal/fullRoot completion before current-only release.",
+    "Core provider ISA material review/future consumer fatal tests/final CMake/newimage remain separate and are not a prerequisite for this genuine first builtin compiler. No consumer, image or native execution."
+  ],
+  "schema": 1,
+  "status": "NEW_GENUINE_INTEGER_PROVIDER_SOURCE_CLOSURE_COMPILER_PENDING_SOURCE_MATERIAL_OPERATION_GO_AND_ADMISSION"
+}

@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "status": "SECOND_ACTUAL_BUILTIN_ABI_FAILURE_GENUINE_INTEGER_SOURCE_CLOSURE_PLAN_ONLY",
+  "at_utc": "2026-11-11T16:47:20.252073+00:00",
+  "owner": "/root/p04_source_max",
+  "repair_owner": "/root/sdk_binding_source_max",
+  "scope": "Independent finite diagnosis and source-selection recommendation only. SDK owns integer-builtins-1 candidate/recipe. No source candidate/algorithm/body modification, compiler/probe/guest/native execution by this owner.",
+  "actual_failure": {
+    "result": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/RESULT.json",
+      "bytes": 9140,
+      "sha256": "f17537f2d4996b6d1df7887f317e79b452dba74e42c5d739e90ae9feeeb736ef"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/builtins-build-payload.stderr",
+      "bytes": 820,
+      "sha256": "eb058bd35548927a7684954de09b6bc9eeb3246fca6ae246e0becacd07aefb06"
+    },
+    "Root_completion": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/builtins-compile-1/cwd-output-correction-1/execution-1/ROOT-EXEC-COMPLETION.json",
+      "bytes": 2975,
+      "sha256": "ef38bdcbe28463430bf79e60bc29c975f09ef7a53bbbe539627420b3710fe84e"
+    },
+    "independent_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-first-builtins-compile-review-sourceacq-max-1/cwd-output-correction-1/actual-result-1/QUALIFICATION.json",
+      "bytes": 19187,
+      "sha256": "9e1066a71efdd9e3b40528aa33b76d15edaa20fa2dc8f8db0906150dba55a4d6"
+    },
+    "diagnostic": "macros.rs471 in upstream math::full_availability::roundevenf float(float): SSE register return with SSE disabled",
+    "observed_scope": "CWD correction reaches granted RW correctly. The new failure is codegen of an unrequired generic floating C-ABI export, not a failure of actual core integer semantics. Partial builtins metadata/object remain unaccepted."
+  },
+  "actual_core_frontier": {
+    "saved_proof": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/ELF-PROVIDERS-IMPORTS.json",
+      "bytes": 13042,
+      "sha256": "89c49cfc254ad1d0b2dfb2e4d38f7816f5b55dd91120c3a838a59344f525b33d"
+    },
+    "tuple": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-review-publicabi-max-1/first-core-compile-1/actual-result-1/CORE-OUTPUT-TUPLE.json",
+      "bytes": 5750,
+      "sha256": "5989484c3d49660b1f53079d8cb97543cb0fd4f71ddd347caf4489df6f88dcdc"
+    },
+    "six_strong_imports": [
+      "memcpy",
+      "memset",
+      "bcmp",
+      "memcmp",
+      "__udivti3",
+      "_RNvCs59BO7kP62uP_7___rustc17rust_begin_unwind"
+    ],
+    "only_observed_compiler_builtin_root": "__udivti3",
+    "other_five_providers": "Four existing real kernel memory functions plus existing kernel Rust panic-handler symbol. These remain actual future image provider obligations.",
+    "new_whole_consumer_imports": "UNOBSERVED: no new whole-consumer actual import proof exists yet. Recompilation/link must reveal any additional required integer/helper provider; this plan does not silently drop such requirements."
+  },
+  "root_cause": {
+    "upstream_whole_root": {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/lib.rs",
+      "bytes": 2449,
+      "sha256": "b116d9dcf7c67c9bba1f77ae283648e6530d60f3d56e9472b6892a4f83fde2b7"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/Cargo.toml",
+      "bytes": 1959,
+      "sha256": "4d434596c0576fd1454e2de88f826d91518688fa2c3c46fff75c1f31471c4b01"
+    },
+    "math_root": {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/math/mod.rs",
+      "bytes": 6730,
+      "sha256": "3d3b1d5ffaad89bb360993d7b93b50da9812e583b344d52be20dfcbd288c6d7d"
+    },
+    "facts": [
+      "Original lib.rs unconditionally declares pub mod float and pub mod math.",
+      "The real math full_availability wrappers emit f32/f64 C-ABI exports even with feature no-asm. That feature selects generic implementations; it does not remove floating return ABIs.",
+      "Actual Cargo feature list has no no-float/no-math or integers-only selector. Inventing such a cfg without changing the module graph would not fix the failure.",
+      "Enabling SSE or linking a HOST archive would change the kernel profile and is not an eligible repair."
+    ]
+  },
+  "genuine_minimal_selected_dependency_closure": {
+    "sources": {
+      "src/macros.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/macros.rs",
+        "bytes": 16947,
+        "sha256": "e3943300cc00a95501b2d1059aa1a6d385e547da4806d3b3051a184dbf3ec8b2"
+      },
+      "src/int/udiv.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/udiv.rs",
+        "bytes": 6819,
+        "sha256": "1e00dbc9721832469cef87465124b51f8856074344ad1fee120b276e5b2b1dab"
+      },
+      "src/int/specialized_div_rem/mod.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/mod.rs",
+        "bytes": 10960,
+        "sha256": "51d9f03ff12422ae770ddc8f9ec721da5576cafdb4d657b040eedee969bc6778"
+      },
+      "src/int/specialized_div_rem/norm_shift.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/norm_shift.rs",
+        "bytes": 5320,
+        "sha256": "3be7ee0dea545c1f702d9daf67dad2b624bf7b17b075c8b90d3d3f7b53df4c21"
+      },
+      "src/int/specialized_div_rem/binary_long.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/binary_long.rs",
+        "bytes": 26904,
+        "sha256": "6bdb94c349705e68ca17ae6ac53a87658d2e0b1860ee72d73c53cc9d171062ae"
+      },
+      "src/int/specialized_div_rem/delegate.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/delegate.rs",
+        "bytes": 15133,
+        "sha256": "138d75dd0eaa2f442a55a1b6f4032b9096901d88e2d114c34753936bdca727b3"
+      },
+      "src/int/specialized_div_rem/trifecta.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/trifecta.rs",
+        "bytes": 20452,
+        "sha256": "87eef69da255b809fd710b14f2eb3f9f59e3dac625f8564ebc8ba78f9763523b"
+      },
+      "src/int/specialized_div_rem/asymmetric.rs": {
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/int/specialized_div_rem/asymmetric.rs",
+        "bytes": 3289,
+        "sha256": "27f5bf70a35109f9d4e4e1ad1e8003aa17da5a1e436bf3e63a493d7528a3a566"
+      }
+    },
+    "selection_shape": [
+      "Retain the actual compiler-builtins crate attributes/no_std/no_builtins and real upstream intrinsics! macros; do not hand-export an invented ABI.",
+      "Use whole unchanged upstream src/macros.rs as the macro-use root.",
+      "Declare crate-relative mod int with only the whole unchanged specialized_div_rem module at its actual source path and whole unchanged int/udiv.rs. Preserve crate::int::specialized_div_rem namespace, which is udiv.rs only crate dependency.",
+      "The full specialized_div_rem module includes its original norm_shift,binary_long,delegate,trifecta,asymmetric files; no function body or branch is shortened/copied by hand.",
+      "Do not declare the unrelated upstream float/math modules, or the all-int traits module that reexports libm::support. This is an explicit source-bound required dependency cut, not a pretend upstream Cargo feature."
+    ],
+    "why_complete_at_source": "udiv.rs exports actual u32/u64/u128 quotient, remainder and combined helpers solely through original specialized_div_rem. The helper tree has no crate::float/math/support dependency; its remaining reference self::delegate and internal macros are included. Original intrinsics! produces the actual extern C unsigned signatures and unmangled/weak symbols.",
+    "profile": [
+      "Same actualRust1.95 compiler and actual newcore7ec5 metadata",
+      "Keep large/static/no-redzone/all-SIMD-off/panic-abort flags and genuine no-asm feature",
+      "Keep metadata core identity and explicit newcore/noHOST sysroot binding; bind new actual integer-builtins metadata from this new source unit before consumer compilation",
+      "x86_64 + pointer64 + no-asm chooses upstream impl_trifecta!(u128_div_rem,...) using real u64 checked integer division; no x86 asymmetric/float route",
+      "Keep all nonzero-divisor branches and upstream zero_div_fn intrinsic-unreachable semantics unchanged; do not invent a successful zero-divisor result"
+    ],
+    "actual_root_signature": "Upstream int/udiv.rs __udivti3(n:u128,d:u128)->u128 delegates to u128_div_rem(n,d).0; actual macro-generated extern C ABI is retained.",
+    "required_source_files": 8,
+    "functional_coverage": "Full unsigned128 dividend/divisor domain with nonzero divisor, including low/high divisor, quotient0/1, short division and long division branches. No narrowing to small fmt values."
+  },
+  "smallest_repair_input_change": [
+    "New genuine source root which selects only the pinned real integer module closure; no changed upstream function body.",
+    "Replace only compiler input source root in the separately bound integer-provider recipe, retain the already corrected output RW working directory and all kernel flags/newcore inputs.",
+    "Update the CMake builtin source/dependencies to that exact reviewed root before a final normal image; Root owns canonical composition, SDK owns the candidate.",
+    "Consumer uses actual new core + integer-builtins metadata and actual matching objects; old failed partial full-builtins metadata is never adopted."
+  ],
+  "necessary_meaningful_verification": [
+    "Independent source/profile review of the exact source-bound root and transitive imports, then actual required integer compiler under fresh Root operation admission.",
+    "Actual emitted integer-provider symbols/relocs/imports/ISA and metadata identity, especially genuine __udivti3; report any additional integer helper import instead of guessing its presence.",
+    "Use the already planned finite real core-boundary consumer. Add necessary unsigned128 nonzero-divisor vectors if absent to cover the actual selected provider branches; never call the upstream undefined zero-divisor intrinsic contract to fabricate semantics. No18-unit ownership suite rerun solely for this provider cut.",
+    "Then real unchanged whole-kernel consumer compile/link and actual all-import/provider closure. No claim of complete future consumer frontier from the currently observed six core imports alone."
+  ],
+  "rejected_shortcuts": [
+    "Enabling SSE/soft-float/custom target changes or changing no-redzone/static/large profile to make unused generic float wrappers compile",
+    "Float no-op/panic placeholders, Linux placeholder compiler_builtins.rs, HOST compiler runtime archive or guessed Rust ABI shims",
+    "Deleting/check-bypassing required core or ownership safety paths",
+    "Taking only a small arithmetic special case or omitting true required integer transitive helpers"
+  ],
+  "preserved_scope": "Core9154/7ec5 actual proof, all28 ownership bodies/checks/handler and four-family runtime26bfc stay unchanged. No provider source GO, compiler PASS, final image, DEFAULT/FUNCTIONAL/native credit or resource release is granted by this diagnosis."
+}

@@ -1,0 +1,188 @@
+{
+  "schema": "m14-core-consumer-normal-u128-source-delta-review-v1",
+  "at_utc": "2026-11-11T16:58:52.993937+00:00",
+  "reviewer": "p03_cutover_source_max independent finite source/oracle/map-boundary delta review",
+  "decision": "CONDITIONAL_SOURCE_ORACLE_AND_REQUIRED_PROVIDER_IDENTITY_GO_NOT_OPERATION_ADMISSION",
+  "reused_unchanged_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-source-review-p03-max-1/REVIEW.json",
+    "bytes": 17438,
+    "sha256": "3b82356f2e6256fc448f55aa50ceff67719efcd23b4d2389ecf4155b39da2753"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 3784,
+    "sha256": "ff79e1136e50c30c64bcaf8786365accf66b886eec6e64201611f47905105df2"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/core_boundary_consumer.rs",
+    "bytes": 6141,
+    "sha256": "ca6c5f71f3616c9c67cd424d61b17ec55f52c63b254c7003e1d748b5b53280b8"
+  },
+  "expected": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/EXPECTED.json",
+    "bytes": 1414,
+    "sha256": "d4844227f9caeac7eeff18ed0e1457c2689da096b97fbaa2f7c0830667272c25"
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/COMMAND-PROPOSAL.json",
+    "bytes": 17953,
+    "sha256": "f647c101f50475120ae85c3c1efb52a5ab374f2285f2249d4c54e2cc3f6378fd"
+  },
+  "exact_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/NORMAL-U128-ONLY.patch",
+    "bytes": 1867,
+    "sha256": "cd9fce5983388491e20410a4b4c8c39559bff3e27d855fc7c3fd3aad7ac90739"
+  },
+  "independent_literal_vectors": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/U128-EXTERNAL-VECTORS.json",
+    "bytes": 1276,
+    "sha256": "61c69693d870f663ef0eb90f0c02354ac3eab0edfd4e50cb0b63988d71095f09"
+  },
+  "old_source_and_oracle_preserved": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/core_boundary_consumer.rs",
+      "bytes": 5235,
+      "sha256": "1aa8c5e6a660b4d26d4c02f09fea3a2e872f2bf88fdb46fc3d6c4eb55297623d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/EXPECTED.json",
+      "bytes": 1158,
+      "sha256": "3b9cf7876d19babb8a569b28efb971fdffe29aa8ad745d81cb3a4eb9b918df03"
+    }
+  ],
+  "delta_reconstruction": "Entire1867B unified patch byte-matches independent old1aa8\u2192newca6 source diff. It adds only unsigned_quotient/words plus four operations/results in normal(); panic handler, all old wrappers/fatal main cases and existing normal observations are preserved.",
+  "genuine_arithmetic": {
+    "operation": "#[inline(never)] unsigned_quotient(numerator:u128,denominator:u128) -> black_box(numerator)/black_box(denominator)",
+    "ABI": "Compiler owns native primitive u128 lowering/call ABI. Probe neither declares/exports __udivti3 nor casts a function pointer or Rust ABI payload.",
+    "word_order": "High u64 first from value>>64, low u64 second. No floating or decimal truncation; serialized u64 decimal values must be compared as exact JSON integers.",
+    "vectors": [
+      {
+        "input": "0/(2^128-1)",
+        "expected_words": [
+          0,
+          0
+        ]
+      },
+      {
+        "input": "(2^128-1)/1",
+        "expected_words": [
+          18446744073709551615,
+          18446744073709551615
+        ]
+      },
+      {
+        "input": "(2^128-1)/(2^128-1)",
+        "expected_words": [
+          0,
+          1
+        ]
+      },
+      {
+        "input": "(2^128-1)/(2^64-1)",
+        "expected_words": [
+          1,
+          1
+        ]
+      }
+    ],
+    "reviewer_independent_integer_arithmetic_confirms_all_literals": true,
+    "divisor_zero_or_float_case_added": false,
+    "genuine_lowering_still_actual_obligation": "Actual consumer object must contain the real __udivti3 relocation; arithmetic results alone do not prove selected builtin linkage."
+  },
+  "oracles_and_test_count": {
+    "original_normal_fields_exactly_unchanged": true,
+    "all_four_fatal_rows_deep_equal_original": true,
+    "original_panic_handler_and_terminal_bytes_unchanged": true,
+    "same_runtime_modes": 5,
+    "same_exact_command_count": 7,
+    "statuses": [
+      0,
+      0,
+      0,
+      101,
+      101,
+      101,
+      101
+    ],
+    "new_normal_only_field": "u128_quotients",
+    "literal_normal_wordpairs": [
+      [
+        0,
+        0
+      ],
+      [
+        18446744073709551615,
+        18446744073709551615
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "buffer": "New finite JSON fits existing initialized512B output buffer. Formatting/IO/error codes remain nonpassing; no oracle imported into source or success result manufactured.",
+    "full_result_rule": "Final execution must compare every exact integer/field, full one-record JSON/status/empty stderr for all five modes, retaining all old message goldens and unexpected-result failures."
+  },
+  "actual_source_interface_checked": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/REQUEST.json",
+      "bytes": 24684,
+      "sha256": "1f6ccf36101336780e95f667565b52186c258ebbcbbfc919a4956fa9cfe427d7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 9658,
+      "sha256": "9ade84872e0d5f66ca51f8f8c873e1035544f91ceae7b374109f5b5a25d375dc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/input/compiler_builtins_integer.rs",
+      "bytes": 2743,
+      "sha256": "8b9c11a4dcf8fae9c5a9c53d2bce342fcf67da11fde50623d41423afc07102f2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/INTEGER-SOURCE-CONTRACT.json",
+      "bytes": 8837,
+      "sha256": "3b5c53ea1b0ea31d815e58ad4b4236722a905f21c6b82f7d48565d6fd7bfba10"
+    }
+  ],
+  "actual_metadata_and_provider_boundary": {
+    "genuine_core_metadata_SHA": "7ec5faeecbe4c7bd2c865000bf4e4b66367269f3bd5bbb0fc1c46015ee014aa9",
+    "actual_new_integer_provider_bytes_bound": false,
+    "required_new_object_and_metadata_paths": [
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/compiler_builtins.o",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/libcompiler_builtins.rmeta"
+    ],
+    "same_metadata_seed": "mckernel_kernel_195_builtins",
+    "no_zero_placeholder_as_core_or_old_HOST_core": true,
+    "explicit_externs_and_two_real_dependency_directories_checked": true,
+    "remaining": "SDK/Root real integer builtin compiler PASS and independent source/profile/ISA/exports+all positive lifecycle/source qualification must bind actual object/rmeta hashes before executable successor. This review grants no producer or case execution."
+  },
+  "map_and_ELF_identity_boundary": {
+    "same_HOST_link_adds_map_output": "-Wl,-Map=/home/holden/mckernel-work/m14-blocker-resolution-20261110/core-provider-consumer-tests-p04tests-max-1/integer-provider-extension-1/output-1/core-boundary-consumer.map",
+    "selected_integer_object": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-freestanding-panic-provider-sdk-max-1/integer-builtins-1/output-1/compiler_builtins.o",
+    "required_actual_proof": [
+      "Saved freshly compiled consumer object genuinely requires __udivti3 relocation",
+      "Actual selected new integer object has the real definition from the reviewed upstream integer source",
+      "Final linker map plus actual final ELF symbol/address/code placement identify that selected object as the provider",
+      "Reject HOSTlibgcc, old full-builtins, guessed symbol alias or other-definition substitution even if numerical results match"
+    ],
+    "no_new_runtime_scenario_or_probe_from_this_source_delta": true,
+    "source_review_does_not_claim_actual_map_or_provider_PASS": true
+  },
+  "HOST_vs_kernel_scope": "Reuse3b823 exactly: no_std real matching core operations, own HOSTwrite/_Exit panic terminal, no libstd/oldcore/fake providers. Does not qualify kernel panic/debugcon/IRQ/native/image/default/original FUNCTIONAL; all real holds/UNKNOWNs retained.",
+  "mandatory_separate_gates": [
+    "Actual new integer provider object/metadata qualification and positive owned compiler/container/client/fullRoot closure",
+    "SourceAcq final bound executable packet/resource/profile/Owner/output proof review and Root fresh sharedHOST admission",
+    "Actual consumer compile and HOSTlink success then five cases and genuine required __udivti3 object/final-map/ELF ownership proof"
+  ],
+  "source_defect_established": null,
+  "Root_may_execute_from_this_review_alone": false,
+  "actual_type_link_behavior_image_or_native_success_claimed": false,
+  "source_candidate_or_canonical_edited_by_reviewer": false,
+  "compiler_link_test_or_SUT_or_native_executed_by_reviewer": false,
+  "children_spawned": false,
+  "old18family_metadata_or_green_suite_rerun": false
+}
