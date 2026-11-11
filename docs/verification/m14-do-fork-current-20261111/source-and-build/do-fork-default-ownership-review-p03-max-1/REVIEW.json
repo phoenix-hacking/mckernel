@@ -1,0 +1,425 @@
+{
+  "Root_only_integration_execution_credit_and_publication": true,
+  "additional_exact_provider_read": {
+    "bytes": 444772,
+    "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+    "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+  },
+  "at": "2026-11-11T01:53:23.861662+00:00",
+  "exact_private_postimages": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 57292,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/candidate/kernel/CMakeLists.txt",
+      "sha256": "02bede01bad5429d513b415a50647ebd59db61e9236bb466e691d790c5fe1063"
+    },
+    "kernel/rust/f03_do_fork.rs": {
+      "bytes": 32328,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/candidate/kernel/rust/f03_do_fork.rs",
+      "sha256": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b"
+    },
+    "kernel/rust/lib.rs": {
+      "bytes": 4380,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/candidate/kernel/rust/lib.rs",
+      "sha256": "05bcbca0c8a7170b67d4eafb1fcf7b60cc920102f3411016e2544c4aaf9d9790"
+    },
+    "kernel/syscall.c": {
+      "bytes": 955657,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/candidate/kernel/syscall.c",
+      "sha256": "6928ebdc14aa988be5b9fb8ff2a59a56e81e0bf56b5a3559272f69858dbc3e24"
+    }
+  },
+  "independent_checks": [
+    {
+      "evidence": "All ready/contract/source/provider pins checked as saved bytes; all four actual canonical preimages still match the frozen f374 hashes. A local stdlib unified-diff comparison reconstructs exactly all four private postimages across seven hunks. Complete 15,693B CURRENT-DO-FORK.c is byte-identical in current syscall.c and inside the new guarded fallback. Added source is one full current Rust entry plus genuine readback-only C/Rust metadata; no provider body or unrelated source is rewritten.",
+      "id": "four-path-integrity",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Rust unsafe extern C fn(CInt,CULong,CULong,CULong,CULong,CULong,CULong)->CULong exactly matches current C unsigned long do_fork(int,...six unsigned longs), current syscall_policy.rs235 extern and sys_fork/sys_vfork/sys_clone callers11494/11502/11529. C and Rust function-pointer assertions bind it. Original seven arguments/order, unsigned-long return bits and signed CInt error widening are preserved. Existing clone3 adapter passes a private legacy register view but leaves original old->uctx syscall number435 intact, so candidate retains the actual clone3 marker exclusion and current1804 behavior.",
+      "id": "seven-argument-public-ABI-and-callers",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Candidate checks the current original syscall number before pthread-marker handling, records/clears the saved routine in the original order, calls actual clone_flags_result/coredump policy, preserves EAGAIN and diagnostic cases, UTI clone-rank state and mod_clone mode values0/1. It retains helper current-CPU choice versus genuine obtain_clone_cpuid reservation, exact affinity snapshot/inherit inputs and existing release_cpuid dispositions. Constructor-null helper returns ENOMEM without releasing an unowned reservation; later helper cleanup retains original C behavior rather than inventing a new reservation policy.",
+      "id": "flags-marker-rank-and-CPU-policy",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Calls current accepted process::clone_thread(old,pc,newsp-or-cursp,flags), whose actual public wrapper forwards unchanged to process_clone_thread_body_result and existing process_clone_config. Constructor graph, VM/private/shared branches and reference/allocator/publication behavior remain F02-owned. Read actual signatures for cpu_set, affinity helpers, runq_add_thread/release_cpuid, kmalloc_tracked(CInt,CULong,*mut i8,CInt), kfree_tracked, write_process_vm, setint_user, virt_to_phys, lock/atomic/wait/report helpers and real extern CPU/do_syscall/do_kill/schedule family. No invented callback, provider stub, fake state or nominal-lock overlay substitutes for them.",
+      "id": "real-F02-constructor-and-provider-types",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Original C lookup releases memory_range_lock before dereferencing range->memobj->path and repeats that borrow after clone_thread. New routine_snapshot performs lookup and copies only path bytes under the same original read-lock interval, then drops every range/object/path pointer. Genuine fileobj/hugefileobj/devobj allocate immutable PATH_MAX path storage retained by the range/object owners; current lookup returns only a borrow. New classification/diagnostic/sprintf consume the local copy. No new lock, allocation, refcount pin, error policy or additional success value is introduced.",
+      "id": "diagnostic-borrow-lifetime-correction",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Snapshot stores at most PATH_MAX-1 bytes plus NUL, preserving every defined terminated path of the original supported providers. New sprintf output max is 0x +16 hex digits+space-at-space+4095 path bytes+NUL (4117B), within actual PTHREAD_ROUTINE_LEN=PATH_MAX+64=4160. Array bytes after the first NUL need not be initialized and are never read by the string providers. The 4KiB path copy and fixed request/cpuset/nodes fit the current32-page/128KiB Thread kernel stack; no dynamic-size stack array or invented small stack profile appears. Actual compiler stack/object behavior remains a future production check.",
+      "id": "diagnostic-storage-and-stack",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Uses actual VM reader/noirq lock providers and actual threads writer/IRQsave providers with matching locks/nodes. ABI and lock-helper representations preserve lock64/align64 and noirq/IRQsave nodes64/align64; irqsave providers initialize/read their real saved flags, and noirq providers ignore their original unused node. Pointer casts change only nominal Rust types at validated ABI lock addresses, not layouts or ownership. No full mutable Thread/Process reference spans transport, scheduling or callbacks; only raw field/storage pointers and immutable local offsets are supplied.",
+      "id": "real-lock-nodes-IRQ-and-raw-storage",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Original NR_TIDS macro policy is preserved on each expansion: allow_oversubscribe ? max(num_processors*2,128) : num_processors. Candidate allocates the same uninitialized int reply/table capacities with original tracked origins; it does not zero extra TID storage. Existing syscall_settid_body_result fully zeros its72B request before args4=count,args5=real physical reply pointer and real synchronous gettid transport. Actual mcexec act_gettid/collect_active_tids_result fill every int slot (including trailing zero), transfer the complete array and return an error on failed transfer. Candidate preserves first-allocation lock/unlock, tid_table_created, exact frees, scan termination, ptr-CAS retry, no-more-TID path and existing table-cleanup ownership.",
+      "id": "shared-TID-transfer-and-CAS",
+      "result": "PASS"
+    },
+    {
+      "evidence": "One72B request1={0} allocation is retained across actual selector0, selector1 and original kill. Selector0 preserves number56, flags/pid-parent policy, user-start/length and physical page-table args, signed-int PID conversion/error, tid assignment, first PID slot and inherit event. Actual C address_space has flexible int pids[] immediately after int nslots; candidate writes allocation byte offset offset_of(AddressSpace,nslots)+sizeof(CInt), not a fabricated field/opt/free_cb overlay or guessed Rust fixed-size offset. Existing accepted create_address_space allocates real trailing slot storage. C static assertion and 104-word row82 bind that exact flexible offset. Required actual compiled C/Rust equality is explicitly still pending.",
+      "id": "legacy-host-request-and-flexible-pids",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Qualified current profile already selects MCKERNEL_NATIVE_CLONE3/NATIVE_CLONE_TID. Candidate ignores failed parent setint_user result exactly as current native branch, preserves clear_child_tid pointer and complete int child write_process_vm/COW operation with ignored result. Genuine helpers initialize TLS/return/status/parentCPU, prepare remote argument, publish thread/process, perform ptrace report and non-SIGCHLD report-list/writer IRQ/hold ordering exactly as current C. No parent/TID/ACK validator or additional refcount is introduced.",
+      "id": "native-TID-execution-and-publication",
+      "result": "PASS"
+    },
+    {
+      "evidence": "After thread/process publication and ptrace, selector1 sets args0=1,args1=child tid, preserves remaining request slots and narrows CLong to CInt. On error, cleanup is original mod-argument free+VM count decrement, release_ids host kill (or entry-created empty shared TID table cleanup), process/thread refcount resets and saved_cmdline free, real release_thread, then release_cpuid. Initial host failure/allocation/inherit errors go directly to original destroy edge as appropriate. Ignored provider dispositions and selector/kill return policies remain unchanged; this is not an assertion that existing native ownership outcomes are proven.",
+      "id": "selector1-and-error-labels",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Candidate copies the already committed immutable child CInt tid before genuine runq_add_thread publication and optional schedule. Static source comparison confirms no child dereference in the success tail after enqueue; it returns that scalar widened to CULong. This removes the original post-enqueue new->tid lifetime hazard without adding a speculative reference/lock or changing runnable scheduling/return bits. Error cleanup still uses only original owned references before release, and dereferences no child after release_thread.",
+      "id": "return-borrow-lifetime-correction",
+      "result": "PASS"
+    },
+    {
+      "evidence": "New report_clone uses the same actual ptrace_report_clone_body_result and actual noirq lock/attach/do_kill/waitq-wakeup/log endpoints as the C wrapper, preserving all ignored dispositions. Fourteen readback/debug records (11do_fork/TLS+3report) use genuine existing __FILE__ env and exact logical lines/messages, not Rust file/line builtins. Fallback #line7747/#line8251 restores existing C logical origins while all original helper explicit origins7690/7710/7792/7800 and tracked allocation/free sites are retained.",
+      "id": "ptrace-and-debug-origin",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Independent saved-text parsing checked exactly104 unique ordered labels and expressions in the C array, Rust [CULong;104] and ABI-WORD-CONTRACT, including request72/align8 and empty DMA annotation, current Thread/Process/VM/AddressSpace/VMRange/Memobj fields, CPU/TID/lock/node representations, flexible-pids row82, region offsets, real PerfEventAttr104/flags40 and real C attr first-member/end-of-bitfield storage, syscall/flag/error/allocator/path/debug constants. Actual inherit-bit qualification is reused at unchanged source scope. Tables are true compiler-derived readback metadata and have no runtime implementation consumer. Source assertions are not actual equality of emitted words.",
+      "id": "104-word-actual-ABI-contract",
+      "result": "PASS_SOURCE_PENDING_ACTUAL_COMPILED_EQUALITY"
+    },
+    {
+      "evidence": "Nested inside the existing Rust+x86_64+Linux6.12+!UBSAN+PROFILE real-outer cut and !TOFU/!Fugaku ordinary mapping cut, new predicate additionally requires whole-F06,PERF,RUSAGE,workIRQ and excludes broad adapters, experimental forwarding and ENABLE_NATIVE_FORK_OWNED_TRANSACTION. It appends cfg/module/header dependencies before real Rust custom command and matching C exclusion after source-property resets. New module checks actual cfg dependencies f06_obtain_clone_cpuid_candidate/f03_sync_child_event_candidate and feature exclusions; C branch requires actual policy/scheduler/native clone3/TID macros and rejects the owned option. Outside this predicate complete original C remains selected; no option, default, old owned flag or unsupported-profile policy is cleared.",
+      "id": "paired-narrow-selector",
+      "result": "PASS"
+    }
+  ],
+  "inputs": {
+    "ABI-WORD-CONTRACT.json": {
+      "bytes": 15838,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/ABI-WORD-CONTRACT.json",
+      "sha256": "3ab6516f652c7a9ac09612d80db87288a3ac27f73e9513292686744c85f23486"
+    },
+    "CONTRACT.json": {
+      "bytes": 7241,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/CONTRACT.json",
+      "sha256": "f6a5d7c4c1be8047c501be6dc2f7bafe73c7c9c76ef60c7c023de9abc6da6af6"
+    },
+    "CURRENT-DO-FORK.c": {
+      "bytes": 15693,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/CURRENT-DO-FORK.c",
+      "sha256": "423036ff6221b34cbac335f7729a37db10277a65c623f66b6b107b8c4404886f"
+    },
+    "DO-FORK-CURRENT-LEGACY-OWNERSHIP.patch": {
+      "bytes": 45416,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/DO-FORK-CURRENT-LEGACY-OWNERSHIP.patch",
+      "sha256": "aeebe884cd2fa2d0cec020fed38d08acb4a87ed18d5407ab267796bf760efbd3"
+    },
+    "PROVIDER-SOURCE-BINDINGS.json": {
+      "bytes": 7465,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/PROVIDER-SOURCE-BINDINGS.json",
+      "sha256": "441c263ba1dc7c96f164a8f7ddcc394b3020a4458cf924068703d0922d7ad10a"
+    },
+    "SOURCE-ORIGINS.json": {
+      "bytes": 1621,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/SOURCE-ORIGINS.json",
+      "sha256": "fa82432414777a51921e2b77f68887d59332599970ef786687ceb5a514771ae6"
+    },
+    "SOURCE-PATHS.json": {
+      "bytes": 1098,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/SOURCE-PATHS.json",
+      "sha256": "e9537a1f2bdef3ffe0868b4221c3ed03a7dd0f0511dfb3c1d234c3663df7c6e0"
+    },
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "bytes": 3412,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/SOURCE-READY.NOT-EXECUTED.json",
+      "sha256": "14e41ec19f7f059c0a9b92b1f6bee277c630f4d26ae7082e8efec73a0329e126"
+    },
+    "SOURCE-RECOVERY.json": {
+      "bytes": 2437,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/SOURCE-RECOVERY.json",
+      "sha256": "63669e1e354bcdaee3369e31b6b6aa9f975318917f9aee79e82ef344b1c165ec"
+    }
+  },
+  "material_findings": [],
+  "next_admissible_boundary": [
+    "P04Source prepares the disjoint actual104-word C/Rust witness plus normal affected image operation, pinning this exact source and existing matching SDK/config/provider inputs. No fake callback/model, old owned/TID constructor fixture or partial object injection is required or authorized.",
+    "Root alone composes reviewed focused source hunks with independent time bridge work and freezes the actual selected source/config. Independent execution-profile GO and fresh measured sharedHOST4GiB/max3/CPUs0,6,7/fresh26GiB/floors/one-heavy admission precede compilation.",
+    "Actual normal mckernel.img build/readback must prove genuine new nonempty Rust do_fork owner and exact C exclusion, all104 emitted C/Rust ABI words equal including flexiblepids/DMA/constants, real seven-arg callers/import/provider/origin closure and zero requiredUND/duplicates, retained15 prior selections/F06data/zero arch-C, positive full-family waits/streams/container/resource cleanup and observed actual remaining-C ledger. Reuse unchanged module/SDK/old green proofs; do not predict or award C retirement from source."
+  ],
+  "retained_limits": [
+    "No source-only whole M14-06-01/DEFAULT/FUNCTIONAL/native/ACCEPT or whole-F06/M14/M15 acceptance. Current default supports the C baseline behavior; native fork/clone/vfork/errors/TID/ACK/current-free/restoration still require genuine separately admitted actual evidence.",
+    "No constructor cleanup/reservation disposition is silently improved, inferred or released. Legacy uncertainty and genuine old held/UNKNOWN outcomes remain; no external inventory prerequisite is substituted for our actual source/ABI work.",
+    "I02 accepted build-integration criteria and already closed F02/proof scopes are not reopened. No new scenario quota, from-scratch rebuild, old suite, provider census or warning suppression is requested."
+  ],
+  "review_actions": {
+    "new_private_review_only": true,
+    "no_SUT_helper_import_or_execution": true,
+    "no_canonical_index_control_or_goal_edits": true,
+    "no_compiler_build_tests_ELF_tools_container_network": true,
+    "no_native_application_signal_device_module": true,
+    "no_recursive_agents": true,
+    "read_only_source_JSON_saved_text_and_hash_static_diff_only": true
+  },
+  "reviewer": "/root/p03_cutover_source_max; direct same-Root Sol/MAX; no recursive agents",
+  "schema": "m14-current-do-fork-independent-source-unsafe-ABI-selector-review-v1",
+  "scope": "SOURCE_ONLY: exact 14e41 ready / aeebe884 four-path patch / 7de21260 current ordinary legacy-host Rust do_fork / f6a5d7c4 contract. No compiler, runtime, image, native or acceptance result.",
+  "source_binding": {
+    "paths": [
+      {
+        "path": "kernel/CMakeLists.txt",
+        "postimage_bytes": 57292,
+        "postimage_sha256": "02bede01bad5429d513b415a50647ebd59db61e9236bb466e691d790c5fe1063",
+        "preimage_sha256": "e682145f34bbdb1311537139c1d3d6062bedc56a072b0737a3e4952e39eb6439"
+      },
+      {
+        "path": "kernel/rust/lib.rs",
+        "postimage_bytes": 4380,
+        "postimage_sha256": "05bcbca0c8a7170b67d4eafb1fcf7b60cc920102f3411016e2544c4aaf9d9790",
+        "preimage_sha256": "1bbe24ffb98810c83f70cf3d37999b26c9fd06ce048f5d733b6a96a2b6a61959"
+      },
+      {
+        "path": "kernel/syscall.c",
+        "postimage_bytes": 955657,
+        "postimage_sha256": "6928ebdc14aa988be5b9fb8ff2a59a56e81e0bf56b5a3559272f69858dbc3e24",
+        "preimage_sha256": "81682ae8cac4a0792d521f5cca240cf81db837f087bdc1c898a9a6561621e9be"
+      },
+      {
+        "path": "kernel/rust/f03_do_fork.rs",
+        "postimage_bytes": 32328,
+        "postimage_sha256": "7de2126064794969f03b0d780679816e095e27733742b7684f29abe01979489b",
+        "preimage_sha256": null
+      }
+    ],
+    "source_commit": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f"
+  },
+  "source_eligibility": {
+    "canonical_and_index_untouched": true,
+    "composition": "Root alone applies focused hunks to live shared CMake/lib/syscall files, accommodating independent time-wrapper work; do not replace those shared files wholesale with frozen postimages.",
+    "current_source_and_genuine_providers": "Current f374 C do_fork and its real current Rust process/provider/caller bodies are ordinary authorized engineering inputs under current AGENTS and Root source-specific assignment. Source availability/ABI ownership is our work, not an external per-name/plaintext inventory prerequisite.",
+    "held_590e": "The separately retained owned-constructor-only 590e candidate, its fixtures and prerequisites are not selected, copied into the new module, invoked or accepted by this review. Review read only its recovery distinction/pins, not its held body.",
+    "holds_preserved": "Original generic/exec/TID/XPMEM/owned-constructor fixture/equivalent replay holds, source custody, native/current-free/service/account/resource/cleanup UNKNOWN and existing flags remain binding. No rejected operation is retried."
+  },
+  "unchanged_accepted_proof_reuse": {
+    "F02": "Existing accepted complete current clone_thread/process/VM/refcount/provider implementation and genuine layout/source proof remain closed at exact scope; no constructor or TID fixture replay requested.",
+    "meaning": "Reuse unchanged genuine source/config/SDK/provider/image/module evidence. This source review is not an additional successful build, ABI witness, helper test, runtime or native result.",
+    "whole_default_image": {
+      "deep_review_sha256": "f949b85f0e7d825020e7f9dc392eb6cb3b69ecdc2db35d9258371a2a64da625e",
+      "image_sha256": "100d078609104b9853b14705fb3d0ee6ef4d6597101e5dad3f948ae46a94a5e2",
+      "source_commit": "f37463cdd25f7f25e6c92c3f418c6dce3054a74f",
+      "whole_E2_review_sha256": "1f1d7bd2e364bf754fb55751cb7104fd23ab57f52e68e804fd4ab9560b402cab",
+      "whole_Rust_sha256": "4a1f34064c238e7cf9ccf21ca06c0219300b226fbdcf7b69abe082efe94c2912"
+    }
+  },
+  "verdict": "GO",
+  "verified_unchanged_provider_sources": [
+    {
+      "bytes": 1240596,
+      "contract": [
+        "clone flag/marker/CPU policy; existing complete gettid request builder",
+        "five current clone execution/remote/publication/cleanup helpers",
+        "complete ptrace_report_clone_body_result and genuine f03_ptrace_attach_thread_addr_v1",
+        "seven-argument callers sys_clone/fork/vfork and actual clone3->sys_clone path"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    {
+      "bytes": 619886,
+      "contract": [
+        "accepted clone_thread constructor unchanged",
+        "lookup_process_memory_range, cpu_set, report attach, hold_thread, release_thread unchanged",
+        "allow_oversubscribe genuine mutable global unchanged"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+    },
+    {
+      "bytes": 186213,
+      "contract": [
+        "real CPU snapshot/inherit, release_cpuid and runq_add_thread unchanged"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+    },
+    {
+      "bytes": 5524,
+      "contract": [
+        "existing real whole-F06 obtain_clone_cpuid, exact global symbol ABI"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/f06_obtain_clone_cpuid.rs",
+      "sha256": "b04605181a7446ca8a9119ef32ab223d40921a6a98c37679051042aa87e349b2"
+    },
+    {
+      "bytes": 325789,
+      "contract": [
+        "virt_to_phys, parent setint_user, complete write_process_vm unchanged"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156"
+    },
+    {
+      "bytes": 256003,
+      "contract": [
+        "actual syscall-number load, preserving native clone3 marker exclusion"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+    },
+    {
+      "bytes": 12202,
+      "contract": [
+        "real existing reader/noirq writer/IRQsave lock and unlock providers"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "bytes": 6207,
+      "contract": [
+        "existing pointer CAS and atomic refcount sets unchanged"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+    },
+    {
+      "bytes": 76151,
+      "contract": [
+        "existing complete Thread/Process/VM/request/tid-slot types; accepted F02 ABI unchanged"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 32461,
+      "contract": [
+        "PATH_MAX owned immutable path allocation/copy until object final release"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/fileobj.rs",
+      "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb"
+    },
+    {
+      "bytes": 14364,
+      "contract": [
+        "PATH_MAX owned path allocation/copy"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/hugefileobj.rs",
+      "sha256": "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9"
+    },
+    {
+      "bytes": 11862,
+      "contract": [
+        "PATH_MAX owned path allocation/copy"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/devobj.rs",
+      "sha256": "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5"
+    },
+    {
+      "bytes": 1722,
+      "contract": [
+        "existing genuine selected104-byte attr representation, inherit second bit"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/f03_perf_event_attr_abi.rs",
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    },
+    {
+      "bytes": 1638,
+      "contract": [
+        "existing qualified read-attribute inherit-bit extraction"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/f03_perf_attr_callbacks.rs",
+      "sha256": "116a1b3561009f530817c96341a8d1b58e1ab1ea275856f7582168c126ca2017"
+    },
+    {
+      "bytes": 46665,
+      "contract": [
+        "genuine Rust sprintf with identical fitting output"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/numparse.rs",
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+    },
+    {
+      "bytes": 13172,
+      "contract": [
+        "genuine Rust strstr for original helper/compute path classification"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    },
+    {
+      "bytes": 10868,
+      "contract": [
+        "genuine waitq_wakeup, same ptrace report wake endpoint"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+    },
+    {
+      "bytes": 7877,
+      "contract": [
+        "genuine current CPU lookup"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "bytes": 16148,
+      "contract": [
+        "genuine num_processors global"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/ap.rs",
+      "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137"
+    },
+    {
+      "bytes": 26602,
+      "contract": [
+        "actual flexible address_space::pids[] after nslots, mcexec_tid, NR kernel-stack pages32"
+      ],
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "bytes": 20836,
+      "contract": [
+        "real72-byte request members and ordering"
+      ],
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "bytes": 8775,
+      "contract": [
+        "real event begins with attr; inherit second bit in unsigned-long unit"
+      ],
+      "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+    },
+    {
+      "bytes": 198,
+      "contract": [
+        "actual selected IHK_DMA_ALIGN empty"
+      ],
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    {
+      "bytes": 256059,
+      "contract": [
+        "actual act_gettid allocates, fills ALL int slots via mcexec_collect_active_tids_result, transfers entire array, returns error on transfer failure"
+      ],
+      "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24"
+    }
+  ]
+}

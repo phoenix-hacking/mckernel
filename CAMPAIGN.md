@@ -5,6 +5,33 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 ## Current decision
 
+**Two original M15 I01 technical accounting conditions verified.** Independent
+wholeGO50811944 on published/fetchedb019 and finaldualmanifest2d256 closes
+complete-selected and complete-linked: all runtime/header/macro/callback owners,
+actual typed/versioned providers, optionalweak dispositions and installed
+artifacts are accounted at their exact supported profiles. Actual old canonical
+converter and private repaired33ed/a875 artifact stay separate. No additional
+cleanup-fix/zero-C/native clause was added to these accounting conditions.
+Current87/156 verified: M14=63.70%, M15=62.43% (+3.33 displayed M15 points).
+I01 checklist is60%, unaccepted; deployment/default/runtime/native/parent
+conditions remain open. I03-complete-ABI stays open for the real canonical
+__error/readmem longjmp-across-Rust-Drop defect. SDK supplied the exact already
+qualified four-path33ed repair and oneROa875/oneFILEPATH future input disposition;
+Root owns its coherent later selection after the current fork cohort retires.
+
+Fork sourcef839 normal incremental image and104-word reader passed02:05:56,
+with all104 C/Rust words in both objects and both image arrays,19 records and
+positive waits/two terminal0 nonOOM containers removed. Root16902 is joined0;
+source/default/body/provider ownership whole qualification is pending P04/P03.
+The correcteddb0d metadata contract preserves rejected/unexecuted5e0f. The focused
+time bridge two-command operation passed02:00:33/all12 vectors/two joined owners
+and released its2GiB job; source remains private pending actual image selection.
+Whole30 guest static providers now close with no required missing edge; genuine
+native authority/currentfree/setup/restoration remain under real gates. Next15min:
+qualify the saved fork body/provider result, then select qualified cleanup with
+its genuine header binding. Preserve all original criteria, source/native/UNKNOWN/resource
+controls. Post this changed pair once only after fetched checkpoint verification.
+
 **Current M15 selection/link/ABI integration.** Root composed the exact reviewed
 P03 three-path3afce authoritative MCKERNELDIR correction and callback0a2 typed
 pthread interface; canonical bytes match qualified candidates91175/b6c97/4c95/
