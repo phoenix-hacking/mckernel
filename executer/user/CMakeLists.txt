@@ -605,7 +605,26 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 		add_custom_target(ldump2mcdump_rust_helpers DEPENDS "${LDUMP2MCDUMP_RUST_OBJ}")
 		set_source_files_properties("${LDUMP2MCDUMP_RUST_OBJ}"
 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
-		set(LDUMP2MCDUMP_SRCS "${LDUMP2MCDUMP_RUST_OBJ}")
+		# The real crash provider may longjmp. Keep returns-twice in this small
+		# C ABI boundary, below Rust owners, using the exact provider's header.
+		set(MCKERNEL_CRASH_DEFS_HEADER "" CACHE FILEPATH "Selected actual crash provider defs.h")
+		if (NOT CMAKE_SYSTEM_NAME STREQUAL "Linux" OR
+		    NOT IS_ABSOLUTE "${MCKERNEL_CRASH_DEFS_HEADER}" OR
+		    NOT EXISTS "${MCKERNEL_CRASH_DEFS_HEADER}" OR
+		    NOT MCKERNEL_CRASH_DEFS_HEADER MATCHES "^/[A-Za-z0-9_./+-]+$")
+			message(FATAL_ERROR "Rust ldump2mcdump requires the absolute selected crash provider header")
+		endif()
+		file(SHA256 "${MCKERNEL_CRASH_DEFS_HEADER}" _ldump2_crash_defs_sha256)
+		if (NOT _ldump2_crash_defs_sha256 STREQUAL "a875242ef3f01c979e25e169149e810819e2194fcfa9281e425b3255d1fe6bfd")
+			message(FATAL_ERROR "Crash nonlocal boundary requires the reviewed crash9.0.1 provider header")
+		endif()
+		set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+			"${MCKERNEL_CRASH_DEFS_HEADER}")
+		set(_ldump2_crash_boundary "${CMAKE_CURRENT_SOURCE_DIR}/ldump2_crash_error_boundary.c")
+		set_source_files_properties("${_ldump2_crash_boundary}" PROPERTIES
+			OBJECT_DEPENDS "${MCKERNEL_CRASH_DEFS_HEADER}"
+			COMPILE_DEFINITIONS "MCKERNEL_CRASH_DEFS_HEADER=\"${MCKERNEL_CRASH_DEFS_HEADER}\"")
+		set(LDUMP2MCDUMP_SRCS "${LDUMP2MCDUMP_RUST_OBJ}" "${_ldump2_crash_boundary}")
 	endif()
 endif()
 

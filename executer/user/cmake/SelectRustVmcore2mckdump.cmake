@@ -7,10 +7,13 @@ if(ENABLE_RUST_VMCORE2MCKDUMP)
   endif()
   # Source presence is necessary; source/fixture/SDK/native acceptance is a separate root decision.
   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs")
+    "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ldump2_crash_error_boundary.c")
   file(SHA256 "${CMAKE_CURRENT_SOURCE_DIR}/rust/ldump2mcdump_helpers.rs" _vmcore_ack_source_sha256)
-  if(NOT _vmcore_ack_source_sha256 STREQUAL "5aab8a4270858287d4eb61a1109d96126bae9bf06913da31adf79c3e8c1b7c2a")
-    message(FATAL_ERROR "Rust vmcore wrapper requires the exact jointly reviewed ACK producer; current unmodified converter is incompatible")
+  file(SHA256 "${CMAKE_CURRENT_SOURCE_DIR}/ldump2_crash_error_boundary.c" _vmcore_restart_source_sha256)
+  if(NOT _vmcore_ack_source_sha256 STREQUAL "9ea23c781d37c200674b71a67b4e5723d9571b8de7402cfef634881ff305c366" OR
+     NOT _vmcore_restart_source_sha256 STREQUAL "9e03cdc4eb792e08f23f4335b8755851abb015185c41d69a3f82c7c5a286fea2")
+    message(FATAL_ERROR "Rust vmcore wrapper requires the exact jointly reviewed ACK producer and nonlocal boundary")
   endif()
   set(MCKERNEL_RUNTIME_TOOL_RUSTC "" CACHE FILEPATH "Pinned runtime tool compiler; independent of compute RUSTC")
   if(NOT IS_ABSOLUTE "${MCKERNEL_RUNTIME_TOOL_RUSTC}" OR NOT EXISTS "${MCKERNEL_RUNTIME_TOOL_RUSTC}")

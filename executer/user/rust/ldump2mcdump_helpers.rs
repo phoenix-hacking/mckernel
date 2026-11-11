@@ -218,14 +218,21 @@ unsafe extern "C" {
     static mut machdep: *mut MachdepTable;
 
     fn register_extension(table: *mut CommandTableEntry);
-    fn symbol_value(name: *mut c_char) -> c_ulong;
-    fn readmem(
+    // The real C command boundary owns crash's opaque setjmp environments.
+    // Providers still receive their original arguments and error flags.
+    fn cmd_ldump2mcdump();
+    fn mck_crash_guarded_symbol_value(
+        restart: *mut c_void, name: *mut c_char, value: *mut c_ulong,
+    ) -> c_int;
+    fn mck_crash_guarded_readmem(
+        restart: *mut c_void,
         addr: c_ulonglong,
         type_: c_int,
         buf: *mut c_void,
         size: c_long,
         msg: *mut c_char,
         flags: c_ulong,
+        result: *mut c_int,
     ) -> c_int;
     fn getopt(argc: c_int, argv: *mut *mut c_char, optstring: *const c_char) -> c_int;
     fn strcpy(dst: *mut c_char, src: *const c_char) -> *mut c_char;
@@ -686,19 +693,31 @@ impl Drop for OwnedBfd {
 }
 
 #[cfg(ldump2_full_body)]
-unsafe fn read_or_return(addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong) -> c_int {
-    readmem(
+unsafe fn read_or_return(
+    restart: *mut c_void, addr: c_ulong, buf: *mut c_void, size: usize, flags: c_ulong,
+) -> Option<c_int> {
+    let mut result = 0;
+    if mck_crash_guarded_readmem(
+        restart,
         addr as c_ulonglong,
         KVADDR,
         buf,
         size as c_long,
         cstr_mut(EMPTY),
         flags,
-    )
+        &raw mut result,
+    ) == 0 {
+        // A genuine crash longjmp was caught entirely in C. Return normally
+        // through every Rust owner before the C command entry resumes it.
+        None
+    } else {
+        Some(result)
+    }
 }
 
 #[cfg(ldump2_full_body)]
 unsafe fn read_dump_pages(
+    restart: *mut c_void,
     dump_page_set: *const IhkDumpPageSet,
     mem_chunks: *mut DumpMemChunks,
     count_only: bool,
@@ -712,11 +731,12 @@ unsafe fn read_dump_pages(
     while i < (*dump_page_set).count {
         let mut ihk_dump_page = MaybeUninit::<IhkDumpPage>::uninit();
         if read_or_return(
+            restart,
             ihk_dump_page_addr,
             ihk_dump_page.as_mut_ptr().cast::<c_void>(),
             size_of::<IhkDumpPage>(),
             FAULT_ON_ERROR,
-        ) != TRUE {
+        ) != Some(TRUE) {
             return -1;
         }
         let ihk_dump_page = ihk_dump_page.assume_init();
@@ -730,11 +750,12 @@ unsafe fn read_dump_pages(
 
         memset(map_buf.cast::<c_void>(), 0, map_size);
         if read_or_return(
+            restart,
             ihk_dump_page_addr.wrapping_add(size_of::<IhkDumpPage>() as c_ulong),
             map_buf.cast::<c_void>(),
             map_size,
             FAULT_ON_ERROR,
-        ) != TRUE {
+        ) != Some(TRUE) {
             return -1;
         }
 
@@ -784,7 +805,7 @@ unsafe fn read_dump_pages(
 
 #[no_mangle]
 #[cfg(ldump2_full_body)]
-pub unsafe extern "C" fn cmd_ldump2mcdump() {
+pub unsafe extern "C" fn mck_ldump2mcdump_rust_body(restart: *mut c_void) {
     // Private acknowledgment proposal: retain existing failure observations and
     // data-writing behavior, but never acknowledge a partial conversion.
     let mut conversion_complete = true;
@@ -826,30 +847,37 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
         }
     }
 
-    let symbol_dump_page_set = symbol_value(cstr_mut(DUMP_MEM_SYMBOL));
+    let mut symbol_dump_page_set = 0;
+    if mck_crash_guarded_symbol_value(
+        restart, cstr_mut(DUMP_MEM_SYMBOL), &raw mut symbol_dump_page_set,
+    ) == 0 {
+        return;
+    }
     let mut dump_page_set_addr: c_ulong = 0;
     if read_or_return(
+        restart,
         symbol_dump_page_set,
         addr_of_mut!(dump_page_set_addr).cast::<c_void>(),
         size_of::<c_ulong>(),
         FAULT_ON_ERROR,
-    ) != TRUE {
+    ) != Some(TRUE) {
         return;
     }
 
     let mut dump_page_set = MaybeUninit::<IhkDumpPageSet>::uninit();
     if read_or_return(
+        restart,
         dump_page_set_addr,
         dump_page_set.as_mut_ptr().cast::<c_void>(),
         size_of::<IhkDumpPageSet>(),
         FAULT_ON_ERROR,
-    ) != TRUE {
+    ) != Some(TRUE) {
         return;
     }
     let dump_page_set = dump_page_set.assume_init();
 
     let mut mem_num: c_int = 0;
-    if read_dump_pages(&dump_page_set, null_mut(), true, &raw mut mem_num) != 0 {
+    if read_dump_pages(restart, &dump_page_set, null_mut(), true, &raw mut mem_num) != 0 {
         return;
     }
 
@@ -863,18 +891,24 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
     }
     memset(mem_chunks.cast::<c_void>(), 0, mem_size);
 
-    if read_dump_pages(&dump_page_set, mem_chunks, false, &raw mut mem_num) != 0 {
+    if read_dump_pages(restart, &dump_page_set, mem_chunks, false, &raw mut mem_num) != 0 {
         return;
     }
 
-    let symbol_bootstrap_mem = symbol_value(cstr_mut(BOOTSTRAP_MEM_SYMBOL));
+    let mut symbol_bootstrap_mem = 0;
+    if mck_crash_guarded_symbol_value(
+        restart, cstr_mut(BOOTSTRAP_MEM_SYMBOL), &raw mut symbol_bootstrap_mem,
+    ) == 0 {
+        return;
+    }
     let mut bootstrap_mem: c_ulong = 0;
     if read_or_return(
+        restart,
         symbol_bootstrap_mem,
         addr_of_mut!(bootstrap_mem).cast::<c_void>(),
         size_of::<c_ulong>(),
         FAULT_ON_ERROR,
-    ) != TRUE {
+    ) != Some(TRUE) {
         return;
     }
     (*mem_chunks).kernel_base = bootstrap_mem
@@ -1099,8 +1133,11 @@ pub unsafe extern "C" fn cmd_ldump2mcdump() {
                 cpsize = bsize;
             }
             memset(buf, 0, cpsize);
-            let read_mem_ret =
-                read_or_return(ptov(addr), buf, cpsize, FAULT_ON_ERROR | RETURN_ON_ERROR);
+            let Some(read_mem_ret) = read_or_return(
+                restart, ptov(addr), buf, cpsize, FAULT_ON_ERROR | RETURN_ON_ERROR,
+            ) else {
+                return;
+            };
             if read_mem_ret == TRUE {
                 if !bfd_set_section_contents(
                     abfd,
