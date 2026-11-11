@@ -1,0 +1,654 @@
+{
+  "id": "M14-06-04-DEFAULT",
+  "decision": "NOT_YET_WHOLE_LITERAL_PENDING_EXACT_REQUIRED_CONTEXT_FORWARD_TIME_EDGE_REVIEW",
+  "original_task": {
+    "counted_in_requirement_rollup": true,
+    "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+    "dependencies": [
+      "HOLD-GENERIC",
+      "PROVIDER-CLOSURE",
+      "SOURCE-SDK-NATIVE"
+    ],
+    "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+    "evidence": [
+      "CAMPAIGN.md"
+    ],
+    "execution_profile": "ordinary_HOST",
+    "id": "M14-06-04-DEFAULT",
+    "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+    "parent": "M14-06-04",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "required_inputs": {
+      "missing_before_execution": [
+        "Establish final supported source/provider/ownership for required vDSO/process mappings and time-page/TSC publication.",
+        "Qualify matching mappings and time behavior on admitted final image; no finer current demonstration is established in active campaign summary."
+      ],
+      "original_requirement": "M14-06-04",
+      "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
+      "target": "arch/x86_64/kernel/syscall.c"
+    },
+    "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
+    "status": "open_or_unverified",
+    "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
+    "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step."
+  },
+  "unchanged_original_done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+  "source_scope_and_prior_exact_mapping": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-leaf-decisions-p04tests-max-1/DECISIONS.json",
+    "bytes": 140030,
+    "sha256": "6a7eceef0cbb405db4d8cc74580f243458f52b450fa171f55454e2ee75b908d1"
+  },
+  "actual18_Rust_roots_and_data": [
+    {
+      "name": "arch_setup_vdso",
+      "final": {
+        "index": 1652,
+        "name": "arch_setup_vdso",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684620656,
+        "bytes": 3282
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4759,
+          "name": "arch_setup_vdso",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 956,
+          "value": 0,
+          "bytes": 3282
+        },
+        "section": ".ltext.arch_setup_vdso",
+        "placement": {
+          "address": 18446744073684620656,
+          "bytes": 3282
+        }
+      }
+    },
+    {
+      "name": "arch_map_vdso",
+      "final": {
+        "index": 2332,
+        "name": "arch_map_vdso",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684603712,
+        "bytes": 1913
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4680,
+          "name": "arch_map_vdso",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 855,
+          "value": 0,
+          "bytes": 1913
+        },
+        "section": ".ltext.arch_map_vdso",
+        "placement": {
+          "address": 18446744073684603712,
+          "bytes": 1913
+        }
+      }
+    },
+    {
+      "name": "vdso_get_vdso_info",
+      "final": {
+        "index": 493,
+        "name": "vdso_get_vdso_info",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685294992,
+        "bytes": 946
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7408,
+          "name": "vdso_get_vdso_info",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4772,
+          "value": 0,
+          "bytes": 946
+        },
+        "section": ".ltext.vdso_get_vdso_info",
+        "placement": {
+          "address": 18446744073685294992,
+          "bytes": 946
+        }
+      }
+    },
+    {
+      "name": "vdso_map_global_pages",
+      "final": {
+        "index": 4142,
+        "name": "vdso_map_global_pages",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685295952,
+        "bytes": 824
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4762,
+          "name": "vdso_map_global_pages",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4774,
+          "value": 0,
+          "bytes": 824
+        },
+        "section": ".ltext.vdso_map_global_pages",
+        "placement": {
+          "address": 18446744073685295952,
+          "bytes": 824
+        }
+      }
+    },
+    {
+      "name": "sys_time",
+      "final": {
+        "index": 1810,
+        "name": "sys_time",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685231984,
+        "bytes": 95
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7184,
+          "name": "sys_time",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4439,
+          "value": 0,
+          "bytes": 95
+        },
+        "section": ".ltext.sys_time",
+        "placement": {
+          "address": 18446744073685231984,
+          "bytes": 95
+        }
+      }
+    },
+    {
+      "name": "time",
+      "final": {
+        "index": 1060,
+        "name": "time",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685278128,
+        "bytes": 379
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4997,
+          "name": "time",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4679,
+          "value": 0,
+          "bytes": 379
+        },
+        "section": ".ltext.time",
+        "placement": {
+          "address": 18446744073685278128,
+          "bytes": 379
+        }
+      }
+    },
+    {
+      "name": "calculate_time_from_tsc",
+      "final": {
+        "index": 2936,
+        "name": "calculate_time_from_tsc",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684638272,
+        "bytes": 597
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4826,
+          "name": "calculate_time_from_tsc",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1051,
+          "value": 0,
+          "bytes": 597
+        },
+        "section": ".ltext.calculate_time_from_tsc",
+        "placement": {
+          "address": 18446744073684638272,
+          "bytes": 597
+        }
+      }
+    },
+    {
+      "name": "vsyscall_gettimeofday",
+      "final": {
+        "index": 1688,
+        "name": "vsyscall_gettimeofday",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 269,
+        "value": 18446744073685753856,
+        "bytes": 153
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7438,
+          "name": "vsyscall_gettimeofday",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4821,
+          "value": 0,
+          "bytes": 153
+        },
+        "section": ".vsyscall.gettimeofday",
+        "placement": {
+          "address": 18446744073685753856,
+          "bytes": 153
+        }
+      }
+    },
+    {
+      "name": "vsyscall_time",
+      "final": {
+        "index": 3006,
+        "name": "vsyscall_time",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 269,
+        "value": 18446744073685754880,
+        "bytes": 26
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7439,
+          "name": "vsyscall_time",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4823,
+          "value": 0,
+          "bytes": 26
+        },
+        "section": ".vsyscall.time",
+        "placement": {
+          "address": 18446744073685754880,
+          "bytes": 26
+        }
+      }
+    },
+    {
+      "name": "vsyscall_getcpu",
+      "final": {
+        "index": 609,
+        "name": "vsyscall_getcpu",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 269,
+        "value": 18446744073685755904,
+        "bytes": 13
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7437,
+          "name": "vsyscall_getcpu",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4820,
+          "value": 0,
+          "bytes": 13
+        },
+        "section": ".vsyscall.getcpu",
+        "placement": {
+          "address": 18446744073685755904,
+          "bytes": 13
+        }
+      }
+    },
+    {
+      "name": "tod_data",
+      "final": {
+        "index": 769,
+        "name": "tod_data",
+        "binding": "GLOBAL",
+        "type": "OBJECT",
+        "visibility": 0,
+        "section_index": 269,
+        "value": 18446744073685754016,
+        "bytes": 40
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4761,
+          "name": "tod_data",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 6167,
+          "value": 0,
+          "bytes": 40
+        },
+        "section": ".vsyscall.gettimeofday.data",
+        "placement": {
+          "address": 18446744073685754016,
+          "bytes": 40
+        }
+      }
+    },
+    {
+      "name": "mckernel_f06_vdso_state",
+      "final": {
+        "index": 1063,
+        "name": "mckernel_f06_vdso_state",
+        "binding": "GLOBAL",
+        "type": "OBJECT",
+        "visibility": 0,
+        "section_index": 270,
+        "value": 18446744073685858616,
+        "bytes": 88
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4683,
+          "name": "mckernel_f06_vdso_state",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 5862,
+          "value": 0,
+          "bytes": 88
+        },
+        "section": ".lbss.mckernel_f06_vdso_state",
+        "placement": {
+          "address": 18446744073685858616,
+          "bytes": 88
+        }
+      }
+    },
+    {
+      "name": "mckernel_f06_vdso_container_size",
+      "final": {
+        "index": 681,
+        "name": "mckernel_f06_vdso_container_size",
+        "binding": "GLOBAL",
+        "type": "OBJECT",
+        "visibility": 0,
+        "section_index": 270,
+        "value": 18446744073685858600,
+        "bytes": 8
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4682,
+          "name": "mckernel_f06_vdso_container_size",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 5858,
+          "value": 0,
+          "bytes": 8
+        },
+        "section": ".lbss.mckernel_f06_vdso_container_size",
+        "placement": {
+          "address": 18446744073685858600,
+          "bytes": 8
+        }
+      }
+    },
+    {
+      "name": "mckernel_f06_vdso_offset",
+      "final": {
+        "index": 3883,
+        "name": "mckernel_f06_vdso_offset",
+        "binding": "GLOBAL",
+        "type": "OBJECT",
+        "visibility": 0,
+        "section_index": 270,
+        "value": 18446744073685858608,
+        "bytes": 8
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4684,
+          "name": "mckernel_f06_vdso_offset",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 5861,
+          "value": 0,
+          "bytes": 8
+        },
+        "section": ".lbss.mckernel_f06_vdso_offset",
+        "placement": {
+          "address": 18446744073685858608,
+          "bytes": 8
+        }
+      }
+    },
+    {
+      "name": "gettime_local_support",
+      "final": {
+        "index": 2599,
+        "name": "gettime_local_support",
+        "binding": "GLOBAL",
+        "type": "OBJECT",
+        "visibility": 0,
+        "section_index": 270,
+        "value": 18446744073685844424,
+        "bytes": 4
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4760,
+          "name": "gettime_local_support",
+          "binding": "GLOBAL",
+          "type": "OBJECT",
+          "visibility": 0,
+          "section_index": 5829,
+          "value": 0,
+          "bytes": 4
+        },
+        "section": ".lbss.gettime_local_support",
+        "placement": {
+          "address": 18446744073685844424,
+          "bytes": 4
+        }
+      }
+    },
+    {
+      "name": "add_process_memory_range",
+      "final": {
+        "index": 2153,
+        "name": "add_process_memory_range",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684584624,
+        "bytes": 833
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4587,
+          "name": "add_process_memory_range",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 764,
+          "value": 0,
+          "bytes": 833
+        },
+        "section": ".ltext.add_process_memory_range",
+        "placement": {
+          "address": 18446744073684584624,
+          "bytes": 833
+        }
+      }
+    },
+    {
+      "name": "ihk_mc_pt_set_range",
+      "final": {
+        "index": 4768,
+        "name": "ihk_mc_pt_set_range",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684842880,
+        "bytes": 497
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4336,
+          "name": "ihk_mc_pt_set_range",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 2137,
+          "value": 0,
+          "bytes": 497
+        },
+        "section": ".ltext.ihk_mc_pt_set_range",
+        "placement": {
+          "address": 18446744073684842880,
+          "bytes": 497
+        }
+      }
+    },
+    {
+      "name": "syscall_policy_do_syscall2_bridge",
+      "final": {
+        "index": 4058,
+        "name": "syscall_policy_do_syscall2_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685251776,
+        "bytes": 170
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7144,
+          "name": "syscall_policy_do_syscall2_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4543,
+          "value": 0,
+          "bytes": 170
+        },
+        "section": ".ltext.syscall_policy_do_syscall2_bridge",
+        "placement": {
+          "address": 18446744073685251776,
+          "bytes": 170
+        }
+      }
+    }
+  ],
+  "new_two_argument_provider_actual_PASS": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/qualification-1/BRIDGE-CHANGED-PATH-JOINS.json",
+    "bytes": 57502,
+    "sha256": "a816ed083ca4493dc3d36c249a35abd7a45a498cad015df43991c2b6924b6103"
+  },
+  "literal_clause_status": {
+    "complete_implementation_selection": "Original17 mapped vDSO/process mappings/time-page/TSC roots and data are current actual Rust owners; former required55B fallback now genuine170B Rust with exact C exclusion. No broad-adapter selection/placeholder.",
+    "actual_ABI_provider_unique_default": "Current14d3/genuinea875/config/compiler/modules/72B+104ABI/normaldefaultON image physical closure demonstrated; original12 changed-input vectors reused, no native behavior invented.",
+    "no_required_live_project_C": "The prior exactscope record explicitly retains adjacent generic sys_settimeofday\u2192C12contextforward\u2192existing forwarding. It is not silently waived or called Rust. Independent literal-scope review must determine whether this setter/provider is required by original time-page/TSC publication; if yes, this exact liveC edge remains an unsatisfied clause. The new55-to170 replacement alone does not establish wholeleaf."
+  },
+  "precise_boundary_for_independent_review": {
+    "actual_C12_owner": {
+      "name": "syscall_policy_forward_context_bridge",
+      "final": {
+        "index": 4028,
+        "name": "syscall_policy_forward_context_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684392912,
+        "bytes": 12
+      },
+      "owner": {
+        "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "input": {
+          "index": 88,
+          "name": "syscall_policy_forward_context_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1,
+          "value": 3024,
+          "bytes": 12
+        },
+        "section": ".text",
+        "placement": {
+          "address": 18446744073684389888,
+          "bytes": 4898
+        }
+      }
+    },
+    "required_time_caller": "sys_settimeofday in generic kernel/rust/syscall_policy.rs11919 updates tod_data origin/version using real callbacks; passes context-forward callback unchanged.",
+    "prior_classification": "Prior6a7 scope called this adjacent time-contract C provider, not sole named55 gap. Preserve that exact distinction.",
+    "minimum_if_required": "Separate source-faithful typed context-forward selector/provider ownership repair for actual(syscall_nr:int,ctx:void*)->long and exact actual aliases, followed only affected normal image proof; no flags-only waiver, heldgeneric/exec replay or newnative/scenario quota.",
+    "if_outside_literal_arch_scope": "Review may close literal18-root original arch scope with existing proofs while retaining this explicit generic-setter C debt for its actual original scope; no blanket C retirement."
+  },
+  "remaining_other_conditions": [
+    "Native served-page/live-clock/TSC/mapping/cohort/currentfree/restoration/FUNCTIONAL/E3/ACCEPT remain separate and unexecuted in this batch.",
+    "Other fileDEFAULT/Cmunmap/3argument/logger/ptrace/resume C provider debt retained under Root other owners; no new source operation prepared here."
+  ],
+  "no_canonical_ledger_or_credit_changed": true
+}

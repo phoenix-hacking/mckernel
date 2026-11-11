@@ -1,0 +1,43 @@
+{
+  "at": "2026-11-11T02:21:38.633340+00:00",
+  "current_parent": "6e72d939bd25a295ea6a6ed4ebf1628e504e4803",
+  "original_patch_sha256": "78eb6dfa719221e4dc600aea8ff8e81cc6672053800786c5cfad4de691696339",
+  "rebased_patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-time-bridge-composition-1/FORK-CONTEXT-ONLY.patch",
+    "sha256": "8f13111f973f45d8041d3f006201bfd8f224a7f47664110e1507cb00cfd1a54d"
+  },
+  "only_two_contexts_and_corresponding_hunk_count_changed": true,
+  "reviewed_added_removed_source_lines_exact": true,
+  "canonical_written": false,
+  "preimages": {
+    "kernel/syscall.c": "6928ebdc14aa988be5b9fb8ff2a59a56e81e0bf56b5a3559272f69858dbc3e24",
+    "kernel/rust/lib.rs": "05bcbca0c8a7170b67d4eafb1fcf7b60cc920102f3411016e2544c4aaf9d9790",
+    "kernel/CMakeLists.txt": "02bede01bad5429d513b415a50647ebd59db61e9236bb466e691d790c5fe1063",
+    "kernel/rust/f03_do_syscall2_bridge.rs": null
+  },
+  "candidate_rows": [
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "f51bb8cd054632c5bc4004a374345da8045c873bc8236fe27cbd40e034c1481a",
+      "bytes": 955713
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "a891d48079db2c7cd749ce4f5d71075f8e3b053bc055f7b2e53d2e873061c9c8",
+      "bytes": 4449
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "54933e844f67eb8afe94f0ac23b82403557361fdbe5f7e83b821b5f8451e8d9d",
+      "bytes": 58021
+    },
+    {
+      "path": "kernel/rust/f03_do_syscall2_bridge.rs",
+      "sha256": "872a99877d33a1f25814fe801bbc51104225cbc1dc8904cfe38acd3c0f524685",
+      "bytes": 2724
+    }
+  ],
+  "source_GO": "ee7ad74a",
+  "actual12_vector_PASS": "71ed960a",
+  "next_step": "P03 focused composition review, Root apply, new actual source/header configure+incremental operation independent review/admission"
+}

@@ -5,6 +5,63 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 ## Current decision
 
+**Original M14-06-04 DEFAULT verified.** WholeGO f0f001b2 on14d/a70 closes
+exactly the unchanged required vDSO/time/TSC scope:18 function/data roots,
+170B genuine Rust2bridge/C55 exclusion,72B typed request/providers/disassembly,
+current104 ABI copies,4557+5 owners/271imports/zeroUND/prior15+fork/archC0/
+defaultON and25 joined clients/3 terminal0 nonOOM removed containers. Scope
+boundary0e91d703 keeps adjacent generic C12 setter debt explicit outside04;
+area01 memory-host C and FUNCTIONAL/native/whole-file acceptance remain open.
+Combined with independent installed dependencyGO131b919d,90/156 original
+checks are verified: M14=64.26% (+0.56 displayed), M15=64.81% (+1.19).
+No denominator/weight/criterion changed. Foreground posted this pair once in PR3 comment6786391376, with source/results
+publication explicitly pending. Root reuses that confirmed receipt; no duplicate
+comment. Fetched source/results checkpoint confirmation is the next action. The physical25-file14d cohort882f is preserved;
+newmemory9HOST cases alreadyPASS but its fiveRust image owners/C exclusions
+and genuinecallbacktable closure are still required before01 DEFAULT credit.
+
+**Original M15-I03 installed static/dynamic dependency condition verified.**
+WholeGO131b919d composes actual selected/linked508119 and canonicalABI8221/00e7
+with named link/static-member/typed-versioned-provider/private-install/RPATH/
+symlink/process/plugin manifests. Every required owner/profile/artifact relation
+is resolved; distinct HOST/native46d and private versus live installed scopes
+remain explicit. No producer/provider/green case reran.89/156 original checks
+verified: M14=63.70%, M15=64.81% (+1.19 displayed M15 points). I03 checklist
+71.43%, unaccepted; original reproducibility/parent acceptance and C104/default/
+live deployment/runtime/native remain separate. Post this changed pair once
+after fetched-byte checkpoint verification.
+
+**Clock component passed; whole04 review remains independent.** Three phases
+configure/image/affectedreader passed02:53:13 on14d/a875, with25 clients and
+Root89062 joined/3 terminal0 nonOOM containers removed. Qualifiedbcfe/882f
+preserves imagea70ec44f/10,646,208B,170B Rust2bridge/C55 exclusion, four104
+ABI copies/72B request,4557+5 owners/271imports/zeroUND/prior15+fork/archC0/
+defaultON. The old zero-child HOST-vs-image compiler preflight and its reviewed
+capture-only correctione27b/0785 stay raw. P03 decides actual required-caller
+scope including adjacent C12; Root claims no whole04 DEFAULT credit yet.
+
+Memory HOST d62/dab373 compile0/runtime0 at03:25:40 matched all9 external
+request/return/flag/log/quiet-set/unmap normal/error observations;2 Owner
+records and Root86c7 joined/current2GiB released. Preserve407f failed2E0308/
+fb97/Rootbf09 and its positive scoped retirement. Only fixture pointer typing
+changed; genuinef181/5aff source and nine oracles stayedfixed. Root composes
+reviewedaead production providers and requires five real Rust owners/C
+exclusions/callback closure in the affected image before whole01 credit.
+Ptrace c7 lifecycle packet is under SourceAcq review. Next15min: run that ready
+packet and integrate compatible providers into one reviewed affected image.
+Exact native holder/restoration40bafb remains the runtime blocker, owned by
+Root/original native holder; every original criterion/reservation/control stays.
+
+**Current clock execution stop and bounded repair.** At02:44:33 Root command
+`taskset -c6 python3 -B .../time-bridge-image-operation-sdk-max-1/run_root_once.py`
+stopped before any child/container/admission: its generic recursive preflight
+compared the immutable46d GCC14 `/usr/bin/cc` record with HOSTcc. Actual14d
+source, frozenfc54 payload/17mounts/output names/cache are unchanged; clients,
+phases and cleanup are empty. Failed rawRESULT and fullRootd9345a are preserved.
+SDK owns the exact host-origin/image-identity capture correction; SourceAcq
+reviews that delta, then Root freshly admits the unchanged three serial phases.
+No compiler/test/guest failure or native/resource release is inferred.
+
 **Original M15-I03 complete-ABI technical condition verified.** Independent
 wholeGO8221a017 binds actual canonicald6/fetched6e72 and selectedtuple00e7 to
 genuinea875 header, five exact production recipe blocks, public571-byte entry,
@@ -14,8 +71,8 @@ release before real main/foreach restarts; unchanged components reuse508119.
 No producer, tool or green case reran. Exactly one original check closes:
 88/156 verified, M14=63.70%, M15=63.62% (+1.19 displayed M15 points).
 I03 checklist57.14%, unaccepted; C104 retirement/default/deployment/backend/
-async/concurrent/native/parent acceptance stay separate. Post this changed
-pair once after fetched-byte checkpoint confirmation.
+async/concurrent/native/parent acceptance stay separate. Checkpoint0cbded93 is pushed/fetched with14 matching owned blobs/all33dirty
+paths preserved. Pair63.70/63.62 was posted once in PR3 comment6785224229.
 
 Fork source/body/build/104ABI12638 passes, but P03 correctly retains whole
 M14-06-01-DEFAULT open: actual mmap/MAP_FIXED/munmap paths still use live C
