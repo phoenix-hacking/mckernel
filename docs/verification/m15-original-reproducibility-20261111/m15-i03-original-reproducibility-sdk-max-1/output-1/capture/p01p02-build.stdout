@@ -1,0 +1,43 @@
+Change Dir: '/output/p01'
+
+Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile -j1 mcreboot_rust_program mcstop_rust_program
+/usr/bin/cmake -S/input/p01 -B/output/p01 --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/gmake  -f CMakeFiles/Makefile2 mcreboot_rust_program
+gmake[1]: Entering directory '/output/p01'
+/usr/bin/cmake -S/input/p01 -B/output/p01 --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/p01/CMakeFiles 1
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/mcreboot_rust_program.dir/all
+gmake[2]: Entering directory '/output/p01'
+/usr/bin/gmake  -f CMakeFiles/mcreboot_rust_program.dir/build.make CMakeFiles/mcreboot_rust_program.dir/depend
+gmake[3]: Entering directory '/output/p01'
+cd /output/p01 && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /input/p01 /input/p01 /output/p01 /output/p01 /output/p01/CMakeFiles/mcreboot_rust_program.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/output/p01'
+/usr/bin/gmake  -f CMakeFiles/mcreboot_rust_program.dir/build.make CMakeFiles/mcreboot_rust_program.dir/build
+gmake[3]: Entering directory '/output/p01'
+[100%] Generating mcreboot.sh
+/usr/bin/cmake -E env MAKEFLAGS= /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --crate-name mcreboot -C panic=abort -C opt-level=2 /output/p01/rust-boot-tools/mcreboot_main.rs -o /output/p01/mcreboot.sh
+gmake[3]: Leaving directory '/output/p01'
+[100%] Built target mcreboot_rust_program
+gmake[2]: Leaving directory '/output/p01'
+/usr/bin/cmake -E cmake_progress_start /output/p01/CMakeFiles 0
+gmake[1]: Leaving directory '/output/p01'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 mcstop_rust_program
+gmake[1]: Entering directory '/output/p01'
+/usr/bin/cmake -S/input/p01 -B/output/p01 --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/p01/CMakeFiles 1
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/mcstop_rust_program.dir/all
+gmake[2]: Entering directory '/output/p01'
+/usr/bin/gmake  -f CMakeFiles/mcstop_rust_program.dir/build.make CMakeFiles/mcstop_rust_program.dir/depend
+gmake[3]: Entering directory '/output/p01'
+cd /output/p01 && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /input/p01 /input/p01 /output/p01 /output/p01 /output/p01/CMakeFiles/mcstop_rust_program.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/output/p01'
+/usr/bin/gmake  -f CMakeFiles/mcstop_rust_program.dir/build.make CMakeFiles/mcstop_rust_program.dir/build
+gmake[3]: Entering directory '/output/p01'
+[100%] Generating mcstop+release.sh
+/usr/bin/cmake -E env MAKEFLAGS= /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --crate-name mcstop -C panic=abort -C opt-level=2 /output/p01/rust-boot-tools/mcstop_main.rs -o /output/p01/mcstop+release.sh
+gmake[3]: Leaving directory '/output/p01'
+[100%] Built target mcstop_rust_program
+gmake[2]: Leaving directory '/output/p01'
+/usr/bin/cmake -E cmake_progress_start /output/p01/CMakeFiles 0
+gmake[1]: Leaving directory '/output/p01'
+

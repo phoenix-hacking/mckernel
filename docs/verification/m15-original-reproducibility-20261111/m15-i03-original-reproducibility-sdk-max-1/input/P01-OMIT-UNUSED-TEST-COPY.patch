@@ -1,0 +1,8 @@
+--- old-qualified-producer/CMakeLists.txt
++++ input/p01/CMakeLists.txt
+@@ -26,5 +26,3 @@
+ set(BUILDID 8d288b8)
+ set(ENABLE_LINUX_WORK_IRQ_FOR_IKC ON CACHE BOOL "Production root default")
+ include("${PROJECT_SOURCE_DIR}/scripts/rust/boot-tools/SelectRustBootTools.cmake")
+-configure_file("${_packet}/qualification/production_work_irq.rs"
+-  "${PROJECT_BINARY_DIR}/rust-boot-tools/production_work_irq.rs" COPYONLY)

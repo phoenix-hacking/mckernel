@@ -1,0 +1,13 @@
+{
+  "schema": "joint-capture-test-source-binding-preparation-failure-v1",
+  "at": "2026-11-11T04:16:06.974289+00:00",
+  "owner": "/root/p04_tests_max",
+  "failed_check": "Top-level ast.FunctionDef name==call lookup in joint-provider-operation-sdk-max-1/run_root_once.py",
+  "diagnostic": "StopIteration: actual operation driver contains no top-level function definitions; it imports call via an AST slice from retained common capture source.",
+  "affected_driver_sha256": "f5e9322f7d4f098dd0fb162d8a9ad7903136101bf4d1063292a168645e917de4",
+  "raw_tool_chunk": "6c7261",
+  "actual_SUT_compiler_helper_or_child_executed": false,
+  "correction": "Read the explicit common path from the actual driver, then statically extract call there; no driver import or execution.",
+  "actual_provider_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/terminate-exit-incremental-1/compiler-correction-1/run_root_once.py",
+  "blocker_remaining": false
+}

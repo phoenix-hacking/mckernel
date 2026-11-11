@@ -1,0 +1,205 @@
+{
+  "schema": "mckernel.focused-operation-review.v1",
+  "decision": "GO_EXACT_JOINT7231_AFFECTED_READER_AFTER_ACTUAL_PRODUCER_POSITIVE_CLOSURE_AND_ROOT_FRESH_ADMISSION",
+  "reviewed_at": "2026-11-11T04:41:08.651447+00:00",
+  "reviewer": "/root/source_acquisition_review_max",
+  "review_scope": "Final source-bound reader wrapper, actual producer closure and four-artifact binding; reuse completed material helper/oracle/profile reviews.",
+  "request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/reader-1/REQUEST.json",
+    "bytes": 31172,
+    "sha256": "17fd8f95af324998223aa7a0a35fdd8c7cb128299b08c51b4300a8c15006c2c7"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/reader-1/INPUTS.json",
+    "bytes": 4963,
+    "sha256": "d5f29e717f8e843592978989b0577b6b72fc6c67012f2dcdde07322a7a0d77b7"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/reader-1/run_root_once.py",
+    "bytes": 8113,
+    "sha256": "8cba09c8da13cd0baf431948004e136b5a8dcdbf50632dd2b595640d76d7719f"
+  },
+  "source_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+  "reused_material_reviews": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-review-source-acquisition-max-1/REVIEW.json",
+      "bytes": 11070,
+      "sha256": "98c4822a349d192df2f96bbb676bc48b56ca1038842fbf1807787ed825d35663"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-review-source-acquisition-max-1/correction-1/REVIEW.json",
+      "bytes": 5614,
+      "sha256": "59f29a8686b75d29881069843a7b9ab0bc1c1eb0210295adaa51c0b13c0037af"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-review-source-acquisition-max-1/capture-correction-1/REVIEW.source.json",
+      "bytes": 7149,
+      "sha256": "cd13efcffeb2522928b4d49566b0aeefc18ea653f75769ac0dbc3c11910afe47"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-review-source-acquisition-max-1/capture-correction-1/REVIEW.json",
+      "bytes": 13596,
+      "sha256": "a53471287daea2779bf0cd6b7ea926cf52f04b6a2cf267ad930ee02559f7a16a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-review-source-acquisition-max-1/REVIEW.json",
+      "bytes": 16340,
+      "sha256": "13899a9f0d6d01f9d3e65e1a84ac0d2e611842b0ecb990ab49b12be2c4c64a8d"
+    }
+  ],
+  "reader_material": {
+    "corrected_phase": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/correction-1/READER-PHASE.json",
+      "bytes": 26124,
+      "sha256": "2cdfd458d26574d82d54ac22d8d3793dc396e6d2ba4f2b9fea0cebb06d225f1d"
+    },
+    "helper": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input/read_joint_provider_metadata.sh",
+      "bytes": 9156,
+      "sha256": "af5642a4d5bd29a8499f7aa523c9cca311d53b77bde74c104ff1180288382a47"
+    },
+    "oracle": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/OUTPUT-ORACLE.json",
+      "bytes": 13445,
+      "sha256": "fbd45186263f72649601831cfa85a598196e3b1ff0d876a25856207e045c97ae"
+    },
+    "source_binding": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/SOURCE-BINDINGS.json",
+      "bytes": 8108,
+      "sha256": "180c2a3dceef7178237e60e0ec27584dbd8bc94958c7da4f6dc09d87219d30f0"
+    },
+    "phase_equals_corrected_reviewed_phase": true,
+    "literal_passive_commands": 48,
+    "required_unique_nonempty_outputs": 45,
+    "mounts": {
+      "count": 3,
+      "readonly": 2,
+      "private_writable": 1
+    },
+    "output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1",
+    "metadata_root_and_capture_absent_at_review": true,
+    "coverage": "Thirteen changed Rust roots and C exclusions, actual nineteen-slot ptrace and six-slot unmap ownership, four ABI104 arrays, affected object/final map/import/debug ownership. Saved raw qualification remains required."
+  },
+  "capture_material": {
+    "protected_phase": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase-cpu6.py",
+      "bytes": 4791,
+      "sha256": "7266db32ace8e167a14cc8a97cd91315f35356f117609da2c7a02cf97d7c2db3"
+    },
+    "corrected_call": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/call_capture.py",
+      "bytes": 3449,
+      "sha256": "e088b7ecbc27598e450395eb9c18672da2696c8c4da8bc1c8e4b492b8f2037b4"
+    },
+    "actual_mock_result": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/execution-1/RESULT.json",
+      "bytes": 1886,
+      "sha256": "9c1e1b8cdb84cf4f4e40ccf76bc48e14aa46d1edb24990b298f08c430291bbee"
+    },
+    "actual_mock_full_root_completion": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/ROOT-EXEC-TOOL.json",
+      "bytes": 266,
+      "sha256": "7001cf32383da2bc85cac0e6421fd658fbded0db40356d87a0e76fd4ae4a89f7"
+    },
+    "findings": "Wrapper pins corrected e088 call and protected 7266 phase; positive PID/birth, direct wait, streams, pending-handle/UNKNOWN preservation and exact owned-CID cleanup remain enforced. No process-group or permission fallback."
+  },
+  "actual_producer": {
+    "result": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/execution-1/RESULT.json",
+      "bytes": 15737,
+      "sha256": "76470805ec4f9a8266664bb21b16d9bed4b5b826bcdcd19e12e92dc05f0768ff"
+    },
+    "resource_release": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/execution-1/RESOURCE-RELEASE.json",
+      "bytes": 163,
+      "sha256": "4a3d109a4bee1317ebd4f2e73a206217ce9feafb52629a99e442cbd40703df58"
+    },
+    "terminal": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/execution-1/build-TERMINAL.json",
+      "bytes": 19994,
+      "sha256": "d531faf5fa00c1e865a11f8928ac9ea2cb7969363d3afff4bc923e7d2343dab7"
+    },
+    "full_root_completion": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/ROOT-EXEC-COMPLETION.json",
+      "bytes": 339,
+      "sha256": "0a4b6105fe9c692fe5164afe0a1c1461df83c70f3703a3267300ce7204afdd8a"
+    },
+    "status": "PASS_JOINT7231_NORMAL_NAMED_IMAGE_PRODUCER_PENDING_SEPARATE_AFFECTED_READER_AND_WHOLE_QUALIFICATION",
+    "source_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+    "request_sha256": "9e1d970a3716168bb66efc7d09324d18ada0da90f6c19d2fe9d50d8cb59f8a63",
+    "exact_expected_positive_client_count": 13,
+    "exact_expected_client_labels": [
+      "source-commit.before",
+      "IHK-commit.before",
+      "running-preflight",
+      "names-preflight",
+      "build-create",
+      "build-profile",
+      "build-running-inspect",
+      "build-payload",
+      "build-terminal",
+      "build-container-wait",
+      "build-owned-remove",
+      "source-commit.after",
+      "IHK-commit.after"
+    ],
+    "all_positive_birth_direct_wait_streams_and_no_primary_secondary_unknown": true,
+    "one_build_exit_zero_non_oom_pid_zero_owned_removed": true,
+    "current_build_resource_release_positive": true,
+    "outer_root_session_10858_terminal_exit_zero": true,
+    "historical_initial_running_tool_preserved": true,
+    "actual_four_artifacts": [
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+        "bytes": 10662800,
+        "sha256": "19c5e24ed20e5786c822f50258db3792d7797b9d61fa7cc5a34cd45811544ef8",
+        "mode": "0o755"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+        "bytes": 993489,
+        "sha256": "8168218f25952a6973a5686ed5123ff022ac8c8bb84255ca36f244058c9bebcb",
+        "mode": "0o644"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+        "bytes": 19294248,
+        "sha256": "f15e40f51d2bb3a3ef2e6a7f5ff904b4e0c660beeae547ba24ed188202a08ba8",
+        "mode": "0o644"
+      },
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "bytes": 197176,
+        "sha256": "3115d974864b265009a378e17838e2bc3f653d14b286f37458bcccad3d8394d2",
+        "mode": "0o644"
+      }
+    ],
+    "all_four_current_file_size_and_sha256_equal_new_producer_result": true,
+    "all_seven_current_source_bytes_equal_frozen_7231_inputs": true,
+    "old_baseline_not_substituted": true
+  },
+  "gate_assessment": [
+    "Exact request17fd, INPUTSd5f29, runner8cba and corrected phase2cdf are bound. The source-bound producer status, request9e1d, all thirteen exact nonvacuous client labels and positive records match actual764708.",
+    "The runner requires positive scoped RESOURCE-RELEASE, terminal exit0/nonOOM/Pid0, owned removal and a full outer Root completion with exit0 and no running session before metadata creation. Actual0a4b completion satisfies this gate.",
+    "Only the four new producer artifact paths are admitted; all current sizes and SHA256 match. The runner records consumed receipt identities, checks seven source inputs and HEAD7231, and rechecks source/artifacts after the read.",
+    "The single stale output_root finding is closed by59f29. The requested metadata phase is byte-equivalent as parsed data to corrected2cdf; metadata and capture namespaces are fresh.",
+    "The operation collects existing artifacts only. Semantic ownership/ABI/provider and whole DEFAULT decisions remain subsequent saved-result reviews."
+  ],
+  "execution_conditions": [
+    "Root alone executes exact reviewed reader once, using fresh operation-specific admission and exact source7231/artifact/cache freeze through completion.",
+    "CPU6, one light job,512MiB memory=swap and reviewed AS/process/wall/file limits; measured aggregate HOST payload plus all controller/worker/daemon overhead <=4GiB and <=3 jobs, fresh >=26GiB available, packet disk headroom and retained host/scratch floors.",
+    "No competing cache writer or heavy owner; exact container name absent, no other running Docker under this serial profile, only declared read-only artifact/helper mounts and fresh private metadata output.",
+    "Retain actual Root tool delivery, positive direct/family/stream joins, exact terminal/owned removal and scoped release; any UNKNOWN stays charged and cannot earn success.",
+    "Native CPUs2-5/12GiB, CPU1 exclusion and all native/source/service/scratch/UNKNOWN holds remain unchanged."
+  ],
+  "reviewer_actions": {
+    "source_and_saved_data_reads_only": true,
+    "private_review_write_only": true,
+    "packet_helper_or_driver_execution": false,
+    "compiler_tests_provider_or_elf_tools": false,
+    "docker_network_native_or_signals": false,
+    "canonical_edits_or_recursive_agents": false
+  },
+  "original_acceptance": false,
+  "unmatched_material_operation_predicate": null
+}

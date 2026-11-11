@@ -1,0 +1,1 @@
+mod platform; mod config; mod reboot; fn main(){let args=std::env::args().skip(1).collect::<Vec<_>>();let mut h=platform::Native::new();let rc=match reboot::parse(&args){Ok(o)=>reboot::execute(&mut h,&config::Config::installed(),&o),Err(e)=>{eprintln!("{e}");1}};std::process::exit(rc)}

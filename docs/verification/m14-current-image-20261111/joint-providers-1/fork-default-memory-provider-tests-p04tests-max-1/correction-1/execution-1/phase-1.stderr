@@ -1,0 +1,26 @@
+error[E0308]: mismatched types
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/memory_host_regression.rs:235:77
+    |
+235 |             addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR } else { 0 });
+    |                                                                             ^^^^ expected `*mut c_void`, found `u64`
+    |
+    = note: expected raw pointer `*mut c_void`
+                      found type `u64`
+
+error[E0308]: mismatched types
+   --> /home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/memory_host_regression.rs:235:91
+    |
+235 |             addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR } else { 0 });
+    |                                                                                           ^ expected `*mut c_void`, found `usize`
+    |
+    = note: expected raw pointer `*mut c_void`
+                      found type `usize`
+help: if you meant to create a null pointer, use `std::ptr::null_mut()`
+    |
+235 -             addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR } else { 0 });
+235 +             addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR } else { std::ptr::null_mut() });
+    |
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0308`.

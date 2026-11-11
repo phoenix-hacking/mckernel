@@ -1,0 +1,19 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe83e7e0 <clear_host_pte_log_bridge>:
+fffffffffe83e7e0:	55                   	push   %rbp
+fffffffffe83e7e1:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe83e7e4:	48 89 fe             	mov    %rdi,%rsi
+fffffffffe83e7e7:	48 bf 57 13 91 fe ff ff ff ff 	movabs $0xfffffffffe911357,%rdi
+fffffffffe83e7f1:	48 b9 20 73 87 fe ff ff ff ff 	movabs $0xfffffffffe877320,%rcx
+fffffffffe83e7fb:	31 c0                	xor    %eax,%eax
+fffffffffe83e7fd:	5d                   	pop    %rbp
+fffffffffe83e7fe:	ff e1                	jmp    *%rcx
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

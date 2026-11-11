@@ -1,0 +1,240 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T04:26:57.691608+00:00",
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/capture_call_regression.py"
+      ],
+      "expected_exit": 0,
+      "id": "three-finite-changed-call-mocked-regressions",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "actual_OS_clients": 0,
+        "actual_call_AST_invocations": 5,
+        "actual_helper_Docker_network_or_native": false,
+        "case_count": 3,
+        "cases": [
+          {
+            "baseline": {
+              "durable_attempt_before_Popen": false,
+              "durable_receipt": false,
+              "durable_returned_client_before_birth": false,
+              "exception": "ProcessLookupError",
+              "forbidden_actions": [],
+              "pending_same_handle_retained": false,
+              "popen_calls": 1,
+              "record": null,
+              "same_primary_exception_object": true,
+              "streams_closed": true,
+              "wait_timeouts": []
+            },
+            "candidate": {
+              "durable_attempt_before_Popen": true,
+              "durable_receipt": true,
+              "durable_returned_client_before_birth": true,
+              "exception": "ProcessLookupError",
+              "forbidden_actions": [],
+              "pending_same_handle_retained": false,
+              "popen_calls": 1,
+              "record": {
+                "attempt_id": 0,
+                "birth": null,
+                "creation_attempted": true,
+                "direct_wait_joined": true,
+                "exit": 0,
+                "lifecycle_UNKNOWN": true,
+                "pid": 450001,
+                "popen_returned": true,
+                "receipt_persisted": true,
+                "resource_charge_retained": true,
+                "secondary_wait_errors": 0,
+                "streams_closed": true
+              },
+              "same_primary_exception_object": true,
+              "streams_closed": true,
+              "wait_timeouts": [
+                6
+              ]
+            },
+            "id": "post-Popen-birth-read-failure"
+          },
+          {
+            "baseline": {
+              "durable_attempt_before_Popen": false,
+              "durable_receipt": false,
+              "durable_returned_client_before_birth": false,
+              "exception": "NameError",
+              "forbidden_actions": [],
+              "pending_same_handle_retained": false,
+              "popen_calls": 1,
+              "record": null,
+              "same_primary_exception_object": false,
+              "streams_closed": true,
+              "wait_timeouts": [
+                30
+              ]
+            },
+            "candidate": {
+              "durable_attempt_before_Popen": true,
+              "durable_receipt": true,
+              "durable_returned_client_before_birth": true,
+              "exception": "TimeoutExpired",
+              "forbidden_actions": [],
+              "pending_same_handle_retained": false,
+              "popen_calls": 1,
+              "record": {
+                "attempt_id": 0,
+                "birth": "900001",
+                "creation_attempted": true,
+                "direct_wait_joined": true,
+                "exit": 0,
+                "lifecycle_UNKNOWN": false,
+                "pid": 450001,
+                "popen_returned": true,
+                "receipt_persisted": true,
+                "resource_charge_retained": false,
+                "secondary_wait_errors": 0,
+                "streams_closed": true
+              },
+              "same_primary_exception_object": true,
+              "streams_closed": true,
+              "wait_timeouts": [
+                30,
+                6
+              ]
+            },
+            "id": "timeout-primary-terminal-bounded-wait"
+          },
+          {
+            "candidate": {
+              "durable_attempt_before_Popen": true,
+              "durable_receipt": true,
+              "durable_returned_client_before_birth": true,
+              "exception": "TimeoutExpired",
+              "forbidden_actions": [],
+              "pending_same_handle_retained": true,
+              "popen_calls": 1,
+              "record": {
+                "attempt_id": 0,
+                "birth": "900001",
+                "creation_attempted": true,
+                "direct_wait_joined": false,
+                "exit": "UNKNOWN",
+                "lifecycle_UNKNOWN": true,
+                "pid": 450001,
+                "popen_returned": true,
+                "receipt_persisted": true,
+                "resource_charge_retained": true,
+                "secondary_wait_errors": 1,
+                "streams_closed": true
+              },
+              "same_primary_exception_object": true,
+              "streams_closed": true,
+              "wait_timeouts": [
+                30,
+                6
+              ]
+            },
+            "id": "timeout-unresolved-client-control"
+          }
+        ],
+        "status": "PASS_MOCKED_CHANGED_CAPTURE_CALL_CASES"
+      },
+      "wall_seconds": 15
+    }
+  ],
+  "contract": {
+    "bytes": 3119,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/TEST-CONTRACT.json",
+    "sha256": "816cd26a950a1c2ae8e276352a5ec1763328fc01bd7c76bc3517e84465cc012a"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1",
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/output-1",
+  "inputs": {
+    "bytes": 3345,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/INPUTS.json",
+    "sha256": "d81980bf7a94f2dd8bb162dd03fd68b29337398eeae2c7925c17a4dea5293264"
+  },
+  "no_canonical_changes": true,
+  "no_execution_by_author": true,
+  "owner": "/root/p04_tests_max actual Sol/MAX private test prep; SDK source; Root sole executor/compositor",
+  "ownership": {
+    "failure": "Preserve phase/argv/raw/error/real child record and best-effort receipt without masking primary. Only existing authenticated Owner cleanup; no numeric/global/reaped PID, sudo-client signal or permission fallback.",
+    "final": "Exactly one positive real HOST fixture Owner record, full external JSON equality/empty stderr and outer Root direct wait/full tool/streams joined before current256MiB/job1 release. Mock UNKNOWN/pending handles are test data, never real release evidence.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive leader PID+birth",
+      "literal argv/cwd/current label",
+      "status expected0",
+      "leader_parent_joined=true",
+      "whole_descendants_joined=true",
+      "streams_closed=true",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-1"
+    ],
+    "record_count": 1
+  },
+  "preconditions": [
+    "Independent SourceAcq material source/test/operation GO must bind exact e088 AST, fixture, oracle and profile. No real broken-child baseline.",
+    "Root fresh same-run current guard/account/stop/hold and aggregate overhead+every current slice<=4GiB/max3, available>=26GiB, host16/scratch12GiB floors+2MiB. No native CPU/resource borrowing or inferred release.",
+    "Verify every source/interpreter/input pin and output/capture nonexistence. Root creates owned output-1/tmp before the one command; preserve all old failure evidence.",
+    "Use unchanged real Owner with immediate record checks. Capture full external JSON, raw streams and complete outer Root tool/direct wait. No image/build/container phase is admitted by this test packet."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 30,
+    "cpu": 7,
+    "cpu_seconds": 10,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "kind": "Existing ordinary HOST Python3.8 source/logic lane, no new grant",
+    "max_address_space_bytes": 268435456,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "no_Docker_helper_compiler_model_network_root_native_or_real_client": true,
+    "output_disk_reservation_bytes": 2097152,
+    "scratch_disk_floor_GiB": 12
+  },
+  "schema": "joint-capture-call-focused-test-request-v1",
+  "source_bindings": {
+    "bytes": 2830,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/AST-SOURCE-BINDINGS.json",
+    "sha256": "d4d7adcfc1514cf19aed628d5b5b6e750b0a9cfb55a614690c2920bbe306290e"
+  },
+  "status": "FROZEN_NOT_EXECUTED_PENDING_INDEPENDENT_SOURCE_TEST_OPERATION_GO_ROOT_ADMISSION"
+}

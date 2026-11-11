@@ -1,0 +1,11 @@
+--- a/memory_host_regression.rs
++++ b/memory_host_regression.rs
+@@ -232,7 +232,7 @@
+     for case in CASES {
+         unsafe {
+             addr_of_mut!((*vm.0).is_memory_range_lock_taken).write(17);
+-            addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR } else { 0 });
++            addr_of_mut!((*process.0).straight_va).write(if case.straight { ADDR as *mut c_void } else { core::ptr::null_mut() });
+             addr_of_mut!((*process.0).straight_len).write(LEN);
+         }
+         MODEL.with(|m| *m.borrow_mut() = Model {

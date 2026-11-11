@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "status": "FROZEN_CONCRETE_THREE_PROGRAM_ROCKY_REPRO_PROPOSAL_NOT_EXECUTED_REQUIRES_INDEPENDENT_OPERATION_GO_AND_ROOT_ADMISSION",
+  "original_check_id": "M15-I03-original-reproducibility",
+  "owner": "/root/sdk_binding_source_max private preparation; Root sole admission/executor/publisher",
+  "assessment": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/ASSESSMENT.json",
+    "bytes": 27517,
+    "sha256": "4bb169918319f0828f822391b157064a1cf506123ba80fd5abbf536ba03501cc"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/INPUTS.json",
+    "bytes": 7721,
+    "sha256": "cb2b8e7e23759ce68eb0164a4d6e57e7e02a19548c4589e6bfcc0067d591d719"
+  },
+  "phase_order": [
+    "one_serial_three_program_SDK_reconstruction"
+  ],
+  "create_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "create",
+    "--name",
+    "mck-m15-i03-three-programs-rocky195-20261111-1",
+    "--label",
+    "mckernel.preparation-owner=m15-i03-original-reproducibility-sdk-max-1",
+    "--init",
+    "--pull=never",
+    "--network=none",
+    "--ipc=private",
+    "--cpus=1",
+    "--cpuset-cpus=6",
+    "--memory=2g",
+    "--memory-swap=2g",
+    "--pids-limit=256",
+    "--ulimit",
+    "core=0:0",
+    "--ulimit",
+    "fsize=67108864:67108864",
+    "--ulimit",
+    "cpu=300:300",
+    "--user",
+    "1000:1000",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+    "--workdir",
+    "/output",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/input,dst=/input,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source,dst=/p01/source,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-tests-producer-sdk-max-1/source,dst=/p03/source,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py,dst=/producer/owned_process.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake,dst=/usr/bin/cmake,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake,dst=/usr/share/cmake,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0,dst=/usr/lib64/libuv.so.1,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/output-1,dst=/output",
+    "--entrypoint",
+    "/usr/bin/env",
+    "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "LANG=C",
+    "TZ=UTC",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "TMPDIR=/output/tmp",
+    "CMAKE_BUILD_PARALLEL_LEVEL=1",
+    "MAKEFLAGS=-j1",
+    "OMP_NUM_THREADS=1",
+    "RUST_TEST_THREADS=1",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/input/produce_scripts.py"
+  ],
+  "expected_mounts": [
+    {
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/input",
+      "destination": "/input",
+      "read_only": true,
+      "role": "Exact source-bound finite producer commands/helper/privateP01driver"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/source",
+      "destination": "/p01/source",
+      "read_only": true,
+      "role": "Only unchanged seven qualified production boot source inputs"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p03-configured-kernel-path-tests-producer-sdk-max-1/source",
+      "destination": "/p03/source",
+      "read_only": true,
+      "role": "Only corrected seven qualified production P03 source/config/selector inputs"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "destination": "/producer/owned_process.py",
+      "read_only": true,
+      "role": "Exact existing serial Owner helper afe740; no new controller"
+    },
+    {
+      "destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "read_only": true,
+      "role": "Reused actual qualified SDK dependency only",
+      "source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu"
+    },
+    {
+      "destination": "/usr/bin/cmake",
+      "read_only": true,
+      "role": "Reused actual qualified SDK dependency only",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake"
+    },
+    {
+      "destination": "/usr/share/cmake",
+      "read_only": true,
+      "role": "Reused actual qualified SDK dependency only",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake"
+    },
+    {
+      "destination": "/usr/lib64/libuv.so.1",
+      "read_only": true,
+      "role": "Reused actual qualified SDK dependency only",
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/output-1",
+      "destination": "/output",
+      "read_only": false,
+      "role": "Fresh private output/tmp/capture/build/stage, UID1000"
+    }
+  ],
+  "expected_mount_count": 9,
+  "commands": [
+    {
+      "label": "p01p02-configure",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/input/p01",
+        "-B",
+        "/output/p01",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DCMAKE_INSTALL_LIBDIR:PATH=lib64",
+        "-DCMAKE_INSTALL_SBINDIR:PATH=sbin",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DENABLE_RUST_BOOT_TOOLS=ON",
+        "-DENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "-DP01P02_SOURCE_ROOT:PATH=/p01/source"
+      ],
+      "timeout": 60
+    },
+    {
+      "label": "p01p02-build",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/output/p01",
+        "--target",
+        "mcreboot_rust_program",
+        "mcstop_rust_program",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "timeout": 120
+    },
+    {
+      "label": "p01p02-install",
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/output/stage",
+        "/usr/bin/cmake",
+        "--install",
+        "/output/p01",
+        "--prefix",
+        "/usr/local"
+      ],
+      "timeout": 30
+    },
+    {
+      "label": "p03-configure",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/p03/source",
+        "-B",
+        "/output/p03",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DCMAKE_INSTALL_LIBDIR:PATH=lib64",
+        "-DCMAKE_INSTALL_BINDIR:PATH=bin",
+        "-DBUILD_TARGET:STRING=smp-x86",
+        "-DENABLE_RUST_ECLAIR_BACKTRACE:BOOL=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "timeout": 60
+    },
+    {
+      "label": "p03-build",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/output/p03",
+        "--target",
+        "eclair_backtrace_rust_program",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "timeout": 120
+    },
+    {
+      "label": "p03-install",
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/output/stage",
+        "/usr/bin/cmake",
+        "--install",
+        "/output/p03",
+        "--prefix",
+        "/usr/local"
+      ],
+      "timeout": 30
+    },
+    {
+      "label": "three-new-ELF-metadata",
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--file-header",
+        "--program-headers",
+        "--section-headers",
+        "--symbols",
+        "--relocs",
+        "--dynamic",
+        "--version-info",
+        "/output/p01/mcreboot.sh",
+        "/output/p01/mcstop+release.sh",
+        "/output/p03/eclair-dump-backtrace.exp"
+      ],
+      "timeout": 30
+    },
+    {
+      "label": "three-new-symbol-owners",
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "--format=posix",
+        "/output/p01/mcreboot.sh",
+        "/output/p01/mcstop+release.sh",
+        "/output/p03/eclair-dump-backtrace.exp"
+      ],
+      "timeout": 30
+    }
+  ],
+  "payload": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/input/produce_scripts.py",
+    "bytes": 3243,
+    "sha256": "a5f0f9eb19f7d94bc53367a4be0af5e053afe91fb6b3a5d4693f6e15eefacbd9"
+  },
+  "expected_returncode": 0,
+  "max_wall_seconds": 420,
+  "output_root": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/output-1",
+  "output_preparation": "Root creates fresh output-1 mode0700 and output-1/tmp,output-1/capture mode0700 before create; no existing output or name reuse. All writes inside that new RW root.",
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "jobs": 1,
+    "memory_bytes": 2147483648,
+    "memory_swap_bytes": 2147483648,
+    "pids": 256,
+    "FSIZE_bytes": 67108864,
+    "CPU_seconds": 300,
+    "wall_seconds": 420,
+    "output_disk_reservation_bytes": 1073741824,
+    "shared_HOST_alloverhead_bytes": 4294967296,
+    "shared_jobs_max": 3,
+    "fresh_MemAvailable_min_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "scratch_disk_floor_bytes": 12884901888,
+    "one_Root_heavy_owner": "M14 joint affectedimage/reader is first; this new2GiB batch only after positive release/fresh actual shared accounting. No native2-5/12GiB/CPU1 or pool expansion."
+  },
+  "reuse_without_replay": [
+    "P01/P02 previous8behavior cases+singleproductionWORKIRQcase/fulltypedsource/main/wrapper contracts",
+    "P03 parser6/controlledPTY/4configcases/guard/source3afce/currentfullbody/installation contract",
+    "All other userspace producers and ABI/installed joins8221/131b/currentkernel/module/IHK proofs"
+  ],
+  "actual_output_oracles": [
+    "Both generated Rustconfig files equal actual oldproductionvalues b04/b8a; target/platform inputs differ only newly boundRockySDK/buildpaths. ExistingP03Expecttemplate config remainsdataonly, no interpreter execution.",
+    "Three genuine new fullRust compiler/link outputs and samebyte private0755 stage. Record builtmode only; do not repeat the private0700 assertion bug. No source/ABI/flag/body substitution or fabricatedSHARED fake provider.",
+    "Actual new ELF/nm/import/version/INTERP/NEEDED/static std/CRT/root data/code ownership joins to exact newSDK/profile; bind provider rows to existing native46d qualified definitions or identify only precise new row before wholeGO. No name/count-only or HOSTprovider-as-native assumption.",
+    "Exactly8 serialOwner records/currentlabels, positivePID/birth/0/direct+wholefamily/streams/no timeout/signal/adoptedreaps/kills/residual/error before next child; Root exactcontainerterminal0/nonOOM/Pid0/removed/fulltooljoin before release.",
+    "Actualtargetmains/device/PTY/boot/module/service/native are never invoked. CMake necessary source selectors/version checks are inherentconfigure, not newstandalonetool probes."
+  ],
+  "failure_policy": "Stop at first real source/compile/link/install/ownership/provider mismatch, preserve exactprimary/raw/partial. No unchanged retry or permission/policy fallback; Root ordinary repair requires meaningful changed input/separate test-review/fresh admission. Memory peakUNKNOWN ifunavailable.",
+  "source_guard_defaults_changed": false,
+  "original_acceptance_or_percentage": false,
+  "execution_by_preparer": false
+}

@@ -1,0 +1,546 @@
+[
+    {
+        "Id": "327d3a39fd5390a988546f658af11be58ea52a18ac8bef4aa86f3cd5795d7db2",
+        "Created": "2026-11-11T04:33:51.737482316Z",
+        "Path": "/usr/bin/env",
+        "Args": [
+            "-i",
+            "BASH_ENV=",
+            "ENV=",
+            "GNUMAKEFLAGS=",
+            "LANG=C",
+            "LC_ALL=C",
+            "PATH=/usr/bin:/bin",
+            "TZ=UTC",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "LD_LIBRARY_PATH=",
+            "LD_PRELOAD=",
+            "MAKEFILES=",
+            "MAKEFLAGS=",
+            "MAKEOVERRIDES=",
+            "MFLAGS=",
+            "CMAKE_BUILD_PARALLEL_LEVEL=1",
+            "SOURCE_DATE_EPOCH=1786434034",
+            "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+            "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+            "KBUILD_BUILD_USER=mckernel",
+            "KBUILD_BUILD_VERSION=1",
+            "TMPDIR=/tmp",
+            "TMP=/tmp",
+            "TEMP=/tmp",
+            "/usr/bin/cmake",
+            "--build",
+            "/work/output/build",
+            "--target",
+            "mckernel.img",
+            "--parallel",
+            "1",
+            "--verbose"
+        ],
+        "State": {
+            "Status": "created",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "0001-01-01T00:00:00Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "ResolvConfPath": "",
+        "HostnamePath": "",
+        "HostsPath": "",
+        "LogPath": "",
+        "Name": "/mck-m14-joint-provider-image-20261111-1",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges"
+            ],
+            "Tmpfs": {
+                "/tmp": "rw,nodev,nosuid,noexec,size=64m,mode=1777"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 2147483648,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "6",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 2147483648,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 256,
+            "Ulimits": [
+                {
+                    "Name": "core",
+                    "Hard": 0,
+                    "Soft": 0
+                },
+                {
+                    "Name": "cpu",
+                    "Hard": 3600,
+                    "Soft": 3600
+                },
+                {
+                    "Name": "fsize",
+                    "Hard": 4294967296,
+                    "Soft": 4294967296
+                }
+            ],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel",
+                    "Target": "/src",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2",
+                    "Target": "/source",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2",
+                    "Target": "/output",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+                    "Target": "/work/output"
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                    "Target": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+                    "Target": "/usr/bin/cmake",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+                    "Target": "/usr/share/cmake",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+                    "Target": "/usr/lib64/libuv.so.1",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h",
+                    "Target": "/usr/include/bfd.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h",
+                    "Target": "/usr/include/ansidecl.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h",
+                    "Target": "/usr/include/symcat.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h",
+                    "Target": "/usr/include/diagnostics.h",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so",
+                    "Target": "/usr/lib64/libbfd.so",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a",
+                    "Target": "/usr/lib64/libbfd.a",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a",
+                    "Target": "/usr/lib64/libsframe.a",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a",
+                    "Target": "/usr/lib64/libiberty.a",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h",
+                    "Target": "/sdk/crash-9.0.1/defs.h",
+                    "ReadOnly": true
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ],
+            "Init": true
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/416606aac305ef841dfbe3618eabc778738e81e511705c23b84b18cad71132e1-init/diff:/var/lib/docker/overlay2/b9950a67e47d32e93d7c43c6a1145e4c5cf89717b127f4a7a42a98785b6c5d5a/diff:/var/lib/docker/overlay2/fff00856c276031a055641a39e0919e79db7904afb0ce80a3d4f4db638a0269c/diff:/var/lib/docker/overlay2/d199f563791647ba171c6a6b30772ca85312af33440b39d08e6bb730f6e6013a/diff:/var/lib/docker/overlay2/f0749d426bb01c0f3b1cf8801b25513f92ffa67570954f3f881636dbf54f2b04/diff:/var/lib/docker/overlay2/b108a9aa871c34f689ca9dad26ceac43de807cd903f00a7ba1d77804cd2d8f1e/diff:/var/lib/docker/overlay2/fb2f4457a35c8482edb2928b3b235f4050018750bf17cdff8b8b1bb174b2c5d6/diff:/var/lib/docker/overlay2/6b8acc345c6edc4a5dfd53ec0ef55b3b54be94cb1082c09d8fba86f9fd66d001/diff:/var/lib/docker/overlay2/8fe2188ddb7c5e6ab9ab5a67a024ba8f7896b7a9cbe1f9cdae2a953e5ef7651d/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+                "MergedDir": "/var/lib/docker/overlay2/416606aac305ef841dfbe3618eabc778738e81e511705c23b84b18cad71132e1/merged",
+                "UpperDir": "/var/lib/docker/overlay2/416606aac305ef841dfbe3618eabc778738e81e511705c23b84b18cad71132e1/diff",
+                "WorkDir": "/var/lib/docker/overlay2/416606aac305ef841dfbe3618eabc778738e81e511705c23b84b18cad71132e1/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2",
+                "Destination": "/output",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                "Destination": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/consumer-native46d-1/libuv-provider-acquisition-1/libuv-passive-extraction-1/extracted/libuv/usr/lib64/libuv.so.1.0.0",
+                "Destination": "/usr/lib64/libuv.so.1",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/ansidecl.h",
+                "Destination": "/usr/include/ansidecl.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.a",
+                "Destination": "/usr/lib64/libbfd.a",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libiberty.a",
+                "Destination": "/usr/lib64/libiberty.a",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel",
+                "Destination": "/src",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake-data/usr/share/cmake",
+                "Destination": "/usr/share/cmake",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/crash-host-provider-join-1/source-passive-extraction-1/header-kind-correction-1/nested-source-extraction-1/extracted/source/crash-9.0.1/defs.h",
+                "Destination": "/sdk/crash-9.0.1/defs.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2",
+                "Destination": "/source",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/bfd.h",
+                "Destination": "/usr/include/bfd.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/diagnostics.h",
+                "Destination": "/usr/include/diagnostics.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libbfd.so",
+                "Destination": "/usr/lib64/libbfd.so",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/lib64/libsframe.a",
+                "Destination": "/usr/lib64/libsframe.a",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+                "Destination": "/work/output",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/cmake/usr/bin/cmake",
+                "Destination": "/usr/bin/cmake",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/binutils-devel/usr/include/symcat.h",
+                "Destination": "/usr/include/symcat.h",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "327d3a39fd53",
+            "Domainname": "",
+            "User": "1000:1000",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "container=oci",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "CARGO_BUILD_JOBS=4",
+                "CMAKE_BUILD_PARALLEL_LEVEL=4",
+                "MAKEFLAGS=-j4",
+                "PYTHONDONTWRITEBYTECODE=1"
+            ],
+            "Cmd": [
+                "-i",
+                "BASH_ENV=",
+                "ENV=",
+                "GNUMAKEFLAGS=",
+                "LANG=C",
+                "LC_ALL=C",
+                "PATH=/usr/bin:/bin",
+                "TZ=UTC",
+                "PYTHONDONTWRITEBYTECODE=1",
+                "LD_LIBRARY_PATH=",
+                "LD_PRELOAD=",
+                "MAKEFILES=",
+                "MAKEFLAGS=",
+                "MAKEOVERRIDES=",
+                "MFLAGS=",
+                "CMAKE_BUILD_PARALLEL_LEVEL=1",
+                "SOURCE_DATE_EPOCH=1786434034",
+                "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+                "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+                "KBUILD_BUILD_USER=mckernel",
+                "KBUILD_BUILD_VERSION=1",
+                "TMPDIR=/tmp",
+                "TMP=/tmp",
+                "TEMP=/tmp",
+                "/usr/bin/cmake",
+                "--build",
+                "/work/output/build",
+                "--target",
+                "mckernel.img",
+                "--parallel",
+                "1",
+                "--verbose"
+            ],
+            "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+            "Volumes": null,
+            "WorkingDir": "/work/output",
+            "Entrypoint": [
+                "/usr/bin/env"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "io.buildah.version": "1.43.1",
+                "license": "BSD-3-Clause",
+                "mckernel.preparation-owner": "m14-joint-provider-image-1",
+                "name": "rockylinux",
+                "org.mckernel.scope": "local development; no production evidence credit",
+                "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+                "org.opencontainers.image.licenses": "BSD-3-Clause",
+                "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+                "org.opencontainers.image.title": "rockylinux",
+                "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+                "org.opencontainers.image.version": "10",
+                "summary": "Rocky Linux Base image",
+                "vendor": "Rocky Enterprise Software Foundation",
+                "version": "10"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

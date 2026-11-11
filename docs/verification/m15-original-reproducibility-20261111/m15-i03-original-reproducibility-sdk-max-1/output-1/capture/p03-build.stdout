@@ -1,0 +1,24 @@
+Change Dir: '/output/p03'
+
+Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile -j1 eclair_backtrace_rust_program
+/usr/bin/cmake -S/p03/source -B/output/p03 --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/make  -f CMakeFiles/Makefile2 eclair_backtrace_rust_program
+make[1]: Entering directory '/output/p03'
+/usr/bin/cmake -S/p03/source -B/output/p03 --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /output/p03/CMakeFiles 1
+/usr/bin/make  -f CMakeFiles/Makefile2 CMakeFiles/eclair_backtrace_rust_program.dir/all
+make[2]: Entering directory '/output/p03'
+/usr/bin/make  -f CMakeFiles/eclair_backtrace_rust_program.dir/build.make CMakeFiles/eclair_backtrace_rust_program.dir/depend
+make[3]: Entering directory '/output/p03'
+cd /output/p03 && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /p03/source /p03/source /output/p03 /output/p03 /output/p03/CMakeFiles/eclair_backtrace_rust_program.dir/DependInfo.cmake "--color="
+make[3]: Leaving directory '/output/p03'
+/usr/bin/make  -f CMakeFiles/eclair_backtrace_rust_program.dir/build.make CMakeFiles/eclair_backtrace_rust_program.dir/build
+make[3]: Entering directory '/output/p03'
+[100%] Generating eclair-dump-backtrace.exp
+/usr/bin/cmake -E env MAKEFLAGS= /home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --crate-name eclair_dump_backtrace -C panic=abort -C opt-level=2 /output/p03/rust-eclair-backtrace/eclair_main.rs -o /output/p03/eclair-dump-backtrace.exp
+make[3]: Leaving directory '/output/p03'
+[100%] Built target eclair_backtrace_rust_program
+make[2]: Leaving directory '/output/p03'
+/usr/bin/cmake -E cmake_progress_start /output/p03/CMakeFiles 0
+make[1]: Leaving directory '/output/p03'
+

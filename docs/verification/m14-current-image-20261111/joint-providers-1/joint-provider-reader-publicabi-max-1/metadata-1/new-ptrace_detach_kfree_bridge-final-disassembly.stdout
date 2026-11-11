@@ -1,0 +1,18 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8aa7b0 <ptrace_detach_kfree_bridge>:
+fffffffffe8aa7b0:	55                   	push   %rbp
+fffffffffe8aa7b1:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8aa7b4:	48 be c0 df 90 fe ff ff ff ff 	movabs $0xfffffffffe90dfc0,%rsi
+fffffffffe8aa7be:	48 b8 b0 f4 82 fe ff ff ff ff 	movabs $0xfffffffffe82f4b0,%rax
+fffffffffe8aa7c8:	ba 31 12 00 00       	mov    $0x1231,%edx
+fffffffffe8aa7cd:	5d                   	pop    %rbp
+fffffffffe8aa7ce:	ff e0                	jmp    *%rax
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

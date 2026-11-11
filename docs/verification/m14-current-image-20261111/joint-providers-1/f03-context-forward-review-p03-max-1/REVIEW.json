@@ -1,0 +1,346 @@
+{
+  "schema": "mckernel-focused-material-source-review-v1",
+  "created_utc": "2026-11-11T03:40:58.360568+00:00",
+  "reviewer": "/root/p03_cutover_source_max; actual same-Root gpt-6.1-sol/MAX; independent of source author /root/p04_source_max; no recursive agents",
+  "verdict": "GO",
+  "decision": "GO_SOURCE_ONLY_GENUINE_NARROW_POLICY_CONTEXT_CALLBACK_OWNERSHIP",
+  "scope": "Exact four-path 4579fb9b patch over source14d3. One current live C policy callback becomes a genuine typed Rust pass-through to the unchanged selected Rust forwarder. This is original F03 migration debt, without reopening or expanding original06-04 DEFAULT.",
+  "inputs": {
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 2109,
+      "sha256": "abdbdd0f1d91bd64a43518fc3e0bfa8b1410060e1d8676e3af93ec9d8564c897"
+    },
+    "POLICY-CONTEXT-BRIDGE-OWNERSHIP.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/POLICY-CONTEXT-BRIDGE-OWNERSHIP.patch",
+      "bytes": 4001,
+      "sha256": "4579fb9b84d3358c68497de91bf9d2f097bed0ce011b3d8f3c357f3b0f903172"
+    },
+    "CONTRACT.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/CONTRACT.json",
+      "bytes": 4724,
+      "sha256": "0bb58d9519470839590e878ab0245c90903541ac980679000cbfab9cde4391aa"
+    },
+    "SOURCE-PATHS.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/SOURCE-PATHS.json",
+      "bytes": 1343,
+      "sha256": "68a398656c0765a71e6e5645dc706157028a6b33c90165fc3c8856ceba2fa751"
+    },
+    "SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/SOURCE-BINDINGS.json",
+      "bytes": 1947,
+      "sha256": "305e817c719572c77c84ae58ec4d542cc4994df60883b7e744725b80e04f4859"
+    },
+    "ACTUAL-CALLERS-AND-OWNER-DECISION.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/ACTUAL-CALLERS-AND-OWNER-DECISION.json",
+      "bytes": 23574,
+      "sha256": "60a484b16911ef8a0bbcfcee5c5484b6a0213ef36ace076dd89b9cee9c5df27d"
+    }
+  },
+  "actual_source_base": "14d3cc82da7db56d1783ab6ef3f661e1838abf2a",
+  "qualified_old_physical_owner_input": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+    "bytes": 5781054,
+    "sha256": "aa1bbb48a0e43b72e3b0a74ecc9b186301b42aef070ad13349f010d82ac7fef4"
+  },
+  "candidate_postimages": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 58758,
+      "sha256": "2e1e04df251e51f72cd9c4fee4e864d678c7263e81f35f3366249cfc53da7432"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/candidate/kernel/rust/lib.rs",
+      "bytes": 4540,
+      "sha256": "b442d215212279157deb5f12d3dd10bb912357d5d64a2be602219c88de4ced52"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/candidate/kernel/syscall.c",
+      "bytes": 955780,
+      "sha256": "6c3097deffca5b92698ccdde49090728ccb1c767f2722d1bdb2d1edfda3bcfb1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/candidate/kernel/rust/f03_policy_forward_context_bridge.rs",
+      "bytes": 1495,
+      "sha256": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377"
+    }
+  ],
+  "unchanged_source_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1240596,
+      "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/arch_syscall_forward_context_bridge.rs",
+      "bytes": 604,
+      "sha256": "3f14c1b94b1a071910623ec25551381b846ed36f3c2cefbf501cf33eb036314a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    }
+  ],
+  "independent_static_checks": [
+    {
+      "result": "PASS",
+      "check": "All six SOURCE-READY linked inputs and all four candidate postimages match exact size/SHA. All three existing preimages match actual14d3 committed blobs, and a standalone text-only hunk reconstruction produces exactly each candidate. No patch was applied to canonical source."
+    },
+    {
+      "result": "PASS",
+      "check": "Exactly six unified hunks: kernel CMake three additions/13 lines; lib.rs one addition/two lines; syscall.c one guard-line replacement with zero physical line-count change; new module32 lines/1495 bytes. No existing Rust body or C function body is rewritten."
+    },
+    {
+      "result": "PASS",
+      "check": "Five separately bound unchanged source/header identities match. Full syscall_policy.rs, ABIff48 and existing arch-context adapter remain byte-identical. No other exports, broad candidate flags, owned transaction, exec/TID body, source hold or admission control is modified."
+    },
+    {
+      "result": "PASS",
+      "check": "The unchanged policy source has exactly19 Some(callback) uses and one foreign declaration. Actual nearest function names and one-based callback lines equal all19 manifest entries. Each prior physical owner row, sys_settimeofday1347B, C callback12B and real Rust forwarding target448B equals the authoritative saved physical-provider projection."
+    },
+    {
+      "result": "PASS",
+      "check": "C long(int,void*) typedef and current two C bodies, Rust foreign declaration, SyscallForwardContextFn alias and new unsafe extern C function/const type agree exactly. Qualified x86 ABI remains CInt=i32, CLong=i64, pointer64, repr(C) X86UserContext; no integer/address round trip or calling-convention cast."
+    },
+    {
+      "result": "PASS",
+      "check": "New body performs exactly one ordinary unsafe Rust call to crate::syscall_policy::syscall_generic_forwarding(number, context.cast::<X86UserContext>()) and returns its CLong unchanged. Pointer cast preserves address/null/provenance, forms no reference and does not dereference, retain, allocate, validate, mutate flags or extend the borrow."
+    },
+    {
+      "result": "PASS",
+      "check": "Old C policy callback called unchanged static C context wrapper, whose sole operation called the same selected Rust forwarder with an ihk_mc_user_context_t pointer cast. Removing these transparent C hops preserves number/pointer/result and introduces no observation, lock, CPU lookup, log, cleanup, ownership or error-order change."
+    },
+    {
+      "result": "PASS",
+      "check": "Unchanged forwarder owns null -EINVAL before CPU/context access, actual CPU lookup and owner logging, zero-initialized72-byte request, six volatile GPR reads in RDI/RSI/RDX/R10/R8/R9 order, number conversion and one actual selected synchronous do_syscall call/return. New adapter does not replace or reimplement that behavior."
+    },
+    {
+      "result": "PASS",
+      "check": "Selection flag starts OFF. Its sole ON assignment/cfg/source dependency is under the existing supported12-term ordinary profile plus NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION. lib.rs has the matching cfg. C exclusion macro is appended only from that same selected flag after existing source-property replacement points. Other profiles keep the original C definition."
+    },
+    {
+      "result": "PASS",
+      "check": "Module compile_error additionally rejects wrong architecture, missing native6.12/profile/perf/rusage or TOFU/Fugaku/broad forwarding. Actual CMake predicate also excludes UBSAN, experimental signaling, missing workIRQ and owned transaction. No option/default is changed. The profile predicate is MCKERNEL_RUST_F06_WHOLE_DEFAULT, as for the prior narrow policy2 adapter, rather than enabling whole F06 or broad adapters."
+    },
+    {
+      "result": "PASS",
+      "check": "New source has one exact no_mangle policy callback definition. Existing policy foreign declaration denotes its external symbol, not another definition. The inner static C context wrapper remains unchanged for its other genuine consumers; no whole C-wrapper retirement is claimed. Compiler aliasing with another genuine identical Rust adapter must be classified from future actual source/map, not forced into fabricated separate physical ranges."
+    }
+  ],
+  "actual19_unchanged_callback_uses": [
+    {
+      "function": "sys_setpgid",
+      "one_based_line": 11341,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 661
+    },
+    {
+      "function": "sys_settimeofday",
+      "one_based_line": 11919,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 1347
+    },
+    {
+      "function": "sys_epoll_pwait",
+      "one_based_line": 12320,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 260
+    },
+    {
+      "function": "sys_ppoll",
+      "one_based_line": 12341,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 257
+    },
+    {
+      "function": "sys_pselect6",
+      "one_based_line": 12362,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 318
+    },
+    {
+      "function": "sys_setresuid",
+      "one_based_line": 12585,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 322
+    },
+    {
+      "function": "sys_setreuid",
+      "one_based_line": 12595,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 322
+    },
+    {
+      "function": "sys_setuid",
+      "one_based_line": 12605,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 322
+    },
+    {
+      "function": "sys_setresgid",
+      "one_based_line": 12628,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 323
+    },
+    {
+      "function": "sys_setregid",
+      "one_based_line": 12638,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 323
+    },
+    {
+      "function": "sys_setgid",
+      "one_based_line": 12648,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 323
+    },
+    {
+      "function": "sys_linux_spawn",
+      "one_based_line": 13091,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 22
+    },
+    {
+      "function": "sys_swapout",
+      "one_based_line": 13177,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 310
+    },
+    {
+      "function": "sys_read",
+      "one_based_line": 13353,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 602
+    },
+    {
+      "function": "sys_ioctl",
+      "one_based_line": 13373,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 496
+    },
+    {
+      "function": "sys_open",
+      "one_based_line": 13396,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 507
+    },
+    {
+      "function": "sys_openat",
+      "one_based_line": 13418,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 507
+    },
+    {
+      "function": "sys_close",
+      "one_based_line": 13436,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 669
+    },
+    {
+      "function": "sys_fcntl",
+      "one_based_line": 13456,
+      "callback_expression": "Some(syscall_policy_forward_context_bridge)",
+      "existing_physical_owner": "rust/mckernel_rust.o",
+      "existing_function_bytes": 596
+    }
+  ],
+  "source_locations": [
+    {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "lines": "363;20852-20865",
+      "purpose": "Exact callback C type and complete original two-hop pass-through bodies; only policy-definition guard changes."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "lines": "315;576;2630-2678;2946-2974",
+      "purpose": "Foreign symbol/type, unchanged complete forwarding contract and request/return boundary."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "lines": "981-1000;1024-1050",
+      "purpose": "Unchanged actual six volatile GPR selectors; read-only corroboration, no executed helper."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "lines": "5-7;484-496",
+      "purpose": "Existing qualified actual integer/pointer/context representation."
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "lines": "62-69;109-110;602-607;649;788-790;1045-1050",
+      "purpose": "Existing profile/default predicate, production dependency and final append location; candidate hunks add only paired narrow callback selection."
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f03-context-settimeofday-ownership-p04source-max-1/candidate/kernel/rust/f03_policy_forward_context_bridge.rs",
+      "lines": "1-32",
+      "purpose": "Entire genuine new adapter and typed-const declaration reviewed."
+    }
+  ],
+  "borrow_and_lifetime": {
+    "required_original_precondition": "A non-null context is the original live, correctly aligned initialized x86 user-context storage through the complete synchronous forwarding operation, including any existing provider wait. Existing callers retain their own context storage and surrounding locking/accounting responsibility.",
+    "null_behavior": "Null is forwarded without manufacturing a Rust reference; unchanged genuine forwarder returns -EINVAL before accessing context/CPU/provider.",
+    "callers": "All19 existing typed callback values and consuming bodies remain unchanged. No new context copy, asynchronous retention, shared reference, refcount, lock or interrupt-state transition is introduced.",
+    "return": "Exact CLong/i64 provider return including signed error values; no truncation or remapping.",
+    "not_claimed": "Source review does not prove live asynchronous/native callback lifetime, provider scheduling or actual signal behavior."
+  },
+  "test_disposition": {
+    "new_behavior_fixture_required": false,
+    "reason": "This exact source delta adds no branch, request encoder, argument mutation, validation or observable effect. A fixture mirroring two-argument forwarding provides no independent behavior oracle; an excluded generic replay is not admissible. Existing exact-scope body/ABI/provider/time tests are reused. Necessary changed production codegen/link/owner exclusion remains required."
+  },
+  "future_actual_production_requirements": [
+    "Root alone composes only the focused reviewed hunks into its actual current memory/ptrace source cohort; never replace newer shared CMake/lib/syscall full postimages with this private14d3 snapshot. Freeze the actual resulting source, configs, generated commands and matching header/compiler/provider tuple for independent operation review.",
+    "Use one genuinely required normal named mckernel.img build under Root fresh reviewed HOST4GiB/max3/CPUs0,6,7/shared-overhead/fresh26GiB/floors admission; actual cache/source work remains serialized with the sole heavy owner. No compiler/native/test execution is admitted by this source review.",
+    "From the changed actual whole Rust/C objects and final image/map, prove one real Rust strong callback definition, matching C policy definition absent, same precise int/raw-pointer/signed-long ABI and real selected Rust forwarding target. Classify any honest compiler alias by actual Rust source/relocation/map rather than inventing another owner.",
+    "Bind all19 actual callback edges/current sys_settimeofday and unchanged forwarder to the new coherent cohort; verify actual provider/type/import/no-UND closure, unchanged previously accepted entries/data and real remaining C ledger without a count quota or whole-file assertion.",
+    "Collect actual operation-specific positive births/direct and full-family waits/closed streams/container removal and scoped resource release. Preserve actual historical UNKNOWN, native/source/account/capacity holds; no empty observation establishes current-free.",
+    "Do not replay held generic/exec/owned590e/TID/XPMEM/TERMRESET or native behavior. Original applicable FUNCTIONAL/default/parent conditions still require their own exact actual result review."
+  ],
+  "whole_condition_or_execution_credit": {
+    "source_only": true,
+    "new_actual_image": false,
+    "C_retirement": false,
+    "whole_F03_DEFAULT": false,
+    "whole_F06_or_file_acceptance": false,
+    "native_or_signal_execution": false,
+    "M14_or_M15_acceptance": false,
+    "original_06_04_default": "Prior independent f0f001b2 remains its unchanged scope; this adjacent generic callback source change is not a new prerequisite or additional04 credit."
+  },
+  "reviewer_analysis_note": "One reviewer saved-data diagnostic first corroborated all21 physical owner rows, then mistakenly compared differently shaped final-symbol rows using the same projection and raised AssertionError. The final review explicitly selects authoritative physical_provider_joins; this was an offline reviewer projection error, not a SUT failure, source change or executable replay.",
+  "permissions_and_ownership": {
+    "filesystem": "Observed declared danger-full-access/approval-never; read-only source/saved evidence plus this assigned private review only; not Unix root.",
+    "canonical_index_controls": "Unchanged by reviewer.",
+    "recursive_agents": false,
+    "source_author_packet": "Frozen and unmodified.",
+    "prohibited_execution": "No compiler/test/CMake/ELF-tool/helper/Docker/network/device/API/application/kernel/native or signal operation by reviewer."
+  },
+  "root_next_action": "Root may compose this exact source-only GO into its joint ready production cohort, then request the independently reviewed actual normal image operation. Actual ownership/C exclusion and all whole-condition decisions remain pending their genuine produced evidence."
+}

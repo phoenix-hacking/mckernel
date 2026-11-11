@@ -1,0 +1,44 @@
+warning: associated function `installed_stop` is never used
+ --> /output/p01/rust-boot-tools/config.rs:5:21
+  |
+5 | impl Config {pub fn installed_stop()->Self{Self{sbin:"/usr/local/sbin".into(),..Self::installed()}}}
+  | -----------         ^^^^^^^^^^^^^^
+  | |
+  | associated function in this implementation
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+
+warning: methods `exists` and `umask` are never used
+  --> /output/p01/rust-boot-tools/platform.rs:11:5
+   |
+ 7 | pub trait Host {
+   |           ---- methods in this trait
+...
+11 |  fn exists(&mut self,path:&str)->bool;
+   |     ^^^^^^
+...
+14 |  fn umask(&mut self,value:u32)->u32;
+   |     ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `umask` is never used
+  --> /output/p01/rust-boot-tools/platform.rs:34:16
+   |
+34 | extern "C" {fn umask(mask:u32)->u32;fn geteuid()->u32;}
+   |                ^^^^^
+
+warning: fields `etc`, `modules`, `kernel`, `buildid`, `linux_work_irq`, and `trampoline` are never read
+ --> /output/p01/rust-boot-tools/config.rs:2:57
+  |
+2 | ...ct Config {pub sbin:String,pub etc:String,pub modules:String,pub kernel:String,pub arch:String,pub buildid:String,pub linux_work_irq:bool,pub trampoline:St...
+  |       ------                      ^^^            ^^^^^^^            ^^^^^^                            ^^^^^^^            ^^^^^^^^^^^^^^          ^^^^^^^^^^
+  |       |
+  |       fields in this struct
+  |
+  = note: `Config` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: 3 warnings emitted
+

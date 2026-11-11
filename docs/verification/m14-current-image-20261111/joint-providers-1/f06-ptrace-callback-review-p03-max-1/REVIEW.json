@@ -1,0 +1,305 @@
+{
+  "Root_sole_integrator_executor_publisher_acceptance_owner": true,
+  "actual_seven_C_names": [
+    "ptrace_detach_kfree_bridge",
+    "ptrace_detach_do_kill_bridge",
+    "ptrace_wakeup_sig",
+    "ptrace_detach_wakeup_bridge",
+    "ptrace_wakeup_update_unlock_bridge",
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_log_bridge"
+  ],
+  "at": "2026-11-11T02:48:59.955966+00:00",
+  "changed_paths": [
+    {
+      "postimage": {
+        "bytes": 59501,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/candidate/kernel/CMakeLists.txt",
+        "sha256": "216e276fd85ae0ee52f673fa67125d763b043f638e771a4391f5f87522d72c0a"
+      },
+      "preimage": {
+        "bytes": 58021,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/preimage/kernel/CMakeLists.txt",
+        "sha256": "54933e844f67eb8afe94f0ac23b82403557361fdbe5f7e83b821b5f8451e8d9d"
+      },
+      "relative_path": "kernel/CMakeLists.txt"
+    },
+    {
+      "postimage": {
+        "bytes": 960915,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/candidate/kernel/syscall.c",
+        "sha256": "7a05e4051d9430f6484833448023f71af5d04387ab84ee2d6f6093f400a7eeb9"
+      },
+      "preimage": {
+        "bytes": 955713,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/preimage/kernel/syscall.c",
+        "sha256": "f51bb8cd054632c5bc4004a374345da8045c873bc8236fe27cbd40e034c1481a"
+      },
+      "relative_path": "kernel/syscall.c"
+    },
+    {
+      "postimage": {
+        "bytes": 4493,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/candidate/kernel/rust/lib.rs",
+        "sha256": "3d869176e12e7bd3106f909ef3885ce54320b1284e57002aafcb7ad561c8c76e"
+      },
+      "preimage": {
+        "bytes": 4449,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/preimage/kernel/rust/lib.rs",
+        "sha256": "a891d48079db2c7cd749ce4f5d71075f8e3b053bc055f7b2e53d2e873061c9c8"
+      },
+      "relative_path": "kernel/rust/lib.rs"
+    },
+    {
+      "postimage": {
+        "bytes": 1240794,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/candidate/kernel/rust/syscall_policy.rs",
+        "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469"
+      },
+      "preimage": {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/preimage/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      "relative_path": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "postimage": {
+        "bytes": 7740,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/candidate/kernel/rust/f06_ptrace_resume_callbacks.rs",
+        "sha256": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0"
+      },
+      "preimage": null,
+      "relative_path": "kernel/rust/f06_ptrace_resume_callbacks.rs"
+    }
+  ],
+  "current_actual_C27_proof": {
+    "bytes": 34432,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/do-fork-default-ownership-p04source-max-1/abi-witness-1/qualification-1/QUALIFICATION.json",
+    "sha256": "985aacaf9f9a399fb4dd2c6ceaf1ccad59ad334a890023ab9109322e22f898f2"
+  },
+  "decision": "GO_SOURCE_ONLY_EXACT_SEVEN_PTRACE_CALLBACK_SELECTION",
+  "exact_existing_two_exports": [
+    "ptrace_detach_do_kill_bridge",
+    "ptrace_detach_wakeup_bridge"
+  ],
+  "findings": [
+    {
+      "evidence": "Five changed paths only; independent static unified-diff comparison reconstructs all five pinned postimages across14hunks. Entire1240596B syscall_policy preimage remains byte-identical prefix; only198B module declaration appended. Existing f03_ptrace_adapters source091c497b unchanged. Canonical four preimages match the14d3 snapshot at review; no source/index mutation or SUT/compiler/helper run.",
+      "predicate": "bounded exact source delta",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Exactly five new externC no_mangle functions plus exact two unchanged existing adapter exports are selected. Read full existing1635B adapter: only ptrace_detach_do_kill_bridge and ptrace_detach_wakeup_bridge, no include or extra export. Current saved f839 C27 confirms all seven are real live C functions; not dead fork-report callbacks or a renamed provider. No new root is claimed emitted before actual build.",
+      "predicate": "complete seven required callbacks",
+      "result": "PASS_SOURCE_ONLY"
+    },
+    {
+      "evidence": "Reused opaque kill adapter calls actual do_kill(Thread*,int,int,int,SigInfo*,int)->CULong and returns CLong with identical x86_64 bits. Reused wake adapter invokes genuine sched_wakeup_thread and deliberately discards int result, preserving void ABI. New typed resume call uses already-selected genuine syscall_do_kill_thread_bridge with exact constSigInfo signature, identical do_kill invocation and unsigned/signed conversion. Existing body invokes this callback only; it neither compares nor exports callback address. No function-pointer reinterpretation, extra thunk, fake provider or synthetic state is introduced.",
+      "predicate": "real same-provider forwarding",
+      "result": "PASS"
+    },
+    {
+      "evidence": "New ptrace_wakeup_sig captures the actual current Thread once before unchanged body, same as selected C wrapper. PtraceIoOffsets88B eleven entries exactly mirror the C ptrace_wakeup_io_offsets: actual Thread/Process field offsets, no guessed layout. Original full body/selection/find/unlock/state/step/pending/wake semantics remain unchanged. Actual ff48 defining ABI and e139 paired source/layout proof reused honestly; new C/Rust assertions still await normal compilation.",
+      "predicate": "current thread and offset binding",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Aligned MaybeUninit<McsRwlockNodeIrqsave>64B/align64 is a fresh exclusive local, live for the entire synchronous body call; no zero-init or assume-init fiction. Actual __mcs_rwlock_writer_lock initializes node.irqsave through real lock.slock, and matching unlock reads that same node/restores saved IRQ. Body pairs lock/update/unlock before pending/free/delivery, or does not access node on other branches. No node/address escapes, extra refcount/lock is acquired, or full mutable Thread/Process reference spans scheduling/transport. Existing borrowed find_thread->thread_unlock ownership is retained.",
+      "predicate": "borrow and same-node IRQ lifetime",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Read actual ptrace_wakeup_sig_body_result16942..17149. Log precedes offset/current/find validation; miss returnsESRCH without unlocking a nonexistent child; data/lookup/optional-callback errors release the existing borrowed child once. KILL clears saved context, zeroes actual128B info,SIGKILL/ptracecont0, then handles negative delivery. CONT/SINGLESTEP/SYSCALL clear context/optional step, writer-pair tracebit, select/take pending, copy128B before one free or synthesize SI_USER/tracerpid, deliver ptracecont1, preserve errors, wake PS_TRACED|PS_STOPPED and one unlock. No body rewrite/new cleanup disposition or acceptance for old held/undefined outcomes.",
+      "predicate": "normal and error resume protocol",
+      "result": "PASS_UNCHANGED_BODY"
+    },
+    {
+      "evidence": "New ptrace_detach_kfree_bridge calls real kfree_tracked once with original pointer, actual C source env filename and logical4657. Same const/char-pointer ABI asserted against genuine C header/provider and Rust fn pointer. Copy-before-free and stackSigInfo lifetime remain owned by unchanged body; no allocator stand-in, retained pending pointer, extra allocation, new null policy or double-free path.",
+      "predicate": "tracked pending free",
+      "result": "PASS"
+    },
+    {
+      "evidence": "New real writable Ddebug32/align8 in __verbose has actual C filename,ptrace_wakeup_log_bridge function,fmtNULL,logical24429 and original initial flags. Event4 gate first; flags>>24!=0 correctly enables any nonzero flag value, not only bit1. kprintf format and signed32 pid/low32 unsigned hex data match original C ABI after body CLong->CInt conversion. No Rust file!/line! or fake diagnostic origin; descriptor/static strings live for kernel duration. Dynamic debug retains original kernel protocol; no new synchronization policy is invented.",
+      "predicate": "logger flags and ABI",
+      "result": "PASS"
+    },
+    {
+      "evidence": "New C guards require actual x86/PROFILE/!UBSAN/SPINLOCK_IN_MCS_RWLOCK/offload/policy/dispatch/ptrace-entry/source-file/debug binding. C static assertions check real sizeof/alignment/scalars,node savedIRQ0/lock slock0,SigInfo128/pendinginfo24,offsettable88,opstable152align8/wakeup8,Ddebug32/event4 plus all7public and3real lower prototypes. Rust checks corresponding callback aliases/direct provider fn types and actual defining layouts. These are genuine headers/types, not a new ABI shim; source assertions are not yet emitted C/Rust ABI results.",
+      "predicate": "guards and actual types",
+      "result": "PASS_SOURCE_PENDING_COMPILE"
+    },
+    {
+      "evidence": "Inside existing x86_64/Rust/linux6.12/!UBSAN/PROFILE and !TOFU/!Fugaku ordinary branch, new local selection additionally requires wholeF06/PERF/RUSAGE/workIRQ and excludes DCFA/broad adapters/experimental forward/owned-fork. No default/cache/flag change or broad adapter activation. New cfg/source+required header dependencies precede actual custom command; matching C macro APPEND occurs after existing source properties. lib.rs broad OR new narrow condition includes only existing two-export ptrace module, leaving general f03_forward_adapters guarded solely by its original broad cfg.",
+      "predicate": "narrow supported selection",
+      "result": "PASS"
+    },
+    {
+      "evidence": "Independent saved-byte checks validate every one of seven complete original C fallback function fragments occurs byte-identically in candidate; only paired guards/extern prototypes/assertions and explicit #line metadata added. Selected free logical4657 and alternate fallback4664 remain derived from4654/4661 entry resets and4659/4666 after resets. Logger24429,writer entries24448/24463,following24454/24469,whole wakeup after24590(policy)/24602(legacy) and unchanged typed ops19 table preserved. Old broad mode retains its original two-Rust selection; unsupported profiles keep original C behavior.",
+      "predicate": "C fallback and logical source origins",
+      "result": "PASS"
+    },
+    {
+      "evidence": "All13 unchanged source pins checked. All15 saved lower rows match actual f839 physical_owner data and are in rust/mckernel_rust.o: currentCPU,unchanged body/find/unlock/state/step/pending,typedkill/do_kill,wake,free,writerpair,formatter. No old43/partialb483 build/readback or new provider inventory replay. This proves existing providers at their source/artifact scope, not new callback codegen/whole03 acceptance.",
+      "predicate": "actual lower-owner reuse",
+      "result": "PASS_UNCHANGED_SCOPE"
+    },
+    {
+      "evidence": "Source snapshot14d3 already preserves separately reviewed clock2 and current fork. Root applies small reviewed hunks over live peer work, never wholesale old postimages; memory-host five-provider repair remains separate. All original generic/exec/owned590e/privateTID/TERMRESET/equivalent replay, source/native/currentfree/account/service/resource/cleanup UNKNOWN holds remain. No collector/native/ptrace syscall/provider invocation or controls/lease/goal mutation.",
+      "predicate": "composition and holds",
+      "result": "PASS_SOURCE_ONLY"
+    }
+  ],
+  "inputs": {
+    "CONTRACT.json": {
+      "bytes": 12773,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/CONTRACT.json",
+      "sha256": "85c623fbbdf5a11c67cc89452ad985543265653955b02439a31574d7eab51759"
+    },
+    "NEXT-VALIDATION.json": {
+      "bytes": 2764,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/NEXT-VALIDATION.json",
+      "sha256": "fe8e7c349701a0c9ceab6e2144f7ab743ea0610ab434b4996592fb4bab126d9d"
+    },
+    "PTRACE-RESUME-CALLBACKS.patch": {
+      "bytes": 18894,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/PTRACE-RESUME-CALLBACKS.patch",
+      "sha256": "27117efde5ceff043cc9c1de6c786bb73adf7ccefc2fe0620d3cbfd934217881"
+    },
+    "SOURCE-BINDINGS.json": {
+      "bytes": 6903,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/SOURCE-BINDINGS.json",
+      "sha256": "cab7258f58c8d81ca358dcd734480d74a29aa54b63a58009e3b9de4af3778c6a"
+    },
+    "SOURCE-CHECKS.json": {
+      "bytes": 17785,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/SOURCE-CHECKS.json",
+      "sha256": "32864938f559ac0c2fd871bbd4212b48ff4b160f570503478d5e027b8c5fcfc0"
+    },
+    "SOURCE-READY.json": {
+      "bytes": 3069,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/SOURCE-READY.json",
+      "sha256": "478cdf21a3948b37d5b84d370689de25872ca2a7fb8f546c1ad8d9e3cb2589e5"
+    }
+  },
+  "lower_fifteen_Rust_owner_names": [
+    "get_this_cpu_local_var",
+    "ptrace_wakeup_sig_body_result",
+    "f03_ptrace_io_find",
+    "f03_ptrace_io_unlock",
+    "ptrace_wakeup_clear_saved_bridge",
+    "ptrace_wakeup_set_single_step_bridge",
+    "ptrace_wakeup_trace_syscall_bridge",
+    "ptrace_wakeup_pending_take_bridge",
+    "syscall_do_kill_thread_bridge",
+    "do_kill",
+    "sched_wakeup_thread",
+    "kfree_tracked",
+    "__mcs_rwlock_writer_lock",
+    "__mcs_rwlock_writer_unlock",
+    "kprintf"
+  ],
+  "new_five_exports": [
+    "ptrace_wakeup_log_bridge",
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_update_unlock_bridge",
+    "ptrace_detach_kfree_bridge",
+    "ptrace_wakeup_sig"
+  ],
+  "new_module": {
+    "bytes": 7740,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-ptrace-callback-ownership-publicabi-max-1/candidate/kernel/rust/f06_ptrace_resume_callbacks.rs",
+    "sha256": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0"
+  },
+  "next_material_boundary": [
+    "P04Tests independently prepares only meaningful changed contract/source/type/logger validations if needed; no old body/ptrace/native/held fixture replay, GS/IRQ/real spinlock/scheduler effects or duplicate tests by reviewer.",
+    "Root composes exact reviewed source with disjoint peer deltas, freezes actual current source/config/SDK identities, and obtains independent operation GO/fresh measured shared HOST4GiB/max3/alloverhead/fresh26GiB/floors/sole-heavy admission before necessary normal namedimage build.",
+    "Actual new image must show all7 unique genuine Rust owners with corresponding live C functions absent, old2module no duplicates,actual19-slot table/wakeup pointer and every other entry/provider accounted, genuine C/Rust guards/types/debug/free origins/new source deps,real function relocation/type/provider closure and all prior roots/entry/LOAD/noUND/positive cleanup. Observe actual C ledger, no predicted count credit."
+  ],
+  "no_source_only_credit_or_C_retirement": true,
+  "original_condition_limit": "M14-06-03-DEFAULT literal complete implementation/selection/no required liveprojectC clause remains pending actual coherent image and full required callback/provider closure. Seven root names alone do not waive transitive required C behavior, as demonstrated by separate01 memory-host NO_GO. FUNCTIONAL/native/currentfree/restoration and whole file/M14/M15 remain open.",
+  "prior_whole_default_decision": {
+    "bytes": 49929,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-leaf-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "46a3823cefd457546cd3d56636aaa31fe61614d13dddcfbe671850699868521e"
+  },
+  "review_actions": {
+    "canonical_index_control_goal_changes": false,
+    "compiler_tests_SUT_helper_ELFtools_Docker_network_native": false,
+    "private_review_write_only": true,
+    "read_current_source_and_saved_JSON_text_pins_static_diff_only": true,
+    "recursive_agents": false
+  },
+  "reviewer": "/root/p03_cutover_source_max; direct same-Root actual Sol/MAX; no recursive agents",
+  "schema": "m14-seven-ptrace-resume-callback-independent-material-source-review-v1",
+  "scope": "Exact478cdf ready/27117e patch/2a00 new five bodies plus unchanged091c two-export adapter module, ABI/lifetime/selector/logical-origin composition only. New code compilation, emitted ownership and original whole-default/functional/native acceptance are not claimed.",
+  "source_snapshot_HEAD": "14d3cc82da7db56d1783ab6ef3f661e1838abf2a",
+  "unchanged_sources_verified": [
+    {
+      "bytes": 1635,
+      "path": "/home/holden/mckernel/kernel/rust/f03_ptrace_adapters.rs",
+      "sha256": "091c497b7b92a59839c61849d7a0d66430966186f835329c12f6e319defa2a7f"
+    },
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 619886,
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "d3be0ac4bfc9a103db7709fb8ba1d40b3e3e4eb144cc5c96fe3d54cbfefbcafe"
+    },
+    {
+      "bytes": 12202,
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "bytes": 3105,
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "bytes": 444772,
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    },
+    {
+      "bytes": 186213,
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+    },
+    {
+      "bytes": 7877,
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "bytes": 13020,
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "bytes": 26602,
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "bytes": 1171,
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "bytes": 4603,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "bytes": 1294,
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    }
+  ],
+  "verdict": "GO"
+}

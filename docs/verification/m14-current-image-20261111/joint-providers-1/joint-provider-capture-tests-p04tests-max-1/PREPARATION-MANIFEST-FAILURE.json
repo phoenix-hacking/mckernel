@@ -1,0 +1,12 @@
+{
+  "schema": "joint-capture-test-manifest-preparation-failure-v1",
+  "at": "2026-11-11T04:25:50.930860+00:00",
+  "owner": "/root/p04_tests_max",
+  "raw_tool_chunk": "82186c",
+  "failed_check": "One-off private JSON manifest generator parsing; no generator statement or SUT/mock function executed.",
+  "diagnostic": "SyntaxError: positional argument follows keyword argument at line34",
+  "affected_source_excerpt": "dict(pin('/usr/bin/python3'),resolved_path=str(Path('/usr/bin/python3').resolve()),qualification_reuse:'Existing actual HOST ...')",
+  "bounded_correction": "Use qualification_reuse='Existing actual HOST ...' keyword assignment; fixture/source/cases remain untouched.",
+  "payload_compiler_helper_Docker_model_network_native_or_canonical_executed": false,
+  "manifest_output_created_by_failed_command": false
+}

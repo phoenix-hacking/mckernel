@@ -1,9 +1,30 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T02:27:48.644789+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T04:01:02.270313+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Current execution: joint provider image passed04:34:14Z.** Source7231
+normal mckernel.img target returned0, producing genuine19c5e24e/10,662,800B,
+map8168218f/Rustf15e40f5/C3115d974. All13 clients and Root10858 joined;
+CID327d exited0/nonOOM/Pid0 and was removed/current2GiB released. Independent
+25-file physical baseline de6c preserves31,472,885B; oldgreen cohorts remain.
+The capture-only correction passed all3 mocked cases9c1e and finalGOa534;
+the rejected2720 candidate remains history. Reader4406bc passed04:42:53Z:
+48 commands/45 records,12 positive clients/Root11627 joined0/CID0bf removed/
+512MiB released. M15repro4a6c passed04:48:53Z after reader retirement:
+all8 commands/13 outerclients/Root86880 joined0/CID3f6b removed/2GiB released;
+three actual Rocky46d+1.95 Rust programs c5f0/7485/d333 equal0755 private stages.
+Actual qualification0b57/5598 is PASS:13 unique genuine Rust owners and paired
+C exclusions,19 ptrace/6 unmap/2 clear slots,19 context edges,four104-word ABI
+copies,4569+5 provider joins/264 strong imports/zeroUND. C-function debt in the
+qualified image is26→13; remaining13 outside these changed owners are explicit.
+Pooled-string and report-label corrections remain evidence, with no producer/read
+replay. Next15min: P03/P04Tests decide literal whole01/03 from frozen current
+proof; SDK/SourceAcq finish original M15repro source/config/SDK/provider/install
+join. No new score or native acceptance is claimed before whole independent GO.
+Root publishes this source/result checkpoint without waiting for unrelated work.
 
 **Original M14-06-04 DEFAULT verified.** WholeGO f0f001b2 on14d/a70 closes
 exactly the unchanged required vDSO/time/TSC scope:18 function/data roots,
@@ -14,9 +35,10 @@ boundary0e91d703 keeps adjacent generic C12 setter debt explicit outside04;
 area01 memory-host C and FUNCTIONAL/native/whole-file acceptance remain open.
 Combined with independent installed dependencyGO131b919d,90/156 original
 checks are verified: M14=64.26% (+0.56 displayed), M15=64.81% (+1.19).
-No denominator/weight/criterion changed. Foreground posted this pair once in PR3 comment6786391376, with source/results
-publication explicitly pending. Root reuses that confirmed receipt; no duplicate
-comment. Fetched source/results checkpoint confirmation is the next action. The physical25-file14d cohort882f is preserved;
+No denominator/weight/criterion changed. Foreground receipt6786391376 is
+POSTED_CONFIRMED; Root source/results2cc813c2 is pushed/fetched with60 matching
+owned blobs and all33 dirty paths preserved (03:52:08Z). Reuse that comment;
+no percentage report is pending. The physical25-file14d cohort882f is preserved;
 newmemory9HOST cases alreadyPASS but its fiveRust image owners/C exclusions
 and genuinecallbacktable closure are still required before01 DEFAULT credit.
 
@@ -47,8 +69,23 @@ fb97/Rootbf09 and its positive scoped retirement. Only fixture pointer typing
 changed; genuinef181/5aff source and nine oracles stayedfixed. Root composes
 reviewedaead production providers and requires five real Rust owners/C
 exclusions/callback closure in the affected image before whole01 credit.
-Ptrace c7 lifecycle packet is under SourceAcq review. Next15min: run that ready
-packet and integrate compatible providers into one reviewed affected image.
+Ptrace c7 lifecycle packet passed all12 vectors, independentlyGOed583.
+Current step: canonical7231ce6d combines exact memoryf181, ptrace2a00 and
+context10208 sources on2cc; P03 compositionGO7d123 approves all7 exact paths. The failed private merge is
+preserved; documented conflict-count handling now accepts2 complete additive
+blocks without weakening marker/source checks. P04Source prepares the normal
+incremental producer, PublicABI its
+affected reader, SDK freezes the actual source-bound packet and SourceAcq reviews
+execution. Next15min deliverable: admitted normal mckernel.img build plus actual
+13 Rust owners/C exclusions/callback/104-word ABI/provider closure. No new
+original condition is credited from composition or HOST tests alone. SDK also
+prepares only the three genuine HOST-to-Rocky script reconstructions required
+for M15-I03 reproducibility, reusing all other qualified profiles.
+Historical pre-execution review2720 retained producer9e1d/source7231/profileGO but rejected
+capturef5e: control-client birth-read/timeout paths can lose the primary error
+and joined receipt. No payload ran. SDK owns the bounded guarded direct-wait/
+UNKNOWN correction; P04Tests two focused mocked cases and SourceAcq delta review
+unblock the unchanged image. No process-group/permission fallback is enabled.
 Exact native holder/restoration40bafb remains the runtime blocker, owned by
 Root/original native holder; every original criterion/reservation/control stays.
 

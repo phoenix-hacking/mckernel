@@ -1,0 +1,26 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8ad710 <ptrace_wakeup_log_bridge>:
+fffffffffe8ad710:	55                   	push   %rbp
+fffffffffe8ad711:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8ad714:	83 ff 04             	cmp    $0x4,%edi
+fffffffffe8ad717:	75 13                	jne    fffffffffe8ad72c <ptrace_wakeup_log_bridge+0x1c>
+fffffffffe8ad719:	48 b8 60 5e 90 fe ff ff ff ff 	movabs $0xfffffffffe905e60,%rax
+fffffffffe8ad723:	8b 00                	mov    (%rax),%eax
+fffffffffe8ad725:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+fffffffffe8ad72a:	73 02                	jae    fffffffffe8ad72e <ptrace_wakeup_log_bridge+0x1e>
+fffffffffe8ad72c:	5d                   	pop    %rbp
+fffffffffe8ad72d:	c3                   	ret
+fffffffffe8ad72e:	48 bf f5 71 91 fe ff ff ff ff 	movabs $0xfffffffffe9171f5,%rdi
+fffffffffe8ad738:	48 b9 20 73 87 fe ff ff ff ff 	movabs $0xfffffffffe877320,%rcx
+fffffffffe8ad742:	31 c0                	xor    %eax,%eax
+fffffffffe8ad744:	5d                   	pop    %rbp
+fffffffffe8ad745:	ff e1                	jmp    *%rcx
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

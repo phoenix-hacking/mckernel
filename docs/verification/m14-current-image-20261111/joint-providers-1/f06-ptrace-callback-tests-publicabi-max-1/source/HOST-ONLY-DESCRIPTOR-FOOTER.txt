@@ -1,0 +1,6 @@
+
+// HOST-test-only private descriptor access; production prefix above is verbatim.
+#[cfg(ptrace_callback_host_controls)]
+pub unsafe fn host_descriptor() -> *mut crate::debug::Ddebug { core::ptr::addr_of_mut!(PTRACE_WAKEUP_DEBUG) }
+#[cfg(ptrace_callback_host_controls)]
+pub fn host_wakeup_slot_offset() -> usize { core::mem::offset_of!(super::PtraceSyscallOps,wakeup_fn) }

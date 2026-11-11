@@ -1,0 +1,738 @@
+{
+  "schema": 1,
+  "status": "FROZEN_CONDITIONAL_ACTUAL7231_READER_NOT_EXECUTED_REQUIRES_PRODUCER_POSITIVE_CLOSURE_AND_SEPARATE_OPERATION_GO_FRESH_ADMISSION",
+  "owner": "/root/sdk_binding_source_max final conditional gate; PublicABI sole readhelperauthor; Root sole admission/executor/publisher",
+  "source_commit": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-image-p04source-max-1/SOURCE-COHORT-PINS.json",
+    "bytes": 10558,
+    "sha256": "c49df343e1daf21c8e5c4f5be56b0994164404043794c636672c1e2750a6a7a7"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/reader-1/INPUTS.json",
+    "bytes": 4963,
+    "sha256": "d5f29e717f8e843592978989b0577b6b72fc6c67012f2dcdde07322a7a0d77b7"
+  },
+  "phase_order": [
+    "metadata"
+  ],
+  "metadata_phase": {
+    "create_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mck-m14-joint13-metadata-20261111-1",
+      "--label",
+      "mckernel.preparation-owner=m14-joint13-metadata-1",
+      "--init",
+      "--pull=never",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=6",
+      "--memory=512m",
+      "--memory-swap=512m",
+      "--pids-limit=64",
+      "--ulimit",
+      "core=0:0",
+      "--ulimit",
+      "fsize=1073741824:1073741824",
+      "--ulimit",
+      "cpu=120:120",
+      "--user",
+      "1000:1000",
+      "--read-only",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+      "--workdir",
+      "/work/output",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input,dst=/producer,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1,dst=/evidence",
+      "--entrypoint",
+      "/usr/bin/env",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "-i",
+      "BASH_ENV=",
+      "ENV=",
+      "LANG=C",
+      "LC_ALL=C",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "/usr/bin/bash",
+      "--noprofile",
+      "--norc",
+      "/producer/read_joint_provider_metadata.sh"
+    ],
+    "expected_mount_count": 3,
+    "expected_mounts": [
+      {
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+        "destination": "/work/output",
+        "read_only": true,
+        "role": "Actual new matching image and only affected objects plus unchanged baseline identities"
+      },
+      {
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input",
+        "destination": "/producer",
+        "read_only": true,
+        "role": "Exact passive joint13 shell reader only"
+      },
+      {
+        "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1",
+        "destination": "/evidence",
+        "read_only": false,
+        "role": "Fresh exclusive actual joint13 metadata; no stale output"
+      }
+    ],
+    "expected_returncode": 0,
+    "gate": "Only after actual canonical7231/materialGO7d123 and necessary genuine configure+namedimage0/nonOOM/Pid0/allownedRootwaits/families/streams/removed. Prior a70 green is retained, never qualified as new. Same3mountCPU6/512MiB serialized readonly phase; no payload target/compiler/native.",
+    "helper": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input/read_joint_provider_metadata.sh",
+      "bytes": 9156,
+      "sha256": "af5642a4d5bd29a8499f7aa523c9cca311d53b77bde74c104ff1180288382a47"
+    },
+    "literal_commands": [
+      {
+        "argv": [
+          "/usr/bin/test",
+          "-s",
+          "/work/output/build/kernel/mckernel.img"
+        ]
+      },
+      {
+        "argv": [
+          "/usr/bin/test",
+          "-s",
+          "/work/output/build/kernel/mckernel.img.map"
+        ]
+      },
+      {
+        "argv": [
+          "/usr/bin/test",
+          "-s",
+          "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+        ]
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-h",
+          "-l",
+          "-S",
+          "-n",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/image-elf.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-s",
+          "-r",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/image-symbols-relocations.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-s",
+          "-r",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/affected-constituent-symbols-relocations.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/nm",
+          "-n",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/image-nm.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/mckernel.img.map"
+        ],
+        "stdout": "/evidence/image-map.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/sha256sum",
+          "/work/output/build/config.h",
+          "/work/output/build/ihk/config.h",
+          "/work/output/build/kernel/config/smp-x86.lds",
+          "/work/output/build/kernel/mckernel.img",
+          "/work/output/build/kernel/mckernel.img.map",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+          "/work/output/build/kernel/rust/mckernel_rust.o",
+          "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+        ],
+        "stdout": "/evidence/artifact-identities.sha256"
+      },
+      {
+        "argv": [
+          "/usr/bin/stat",
+          "--format=%a %s %n",
+          "/work/output/build/config.h",
+          "/work/output/build/ihk/config.h",
+          "/work/output/build/kernel/config/smp-x86.lds",
+          "/work/output/build/kernel/mckernel.img",
+          "/work/output/build/kernel/mckernel.img.map",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+          "/work/output/build/kernel/rust/mckernel_rust.o",
+          "/work/output/build/tmp.resolve_MODULES_END/driver.ko"
+        ],
+        "stdout": "/evidence/artifact-modes.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/CMakeCache.txt"
+        ],
+        "stdout": "/evidence/regenerated-CMakeCache.txt"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/compile_commands.json"
+        ],
+        "stdout": "/evidence/regenerated-compile_commands.json"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make"
+        ],
+        "stdout": "/evidence/regenerated-flags.make"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make"
+        ],
+        "stdout": "/evidence/regenerated-build.make"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt"
+        ],
+        "stdout": "/evidence/regenerated-link.txt"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.d"
+        ],
+        "stdout": "/evidence/regenerated-link.d"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/rust/mckernel_rust.d"
+        ],
+        "stdout": "/evidence/regenerated-mckernel_rust.d"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/rust/mckernel_rust.raw.d"
+        ],
+        "stdout": "/evidence/regenerated-mckernel_rust.raw.d"
+      },
+      {
+        "argv": [
+          "/usr/bin/cat",
+          "/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make"
+        ],
+        "stdout": "/evidence/regenerated-Rust-build.make"
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-x",
+          ".rodata",
+          "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+        ],
+        "stdout": "/evidence/C-tables-and-ABI-rodata.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-x",
+          ".lrodata.f03_do_fork_rust_abi_words",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/Rust-ABI104-rodata.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-W",
+          "-x",
+          ".rodata",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/image-tables-and-ABI-rodata.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=syscall_do_syscall3_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-syscall_do_syscall3_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=syscall_do_syscall3_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-syscall_do_syscall3_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=syscall_policy_do_syscall3_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-syscall_policy_do_syscall3_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=syscall_policy_do_syscall3_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-syscall_policy_do_syscall3_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=clear_host_pte_log_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-clear_host_pte_log_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=clear_host_pte_log_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-clear_host_pte_log_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=do_munmap_clear_host_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-do_munmap_clear_host_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=do_munmap_clear_host_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-do_munmap_clear_host_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=do_munmap_set_host_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-do_munmap_set_host_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=do_munmap_set_host_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-do_munmap_set_host_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_sig",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_sig-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_sig",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_sig-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_update_lock_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_update_lock_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_update_lock_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_update_lock_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_update_unlock_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_update_unlock_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_update_unlock_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_update_unlock_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_detach_kfree_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_detach_kfree_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_detach_kfree_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_detach_kfree_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_detach_do_kill_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_detach_do_kill_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_detach_do_kill_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_detach_do_kill_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_detach_wakeup_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_detach_wakeup_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_detach_wakeup_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_detach_wakeup_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_log_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_log_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=ptrace_wakeup_log_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-ptrace_wakeup_log_bridge-final-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=syscall_policy_forward_context_bridge",
+          "/work/output/build/kernel/rust/mckernel_rust.o"
+        ],
+        "stdout": "/evidence/new-syscall_policy_forward_context_bridge-Rust-disassembly.stdout"
+      },
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-drw",
+          "--disassemble=syscall_policy_forward_context_bridge",
+          "/work/output/build/kernel/mckernel.img"
+        ],
+        "stdout": "/evidence/new-syscall_policy_forward_context_bridge-final-disassembly.stdout"
+      }
+    ],
+    "max_wall_seconds": 180,
+    "output_contract": {
+      "exclusive_new_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1",
+      "stdout_files": [
+        "image-elf.stdout",
+        "image-symbols-relocations.stdout",
+        "affected-constituent-symbols-relocations.stdout",
+        "image-nm.stdout",
+        "image-map.stdout",
+        "artifact-identities.sha256",
+        "artifact-modes.stdout",
+        "regenerated-CMakeCache.txt",
+        "regenerated-compile_commands.json",
+        "regenerated-flags.make",
+        "regenerated-build.make",
+        "regenerated-link.txt",
+        "regenerated-link.d",
+        "regenerated-mckernel_rust.d",
+        "regenerated-mckernel_rust.raw.d",
+        "regenerated-Rust-build.make",
+        "C-tables-and-ABI-rodata.stdout",
+        "Rust-ABI104-rodata.stdout",
+        "image-tables-and-ABI-rodata.stdout",
+        "new-syscall_do_syscall3_bridge-Rust-disassembly.stdout",
+        "new-syscall_do_syscall3_bridge-final-disassembly.stdout",
+        "new-syscall_policy_do_syscall3_bridge-Rust-disassembly.stdout",
+        "new-syscall_policy_do_syscall3_bridge-final-disassembly.stdout",
+        "new-clear_host_pte_log_bridge-Rust-disassembly.stdout",
+        "new-clear_host_pte_log_bridge-final-disassembly.stdout",
+        "new-do_munmap_clear_host_bridge-Rust-disassembly.stdout",
+        "new-do_munmap_clear_host_bridge-final-disassembly.stdout",
+        "new-do_munmap_set_host_bridge-Rust-disassembly.stdout",
+        "new-do_munmap_set_host_bridge-final-disassembly.stdout",
+        "new-ptrace_wakeup_sig-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_sig-final-disassembly.stdout",
+        "new-ptrace_wakeup_update_lock_bridge-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_update_lock_bridge-final-disassembly.stdout",
+        "new-ptrace_wakeup_update_unlock_bridge-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_update_unlock_bridge-final-disassembly.stdout",
+        "new-ptrace_detach_kfree_bridge-Rust-disassembly.stdout",
+        "new-ptrace_detach_kfree_bridge-final-disassembly.stdout",
+        "new-ptrace_detach_do_kill_bridge-Rust-disassembly.stdout",
+        "new-ptrace_detach_do_kill_bridge-final-disassembly.stdout",
+        "new-ptrace_detach_wakeup_bridge-Rust-disassembly.stdout",
+        "new-ptrace_detach_wakeup_bridge-final-disassembly.stdout",
+        "new-ptrace_wakeup_log_bridge-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_log_bridge-final-disassembly.stdout",
+        "new-syscall_policy_forward_context_bridge-Rust-disassembly.stdout",
+        "new-syscall_policy_forward_context_bridge-final-disassembly.stdout"
+      ],
+      "required_files": [
+        "image-elf.stdout",
+        "image-symbols-relocations.stdout",
+        "affected-constituent-symbols-relocations.stdout",
+        "image-nm.stdout",
+        "image-map.stdout",
+        "artifact-identities.sha256",
+        "artifact-modes.stdout",
+        "regenerated-CMakeCache.txt",
+        "regenerated-compile_commands.json",
+        "regenerated-flags.make",
+        "regenerated-build.make",
+        "regenerated-link.txt",
+        "regenerated-link.d",
+        "regenerated-mckernel_rust.d",
+        "regenerated-mckernel_rust.raw.d",
+        "regenerated-Rust-build.make",
+        "C-tables-and-ABI-rodata.stdout",
+        "Rust-ABI104-rodata.stdout",
+        "image-tables-and-ABI-rodata.stdout",
+        "new-syscall_do_syscall3_bridge-Rust-disassembly.stdout",
+        "new-syscall_do_syscall3_bridge-final-disassembly.stdout",
+        "new-syscall_policy_do_syscall3_bridge-Rust-disassembly.stdout",
+        "new-syscall_policy_do_syscall3_bridge-final-disassembly.stdout",
+        "new-clear_host_pte_log_bridge-Rust-disassembly.stdout",
+        "new-clear_host_pte_log_bridge-final-disassembly.stdout",
+        "new-do_munmap_clear_host_bridge-Rust-disassembly.stdout",
+        "new-do_munmap_clear_host_bridge-final-disassembly.stdout",
+        "new-do_munmap_set_host_bridge-Rust-disassembly.stdout",
+        "new-do_munmap_set_host_bridge-final-disassembly.stdout",
+        "new-ptrace_wakeup_sig-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_sig-final-disassembly.stdout",
+        "new-ptrace_wakeup_update_lock_bridge-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_update_lock_bridge-final-disassembly.stdout",
+        "new-ptrace_wakeup_update_unlock_bridge-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_update_unlock_bridge-final-disassembly.stdout",
+        "new-ptrace_detach_kfree_bridge-Rust-disassembly.stdout",
+        "new-ptrace_detach_kfree_bridge-final-disassembly.stdout",
+        "new-ptrace_detach_do_kill_bridge-Rust-disassembly.stdout",
+        "new-ptrace_detach_do_kill_bridge-final-disassembly.stdout",
+        "new-ptrace_detach_wakeup_bridge-Rust-disassembly.stdout",
+        "new-ptrace_detach_wakeup_bridge-final-disassembly.stdout",
+        "new-ptrace_wakeup_log_bridge-Rust-disassembly.stdout",
+        "new-ptrace_wakeup_log_bridge-final-disassembly.stdout",
+        "new-syscall_policy_forward_context_bridge-Rust-disassembly.stdout",
+        "new-syscall_policy_forward_context_bridge-final-disassembly.stdout"
+      ],
+      "record_count": 45,
+      "stdout_record_count": 45,
+      "literal_command_count": 48,
+      "generated_result_file": null,
+      "record_count_definition": "45 passive stdout records: retained16 actual changed-image/generated records,3 current actual C/Rust104/table byte dumps,26 targeted new13 Rust/final lowering records;3 test-s commands create no record. Two old timebridge disassemblies removed, not replayed.",
+      "alias_handling": "Disassembler labels may pick an actual shared alias; actual nonempty13FUNC+byte/range/owner proof comes from current ELF/map and decoded ranges, not a grep/nonempty-file spelling quota."
+    },
+    "output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1"
+  },
+  "reader_component": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/correction-1/READER-PHASE.json",
+    "bytes": 26124,
+    "sha256": "2cdfd458d26574d82d54ac22d8d3793dc396e6d2ba4f2b9fea0cebb06d225f1d"
+  },
+  "reader_output_oracles": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/OUTPUT-ORACLE.json",
+    "bytes": 13445,
+    "sha256": "fbd45186263f72649601831cfa85a598196e3b1ff0d876a25856207e045c97ae"
+  },
+  "producer_request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/REQUEST.json",
+    "bytes": 22169,
+    "sha256": "9e1d970a3716168bb66efc7d09324d18ada0da90f6c19d2fe9d50d8cb59f8a63"
+  },
+  "producer_call_correction": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/REQUEST.json",
+    "bytes": 5234,
+    "sha256": "d530f3d75b69655e52160be5fa61146eeb1b0cfe514e661cb593df02175a6e52"
+  },
+  "corrected_call": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/call_capture.py",
+    "bytes": 3449,
+    "sha256": "e088b7ecbc27598e450395eb9c18672da2696c8c4da8bc1c8e4b492b8f2037b4"
+  },
+  "capture_reuse": {
+    "prior_exactCPU6operationreview": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-operation-review-publicabi-max-1/do-mmap-incremental-1/REVIEW.json",
+      "bytes": 18098,
+      "sha256": "36195ced4b9f98fa57a5d0c819471b8ce7b9083e5dc060a45a86321d958197ed"
+    },
+    "exact_CPU6_capture_references": [
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase-cpu6.py",
+        "bytes": 4791,
+        "sha256": "7266db32ace8e167a14cc8a97cd91315f35356f117609da2c7a02cf97d7c2db3"
+      }
+    ],
+    "parent_reviewed_corrected_phase": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/root-reviewed-capture-correction-1/correction-1/phase.py",
+      "bytes": 4791,
+      "sha256": "4ca162e1a0e68d236a1f22abbeb7b88849e04e6ffac62049ce28604646acc01b"
+    },
+    "scope": "Root must use exact alreadyreviewedCPU6variant bound in36195, notCPU0helper or oldunprotectedcapture. No newframework/capability."
+  },
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "CPU_seconds": 120,
+    "FSIZE_bytes": 1073741824,
+    "container_memory_bytes": 536870912,
+    "jobs": 1,
+    "memory_swap_bytes": 536870912,
+    "new_output_disk_headroom_bytes": 1073741824,
+    "pids": 64,
+    "wall_seconds": 180
+  },
+  "shared_resource_and_ownership_gates": "Root fresh HOST4GiB/max3 incl all overhead and current owners, available>=26GiB, host16/scratch12GiB floors plus actual parentbatch headroom. Serialize producer/heavy retirement before this reader. Current Docker name absent/no conflict, own exact CID/profile/3mounts inspected, direct client+whole family waits/streams/nonOOM/Pid0+ownedremoval positive before current release. No native2-5/12GiB or CPU1 use, no other UNKNOWN/hold release. Parent SDK binds existing corrected capture CPU6 specialization and actual serial ownership; no new executor/framework.",
+  "producer_gate": {
+    "directory": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/capture-correction-1/execution-1",
+    "required_request_sha256": "9e1d970a3716168bb66efc7d09324d18ada0da90f6c19d2fe9d50d8cb59f8a63",
+    "required_status": "PASS_JOINT7231_NORMAL_NAMED_IMAGE_PRODUCER_PENDING_SEPARATE_AFFECTED_READER_AND_WHOLE_QUALIFICATION",
+    "required_artifact_paths": [
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/mckernel.img.map",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/rust/mckernel_rust.o",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+    ],
+    "proof": "At actual readeradmission load actualnewRESULT, requirepositiveproducerphase/clients/ResourceRelease/Rootfulltoolcompletion, bind everyfouractualsize/hash tocurrentROcache andsave exactconsumedproducer receipt+artifact rows. Never substituteolda70/882f/source-onlyorunknownreceipt."
+  },
+  "actual_raw_commands_oracle": "Exactly48 literal passive commands/45 fresh files from PublicABI af56/fbd4; unchanged helper/tuple/ABI/output content. Source13Rust/Cexclusion/realcallbacktables/current4x104/providers/strongimports/entry/LOAD/default/archive remainingwholequalification later. No compiler/test/helpernewframework/13 body/native action.",
+  "Root_preconditions": [
+    "Actualsource7231/IHK8d/seven hashes unchanged; exactthree readonlyoutput/helper andnewmetadataRWtuples. No source/cache writer betweenactualproducer/artifactbinding andreaderend.",
+    "Separately reviewed correctedcall e088 plusactualtinytestGO and newread-onlyphase/oracle/correctedoutputrootdeltaGO. Producerbuildneednotwaitthisreaderpacket.",
+    "Actualproducerpositivephase0/nonOOM/Pid0/remove/allbirthwaitsstreams/noUNKNOWN pluscurrentresource release andRootfulltool0/closed, exactnewfourartifacts sizes/SHA; missing/newunjoined receipt isBLOCKED/UNKNOWN, no fabricatedPASS or absence-basedretirement.",
+    "Rootfresh CPU6/512MiBmem=swap/PIDs64/3mount actualprofile admission after2GiBheavypositiveretire, allHOST4GiB/max3/overhead/fresh26/host16+5/scratch12+5GiB/currentholdconditions. No native2-5/12GiB orCPU1/poolchanges.",
+    "Freshmetadata-1 absent andRootcreatesitonlyafterallproducerpreconditions; freshreader-1/execution-1/nameabsent. Immutable14d882f ispreviouscohortonly, not usedfornewfour artifactvalues.",
+    "ExactownedCIDboundedcleanup/protectedphase7266/directclientwait+closedstreams/positivebirthandfullRoottooljoin. Newreaderprovidesdataonly, doesnotitselfaccept13Rustowners orwholeleaf."
+  ],
+  "original_acceptance": false,
+  "preparer_executed_payload": false
+}

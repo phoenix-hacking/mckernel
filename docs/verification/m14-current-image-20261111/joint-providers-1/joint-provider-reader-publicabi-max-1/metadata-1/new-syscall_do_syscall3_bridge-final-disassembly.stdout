@@ -1,0 +1,50 @@
+
+/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8d06e0 <syscall_do_syscall3_bridge>:
+fffffffffe8d06e0:	55                   	push   %rbp
+fffffffffe8d06e1:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8d06e4:	48 83 ec 50          	sub    $0x50,%rsp
+fffffffffe8d06e8:	49 89 c8             	mov    %rcx,%r8
+fffffffffe8d06eb:	49 89 d1             	mov    %rdx,%r9
+fffffffffe8d06ee:	48 c7 45 c0 00 00 00 00 	movq   $0x0,-0x40(%rbp)
+fffffffffe8d06f6:	48 c7 45 b8 00 00 00 00 	movq   $0x0,-0x48(%rbp)
+fffffffffe8d06fe:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+fffffffffe8d0703:	0f 32                	rdmsr
+fffffffffe8d0705:	48 c1 e2 20          	shl    $0x20,%rdx
+fffffffffe8d0709:	89 c1                	mov    %eax,%ecx
+fffffffffe8d070b:	48 09 d1             	or     %rdx,%rcx
+fffffffffe8d070e:	48 b8 20 79 96 fe ff ff ff ff 	movabs $0xfffffffffe967920,%rax
+fffffffffe8d0718:	48 8b 10             	mov    (%rax),%rdx
+fffffffffe8d071b:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+fffffffffe8d0720:	48 39 ca             	cmp    %rcx,%rdx
+fffffffffe8d0723:	77 21                	ja     fffffffffe8d0746 <syscall_do_syscall3_bridge+0x66>
+fffffffffe8d0725:	49 ba c0 79 90 fe ff ff ff ff 	movabs $0xfffffffffe9079c0,%r10
+fffffffffe8d072f:	4d 63 12             	movslq (%r10),%r10
+fffffffffe8d0732:	49 c1 e2 0e          	shl    $0xe,%r10
+fffffffffe8d0736:	4c 01 d2             	add    %r10,%rdx
+fffffffffe8d0739:	48 39 ca             	cmp    %rcx,%rdx
+fffffffffe8d073c:	72 08                	jb     fffffffffe8d0746 <syscall_do_syscall3_bridge+0x66>
+fffffffffe8d073e:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+fffffffffe8d0746:	48 63 cf             	movslq %edi,%rcx
+fffffffffe8d0749:	48 89 4d c8          	mov    %rcx,-0x38(%rbp)
+fffffffffe8d074d:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
+fffffffffe8d0751:	4c 89 4d d8          	mov    %r9,-0x28(%rbp)
+fffffffffe8d0755:	4c 89 45 e0          	mov    %r8,-0x20(%rbp)
+fffffffffe8d0759:	48 c7 45 e8 00 00 00 00 	movq   $0x0,-0x18(%rbp)
+fffffffffe8d0761:	48 c7 45 f0 00 00 00 00 	movq   $0x0,-0x10(%rbp)
+fffffffffe8d0769:	48 c7 45 f8 00 00 00 00 	movq   $0x0,-0x8(%rbp)
+fffffffffe8d0771:	48 b9 50 d6 84 fe ff ff ff ff 	movabs $0xfffffffffe84d650,%rcx
+fffffffffe8d077b:	48 8d 7d b8          	lea    -0x48(%rbp),%rdi
+fffffffffe8d077f:	89 c6                	mov    %eax,%esi
+fffffffffe8d0781:	ff d1                	call   *%rcx
+fffffffffe8d0783:	48 83 c4 50          	add    $0x50,%rsp
+fffffffffe8d0787:	5d                   	pop    %rbp
+fffffffffe8d0788:	c3                   	ret
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

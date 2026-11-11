@@ -1,0 +1,35 @@
+{
+  "assertions": "Complete external JSON comparison plus in-fixture same-exception-object identity, exact direct wait arguments, identical pending handle, file receipt readback at launch/birth/final boundaries and closed streams. Full original error strings persist in actual private CLIENTS.json; summary preserves exception type/identity and secondary count/type.",
+  "durability_scope": "save writes/closes private CLIENTS.json and reads every snapshot back. No fsync guarantee is invented; source caller save semantics remain independently reviewed.",
+  "explicit_test_only_effects": "Popen/stat/wait/process control/permission fallbacks are local fakes. No real process creation is exposed to actual call AST. Synthetic pid450001/birth900001 are test data. Only private files are real. Real source save/admission/native outcomes are not simulated acceptance.",
+  "external_expected": {
+    "bytes": 3935,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/EXPECTED.json",
+    "sha256": "71b612c40b334106fbaaf5dde89d510ef764cbd028fee150e3e495471662b348"
+  },
+  "finite_cases": [
+    {
+      "baseline": "Actual old AST loses client/wait/receipt after returned Popen; original birth exception remains.",
+      "candidate": "Prepared+attempt record durable before Popen, pid/returned durable before birth; bounded same-handle wait6 joins; identical birth exception preserved. BirthNone keeps UNKNOWN/charge despite direct join and closed streams.",
+      "id": "post-Popen-birth-read-failure"
+    },
+    {
+      "baseline": "Actual absent signal global masks TimeoutExpired with NameError and leaves no receipt or final direct wait.",
+      "candidate": "Same first TimeoutExpired object remains primary after terminal wait6; positive birth/direct join/closed streams are durably recorded and permit only current lifecycle disposition. Never killpg or permission fallback.",
+      "id": "timeout-primary-terminal-bounded-wait"
+    },
+    {
+      "candidate": "First TimeoutExpired remains same primary, second wait failure is secondary; retain exact mock Popen handle plus attempted/returned/pid/birth/durable UNKNOWN/charge. No None/absence implies no child.",
+      "id": "timeout-unresolved-client-control",
+      "necessity": "Distinct actual corrected pending-handle/UNKNOWN branch; Root permitted one additional unresolved control."
+    }
+  ],
+  "not_proved": "Actual Docker/image/source/provider/OS client lifecycle, real timeout retirement or original DEFAULT/native/milestone acceptance. Existing real Owner and actual current accounting remain mandatory for the one HOST test process.",
+  "original_work_unblocked": "M14-06-01/03 actual normal image capture; confirmed engineering failure, not optional harness",
+  "schema": "joint-capture-call-focused-regression-contract-v1",
+  "source": {
+    "bytes": 2830,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-capture-tests-p04tests-max-1/AST-SOURCE-BINDINGS.json",
+    "sha256": "d4d7adcfc1514cf19aed628d5b5b6e750b0a9cfb55a614690c2920bbe306290e"
+  }
+}

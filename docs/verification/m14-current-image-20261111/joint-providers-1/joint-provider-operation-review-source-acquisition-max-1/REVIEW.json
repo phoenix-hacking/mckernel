@@ -1,0 +1,104 @@
+{
+  "schema": "m14-joint-provider-producer-operation-independent-review-v1",
+  "at": "2026-11-11T04:15:23.423807+00:00",
+  "reviewer": "/root/source_acquisition_review_max; existing same-Root actual Sol/MAX; private depth1/no children",
+  "decision": "NO_GO_CONTROL_CLIENT_POST_POPEN_CAPTURE_BINDING",
+  "request": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/REQUEST.json",
+    "bytes": 22169,
+    "sha256": "9e1d970a3716168bb66efc7d09324d18ada0da90f6c19d2fe9d50d8cb59f8a63"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/INPUTS.json",
+    "bytes": 6443,
+    "sha256": "4ecf199d04239a4ce22e9c2cb41d2ee65972983d52535de063cc580c287cb4f2"
+  },
+  "Root_runner": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-operation-sdk-max-1/run_root_once.py",
+    "bytes": 6834,
+    "sha256": "f5e9322f7d4f098dd0fb162d8a9ad7903136101bf4d1063292a168645e917de4"
+  },
+  "producer_component": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-image-p04source-max-1/PRODUCER.json",
+    "bytes": 19014,
+    "sha256": "a7968446a5087d093b8dc8b6578451e4c8d35bc93e1a2d91c1f32b054f50e1c4"
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-image-p04source-max-1/SOURCE-COHORT-PINS.json",
+    "bytes": 10558,
+    "sha256": "c49df343e1daf21c8e5c4f5be56b0994164404043794c636672c1e2750a6a7a7"
+  },
+  "joint_source_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-review-p03-max-1/REVIEW.json",
+    "bytes": 19760,
+    "sha256": "7d123aea7f254315afa66cc0e78cde3c4982db8a16ede816f2bc8f9bf8d4117f"
+  },
+  "joint_canonical_integration": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-composition-2/CANONICAL-INTEGRATION.json",
+    "bytes": 2024,
+    "sha256": "212c616ee0d37a96649e8e6d4467294a910b42fa91e026ab1f80feb6c1c541ea"
+  },
+  "one_capture_failure_family": {
+    "id": "CONTROL_CLIENT_POST_POPEN_CAPTURE",
+    "location": "New runner lines3-6 AST-import function bodies, lines1/7 global namespace; reused common call() shown below.",
+    "exact_reused_function_source": "def call(label,argv,timeout=30):\n    with (OUT/(label+'.stdout')).open('wb') as out,(OUT/(label+'.stderr')).open('wb') as err:\n        p=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=out,stderr=err,env=ENV,cwd=str(ROOT),start_new_session=True)\n        birth=pathlib.Path('/proc/%d/stat'%p.pid).read_text().rsplit(') ',1)[1].split()[19]\n        try:rc=p.wait(timeout=timeout)\n        except BaseException:\n            if p.returncode is None:os.killpg(p.pid,signal.SIGKILL);p.wait(timeout=6)\n            raise\n    clients.append({'label':label,'argv':argv,'pid':p.pid,'birth':birth,'exit':rc,'direct_wait_joined':True,'streams_closed':True});save('CLIENTS.json',clients)\n    assert rc==0,(label,rc);return (OUT/(label+'.stdout')).read_bytes()",
+    "function_source_sha256": "f300788deec5e23e3ad577236cd8a36c5ac513722fbbabaa79c00ba469bc9c36",
+    "finding_1": "New runner imports no signal module; only FunctionDef nodes are extracted from prior helper files and7266 contains only phase definition. Reused call() timeout branch evaluates signal.SIGKILL in os.killpg, so a timeout would raise NameError instead of preserving original TimeoutExpired and skip original direct-wait/client receipt. This is a source-proven integration error, not an observed timeout or payload failure.",
+    "finding_2": "The same call() reads original Popen child birth before entering try. A post-Popen birth-read exception skips its direct wait and durable PID/birth/error record. On cleanup error, original exception can also be masked. Protected7266 fixes the main Docker start payload but delegates all Git/Docker/control clients to this still-unprotected call().",
+    "scope": "Exactly one bounded control-client capture family. Source selectors/producer argv/SDK/cache/image/profile are unaffected and do not need another source or green audit.",
+    "minimum_correction": "Use the already reviewed guarded post-Popen/finally direct-wait/receipt pattern for call() only: initialize identity/status before Popen, protect every post-Popen birth/wait read, preserve primary and secondary diagnostics, close streams and durably record positive or UNKNOWN join facts on every owned-client exit. Bound any final wait and retain uncertain scope. Do not merely import signal to re-enable rejected sudo-client process-group signaling; no killpg, numeric/global/reaped-PID or permission fallback. Keep payload7266 exact and current exact-owned CID cleanup unchanged. Freeze one private successor with matching request/runner/fresh capture bindings; retain original unexecuted9e1d/f5e and this NO_GO.",
+    "actual_execution": "Root explicitly confirmed no9e1d/f5e execution. No compiler/container/test/control command, timeout, signal or permission attempt was invoked by reviewer; this is static source/data review."
+  },
+  "unaffected_complete_material_findings": {
+    "actual_source": "Read actual HEAD metadata7231ce6d and verified all7 scoped canonical postimage sizes/hashes against c49df; current source-integration212c matches independent composition7d123. Reuse entire memory440dd/ptrace297d/context905 source findings and actual9/12 cases4b33/ed583 without rereading or running bodies. Root must freeze exact source/IHK before/after producer, preserve all33 unrelated edits and avoid any concurrent canonical/cache writer.",
+    "payload_delta": "Final build_phase is exactly P04Source a796. Its complete create/payload/resource argv is previous qualified fc54 build after only new owner name/label. Only payload is /usr/bin/cmake --build /work/output/build --target mckernel.img --parallel 1 --verbose. Normal dependency-driven CMake regeneration is legitimate for changed kernel CMake/source; no explicit configure/clean/-B/forced timestamps/ad hoc body compiler/object injection or passing suite replay.",
+    "namespace_security": "All17 bind tuples/cardinality/set match actual argv and prior qualified profile exactly. Source/Linux/config/toolchain/header/providers RO; only existing owned /work/output build/cache RW, readonlyrootfs/unprivileged1000:1000/capsALLdrop/no-new-privileges/networknone/privateIPC/pinned46d/pullnever/no devices/CPU6/oneCPU. Exact a875 header remains single ROfile /sdk/crash-9.0.1/defs.h. No new mount, compiler, provider namespace or profile expansion.",
+    "cache_header": "All seven required cache fields match actual read: real headerFILEPATH, wholeF6/kernelON/linux6.12/KERNEL_DIR/output/build and native-fork-owned/broadadaptersOFF. Valid existing14d/a70 cache is retained. Expected new source/size/address changes are not forced equal old image. Stable882f preserves25 inode-independent matching old physical files and17 artifact identities in a separate directory, never substituted for mutable new build outputs.",
+    "exact_inputs": "All12 actual HOST execution file pins and10 immutable receipt pins match. Explicit input boundary does not recurse historical preimages. Image Ccompiler2092 exact dictionary is tied immutable46d and asserts no /usr/bin/cc,/usr/bin/gcc or parent overlay; it is not wrongly checked against HOSTcc. Actual whole real195/70eb sysroot and Linuxconfig106055/compiler proof remain matched existing inputs.",
+    "protected_payload": "Exact payload capture7266 is retained and SHA-matches, with main start Popen protected before birth/LIVE/deadline, fastterminal metrics explicit unavailable, original wait in finally, primary/secondary and missing-birth rejection, immutable-ID bounded cleanup/terminal/nonOOM/Pid0/wait/removal. This main-phase finding is reused from36195/4ca/0785, not the blocking unprotected control-call dependency.",
+    "resources": "OneCPU6/2GiB=swap/j1/PIDs256/CPU+wall3600/FSIZE4GiB producer. Fresh shared total4GiB/max3 includes all controller/worker/daemon/helper/current payload overhead; require>=26GiB available and host21/scratch17GiB free (16/12 floors+5GiB headroom). Native2-5/12GiB andCPU1 are excluded. Current prior heavy jobs must positively retire; no current-free or other hold release inferred. Root delivered fresh04:09:32 guard/nohold,27.321GiB available,1497415680B overhead+2GiB=3644899328<4GiB and114.407GiB free, but actual runner readmission still mandatory.",
+    "following_reader": "Producer-only request does not wait on reader. After corrected producer capture GO and fresh admission Root may run this one normal compile; PASS only binds four actual artifact identities and remains pending separately reviewed serialized512MiB affected reader/full qualification. No entry count/build0/source review alone accepts original01/03DEFAULT, C retirement or FUNCTIONAL/native."
+  },
+  "actual_seven_source_rows": [
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "59fb96abd8bf18ca48f788376503495e8baba0ca39e9e02f7ee72b7121c5e685",
+      "bytes": 61222
+    },
+    {
+      "path": "kernel/rust/f03_memory_host_offload.rs",
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33",
+      "bytes": 5930
+    },
+    {
+      "path": "kernel/rust/f03_policy_forward_context_bridge.rs",
+      "sha256": "10208bd7fb8539e1313a13c861bdaf84a54df7ce39ab4a714e1726e6729b5377",
+      "bytes": 1495
+    },
+    {
+      "path": "kernel/rust/f06_ptrace_resume_callbacks.rs",
+      "sha256": "2a00e7d12f25b6e738df786fe2511c4ef4d425335e9e2f663434982e1fb02ae0",
+      "bytes": 7740
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "2b2cef5a65dd303ddf923bda67c7ebfe3ccc5360dfefac8910fe67c8e95477be",
+      "bytes": 4655
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "76ce6016d6ddd1cfa6c41070c0cf35e87b94ddc31e67c805adbe3b94b3f17469",
+      "bytes": 1240794
+    },
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "9681968de471da4c6051b4b0faa1b402201f6e78ad1a659052042b60be8fed9a",
+      "bytes": 962259
+    }
+  ],
+  "affected_normal_image_oracle": "After actual build and separate reader, require all13 intended Rust owners/C exclusions (memory5,ptrace7,context1), real24B/48B/152B tables/callback pointers and full other slots/providers, actual104C/Rust ABI byte joins,72/request/node64/Ddebug32 contracts, exact new selectors/dependencies/free/debug logical origins and whole-image definition/import/LOAD/noUND ownership. Preserve accepted fork/clock/other roots and all source/config/Linux/IHK identities; do not demand old addresses or predict retirement counts.",
+  "next_action_owner": "Root has assigned SDK one bounded capture-only successor. Independent SourceAcq delta review follows frozen meaningful new script; Root alone admits and executes after actual GO. No source/body/profile/test work needs repeating.",
+  "remaining_original_conditions": "Original M14-before-M15 order and actual generic/exec/replay/source/native/current-free/restoration/service/account/credit/UNKNOWN/resource/Scratch holds stay binding. No native action, permission widening or historical release is authorized.",
+  "reviewer_actions": "Exact source/data/pin/AST reads, existing source/cache binding comparisons and exclusive private REVIEW write only. No imported helper/runner/SUT execution, compiler/test/Docker/network/sudo/native/API or canonical/index/state action; no recursive agents.",
+  "acceptance_delta": 0
+}

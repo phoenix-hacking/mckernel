@@ -1,0 +1,335 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0xfffffffffe83a770
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          10644432 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         3
+  Size of section headers:           64 (bytes)
+  Number of section headers:         287
+  Section header string table index: 286
+
+Section Headers:
+  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        fffffffffe801000 001000 0fa4eb 00  AX  0   0 16
+  [ 2] .fixup            PROGBITS        fffffffffe8fb4eb 0fb4eb 000078 00  AX  0   0  1
+  [ 3] .data             PROGBITS        fffffffffe8fc000 0fc000 00b6e8 00  WA  0   0 32
+  [ 4] .ldata.mck_num_processors PROGBITS        fffffffffe9076e8 1076e8 000008 00 WAl  0   0  8
+  [ 5] .ldata.x86_march_perfmap PROGBITS        fffffffffe9076f0 1076f0 000008 00 WAl  0   0  8
+  [ 6] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust11native_vdso8EXCHANGE PROGBITS        fffffffffe9076f8 1076f8 000080 00 WAl  0   0  8
+  [ 7] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12ikc_manycore15IHK_IKC_HANDLER PROGBITS        fffffffffe907778 107778 000020 00 WAl  0   0  8
+  [ 8] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22OFFLOAD_WAIT_LOG_STATE PROGBITS        fffffffffe907798 107798 000008 00 WAl  0   0  8
+  [ 9] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22SYSCALL_SEND_LOG_STATE PROGBITS        fffffffffe9077a0 1077a0 000008 00 WAl  0   0  8
+  [10] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25GENERIC_FORWARD_LOG_STATE PROGBITS        fffffffffe9077a8 1077a8 000008 00 WAl  0   0  8
+  [11] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust21syscall_offload_entry16RETURN_LOG_STATE PROGBITS        fffffffffe9077b0 1077b0 000008 00 WAl  0   0  8
+  [12] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust2ap15SHOW_FCI_ONLINE PROGBITS        fffffffffe9077b8 1077b8 000020 00 WAl  0   0  8
+  [13] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust2ap7AP_STOP PROGBITS        fffffffffe9077d8 1077d8 000004 00 WAl  0   0  4
+  [14] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug23DYNAMIC_DEBUG_SYSFS_OPS PROGBITS        fffffffffe9077e0 1077e0 000018 00 WAl  0   0  8
+  [15] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_local17LAST_PROCESSOR_ID PROGBITS        fffffffffe9077f8 1077f8 000004 00 WAl  0   0  4
+  [16] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup11EARLY_PHASE PROGBITS        fffffffffe9077fc 1077fc 000001 00 WAl  0   0  1
+  [17] .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup16PERF_MAP_NEHALEM PROGBITS        fffffffffe907800 107800 000068 00 WAl  0   0  4
+  [18] .ldata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy27f03_syscall_entry_candidate16ENTRY_LOG_BUDGET PROGBITS        fffffffffe907868 107868 000008 00 WAl  0   0  8
+  [19] .ldata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy27f03_syscall_entry_candidate17RETURN_LOG_BUDGET PROGBITS        fffffffffe907870 107870 000008 00 WAl  0   0  8
+  [20] .ldata._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate20F06_SIGNAL_LOG_STATE PROGBITS        fffffffffe907878 107878 000008 00 WAl  0   0  8
+  [21] .ldata.allocator  PROGBITS        fffffffffe907880 107880 000020 00 WAl  0   0  8
+  [22] .ldata.attr_mask  PROGBITS        fffffffffe9078a0 1078a0 000008 00 WAl  0   0  8
+  [23] .ldata.debug_constants PROGBITS        fffffffffe9078c0 1078c0 000060 00 WAl  0   0 32
+  [24] .ldata.deferred_zero_at_free PROGBITS        fffffffffe907920 107920 000004 00 WAl  0   0  4
+  [25] .ldata.gdt        PROGBITS        fffffffffe907930 107930 000080 00 WAl  0   0 16
+  [26] .ldata.job_nr_processes PROGBITS        fffffffffe9079b0 1079b0 000004 00 WAl  0   0  4
+  [27] .ldata.job_nr_processes_left PROGBITS        fffffffffe9079b4 1079b4 000004 00 WAl  0   0  4
+  [28] .ldata.mem_page_fault_log_pid PROGBITS        fffffffffe9079b8 1079b8 000004 00 WAl  0   0  4
+  [29] .ldata.no_turbo   PROGBITS        fffffffffe9079bc 1079bc 000004 00 WAl  0   0  4
+  [30] .ldata.num_processors PROGBITS        fffffffffe9079c0 1079c0 000004 00 WAl  0   0  4
+  [31] .ldata.numa_sysfs_meminfo PROGBITS        fffffffffe9079c8 1079c8 000018 00 WAl  0   0  8
+  [32] .ldata.profile_event_names PROGBITS        fffffffffe9079e0 1079e0 0000c0 00 WAl  0   0  8
+  [33] .ldata.pvti_msr   PROGBITS        fffffffffe907aa0 107aa0 000008 00 WAl  0   0  8
+  [34] .ldata.query_free_mem_handler PROGBITS        fffffffffe907ac0 107ac0 000020 00 WAl  0   0 32
+  [35] .ldata.show_int_ops PROGBITS        fffffffffe907ae0 107ae0 000018 00 WAl  0   0  8
+  [36] .ldata.sysctl_overcommit_memory PROGBITS        fffffffffe907af8 107af8 000004 00 WAl  0   0  4
+  [37] .ldata.time_sharing PROGBITS        fffffffffe907afc 107afc 000004 00 WAl  0   0  4
+  [38] .ldata.x86_cpu_local_variables_span PROGBITS        fffffffffe907b00 107b00 000008 00 WAl  0   0  8
+  [39] .ldata.zero_at_free PROGBITS        fffffffffe907b08 107b08 000004 00 WAl  0   0  4
+  [40] .rodata           PROGBITS        fffffffffe907b20 107b20 003170 00   A  0   0 32
+  [41] .eh_frame         PROGBITS        fffffffffe90ac90 10ac90 000218 00   A  0   0  8
+  [42] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12host_helpers29host_perf_ctrl_request_bridge PROGBITS        fffffffffe90aea8 10aea8 000020 00  Al  0   0  8
+  [43] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12host_helpers34host_init_ikc2linux_log_raw_bridge PROGBITS        fffffffffe90aec8 10aec8 000020 00  Al  0   0  8
+  [44] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust5sysfs16request_and_free PROGBITS        fffffffffe90aee8 10aee8 0000b8 00  Al  0   0  8
+  [45] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs28process_procfs_request_inner PROGBITS        fffffffffe90afa0 10afa0 000048 00  Al  0   0  8
+  [46] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust8numparse20scanf_store_unsigned PROGBITS        fffffffffe90afe8 10afe8 000198 00  Al  0   0  8
+  [47] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust8numparse22rust_scanf_read_output PROGBITS        fffffffffe90b180 10b180 000198 00  Al  0   0  8
+  [48] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust8numparse24vsnprintf_va_list_result PROGBITS        fffffffffe90b318 10b318 0000f0 00  Al  0   0  8
+  [49] .lrodata.arch_mmap_log_bridge PROGBITS        fffffffffe90b408 10b408 000030 00  Al  0   0  8
+  [50] .lrodata.arch_prctl_body_result PROGBITS        fffffffffe90b438 10b438 000020 00  Al  0   0  8
+  [51] .lrodata.arch_process_vm_rw_log_bridge PROGBITS        fffffffffe90b458 10b458 000020 00  Al  0   0  8
+  [52] .lrodata.arch_ptrace_user_log_bridge PROGBITS        fffffffffe90b478 10b478 000028 00  Al  0   0  8
+  [53] .lrodata.arch_vdso_map_log_bridge PROGBITS        fffffffffe90b4a0 10b4a0 000028 00  Al  0   0  8
+  [54] .lrodata.arch_vdso_public_log_bridge PROGBITS        fffffffffe90b4c8 10b4c8 000020 00  Al  0   0  8
+  [55] .lrodata.arch_vdso_setup_log_bridge PROGBITS        fffffffffe90b4e8 10b4e8 000020 00  Al  0   0  8
+  [56] .lrodata.debug_log PROGBITS        fffffffffe90b508 10b508 000020 00  Al  0   0  8
+  [57] .lrodata.do_signal PROGBITS        fffffffffe90b528 10b528 0000e8 00  Al  0   0  8
+  [58] .lrodata.f03_futex_log_bridge_v2 PROGBITS        fffffffffe90b610 10b610 000020 00  Al  0   0  8
+  [59] .lrodata.f03_mprotect_log_bridge_v1 PROGBITS        fffffffffe90b630 10b630 000058 00  Al  0   0  8
+  [60] .lrodata.f03_prlimit_body_result PROGBITS        fffffffffe90b688 10b688 000080 00  Al  0   0  8
+  [61] .lrodata.f03_shmat_log_bridge_v1 PROGBITS        fffffffffe90b708 10b708 000048 00  Al  0   0  8
+  [62] .lrodata.f03_shmctl_log_bridge_v1 PROGBITS        fffffffffe90b750 10b750 000058 00  Al  0   0  8
+  [63] .lrodata.f03_wait_log_v1 PROGBITS        fffffffffe90b7a8 10b7a8 000028 00  Al  0   0  8
+  [64] .lrodata.format_decode_result PROGBITS        fffffffffe90b7d0 10b7d0 0004c0 00  Al  0   0  8
+  [65] .lrodata.futex    PROGBITS        fffffffffe90bc90 10bc90 000058 00  Al  0   0  8
+  [66] __ex_table        PROGBITS        fffffffffe90bce8 10bce8 000120 00   A  0   0  8
+  [67] .lrodata.futex_atomic_op_inuser PROGBITS        fffffffffe90be08 10be08 000058 00  Al  0   0  8
+  [68] .lrodata.futex_atomic_op_inuser_bridge PROGBITS        fffffffffe90be60 10be60 000028 00  Al  0   0  8
+  [69] .lrodata.futex_dispatch_result PROGBITS        fffffffffe90be88 10be88 000058 00  Al  0   0  8
+  [70] .lrodata.handle_interrupt PROGBITS        fffffffffe90bee0 10bee0 0000a0 00  Al  0   0  8
+  [71] .lrodata.host_perf_ctrl_result PROGBITS        fffffffffe90bf80 10bf80 000020 00  Al  0   0  8
+  [72] .lrodata.host_scd_packet_dispatch_result PROGBITS        fffffffffe90bfa0 10bfa0 0002a0 00  Al  0   0  8
+  [73] .lrodata.ihk_ikc_master_channel_packet_handler PROGBITS        fffffffffe90c240 10c240 000080 00  Al  0   0  8
+  [74] .lrodata.ihk_mc_get_memory_address PROGBITS        fffffffffe90c2c0 10c2c0 000030 00  Al  0   0  8
+  [75] .lrodata.mem_kmalloc_track_log_bridge PROGBITS        fffffffffe90c2f0 10c2f0 000038 00  Al  0   0  8
+  [76] .lrodata.mem_mckernel_alloc_log_bridge PROGBITS        fffffffffe90c328 10c328 000038 00  Al  0   0  8
+  [77] .lrodata.mem_pagealloc_track_log_bridge PROGBITS        fffffffffe90c360 10c360 000050 00  Al  0   0  8
+  [78] .lrodata.memlock_log_bridge PROGBITS        fffffffffe90c3b0 10c3b0 000038 00  Al  0   0  8
+  [79] .lrodata.move_pages_smp_handler PROGBITS        fffffffffe90c3e8 10c3e8 000058 00  Al  0   0  8
+  [80] .lrodata.mremap_log_bridge PROGBITS        fffffffffe90c440 10c440 000088 00  Al  0   0  8
+  [81] .lrodata.msync_log_bridge PROGBITS        fffffffffe90c4c8 10c4c8 000040 00  Al  0   0  8
+  [82] .lrodata.multi_nm_interrupt_handler PROGBITS        fffffffffe90c508 10c508 000028 00  Al  0   0  8
+  [83] .lrodata.process_add_range_log_bridge PROGBITS        fffffffffe90c530 10c530 000028 00  Al  0   0  8
+  [84] .lrodata.process_init_stack_log_bridge PROGBITS        fffffffffe90c558 10c558 000048 00  Al  0   0  8
+  [85] .lrodata.process_range_public_log_bridge PROGBITS        fffffffffe90c5a0 10c5a0 000040 00  Al  0   0  8
+  [86] .lrodata.process_remove_range_log_bridge PROGBITS        fffffffffe90c5e0 10c5e0 000028 00  Al  0   0  8
+  [87] .lrodata.process_sched_runq_log_bridge PROGBITS        fffffffffe90c608 10c608 000058 00  Al  0   0  8
+  [88] .lrodata.ptrace_request_dispatch_result PROGBITS        fffffffffe90c660 10c660 0000f8 00  Al  0   0  8
+  [89] .lrodata.ptrace_syscall_body_result PROGBITS        fffffffffe90c758 10c758 000090 00  Al  0   0  8
+  [90] .lrodata.ptrace_wakeup_request_action_result PROGBITS        fffffffffe90c7e8 10c7e8 000090 00  Al  0   0  8
+  [91] .lrodata.ptrace_wakeup_sig PROGBITS        fffffffffe90c878 10c878 000090 00  Al  0   0  8
+  [92] .lrodata.ptrace_wakeup_sig_body_result PROGBITS        fffffffffe90c908 10c908 000090 00  Al  0   0  8
+  [93] .lrodata.remap_file_pages_log_bridge PROGBITS        fffffffffe90c998 10c998 000030 00  Al  0   0  8
+  [94] .lrodata.shmctl_body_result PROGBITS        fffffffffe90c9c8 10c9c8 000078 00  Al  0   0  8
+  [95] .lrodata.syscall_mbind_log_bridge PROGBITS        fffffffffe90ca40 10ca40 000058 00  Al  0   0  8
+  [96] .lrodata.syscall_set_mempolicy_log_bridge PROGBITS        fffffffffe90ca98 10ca98 000038 00  Al  0   0  8
+  [97] .lrodata.sysfs_request_body_result PROGBITS        fffffffffe90cad0 10cad0 000090 00  Al  0   0  8
+  [98] .lrodata.sysfss_packet_handler_body_result PROGBITS        fffffffffe90cb60 10cb60 000020 00  Al  0   0  8
+  [99] .lrodata.vsnprintf_loop_result PROGBITS        fffffffffe90cb80 10cb80 000090 00  Al  0   0  8
+  [100] .lrodata.vsscanf_loop_result PROGBITS        fffffffffe90cc10 10cc10 000338 00  Al  0   0  8
+  [101] .lrodata.x86_clear_effect_log_bridge PROGBITS        fffffffffe90cf48 10cf48 000020 00  Al  0   0  8
+  [102] .lrodata.x86_context_line_log_bridge PROGBITS        fffffffffe90cf68 10cf68 0000b0 00  Al  0   0  8
+  [103] .lrodata.x86_cpu_log_bridge PROGBITS        fffffffffe90d018 10d018 000020 00  Al  0   0  8
+  [104] .lrodata.x86_init_linux_log_bridge PROGBITS        fffffffffe90d038 10d038 000040 00  Al  0   0  8
+  [105] .lrodata.x86_pt_print_log_bridge PROGBITS        fffffffffe90d078 10d078 000020 00  Al  0   0  8
+  [106] .lrodata.x86_pvclock_log_bridge PROGBITS        fffffffffe90d098 10d098 000070 00  Al  0   0  8
+  [107] .lrodata.x86_set_range_log_bridge PROGBITS        fffffffffe90d108 10d108 000090 00  Al  0   0  8
+  [108] .lrodata.x86_split_log_bridge PROGBITS        fffffffffe90d198 10d198 000028 00  Al  0   0  8
+  [109] .lrodata.x86_user_copy_log_bridge PROGBITS        fffffffffe90d1c0 10d1c0 000048 00  Al  0   0  8
+  [110] .lrodata.xpmem_refcnt_ptr_bridge PROGBITS        fffffffffe90d208 10d208 000020 00  Al  0   0  8
+  [111] .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11mem_helpers23owned_mem_debug_records10TRACE_FILE PROGBITS        fffffffffe90d228 10d228 0000d1 00  Al  0   0  1
+  [112] .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11mem_helpers34owned_mem_origin_and_core_metadata10TRACE_FILE PROGBITS        fffffffffe90d2f9 10d2f9 0000d1 00  Al  0   0  1
+  [113] .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data10TRACE_FILE PROGBITS        fffffffffe90d3ca 10d3ca 00013f 00  Al  0   0  1
+  [114] .lrodata._ctype   PROGBITS        fffffffffe90d509 10d509 000100 00  Al  0   0  1
+  [115] .lrodata.f03_sync_child_Rust_inherit_pattern_v1 PROGBITS        fffffffffe90d609 10d609 000068 00 Aol  0   0  1
+  [116] .lrodata.process_init_stack_alloc_file PROGBITS        fffffffffe90d678 10d678 000008 00  Al  0   0  8
+  [117] .lrodata.process_init_stack_free_file PROGBITS        fffffffffe90d680 10d680 000008 00  Al  0   0  8
+  [118] .lrodata.process_page_fault_anon_alloc_file PROGBITS        fffffffffe90d688 10d688 000008 00  Al  0   0  8
+  [119] .lrodata.process_page_fault_cow_alloc_file PROGBITS        fffffffffe90d690 10d690 000008 00  Al  0   0  8
+  [120] .lrodata.process_remap_free_file PROGBITS        fffffffffe90d698 10d698 000008 00  Al  0   0  8
+  [121] .lrodata.process_tracked_allocator_source_file PROGBITS        fffffffffe90d6a0 10d6a0 000008 00  Al  0   0  8
+  [122] .lrodata.x86_clear_free_pages_user_file PROGBITS        fffffffffe90d6a8 10d6a8 00013f 00  Al  0   0  1
+  [123] .lrodata.x86_memory_init_alloc_file PROGBITS        fffffffffe90d7e7 10d7e7 00013f 00  Al  0   0  1
+  [124] .lrodata.x86_memory_kfree_file PROGBITS        fffffffffe90d926 10d926 00013f 00  Al  0   0  1
+  [125] .lrodata.x86_memory_kmalloc_file PROGBITS        fffffffffe90da65 10da65 00013f 00  Al  0   0  1
+  [126] .lrodata.x86_pt_alloc_pages_file PROGBITS        fffffffffe90dba4 10dba4 00013f 00  Al  0   0  1
+  [127] .lrodata.x86_pt_free_pages_file PROGBITS        fffffffffe90dce3 10dce3 00013f 00  Al  0   0  1
+  [128] .lrodata.str1.1   PROGBITS        fffffffffe90de22 10de22 00ba0a 01 AMSl  0   0  1
+  [129] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.2 PROGBITS        fffffffffe91982c 11982c 000018 00  Al  0   0  4
+  [130] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12host_helpers21HOST_SCD_DISPATCH_OPS PROGBITS        fffffffffe919848 119848 000078 00  Al  0   0  8
+  [131] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers19XPMEM_IOCTL_OFFSETS PROGBITS        fffffffffe9198c0 1198c0 000108 00  Al  0   0  8
+  [132] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers29XPMEM_FAULT_PROCESS_RANGE_OPS PROGBITS        fffffffffe9199c8 1199c8 0000c8 00  Al  0   0  8
+  [133] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers33XPMEM_FAULT_PROCESS_RANGE_OFFSETS PROGBITS        fffffffffe919a90 119a90 0000d8 00  Al  0   0  8
+  [134] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.81 PROGBITS        fffffffffe919b68 119b68 000001 00  Al  0   0  1
+  [135] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.82 PROGBITS        fffffffffe919b69 119b69 00000b 00  Al  0   0  1
+  [136] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.83 PROGBITS        fffffffffe919b74 119b74 000001 00  Al  0   0  1
+  [137] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.84 PROGBITS        fffffffffe919b75 119b75 000001 00  Al  0   0  1
+  [138] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.85 PROGBITS        fffffffffe919b76 119b76 000005 00  Al  0   0  1
+  [139] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.86 PROGBITS        fffffffffe919b7b 119b7b 000006 00  Al  0   0  1
+  [140] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.87 PROGBITS        fffffffffe919b81 119b81 000006 00  Al  0   0  1
+  [141] .lrodata.cst8     PROGBITS        fffffffffe919b87 119b87 000010 08 AMl  0   0  1
+  [142] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.90 PROGBITS        fffffffffe919b97 119b97 00000d 00  Al  0   0  1
+  [143] .lrodata.cst16    PROGBITS        fffffffffe919ba4 119ba4 000060 10 AMl  0   0  4
+  [144] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.92 PROGBITS        fffffffffe919c04 119c04 00000b 00  Al  0   0  1
+  [145] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.94 PROGBITS        fffffffffe919c0f 119c0f 00000a 00  Al  0   0  1
+  [146] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.95 PROGBITS        fffffffffe919c19 119c19 00000b 00  Al  0   0  1
+  [147] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy21F03_WAIT_SCAN_OFFSETS PROGBITS        fffffffffe919c28 119c28 0000a0 00  Al  0   0  8
+  [148] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy23F03_WAIT_ZOMBIE_OFFSETS PROGBITS        fffffffffe919cc8 119cc8 000098 00  Al  0   0  8
+  [149] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F03_PTRACE_DETACH_OFFSETS PROGBITS        fffffffffe919d60 119d60 0000a0 00  Al  0   0  8
+  [150] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.162 PROGBITS        fffffffffe919e00 119e00 000060 00  Al  0   0  8
+  [151] .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust6rbtree15DUMMY_CALLBACKS PROGBITS        fffffffffe919e60 119e60 000018 00  Al  0   0  8
+  [152] .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS PROGBITS        fffffffffe919e78 119e78 000058 00  Al  0   0  8
+  [153] .lrodata.arch_process_vm_rw_kernel_offsets PROGBITS        fffffffffe919ed0 119ed0 000068 00 Aol  0   0  8
+  [154] .lrodata.f03_do_fork_rust_abi_words PROGBITS        fffffffffe919f38 119f38 000340 00 Aol  0   0  8
+  [155] .lrodata.f03_sync_child_attr_Rust_ABI_v1 PROGBITS        fffffffffe91a278 11a278 000020 00 Aol  0   0  8
+  [156] .lrodata.f03_sync_child_offsets_v1 PROGBITS        fffffffffe91a298 11a298 000040 00  Al  0   0  8
+  [157] .lrodata.f03_syscall_handler_table_v1 PROGBITS        fffffffffe91a2d8 11a2d8 007dc8 00  Al  0   0  8
+  [158] .lrodata.process_add_range_alloc_bridge_source_line PROGBITS        fffffffffe9220a0 1220a0 000004 00  Al  0   0  4
+  [159] .lrodata.process_add_range_arch_memclear_callback PROGBITS        fffffffffe9220a8 1220a8 000008 00  Al  0   0  8
+  [160] .lrodata.process_add_range_free_bridge_source_line PROGBITS        fffffffffe9220b0 1220b0 000004 00  Al  0   0  4
+  [161] .lrodata.process_alloc_bridge_source_line PROGBITS        fffffffffe9220b4 1220b4 000004 00  Al  0   0  4
+  [162] .lrodata.process_clone_config PROGBITS        fffffffffe9220b8 1220b8 000088 00  Al  0   0  8
+  [163] .lrodata.process_copy_entry_config PROGBITS        fffffffffe922140 122140 000070 00  Al  0   0  8
+  [164] .lrodata.process_create_thread_alloc_pages_source_line PROGBITS        fffffffffe9221b0 1221b0 000004 00  Al  0   0  4
+  [165] .lrodata.process_dump_tree_enabled PROGBITS        fffffffffe9221b4 1221b4 000004 00  Al  0   0  4
+  [166] .lrodata.process_extend_region_entry_config PROGBITS        fffffffffe9221b8 1221b8 000088 00  Al  0   0  8
+  [167] .lrodata.process_free_range_pages_source_line PROGBITS        fffffffffe922240 122240 000004 00  Al  0   0  4
+  [168] .lrodata.process_free_thread_pages_source_line PROGBITS        fffffffffe922244 122244 000004 00  Al  0   0  4
+  [169] .lrodata.process_free_vm_bridge_source_line PROGBITS        fffffffffe922248 122248 000004 00  Al  0   0  4
+  [170] .lrodata.process_idle_offsets PROGBITS        fffffffffe922250 122250 000050 00  Al  0   0  8
+  [171] .lrodata.process_idle_values PROGBITS        fffffffffe9222a0 1222a0 000024 00  Al  0   0  4
+  [172] .lrodata.process_init_stack_alloc_line PROGBITS        fffffffffe9222c4 1222c4 000004 00  Al  0   0  4
+  [173] .lrodata.process_init_stack_entry_config PROGBITS        fffffffffe9222c8 1222c8 0000a8 00  Al  0   0  8
+  [174] .lrodata.process_init_stack_free_line PROGBITS        fffffffffe922370 122370 000004 00  Al  0   0  4
+  [175] .lrodata.process_init_stack_user_category PROGBITS        fffffffffe922374 122374 000004 00  Al  0   0  4
+  [176] .lrodata.process_mckfd_free_bridge_source_line PROGBITS        fffffffffe922378 122378 000004 00  Al  0   0  4
+  [177] .lrodata.process_memset_smp_fast_word_pattern PROGBITS        fffffffffe92237c 12237c 000004 00  Al  0   0  4
+  [178] .lrodata.process_optional_free_bridge_source_line PROGBITS        fffffffffe922380 122380 000004 00  Al  0   0  4
+  [179] .lrodata.process_page_fault_anon_alloc_line PROGBITS        fffffffffe922384 122384 000004 00  Al  0   0  4
+  [180] .lrodata.process_page_fault_anon_clear_profile_event PROGBITS        fffffffffe922388 122388 000004 00  Al  0   0  4
+  [181] .lrodata.process_page_fault_cow_alloc_line PROGBITS        fffffffffe92238c 12238c 000004 00  Al  0   0  4
+  [182] .lrodata.process_policy_free_bridge_source_line PROGBITS        fffffffffe922390 122390 000004 00  Al  0   0  4
+  [183] .lrodata.process_range_kfree_bridge_source_line PROGBITS        fffffffffe922394 122394 000004 00  Al  0   0  4
+  [184] .lrodata.process_remap_free_line PROGBITS        fffffffffe922398 122398 000004 00  Al  0   0  4
+  [185] .lrodata.process_sched_runqueue_offsets PROGBITS        fffffffffe9223a0 1223a0 0000d0 00  Al  0   0  8
+  [186] .lrodata.process_sched_timer_configuration PROGBITS        fffffffffe922470 122470 000008 00  Al  0   0  4
+  [187] .lrodata.process_schedule_exit_debug_input PROGBITS        fffffffffe922478 122478 000008 00  Al  0   0  8
+  [188] .lrodata.process_split_range_alloc_source_line PROGBITS        fffffffffe922480 122480 000004 00  Al  0   0  4
+  [189] .lrodata.process_timer_runtime_offsets PROGBITS        fffffffffe922488 122488 000078 00  Al  0   0  8
+  [190] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1065 PROGBITS        fffffffffe922500 122500 000006 00  Al  0   0  1
+  [191] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1066 PROGBITS        fffffffffe922506 122506 000006 00  Al  0   0  1
+  [192] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1067 PROGBITS        fffffffffe92250c 12250c 000007 00  Al  0   0  1
+  [193] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1068 PROGBITS        fffffffffe922513 122513 000006 00  Al  0   0  1
+  [194] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1069 PROGBITS        fffffffffe922519 122519 000002 00  Al  0   0  1
+  [195] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1070 PROGBITS        fffffffffe92251b 12251b 000002 00  Al  0   0  1
+  [196] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1071 PROGBITS        fffffffffe92251d 12251d 00001d 00  Al  0   0  1
+  [197] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1072 PROGBITS        fffffffffe92253a 12253a 000025 00  Al  0   0  1
+  [198] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1073 PROGBITS        fffffffffe92255f 12255f 00000b 00  Al  0   0  1
+  [199] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1074 PROGBITS        fffffffffe92256a 12256a 00000e 00  Al  0   0  1
+  [200] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1075 PROGBITS        fffffffffe922578 122578 000013 00  Al  0   0  1
+  [201] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1076 PROGBITS        fffffffffe92258b 12258b 00000e 00  Al  0   0  1
+  [202] .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1077 PROGBITS        fffffffffe922599 122599 000013 00  Al  0   0  1
+  [203] .lrodata.x86_ap_init_geometry PROGBITS        fffffffffe9225b0 1225b0 000010 00  Al  0   0  8
+  [204] .lrodata.x86_clear_free_pages_user_flag PROGBITS        fffffffffe9225c0 1225c0 000004 00  Al  0   0  4
+  [205] .lrodata.x86_clear_free_pages_user_line PROGBITS        fffffffffe9225c4 1225c4 000004 00  Al  0   0  4
+  [206] .lrodata.x86_cpu_fp_sse_enabled PROGBITS        fffffffffe9225c8 1225c8 000004 00  Al  0   0  4
+  [207] .lrodata.x86_cpu_info_ncpus_offset PROGBITS        fffffffffe9225d0 1225d0 000008 00  Al  0   0  8
+  [208] .lrodata.x86_debug_handler_debug_print_enabled PROGBITS        fffffffffe9225d8 1225d8 000004 00  Al  0   0  4
+  [209] .lrodata.x86_gdt_geometry PROGBITS        fffffffffe9225e0 1225e0 000010 00  Al  0   0  8
+  [210] .lrodata.x86_gdt_reload_geometry PROGBITS        fffffffffe9225f0 1225f0 000018 00  Al  0   0  8
+  [211] .lrodata.x86_icr_geometry PROGBITS        fffffffffe922608 122608 000020 00  Al  0   0  8
+  [212] .lrodata.x86_idt_geometry PROGBITS        fffffffffe922628 122628 000048 00  Al  0   0  8
+  [213] .lrodata.x86_init_geometry PROGBITS        fffffffffe922670 122670 000058 00  Al  0   0  8
+  [214] .lrodata.x86_initial_fp_regs_extent PROGBITS        fffffffffe9226c8 1226c8 000008 00  Al  0   0  8
+  [215] .lrodata.x86_int3_debug_print_enabled PROGBITS        fffffffffe9226d0 1226d0 000004 00  Al  0   0  4
+  [216] .lrodata.x86_ipi_icr_id_shift PROGBITS        fffffffffe9226d4 1226d4 000004 00  Al  0   0  4
+  [217] .lrodata.x86_local_apic_base_msr PROGBITS        fffffffffe9226d8 1226d8 000004 00  Al  0   0  4
+  [218] .lrodata.x86_lookup_sleep_mask PROGBITS        fffffffffe9226dc 1226dc 000004 00  Al  0   0  4
+  [219] .lrodata.x86_main_irq_constants PROGBITS        fffffffffe9226e0 1226e0 0000b8 00  Al  0   0  8
+  [220] .lrodata.x86_main_irq_handler_layout PROGBITS        fffffffffe922798 122798 000048 00  Al  0   0  8
+  [221] .lrodata.x86_map_kernel_start_geometry PROGBITS        fffffffffe9227e0 1227e0 000008 00  Al  0   0  8
+  [222] .lrodata.x86_memory_init_alloc_line PROGBITS        fffffffffe9227e8 1227e8 000004 00  Al  0   0  4
+  [223] .lrodata.x86_memory_kfree_line PROGBITS        fffffffffe9227ec 1227ec 000004 00  Al  0   0  4
+  [224] .lrodata.x86_memory_kmalloc_line PROGBITS        fffffffffe9227f0 1227f0 000004 00  Al  0   0  4
+  [225] .lrodata.x86_memory_page_table_bytes PROGBITS        fffffffffe9227f8 1227f8 000008 00  Al  0   0  8
+  [226] .lrodata.x86_memory_rust_debug_align PROGBITS        fffffffffe922800 122800 000008 00  Al  0   0  8
+  [227] .lrodata.x86_memory_rust_debug_line_flags_offset PROGBITS        fffffffffe922808 122808 000008 00  Al  0   0  8
+  [228] .lrodata.x86_memory_rust_debug_size PROGBITS        fffffffffe922810 122810 000008 00  Al  0   0  8
+  [229] .lrodata.x86_memory_rust_kmalloc_initialized_offset PROGBITS        fffffffffe922818 122818 000008 00  Al  0   0  8
+  [230] .lrodata.x86_panic_user_end PROGBITS        fffffffffe922820 122820 000008 00  Al  0   0  8
+  [231] .lrodata.x86_pt_alloc_pages_is_user PROGBITS        fffffffffe922828 122828 000004 00  Al  0   0  4
+  [232] .lrodata.x86_pt_alloc_pages_line PROGBITS        fffffffffe92282c 12282c 000004 00  Al  0   0  4
+  [233] .lrodata.x86_pt_alloc_pages_p2align PROGBITS        fffffffffe922830 122830 000004 00  Al  0   0  4
+  [234] .lrodata.x86_pt_free_pages_flag PROGBITS        fffffffffe922834 122834 000004 00  Al  0   0  4
+  [235] .lrodata.x86_pt_free_pages_line PROGBITS        fffffffffe922838 122838 000004 00  Al  0   0  4
+  [236] .lrodata.x86_set_range_log_geometry PROGBITS        fffffffffe922840 122840 000010 00  Al  0   0  8
+  [237] .lrodata.x86_smp_init_geometry PROGBITS        fffffffffe922850 122850 000030 00  Al  0   0  8
+  [238] .lrodata.x86_switch_context_geometry PROGBITS        fffffffffe922880 122880 000030 00  Al  0   0  8
+  [239] .lrodata.x86_switch_context_perf_enabled PROGBITS        fffffffffe9228b0 1228b0 000004 00  Al  0   0  4
+  [240] .lrodata.x86_switch_context_profile_enabled PROGBITS        fffffffffe9228b4 1228b4 000004 00  Al  0   0  4
+  [241] .lrodata.x86_trace_enter_user_offsets PROGBITS        fffffffffe9228b8 1228b8 000020 00  Al  0   0  8
+  [242] .lrodata.x86_user_start_geometry PROGBITS        fffffffffe9228d8 1228d8 000018 00  Al  0   0  8
+  [243] .lrodata.x86_wakeup_constants PROGBITS        fffffffffe9228f0 1228f0 000014 00  Al  0   0  4
+  [244] .lrodata.xpmem_partition_offsets PROGBITS        fffffffffe922908 122908 000030 00  Al  0   0  8
+  [245] .lrodata.xpmem_tg_lookup_offsets PROGBITS        fffffffffe922938 122938 000030 00  Al  0   0  8
+  [246] .lrodata.xpmem_vm_range_private_data_offset PROGBITS        fffffffffe922968 122968 000008 00  Al  0   0  8
+  [247] .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level PROGBITS        fffffffffe922970 122970 000018 00  Al  0   0  8
+  [248] .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level.1 PROGBITS        fffffffffe922988 122988 000018 00  Al  0   0  8
+  [249] .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level.2 PROGBITS        fffffffffe9229a0 1229a0 000018 00  Al  0   0  8
+  [250] .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level.3 PROGBITS        fffffffffe9229b8 1229b8 000018 00  Al  0   0  8
+  [251] .lrodata..Lswitch.table.__ubsan_handle_type_mismatch PROGBITS        fffffffffe9229d0 1229d0 000040 00  Al  0   0  8
+  [252] .lrodata..Lswitch.table.f03_futex_log_bridge_v2.4 PROGBITS        fffffffffe922a10 122a10 000058 00  Al  0   0  8
+  [253] .lrodata..Lswitch.table.f03_prlimit_body_result PROGBITS        fffffffffe922a68 122a68 000080 00  Al  0   0  8
+  [254] .lrodata..Lswitch.table.getrusage_dispatch_result PROGBITS        fffffffffe922ae8 122ae8 00000c 00  Al  0   0  4
+  [255] .lrodata..Lswitch.table.mem_init_log_bridge PROGBITS        fffffffffe922af8 122af8 000018 00  Al  0   0  8
+  [256] .lrodata..Lswitch.table.prlimit_to_mckernel_resource PROGBITS        fffffffffe922b10 122b10 000040 00  Al  0   0  4
+  [257] .lrodata..Lswitch.table.sched_get_priority_max_value PROGBITS        fffffffffe922b50 122b50 00001c 00  Al  0   0  4
+  [258] .lrodata..Lswitch.table.sched_get_priority_min_value PROGBITS        fffffffffe922b6c 122b6c 00001c 00  Al  0   0  4
+  [259] .lrodata..Lswitch.table.sched_policy_is_valid PROGBITS        fffffffffe922b88 122b88 00001c 00  Al  0   0  4
+  [260] .lrodata..Lswitch.table.sched_policy_needs_root PROGBITS        fffffffffe922ba4 122ba4 00001c 00  Al  0   0  4
+  [261] .lrodata..Lswitch.table.sys_sched_get_priority_max PROGBITS        fffffffffe922bc0 122bc0 000038 00  Al  0   0  8
+  [262] .lrodata..Lswitch.table.sys_sched_get_priority_min PROGBITS        fffffffffe922bf8 122bf8 000038 00  Al  0   0  8
+  [263] .lrodata..Lswitch.table.syscall_set_mempolicy_log_bridge PROGBITS        fffffffffe922c30 122c30 000020 00  Al  0   0  8
+  [264] .lrodata.cst32    PROGBITS        fffffffffe922c50 122c50 000040 20 AMl  0   0  8
+  [265] .lrodata..Lswitch.table.sysfss_packet_handler_body_result PROGBITS        fffffffffe922c90 122c90 000014 00  Al  0   0  4
+  [266] .lrodata..Lswitch.table.x86_init_page_table_panic_bridge PROGBITS        fffffffffe922ca8 122ca8 000018 00  Al  0   0  8
+  [267] .lrodata..Lswitch.table.x86_tick_log_bridge PROGBITS        fffffffffe922cc0 122cc0 000018 00  Al  0   0  8
+  [268] .eh_frame         X86_64_UNWIND   fffffffffe922cd8 122cd8 02a8a0 00   A  0   0  8
+  [269] .note.mckernel.boot NOTE            fffffffffe94d578 14d578 000028 00  Ao  0   0  4
+  [270] .vsyscall         PROGBITS        fffffffffe94e000 14e000 001000 00 WAX  0   0 4096
+  [271] .bss              NOBITS          fffffffffe94f000 14f000 049444 00  WA  0   0 4096
+  [272] .debug_info       PROGBITS        0000000000000000 14f000 331c50 00      0   0  1
+  [273] .debug_abbrev     PROGBITS        0000000000000000 480c50 001128 00      0   0  1
+  [274] .debug_aranges    PROGBITS        0000000000000000 481d80 010320 00      0   0 16
+  [275] .debug_line       PROGBITS        0000000000000000 4920a0 0b4b46 00      0   0  1
+  [276] .debug_str        PROGBITS        0000000000000000 546be6 0902ef 01  MS  0   0  1
+  [277] .debug_line_str   PROGBITS        0000000000000000 5d6ed5 000321 01  MS  0   0  1
+  [278] .comment          PROGBITS        0000000000000000 5d71f6 000062 01  MS  0   0  1
+  [279] .note.gnu.build-id NOTE            fffffffffe94d5a0 14d5a0 000024 00   A  0   0  4
+  [280] .debug_loclists   PROGBITS        0000000000000000 5d7258 0007ae 00      0   0  1
+  [281] .debug_rnglists   PROGBITS        0000000000000000 5d7a06 00007a 00      0   0  1
+  [282] .debug_loc        PROGBITS        0000000000000000 5d7a80 357932 00      0   0  1
+  [283] .debug_ranges     PROGBITS        0000000000000000 92f3b2 0b4390 00      0   0  1
+  [284] .symtab           SYMTAB          0000000000000000 9e3748 01ce78 18     285 359  8
+  [285] .strtab           STRTAB          0000000000000000 a005c0 023707 00      0   0  1
+  [286] .shstrtab         STRTAB          0000000000000000 a23cc7 002f08 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), l (large), p (processor specific)
+
+Program Headers:
+  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+  LOAD           0x001000 0xfffffffffe801000 0xfffffffffe801000 0x0fa563 0x0fa563 R E 0x1000
+  LOAD           0x0fc000 0xfffffffffe8fc000 0xfffffffffe8fc000 0x053000 0x09c444 RWE 0x1000
+  NOTE           0x14d578 0xfffffffffe94d578 0xfffffffffe94d578 0x00004c 0x00004c R   0x4
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .text .fixup 
+   01     .data .ldata.mck_num_processors .ldata.x86_march_perfmap .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust11native_vdso8EXCHANGE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12ikc_manycore15IHK_IKC_HANDLER .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22OFFLOAD_WAIT_LOG_STATE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22SYSCALL_SEND_LOG_STATE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25GENERIC_FORWARD_LOG_STATE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust21syscall_offload_entry16RETURN_LOG_STATE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust2ap15SHOW_FCI_ONLINE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust2ap7AP_STOP .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug23DYNAMIC_DEBUG_SYSFS_OPS .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_local17LAST_PROCESSOR_ID .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup11EARLY_PHASE .ldata._RNvNtCsbVRkTr4hvpt_13mckernel_rust9x86_setup16PERF_MAP_NEHALEM .ldata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy27f03_syscall_entry_candidate16ENTRY_LOG_BUDGET .ldata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy27f03_syscall_entry_candidate17RETURN_LOG_BUDGET .ldata._RNvNtNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy15f06_signal_tail29f06_do_signal_whole_candidate20F06_SIGNAL_LOG_STATE .ldata.allocator .ldata.attr_mask .ldata.debug_constants .ldata.deferred_zero_at_free .ldata.gdt .ldata.job_nr_processes .ldata.job_nr_processes_left .ldata.mem_page_fault_log_pid .ldata.no_turbo .ldata.num_processors .ldata.numa_sysfs_meminfo .ldata.profile_event_names .ldata.pvti_msr .ldata.query_free_mem_handler .ldata.show_int_ops .ldata.sysctl_overcommit_memory .ldata.time_sharing .ldata.x86_cpu_local_variables_span .ldata.zero_at_free .rodata .eh_frame .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12host_helpers29host_perf_ctrl_request_bridge .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12host_helpers34host_init_ikc2linux_log_raw_bridge .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust5sysfs16request_and_free .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs28process_procfs_request_inner .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust8numparse20scanf_store_unsigned .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust8numparse22rust_scanf_read_output .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust8numparse24vsnprintf_va_list_result .lrodata.arch_mmap_log_bridge .lrodata.arch_prctl_body_result .lrodata.arch_process_vm_rw_log_bridge .lrodata.arch_ptrace_user_log_bridge .lrodata.arch_vdso_map_log_bridge .lrodata.arch_vdso_public_log_bridge .lrodata.arch_vdso_setup_log_bridge .lrodata.debug_log .lrodata.do_signal .lrodata.f03_futex_log_bridge_v2 .lrodata.f03_mprotect_log_bridge_v1 .lrodata.f03_prlimit_body_result .lrodata.f03_shmat_log_bridge_v1 .lrodata.f03_shmctl_log_bridge_v1 .lrodata.f03_wait_log_v1 .lrodata.format_decode_result .lrodata.futex __ex_table .lrodata.futex_atomic_op_inuser .lrodata.futex_atomic_op_inuser_bridge .lrodata.futex_dispatch_result .lrodata.handle_interrupt .lrodata.host_perf_ctrl_result .lrodata.host_scd_packet_dispatch_result .lrodata.ihk_ikc_master_channel_packet_handler .lrodata.ihk_mc_get_memory_address .lrodata.mem_kmalloc_track_log_bridge .lrodata.mem_mckernel_alloc_log_bridge .lrodata.mem_pagealloc_track_log_bridge .lrodata.memlock_log_bridge .lrodata.move_pages_smp_handler .lrodata.mremap_log_bridge .lrodata.msync_log_bridge .lrodata.multi_nm_interrupt_handler .lrodata.process_add_range_log_bridge .lrodata.process_init_stack_log_bridge .lrodata.process_range_public_log_bridge .lrodata.process_remove_range_log_bridge .lrodata.process_sched_runq_log_bridge .lrodata.ptrace_request_dispatch_result .lrodata.ptrace_syscall_body_result .lrodata.ptrace_wakeup_request_action_result .lrodata.ptrace_wakeup_sig .lrodata.ptrace_wakeup_sig_body_result .lrodata.remap_file_pages_log_bridge .lrodata.shmctl_body_result .lrodata.syscall_mbind_log_bridge .lrodata.syscall_set_mempolicy_log_bridge .lrodata.sysfs_request_body_result .lrodata.sysfss_packet_handler_body_result .lrodata.vsnprintf_loop_result .lrodata.vsscanf_loop_result .lrodata.x86_clear_effect_log_bridge .lrodata.x86_context_line_log_bridge .lrodata.x86_cpu_log_bridge .lrodata.x86_init_linux_log_bridge .lrodata.x86_pt_print_log_bridge .lrodata.x86_pvclock_log_bridge .lrodata.x86_set_range_log_bridge .lrodata.x86_split_log_bridge .lrodata.x86_user_copy_log_bridge .lrodata.xpmem_refcnt_ptr_bridge .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11mem_helpers23owned_mem_debug_records10TRACE_FILE .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11mem_helpers34owned_mem_origin_and_core_metadata10TRACE_FILE .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data10TRACE_FILE .lrodata._ctype .lrodata.f03_sync_child_Rust_inherit_pattern_v1 .lrodata.process_init_stack_alloc_file .lrodata.process_init_stack_free_file .lrodata.process_page_fault_anon_alloc_file .lrodata.process_page_fault_cow_alloc_file .lrodata.process_remap_free_file .lrodata.process_tracked_allocator_source_file .lrodata.x86_clear_free_pages_user_file .lrodata.x86_memory_init_alloc_file .lrodata.x86_memory_kfree_file .lrodata.x86_memory_kmalloc_file .lrodata.x86_pt_alloc_pages_file .lrodata.x86_pt_free_pages_file .lrodata.str1.1 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.2 .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust12host_helpers21HOST_SCD_DISPATCH_OPS .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers19XPMEM_IOCTL_OFFSETS .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers29XPMEM_FAULT_PROCESS_RANGE_OPS .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers33XPMEM_FAULT_PROCESS_RANGE_OFFSETS .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.81 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.82 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.83 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.84 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.85 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.86 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.87 .lrodata.cst8 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.90 .lrodata.cst16 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.92 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.94 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.95 .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy21F03_WAIT_SCAN_OFFSETS .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy23F03_WAIT_ZOMBIE_OFFSETS .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F03_PTRACE_DETACH_OFFSETS .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.162 .lrodata._RNvNtCsbVRkTr4hvpt_13mckernel_rust6rbtree15DUMMY_CALLBACKS .lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS .lrodata.arch_process_vm_rw_kernel_offsets .lrodata.f03_do_fork_rust_abi_words .lrodata.f03_sync_child_attr_Rust_ABI_v1 .lrodata.f03_sync_child_offsets_v1 .lrodata.f03_syscall_handler_table_v1 .lrodata.process_add_range_alloc_bridge_source_line .lrodata.process_add_range_arch_memclear_callback .lrodata.process_add_range_free_bridge_source_line .lrodata.process_alloc_bridge_source_line .lrodata.process_clone_config .lrodata.process_copy_entry_config .lrodata.process_create_thread_alloc_pages_source_line .lrodata.process_dump_tree_enabled .lrodata.process_extend_region_entry_config .lrodata.process_free_range_pages_source_line .lrodata.process_free_thread_pages_source_line .lrodata.process_free_vm_bridge_source_line .lrodata.process_idle_offsets .lrodata.process_idle_values .lrodata.process_init_stack_alloc_line .lrodata.process_init_stack_entry_config .lrodata.process_init_stack_free_line .lrodata.process_init_stack_user_category .lrodata.process_mckfd_free_bridge_source_line .lrodata.process_memset_smp_fast_word_pattern .lrodata.process_optional_free_bridge_source_line .lrodata.process_page_fault_anon_alloc_line .lrodata.process_page_fault_anon_clear_profile_event .lrodata.process_page_fault_cow_alloc_line .lrodata.process_policy_free_bridge_source_line .lrodata.process_range_kfree_bridge_source_line .lrodata.process_remap_free_line .lrodata.process_sched_runqueue_offsets .lrodata.process_sched_timer_configuration .lrodata.process_schedule_exit_debug_input .lrodata.process_split_range_alloc_source_line .lrodata.process_timer_runtime_offsets .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1065 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1066 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1067 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1068 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1069 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1070 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1071 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1072 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1073 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1074 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1075 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1076 .lrodata..Lanon.f621a4ac735fbadff5651398d8608d91.1077 .lrodata.x86_ap_init_geometry .lrodata.x86_clear_free_pages_user_flag .lrodata.x86_clear_free_pages_user_line .lrodata.x86_cpu_fp_sse_enabled .lrodata.x86_cpu_info_ncpus_offset .lrodata.x86_debug_handler_debug_print_enabled .lrodata.x86_gdt_geometry .lrodata.x86_gdt_reload_geometry .lrodata.x86_icr_geometry .lrodata.x86_idt_geometry .lrodata.x86_init_geometry .lrodata.x86_initial_fp_regs_extent .lrodata.x86_int3_debug_print_enabled .lrodata.x86_ipi_icr_id_shift .lrodata.x86_local_apic_base_msr .lrodata.x86_lookup_sleep_mask .lrodata.x86_main_irq_constants .lrodata.x86_main_irq_handler_layout .lrodata.x86_map_kernel_start_geometry .lrodata.x86_memory_init_alloc_line .lrodata.x86_memory_kfree_line .lrodata.x86_memory_kmalloc_line .lrodata.x86_memory_page_table_bytes .lrodata.x86_memory_rust_debug_align .lrodata.x86_memory_rust_debug_line_flags_offset .lrodata.x86_memory_rust_debug_size .lrodata.x86_memory_rust_kmalloc_initialized_offset .lrodata.x86_panic_user_end .lrodata.x86_pt_alloc_pages_is_user .lrodata.x86_pt_alloc_pages_line .lrodata.x86_pt_alloc_pages_p2align .lrodata.x86_pt_free_pages_flag .lrodata.x86_pt_free_pages_line .lrodata.x86_set_range_log_geometry .lrodata.x86_smp_init_geometry .lrodata.x86_switch_context_geometry .lrodata.x86_switch_context_perf_enabled .lrodata.x86_switch_context_profile_enabled .lrodata.x86_trace_enter_user_offsets .lrodata.x86_user_start_geometry .lrodata.x86_wakeup_constants .lrodata.xpmem_partition_offsets .lrodata.xpmem_tg_lookup_offsets .lrodata.xpmem_vm_range_private_data_offset .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level.1 .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level.2 .lrodata..Lswitch.table._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers21add_range_transaction9map_level.3 .lrodata..Lswitch.table.__ubsan_handle_type_mismatch .lrodata..Lswitch.table.f03_futex_log_bridge_v2.4 .lrodata..Lswitch.table.f03_prlimit_body_result .lrodata..Lswitch.table.getrusage_dispatch_result .lrodata..Lswitch.table.mem_init_log_bridge .lrodata..Lswitch.table.prlimit_to_mckernel_resource .lrodata..Lswitch.table.sched_get_priority_max_value .lrodata..Lswitch.table.sched_get_priority_min_value .lrodata..Lswitch.table.sched_policy_is_valid .lrodata..Lswitch.table.sched_policy_needs_root .lrodata..Lswitch.table.sys_sched_get_priority_max .lrodata..Lswitch.table.sys_sched_get_priority_min .lrodata..Lswitch.table.syscall_set_mempolicy_log_bridge .lrodata.cst32 .lrodata..Lswitch.table.sysfss_packet_handler_body_result .lrodata..Lswitch.table.x86_init_page_table_panic_bridge .lrodata..Lswitch.table.x86_tick_log_bridge .eh_frame .note.mckernel.boot .vsyscall .bss .note.gnu.build-id 
+   02     .note.mckernel.boot .note.gnu.build-id 
+
+Displaying notes found in: .note.mckernel.boot
+  Owner                Data size 	Description
+  MCKERNEL             0x00000010	Unknown note type: (0x4d434b01)	   description data: 04 00 00 00 00 0c 06 00 c0 1d 00 00 01 00 00 00 
+
+Displaying notes found in: .note.gnu.build-id
+  Owner                Data size 	Description
+  GNU                  0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)	    Build ID: 5f63d274076ab834454226d6c697b9d049771368

@@ -1,0 +1,80 @@
+{
+  "schema": "mckernel-focused-operation-profile-review-v1",
+  "at": "2026-11-11T04:09:32.889103+00:00",
+  "reviewer": "/root/p03_cutover_source_max; existing same-Root Sol/MAX independent route; no children",
+  "verdict": "NO_GO",
+  "decision": "NO_GO_EXACT_PROPOSED_REQUEST_RETAINED_OUTPUT_DISK_RESERVATION_GAP",
+  "original_check": "M15-I03-original-reproducibility",
+  "request": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/REQUEST.PROPOSED.json",
+    "bytes": 13792,
+    "sha256": "72aafbaa9b9511febec0fbcac7afc709a03e98ff68df37714c9816a7101ce170"
+  },
+  "assessment": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/ASSESSMENT.json",
+    "bytes": 27517,
+    "sha256": "4bb169918319f0828f822391b157064a1cf506123ba80fd5abbf536ba03501cc"
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/INPUTS.json",
+    "bytes": 7721,
+    "sha256": "cb2b8e7e23759ce68eb0164a4d6e57e7e02a19548c4589e6bfcc0067d591d719"
+  },
+  "payload": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/input/produce_scripts.py",
+    "bytes": 3243,
+    "sha256": "a5f0f9eb19f7d94bc53367a4be0af5e053afe91fb6b3a5d4693f6e15eefacbd9"
+  },
+  "Owner": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+    "bytes": 4668,
+    "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/m15-i03-original-reproducibility-sdk-max-1/input/COMMANDS.json",
+    "bytes": 3083,
+    "sha256": "682a515059a17598ae6e63b8c030042b564d20ad88d14336c513c0153c3ab8d5"
+  },
+  "finding": {
+    "id": "RETAINED_DISK_ENVELOPE",
+    "field": "resources.output_disk_reservation_bytes",
+    "actual_value": 1073741824,
+    "literal_command_count": 8,
+    "per_command_retained_stream_files": 2,
+    "stream_file_count": 16,
+    "inherited_RLIMIT_FSIZE_bytes": 67108864,
+    "retained_stream_capacity_bytes": 1073741824,
+    "source_basis": "Exact commands array has8 entries; unchanged Owner writes label.stdout and label.stderr for every run in its finally block. Docker sets inherited fsize=67108864:67108864, also applying to the Python capture writer. Eight pairs of retained files can therefore consume the entire1GiB allocation.",
+    "additional_positive_outputs": "Three built ELF programs plus their three same-byte private staged files, two generated configs, CMake/cache/build metadata, Rust/link temporary files under TMPDIR=/output/tmp, ownership/RESULT/FAILURE receipts and Root actual tool/lifecycle captures also need retained planning headroom.",
+    "why_blocking": "The stated disk reservation cannot cover its own finite retained stream envelope plus required nonempty artifacts. No enforced aggregate output budget or additional reserved headroom is present in this proposal. A successful expected-small run does not repair that profile mismatch.",
+    "scope": "Preexecution planning defect only; no source/compiler/test/container/native failure has happened in this proposed batch."
+  },
+  "positive_scope_reviewed_before_stop": [
+    "The proposed new work is only the genuine unmatched Rocky46d/retained1.95 P01/P02/P03 producer-profile gap. Two source-faithful configure/build/install branches and new three-ELF/nm readback do not invoke application mains, boot, PTY/device, module/service or native operations.",
+    "The payload executes the literal pinned command list serially through the existing afe740 Owner and requires an immediate positive PID/birth/status/direct+whole-family/stream record after each command. It checks three regular ELF built/stage byte identities and staged0755, records built modes without repeating the old private0700 assertion, and preserves failed raw/partial outcomes.",
+    "The P01 private driver differs from its qualified production driver only by omitting an unused old test-source copy. The exact production boot selector remains the source/config/compiler/install supplier. P03 reuses its already qualified authoritative-path driver/selector. No old behavior/parser/PTY/guard test replay is proposed.",
+    "The create profile fixes immutable46d, ROroot/networknone/privateIPC/unprivileged UID1000/capdrop/no-new-privileges,9 declared mounts with only new privateoutput RW, CPU6/onejob/memory=swap2GiB/PIDs256/CPU300/fsize64MiB/wall420. Retained1.95 tree/CMake/libuv are explicit RO suppliers; image-resident GCC14/runtime facts are not falsely checked as HOST paths.",
+    "Root alone owns final exact source/profile/resource admission and schedules this batch only after the primary M14 heavy/cache owner is positively released. No present model/source snapshot admits the pending SOURCE123/native/source holds."
+  ],
+  "smallest_bounded_correction": {
+    "root_direction": "Preserve exact initial72aaf proposal and freeze one disk-only successor with2GiB packet reservation/headroom. No payload/helper/source/argv/RAM/CPU/capability or additional test change.",
+    "proposed_output_disk_reservation_bytes": 2147483648,
+    "required_admission_effect": "Fresh actual host/scratch accounting must reserve this full disk allowance while retaining existing16/12GiB floors and Root capture/emergency overhead. It does not change shared HOST4GiB/max3/all-worker memory accounting or native allocation.",
+    "independent_delta_review": "Bind frozen successor hash, prove only disk reservation/headroom changes, preserve all8 commands and exact source/provider/helper pins, then Root freshly admits. This NO_GO itself grants no execution."
+  },
+  "source_custody_and_scope_limits": {
+    "observed_current_HEAD": "7231ce6d17af39e9556ee815980a97f180b70eb1",
+    "meaning": "Read-only observed HEAD only, not a fabricated admission or assertion that retained component sources were rebuilt under7231. Root must bind unchanged relevant selected source pins and its actual source/header/SDK admission at launch; the new kernel-only composition is a distinct cohort.",
+    "SOURCE123": "Pending actual gate semantics preserved. No accepting boolean, source overlay bypass, retired reservation or private producer result supplies a missing source/native/currentfree authority.",
+    "Rocky_vs_native": "A proposed build in the cached Rocky SDK namespace is a HOST userspace reconstruction. It does not prove native application/device behavior, deployment, accepted default selection, full original I03/parent/M14/M15 or C retirement.",
+    "unchanged_completed_scopes": "Prior complete-ABI8221 and installed dependency131b remain closed at their exact scopes; current original reproducibility whole decision waits actual new producer artifacts/typed provider qualification."
+  },
+  "execution_or_mutation_by_reviewer": {
+    "compiler_test_CMake_helpers_ELFtools_Docker_network_native": false,
+    "canonical_index_or_source_edits": false,
+    "new_lease_or_resource_release": false,
+    "children": false,
+    "private_outputs": "Only this assigned review JSON."
+  },
+  "root_next_action": "Keep72aaf unstarted. Freeze and independently review the requested disk-only2GiB successor, then perform operation-specific source/current-owner/shared-capacity admission after primary M14 owner release. Do not rerun an old producer/test or treat this as missing external inventory."
+}

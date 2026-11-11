@@ -1,0 +1,824 @@
+{
+  "actual_oracle": {
+    "CPU_lookup_count": 14,
+    "actual_cases": [
+      {
+        "cpu_lookups": 1,
+        "error_logs": [],
+        "events": [
+          "cpu",
+          "forward"
+        ],
+        "final_flag": 17,
+        "forward_flags": [
+          17
+        ],
+        "id": "direct3-setitimer-high-arg2",
+        "requests": [
+          "000000000000000000000000000000002600000000000000010000000000008000503412ff7f0000ccccddddeeeeffff000000000000000000000000000000000000000000000000"
+        ],
+        "return": -14
+      },
+      {
+        "cpu_lookups": 1,
+        "error_logs": [],
+        "events": [
+          "cpu",
+          "forward"
+        ],
+        "final_flag": 17,
+        "forward_flags": [
+          17
+        ],
+        "id": "policy3-signed-number-return",
+        "requests": [
+          "00000000000000000000000000000000ffffffffffffffffffffffffffffffff00000000000000801032547698badcfe000000000000000000000000000000000000000000000000"
+        ],
+        "return": -9223372036854775801
+      },
+      {
+        "cpu_lookups": 2,
+        "error_logs": [
+          {
+            "error": 4294967301,
+            "flag": 17
+          }
+        ],
+        "events": [
+          "cpu",
+          "cpu",
+          "forward",
+          "error-log"
+        ],
+        "final_flag": 17,
+        "forward_flags": [
+          17
+        ],
+        "id": "clear-unheld-wide-nonzero-log",
+        "requests": [
+          "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "return": 4294967301
+      },
+      {
+        "cpu_lookups": 2,
+        "error_logs": [],
+        "events": [
+          "cpu",
+          "cpu",
+          "forward"
+        ],
+        "final_flag": -1,
+        "forward_flags": [
+          6
+        ],
+        "id": "clear-held-success-quiet",
+        "requests": [
+          "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "return": 0
+      },
+      {
+        "cpu_lookups": 2,
+        "error_logs": [],
+        "events": [
+          "cpu",
+          "cpu",
+          "forward"
+        ],
+        "final_flag": 17,
+        "forward_flags": [
+          17
+        ],
+        "id": "set-unheld-error-quiet",
+        "requests": [
+          "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "return": -14
+      },
+      {
+        "cpu_lookups": 2,
+        "error_logs": [
+          {
+            "error": -14,
+            "flag": -1
+          }
+        ],
+        "events": [
+          "begin",
+          "remove",
+          "cpu",
+          "cpu",
+          "forward",
+          "error-log",
+          "finish",
+          "unmap-log"
+        ],
+        "final_flag": -1,
+        "forward_flags": [
+          6
+        ],
+        "id": "unmap-remove-error-precedence",
+        "requests": [
+          "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "return": -12
+      },
+      {
+        "cpu_lookups": 2,
+        "error_logs": [
+          {
+            "error": -14,
+            "flag": 17
+          }
+        ],
+        "events": [
+          "begin",
+          "remove",
+          "cpu",
+          "cpu",
+          "forward",
+          "error-log",
+          "finish",
+          "unmap-log"
+        ],
+        "final_flag": 17,
+        "forward_flags": [
+          17
+        ],
+        "id": "unmap-clear-error-result",
+        "requests": [
+          "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "return": -14
+      },
+      {
+        "cpu_lookups": 2,
+        "error_logs": [],
+        "events": [
+          "begin",
+          "remove",
+          "cpu",
+          "cpu",
+          "forward",
+          "finish",
+          "unmap-log"
+        ],
+        "final_flag": -1,
+        "forward_flags": [
+          6
+        ],
+        "id": "unmap-ro-set-wide-int-quiet",
+        "requests": [
+          "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "return": 5
+      },
+      {
+        "cpu_lookups": 0,
+        "error_logs": [],
+        "events": [
+          "begin",
+          "remove",
+          "finish",
+          "unmap-log"
+        ],
+        "final_flag": 17,
+        "forward_flags": [],
+        "id": "unmap-straight-suppresses-host",
+        "requests": [],
+        "return": 0
+      }
+    ],
+    "case_count": 9,
+    "complete_JSON_equal_external_oracle_and_request": true,
+    "external_golden": {
+      "bytes": 4645,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/EXPECTED.json",
+      "sha256": "02fd39665f703293cd1dd325b616c2fd076614eaf2c9ac572350dd6e61327859"
+    },
+    "independent_little_endian_wire_decode": [
+      {
+        "args": [
+          9223372036854775809,
+          140733498806272,
+          18446725308424768716,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "direct3-setitimer-high-arg2",
+        "number_CInt": 38,
+        "number_on_wire": 38,
+        "request_hex": "000000000000000000000000000000002600000000000000010000000000008000503412ff7f0000ccccddddeeeeffff000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          18446744073709551615,
+          9223372036854775808,
+          18364758544493064720,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "policy3-signed-number-return",
+        "number_CInt": -1,
+        "number_on_wire": 18446744073709551615,
+        "request_hex": "00000000000000000000000000000000ffffffffffffffffffffffffffffffff00000000000000801032547698badcfe000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          140733785137152,
+          8192,
+          0,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "clear-unheld-wide-nonzero-log",
+        "number_CInt": 11,
+        "number_on_wire": 11,
+        "request_hex": "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          140733785137152,
+          8192,
+          0,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "clear-held-success-quiet",
+        "number_CInt": 11,
+        "number_on_wire": 11,
+        "request_hex": "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          140733785137152,
+          8192,
+          0,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "set-unheld-error-quiet",
+        "number_CInt": 11,
+        "number_on_wire": 11,
+        "request_hex": "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          140733785137152,
+          8192,
+          0,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "unmap-remove-error-precedence",
+        "number_CInt": 11,
+        "number_on_wire": 11,
+        "request_hex": "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          140733785137152,
+          8192,
+          0,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "unmap-clear-error-result",
+        "number_CInt": 11,
+        "number_on_wire": 11,
+        "request_hex": "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      },
+      {
+        "args": [
+          140733785137152,
+          8192,
+          0,
+          0,
+          0,
+          0
+        ],
+        "byte_count": 72,
+        "id": "unmap-ro-set-wide-int-quiet",
+        "number_CInt": 11,
+        "number_on_wire": 11,
+        "request_hex": "000000000000000000000000000000000b0000000000000000604523ff7f000000200000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "rtid": 0,
+        "ttid": 0,
+        "valid": 0
+      }
+    ],
+    "interpretation": [
+      "Direct and policy three-argument exports preserve all64-bit arguments including arg2 high bits, signed CInt syscall number, one synchronous call and full CLong return. TIDs/valid initially zero and unused args3..5 zero in every72-byte wire record.",
+      "Real clear entry publishes CPU6 only for held ranges, restores -1 before nonzero full-width signed-long diagnostic, and leaves flag17 untouched when unheld. Zero clear return is quiet.",
+      "Native set-host composition is quiet on error and performs the existing CInt truncation; WIDE0x100000005 yields5 in the RO unmap branch. No nonnative fallback or permission-map behavior is claimed.",
+      "Real unmap body preserves remove-error precedence over clear-host error, returns clear error when removal succeeds, selects quiet set-host when ro_freed, and suppresses host callbacks for a covering straight range. Begin/remove/forward/errorlog/finish/final-log ordering is exact.",
+      "The live stack request is inspected/copied synchronously and private TID writes77/79 verified before return; all four size/alignment-correct private CPU/thread/VM/process allocations stay live through the calls. This does not prove real provider transport, lock, PTE, refcount or native lifetime."
+    ],
+    "raw_runtime_stdout": {
+      "bytes": 3112,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/phase-2.stdout",
+      "sha256": "fa3e4444f1280926ba492dc7df3e7936865107fc057d81be7bc3b001cd4364f5"
+    },
+    "synchronous_controlled_requests": 8
+  },
+  "artifacts_and_streams": {
+    "empty_compile_stdout_and_both_stderr": true,
+    "executable": {
+      "ELF_class": 64,
+      "bytes": 4570552,
+      "endianness": "little",
+      "machine": "EM_X86_64",
+      "mode": "0o700",
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/output-1/memory-host-regression",
+      "sha256": "d94c992f3573917aaaba28080cbd60462857540866607e08a4abc843eb04332c",
+      "type": "ET_DYN_HOST_test_fixture"
+    },
+    "executable_receipt": {
+      "bytes": 297,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/EXECUTABLE.json",
+      "sha256": "281f656e620de60a41b1116c7ac9efeb25e097c083728ea2b577b1dc71fd34a7"
+    },
+    "streams": [
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/phase-1.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/phase-1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 3112,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/phase-2.stdout",
+        "sha256": "fa3e4444f1280926ba492dc7df3e7936865107fc057d81be7bc3b001cd4364f5"
+      },
+      {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/phase-2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "at": "2026-11-11T03:33:35.337095+00:00",
+  "decision": "GO_ACTUAL_CORRECTED_FIVE_PROVIDER_HOST_COMPOSITION_NINE_CASES_ONLY",
+  "limits": {
+    "acceptance_delta": 0,
+    "actual_GS_IRQ_scheduler_lock_PTE_hostmap_refcount_device_or_native_operation": false,
+    "explicit_test_only_effects": [
+      "CPU id6 and CLS/current storage",
+      "controlled synchronous do_syscall recorder/reply",
+      "C-variadic diagnostic sink",
+      "repr(C)24B/48B metadata tables",
+      "begin/remove/finish/final unmap log"
+    ],
+    "image_C_exclusion_or_default_credit": false,
+    "original_acceptance": false,
+    "real_kernel_table_provider_selected": false
+  },
+  "next_actual_check": "Root may compose the independently reviewed corrected f181 source/selectors into the coherent current production graph, then qualify actual changed image unique Rust owners/C exclusions, real24B/48B table pointers, all lower-provider ABI/ownership and zero undefined closure under a separately reviewed/admitted normal image operation. Existing nine HOST cases need no passing replay.",
+  "operation": {
+    "Root_tool_chunk": "86c7d8",
+    "Root_tool_exit": 0,
+    "actual_RESULT": {
+      "bytes": 4219,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/RESULT.json",
+      "sha256": "667b592d8e0ef28d65d1de83c848ea3e9aa137f4aea1e5674c87d57345271662"
+    },
+    "actual_Root_driver": {
+      "bytes": 5432,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/run_root_once.py",
+      "sha256": "2ee26949f18bc2e2aa504d3e2be4a8d0acefa001872614ef97f4246d5e85bda1"
+    },
+    "commands": [
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=2147483648",
+          "--cpu=60",
+          "--fsize=16777216",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "memory_host_changed_composition",
+          "--edition=2021",
+          "-Dwarnings",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=1",
+          "-C",
+          "force-unwind-tables=no",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--cfg",
+          "f03_memory_host_offload_candidate",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/memory_host_regression.rs",
+          "-o",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/output-1/memory-host-regression"
+        ],
+        "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1",
+        "exit": 0,
+        "id": "compile-corrected-five-provider-and-exact-production-composition",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-1",
+          "leader": 1226340,
+          "leader_birth": "45380571",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        }
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=2147483648",
+          "--cpu=60",
+          "--fsize=16777216",
+          "--nofile=64",
+          "--",
+          "/usr/bin/env",
+          "-i",
+          "PATH=/usr/bin:/bin",
+          "LANG=C",
+          "LC_ALL=C",
+          "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/output-1/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/output-1/memory-host-regression"
+        ],
+        "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1",
+        "exit": 0,
+        "id": "changed-argument-flag-log-quiet-set-and-unmap-error-composition",
+        "ownership": {
+          "adopted_kills": [],
+          "adopted_reaps": [],
+          "error": null,
+          "label": "phase-2",
+          "leader": 1226360,
+          "leader_birth": "45380622",
+          "leader_group_signalled": false,
+          "leader_parent_joined": true,
+          "remaining_direct_children": [],
+          "status": 0,
+          "streams_closed": true,
+          "timed_out": false,
+          "whole_descendants_joined": true
+        }
+      }
+    ],
+    "full_ROOT_EXEC_TOOL": {
+      "bytes": 239,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/ROOT-EXEC-TOOL.json",
+      "sha256": "e34a1cafa70b5af48a3df7db0cf9bd3b4cd980b250a20ee77cd0db8135c5dfe2"
+    },
+    "independent_GO": {
+      "bytes": 18980,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-review-source-acquisition-max-1/escalation-pointer-1/REVIEW.json",
+      "sha256": "dab3737e4d299bc921ea80b04c9aac239d5155b0cbe64ac93ae50c90e4c1d377"
+    },
+    "inputs": {
+      "bytes": 6249,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/INPUTS.json",
+      "sha256": "9ecd67e5f50c0a05640e9ae6705b3436e9500eeb27790fefcc827e08decec672"
+    },
+    "observed_at": "2026-11-11T03:25:40.168312+00:00",
+    "outer_completion_positive": true,
+    "request": {
+      "bytes": 14843,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/REQUEST.json",
+      "sha256": "d62ec66b6bf703677f0e9331bc4309550b5835399561519913cc3b4a2273ad16"
+    }
+  },
+  "original_check": "M14-F06-01-DEFAULT required shared memory-host/offload provider correction; changed logic evidence only, not original whole-leaf acceptance",
+  "ownership_and_resource": {
+    "actual_admission": {
+      "CPU": 6,
+      "MemAvailable_bytes": 29314203648,
+      "aggregate_HOST_bytes": 4294967296,
+      "aggregate_jobs_max": 3,
+      "all_current_overhead_bytes": 1490903040,
+      "at": "2026-11-11T03:25:39.643854+00:00",
+      "guard_updated_at": "2026-11-11T03:25:38.303423+00:00",
+      "new_job_bytes": 2147483648,
+      "new_jobs": 1,
+      "other_current_payloads": [],
+      "prior_clock_three_phase_scope_positive_retired": true,
+      "request_sha256": "d62ec66b6bf703677f0e9331bc4309550b5835399561519913cc3b4a2273ad16",
+      "review_sha256": "dab3737e4d299bc921ea80b04c9aac239d5155b0cbe64ac93ae50c90e4c1d377",
+      "source_or_native_holds_released": false
+    },
+    "admission": {
+      "bytes": 620,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/ADMISSION.json",
+      "sha256": "7e6dcaa7b2c9154e60cb716d11c79a89555d52790c8355ff2b7d982e5f1b2465"
+    },
+    "admitted_total_bytes": 3638386688,
+    "aggregate_limit_bytes": 4294967296,
+    "current_2GiB_one_job_released_with_final_outer_completion": true,
+    "disk_floors": "Successful actual Root driver asserted host16GiB/scratch12GiB plus32MiB output growth before admission; numeric disk-free readings were not stored, so no numeric readback is invented.",
+    "exactly_two_records": [
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-1",
+        "leader": 1226340,
+        "leader_birth": "45380571",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      },
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "phase-2",
+        "leader": 1226360,
+        "leader_birth": "45380622",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    ],
+    "immediate_gate": "Actual Root driver validates returned record before any output use/next command, then requires exact2 final records; saved raw records and complete outer exit0 corroborate final closure.",
+    "no_timeout_signal_adoption_residual_error_UNKNOWN": true,
+    "other_holds_or_history_released": false,
+    "ownership_receipt": {
+      "bytes": 745,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/ownership.json",
+      "sha256": "1f287187c581e6640e31786e18ac2dd93b7bdc50dcc6f79ffbd67abe67a8731b"
+    },
+    "positive_direct_whole_family_stream_joins": true,
+    "release": {
+      "bytes": 187,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/execution-1/RESOURCE-RELEASE.json",
+      "sha256": "2c92ef992207bd6cf0cde93b532ad4db4ede71f62524b189aed0c1ac3f2bd71b"
+    }
+  },
+  "preserved_history": {
+    "actual_failed_RESULT": {
+      "bytes": 1106,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/execution-1/RESULT.json",
+      "sha256": "e4fd0df9abbc33e0f76dca4ea48dc72e312d12bb717f6bc8ec58ee9bb42c605d"
+    },
+    "actual_failed_Root_tool": {
+      "bytes": 486,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/ROOT-EXEC-TOOL.json",
+      "sha256": "b89eaf48866bbe466126c8b63c260ff737d9e950f32c68b811cf3c1c2798bedd"
+    },
+    "actual_failed_current_scope_release": {
+      "bytes": 631,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/execution-1/RESOURCE-RELEASE.json",
+      "sha256": "7fe125ee8096aef85ee6607ed9e3703e065a3df188a292eced5b6ed131b70f33"
+    },
+    "actual_two_E0308_stderr": {
+      "bytes": 1466,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/execution-1/phase-1.stderr",
+      "sha256": "fb97bfcef5025c93f457348f04b15afafe219a35e94012cafb1057e10359291f"
+    },
+    "failed_attempt_runtime_case_count": 0,
+    "import_only_request_then_actual_compile_failure": {
+      "bytes": 14706,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/correction-1/REQUEST.json",
+      "sha256": "407fca38a286ce83f7fd593a8d3ec6b367b03c58a21efcbad85709c8e2d8f846"
+    },
+    "no_unchanged_retry": true,
+    "original_unexecuted_request": {
+      "bytes": 14274,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/REQUEST.json",
+      "sha256": "6c3bd2adae5c07c7f6fbfb7eded9784971f426221cee35fe0494fc3facafa9f8"
+    },
+    "pointer_escalation": {
+      "bytes": 10271,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/CORRECTION.json",
+      "sha256": "6107fabbbd5eb4b6774ae7af363956ae5858524fda03de22e9ef6568812045d8"
+    },
+    "static_import_NO_GO": {
+      "bytes": 11893,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/../fork-default-memory-provider-tests-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "b038c47b1115f7fc583aac68a869cb85a7cb302320ac2a9418d80469a32eb698"
+    }
+  },
+  "qualifier": "/root/p04_tests_max actual Sol/MAX, saved bytes only; no compiler/test/helper/native replay",
+  "schema": "memory-five-focused-actual-saved-qualification-v1",
+  "source_type_ABI_binding": {
+    "all22_input_files_and_actual_compiler_SHA_match": true,
+    "checked_files_and_compiler": [
+      {
+        "bytes": 14023,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/memory_host_regression.rs",
+        "sha256": "de36b5df2bde3432ff3feb0fa947212570ef6b6e625b4deeb00b3d9b14f87758"
+      },
+      {
+        "bytes": 5930,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_memory_provider.rs",
+        "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+      },
+      {
+        "bytes": 10713,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_slices.rs",
+        "sha256": "1fe4f725ef1fb6200523619c2f02c0e2c7c4b1d898feac071d401a6da190159e"
+      },
+      {
+        "bytes": 1293,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_setters.rs",
+        "sha256": "83d5ea5d797ea31d23312b4d925fd546ab8da8956bd42212ac13425546803f65"
+      },
+      {
+        "bytes": 25615,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/PRODUCTION-SLICES.json",
+        "sha256": "f1ccc810731ad40e5ea7e74298a9186b5b6fab55865603b175b355f35e1e0b58"
+      },
+      {
+        "bytes": 4645,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/EXPECTED.json",
+        "sha256": "02fd39665f703293cd1dd325b616c2fd076614eaf2c9ac572350dd6e61327859"
+      },
+      {
+        "bytes": 5121,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/TEST-CONTRACT.json",
+        "sha256": "7d37e0c9429863114e4cec95126c3846def5976d536229351c466a0d09c620eb"
+      },
+      {
+        "bytes": 5930,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/candidate/kernel/rust/f03_memory_host_offload.rs",
+        "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+      },
+      {
+        "bytes": 3388,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/SOURCE-READY.NOT-EXECUTED.json",
+        "sha256": "5aff021aeead821f19fbd05d9bf8f460d34cb7dc5018edeaeca3780deddcf556"
+      },
+      {
+        "bytes": 2614,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/CHANGED-BEHAVIOR-TEST-CONTRACT.json",
+        "sha256": "f5eb49b703d19edeed013f9bf1b9c10ead43e4d5fc54358cbf61e359deae3210"
+      },
+      {
+        "bytes": 5623,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/TRANSITIVE-REQUIRED-PROVIDER-CONTRACT.json",
+        "sha256": "374c69bb6b024bf90b0c03488857f86e0553e8ef140a397c2a9a36970b2cfd8a"
+      },
+      {
+        "bytes": 9524,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-review-publicabi-max-1/correction-1/REVIEW.json",
+        "sha256": "440dd803abbd8d1f1145deebb2cc5760b307df17dbc85ff97037b8ef803ba90e"
+      },
+      {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      {
+        "bytes": 1240596,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "3c91a22fdae204240201969957036a175fa207cb1d076ff5723650ce5a9adb8f"
+      },
+      {
+        "bytes": 256003,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "5c74d84ef68824177b06a9b9d29ef69a895e58f4afa6b9a1f6652aef8fae3dde"
+      },
+      {
+        "bytes": 65125,
+        "path": "/home/holden/mckernel/kernel/rust/abi_checks.c",
+        "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+      },
+      {
+        "bytes": 20836,
+        "path": "/home/holden/mckernel/kernel/include/syscall.h",
+        "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+      },
+      {
+        "bytes": 198,
+        "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+        "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+      },
+      {
+        "bytes": 43555,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-source-1/HOST-TOOLCHAIN-BINDING.json",
+        "sha256": "e27a98348bd44a341a37db8528008303111f7753af6a8fb441cd14199ec243ac"
+      },
+      {
+        "bytes": 4668,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+        "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+      },
+      {
+        "bytes": 2718,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/host-lane-current-retirement-20261110/ROOT-DISPOSITION.json",
+        "sha256": "54065796b198ef95d2258e3dd1a290ea5a48335ca1c03857095a04b0a6422257"
+      },
+      {
+        "bytes": 12360,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/host-lane-current-retirement-20261110/REVIEW.json",
+        "sha256": "a41bad7b82600ebf489041fb950aea4084b8fedf4a6f6a47c05b3713283be9fe"
+      },
+      {
+        "bytes": 645792,
+        "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+      }
+    ],
+    "compile_scope": "Actual HOST nightly1.95 complete fixture compilation exit0 with -Dwarnings and empty stdout/stderr. This is source/type/ABI-in-fixture evidence, not a new matching kernel image or production provider artifact.",
+    "context_validity": "The production local X86UserContext is zeroed before the three real setters form field references; all actual nested u64/u8 fields are zero-valid per440dd. No unsafe uninitialized baseline was executed.",
+    "corrected_module_byte_identical": {
+      "bytes": 5930,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/production_memory_provider.rs",
+      "sha256": "f181d7308fcc3ecc81343f38788c9a9f1a1f7b024b3a24586a057f3ff2c17d33"
+    },
+    "pointer_fixture": "Only escalated fixture assignment writes ADDR as raw *mut c_void or typed null_mut to real Process.straight_va. The source body loads/computes its scalar range; no ADDR dereference or real mapping occurs.",
+    "production_slice_manifest": {
+      "bytes": 25615,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-tests-p04tests-max-1/escalation-pointer-1/PRODUCTION-SLICES.json",
+      "sha256": "f1ccc810731ad40e5ea7e74298a9186b5b6fab55865603b175b355f35e1e0b58"
+    },
+    "request_layout": "Actual selected SyscallRequest repr(C):72 bytes/align8, rtid i32@0,ttid i32@4,valid u64@8,number u64@16,args[6]u64@24. Runtime recorder asserted72 bytes and actual pointer alignment; external bytes independently decoded below. Actual C/Rust ABI guards are retained evidence, not newly executed here.",
+    "scope": "Full corrected f181 five-export module, exact existing pure builder/clear/set/unmap body and entry definitions plus four genuine x86 GPR-setter definitions compiled with actual full ff48 ABI. Existing440dd/b038/02459/dab373 source/unsafe/ABI findings reused; no rewritten production definition or rejected d7ae compiled.",
+    "source_GO": {
+      "bytes": 9524,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-review-publicabi-max-1/correction-1/REVIEW.json",
+      "sha256": "440dd803abbd8d1f1145deebb2cc5760b307df17dbc85ff97037b8ef803ba90e"
+    },
+    "source_ready": {
+      "bytes": 3388,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/fork-default-memory-provider-closure-p04source-max-1/correction-1/SOURCE-READY.NOT-EXECUTED.json",
+      "sha256": "5aff021aeead821f19fbd05d9bf8f460d34cb7dc5018edeaeca3780deddcf556"
+    },
+    "unchanged_exact_items": 25
+  }
+}

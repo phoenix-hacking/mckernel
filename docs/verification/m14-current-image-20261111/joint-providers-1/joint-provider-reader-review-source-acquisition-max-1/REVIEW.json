@@ -1,0 +1,122 @@
+{
+  "schema": "m14-joint13-passive-reader-material-operation-component-review-v1",
+  "at": "2026-11-11T04:19:31.462123+00:00",
+  "reviewer": "/root/source_acquisition_review_max; existing same-Root actual Sol/MAX; private depth1/no children",
+  "decision": "NO_GO_ONE_STALE_READER_OUTPUT_ROOT_BINDING",
+  "ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/READY.NOT-EXECUTED.json",
+    "bytes": 2228,
+    "sha256": "878ed4ee54950627459e5f647c2ab5c7b63e2a4948f2a4bb35c771a877f05157"
+  },
+  "phase": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/READER-PHASE.json",
+    "bytes": 26124,
+    "sha256": "6e28fa671cdeae1487e42711759e59cf48b961685ce6082eb92dde12ee499c9b"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input/read_joint_provider_metadata.sh",
+    "bytes": 9156,
+    "sha256": "af5642a4d5bd29a8499f7aa523c9cca311d53b77bde74c104ff1180288382a47"
+  },
+  "oracle": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/OUTPUT-ORACLE.json",
+    "bytes": 13445,
+    "sha256": "fbd45186263f72649601831cfa85a598196e3b1ff0d876a25856207e045c97ae"
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/SOURCE-BINDINGS.json",
+    "bytes": 8108,
+    "sha256": "180c2a3dceef7178237e60e0ec27584dbd8bc94958c7da4f6dc09d87219d30f0"
+  },
+  "one_complete_finite_finding": {
+    "id": "READER_OUTPUT_ROOT_STALE",
+    "field": "READER-PHASE.json.metadata_phase.output_root",
+    "actual_stale_value": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/time-bridge-image-operation-sdk-max-1/metadata-1",
+    "required_exact_value": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1",
+    "evidence": "Actual sole RW bind source and output_contract.exclusive_new_output_root agree on the fresh joint-provider-reader metadata-1, but metadata_phase.output_root points to the existing time-bridge metadata-1. Source checks confirm the old path exists and new intended path is absent. A finalizer creating/validating output_root would target old evidence or stop needlessly before start; a frozen phase must have one consistent exact output namespace.",
+    "minimum_correction": "Change only metadata_phase.output_root to the exact existing intended joint-provider-reader-publicabi-max-1/metadata-1 and freeze matching phase/READY pins in one successor. Keep shell/helper,45literal outputs/48commands,source7231/oracle/sourcebinding,3mounts/name/label/profile/resources unchanged. Retain old878e/6e28/helper/oracle and this NO_GO; never remove, overwrite or reuse the occupied old output root.",
+    "actual_execution": "No reader or producer was executed by reviewer; Root confirmed no original9e1d producer start and this reader is conditional/unexecuted. This is one static field-binding defect, not an SUT/output failure."
+  },
+  "unaffected_material_review_complete": {
+    "source_and_scope": "Reuse independent actual7231 seven-path source composition7d123/212c and full memory440dd/ptrace297d/context905, actual memory9/ptrace12 proofs. Reader introduces no source/callback/ABI implementation or new compiler/test. Source bindings correctly retain same current root7 hashes, previous physical owner/input set882f, current104 d8affe and exact three new cfg/Cmacro families.",
+    "literal_helper_fidelity": "Text-only shlex comparison independently verifies every one of48 actual helper statements equals phase literal_commands argv/stdout, in order;3 test-s commands have no output and remaining45 produce exactly45 unique paths matching stdout_files/required_files/counts. No shell interpolation, dynamic path, eval, subprocess discovery, compiler, target entry, native/device or network action is present. Absolute readelf/nm/objdump/cat/sha256sum/stat/test only; set-euo/pipefail/noclobber preserves failures and exclusive new output.",
+    "namespace_and_profile": "Actual create argv mount set/cardinality is exactly3: existing /work/output RO, fixed helper directory /producer RO, intended fresh /evidence RW. No source/SDK writable mount or unprivileged profile change. Immutable46d,pullnever,networknone/privateIPC,1000:1000,readonlyrootfs,capsALLdrop/no-new-privileges,CPU6/oneCPU,512MiB=swap,PIDs64,CPU120/wall180/FSIZE1GiB/tmpnoexec16MiB. Fresh measured shared4GiB/max3/all overhead/fresh26/floors+parentgrowth and positive producer/heavy retirement remain mandatory; native2-5/12GiB/CPU1 never borrowed.",
+    "necessary_output_coverage": "Only actual changed Csyscall/Rust constituents and current finalimage/map are symbol/relocation-read;9 unchanged object identities permit bounded prior proof reuse.17 artifact identity/mode rows include config/lds/currentdriver.16 generated command/cache/flags/link/dependency/context records plus3 actual C/Rust/final104/table dumps and26 targeted13 Rust/final disassemblies cover45 outputs. No old time-bridge disassembly/test/ABIhelper/module or SDK probe replay.",
+    "thirteen_owner_oracle": "All13 required names match7d123 source families:memory5/ptrace7/context1. Require exactly one nonempty named real FUNC owner in current Rustobject and same real final range/bytes/relocations, source/profile/type/complete provider closure and C absence. Compiler alias code sharing/objdump label choice is accepted only from actual symbol/section/byte/reloc equivalence, not name/nonempty text or distinct-address quota.",
+    "actual_tables_and_ABI": "Oracle correctly requires real Cinput bytes+relocs/final ptrace152B19slots with all original functions/typed actual owners, especially wakeup slot8; actual unmap48B6slots and clear24B number11/forward/log target typed genuine Rust owners. Native set-host logNone/int/borrow remains source+actual changed9 scope. Decode all four current C/Rust104 copies832B each at physical symbol/section offsets to exact retained1621f582 data, no relocation overlap, not HOST layout/stale arrays. Existing source/witness proofs are reused without another compiler.",
+    "context_and_global_owners": "Nineteen real typed context callers and forwarder are required through actual direct/indirect code/source/map paths, allowing proved inlining/aliasing rather than19-relocation quota. Retained17 roots/debug_constants96Balign32/newptrace32Bdescriptor/file/function/fmtNULL/logical24429/free4657 and all accepted fork/clock evidence stay bound. Whole11 object/currentmap/allocatedLOAD/entry/strong-weak imports/noUND/noINTERP/DYNAMIC constraints and actual Cledger remain honest; predictedC26to13 is supporting only and any actual difference needs precise source/emission explanation.",
+    "reuse_not_blanket": "ArchC executable0 and other previous ownership/provider/ABI facts are reused only when actual9 object hashes match882f. A changed identity stops that specific inherited claim for exact diagnosis/qualified source evidence; no broad Linux/sysroot census or automatic original DEFAULT credit. All actual new raw four artifacts/source/config must be preserved at observed identity before later mutation.",
+    "no_other_material_defect": "Full helper/oracle/source/output/profile review is complete; only the stale output_root field needs correction. No extra case, helper change, read quota or source/body review is requested."
+  },
+  "metadata_payload_argv_tail": [
+    "--entrypoint",
+    "/usr/bin/env",
+    "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "-i",
+    "BASH_ENV=",
+    "ENV=",
+    "LANG=C",
+    "LC_ALL=C",
+    "PATH=/usr/bin:/bin",
+    "TZ=UTC",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "/usr/bin/bash",
+    "--noprofile",
+    "--norc",
+    "/producer/read_joint_provider_metadata.sh"
+  ],
+  "expected_mounts": [
+    {
+      "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output",
+      "destination": "/work/output",
+      "read_only": true,
+      "role": "Actual new matching image and only affected objects plus unchanged baseline identities"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/input",
+      "destination": "/producer",
+      "read_only": true,
+      "role": "Exact passive joint13 shell reader only"
+    },
+    {
+      "source": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/joint-provider-reader-publicabi-max-1/metadata-1",
+      "destination": "/evidence",
+      "read_only": false,
+      "role": "Fresh exclusive actual joint13 metadata; no stale output"
+    }
+  ],
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "CPU_seconds": 120,
+    "FSIZE_bytes": 1073741824,
+    "container_memory_bytes": 536870912,
+    "jobs": 1,
+    "memory_swap_bytes": 536870912,
+    "new_output_disk_headroom_bytes": 1073741824,
+    "pids": 64,
+    "wall_seconds": 180
+  },
+  "thirteen_expected_roots": [
+    "syscall_do_syscall3_bridge",
+    "syscall_policy_do_syscall3_bridge",
+    "clear_host_pte_log_bridge",
+    "do_munmap_clear_host_bridge",
+    "do_munmap_set_host_bridge",
+    "ptrace_wakeup_sig",
+    "ptrace_wakeup_update_lock_bridge",
+    "ptrace_wakeup_update_unlock_bridge",
+    "ptrace_detach_kfree_bridge",
+    "ptrace_detach_do_kill_bridge",
+    "ptrace_detach_wakeup_bridge",
+    "ptrace_wakeup_log_bridge",
+    "syscall_policy_forward_context_bridge"
+  ],
+  "following_gates": "After the single field successor is frozen, perform delta-only component review. Actual standalone Docker reader execution is not yet authorized by this component: SDK final parent must bind exact corrected capture/witness and actual successful source7231 normal producer receipt/four artifacts/fullRootpositive joins/nonOOM/Pid0/owned removal, fresh reader name/output and serialized512MiB admission. Reader never delays starting an independently GO producer. Final affected raw results/full independent original source/provider/ABI/default review remain necessary for any whole01/03 condition.",
+  "parallel_owner_boundary": "SDK controls producer-only control-call capture repair under2720/P04Tests mocked witness; this author only corrects reader field. Root sole compositor/admission/executor/publisher; no active source/cache mutation or alternate owner/agent.",
+  "holds_and_original_scope": "All original M14-before-M15/default/FUNCTIONAL/ACCEPT, genuine generic/exec/replay/source/native/current-free/restoration/service/account/credit/resource/Scratch/UNKNOWN criteria remain unchanged. No original credit, C retirement, actual native behavior or release of other scope is inferred.",
+  "reviewer_actions": "Source/data/hash/shlex-literal comparisons and private exclusive REVIEW write only; no shell/helper/parser/SUT/test/ELF tool/compiler/Docker/network/native execution, source/canonical/index/state edit or recursive agents.",
+  "acceptance_delta": 0
+}

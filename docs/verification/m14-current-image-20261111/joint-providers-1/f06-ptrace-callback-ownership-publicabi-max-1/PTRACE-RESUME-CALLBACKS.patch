@@ -1,0 +1,381 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -102,6 +102,7 @@
+ set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
+ set(MCKERNEL_DO_MMAP_SELECTED OFF)
+ set(MCKERNEL_DO_FORK_SELECTED OFF)
++set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED OFF)
+ set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
+ set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
+@@ -574,6 +575,23 @@
+                     "${CMAKE_CURRENT_SOURCE_DIR}/include/shm.h"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/include/profile.h")
++                # Complete ptrace resume callback ownership only for the already
++                # qualified ordinary whole-F06 profile. Broad adapters stay off.
++                if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
++                    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT DCFA_KMOD AND
++                    NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
++                    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
++                    NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
++                    set(MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED ON)
++                    list(APPEND RUST_KERNEL_CFG "--cfg" "f06_ptrace_resume_callbacks_candidate")
++                    list(APPEND RUST_KERNEL_SRCS
++                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_resume_callbacks.rs"
++                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_ptrace_adapters.rs"
++                        "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
++                        "${CMAKE_CURRENT_SOURCE_DIR}/include/kmalloc.h"
++                        "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/include/arch-lock.h"
++                        "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h")
++                endif()
+                 # Current legacy-host fork entry; the separate owned transaction
+                 # retains its original C selection and holds.
+                 if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
+@@ -1027,6 +1045,10 @@
+ endif()
+ 
+ # Apply after the existing source properties, which otherwise replace flags.
++if (MCKERNEL_PTRACE_RESUME_CALLBACKS_SELECTED)
++    set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)
++endif()
+ if (MCKERNEL_DO_FORK_SELECTED)
+     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_FORK)
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -4744,11 +4744,25 @@
+ }
+ #endif
+ 
++/* Preserve this original tracked-free origin in every C fallback profile. */
++#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
++#define MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE 4654
++#define MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE 4659
++#else
++#define MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE 4661
++#define MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE 4666
++#endif
++#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
++extern void ptrace_detach_kfree_bridge(void *);
++#else
++#line MCKERNEL_PTRACE_FREE_ORIGINAL_ENTRY_LINE
+ static void
+ ptrace_detach_kfree_bridge(void *ptr)
+ {
+ 	kfree_tracked(ptr, __FILE__, __LINE__);
+ }
++#endif
++#line MCKERNEL_PTRACE_FREE_ORIGINAL_AFTER_LINE
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void
+@@ -4780,7 +4794,7 @@
+ }
+ #endif
+ 
+-#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS
++#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || defined(MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)
+ extern long ptrace_detach_do_kill_bridge(void *, int, int, int,
+ 		const void *, int);
+ extern void ptrace_detach_wakeup_bridge(void *, int);
+@@ -25332,6 +25346,10 @@
+ #endif
+ #line 24424
+ 
++#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
++extern void ptrace_wakeup_log_bridge(int, int, int);
++#else
++#line 24425
+ static void
+ ptrace_wakeup_log_bridge(int event, int value, int result)
+ {
+@@ -25340,6 +25358,8 @@
+ 				value, result);
+ 	}
+ }
++#endif
++#line 24433
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern int ptrace_wakeup_clear_saved_bridge(unsigned long, unsigned long);
+@@ -25367,12 +25387,18 @@
+ #endif
+ #line 24447
+ 
++#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
++extern void ptrace_wakeup_update_lock_bridge(unsigned long, void *);
++#else
++#line 24448
+ static void
+ ptrace_wakeup_update_lock_bridge(unsigned long lock_addr, void *node)
+ {
+ 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
+ 			(struct mcs_rwlock_node_irqsave *)node);
+ }
++#endif
++#line 24454
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern int ptrace_wakeup_trace_syscall_bridge(unsigned long, unsigned long, int);
+@@ -25388,12 +25414,18 @@
+ #endif
+ #line 24462
+ 
++#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
++extern void ptrace_wakeup_update_unlock_bridge(unsigned long, void *);
++#else
++#line 24463
+ static void
+ ptrace_wakeup_update_unlock_bridge(unsigned long lock_addr, void *node)
+ {
+ 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
+ 			(struct mcs_rwlock_node_irqsave *)node);
+ }
++#endif
++#line 24469
+ 
+ #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)
+ extern unsigned long ptrace_wakeup_pending_take_bridge(unsigned long,
+@@ -25412,6 +25444,58 @@
+ #endif
+ #line 24479
+ #endif
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++#define MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE 24590
++#else
++#define MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE 24602
++#endif
++#ifdef MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS
++#if !defined(__x86_64__) || !defined(PROFILE_ENABLE) || defined(ENABLE_UBSAN) || \
++    !defined(SPINLOCK_IN_MCS_RWLOCK) || !defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) || \
++    !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || \
++    !defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) || \
++    !defined(MCKERNEL_RUST_F03_PTRACE_ENTRY) || \
++    !defined(MCKERNEL_DO_SYSCALL_C_FILE) || !defined(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS)
++#error "Rust ptrace resume callbacks require the paired current profile/types/providers"
++#endif
++extern int ptrace_wakeup_sig(int, long, long);
++_Static_assert(DDEBUG_DEFAULT == MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS,
++    "Rust ptrace resume Ddebug flags must match C");
++_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_DO_SYSCALL_C_FILE) == 0,
++    "Rust ptrace resume filename must match actual C __FILE__");
++_Static_assert(sizeof(int) == 4 && sizeof(unsigned int) == 4 && sizeof(long) == 8 && sizeof(unsigned long) == 8 && sizeof(void *) == 8,
++    "Rust ptrace resume scalar ABI");
++_Static_assert(sizeof(struct mcs_rwlock_node_irqsave) == 64 && __alignof__(struct mcs_rwlock_node_irqsave) == 64 && __builtin_offsetof(struct mcs_rwlock_node_irqsave, irqsave) == 0,
++    "Rust ptrace resume live IRQ node ABI");
++_Static_assert(sizeof(struct mcs_rwlock_lock) == 64 && __alignof__(struct mcs_rwlock_lock) == 64 && __builtin_offsetof(struct mcs_rwlock_lock, slock) == 0,
++    "Rust ptrace resume actual MCS lock ABI");
++_Static_assert(sizeof(struct siginfo) == 128 && __builtin_offsetof(struct sig_pending, info) == 24,
++    "Rust ptrace resume pending info ABI");
++_Static_assert(sizeof(struct ptrace_io_offsets) == 88 && sizeof(struct ptrace_syscall_ops) == 152 && __alignof__(struct ptrace_syscall_ops) == 8 && __builtin_offsetof(struct ptrace_syscall_ops, wakeup_fn) == 8,
++    "Rust ptrace resume real offset/ops table ABI");
++_Static_assert(sizeof(struct ddebug) == 32 && __alignof__(struct ddebug) == 8 && PTRACE_CONTROL_LOG_WAKEUP_ENTER == 4,
++    "Rust ptrace resume debug ABI/event");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_sig),
++    ptrace_wakeup_sig_fn_t), "Rust ptrace resume ptrace_wakeup_sig ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_update_lock_bridge),
++    void (*)(unsigned long, void *)), "Rust ptrace resume ptrace_wakeup_update_lock_bridge ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_update_unlock_bridge),
++    void (*)(unsigned long, void *)), "Rust ptrace resume ptrace_wakeup_update_unlock_bridge ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_kfree_bridge),
++    void (*)(void *)), "Rust ptrace resume ptrace_detach_kfree_bridge ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_log_bridge),
++    void (*)(int, int, int)), "Rust ptrace resume ptrace_wakeup_log_bridge ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_do_kill_bridge),
++    long (*)(void *, int, int, int, const void *, int)), "Rust ptrace resume ptrace_detach_do_kill_bridge ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_detach_wakeup_bridge),
++    void (*)(void *, int)), "Rust ptrace resume ptrace_detach_wakeup_bridge ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill),
++    unsigned long (*)(struct thread *, int, int, int, struct siginfo *, int)), "Rust ptrace resume do_kill ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_wakeup_thread),
++    int (*)(struct thread *, int)), "Rust ptrace resume sched_wakeup_thread ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&kfree_tracked),
++    void (*)(void *, char *, int)), "Rust ptrace resume kfree_tracked ABI");
++#else
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ #line 24477
+ #else
+@@ -25527,6 +25611,8 @@
+ 	return error;
+ #endif
+ }
++#endif /* MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS */
++#line MCKERNEL_PTRACE_WAKEUP_ORIGINAL_AFTER_LINE
+ 
+ extern long ptrace_read_user(struct thread *thread, long addr, unsigned long *value);
+ extern long ptrace_write_user(struct thread *thread, long addr, unsigned long value);
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -72,7 +72,7 @@
+ mod f06_rt_sigreturn_xrstor;
+ #[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
+ mod f03_forward_adapters;
+-#[cfg(all(f03_forward_adapters_candidate, target_arch = "x86_64"))]
++#[cfg(all(any(f03_forward_adapters_candidate, f06_ptrace_resume_callbacks_candidate), target_arch = "x86_64"))]
+ mod f03_ptrace_adapters;
+ #[cfg(all(any(f03_forward_adapters_candidate, f03_host_cleanup_candidate), target_arch = "x86_64"))]
+ mod f03_host_cleanup;
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -35451,3 +35451,8 @@
+ #[cfg(all(f03_signal_forward_defined_candidate, target_arch = "x86_64"))]
+ #[path = "f03_signal_forward_defined_candidate.rs"]
+ mod f03_signal_forward_defined_candidate;
++
++// Genuine resume callbacks; select together with the paired C exclusions.
++#[cfg(f06_ptrace_resume_callbacks_candidate)]
++#[path = "f06_ptrace_resume_callbacks.rs"]
++mod f06_ptrace_resume_callbacks;
+--- /dev/null
++++ b/kernel/rust/f06_ptrace_resume_callbacks.rs
+@@ -0,0 +1,148 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++//! Genuine callbacks and stack/CPU binding for the existing ptrace resume body.
++
++#[cfg(not(all(target_arch = "x86_64", native_linux_irq_work_v6_12,
++    enable_profile, enable_perf, enable_rusage, not(enable_tofu),
++    not(enable_fugaku_hacks), f03_ptrace_entry_candidate)))]
++compile_error!("ptrace resume callbacks require the paired ordinary x86/Linux6.12/PROFILE/whole-F06 cohort");
++
++use core::ffi::{c_uint, c_void};
++use core::mem::{align_of, offset_of, size_of, MaybeUninit};
++use core::ptr::{addr_of, read_volatile};
++use crate::abi::{CInt, CLong, CULong, SigInfo, SigPending};
++use crate::lock_helpers as locks;
++
++// Exact C __FILE__, tracked-free origin and Ddebug flags from the same normal
++// syscall.c producer. These are source identities, not Rust file!/line! values.
++const SOURCE_FILE: &[u8] = concat!(env!("MCKERNEL_DO_SYSCALL_C_FILE"), "\0").as_bytes();
++const INITIAL_DEBUG_FLAGS: u32 = match env!("MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS").as_bytes() {
++    b"0" => 0,
++    b"1" => 1,
++    _ => panic!("ptrace resume Ddebug flags must match the actual C definition"),
++};
++
++#[used]
++#[link_section = "__verbose"]
++static mut PTRACE_WAKEUP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
++    file: SOURCE_FILE.as_ptr().cast(),
++    func: b"ptrace_wakeup_log_bridge\0".as_ptr().cast(),
++    fmt: core::ptr::null(),
++    // Original dkprintf at logical24429 under the actual selected C profile.
++    line_flags: 24429 | (INITIAL_DEBUG_FLAGS << 24),
++};
++
++/// Preserve the exact event gate, mutable Ddebug gate and two32-bit arguments.
++/// # Safety
++/// The original kernel debug-registration/formatter environment is live. No
++/// thread/process/pending-signal pointer is retained across this synchronous log.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_log_bridge(event: CInt, value: CInt, result: CInt) {
++    if event == super::PTRACE_CONTROL_LOG_WAKEUP_ENTER &&
++        unsafe { read_volatile(addr_of!(PTRACE_WAKEUP_DEBUG.line_flags)) } >> 24 != 0 {
++        unsafe {
++            crate::debug::kprintf(
++                b"ptrace_wakeup_sig,pid=%d,data=%08x\n\0".as_ptr().cast(),
++                value, result as c_uint,
++            )
++        };
++    }
++}
++
++/// Acquire the genuine process update writer lock and initialize saved IRQ state.
++/// # Safety
++/// lock_addr names the live aligned process update lock; node names the caller's
++/// exclusive64-byte IRQ-save node. The unchanged body pairs this exact lock/node
++/// with its unlock before either lifetime ends. No zero-initialization is needed.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_update_lock_bridge(lock_addr: CULong, node: *mut c_void) {
++    unsafe {
++        locks::__mcs_rwlock_writer_lock(lock_addr as *mut locks::McsRwlockLock,
++            node.cast::<locks::McsRwlockNodeIrqsave>())
++    };
++}
++
++/// Release that same writer lock and restore its node's saved IRQ state.
++/// # Safety
++/// The same live lock and exclusive initialized node are held by this caller;
++/// no intervening owner may reuse the node. Neither pointer is retained.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_update_unlock_bridge(lock_addr: CULong, node: *mut c_void) {
++    unsafe {
++        locks::__mcs_rwlock_writer_unlock(lock_addr as *mut locks::McsRwlockLock,
++            node.cast::<locks::McsRwlockNodeIrqsave>())
++    };
++}
++
++/// Retire a taken pending-signal node through the original tracked-free provider.
++/// # Safety
++/// The original detach/resume caller owns this allocation and has finished all
++/// reads before this once-only free. The diagnostic filename/line remain the C
++/// callback's original logical identity; no new lifetime or null policy is added.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_detach_kfree_bridge(ptr: *mut c_void) {
++    unsafe { crate::mem_helpers::kfree_tracked(ptr, SOURCE_FILE.as_ptr().cast_mut().cast(), 4657) };
++}
++
++/// Bind the genuine current thread, offsets, stack node and real provider callbacks.
++/// # Safety
++/// Per-CPU state/current thread are initialized and remain live through this
++/// synchronous entry. The unchanged body owns the borrowed find_thread result
++/// until its one thread_unlock, its pending-node transfer/copy/free, and the
++/// same-node writer/IRQ pair. This entry acquires no extra process/thread ref.
++#[no_mangle]
++pub unsafe extern "C" fn ptrace_wakeup_sig(pid: CInt, request: CLong, data: CLong) -> CInt {
++    let thread = unsafe { (*crate::cls::get_this_cpu_local_var()).current };
++    let mut lock_node = MaybeUninit::<locks::McsRwlockNodeIrqsave>::uninit();
++    unsafe {
++        super::ptrace_wakeup_sig_body_result(
++            pid, request, data, thread as CULong, offset_of!(SigPending, info) as CULong,
++            addr_of!(super::F03_PTRACE_IO_OFFSETS), lock_node.as_mut_ptr().cast(),
++            Some(super::f03_ptrace_io_find), Some(super::f03_ptrace_io_unlock),
++            Some(ptrace_wakeup_log_bridge),
++            Some(super::ptrace_wakeup_state_callbacks::ptrace_wakeup_clear_saved_bridge),
++            Some(super::ptrace_wakeup_step_callback::ptrace_wakeup_set_single_step_bridge),
++            Some(ptrace_wakeup_update_lock_bridge),
++            Some(super::ptrace_wakeup_state_callbacks::ptrace_wakeup_trace_syscall_bridge),
++            Some(ptrace_wakeup_update_unlock_bridge),
++            Some(super::ptrace_wakeup_state_callbacks::ptrace_wakeup_pending_take_bridge),
++            Some(ptrace_detach_kfree_bridge),
++            // This already-selected genuine bridge has the body's exact typed
++            // SigInfo signature and the same do_kill call/unsigned-long result
++            // conversion as the unchanged opaque ptrace_detach_do_kill_bridge.
++            Some(super::syscall_do_kill_thread_bridge),
++            Some(crate::f03_ptrace_adapters::ptrace_detach_wakeup_bridge),
++        )
++    }
++}
++
++const _: super::PtraceWakeupSigFn = ptrace_wakeup_sig;
++const _: super::PtraceControlLogFn = ptrace_wakeup_log_bridge;
++const _: super::PtraceRwlockFn = ptrace_wakeup_update_lock_bridge;
++const _: super::PtraceRwlockFn = ptrace_wakeup_update_unlock_bridge;
++const _: super::PtraceFreeFn = ptrace_detach_kfree_bridge;
++const _: super::PtraceDoKillThreadFn = super::syscall_do_kill_thread_bridge;
++const _: super::PtraceWakeupThreadFn = crate::f03_ptrace_adapters::ptrace_detach_wakeup_bridge;
++const _: unsafe extern "C" fn(*mut c_void, CInt, CInt, CInt, *const c_void, CInt) -> CLong =
++    crate::f03_ptrace_adapters::ptrace_detach_do_kill_bridge;
++const _: unsafe extern "C" fn(*mut c_void, *mut i8, CInt) = crate::mem_helpers::kfree_tracked;
++const _: unsafe extern "C" fn(*mut locks::McsRwlockLock, *mut locks::McsRwlockNodeIrqsave) =
++    locks::__mcs_rwlock_writer_lock;
++const _: unsafe extern "C" fn(*mut locks::McsRwlockLock, *mut locks::McsRwlockNodeIrqsave) =
++    locks::__mcs_rwlock_writer_unlock;
++const _: () = {
++    assert!(size_of::<CInt>() == 4 && size_of::<c_uint>() == 4);
++    assert!(size_of::<CLong>() == 8 && size_of::<CULong>() == 8);
++    assert!(size_of::<*mut c_void>() == 8);
++    assert!(size_of::<locks::McsRwlockNodeIrqsave>() == 64);
++    assert!(align_of::<locks::McsRwlockNodeIrqsave>() == 64);
++    assert!(size_of::<locks::McsRwlockLock>() == 64);
++    assert!(align_of::<locks::McsRwlockLock>() == 64);
++    assert!(size_of::<SigInfo>() == 128 && offset_of!(SigPending, info) == 24);
++    assert!(size_of::<super::PtraceIoOffsets>() == 88);
++    assert!(size_of::<super::PtraceSyscallOps>() == 152);
++    assert!(align_of::<super::PtraceSyscallOps>() == 8);
++    assert!(offset_of!(super::PtraceSyscallOps, wakeup_fn) == 8);
++    assert!(super::PTRACE_CONTROL_LOG_WAKEUP_ENTER == 4);
++    assert!(size_of::<crate::debug::Ddebug>() == 32);
++    assert!(align_of::<crate::debug::Ddebug>() == 8);
++};

@@ -1,0 +1,153 @@
+struct ptrace_syscall_ops {
+	ptrace_traceme_fn_t traceme_fn;
+	ptrace_wakeup_sig_fn_t wakeup_fn;
+	ptrace_pid_data_fn_t getregs_fn;
+	ptrace_pid_data_fn_t setregs_fn;
+	ptrace_pid_data_fn_t getfpregs_fn;
+	ptrace_pid_data_fn_t setfpregs_fn;
+	ptrace_pid_addr_data_fn_t peekuser_fn;
+	ptrace_pid_addr_data_fn_t pokeuser_fn;
+	ptrace_pid_addr_data_fn_t peektext_fn;
+	ptrace_pid_addr_data_fn_t poketext_fn;
+	ptrace_setoptions_fn_t setoptions_fn;
+	ptrace_attach_fn_t attach_fn;
+	ptrace_detach_fn_t detach_fn;
+	ptrace_siginfo_fn_t getsiginfo_fn;
+	ptrace_siginfo_fn_t setsiginfo_fn;
+	ptrace_pid_addr_data_fn_t getregset_fn;
+	ptrace_pid_addr_data_fn_t setregset_fn;
+	ptrace_pid_data_fn_t geteventmsg_fn;
+	ptrace_arch_fn_t arch_fn;
+}
+
+const struct ptrace_syscall_ops f03_ptrace_entry_ops_v1 = {
+		.traceme_fn = ptrace_traceme,
+		.wakeup_fn = ptrace_wakeup_sig,
+		.getregs_fn = ptrace_getregs,
+		.setregs_fn = ptrace_setregs,
+		.getfpregs_fn = ptrace_getfpregs,
+		.setfpregs_fn = ptrace_setfpregs,
+		.peekuser_fn = ptrace_peekuser,
+		.pokeuser_fn = ptrace_pokeuser,
+		.peektext_fn = ptrace_peektext,
+		.poketext_fn = ptrace_poketext,
+		.setoptions_fn = ptrace_setoptions,
+		.attach_fn = ptrace_attach,
+		.detach_fn = ptrace_detach,
+		.getsiginfo_fn = ptrace_getsiginfo,
+		.setsiginfo_fn = ptrace_setsiginfo,
+		.getregset_fn = ptrace_getregset,
+		.setregset_fn = ptrace_setregset,
+		.geteventmsg_fn = ptrace_geteventmsg,
+		.arch_fn = arch_ptrace,
+	}
+
+static int ptrace_wakeup_sig(int pid, long request, long data) {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	struct thread *thread = get_this_cpu_local_var()->current;
+	struct mcs_rwlock_node_irqsave lock;
+
+	return ptrace_wakeup_sig_body_result(pid, request, data,
+			(unsigned long)thread,
+			__builtin_offsetof(struct sig_pending, info),
+			&ptrace_wakeup_io_offsets, &lock,
+			ptrace_wakeup_find_thread_bridge,
+			ptrace_wakeup_thread_unlock_bridge,
+			ptrace_wakeup_log_bridge,
+			ptrace_wakeup_clear_saved_bridge,
+			ptrace_wakeup_set_single_step_bridge,
+			ptrace_wakeup_update_lock_bridge,
+			ptrace_wakeup_trace_syscall_bridge,
+			ptrace_wakeup_update_unlock_bridge,
+			ptrace_wakeup_pending_take_bridge,
+			ptrace_detach_kfree_bridge,
+			ptrace_detach_do_kill_bridge,
+			ptrace_detach_wakeup_bridge);
+#else
+	dkprintf("ptrace_wakeup_sig,pid=%d,data=%08x\n", pid, data);
+	int error = 0;
+	struct thread *child;
+	struct siginfo info;
+	struct mcs_rwlock_node_irqsave lock;
+	struct thread *thread = get_this_cpu_local_var()->current;
+	int action;
+	int source;
+
+	child = find_thread(pid, pid);
+	if (!child) {
+		error = -ESRCH;
+		goto out;
+	}
+
+	error = ptrace_signal_data_result(data);
+	if (error) {
+		goto out;
+	}
+
+	action = ptrace_wakeup_request_action_result(request);
+	switch (action) {
+	case PTRACE_WAKEUP_ACTION_KILL:
+		process_thread_ptrace_saved_context_clear_result(child,
+			__builtin_offsetof(struct thread,
+					   ptrace_saved_uctx_valid));
+		memset(&info, '\0', sizeof info);
+		info.si_signo = SIGKILL;
+		error = do_kill(thread, pid, -1, SIGKILL, &info, 0);
+		if (error < 0) {
+			goto out;
+		}
+		break;
+	case PTRACE_WAKEUP_ACTION_RESUME:
+		process_thread_ptrace_saved_context_clear_result(child,
+			__builtin_offsetof(struct thread,
+					   ptrace_saved_uctx_valid));
+		if (ptrace_resume_single_step_result(request)) {
+			set_single_step(child);
+		}
+		mcs_rwlock_writer_lock(&child->proc->update_lock, &lock);
+		process_thread_ptrace_trace_syscall_update_result(child,
+			__builtin_offsetof(struct thread, ptrace),
+			ptrace_resume_trace_syscall_result(request));
+		mcs_rwlock_writer_unlock(&child->proc->update_lock, &lock);
+		if (ptrace_resume_signal_needed_result(request, data)) {
+			struct sig_pending *pending;
+
+			/* TODO: Tracing process replace the original
+			   signal with "data" */
+			source = ptrace_resume_signal_source_result(request,
+					child->ptrace_sendsig != NULL,
+					child->ptrace_recvsig != NULL);
+			pending = process_thread_ptrace_pending_signal_take_result(
+					child,
+					__builtin_offsetof(struct thread,
+							   ptrace_sendsig),
+					__builtin_offsetof(struct thread,
+							   ptrace_recvsig),
+					source);
+			if (pending) {
+				memcpy(&info, &pending->info, sizeof info);
+				kfree_tracked(pending, __FILE__, __LINE__);
+			}
+			else {
+				memset(&info, '\0', sizeof info);
+				info.si_signo = data;
+				info.si_code = SI_USER;
+				info._sifields._kill.si_pid = thread->proc->pid;
+			}
+			error = do_kill(thread, pid, -1, data, &info, 1);
+			if (error < 0) {
+				goto out;
+			}
+		}
+		break;
+	default:
+		break;
+	}
+
+	sched_wakeup_thread(child, PS_TRACED | PS_STOPPED);
+out:
+	if(child)
+		thread_unlock(child);
+	return error;
+#endif
+}
