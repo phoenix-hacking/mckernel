@@ -1,9 +1,37 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T08:13:28.361396+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T08:57:56.184168+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Original M14-03-04 DEFAULT verified.** Independent2f3b9a32 joins6aae/image
+4b711/0bfde qualification: all5 original signal/futex/time/wait/wake/restart
+regions, realRustwait172/terminate330, wait48slot0/all6pointers, completepending
+1159BinlineCAS/nohost/request231/CPU/void path, four104/prior34/4572+5providers/
+257strong/zeroUND/entryLOAD and25positiveclients/two0nonOOMremovedcontainers/
+fullRoot. Exactly one original check closes:97/156 verified; M14=66.94%
+(+0.27 displayed), M15=67.19% (unchanged). Emitted C9→6 is scoped actual image
+ownership; remainingexec/perf/generalUTI debt is outside this region, not erased.
+FUNCTIONAL/native/parent/file/milestone acceptance stays open. Criteria/weights/
+denominators unchanged. Root publishes/fetches this checkpoint, then exactly one
+changed-pair PR3 report, dedupe M14-03-04-DEFAULT@2f3b9a32;6789915776 retained.
+Green25filea437 preserves actual4b711/8f0f/fc09/3179 independently; no passing
+build/reader/wait/transaction case reran. Source6aae stays recoverable.
+Next original M14-F06-FUNCTIONAL/M15-I04 prerequisite: PublicABI's complete
+nativee5 has finite sourceNO_GO1c9 fordeadline/post-refresh workcaps and exact
+normalmckernel-code package layout. Rootreactivated implementerviafollowup;
+SourceAcq reviews only meaningfulfixedcontracts, P04Source binds4actual-source
+HOSTfamiliesincllate-response/duration/layout, controller1961 reused. SDK
+implements smallest normal29Python+static7f7codeinstaller specialization, no
+oldC9/expirednonce/release replay. Native scratch permission4f9 is separately
+real: UID0/0755 bare stagingparent deniesUID1000; no payload/charge/output;
+owner-scopedgrant request6790932995 posted once. No sudo/path/chmod/remount
+fallback. Numeric retained18=install4+V2_2+native12 is resolved7f7; R3process4
+was already retired, persistentUNKNOWN is not a newnumeric4 charge. This is not
+nativecurrentfree/source/permission release. Next15min: freeze/review bounded
+native successor+4HOSTchecks and normalcodeinstaller patch; Rootexecutes only
+reviewedeligiblechecks, while awaiting actual scratch-owner provisioning.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
 integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6

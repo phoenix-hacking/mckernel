@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.two-exact-scratch-namespace-readonly-observation.v1",
+  "at": "2026-11-11T08:19:36.603524+00:00",
+  "worker_uid": 1000,
+  "worker_euid": 1000,
+  "worker_mount_namespace": "mnt:[4026531841]",
+  "scope": "Only canonical scratch and actual registered readonly scratch view; no process census, directory listing, permission change or helper execution.",
+  "path_metadata": [
+    {
+      "path": "/home/holden/mckernel-work/scratch",
+      "device": 66306,
+      "inode": 49551073,
+      "uid": 0,
+      "gid": 0,
+      "mode": "0o755",
+      "is_symlink": false
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105",
+      "device": 1836,
+      "inode": 2,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700",
+      "is_symlink": false
+    }
+  ],
+  "exact_named_mount_rows": [
+    "974 29 7:44 / /home/holden/mckernel-work/scratch-readonly-20261105 ro,nosuid,nodev,relatime shared:623 - ext4 /dev/loop44 ro,norecovery"
+  ],
+  "current_worker_mountinfo_bytes_read_bounded": 9496,
+  "full_mountinfo_not_published": true,
+  "finite_checkpoint_exclusion_reads": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "observation": "ENOENT",
+      "read_attempts": 1,
+      "not_release_or_global_absence": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+      "observation": "ENOENT",
+      "read_attempts": 1,
+      "not_release_or_global_absence": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/mckernel-heavy-operation.lock",
+      "observation": "ENOENT",
+      "read_attempts": 1,
+      "not_release_or_global_absence": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-candidate-operational-exclusion-scratch18.json",
+      "observation": "ENOENT",
+      "read_attempts": 1,
+      "not_release_or_global_absence": true
+    }
+  ],
+  "canonical_parent_access_predicate_not_retried": "Root diagnosis supplies actual os.access failure; this review only reads metadata/source.",
+  "no_new_directory_or_output": true,
+  "native_or_permission_grant": false,
+  "source_execution": false
+}

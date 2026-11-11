@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-11T08:10:56.926183+00:00",
+  "classification": "ACTUAL_UNIX_DESTINATION_PERMISSION_PRECONDITION_NOT_SUT_SOFTWARE_FAILURE",
+  "failed_predicate": "os.access(output.parent, os.W_OK)",
+  "current_uid": 1000,
+  "current_euid": 1000,
+  "logical_parent": "/home/holden/mckernel-work/scratch",
+  "canonical_parent": "/home/holden/mckernel-work/scratch",
+  "symlink": false,
+  "parent_uid": 0,
+  "parent_gid": 0,
+  "mode": "0o755",
+  "writable_by_current_actor": false,
+  "output_exists": false,
+  "producer_started": false,
+  "admitted": false,
+  "job_or_memory_charge_issued": false,
+  "full_Root_tool_and_streams_joined": true,
+  "tool_result": {
+    "chunk_id": "830878",
+    "wall_time_seconds": 5.5893e-05,
+    "exit_code": 1,
+    "original_token_count": 23,
+    "output": "Traceback (most recent call last):\n  File \"<stdin>\", line 15, in <module>\nAssertionError\n"
+  },
+  "no_sudo_or_permission_fallback": true,
+  "no_directory_permission_change": true,
+  "no_native_or_other_UNKNOWN_release": true,
+  "next_action": "Use actual existing scratch owner/provisioning/admission interface for a genuinely scoped permission grant, not retry this UID1000 command via elevation or alternate path."
+}

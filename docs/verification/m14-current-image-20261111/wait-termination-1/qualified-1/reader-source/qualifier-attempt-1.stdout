@@ -1,0 +1,59 @@
+{
+  "component": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/COMPONENT-FACTS.json",
+    "bytes": 60653,
+    "sha256": "26b6634dd8ec277ac31670351fd30b49a59899a2524b598584c7a51e4eebdf69"
+  },
+  "changed": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/WAIT-TERMINATION-CHANGED-PATH-JOINS.json",
+    "bytes": 71808,
+    "sha256": "ce3d65fb15ddb02ffe1df0cb5f016e3022b07813400dcfbc1f10fa65dfef49d2"
+  },
+  "tables": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/ACTUAL-WAIT-TABLE.json",
+    "bytes": 23781,
+    "sha256": "a913b1c172a4a31dacfbe9a0f9f6bd4fbcdeda554304fd366d9b4938e2654bc7"
+  },
+  "ABI": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/ACTUAL-ABI104-AND-PUBLIC-TYPES.json",
+    "bytes": 10089,
+    "sha256": "49ed4c87bf0ac91dda83eb21bc9608336d70cc80c3739a8c312f87fa00a991c2"
+  },
+  "physical": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/OWNER-PROVIDER-JOINS.json",
+    "bytes": 5773209,
+    "sha256": "34e8f08788817388d5ff259fd1ad979f5dd03fb705ecb5de25028ac648a8cc62"
+  },
+  "callers": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/ACTUAL-CALLER-BYTES-AND-REFERENCES.json",
+    "bytes": 596815,
+    "sha256": "bf60ad97c07c6986371c93c666519cb031034bd53e4986c8d4d2fe47d3e6ce4a"
+  },
+  "new_roots": {
+    "wait_host_wait4_bridge": 172,
+    "terminate_mcexec": 330
+  },
+  "input_globals": 4572,
+  "imports": 257,
+  "Cledger": [
+    {
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "previous_count": 9,
+      "actual_count": 6,
+      "removed": [
+        "terminate_mcexec",
+        "terminate_mcexec_do_syscall_bridge",
+        "wait_host_wait4_bridge"
+      ],
+      "added": [],
+      "actual_names": [
+        "perf_event_open_do_syscall_bridge",
+        "do_execveat",
+        "syscall_execveat_bridge",
+        "sys_perf_event_open",
+        "util_thread",
+        "syscall_util_indicate_clone_disabled_bridge"
+      ]
+    }
+  ]
+}

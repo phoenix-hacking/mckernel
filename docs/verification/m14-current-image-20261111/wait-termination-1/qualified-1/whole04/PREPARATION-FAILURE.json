@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-11T08:42:01.651893+00:00",
+  "scope": "Reviewer saved-byte proof preparation only; no SUT/helper/compiler/test/ELF command or source mutation",
+  "diagnostic": "KeyError: owner in reviewer summary comprehension for resolved_provider lacking an owner field",
+  "affected_input": "qualification-1/ACTUAL-CALLER-BYTES-AND-REFERENCES.json bf60ad97; some resolved literal/linker providers use their actual alternate shape",
+  "impact": "No INDEPENDENT-AFFECTED-BYTES or whole decision had been written; no source/physical discrepancy identified",
+  "correction": "Represent optional owner field honestly and retain exact underlying target/provider; derive instruction offsets from actual byte patterns instead of hand-typed offsets. Preserve fixed real R64 offsets and full file/input/final hashes."
+}
