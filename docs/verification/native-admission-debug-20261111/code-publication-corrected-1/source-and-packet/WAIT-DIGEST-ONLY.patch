@@ -1,0 +1,9 @@
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/WAIT-INSTALL-CODE-current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/WAIT-INSTALL-CODE-current.py
+@@ -1,5 +1,5 @@
+ import fcntl,hashlib,json,os,select,signal,struct,sys,time,types
+-EXPECTED='d87594a07ecd27d0760b418cb51c64f67f0b01e889d5c3b587cadd080944d8f5'
++EXPECTED='8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c'
+ if len(sys.argv)!=17:raise ValueError('exact waiting-installer argv required')
+ source_fd,ready_fd,go_fd,root_fd,package_fd,code_fd,lease_fd,closure_fd,controls_fd,capacity_fd,host_fd,owner_fd=map(int,sys.argv[1:13])
+ nonce,deadline,installer_path,boot_id=sys.argv[13:17];deadline=int(deadline)

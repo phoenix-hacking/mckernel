@@ -1,0 +1,201 @@
+{
+  "acceptance_delta": 0,
+  "at": "2026-11-11T11:05:01.236643+00:00",
+  "author_execution": false,
+  "candidate_source_ready": {
+    "bytes": 3775,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "sha256": "6c124fbc70b52d1334fc4ea67f5f55fe740cb4e059074c51f9ec056bb4a3a8ed"
+  },
+  "canonical_changes": false,
+  "capture_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/execution-1",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=134217728",
+        "--cpu=10",
+        "--fsize=1048576",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/wait_binding_regression.py"
+      ],
+      "expected_exit": 0,
+      "id": "actual-wait-preREADY-installer-digest-binding",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "actual_READY_GO_Root_nonce_account_native_action": false,
+        "actual_installer_bytes": 23246,
+        "actual_installer_compiled_or_executed": false,
+        "actual_installer_sha256": "8076a13c5c47230f2059c150036b0aac6d4c9b1ae64bd1d0f6de011ecaf8521c",
+        "cases": [
+          {
+            "controlled_compile_boundary_calls": 0,
+            "id": "baseline-actual8076",
+            "installer_compile_calls": 0,
+            "installer_exec_calls": 0,
+            "outcome": "REJECTED_INSTALLER_SOURCE_CHANGED",
+            "own_readonly_fd_close_attempts": 1,
+            "ready_or_go_actions": 0,
+            "source_bytes": 23246,
+            "stable_stat_observations": 2
+          },
+          {
+            "controlled_compile_boundary_calls": 1,
+            "id": "candidate-actual8076",
+            "installer_compile_calls": 0,
+            "installer_exec_calls": 0,
+            "outcome": "GUARD_ACCEPTED_AT_CONTROLLED_COMPILE_BOUNDARY",
+            "own_readonly_fd_close_attempts": 1,
+            "ready_or_go_actions": 0,
+            "source_bytes": 23246,
+            "stable_stat_observations": 2
+          },
+          {
+            "controlled_compile_boundary_calls": 0,
+            "id": "candidate-wrong-content",
+            "installer_compile_calls": 0,
+            "installer_exec_calls": 0,
+            "outcome": "REJECTED_INSTALLER_SOURCE_CHANGED",
+            "own_readonly_fd_close_attempts": 1,
+            "ready_or_go_actions": 0,
+            "source_bytes": 23246,
+            "stable_stat_observations": 2
+          },
+          {
+            "controlled_compile_boundary_calls": 0,
+            "id": "candidate-truncated-content",
+            "installer_compile_calls": 0,
+            "installer_exec_calls": 0,
+            "outcome": "REJECTED_INSTALLER_SOURCE_CHANGED",
+            "own_readonly_fd_close_attempts": 1,
+            "ready_or_go_actions": 0,
+            "source_bytes": 23245,
+            "stable_stat_observations": 2
+          },
+          {
+            "controlled_compile_boundary_calls": 0,
+            "id": "candidate-unstable-stat",
+            "installer_compile_calls": 0,
+            "installer_exec_calls": 0,
+            "outcome": "REJECTED_INSTALLER_SOURCE_CHANGED",
+            "own_readonly_fd_close_attempts": 1,
+            "ready_or_go_actions": 0,
+            "source_bytes": 23246,
+            "stable_stat_observations": 2
+          },
+          {
+            "controlled_compile_boundary_calls": 0,
+            "id": "candidate-unexpected-fd",
+            "installer_compile_calls": 0,
+            "installer_exec_calls": 0,
+            "outcome": "REJECTED_UNOWNED_SOURCE_FD",
+            "own_readonly_fd_close_attempts": 1,
+            "ready_or_go_actions": 0,
+            "source_bytes": 0,
+            "stable_stat_observations": 0
+          }
+        ],
+        "guard_algorithm_unchanged": true,
+        "original97528_custody_changed": false,
+        "prior_green_suites_replayed": false,
+        "status": "PASS"
+      },
+      "wall_seconds": 15
+    }
+  ],
+  "contract": {
+    "bytes": 3616,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/TEST-CONTRACT.json",
+    "sha256": "a1c79cae456a4831279a6034a985cffd233ec3864ad7c000beb50093b9a9fd5e"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1",
+  "expected": {
+    "bytes": 2566,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/EXPECTED.json",
+    "sha256": "ea4802ce9d14cc8ce372c43e61e2561bc86984022d5ab132df8ed99851867868"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/output-1",
+  "inputs": {
+    "bytes": 8673,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/INPUTS.json",
+    "sha256": "0272671c8ca998e24849c8104962cf6b6e45a5f38b16e7b9bd7c61a1f4ac0189"
+  },
+  "owner": "/root/p04_source_max actual Sol/MAX test author; Root sole executor/compositor; independent SourceAcq/P04Tests reviewer",
+  "ownership": {
+    "failure": "Stop and preserve actual guard/Root/Owner/FD failure and raw stream/primary; no unchanged retry or numeric/global/reaped fallback.",
+    "final": "One full exact external golden/empty stderr plus positive Owner family and full outer Root tool/direct wait/streams before releasing only newHOST128MiB/job1. Original97528/custody/allUNKNOWN unaffected.",
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_required": [
+      "positive exact PID+birth/literalargv/cwd/currentlabel",
+      "status0",
+      "leader_parent_joined=true",
+      "whole_descendants_joined=true",
+      "streams_closed=true",
+      "timed_out=false",
+      "leader_group_signalled=false",
+      "adopted_reaps=[]",
+      "adopted_kills=[]",
+      "remaining_direct_children=[]",
+      "error=null"
+    ],
+    "labels": [
+      "phase-1"
+    ],
+    "record_count": 1
+  },
+  "preconditions": [
+    "Independent SourceAcq/P04Tests exact source-delta and test/parent/profile GO before any execution. Source author SDK cannot independently review this wait fix.",
+    "Root fresh same-run account/control/stop/hold, actual all-overhead+retained97528/UNKNOWN2GiB+new128MiB<=shared4GiB, aggregatejobs<=3, available>=26GiB and host16/scratch12GiB disks+16MiB. This parent conservatively retains old2GiB; no zeroing/inferred custody release. If later genuinely retired, bind actual positive scope before any separate resource-only successor.",
+    "Check every exact source/data/helper/interpreter pin and absent fresh output/capture; Root alone creates private output-1/tmp/execution-1. SUT has no actual private Root path/permission fallback or source mutation.",
+    "Run one literal HOST command through existing Ownerafe740 and exact full external JSON/empty stderr checks, full real returned row and outer Root tool closure. One ordinary own read-only source FD per vector is allowed, never actual installer compile/import/main/READY/GO/Root/account/native.",
+    "Original publisher97528/caller/direct-child/source/resource UNKNOWN remains untouched. This is not a publisher retry, gate/nonce/cap extension or equivalent Root action. No old8HOST/1961/installed/body replay."
+  ],
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/output-1/tmp",
+  "profile": {
+    "all_worker_controller_overhead_included": true,
+    "batch_wall_seconds": 30,
+    "cpu": 7,
+    "cpu_seconds_per_command": 10,
+    "fresh_MemAvailable_floor_GiB": 26,
+    "host_disk_floor_GiB": 16,
+    "jobs": 1,
+    "max_address_space_bytes": 134217728,
+    "max_aggregate_HOST_bytes": 4294967296,
+    "max_aggregate_jobs": 3,
+    "max_file_bytes": 1048576,
+    "no_actual_installer_compile_exec_READY_GO_Root_account_nonce_native_action": true,
+    "output_disk_reservation_bytes": 16777216,
+    "retained_current_publication_bytes": 2147483648,
+    "retained_current_publication_jobs": 1,
+    "retained_current_publication_session": 97528,
+    "retained_current_publication_status": "UNKNOWN_RETAINED_AT_FREEZE_NO_RETIREMENT_INFERRED",
+    "scratch_disk_floor_GiB": 12,
+    "wall_seconds_per_command": 15
+  },
+  "root_parent_proposal": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/ROOT-PARENT.PROPOSED.py",
+  "schema": "fixed-code-wait-preREADY-guard-host-request-v1",
+  "source_bindings": {
+    "bytes": 3375,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-wait-binding-tests-p04source-max-1/SOURCE-BINDINGS.json",
+    "sha256": "b8797924ea3a2a3a96c856e8bb31919ecf34007f3a103231bed4c80eb76ede51"
+  },
+  "status": "FROZEN_SOURCE_PREPARATION_NOT_EXECUTED_PENDING_INDEPENDENT_SOURCE_TEST_OPERATION_GO"
+}

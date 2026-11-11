@@ -1,0 +1,99 @@
+{
+  "confirmed_delta": [
+    {
+      "change": "Point-subtree branch runs only while not timed_out and set(observed) is not exactly root_parent/keeper/installer.",
+      "location": "prepare_current.CANDIDATE.py:396",
+      "source_basis": "The published observation scope was already POINT_SAMPLES_UNTIL_ROLE_IDENTITIES_OBSERVED. identify_roles produces only those three keys. A role enters observed only after write_new and directory fsync succeed. An attempted-but-failed role publication is not enough to end sampling; it remains missing and captured-DATA validation refuses it. No durable role is discarded or replaced."
+    },
+    {
+      "change": "Retain built-in observation exception class plus first512 message characters, rather than only its class.",
+      "location": "prepare_current.CANDIDATE.py:422",
+      "source_basis": "The same OSError/ValueError handler still sets resource_unknown=True and retains bounded error history. Actual lower operations at this boundary emit ordinary built-in filesystem/numeric/source-check exceptions. This supplies future diagnostic detail; it does not reconstruct the old missing message/time."
+    }
+  ],
+  "created_utc": "2026-11-11T12:12:30.683324+00:00",
+  "decision": "GO_FOCUSED_SOURCE_FUTURE_CALLER_ONLY",
+  "holds": {
+    "actual_installer_sudo_nonce_or_live_state_action": false,
+    "controller_activation_or_staging_permission": false,
+    "native_currentfree": null,
+    "native_release": false,
+    "prior18_and_native_Scratch_persistent_source_UNKNOWN_unchanged": true
+  },
+  "inputs": {
+    "baseline": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare_current.py",
+      "sha256": "05ea0c9e8c1904869a3eb7072a9a197b480ad78209cc19c2aac4ae5c1ae39e8d",
+      "size": 39398
+    },
+    "candidate": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/prepare_current.CANDIDATE.py",
+      "sha256": "abadd7ebf5531b6edb408544b2367a95e357ca80917bf1fa912fdeb8708efaba",
+      "size": 39476
+    },
+    "current_disposition": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-current-ownership-review-sourceacq-max-1/corrected-producer-1/RESULT.json",
+      "sha256": "ee63defa3229ed398d1bfb06795fdb9b11084b9cffc575f50af396216b43a5c3",
+      "size": 21200
+    },
+    "diagnosis": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/DIAGNOSIS.json",
+      "sha256": "a6cd18224ad35413ca6a988b00989ae33e0e229c5ad9aa8b1160b0415395c5d9",
+      "size": 13351
+    },
+    "patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/POINT-SCOPE-AND-ERROR-CONTEXT.patch",
+      "sha256": "7ff2b155629d7cab988c655cd7fbc1189401ca19eab5059e2dfa5a7505158811",
+      "size": 1447
+    },
+    "source_ready": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+      "sha256": "b7957653bc204d45cc6319d7d17bae1b2366c98969ed8c8bb52a601c2d5893be",
+      "size": 2127
+    }
+  },
+  "limits_and_lifetime_preserved": {
+    "aggregate_HOST4_guard": "overhead()>BUDGET remains outside and before the point-subtree condition on every polling iteration, including after all three persisted roles and after cap expiry; exceeding still sets AGGREGATE_HOST4_RSS_EXCEEDED and resource_unknown.",
+    "caller_RSS_guard": "caller_rss peak and512MiB caller reserve remain outside the point branch on every iteration; exceedance or read error still latches UNKNOWN.",
+    "caps": "Boot/monotonic/UTC timeout checks and poll timing unchanged. Once timed_out, no role sampling resumes, and original caller custody/wait behavior continues.",
+    "custody": "Unchanged exact sudo pidfd polling, own direct wait, invalid/poll/wait UNKNOWN retention, no client signal or permission fallback, final capture close/hash, producer DATA validation and role joins.",
+    "final_acceptance": "Unchanged final result requires nonmissing verified DATA, no timeout, no resource_unknown and no latch failure before FULL_DATA_CAPTURED_AWAIT_ROOT_SESSION_JOIN. Otherwise it remains UNKNOWN_REQUIRES_ROOT_RECONCILIATION.",
+    "historical_error_latch": "No clear/reset of resource_unknown or errors was added; every precompletion error and timeout remains part of final status. Full DATA alone never overrides UNKNOWN.",
+    "point_family_host_control_scope": "The host_bytes/sudo_overhead_reserved_bytes check remains identical on every eligible role-point sample until all three durable role identities exist. Thereafter it ends with that declared point scope; this is not claimed as continuous per-family peak measurement. Continuous aggregate/caller checks remain active."
+  },
+  "method": "Read selected source, patch and saved machine data; static byte/AST/grammar checks only. No candidate import, compile, fake test, helper, issuer, reader, account/service, root-private journal, network, process action, canonical edit or recursive agent.",
+  "necessary_future_validation_scope": [
+    "Actual revised supervise with explicit lower-effect fakes: after exactly three successful durable role publications, a later terminal/vanishing subtree would not be sampled. Baseline contrasting failure may be modeled; do not run a new privileged publication to manufacture it.",
+    "Before roster completion, the same actual observation ValueError still records its bounded class/message and leaves resource_unknown true; missing/mismatched roles and timeout cannot become a complete accepted caller result.",
+    "After roster completion, aggregate HOST4 and caller512MiB overages/read failure still latch UNKNOWN, and pidfd/directwait/capture/DATA conditions remain required. Reuse unchanged prior checks rather than replaying the installer/controller suites."
+  ],
+  "not_a_runnable_publisher_cohort": {
+    "current_actual_nonce_republication_needed": false,
+    "current_reader_or_producer_proof_changed": false,
+    "new_operation_requested": false,
+    "old_request_or_review_not_reusable_for_candidate": true,
+    "reason": "Changed caller bytes have a new digest; selected issuer/driver/manifests and independent operation review still bind actual05ea/b6f. This source-only file is not an authorized replacement in those frozen inputs. Any genuine future publication would require its own coherent input rebinding and operation-specific admission, not the already-consumed nonce/review."
+  },
+  "preserved_current_record": {
+    "actual_exception_cause_and_time_unrecoverable": true,
+    "current_process_only_retirement_is_separate_ee63": true,
+    "exact_historical_peak_proven": false,
+    "nonce": "2c4cd062dbec96e05ded7079ee4c772d2d7f5d8c976024428db96ea2681c789f",
+    "old_failed_generation_lease_source_globalOFD_UNKNOWN_retained": true,
+    "raw_caller_sha256": "e4a294466bcea2aa01cdb90a4d0d40a74a0247991c36d2cb484123eef0d0b190",
+    "raw_resource_unknown": true,
+    "source_only_fix_does_not_relabel_current_or_old_UNKNOWN": true
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "schema": "mckernel.fixed30.future-role-observer-source-review.v1",
+  "scope": "Two literal edits in supervise; no publication/retry/retirement/activation grant",
+  "static_validation": {
+    "Python38_grammar_only": true,
+    "all_declared_input_sizes_and_SHA_match": true,
+    "all_module_AST_except_supervise_identical": true,
+    "exact_patch_equals_independent_unified_diff": true,
+    "reversing_the_two_changed_supervise_nodes_restores_complete_baseline_AST": true,
+    "source_or_test_execution": false,
+    "two_literal_reverse_edits_restore_complete_baseline_bytes": true
+  }
+}

@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/prepare_current.py
++++ /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/specialization-1/wait-digest-correction-1/role-observer-correction-1/prepare_current.CANDIDATE.py
+@@ -393,7 +393,7 @@
+             if rss_peak>512*1024**2:errors.append('CALLER_RSS_RESERVE_EXCEEDED');resource_unknown=True
+         except (OSError,ValueError):errors.append('CALLER_RSS_UNKNOWN');resource_unknown=True
+         if len(errors)>64:errors=errors[-64:]
+-        if not timed_out:
++        if not timed_out and set(observed)!={'root_parent','keeper','installer'}:
+             try:
+                 tree=owned_tree(child_pid,child_birth);roles=identify_roles(tree,child_pid,bootstrap,wait_literal)
+                 root_roles={row['pid'] for row in roles.values()}
+@@ -419,7 +419,7 @@
+                 errors.append('TRANSIENT_SUBTREE_'+type(error).__name__)
+                 if len(errors)>64:errors=errors[-64:]
+             except (OSError,ValueError) as error:
+-                errors.append(type(error).__name__);resource_unknown=True
++                errors.append(type(error).__name__+': '+str(error)[:512]);resource_unknown=True
+                 if len(errors)>64:errors=errors[-64:]
+         events=poll.poll(1000 if timed_out else 100)
+         if events:

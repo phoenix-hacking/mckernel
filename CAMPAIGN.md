@@ -1,80 +1,80 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T10:30:15.591317+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T12:15:34.296154+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Original M14-03-04 DEFAULT verified.** Independent2f3b9a32 joins6aae/image
-4b711/0bfde qualification: all5 original signal/futex/time/wait/wake/restart
-regions, realRustwait172/terminate330, wait48slot0/all6pointers, completepending
-1159BinlineCAS/nohost/request231/CPU/void path, four104/prior34/4572+5providers/
-257strong/zeroUND/entryLOAD and25positiveclients/two0nonOOMremovedcontainers/
-fullRoot. Exactly one original check closes:97/156 verified; M14=66.94%
-(+0.27 displayed), M15=67.19% (unchanged). Emitted C9→6 is scoped actual image
-ownership; remainingexec/perf/generalUTI debt is outside this region, not erased.
-FUNCTIONAL/native/parent/file/milestone acceptance stays open. Criteria/weights/
-denominators unchanged. Checkpointf2708fbe is pushed/fetched86matchingownedblobs; changed-pair PR3
-comment6791617739 is POSTED_CONFIRMED, dedupe M14-03-04-DEFAULT@2f3b9a32.
-Prior6789915776 retained; no percentage report remains pending.
-Green25filea437 preserves actual4b711/8f0f/fc09/3179 independently; no passing
-build/reader/wait/transaction case reran. Source6aae stays recoverable.
-Next original M14-F06-FUNCTIONAL/M15-I04 prerequisite: PublicABI's bounded
-successor9b422/patch4917 fixes deadline/post-refresh workcaps and the normal
-mckernel-code package layout; independent sourceGOc14f closes both1c9 source
-findings. P04Tests reviews four-family HOST request40e309/fixture82b908 and
-Root parentad816 onCPU0/256MiB. Actual operationGOe6e45 and fresh admission
-ran09:24:30Z: registered-context/capacity-claim canonical outputs PASS; third
-effective-source failed KeyError adapter.py at fixture621/source156 before its
-intended consumed-file omission assertion, fourth unstarted. Faileddcc37b2b/
-rawstderr preserved; all3Owner families/fullRoot9196dc joined, current256MiB
-released only. P04Source diagnoses smallest fixture-versus-source correction;
-P04Tests reviewed coherent missing-file/setup-order correction73ad/parentc87d:
-GO0a48. Actual remaining2 commands PASS09:35:06Z/e47755ee, exact unchanged
-external JSON/empty stderr/two positive families/fullRootcdc1e2. Current256MiB
-released; first2 PASS/controller1961 reused, no production/body change. Independent
-saved-result qualificationc5646bd1 joins all4 exact canonical outputs, source9b/
-c14f, five positive families including the retained failed fixture, both Root
-completions and current-only retirement. Source/patch/actual tests are published
-under native-admission-debug-20261111/complete-interface-candidate-1; this proves
-no installed/controller/native readiness or original acceptance. Source/test
-checkpoint094c52c6 is pushed/fetched98matchingownedblobs; all33 dirty paths
-preserved/indexempty. Native source return6792502502 is POSTED_CONFIRMED;
-it reports source/HOST progress and actual pending dependencies, no new score.
-SDK's fixed30 installer64ed/patch6d8b binds corrected
-payload06661073/current Root/credit7c6; P03 reviews catalog/current-owner source
-and focused fake-test proposal: independent source/designGO5f7fefc5 is frozen.
-P04Source prepares only four changed actual-source controlled-effect families;
-actual994c/8c3 operation ran10:00:15Z: exact catalogue, Root-only immutable
-proof and currentRoot/credit/caps canonical JSON PASS. Failed fourth492a is
-preserved: fixture selected serve instead of the actual run actor guard. Bounded
-one-token68b994/ece1 successor passed10:06:34Z/98dd; first3 reused. Independent
-whole4 HOST qualificationfe88 joins exact30/154-event proof/31vetoes/dependent
-pins, five positive owned families and fullRoot4a7ffb1/eae0500 with scoped current
-CPU7/256MiB release. Source64ed/oracles/privilege+wait/IPC algorithms unchanged.
-The separate UID1000 readback41fb has finite sourceNO_GO408d: close-once/custody,
-all-close/primary/report failure preservation and finite-positive AS. Pub's bounded
-successore04a/f8f196 preserves all DATA/catalog/path guards; independentcbf7
-sourceGO closes all3 findings. P04Source froze two actual-method failure controls
-e476/parent0a9cd; SDK reviews the exact operation before fresh Root admission.
-Actual code-publication9fieldPASS/nonce/caps remain unissued. No install/
-activation/oldC9/nonce replay.
-Native scratch permission4f9 is separately
-real: UID0/0755 bare stagingparent deniesUID1000; no payload/charge/output;
-owner-scopedgrant request6790932995 posted once. No sudo/path/chmod/remount
-fallback. Numeric retained18=install4+V2_2+native12 is resolved7f7; R3process4
-was already retired, persistentUNKNOWN is not a newnumeric4 charge. This is not
-nativecurrentfree/source/permission release. Next15min: publish qualified fixed30
-source/fourHOST results; finish bounded readback delta/two controls, then final
-normal code-only operation review/fresh admission and all30 UID1000 readback.
-P03/P04Tests independently advance actual M14-03-05 perf lifetime protocol from
-6aae/4b711/c9a3, including monitoring/fork/PMI/scheduler/VM-drain/Thread teardown
-participants and real counter/host/group rollback; no count-as-reference or
-long-lived Thread cycle, selector activation or old held-fixture replay. SourceAcq
-material review is required before activation. Controller binding1f0d/55a3 stays
-private/unloaded pending genuine safe same-Root transition, not a new start.
-Actual scratch-owner provisioning remains separately pending. Existing source/
-native/UNKNOWN controls and original criteria remain; no new counted gain.
+**Original closure remains97/156: M14=66.94%, M15=67.19%.** Last counted
+condition M14-03-04-DEFAULT is independently GO2f3b9a32 on6aae/image4b711/
+qualification0bfde, with all original region/ABI/provider/cleanup clauses joined.
+M14-03-03 is separately closed; emitted C9→6 is scoped image ownership, not
+complete C retirement. Functional/native/parent/file/milestone conditions stay
+open at their original scope. Four accepted M14 files and accepted M15-F01 remain
+closed. Original criteria/weights/denominators and M14-before-M15 acceptance
+are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
+PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
+Last source/results checkpoint48b29684 is pushed/fetched83ownedblobs; all33
+unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
+
+**M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
+c14f and all4 canonical HOST families c564 are qualified; controller1961 and
+fixed30 installerfe88 plus readback failure-control8a54 results are reused.
+Normal source publication51ca failed before READY because waiterEXPECTEDd875
+did not match selected installer8076 (diagnosisd0cbd). Its exact parent recovery
+797/b4f/4f632 positively retired1358834/birth47979237 and joined original97528/
+sudo wait9/closed captures; independent5081 permits only old2GiB/job process
+retirement, recorded2c2a. Old failed normallease/globalOFD/source outcomes remain
+UNKNOWN; neither old nonce nor consumed9f26/51ca/ec829 was replayed.
+Corrected cohort6c124/b6f205 changes the waiter digest and dependent pins;
+sourceGO809a and actual6preREADY92fc passes are reused. Operation3b8b ran once
+at11:47:51Z after a genuine fresh account event. Actual toolde34d3 exit0/noSession
+and FULL4bf86 prove keeper+installer waits0, normallease VERIFIED_CLOSED/COMPLETE,
+sudo0/no timeout, closed stdout12974B/stderr0 and genuine30-file producer proof.
+Caller e4a still records resource_unknown=true and ValueError without predicate/
+time. SDK a6cd cannot recover that historical event. Future-only observer b795/
+7ff2 has independent09fc sourceGO: stop extra point-subtree sampling after all3
+roles are durably recorded while retaining aggregate HOST4/caller512MiB guards,
+all waits/captures/DATA and previous UNKNOWN latches. No future issue is granted.
+Independent ee63 verifies actual role/wait/tool/stream/catalogue joins and allows
+ONLY the new current2GiB/job process retirement, recorded56e11. Raw historical
+resource cause/time/peak/compliance remain UNKNOWN; no source/native/Scratch hold
+is released. NEW honest Root capsuleeba51 records actual tool/stream closure,
+exact caller/values refs and overall_resource_acceptance=false. Original snapshot
+false and raw caller UNKNOWN are untouched. Strict c843/a422/9fcc remains NO_GO.
+PublicABI owns the minimum exact-tuple reader/contract/request correction against
+ee63/eba51, SourceAcq independently reviews, and Root then freshly admits the
+readonly UID1000 operation. Required next result: all30 normal-layout immutable
+Root-owned file dev/inode/mode/size/SHA/catalogue agreement, UID1000 readability
+and positive owned closure. No issuer replay, overall install/native acceptance
+or controller activation follows from producer success alone.
+
+**Independent M14-03-05-DEFAULT:** P03 integrates actual mckfd/VM/Thread/open/
+group/monitor/counter and hostFD lifecycle source on6aae/4b711 under corrected
+protocol202a/specGO34c569. P04Source delivered events c790/groups e830/monitors
+db25, with real Process-owned inherited slots and distinct origin-storage
+retirement; P03 ACKed the shared APIs. SDK independently reviews the genuine
+current-owner terminal hostFD/child route while P03 freezes the coherent source.
+P04Tests f0d preparation remains NOT_RUNNABLE until that exact API/source handoff;
+Root must followup the completed owner then obtain independent source/test GO
+before its oneRust1.95 compile/four-family runtime packet. No selector activation,
+compiler run or DEFAULT credit yet; actual lifetime/lock-order/rollback and
+unknown close dispositions must be preserved, not replaced by callback counts.
+
+**Actual separate native dependencies:** staging parent is UID0/0755 and not
+writable byUID1000. Owner-scoped scratch grant6790932995 is pending; no payload,
+permission fallback, alternate path or elevation is authorized. Scratch21 and
+numeric retained18=install4+V2_2+native12 remain. Native12 is retained capacity,
+not an operation claim/current-free proof. Matching frozen1e64/c664 signal case,
+three qualified modules, app77e8/libcb058/loader0853, collector9a55 and guest30ELF
+closure are reusable only at their exact declared cohort. Controller canonical
+binding1f0d/55a3 remains private/unloaded until genuine supported same-Root safe
+transition. Actual staged inputs/current-owner/current-free/restoration gates
+remain separate from code-only installation. Signal alternate-repeat alone
+cannot satisfy all original frame/register/xstate normal/error requirements.
+Guardian/mailbox and restored20-minute functional assistance remain active.
+Use included allowance first then existing credits under same7c6 identity/budget;
+no account/state reset, purchase/API fallback, healthy restart or hold bypass.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
 integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6
