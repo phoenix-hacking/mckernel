@@ -1,0 +1,11 @@
+--- a/kernel/rust/f03_perf_owner/events.rs
++++ b/kernel/rust/f03_perf_owner/events.rs
+@@ -430,7 +430,7 @@
+         let mut r = unsafe { Locked::take() };
+         unsafe {
+             self.close_locked(&mut r).expect("invalid perf descriptor event retirement");
+-            let owner = (*self.state.get()).pin.event.owner;
++            let owner = (&(*self.state.get()).pin).event.owner;
+             let storage = (*owner).descriptor_storages.checked_sub(1)
+                 .expect("perf descriptor storage released twice");
+             (*owner).descriptor_storages = storage;

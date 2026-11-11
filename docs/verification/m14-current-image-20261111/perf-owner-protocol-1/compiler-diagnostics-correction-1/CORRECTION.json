@@ -1,0 +1,101 @@
+{
+  "status": "ONE_BOUNDED_SOURCE_CORRECTION_OF_ALL_SIX_ACTUAL_FIRST_COMPILER_DIAGNOSTICS_NOT_EXECUTED",
+  "at_utc": "2026-11-11T13:54:57.990079+00:00",
+  "original_source_ready": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 2070,
+    "sha256": "fb154ab61b167acf9a96febfe881b3472f5527473dd3f5ea321a2aa5818b643d"
+  },
+  "original_source_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/SOURCE-MANIFEST.json",
+    "bytes": 18552,
+    "sha256": "d17f3ea54931735f9088d0697477261d93684ab1f4b58c0dfca5713086a22b45"
+  },
+  "actual_failed_result": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/execution-1/RESULT.json",
+    "bytes": 17599,
+    "sha256": "748b817024d30d5f8bb2cb83e9fd7408a51688054588777f8b5c8e0afb8cc233"
+  },
+  "actual_stderr": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/execution-1/compile-payload.stderr",
+    "bytes": 27532,
+    "sha256": "b7fc4f34308f44325a048732ddfd3fd51bc13b8be1baca09a600764557ac3e24"
+  },
+  "independent_actual_failure_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/actual-failure-1/QUALIFICATION.json",
+    "bytes": 13623,
+    "sha256": "5ef330b3bd1833ad951dee3d23ba8f88f5ec88faa9f23ff589ce387b7eb96af1"
+  },
+  "preserved_first_operation_and_overlay": {
+    "driver": {
+      "bytes": 9634,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/run_root_once.py",
+      "sha256": "a4a75c8c97327724ceddd6968ceb20357cb6072e8f58ed83993d1bb5b074a43d"
+    },
+    "inputs": {
+      "bytes": 66634,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/INPUTS.json",
+      "sha256": "6815657f749adbfe2c91565858b0f0b25a2806672343b55aa7000b7b5b9940ad"
+    },
+    "original_source_ready": "fb154ab61b167acf9a96febfe881b3472f5527473dd3f5ea321a2aa5818b643d",
+    "request": {
+      "bytes": 32203,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/REQUEST.json",
+      "sha256": "4a67b2fe369bdfee7d97a391529ff3c26108909f733925323d4bf342bcc4c855"
+    },
+    "review": {
+      "bytes": 11847,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "61f5ff9d0a553de8ba10d0cf089655881cef6c2cffd5c469f4eb795de4f3c503"
+    },
+    "source_overlay": {
+      "bytes": 90936,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/SOURCE-OVERLAY.json",
+      "sha256": "7fb2245154733571ade8c03ac8b42a6029e414120f987b048be772a1e24e9a27"
+    }
+  },
+  "error_count": 6,
+  "warnings_emitted_in_failed_attempt": 87,
+  "changed_source_files": 3,
+  "exact_transformations": {
+    "kernel/rust/f03_perf_owner/callbacks.rs": {
+      "occurrences": 1,
+      "change": "Parenthesize unsafe forward expression before the unchanged CInt cast."
+    },
+    "kernel/rust/f03_perf_owner/groups.rs": {
+      "occurrences": 1,
+      "change": "Terminate existing if-let expression with semicolon so Option<MemberRetirement> temporary drops before its borrowed local ManuallyDrop<GroupRef> facade."
+    },
+    "kernel/rust/f03_perf_owner/runtime.rs": {
+      "occurrences": 4,
+      "change": "Actual IhkAtomic64.counter64 field for the same prev_count/period_left AtomicI64 SeqCst loads/stores."
+    }
+  },
+  "actual_atomic_abi_source": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "actual_atomic_declaration": "#[repr(C)] pub struct IhkAtomic64 { pub counter64: CLong }",
+  "retirement_token_lifetime_disposition": [
+    "The existing if-let Some arm, actual GroupRef clone, selected tuple and mapping claim transfer stay byte-identical.",
+    "The token is still wrapped in ManuallyDrop and marked inactive in the same locked scope; no token/epoch/group keep edge is released early.",
+    "The semicolon only ends the if-let temporary before facade goes out of scope. The selected real keep edge survives R unlock, genuine retire callback and later acknowledgement exactly as before.",
+    "No callback/free/wait is added under R and the original callback/ack order is unchanged."
+  ],
+  "unchanged_source_files": 25,
+  "semantics_preserved": [
+    "forward callee/arguments/return cast",
+    "same AtomicI64 storage width and SeqCst loads/stores",
+    "same member-retirement ownership/claim/keep/drop order"
+  ],
+  "scheduler_branch_separate": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/scheduler-epoch-correction-1/SOURCE-READY.NOT-EXECUTED.json",
+    "bytes": 3243,
+    "sha256": "f948ccb95bca654e329c4fa0dba1e689b2a92a452553e07be2ce2f4d0434221c"
+  },
+  "scheduler_correction_composed_here": false,
+  "compiler_or_test_or_SUT_or_native_execution_by_author": false,
+  "first_attempt_preserved_unchanged": true,
+  "no_activation_or_acceptance_or_resource_release_claim": true
+}

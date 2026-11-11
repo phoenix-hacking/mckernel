@@ -1,0 +1,132 @@
+--- a/kernel/rust/f03_perf_owner/hardware.rs
++++ b/kernel/rust/f03_perf_owner/hardware.rs
+@@ -183,9 +183,17 @@
+ }
+ pub(super) unsafe fn start_locked(event: &EventPin, thread: *mut Thread, r: Locked) -> CLong {
+     let mut operation = match unsafe { capture(event, thread, r, false) } { Ok(op) => op, Err(error) => return error };
++    unsafe { start_walk(event, thread, &mut operation.walk, &operation.leases) }
++}
++
++/// Run the original complete start step on an ALREADY CAPTURED member epoch
++/// and its actual per-executing-Thread Operation leases. No new epoch capture.
++unsafe fn start_walk(
++    event: &EventPin, thread: *mut Thread, walk: &mut GroupRead<'_>, leases: &HardwareLeases,
++) -> CLong {
+     let mut mask = 0;
+-    while let Some(member) = next(&mut operation.walk) {
+-        let rc = unsafe { start_event(&member, &operation.leases, thread, &mut mask) };
++    while let Some(member) = next(walk) {
++        let rc = unsafe { start_event(&member, leases, thread, &mut mask) };
+         if rc != 0 { return rc; }
+     }
+     if mask != 0 {
+@@ -231,11 +239,77 @@
+ }
+ pub(super) unsafe fn reset_locked(event: &EventPin, thread: *mut Thread, r: Locked) -> CLong {
+     let mut operation = match unsafe { capture(event, thread, r, false) } { Ok(op) => op, Err(error) => return error };
+-    while let Some(member) = next(&mut operation.walk) {
+-        let rc = unsafe { reset_event(&member, &operation.leases, thread) };
++    unsafe { reset_walk(thread, &mut operation.walk, &operation.leases) }
++}
++
++/// Preserve the original reset step, including its early return within THIS
++/// step. A later original void scheduler step still runs even after an error.
++unsafe fn reset_walk(
++    thread: *mut Thread, walk: &mut GroupRead<'_>, leases: &HardwareLeases,
++) -> CLong {
++    while let Some(member) = next(walk) {
++        let rc = unsafe { reset_event(&member, leases, thread) };
+         if rc != 0 { return rc; }
+     }
+     0
++}
++
++/// ONE actual member epoch/tail and ONE complete actual mapping lease set for
++/// the scheduler's entire original reset/reset/start transaction. All cursors
++/// are captured under the same R, so they share sequence, tail and epoch even
++/// if another CPU clears the Process monitor and appends after R unlock.
++struct SwitchSequence<'a> {
++    initial_reset: Option<GroupRead<'a>>,
++    reset: GroupRead<'a>,
++    start: GroupRead<'a>,
++    leases: HardwareLeases,
++}
++unsafe fn capture_switch_sequence<'a>(
++    event: &'a EventPin, thread: *mut Thread, mut r: Locked, initial_reset: bool,
++) -> Result<SwitchSequence<'a>, CLong> {
++    if thread.is_null() { return Err(-EINVAL); }
++    let group = event.selected_group();
++    let mut mapping = unsafe { group.read_locked(&mut r) };
++    let first = if initial_reset { Some(unsafe { group.read_locked(&mut r) }) } else { None };
++    let reset = unsafe { group.read_locked(&mut r) };
++    let start = unsafe { group.read_locked(&mut r) };
++    let leases = unsafe { HardwareLeases::capture_locked(thread, &mut mapping, &mut r) };
++    unsafe { mapping.finish_locked(&mut r) };
++    match leases {
++        Ok(leases) => {
++            drop(r);
++            Ok(SwitchSequence { initial_reset: first, reset, start, leases })
++        }
++        Err(error) => {
++            if let Some(first) = first { unsafe { first.finish_locked(&mut r) }; }
++            unsafe { reset.finish_locked(&mut r); start.finish_locked(&mut r); }
++            drop(r);
++            Err(error as CLong)
++        }
++    }
++}
++
++/// Scheduler-only complete original void-call sequence. Err denotes failure to
++/// capture its PREBOUND maps before any hardware step; lifecycle treats that as
++/// the existing protocol invariant failure rather than silently truncating.
++/// Ok contains the first real helper status for precise diagnostics. Original
++/// void semantics are retained: execute EACH scheduled step even if a prior
++/// helper returned nonzero, then deliberately ignore that backend status.
++/// No allocation/wait, R across S/providers, new cursor or late map lookup.
++pub(super) unsafe fn switch_sequence_locked(
++    event: &EventPin, thread: *mut Thread, r: Locked, initial_reset: bool,
++) -> Result<CLong, CLong> {
++    let mut sequence = unsafe { capture_switch_sequence(event, thread, r, initial_reset) }?;
++    let mut first_error = 0;
++    if let Some(first) = sequence.initial_reset.as_mut() {
++        let result = unsafe { reset_walk(thread, first, &sequence.leases) };
++        if result != 0 { first_error = result; }
++    }
++    let result = unsafe { reset_walk(thread, &mut sequence.reset, &sequence.leases) };
++    if first_error == 0 && result != 0 { first_error = result; }
++    let result = unsafe { start_walk(event, thread, &mut sequence.start, &sequence.leases) };
++    if first_error == 0 && result != 0 { first_error = result; }
++    Ok(first_error)
+ }
+ 
+ pub(super) unsafe fn stop(event: &EventPin, thread: *mut Thread) -> CLong {
+--- a/kernel/rust/f03_perf_owner/lifecycle.rs
++++ b/kernel/rust/f03_perf_owner/lifecycle.rs
+@@ -104,20 +104,13 @@
+         MonitorRead::Managed(pin)=>{
+             let status=unsafe{(*process).perf_status};
+             if status==count_state{unsafe{pin.release_locked(&mut r);}return;}
+-            // Retain complete actual operation maps across the original
+-            // reset/reset/start sequence, including a concurrent association
+-            // clear between helpers. No allocator or permanent Thread edge.
+-            let mut snapshot=unsafe{pin.selected_group().read_locked(&mut r)};
+-            let retained=unsafe{super::maps::HardwareLeases::capture_locked(thread,&mut snapshot,&mut r)};
+-            unsafe{snapshot.finish_locked(&mut r);}
+-            let _sequence_maps=match retained{Ok(leases)=>leases,Err(_)=>{unsafe{pin.release_locked(&mut r);}drop(r);panic!("managed scheduler monitor was not prebound");}};
+-            if status==reset_state{
+-                let _=unsafe{super::hardware::reset_locked(&pin,thread,r)};
+-                let _=unsafe{super::hardware::reset(&pin,thread)};
+-                let _=unsafe{super::hardware::start(&pin,thread)};
+-            }else{
+-                let _=unsafe{super::hardware::reset_locked(&pin,thread,r)};
+-                let _=unsafe{super::hardware::start(&pin,thread)};
++            // All original steps consume ONE coherent member epoch and ONE
++            // complete actual lease set captured under this already-held R.
++            // Monitor clear/replacement plus late append cannot widen a later
++            // step to include a member that was never mapped for this Thread.
++            match unsafe { super::hardware::switch_sequence_locked(&pin,thread,r,status==reset_state) } {
++                Ok(_ignored_original_backend_status) => {},
++                Err(_capture_error) => panic!("managed scheduler monitor was not prebound"),
+             }
+         }
+     }

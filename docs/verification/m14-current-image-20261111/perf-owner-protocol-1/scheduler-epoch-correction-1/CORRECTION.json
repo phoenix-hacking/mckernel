@@ -1,0 +1,20 @@
+{
+  "status": "BOUNDED_SOURCE_REPAIR_NOT_EXECUTED",
+  "finding": "PERF-COMMON-01 scheduler epoch after clear/replacement + late append",
+  "failed_material_review": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/REVIEW.json",
+    "sha256": "6bbb8bc323bba35026bbcc0e8c0d6838770560d14891c0f303607f3c6032105d"
+  },
+  "original_source_ready_sha256": "fb154ab61b167acf9a96febfe881b3472f5527473dd3f5ea321a2aa5818b643d",
+  "changed_paths": [
+    "kernel/rust/f03_perf_owner/hardware.rs",
+    "kernel/rust/f03_perf_owner/lifecycle.rs"
+  ],
+  "corrected_contract": "One R-captured sequence/epoch/tail, three (or two) independent walk cursors and one complete actual Operation lease set survive through all original reset/reset/start steps. No later capture includes a newly appended member; old tombstones/epochs retain removed members and tokens until sequence completion.",
+  "original_order_and_errors": "PP_COUNT still skips. PP_RESET executes reset/reset/start; other non-count executes reset/start. Existing per-step early returns and real math/provider order remain. Each next original void step still runs after a nonzero backend result. Initial prebound-map capture failure is distinct Err -> existing invariant panic, never silently ignored -EINVAL/truncated sequence.",
+  "no_new_irq_allocation_or_failure_domain": "Only fixed stack cursor/lease owners and existing R/epoch reader counts; no allocator/wait or new ENOMEM in void scheduler. R released before S/hardware/usercopy. Real EventPin/GroupRead and actual Thread map token lifetimes unchanged.",
+  "focused_regression_obligation": "Within existing actual group/Thread family, coordinate a second HOST thread to clear/replace monitor and append E_new after first reset but before next step. Assert same original member-key list for all admitted steps, each exact old mapping retained until final step, E_new excluded from this sequence, new/foreign bits untouched, no missing-map EINVAL and original reset/reset/start invoked even if a lower step reports a nonzero result. Use real group/lease functions; no production injection callback or old suite replay.",
+  "compiler_overlay": "Original first-compiler SOURCE-OVERLAY7fb22451 and its fb154 tuple remain untouched; this is a separate successor directory, not substituted into in-flight input.",
+  "source_helpers_run": false,
+  "compiler_tests_native_or_canonical_actions": false
+}

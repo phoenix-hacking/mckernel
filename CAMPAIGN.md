@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T12:40:38.074391+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T14:21:52.130237+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,7 +14,7 @@ open at their original scope. Four accepted M14 files and accepted M15-F01 remai
 closed. Original criteria/weights/denominators and M14-before-M15 acceptance
 are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
 PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
-Last source/results checkpoint757701fc is pushed/fetched41ownedblobs; all33
+Last source/results checkpointac6b4690 is pushed/fetched45ownedblobs; all33
 unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
@@ -59,17 +59,62 @@ authority-ordered safe transition,
 staging permission, native claim/current-free/restoration and original behavior
 remain distinct prerequisites. Installer/readback success closes no original check.
 
-**Independent M14-03-05-DEFAULT:** P03 integrates actual mckfd/VM/Thread/open/
-group/monitor/counter and hostFD lifecycle source on6aae/4b711 under corrected
-protocol202a/specGO34c569. P04Source delivered events c790/groups e830/monitors
-db25, with real Process-owned inherited slots and distinct origin-storage
-retirement; P03 ACKed the shared APIs. SDK independently reviews the genuine
-current-owner terminal hostFD/child route while P03 freezes the coherent source.
-P04Tests f0d preparation remains NOT_RUNNABLE until that exact API/source handoff;
-Root must followup the completed owner then obtain independent source/test GO
-before its oneRust1.95 compile/four-family runtime packet. No selector activation,
-compiler run or DEFAULT credit yet; actual lifetime/lock-order/rollback and
-unknown close dispositions must be preserved, not replaced by callback counts.
+**Immediate original M14-03-05 DEFAULT/FUNCTIONAL:** P03 froze coherent private
+28-file sourcefb154/manifestd17f/patch14fc/API8d57 at13:19:26Z on6aae/image4b711.
+Actual lib/process/syscall/fork/C entry/module bindings are present; kernelCMake
+is intentionally unchanged, newcfg/macros remain UNSELECTED. SDKfork1026/15420,
+terminalacad/a2d, copyeb388/c95 and hardwareddaf join delivered event/group/monitor
+sources and callbacks f8b correction. Terminal f7a4/hardware a821 independent GOs
+apply only to those unchanged units. P04Tests and SourceAcq actual new turns are
+confirmed: finalize existingf0d into one realRust1.95 compile/four runtimefamilies
+while reviewing unmatched coherent shared lifecycle/provider/caller composition.
+Source readiness does not assert type/compiler success. Actual runtime driver
+closure requires18 real ownership units and genuine typed lower adapters; no
+stub ownership is allowed. Independent compiler eligibility9a66 permits faithful
+wholeRust compilation before final lifecycle approval. SDK recovers the saved
+actual1.95 argv/config/target/sysroot/generatedABI and P04Tests freezes that first
+compiler packet while the four runtimefamilies are bound. Root admits after
+exact operationGO and fresh sharedHOST measurements, assigns actual diagnostics
+for bounded repair, then requires actual
+rollback/freeorigins, executing-Thread/groupPMC retirement, positive remote-target/
+monitor and P-heldVM/last-pin cleanup. No previous suite/readback repeat or native
+rollout wait. After PASS rebind normal74fe image recipe to changedsource, verify
+Rust owners/C exclusions/ABI/provider/cleanup before originalDEFAULT credit.
+First actual wholeRust195 compiler4a67/operationGO61f5 ran13:48:54–57Z onCPU6/
+2GiB, exited1/nonOOM. Rawstderrb7fc/result748b/fullRoot208c retain6 sourceerrors:
+callbacks193 cast grammar; runtime four atomic.counter→counter64 accesses;
+groups444 MemberRetirement temporary/facade E0597. All9positiveclientjoins,
+exitedCIDd073/Pid0/nonOOM/ownedremove and fullRoottool20bcb9exit1/noSession are
+recorded; independent actual-failure qualification5ef330 permits only current
+CPU6/2GiB/job retirement, now recorded byRoot with all priorUNKNOWNs retained.
+P03 is in a confirmed
+bounded correction turn; oldfb154/overlay7fb/failure evidence stay immutable.
+No unchanged retry or runtime/image work. Commonmaterial6bbb separately finds
+one scheduler epoch recapture defect; P03 f948 newtwofile correction awaits
+focusedreview and must not rewrite the firstcompiler cohort. Actualruntime
+monitor-family a011 is delivered; common loweradapters remain unfinished.
+Combined5sourcecbea/23c2 has focusedGOc8c; scheduler finding sourceGO bdd658.
+Fresh retrybb057/operationGO8cb ran14:06:50–53Z, removed all6 priorerrors but
+failed1/nonOOM on one newevents433 dangerous_implicit_autorefs reference via
+rawDescriptorState/ManuallyDrop/EventPin. Rawd066/result112e/fullRootc087 retain
+198warnings and full9wait/stream joins/CIDf27b exited1/Pid0/nonOOM/remove;
+independent secondfailureQf3be9 permits only current2GiB/job retirement,
+now recorded byRoot. After firstfailedcandidate+boundedcorrection,
+Root activated originaleventsownerP04Source plus independentSourceAcq for
+focused pointer/lifetime diagnosis+small sourcefix, with no lintdisable/transmute
+or unchangedretry. Focused events15979 explicit-borrow sourceGO2f31 preserves real initialized
+pin/claim/take/release lifetime; no lintdisable. Fresh31eb/operationGOca515 ran
+14:18:22Z and PASSED whole actualRust195 metadata: resulteb0f/fullRoot64e866,
+7,786,840B metadatad1db/14,149B depinfo401b/all19owner-source paths, original
+6+autoref errors absent, warnings retained. All9clients0/fullwait/streams,
+CIDf3a5exit0/Pid0/nonOOM/positiveownedremove and Rootsession63446/710b43exit0/
+noSession are recorded; independent wholeTYPE qualificationed8ca confirms
+0errors/198warnings/all159source+19owner dependencies/200+30unchangedpins,
+and Root retired only this current2GiB/job under that exact disposition.
+Go DIRECT to genuine18-unit4family runtime binding using monitor a011/lower
+effects a215; include real captured-epoch/group-change/nonzero-backend sequence.
+No metadata/oldgreen rerun. All earliercohorts/raws preserved; no runtime/image/
+C retirement or new original checklist credit from type closure alone.
 
 **Actual separate native dependencies:** staging parent is UID0/0755 and not
 writable byUID1000. Owner-scoped scratch grant6790932995 is pending; no payload,
@@ -77,9 +122,12 @@ permission fallback, alternate path or elevation is authorized. Scratch21 and
 numeric retained18=install4+V2_2+native12 remain. Native12 is retained capacity,
 not an operation claim/current-free proof. Matching frozen1e64/c664 signal case,
 three qualified modules, app77e8/libcb058/loader0853, collector9a55 and guest30ELF
-closure are reusable only at their exact declared cohort. Controller canonical
-binding1f0d/55a3 remains private/unloaded until genuine supported same-Root safe
-transition. Actual staged inputs/current-owner/current-free/restoration gates
+closure are reusable only at their exact declared cohort. Controller3-path1f0d/55a source is canonical/publishedac6b, runtime remains
+unloaded. Independent abe376 confirms no healthy planned-adoption caller in
+the actual old handlers; real normal stop/checkpoint/positive retirement and
+genuine later normalstart is the existing route, unissued/unapproved. Preserve
+source699 originaltimestamp, laterstops/delivery/owner vetoes; no fake recovery
+or uncallable new framework. This does not block the immediate perfHOST work. Actual staged inputs/current-owner/current-free/restoration gates
 remain separate from code-only installation. Signal alternate-repeat alone
 cannot satisfy all original frame/register/xstate normal/error requirements.
 Guardian/mailbox and restored20-minute functional assistance remain active.

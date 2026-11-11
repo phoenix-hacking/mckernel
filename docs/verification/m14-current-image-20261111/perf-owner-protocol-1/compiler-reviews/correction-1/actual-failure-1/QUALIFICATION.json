@@ -1,0 +1,270 @@
+{
+  "Root_sole_compositor_executor_admission_and_release": true,
+  "actual_admission": {
+    "HOST_total_limit_bytes": 4294967296,
+    "disk_and26GiB_floors_met": true,
+    "external_MemAvailable_bytes": 29295546368,
+    "external_overhead_plus2GiB_bytes": 3632308224,
+    "other_payload_jobs": 0,
+    "phase_MemAvailable_bytes": 29283074048,
+    "phase_overhead_plus2GiB_bytes": 3634855936
+  },
+  "actual_lifecycle": {
+    "CID": "f27b2ef0a334d217db5954b3de65dcc043eacb34e254ae1088cdca0fe7bab025",
+    "Root_no_session_and_streams_joined": true,
+    "Root_original_session": 34057,
+    "Root_terminal_exit": 1,
+    "all8_control_client_exit0": true,
+    "all9_positive_PID_birth_directwait_streams": true,
+    "clients": [
+      {
+        "birth": "49227536",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "running-preflight",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1418999,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227547",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "names-preflight",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419007,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227561",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "compile-create",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419015,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227573",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "compile-profile",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419023,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227585",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "compile-running-inspect",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419032,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227585",
+        "direct_wait_joined": true,
+        "exit": 1,
+        "label": "compile-payload",
+        "pid": 1419031,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227961",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "compile-terminal",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419132,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227973",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "failure-inspect-f27b2ef0",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419140,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      },
+      {
+        "birth": "49227986",
+        "direct_wait_joined": true,
+        "exit": 0,
+        "label": "failure-remove-f27b2ef0",
+        "lifecycle_UNKNOWN": false,
+        "pid": 1419148,
+        "primary_error": null,
+        "secondary_errors": [],
+        "streams_closed": true
+      }
+    ],
+    "compiler_payload_exit1_retained": true,
+    "initial_chunk": "b72988",
+    "owned_container_removed": true,
+    "pending_calls": [],
+    "remaining_owned_CIDs": [],
+    "terminal": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 1,
+      "FinishedAt": "2026-11-11T14:06:53.031782077Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-11-11T14:06:50.014637377Z",
+      "Status": "exited"
+    },
+    "terminal_chunk": "32fab7"
+  },
+  "actual_new_diagnostic": {
+    "classification": "Actual real195 dangerous_implicit_autorefs default lint rejects the hidden Deref shared reference from a raw DescriptorState pointer. This is a new concrete unsafe-source typing diagnostic, not proof of representation corruption or runtime failure and not an access/service/source hold.",
+    "compiler_suggested_expression": "(&(*self.state.get()).pin).event.owner",
+    "count": 1,
+    "header": "error: implicit autoref creates a reference to the dereference of a raw pointer",
+    "line": 433,
+    "old_six_error_headers_absent": true,
+    "source": {
+      "bytes": 24616,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-current-contract-p03-max-1/ownership-proposal-1/implementation-1/compiler-scheduler-composition-1/candidate/kernel/rust/f03_perf_owner/events.rs",
+      "sha256": "c7909e8e9de975d0dbae0e2ea3abf25ae18a934c7910d307e3b4342700247c5d"
+    },
+    "warnings": 198
+  },
+  "actual_saved_receipts": {
+    "ROOT-EXEC-COMPLETION.json": {
+      "bytes": 1124,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/ROOT-EXEC-COMPLETION.json",
+      "sha256": "c087b8ee1199d0dffcf0d2e0f1edb3265cd981279eb16d72f1402b3e802c2fcc"
+    },
+    "ROOT-EXTERNAL-ADMISSION.json": {
+      "bytes": 1015,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/ROOT-EXTERNAL-ADMISSION.json",
+      "sha256": "ed7772be4604f26fa59e017d8ef4c64127f1cfc0a4444e2241c65ead34c39dbe"
+    },
+    "ROOT-TOOL-FINAL.json": {
+      "bytes": 1060,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/ROOT-TOOL-FINAL.json",
+      "sha256": "fc37f9ad3fb3696119f94442c320970cb0c22e3c29ec367731d92da0aa34866c"
+    },
+    "ROOT-TOOL-INITIAL.json": {
+      "bytes": 1463,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/ROOT-TOOL-INITIAL.json",
+      "sha256": "f560ec3998edc9e1b3b971646357ede69c2d8d82a2dd461834f46590d39549cd"
+    },
+    "execution-1/ADMISSION.json": {
+      "bytes": 790,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/ADMISSION.json",
+      "sha256": "7db0b3ec8902617d434be8d95f37761c7377d741e553df76d55663b58307fc53"
+    },
+    "execution-1/CLIENTS.json": {
+      "bytes": 14912,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/CLIENTS.json",
+      "sha256": "14f3324a5ce4a4fc9dfd8b4b4f51b54c2db7575907c12234b8773b43c8cd88fe"
+    },
+    "execution-1/INPUT-READBACK.before.json": {
+      "bytes": 73153,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/INPUT-READBACK.before.json",
+      "sha256": "b11cff36e1eff6161884746a1b24e43fe0b3277344a1c26e39e7b021cc1558ce"
+    },
+    "execution-1/RESULT.json": {
+      "bytes": 17652,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/RESULT.json",
+      "sha256": "112e771458ca94d6a9b113bda44c1cfcf1c05a4329c5b58984a30bbc89c53698"
+    },
+    "execution-1/compile-PROFILE.json": {
+      "bytes": 24936,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/compile-PROFILE.json",
+      "sha256": "cef8d7eb87962c8ee6a32b98fc0fac45f731bc153034b0638b9763ff69237825"
+    },
+    "execution-1/compile-TERMINAL.json": {
+      "bytes": 25596,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/compile-TERMINAL.json",
+      "sha256": "617668c93a89c8cfe759c348d3fef6c809ed48b8d22f45794b82bb2adc93bbb5"
+    },
+    "execution-1/compile-payload.stderr": {
+      "bytes": 76620,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/compile-payload.stderr",
+      "sha256": "d0668ff6ebfbf2cfc8135e01a4c17e93a9357a84e5b5fc2c1b4a49d09a9ce780"
+    },
+    "execution-1/compile-payload.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/execution-1/compile-payload.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "children_spawned": false,
+  "compiler_result": "FAIL_EXIT1_NON_OOM_NO_METADATA_TYPE_SUCCESS",
+  "created_utc": "2026-11-11T14:10:14.696162+00:00",
+  "decision": "GO_QUALIFIED_NEW_SINGLE_AUTOREF_COMPILER_FAILURE_AND_RETIRE_ONLY_CURRENT_2GiB_JOB1",
+  "focused_unsafe_lifetime_contract": [
+    "DescriptorState is inside DescriptorEvent::UnsafeCell at stable initialized owner storage. DescriptorEvent::from_pin/copy_locked place a valid ManuallyDrop<EventPin>; close_locked only retires monitor/logical descriptor ownership and does not take/release the stored pin.",
+    "Drop has exclusive &mut DescriptorEvent and acquires real R before close_locked. Descriptor registry last-pin finalization or unpublished exclusive preparation owns this Drop; no concurrent DescriptorPin callback may access that same descriptor state while final Drop runs.",
+    "close_locked completes and its temporary &mut DescriptorState ends before line433. An explicit shared reference only to the ManuallyDrop<EventPin> field can read the existing EventRef raw owner pointer, and that temporary reference ends at this statement. It must not span the later mutable ManuallyDrop::take.",
+    "EventPin/EventRef contain raw Owner identity pointers; borrowing the pin does not create a shared &Owner that prohibits the following R-protected scalar owner writes in a separate allocation.",
+    "Actual stored EventPin keeps the Owner alive while descriptor_storages is checked/decremented. If it reaches0, queue_origin_locked at events107-115 retains a separate real Owner edge BEFORE enqueue and BEFORE releasing the descriptor EventPin. No owner pointer access occurs after the final pin.release_locked.",
+    "Only after storage/origin bookkeeping does ManuallyDrop::take consume the one EventPin and release all real edges through existing release_locked while R is already held. No destructor recurses into R, allocator, real callback or host operation here; finalization remains deferred to actual safe drain."
+  ],
+  "original4a67_and_bb057_failed_tuples_preserved": true,
+  "resource_disposition": {
+    "all_historical_failed_install_source_globalOFD_native18_Scratch21_mutex27_4_and_other_UNKNOWN": "UNCHANGED_RETAINED",
+    "eligible_current_jobs_after": 0,
+    "eligible_current_process_memory_after_bytes": 0,
+    "native_currentfree": null,
+    "native_release": false,
+    "positive_basis": "Real same-CID exited1/nonOOM/Pid0 plus owned rm, all9 known child direct waits/streams without pending/errors, actual original34057 terminal1/noSession/fulltool closure. No absence-only inference.",
+    "recording_owner": "Root alone records actual current retirement. This qualification changes no launcher/store/lease/canonical state.",
+    "scope": "Only this exact bb057 CPU6/2GiB/job1 compile and its positively joined Root/client process memory"
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "reviewer_source_edit_or_execution": false,
+  "schema": "mckernel.perf-second-whole-Rust-failure-scoped-retirement-and-pointer-diagnosis.v1",
+  "smallest_eligible_escalation": "Existing P04Source exact one-line explicit shared field borrow at events433, preserving all original branch/math/storage/origin/drop order and no reference escape. No allowlint, transmute, refcount change, pointer/layout substitution or broad refactor. Freeze its actual source/pins/contract for independent sourceGO, then a separately reviewed changed-input compiler operation. No known-broken replay.",
+  "source_operation": {
+    "actual_overlay": {
+      "bytes": 94579,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/SOURCE-OVERLAY.json",
+      "sha256": "fe906721af7fc33a46feaa0c4b2539ce222b8b811f75849c9a64821902faaa01"
+    },
+    "driver": {
+      "bytes": 10253,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/run_root_once.py",
+      "sha256": "ab0672fc549a3ed8d3c5073e00baf2e9b872b05f094225f504bb28c289dcaf19"
+    },
+    "operation_GO": {
+      "bytes": 10576,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-first-whole-compile-review-sourceacq-max-1/correction-1/REVIEW.json",
+      "sha256": "8cb058a213643bbb5d57c805ad47a677059098779eba8ba1e1716c6f191b52a4"
+    },
+    "request": {
+      "bytes": 34468,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/correction-1/REQUEST.json",
+      "sha256": "bb0577497f105d5a5889eb0d32ae46a6687cf935cdf658c078f3e6b9e2c9c258"
+    },
+    "source_material_GO": {
+      "bytes": 12716,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-coherent-source-review-sourceacq-max-1/compiler-scheduler-composition-1/REVIEW.json",
+      "sha256": "c8c265f293b6e3df617117246002c83f9160e22569d8352bfaee5387ca94c6a0"
+    }
+  },
+  "source_original_tests_runtime_image_default_or_milestone_credit": false
+}

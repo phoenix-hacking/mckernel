@@ -1,0 +1,177 @@
+--- a/kernel/rust/f03_perf_owner/callbacks.rs
++++ b/kernel/rust/f03_perf_owner/callbacks.rs
+@@ -190,5 +190,5 @@
+         unsafe{(*sfd).padding=argument as CInt;super::super::syscall_mckfd_unlock_bridge(lock,flags);}
+     }
+     let data=unsafe{&super::super::f03_perf_descriptor_entries_v1::f03_perf_descriptor_layout_v1};
+-    match data.forward{Some(forward)=>unsafe{forward(data.fcntl_nr,ctx.cast())} as CInt,None=>-EINVAL}
++    match data.forward{Some(forward)=>(unsafe{forward(data.fcntl_nr,ctx.cast())}) as CInt,None=>-EINVAL}
+ }
+--- a/kernel/rust/f03_perf_owner/groups.rs
++++ b/kernel/rust/f03_perf_owner/groups.rs
+@@ -454,7 +454,7 @@
+                             Ok(keep) => { selected = Some((keep, node, group_key, event_key)); break; }
+                             Err(_) => unsafe { (*node).mapping_claimed = false },
+                         }
+-                    }
++                    };
+                 }
+                 owner = unsafe { (*owner).next_registered };
+             }
+--- a/kernel/rust/f03_perf_owner/hardware.rs
++++ b/kernel/rust/f03_perf_owner/hardware.rs
+@@ -183,9 +183,17 @@
+ }
+ pub(super) unsafe fn start_locked(event: &EventPin, thread: *mut Thread, r: Locked) -> CLong {
+     let mut operation = match unsafe { capture(event, thread, r, false) } { Ok(op) => op, Err(error) => return error };
++    unsafe { start_walk(event, thread, &mut operation.walk, &operation.leases) }
++}
++
++/// Run the original complete start step on an ALREADY CAPTURED member epoch
++/// and its actual per-executing-Thread Operation leases. No new epoch capture.
++unsafe fn start_walk(
++    event: &EventPin, thread: *mut Thread, walk: &mut GroupRead<'_>, leases: &HardwareLeases,
++) -> CLong {
+     let mut mask = 0;
+-    while let Some(member) = next(&mut operation.walk) {
+-        let rc = unsafe { start_event(&member, &operation.leases, thread, &mut mask) };
++    while let Some(member) = next(walk) {
++        let rc = unsafe { start_event(&member, leases, thread, &mut mask) };
+         if rc != 0 { return rc; }
+     }
+     if mask != 0 {
+@@ -231,11 +239,77 @@
+ }
+ pub(super) unsafe fn reset_locked(event: &EventPin, thread: *mut Thread, r: Locked) -> CLong {
+     let mut operation = match unsafe { capture(event, thread, r, false) } { Ok(op) => op, Err(error) => return error };
+-    while let Some(member) = next(&mut operation.walk) {
+-        let rc = unsafe { reset_event(&member, &operation.leases, thread) };
++    unsafe { reset_walk(thread, &mut operation.walk, &operation.leases) }
++}
++
++/// Preserve the original reset step, including its early return within THIS
++/// step. A later original void scheduler step still runs even after an error.
++unsafe fn reset_walk(
++    thread: *mut Thread, walk: &mut GroupRead<'_>, leases: &HardwareLeases,
++) -> CLong {
++    while let Some(member) = next(walk) {
++        let rc = unsafe { reset_event(&member, leases, thread) };
+         if rc != 0 { return rc; }
+     }
+     0
++}
++
++/// ONE actual member epoch/tail and ONE complete actual mapping lease set for
++/// the scheduler's entire original reset/reset/start transaction. All cursors
++/// are captured under the same R, so they share sequence, tail and epoch even
++/// if another CPU clears the Process monitor and appends after R unlock.
++struct SwitchSequence<'a> {
++    initial_reset: Option<GroupRead<'a>>,
++    reset: GroupRead<'a>,
++    start: GroupRead<'a>,
++    leases: HardwareLeases,
++}
++unsafe fn capture_switch_sequence<'a>(
++    event: &'a EventPin, thread: *mut Thread, mut r: Locked, initial_reset: bool,
++) -> Result<SwitchSequence<'a>, CLong> {
++    if thread.is_null() { return Err(-EINVAL); }
++    let group = event.selected_group();
++    let mut mapping = unsafe { group.read_locked(&mut r) };
++    let first = if initial_reset { Some(unsafe { group.read_locked(&mut r) }) } else { None };
++    let reset = unsafe { group.read_locked(&mut r) };
++    let start = unsafe { group.read_locked(&mut r) };
++    let leases = unsafe { HardwareLeases::capture_locked(thread, &mut mapping, &mut r) };
++    unsafe { mapping.finish_locked(&mut r) };
++    match leases {
++        Ok(leases) => {
++            drop(r);
++            Ok(SwitchSequence { initial_reset: first, reset, start, leases })
++        }
++        Err(error) => {
++            if let Some(first) = first { unsafe { first.finish_locked(&mut r) }; }
++            unsafe { reset.finish_locked(&mut r); start.finish_locked(&mut r); }
++            drop(r);
++            Err(error as CLong)
++        }
++    }
++}
++
++/// Scheduler-only complete original void-call sequence. Err denotes failure to
++/// capture its PREBOUND maps before any hardware step; lifecycle treats that as
++/// the existing protocol invariant failure rather than silently truncating.
++/// Ok contains the first real helper status for precise diagnostics. Original
++/// void semantics are retained: execute EACH scheduled step even if a prior
++/// helper returned nonzero, then deliberately ignore that backend status.
++/// No allocation/wait, R across S/providers, new cursor or late map lookup.
++pub(super) unsafe fn switch_sequence_locked(
++    event: &EventPin, thread: *mut Thread, r: Locked, initial_reset: bool,
++) -> Result<CLong, CLong> {
++    let mut sequence = unsafe { capture_switch_sequence(event, thread, r, initial_reset) }?;
++    let mut first_error = 0;
++    if let Some(first) = sequence.initial_reset.as_mut() {
++        let result = unsafe { reset_walk(thread, first, &sequence.leases) };
++        if result != 0 { first_error = result; }
++    }
++    let result = unsafe { reset_walk(thread, &mut sequence.reset, &sequence.leases) };
++    if first_error == 0 && result != 0 { first_error = result; }
++    let result = unsafe { start_walk(event, thread, &mut sequence.start, &sequence.leases) };
++    if first_error == 0 && result != 0 { first_error = result; }
++    Ok(first_error)
+ }
+ 
+ pub(super) unsafe fn stop(event: &EventPin, thread: *mut Thread) -> CLong {
+--- a/kernel/rust/f03_perf_owner/lifecycle.rs
++++ b/kernel/rust/f03_perf_owner/lifecycle.rs
+@@ -104,20 +104,13 @@
+         MonitorRead::Managed(pin)=>{
+             let status=unsafe{(*process).perf_status};
+             if status==count_state{unsafe{pin.release_locked(&mut r);}return;}
+-            // Retain complete actual operation maps across the original
+-            // reset/reset/start sequence, including a concurrent association
+-            // clear between helpers. No allocator or permanent Thread edge.
+-            let mut snapshot=unsafe{pin.selected_group().read_locked(&mut r)};
+-            let retained=unsafe{super::maps::HardwareLeases::capture_locked(thread,&mut snapshot,&mut r)};
+-            unsafe{snapshot.finish_locked(&mut r);}
+-            let _sequence_maps=match retained{Ok(leases)=>leases,Err(_)=>{unsafe{pin.release_locked(&mut r);}drop(r);panic!("managed scheduler monitor was not prebound");}};
+-            if status==reset_state{
+-                let _=unsafe{super::hardware::reset_locked(&pin,thread,r)};
+-                let _=unsafe{super::hardware::reset(&pin,thread)};
+-                let _=unsafe{super::hardware::start(&pin,thread)};
+-            }else{
+-                let _=unsafe{super::hardware::reset_locked(&pin,thread,r)};
+-                let _=unsafe{super::hardware::start(&pin,thread)};
++            // All original steps consume ONE coherent member epoch and ONE
++            // complete actual lease set captured under this already-held R.
++            // Monitor clear/replacement plus late append cannot widen a later
++            // step to include a member that was never mapped for this Thread.
++            match unsafe { super::hardware::switch_sequence_locked(&pin,thread,r,status==reset_state) } {
++                Ok(_ignored_original_backend_status) => {},
++                Err(_capture_error) => panic!("managed scheduler monitor was not prebound"),
+             }
+         }
+     }
+--- a/kernel/rust/f03_perf_owner/runtime.rs
++++ b/kernel/rust/f03_perf_owner/runtime.rs
+@@ -25,18 +25,18 @@
+         Self{state:addr_of!((*event).state).read(),cpu:addr_of!((*event).cpu_id).read(),counter:addr_of!((*event).counter_id).read(),
+             base_user:addr_of!((*event).base_user_tsc).read(),stopped_user:addr_of!((*event).stopped_user_tsc).read(),user_accum:addr_of!((*event).user_accum_count).read(),
+             base_system:addr_of!((*event).base_system_tsc).read(),stopped_system:addr_of!((*event).stopped_system_tsc).read(),system_accum:addr_of!((*event).system_accum_count).read(),
+-            previous:AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter)).load(Ordering::SeqCst),
++            previous:AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter64)).load(Ordering::SeqCst),
+             sample:addr_of!((*event).hw.sample_period).read(),last:addr_of!((*event).hw.last_period).read(),
+-            left:AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter)).load(Ordering::SeqCst),
++            left:AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter64)).load(Ordering::SeqCst),
+             extra_index:addr_of!((*event).extra_reg.idx).read(),extra_reg:addr_of!((*event).extra_reg.reg).read(),hardware:addr_of!((*event).hw_config).read()}
+     }}
+     unsafe fn write(self,event:*mut Event){unsafe{
+         addr_of_mut!((*event).state).write(self.state);addr_of_mut!((*event).cpu_id).write(self.cpu);addr_of_mut!((*event).counter_id).write(self.counter);
+         addr_of_mut!((*event).base_user_tsc).write(self.base_user);addr_of_mut!((*event).stopped_user_tsc).write(self.stopped_user);addr_of_mut!((*event).user_accum_count).write(self.user_accum);
+         addr_of_mut!((*event).base_system_tsc).write(self.base_system);addr_of_mut!((*event).stopped_system_tsc).write(self.stopped_system);addr_of_mut!((*event).system_accum_count).write(self.system_accum);
+-        AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter)).store(self.previous,Ordering::SeqCst);
++        AtomicI64::from_ptr(addr_of_mut!((*event).hw.prev_count.counter64)).store(self.previous,Ordering::SeqCst);
+         addr_of_mut!((*event).hw.sample_period).write(self.sample);addr_of_mut!((*event).hw.last_period).write(self.last);
+-        AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter)).store(self.left,Ordering::SeqCst);
++        AtomicI64::from_ptr(addr_of_mut!((*event).hw.period_left.counter64)).store(self.left,Ordering::SeqCst);
+         addr_of_mut!((*event).extra_reg.idx).write(self.extra_index);addr_of_mut!((*event).extra_reg.reg).write(self.extra_reg);addr_of_mut!((*event).hw_config).write(self.hardware);
+     }}
+ }
