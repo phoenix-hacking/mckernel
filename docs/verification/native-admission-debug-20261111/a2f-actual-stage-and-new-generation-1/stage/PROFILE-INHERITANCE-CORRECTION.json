@@ -1,0 +1,59 @@
+{
+  "actual70B_stderr": {
+    "bytes": 70,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/execution-1/current-a2f-scoped-stage.stderr",
+    "sha256": "fa2728986427b545bc2421c967b0552b1de89d9ea0a72101180e18a52c015229"
+  },
+  "actual_failure": {
+    "bytes": 3269,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/execution-1/RESULT.json",
+    "sha256": "b6bb5dbe7b1efcb414f790fa597803716d049a3077a1438345c17d308f0d64f2"
+  },
+  "actual_fullRoot_failure_capture": {
+    "bytes": 1874,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/execution-1/ROOT-EXEC-TOOL-FAILURE.json",
+    "sha256": "3e98dd7c1096479c08251245a28baeb23742b9eec1edf641eb3a4bd368c96a2a"
+  },
+  "basis_parent": {
+    "bytes": 15369,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/run_root_once.py",
+    "sha256": "21bcedae4bf85092785954bc9e166c44093e51730d079557ef930e52b537f01c"
+  },
+  "basis_request": {
+    "bytes": 19410,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/REQUEST.json",
+    "sha256": "1b06530e9b09a2a7530e9753cf71db37059306c247094a3962b657c087fb972a"
+  },
+  "correction": {
+    "parent_AS_soft_hard_bytes": [
+      268435456,
+      1073741824
+    ],
+    "parent_CPU_soft_hard_seconds": [
+      330,
+      330
+    ],
+    "parent_FSIZE_soft_hard_bytes": [
+      8388608,
+      268435456
+    ],
+    "unchanged_child_AS_soft_hard_bytes": [
+      1073741824,
+      1073741824
+    ],
+    "unchanged_child_FSIZE_soft_hard_bytes": [
+      268435456,
+      268435456
+    ]
+  },
+  "existing_cleanup_source_GO": {
+    "bytes": 10109,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/REVIEW.json",
+    "sha256": "1a3972814c0c3c38bad894cb2022b7d7db059796a4fbfdaa1cc6e2658b112374"
+  },
+  "limits_scope": "Parent soft bounds unchanged. Hard values carry only the already-approved child profile through exec. No machine/cgroup/affinity/global resource limit, sudo or privilege change; no actual resource-setting operation by author.",
+  "necessary_next_check": "Only exact meaningful profile-corrected Root/stager command after independent GO, actual failed-scope/current-only retirement and fresh HOST1GiB admission; no unchanged retry or old suites.",
+  "proven_failure": "Explicit parent hardAS256MiB cannot be raised by unprivileged child prlimit to already-approved AS1GiB; the same contradiction also exists between parent hardFSIZE8MiB and approved child256MiB. Actual child failed at first AS setup, before stager.",
+  "status": "BOUNDED_PROFILE_SOFT_HARD_INHERITANCE_FIX_UNEXECUTED",
+  "unchanged": "All stager/source43/FD cleanup/capture/ENV/output/actual parentgrant34759/child command and child/family1GiB grant unchanged."
+}

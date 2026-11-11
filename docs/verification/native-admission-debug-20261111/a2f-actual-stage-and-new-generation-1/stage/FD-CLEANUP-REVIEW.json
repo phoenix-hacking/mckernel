@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "decision": "GO_FOCUSED_RAW_FIRST_FD_CLEANUP_ESCALATION_AND_EXACT_HOST_STAGE_OPERATION",
+  "at_utc": "2026-11-11T20:20:10.828699+00:00",
+  "reviewer": "/root/p04_source_max",
+  "corrector": "/root/p04_tests_max",
+  "scope": "Only the focused different-owner FD-error ordering correction and its exact request/entrypoint. Rest of finite43-input/currenta2f/profile/parent/stager checks reused from09304/c087 and actualdirectoryQ34759. No new framework, body audit or test replay.",
+  "actual_reviewer_model_effort": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-cleanup-escalation-1/MODEL-EFFORT-READBACK.json",
+    "bytes": 424,
+    "sha256": "b791ffdf523450add8ce94718757ae73774a91858e08b762f9e83087ed473f13"
+  },
+  "inputs": {
+    "SOURCE-READY.NOT-EXECUTED.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/SOURCE-READY.NOT-EXECUTED.json",
+      "bytes": 5818,
+      "sha256": "8b94684565ec2071cfe06dbd45ba84c8fadb34ba53407f482c6fe74f03df59c6"
+    },
+    "REQUEST.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/REQUEST.json",
+      "bytes": 19410,
+      "sha256": "1b06530e9b09a2a7530e9753cf71db37059306c247094a3962b657c087fb972a"
+    },
+    "run_root_once.py": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/run_root_once.py",
+      "bytes": 15369,
+      "sha256": "21bcedae4bf85092785954bc9e166c44093e51730d079557ef930e52b537f01c"
+    },
+    "RAW-FIRST-FD-CLEANUP.patch": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/RAW-FIRST-FD-CLEANUP.patch",
+      "bytes": 9738,
+      "sha256": "daa37ae65bab647ba044fb750fe281e7c8b1059ffb451990e5bc3f6d8acf144c"
+    },
+    "CORRECTION.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/CORRECTION.json",
+      "bytes": 2928,
+      "sha256": "5b68f041ebcaaad723407816ae5689941f2fc8e41b50a2f9cc129ad5521b0330"
+    },
+    "MODEL-EFFORT-READBACK.json": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/MODEL-EFFORT-READBACK.json",
+      "bytes": 388,
+      "sha256": "30c6b79d60448540e0714216d9405a2c02be70eaa37def6ecab23d688cc03557"
+    }
+  },
+  "reused_source_finding": {
+    "bytes": 6540,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-review-p04source-max-1/fd-close-correction-1/REVIEW.json",
+    "sha256": "c087aad38b5cb2b21e14bd0dded604da47593cc4fe1cc2c7cf3cae2eefac0dc9"
+  },
+  "reused_actual_parent_qualification": {
+    "bytes": 7505,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/scratch-scoped-parent-review-p04source-max-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "34759fd1a239ee310915d9ff0cdd4639257c93e90ca3b1897af9785d0b8772eb"
+  },
+  "closed_findings": {
+    "09304_numeric_close_retry": "Every held number is popped before its only close. Consumed numbers cannot reenter cleanup; no old reversed-held retry loop.",
+    "c087_diagnostic_before_drain": "close_owned_once performs only raw sys.exc_info retention, first raw failure caching and raw FD outcome retention. It contains no str/traceback rendering/report/fsync. Every remaining held entry is attempted before diagnostics. Outerexcept retains original sys.exc_info before this same drain.",
+    "primary_secondary": "Only with held empty, individually guarded error/traceback rendering produces diagnostic fields. Save/report/fsync failures are caught as raw secondaries. Original primary object/rawtraceback is rethrown through BaseException.with_traceback, with retained raw secondary list/attribute; a cleanup or diagnostic failure cannot replace that primary.",
+    "success": "Any first raw close failure is raised after drain and prevents PASS. Otherwise all closed dispositions and empty error list are reported. No uncertainty is silently treated as closed."
+  },
+  "unchanged_checks": {
+    "same_source_stager4fa": {
+      "bytes": 33254,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/stager-correction-1/candidate/scripts/application-tests/native_diagnostic_stager.py",
+      "sha256": "4fa876bbb651ce214f6c642a0d660754d37ee3c21ef5f10010428d59341c7956"
+    },
+    "same43_input58043": {
+      "bytes": 53409,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+      "sha256": "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a"
+    },
+    "same_complete_literal_command": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--core=0",
+      "--cpu=180",
+      "--fsize=268435456",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-signal-coherent-operation-source-p04-1/stager-correction-1/candidate/scripts/application-tests/native_diagnostic_stager.py",
+      "--bound-inputs",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+      "--bound-inputs-sha256",
+      "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a",
+      "--output",
+      "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1"
+    ],
+    "same_environment_and_resource_profile": true,
+    "same_output_and_resolved_parent66306_49551867_grant34759": true,
+    "same_provisioning_receipts_and_fullRoot_retirement": true,
+    "same_protected_e088_capture_and_guard_overhead_pin_sources": true,
+    "durable_capture_identity_mounts_and_check_parent_bodies_byte_identical": true,
+    "entire_source_input_parent_guard_admission_stager_and_successor_manifest_checks_before_close_byte_identical_except_new_requestSHA": true,
+    "Python3_8_AST_parse_only": true,
+    "no_prior_stager_or_input_or_permission_change": true,
+    "fresh_execution_directory_absent_at_review": true
+  },
+  "exact_Root_entrypoint": {
+    "argv_prefix": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=268435456",
+      "--core=0",
+      "--cpu=330",
+      "--fsize=8388608",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-scoped-staging-p04tests-max-1/fd-cleanup-escalation-1/run_root_once.py"
+    ],
+    "login": false,
+    "max_output_tokens": 3500,
+    "required_positional_review_arguments": [
+      "absolute new independent P04Source changed-input/operation GO",
+      "SHA256 of exact GO"
+    ],
+    "tty": false,
+    "workdir": "/home/holden/mckernel",
+    "yield_time_ms": 1000
+  },
+  "resources": {
+    "CPU": 0,
+    "CPU_seconds": 180,
+    "HOST_planning_reserved_bytes": 1073741824,
+    "Root_parent_CPU_seconds": 330,
+    "Root_parent_FSIZE_bytes": 8388608,
+    "address_space_limit_bytes": 1073741824,
+    "capture_parent_AS_limit_bytes": 268435456,
+    "disk_reservation_is_planning_not_aggregate_hardcap": true,
+    "existing_protected_call_final_join_seconds": 6,
+    "family_AS_is_not_aggregate_cgroup_hardcap": true,
+    "file_size_limit_bytes": 268435456,
+    "fresh_MemAvailable_floor_bytes": 27917287424,
+    "global_SHARED_HOST_ceiling_bytes": 4294967296,
+    "global_max_jobs": 3,
+    "host_free_floor_bytes": 17179869184,
+    "jobs": 1,
+    "native_CPUs_2_5_not_used": true,
+    "output_disk_planning_reservation_bytes": 1073741824,
+    "scratch_free_floor_bytes": 12884901888,
+    "terminal_peak_not_yet_measured": true,
+    "wall_seconds": 300
+  },
+  "Root_conditions": [
+    "Use exact1b0653 request/21bced parent and this GO; Root alone executes after fresh actual shared1GiB HOST admission inside4GiB/max3/alloverhead/26GiB and host16/scratch12+1GiB floors, CPU0 exclusive for this job. No native2-5/12GiB borrowing or new budget/hold changes.",
+    "Actual scoped parent66306:49551867/1000:1000/0700 and absent exact final child are rechecked by unchanged parent before first unprivileged stage. No provisioning replay, permission widening, oldc664/defaultroot fallback, clean/reroute or target deletion.",
+    "Run only this same currentc964/a2f43-input HOST materializer and its reused strict collector9a55/manifest checks. No application/collector main, boot/QEMU/module/native/controller/issuer/account action.",
+    "Retain actual source/output/archive/manifest, raw original child/client/directwait/family/stream closure and full outerRoot tool0/noSession before any current-only process-charge retirement. RESOURCE-RELEASE file is advisory and cannot establish outertool completion or old/global release.",
+    "On any actual failure retain partial outputs/FD unknowns/raw primary and secondaries; do not unchanged-retry or clean them. The actual new stage result still needs independent saved qualification."
+  ],
+  "preserved_old_candidates": "Original676e/2da/NO_GO09304 and bounded3fb7/f68c/NO_GOc087 remain unexecuted and intact. P03 is not a competing writer. Directory actualQ34759 remains resolved only at its scoped permission.",
+  "findings": [],
+  "acceptance_scope": "GO for one actual future HOST materialization only. No produced stage is claimed yet; native/currentfree/capacity/Scratch21/source/account/UNKNOWN and original M14/M15 acceptances remain separate.",
+  "actions": {
+    "only_source_AST_saved_metadata_private_review": true,
+    "stager_helper_provisioner_sudo_native_tests_or_source_import_executed": false,
+    "peer_canonical_permissions_installed_or_control_state_edited": false
+  }
+}

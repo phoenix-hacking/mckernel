@@ -1,0 +1,1679 @@
+{
+  "status": "PASS_ALL43_CURRENT_STAGED_BYTES_MODES_AND21_REAL_DIRECTORIES",
+  "input_manifest": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-functional-a2f-handoff-p03-max-1/GUEST-STAGING-INPUTS.PROPOSED.json",
+    "bytes": 53409,
+    "sha256": "58043c742a8593bb50faccf3a4ea7bfff7bb6e8f30eaa7f18ee06652dd792e1a",
+    "identity": {
+      "device": 66306,
+      "inode": 2247080,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": 384,
+      "nlink": 1
+    }
+  },
+  "base_record": {
+    "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root-base.json",
+    "bytes": 11768,
+    "sha256": "9c80d1382c90e1b3778273db87153ddeea619178dd317391ba5639dfd898a1ba",
+    "identity": {
+      "device": 66306,
+      "inode": 49552018,
+      "uid": 1000,
+      "gid": 1000,
+      "mode": 384,
+      "nlink": 1
+    }
+  },
+  "base_file_count": 43,
+  "base_directory_count": 21,
+  "base_source_bytes": 81798929,
+  "files": [
+    {
+      "guest_target": "bin/native-boot",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/p01p02-production-cutover-1/output-1/stage/usr/local/sbin/mcreboot.sh",
+        "size": 4493400,
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/bin/native-boot",
+        "bytes": 4493400,
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "identity": {
+          "device": 66306,
+          "inode": 49551916,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-boot",
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "size": 4493400,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "images/mckernel.img",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+        "bytes": 139468,
+        "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/images/mckernel.img",
+        "bytes": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "identity": {
+          "device": 66306,
+          "inode": 49551918,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 292,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 292,
+        "path": "images/mckernel.img",
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "size": 13349576,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/ld-linux-x86-64.so.2",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/ld-linux-x86-64.so.2",
+        "size": 930600,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/ld-linux-x86-64.so.2",
+        "bytes": 930600,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "identity": {
+          "device": 66306,
+          "inode": 49551920,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libacl.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libacl.so.1",
+        "size": 40896,
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libacl.so.1",
+        "bytes": 40896,
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "identity": {
+          "device": 66306,
+          "inode": 49551932,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libacl.so.1",
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "size": 40896,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libattr.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libattr.so.1",
+        "size": 28296,
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libattr.so.1",
+        "bytes": 28296,
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "identity": {
+          "device": 66306,
+          "inode": 49551934,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libattr.so.1",
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "size": 28296,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libaudit.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/output-1/files/libaudit.so.1",
+        "size": 192352,
+        "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libaudit.so.1",
+        "bytes": 192352,
+        "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+        "identity": {
+          "device": 66306,
+          "inode": 49551936,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libaudit.so.1",
+        "sha256": "ab76f679c3cc8aadde6cc961d6aede927b4891f761615233389d396a06c6f3cc",
+        "size": 192352,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libblkid.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libblkid.so.1",
+        "size": 242128,
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libblkid.so.1",
+        "bytes": 242128,
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "identity": {
+          "device": 66306,
+          "inode": 49551938,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libblkid.so.1",
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "size": 242128,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libc.so.6",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/runtime/lib64/libc.so.6",
+        "size": 2339896,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libc.so.6",
+        "bytes": 2339896,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "identity": {
+          "device": 66306,
+          "inode": 49551940,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libcap-ng.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/output-1/files/libcap-ng.so.0",
+        "size": 32336,
+        "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcap-ng.so.0",
+        "bytes": 32336,
+        "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+        "identity": {
+          "device": 66306,
+          "inode": 49551942,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libcap-ng.so.0",
+        "sha256": "0ee946e3dbce118176795986e931d2c16c95734220c3d5d47d9de1ada9517832",
+        "size": 32336,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libcap.so.2",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libcap.so.2",
+        "size": 53168,
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcap.so.2",
+        "bytes": 53168,
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "identity": {
+          "device": 66306,
+          "inode": 49551944,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libcap.so.2",
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "size": 53168,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libcrypt.so.2",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libcrypt.so.2",
+        "size": 197000,
+        "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcrypt.so.2",
+        "bytes": 197000,
+        "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+        "identity": {
+          "device": 66306,
+          "inode": 49551946,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libcrypt.so.2",
+        "sha256": "3cb0985cf4ae9bf1f2eabee655527d1e7baf295a9c00c202781cc0e1ad8bd8f7",
+        "size": 197000,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libcrypto.so.3",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libcrypto.so.3",
+        "size": 5631152,
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libcrypto.so.3",
+        "bytes": 5631152,
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "identity": {
+          "device": 66306,
+          "inode": 49551948,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libcrypto.so.3",
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "size": 5631152,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libeconf.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/output-1/files/libeconf.so.0",
+        "size": 49336,
+        "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libeconf.so.0",
+        "bytes": 49336,
+        "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+        "identity": {
+          "device": 66306,
+          "inode": 49551950,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libeconf.so.0",
+        "sha256": "4465c7bedc9db8bca0092b82ab414b651c2d437ac48e8b7f6b511bf8edb241ed",
+        "size": 49336,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libgcc_s.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libgcc_s.so.1",
+        "size": 186528,
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libgcc_s.so.1",
+        "bytes": 186528,
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "identity": {
+          "device": 66306,
+          "inode": 49551952,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libgcc_s.so.1",
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "size": 186528,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/liblzma.so.5",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/liblzma.so.5",
+        "size": 215496,
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/liblzma.so.5",
+        "bytes": 215496,
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "identity": {
+          "device": 66306,
+          "inode": 49551954,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/liblzma.so.5",
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "size": 215496,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libm.so.6",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libm.so.6",
+        "size": 720624,
+        "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libm.so.6",
+        "bytes": 720624,
+        "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+        "identity": {
+          "device": 66306,
+          "inode": 49551956,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libm.so.6",
+        "sha256": "e5963b5e3cbd54ad0c9eb1dbd24f175e5728c09378831196c9bb53733ed8c2a6",
+        "size": 720624,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libmount.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libmount.so.1",
+        "size": 333512,
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libmount.so.1",
+        "bytes": 333512,
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "identity": {
+          "device": 66306,
+          "inode": 49551958,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libmount.so.1",
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "size": 333512,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libnuma.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/runtime-numa-copy-1/output-1/libnuma.so.1",
+        "size": 62328,
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-runtime-numa-copy-review-source-acquisition-max-1/REVIEW.json",
+        "sha256": "db6434473a56befccc2772e7a06e275f9c52f2d7b7d669ef1991bf1a87239ac5"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libnuma.so.1",
+        "bytes": 62328,
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "identity": {
+          "device": 66306,
+          "inode": 49551960,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libnuma.so.1",
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "size": 62328,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libpam.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libpam.so.0",
+        "size": 73808,
+        "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libpam.so.0",
+        "bytes": 73808,
+        "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+        "identity": {
+          "device": 66306,
+          "inode": 49551962,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libpam.so.0",
+        "sha256": "3b27cfc9a13a898e7184ea90ecca48bce9e8721b820dff13b5b4a60bb06fc925",
+        "size": 73808,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libpcre2-8.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libpcre2-8.so.0",
+        "size": 665664,
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libpcre2-8.so.0",
+        "bytes": 665664,
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "identity": {
+          "device": 66306,
+          "inode": 49551964,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libpcre2-8.so.0",
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "size": 665664,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libproc2.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libproc2.so.0",
+        "size": 173848,
+        "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libproc2.so.0",
+        "bytes": 173848,
+        "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+        "identity": {
+          "device": 66306,
+          "inode": 49551966,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libproc2.so.0",
+        "sha256": "f5df8f1abb757eb85293854bd4cc4e6fcd0fa2f9e5399e56e28957cec66f8de2",
+        "size": 173848,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libpthread.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libpthread.so.0",
+        "size": 15496,
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libpthread.so.0",
+        "bytes": 15496,
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "identity": {
+          "device": 66306,
+          "inode": 49551968,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libpthread.so.0",
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "size": 15496,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libseccomp.so.2",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libseccomp.so.2",
+        "size": 135488,
+        "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libseccomp.so.2",
+        "bytes": 135488,
+        "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+        "identity": {
+          "device": 66306,
+          "inode": 49551970,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libseccomp.so.2",
+        "sha256": "fd624d73c660ffc8dc6dccb714223112285f2460dec7a6b1e31efdb65373a015",
+        "size": 135488,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libselinux.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libselinux.so.1",
+        "size": 200664,
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libselinux.so.1",
+        "bytes": 200664,
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "identity": {
+          "device": 66306,
+          "inode": 49551972,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libselinux.so.1",
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "size": 200664,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libsystemd.so.0",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/output-1/files/libsystemd.so.0",
+        "size": 1225176,
+        "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libsystemd.so.0",
+        "bytes": 1225176,
+        "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+        "identity": {
+          "device": 66306,
+          "inode": 49551974,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libsystemd.so.0",
+        "sha256": "88ce44c4762330ddb10c33ea0c6fa264af74ce7d204166221a6f4156304c172c",
+        "size": 1225176,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libz.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/libz.so.1",
+        "size": 140824,
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libz.so.1",
+        "bytes": 140824,
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "identity": {
+          "device": 66306,
+          "inode": 49551976,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libz.so.1",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "size": 140824,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "lib64/libzstd.so.1",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libzstd.so.1",
+        "size": 729608,
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libzstd.so.1",
+        "bytes": 729608,
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "identity": {
+          "device": 66306,
+          "inode": 49551978,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libzstd.so.1",
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "size": 729608,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "modules/ihk-smp-x86_64.ko",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "size": 13092960,
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "mode": 420
+      },
+      "source_proof": {
+        "bytes": 30444,
+        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko",
+        "bytes": 13092960,
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "identity": {
+          "device": 66306,
+          "inode": 49551980,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 420,
+        "path": "modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "size": 13092960,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "modules/ihk.ko",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "size": 1521480,
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "mode": 420
+      },
+      "source_proof": {
+        "bytes": 30444,
+        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko",
+        "bytes": 1521480,
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "identity": {
+          "device": 66306,
+          "inode": 49551982,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 420,
+        "path": "modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "size": 1521480,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "modules/mcctrl.ko",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "size": 2374656,
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "mode": 420
+      },
+      "source_proof": {
+        "bytes": 30444,
+        "path": "/home/holden/mckernel/docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+        "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko",
+        "bytes": 2374656,
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "identity": {
+          "device": 66306,
+          "inode": 49551984,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 420,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 420,
+        "path": "modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "size": 2374656,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "sbin/insmod",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/insmod",
+        "size": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/sbin/insmod",
+        "bytes": 182088,
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "identity": {
+          "device": 66306,
+          "inode": 49551986,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "sbin/insmod",
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "size": 182088,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/bin/chown",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/chown",
+        "size": 52,
+        "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+        "mode": 365
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/chown",
+        "bytes": 52,
+        "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+        "identity": {
+          "device": 66306,
+          "inode": 49551988,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 365,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 365,
+        "path": "usr/bin/chown",
+        "sha256": "497a658c90080afd7bba33da8297fdb1be37cf36a3465a344164a8cb14390b53",
+        "size": 52,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/bin/coreutils",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/coreutils-wrapper-correction-1/output-1/files/coreutils",
+        "size": 1347728,
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/coreutils",
+        "bytes": 1347728,
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "identity": {
+          "device": 66306,
+          "inode": 49551990,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/bin/coreutils",
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "size": 1347728,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/bin/pidof",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/pidof",
+        "size": 24064,
+        "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/pidof",
+        "bytes": 24064,
+        "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+        "identity": {
+          "device": 66306,
+          "inode": 49551992,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/bin/pidof",
+        "sha256": "66a8f1ea5012d82ac6979165feb6bcc818532e57c9367c5b4bd095624d138312",
+        "size": 24064,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/bin/sync",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/sync",
+        "size": 51,
+        "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+        "mode": 365
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/sync",
+        "bytes": 51,
+        "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+        "identity": {
+          "device": 66306,
+          "inode": 49551994,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 365,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 365,
+        "path": "usr/bin/sync",
+        "sha256": "5f3ecf316cc8d0461cdc69e55f97c575a2c37f250e77461ac6241d049d65b177",
+        "size": 51,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/bin/systemctl",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/systemctl",
+        "size": 326688,
+        "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/systemctl",
+        "bytes": 326688,
+        "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+        "identity": {
+          "device": 66306,
+          "inode": 49551996,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/bin/systemctl",
+        "sha256": "c1ab70e9b250c2fdfa49373d9748842846a84eaa971eac40430d0eeb607a2bec",
+        "size": 326688,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/bin/tee",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/cpu0-affinity-1/output-1/files/tee",
+        "size": 50,
+        "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+        "mode": 365
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/bin/tee",
+        "bytes": 50,
+        "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+        "identity": {
+          "device": 66306,
+          "inode": 49551998,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 365,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 365,
+        "path": "usr/bin/tee",
+        "sha256": "97a3eca66552d324751b1e8e5af6ca4295328b98fa57bc43f1f81cc0a53e197e",
+        "size": 50,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/output-1/files/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+        "size": 4930680,
+        "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+        "bytes": 4930680,
+        "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+        "identity": {
+          "device": 66306,
+          "inode": 49552000,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/lib64/systemd/libsystemd-shared-257-23.el10_2.1.rocky.0.1.so",
+        "sha256": "eadc13fc65d2c132427d03fcac5c4543a29b33d8dccf18ca3d1a1a630d42ba96",
+        "size": 4930680,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/local/lib64/libihk.so",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/stage/lib64/libihk.so",
+        "size": 12095128,
+        "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/lib64/libihk.so",
+        "bytes": 12095128,
+        "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+        "identity": {
+          "device": 66306,
+          "inode": 49552002,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/local/lib64/libihk.so",
+        "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+        "size": 12095128,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/local/sbin/ihkconfig",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkconfig",
+        "size": 40960,
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/sbin/ihkconfig",
+        "bytes": 40960,
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+        "identity": {
+          "device": 66306,
+          "inode": 49552004,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/local/sbin/ihkconfig",
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+        "size": 40960,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/local/sbin/ihkosctl",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/sbin/ihkosctl",
+        "size": 37776,
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/boot-caller-1/SOURCE-CONTRACT.json",
+        "bytes": 13862,
+        "sha256": "14fbb95a6c7e1c985572565d3aebc145d9159fa1d2c1aa028c46010bd1e2e524"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/sbin/ihkosctl",
+        "bytes": 37776,
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+        "identity": {
+          "device": 66306,
+          "inode": 49552006,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/local/sbin/ihkosctl",
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+        "size": 37776,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/local/smp-x86/kernel/mckernel.img",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+        "bytes": 139468,
+        "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/smp-x86/kernel/mckernel.img",
+        "bytes": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "identity": {
+          "device": 66306,
+          "inode": 49552008,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 292,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 292,
+        "path": "usr/local/smp-x86/kernel/mckernel.img",
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "size": 13349576,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/sbin/getenforce",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/getenforce-provider-1/passive-extraction-1/extracted/libselinux-utils/usr/sbin/getenforce",
+        "size": 15792,
+        "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+        "mode": 493
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/guest-base-1/linux-inputs-1/direct-dependencies-1/pcre2-coalesced-1/loader-reuse-1/next-six-provider-inputs-publicabi-max-1/loop-in-correction-1/pam-two-provider-inputs-publicabi-max-1/capng-one-provider-inputs-publicabi-max-1/qualification-publicabi-max-1/WHOLE-STATIC-GUEST-PROVIDER-CLOSURE.json",
+        "bytes": 146175,
+        "sha256": "ebae1625f79b640901b7e6f9ca0ab3757e9b277e2416cc606151ff461954709e"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/sbin/getenforce",
+        "bytes": 15792,
+        "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+        "identity": {
+          "device": 66306,
+          "inode": 49552012,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 493,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/sbin/getenforce",
+        "sha256": "f0ee5942bf7c31e995da955022d676e73734ac71367efe22b262356bc93dc788",
+        "size": 15792,
+        "type": "file",
+        "uid": 1000
+      }
+    }
+  ],
+  "directories": {
+    "bin": 493,
+    "dev": 493,
+    "etc": 493,
+    "images": 493,
+    "lib64": 493,
+    "modules": 493,
+    "proc": 493,
+    "run": 493,
+    "sbin": 493,
+    "sys": 493,
+    "tmp": 1023,
+    "usr": 493,
+    "usr/bin": 493,
+    "usr/lib64": 493,
+    "usr/lib64/systemd": 493,
+    "usr/local": 493,
+    "usr/local/lib64": 493,
+    "usr/local/sbin": 493,
+    "usr/local/smp-x86": 493,
+    "usr/local/smp-x86/kernel": 493,
+    "usr/sbin": 493
+  },
+  "new_a2f_at_both_real_image_paths": [
+    {
+      "guest_target": "images/mckernel.img",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+        "bytes": 139468,
+        "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/images/mckernel.img",
+        "bytes": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "identity": {
+          "device": 66306,
+          "inode": 49551918,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 292,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 292,
+        "path": "images/mckernel.img",
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "size": 13349576,
+        "type": "file",
+        "uid": 1000
+      }
+    },
+    {
+      "guest_target": "usr/local/smp-x86/kernel/mckernel.img",
+      "source_expected": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+        "size": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "mode": 292
+      },
+      "source_proof": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+        "bytes": 139468,
+        "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+      },
+      "actual_staged": {
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/usr/local/smp-x86/kernel/mckernel.img",
+        "bytes": 13349576,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "identity": {
+          "device": 66306,
+          "inode": 49552008,
+          "uid": 1000,
+          "gid": 1000,
+          "mode": 292,
+          "nlink": 1
+        }
+      },
+      "recorded_inventory": {
+        "gid": 1000,
+        "mode": 292,
+        "path": "usr/local/smp-x86/kernel/mckernel.img",
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "size": 13349576,
+        "type": "file",
+        "uid": 1000
+      }
+    }
+  ],
+  "actual_original_source_authentication": "Actual pinned4fa stage_bound_inputs/_named_source heldFD source hashes/metadata rechecked before and after; copies here independently match the exact authorized input SHA/size/mode. No oldc664 source/program execution or passing-source validator replay."
+}

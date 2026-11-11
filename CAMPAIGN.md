@@ -1,201 +1,90 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T20:01:38.338464+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T20:58:34.067193+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Original closure is98/156: M14=67.22%, M15=67.19%.** Exactly one new atomic
-condition, M14-03-05-DEFAULT, has independent whole GOc7f765f0 onsourcec964/
-imagea2f00a61/map15b10db2. All original clauses join actual13inputs/5052+5owners,
-both genuine Rust perf providers and C exclusions,43nonperf roots, ABI104,
-255strongimports/zeroUND, entry/LOAD and positive producer+reader/Root cleanup.
-Readonly C dispatch carrier and genuinely Rust-owned4025-handler table are
-separately proved; failed qualifier evidence and bounded correction are retained.
-Remaining C4 and FUNCTIONAL/native/parent/file/milestone obligations stay open.
-Four accepted M14 files and accepted M15-F01 keep their exact scopes. Criteria,
-weights, denominators and M14-before-M15 acceptance order are unchanged.
-EACH75% by2026-11-10T16:00Z was missed, not a stop time. Checkpoint43 cddaec4d is
-pushed/fetched147 matching owned blobs; sourcec964 and preserved25-file a2f cohort
-remain recoverable. [PR3receipt6803610176](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176)
-is POSTED_CONFIRMED for67.22/67.19, dedupeM14-03-05-DEFAULT@c7f765f0. No report
-is pending; post again only after a verified percentage changes.
-All33 unrelated dirty paths and every historical UNKNOWN/hold remain preserved.
+**Original closure is98/156: M14=67.22%, M15=67.19%.** Whole original
+M14-03-05-DEFAULT GOc7f765f0 remains counted on sourcec964/imagea2f00a61/map15b10db2.
+All original criteria/weights/denominators and M14-before-M15 acceptance order stay
+unchanged. C4 and remaining FUNCTIONAL/native/parent/file/milestone conditions are
+open. Four accepted M14 files and M15-F01 remain closed at their exact scopes.
+PR3 receipt[6803610176](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6803610176)
+is POSTED_CONFIRMED for this pair; do not repeat an unchanged percentage report.
+All33 unrelated tracked dirty paths and historical UNK2026-11-11T20:58:34.067193+00:00N/holds stay preserved.
+The missed75% November10 target is not a stop time.
 
-**M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
-c14f and all4 canonical HOST families c564 are qualified; controller1961 and
-fixed30 installerfe88 plus readback failure-control8a54 results are reused.
-Normal source publication51ca failed before READY because waiterEXPECTEDd875
-did not match selected installer8076 (diagnosisd0cbd). Its exact parent recovery
-797/b4f/4f632 positively retired1358834/birth47979237 and joined original97528/
-sudo wait9/closed captures; independent5081 permits only old2GiB/job process
-retirement, recorded2c2a. Old failed normallease/globalOFD/source outcomes remain
-UNKNOWN; neither old nonce nor consumed9f26/51ca/ec829 was replayed.
-Corrected cohort6c124/b6f205 changes the waiter digest and dependent pins;
-sourceGO809a and actual6preREADY92fc passes are reused. Operation3b8b ran once
-at11:47:51Z after a genuine fresh account event. Actual toolde34d3 exit0/noSession
-and FULL4bf86 prove keeper+installer waits0, normallease VERIFIED_CLOSED/COMPLETE,
-sudo0/no timeout, closed stdout12974B/stderr0 and genuine30-file producer proof.
-Caller e4a still records resource_unknown=true and ValueError without predicate/
-time. SDK a6cd cannot recover that historical event. Future-only observer b795/
-7ff2 has independent09fc sourceGO: stop extra point-subtree sampling after all3
-roles are durably recorded while retaining aggregate HOST4/caller512MiB guards,
-all waits/captures/DATA and previous UNKNOWN latches. No future issue is granted.
-Independent ee63 verifies actual role/wait/tool/stream/catalogue joins and allows
-ONLY the new current2GiB/job process retirement, recorded56e11. Raw historical
-resource cause/time/peak/compliance remain UNKNOWN; no source/native/Scratch hold
-is released. NEW honest Root capsuleeba51 records actual tool/stream closure,
-exact caller/values refs and overall_resource_acceptance=false. Original snapshot
-false and raw caller UNKNOWN are untouched. Strict c843/a422/9fcc was not run.
-New reader1c1b/request22f870 pins only ee63/eba51/actual2c4c metadata; independent
-sourceGOa24 and actual focused62589 (one accepted boundary/seven rejections,
-positive onefamily/Root673a5e0/noSession) qualify72edd. OperationGO2e32 permitted
-actual fresh CPU0/128MiB readonly command: tool902087 exit0/noSession, all30
-UID1000 files/401674B matched exact immutable Root-owned normal paths, catalog,
-dev/inode/mode/size/SHA and before/after cohort. Result2834 explicitly reports
-VERIFIED_ALL30_CODE_ONLY_WITH_RESOURCE_AUDIT_UNKNOWN/overallfalse/nativefalse,
-no read-close or secondary errors. FullRoot107ac/current128MiB/job is retired;
-Independent whole code-only qualificationebce confirms all30 actual files and
-positive Root closure. No new issuer/nonce, private journal read or native action
-occurred. PublicABI sourceGO3d332 confirms existing3-path controller55a against
-reused1961/fb62 and actual2c4c modules. Root integrated exact6fe65/7207/068e
-source bytes at12:39:22Z; healthy loaded controller stays unchanged. Actual
-authority-ordered safe transition,
-staging permission, native claim/current-free/restoration and original behavior
-remain distinct prerequisites. Installer/readback success closes no original check.
+**Actual blockers cleared:** the specifically authorized scoped parent was created
+once at19:52:54Z, dev66306/inode49551867 UID1000:GID1000/0700, realUID1000 access
+PASS. Receipt3a0a947d/independent34759fd1 is published atf0db9015. Only that parent
+was changed; Scratch21/ancestor/ROloop44 and every other reservation stay intact.
+No further permission or provisioning replay is needed for this exact directory.
 
-**Completed original M14-03-05 DEFAULT:** Sourcec964 normal configure/image
-PASS17:33:29Z bc331c71/fullRoot390d4cde produceda2f image,15b map,a156 Rust,
-0ade C and canonical51edd/63b integer object/metadata against actualcore9154/7ec5.
-Producer20clients/two0nonOOM removedcontainers and Root are positively joined;
-current2GiB charge retired80ce. Reader016d/GO5abf passed17:45:44Z,31commands/
-28records/12clients/removedcontainer/fullRooted322; current512MiB retiredf097.
-Independent readerQ42a8 and canonical-providerGO1db74 plus actualimageQ6f67
-bind the complete tuple. Whole originalDEFAULT GOc7f765f0 joins every clause,
-including genuine Rust implementation ownership, callback/lower-provider/credential
-error paths, C carrier relocations and Rust handler-table ownership. Reused
-runtime26bfc and finite normal/fourfatal boundary21737568/independent5bb1 evidence;
-no build/reader/green suite was replayed. Four remaining C functions, modeled
-VM/rollback uncertainty, native behavior and historical UNKNOWN outcomes remain.
-Public evidence: [complete checkpoint](docs/verification/m14-current-image-20261111/perf-supported-default-1/PUBLICATION-SCOPE.json).
+**Coherent a2f HOST staging is complete.** Reviewed profile-only successor
+eb7c/GOa797 passed20:32:18Z:43files/21dirs/BOTHa2f guestimage paths, exact099/IHK8d/
+config106055/threeKOs, payload77e8/libcb058/loader0853/collector9a55, actualbase/
+derivedcpio/root/overlay/native manifestf133. All14heldFDs/oneclient/fullRootbeb0
+closed positively; current1GiB retired e469. Saved P03Q4cc2 joins70archive members/
+17consumedregular-source identities and protectedRO/parent. Actual handoffcbdb is
+now materialized at the authorized scoped parent. Preserve the earlier hard-limit
+inheritance failure and bounded correction; no stager or validator replay.
 
-**New actual scoped-parent repair passed19:52:54Z.** Explicit operator grant6805178926
-was consumed ONLY for the named parent. Packet3048/GOacf684/provisioner0218 ran
-once: actualparentdev66306/inode49551867 UID1000:GID1000/0700, durablefsync and
-realUID1000RWX/search PASS, finaloutput absent. Existing ancestor ownership/mode
-and ROloop44/mount974 stay unchanged; no oldobjects/native/control changes.
-Actualresult672b/receipt3a0a/fullRoot5a58/current256retire54fb have independent
-qualification34759. This resolves ONLY that scoped permission, not native grants.
-P03 currenta2fstager successor6ab1/2da888 binds realparent and unchanged43inputs/
-81798929B/21dirs; exact output is the authorized parent plus
-`native-signal-c964-a2f00a61-stage-20261111-1`. P04Source reviews; Root runs after
-fresh bounded HOST admission, never oldroot/c664 output or repair replay.
+**Normal a2f code generation and strict UID1000 readback are complete.** Unchanged
+reviewed E9dae/GO4d3 consumed a genuinely NEW20:35:01.891315 account notification;
+actual helper accepted at20:35:04, age2.406s. New nonce468d984b has positive actual
+producer/caller/Root/client/stream closure, rawresource_unknownfalse/data_errornull,
+sudo/keeper/installer waits0, normallease VERIFIED_CLOSED/COMPLETE. Strictreader
+eebd/GO3e1b physically read all30 immutable Root-owned normal-layout files/401674B,
+matching catalogd42/dev/inode/mode/size/SHA. Result1cf843/fullRoot85d54 and saved
+independent whole code-only Qe4288d6a corroborate current2GiB+128MiB retirements
+d168/039681 only. The first receipt-output-parent failure and exact0700 repair
+remain recorded. Old2c4c resource-audit UNK2026-11-11T20:58:34.067193+00:00N and old failed lease/OFD/source
+outcomes remain old-only. Do not reissue or reread this successful generation.
+[Actual source/review/result bundle](docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/PUBLICATION-SCOPE.json).
 
-**Coherent account helper correction passed20 vectors19:55:32Z.** InitialD
-source00d140 NO_GO and old229c actualpreissuefailure stay intact. Ecb347/811707/
-wrapper9dae adds only shared numeric/nonbool/finite primary validation; sourceGO25078.
-Corrected2a61/GO0c1a ran once: four actual-helper families/20 fullvectors PASS,
-actualresult588b/fullRoot5eb1/oneOwner/current256retire8454; independentQ749b
-joins all29pins and exactsource. No live account/controller/issuer effects from
-these controlled tests. SourceAcq final E9field operation approval and fresh actual
-normal admission precede a single normalproducer. All passed observer/equality/
-image/reader scopes are reused; no badsource or green-suite replay.
-[Actual repair evidence](docs/verification/native-admission-debug-20261111/scoped-parent-and-snapshot-repairs-1/PUBLICATION-SCOPE.json).
-No additional original check is counted from these prerequisite repairs.
+**Current concrete next action:** PublicABI owns the existing normal same-Root
+controller transition proposal, preserving guardian/mailbox, saved goal/thread,
+finite7c6 credit run/cumulative budget, actual interpreter and resource owners.
+No controller activation or native run is claimed. SDK implements the confirmed
+RPC poll receipt liveness correction; P03 prepares focused tests and SourceAcq
+reviews the changed source after current F02 review. Successful account/rateLimits/read
+responses must carry actual method/id/response time/owner context through SAME
+ledger and state persistence before a success receipt; heartbeat/request time
+cannot substitute. Preserve25s/equality/allhold/credit guards and notification-only
+fallback semantics. Load through the normal reviewed transition, never hotpatch,
+synthetic notification, fake failure, new run or budget reset.
 
-**Next original M14-06-02-FUNCTIONAL / M15-I04-native-admission:** P03 froze
-source-only matching handoff4baab82d with exactc964/a2f at BOTH guest image paths,
-qualified099/IHK8d/config106055/threeKOs, existing guest43files/30ELFs and actual
-signal payload77e8/libcb058/loader0853/collector9a55. Literal case remains
-`/bin/mcexec -t 1 0 /apps/signal.alternate-repeat`, cwd`/case/work`, PATH/COKERNEL
-plus LANG=C/LC_ALL=C/TZ=UTC; exact16handler/16delivery/16altstack/exit0/stderr0
-oracle is one bounded scope. Whole frame/register/xstate normal/error and lifecycle
-restoration remain required, including separately qualified signal inputs.
-Concrete new internal source discrepancy: installed native_resource_admission.py
-EXPECTED line33 still pinsc664 and exact guard367 enforces it. PublicABI owns a
-private minimal normal package/profile/catalog/cohort rebind; SourceAcq independently
-reviews; Root alone composes/adopts after actual gates. No immutable installed edit,
-caller-hash substitution, new issuer/readback replay, staging or native run is issued.
-Private a2f source-readydff22833 is now frozen: admission candidate1e7ced65,
-patchbcf40149, exact30catalogd42de826/hashchain7fce7504/payload1d08b2b2.
-Only EXPECTED.mckernel_image changes; every method and other29members stay exact.
-SourceAcq reviews only those dependent bindings. P04Tests supplies the missing
-executable HOST packet from focusedproposal4329850f: pure actual _named_manifest
-accepts exacta2f tuple, rejects stalec664/wrongimage/missingimage/wrongpayload.
-SourceGO7752 confirms all30 exact source/catalog/profile bindings. Packet6330/
-parent352e/operationGO28cc ran once18:24:11Z under freshCPU7/256MiB shared admission:
-allfive exact pure guard cases PASS, actualstdout oracleb08/stderr0 and one positive
-owned family. Root terminal0/noSession57b5 and current-job retirement2da9 follow
-actualresult86ba; independent savedQ1235e899 joins all22pins and exact output,
-no rerun. This is equality-guard
-proof only, not native/current-free permission. Reused c14f/c564/1961/fe88/ebce
-scopes remain; no new issuer/installed/controller/staging/native action. Scores stay
-67.22/67.19 with receipt6803610176; no unchanged PR3 post.
-SDK now prepares only the exact changed normal fixed30 adoption source/input
-proposal: new catalogue/SOURCE_DIR/installer/phase0/completion/waiter/source-profile
-bindings, with genuine authority/nonce/inode/effective-view outputs left unissued.
-Root alone composes/adopts later after review; no new issuer or installed edit.
-PublicABI owns the specific future-generation strict completion/readback contract;
-SourceAcq reviews SDK changed30-source/hash-chain and exact normal operation as frozen.
-Old2c4c/ee63/eba51 UNKNOWN disposition stays bound ONLY to that generation. A
-successor requires its own positive producer/caller/lease/Root/client/stream closure
-and UID1000 physical30-file proof. Nonce/inode/issuer/effective-view outputs stay
-unissued until actual reviewed Root admission; no stale-digest substitution.
-SDK source8529/3be2 has independentGO4297. Original concrete Ocb110/4b900
-was rejected17962 before execution: operative RESOURCE wait_literalda47/EXPECTED8076
-mismatched selectedc06f/EXPECTEDab752. OriginalO stays intact. Fresh correction-1
-2f652/a82d selects actual resourcef670/c06 at its real newHERE; callerddfb/wrapper229c/
-profile5f13 and derived pins preserve all12 algorithm/observer bodies. SourceAcq
-sourceGO7848 reviewed that exact chain. P04Tests826b/operationGO6709 ran19:01:26Z:
-both actual-supervise external rows PASS; modeledUNKNOWN/releasefalse retained,
-one real family/fullRoot7c96 joined/current256MiB retired dd0d; independentQ7f106
-joins all17pins/8function transfer. Strict reader d2e/396201 has conditionalGOaed6.
-Final normal9fieldGO2696/detailed2ed6 allowed one actual fresh admission attempt.
-Wrapper229c then exited1 before any nonce/caller/sudo/Rootrole/install/lease:
-line131 compared fresh eventprimary to a controller state read before event scan.
-Rawfailure d51e/failedrecord63c0 and all7 absent outputs remain intact. Independent
-preissueQ8cf3 proves complete process scope; Root cancelled ONLY plannedCPU6/2GiB/
-job in ec7c. No account/credit/window checks after131 are claimed proved. SDK
-now diagnoses exact event/state scope+ordering; primary equality/25s/currentgoal/
-owner/service/SAMEfinitecredit guards stay intact. SourceAcq independently reviews
-one meaningful private successor; no blind229c retry or stale status/account reset.
-SDK diagnosiscd31/source observation34d0 and independent diagnosis5263 establish
-non-atomic acquisition, not the unrecorded failed interleaving. Controller persists
-limits before the durable credit observation, so stable state/ledger pairs alone
-are insufficient. The bounded successor must join the same fresh event/controller
-primary AND finite credit observation to both original ledger/state last_balance,
-with full equality/25s/goal-owner-service/SAMEcredit guards, two bookends, immediate
-hold/unknown veto and max3 local consistency attempts. It writes no launcher state.
-No new operation/nonce is issued by this source work.
-[Reviewed candidate and actual HOST result](docs/verification/native-admission-debug-20261111/a2f-cohort-binding-1/PUBLICATION-SCOPE.json).
+**Independent original closure:** SDK independently decides literal M14-I01-E1
+from P04Source assessment0987582e/current5052+5manifest/163dependencies/C4contracts
+on the saved c964/a2f cohort. E1 is not credited pending that whole verdict; E2/E3
+and C retirement remain separate. SourceAcq reviews exact F02 HOST packet8184/
+parent24ab after critical new-generation qualification. Its four genuine C/Rust1.95/
+readelf commands compare one624B readonly unrelocated78-word record; this slice
+alone cannot close wholeF02 behavior. P04Source owns the small clone-disabled
+Rust diagnostic-provider candidate, P04Tests independent formatter/string/caller
+review; actual C3 requires later matching normal image proof.
 
-P03 noon disposition9c4b confirms no callable authorized provisioner in the5
-established interfaces: workstation-operator action is required. One minimum
-request52297 asks for canonical scoped parent
-`/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent`,
-UID1000:GID1000/0700/create-search and1GiB reserve above host16/scratch12 floors,
-with actual namespace/mount/dev/inode/UID/mode/access/capacity receipt. Preserve
-Scratch21 exact oldobjects and ROloop44/mount974 mapping; final stage output stays
-absent. Existing stager supports scoped parent, but frozen a2f4baab/58043 --output
-needs an explicit reviewed parent/identity binding successor after a genuine grant.
-No sudo/permission/remount/alternate-path fallback or operator action occurred.
-[Noon mailbox return6805126092](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6805126092)
-is POSTED_CONFIRMED for request1909, linking published/fetched121-file checkpoint
-daf859c8 and the exact minimum operator request. It is a requested blocker reply,
-not a duplicate percentage report; no operator receipt has arrived.
+**Actual native prerequisites remain:** reviewed normal controller transition,
+authenticated effective source/claim/current-free/caps/pidfd custody and positive
+restoration. Retained native12 capacity is not an operation claim. The exact first
+case stays `/bin/mcexec -t 1 0 /apps/signal.alternate-repeat`, cwd`/case/work`,
+PATH=/usr/bin:/bin,COKERNEL_PATH=/apps,LANG=C,LC_ALL=C,TZ=UTC. Require16handlers/
+deliveries/altstack hits, exit0 and empty stderr, then positive owned restoration.
+This one altstack scope does not establish all original signal frame/register/
+xstate normal/error or lifecycle requirements. HOST materialization/installation/
+readback and current controller source are prerequisites, not native acceptance.
 
-**Separate actual native prerequisites:** Owner-scoped writable staging parent
-is still missing: selected parentUID0/0755 is not UID1000 writable; one exact request
-[6790932995](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6790932995)
-is pending with the scratch resource owner. PreserveScratch21 and UNKNOWNs; no
-path/elevation/permission fallback. Healthy loaded controller requires its genuine
-normal transition/positive owner retirement; integrated controller source and fixed30
-code-only installation/readback do not activate it. Root/guardian owns that transition.
-Retainednative12 capacity is separate from fresh actual-operation claim/source gates,
-current-free/caps/FD custody and positive restoration supplied by its authenticated
-resource owner. These do not block eligible private source repair. Guardian/mailbox
-and restored20-minute functional assistance remain active, under same account/run
-budget; no healthy restart, new allowance, source/native or UNKNOWN bypass.
+**Preservation and execution:** checkpoint46 f0db9015 is pushed/fetched125owned
+blobs; next coherent checkpoint publishes actual staging/new generation/readback.
+No current payload job remains live; use fresh operation-specific admission within
+loaded HOST CPUs0,6,7/max3/4GiB TOTAL including overhead,26GiB availability and
+16/12GiB disk floors. Native CPUs2–5/12GiB stays separately held, CPU1 excluded.
+Same saved Root/goal/SolMAX/six direct owners, no recursive agents or state edits.
+Included allowance first, then existing signed-in credits under SAME finite7c6;
+stop on actual user/service/auth/account/spend/unknown/exhaustion hold. Genuine
+source/rejected-operation/native/Scratch/UNK2026-11-11T20:58:34.067193+00:00N controls are not released by
+these results. Guardian/mailbox and20-minute assistance remain active.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
 integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6

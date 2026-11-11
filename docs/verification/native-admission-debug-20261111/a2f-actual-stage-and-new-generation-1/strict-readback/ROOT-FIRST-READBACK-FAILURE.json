@@ -1,0 +1,20 @@
+[
+  {
+    "tool": "exec_command",
+    "arguments": {
+      "cmd": "/usr/bin/taskset -c 0 /usr/bin/prlimit --as=134217728 --cpu=20 --fsize=16777216 --nofile=96:96 --core=0 /usr/bin/env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -I -B /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py --root-capture /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-preparation-sdk-max-1/a2f-fixed30-normal-operation-proposal-1/correction-1/account-snapshot-correction-1/primary-guard-correction-1/ROOT-EXEC-COMPLETION.ACTUAL.json --root-capture-sha256 a8b999a6c991f234316f4b489d3a6c2e3915755fad0d772d49d01e66e03a4837 --output /home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/output-1/RESULT.json",
+      "workdir": "/home/holden/mckernel",
+      "login": false,
+      "tty": false,
+      "yield_time_ms": 1000,
+      "max_output_tokens": 10000
+    },
+    "result": {
+      "chunk_id": "6c5aa4",
+      "wall_time_seconds": 3.2631e-05,
+      "exit_code": 1,
+      "original_token_count": 359,
+      "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py\", line 420, in <module>\n    if __name__=='__main__':main()\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py\", line 416, in main\n    if primary is not None:rethrow(primary,secondary)\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py\", line 350, in rethrow\n    raise BaseException.with_traceback(info[1],info[2])\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py\", line 411, in main\n    write_once(args.output,result)\n  File \"/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/readback_code.py\", line 354, in write_once\n    raw=canon(value);fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\nFileNotFoundError: [Errno 2] No such file or directory: '/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-future-readback-publicabi-max-1/primary-guard-source-binding-1/output-1/RESULT.json'\n"
+    }
+  }
+]
