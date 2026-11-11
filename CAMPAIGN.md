@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T15:56:09.014836+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T16:07:59.880097+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
@@ -14,7 +14,7 @@ open at their original scope. Four accepted M14 files and accepted M15-F01 remai
 closed. Original criteria/weights/denominators and M14-before-M15 acceptance
 are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
 PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
-Last source/results checkpointafb1fced is pushed/fetched195ownedblobs; all33
+Last source/results checkpoint6ad55936 is pushed/fetched31ownedblobs; all33
 unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
@@ -86,9 +86,20 @@ removed, alltooloutput preserved. SourceAcqbb64 qualified11clients/current2GiB;
 Root retired only that charge in4d7d53db. One-line originalF_SETSIG=10 correction
 84b98/6fbd has independent sourceGOe00af192: matchingLinux6.12header and existing
 C/Rustcallers alluse10; allotherCbytes/linecounts/Rustbodies/oracles unchanged.
-Root integrated exact9f5aa63d. Next: bind a fresh normal producer successor to
-actualcommit and rerun affected compilation;
-reader only after producerPASS/positive retirement. No green runtime replay.
+Root committed exact9f5aa63d as6ad55936/pushed31blobs. Fresh retry4f89/operation
+GO6a55 ran16:01:26–49Z: C F_SETSIG error is gone and actual Cobject compiled,
+then final ld failed on real Rustcore panic/Result/Option/format imports from
+new perf invariant paths. Saved resulta4dd96a2/stderrf4ed9a50/fullRoot9838d9d,
+11clientjoins/CIDf888ownedremove retained; no new image or reader acceptance.
+SourceAcq35891 qualifies all11clients/container/fullRoot and ONLY current2GiB;
+Root recorded scoped retirement6c100868. SDK owns the smallest genuine
+freestandingpanic/provider source correction; P04Source independently diagnoses
+actual callers/link design and PublicABI reviews invariant/fatal/ABI preservation.
+No fabricatedRustsymbol/stub/checkdisabling/blindhostarchive is allowed. Derive
+and repair the actual matching source/toolchain dependency, then affected-only
+validation and normalimage after meaningful changedinput/exactGO/freshadmission.
+Both failed cohorts and all green runtime/TYPE/source scopes remain intact.
+Reader follows only producerPASS/fullpositive retirement; no unchanged retry.
 Require actual unique Rust perf owners, pairedC exclusions, allrequiredABI104/
 callback/lowerproviders/zero strongUND/LOAD/newentry/currentCledger and cleanup,
 followed by independent whole original03-05 decision. SourceGOs/HOST PASS alone

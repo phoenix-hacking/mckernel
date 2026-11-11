@@ -1,0 +1,3269 @@
+{
+  "schema": 1,
+  "at": "2026-11-11T15:56:35.949187+00:00",
+  "reviewer": "/root/p04_tests_max independent whole-region review",
+  "decision": "CONDITIONAL_NO_FINAL_DEFAULT_CREDIT_AWAIT_ACTUAL_MATCHING_IMAGE_AND_READER",
+  "original_condition": "M14-03-05-DEFAULT",
+  "original_done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
+  "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
+  "criteria_snapshot_source": {
+    "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+    "bytes": 942080,
+    "sha256": "e2f306cb28920e20ccba0f040c4f7c9f9da2b4997bce55158ba4c887c599ce18"
+  },
+  "criteria_unchanged": true,
+  "proposed_mapping": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-whole-region-map-p03-max-1/MAPPING.PROPOSED.json",
+    "bytes": 125359,
+    "sha256": "7c40badffd8d428186dade1804bd51f5b3a950f7a443319ad11310abeddf4317"
+  },
+  "retained_basis_image": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/stable-baseline6aae-1/build/kernel/mckernel.img",
+    "bytes": 10666456,
+    "sha256": "4b711cd9a361068d8c5b4e7e7fb6852e3124a0f7f97dc0401a77086c1897fc60"
+  },
+  "retained_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/QUALIFICATION.json",
+    "bytes": 65438,
+    "sha256": "0bfde64c608e67b2f5926fae58d6d5defa4dcc998200f716624139fe165ef371"
+  },
+  "retained_full_provider_map": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-reader-p03-max-1/qualification-1/preserved-cohort-bindings-1/OWNER-PROVIDER-JOINS.json",
+    "bytes": 5773404,
+    "sha256": "8c4062071b310c03aeeea2668ddff51aaf8f77706250bb4e1c85dd88e60d4006"
+  },
+  "complete_nonperf_source_basis": [
+    {
+      "region": "credentials",
+      "decision": "SOURCE_AND_QUALIFIED_BASIS_JOINED_FINAL_COHORT_PENDING",
+      "roots": [
+        {
+          "name": "sys_setresuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12664,
+          "last_line": 12671,
+          "body_sha256": "8b7a330b0b925965ccbd63db7471e7ee676f78888b860763c2df732693ef64d6",
+          "basis_physical_owner": {
+            "name": "sys_setresuid",
+            "final": {
+              "index": 4715,
+              "name": "sys_setresuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685225296,
+              "bytes": 322
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7174,
+                "name": "sys_setresuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4424,
+                "value": 0,
+                "bytes": 322
+              },
+              "section": ".ltext.sys_setresuid",
+              "placement": {
+                "address": 18446744073685225296,
+                "bytes": 322
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setreuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12674,
+          "last_line": 12681,
+          "body_sha256": "609d49ccb932a319e2bc648b63c977817f112755eb97b85a7e7597341ff30d74",
+          "basis_physical_owner": {
+            "name": "sys_setreuid",
+            "final": {
+              "index": 599,
+              "name": "sys_setreuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685225632,
+              "bytes": 322
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7175,
+                "name": "sys_setreuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4426,
+                "value": 0,
+                "bytes": 322
+              },
+              "section": ".ltext.sys_setreuid",
+              "placement": {
+                "address": 18446744073685225632,
+                "bytes": 322
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12684,
+          "last_line": 12691,
+          "body_sha256": "4a715d0482580b5b1ce5ebadcf70915aa576e83ffd2b82413783a34641ef6cfc",
+          "basis_physical_owner": {
+            "name": "sys_setuid",
+            "final": {
+              "index": 3939,
+              "name": "sys_setuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685227520,
+              "bytes": 322
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7180,
+                "name": "sys_setuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4432,
+                "value": 0,
+                "bytes": 322
+              },
+              "section": ".ltext.sys_setuid",
+              "placement": {
+                "address": 18446744073685227520,
+                "bytes": 322
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setfsuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12694,
+          "last_line": 12704,
+          "body_sha256": "861cc303d921896d8718c2bdddda603325819a61ddc865c0614303f7589eb80a",
+          "basis_physical_owner": {
+            "name": "sys_setfsuid",
+            "final": {
+              "index": 2432,
+              "name": "sys_setfsuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685222480,
+              "bytes": 437
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7168,
+                "name": "sys_setfsuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4412,
+                "value": 0,
+                "bytes": 437
+              },
+              "section": ".ltext.sys_setfsuid",
+              "placement": {
+                "address": 18446744073685222480,
+                "bytes": 437
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setresgid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12707,
+          "last_line": 12714,
+          "body_sha256": "617805481f1b30e3050cc0cd5c856a8bb9f6fe176f6d1b34f355bb96d6032480",
+          "basis_physical_owner": {
+            "name": "sys_setresgid",
+            "final": {
+              "index": 4557,
+              "name": "sys_setresgid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685224960,
+              "bytes": 323
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7173,
+                "name": "sys_setresgid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4422,
+                "value": 0,
+                "bytes": 323
+              },
+              "section": ".ltext.sys_setresgid",
+              "placement": {
+                "address": 18446744073685224960,
+                "bytes": 323
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setregid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12717,
+          "last_line": 12724,
+          "body_sha256": "45804e4e9191a6544b596c88e0183cb4603247ac124515d2642b65b5a90f3ef4",
+          "basis_physical_owner": {
+            "name": "sys_setregid",
+            "final": {
+              "index": 1737,
+              "name": "sys_setregid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685224624,
+              "bytes": 323
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7172,
+                "name": "sys_setregid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4420,
+                "value": 0,
+                "bytes": 323
+              },
+              "section": ".ltext.sys_setregid",
+              "placement": {
+                "address": 18446744073685224624,
+                "bytes": 323
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setgid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12727,
+          "last_line": 12734,
+          "body_sha256": "40c4e72679508c77e74efe506f342e8b4d470a70fafd909b1235ea6af9058adb",
+          "basis_physical_owner": {
+            "name": "sys_setgid",
+            "final": {
+              "index": 3489,
+              "name": "sys_setgid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685222928,
+              "bytes": 323
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7169,
+                "name": "sys_setgid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4414,
+                "value": 0,
+                "bytes": 323
+              },
+              "section": ".ltext.sys_setgid",
+              "placement": {
+                "address": 18446744073685222928,
+                "bytes": 323
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_setfsgid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12737,
+          "last_line": 12747,
+          "body_sha256": "fe495c6df7c2dfe51ed092a573bd37bd65ebeff4664e30845143902183273564",
+          "basis_physical_owner": {
+            "name": "sys_setfsgid",
+            "final": {
+              "index": 871,
+              "name": "sys_setfsgid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685222032,
+              "bytes": 438
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7167,
+                "name": "sys_setfsgid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4410,
+                "value": 0,
+                "bytes": 438
+              },
+              "section": ".ltext.sys_setfsgid",
+              "placement": {
+                "address": 18446744073685222032,
+                "bytes": 438
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12750,
+          "last_line": 12756,
+          "body_sha256": "6026d91ebbb02208061b884b4cfb232359e6b24f1a435d2309f83076492951ff",
+          "basis_physical_owner": {
+            "name": "sys_getuid",
+            "final": {
+              "index": 1785,
+              "name": "sys_getuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685197504,
+              "bytes": 124
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7096,
+                "name": "sys_getuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4303,
+                "value": 0,
+                "bytes": 124
+              },
+              "section": ".ltext.sys_getuid",
+              "placement": {
+                "address": 18446744073685197504,
+                "bytes": 124
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_geteuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12759,
+          "last_line": 12765,
+          "body_sha256": "5252c6d2b5c77f68695c1578b066c85fe7e512b5f8fdf96efebe8ae37b33d8b4",
+          "basis_physical_owner": {
+            "name": "sys_geteuid",
+            "final": {
+              "index": 1059,
+              "name": "sys_geteuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685194592,
+              "bytes": 124
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7085,
+                "name": "sys_geteuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4281,
+                "value": 0,
+                "bytes": 124
+              },
+              "section": ".ltext.sys_geteuid",
+              "placement": {
+                "address": 18446744073685194592,
+                "bytes": 124
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getresuid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12768,
+          "last_line": 12783,
+          "body_sha256": "131e0c455490f057107650c2fb62dfef32ac54b777f6406f93aee6ae5a1eecf7",
+          "basis_physical_owner": {
+            "name": "sys_getresuid",
+            "final": {
+              "index": 822,
+              "name": "sys_getresuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685196000,
+              "bytes": 260
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7091,
+                "name": "sys_getresuid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4293,
+                "value": 0,
+                "bytes": 260
+              },
+              "section": ".ltext.sys_getresuid",
+              "placement": {
+                "address": 18446744073685196000,
+                "bytes": 260
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getgid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12786,
+          "last_line": 12792,
+          "body_sha256": "f0405932cabc204d4679a1b43b67ac108afa5f58ce7275c1cf729ef35cbde382",
+          "basis_physical_owner": {
+            "name": "sys_getgid",
+            "final": {
+              "index": 3724,
+              "name": "sys_getgid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685194720,
+              "bytes": 124
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7086,
+                "name": "sys_getgid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4283,
+                "value": 0,
+                "bytes": 124
+              },
+              "section": ".ltext.sys_getgid",
+              "placement": {
+                "address": 18446744073685194720,
+                "bytes": 124
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getegid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12795,
+          "last_line": 12801,
+          "body_sha256": "fd606cde911a7e17513bf1ecb379b626ae91231368477472b99181afdc39b89c",
+          "basis_physical_owner": {
+            "name": "sys_getegid",
+            "final": {
+              "index": 1051,
+              "name": "sys_getegid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685194464,
+              "bytes": 124
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7084,
+                "name": "sys_getegid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4279,
+                "value": 0,
+                "bytes": 124
+              },
+              "section": ".ltext.sys_getegid",
+              "placement": {
+                "address": 18446744073685194464,
+                "bytes": 124
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getresgid",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12804,
+          "last_line": 12819,
+          "body_sha256": "aa962320dfb831b4508db9c3d48396c8f1fc459b8a10938911e83910c79f3d3e",
+          "basis_physical_owner": {
+            "name": "sys_getresgid",
+            "final": {
+              "index": 2292,
+              "name": "sys_getresgid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685195728,
+              "bytes": 260
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7090,
+                "name": "sys_getresgid",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4291,
+                "value": 0,
+                "bytes": 260
+              },
+              "section": ".ltext.sys_getresgid",
+              "placement": {
+                "address": 18446744073685195728,
+                "bytes": 260
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        }
+      ],
+      "dispatch_slots": [
+        {
+          "syscall_slot": 117,
+          "handler": "sys_setresuid",
+          "actual_pointer": "0xfffffffffe8ccf50",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 113,
+          "handler": "sys_setreuid",
+          "actual_pointer": "0xfffffffffe8cd0a0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 105,
+          "handler": "sys_setuid",
+          "actual_pointer": "0xfffffffffe8cd800",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 122,
+          "handler": "sys_setfsuid",
+          "actual_pointer": "0xfffffffffe8cc450",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 119,
+          "handler": "sys_setresgid",
+          "actual_pointer": "0xfffffffffe8cce00",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 114,
+          "handler": "sys_setregid",
+          "actual_pointer": "0xfffffffffe8cccb0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 106,
+          "handler": "sys_setgid",
+          "actual_pointer": "0xfffffffffe8cc610",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 123,
+          "handler": "sys_setfsgid",
+          "actual_pointer": "0xfffffffffe8cc290",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 102,
+          "handler": "sys_getuid",
+          "actual_pointer": "0xfffffffffe8c62c0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 107,
+          "handler": "sys_geteuid",
+          "actual_pointer": "0xfffffffffe8c5760",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 118,
+          "handler": "sys_getresuid",
+          "actual_pointer": "0xfffffffffe8c5ce0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 104,
+          "handler": "sys_getgid",
+          "actual_pointer": "0xfffffffffe8c57e0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 108,
+          "handler": "sys_getegid",
+          "actual_pointer": "0xfffffffffe8c56e0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 120,
+          "handler": "sys_getresgid",
+          "actual_pointer": "0xfffffffffe8c5bd0",
+          "matches_unique_Rust_physical_owner": true
+        }
+      ]
+    },
+    {
+      "region": "resource_limits_and_accounting",
+      "decision": "SOURCE_AND_QUALIFIED_BASIS_JOINED_FINAL_COHORT_PENDING",
+      "roots": [
+        {
+          "name": "sys_setrlimit",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 11429,
+          "last_line": 11438,
+          "body_sha256": "54810c9e4ce551908aa9f09713760898f4d33aa7a3b4c3d78e8c107fb39021a0",
+          "basis_physical_owner": {
+            "name": "sys_setrlimit",
+            "final": {
+              "index": 1636,
+              "name": "sys_setrlimit",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685225968,
+              "bytes": 178
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7176,
+                "name": "sys_setrlimit",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4428,
+                "value": 0,
+                "bytes": 178
+              },
+              "section": ".ltext.sys_setrlimit",
+              "placement": {
+                "address": 18446744073685225968,
+                "bytes": 178
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getrlimit",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 11441,
+          "last_line": 11450,
+          "body_sha256": "b78afbed9b7ea1805ffdea4e44727f60b7ae190bde31c26f7ee4b646e32f75a4",
+          "basis_physical_owner": {
+            "name": "sys_getrlimit",
+            "final": {
+              "index": 1260,
+              "name": "sys_getrlimit",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685196272,
+              "bytes": 178
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7092,
+                "name": "sys_getrlimit",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4295,
+                "value": 0,
+                "bytes": 178
+              },
+              "section": ".ltext.sys_getrlimit",
+              "placement": {
+                "address": 18446744073685196272,
+                "bytes": 178
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_prlimit64",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 11453,
+          "last_line": 11464,
+          "body_sha256": "5a5fcf619a4c7e1ada7bf292ae4277d27126f54cf19ee0ccd424fc680db94290",
+          "basis_physical_owner": {
+            "name": "sys_prlimit64",
+            "final": {
+              "index": 3774,
+              "name": "sys_prlimit64",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685211392,
+              "bytes": 187
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7132,
+                "name": "sys_prlimit64",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4353,
+                "value": 0,
+                "bytes": 187
+              },
+              "section": ".ltext.sys_prlimit64",
+              "placement": {
+                "address": 18446744073685211392,
+                "bytes": 187
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_getrusage",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12069,
+          "last_line": 12109,
+          "body_sha256": "3b706385135c926f5256e000c08e3e4c9b7971b180b99fb6bda0e14515322521",
+          "basis_physical_owner": {
+            "name": "sys_getrusage",
+            "final": {
+              "index": 1135,
+              "name": "sys_getrusage",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685196464,
+              "bytes": 428
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7093,
+                "name": "sys_getrusage",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4297,
+                "value": 0,
+                "bytes": 428
+              },
+              "section": ".ltext.sys_getrusage",
+              "placement": {
+                "address": 18446744073685196464,
+                "bytes": 428
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_times",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 11366,
+          "last_line": 11395,
+          "body_sha256": "961b4f326b4575df97ad3d37c0440a7a06de90b5ade34a3a6113e5c5d930720f",
+          "basis_physical_owner": {
+            "name": "sys_times",
+            "final": {
+              "index": 1596,
+              "name": "sys_times",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685232384,
+              "bytes": 797
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7201,
+                "name": "sys_times",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4457,
+                "value": 0,
+                "bytes": 797
+              },
+              "section": ".ltext.sys_times",
+              "placement": {
+                "address": 18446744073685232384,
+                "bytes": 797
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sysinfo",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 11467,
+          "last_line": 11477,
+          "body_sha256": "ea418bc1b42b4d181019ff83205d0e3118633ff0fbc4bf3abb48b9f3c1915284",
+          "basis_physical_owner": {
+            "name": "sys_sysinfo",
+            "final": {
+              "index": 4114,
+              "name": "sys_sysinfo",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685231760,
+              "bytes": 235
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7198,
+                "name": "sys_sysinfo",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4451,
+                "value": 0,
+                "bytes": 235
+              },
+              "section": ".ltext.sys_sysinfo",
+              "placement": {
+                "address": 18446744073685231760,
+                "bytes": 235
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        }
+      ],
+      "dispatch_slots": [
+        {
+          "syscall_slot": 160,
+          "handler": "sys_setrlimit",
+          "actual_pointer": "0xfffffffffe8cd1f0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 97,
+          "handler": "sys_getrlimit",
+          "actual_pointer": "0xfffffffffe8c5df0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 302,
+          "handler": "sys_prlimit64",
+          "actual_pointer": "0xfffffffffe8c9900",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 98,
+          "handler": "sys_getrusage",
+          "actual_pointer": "0xfffffffffe8c5eb0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 100,
+          "handler": "sys_times",
+          "actual_pointer": "0xfffffffffe8ceb00",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 99,
+          "handler": "sys_sysinfo",
+          "actual_pointer": "0xfffffffffe8ce890",
+          "matches_unique_Rust_physical_owner": true
+        }
+      ]
+    },
+    {
+      "region": "POSIX_scheduling_policy",
+      "decision": "SOURCE_AND_QUALIFIED_BASIS_JOINED_FINAL_COHORT_PENDING",
+      "roots": [
+        {
+          "name": "sys_sched_yield",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12041,
+          "last_line": 12057,
+          "body_sha256": "6bde9bf5c33f4167bd808a366ac0cdbfccde00c3658cd46bfe47dfd974867846",
+          "basis_physical_owner": {
+            "name": "sys_sched_yield",
+            "final": {
+              "index": 3784,
+              "name": "sys_sched_yield",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685221024,
+              "bytes": 513
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7162,
+                "name": "sys_sched_yield",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4403,
+                "value": 0,
+                "bytes": 513
+              },
+              "section": ".ltext.sys_sched_yield",
+              "placement": {
+                "address": 18446744073685221024,
+                "bytes": 513
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_setparam",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12126,
+          "last_line": 12154,
+          "body_sha256": "028efeb28d02e16d70a0e316d784c5947d7c01b01d731d174744eb31c13bb629",
+          "basis_physical_owner": {
+            "name": "sys_sched_setparam",
+            "final": {
+              "index": 1598,
+              "name": "sys_sched_setparam",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685219776,
+              "bytes": 583
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7159,
+                "name": "sys_sched_setparam",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4399,
+                "value": 0,
+                "bytes": 583
+              },
+              "section": ".ltext.sys_sched_setparam",
+              "placement": {
+                "address": 18446744073685219776,
+                "bytes": 583
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_getparam",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12157,
+          "last_line": 12177,
+          "body_sha256": "ba19aee6731664e2569c2891c7900ebc33637163f3c054c79473b6e1e1e6c5ec",
+          "basis_physical_owner": {
+            "name": "sys_sched_getparam",
+            "final": {
+              "index": 3705,
+              "name": "sys_sched_getparam",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685218368,
+              "bytes": 347
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7155,
+                "name": "sys_sched_getparam",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4391,
+                "value": 0,
+                "bytes": 347
+              },
+              "section": ".ltext.sys_sched_getparam",
+              "placement": {
+                "address": 18446744073685218368,
+                "bytes": 347
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_setscheduler",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12180,
+          "last_line": 12206,
+          "body_sha256": "6bbcbe233ed13fb64019da6357fa44aa90d8e8ad47f4c8e99b64e694ae760fd5",
+          "basis_physical_owner": {
+            "name": "sys_sched_setscheduler",
+            "final": {
+              "index": 1504,
+              "name": "sys_sched_setscheduler",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685220368,
+              "bytes": 647
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7161,
+                "name": "sys_sched_setscheduler",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4401,
+                "value": 0,
+                "bytes": 647
+              },
+              "section": ".ltext.sys_sched_setscheduler",
+              "placement": {
+                "address": 18446744073685220368,
+                "bytes": 647
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_getscheduler",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12209,
+          "last_line": 12226,
+          "body_sha256": "b3138cc5117adfa3564e4c7de789fe8a5dd6541ef15e9c6f42036774054167e9",
+          "basis_physical_owner": {
+            "name": "sys_sched_getscheduler",
+            "final": {
+              "index": 4236,
+              "name": "sys_sched_getscheduler",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685218720,
+              "bytes": 272
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7156,
+                "name": "sys_sched_getscheduler",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4393,
+                "value": 0,
+                "bytes": 272
+              },
+              "section": ".ltext.sys_sched_getscheduler",
+              "placement": {
+                "address": 18446744073685218720,
+                "bytes": 272
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_get_priority_max",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12229,
+          "last_line": 12234,
+          "body_sha256": "0955cccafc4132d47dd9e9a32a818665aea2dc39c7b77b6dbbd6a83ae2dbdc61",
+          "basis_physical_owner": {
+            "name": "sys_sched_get_priority_max",
+            "final": {
+              "index": 3700,
+              "name": "sys_sched_get_priority_max",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685217648,
+              "bytes": 56
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7152,
+                "name": "sys_sched_get_priority_max",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4385,
+                "value": 0,
+                "bytes": 56
+              },
+              "section": ".ltext.sys_sched_get_priority_max",
+              "placement": {
+                "address": 18446744073685217648,
+                "bytes": 56
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_get_priority_min",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12237,
+          "last_line": 12242,
+          "body_sha256": "ba0483023cbe311b3f7bc226f8c51d5672c2bb5faa7aaf2fb0ca66bbbe765753",
+          "basis_physical_owner": {
+            "name": "sys_sched_get_priority_min",
+            "final": {
+              "index": 2570,
+              "name": "sys_sched_get_priority_min",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685217712,
+              "bytes": 56
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7153,
+                "name": "sys_sched_get_priority_min",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4387,
+                "value": 0,
+                "bytes": 56
+              },
+              "section": ".ltext.sys_sched_get_priority_min",
+              "placement": {
+                "address": 18446744073685217712,
+                "bytes": 56
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_rr_get_interval",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12245,
+          "last_line": 12264,
+          "body_sha256": "abf636354e1403ab820f4d39353aae60c91b7135150a8934d2e21df0aa582700",
+          "basis_physical_owner": {
+            "name": "sys_sched_rr_get_interval",
+            "final": {
+              "index": 1190,
+              "name": "sys_sched_rr_get_interval",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685218992,
+              "bytes": 376
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7157,
+                "name": "sys_sched_rr_get_interval",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4395,
+                "value": 0,
+                "bytes": 376
+              },
+              "section": ".ltext.sys_sched_rr_get_interval",
+              "placement": {
+                "address": 18446744073685218992,
+                "bytes": 376
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_setaffinity",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12267,
+          "last_line": 12297,
+          "body_sha256": "8bce1d4982690c982efd592e2571e1d54c1b1367122bf50f566c6d64cb6a7e6a",
+          "basis_physical_owner": {
+            "name": "sys_sched_setaffinity",
+            "final": {
+              "index": 1246,
+              "name": "sys_sched_setaffinity",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685219376,
+              "bytes": 391
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7158,
+                "name": "sys_sched_setaffinity",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4397,
+                "value": 0,
+                "bytes": 391
+              },
+              "section": ".ltext.sys_sched_setaffinity",
+              "placement": {
+                "address": 18446744073685219376,
+                "bytes": 391
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_sched_getaffinity",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12300,
+          "last_line": 12325,
+          "body_sha256": "97a9df95f9e5d305bd25e5dfde90926abcd4af0d07503f630650acbbbfa58e8f",
+          "basis_physical_owner": {
+            "name": "sys_sched_getaffinity",
+            "final": {
+              "index": 2190,
+              "name": "sys_sched_getaffinity",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685217776,
+              "bytes": 590
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7154,
+                "name": "sys_sched_getaffinity",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4389,
+                "value": 0,
+                "bytes": 590
+              },
+              "section": ".ltext.sys_sched_getaffinity",
+              "placement": {
+                "address": 18446744073685217776,
+                "bytes": 590
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        }
+      ],
+      "dispatch_slots": [
+        {
+          "syscall_slot": 24,
+          "handler": "sys_sched_yield",
+          "actual_pointer": "0xfffffffffe8cbea0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 142,
+          "handler": "sys_sched_setparam",
+          "actual_pointer": "0xfffffffffe8cb9c0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 143,
+          "handler": "sys_sched_getparam",
+          "actual_pointer": "0xfffffffffe8cb440",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 144,
+          "handler": "sys_sched_setscheduler",
+          "actual_pointer": "0xfffffffffe8cbc10",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 145,
+          "handler": "sys_sched_getscheduler",
+          "actual_pointer": "0xfffffffffe8cb5a0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 146,
+          "handler": "sys_sched_get_priority_max",
+          "actual_pointer": "0xfffffffffe8cb170",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 147,
+          "handler": "sys_sched_get_priority_min",
+          "actual_pointer": "0xfffffffffe8cb1b0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 148,
+          "handler": "sys_sched_rr_get_interval",
+          "actual_pointer": "0xfffffffffe8cb6b0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 203,
+          "handler": "sys_sched_setaffinity",
+          "actual_pointer": "0xfffffffffe8cb830",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 204,
+          "handler": "sys_sched_getaffinity",
+          "actual_pointer": "0xfffffffffe8cb1f0",
+          "matches_unique_Rust_physical_owner": true
+        }
+      ]
+    },
+    {
+      "region": "SysV_SHM",
+      "decision": "SOURCE_AND_QUALIFIED_BASIS_JOINED_FINAL_COHORT_PENDING",
+      "roots": [
+        {
+          "name": "sys_shmget",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 11690,
+          "last_line": 11702,
+          "body_sha256": "11c76fcada10023de64935ea5f0e9231264ca12f335f269e187a7414b7c6fab9",
+          "basis_physical_owner": {
+            "name": "sys_shmget",
+            "final": {
+              "index": 3123,
+              "name": "sys_shmget",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685229888,
+              "bytes": 338
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7189,
+                "name": "sys_shmget",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4440,
+                "value": 0,
+                "bytes": 338
+              },
+              "section": ".ltext.sys_shmget",
+              "placement": {
+                "address": 18446744073685229888,
+                "bytes": 338
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_shmat",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 27417,
+          "last_line": 27444,
+          "body_sha256": "91b6a2dbb274b78cbd43e70255b5e42805e8278658ab5c272f300c764c0f5824",
+          "basis_physical_owner": {
+            "name": "sys_shmat",
+            "final": {
+              "index": 2787,
+              "name": "sys_shmat",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685227856,
+              "bytes": 482
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7181,
+                "name": "sys_shmat",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4434,
+                "value": 0,
+                "bytes": 482
+              },
+              "section": ".ltext.sys_shmat",
+              "placement": {
+                "address": 18446744073685227856,
+                "bytes": 482
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_shmdt",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 27156,
+          "last_line": 27171,
+          "body_sha256": "e5276a423929f7618ef2602f10a7413b3732e81ae8a5230e73d543b629816974",
+          "basis_physical_owner": {
+            "name": "sys_shmdt",
+            "final": {
+              "index": 1619,
+              "name": "sys_shmdt",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685228896,
+              "bytes": 984
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7186,
+                "name": "sys_shmdt",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4438,
+                "value": 0,
+                "bytes": 984
+              },
+              "section": ".ltext.sys_shmdt",
+              "placement": {
+                "address": 18446744073685228896,
+                "bytes": 984
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_shmctl",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 27485,
+          "last_line": 27515,
+          "body_sha256": "3591fb5269eb064208437119890bcc9ebd3c4b15deb59bce4c0f19a6a7132949",
+          "basis_physical_owner": {
+            "name": "sys_shmctl",
+            "final": {
+              "index": 1428,
+              "name": "sys_shmctl",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685228352,
+              "bytes": 537
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7183,
+                "name": "sys_shmctl",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4436,
+                "value": 0,
+                "bytes": 537
+              },
+              "section": ".ltext.sys_shmctl",
+              "placement": {
+                "address": 18446744073685228352,
+                "bytes": 537
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        }
+      ],
+      "dispatch_slots": [
+        {
+          "syscall_slot": 29,
+          "handler": "sys_shmget",
+          "actual_pointer": "0xfffffffffe8ce140",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 30,
+          "handler": "sys_shmat",
+          "actual_pointer": "0xfffffffffe8cd950",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 67,
+          "handler": "sys_shmdt",
+          "actual_pointer": "0xfffffffffe8cdd60",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 31,
+          "handler": "sys_shmctl",
+          "actual_pointer": "0xfffffffffe8cdb40",
+          "matches_unique_Rust_physical_owner": true
+        }
+      ]
+    },
+    {
+      "region": "file_wrappers_and_wait_forwarding",
+      "decision": "SOURCE_AND_QUALIFIED_BASIS_JOINED_FINAL_COHORT_PENDING",
+      "roots": [
+        {
+          "name": "sys_read",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 13423,
+          "last_line": 13438,
+          "body_sha256": "ac3d21429302fed1985e4d132c9eb3e260467dcc0d6a15c88ebab1192ab9b464",
+          "basis_physical_owner": {
+            "name": "sys_read",
+            "final": {
+              "index": 2988,
+              "name": "sys_read",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685213072,
+              "bytes": 602
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7140,
+                "name": "sys_read",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4365,
+                "value": 0,
+                "bytes": 602
+              },
+              "section": ".ltext.sys_read",
+              "placement": {
+                "address": 18446744073685213072,
+                "bytes": 602
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_open",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 13463,
+          "last_line": 13481,
+          "body_sha256": "af71549def653b6a6a5ce3175ab3fecff5ba0b120db12600db2ac6f3eda3c292",
+          "basis_physical_owner": {
+            "name": "sys_open",
+            "final": {
+              "index": 1781,
+              "name": "sys_open",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685209648,
+              "bytes": 507
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7126,
+                "name": "sys_open",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4343,
+                "value": 0,
+                "bytes": 507
+              },
+              "section": ".ltext.sys_open",
+              "placement": {
+                "address": 18446744073685209648,
+                "bytes": 507
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_openat",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 13485,
+          "last_line": 13503,
+          "body_sha256": "5f7bf8515c52a278f948da93225e436c58459812cf2f3f43fa6116a18976227f",
+          "basis_physical_owner": {
+            "name": "sys_openat",
+            "final": {
+              "index": 4111,
+              "name": "sys_openat",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685210160,
+              "bytes": 507
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7127,
+                "name": "sys_openat",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4345,
+                "value": 0,
+                "bytes": 507
+              },
+              "section": ".ltext.sys_openat",
+              "placement": {
+                "address": 18446744073685210160,
+                "bytes": 507
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_close",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 13506,
+          "last_line": 13523,
+          "body_sha256": "6481533057e9ef2b035b383ab6043733dfa089c50a11fdfc45f664da1885d59a",
+          "basis_physical_owner": {
+            "name": "sys_close",
+            "final": {
+              "index": 556,
+              "name": "sys_close",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685191328,
+              "bytes": 669
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7068,
+                "name": "sys_close",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4254,
+                "value": 0,
+                "bytes": 669
+              },
+              "section": ".ltext.sys_close",
+              "placement": {
+                "address": 18446744073685191328,
+                "bytes": 669
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_ioctl",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 13441,
+          "last_line": 13459,
+          "body_sha256": "4a414ec3f1f375f632fc365ff31c47cb0dc7e6bb2ce61004dd4828a072825603",
+          "basis_physical_owner": {
+            "name": "sys_ioctl",
+            "final": {
+              "index": 450,
+              "name": "sys_ioctl",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685197632,
+              "bytes": 496
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7097,
+                "name": "sys_ioctl",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4305,
+                "value": 0,
+                "bytes": 496
+              },
+              "section": ".ltext.sys_ioctl",
+              "placement": {
+                "address": 18446744073685197632,
+                "bytes": 496
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_fcntl",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 13526,
+          "last_line": 13541,
+          "body_sha256": "9b60329860a66c118407e32390b53385215c03555c0b788c69f6a2631bb1707b",
+          "basis_physical_owner": {
+            "name": "sys_fcntl",
+            "final": {
+              "index": 2859,
+              "name": "sys_fcntl",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685192736,
+              "bytes": 596
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7075,
+                "name": "sys_fcntl",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4266,
+                "value": 0,
+                "bytes": 596
+              },
+              "section": ".ltext.sys_fcntl",
+              "placement": {
+                "address": 18446744073685192736,
+                "bytes": 596
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_ppoll",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12408,
+          "last_line": 12426,
+          "body_sha256": "d5d6013250c609ac61e78eae564434857886c4f2cc3b709fc0dce9770ced5ae6",
+          "basis_physical_owner": {
+            "name": "sys_ppoll",
+            "final": {
+              "index": 3303,
+              "name": "sys_ppoll",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685210832,
+              "bytes": 257
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7130,
+                "name": "sys_ppoll",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4349,
+                "value": 0,
+                "bytes": 257
+              },
+              "section": ".ltext.sys_ppoll",
+              "placement": {
+                "address": 18446744073685210832,
+                "bytes": 257
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_pselect6",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12429,
+          "last_line": 12447,
+          "body_sha256": "c0b443be67a9012cb9cf1b08fde46b0dc333056d4ed3dce468e8f3fe411ed167",
+          "basis_physical_owner": {
+            "name": "sys_pselect6",
+            "final": {
+              "index": 2665,
+              "name": "sys_pselect6",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685212576,
+              "bytes": 318
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7136,
+                "name": "sys_pselect6",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4361,
+                "value": 0,
+                "bytes": 318
+              },
+              "section": ".ltext.sys_pselect6",
+              "placement": {
+                "address": 18446744073685212576,
+                "bytes": 318
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        },
+        {
+          "name": "sys_epoll_pwait",
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "first_line": 12387,
+          "last_line": 12405,
+          "body_sha256": "5bba8bcf99828448e740be63647b9c30ea9018a2b087306798d68bcb6ac13621",
+          "basis_physical_owner": {
+            "name": "sys_epoll_pwait",
+            "final": {
+              "index": 4649,
+              "name": "sys_epoll_pwait",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1,
+              "value": 18446744073685192000,
+              "bytes": 260
+            },
+            "owner": {
+              "object": "rust/mckernel_rust.o",
+              "input": {
+                "index": 7069,
+                "name": "sys_epoll_pwait",
+                "binding": "GLOBAL",
+                "type": "FUNC",
+                "visibility": 0,
+                "section_index": 4256,
+                "value": 0,
+                "bytes": 260
+              },
+              "section": ".ltext.sys_epoll_pwait",
+              "placement": {
+                "address": 18446744073685192000,
+                "bytes": 260
+              }
+            }
+          },
+          "source_body_present": true,
+          "new_actual_image_rejoin_required": true
+        }
+      ],
+      "dispatch_slots": [
+        {
+          "syscall_slot": 0,
+          "handler": "sys_read",
+          "actual_pointer": "0xfffffffffe8c9f90",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 2,
+          "handler": "sys_open",
+          "actual_pointer": "0xfffffffffe8c9230",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 257,
+          "handler": "sys_openat",
+          "actual_pointer": "0xfffffffffe8c9430",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 3,
+          "handler": "sys_close",
+          "actual_pointer": "0xfffffffffe8c4aa0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 16,
+          "handler": "sys_ioctl",
+          "actual_pointer": "0xfffffffffe8c6340",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 72,
+          "handler": "sys_fcntl",
+          "actual_pointer": "0xfffffffffe8c5020",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 271,
+          "handler": "sys_ppoll",
+          "actual_pointer": "0xfffffffffe8c96d0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 270,
+          "handler": "sys_pselect6",
+          "actual_pointer": "0xfffffffffe8c9da0",
+          "matches_unique_Rust_physical_owner": true
+        },
+        {
+          "syscall_slot": 281,
+          "handler": "sys_epoll_pwait",
+          "actual_pointer": "0xfffffffffe8c4d40",
+          "matches_unique_Rust_physical_owner": true
+        }
+      ]
+    }
+  ],
+  "supplemental_positive_scope_join": {
+    "name": "sys_setpgid",
+    "source": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1247778,
+      "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+    },
+    "first_line": 11398,
+    "last_line": 11426,
+    "body_sha256": "15bd6065a9bb621509696bb90a72432f172c3f954962565433dc614f9a0e6d4f",
+    "basis_physical_owner": {
+      "name": "sys_setpgid",
+      "final": {
+        "index": 3005,
+        "name": "sys_setpgid",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685223952,
+        "bytes": 661
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7171,
+          "name": "sys_setpgid",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4418,
+          "value": 0,
+          "bytes": 661
+        },
+        "section": ".ltext.sys_setpgid",
+        "placement": {
+          "address": 18446744073685223952,
+          "bytes": 661
+        }
+      }
+    },
+    "scope": "Process-group/credential-adjacent wrapper; full Rust lookup/unlock/validation+host forwarding. Included positively without inventing an additional scenario/function quota.",
+    "new_actual_image_rejoin_required": true
+  },
+  "actual_required_lower_basis_joins": [
+    {
+      "name": "schedule",
+      "final": {
+        "index": 3637,
+        "name": "schedule",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685141360,
+        "bytes": 3632
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4361,
+          "name": "schedule",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4065,
+          "value": 0,
+          "bytes": 3632
+        },
+        "section": ".ltext.schedule",
+        "placement": {
+          "address": 18446744073685141360,
+          "bytes": 3632
+        }
+      }
+    },
+    {
+      "name": "sched_yield_schedule_bridge",
+      "final": {
+        "index": 2125,
+        "name": "sched_yield_schedule_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685058272,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8701,
+          "name": "sched_yield_schedule_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3537,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.process_sched_schedule_bridge",
+        "placement": {
+          "address": 18446744073685058272,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "sched_apply_scheduler_bridge",
+      "final": {
+        "index": 4579,
+        "name": "sched_apply_scheduler_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685124224,
+        "bytes": 87
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6903,
+          "name": "sched_apply_scheduler_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 3997,
+          "value": 0,
+          "bytes": 87
+        },
+        "section": ".ltext.sched_apply_scheduler_bridge",
+        "placement": {
+          "address": 18446744073685124224,
+          "bytes": 87
+        }
+      }
+    },
+    {
+      "name": "sched_request_migrate_bridge",
+      "final": {
+        "index": 4746,
+        "name": "sched_request_migrate_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685133408,
+        "bytes": 17
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 6926,
+          "name": "sched_request_migrate_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4039,
+          "value": 0,
+          "bytes": 17
+        },
+        "section": ".ltext.sched_request_migrate_bridge",
+        "placement": {
+          "address": 18446744073685133408,
+          "bytes": 17
+        }
+      }
+    },
+    {
+      "name": "syscall_do_prlimit64_bridge",
+      "final": {
+        "index": 4872,
+        "name": "syscall_do_prlimit64_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685238720,
+        "bytes": 150
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7224,
+          "name": "syscall_do_prlimit64_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4484,
+          "value": 0,
+          "bytes": 150
+        },
+        "section": ".ltext.syscall_do_prlimit64_bridge",
+        "placement": {
+          "address": 18446744073685238720,
+          "bytes": 150
+        }
+      }
+    },
+    {
+      "name": "do_shmget",
+      "final": {
+        "index": 2634,
+        "name": "do_shmget",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684695504,
+        "bytes": 2993
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4641,
+          "name": "do_shmget",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1214,
+          "value": 0,
+          "bytes": 2993
+        },
+        "section": ".ltext.do_shmget",
+        "placement": {
+          "address": 18446744073684695504,
+          "bytes": 2993
+        }
+      }
+    },
+    {
+      "name": "syscall_copy_from_user_bridge",
+      "final": {
+        "index": 3368,
+        "name": "syscall_copy_from_user_bridge",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684585744,
+        "bytes": 20
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 8577,
+          "name": "syscall_copy_from_user_bridge",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 788,
+          "value": 0,
+          "bytes": 20
+        },
+        "section": ".ltext.arch_copy_from_user_bridge",
+        "placement": {
+          "address": 18446744073684585744,
+          "bytes": 20
+        }
+      }
+    },
+    {
+      "name": "xpmem_openat",
+      "final": {
+        "index": 4020,
+        "name": "xpmem_openat",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685400576,
+        "bytes": 25
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7882,
+          "name": "xpmem_openat",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 5475,
+          "value": 0,
+          "bytes": 25
+        },
+        "section": ".ltext.xpmem_openat",
+        "placement": {
+          "address": 18446744073685400576,
+          "bytes": 25
+        }
+      }
+    },
+    {
+      "name": "do_syscall",
+      "final": {
+        "index": 3520,
+        "name": "do_syscall",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073684702128,
+        "bytes": 1421
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4230,
+          "name": "do_syscall",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 1224,
+          "value": 0,
+          "bytes": 1421
+        },
+        "section": ".ltext.do_syscall",
+        "placement": {
+          "address": 18446744073684702128,
+          "bytes": 1421
+        }
+      }
+    },
+    {
+      "name": "syscall_generic_forwarding",
+      "final": {
+        "index": 1535,
+        "name": "syscall_generic_forwarding",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685240032,
+        "bytes": 448
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 4311,
+          "name": "syscall_generic_forwarding",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4502,
+          "value": 0,
+          "bytes": 448
+        },
+        "section": ".ltext.syscall_generic_forwarding",
+        "placement": {
+          "address": 18446744073685240032,
+          "bytes": 448
+        }
+      }
+    },
+    {
+      "name": "syscall_generic_forwarding_body_result",
+      "final": {
+        "index": 1570,
+        "name": "syscall_generic_forwarding_body_result",
+        "binding": "GLOBAL",
+        "type": "FUNC",
+        "visibility": 0,
+        "section_index": 1,
+        "value": 18446744073685240480,
+        "bytes": 78
+      },
+      "owner": {
+        "object": "rust/mckernel_rust.o",
+        "input": {
+          "index": 7233,
+          "name": "syscall_generic_forwarding_body_result",
+          "binding": "GLOBAL",
+          "type": "FUNC",
+          "visibility": 0,
+          "section_index": 4504,
+          "value": 0,
+          "bytes": 78
+        },
+        "section": ".ltext.syscall_generic_forwarding_body_result",
+        "placement": {
+          "address": 18446744073685240480,
+          "bytes": 78
+        }
+      }
+    }
+  ],
+  "credential_erroraware_chain": {
+    "actual_prior_credential_selection_qualification": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/credential-only-1/qualification-1/QUALIFICATION.json",
+      "bytes": 55760,
+      "sha256": "f35f17f685c76441ccbb91950adc97edb88145af5b48e93173f04df56ce9b1ab"
+    },
+    "source_contract": {
+      "bytes": 29699,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-selection-1/CONTRACT.json",
+      "sha256": "04b237b239ec42012f4c265c66f67d2abccb13ac5ac5c89eb836b46cfc7f63e1"
+    },
+    "independent_source_GO": {
+      "bytes": 11790,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "3d2b927a1ab7d45de95dba92e5f09eacb440714f16bf9be6c42fd3192dfd3f23"
+    },
+    "compatible_error_aware_chain": {
+      "chain": [
+        "f03_credential_refresh::do_setresuid/gid",
+        "cls::get_this_cpu_local_var -> actual currentCPU currentThread",
+        "syscall_refresh_cred_fields_body_result -> real getcred",
+        "getcred_body_result -> real virt_to_phys/currentCPU/request bridge -> genuine synchronous do_syscall",
+        "existing matched complete credential endpoint/producer -> selected snapshot -> existing four-field writes"
+      ],
+      "entry_ABI": "unsafe extern C fn()->(), Cvoid no arguments; existing explicit Rust fn-pointer asserts preserved.",
+      "lifetime": "Current Thread.proc, caller stack scratch, physical mapping and synchronous offload remain live until callback return, exactly as in current C wrapper. No new refcount or concurrent setter serialization is claimed.",
+      "no_external_missing_input": "Source/header/caller/producer/provider derivation is complete for this selector. Required next input is actual independently reviewed next-cohort selection/build/ownership, supplied by Root normal pipeline.",
+      "pointees": "Actual Thread and Process from ABIff48, CInt=i32, scratch16CInt64B, response8CInt32B. No invented layout or pointer lifetime.",
+      "whole_image_providers": "First-image ledger already binds getcred/getcred_body/refresh-fields and caller helpers to rust/mckernel_rust.o; current separate Root do_syscall cohort retains the genuine offload provider. No partial injection or fake callback is proposed."
+    },
+    "unchanged_defined_body_cases_scope": "Reuse actual unchanged5 producer/body cases identified in source contract/GO; no body change or semantic suite replay. Actual8setter syscall callers, refresh/getcred/core and real synchronous Rustdo_syscall are physically joined here with their actual kind/size/map/section owners.",
+    "current_6aae_actual_lower_Rust_owners": [
+      {
+        "name": "do_setresuid",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/f03_credential_refresh.rs",
+            "bytes": 2684,
+            "sha256": "9d52bfd14779a4396bf98e20058f8eac5a15ce3da99cdd788f667db6146a0e7c"
+          },
+          "function": "do_setresuid",
+          "first_line": 12,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn do_setresuid()"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "do_setresuid",
+          "final": {
+            "index": 4379,
+            "name": "do_setresuid",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073684695232,
+            "bytes": 262
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 5008,
+              "name": "do_setresuid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1212,
+              "value": 0,
+              "bytes": 262
+            },
+            "section": ".ltext.do_setresuid",
+            "placement": {
+              "address": 18446744073684695232,
+              "bytes": 262
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "do_setresgid",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/source-overlay/kernel/rust/f03_credential_refresh.rs",
+            "bytes": 2684,
+            "sha256": "9d52bfd14779a4396bf98e20058f8eac5a15ce3da99cdd788f667db6146a0e7c"
+          },
+          "function": "do_setresgid",
+          "first_line": 44,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn do_setresgid()"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "do_setresgid",
+          "final": {
+            "index": 4275,
+            "name": "do_setresgid",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073684694960,
+            "bytes": 263
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 5006,
+              "name": "do_setresgid",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1210,
+              "value": 0,
+              "bytes": 263
+            },
+            "section": ".ltext.do_setresgid",
+            "placement": {
+              "address": 18446744073684694960,
+              "bytes": 263
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "getcred",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "getcred",
+          "first_line": 30730,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn getcred(raw_buf: *mut CInt) -> *mut CInt"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "getcred",
+          "final": {
+            "index": 4323,
+            "name": "getcred",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073684781440,
+            "bytes": 515
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 5007,
+              "name": "getcred",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1687,
+              "value": 0,
+              "bytes": 515
+            },
+            "section": ".ltext.getcred",
+            "placement": {
+              "address": 18446744073684781440,
+              "bytes": 515
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "getcred_body_result",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "getcred_body_result",
+          "first_line": 2210,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn getcred_body_result(\n    raw_buf: *mut CInt,\n    page_mask: CULong,\n    syscall_nr: CInt,\n    virt_to_phys_fn: Option<SyscallVirtToPhysFn>,\n    processor_id_fn: Option<SyscallGetCpuFn>,\n    do_syscall_fn: Option<SyscallRequestCallFn>,\n) -> *mut CInt"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "getcred_body_result",
+          "final": {
+            "index": 2998,
+            "name": "getcred_body_result",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073684781968,
+            "bytes": 265
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 5348,
+              "name": "getcred_body_result",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1689,
+              "value": 0,
+              "bytes": 265
+            },
+            "section": ".ltext.getcred_body_result",
+            "placement": {
+              "address": 18446744073684781968,
+              "bytes": 265
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "syscall_refresh_cred_fields_body_result",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "syscall_refresh_cred_fields_body_result",
+          "first_line": 2257,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn syscall_refresh_cred_fields_body_result(\n    thread: *mut c_void,\n    scratch: *mut CInt,\n    thread_proc_offset: SizeT,\n    field0_offset: SizeT,\n    field1_offset: SizeT,\n    field2_offset: SizeT,\n    field3_offset: SizeT,\n    value0_index: SizeT,\n    value1_index: SizeT,\n    value2_index: SizeT,\n    value3_index: SizeT,\n    getcred_fn: Option<SyscallGetcredFn>,\n) -> CInt"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "syscall_refresh_cred_fields_body_result",
+          "final": {
+            "index": 4261,
+            "name": "syscall_refresh_cred_fields_body_result",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685253024,
+            "bytes": 167
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 7271,
+              "name": "syscall_refresh_cred_fields_body_result",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 4572,
+              "value": 0,
+              "bytes": 167
+            },
+            "section": ".ltext.syscall_refresh_cred_fields_body_result",
+            "placement": {
+              "address": 18446744073685253024,
+              "bytes": 167
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      }
+    ],
+    "earlier_ledger_prerequisite_disposition": "The previously old/incompatible getter note is historical. Actual genuine error-aware getcred/refresh/do_syscall/host producer source and typed physical chain were joined in f35, retained in6aae. Do not treat 16 imported names or historical partial text as an external inventory requirement; match the actual new image/provider cohort."
+  },
+  "delegated_file_behavior": {
+    "original_header": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/syscall_list.h",
+      "bytes": 5815,
+      "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead"
+    },
+    "actual_explicit_delegated_examples": [
+      {
+        "source_header_slot": 1,
+        "declared_name": "write",
+        "actual_None_handler_pointer": 0,
+        "selected_fallback": "Rust do_syscall outer -> syscall_generic_forwarding -> genuine synchronous offload/actual Linux control-plane provider; no absent-local-symbol assumption."
+      },
+      {
+        "source_header_slot": 7,
+        "declared_name": "poll",
+        "actual_None_handler_pointer": 0,
+        "selected_fallback": "Rust do_syscall outer -> syscall_generic_forwarding -> genuine synchronous offload/actual Linux control-plane provider; no absent-local-symbol assumption."
+      },
+      {
+        "source_header_slot": 18,
+        "declared_name": "pwrite64",
+        "actual_None_handler_pointer": 0,
+        "selected_fallback": "Rust do_syscall outer -> syscall_generic_forwarding -> genuine synchronous offload/actual Linux control-plane provider; no absent-local-symbol assumption."
+      },
+      {
+        "source_header_slot": 20,
+        "declared_name": "writev",
+        "actual_None_handler_pointer": 0,
+        "selected_fallback": "Rust do_syscall outer -> syscall_generic_forwarding -> genuine synchronous offload/actual Linux control-plane provider; no absent-local-symbol assumption."
+      },
+      {
+        "source_header_slot": 23,
+        "declared_name": "select",
+        "actual_None_handler_pointer": 0,
+        "selected_fallback": "Rust do_syscall outer -> syscall_generic_forwarding -> genuine synchronous offload/actual Linux control-plane provider; no absent-local-symbol assumption."
+      }
+    ],
+    "actual_dispatch_and_forward_Rust_owners": [
+      {
+        "name": "do_syscall",
+        "source_binding": {
+          "function": "do_syscall",
+          "declaration_scope": "Real existing lower Rust provider; typed body/source ABI evidence reused from qualified same-image source/provider closure. No NOTYPE-name signature inference."
+        },
+        "actual_6aae_physical_owner": {
+          "name": "do_syscall",
+          "final": {
+            "index": 3520,
+            "name": "do_syscall",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073684702128,
+            "bytes": 1421
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 4230,
+              "name": "do_syscall",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 1224,
+              "value": 0,
+              "bytes": 1421
+            },
+            "section": ".ltext.do_syscall",
+            "placement": {
+              "address": 18446744073684702128,
+              "bytes": 1421
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "syscall_generic_forwarding",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "syscall_generic_forwarding",
+          "first_line": 2630,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "syscall_generic_forwarding",
+          "final": {
+            "index": 1535,
+            "name": "syscall_generic_forwarding",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685240032,
+            "bytes": 448
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 4311,
+              "name": "syscall_generic_forwarding",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 4502,
+              "value": 0,
+              "bytes": 448
+            },
+            "section": ".ltext.syscall_generic_forwarding",
+            "placement": {
+              "address": 18446744073685240032,
+              "bytes": 448
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "syscall_generic_forwarding_body_result",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "syscall_generic_forwarding_body_result",
+          "first_line": 2946,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn syscall_generic_forwarding_body_result(\n    request: *mut SyscallRequest,\n    n: CInt,\n    arg0: CULong,\n    arg1: CULong,\n    arg2: CULong,\n    arg3: CULong,\n    arg4: CULong,\n    arg5: CULong,\n    cpu: CInt,\n    do_syscall_fn: Option<SyscallRequestCallFn>,\n) -> CLong"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "syscall_generic_forwarding_body_result",
+          "final": {
+            "index": 1570,
+            "name": "syscall_generic_forwarding_body_result",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685240480,
+            "bytes": 78
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 7233,
+              "name": "syscall_generic_forwarding_body_result",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 4504,
+              "value": 0,
+              "bytes": 78
+            },
+            "section": ".ltext.syscall_generic_forwarding_body_result",
+            "placement": {
+              "address": 18446744073685240480,
+              "bytes": 78
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "syscall_nested_dispatch_valid_result",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "syscall_nested_dispatch_valid_result",
+          "first_line": 3163,
+          "actual_declared_signature": "pub extern \"C\" fn syscall_nested_dispatch_valid_result(\n    syscall_nr: CInt,\n    syscall_count: CInt,\n    has_handler: CInt,\n) -> CInt"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "syscall_nested_dispatch_valid_result",
+          "final": {
+            "index": 1391,
+            "name": "syscall_nested_dispatch_valid_result",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685243760,
+            "bytes": 28
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 7258,
+              "name": "syscall_nested_dispatch_valid_result",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 4551,
+              "value": 0,
+              "bytes": 28
+            },
+            "section": ".ltext.syscall_nested_dispatch_valid_result",
+            "placement": {
+              "address": 18446744073685243760,
+              "bytes": 28
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "syscall_xpmem_openat_bridge",
+        "source_binding": {
+          "source": {
+            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1247778,
+            "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+          },
+          "function": "syscall_xpmem_openat_bridge",
+          "first_line": 30663,
+          "actual_declared_signature": "pub unsafe extern \"C\" fn syscall_xpmem_openat_bridge(\n    pathname: *const c_void,\n    flags: CInt,\n    ctx: *mut c_void,\n) -> CLong"
+        },
+        "actual_6aae_physical_owner": {
+          "name": "syscall_xpmem_openat_bridge",
+          "final": {
+            "index": 2731,
+            "name": "syscall_xpmem_openat_bridge",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685260160,
+            "bytes": 28
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 7305,
+              "name": "syscall_xpmem_openat_bridge",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 4628,
+              "value": 0,
+              "bytes": 28
+            },
+            "section": ".ltext.syscall_xpmem_openat_bridge",
+            "placement": {
+              "address": 18446744073685260160,
+              "bytes": 28
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      },
+      {
+        "name": "xpmem_openat",
+        "source_binding": {
+          "function": "xpmem_openat",
+          "declaration_scope": "Real existing lower Rust provider; typed body/source ABI evidence reused from qualified same-image source/provider closure. No NOTYPE-name signature inference."
+        },
+        "actual_6aae_physical_owner": {
+          "name": "xpmem_openat",
+          "final": {
+            "index": 4020,
+            "name": "xpmem_openat",
+            "binding": "GLOBAL",
+            "type": "FUNC",
+            "visibility": 0,
+            "section_index": 1,
+            "value": 18446744073685400576,
+            "bytes": 25
+          },
+          "owner": {
+            "object": "rust/mckernel_rust.o",
+            "input": {
+              "index": 7882,
+              "name": "xpmem_openat",
+              "binding": "GLOBAL",
+              "type": "FUNC",
+              "visibility": 0,
+              "section_index": 5475,
+              "value": 0,
+              "bytes": 25
+            },
+            "section": ".ltext.xpmem_openat",
+            "placement": {
+              "address": 18446744073685400576,
+              "bytes": 25
+            }
+          }
+        },
+        "new_image_rejoin_required": true
+      }
+    ],
+    "scope": "Header-delegated or unhandled slots use the existing real Rust fallback. No local sys_write/sys_dup/sys_getpriority symbol is demanded for a delegated operation; native Linux is the original external platform provider, not a guessed project implementation. Local file callback/closed-descriptor/forwarding and XPMEM callers keep their real typed Rust provider/known held-backend scope; no backend execution/replay."
+  },
+  "new_perf_runtime_qualification": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-four-family-operation-review-sourceacq-max-1/compiler-correction-1/actual-result-1/QUALIFICATION.json",
+    "bytes": 25466,
+    "sha256": "26bfc03fb22206bb90074a0a5868933383eaf8b9876aac442fab4b624a2d7e67"
+  },
+  "perf_protocol_scope": "Complete selected owner transaction/descriptor/event/group epoch/per-executingThread+inherited leases/positive target+monitor/parent copy and VM drain/close/terminal lifetimes. Actual HOST4 covers changed logic only, explicit lower effects; image/source/ABI/provider/default still required.",
+  "remaining_C_scope": [
+    {
+      "names": [
+        "do_execveat",
+        "syscall_execveat_bridge"
+      ],
+      "original_scope": "Original M14-03-02 fork/exec/wait/exit/ptrace/reaping; inherited03-01 generic/exec holds remain. Not an implementation of the named credential/limits/POSIX-sched/SHM/file handlers.",
+      "existing_scope_evidence": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-whole04-review-p04tests-max-1/REVIEW.json",
+        "bytes": 28076,
+        "sha256": "2f3b9a329f05cec77f60ff2fc7a7aa2a8a95640fb39a52c08a412ffac7a50eff"
+      }
+    },
+    {
+      "names": [
+        "util_thread",
+        "syscall_util_indicate_clone_disabled_bridge"
+      ],
+      "original_scope": "Existing independent generalUTI dispatcher/thread migration and sys_util_migrate_inter_kernel/sys_util_indicate_clone control, classified03-01 by prior whole04 review. Selected POSIX sched_* entries have their genuine Rust owners; do not relabel utility C or imply its retirement.",
+      "actual_named_source_refs": {
+        "source": {
+          "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-default-selection-p03-max-1/candidate/kernel/rust/syscall_policy.rs",
+          "bytes": 1247778,
+          "sha256": "784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503"
+        },
+        "explicit_contexts": [
+          "sys_util_migrate_inter_kernel -> syscall_util_thread_bridge -> existing C util_thread",
+          "sys_util_indicate_clone -> existing C syscall_util_indicate_clone_disabled_bridge",
+          "utilthr_migrate only when already-published SPAWN_TO_REMOTE mode, retains existing C endpoint and holds"
+        ]
+      },
+      "existing_scope_evidence": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-whole04-review-p04tests-max-1/REVIEW.json",
+        "bytes": 28076,
+        "sha256": "2f3b9a329f05cec77f60ff2fc7a7aa2a8a95640fb39a52c08a412ffac7a50eff"
+      }
+    }
+  ],
+  "C_scope_independent_reason": "Exec implementation belongs original03-02/03-01; UTI custom entries730/731 and already-published remote migration mode belong original03-01. None implements the named local credential/limit/POSIX-scheduler/SHM/file-entry transactions. This retains those C/control/held debts; it is not a zero-whole-image-C waiver or whole dispatcher/UTI acceptance.",
+  "unchanged_scope_reuse": {
+    "whole04_source_scope_review": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/wait-termination-whole04-review-p04tests-max-1/REVIEW.json",
+      "bytes": 28076,
+      "sha256": "2f3b9a329f05cec77f60ff2fc7a7aa2a8a95640fb39a52c08a412ffac7a50eff"
+    },
+    "credential_source_GO": {
+      "bytes": 11790,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/credential-refresh-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "3d2b927a1ab7d45de95dba92e5f09eacb440714f16bf9be6c42fd3192dfd3f23"
+    },
+    "credential_selection": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/next-credential-f06-1/credential-only-1/qualification-1/QUALIFICATION.json",
+      "bytes": 55760,
+      "sha256": "f35f17f685c76441ccbb91950adc97edb88145af5b48e93173f04df56ce9b1ab"
+    }
+  },
+  "literal_clause_decisions": [
+    {
+      "clause": "Complete required region implementation/selection",
+      "decision": "SOURCE_AND_RETAINED_BASIS_MAPPED; NEW_SELECTED_IMAGE_REQUIRED",
+      "reason": "All original region categories mapped positively to actual full Rust bodies, local syscall table entries and genuine delegated fallback;43 is a finite retained-root set, not a new completeness quota. Supplemental sys_setpgid also joined."
+    },
+    {
+      "clause": "Compatible actual ABI/providers",
+      "decision": "RETAINED_ABI_SOURCE_AND_CURRENT_CHANGED_FUNCTION_CASES_JOINED; NEW_ACTUAL_CALLBACK_DATA_REQUIRED",
+      "reason": "Real ff48/header/request72/Mckfd80/four104 and exact credential source/providers retained; new96B header constants,7Ctable bindings and current selected18units/provider closure must come from real new image."
+    },
+    {
+      "clause": "Unique supported-default in coherent image/no live project C/held/guessed/placeholder required implementation",
+      "decision": "PENDING_ACTUAL_NEW_IMAGE",
+      "reason": "Production Rust selection/body source is ready and actual4functional HOST families passed; old6aae still has the two C perf entries. New current default image/C exclusions/nonempty or qualified aliases/inlining/complete typed provider graph must be observed."
+    },
+    {
+      "clause": "Exact admitted command/result/cleanup/artifact and applicable defined functional checks",
+      "decision": "NEW_RUNTIME_CHANGED_CHECKS_GO; PRODUCTION_IMAGE_PENDING",
+      "reason": "Independent26bfc genuine HOST compile/link+all4full observations/allpositive ownership; old compiler failure retained. Does not replace final normal image/reader or actual native functional behavior. No new scenario quota."
+    }
+  ],
+  "genuinely_unmatched_original_source_clause_identified": null,
+  "current_new_image_state": "Root reports first normal C compile failed F_SETSIG undeclared after Rust object success; no valid newly linked image/reader. Existing immutable6aae basis alone earns no newDEFAULT credit.",
+  "minimum_required_next_input": "Actual reviewed bounded header correction followed by successful normal production image and passive reader qualification at the resulting exact source/config/toolchain tuple; bind all mapped roots/table/provider/newC2 exclusions/actualC4/entryLOAD/zeroUND and positive ownership before final whole03-05 decision.",
+  "separate_open": [
+    "M14-03-05-FUNCTIONAL/native original behavior and restoration",
+    "Whole original03-05 parent, F03 generic/exec/UTI/held source debt and M14 acceptance",
+    "All historical/native/Scratch/service/account/UNKNOWN holds"
+  ],
+  "original_acceptance_progress_mutated": false,
+  "new_tests_or_execution": false,
+  "new_native_or_zero_wholefile_clause": false
+}

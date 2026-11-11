@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T15:56:09.014836+00:00",
+  "updated_at": "2026-11-11T16:07:59.880097+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -16103,6 +16103,28 @@
       "reviewed_C_constant_correction_integrated": true,
       "C_candidate_sha256": "9f5aa63d124784d772734bff1c0c63dd719cb814fd43d4ebf41f3bf7ce188b2e",
       "source_GO_sha256": "e00af192e35f9292977c8cfe6cc34ecece6dab11f9e1ac24b10a5700e54a9c18"
+    },
+    "latest_perf_image_link_failure": {
+      "at": "2026-11-11T16:03:44.990517+00:00",
+      "source_commit": "6ad55936c5238bc4c573ddafbc3abaabfe0710de",
+      "request_sha256": "4f89f1c296de252668e2924c1d882aad16b1c2f3f2dc19b7ea9a6d58ea38f1d0",
+      "result_sha256": "a4dd96a2a4693c18110c9d92a464d8dfa5a90811fd2640baa767bf270c2e5e70",
+      "stderr_sha256": "f4ed9a501d1fe45722c545604f0ac44dbbc1c0029588eaa1aded1274af6e404a",
+      "Root_completion_sha256": "9838d9d192be9da1e662b2128cc89c3e41c2b7faa7a9e39145e46c3fae3daa52",
+      "C_constant_failure_fixed": true,
+      "new_failure": "Freestanding ld lacks genuine core panic/Result/Option/format providers referenced by perf invariant paths",
+      "source_owner": "SDK",
+      "second_diagnosis_owner": "P04Source",
+      "independent_invariant_ABI_reviewer": "PublicABI",
+      "next_action": "Derive and review smallest genuine freestanding fatal/provider binding, preserve all invariant checks, then affected validation/new normal image. No unchanged retry.",
+      "reader_executed": false,
+      "new_image_accepted": false,
+      "counted_delta": 0,
+      "failure_qualification_sha256": "35891f6d7fdfa57a7fbc455c570657adfc0326b27fd3878fe18e5012c70a51a7",
+      "current_process_retirement_sha256": "6c100868d650c4f7bc9bd06577107fdaaf2532697eaa80a113664d6fd393d597",
+      "current_process_charge_retired": true,
+      "actual_missing_core_provider_classes": 9,
+      "whole_region_preimage_review_sha256": "7f3570eb6cac9f24bd8918ff944c9f4cce7eb5305b263142fa5e681baf9e78cb"
     }
   },
   "denominator_changes": [
