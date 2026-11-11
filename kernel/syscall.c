@@ -8225,6 +8225,128 @@ extern int process_fork_owned_caller_runnable_current_v2(struct thread *, struct
         int, unsigned long, void *, int, int, unsigned long, struct owned_fork_caller_outcome *);
 #endif
 
+#ifdef MCKERNEL_RUST_F03_DO_FORK
+#if !defined(__x86_64__) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) || !defined(MCKERNEL_NATIVE_CLONE3) || !defined(MCKERNEL_NATIVE_CLONE_TID) || defined(MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION)
+#error "do_fork Rust selection requires the exact current ordinary legacy-host profile"
+#endif
+unsigned long do_fork(int, unsigned long, unsigned long, unsigned long,
+                      unsigned long, unsigned long, unsigned long);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_fork),
+    unsigned long (*)(int,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)), "do_fork seven-argument ABI");
+_Static_assert(sizeof(struct syscall_request)==72 && __alignof__(struct syscall_request)==8, "do_fork current request ABI");
+_Static_assert(sizeof(struct mcexec_tid)==16 && __builtin_offsetof(struct mcexec_tid,thread)==8, "do_fork TID slot ABI");
+_Static_assert(__builtin_offsetof(struct address_space,pids)==__builtin_offsetof(struct address_space,nslots)+sizeof(int), "do_fork trailing flexible pids offset");
+struct f03_fork_dma_request { struct syscall_request request IHK_DMA_ALIGN; };
+_Static_assert(sizeof(struct f03_fork_dma_request)==72 && __alignof__(struct f03_fork_dma_request)==8, "selected x86 DMA request annotation");
+/* Readback-only genuine C compiler ABI words; no implementation callback. */
+__attribute__((used)) const unsigned long f03_do_fork_c_abi_words[] = {
+    sizeof(int), /* sizeof int */
+    __alignof__(int), /* alignof int */
+    sizeof(unsigned long), /* sizeof unsigned long */
+    __alignof__(unsigned long), /* alignof unsigned long */
+    sizeof(cpu_set_t), /* sizeof cpu_set_t */
+    __alignof__(cpu_set_t), /* alignof cpu_set_t */
+    sizeof(struct syscall_request), /* sizeof struct syscall_request */
+    __alignof__(struct syscall_request), /* alignof struct syscall_request */
+    sizeof(struct mcexec_tid), /* sizeof struct mcexec_tid */
+    __alignof__(struct mcexec_tid), /* alignof struct mcexec_tid */
+    sizeof(struct thread), /* sizeof struct thread */
+    __alignof__(struct thread), /* alignof struct thread */
+    sizeof(struct process), /* sizeof struct process */
+    __alignof__(struct process), /* alignof struct process */
+    sizeof(struct process_vm), /* sizeof struct process_vm */
+    __alignof__(struct process_vm), /* alignof struct process_vm */
+    sizeof(struct address_space), /* sizeof struct address_space */
+    __alignof__(struct address_space), /* alignof struct address_space */
+    sizeof(struct vm_range), /* sizeof struct vm_range */
+    __alignof__(struct vm_range), /* alignof struct vm_range */
+    sizeof(struct memobj), /* sizeof struct memobj */
+    __alignof__(struct memobj), /* alignof struct memobj */
+    sizeof(struct mcs_rwlock_lock), /* sizeof struct mcs_rwlock_lock */
+    __alignof__(struct mcs_rwlock_lock), /* alignof struct mcs_rwlock_lock */
+    sizeof(struct mcs_rwlock_node_irqsave), /* sizeof struct mcs_rwlock_node_irqsave */
+    __alignof__(struct mcs_rwlock_node_irqsave), /* alignof struct mcs_rwlock_node_irqsave */
+    sizeof(struct mcs_rwlock_node), /* sizeof struct mcs_rwlock_node */
+    __alignof__(struct mcs_rwlock_node), /* alignof struct mcs_rwlock_node */
+    sizeof(struct perf_event_attr), /* sizeof struct perf_event_attr */
+    __alignof__(struct perf_event_attr), /* alignof struct perf_event_attr */
+    __builtin_offsetof(struct syscall_request,rtid), /* struct syscall_request::rtid */
+    __builtin_offsetof(struct syscall_request,ttid), /* struct syscall_request::ttid */
+    __builtin_offsetof(struct syscall_request,valid), /* struct syscall_request::valid */
+    __builtin_offsetof(struct syscall_request,number), /* struct syscall_request::number */
+    __builtin_offsetof(struct syscall_request,args), /* struct syscall_request::args */
+    __builtin_offsetof(struct mcexec_tid,tid), /* struct mcexec_tid::tid */
+    __builtin_offsetof(struct mcexec_tid,thread), /* struct mcexec_tid::thread */
+    __builtin_offsetof(struct thread,cpu_id), /* struct thread::cpu_id */
+    __builtin_offsetof(struct thread,tid), /* struct thread::tid */
+    __builtin_offsetof(struct thread,pthread_routine), /* struct thread::pthread_routine */
+    __builtin_offsetof(struct thread,status), /* struct thread::status */
+    __builtin_offsetof(struct thread,exit_status), /* struct thread::exit_status */
+    __builtin_offsetof(struct thread,termsig), /* struct thread::termsig */
+    __builtin_offsetof(struct thread,vm), /* struct thread::vm */
+    __builtin_offsetof(struct thread,uctx), /* struct thread::uctx */
+    __builtin_offsetof(struct thread,proc), /* struct thread::proc */
+    __builtin_offsetof(struct thread,report_proc), /* struct thread::report_proc */
+    __builtin_offsetof(struct thread,report_siblings_list), /* struct thread::report_siblings_list */
+    __builtin_offsetof(struct thread,ptrace), /* struct thread::ptrace */
+    __builtin_offsetof(struct thread,ptrace_eventmsg), /* struct thread::ptrace_eventmsg */
+    __builtin_offsetof(struct thread,refcount), /* struct thread::refcount */
+    __builtin_offsetof(struct thread,clear_child_tid), /* struct thread::clear_child_tid */
+    __builtin_offsetof(struct thread,cpu_set), /* struct thread::cpu_set */
+    __builtin_offsetof(struct thread,clone_pthread_start_routine), /* struct thread::clone_pthread_start_routine */
+    __builtin_offsetof(struct thread,mod_clone), /* struct thread::mod_clone */
+    __builtin_offsetof(struct process,threads_lock), /* struct process::threads_lock */
+    __builtin_offsetof(struct process,tids), /* struct process::tids */
+    __builtin_offsetof(struct process,nr_tids), /* struct process::nr_tids */
+    __builtin_offsetof(struct process,parent), /* struct process::parent */
+    __builtin_offsetof(struct process,ppid_parent), /* struct process::ppid_parent */
+    __builtin_offsetof(struct process,refcount), /* struct process::refcount */
+    __builtin_offsetof(struct process,status), /* struct process::status */
+    __builtin_offsetof(struct process,waitpid_q), /* struct process::waitpid_q */
+    __builtin_offsetof(struct process,pid), /* struct process::pid */
+    __builtin_offsetof(struct process,saved_cmdline), /* struct process::saved_cmdline */
+    __builtin_offsetof(struct process,cpu_set), /* struct process::cpu_set */
+    __builtin_offsetof(struct process,report_threads_list), /* struct process::report_threads_list */
+    __builtin_offsetof(struct process,uti_thread_rank), /* struct process::uti_thread_rank */
+    __builtin_offsetof(struct process,uti_use_last_cpu), /* struct process::uti_use_last_cpu */
+    __builtin_offsetof(struct process,clone_count), /* struct process::clone_count */
+    __builtin_offsetof(struct process,monitoring_event), /* struct process::monitoring_event */
+    __builtin_offsetof(struct process,coredump_barrier_count), /* struct process::coredump_barrier_count */
+    __builtin_offsetof(struct process,update_lock), /* struct process::update_lock */
+    __builtin_offsetof(struct process_vm,address_space), /* struct process_vm::address_space */
+    __builtin_offsetof(struct process_vm,region), /* struct process_vm::region */
+    __builtin_offsetof(struct process_vm,memory_range_lock), /* struct process_vm::memory_range_lock */
+    __builtin_offsetof(struct address_space,page_table), /* struct address_space::page_table */
+    __builtin_offsetof(struct address_space,cpu_set), /* struct address_space::cpu_set */
+    __builtin_offsetof(struct address_space,cpu_set_lock), /* struct address_space::cpu_set_lock */
+    __builtin_offsetof(struct address_space,nslots), /* struct address_space::nslots */
+    __builtin_offsetof(struct vm_range,memobj), /* struct vm_range::memobj */
+    __builtin_offsetof(struct memobj,path), /* struct memobj::path */
+    __builtin_offsetof(struct address_space,pids), /* struct address_space::pids flexible */
+    __builtin_offsetof(struct process_vm,region.user_start), /* struct process_vm::region.user_start */
+    __builtin_offsetof(struct process_vm,region.user_end), /* struct process_vm::region.user_end */
+    __builtin_offsetof(struct mc_perf_event,attr), /* mc_perf_event::attr */
+    __builtin_offsetof(struct perf_event_attr,wakeup_events), /* perf flags unit end */
+    sizeof(struct f03_fork_dma_request), /* DMA request sizeof */
+    __alignof__(struct f03_fork_dma_request), /* DMA request align */
+    __NR_clone, /* clone number */
+    __NR_clone3, /* clone3 number */
+    __NR_kill, /* kill number */
+    __NR_gettid, /* gettid number */
+    CLONE_VM, /* CLONE_VM */
+    CLONE_THREAD, /* CLONE_THREAD */
+    SIGKILL, /* SIGKILL */
+    EAGAIN, /* EAGAIN */
+    ENOMEM, /* ENOMEM */
+    EINVAL, /* EINVAL */
+    IHK_MC_AP_NOWAIT, /* NOWAIT */
+    OVERSUBSCRIBED_NR_TIDS, /* oversubscribed TIDs */
+    PATH_MAX, /* PATH_MAX */
+    sizeof(((struct thread*)0)->pthread_routine), /* pthread routine capacity */
+    DDEBUG_DEFAULT, /* DDEBUG default */
+};
+#else
+#line 7747
 unsigned long do_fork(int clone_flags, unsigned long newsp,
                       unsigned long parent_tidptr, unsigned long child_tidptr,
                       unsigned long tlsblock_base, unsigned long curpc,
@@ -8729,6 +8851,8 @@ release_cpuid:
 	release_cpuid(cpuid);
 	return err;
 }
+#endif
+#line 8251
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_set_tid_address(int n, ihk_mc_user_context_t *ctx);

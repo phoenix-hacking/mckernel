@@ -101,6 +101,7 @@ endif()
 # The outer entry has a narrower scope than the existing inner OFFLOAD macro.
 set(MCKERNEL_DO_SYSCALL_OUTER_SELECTED OFF)
 set(MCKERNEL_DO_MMAP_SELECTED OFF)
+set(MCKERNEL_DO_FORK_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -572,6 +573,22 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                     "${CMAKE_CURRENT_SOURCE_DIR}/include/shm.h"
                     "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
                     "${CMAKE_CURRENT_SOURCE_DIR}/include/profile.h")
+                # Current legacy-host fork entry; the separate owned transaction
+                # retains its original C selection and holds.
+                if (ENABLE_RUST_F06_SYSCALL_WHOLE AND ENABLE_PERF AND ENABLE_RUSAGE AND
+                    ENABLE_LINUX_WORK_IRQ_FOR_IKC AND NOT ENABLE_RUST_M14_SYSCALL_ADAPTERS AND
+                    NOT MCKERNEL_F03_SIGNAL_FORWARD_EXPERIMENTAL AND
+                    NOT ENABLE_NATIVE_FORK_OWNED_TRANSACTION)
+                    set(MCKERNEL_DO_FORK_SELECTED ON)
+                    list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_fork_candidate")
+                    list(APPEND RUST_KERNEL_SRCS
+                        "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_do_fork.rs"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/include/memobj.h"
+                        "${PROJECT_SOURCE_DIR}/lib/include/mc_perf_event.h"
+                        "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+                endif()
             endif()
 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_syscall_outer_candidate")
 			list(APPEND RUST_KERNEL_SRCS
@@ -1001,6 +1018,10 @@ if (RUST_KERNEL_ENABLED AND MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
 endif()
 
 # Apply after the existing source properties, which otherwise replace flags.
+if (MCKERNEL_DO_FORK_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_FORK)
+endif()
 if (MCKERNEL_DO_MMAP_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_DO_MMAP)
