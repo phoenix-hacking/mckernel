@@ -1,0 +1,78 @@
+{
+  "status": "PASS_ACTUAL_HEADER_DERIVED_READONLY12WORDS96_BYTES_CURRENT_C_AND_FINAL",
+  "physical_owner": {
+    "name": "f03_perf_owner_entry_constants_v1",
+    "final": {
+      "index": 3087,
+      "name": "f03_perf_owner_entry_constants_v1",
+      "binding": "GLOBAL",
+      "type": "OBJECT",
+      "visibility": 0,
+      "section_index": 45,
+      "value": 18446744073685679360,
+      "bytes": 96
+    },
+    "owner": {
+      "object": "CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "input": {
+        "index": 146,
+        "name": "f03_perf_owner_entry_constants_v1",
+        "binding": "GLOBAL",
+        "type": "OBJECT",
+        "visibility": 0,
+        "section_index": 8,
+        "value": 960,
+        "bytes": 96
+      },
+      "section": ".rodata",
+      "placement": {
+        "address": 18446744073685678400,
+        "bytes": 3072
+      }
+    }
+  },
+  "input_section": {
+    "index": 8,
+    "name": ".rodata",
+    "type": 1,
+    "flags": 2,
+    "address": 0,
+    "offset": 38912,
+    "bytes": 3072,
+    "link": 0,
+    "info": 0,
+    "align": 32,
+    "entry_bytes": 0
+  },
+  "final_section": {
+    "index": 45,
+    "name": ".rodata",
+    "type": 1,
+    "flags": 2,
+    "address": 18446744073685674912,
+    "offset": 1289120,
+    "bytes": 12752,
+    "link": 0,
+    "info": 0,
+    "align": 32,
+    "entry_bytes": 0
+  },
+  "input_file_offset": 39872,
+  "final_file_offset": 1293568,
+  "words": [
+    104,
+    80,
+    328,
+    8,
+    4,
+    0,
+    3,
+    7,
+    9223372036854775808,
+    298,
+    2,
+    10
+  ],
+  "source_contract": "Actual canonical C sizeof(perf_event_attr),sizeof(mckfd),sizeof(mc_perf_event),alignof(mc_perf_event),RAW/HARDWARE/HWCACHE,readformat mask,signbit,NRperf,AP_NOWAIT,F_SETSIG10; real entry.rs validates the first four layout fields and set-signal command. Header/typed normal compile and runtime/type proofs reused; constants10=IHK_MC_AP_NOWAIT is actual recorded value, no guessed alternative.",
+  "all_input_final_bytes_equal": true
+}

@@ -1,0 +1,494 @@
+{
+  "status": "PASS_C964_CORE_INTEGER_NORMAL_PERF_AFFECTED31_PASSIVE_READS28_OUTPUTS_PENDING_COMPLETE_PROVIDER_ABI_OWNERSHIP_QUALIFICATION",
+  "started_at": "2026-11-11T17:45:27.719033+00:00",
+  "finished_at": "2026-11-11T17:45:44.651557+00:00",
+  "source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+  "request_sha256": "016d999aea13392693bf5b2fea9bb781f3dce2529edd9d38981bb66f0d144813",
+  "review_sha256": "5abf7d1ae055471aa101ef710019604eb17107b7ce26fe31ed87bd571add3d66",
+  "phases": [
+    {
+      "phase": "metadata",
+      "CID": "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96",
+      "exit": 0,
+      "OOMKilled": false,
+      "owned_container_removed": true,
+      "client_wait_joined": true,
+      "cgroup_samples": 31
+    }
+  ],
+  "clients": [
+    {
+      "attempt_id": 0,
+      "label": "source-commit.before",
+      "argv": [
+        "/usr/bin/git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486756,
+      "birth": "50539385",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 1,
+      "label": "IHK-commit.before",
+      "argv": [
+        "/usr/bin/git",
+        "-C",
+        "/home/holden/mckernel/ihk",
+        "rev-parse",
+        "HEAD"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486757,
+      "birth": "50539386",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 2,
+      "label": "running-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486758,
+      "birth": "50539397",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 3,
+      "label": "names-preflight",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486767,
+      "birth": "50539409",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 4,
+      "label": "metadata-create",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mck-m14-core-integer-metadata-20261111-1",
+        "--label",
+        "mckernel.preparation-owner=m14-core-integer-metadata-1",
+        "--init",
+        "--pull=never",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=1",
+        "--cpuset-cpus=6",
+        "--memory=512m",
+        "--memory-swap=512m",
+        "--pids-limit=64",
+        "--ulimit",
+        "core=0:0",
+        "--ulimit",
+        "fsize=1073741824:1073741824",
+        "--ulimit",
+        "cpu=120:120",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,noexec,size=16m,mode=1777",
+        "--workdir",
+        "/work/output",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output,dst=/work/output,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/input,dst=/producer,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1,dst=/evidence",
+        "--entrypoint",
+        "/usr/bin/env",
+        "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "-i",
+        "BASH_ENV=",
+        "ENV=",
+        "LANG=C",
+        "LC_ALL=C",
+        "PATH=/usr/bin:/bin",
+        "TZ=UTC",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/producer/read_core_integer_image_metadata.sh"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486776,
+      "birth": "50539422",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 5,
+      "label": "metadata-profile",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486785,
+      "birth": "50539434",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 6,
+      "label": "metadata-running-inspect",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1486795,
+      "birth": "50539446",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "label": "metadata-payload",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "-a",
+        "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96"
+      ],
+      "pid": 1486794,
+      "birth": "50539446",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    {
+      "attempt_id": 8,
+      "label": "metadata-terminal",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1487304,
+      "birth": "50541023",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 9,
+      "label": "metadata-container-wait",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1487313,
+      "birth": "50541035",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 10,
+      "label": "metadata-owned-remove",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "0824e2e30e5f37cf290e863575d62fc5b01ea40ee38eba071514666528260d96"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1487322,
+      "birth": "50541047",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    },
+    {
+      "attempt_id": 11,
+      "label": "source-commit.after",
+      "argv": [
+        "/usr/bin/git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "creation_attempted": true,
+      "popen_returned": true,
+      "pid": 1487331,
+      "birth": "50541059",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "primary_error": null,
+      "secondary_errors": [],
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "receipt_persisted": true
+    }
+  ],
+  "all_waits_streams_joined": true,
+  "remaining_owned_children": [],
+  "producer_binding_sha256": "5af493f6e8790e7357efef31fa7d255949d4ed0652044c9214530d307dc6c24f",
+  "metadata": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/image-elf.stdout",
+      "bytes": 128178,
+      "sha256": "82344bd948fbf2f015cae3e12821b540c31a7b0381580fd7a35bd548e2f3f739"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/image-symbols-relocations.stdout",
+      "bytes": 532707,
+      "sha256": "64439abd29c94b4c5af35bce8973061315cb73a820580fae4eb4c1ef22529de7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/affected-constituent-symbols-relocations.stdout",
+      "bytes": 44830171,
+      "sha256": "ca9b5aac5c4d7d56dbcfb29bfe8150a6398d571698aa09be0405a3fb97a3733a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/image-nm.stdout",
+      "bytes": 308227,
+      "sha256": "c821d40db15b42eea0dd273c395b206016e04519f82d116a6ffa69f6ac06a6f0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/image-map.stdout",
+      "bytes": 1274247,
+      "sha256": "15b10db2310f91d83ac72f28fdeae0ea361d6bd152f64bca1a42976e2cfa3e98"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/artifact-identities.sha256",
+      "bytes": 2875,
+      "sha256": "68fcfd0b4493653f411f945fb73f5f3e59f2ba79412abd8b375cc72b398ed8be"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/artifact-modes.stdout",
+      "bytes": 1638,
+      "sha256": "c3e22dab77b7bf10e6b8dd1d9d136b0f2ef4330be2cff01e2916485bad0d0744"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-CMakeCache.txt",
+      "bytes": 30347,
+      "sha256": "4ce882d86489e4c3a05546078c2c275bbdc5239bbf4b0f9f7556b73022288bbc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-compile_commands.json",
+      "bytes": 74310,
+      "sha256": "ec7de0d710dec207452dbf734a0f7075a92423043ac914bc7d1c999da8cb144c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-flags.make",
+      "bytes": 7348,
+      "sha256": "507eb96ec88fe4f7b5da709fa6655225da9ddec4731f03252884a0db29763169"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-build.make",
+      "bytes": 59512,
+      "sha256": "5599757ed7bb5546c4a51f4c23798fc4bee2f8e1ac2e572d5a0243c765565aa3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-link.txt",
+      "bytes": 829,
+      "sha256": "ece6e16b0ecdc359c0c4b0d652cb9fe685e2a3ae400fad8740bf4c54d51198d8"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-link.d",
+      "bytes": 1438,
+      "sha256": "df0a7a96b5e8bf6c5c3dc33b9bd209f7dff5b5798383236c9a9db2ae6f112e54"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-mckernel_rust.d",
+      "bytes": 12626,
+      "sha256": "da05eb0746048eaddb044dc392b80f6919d5916636cd6766ababdc62dfcfecd5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-mckernel_rust.raw.d",
+      "bytes": 13414,
+      "sha256": "b298ac1866bb776d172bf04b5eb4f16bb14d6af9dc974e9e0260b94c448ae29e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/regenerated-Rust-build.make",
+      "bytes": 28065,
+      "sha256": "dab27b957bb62dc0dd80436dd426ac9c7ba3abe3451c8172a086cec13c497df3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/C-tables-and-ABI-rodata.stdout",
+      "bytes": 12799,
+      "sha256": "2ac3ab0d2cb495930bf232d797e79fd8b49de4942f9edb9530b6ad8216b1818f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/Rust-ABI104-rodata.stdout",
+      "bytes": 3493,
+      "sha256": "5cf0ff94aa51ca969326fd7a596457e0eeb90fb86e8aac156de3c39aef6344db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/image-tables-and-ABI-rodata.stdout",
+      "bytes": 59011,
+      "sha256": "e11f5e44446890f995c53a352fe27f3c4fba6f99840eb44915a68c591fe344a6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/new-sys_perf_event_open-Rust-disassembly.stdout",
+      "bytes": 254378,
+      "sha256": "8a179e0ebc09209d686f90fa9a6c9a097266f86f173e977db31a9667e58a2335"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/new-sys_perf_event_open-final-disassembly.stdout",
+      "bytes": 13840,
+      "sha256": "c04ef10155e5f7bb5e5285b63f4fcd48d61f6c332ab2ae19cff72c6a2c56e3cd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/new-perf_event_open_do_syscall_bridge-Rust-disassembly.stdout",
+      "bytes": 242735,
+      "sha256": "77b81745e51fef448716d0a5ecbb82a8d6637a72bfbda5cfd1850c7a46e7fea9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/new-perf_event_open_do_syscall_bridge-final-disassembly.stdout",
+      "bytes": 519,
+      "sha256": "d040efd5c8ffd5a7f5e02686660ea56c3029bdb72ed4f2f07367ab2dfab75c03"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/normal-builtin-elf-symbols-relocations.stdout",
+      "bytes": 285926,
+      "sha256": "2ac96961bbebb4aff96633d8be04e91f3565552e44cd3dcb03c2a1e1e8ff9acc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/normal-builtin-disassembly.stdout",
+      "bytes": 81846,
+      "sha256": "e2ee7903f7a2dc088d2245c5779af20e23f0bb0b88b00584286fc0ca1291a741"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/normal-generated-integer-source.rs",
+      "bytes": 2743,
+      "sha256": "8b9c11a4dcf8fae9c5a9c53d2bce342fcf67da11fde50623d41423afc07102f2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/normal-builtin-raw.d",
+      "bytes": 6671,
+      "sha256": "90c42e2995acf251c0f8f07370a74a9e3daf70124bd3c45724b9826d1b2c67db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/metadata-1/normal-builtin.d",
+      "bytes": 6671,
+      "sha256": "90c42e2995acf251c0f8f07370a74a9e3daf70124bd3c45724b9826d1b2c67db"
+    }
+  ],
+  "original_acceptance": false
+}

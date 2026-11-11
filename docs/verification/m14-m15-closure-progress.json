@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-11T17:10:12.955568+00:00",
+  "updated_at": "2026-11-11T18:08:10.984654+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 66.94,
+      "checklist_percent_complete": 67.22,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
@@ -269,7 +269,7 @@
         "M14-03-05-DEFAULT",
         "M14-03-05-FUNCTIONAL"
       ],
-      "percent_complete": 50.0,
+      "percent_complete": 75.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -565,7 +565,7 @@
         "M14-F03-FUNCTIONAL",
         "M14-F03-ACCEPT"
       ],
-      "percent_complete": 45.83,
+      "percent_complete": 48.33,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -1848,21 +1848,17 @@
       "id": "M14-03-05-DEFAULT",
       "parent": "M14-03-05",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
-      "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
+      "status": "verified_original_supported_default_condition",
+      "owner": "Root sole compositor; independent whole-condition review P04Tests",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
       "required_inputs": {
         "original_requirement": "M14-03-05",
         "target": "kernel/syscall.c",
         "source_profile": "Original supported x86_64/Rocky profile; exact source/config/toolchain/artifact identities must match the proof scope.",
-        "missing_before_execution": [
-          "Join new credential entries to genuine compatible error-aware host/core getter rather than old core.",
-          "Complete required remaining credentials/limits/scheduling/SHM/file wrapper contracts and final supported/default qualification.",
-          "Establish reviewed perf kind/live-reference/group/lookup/free/copy/close contract; callback identity or event count is insufficient and close-lock shortcut would deadlock final VM teardown."
-        ]
+        "missing_before_execution": []
       },
       "dependencies": [
         "HOLD-GENERIC",
@@ -1874,13 +1870,20 @@
         "CAMPAIGN.md",
         "docs/verification/m14-credential-provider-partial-results-20261109.json",
         "docs/verification/m14-lower-provider-partial-results-20261109.json",
-        "docs/verification/m14-provider-storage-partial-results-20261109.json"
+        "docs/verification/m14-provider-storage-partial-results-20261109.json",
+        "docs/verification/m14-current-image-20261111/perf-supported-default-1/whole-review/REVIEW.json"
       ],
       "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
-      "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
+      "definition_status": "original_complete_condition_defined_and_verified_at_matching_supported_default_scope",
       "execution_profile": "ordinary_HOST",
       "counted_in_requirement_rollup": true,
-      "current_partial_evidence": "Compatibleerrorawareprovider10consumerpartialjoinnowavailable;16imports/finalcoherentimage/providers/nativeconditions remainunqualified."
+      "current_partial_evidence": "Compatibleerrorawareprovider10consumerpartialjoinnowavailable;16imports/finalcoherentimage/providers/nativeconditions remainunqualified.",
+      "verified_at": "2026-11-11T17:58:23.106070+00:00",
+      "whole_condition_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
+      "original_private_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
+      "matching_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+      "matching_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "verification_scope": "Complete original M14-03-05 supported-default technical condition, all required regions/handlers/providers/ABI and positive cleanup; FUNCTIONAL/native/file/milestone acceptance remains separate."
     },
     {
       "id": "M14-03-05-FUNCTIONAL",
@@ -14638,16 +14641,16 @@
     "m15-requirement-snapshot.json"
   ],
   "engineering_checkpoint_update": {
-    "at": "2026-11-11T08:57:56.184168+00:00",
+    "at": "2026-11-11T18:08:10.984654+00:00",
     "invocation": "20261110T060029Z-3fe88dab",
     "formula_unchanged": true,
     "counted_evidence_checks_before": 156,
     "counted_evidence_checks_after": 156,
-    "counted_verified_before": 96,
-    "counted_verified_after": 97,
+    "counted_verified_before": 97,
+    "counted_verified_after": 98,
     "task_binding_rows_before": 391,
     "task_binding_rows_after": 391,
-    "change_reason": "Exactly one complete original03-04 DEFAULT condition independently passes; no criterion/weight/denominator or separate native/final acceptance changed.",
+    "change_reason": "Exactly the whole original03-05 DEFAULT leaf passes independent review on actualmatchingimage. No criterion, weight, denominator, acceptedfile or native/milestone state changes.",
     "latest_source_backed_integration": {
       "at": "2026-11-10T14:39:48.032766+00:00",
       "original_checks": [
@@ -14678,36 +14681,44 @@
       ]
     },
     "latest_counted_closure": {
-      "at": "2026-11-11T08:57:56.184168+00:00",
+      "at": "2026-11-11T17:58:23.106070+00:00",
       "check_ids": [
-        "M14-03-04-DEFAULT"
+        "M14-03-05-DEFAULT"
       ],
       "whole_condition_reviews": [
-        "docs/verification/m14-current-image-20261111/wait-termination-1/qualified-1/whole04/REVIEW.json"
+        "docs/verification/m14-current-image-20261111/perf-supported-default-1/whole-review/REVIEW.json"
       ],
       "whole_condition_review_sha256s": [
-        "2f3b9a329f05cec77f60ff2fc7a7aa2a8a95640fb39a52c08a412ffac7a50eff"
+        "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377"
       ],
+      "original_private_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
       "M14_before_after": [
-        66.67,
-        66.94
+        66.94,
+        67.22
       ],
       "M15_before_after": [
         67.19,
         67.19
       ],
       "exact": {
-        "M14": "1205/18",
+        "M14": "605/9",
         "M15": "248345/3696"
       },
       "counted_verified_before_after": [
-        96,
-        97
+        97,
+        98
       ],
       "exact_M14_delta_pp": "5/18",
+      "display_delta_pp": {
+        "M14": 0.28,
+        "M15": 0.0
+      },
       "accepted_gate": null,
       "milestone_acceptance": false,
-      "original_denominators_weights_criteria_unchanged": true
+      "original_denominators_weights_criteria_unchanged": true,
+      "matching_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+      "matching_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "remaining_C_functions": 4
     },
     "counted_closure_history": [
       {
@@ -14878,6 +14889,46 @@
         "accepted_gate": null,
         "milestone_acceptance": false,
         "original_denominators_weights_criteria_unchanged": true
+      },
+      {
+        "at": "2026-11-11T17:58:23.106070+00:00",
+        "check_ids": [
+          "M14-03-05-DEFAULT"
+        ],
+        "whole_condition_reviews": [
+          "docs/verification/m14-current-image-20261111/perf-supported-default-1/whole-review/REVIEW.json"
+        ],
+        "whole_condition_review_sha256s": [
+          "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377"
+        ],
+        "original_private_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
+        "M14_before_after": [
+          66.94,
+          67.22
+        ],
+        "M15_before_after": [
+          67.19,
+          67.19
+        ],
+        "exact": {
+          "M14": "605/9",
+          "M15": "248345/3696"
+        },
+        "counted_verified_before_after": [
+          97,
+          98
+        ],
+        "exact_M14_delta_pp": "5/18",
+        "display_delta_pp": {
+          "M14": 0.28,
+          "M15": 0.0
+        },
+        "accepted_gate": null,
+        "milestone_acceptance": false,
+        "original_denominators_weights_criteria_unchanged": true,
+        "matching_source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+        "matching_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "remaining_C_functions": 4
       }
     ],
     "last_published_percentage_report": {
@@ -15379,30 +15430,18 @@
       }
     },
     "next_original_closure": {
-      "at": "2026-11-11T07:29:54.786469+00:00",
-      "primary_original_gate": "M14-03-04-DEFAULT and M14-06-02-FUNCTIONAL; shared M15-I04-native-admission",
-      "next_three_prerequisites": [
-        {
-          "original_check": "M14-03-04-DEFAULT",
-          "deliverable": "Genuine narrow Rust wait_host_wait4_bridge consumer-field/lifetime implementation and slot0 C exclusion",
-          "caller_consumer": "Rust wait4/waitid reap scan ->48B wait dependency slot0",
-          "owner": "sdk_binding_source_max",
-          "smallest_completion_proof": "Material source GO, changed-contract cases, actual affected image/table/provider ownership; no automatic zeroing or broad adapter"
-        },
-        {
-          "original_check": "M14-03-04-DEFAULT",
-          "deliverable": "Genuine public Rust terminate_mcexec from existing notify_host_exit, remove actual C136/local12 boundary",
-          "caller_consumer": "check_sig_pending R64 and current terminate path",
-          "owner": "p03_cutover_source_max; p04_tests_max independent review",
-          "smallest_completion_proof": "Reviewed typed ABI/narrow selectors, necessary changed check and affected image/caller/provider proof"
-        },
-        {
-          "original_check": "M14-06-02-FUNCTIONAL / M15-I04-native-admission",
-          "deliverable": "Complete callable current-control/resource/source/18-loader lifecycle plus real coherent c664 named base/overlay/manifest",
-          "caller_consumer": "normal container-owner -> runner -> diagnostic/backend -> QEMU/mcexec",
-          "owner": "public_abi_join_max and p04_source_max; source_acquisition_review_max independent review; Root admission/execution",
-          "smallest_completion_proof": "Correct three b696 controller defects, reviewed callable source and HOST staged inputs, genuine fresh native admission, exact case output/exit/retirement/restoration"
-        }
+      "at": "2026-11-11T18:08:10.984654+00:00",
+      "primary_original_gate": "M14-06-02-FUNCTIONAL; shared M15-I04-native-admission",
+      "source_only_handoff": "docs/verification/m14-current-image-20261111/perf-supported-default-1/next-functional-source-only/FUNCTIONAL-HANDOFF.SOURCE-ONLY.json",
+      "handoff_sha256": "4baab82d569d97f11d5a6b69f4e26dc1bd8fb4ceeb6eb9cd9d21c6b217dd41fc",
+      "implementation_owner": "public_abi_join_max",
+      "independent_review_owner": "source_acquisition_review_max",
+      "integration_admission_owner": "Root",
+      "next_action": "Private minimal reviewed actual normal package/profile/cohort rebind, preserving immutable installed package and every invalid/stale/mismatch rejection. No staging/native action until actual independent gates pass.",
+      "separate_actual_prerequisites": [
+        "Scratch-owner UID1000 writable staging-parent grant",
+        "Genuine same-Root healthy controller transition with positive owner retirement",
+        "Authenticated fresh native-operation claim/source/current-free/caps and positive restoration"
       ],
       "original_criteria_unchanged": true,
       "no_unchanged_green_reruns": true
@@ -15523,264 +15562,18 @@
       "no_pending_report": true
     },
     "current_engineering_step": {
-      "at": "2026-11-11T14:33:22.966843+00:00",
-      "original_checks": [
-        "M15-I04-native-admission",
-        "M14-06-02-FUNCTIONAL"
-      ],
-      "state": "PERF_WHOLE_RUST195_METADATA_PASS_REAL_FOUR_FAMILY_RUNTIME_BINDING_NEXT",
-      "source_ready_sha256": "9b422b4da1d39f48f28888fba7549f8b48f2069c35a8927d128df75bec16eea1",
-      "source_review_sha256": "c14f528e1ee5b628a0b0eec073c58cee3c564bd33e07ffce468ee6c804962505",
-      "HOST_qualification_sha256": "c5646bd1722f33572dae6f7c8fa2b073eb87f3f059675895a2e107ae7d80256c",
-      "remaining_two_result_sha256": "e47755ee4543dd1a51460a539385a6dc85d538f9b315123b18bf11cd9b59939c",
-      "evidence": "docs/verification/native-admission-debug-20261111/complete-interface-candidate-1/PUBLICATION-SCOPE.json",
-      "four_canonical_HOST_families_PASS": true,
-      "first_two_PASS_and_controller1961_reused": true,
-      "all_five_attempted_current_HOST_families_joined": true,
-      "preserved_failed_fixture_result_sha256": "dcc37b2bc4ca01eeb2055600def07281e04293930aa1dc398504f9ed0fdc2697",
-      "current_HOST_charge_released": true,
-      "installer_source_ready_sha256": "64ed6331ca864479d7e32de30d40c1e8c844e844ac7322adadbfaa8ae934dfc5",
-      "installer_source_design_review_sha256": "5f7fefc5dac7ccb2caa3b555b840b1b7f930bf4c1b84389ace2b5ecd488293d9",
-      "owners": {
-        "implementation": "PublicABI",
-        "four_HOST_result_review": "P04Tests",
-        "installer_implementation": "SDK",
-        "installer_source_review": "P03",
-        "installer_changed_test_author": "P04Source",
-        "installer_operation_review": "SDK",
-        "integration_admission_publication": "Root"
-      },
-      "next_command": "SourceAcq qualifies actualeb0f type-only result/current2GiB closure; P04Tests binds real18-unit4familyruntimepacket with monitor a011/hostlower a215+captured-epoch regression. ExactoperationGO+Rootfreshadmission, actualruntimePASS before supportedimage/provider/ABI evidence. No metadata replay or originalcredit.",
+      "at": "2026-11-11T18:08:10.984654+00:00",
+      "state": "M14_03_05_DEFAULT_WHOLE_GO_COUNTED_CHECKPOINT_PUBLICATION",
+      "original_check": "M14-03-05-DEFAULT",
+      "whole_review_sha256": "c7f765f0db52a687b5cc81c4bf5fe9a4d5f7906704045dcdb3b72ab91f923377",
+      "source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+      "image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "reader_result_sha256": "20295eacb8d60dba2d1cb18fd6a0cb6a2c724f7d37d99f89e1ba009fdf63cfeb",
+      "reader_independent_qualification_sha256": "42a8cc5308ff796bf544bdc11b10930fa1db07146d91e66cd5dee0793edde355",
+      "current_HOST_payloads": 0,
       "native_execution": false,
-      "installed_or_activated": false,
-      "scratch_permission": "Actual UID0/0755 staging parent is not writable by UID1000. Scoped provisioning-owner grant pending PR3 comment6790932995; no elevation/path/permission fallback.",
-      "native_or_source_UNKNOWN_release": false,
-      "counted_delta": 0,
-      "prior_step_preserved_at_commit": "f2708fbe15368b95b057860d796e5a37e9c41541",
-      "all33_unrelated_dirty_preserved": true,
-      "installer_four_HOST_qualification_sha256": "fe88fa967ef0e780a914a8c844481fdbd2ac960c8e50859c7242fcf1e7c70cc4",
-      "installer_corrected_fourth_result_sha256": "98dd63928f92e501b57cd11cf89c56a22e053790a0e0ba4788e02a96470d3248",
-      "installer_first_three_PASS_reused": true,
-      "installer_five_attempted_owned_families_joined": true,
-      "installer_preserved_failed_result_sha256": "492a02d67d44d6a8a450c416f96147e74f2da35dbfde27d00aa7d89dbaca4206",
-      "readback_source_NO_GO_sha256": "408d7ec2d5c419c0a42992ab6824ffc5605bd6f0c6e298f3e1e8a3979233463d",
-      "readback_bounded_successor_sha256": "e04a050f409f3d554cbf23bf0e0e82ff42484b5cf6f48a1e52c8f2a93ca2bf01",
-      "normal_publication_operation_PASS_issued": true,
-      "actual_code_install_issued": true,
-      "published_native_source_and_four_HOST_checkpoint": {
-        "commit": "094c52c6e1dc0ed42e76e2f393926f095d395bff",
-        "fetched_owned_blobs_matching": 98,
-        "mailbox_return": 6792502502
-      },
-      "perf_independent_source_lane": {
-        "original_check": "M14-03-05-DEFAULT",
-        "source_commit": "6aae8273960583ec7fb194926292bd10ab1bc585",
-        "image_prefix": "4b711cd9",
-        "contract_sha256": "fe13b10d9b7902004060fe79af25e3c46f4b49b6f2aa1dfd02205663db4a9509",
-        "ownership_frontier_sha256": "c9a3b62559122523a41bee6443086b57321d3a6ef9a319b63b9e8c9d22799cb2",
-        "source_owner": "P03",
-        "peer_ownership_review": "P04Tests",
-        "material_review_before_activation": "SourceAcq",
-        "state": "COHERENT_SOURCE_FROZEN_COMPILER_AND_LIFECYCLE_UNPROVED",
-        "counted_delta": 0,
-        "source_ready_sha256": "fb154ab61b167acf9a96febfe881b3472f5527473dd3f5ea321a2aa5818b643d",
-        "source_manifest_sha256": "d17f3ea54931735f9088d0697477261d93684ab1f4b58c0dfca5713086a22b45",
-        "source_patch_sha256": "14fc35cc8712a49ad0587d9cededd4a3498e922e19af6d2a0765b30cf48fd8ff",
-        "API_handoff_sha256": "8d57eef2850448efb8b7bd60e54e2c5fc071fcb35b78b4e181159c0de9bb7329",
-        "actual_source_files": 28,
-        "production_selectors_unchanged": true,
-        "kernel_CMake_intentionally_unchanged": true,
-        "compiler_or_test_executed": false,
-        "test_packet_owner": "P04Tests",
-        "unmatched_common_material_owner": "SourceAcq",
-        "root_followups_actual_new_turns_confirmed": true,
-        "unit_scoped_reviews": {
-          "terminal": "f7a4bf9f68d1f0b0ae10b1e51e075d1ea7581664aca26b1531bb3c7aeafe4a17",
-          "hardware": "a821ddaa015e8a627302939ae9e41adb0407f78654914ef5b513896612eb879e"
-        },
-        "whole_Rust_compiler_eligibility_sha256": "9a66cc1c4aec1dcd6ec6ce0ce13adb93d164909312a5064c8833d811a1d13284",
-        "first_compiler_eligibility": "GO_FOR_EXACT_PACKET_REVIEW_ONLY",
-        "actual_saved_compiler_profile_binding_owner": "SDK",
-        "runtime_actual_adapter_binding_owner": "P04Tests",
-        "runtime_fixture_bottleneck": "18 complete actual ownership units and real typed layout/provider/lifecycle lower adapters; no ownership stubs or mirrored bodies",
-        "first_compiler_operation_packet": "4a67b2fe369bdfee7d97a391529ff3c26108909f733925323d4bf342bcc4c855",
-        "first_compiler_executed": true,
-        "first_compiler_operation_review": "61f5ff9d0a553de8ba10d0cf089655881cef6c2cffd5c469f4eb795de4f3c503",
-        "first_compiler_result": "748b817024d30d5f8bb2cb83e9fd7408a51688054588777f8b5c8e0afb8cc233",
-        "first_compiler_stderr_sha256": "b7fc4f34308f44325a048732ddfd3fd51bc13b8be1baca09a600764557ac3e24",
-        "first_compiler_full_Root_completion": "208c6277089682e0578e585ac72f81af1d977a9d5536177b88b2014fd3bd4f63",
-        "first_compiler_exit": 1,
-        "first_compiler_non_OOM": true,
-        "all9_clients_joined_and_owned_CID_removed": true,
-        "source_errors": {
-          "callbacks.rs:193": "parenthesize actual unsafe call before as CInt",
-          "runtime.rs:28,30,37,39": "real IhkAtomic64.counter64 field",
-          "groups.rs:444": "MemberRetirement temporary/facade E0597 lifetime; preserve real guard ordering"
-        },
-        "warning_count": 87,
-        "current_compiler_2GiB_retirement": "SUCCESSFUL_TYPE_ATTEMPT_CURRENT_PROCESS_ONLY_RETIRED",
-        "bounded_compiler_repair_owner": "P03",
-        "bounded_compiler_repair_attempt": 1,
-        "scheduler_material_NO_GO": "6bbb8bc323bba35026bbcc0e8c0d6838770560d14891c0f303607f3c6032105d",
-        "scheduler_correction_source_ready": "f948ccb95bca654e329c4fa0dba1e689b2a92a452553e07be2ce2f4d0434221c",
-        "runtime_executed": false,
-        "first_compiler_failure_qualification_sha256": "5ef330b3bd1833ad951dee3d23ba8f88f5ec88faa9f23ff589ce387b7eb96af1",
-        "current_compiler_process_charge": 0,
-        "current_compiler_job_charge": 0,
-        "current_compiler_retirement_record_sha256": "9316544729160fee6bb588e87bf6208a710444c376b83a6a5f16facc91a99bb7",
-        "combined_source_ready_sha256": "cbea555224d67bdf617c5e7911d314af8e61863f31028603dda086b0b7896362",
-        "combined_source_review_sha256": "c8c265f293b6e3df617117246002c83f9160e22569d8352bfaee5387ca94c6a0",
-        "bounded_compiler_retry_request_sha256": "bb0577497f105d5a5889eb0d32ae46a6687cf935cdf658c078f3e6b9e2c9c258",
-        "bounded_compiler_retry_operation_review": "8cb058a213643bbb5d57c805ad47a677059098779eba8ba1e1716c6f191b52a4",
-        "bounded_compiler_retry_result_sha256": "112e771458ca94d6a9b113bda44c1cfcf1c05a4329c5b58984a30bbc89c53698",
-        "bounded_compiler_retry_stderr_sha256": "d0668ff6ebfbf2cfc8135e01a4c17e93a9357a84e5b5fc2c1b4a49d09a9ce780",
-        "bounded_compiler_retry_full_Root_completion": "c087b8ee1199d0dffcf0d2e0f1edb3265cd981279eb16d72f1402b3e802c2fcc",
-        "bounded_compiler_retry_exit": 1,
-        "old6_source_errors_resolved": true,
-        "new_compiler_error": "events.rs433 dangerous_implicit_autorefs through raw DescriptorState/ManuallyDrop/EventPin",
-        "focused_escalated_source_owner": "P04Source",
-        "focused_independent_reviewer": "SourceAcq",
-        "bounded_compiler_retry_all9_clients_CID_nonOOM_removed": true,
-        "second_compiler_failure_qualification": "f3be9aa1fb748b847e49c79645c9c7e7109357e4dfb073c6d020505adbab4fed",
-        "second_compiler_retirement_record_sha256": "1f945474fb8b7cfacadf472aa8b214cc30f68f874f2c1ae6433aaaf8b7a008ff",
-        "latest_whole_compiler_request": "31eb6083fa1fa49e747e7595bed9a288774de655bcab52d1176e3dc04885826e",
-        "latest_whole_compiler_operation_GO": "ca515f79255da73371ca88cf339bdd5105ba6c5c50647859166e8feb4e616d44",
-        "latest_whole_compiler_result": "eb0fa2f91b444c50158af89bdb35be0763a369926091789bfa147b7c75bb38b7",
-        "latest_whole_compiler_full_Root_completion": "64e866ad98076fdf4c03624fb38e458161f68ddc458366f126c800a83fa89dc8",
-        "latest_whole_compiler_exit": 0,
-        "latest_compiler_metadata": [
-          {
-            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/output-1/build/kernel/rust/perf_owner.rmeta",
-            "bytes": 7786840,
-            "sha256": "d1db6455c63725d7b3d7665a622c3c59e8d9385dbbfed2b569a717c0a80c61a0",
-            "mode": "0o644"
-          },
-          {
-            "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-owner-changed-tests-p04tests-max-1/first-whole-compile-1/escalation-events-1/output-1/build/kernel/rust/perf_owner.raw.d",
-            "bytes": 14149,
-            "sha256": "401b380d0c63b601e8f800032f2bda0ce5add50df46e348ad89de2585848643e",
-            "mode": "0o644"
-          }
-        ],
-        "actual_owner_source_dependencies": 19,
-        "old6_and_autoref_errors_absent": true,
-        "all9_clients_CID_nonOOM_removed_and_Root_joined": true,
-        "real_runtime_monitor_source": "a01100a3dc882fc41f7e404e845382878de29ed7586931cc57c69ecfcdd88332",
-        "real_runtime_lower_effects_source": "a2151e8f310350f8249904cb28cbddf79659c12968412a7cc1e0d7657380ad79",
-        "type_scope_only": true,
-        "original_check_credit": 0,
-        "whole_Rust_type_qualification_sha256": "ed8ca29c5370dc005bd1e6bf957395a0966c13ed7fb61eb97f2972f888c11de1",
-        "whole_Rust_type_retirement_record_sha256": "2a19fd6a576e99727e1957f5ec701a061ab7a470c584b3dc9bf83f1a11534175",
-        "runtime_lower_effects_independent_review_sha256": "b85d4130de6ad27ef94e9eddac5369a93e0ff6d37d5c0d6cbde9e67211b59342",
-        "runtime_lower_effects_review_scope": "GO_TYPED_CONTROLLED_HOST_EFFECTS_ONLY_NOT_SCENARIOS_OR_NATIVE",
-        "runtime_lower_requirements": [
-          "actual purearg0getter",
-          "explicit P/S lockclassregistration whereverorderclaimed",
-          "no ownership/ref/group/waitq/schedulebody substitution"
-        ],
-        "runtime_packet_owner": "P04Tests",
-        "runtime_packet_state": "NOT_YET_FROZEN_ACTUAL_COMMON_FIXTURE_AND_CALLER_BODY_CLOSURE_PENDING",
-        "runtime_missing_input_supplier": "OUR_EXISTING_P04Tests_SOURCE_OWNER_NO_EXTERNAL_INVENTORY_OR_NATIVE_PREREQUISITE"
-      },
-      "readback_source_delta_GO_sha256": "cbf7c0de4b28d2357f746d89af1a8d81c969d96af5b4df6700356cdb4d7b110b",
-      "readback_changed_controls_request_sha256": "e47631489a0a9e62c1c7b58192f284bf52ed6353230b42c31b34ade2072ee5cc",
-      "readback_changed_controls_executed": true,
-      "normal_publication_operation_review_sha256": "9f26e90fbc05672b67dffdf0f0b1d9f1f4210a9cc34009d503896b576501ba6b",
-      "actual_code_authority_issued": true,
-      "actual_code_install_once_at": "2026-11-11T10:38:04.750220+00:00",
-      "actual_code_install_proved": false,
-      "readback_changed_controls_result_sha256": "8a54e9b2f5a3cf3a6d9e47558426054166df6f3b34a058fc7eb1847e427819fa",
-      "original_unified_tool_session": 97528,
-      "actual_failure": "PHASE0_UNKNOWN_RETAINED IssuerUnknown keeper custody unknown; go_handoff InterruptedError configured stop received; no complete Root DATA/caller terminal.",
-      "actual_current_publication_scope_retired": false,
-      "current_publication_bytes_still_charged": 0,
-      "current_publication_jobs_still_charged": 0,
-      "live_capture_evidence": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-code-package-operation-root-1",
-      "runtime_diagnosis_owner": "SDK",
-      "ownership_disposition_owner": "SourceAcq",
-      "old_original_session97528_terminal": true,
-      "old_current_process_memory_retired_only": true,
-      "old_process_memory_retirement_review_sha256": "5081e4cefd4140ed562fcad54a119ebbe5fe0751c1008453a7e73b50f92ed555",
-      "old_current_process_memory_after": 0,
-      "old_failed_install_normallease_globalOFD_source_UNKNOWN_preserved": true,
-      "new_source_ready_sha256": "6c124fbc70b52d1334fc4ea67f5f55fe740cb4e059074c51f9ec056bb4a3a8ed",
-      "new_request_sha256": "b6f20566657bad0feea6278daae7d8449a554180d020d7d035a900cc2dccf760",
-      "new_operation_review_sha256": "3b8b8e0c1bcfd9b7ac52e374904f6b1bccf147343752288e1347df3b04b9724d",
-      "preissue_fresh_account_veto_no_nonce_or_Root_child": true,
-      "genuinely_fresh_account_observed_then_issued_at": "2026-11-11T11:47:51.040825+00:00",
-      "new_actual_code_install_issued_once": true,
-      "new_Root_producer_full_sha256": "4bf86e15c83120d699e1fd69520c311b8199ec34b2156f16787e12164214b8f2",
-      "new_Root_lease": "VERIFIED_CLOSED_COMPLETE",
-      "new_sudo_tool_keeper_installer_waits_all_zero": true,
-      "new_timeout": false,
-      "new_caller_resource_unknown": true,
-      "new_caller_observation_errors": [
-        "ValueError"
-      ],
-      "new_current_process_memory_still_charged": 0,
-      "new_current_job_still_charged": 0,
-      "new_installed_file_UID1000_readback_proved": true,
-      "new_caller_terminal_sha256": "e4a294466bcea2aa01cdb90a4d0d40a74a0247991c36d2cb484123eef0d0b190",
-      "strict_matching_readback": {
-        "reader_prefix": "c843d824",
-        "request_prefix": "a4229c03",
-        "contract_prefix": "9fcc2bdb",
-        "executed": false
-      },
-      "current_diagnosis_owner": "SDK",
-      "current_evidence_disposition_owner": "SourceAcq",
-      "new_current_process_only_retirement_review_sha256": "ee63defa3229ed398d1bfb06795fdb9b11084b9cffc575f50af396216b43a5c3",
-      "new_current_process_only_retirement_record_sha256": "56e11fe1c050fbca23ebda1d735c889ead11fe6ce3ae6f48757af19a8f4e0c7e",
-      "historical_resource_audit_unknown_retained": true,
-      "physical_readback": {
-        "request_sha256": "22f8702513da23e78654a1500de98edd9d8342cc6ce93863b4d7781319b10b98",
-        "source_sha256": "1c1b2194be385527e975c4a066552293444989da07813dadaabd8e4899d98bf2",
-        "operation_review_sha256": "2e32af3fc29c37823b1e88e169e26abaa64683dcca26bffd6d71d2de4c80fba2",
-        "result_sha256": "2834c3a01a022a8774131726e980eb37884011bf26d5c01774eb9f3f04fff347",
-        "Root_completion_sha256": "107ac06cb015507ebf7b7e50f10654ea4e15fe67defca067cdf246fa4216703b",
-        "files": 30,
-        "total_bytes": 401674,
-        "actual_tool_exit": 0,
-        "actual_tool_no_session": true,
-        "all_owned_read_close_errors": [],
-        "overall_resource_acceptance": false,
-        "historical_resource_observation": "UNKNOWN_RETAINED",
-        "native_runtime_ready": false,
-        "controller_activated": false,
-        "current128MiB_and_job_retired_only": true,
-        "independent_saved_result_qualification": "GO_CODE_ONLY",
-        "qualification_sha256": "ebce88777f4f9c79009d16b20082203dc811ef49a1fb5f09a9f49ed9099a8038"
-      },
-      "focused_exact_tuple_control": {
-        "result_sha256": "62589e00536c487d651b86bac3c88afe2ea18ea8d8ed7816f65417153ecd1988",
-        "qualification_sha256": "72edd730043ad65bab8506c8cfb99f2367c8b5d744642332fcc30f4659bb1a39",
-        "exact_tuple_acceptance": 1,
-        "mutated_tuple_rejections": 7,
-        "all_current_waits_streams_Root_joined": true
-      },
-      "canonical_controller_source_integration": {
-        "exact_paths": [
-          "scripts/run_os_goal.py",
-          "scripts/native_current_owner.py",
-          "scripts/pidfd_compat.py"
-        ],
-        "patch_sha256": "55a32b7df3e9fab00e3a201e4a1ae778aef03dd88d6c7d3b24d565fac4a50869",
-        "independent_review_sha256": "3d33239b151274f7a224ed4c47be7b32790116492f1de69ed97a2712ec7d99ad",
-        "reused_actual_qualification": "1961e3f53a3633bcbe8e6961be508a3a9e8ce238bb23d3cc8fd21a5d14dd8652",
-        "runtime_activation": false,
-        "healthy_owner_interrupted": false
-      },
-      "active_original_checks": [
-        "M14-03-05-DEFAULT",
-        "M14-03-05-FUNCTIONAL"
-      ],
-      "existing_controller_callability_disposition": {
-        "review_sha256": "abe3764e1685670150402fffe698376398f863cd908dd9806d575eefd17bd9a6",
-        "same_loaded_healthy_planned_adoption_caller": "NOT_PRESENT_IN_BOUND_PATHS",
-        "normal_real_stop_checkpoint_positive_retirement_then_later_normal_start": "EXISTING_SOURCE_PATH_OPERATION_NOT_ISSUED_OR_APPROVED",
-        "source699_original_timestamp_retained": true,
-        "native_execution": false
-      }
+      "resource_UNKNOWN_preserved": true,
+      "next_action": "Publish/fetch checkpoint43 and one changed-pair PR3 report; review minimal normal admission package cohort rebind from c664 to deliberately selected a2f. Genuine controller transition, Scratch-owner provisioning and native claim/current-free/restoration remain separate."
     },
     "verified_whole_condition_history": [
       {
@@ -16172,6 +15965,45 @@
       "consumer_source_GO_sha256": "44efc737f530698ebddc42eac278ccd0a4062999c44048066ac6605d18f00721",
       "consumer_canonical_integration_sha256": "9333e3e853fe8f1723f3459814ecede0716fefbb25a5847f64271c1fa077cf1b",
       "actual_normal_consumer_or_image_accepted": false
+    },
+    "latest_core_boundary_execution": {
+      "at": "2026-11-11T17:24:44.069658+00:00",
+      "status": "ACTUAL_SEVEN_COMMAND_PASS_PENDING_INDEPENDENT_Q_NORMAL_IMAGE_NEXT",
+      "request_sha256": "5324c66eb84b0a45e018afd5a740a57d073dc01c9e2da7813e46a42b76d2e21e",
+      "result_sha256": "217375680559d69694df750d84377a38decd24f37982691f4e5e75cdfd0d8ab3",
+      "Root_completion_sha256": "0ca3ed645da85647edcf48c696f0d7a9d90f7a0206c85a714266c35328cc9f35",
+      "actual_statuses": [
+        0,
+        0,
+        0,
+        101,
+        101,
+        101,
+        101
+      ],
+      "all_five_full_oracles_matched": true,
+      "u128_quotient_vectors_matched": 4,
+      "actual_selected_integer_provider_final_address": 4208992,
+      "HOST_libgcc_substitution_accepted": false,
+      "current_host_charge_retired_after_seven_positive_families_and_fullRoot": true,
+      "current_retirement_sha256": "fe49672887b5efa27128419fab413952167302ed9b1be4e7bbe4e64283ae012b",
+      "independent_semantic_qualification_pending": true,
+      "native_or_image_original_acceptance": false,
+      "counted_delta": 0
+    },
+    "pending_changed_percentage_report": {
+      "state": "PENDING_SOURCE_RESULTS_PUBLICATION",
+      "pair": {
+        "M14": 67.22,
+        "M15": 67.19
+      },
+      "deltas": {
+        "M14": 0.28,
+        "M15": 0.0
+      },
+      "verified_checks": 98,
+      "dedupe": "M14-03-05-DEFAULT@c7f765f0",
+      "last_confirmed_pair_receipt": 6791617739
     }
   },
   "denominator_changes": [

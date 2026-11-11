@@ -1,0 +1,1791 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: 1 warning emitted
+
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /src/kernel/rust/lib.rs:3:12
+  |
+3 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+warning: unused import: `IhkSpinlock`
+     --> /src/kernel/rust/process_helpers.rs:16423:49
+      |
+16423 |     use crate::abi::{CInt, CULong, CpuLocalVar, IhkSpinlock, Thread, X86UserContext};
+      |                                                 ^^^^^^^^^^^
+      |
+      = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `MaybeUninit`
+     --> /src/kernel/rust/syscall_policy.rs:30978:30
+      |
+30978 |     use core::mem::{size_of, MaybeUninit};
+      |                              ^^^^^^^^^^^
+
+warning: unused imports: `null_mut` and `read_volatile`
+     --> /src/kernel/rust/syscall_policy.rs:30979:34
+      |
+30979 |     use core::ptr::{addr_of_mut, null_mut, read_volatile};
+      |                                  ^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `MovePagesSmpReq`
+     --> /src/kernel/rust/syscall_policy.rs:30981:51
+      |
+30981 |     use crate::abi::{CInt, CLong, CULong, CpuSet, MovePagesSmpReq, ProcessVm, SizeT,
+      |                                                   ^^^^^^^^^^^^^^^
+
+warning: unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`
+     --> /src/kernel/rust/syscall_policy.rs:30985:9
+      |
+30985 |         move_pages_free_arrays, move_pages_log_delta, move_pages_policy_result,
+      |         ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+30986 |         move_pages_smp_req_prepare_result, syscall_alloc_bridge, syscall_copy_from_user_bridge,
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+30987 |         syscall_copy_to_user_bridge, syscall_mckfd_free_bridge, MovePagesGetNrNodesFn,
+      |                                                                 ^^^^^^^^^^^^^^^^^^^^^
+30988 |         MovePagesLogFn, MovePagesSmpCallFn, MovePagesSmpHandlerFn, MovePagesVerifyFn,
+      |         ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^^^^^
+30989 |         SyscallCopyFromUserFn, SyscallCopyToUserFn, SyscallMckfdFreeFn, SyscallPolicyAllocFn,
+      |         ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+30990 |         SyscallRdtscFn, SyscallRwlockFn, EFAULT, ENODEV, ENOMEM, IHK_MC_AP_NOWAIT,
+      |         ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^  ^^^^^^
+30991 |         MOVE_PAGES_LOG_INIT_MALLOC, MOVE_PAGES_LOG_INIT_VERIFY, MOVE_PAGES_LOG_PARALLEL,
+30992 |         MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL, MOVE_PAGES_LOG_UNSUPPORTED_PID, MPOL_MF_MOVE_ALL};
+      |                                                                              ^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:34400:6
+      |
+34400 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:34426:6
+      |
+34426 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:34438:6
+      |
+34438 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused imports: `align_of` and `size_of`
+     --> /src/kernel/rust/syscall_policy.rs:34528:18
+      |
+34528 |  use core::mem::{size_of,align_of,offset_of};
+      |                  ^^^^^^^ ^^^^^^^^
+
+warning: unused imports: `CLong` and `SizeT`
+     --> /src/kernel/rust/syscall_policy.rs:35292:27
+      |
+35292 |     use crate::abi::{CInt,CLong,CULong,SizeT};
+      |                           ^^^^^        ^^^^^
+
+warning: unused import: `ManuallyDrop`
+ --> /src/kernel/rust/f03_perf_owner/maps.rs:5:17
+  |
+5 | use core::mem::{ManuallyDrop, size_of};
+  |                 ^^^^^^^^^^^^
+
+warning: unused import: `addr_of`
+ --> /src/kernel/rust/f03_perf_owner/maps.rs:6:17
+  |
+6 | use core::ptr::{addr_of, null_mut, write};
+  |                 ^^^^^^^
+
+warning: unused import: `Process`
+ --> /src/kernel/rust/f03_perf_owner/maps.rs:7:30
+  |
+7 | use crate::abi::{CInt,CULong,Process,Thread};
+  |                              ^^^^^^^
+
+warning: unused import: `super::events::EventPin`
+ --> /src/kernel/rust/f03_perf_owner/process_targets.rs:9:5
+  |
+9 | use super::events::EventPin;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `InstallMode` and `Installed`
+  --> /src/kernel/rust/f03_perf_owner/process_targets.rs:10:65
+   |
+10 | use super::monitors::{Target,MonitorSlot,MonitorRead,ProcessKey,InstallMode,Installed};
+   |                                                                 ^^^^^^^^^^^ ^^^^^^^^^
+
+warning: unused import: `MaybeUninit`
+ --> /src/kernel/rust/f03_perf_owner/transactions.rs:4:44
+  |
+4 | use core::mem::{size_of,align_of,offset_of,MaybeUninit};
+  |                                            ^^^^^^^^^^^
+
+warning: unused import: `null_mut`
+ --> /src/kernel/rust/f03_perf_owner/lifecycle.rs:3:29
+  |
+3 | use core::ptr::{addr_of_mut,null_mut};
+  |                             ^^^^^^^^
+
+warning: unused import: `addr_of_mut`
+    --> /src/kernel/rust/x86_cpu_helpers.rs:4813:30
+     |
+4813 |     use core::ptr::{addr_of, addr_of_mut};
+     |                              ^^^^^^^^^^^
+
+warning: unreachable statement
+     --> /src/kernel/rust/syscall_policy.rs:21549:5
+      |
+21505 | /         return unsafe { crate::f03_perf_owner::open_from_body(crate::f03_perf_owner::Open {
+21506 | |             request,
+21507 | |             thread,
+21508 | |             proc,
+...     |
+21545 | |             unlock_fn,
+21546 | |         }) };
+      | |____________- any code following this expression is unreachable
+...
+21549 | /     if request.is_null() || thread.is_null() || proc.is_null() || attr.is_null() {
+21550 | |         return -EINVAL as CLong;
+21551 | |     }
+      | |_____^ unreachable statement
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+     --> /src/kernel/rust/syscall_policy.rs:26749:9
+      |
+26746 |         { return unsafe{crate::f03_perf_owner::descriptor_read(sfd,ctx)}; }
+      |           -------------------------------------------------------------- any code following this expression is unreachable
+...
+26749 |         let buf_addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+     --> /src/kernel/rust/syscall_policy.rs:26835:9
+      |
+26832 |         { return unsafe{crate::f03_perf_owner::descriptor_ioctl(sfd,ctx)}; }
+      |           --------------------------------------------------------------- any code following this expression is unreachable
+...
+26835 |         let cmd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as u32;
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11879:17
+      |
+11879 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_3).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+      |
+      = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11890:13
+      |
+11890 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11902:13
+      |
+11902 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11903:13
+      |
+11903 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11904:13
+      |
+11904 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11905:13
+      |
+11905 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11917:13
+      |
+11917 |             unsafe { core::ptr::addr_of_mut!(RECORD_9).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11929:13
+      |
+11929 |             unsafe { core::ptr::addr_of_mut!(RECORD_10).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11930:13
+      |
+11930 |             unsafe { core::ptr::addr_of_mut!(RECORD_11).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11931:13
+      |
+11931 |             unsafe { core::ptr::addr_of_mut!(RECORD_12).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11932:13
+      |
+11932 |             unsafe { core::ptr::addr_of_mut!(RECORD_13).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11933:13
+      |
+11933 |             unsafe { core::ptr::addr_of_mut!(RECORD_14).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11934:13
+      |
+11934 |             unsafe { core::ptr::addr_of_mut!(RECORD_15).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11935:13
+      |
+11935 |             unsafe { core::ptr::addr_of_mut!(RECORD_16).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11947:13
+      |
+11947 |             unsafe { core::ptr::addr_of_mut!(RECORD_18).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11958:17
+      |
+11958 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_17).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11969:13
+      |
+11969 |             unsafe { core::ptr::addr_of_mut!(RECORD_19).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11970:13
+      |
+11970 |             unsafe { core::ptr::addr_of_mut!(RECORD_20).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11971:13
+      |
+11971 |             unsafe { core::ptr::addr_of_mut!(RECORD_21).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11984:17
+      |
+11984 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_2).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11998:13
+      |
+11998 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11999:13
+      |
+11999 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12088:29
+      |
+12088 |         query_free_handler: unsafe { core::ptr::addr_of!(QUERY_FREE_MEM_HANDLER).cast() },
+      |                             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12090:20
+      |
+12090 |         anon_slot: unsafe { core::ptr::addr_of_mut!(ANON_ON_DEMAND) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12091:21
+      |
+12091 |         xpmem_slot: unsafe { core::ptr::addr_of_mut!(XPMEM_PAGE_IN_REMOTE_ON_ATTACH) },
+      |                     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12100:9
+      |
+12100 |         unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12109:13
+      |
+12109 |             unsafe { core::ptr::addr_of_mut!(VMAP_ALLOCATOR) },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12118:18
+      |
+12118 |             ops: unsafe { core::ptr::addr_of_mut!(NUMA_SYSFS_MEMINFO) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12119:20
+      |
+12119 |             nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12242:13
+      |
+12242 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12243:13
+      |
+12243 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12418:20
+      |
+12418 |         allocator: unsafe { core::ptr::addr_of_mut!(ALLOCATOR) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12441:16
+      |
+12441 |         nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12460:20
+      |
+12460 |         log_count: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_COUNT) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12461:18
+      |
+12461 |         log_pid: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_PID) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12484:13
+      |
+12484 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12486:13
+      |
+12486 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12487:13
+      |
+12487 |             unsafe { core::ptr::addr_of_mut!(RECORD_2).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12570:13
+      |
+12570 |             unsafe { core::ptr::addr_of_mut!(RECORD_3).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12571:13
+      |
+12571 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12572:13
+      |
+12572 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12573:13
+      |
+12573 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12574:13
+      |
+12574 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12576:13
+      |
+12576 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3382:28
+     |
+3382 |             pa_start_slot: unsafe { core::ptr::addr_of_mut!(PA_START) },
+     |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3383:26
+     |
+3383 |             pa_end_slot: unsafe { core::ptr::addr_of_mut!(PA_END) },
+     |                          ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3384:25
+     |
+3384 |             kernel_end: unsafe { core::ptr::addr_of_mut!(KERNEL_END) },
+     |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/process_helpers.rs:13200:18
+      |
+13200 |     let config = unsafe { core::ptr::addr_of!(process_extend_region_entry_config) };
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unused variable: `thread`
+   --> /src/kernel/rust/f06_signal_tail.rs:301:5
+    |
+301 |     thread:*mut Thread,pending:*mut crate::abi::SigPending,sig:CInt,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_thread`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sig`
+   --> /src/kernel/rust/f06_signal_tail.rs:301:60
+    |
+301 |     thread:*mut Thread,pending:*mut crate::abi::SigPending,sig:CInt,
+    |                                                            ^^^ help: if this is intentional, prefix it with an underscore: `_sig`
+
+warning: unused variable: `lock_node`
+   --> /src/kernel/rust/f06_signal_tail.rs:303:23
+    |
+303 |     user_frame:CULong,lock_node:*mut McsRwlockNodeIrqsave,copy:F06SignalFrameCopy,
+    |                       ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_lock_node`
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/syscall_policy.rs:35422:28
+      |
+35422 |             let descriptor=unsafe{addr_of!(f03_vm_policy_insert_log_debug_v1).cast::<Ddebug>()};
+      |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+   --> /src/kernel/rust/f03_perf_owner/callbacks.rs:116:25
+    |
+114 |             let result=unsafe{super::target_process::with_remote_target(pid,node.as_mut_ptr().cast(),
+    |                        ------ because it's nested under this `unsafe` block
+115 |                 super::super::f03_process_cleanup_find,super::super::f03_process_cleanup_unlock,
+116 |                 |target|unsafe{enable(&pin,&event,thread,target,true)})};
+    |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: variable does not need to be mutable
+  --> /src/kernel/rust/f03_perf_owner/fork_copy.rs:91:9
+   |
+91 |     let mut snapshot=loop{
+   |         ----^^^^^^^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:8770:5
+     |
+8770 |     unsafe { core::ptr::addr_of!(X86_END) as CULong }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:8939:5
+     |
+8939 |     unsafe { core::ptr::addr_of!(MEMORY_VSYSCALL_PAGE) as *mut c_void }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9169:18
+     |
+9169 |     let result = unsafe { core::arch::x86_64::__cpuid(op as u32) };
+     |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9573:9
+     |
+9573 |         unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9584:9
+     |
+9584 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9592:9
+     |
+9592 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9600:9
+     |
+9600 |         unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9608:9
+     |
+9608 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9616:9
+     |
+9616 |         unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9967:9
+     |
+9967 |         unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: type `ProcessCloneConfig` is more private than the item `process_clone_thread_body_result`
+     --> /src/kernel/rust/process_helpers.rs:13768:1
+      |
+13768 | / pub unsafe extern "C" fn process_clone_thread_body_result(
+13769 | |     org: *mut Thread,
+13770 | |     pc: CULong,
+13771 | |     sp: CULong,
+13772 | |     clone_flags: CInt,
+13773 | |     config: *const ProcessCloneConfig,
+13774 | | ) -> *mut Thread {
+      | |________________^ function `process_clone_thread_body_result` is reachable at visibility `pub(crate)`
+      |
+note: but type `ProcessCloneConfig` is only usable at visibility `pub(self)`
+     --> /src/kernel/rust/process_helpers.rs:13708:1
+      |
+13708 | struct ProcessCloneConfig {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+      = note: `#[warn(private_interfaces)]` on by default
+
+warning: struct `CallerCredits` is never constructed
+  --> /src/kernel/rust/fork_child_credits.rs:32:19
+   |
+32 | pub(crate) struct CallerCredits {
+   |                   ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `acquire` and `cancel_unpublished` are never used
+   --> /src/kernel/rust/fork_child_credits.rs:94:26
+    |
+ 39 | impl ChildCredits {
+    | ----------------- associated items in this implementation
+...
+ 94 |     pub(crate) unsafe fn acquire(
+    |                          ^^^^^^^
+...
+161 |     pub(crate) unsafe fn cancel_unpublished(self) -> Result<CallerCredits, Self> {
+    |                          ^^^^^^^^^^^^^^^^^^
+
+warning: struct `PrivateFork` is never constructed
+   --> /src/kernel/rust/fork_child_credits.rs:194:19
+    |
+194 | pub(crate) struct PrivateFork<'request> {
+    |                   ^^^^^^^^^^^
+
+warning: struct `CreateFailure` is never constructed
+   --> /src/kernel/rust/fork_child_credits.rs:214:19
+    |
+214 | pub(crate) struct CreateFailure { pub(crate) error: i32, pub(crate) credits: ChildCredits }
+    |                   ^^^^^^^^^^^^^
+
+warning: struct `PrivateFailure` is never constructed
+   --> /src/kernel/rust/fork_child_credits.rs:215:19
+    |
+215 | pub(crate) struct PrivateFailure<'request> { pub(crate) error: i32, pub(crate) owner: PrivateFork<'request> }
+    |                   ^^^^^^^^^^^^^^
+
+warning: enum `BeginFailure` is never used
+   --> /src/kernel/rust/fork_child_credits.rs:216:17
+    |
+216 | pub(crate) enum BeginFailure<'request> {
+    |                 ^^^^^^^^^^^^
+
+warning: associated items `create`, `create_owned`, `create_raw`, `validate`, `cancel`, and `begin` are never used
+   --> /src/kernel/rust/fork_child_credits.rs:225:26
+    |
+221 | impl<'request> PrivateFork<'request> {
+    | ------------------------------------ associated items in this implementation
+...
+225 |     pub(crate) unsafe fn create(
+    |                          ^^^^^^
+...
+235 |     pub(crate) unsafe fn create_owned(
+    |                          ^^^^^^^^^^^^
+...
+244 |     unsafe fn create_raw(
+    |               ^^^^^^^^^^
+...
+260 |     unsafe fn validate(&self, carrier: &Carrier) -> bool {
+    |               ^^^^^^^^
+...
+276 |     pub(crate) unsafe fn cancel(mut self) -> Result<CallerCredits, PrivateFailure<'request>> {
+    |                          ^^^^^^
+...
+322 |     pub(crate) unsafe fn begin(mut self) -> Result<EscapedFork<'request>, BeginFailure<'request>> {
+    |                          ^^^^^
+
+warning: field `child_pid` is never read
+   --> /src/kernel/rust/fork_child_credits.rs:352:23
+    |
+352 |     ReceiptObserved { child_pid: i32, owner: RetainedFork },
+    |     ---------------   ^^^^^^^^^
+    |     |
+    |     field in this variant
+
+warning: field `actual` is never read
+   --> /src/kernel/rust/fork_child_credits.rs:353:17
+    |
+353 |     Uncertain { actual: Option<i64>, owner: RetainedFork },
+    |     ---------   ^^^^^^
+    |     |
+    |     field in this variant
+
+warning: method `handle` is never used
+   --> /src/kernel/rust/fork_child_credits.rs:357:19
+    |
+356 | impl EscapedFork<'_> {
+    | -------------------- method in this implementation
+357 |     pub(crate) fn handle(&self) -> Handle { self.handle }
+    |                   ^^^^^^
+
+warning: method `caller_cleanup_allowed` is never used
+   --> /src/kernel/rust/fork_child_credits.rs:419:19
+    |
+417 | impl RetainedFork {
+    | ----------------- method in this implementation
+418 |     pub(crate) fn handle(&self) -> Handle { self.handle }
+419 |     pub(crate) fn caller_cleanup_allowed(&self) -> bool { false }
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `NATIVE_QUEUE_ABI_VERSION` is never used
+  --> /src/kernel/rust/ikc_queue.rs:24:11
+   |
+24 | pub const NATIVE_QUEUE_ABI_VERSION: u32 = 2;
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: enum `PendingFreeBatchState` is never used
+   --> /src/kernel/rust/mem_helpers.rs:166:6
+    |
+166 | enum PendingFreeBatchState {
+    |      ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingPhysicalBounds` is never constructed
+   --> /src/kernel/rust/mem_helpers.rs:176:8
+    |
+176 | struct PendingPhysicalBounds {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingFreeCallbackArgs` is never constructed
+   --> /src/kernel/rust/mem_helpers.rs:182:8
+    |
+182 | struct PendingFreeCallbackArgs {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingInventoryLease` is never constructed
+   --> /src/kernel/rust/mem_helpers.rs:200:8
+    |
+200 | struct PendingInventoryLease {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `descriptor`, `descriptor_node`, and `descriptor_index` are never used
+   --> /src/kernel/rust/mem_helpers.rs:214:15
+    |
+210 | impl PendingInventoryLease {
+    | -------------------------- associated items in this implementation
+...
+214 |     unsafe fn new(
+    |               ^^^
+...
+230 |     unsafe fn descriptor(&self, index: usize) -> *mut MemPage {
+    |               ^^^^^^^^^^
+...
+234 |     unsafe fn descriptor_node(&self, index: usize) -> *mut AbiListHead {
+    |               ^^^^^^^^^^^^^^^
+...
+238 |     unsafe fn descriptor_index(&self, node: *mut AbiListHead) -> Option<usize> {
+    |               ^^^^^^^^^^^^^^^^
+
+warning: struct `ValidatedPendingInventory` is never constructed
+   --> /src/kernel/rust/mem_helpers.rs:251:8
+    |
+251 | struct ValidatedPendingInventory {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingFreeBatch` is never constructed
+   --> /src/kernel/rust/mem_helpers.rs:259:8
+    |
+259 | struct PendingFreeBatch {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> /src/kernel/rust/mem_helpers.rs:269:14
+    |
+268 | impl PendingFreeBatch {
+    | --------------------- associated function in this implementation
+269 |     const fn new() -> Self {
+    |              ^^^
+
+warning: function `validate_pending_inventory_metadata` is never used
+   --> /src/kernel/rust/mem_helpers.rs:284:11
+    |
+284 | unsafe fn validate_pending_inventory_metadata(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_pending_inventory_ring` is never used
+   --> /src/kernel/rust/mem_helpers.rs:349:11
+    |
+349 | unsafe fn validate_pending_inventory_ring(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_pending_inventory` is never used
+   --> /src/kernel/rust/mem_helpers.rs:405:11
+    |
+405 | unsafe fn validate_pending_inventory(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `try_reanchor_into` and `reanchor_into` are never used
+   --> /src/kernel/rust/mem_helpers.rs:421:15
+    |
+417 | impl ValidatedPendingInventory {
+    | ------------------------------ methods in this implementation
+...
+421 |     unsafe fn try_reanchor_into(
+    |               ^^^^^^^^^^^^^^^^^
+...
+445 |     unsafe fn reanchor_into(self, mut destination: Pin<&mut PendingFreeBatch>) {
+    |               ^^^^^^^^^^^^^
+
+warning: function `drain_validated_pending_inventory` is never used
+   --> /src/kernel/rust/mem_helpers.rs:472:11
+    |
+472 | unsafe fn drain_validated_pending_inventory(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `detach_pending_free_batch` is never used
+   --> /src/kernel/rust/mem_helpers.rs:580:11
+    |
+580 | unsafe fn detach_pending_free_batch(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `drain_pending_free_batch` is never used
+   --> /src/kernel/rust/mem_helpers.rs:625:11
+    |
+625 | unsafe fn drain_pending_free_batch(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated function `unpublished` is never used
+  --> /src/kernel/rust/smp_ikc.rs:45:18
+   |
+44 | impl NativeIrqWorkDescriptor {
+   | ---------------------------- associated function in this implementation
+45 |     pub const fn unpublished(generation: u64, slots_phys: u64, slots_count: u32) -> Self {
+   |                  ^^^^^^^^^^^
+
+warning: function `native_irq_work_descriptor_offset` is never used
+  --> /src/kernel/rust/smp_ikc.rs:89:8
+   |
+89 | pub fn native_irq_work_descriptor_offset(tables_end: usize) -> Option<usize> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `can_drain` are never used
+   --> /src/kernel/rust/smp_ikc.rs:108:18
+    |
+106 | impl IrqWorkSenderGate {
+    | ---------------------- associated items in this implementation
+107 |     const CLOSED: u32 = 1 << 31;
+108 |     pub const fn new() -> Self {
+    |                  ^^^
+...
+134 |     pub fn can_drain(&self) -> bool {
+    |            ^^^^^^^^^
+
+warning: constant `F06_SIGNAL_LEGACY_FRAME_COPY_PENDING_FREE_LINE` is never used
+ --> /work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs:8:7
+  |
+8 | const F06_SIGNAL_LEGACY_FRAME_COPY_PENDING_FREE_LINE: i32 = 1969;
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `F06_SIGNAL_LEGACY_XSAVE_COPY_PENDING_FREE_LINE` is never used
+  --> /work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs:10:7
+   |
+10 | const F06_SIGNAL_LEGACY_XSAVE_COPY_PENDING_FREE_LINE: i32 = 1951;
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `F06_SIGNAL_LEGACY_XSAVE_OOM_PENDING_FREE_LINE` is never used
+  --> /work/output/build/kernel/rust/f06-origin/f06_signal_metadata.rs:11:7
+   |
+11 | const F06_SIGNAL_LEGACY_XSAVE_OOM_PENDING_FREE_LINE: i32 = 1935;
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `F06_HANDLER_SA_NODEFER` is never used
+   --> /src/kernel/rust/f06_signal_tail.rs:164:7
+    |
+164 | const F06_HANDLER_SA_NODEFER:CULong=0x40000000;
+    |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `f06_signal_frame_copy_terminate` is never used
+   --> /src/kernel/rust/f06_signal_tail.rs:290:8
+    |
+290 |     fn f06_signal_frame_copy_terminate(status:CInt,sig:CInt);
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `f03_do_exit_existing_sync_child_v2` is never used
+     --> /src/kernel/rust/syscall_policy.rs:34284:8
+      |
+34284 |     fn f03_do_exit_existing_sync_child_v2(event: *mut c_void);
+      |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `0` is never read
+  --> /src/kernel/rust/f03_perf_owner/descriptors.rs:23:91
+   |
+23 | pub(super) enum HostState { NoHost, PendingChildRoute, Owned, ClosedAcknowledged, Unknown(CLong), Unissued(HostUnissued) }
+   |                                                                                   ------- ^^^^^
+   |                                                                                   |
+   |                                                                                   field in this variant
+   |
+   = note: `HostState` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+23 - pub(super) enum HostState { NoHost, PendingChildRoute, Owned, ClosedAcknowledged, Unknown(CLong), Unissued(HostUnissued) }
+23 + pub(super) enum HostState { NoHost, PendingChildRoute, Owned, ClosedAcknowledged, Unknown(()), Unissued(HostUnissued) }
+   |
+
+warning: field `0` is never read
+  --> /src/kernel/rust/f03_perf_owner/descriptors.rs:23:108
+   |
+23 | pub(super) enum HostState { NoHost, PendingChildRoute, Owned, ClosedAcknowledged, Unknown(CLong), Unissued(HostUnissued) }
+   |                                                                                                   -------- ^^^^^^^^^^^^
+   |                                                                                                   |
+   |                                                                                                   field in this variant
+   |
+   = note: `HostState` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+23 - pub(super) enum HostState { NoHost, PendingChildRoute, Owned, ClosedAcknowledged, Unknown(CLong), Unissued(HostUnissued) }
+23 + pub(super) enum HostState { NoHost, PendingChildRoute, Owned, ClosedAcknowledged, Unknown(CLong), Unissued(()) }
+   |
+
+warning: field `0` is never read
+  --> /src/kernel/rust/f03_perf_owner/descriptors.rs:25:75
+   |
+25 | pub(super) enum HostUnissued { NoHostFlag, WrongCurrentOwner, GateFailure(CInt), InterruptedOwnerRoute }
+   |                                                               ----------- ^^^^
+   |                                                               |
+   |                                                               field in this variant
+   |
+   = note: `HostUnissued` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+25 - pub(super) enum HostUnissued { NoHostFlag, WrongCurrentOwner, GateFailure(CInt), InterruptedOwnerRoute }
+25 + pub(super) enum HostUnissued { NoHostFlag, WrongCurrentOwner, GateFailure(()), InterruptedOwnerRoute }
+   |
+
+warning: function `has_deferred` is never used
+   --> /src/kernel/rust/f03_perf_owner/descriptors.rs:149:15
+    |
+149 | pub(super) fn has_deferred()->bool { !PENDING.load(Ordering::Acquire).is_null() }
+    |               ^^^^^^^^^^^^
+
+warning: methods `generation` and `try_clone` are never used
+   --> /src/kernel/rust/f03_perf_owner/descriptors.rs:155:19
+    |
+152 | impl DescriptorPin {
+    | ------------------ methods in this implementation
+...
+155 |     pub(super) fn generation(&self)->u64 { unsafe { (*self.record).generation } }
+    |                   ^^^^^^^^^^
+...
+163 |     pub(super) fn try_clone(&self)->Result<Self,CInt> {
+    |                   ^^^^^^^^^
+
+warning: method `event` is never used
+   --> /src/kernel/rust/f03_perf_owner/descriptors.rs:170:19
+    |
+167 | impl CloseToken {
+    | --------------- method in this implementation
+...
+170 |     pub(super) fn event(&self)->Result<EventPin,CInt> { self.pin.event() }
+    |                   ^^^^^
+
+warning: methods `raw_event` and `event` are never used
+   --> /src/kernel/rust/f03_perf_owner/descriptors.rs:223:19
+    |
+184 | impl Prepared {
+    | ------------- methods in this implementation
+...
+223 |     pub(super) fn raw_event(&self)->*mut core::ffi::c_void {
+    |                   ^^^^^^^^^
+...
+228 |     pub(super) fn event(&self)->Result<EventPin,CInt> { unsafe { (*self.record).event.pin() } }
+    |                   ^^^^^
+
+warning: function `unresolved_host_closes` is never used
+   --> /src/kernel/rust/f03_perf_owner/descriptors.rs:389:22
+    |
+389 | pub(crate) unsafe fn unresolved_host_closes()->usize {
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `borrow` is never used
+   --> /src/kernel/rust/f03_perf_owner/events.rs:234:19
+    |
+171 | impl EventPin {
+    | ------------- method in this implementation
+...
+234 |     pub(super) fn borrow(&self) -> EventBorrow<'_> { self.event.borrow() }
+    |                   ^^^^^^
+
+warning: method `raw_event` is never used
+   --> /src/kernel/rust/f03_perf_owner/events.rs:457:19
+    |
+448 | impl StateGuard<'_> {
+    | ------------------- method in this implementation
+...
+457 |     pub(super) fn raw_event(&self) -> *mut c_void { unsafe { (*self.owner).event } }
+    |                   ^^^^^^^^^
+
+warning: method `read` is never used
+   --> /src/kernel/rust/f03_perf_owner/groups.rs:229:19
+    |
+113 | impl GroupRef {
+    | ------------- method in this implementation
+...
+229 |     pub(super) fn read(&self) -> GroupRead<'_> {
+    |                   ^^^^
+
+warning: field `logical_mask` is never read
+   --> /src/kernel/rust/f03_perf_owner/groups.rs:365:5
+    |
+357 | pub(super) struct GroupRead<'a> {
+    |                   --------- field in this struct
+...
+365 |     logical_mask: CULong,
+    |     ^^^^^^^^^^^^
+
+warning: method `logical_mask` is never used
+   --> /src/kernel/rust/f03_perf_owner/groups.rs:373:19
+    |
+368 | impl GroupRead<'_> {
+    | ------------------ method in this implementation
+...
+373 |     pub(super) fn logical_mask(&self) -> CULong { self.logical_mask }
+    |                   ^^^^^^^^^^^^
+
+warning: methods `event` and `ack_locked` are never used
+   --> /src/kernel/rust/f03_perf_owner/groups.rs:411:19
+    |
+408 | impl MemberRetirement<'_> {
+    | ------------------------- methods in this implementation
+...
+411 |     pub(super) fn event(&self) -> EventBorrow<'_> { unsafe { (*self.member).event.borrow() } }
+    |                   ^^^^^
+412 |     /// Caller has just consumed the real per-Thread mapping tokens under R.
+413 |     pub(super) unsafe fn ack_locked(mut self, _r: &mut Locked) {
+    |                          ^^^^^^^^^^
+
+warning: method `process` is never used
+  --> /src/kernel/rust/f03_perf_owner/monitors.rs:53:19
+   |
+44 | impl Target {
+   | ----------- method in this implementation
+...
+53 |     pub(super) fn process(&self) -> *mut Process { self.process }
+   |                   ^^^^^^^
+
+warning: method `descriptor_key` is never used
+   --> /src/kernel/rust/f03_perf_owner/monitors.rs:134:19
+    |
+116 | impl MonitorSlot {
+    | ---------------- method in this implementation
+...
+134 |     pub(super) fn descriptor_key(&self) -> Option<DescriptorKey> {
+    |                   ^^^^^^^^^^^^^^
+
+warning: field `0` is never read
+   --> /src/kernel/rust/f03_perf_owner/monitors.rs:240:15
+    |
+240 |     Unmanaged(*mut c_void),
+    |     --------- ^^^^^^^^^^^
+    |     |
+    |     field in this variant
+    |
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+    |
+240 -     Unmanaged(*mut c_void),
+240 +     Unmanaged(()),
+    |
+
+warning: field `generation` is never read
+  --> /src/kernel/rust/f03_perf_owner/maps.rs:30:48
+   |
+28 | struct ThreadRecord {
+   |        ------------ field in this struct
+29 |     next:*mut ThreadRecord,next_free:*mut ThreadRecord,
+30 |     raw:*mut Thread,process:Option<ProcessKey>,generation:u64,references:usize,
+   |                                                ^^^^^^^^^^
+
+warning: method `translated_mask` is never used
+   --> /src/kernel/rust/f03_perf_owner/maps.rs:294:19
+    |
+256 | impl HardwareLeases{
+    | ------------------- method in this implementation
+...
+294 |     pub(super) fn translated_mask(&self,logical:CULong,event:EventKey,creation:CInt)->CULong{
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `release_locked` is never used
+  --> /src/kernel/rust/f03_perf_owner/process_targets.rs:45:26
+   |
+27 | impl ProcessHandle{
+   | ------------------ method in this implementation
+...
+45 |     pub(super) unsafe fn release_locked(self,r:&mut Locked){let this=core::mem::ManuallyDrop::new(self);unsafe{release(this.record,r...
+   |                          ^^^^^^^^^^^^^^
+
+warning: function `pin` is never used
+  --> /src/kernel/rust/f03_perf_owner/process_targets.rs:90:22
+   |
+90 | pub(super) unsafe fn pin(raw:*mut Process)->Result<MonitorRead,CInt>{
+   |                      ^^^
+
+warning: field `cpu` is never read
+  --> /src/kernel/rust/f03_perf_owner/transactions.rs:24:16
+   |
+16 | pub(crate) struct Open {
+   |                   ---- field in this struct
+...
+24 |     pub(crate) cpu:CInt,
+   |                ^^^
+   |
+   = note: `Open` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: function `start` is never used
+   --> /src/kernel/rust/f03_perf_owner/hardware.rs:181:22
+    |
+181 | pub(super) unsafe fn start(event: &EventPin, thread: *mut Thread) -> CLong {
+    |                      ^^^^^
+
+warning: function `reset` is never used
+   --> /src/kernel/rust/f03_perf_owner/hardware.rs:237:22
+    |
+237 | pub(super) unsafe fn reset(event: &EventPin, thread: *mut Thread) -> CLong {
+    |                      ^^^^^
+
+warning: function `stop` is never used
+   --> /src/kernel/rust/f03_perf_owner/hardware.rs:315:22
+    |
+315 | pub(super) unsafe fn stop(event: &EventPin, thread: *mut Thread) -> CLong {
+    |                      ^^^^
+
+warning: function `sync` is never used
+   --> /src/kernel/rust/f03_perf_owner/hardware.rs:365:22
+    |
+365 | pub(super) unsafe fn sync(event: &EventPin, thread: *mut Thread) -> CLong {
+    |                      ^^^^
+
+warning: function `read` is never used
+   --> /src/kernel/rust/f03_perf_owner/hardware.rs:396:22
+    |
+396 | pub(super) unsafe fn read(
+    |                      ^^^^
+
+warning: function `sync_child_event` is never used
+  --> /src/kernel/rust/f03_terminate.rs:34:8
+   |
+34 |     fn sync_child_event(event: *mut c_void);
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `perf_reset` is never used
+    --> /src/kernel/rust/x86_cpu_helpers.rs:5430:12
+     |
+5430 |         fn perf_reset(event: *mut c_void);
+     |            ^^^^^^^^^^
+
+warning: function `perf_start` is never used
+    --> /src/kernel/rust/x86_cpu_helpers.rs:5431:12
+     |
+5431 |         fn perf_start(event: *mut c_void);
+     |            ^^^^^^^^^^
+
+warning: module `selected_APboot_storage` should have a snake case name
+    --> /src/kernel/rust/x86_cpu_helpers.rs:6184:5
+     |
+6184 | mod selected_APboot_storage {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `selected_apboot_storage`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: static variable `no_execute` should have an upper case name
+    --> /src/kernel/rust/x86_cpu_helpers.rs:4505:16
+     |
+4505 |     static mut no_execute: CInt = 0;
+     |                ^^^^^^^^^^
+     |
+     = note: `#[warn(non_upper_case_globals)]` (part of `#[warn(nonstandard_style)]`) on by default
+help: convert the identifier to upper case
+     |
+4505 -     static mut no_execute: CInt = 0;
+4505 +     static mut NO_EXECUTE: CInt = 0;
+     |
+
+warning: static variable `selected_mode` should have an upper case name
+    --> /src/kernel/rust/x86_cpu_helpers.rs:5292:16
+     |
+5292 |     static mut selected_mode: CInt = 0;
+     |                ^^^^^^^^^^^^^
+     |
+help: convert the identifier to upper case
+     |
+5292 -     static mut selected_mode: CInt = 0;
+5292 +     static mut SELECTED_MODE: CInt = 0;
+     |
+
+warning: direct cast of function item into an integer
+    --> /src/kernel/rust/xpmem_helpers.rs:1795:21
+     |
+1795 |         xpmem_ioctl as usize as CULong,
+     |                     ^^^^^^^^
+     |
+     = note: `#[warn(function_casts_as_integer)]` on by default
+help: first cast to a pointer `as *const ()`
+     |
+1795 |         xpmem_ioctl as *const () as usize as CULong,
+     |                     ++++++++++++
+
+warning: direct cast of function item into an integer
+    --> /src/kernel/rust/xpmem_helpers.rs:1796:21
+     |
+1796 |         xpmem_close as usize as CULong,
+     |                     ^^^^^^^^
+     |
+help: first cast to a pointer `as *const ()`
+     |
+1796 |         xpmem_close as *const () as usize as CULong,
+     |                     ++++++++++++
+
+warning: direct cast of function item into an integer
+    --> /src/kernel/rust/xpmem_helpers.rs:1797:19
+     |
+1797 |         xpmem_dup as usize as CULong,
+     |                   ^^^^^^^^
+     |
+help: first cast to a pointer `as *const ()`
+     |
+1797 |         xpmem_dup as *const () as usize as CULong,
+     |                   ++++++++++++
+
+warning: `ihk_ikc_send` redeclared with a different signature
+   --> /src/kernel/rust/host_helpers.rs:197:5
+    |
+197 |     fn ihk_ikc_send(channel: *mut c_void, packet: *mut c_void, opt: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/futex.rs:198:5
+    |
+198 |     fn ihk_ikc_send(channel: *mut c_void, packet: *mut IkcScdPacket, flags: CInt) -> CInt;
+    |     -------------------------------------------------------------------------------------- `ihk_ikc_send` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut IkcScdPacket, i32) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32) -> i32`
+    = note: `#[warn(clashing_extern_declarations)]` on by default
+
+warning: `page_fault_process_vm` redeclared with a different signature
+   --> /src/kernel/rust/host_helpers.rs:215:5
+    |
+215 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/futex.rs:204:5
+    |
+204 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong) -> CInt;
+    |     ---------------------------------------------------------------------------------------- `page_fault_process_vm` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut abi::ProcessVm, *mut core::ffi::c_void, u64) -> i32`
+               found `unsafe extern "C" fn(*mut abi::ProcessVm, *mut core::ffi::c_void, u64)`
+
+warning: `sched_wakeup_thread` redeclared with a different signature
+   --> /src/kernel/rust/host_helpers.rs:221:5
+    |
+221 |     fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/futex.rs:205:5
+    |
+205 |     fn sched_wakeup_thread(thread: *mut c_void, valid_states: CInt) -> CInt;
+    |     ------------------------------------------------------------------------ `sched_wakeup_thread` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut abi::Thread, i32) -> i32`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /src/kernel/rust/ikc_queue.rs:95:5
+    |
+ 95 |     fn ihk_mc_map_virtual(phys: CULong, size: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut core::ffi::c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /src/kernel/rust/ikc_queue.rs:96:5
+    |
+ 96 |     fn ihk_mc_unmap_virtual(virt: *mut CULong, size: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /src/kernel/rust/listeners.rs:55:5
+    |
+ 55 |     fn ihk_mc_map_virtual(phys: CULong, size: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut core::ffi::c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /src/kernel/rust/listeners.rs:56:5
+    |
+ 56 |     fn ihk_mc_unmap_virtual(virt: *mut CULong, size: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `page_fault_process_vm` redeclared with a different signature
+   --> /src/kernel/rust/mem_helpers.rs:24:5
+    |
+ 24 |     fn page_fault_process_vm(vm: *mut c_void, virt: *mut c_void, reason: CULong) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/futex.rs:204:5
+    |
+204 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong) -> CInt;
+    |     ---------------------------------------------------------------------------------------- `page_fault_process_vm` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut abi::ProcessVm, *mut core::ffi::c_void, u64) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, u64) -> i32`
+
+warning: `mem_kmalloc_panic` redeclares `panic` with a different signature
+    --> /src/kernel/rust/mem_helpers.rs:7041:5
+     |
+7041 |     #[link_name = "panic"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/ap.rs:80:5
+     |
+  80 |     #[link_name = "panic"]
+     |     ---------------------- `panic` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(*const i8) -> !`
+                found `unsafe extern "C" fn(*const i8)`
+
+warning: `mem_register_interrupt_handler_provider` redeclares `ihk_mc_register_interrupt_handler` with a different signature
+    --> /src/kernel/rust/mem_helpers.rs:8987:5
+     |
+8987 |       #[link_name = "ihk_mc_register_interrupt_handler"]
+     |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/ikc_manycore.rs:48:5
+     |
+  48 | /     fn ihk_mc_register_interrupt_handler(vector: CInt, handler: *mut IhkMcInterruptHandler)
+  49 | |         -> CInt;
+     | |________________- `ihk_mc_register_interrupt_handler` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(i32, *mut IhkMcInterruptHandler) -> i32`
+                found `unsafe extern "C" fn(i32, *mut core::ffi::c_void) -> i32`
+
+warning: `mem_get_vector_provider` redeclares `ihk_mc_get_vector` with a different signature
+    --> /src/kernel/rust/mem_helpers.rs:9208:5
+     |
+9208 |     #[link_name = "ihk_mc_get_vector"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/futex.rs:201:5
+     |
+ 201 |     fn ihk_mc_get_vector(vector_key: CInt) -> CInt;
+     |     ----------------------------------------------- `ihk_mc_get_vector` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(i32) -> i32`
+                found `unsafe extern "C" fn(u32) -> i32`
+
+warning: `ORIGINAL_CPU_INFO` redeclares `ihk_mc_get_cpu_info` with a different signature
+     --> /src/kernel/rust/mem_helpers.rs:12337:9
+      |
+12337 |         #[link_name = "ihk_mc_get_cpu_info"]
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/ap.rs:92:5
+      |
+   92 |     fn ihk_mc_get_cpu_info() -> *mut IhkMcCpuInfo;
+      |     ---------------------------------------------- `ihk_mc_get_cpu_info` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn() -> *mut ap::IhkMcCpuInfo`
+                 found `unsafe extern "C" fn() -> *mut abi::IhkCpuInfo`
+
+warning: `ORIGINAL_PROFILE_EVENT_ADD` redeclares `profile_event_add` with a different signature
+     --> /src/kernel/rust/mem_helpers.rs:12362:9
+      |
+12362 |         #[link_name = "profile_event_add"]
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/devobj.rs:68:5
+      |
+   68 |     fn profile_event_add(type_: CInt, tsc: CULong);
+      |     ----------------------------------------------- `profile_event_add` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(i32, u64)`
+                 found `unsafe extern "C" fn(u32, u64)`
+
+warning: `mem_reserve_panic_provider` redeclares `panic` with a different signature
+    --> /src/kernel/rust/page_alloc.rs:3158:5
+     |
+3158 |     #[link_name = "panic"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/ap.rs:80:5
+     |
+  80 |     #[link_name = "panic"]
+     |     ---------------------- `panic` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(*const i8) -> !`
+                found `unsafe extern "C" fn(*const i8)`
+
+warning: `phys_to_page` redeclared with a different signature
+   --> /src/kernel/rust/process_helpers.rs:191:5
+    |
+191 |     fn phys_to_page(phys: CULong) -> *mut crate::page_helpers::Page;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/fileobj.rs:180:5
+    |
+180 |     fn phys_to_page(phys: CULong) -> *mut ObjectPage;
+    |     ------------------------------------------------- `phys_to_page` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64) -> *mut fileobj::ObjectPage`
+               found `unsafe extern "C" fn(u64) -> *mut Page`
+
+warning: `process_copy_set_range_public` redeclares `ihk_mc_pt_set_range` with a different signature
+     --> /src/kernel/rust/process_helpers.rs:13349:5
+      |
+13349 |       #[link_name = "ihk_mc_pt_set_range"]
+      |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/host_helpers.rs:161:5
+      |
+  161 | /     fn ihk_mc_pt_set_range(
+  162 | |         page_table: *mut c_void,
+  163 | |         vm: *mut c_void,
+  164 | |         start: *mut c_void,
+...     |
+  170 | |         flags: CInt,
+  171 | |     ) -> CInt;
+      | |______________- `ihk_mc_pt_set_range` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut core::ffi::c_void, i32) -> i32`
+                 found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut abi::ProcessVm, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut abi::VmRange, i32) -> i32`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /src/kernel/rust/procfs.rs:103:5
+    |
+103 |     fn ihk_mc_map_virtual(phys: CULong, npages: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut core::ffi::c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /src/kernel/rust/procfs.rs:104:5
+    |
+104 |     fn ihk_mc_unmap_virtual(ptr: *mut CULong, npages: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `release_thread` redeclared with a different signature
+   --> /src/kernel/rust/sched_helpers.rs:28:5
+    |
+ 28 |     fn release_thread(thread: *mut core::ffi::c_void);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/procfs.rs:116:5
+    |
+116 |     fn release_thread(thread: *mut Thread);
+    |     --------------------------------------- `release_thread` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut abi::Thread)`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void)`
+
+warning: `process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature
+     --> /src/kernel/rust/sched_helpers.rs:39:5
+      |
+   39 |     #[link_name = "process_spin_lock_bridge"]
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/process_helpers.rs:17491:9
+      |
+17491 |         fn process_spin_lock_bridge(lock_addr: usize) -> CULong;
+      |         -------------------------------------------------------- `process_spin_lock_bridge` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(usize) -> u64`
+                 found `unsafe extern "C" fn(u64) -> u64`
+
+warning: `process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature
+     --> /src/kernel/rust/sched_helpers.rs:41:5
+      |
+   41 |     #[link_name = "process_spin_unlock_bridge"]
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/process_helpers.rs:17492:9
+      |
+17492 |         fn process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);
+      |         ------------------------------------------------------------------ `process_spin_unlock_bridge` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(usize, u64)`
+                 found `unsafe extern "C" fn(u64, u64)`
+
+warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature
+   --> /src/kernel/rust/shmobj.rs:134:5
+    |
+134 | /     fn ihk_mc_pt_lookup_pte(
+135 | |         pt: *mut c_void,
+136 | |         virt: *mut c_void,
+137 | |         pgshift: CInt,
+...   |
+140 | |         p2alignp: *mut CInt,
+141 | |     ) -> *mut c_void;
+    | |_____________________^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/mem_helpers.rs:20:5
+    |
+ 20 | /     fn ihk_mc_pt_lookup_pte(
+ 21 | |         pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
+ 22 | |         basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
+ 23 | |     ) -> *mut CULong;
+    | |_____________________- `ihk_mc_pt_lookup_pte` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut u64`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut core::ffi::c_void`
+
+warning: `f06_set_signal_kernel_panic` redeclares `panic` with a different signature
+     --> /src/kernel/rust/syscall_policy.rs:30043:5
+      |
+30043 |     #[link_name = "panic"]
+      |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/ap.rs:80:5
+      |
+   80 |     #[link_name = "panic"]
+      |     ---------------------- `panic` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(*const i8) -> !`
+                 found `unsafe extern "C" fn(*const i8)`
+
+warning: `set_cputime` redeclared with a different signature
+     --> /src/kernel/rust/syscall_policy.rs:33351:9
+      |
+33351 |         fn set_cputime(mode: CInt);
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /src/kernel/rust/mem_helpers.rs:9940:5
+      |
+ 9940 |     #[link_name = "set_cputime"]
+      |     ---------------------------- `set_cputime` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(u32)`
+                 found `unsafe extern "C" fn(i32)`
+
+warning: `f06_vdso_pt_set_range` redeclares `ihk_mc_pt_set_range` with a different signature
+   --> /src/kernel/rust/f06_vdso_set_range.rs:8:5
+    |
+  8 |       #[link_name = "ihk_mc_pt_set_range"]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:161:5
+    |
+161 | /     fn ihk_mc_pt_set_range(
+162 | |         page_table: *mut c_void,
+163 | |         vm: *mut c_void,
+164 | |         start: *mut c_void,
+...   |
+170 | |         flags: CInt,
+171 | |     ) -> CInt;
+    | |______________- `ihk_mc_pt_set_range` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut core::ffi::c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut abi::ProcessVm, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut abi::VmRange, i32) -> i32`
+
+warning: `f06_signal_adapter_syscall` redeclares `syscall` with a different signature
+   --> /src/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs:6:5
+    |
+  6 |     #[link_name = "syscall"]
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/init.rs:100:5
+    |
+100 |     fn syscall(num: CInt, ctx: *mut c_void) -> CLong;
+    |     ------------------------------------------------- `syscall` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(i32, *mut core::ffi::c_void) -> i64`
+               found `unsafe extern "C" fn(i32, *mut X86UserContext) -> i64`
+
+warning: `sched_wakeup_thread` redeclared with a different signature
+   --> /src/kernel/rust/f03_ptrace_adapters.rs:11:5
+    |
+ 11 |     fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/futex.rs:205:5
+    |
+205 |     fn sched_wakeup_thread(thread: *mut c_void, valid_states: CInt) -> CInt;
+    |     ------------------------------------------------------------------------ `sched_wakeup_thread` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut abi::Thread, i32) -> i32`
+
+warning: `panic` redeclared with a different signature
+  --> /src/kernel/rust/f03_terminate.rs:40:5
+   |
+40 |     fn panic(message: *const i8);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+   |
+  ::: /src/kernel/rust/ap.rs:80:5
+   |
+80 |     #[link_name = "panic"]
+   |     ---------------------- `panic` previously declared here
+   |
+   = note: expected `unsafe extern "C" fn(*const i8) -> !`
+              found `unsafe extern "C" fn(*const i8)`
+
+warning: `c_map_fixed_area` redeclares `map_fixed_area` with a different signature
+    --> /src/kernel/rust/x86_cpu_helpers.rs:5720:9
+     |
+5720 |         #[link_name = "map_fixed_area"]
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/builtin_dma.rs:53:5
+     |
+  53 |     fn map_fixed_area(phys: CULong, size: CULong, flags: CULong) -> *mut c_void;
+     |     ---------------------------------------------------------------------------- `map_fixed_area` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(u64, u64, u64) -> *mut core::ffi::c_void`
+                found `unsafe extern "C" fn(u64, u64, i32) -> *mut core::ffi::c_void`
+
+warning: `c_cpu_info` redeclares `ihk_mc_get_cpu_info` with a different signature
+    --> /src/kernel/rust/x86_cpu_helpers.rs:5730:9
+     |
+5730 |         #[link_name = "ihk_mc_get_cpu_info"]
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/ap.rs:92:5
+     |
+  92 |     fn ihk_mc_get_cpu_info() -> *mut IhkMcCpuInfo;
+     |     ---------------------------------------------- `ihk_mc_get_cpu_info` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn() -> *mut ap::IhkMcCpuInfo`
+                found `unsafe extern "C" fn() -> *mut core::ffi::c_void`
+
+warning: `x86_memory_existing_panic` redeclares `panic` with a different signature
+   --> /src/kernel/rust/x86_memory_helpers.rs:196:5
+    |
+196 |     #[link_name = "panic"]
+    |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/ap.rs:80:5
+    |
+ 80 |     #[link_name = "panic"]
+    |     ---------------------- `panic` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*const i8) -> !`
+               found `unsafe extern "C" fn(*const i8)`
+
+warning: `page_unmap` redeclared with a different signature
+   --> /src/kernel/rust/x86_memory_helpers.rs:207:5
+    |
+207 |     fn page_unmap(page: *mut Page) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/fileobj.rs:183:5
+    |
+183 |     fn page_unmap(page: *mut ObjectPage) -> CInt;
+    |     --------------------------------------------- `page_unmap` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut fileobj::ObjectPage) -> i32`
+               found `unsafe extern "C" fn(*mut Page) -> i32`
+
+warning: `phys_to_page` redeclared with a different signature
+   --> /src/kernel/rust/x86_memory_helpers.rs:208:5
+    |
+208 |     fn phys_to_page(phys: CULong) -> *mut Page;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/fileobj.rs:180:5
+    |
+180 |     fn phys_to_page(phys: CULong) -> *mut ObjectPage;
+    |     ------------------------------------------------- `phys_to_page` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64) -> *mut fileobj::ObjectPage`
+               found `unsafe extern "C" fn(u64) -> *mut Page`
+
+warning: `memory_find_command_line` redeclares `find_command_line` with a different signature
+    --> /src/kernel/rust/x86_memory_helpers.rs:9078:5
+     |
+9078 |     #[link_name = "find_command_line"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /src/kernel/rust/ap.rs:87:5
+     |
+  87 |     fn find_command_line(name: *const c_char) -> *mut c_char;
+     |     --------------------------------------------------------- `find_command_line` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(*const i8) -> *mut i8`
+                found `unsafe extern "C" fn(*mut i8) -> *mut i8`
+
+warning: `syscall_generic_forwarding` redeclared with a different signature
+  --> /src/kernel/rust/xpmem_helpers.rs:98:5
+   |
+98 |     fn syscall_generic_forwarding(syscall_num: CInt, ctx: *mut c_void) -> CLong;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+   |
+  ::: /src/kernel/rust/devobj.rs:57:5
+   |
+57 |     fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong;
+   |     -------------------------------------------------------------------------- `syscall_generic_forwarding` previously declared here
+   |
+   = note: expected `unsafe extern "C" fn(i32, *mut X86UserContext) -> i64`
+              found `unsafe extern "C" fn(i32, *mut core::ffi::c_void) -> i64`
+
+warning: `memobj_unref` redeclared with a different signature
+   --> /src/kernel/rust/xpmem_helpers.rs:127:5
+    |
+127 |     fn memobj_unref(ptr: *mut c_void) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/fileobj.rs:190:5
+    |
+190 |     fn memobj_unref(obj: *mut Memobj) -> CInt;
+    |     ------------------------------------------ `memobj_unref` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut Memobj) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void) -> i32`
+
+warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature
+   --> /src/kernel/rust/xpmem_helpers.rs:139:5
+    |
+139 | /     fn ihk_mc_pt_lookup_pte(
+140 | |         page_table: *mut c_void,
+141 | |         vaddr: *mut c_void,
+142 | |         pgshift: CInt,
+...   |
+145 | |         p2align: *mut CInt,
+146 | |     ) -> *mut c_void;
+    | |_____________________^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/mem_helpers.rs:20:5
+    |
+ 20 | /     fn ihk_mc_pt_lookup_pte(
+ 21 | |         pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
+ 22 | |         basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
+ 23 | |     ) -> *mut CULong;
+    | |_____________________- `ihk_mc_pt_lookup_pte` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut u64`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut core::ffi::c_void`
+
+warning: `ihk_mc_pt_set_range` redeclared with a different signature
+   --> /src/kernel/rust/xpmem_helpers.rs:154:5
+    |
+154 | /     fn ihk_mc_pt_set_range(
+155 | |         page_table: *mut c_void,
+156 | |         vm: *mut ProcessVm,
+157 | |         start: *mut c_void,
+...   |
+163 | |         replace: CInt,
+164 | |     ) -> CInt;
+    | |______________^ this signature doesn't match the previous declaration
+    |
+   ::: /src/kernel/rust/host_helpers.rs:161:5
+    |
+161 | /     fn ihk_mc_pt_set_range(
+162 | |         page_table: *mut c_void,
+163 | |         vm: *mut c_void,
+164 | |         start: *mut c_void,
+...   |
+170 | |         flags: CInt,
+171 | |     ) -> CInt;
+    | |______________- `ihk_mc_pt_set_range` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut core::ffi::c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut abi::ProcessVm, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut abi::VmRange, i32) -> i32`
+
+warning: 198 warnings emitted
+
+/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions

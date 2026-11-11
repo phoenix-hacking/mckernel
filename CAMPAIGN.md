@@ -1,21 +1,25 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T17:10:12.955568+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T18:08:10.984654+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
 
-**Original closure remains97/156: M14=66.94%, M15=67.19%.** Last counted
-condition M14-03-04-DEFAULT is independently GO2f3b9a32 on6aae/image4b711/
-qualification0bfde, with all original region/ABI/provider/cleanup clauses joined.
-M14-03-03 is separately closed; emitted C9→6 is scoped image ownership, not
-complete C retirement. Functional/native/parent/file/milestone conditions stay
-open at their original scope. Four accepted M14 files and accepted M15-F01 remain
-closed. Original criteria/weights/denominators and M14-before-M15 acceptance
-are unchanged. EACH75% by2026-11-10T16:00Z was missed, not a stop time.
-PR3receipt6791617739 is POSTED_CONFIRMED for this pair; no duplicate report.
-Last source/results checkpoint2c3997f1 is pushed/fetched26ownedblobs; all33
-unrelated dirty paths are preserved and source6aae/image4b711 is recoverable.
+**Original closure is98/156: M14=67.22%, M15=67.19%.** Exactly one new atomic
+condition, M14-03-05-DEFAULT, has independent whole GOc7f765f0 onsourcec964/
+imagea2f00a61/map15b10db2. All original clauses join actual13inputs/5052+5owners,
+both genuine Rust perf providers and C exclusions,43nonperf roots, ABI104,
+255strongimports/zeroUND, entry/LOAD and positive producer+reader/Root cleanup.
+Readonly C dispatch carrier and genuinely Rust-owned4025-handler table are
+separately proved; failed qualifier evidence and bounded correction are retained.
+Remaining C4 and FUNCTIONAL/native/parent/file/milestone obligations stay open.
+Four accepted M14 files and accepted M15-F01 keep their exact scopes. Criteria,
+weights, denominators and M14-before-M15 acceptance order are unchanged.
+EACH75% by2026-11-10T16:00Z was missed, not a stop time. Checkpoint43 publication
+is in progress; sourcec964 and 25-file preserved a2f cohort remain recoverable.
+Last confirmed PR3 receipt6791617739 covers66.94/67.19; the new67.22/67.19 report
+is pending source/results push+fetched-byte confirmation. Do not repeat oldpair.
+All33 unrelated dirty paths and every historical UNKNOWN/hold remain preserved.
 
 **M15-I04-native-admission / M14-06-02-FUNCTIONAL prerequisite:** source9b422/
 c14f and all4 canonical HOST families c564 are qualified; controller1961 and
@@ -59,128 +63,47 @@ authority-ordered safe transition,
 staging permission, native claim/current-free/restoration and original behavior
 remain distinct prerequisites. Installer/readback success closes no original check.
 
-**Immediate original M14-03-05 DEFAULT/FUNCTIONAL:** actual corrected runtime
-request961fe69a/Root2a874/operationGOa5c030 passed15:37:51Z: realRust1.95 compile
-and link0, nonempty6,197,824B ELF0360422d, allfour full externalJSON rows exact
-(6820B), runtime stderr0. Compiler4warnings remain. Real18 ownership prefixes
-and four expected rows17f695 are unchanged. Savedresult85cf2df5/fullRoot39b1d40c
-and independent wholeHOST qualification26bfc03f verify both0/ownedfamilyjoins,
-all93pins and Rootsession93748→5e2699exit0/noSession. Root retired only this
-currentCPU6/2GiB/job in d73c0ad5; modeledVMdebt2/rollbackdelta1, blockedwait,
-actualkernelPMU/native and historicalUNKNOWN limits stay explicit. First runtime
-compilec8eb/afb4/nineerrors/no case remains preserved; bounded fixture961f fixes
-only exact missing aliases/ENOENT, resetconstant/shadow and Vm.proc pointer types.
-WholeTYPEed8ca/three earliercompiler attempts remain reused, no metadata replay.
-Root integrated/committed/pushed afb1fced all29 exact production/selection paths
-fromaf879/6195/034f after
-sourceGO4900df73 and runtimeGO26bfc, with all33unrelateddirtypaths preserved;
-integration7c08eca7. This changes source selection only: actual new image,
-providers/C exclusions/originalDEFAULT are still pending. P03 normal74fe image/
-affected-reader proposal28ab has independent conditional operationGOc6f842cb:
-normal17mount/CPU6/2GiBproducer and separately admitted26passivereads/512MiB.
-Actual commit-bound producer766ec/operationGO496a ran15:49:38–15:50:03Z.
-Rustproduction object compiled, then C syscall compilation failed on genuine
-F_SETSIG undeclared at reported21478. Resultf595c49a/stderr61b03437/fullRoot
-2d28cd7d retain the exact sourceafb1/profile/command; exit2/Pid0/nonOOM/CID2ccb
-removed, alltooloutput preserved. SourceAcqbb64 qualified11clients/current2GiB;
-Root retired only that charge in4d7d53db. One-line originalF_SETSIG=10 correction
-84b98/6fbd has independent sourceGOe00af192: matchingLinux6.12header and existing
-C/Rustcallers alluse10; allotherCbytes/linecounts/Rustbodies/oracles unchanged.
-Root committed exact9f5aa63d as6ad55936/pushed31blobs. Fresh retry4f89/operation
-GO6a55 ran16:01:26–49Z: C F_SETSIG error is gone and actual Cobject compiled,
-then final ld failed on real Rustcore panic/Result/Option/format imports from
-new perf invariant paths. Saved resulta4dd96a2/stderrf4ed9a50/fullRoot9838d9d,
-11clientjoins/CIDf888ownedremove retained; no new image or reader acceptance.
-SourceAcq35891 qualifies all11clients/container/fullRoot and ONLY current2GiB;
-Root recorded scoped retirement6c100868. SDK owns the smallest genuine
-freestandingpanic/provider source correction; P04Source independently diagnoses
-actual callers/link design and PublicABI reviews invariant/fatal/ABI preservation.
-No fabricatedRustsymbol/stub/checkdisabling/blindhostarchive is allowed. Derive
-and repair the actual matching source/toolchain dependency, then affected-only
-validation and normalimage after meaningful changedinput/exactGO/freshadmission.
-Both failed cohorts and all green runtime/TYPE/source scopes remain intact.
-Second source diagnosis e267 identifies actual object-only/bareld omission of
-nine genuine core provider classes, including bounds and Result<i32> formatting;
-the existing panic handler is terminal, not their definition. SDK now binds
-retained Linux6.12 rust/Makefile core recipe (no_fp_fmt_parse/edition2024/
-obj+metadata/sysroot=/dev/null) to real1.95/kernel flags. P04Source owns the
-matched compiler-builtins source/profile unit consuming that new core metadata;
-SDK owns core+consumer repair and first literal dependency compile packet.
-No ownership body/check/handler changes or blindHOSTarchive/panicbuiltinstub.
-FIRSTcore87afd/materialGOdd40/operationGOc7db ran16:21:19–32Z and PASSED:
-core.o91548(2,545,640B), metadata7ec5(62,088,310B), depsb63 and three realELF/
-symbol-reloc/disasm reads. Resulte01/fullRootc39/Qc044 verify367source deps,
-all9clients/removedCIDa637/nonOOM/fullRoot52585exit0; current2GiB retired3253.
-Material/ISA Q8b21 verifiesall9coreproviders/439executable sections and no
-SIMD/MMX/x87 observed; six actualimports stay explicit. SSE2ABIwarning retained.
-Actualsamecoremetadatabuiltinsad8c/operationGO7b9a ran16:33:33–36Z and failed
-only intermediateCGUobject output in read-onlyCWD, result2c7d/stderr84c2/fullRoot
-d325/removedCIDf80b. SourceAcq qualifies scoped current2GiBretirement; SDK owns
-one bounded recipe output/CWD binding to its existing granted privateRWdirectory,
-P04Source independently reviews. Source/55flags/coreROmetadata/readonlyimage
-remain unchanged. Firstfailedcharge independently97daa/Root843f retired.
-CWD-only9527/sourceGO776a/operationGO1a60 ran16:42:12–16Z; outputplacement is
-fixed, then actualcodegen rejected upstream full_availability::roundevenf
-float(float): SSEregisterreturn withSSEdisabled (macros.rs471). Savedf17537f2/
-stderreb058bd3/fullRootef38 retainall9clients/CID3758ownedremove; SourceAcq
-qualifies onlycurrent2GiBretirement. Core7ec5 remains unchanged and no valid
-builtins tuple is adopted. Focusedescalation: P04Source actualsecond diagnosis,
-SDK genuinekernel-required integerbuiltin/source-selection repair, PublicABI
-independentprofile/ABIreview. Preserve kernelnoSIMD/core/checks/handler; no
-floatstubs/SSEenable/blindarchive/mismatchedmetadata or requiredproviderdrops.
-Use actual6coreimportfrontier (only__udivti3 builtin root) to derive complete
-needed genuine closure, then freeze changedcompilerpacket forreview/admission.
-No unchanged retry, green core/TYPE/runtime replay or original credit.
-Second diagnosis5380533e derives8 unchanged upstream integer files (no upstream
-no-float feature) supplying complete__udivti3 semantics. FIRST integer1f6c/
-facade8b9c/materialGOc4fe/operationGO8b4f ran16:58:11–13Z and PASSED. Actual
-object8cf38cfa(134,528B), metadata7068131f(76,400B), deps5c90 and three ELF/
-symbol/disasm captures exist. Result109745aa/fullRoot1d94b874 verifycontainer
-exit0/nonOOM/removed/all9clients/Root59549→b51692exit0/noSession; actualcore7ec5
-unchanged. IndependentQ6187/currentretirecf53 and material7ef323 qualifyactualpaired
-metadata/provider/import/ISA: genuine__udivti3,zeroUND/noSIMD4830bytes. RawSSE2targetABIwarning stays explicit. No partialprevious
-builtins artifact adopted. P04Tests finiteboundary extensionca6c/d484/f647 has
-independentsourceGO8bd51: samefive normal/fatal outcomes plusfouru128 quotient
-wordpairs, exactmap/ELF relocation owner must be selectedintegerobject, notHOST
-libgcc. Bind actualfourproviderfiles and producerqualification/retirement, then
-freeze/exactreview/admit7commands. SDK integerconsumerdelta bfa2/581b/template37ea has sourceGO44ef and complete
-actualproviderbinding41ade/22775. Root integratedexact2paths afterdependency
-Q/retire/materialGO (record9333e3e8). Theoldfloatinglib.rs proposal wasnever
-canonical. Next: actualcommit-bound configurecoreSDK+normalnamedimage/affected
-reader via interface06cd whilefinitecoreboundarypacket isreviewed/executesin
-its releasedexclusiveHOSTlane. Firstcanonicalbuiltin generation isnecessary
-production; standaloneH/core/TYPE/old18tests are reused.
-No core/TYPE/old18family rerun; invariant/handler/requiredwhole03-05 scope remains.
-SDK consumerCMake d330/e9f has conditionalsourceGO24fbb; actualcore->builtins->
-fullconsumer metadata+realobjectlink is required before normalimage/reader.
-P04Tests newfinitecore-boundary source1aa8/EXPECTED3b9c has independent3b823
-source/oracleGO: normal+fourfatal cases cover nine classes; execution waits
-actualcompatiblebuiltins/core bytes/producerclosure/exactoperationGO/admission.
-No HOSTnativepanic/old18suite replay or originalcredit from these prerequisites.
-Reader follows only producerPASS/fullpositive retirement; no unchanged retry.
-Require actual unique Rust perf owners, pairedC exclusions, allrequiredABI104/
-callback/lowerproviders/zero strongUND/LOAD/newentry/currentCledger and cleanup,
-followed by independent whole original03-05 decision. SourceGOs/HOST PASS alone
-close no original check. M15 controllertransition/Scratch remain separate and
-cannot delay this ready ordinary image work. No passing suite/readback replay.
+**Completed original M14-03-05 DEFAULT:** Sourcec964 normal configure/image
+PASS17:33:29Z bc331c71/fullRoot390d4cde produceda2f image,15b map,a156 Rust,
+0ade C and canonical51edd/63b integer object/metadata against actualcore9154/7ec5.
+Producer20clients/two0nonOOM removedcontainers and Root are positively joined;
+current2GiB charge retired80ce. Reader016d/GO5abf passed17:45:44Z,31commands/
+28records/12clients/removedcontainer/fullRooted322; current512MiB retiredf097.
+Independent readerQ42a8 and canonical-providerGO1db74 plus actualimageQ6f67
+bind the complete tuple. Whole originalDEFAULT GOc7f765f0 joins every clause,
+including genuine Rust implementation ownership, callback/lower-provider/credential
+error paths, C carrier relocations and Rust handler-table ownership. Reused
+runtime26bfc and finite normal/fourfatal boundary21737568/independent5bb1 evidence;
+no build/reader/green suite was replayed. Four remaining C functions, modeled
+VM/rollback uncertainty, native behavior and historical UNKNOWN outcomes remain.
+Public evidence: [complete checkpoint](docs/verification/m14-current-image-20261111/perf-supported-default-1/PUBLICATION-SCOPE.json).
 
-**Actual separate native dependencies:** staging parent is UID0/0755 and not
-writable byUID1000. Owner-scoped scratch grant6790932995 is pending; no payload,
-permission fallback, alternate path or elevation is authorized. Scratch21 and
-numeric retained18=install4+V2_2+native12 remain. Native12 is retained capacity,
-not an operation claim/current-free proof. Matching frozen1e64/c664 signal case,
-three qualified modules, app77e8/libcb058/loader0853, collector9a55 and guest30ELF
-closure are reusable only at their exact declared cohort. Controller3-path1f0d/55a source is canonical/publishedac6b, runtime remains
-unloaded. Independent abe376 confirms no healthy planned-adoption caller in
-the actual old handlers; real normal stop/checkpoint/positive retirement and
-genuine later normalstart is the existing route, unissued/unapproved. Preserve
-source699 originaltimestamp, laterstops/delivery/owner vetoes; no fake recovery
-or uncallable new framework. This does not block the immediate perfHOST work. Actual staged inputs/current-owner/current-free/restoration gates
-remain separate from code-only installation. Signal alternate-repeat alone
-cannot satisfy all original frame/register/xstate normal/error requirements.
-Guardian/mailbox and restored20-minute functional assistance remain active.
-Use included allowance first then existing credits under same7c6 identity/budget;
-no account/state reset, purchase/API fallback, healthy restart or hold bypass.
+**Next original M14-06-02-FUNCTIONAL / M15-I04-native-admission:** P03 froze
+source-only matching handoff4baab82d with exactc964/a2f at BOTH guest image paths,
+qualified099/IHK8d/config106055/threeKOs, existing guest43files/30ELFs and actual
+signal payload77e8/libcb058/loader0853/collector9a55. Literal case remains
+`/bin/mcexec -t 1 0 /apps/signal.alternate-repeat`, cwd`/case/work`, PATH/COKERNEL
+plus LANG=C/LC_ALL=C/TZ=UTC; exact16handler/16delivery/16altstack/exit0/stderr0
+oracle is one bounded scope. Whole frame/register/xstate normal/error and lifecycle
+restoration remain required, including separately qualified signal inputs.
+Concrete new internal source discrepancy: installed native_resource_admission.py
+EXPECTED line33 still pinsc664 and exact guard367 enforces it. PublicABI owns a
+private minimal normal package/profile/catalog/cohort rebind; SourceAcq independently
+reviews; Root alone composes/adopts after actual gates. No immutable installed edit,
+caller-hash substitution, new issuer/readback replay, staging or native run is issued.
+
+**Separate actual native prerequisites:** Owner-scoped writable staging parent
+is still missing: selected parentUID0/0755 is not UID1000 writable; one exact request
+[6790932995](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6790932995)
+is pending with the scratch resource owner. PreserveScratch21 and UNKNOWNs; no
+path/elevation/permission fallback. Healthy loaded controller requires its genuine
+normal transition/positive owner retirement; integrated controller source and fixed30
+code-only installation/readback do not activate it. Root/guardian owns that transition.
+Retainednative12 capacity is separate from fresh actual-operation claim/source gates,
+current-free/caps/FD custody and positive restoration supplied by its authenticated
+resource owner. These do not block eligible private source repair. Guardian/mailbox
+and restored20-minute functional assistance remain active, under same account/run
+budget; no healthy restart, new allowance, source/native or UNKNOWN bypass.
 
 **Reviewed wait/termination source is canonical; new image is next.** Root
 integrated exact5path756e after independentf247 compositionGO, source4a6c/e9a6
@@ -2137,27 +2060,27 @@ Every original requirement and concrete evidence step is defined in [the machine
 
 | Milestone | Checklist progress | Accepted file goals | Accepted integration gates |
 | --- | ---: | ---: | ---: |
-| M14 | 63.70% | 4/6 | 1/3 |
-| M15 | 59.10% | 1/8 | 0/4 |
+| M14 | 67.22% | 4/6 | 1/3 |
+| M15 | 67.19% | 1/8 | 1/4 |
 
 | Requirement | Checklist complete | Accepted | Defined scope / remaining obligation |
 | --- | ---: | --- | --- |
 | M14-03-01 | 33.33% | no | Dispatch/offload request ABI, initialization, lifetime and exactly-once completion |
 | M14-03-02 | 33.33% | no | Fork/exec/wait/exit/ptrace and final host/process cleanup; held exec work remains excluded |
-| M14-03-03 | 33.33% | no | mmap/munmap/mprotect/brk/remap, NUMA/process-VM and substantive callbacks |
-| M14-03-04 | 50.00% | no | Signal masks/actions/altstack, futex/robust cleanup, time/wait/wake and restart |
-| M14-03-05 | 50.00% | no | Credentials/limits/scheduling, SHM/perf/file wrappers, validation and forwarding |
-| M14-06-01 | 0.00% | no | Architecture wrappers, TLS/arch_prctl and clone/mmap/shm ABI translation |
+| M14-03-03 | 66.67% | no | mmap/munmap/mprotect/brk/remap, NUMA/process-VM and substantive callbacks |
+| M14-03-04 | 75.00% | no | Signal masks/actions/altstack, futex/robust cleanup, time/wait/wake and restart |
+| M14-03-05 | 75.00% | no | Credentials/limits/scheduling, SHM/perf/file wrappers, validation and forwarding |
+| M14-06-01 | 50.00% | no | Architecture wrappers, TLS/arch_prctl and clone/mmap/shm ABI translation |
 | M14-06-02 | 50.00% | no | Signal/rt_sigreturn frames, alternate stack, context and xstate restoration |
-| M14-06-03 | 33.33% | no | Ptrace registers/debug state and correct stop/wakeup/event ordering |
-| M14-06-04 | 0.00% | no | vDSO/process mappings and time-page/TSC publication |
+| M14-06-03 | 66.67% | no | Ptrace registers/debug state and correct stop/wakeup/event ordering |
+| M14-06-04 | 50.00% | no | vDSO/process mappings and time-page/TSC publication |
 | M14-06-05 | 50.00% | no | Cross-process memory/move-pages, target references and NUMA callback lifetime |
 | M14-F01 | 100.00% | yes | Allocator, heap, references, faults/page maintenance, counters/diagnostics |
 | M14-F02 | 100.00% | yes | Creation/unwind, VM ranges, PID/TID lifetime, scheduling, inheritance/publication |
-| M14-F03 | 40.00% | no | Generic compute syscalls |
+| M14-F03 | 48.33% | no | Generic compute syscalls |
 | M14-F04 | 100.00% | yes | Primitives, startup/interrupts, context/TLS, FPU/xstate, diagnostics |
 | M14-F05 | 100.00% | yes | Mappings, PTEs, walkers, TLB, usercopy/process-VM supported scope |
-| M14-F06 | 33.33% | no | x86_64 architecture compute syscalls |
+| M14-F06 | 56.67% | no | x86_64 architecture compute syscalls |
 | M14-I01 | 0.00% | no | Account for all emitted supported compute code, including headers, macros/callbacks and unknown owners; zero live project compute-C implementations |
 | M14-I02 | 100.00% | yes | Reproducible default source/config/toolchain and matched image/modules |
 | M14-I03 | 0.00% | no | Matching useful applications, process/memory/thread/signal behavior and native lifecycle/resource restoration on that image |
@@ -2169,9 +2092,9 @@ Every original requirement and concrete evidence step is defined in [the machine
 | M15-F06 | 63.64% | no | Rust ihkconfig CLI qualification |
 | M15-F07 | 71.43% | no | Rust ihkosctl CLI qualification |
 | M15-F08 | 70.00% | no | Rust ihkmond supervisor qualification |
-| M15-I01 | 20.00% | no | Complete project-runtime ownership manifest |
+| M15-I01 | 60.00% | no | Complete project-runtime ownership manifest |
 | M15-I02 | 60.00% | no | Three delivered Linux-loadable Rust/assembly modules |
-| M15-I03 | 42.86% | no | Reproducible Rust userspace and dependency closure |
+| M15-I03 | 100.00% | yes | Reproducible Rust userspace and dependency closure |
 | M15-I04 | 0.00% | no | Matched application and restoring lifecycle qualification |
 
 The ledger names 391 concrete rows, including the three exact modules `ihk.ko`, `ihk-smp-x86_64.ko`, `mcctrl.ko`, all70function/sixdata library roots, and105unresolved symbols in the retained partial image link. Those105symbols are unresolved binding obligations, not105unimplemented ports or105new test jobs.
