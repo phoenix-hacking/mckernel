@@ -34,7 +34,7 @@ PROFILE_DUAL = "native-diagnostic-4vcpu-6144mib"
 # deliberately bounded rather than frozen so the same manifest validator can
 # describe startup and the four core-mode payloads.
 PAYLOAD_ARGV_PREFIX = ("/bin/mcexec", "-t", "1", "0")
-PAYLOAD_PATHS = ("app", "/apps/app")
+PAYLOAD_PATHS = ("app", "/apps/app", "/apps/signal.alternate-repeat")
 PAYLOAD_ARGC_MAX = 32
 PAYLOAD_ARG_BYTES_MAX = 256
 PAYLOAD_ARGV_BYTES_MAX = 2048
@@ -115,6 +115,8 @@ def _validate_payload_argv(argv):
           len(argv) > len(PAYLOAD_ARGV_PREFIX) and
           argv[len(PAYLOAD_ARGV_PREFIX)] in PAYLOAD_PATHS,
           "payload argv prefix/path")
+    if argv[len(PAYLOAD_ARGV_PREFIX)] == "/apps/signal.alternate-repeat":
+        _need(len(argv) == len(PAYLOAD_ARGV_PREFIX) + 1, "signal alternate-repeat argv")
     encoded = 0
     for item in argv:
         _need(type(item) is str and "\0" not in item, "payload argv item")
@@ -133,7 +135,8 @@ def _identity(path):
     return {key: getattr(st, key) for key in IDENTITY_FIELDS}
 
 
-def _staging(obj, artifacts, modules):
+def _staging(obj, artifacts, modules, *, payload_member="apps/app"):
+    _need(payload_member in ("apps/app", "apps/signal.alternate-repeat"), "unsupported payload member")
     _keys(obj, ("base_initramfs", "derived_initramfs", "collector", "overlay_source", "overlay_manifest"))
     refs = {name: _ref(obj[name], name) for name in obj}
     _need(refs["base_initramfs"] == artifacts["initramfs"], "base initramfs join")
@@ -176,15 +179,17 @@ def _staging(obj, artifacts, modules):
     _need(isinstance(final, dict), "overlay final map")
     names = {**{name: artifacts[name] for name in ("mcexec", "native_boot", "loader", "libc", "mckernel_image", "payload")},
              "collector": refs["collector"], **dict(zip(MODULE_NAMES, modules))}
-    for member, source in FINAL_MEMBERS.items():
+    final_members = {payload_member if member == "apps/app" else member: source
+                     for member, source in FINAL_MEMBERS.items()}
+    for member, source in final_members.items():
         _need(member in final, "missing final member " + member)
         row = final[member]
         _keys(row, MAP_FIELDS)
         ref = names[source]
-        expected_mode = stat.S_IFREG | 0o755 if member in ("init", "apps/app") else ref["mode"]
+        expected_mode = stat.S_IFREG | 0o755 if member in ("init", payload_member) else ref["mode"]
         _need(row["sha256"] == ref["sha256"] and row["size"] == ref["size"] and
               row["mode"] == expected_mode, "final member join " + member)
-    for member in OVERLAY_MEMBERS:
+    for member in (payload_member if name == "apps/app" else name for name in OVERLAY_MEMBERS):
         _need(member in final, "missing overlay member " + member)
     for member in ("apps", "case", "case/work"):
         row = final[member]
@@ -216,7 +221,6 @@ def _validate_manifest(obj):
     _need(isinstance(obj["modules"], list) and len(obj["modules"]) == 3, "exactly three modules")
     modules = [_ref(ref, "module") for ref in obj["modules"]]
     _need(tuple(Path(ref["path"]).name for ref in modules) == MODULE_NAMES, "module inventory")
-    staging = _staging(obj["staging"], bound, modules)
     _need(isinstance(obj["profile"], dict) and set(obj["profile"]) <= {"name", "memory_mib", "vcpus", "numa_nodes", "append"}
           and {"memory_mib", "vcpus", "numa_nodes"} <= set(obj["profile"]), "profile keys")
     profile = obj["profile"]
@@ -232,7 +236,13 @@ def _validate_manifest(obj):
     payload = obj["payload"]
     _need(payload["cwd"] == "/case/work", "payload cwd")
     _validate_payload_argv(payload["argv"])
-    _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
+    environment = {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}
+    payload_member = "apps/app"
+    if payload["argv"][len(PAYLOAD_ARGV_PREFIX)] == "/apps/signal.alternate-repeat":
+        environment.update({"LANG": "C", "LC_ALL": "C", "TZ": "UTC"})
+        payload_member = "apps/signal.alternate-repeat"
+    _need(payload["env"] == environment, "frozen environment")
+    staging = _staging(obj["staging"], bound, modules, payload_member=payload_member)
     oracle = payload["oracle"]
     _need(set(oracle) in ({"stdout_hex", "stderr_hex", "exit_code"},
                           {"stdout_hex", "stderr_hex", "exit_code", "stderr_typed"}),
@@ -444,7 +454,9 @@ def build_command(manifest, attempt):
     overlay = {"modules": [m["path"] for m in manifest["modules"]], "mckernel_image": a["mckernel_image"]["path"],
                "mcexec": a["mcexec"]["path"], "payload": a["payload"]["path"], "load_modules": list(MODULE_NAMES),
                "boot_contract": "native-boot-v1", "guest_destinations": {"/images/mckernel.img": a["mckernel_image"]["path"],
-               "/bin/mcexec": a["mcexec"]["path"], "/apps/app": a["payload"]["path"]},
+               "/bin/mcexec": a["mcexec"]["path"],
+               ("/apps/signal.alternate-repeat" if manifest["payload"]["argv"][len(PAYLOAD_ARGV_PREFIX)] ==
+                "/apps/signal.alternate-repeat" else "/apps/app"): a["payload"]["path"]},
                "init_sequence": ["insmod /modules/ihk.ko", "insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288",
                                  "insmod /modules/mcctrl.ko", "/bin/native-boot", "cd /case/work"],
                "transport": "guest collector framed serial report; never QEMU stdout"}

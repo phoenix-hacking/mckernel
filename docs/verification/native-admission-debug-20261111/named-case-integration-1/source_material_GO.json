@@ -1,0 +1,151 @@
+{
+  "schema": "m14-f06-named-signal-frontdoor-source-independent-review-v1",
+  "at": "2026-11-10T21:17:41.285869+00:00",
+  "reviewer": "source_acquisition_review_max, actual same-Root Sol/MAX/depth1/no children; independent of P03 author; Root sole compositor/executor",
+  "decision": "GO_EXACT_FOUR_FILE_NAMED_CASE_SOURCE_DELTA_AND_FOCUSED_TEST_PLAN__NOT_NATIVE_OR_TEST_EXECUTION_ADMISSION",
+  "source_contract": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/SOURCE-CONTRACT.json",
+    "bytes": 9922,
+    "sha256": "da7838390f3333490fe48693dfc8f6ba12f0d044341a269de26f63cd8f912102"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/NAMED-SIGNAL-PATH-ENV.patch",
+    "bytes": 15015,
+    "sha256": "f7a462ed06cc7b719b721a738832cddf2947690c26f1b7acee8fd968f6717fd4"
+  },
+  "four_frozen_source_bindings": [
+    {
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic.py",
+        "sha256": "7e4256eee51f7d50ef758c55579801d691d4ee2cee9155a60680701dba5c540b",
+        "size": 54447
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "preimage": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/preimage/scripts/application-tests/native_diagnostic.py",
+        "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+        "size": 53440
+      }
+    },
+    {
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_overlay.py",
+        "sha256": "0891bc13a8750d09f7758d31031828f8270bc480fe5dc0c25d545528ab454640",
+        "size": 27356
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "preimage": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/preimage/scripts/application-tests/native_diagnostic_overlay.py",
+        "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+        "size": 26579
+      }
+    },
+    {
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_guest_collector.c",
+        "sha256": "806958926967ef7aefe7d12ea8f3a143c3ded85ce4091cd485883cb78999a43f",
+        "size": 24226
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+      "preimage": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/preimage/scripts/application-tests/native_diagnostic_guest_collector.c",
+        "sha256": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+        "size": 22952
+      }
+    },
+    {
+      "candidate": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_container_owner.py",
+        "sha256": "4634075d634e9360d693e592c381379a427ef9b4b98460b5757217bf2b39f203",
+        "size": 58828
+      },
+      "canonical_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "preimage": {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/preimage/scripts/application-tests/native_diagnostic_container_owner.py",
+        "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+        "size": 58828
+      }
+    }
+  ],
+  "exact_new_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/signal.alternate-repeat"
+    ],
+    "collector_compile_flag": "-DND_SIGNAL_ALTERNATE_REPEAT=1",
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "TZ": "UTC"
+    },
+    "exit_code": 0,
+    "guest_payload_member": "apps/signal.alternate-repeat",
+    "no_tail_arguments": true,
+    "overlay_new_literal_option": [
+      "--payload-member",
+      "apps/signal.alternate-repeat"
+    ],
+    "stderr_hex": "",
+    "stdout_oracle_ref": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/expected.stdout",
+      "sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db",
+      "size": 415
+    }
+  },
+  "material_review": {
+    "validator": "Adds only literal /apps/signal.alternate-repeat to old app and /apps/app alternatives, same mcexec prefix. Selected new path requires exactly five argv items; each remains exact str/NUL-free/UTF8 with argc32/perarg256/total2048 bounds. Same /case/work cwd. Only named path requires exact PATH/COKERNEL_PATH plus LANG=C/LC_ALL=C/TZ=UTC; old paths still require their exact two-entry environment, with no extra locale allowed.",
+    "selected_final_member": "Payload path selects exactly apps/app or apps/signal.alternate-repeat. _staging still authenticates all artifact/ref source/output paths/hash/modes/identities, exact three modules, overlay metadata/sources/final-map fields; only payload key/mode substitution changes. New argv with old-only final map is rejected. Existing base may contain other trusted members; actual overlay replay and selected destination identity, not name-only evidence, remain mandatory.",
+    "overlay": "New payload_member keyword/CLI choice is exactly two literals, default apps/app. One selected six-entry tuple controls archive construction, membership/order, duplicate/hardlink destination exceptions, replay of base+overlay and concatenated output reread. All public replay/build entry points validate through _overlay_names; no arbitrary new filename or traversal/alias option.",
+    "unchanged_overlay_guards": "Base gzip/CPIO byte hash/size bounds, canonical deterministic archive metadata, symlink ancestor/type-change/duplicate/hardlink consistency, stable source identities, output exclusive create/no-follow/reread/fsync and final map checks remain in place. No schema/source-alias/output reuse relaxation.",
+    "collector_selection": "One new presence flag ND_SIGNAL_ALTERNATE_REPEAT, mutually exclusive with ND_FUTEX and each ND_CORE_* macro. Existing obsolete/core-conflict checks remain. Actual payload_argv has exact fixed five items then NULL; actual payload_env exactly five entries then NULL. Legacy branches and helper_env unchanged.",
+    "collector_execution_and_serialization": "Actual unchanged supervise call passes payload_argv/payload_env and /case/work to existing execve child. The corresponding new frame branch serializes exactly the same argv/cwd/environment in ND_PAYLOAD, then shares unchanged raw wait/timestamp/stream/truncation/EOF/retirement fields and bounded append logic. Signal collection does not enter the special futex boot branch.",
+    "cleanup_and_gates": "Collector main/module/native_boot/child supervision/pidfd/birth/family/deadline/stream/procfs/teardown/guest shutdown code has no changed body. Validator failure markers, runtime/result classification, profile/size/parser/owner/cleanup/oracle checks and native command limits remain unchanged. Source-only protocol data does not become application acceptance.",
+    "owner_strict_pin": "Owner candidate equals preimage after exactly one native_diagnostic.py SHA replacement1b43934a->7e4256ee. New hash equals frozen actual candidate. Runner/backend/qmp pins and all gate/refusal/privilege/cgroup/name/wait/cleanup/source logic remain byte-identical. This is a strict successor pin, not a waiver."
+  },
+  "real_frontdoor_binding": {
+    "route": "scripts/application-tests/native_diagnostic_container_owner.py -> existing native_diagnostic_runner.py -> native_diagnostic.py/native_diagnostic_backend.py -> real QEMU guest /init collector -> /bin/mcexec. Catalog run.py is not the execution route.",
+    "not_catalog_backend": "No catalog run.py or NOT_RUN backend is promoted into actual guest execution. Unchanged runner/backend consume validated manifest and actual framed payload; source route has no new app allowlist beyond the validator/collector changes.",
+    "preserved_cohort": {
+      "commit": "1e64b165ff2a46e6ec7615e804b36c9a936172a8",
+      "image_sha256": "c66492d44e2e71a072114f637cd04dff5feb77bd2216c42ef69f7a56944c7a5f",
+      "source_view": "Preserved exact1e64 source/image/artifact cohort. Later78 source/new build output is not substituted; new frontdoor changes require their own actual integrated/fetched control-source identity."
+    },
+    "runtime_inputs": "Existing ae2965d9 named app/loader/libc qualification remains input proof only. Actual guest Linux/baseCPIO/three modules/native_boot/mcexec/providers/derived final map and new collector ELF identities must be pinned for the concrete operation; no source path or symbol name replaces those bytes.",
+    "no_new_native_permission": "Actual missing fixed lock/cgroup observations are retained failures, no admission/release. New source support for path/env supplies neither current-free, host native ownership, source custody, source/policy/service/account permission nor resource expansion."
+  },
+  "focused_test_plan_review": {
+    "verdict": "GO_PREPARE_ONLY_THE_CHANGED_CONTRACT_OVERLAY_COLLECTOR_SERIALIZER_TESTS; ACTUAL_COMMAND_PROFILE_PACKET_STILL_REQUIRED",
+    "required_cases": [
+      "Accept exact named five-argv/five-env and selected final-map member. Reject argv tails and missing/changed/extra locale entries, wrong cwd, and old-only payload destination.",
+      "Retain apps/app overlay default and exact two-entry env for legacy app and /apps/app; reject signal locale env on old path. These are changed-path compatibility controls, not an old full suite replay.",
+      "Using existing real strict overlay parser/replay on bounded private data, prove both selected exact six-member tuples and reject unsupported/traversal member, order mismatch, hardlink destination, symlink ancestor and type change.",
+      "Compile exact candidate collector80695892 with ND_SIGNAL_ALTERNATE_REPEAT=1 and existing genuine target compiler/sysroot/flags. In a separate controlled HOST serializer entry call only actual bounded frame with owned result data; assert full ND_PAYLOAD argv/env/cwd. Do not execute collector main/native helpers/supervise/mcexec/app or send real signals.",
+      "Conflicting ND_SIGNAL_ALTERNATE_REPEAT plus ND_FUTEX or any ND_CORE_* presence must compile-fail specifically. Confirm exact owner validator hash and unchanged other pins."
+    ],
+    "production_collector_binding": "Serializer or compile-only test does not invent a production collector. Actual full collector ELF from exact source/macro/compiler/flags must be captured, hash/size/mode/architecture/provider-qualified and bound as /init/collector input before overlay/native use. No prior collector hash or old manifest is reused as the changed collector.",
+    "execution_scope": "No exact focused test driver/commands/capture/profile is frozen in this source contract. Root must prepare the concrete bounded HOST packet with fresh owned output, positive birth/direct-family/stream joins and actual shared4GiB/max3/fresh26/floors/oldCPU0-256MiB-job1 accounting. Native priority and held2-5/12GiB stay separate.",
+    "claims": "Only changed serializer/parser/source contract correctness may pass these HOST checks. Real16 signal deliveries/415B/exit0/stderr0/cleanup require a separately admitted matched guest operation; no full F06/whole M14 acceptance follows from test source/serializer."
+  },
+  "preservation": {
+    "all_canonical_untracked_dirty_user_files": true,
+    "Root_only_integrates_exact_reviewed_hunks_after_actual_tests": true,
+    "old_packet_and_native_RO_failure_evidence": true,
+    "old_UNKNOWN_and_native_currentfree_holds": true,
+    "no_timeout_label_serialization_owner_gate_relaxation": true,
+    "no_policy_permission_retry_or_equivalent_fixture": true
+  },
+  "reviewer_operations": {
+    "source_patch_frozen_machine_data_reads": true,
+    "private_REVIEW_write_only": true,
+    "SUT_import_compiler_test_helper_Docker_network_native_or_signal_execution": false,
+    "canonical_or_source_packet_edits": false,
+    "recursive_agents": false
+  },
+  "next_action": "Existing independent test owner prepares only the focused named-case/overlay/serializer packet. Root runs after exact operation GO/fresh HOST admission, integrates/publishes verified control sources, then separately freezes real collector/overlay/native source-and-owner admission. No old unchanged SUT or native snapshot retry."
+}

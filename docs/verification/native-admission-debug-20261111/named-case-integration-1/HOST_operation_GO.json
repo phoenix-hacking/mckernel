@@ -1,0 +1,351 @@
+{
+  "actual_tool_file_bindings": {
+    "HOST_static_libc": {
+      "bytes": 5747618,
+      "path": "/usr/lib/x86_64-linux-gnu/libc.a",
+      "sha256": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127"
+    },
+    "HOSTcc": {
+      "bytes": 1158288,
+      "literal": "/usr/bin/cc",
+      "resolved": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "scope": "New actual HOST GCC9/staticglibc collector and dynamic HOST serializer; not claimedCC14/Rockyproducer. Standard C/POSIX/Linux PID1 code, staticcollector will have no interpreter/externalNEEDED under actual strict ELFcheck. TargetLinux6.12 still requires native execution admission. Tool files were read/hash only bypreparer, compiler/version/runtime not invoked. Actual generated .d/map/trace bind used inputs at execution."
+  },
+  "decision": "GO",
+  "exact_phase_bindings": [
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-e",
+        "-c",
+        "ulimit -v 524288; ulimit -t 60; ulimit -f 65536; ulimit -c 0; umask 022; exec \"$@\"",
+        "named-signal-host-as-limit",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-O2",
+        "-g1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DND_SIGNAL_ALTERNATE_REPEAT=1",
+        "-static",
+        "-no-pie",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/collector.d",
+        "-Wl,-Map=/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/collector.map",
+        "-Wl,--trace",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_guest_collector.c",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/collector"
+      ],
+      "capture_prefix": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/execution-1/phase-1",
+      "expected_exit": 0,
+      "name": "new-actual-static-named-collector",
+      "phase": 1
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-e",
+        "-c",
+        "ulimit -v 524288; ulimit -t 60; ulimit -f 65536; ulimit -c 0; umask 022; exec \"$@\"",
+        "named-signal-host-as-limit",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-O2",
+        "-g1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DND_SIGNAL_ALTERNATE_REPEAT=1",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/serializer.d",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/source/serialize_named_signal.c",
+        "-o",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/serializer"
+      ],
+      "capture_prefix": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/execution-1/phase-2",
+      "expected_exit": 0,
+      "name": "compile-exact-C-serializer-only",
+      "phase": 2
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-e",
+        "-c",
+        "ulimit -v 524288; ulimit -t 60; ulimit -f 65536; ulimit -c 0; umask 022; exec \"$@\"",
+        "named-signal-host-as-limit",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/serializer"
+      ],
+      "capture_prefix": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/execution-1/phase-3",
+      "expected_exit": 0,
+      "name": "run-HOST-pure-serializer",
+      "phase": 3
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-e",
+        "-c",
+        "ulimit -v 524288; ulimit -t 60; ulimit -f 65536; ulimit -c 0; umask 022; exec \"$@\"",
+        "named-signal-host-as-limit",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/source/test_named_signal_contract.py",
+        "--native-source",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic.py",
+        "--overlay-source",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_overlay.py",
+        "--collector",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1/collector",
+        "--mcexec",
+        "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/stage/usr/local/bin/mcexec",
+        "--payload",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
+        "--serializer-report",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/execution-1/phase-3.stdout",
+        "--work-root",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/output-1"
+      ],
+      "capture_prefix": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/execution-1/phase-4",
+      "expected_exit": 0,
+      "name": "seven-changed-HOST-unit-contracts",
+      "phase": 4
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "-e",
+        "-c",
+        "ulimit -v 524288; ulimit -t 60; ulimit -f 65536; ulimit -c 0; umask 022; exec \"$@\"",
+        "named-signal-host-as-limit",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-O2",
+        "-g1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DND_SIGNAL_ALTERNATE_REPEAT=1",
+        "-DND_FUTEX=1",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_guest_collector.c"
+      ],
+      "capture_prefix": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/execution-1/phase-5",
+      "expected_exit": 1,
+      "name": "new-profile-conflict-compile-rejection",
+      "phase": 5
+    }
+  ],
+  "path_clarification": "The exact bound request exists at native-request-1/host-validation-1. The initially supplied named-case-binding-1/host-validation-1 path does not identify this packet; the existing actual request SHA matches the requested SHA exactly.",
+  "phase_findings": [
+    {
+      "decision": "GO",
+      "finding": "Exact reviewed collector C source; ND_SIGNAL_ALTERNATE_REPEAT only; C11/O2/g1/Wall/Wextra/Werror/static/no-pie, depfile/map/ld trace. Compilation only; no collector entrypoint execution. Subsequent real overlay build invokes unchanged strict ELF collector validation including no interpreter/external NEEDED.",
+      "phase": 1
+    },
+    {
+      "decision": "GO",
+      "finding": "748-byte serializer includes exact candidate collector by absolute path with guest main renamed. Only new test main constructs explicitly synthetic zero-initialized result and calls actual frame(), then fwrite. No constructor or indirect native main path is selected.",
+      "phase": 2
+    },
+    {
+      "decision": "GO",
+      "finding": "Only HOST serializer executes. Exactly one actual ND_PAYLOAD JSON line is expected and retained as phase-3.stdout. Initialized clean/wait/stream facts are test data, not observed application or process evidence.",
+      "phase": 3
+    },
+    {
+      "decision": "GO",
+      "finding": "Seven actual unittest methods exercise exact new no-tail argv, exact five env entries with missing/changed/extra rejects, two legacy path/env compatibility controls, real selected six-member archive plus default/replay/wrong-member rejection, unsupported member and actual C serializer line. Native/overlay modules load only after their exact source hashes match. _ref and _staging are the only mocks; symbolic /unit inputs cannot form executable native authority, and staging sentinel stops before oracle/backend. Actual imported module top level has no backend side effects. Real collector/app/executor bytes are archived using strict source identity/ELF checks; none is run. Minimal newc base is only bin directory, independently synthesized HOST unit data. Python syntax/library calls used are compatible with stated HOST 3.8; no dictionary union or newer required API.",
+      "phase": 4
+    },
+    {
+      "decision": "GO",
+      "finding": "Exact original candidate C source with both ND_SIGNAL_ALTERNATE_REPEAT and ND_FUTEX, fsyntax-only. Require exit1 AND literal new mutual-exclusion #error. A generic compiler/environment failure is insufficient; no output object may be credited.",
+      "phase": 5
+    }
+  ],
+  "remaining_original_conditions": "Actual five-command results must be captured and qualified; later matched native source/image/collector/app/executor and owner/resource/restoration admission remain separate. Preserve exact c664/1e64 cohort and no implied current78/f8cf native substitution.",
+  "request": {
+    "bytes": 17351,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/REQUEST.json",
+    "sha256": "2e6ced22765f1bb74850e45dead556c753bd23d7ffdb00297717ddd8c980d062"
+  },
+  "resource_and_capture": {
+    "actual_fresh_resource_or_process_observation_by_reviewer": false,
+    "fresh_private_output_and_execution_paths_observed_absent": true,
+    "limits": "Literal env-i preserves only PATH/LANG/LC_ALL/TZ; taskset7; bash no profile/rc; AS512MiB/CPU60s/FSIZE64MiB/core0 per child. Five serial jobs, one at a time, wall90s each. Root captures actual dep/map/trace and child results.",
+    "profile": {
+      "AS_bytes": 536870912,
+      "CPU_seconds_each": 60,
+      "FSIZE_bytes": 67108864,
+      "admission": "Root freshly measures allcontrollers/workers/heldCPU0/this512MiB/otherwork <=sharedHOST4GiB/max3jobs, freshavailable26GiB and actual16/12GiBdiskfloors. Serialize after current heavy image owner release; no native CPUs2-5/12GiB or retained18GiB borrowing.",
+      "core_bytes": 0,
+      "cpu": [
+        7
+      ],
+      "jobs": 1,
+      "location": "ordinaryHOST,noDocker/no sudo/no native",
+      "maximum_disk_growth_bytes": 67108864,
+      "oldCPU0_UNKNOWN": {
+        "cpu": [
+          0
+        ],
+        "jobs": 1,
+        "memory_bytes": 268435456,
+        "released": false
+      },
+      "serial_phases": 5,
+      "wall_seconds_each": 90
+    },
+    "required_admission": "Root freshly includes controllers/workers/old CPU0 256MiB job1 UNKNOWN plus this512MiB inside sharedHOST4GiB/max3; fresh26GiB and host16/scratch12GiB floors. Serialize after heavy owner release. No native CPUs2-5/12GiB or retained reservations borrowing.",
+    "required_ownership": "Root creates only fresh0700 UID/GID1000 output/execution roots; records positive child PID and birth, all direct/family waits and streams. Stop first unexpected failure, retain primary diagnostics and cleanup; no residual/UNKNOWN can yield PASS. Preserve passing producer/serializer after a later test-only defect; no unchanged replay."
+  },
+  "retained_limits": [
+    "No actual compile, serializer, Python module import, unit test, ELF tool, Docker, native or process probe was executed by reviewer; source/data reads and this private review write only.",
+    "Actual HOST GCC9/staticglibc proof does not claim CC14/Rocky collector production or native6.12 behavior.",
+    "Old UNJOINED CPU0 slice and all native/source/currentfree/cleanup/service/account/credit/retained reservations remain binding.",
+    "This review grants no native Manifest/backend/currentfree gate, old fixture replay, source default/C retirement or original M14/M15 acceptance."
+  ],
+  "reused_material_source_GO": {
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-named-case-review-source-acquisition-max-1/REVIEW.json",
+    "sha256": "af6adf13fba920adef0459e2b653bdabc5cae41523c40007243087adcca6d4cf",
+    "size": 13281
+  },
+  "reviewed_at_utc": "2026-11-10T21:46:50.899005+00:00",
+  "reviewer": "/root/source_acquisition_review_max",
+  "schema": "m14-f06-named-HOST-independent-operation-review-v1",
+  "scope": "Only exact five serial ordinary-HOST operations in bound REQUEST, conditional on Root fresh admission and positive per-operation ownership. No native/container/payload execution or original acceptance credit.",
+  "verified_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic.py",
+      "sha256": "7e4256eee51f7d50ef758c55579801d691d4ee2cee9155a60680701dba5c540b",
+      "size": 54447
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "0891bc13a8750d09f7758d31031828f8270bc480fe5dc0c25d545528ab454640",
+      "size": 27356
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_guest_collector.c",
+      "sha256": "806958926967ef7aefe7d12ea8f3a143c3ded85ce4091cd485883cb78999a43f",
+      "size": 24226
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/candidate/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "4634075d634e9360d693e592c381379a427ef9b4b98460b5757217bf2b39f203",
+      "size": 58828
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/source/test_named_signal_contract.py",
+      "sha256": "4d4e4a6333488cd041a6615f7c0748088df2291944ec17a5be9ec6e6a61707f1",
+      "size": 8449
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/host-validation-1/source/serialize_named_signal.c",
+      "sha256": "1c5b9e009857ca3cb16246068f73224b7f0b7f052eda2db689548ce245c7da0b",
+      "size": 748
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/SOURCE-CONTRACT.json",
+      "sha256": "da7838390f3333490fe48693dfc8f6ba12f0d044341a269de26f63cd8f912102",
+      "size": 9922
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/native-request-1/named-case-binding-1/NAMED-SIGNAL-PATH-ENV.patch",
+      "sha256": "f7a462ed06cc7b719b721a738832cddf2947690c26f1b7acee8fd968f6717fd4",
+      "size": 15015
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-named-case-review-source-acquisition-max-1/REVIEW.json",
+      "sha256": "af6adf13fba920adef0459e2b653bdabc5cae41523c40007243087adcca6d4cf",
+      "size": 13281
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/m15-mcexec-matching-provider-20261110/qualification/QUALIFICATION.json",
+      "role": "executor_qualification",
+      "sha256": "dc0c975c362caba38100e13b5ca951cb864fc8ecba698096f24e72edf0115296",
+      "size": 44796
+    },
+    {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/mcexec-matching-provider-build-1/production-packet-1/output-1/stage/usr/local/bin/mcexec",
+      "role": "mcexec",
+      "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+      "size": 398096
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/output-1/signal.alternate-repeat",
+      "role": "payload",
+      "sha256": "77e8dfe6f8089f18b22524ad474e057cb061d67501f9e9fdb4f391dd4790f45d",
+      "size": 18736
+    },
+    {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/f06-default-promotion-1/payload-1/qualification-1/RESULT.json",
+      "role": "payload_qualification",
+      "sha256": "ae2965d9575488919e44ff338d1d4ca7b6268d1c1a93ed02f747c619e09b5055",
+      "size": 19010
+    }
+  ]
+}

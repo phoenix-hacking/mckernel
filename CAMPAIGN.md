@@ -1,9 +1,25 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T06:50:42.350083+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-11T06:54:51.213862+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current decision
+
+**Named signal source integration complete; runtime remains unadmitted.** Root
+applied exactf7a fourfile postimages after independentfc550 sourceGO, including
+validator7e4256/overlay0891bc/collector806958/owner463407 and its hashpin.
+Seven actual HOST checks and independentc0f5 are reused; no test, compiler,
+installed supervisor, admission or native operation ran. Laterc48 bootcollector
+stays separately qualified and unselected pending coherent request composition.
+The50-file exact native source bundle7dc71254 is pushed/fetched52blobs; substantive
+PR3 reply6789195115 supplies accessible installed/issuer/loader/cohort code links.
+PublicABI owns complete normal-frontdoor control/admission/dependency source;
+SourceAcq independently reviews; P04Source assembles the genuine named1e64/c664
+artifact/effective-view packet. F199 green25-file baseline0ddffc is physically
+preserved with matching producer bytes. P03/SDK/P04Tests finish whole03-03/04
+saved-result decisions before any new counted gain. Scores/criteria unchanged;
+confirmed percentage report6788434691 is reused. Native controls and historical
+UNKNOWNs remain binding; no claim is released by source integration.
 
 **Current native source diagnosis and M14 qualification.** At06:41:02Z the
 f199/1aee affected reader093446 passed:30 literal commands/27 outputs,13 clients

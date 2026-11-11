@@ -62,6 +62,11 @@ struct child_fault { int stage, number; };
                           defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS))
 #error "ND_FUTEX is mutually exclusive with ND_CORE_* profiles"
 #endif
+#if defined(ND_SIGNAL_ALTERNATE_REPEAT) && (defined(ND_FUTEX) || \
+    defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
+    defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS))
+#error "ND_SIGNAL_ALTERNATE_REPEAT is mutually exclusive with other payload profiles"
+#endif
 #if defined(ND_CORE_MEMORY)
 static const char nd_core_case[] = "memory";
 #elif defined(ND_CORE_FILES)
@@ -80,12 +85,21 @@ static char *const payload_argv[] = {
 static char *const payload_argv[] = {
     "/bin/mcexec", "-t", "1", "0", "/apps/app", NULL
 };
+#elif defined(ND_SIGNAL_ALTERNATE_REPEAT)
+static char *const payload_argv[] = {
+    "/bin/mcexec", "-t", "1", "0", "/apps/signal.alternate-repeat", NULL
+};
 #else
 static char *const payload_argv[] = {
     "/bin/mcexec", "-t", "1", "0", "app", "A", "", "B", NULL
 };
 #endif
+#if defined(ND_SIGNAL_ALTERNATE_REPEAT)
+static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps",
+                                    "LANG=C", "LC_ALL=C", "TZ=UTC", NULL};
+#else
 static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps", NULL};
+#endif
 static char *const helper_env[] = {"PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C", NULL};
 #if defined(ND_FUTEX)
 static char *const futex_boot_argv[] = {
@@ -334,6 +348,15 @@ static int frame(char *b, const struct result *r, int empty)
 #elif defined(ND_FUTEX)
     if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"/apps/app\"],\"cwd\":\"/case/work\","
                "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"},"
+               "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
+               "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
+               (unsigned long long)r->started, (unsigned long long)r->reaped,
+               (unsigned long long)r->finished) ||
+#elif defined(ND_SIGNAL_ALTERNATE_REPEAT)
+    if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\","
+               "\"/apps/signal.alternate-repeat\"],\"cwd\":\"/case/work\","
+               "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\","
+               "\"LANG\":\"C\",\"LC_ALL\":\"C\",\"TZ\":\"UTC\"},"
                "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
                "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
                (unsigned long long)r->started, (unsigned long long)r->reaped,

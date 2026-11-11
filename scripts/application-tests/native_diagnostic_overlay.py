@@ -322,12 +322,18 @@ def _authenticate_base(raw, *, base_sha256, base_size, base_cpio_sha256, base_cp
     return data
 
 
-def _replay_records(records):
+def _overlay_names(payload_member):
+    if payload_member not in ("apps/app", "apps/signal.alternate-repeat"):
+        _die("unsupported payload member")
+    return tuple(payload_member if name == "apps/app" else name for name in OVERLAY_NAMES)
+
+
+def _replay_records(records, *, overlay_names=OVERLAY_NAMES):
     final = {}
     links = {}
     for record in records:
         name = record["name"]
-        if name in final and name not in OVERLAY_NAMES:
+        if name in final and name not in overlay_names:
             _die("duplicate newc path outside overlay allowlist")
         # Lexical paths must match the unpacked namespace: no symlink ancestors.
         parts = name.split("/")
@@ -338,7 +344,7 @@ def _replay_records(records):
         if name in final and stat.S_IFMT(final[name]["mode"]) != stat.S_IFMT(record["mode"]):
             _die("newc duplicate changes member type")
         if stat.S_ISREG(record["mode"]) and record["nlink"] > 1:
-            if name in OVERLAY_NAMES:
+            if name in overlay_names:
                 _die("overlay destination is a hardlink")
             key = (record["archive"], record["devmajor"], record["devminor"], record["ino"])
             group = links.setdefault(key, [])
@@ -368,12 +374,14 @@ def _manifest(final):
             for name, record in sorted(final.items())}
 
 
-def replay(base_raw, overlay_raw, *, base_sha256, base_size, base_cpio_sha256, base_cpio_size):
+def replay(base_raw, overlay_raw, *, base_sha256, base_size, base_cpio_sha256, base_cpio_size,
+           payload_member="apps/app"):
+    overlay_names = _overlay_names(payload_member)
     base = _authenticate_base(base_raw, base_sha256=base_sha256, base_size=base_size,
                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
     base_records, _ = parse_newc(base)
     overlay_records, _ = parse_newc(overlay_raw)
-    if tuple(r["name"] for r in overlay_records) != OVERLAY_NAMES:
+    if tuple(r["name"] for r in overlay_records) != overlay_names:
         _die("overlay membership/order mismatch")
     if any(r["archive"] != 0 for r in overlay_records):
         _die("overlay must be one archive")
@@ -384,9 +392,9 @@ def replay(base_raw, overlay_raw, *, base_sha256, base_size, base_cpio_sha256, b
                 record["nlink"] != (2 if stat.S_ISDIR(mode) else 1) or
                 record["devmajor"] or record["devminor"] or record["rdevmajor"] or record["rdevminor"]):
             _die("invalid overlay member metadata")
-    final = _manifest(_replay_records(base_records + overlay_records))
+    final = _manifest(_replay_records(base_records + overlay_records, overlay_names=overlay_names))
     combined, _ = parse_newc(base + overlay_raw)
-    if final != _manifest(_replay_records(combined)):
+    if final != _manifest(_replay_records(combined, overlay_names=overlay_names)):
         _die("concatenated archive replay mismatch")
     return final
 
@@ -478,7 +486,8 @@ def _gzip(data):
 
 def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256, mcexec_sha256,
                   base_sha256, base_size, base_cpio_sha256, base_cpio_size,
-                  payload_sha256):
+                  payload_sha256, payload_member="apps/app"):
+    overlay_names = _overlay_names(payload_member)
     base_sha256, base_size, base_cpio_sha256, base_cpio_size = _base_identity(
         base_sha256, base_size, base_cpio_sha256, base_cpio_size)
     collector_sha256 = _collector_hash(collector_sha256)
@@ -511,9 +520,10 @@ def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256,
             _check_collector(cr)
             overlay = _archive((("apps", b"", 0o040755), ("case", b"", 0o040755),
                                 ("case/work", b"", 0o040755), ("init", cr, 0o100755),
-                                ("apps/app", pr, 0o100755), ("bin/mcexec", mr, 0o100755)))
+                                (payload_member, pr, 0o100755), ("bin/mcexec", mr, 0o100755)))
             final_map = replay(br, overlay, base_sha256=base_sha256, base_size=base_size,
-                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size)
+                               base_cpio_sha256=base_cpio_sha256, base_cpio_size=base_cpio_size,
+                               payload_member=payload_member)
             raw = _gzip(original + overlay)
             for source in sources:
                 source.verify()
@@ -537,7 +547,7 @@ def build_overlay(base, payload, collector, mcexec, output, *, collector_sha256,
             if unpacked != original + overlay:
                 _die("output decompressed bytes mismatch")
             observed_records, _ = parse_newc(unpacked)
-            if _manifest(_replay_records(observed_records)) != final_map:
+            if _manifest(_replay_records(observed_records, overlay_names=overlay_names)) != final_map:
                 _die("output final map mismatch")
             for source in sources:
                 source.verify()
@@ -577,6 +587,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     for name in ("base", "payload", "collector", "mcexec", "output"):
         parser.add_argument(name)
+    parser.add_argument("--payload-member", choices=("apps/app", "apps/signal.alternate-repeat"),
+                        default="apps/app")
     parser.add_argument("--collector-sha256", required=True, type=_collector_hash)
     parser.add_argument("--mcexec-sha256", required=True, type=_collector_hash)
     parser.add_argument("--payload-sha256", required=True,
@@ -592,7 +604,7 @@ def main(argv=None):
     print(json.dumps(build_overlay(args.base, args.payload, args.collector, args.mcexec, args.output,
                                    collector_sha256=args.collector_sha256,
                                    mcexec_sha256=args.mcexec_sha256,
-                                   payload_sha256=args.payload_sha256,
+                                   payload_sha256=args.payload_sha256, payload_member=args.payload_member,
                                    base_sha256=args.base_sha256, base_size=args.base_size,
                                    base_cpio_sha256=args.base_cpio_sha256,
                                    base_cpio_size=args.base_cpio_size), sort_keys=True))
