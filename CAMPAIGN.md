@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-11T23:51:17.466335+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T00:30:50.668763+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -117,7 +117,7 @@ has run. SDK setupGO5c939 is complete; P04Source binds its existing protected
 fast-exit-safe capture and SDK reviews only that outer delta. Root alone acts
 after exact operationGO and fresh scoped admission. The first readonly Root
 preflight failed only an overbroad unrelated-process readability assertion;
-no payload issued and no denied access retried. Actual ownedtree~495MiB,
+no payload issued and no denied access retried. Actual ownedtree494673920B,
 MemAvailable~29.27GB/disk~120.84GB and3targets absent were observed, not grants. No flagclear,
 source fallback, native reservation release, new framework or guessedfree grant.
 Pub must freeze the actual existing verified-byte Root-context/bootstrap command,
@@ -176,6 +176,26 @@ The initial immutableRoot4keyinput/host-admissionDATA has no pre-read writer yet
 P04Source owns its smallest normal same-Root materialization using existing
 0ca save_control/pinner/walk; Pub owns protected direct-argv outercapture.
 Do not invent a hidden issuer, callertrue grant, newcontroller or oldlease.
+InitialDATApublisher0181/3121 now has conditionalSourceGOb46b after exactly2
+source fixes: actualscratchpath and existing1.25GiB HOSTfamilyreserve. No data,
+Rootfiles or flags were issued. Its real9032→0ca save_control/pinner/walk→FULL
+e81→real0ca inline chain remains one actualRoot process.
+
+**Provider wiring is ACTUALLY QUALIFIED.** Packet7631/operationGO5aaca passed
+00:07:48Z onNovember12: all3entry+5journal rows byteequal expectedd84f7be4;
+actualSourcee81 fullentry/firstrow verifier/inlineCAS and11unchanged diagnostic
+bodies reuse4cbb. P04TestsQcc58c361 joins actual1605177/b52833450 parent/family/
+streams/fullRoot5ac27c exit0; onlycurrent256MiB/job1 retired(a1c60f71). No real
+main/Root/flag/native call occurred. Rootpreflight had first stopped on obsolete
+transitioncustodian1129750; correction requires current5roles and preserves the
+prior whole-tree864333824B accounting conservatively, with no owner/UNKNOWN release.
+
+**Current one capture repair:** Pub outer07b93/a484 is unexecuted, finiteSDK
+NO_GO41bca823 found exactlyone pending-keeper escape boundary. Pub owns its
+bounded nonescaping original-handle/parent retention correction; P04Tests
+prepares only that changed pureentry check. Allother28argv/profile/source
+predicates are clear. No new Popen/signal/kill/replay or oldsuite is allowed;
+fresh measurements/caps and Root actualARGV slots26/27 remain unissued.
 RealRoot creates its later native nonce/PID; genuine fresh source/currentfree/
 claim/caps/pidfd gates and positive runtime/native/source restoration stay required.
 
