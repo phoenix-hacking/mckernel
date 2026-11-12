@@ -1,0 +1,586 @@
+{
+  "schema": "mckernel.m15.f08.passive-source-independent-source-operation-review.v1",
+  "reviewer": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; independent source/profile/operation review; no recursive delegation",
+  "reviewed_at_utc": "2026-11-12T17:36:25.806Z",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "GO_F08_EXACT_SOURCE_AUTHENTICATION_AND_PASSIVE_SRPM_EXTRACTION",
+  "decision_scope": "Exactly the frozen two changed-file nonimporting syntax checks, followed after their success by one exact acquired-SRPM signature/header/passive outer-CPIO operation under a fresh complete Root admission. This is a source/operation decision; actual authentication, extraction, positive closure and resource retirement remain unproved until saved execution and independent actual-result qualification.",
+  "approved": {
+    "request_sha256": "f4d4807699341951876ce6f25680d1666b80aa8b68f91adc53166887737be682",
+    "capture_sha256": "b9ca9c8d9c3ad9df5c8896f1b858c7dd612488d94f99460cae3856e64f2f0311",
+    "profile_sha256": "7b67102c6b8f2b7208a6a36bc709393096b86e4986f000bdbc798bf5d347bb0a",
+    "manifest_sha256": "1c4f36c4267b0efb71637d193dba24849133beac0dfad53810066354bf7a7975",
+    "extractor_sha256": "070e78dd4ebe6b4beb52ac6eb353fd8aac7358f533dd39bfb01e671a756a930c",
+    "archive_result_sha256": "1b8a389dd61fb2978edb25efdc2aa3a8d5340f5b3a998d78ff071472b376891c",
+    "archive_physical_proof_sha256": "bfae4b6e764b0b7fb5b1e5713ec94d8695641cc79b1935266b81ca6d7a1d6c08",
+    "archive_Root_tool_sha256": "662918042d5199ccb82b9909b488e936c4d5acead725834ed175a555786c47ed",
+    "source_archive_sha256": "71e6008384fb7b7bbdc3d423f5b9cfaae9a2fb88bca42739dd7e733d93ad361e",
+    "source_archive_bytes": 19134402,
+    "immutable_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "reused_trusted_key_proof_sha256": "e0b12f0fa9677992570936436e3e4875034e495fd8f7fb473e686b3dcab35468"
+  },
+  "bound_identity": {
+    "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "invocation": "invocation20261112T094452Z-12a4bea0",
+    "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "cumulative_ceiling_unchanged": "Private finite budget preserved; no amount published.",
+    "sole_executor_and_integrator": "/root"
+  },
+  "excluded_rejected_task": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "request": "signal/frame/xstate collector",
+    "disposition": "Excluded from replay, rephrasing and reassignment."
+  },
+  "reviewed_packet": {
+    "ready": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/READY.json",
+      "bytes": 7160,
+      "sha256": "00195dd5c198b8f199ccf6b73ec00eaf56784e9503381bb7b207afea698a2ac9"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/REQUEST.json",
+      "bytes": 16413,
+      "sha256": "f4d4807699341951876ce6f25680d1666b80aa8b68f91adc53166887737be682"
+    },
+    "capture": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/run_passive_source_once.py",
+      "bytes": 32130,
+      "sha256": "b9ca9c8d9c3ad9df5c8896f1b858c7dd612488d94f99460cae3856e64f2f0311"
+    },
+    "profile": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/PROFILE.json",
+      "bytes": 9049,
+      "sha256": "7b67102c6b8f2b7208a6a36bc709393096b86e4986f000bdbc798bf5d347bb0a"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/PACKAGES.json",
+      "bytes": 3027,
+      "sha256": "1c4f36c4267b0efb71637d193dba24849133beac0dfad53810066354bf7a7975"
+    },
+    "extractor": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/extract_providers.py",
+      "bytes": 14900,
+      "sha256": "070e78dd4ebe6b4beb52ac6eb353fd8aac7358f533dd39bfb01e671a756a930c"
+    },
+    "Root_grant_contract": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/ROOT-GRANT-CONTRACT.json",
+      "bytes": 6481,
+      "sha256": "ba3dfed0e571d91beed6fda355f1c98178404a87cc38bfe9b28c03d84b2129c6"
+    },
+    "Root_argv": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/ROOT-ARGV.json",
+      "bytes": 5371,
+      "sha256": "33fc5e813edc9a6d3def106341a5a1c7a26ea31c3b348cd037b7afcd8641dd15"
+    },
+    "source_closure": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/SOURCE-CLOSURE.json",
+      "bytes": 11349,
+      "sha256": "057a85c1d4d238ae1756e6a674ec76cd155fead2c4d4751c35f76424396a7016"
+    }
+  },
+  "bounded_source_delta": {
+    "parent_predecessor": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/run_srpm_once.py",
+      "bytes": 25923,
+      "sha256": "9c0c6c5646390e337c7b0fea13f0428e96ce30893c613e97a13c1450fac566ca"
+    },
+    "extractor_predecessor": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/passive-extraction-1/extract_providers.py",
+      "bytes": 14375,
+      "sha256": "aada38571c3bec9056ed0097610c9d437f5acc377384cf746e047903dc9204fc"
+    },
+    "accepted_passive_qualification": {
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/libudev-development-provider-1/passive-extraction-1/qualification-1/QUALIFICATION.json",
+      "bytes": 10689,
+      "sha256": "edc1d8dad12410dd2a927d1243e415561a90cb2d0f248e4246529763a2c8f4a2"
+    },
+    "extractor_delta": "Only the systemd-source query appends SOURCEPACKAGE. Require exact N/E/V/R systemd|0|257|23.el10_2.1.rocky.0.1, a nonempty actual header ARCH and SOURCEPACKAGE=1. Repository arch=src does not substitute for actual header ARCH. The manifest selects one source RPM, so BFD/cmake/libuv conditional bodies are inactive.",
+    "capture_delta": "Exact physical archive/result/Root join; four-role immutable-image profile; 1.25 GiB family charge; allowed_running_container_ids added to the existing Root field union; actual signature/header/passive output verification and positive exact-owned lifecycle. Qualified E088, five original-handle retention routines and current account/source/held-FD guards are reused.",
+    "static_validation": "Read source and direct deltas, compared data/argv/profile/ref bindings, counted consumed admission fields, and verified frozen file hashes. No source imports, compiles, helpers, RPM/archive parse, Docker/sudo, network/account/live/native operation was executed by the reviewer.",
+    "checks_authorized_for_Root": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "7",
+      "/usr/bin/prlimit",
+      "--core=0:0",
+      "--fsize=67108864:67108864",
+      "--nofile=512:512",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import pathlib,sys; [compile(pathlib.Path(p).read_bytes(),p,'exec') for p in sys.argv[1:]]",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/run_passive_source_once.py",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/extract_providers.py"
+    ],
+    "checks_condition": "Only the two pinned changed files are compiled as data, with no imports or main execution. Both must pass before extraction. These checks and extraction are serialized within the one fresh admitted family; no unrelated suite or accepted green check is repeated."
+  },
+  "acquired_archive_join": {
+    "actual_qualification": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/independent-source-acquisition-review-1/srpm-fetch-operation-review-1/actual-srpm-qualification-1/QUALIFICATION.json",
+      "bytes": 20006,
+      "sha256": "3286e8869bb2376ef00ba5e2055cf028970d0dd06ef0547b030147769ab27f05"
+    },
+    "physical_proof": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/execution-1/ARCHIVE-PHYSICAL-PROOF.json",
+      "bytes": 2221,
+      "sha256": "bfae4b6e764b0b7fb5b1e5713ec94d8695641cc79b1935266b81ca6d7a1d6c08"
+    },
+    "result": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/execution-1/RESULT.json",
+      "bytes": 3994,
+      "sha256": "1b8a389dd61fb2978edb25efdc2aa3a8d5340f5b3a998d78ff071472b376891c"
+    },
+    "full_Root_tool": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/ROOT-ACTUAL-SRPM-FETCH.FINAL.json",
+      "bytes": 105,
+      "sha256": "662918042d5199ccb82b9909b488e936c4d5acead725834ed175a555786c47ed"
+    },
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/execution-1/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+    "bytes": 19134402,
+    "sha256": "71e6008384fb7b7bbdc3d423f5b9cfaae9a2fb88bca42739dd7e733d93ad361e",
+    "device": 66306,
+    "inode": 2253628,
+    "uid": 1000,
+    "gid": 1000,
+    "mode_octal": "0600",
+    "nlink": 1,
+    "mtime_ns_exact_decimal_string": "1794503374559054963",
+    "ctime_ns_exact_decimal_string": "1794503374559054963",
+    "timestamp_representation": "Exact raw JSON integer values preserved here as decimal strings; no JavaScript floating-point timestamp conversion.",
+    "enforcement": "Before creation, pin full acquired file and require exact prior held-FD/path/physical proof tuple, actual source row and full Root exit0/noSession. Keep input handles and path/stat bookends through normal completion.",
+    "existing_authentication_scope": "Metadata and GET results prove selected bytes/physical custody only. No source-RPM signature, header or payload extraction has run yet."
+  },
+  "immutable_image_and_trust": {
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "tool_binding": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/metadata-descriptor-fetch-1/TOOL-BINDINGS.json",
+      "bytes": 3409,
+      "sha256": "f3fe4d420a5722406d67555975d0b6514dfa030c5cf09959f5be8321abce98c8"
+    },
+    "trusted_key_proof": {
+      "bytes": 29632,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/public-abi-join-max-1/provider-acquisition-1/extraction-correction-1/extracted/EXTRACTION.json",
+      "sha256": "e0b12f0fa9677992570936436e3e4875034e495fd8f7fb473e686b3dcab35468"
+    },
+    "trusted_release_key": {
+      "source_pinned_file": {
+        "path": "/etc/pki/rpm-gpg/RPM-GPG-KEY-Rocky-10",
+        "bytes": 1688,
+        "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+      },
+      "full_primary_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "full_fingerprint_basis": "existing source lock exactkeySHA/fullfingerprint binding; actual existing RPMdb packets equal source-pinned bytes, no new crypto implementation",
+      "existing_rpm_key_record": "gpg-pubkey|6fedfc85|682ae1a9",
+      "key_packet_sha256": "1f09530c1d1fdcbe03279b565e9b7ff1ec4d6fccd663ac2710d0b2f0119dbb7e",
+      "already_trusted_material_equal": true,
+      "import_or_trust_mutation": false
+    },
+    "proof_comparison": "The manifest's reused_trusted_release_key equals the actual accepted proof's trusted_release_key. Reuse the accepted immutable46d RPMdb/keyfile/packet/full-fingerprint relationship at that exact scope.",
+    "container_tool_namespace": "Actual bash, system Python, rpm, rpmkeys, rpm2cpio and cpio come from the pinned immutable46d root. Existing key/RPMdb are inside the read-only root; no key query/import/trust mutation or new HOST rpm/rpm2cpio fallback.",
+    "new_authentication_required": "Actual rpmkeys --checksig --verbose must return0 with the selected signature key and no NOKEY under this unchanged trusted RPMdb; subsequent independent result qualification must bind the exact RPM and genuine captures."
+  },
+  "passive_commands_exactly_seven": [
+    {
+      "ordinal": 1,
+      "purpose": "actual source header",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--qf",
+        "%{NAME}|%{EPOCHNUM}|%{VERSION}|%{RELEASE}|%{ARCH}|%{SOURCEPACKAGE}\n",
+        "/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm"
+      ]
+    },
+    {
+      "ordinal": 2,
+      "purpose": "actual selected RPM signature",
+      "argv": [
+        "/usr/bin/rpmkeys",
+        "--checksig",
+        "--verbose",
+        "/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm"
+      ]
+    },
+    {
+      "ordinal": 3,
+      "purpose": "source dependency metadata",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--requires",
+        "/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm"
+      ]
+    },
+    {
+      "ordinal": 4,
+      "purpose": "outer payload manifest metadata",
+      "argv": [
+        "/usr/bin/rpm",
+        "-qp",
+        "--dump",
+        "/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm"
+      ]
+    },
+    {
+      "ordinal": 5,
+      "purpose": "bounded outer CPIO data",
+      "argv": [
+        "/usr/bin/rpm2cpio",
+        "/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm"
+      ]
+    },
+    {
+      "ordinal": 6,
+      "purpose": "outer CPIO relative path list",
+      "argv": [
+        "/usr/bin/cpio",
+        "--list",
+        "--quiet"
+      ],
+      "stdin": "held bounded payload.cpio"
+    },
+    {
+      "ordinal": 7,
+      "purpose": "outer CPIO passive extraction",
+      "argv": [
+        "/usr/bin/cpio",
+        "--extract",
+        "--make-directories",
+        "--quiet",
+        "--no-absolute-filenames",
+        "--no-preserve-owner"
+      ],
+      "stdin": "held bounded payload.cpio",
+      "cwd": "/output/systemd-source"
+    }
+  ],
+  "profile_review": {
+    "literal_create_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "create",
+      "--name",
+      "mck-m15-f08-exact-source-passive-20261112-1",
+      "--label",
+      "mckernel.preparation-owner=m15-f08-exact-source-passive-20261112-1",
+      "--init",
+      "--pull=never",
+      "--network=none",
+      "--ipc=private",
+      "--cpus=1",
+      "--cpuset-cpus=7",
+      "--memory=1g",
+      "--memory-swap=1g",
+      "--pids-limit=64",
+      "--user",
+      "1000:1000",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--read-only",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+      "--ulimit",
+      "core=0:0",
+      "--ulimit",
+      "fsize=268435456:268435456",
+      "--ulimit",
+      "nofile=128:128",
+      "--ulimit",
+      "cpu=90:90",
+      "--env",
+      "PATH=/usr/bin:/bin",
+      "--env",
+      "LANG=C",
+      "--env",
+      "LC_ALL=C",
+      "--env",
+      "TZ=UTC",
+      "--env",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/execution-1/systemd-257-23.el10_2.1.rocky.0.1.src.rpm,dst=/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/PACKAGES.json,dst=/producer/PACKAGES.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/extract_providers.py,dst=/producer/extract_providers.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/execution-1/extracted,dst=/output",
+      "--workdir",
+      "/output",
+      "--entrypoint",
+      "/usr/bin/bash",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "--noprofile",
+      "--norc",
+      "-e",
+      "-c",
+      "ulimit -v 1048576; exec \"$@\"",
+      "provider-acquisition-as-limit",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/producer/extract_providers.py"
+    ],
+    "role_mounts": [
+      {
+        "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/exact-source-srpm-fetch-1/execution-1/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+        "destination": "/packages/systemd-257-23.el10_2.1.rocky.0.1.src.rpm",
+        "read_only": true
+      },
+      {
+        "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/PACKAGES.json",
+        "destination": "/producer/PACKAGES.json",
+        "read_only": true
+      },
+      {
+        "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/extract_providers.py",
+        "destination": "/producer/extract_providers.py",
+        "read_only": true
+      },
+      {
+        "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/execution-1/extracted",
+        "destination": "/output",
+        "read_only": false
+      }
+    ],
+    "mount_count": 4,
+    "mount_permissions": "Three selected regular-file input mounts read-only (RPM, manifest, extractor); one disjoint private /output read-write. No extra host tree, socket, RPMdb or key bind is admitted.",
+    "resource_charge": {
+      "CPU": [
+        7
+      ],
+      "jobs": 1,
+      "planning_bytes": 1342177280,
+      "retired": false,
+      "retire_only_on_actual_positive_closure": true
+    },
+    "family_container_bytes": 1073741824,
+    "family_parent_planning_bytes": 268435456,
+    "family_total_planning_bytes": 1342177280,
+    "HOST_limits": {
+      "AS": [
+        -1,
+        -1
+      ],
+      "CORE": [
+        0,
+        0
+      ],
+      "FSIZE": [
+        67108864,
+        67108864
+      ],
+      "NOFILE": [
+        512,
+        512
+      ],
+      "CPU": [
+        -1,
+        -1
+      ]
+    },
+    "container_limits": {
+      "CPU": [
+        7
+      ],
+      "cpus": 1,
+      "memory_bytes": 1073741824,
+      "memory_swap_bytes": 1073741824,
+      "pids": 64,
+      "AS_bytes": 1073741824,
+      "CPU_seconds": 90,
+      "FSIZE_bytes": 268435456,
+      "CORE": 0,
+      "NOFILE": 128,
+      "tmpfs_bytes": 67108864
+    },
+    "hard_profile": "Container CPU7/1CPU/1GiB memory+swap1GiB/64PIDs/UID1000/cap-dropALL/no-new-privileges/networknone/ipcprivate/read-only root. Existing reviewed Docker-CLI HOST AS/CPU infinity is preserved; the 256MiB parent allowance is planning/accounted overhead, not a claim of a new hard cgroup limit.",
+    "exact_inspection": "Created and terminal inspections join Config/HostConfig/Mounts/image/name/labels/environment/cmd/entrypoint/user/workdir/limits. Require exact 3RO+1RW mounts and phase-specific AppArmor values, created/notrunning/Pid0 then exited0/nonOOM/Pid0/errorfalse/notdead/notpaused/notrestarting.",
+    "allowed_running_containers": "Require exact equality of current running full CID list to Root's uniquely pinned allowed_running_container_ids. This is ownership reconciliation, not an authorization to stop, remove or reuse any preexisting CID."
+  },
+  "capture_and_closure_review": {
+    "input_custody": "Regular private source/ref checks, exact hash/bytes and stable held-FD/path/stat bookends; no protected RootDATA/account-body publication.",
+    "output_custody": "Task-specific 0700 roots. Verify one PASS report with exact selected source/header/signature/key proof, seven genuine command records and stable regular bounded stdout/stderr capture hashes. Parent hashes captures in <=1MiB chunks; no full expanded CPIO allocation in the parent.",
+    "bounds": "Each tool capture <=256MiB; CPIO/data obey the reused 2GiB total disk envelope and fixed capture reserve. Root's actual capacity proof must cover the declared growth while preserving the existing host/scratch floors.",
+    "positive_lifecycle": "Original start-a Popen/direct wait and streams, strict terminal inspection, docker wait0, exact owned full CID nonforce removal and exact ID absence; all direct HOST calls require exit0/birth/receipt/closed streams/no pending/no UNKNOWN/no secondary errors. Held inputs close before normal parent terminal.",
+    "failure_custody": "Any uncertainty after creation_attempted retains the owning parent/Popen/CID/charge for legitimate Root disposition, without stop/rm/retry fallback. A timeout or absent PID is not a release receipt. Any earlier failure needs its saved full Root outcome and exact before-Popen proof before a separate failed-scope qualification.",
+    "retirement_conditions": "Actual complete original Root terminal with full streams, genuine seven tools and container/child/input closure, independent actual-result qualification, then Root-only receipt can retire only this new 1342177280B/job1 family."
+  },
+  "required_fresh_Root_admission": {
+    "contract": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/ROOT-GRANT-CONTRACT.json",
+      "bytes": 6481,
+      "sha256": "ba3dfed0e571d91beed6fda355f1c98178404a87cc38bfe9b28c03d84b2129c6"
+    },
+    "schema": "mckernel.Root-current-HOST-admission.f08-passive-source.v1",
+    "complete_consumed_field_union": [
+      "MemAvailable_bytes",
+      "Root_thread_id",
+      "account_consumer_ref",
+      "allowed_running_container_ids",
+      "approved",
+      "charge",
+      "complete_owner_accounting",
+      "current_HOST_jobs_before",
+      "current_owned_controller_worker_overhead_bytes",
+      "current_owner_private_ref",
+      "current_owner_validation_ref",
+      "host_free_bytes",
+      "invocation",
+      "issued_mono_ns",
+      "issued_utc_ns",
+      "native81012_scope",
+      "native_and_historical_unknowns_preserved",
+      "operation_nonce",
+      "operation_review_ref",
+      "other_current_HOST_payload_reserved_bytes",
+      "request_sha256",
+      "retained_owner_dispositions_ref",
+      "same_Root_finite_credit_run_id",
+      "schema",
+      "scoped_resource_evidence_ref",
+      "scratch_free_bytes",
+      "source_acquisition_current_slices_ref",
+      "source_custody_and_actual_permission_checks_ref",
+      "source_view_verified"
+    ],
+    "field_count": 29,
+    "field_union_validation": "Exact union of every literal grant access plus the five dynamically named proof refs equals the 29 fields shown. allowed_running_container_ids is the only new field relative to the qualified SRPM-fetch union.",
+    "literal_fields": {
+      "invocation": "invocation20261112T094452Z-12a4bea0",
+      "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+      "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+      "request_sha256": "f4d4807699341951876ce6f25680d1666b80aa8b68f91adc53166887737be682",
+      "approved": {
+        "request_sha256": "f4d4807699341951876ce6f25680d1666b80aa8b68f91adc53166887737be682",
+        "capture_sha256": "b9ca9c8d9c3ad9df5c8896f1b858c7dd612488d94f99460cae3856e64f2f0311",
+        "profile_sha256": "7b67102c6b8f2b7208a6a36bc709393096b86e4986f000bdbc798bf5d347bb0a",
+        "manifest_sha256": "1c4f36c4267b0efb71637d193dba24849133beac0dfad53810066354bf7a7975",
+        "extractor_sha256": "070e78dd4ebe6b4beb52ac6eb353fd8aac7358f533dd39bfb01e671a756a930c",
+        "archive_result_sha256": "1b8a389dd61fb2978edb25efdc2aa3a8d5340f5b3a998d78ff071472b376891c",
+        "archive_physical_proof_sha256": "bfae4b6e764b0b7fb5b1e5713ec94d8695641cc79b1935266b81ca6d7a1d6c08",
+        "archive_Root_tool_sha256": "662918042d5199ccb82b9909b488e936c4d5acead725834ed175a555786c47ed",
+        "source_archive_sha256": "71e6008384fb7b7bbdc3d423f5b9cfaae9a2fb88bca42739dd7e733d93ad361e",
+        "source_archive_bytes": 19134402,
+        "immutable_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+        "reused_trusted_key_proof_sha256": "e0b12f0fa9677992570936436e3e4875034e495fd8f7fb473e686b3dcab35468"
+      },
+      "charge": {
+        "CPU": [
+          7
+        ],
+        "jobs": 1,
+        "planning_bytes": 1342177280,
+        "retired": false,
+        "retire_only_on_actual_positive_closure": true
+      },
+      "account_consumer_ref": {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-binding-1/current-root-owner-1/current_account_snapshot.PROPOSED.py",
+        "bytes": 7994,
+        "sha256": "fe2c38a7d559e0066c45da9de0fd65b5597b61cebbd5249663c645cfe08c7fe6"
+      },
+      "current_owner_private_ref": {
+        "path": "/home/holden/mckernel-work/resume-reconciliation-20261112T094452Z-12a4bea0/CURRENT-OWNER.PRIVATE.json",
+        "bytes": 706,
+        "sha256": "a51ed92a2b11f7cb65d83189ee0eee80c13537d0c76f2b1b0351dc38293e09a1"
+      }
+    },
+    "fresh_actual_fields": {
+      "operation_review_ref": "EXACT two-key {path,sha256} of actual passive-source independentGO; no bytes member.",
+      "issued_utc_ns": "actual0..60s fresh",
+      "issued_mono_ns": "actual0..60s fresh",
+      "operation_nonce": "fresh64hex operation nonce, never reused",
+      "source_view_verified": "actual verified current source/tool/permission view",
+      "complete_owner_accounting": "actual allcurrent/retained/controller/worker slices, not legacyoverhead",
+      "native_and_historical_unknowns_preserved": "actual preservation check",
+      "current_HOST_jobs_before": "actual integer0..2; add1 <=3",
+      "other_current_HOST_payload_reserved_bytes": "actual nonnegative sum incl retained native81012 1.5GiB/job1 unless separately qualified/retired",
+      "current_owned_controller_worker_overhead_bytes": "Actual nonnegative overhead; other+overhead+1342177280 <=4294967296; parent256MiB included in this new1.25GiB planning charge, container hard cap1GiB.",
+      "MemAvailable_bytes": "actual >=27917287424",
+      "host_free_bytes": "actual >=18253611008",
+      "scratch_free_bytes": "actual >=13958643712",
+      "current_owner_validation_ref": "actual fresh currentRoot fe2/7f8/private-ref validation witness",
+      "scoped_resource_evidence_ref": "actual complete current measurement/accounting witness",
+      "retained_owner_dispositions_ref": "actual retained/qualified/retired owner records",
+      "source_custody_and_actual_permission_checks_ref": "actual current regular/source/tool/output-parent/permission proof",
+      "source_acquisition_current_slices_ref": "Actual complete descriptor/primary/archive/current failed-preissue/projection/source-acquisition retained/qualified/Root-scoped-retirement evidence; include all still-held256MiB/job1 separately, no automatic release from GET success.",
+      "allowed_running_container_ids": "Exact current all running Docker IDs/owners; empty only with actual positive current ownership evidence. This does not retire old stopped/unknown containers or native ownership."
+    },
+    "operation_review_ref_shape": "EXACT {path,sha256}; no bytes member. CLI review path/SHA and this grant member must agree.",
+    "resource_condition": "Root must supply genuine current all-owner/account/source/permission evidence, 0..60s UTC+monotonic freshness and fresh64hex nonce. One new job with jobs_before+1<=3, other_current_HOST_payload_reserved_bytes + current_owned_controller_worker_overhead_bytes +1342177280 <=4294967296. Fresh MemAvailable>=26GiB and declared disk growth/floors apply.",
+    "retained_scope_condition": "Include original81012 1.5GiB/job1 unless exact actual cleanup/independentQ/Root scoped retirement refs justify the contract's retired branch. Also include every still-held PhaseA/projection/source helper family and all current controller/worker overhead until its own positive scoped receipt. This review changes no ownership or charge.",
+    "native81012_union": {
+      "always_exact": {
+        "session": 81012,
+        "planning_bytes": 1610612736,
+        "jobs": 1
+      },
+      "retained_branch": {
+        "disposition": "RETAINED_UNKNOWN",
+        "requirements": "other>=1610612736 and jobs_before>=1; no native/runtime/source UNKNOWN retired"
+      },
+      "retired_branch": {
+        "disposition": "ACTUALLY_QUALIFIED_AND_SCOPED_RETIRED",
+        "required_actual_refs": [
+          "actual_owned_cleanup_ref",
+          "independent_qualification_ref",
+          "Root_scoped_retirement_ref"
+        ],
+        "requirements": "Only actual pinned scoped receipts permit this branch; recovery/model absence is insufficient."
+      }
+    }
+  },
+  "full_argv_binding": {
+    "author_root_argv": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/ROOT-ARGV.json",
+      "bytes": 5371,
+      "sha256": "33fc5e813edc9a6d3def106341a5a1c7a26ea31c3b348cd037b7afcd8641dd15"
+    },
+    "literal_root_argv_template": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "7",
+      "/usr/bin/prlimit",
+      "--core=0:0",
+      "--fsize=67108864:67108864",
+      "--nofile=512:512",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/run_passive_source_once.py",
+      "--request-sha256",
+      "f4d4807699341951876ce6f25680d1666b80aa8b68f91adc53166887737be682",
+      "--operation-review",
+      "@ACTUAL_PASSIVE_SOURCE_OPERATION_REVIEW_PATH@",
+      "--operation-review-sha256",
+      "@ACTUAL_PASSIVE_SOURCE_OPERATION_REVIEW_SHA@",
+      "--admission",
+      "@FRESH_ROOT_PASSIVE_SOURCE_ADMISSION_PATH@",
+      "--admission-sha256",
+      "@FRESH_ROOT_PASSIVE_SOURCE_ADMISSION_SHA@"
+    ],
+    "review_argv_companion": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/passive-source-extraction-1/independent-review/APPROVED-ROOT-ARGV.UNISSUED-ADMISSION.json",
+    "materialization": "Bind this actual review path/SHA. Only the two fresh actual admission path/SHA slots remain unissued. Execute at most once with a fresh operation nonce after all guards and the two syntax checks."
+  },
+  "findings": [],
+  "unmatched_source_operation_guard": null,
+  "not_yet_proved": {
+    "actual_authentication": false,
+    "actual_passive_extraction": false,
+    "patched_provider_source_behavior": false,
+    "F08_runtime_or_original_acceptance": false,
+    "native_or_installation_credit": false,
+    "resource_retirement": false
+  },
+  "preserved_holds": "All real service/account/source/runtime/native12/UNKNOWN and current original81012 ownership hold; same finite run and M14-before-M15 acceptance order; excluded rejected collector identities/task unchanged.",
+  "next_action": {
+    "owner": "/root",
+    "action": "Materialize the exact complete29-field fresh admission and literal reviewed argv after real aggregate resource/source/account/permission checks; run only the two fixed nonimporting syntax checks and this one passive source operation. Preserve raw full original tool and all failures for independent actual-result qualification."
+  }
+}

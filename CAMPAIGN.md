@@ -1,9 +1,44 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T18:04:11.551662+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T18:59:29.324723+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+CURRENT c309 actual result_verify failure supersedes priorpreissue banners.
+Correctedhelper0fb/GOe792 with qualifiedsudo/socket/env+childlimits succeeded
+throughfreshpreflight/account/admission and issued SAMEunusedcdc publisherONCE,
+newnoncec309bcdd, original8e36f5/session81691 LIVE. Actualownedstderr443B/43ed
+reports ROOT_INSTALL_FAILURE_DATA_V1, ValueError/result_verify, redactedmessage,
+UNKNOWN; parent1995217/b59502337, keeper1995219/b59502349, installer1995220/
+b59502365 and capture2254658/2254659 are point observations only. Stage also
+covers ACKsend; exact failingpredicate/verifiedresult/ACK and originalcaller/
+sudo/keeper/installer/lease/capture/fullRoot closure remain UNPROVED. Retain
+CURRENT2GiB/job1/exclusiveHOST; no newnonce/issuer/native reissue or sourcehotpatch.
+Functional_delta_review diagnoses exactsource +minimumsaved INSTALL-RESULT/START
+projection; native_binding_review froze currentcustodyconditionscc1561 and will
+review only finitecurrentowning-context collection/disposition. Parentfailureloop
+has NOrecoveryRPC; no inventedframes/processmemory/tracing or normalvalidator
+weakening. Native_current_binding froze conditional BOTH CORE/providerrecipe
+7b62/prospectivec309 only; actualinode/FULL/Q/readback/sourceGO/nativeauthority
+unset. No partiallyinstalledgeneration credit/adoption.
+
+Earlier81012A/B/C/failedHOSTQ/Root633f remain complete (old1.5GiB notretained).
+F08 realqualifiedquery306f29/Qa9b/Roote72d, actualsyntaxece463/extraction5880->
+3da413/CID3458removed/Q5db790/Root975f are complete; no currentF08charge/replay.
+Actual643signedRPMmembers/spec108901B/nestedtar16184128B/14f6907e/619patches
+are qualifiedDATA; no directpatches changeeight coremonitor files. Time source
+froze bounded256MiB nestedmemberread ffadc/a09f/8290/f350, m15_installed_leaf_review
+independently reviews thatactualnextpacket; executionqueues behind exclusive
+failedpublisher custody/resource disposition. No daemon/service or F08acceptance.
+Proc_vm_index_fix binds actual81012C/Q/Root633 into EXISTING UTImetadataGO080f
+companion/approvedargv withABI35 reused, no frozenfieldrewrite or compileyet.
+Actualcurrent2GiB +UTI2GiB +overhead cannotfit4GiB; no successfulsignal prerequisite
+isinvented. TLSsource5bffd/0b663 isready; timeeddd/07c69 remains SOURCE/DATAready
+with actualstage/native/mapping/timepage/TSC missing, no repeatedprep. F05fullmode
+GO8815 remains ready afterrealexclusivepublisher/resource release; no destroy/CLI
+replay. Allnative12/source/globalUNKNOWN/excludedcollector/finite7c6/original
+105/156 and70.00/74.59 remain preserved.
 
 Current normalpublication PREISSUE result: consumable final9field GOcdc590 is
 ready/UNUSED. Rootdebc79 metadata helper failed BEFORE freshaccount/grant/nonce/
