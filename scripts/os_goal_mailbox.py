@@ -19,21 +19,34 @@ import time
 from uuid import uuid4
 
 from run_os_goal import queue_instruction
+from os_goal_instruction_limits import MAX_INSTRUCTION_BYTES, validate_instruction
 from os_goal_stop_log import _text as _redacted_text
 
 
 STATE_FILE = "mailbox-state.json"
 MARKER = "<!-- mckernel-mailbox:{event_id} -->"
-_MAX_JSON = 2 * 1024 * 1024
+_MAX_STATE_JSON = 8 * 1024 * 1024
+# Keep ordinary polls at 100 comments/page; retry smaller pages only if needed.
+_MAX_API_JSON = 32 * 1024 * 1024
+_COMMENTS_PER_PAGE = 100
+_MAX_COMMENTS = 1000
+
+
+class MailboxStateLimitError(ValueError):
+    """A larger state must never replace the last durable mailbox record."""
+
+
+class MailboxResponseLimitError(ValueError):
+    """The same comments may need smaller pages within the existing deadline."""
 
 
 def _read(path):
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         info = os.fstat(fd)
-        if not stat.S_ISREG(info.st_mode) or info.st_size > _MAX_JSON:
+        if not stat.S_ISREG(info.st_mode) or info.st_size > _MAX_STATE_JSON:
             raise ValueError("Mailbox JSON must be a bounded regular file")
-        raw = os.read(fd, _MAX_JSON + 1)
+        raw = os.read(fd, _MAX_STATE_JSON + 1)
         value = json.loads(raw)
         if not isinstance(value, dict):
             raise ValueError("Mailbox JSON must contain an object")
@@ -43,12 +56,16 @@ def _read(path):
 
 
 def _save(path, value):
+    payload = (json.dumps(value, sort_keys=True) + "\n").encode("utf-8")
+    if len(payload) > _MAX_STATE_JSON:
+        raise MailboxStateLimitError(
+            f"Mailbox state requires {len(payload)} bytes; maximum {_MAX_STATE_JSON}. "
+            "Prior state and receipts are preserved; reconcile before adding more records.")
     temporary = path.with_name(path.name + "." + uuid4().hex + ".tmp")
     fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
     try:
-        with os.fdopen(fd, "w") as stream:
-            json.dump(value, stream, sort_keys=True)
-            stream.write("\n")
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(payload)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, path)
@@ -75,8 +92,8 @@ def _gh_api(endpoint, *, method="GET", payload=None, timeout=10):
         # gh stderr can include request details; retain only the exit class here.
         raise RuntimeError("GitHub mailbox API " + method + " failed (exit "
                            + str(completed.returncode) + "); check gh authentication/network")
-    if len(completed.stdout.encode("utf-8")) > _MAX_JSON:
-        raise ValueError("GitHub mailbox response exceeded the bounded limit")
+    if len(completed.stdout.encode("utf-8")) > _MAX_API_JSON:
+        raise MailboxResponseLimitError("GitHub mailbox response exceeded the bounded limit")
     return json.loads(completed.stdout) if completed.stdout.strip() else None
 
 
@@ -114,6 +131,7 @@ class Mailbox:
             raise ValueError("Mailbox poll_seconds must be between 30 and 3600")
         self.binding = _sha([self.remote, self.issue, self.user_id])
         self.path = self.directory / STATE_FILE
+        self._comments_per_page = _COMMENTS_PER_PAGE
 
     @contextmanager
     def _locked(self):
@@ -161,19 +179,46 @@ class Mailbox:
         return result
 
     def _comments(self):
-        comments, deadline = [], time.monotonic() + 30
-        for page in range(1, 11):
+        comments, page, deadline = [], 1, time.monotonic() + 30
+        while len(comments) < _MAX_COMMENTS:
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise RuntimeError("GitHub mailbox pagination exceeded poll time budget")
-            rows = _gh_api(f"repos/{self.remote}/issues/{self.issue}/comments?per_page=100&page={page}",
-                           timeout=min(10, remaining))
+            per_page = self._comments_per_page
+            try:
+                rows = _gh_api(f"repos/{self.remote}/issues/{self.issue}/comments?per_page={per_page}&page={page}",
+                               timeout=min(10, remaining))
+            except MailboxResponseLimitError:
+                if per_page == 1:
+                    raise
+                self._comments_per_page = max(1, per_page // 2)
+                # Page numbering changes with page size. Restart collection,
+                # retaining both the deadline and the last durable cursor.
+                comments, page = [], 1
+                continue
             if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
                 raise ValueError("GitHub returned malformed mailbox comments")
+            if len(rows) > per_page or len(comments) + len(rows) > _MAX_COMMENTS:
+                raise RuntimeError("GitHub mailbox exceeds bounded pagination; reconcile before polling")
             comments.extend(rows)
-            if len(rows) < 100:
+            if len(rows) < per_page:
                 return sorted(comments, key=lambda row: row.get("id") if type(row.get("id")) is int else -1)
+            page += 1
         raise RuntimeError("GitHub mailbox exceeds bounded pagination; reconcile before polling")
+
+    def _capacity_error(self, error, now, queued):
+        # Only unpublished memory is discarded. Any durable enqueue intent,
+        # cursor and receipt remain intact for the next idempotent poll.
+        retained = self._state()
+        retained.update(last_error=_safe(str(error), 500),
+                        failures=min(int(retained.get("failures", 0)) + 1, 5),
+                        next_poll_at=now + max(600, self.poll_seconds))
+        try:
+            _save(self.path, retained)
+        except MailboxStateLimitError:
+            pass  # No room for error metadata: preserve exact prior bytes.
+        return self._result(retained, "ERROR", reason=_safe(str(error), 500),
+                            queued_instruction_ids=queued)
 
     @staticmethod
     def _current_stop(stop, state, context, mode):
@@ -271,7 +316,12 @@ class Mailbox:
                  "- 📤 GitHub sent timestamp: " + (message["source_created_at"] or "unavailable in preserved record"),
                  "- 📥 Computer received timestamp: " + (message["received_at"] or "unavailable in preserved record")]
         if request_id:
+            raw = intent["instruction"].encode("utf-8")
+            message.update(instruction_utf8_bytes=len(raw),
+                           instruction_sha256=hashlib.sha256(raw).hexdigest())
             lines += [f"- Queued instruction: `{request_id}`", "", "**⏳ WAITING for controller acceptance.**",
+                      f"Instruction: {len(raw)} UTF-8 bytes including mailbox provenance; maximum {MAX_INSTRUCTION_BYTES}.",
+                      f"Instruction SHA-256: `{message['instruction_sha256']}`.",
                       "The instruction is saved once. Queueing does not prove controller acceptance or completed work."]
         else:
             message["not_queued_reason"] = reason or "No supported first-line command was supplied."
@@ -369,11 +419,11 @@ class Mailbox:
             state = self._state()
             now = time.time()
             due = now >= state.get("next_poll_at", 0)
-            if due:
-                state["last_poll_at"] = now
-                _save(self.path, state)
             queued, replied = [], False
             try:
+                if due:
+                    state["last_poll_at"] = now
+                    _save(self.path, state)
                 if state.get("enqueue_intent"):
                     queued.append(self._finish_enqueue(state))
                     replied = True
@@ -416,7 +466,12 @@ class Mailbox:
                                 url = f"https://github.com/{self.remote}/pull/{self.issue}#issuecomment-{ident}"
                                 instruction = (f"Verified GitHub mailbox instruction from {self.login} (user id {self.user_id}).\n"
                                                f"Source: {url}\nCommand: {command}\n\n{text}")
-                                if len(instruction.encode("utf-8")) <= 8192:
+                                try:
+                                    validate_instruction(instruction)
+                                except ValueError as error:
+                                    reason = str(error) + " Mailbox provenance is included; post a shorter new comment."
+                                    state["rejected_comment"] = {"comment_id": ident, "reason": reason}
+                                else:
                                     intent.update(source_id=f"github:{self.remote}:{self.issue}:{ident}",
                                                   instruction=instruction, text_sha256=_sha(instruction))
                                     if command == "/mckernel-resume":
@@ -424,9 +479,6 @@ class Mailbox:
                                     state["enqueue_intent"] = intent
                                     _save(self.path, state)
                                     queued.append(self._finish_enqueue(state))
-                                else:
-                                    reason = "Instruction exceeds 8192 UTF-8 bytes; post a shorter new comment."
-                                    state["rejected_comment"] = {"comment_id": ident, "reason": reason}
                             elif command == "/mckernel-instruct":
                                 reason = "The instruction body is empty; post a new comment with the direction below its first-line command."
                             if str(ident) not in state["messages"]:
@@ -456,12 +508,17 @@ class Mailbox:
                     state.update(failures=0, last_error=None, last_successful_poll_at=now)
                 _save(self.path, state)
                 return self._result(state, "POLLED" if due else "BACKOFF", queued_instruction_ids=queued, dispatched_event_id=dispatched)
+            except MailboxStateLimitError as error:
+                return self._capacity_error(error, now, queued)
             except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
                 failures = min(int(state.get("failures", 0)) + 1, 5)
                 state.update(failures=failures, last_error=_safe(str(error), 500))
                 if due and state.get("next_poll_at", 0) <= now:
                     state["next_poll_at"] = now + min(max(900, self.poll_seconds), self.poll_seconds * 2 ** (failures - 1))
-                _save(self.path, state)
+                try:
+                    _save(self.path, state)
+                except MailboxStateLimitError as capacity_error:
+                    return self._capacity_error(capacity_error, now, queued)
                 return self._result(state, "ERROR", reason=state["last_error"], queued_instruction_ids=queued)
 
     def ack_resume(self, request_id):
@@ -470,3 +527,4 @@ class Mailbox:
             state = self._state()
             state["pending_resumes"] = [item for item in state["pending_resumes"] if item["request_id"] != request_id]
             _save(self.path, state)
+

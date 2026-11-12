@@ -31,6 +31,8 @@ from os_goal_resources import (check_resources, resolve_resources,
                                resource_environment, resource_instructions)
 from os_goal_windows import window_capability
 from os_goal_instructions import reconcile_instructions
+from os_goal_instruction_limits import (MAX_INSTRUCTION_BYTES, validate_instruction,
+                                         validate_instruction_record)
 from os_goal_credits import (CreditBudget, available_balance, amount, billing_policy,
                              credit_budget_argument)
 from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure, classify_service_failure,
@@ -147,18 +149,31 @@ def read_startup_instruction(path):
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         before = os.fstat(fd)
-        if not stat.S_ISREG(before.st_mode) or before.st_size > 8192:
-            raise ValueError("Startup instruction must be a regular file of at most 8192 bytes")
-        raw = os.read(fd, 8193)
+        if not stat.S_ISREG(before.st_mode):
+            raise ValueError("Startup instruction must be a regular file")
+        if before.st_size > MAX_INSTRUCTION_BYTES:
+            raise ValueError(f"Startup instruction is {before.st_size} UTF-8 bytes; "
+                             f"maximum is {MAX_INSTRUCTION_BYTES} bytes")
+        chunks, size = [], 0
+        while size <= MAX_INSTRUCTION_BYTES:
+            chunk = os.read(fd, min(65536, MAX_INSTRUCTION_BYTES + 1 - size))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            size += len(chunk)
+        raw = b"".join(chunks)
         after = os.fstat(fd)
         if (len(raw) != before.st_size or
                 (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) !=
                 (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)):
             raise ValueError("Startup instruction changed during read")
-        note = raw.decode("utf-8")
-        if not note.strip() or "\0" in note:
+        try:
+            note = raw.decode("utf-8")
+        except UnicodeDecodeError as error:
+            raise ValueError("Startup instruction must be valid UTF-8 text") from error
+        if "\0" in note:
             raise ValueError("Startup instruction must be nonempty UTF-8 text without NUL")
-        return note
+        return validate_instruction(note)
     finally:
         os.close(fd)
 
@@ -239,8 +254,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
-    if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
-        raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
+    validate_instruction(instruction)
     item = {"submitted_at": utc(), "text": instruction}
     if capture_progress_directory is not None:
         path = validate_capture_progress_directory(capture_progress_directory)
@@ -266,6 +280,9 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
         ident = "source-" + digest
         item.update(source_id=source_id, text_sha256=hashlib.sha256(instruction.encode()).hexdigest())
         item["id"] = ident
+        validate_instruction_record(item)
+        validate_instruction_record({"status": "intent", "item": item})
+        validate_instruction_record({"status": "queued", "item": item})
         sources = directory / "instructions" / "sources"
         sources.mkdir(mode=0o700, parents=True, exist_ok=True)
         lock = os.open(sources / "queue.lock", os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
@@ -286,6 +303,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
         finally:
             os.close(lock)
     item["id"] = ident
+    validate_instruction_record(item)
     atomic_json(inbox / (ident + ".json"), item)
     return ident
 
@@ -483,12 +501,34 @@ class RPC:
         self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=self.stderr, bufsize=0, start_new_session=True,
                                      env=runtime_environment())
+        os.set_blocking(self.proc.stdin.fileno(), False)
         self.selector = selectors.DefaultSelector()
         self.selector.register(self.proc.stdout, selectors.EVENT_READ)
 
-    def send(self, value):
-        self.proc.stdin.write((json.dumps(value) + "\n").encode())
-        self.proc.stdin.flush()
+    def send(self, value, *, deadline=None):
+        # A raw pipe may accept only part of a large JSON line. Never replay the
+        # whole request after a partial send; call/delivery owns uncertainty.
+        if deadline is None:
+            deadline = getattr(self, "_call_deadline", None)
+        if deadline is None:
+            deadline = time.monotonic() + 45.0
+        view = memoryview((json.dumps(value) + "\n").encode("utf-8"))
+        fd = self.proc.stdin.fileno()
+        with selectors.DefaultSelector() as writable:
+            writable.register(fd, selectors.EVENT_WRITE)
+            while view:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise RecoverableFailure("App-server request timed out while sending")
+                if not writable.select(min(1.0, remaining)):
+                    continue
+                try:
+                    written = os.write(fd, view)
+                except (BlockingIOError, InterruptedError):
+                    continue
+                if written <= 0:
+                    raise BrokenPipeError("App-server stdin stopped accepting request bytes")
+                view = view[written:]
 
     def pump(self, timeout=1.0):
         self.pump_stderr()
@@ -569,15 +609,19 @@ class RPC:
                 self.on_event({"method": "launcher/serverStderr", "params": {"delta": value}})
 
     def call(self, method, params, timeout=45.0):
+        deadline = time.monotonic() + timeout
+        previous_deadline = getattr(self, "_call_deadline", None)
+        if previous_deadline is not None:
+            deadline = min(deadline, previous_deadline)
         if method == "account/rateLimits/read":
             self.last_account_read_completion = None
         self.next_id += 1
         ident = self.next_id
         self.pending_methods[ident] = method
         self.events.write(json.dumps({"at": utc(), "request": method, "id": ident}) + "\n")
+        self._call_deadline = deadline
         try:
-            self.send({"id": ident, "method": method, "params": params})
-            deadline = time.monotonic() + timeout
+            self.send({"id": ident, "method": method, "params": params}, deadline=deadline)
             while ident not in self.responses:
                 if time.monotonic() >= deadline:
                     raise RecoverableFailure("App-server request timed out: " + method)
@@ -589,6 +633,8 @@ class RPC:
                 error.rpc_method = method
                 error.rpc_mutating = method not in READ_ONLY_RPC_METHODS
             raise
+        finally:
+            self._call_deadline = previous_deadline
         response = self.responses.pop(ident)
         self.pending_methods.pop(ident, None)
         completion = self.response_contexts.pop(ident, None)
@@ -2573,4 +2619,5 @@ if __name__ == "__main__":
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as failure:
         say(str(failure))
         sys.exit(1)
+
 

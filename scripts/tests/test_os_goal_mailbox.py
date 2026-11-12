@@ -2,6 +2,7 @@
 """Offline mailbox contracts: temporary files and mocked GitHub only."""
 import copy
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -328,7 +329,7 @@ class MailboxTests(unittest.TestCase):
         self.assertEqual(self.pending(), [])
 
     def test_oversized_reply_is_rejected_without_blocking_a_later_valid_comment(self):
-        self.comments = [self.comment(10, "/mckernel-instruct\n" + "x" * 8192), self.comment(11)]
+        self.comments = [self.comment(10, "/mckernel-instruct\n" + "x" * mailbox.MAX_INSTRUCTION_BYTES), self.comment(11)]
         result = self.mailbox.poll(self.context)
         self.assertEqual(len(result["queued_instruction_ids"]), 1)
         self.assertEqual(self.state()["rejected_comment"]["comment_id"], 10)
@@ -586,8 +587,140 @@ class MailboxTests(unittest.TestCase):
         self.assertEqual(len(result["queued_instruction_ids"]), 1)
         self.assertIn(text, json.loads(self.pending()[0].read_text())["text"])
 
+    def test_large_utf8_escaped_reply_preserves_text_hash_receipt_and_deduplication(self):
+        text = "Large plan: " + ("\u00e9\U0001f642" * 3000) + ("\x00" * 20000) + " end"
+        self.comments = [self.comment(body="/mckernel-instruct\n" + text)]
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        entry = json.loads(self.pending()[0].read_text())
+        self.assertTrue(entry["text"].endswith("\n\n" + text))
+        raw = entry["text"].encode("utf-8")
+        self.assertGreater(len(raw), 8192)
+        self.assertGreater(self.pending()[0].stat().st_size, 32768)
+        receipt = self.state()["messages"]["10"]
+        self.assertEqual(receipt["instruction_utf8_bytes"], len(raw))
+        self.assertEqual(receipt["instruction_sha256"], hashlib.sha256(raw).hexdigest())
+        self.assertEqual(receipt["delivery_status"], "WAITING")
+        self.advance()
+        self.mailbox.poll(self.context)
+        self.assertEqual(len(self.pending()), 1)
+        self.assertEqual(json.loads(self.pending()[0].read_text())["text"], entry["text"])
+
+    def _instruction_prefix(self, ident):
+        return ("Verified GitHub mailbox instruction from phoenix-hacking (user id 175406809).\n"
+                f"Source: https://github.com/phoenix-hacking/mckernel/pull/123#issuecomment-{ident}\n"
+                "Command: /mckernel-instruct\n\n")
+
+    def test_exact_wrapped_byte_limit_and_one_byte_over(self):
+        exact = "x" * (mailbox.MAX_INSTRUCTION_BYTES - len(self._instruction_prefix(10).encode()))
+        too_large = "x" * (mailbox.MAX_INSTRUCTION_BYTES + 1 - len(self._instruction_prefix(11).encode()))
+        self.comments = [self.comment(10, "/mckernel-instruct\n" + exact),
+                         self.comment(11, "/mckernel-instruct\n" + too_large)]
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(len(json.loads(self.pending()[0].read_text())["text"].encode()),
+                         mailbox.MAX_INSTRUCTION_BYTES)
+        rejected = self.state()["messages"]["11"]
+        self.assertEqual(rejected["delivery_status"], "NOT_QUEUED")
+        self.assertIn(str(mailbox.MAX_INSTRUCTION_BYTES + 1), rejected["not_queued_reason"])
+        self.assertIn(str(mailbox.MAX_INSTRUCTION_BYTES), rejected["not_queued_reason"])
+        self.assertIn("provenance", rejected["not_queued_reason"])
+
+    def test_multibyte_limit_counts_utf8_bytes_not_characters(self):
+        available = mailbox.MAX_INSTRUCTION_BYTES - len(self._instruction_prefix(10).encode())
+        text = "\U0001f642" * (available // 4) + "x" * (available % 4)
+        self.comments = [self.comment(10, "/mckernel-instruct\n" + text)]
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(self.state()["messages"]["10"]["instruction_utf8_bytes"],
+                         mailbox.MAX_INSTRUCTION_BYTES)
+
+    def test_state_limit_preserves_prior_bytes_before_file_replacement(self):
+        mailbox._save(self.mailbox.path, self.mailbox._state())
+        before = self.mailbox.path.read_bytes()
+        with patch.object(mailbox, "_MAX_STATE_JSON", len(before) + 10):
+            with self.assertRaises(mailbox.MailboxStateLimitError):
+                mailbox._save(self.mailbox.path, {"large": "\x00" * len(before)})
+        self.assertEqual(self.mailbox.path.read_bytes(), before)
+        self.assertEqual(list(self.directory.glob("mailbox-state.json.*.tmp")), [])
+
+    def test_poll_capacity_failure_keeps_unseen_cursor_and_does_not_enqueue(self):
+        mailbox._save(self.mailbox.path, self.mailbox._state())
+        before_size = self.mailbox.path.stat().st_size
+        self.comments = [self.comment(10, "/mckernel-instruct\n" + "x" * 10000)]
+        with patch.object(mailbox, "_MAX_STATE_JSON", before_size + 800):
+            result = self.mailbox.poll(self.context)
+        self.assertEqual(result["status"], "ERROR")
+        self.assertIn("Prior state", result["reason"])
+        self.assertEqual(self.state()["last_seen_comment_id"], 0)
+        self.assertEqual(self.pending(), [])
+
+    def test_ordinary_polls_keep_ten_request_comment_coverage(self):
+        pages = []
+        def api(endpoint, **kwargs):
+            page = int(endpoint.rsplit("=", 1)[1])
+            pages.append(page)
+            count = mailbox._COMMENTS_PER_PAGE - (page == 10)
+            start = (page - 1) * mailbox._COMMENTS_PER_PAGE + 1
+            return [self.comment(i, "No instruction") for i in range(start, start + count)]
+        self.api_mock.side_effect = api
+        comments = self.mailbox._comments()
+        self.assertEqual(mailbox._MAX_COMMENTS, 1000)
+        self.assertEqual(len(comments), 999)
+        self.assertEqual(comments[-1]["id"], 999)
+        self.assertEqual(len(pages), 10)
+
+    def test_large_page_retries_smaller_pages_without_reducing_coverage(self):
+        requests = []
+        def api(endpoint, **kwargs):
+            requests.append(endpoint)
+            if "per_page=100&" in endpoint:
+                raise mailbox.MailboxResponseLimitError("large page")
+            self.assertIn("per_page=50&", endpoint)
+            page = int(endpoint.rsplit("=", 1)[1])
+            start = (page - 1) * 50 + 1
+            return [self.comment(i, "No instruction")
+                    for i in range(start, start + (49 if page == 20 else 50))]
+        self.api_mock.side_effect = api
+        comments = self.mailbox._comments()
+        self.assertEqual(len(comments), 999)
+        self.assertEqual(comments[-1]["id"], 999)
+        self.assertEqual(len(requests), 21)
+        self.assertEqual(self.mailbox._comments_per_page, 50)
+
+    def test_large_page_retry_keeps_original_deadline_and_cursor(self):
+        self.api_mock.side_effect = mailbox.MailboxResponseLimitError("large page")
+        with patch.object(mailbox.time, "monotonic", side_effect=[0.0, 0.0, 31.0]):
+            result = self.mailbox.poll(self.context)
+        self.assertEqual(result["status"], "ERROR")
+        self.assertIn("time budget", result["reason"])
+        self.assertEqual(self.state()["last_seen_comment_id"], 0)
+        self.assertEqual(self.pending(), [])
+        self.assertEqual(self.api_mock.call_count, 1)
+
+    def test_page_deadline_preserves_cursor_for_unseen_comments(self):
+        self.api_mock.side_effect = lambda *a, **kw: [self.comment(i) for i in range(1, 101)]
+        with patch.object(mailbox.time, "monotonic", side_effect=[0.0, 0.0, 31.0]):
+            result = self.mailbox.poll(self.context)
+        self.assertEqual(result["status"], "ERROR")
+        self.assertIn("time budget", result["reason"])
+        self.assertEqual(self.state()["last_seen_comment_id"], 0)
+        self.assertEqual(self.pending(), [])
+
 
 class TransportTests(unittest.TestCase):
+    def test_page_larger_than_old_two_mib_limit_remains_bounded(self):
+        rows = [{"id": i, "body": "x" * mailbox.MAX_INSTRUCTION_BYTES} for i in range(10)]
+        raw = json.dumps(rows)
+        self.assertGreater(len(raw.encode()), 2 * 1024 * 1024)
+        completed = Mock(returncode=0, stdout=raw, stderr="")
+        with patch.object(mailbox.shutil, "which", return_value="/fake/gh"), \
+                patch.object(mailbox.subprocess, "run", return_value=completed):
+            self.assertEqual(mailbox._gh_api("repos/o/r/issues/1/comments"), rows)
+            with patch.object(mailbox, "_MAX_API_JSON", len(raw.encode()) - 1):
+                with self.assertRaisesRegex(ValueError, "bounded limit"):
+                    mailbox._gh_api("repos/o/r/issues/1/comments")
+
     def test_gh_api_uses_supported_auth_stdin_and_bounded_no_shell_request(self):
         completed = Mock(returncode=0, stdout="", stderr="")
         payload = {"ref": "development", "inputs": {"body": "literal $(echo no-shell)"}}
@@ -612,3 +745,4 @@ class TransportTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
