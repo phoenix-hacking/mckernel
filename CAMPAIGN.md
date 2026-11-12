@@ -22,7 +22,7 @@ do not replay or reassign the rejected task, erase the hold, switch accounts/mod
 or use a fresh conversation as clearance. The harness now carries the engineering
 scope and rejected worker/turn exclusion into startup and manual-resume instructions,
 and refuses fresh-session creation/reuse over a current service/policy hold.
-31 focused offline startup/resume/fresh-session regressions passed; no model or
+32 focused offline startup/resume/fresh-session regressions passed; no model or
 native work was launched. Current launcher changes require matching reviewed source
 bindings before any execution. No new M14/M15 acceptance is claimed by this fix.
 

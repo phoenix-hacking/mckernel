@@ -153,6 +153,14 @@ def _require_no_service_hold(state):
         any(state.get(key) is not None and provenance.get(key) is not None
             and state[key] != provenance[key]
             for key in ("worker_pid", "worker_start", "server_pid", "server_start"))))
+    failure = state.get("last_failure")
+    if (historical and isinstance(failure, dict) and failure.get("error") == error
+            and isinstance(state.get("log_dir"), str) and state["log_dir"]
+            and failure.get("log_dir") == state["log_dir"]
+            and all(state.get(key) is None or failure.get(key) is None
+                    or state[key] == failure[key]
+                    for key in ("worker_pid", "worker_start", "server_pid", "server_start"))):
+        historical = False
     rejected = (not historical and state.get("stop_reason") in
                 {"turn_failed", "server_error", "rate_limit"}
                 and info in ("cyberPolicy", "policyViolation", "contentPolicyViolation"))

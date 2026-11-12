@@ -186,6 +186,15 @@ class FreshSessionTests(unittest.TestCase):
         self.save()
         self.assertIsNone(self.fresh()["thread_id"])
 
+    def test_current_failed_turn_takes_precedence_over_historical_error_provenance(self):
+        error = {"codexErrorInfo": "cyberPolicy"}
+        self.state.update(log_dir="current-run", last_error=error,
+                          last_error_provenance={"log_dir": "previous-run", "error": error},
+                          last_failure={"log_dir": "current-run", "error": error,
+                                        "thread_id": "failed-worker", "id": "failed-turn"})
+        self.save()
+        self.assert_refused()
+
     def test_expected_objective_mismatch_refuses_before_archival(self):
         self.assert_refused(expected_objective="Another launcher's objective")
         self.assertFalse((self.directory / "session-archives").exists())
