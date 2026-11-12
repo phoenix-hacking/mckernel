@@ -1,0 +1,36 @@
+{
+  "actor_uid": 1000,
+  "method": "Single ordinary stdlib Path.lstat per exact source-derived path, no project import/main, no root/native/device call, no privilege/alternate-path retry. Raw tool stdout observations are encoded below; no artifact/source/lease mutation.",
+  "namespace_limit": "Only current HOST path observations. No claim that a HOST namespace is interchangeable with the guest; the current guest archive map is joined separately. No absence is treated as resource retirement or permission.",
+  "observed_utc": "2026-11-12T01:36:16.222993+00:00",
+  "paths": [
+    {
+      "errno": 2,
+      "message": "[Errno 2] No such file or directory: '/usr/local/bin/mcps'",
+      "no_privileged_retry": true,
+      "observed_error_type": "FileNotFoundError",
+      "path": "/usr/local/bin/mcps"
+    },
+    {
+      "errno": 2,
+      "message": "[Errno 2] No such file or directory: '/usr/local/bin/mcinspect'",
+      "no_privileged_retry": true,
+      "observed_error_type": "FileNotFoundError",
+      "path": "/usr/local/bin/mcinspect"
+    },
+    {
+      "errno": 2,
+      "message": "[Errno 2] No such file or directory: '/usr/local/smp-x86/kernel/mckernel.img'",
+      "no_privileged_retry": true,
+      "observed_error_type": "FileNotFoundError",
+      "path": "/usr/local/smp-x86/kernel/mckernel.img"
+    }
+  ],
+  "schema": "m15-required-mcps-exact-path-readonly-observation.v1",
+  "source_binding": {
+    "bytes": 3902,
+    "path": "/home/holden/mckernel/executer/user/rust/mcps.rs",
+    "sha256": "11bbecd7a0a6f4d098bb737ccca1e64e974e7c91bcc124b989fdc40b552c3b53"
+  },
+  "source_predicate": "PROGRAM=MCPS_PREFIX+/bin/mcinspect; KERNEL=--kernel=+MCPS_MCKERNELDIR+/mckernel.img; posix_spawn actual required program argv includes --ps. Qualified configured values are /usr/local and /usr/local/smp-x86/kernel."
+}

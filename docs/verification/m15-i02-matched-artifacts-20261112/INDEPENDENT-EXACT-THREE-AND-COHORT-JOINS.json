@@ -1,0 +1,584 @@
+{
+  "ABI_imports": {
+    "per_module": {
+      "ihk": 36,
+      "ihk-smp-x86_64": 181,
+      "mcctrl": 88
+    },
+    "provider_class_counts": {
+      "actual_generated_Linux_C_or_data_binding": 136,
+      "actual_kernel_Rust_core_alloc_compiler_generated_provider": 56,
+      "exact_same_cohort_IHK_Rust_namespaced_provider": 15,
+      "explicit_C_ABI_boundary_to_selected_Linux_platform": 11
+    },
+    "total_consumer_rows": 305,
+    "unique_symbols": 218,
+    "unmatched_C_or_data_declarations": [],
+    "unresolved_or_duplicate_provider_rows": []
+  },
+  "CONFIG_sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474",
+  "CRC_zero_not_used_as_ABI_CRC_proof": true,
+  "IHK_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+  "Kbuild": {
+    "bytes": 1472,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/source-stage-1/output-1/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/Kbuild",
+    "sha256": "192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3"
+  },
+  "actual_kernel_release": "6.12.0-211.44.1.el10_2.mckernel1.x86_64",
+  "actual_module_load_or_binary_tool_or_artifact_rehash": false,
+  "archive_source": {
+    "bytes": 86631,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/ACTUAL-BASE-AND-DERIVED-ARCHIVE-JOINS.json",
+    "sha256": "121b39664e6b365050bda8014f765535eea126439193f105f44e845ca2c1b2c9"
+  },
+  "candidate": {
+    "bytes": 23320,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/MATCHED-THREE-MODULES.GO-CANDIDATE.json",
+    "sha256": "bef5b30ae58d5b36951c7c01d83ab8d719b744ac4a2f5a03c4e21a46d2e06462"
+  },
+  "compiler_sysroot": {
+    "actual_RPM_verify": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "actual_compiler_input_receipt": {
+      "bytes": 931,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/evidence/actual-compiler-inputs.json",
+      "sha256": "4364887f56d09bd3c2a3bbd0dc638cef617407c061a276376f7bc1d11ff852bf"
+    },
+    "actual_ld_lld": {
+      "package_nevra": "lld-0:21.1.8-1.el10.x86_64",
+      "path": "/usr/bin/ld.lld",
+      "sha256": "52029c7d731c74ab72a2eca8126d578547242b3192ba74e27c94c1b51be001f9",
+      "size": 20040,
+      "target": "/usr/bin/lld",
+      "version": "LLD 21.1.8 (compatible with GNU linkers)\n"
+    },
+    "actual_tool_probe": {
+      "bytes": 2088,
+      "path": "/home/holden/mckernel-work/m14-m15-closure-first-20261110/docker-tool-probes-20261110T0820Z/corrected/native.json",
+      "sha256": "c8865a497416c98e76234e8d1be39d2a1cdd0a512d02bac3c4d9b7242bb189f6"
+    },
+    "bindgen": {
+      "rc": 0,
+      "stderr": "",
+      "stdout": "bindgen 0.72.1\n"
+    },
+    "clang": {
+      "rc": 0,
+      "stderr": "",
+      "stdout": "clang version 21.1.8 (RESF 21.1.8-1.el10)\nTarget: x86_64-redhat-linux-gnu\nThread model: posix\nInstalledDir: /usr/bin\nConfiguration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg\n"
+    },
+    "compiler_package_sysroot": "/usr",
+    "complete_image_transitive_universe": "Immutable46d image and actual command/core/lld/tool records provide necessary tool dependencies; no invented per-sysroot/per-Linux-file census.",
+    "immutable_image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "llvm_config": {
+      "rc": 0,
+      "stderr": "",
+      "stdout": "21.1.8\n"
+    },
+    "module_compiler_sysroot": "Kbuild commands deliberately use --sysroot=/dev/null with generated exact kernel/core/alloc crate products; /usr is the pinned compiler package/core-source root, not an implicit module stdlib lookup.",
+    "real_Rust_core_source": {
+      "package_nevra": "rust-src-0:1.92.0-1.el10.noarch",
+      "path": "/usr/lib/rustlib/src/rust/library/core/src/lib.rs",
+      "sha256": "38ed9003ea2427f8803317e3e040d69f988d88534468bb28cbf83f27e2b51080",
+      "size": 12894,
+      "target": "/usr/lib/rustlib/src/rust/library/core/src/lib.rs"
+    },
+    "rustc": {
+      "rc": 0,
+      "stderr": "",
+      "stdout": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)\n"
+    }
+  },
+  "current_compute_image": {
+    "four104_actual_ABI": {
+      "bytes": 10547,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/ACTUAL-ABI104-AND-PERF-TYPES.json",
+      "sha256": "894014e5e9a78752919c94b6fff526e0cf1c6c1bfc44b81666c99a9faad149b8"
+    },
+    "image": {
+      "mode": 292,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/build/kernel/mckernel.img",
+      "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+      "size": 13349576
+    },
+    "independent_image_qualification": {
+      "bytes": 139468,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/qualification-1/dispatch-owner-correction-1/QUALIFICATION.json",
+      "sha256": "6f67cd0637b3127c8724e78ad259d3b86c536c66868a92dafa0a106f33f68623"
+    },
+    "source30": {
+      "bytes": 20069,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/SOURCE-BINDINGS.json",
+      "sha256": "2e1c5b8dc4ae06da90bd4b38c0a76d5556c23717c21bb6c2746b291021e066ce"
+    },
+    "source_commit": "c964be3917c8f4c5031108aa927c84894584b667",
+    "two_guest_members": [
+      {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33060,
+        "mtime": 0,
+        "name": "images/mckernel.img",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "size": 13349576,
+        "uid": 0
+      },
+      {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33060,
+        "mtime": 0,
+        "name": "usr/local/smp-x86/kernel/mckernel.img",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+        "size": 13349576,
+        "uid": 0
+      }
+    ]
+  },
+  "kernel": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/bzImage",
+    "sha256": "415b951d9d83f62ec9253eee43ffbd0c6daf3fa02b25618d995d89dc3de928c4",
+    "size": 16134144
+  },
+  "modules": [
+    {
+      "Rust_command": {
+        "bytes": 2797,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk.o.cmd",
+        "sha256": "a1c51459835fdec89766d38f7d2fb9e56f87cf02bf1deeb9d52658fed8352c88"
+      },
+      "actual_staged": {
+        "bytes": 1521480,
+        "identity": {
+          "device": 66306,
+          "gid": 1000,
+          "inode": 49551982,
+          "mode": 420,
+          "nlink": 1,
+          "uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
+      },
+      "all_recorded_relations_match": true,
+      "base": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33188,
+        "mtime": 0,
+        "name": "modules/ihk.ko",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "size": 1521480,
+        "uid": 0
+      },
+      "closed_link_inputs": [
+        "drivers/misc/mckernel/ihk.o",
+        "drivers/misc/mckernel/ihk.mod.o",
+        ".module-common.o"
+      ],
+      "crate": "ihk",
+      "derived": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33188,
+        "mtime": 0,
+        "name": "modules/ihk.ko",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "size": 1521480,
+        "uid": 0
+      },
+      "final_link": {
+        "bytes": 228,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk.ko.cmd",
+        "sha256": "6739f4d1e9141d321835a6a607d735113def24054abf2d3b1ab5fed8843e23db"
+      },
+      "generated_metadata": {
+        "actual_generated_source": {
+          "bytes": 2088,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/drivers/misc/mckernel/ihk.mod.c",
+          "sha256": "7edc08654b210ad693e9049073c00129c44746a753ad12ceeaaa9e6156ecda8e"
+        },
+        "classification": "Kbuild/modpost generated module descriptor, dependency/version/export metadata; no McKernel C implementation body.",
+        "object": "ihk.mod.o",
+        "sha256": "d21699fed9781446446bea7e99979622e604a16ff4759eb6e12b84783292c913"
+      },
+      "name": "ihk.ko",
+      "native_manifest": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+        "size": 1521480
+      },
+      "project_components": [
+        {
+          "language": "Rust",
+          "object": "drivers/misc/mckernel/ihk.o",
+          "sha256": "38e2be08dfbe3eef3c62c8465ea1462e5ec5daf0bd97b962874dee7d124dd325"
+        }
+      ],
+      "reviewed_artifact": {
+        "bytes": 1521480,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk.ko",
+        "sha256": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e"
+      },
+      "root": "ihk.rs"
+    },
+    {
+      "Rust_command": {
+        "bytes": 4861,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk_smp_x86_64.o.cmd",
+        "sha256": "f7630d72fbcef6284fdd635d272aab91d5218f284e8c8eda803eb7b85cdd35e5"
+      },
+      "actual_staged": {
+        "bytes": 13092960,
+        "identity": {
+          "device": 66306,
+          "gid": 1000,
+          "inode": 49551980,
+          "mode": 420,
+          "nlink": 1,
+          "uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
+      },
+      "all_recorded_relations_match": true,
+      "base": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33188,
+        "mtime": 0,
+        "name": "modules/ihk-smp-x86_64.ko",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "size": 13092960,
+        "uid": 0
+      },
+      "closed_link_inputs": [
+        "drivers/misc/mckernel/ihk-smp-x86_64.o",
+        "drivers/misc/mckernel/ihk-smp-x86_64.mod.o",
+        ".module-common.o"
+      ],
+      "crate": "ihk_smp_x86_64",
+      "derived": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33188,
+        "mtime": 0,
+        "name": "modules/ihk-smp-x86_64.ko",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "size": 13092960,
+        "uid": 0
+      },
+      "final_link": {
+        "bytes": 272,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.ihk-smp-x86_64.ko.cmd",
+        "sha256": "2e608ceeeab99a11ff07135f014be4b0e87209cb864165fc41fdfeb6c0b87cd7"
+      },
+      "generated_metadata": {
+        "actual_generated_source": {
+          "bytes": 490,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/drivers/misc/mckernel/ihk-smp-x86_64.mod.c",
+          "sha256": "6ae858d30164ed4793308f4c7d092b4418c942c67a2cd4bf8b15d6a8b1ab8eee"
+        },
+        "classification": "Kbuild/modpost generated module descriptor, dependency/version/export metadata; no McKernel C implementation body.",
+        "object": "ihk-smp-x86_64.mod.o",
+        "sha256": "d709f3898d282ed1240881377f3c339c4998006a9220037bf7026fcc8d389f5b"
+      },
+      "name": "ihk-smp-x86_64.ko",
+      "native_manifest": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+        "size": 13092960
+      },
+      "project_components": [
+        {
+          "language": "Rust",
+          "object": "drivers/misc/mckernel/ihk_smp_x86_64.o",
+          "sha256": "d0b6d14991375e57fa744bac0eadb1ebfb93b58aa1efe3852f1f14ff358dc956"
+        }
+      ],
+      "reviewed_artifact": {
+        "bytes": 13092960,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/ihk-smp-x86_64.ko",
+        "sha256": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696"
+      },
+      "root": "ihk_smp_x86_64.rs"
+    },
+    {
+      "Rust_command": {
+        "bytes": 3857,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.mcctrl_rust.o.cmd",
+        "sha256": "e45404fa0c2cdbb9cd7d9bd281f63dec678f14c6e5330970c1750e9c0f21e329"
+      },
+      "actual_staged": {
+        "bytes": 2374656,
+        "identity": {
+          "device": 66306,
+          "gid": 1000,
+          "inode": 49551984,
+          "mode": 420,
+          "nlink": 1,
+          "uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      },
+      "all_recorded_relations_match": true,
+      "base": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33188,
+        "mtime": 0,
+        "name": "modules/mcctrl.ko",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "size": 2374656,
+        "uid": 0
+      },
+      "closed_link_inputs": [
+        "drivers/misc/mckernel/mcctrl.o",
+        "drivers/misc/mckernel/mcctrl.mod.o",
+        ".module-common.o"
+      ],
+      "crate": "mcctrl_rust",
+      "derived": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33188,
+        "mtime": 0,
+        "name": "modules/mcctrl.ko",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "size": 2374656,
+        "uid": 0
+      },
+      "final_link": {
+        "bytes": 240,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/.mcctrl.ko.cmd",
+        "sha256": "dce809d695b2e46a132460f3719f5f1d1e1952b284a6f275290e1b04dcf9e9a4"
+      },
+      "generated_metadata": {
+        "actual_generated_source": {
+          "bytes": 490,
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/output-2/build/drivers/misc/mckernel/mcctrl.mod.c",
+          "sha256": "d6e82912afe90f01dd3a2abf171c284a8265c4231e2a8607bdd61e2fcca22a2b"
+        },
+        "classification": "Kbuild/modpost generated module descriptor, dependency/version/export metadata; no McKernel C implementation body.",
+        "object": "mcctrl.mod.o",
+        "sha256": "490f2a3b7ea289f2a6ddc4a76200f0d9b564104054c7a0920f391711fe8b7389"
+      },
+      "name": "mcctrl.ko",
+      "native_manifest": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc",
+        "size": 2374656
+      },
+      "project_components": [
+        {
+          "language": "Rust",
+          "object": "drivers/misc/mckernel/mcctrl_rust.o",
+          "sha256": "3bb2b21a4dfa5340c2364125d4f20d3fc37a2af135dd4d491721e1908eca273d"
+        },
+        {
+          "language": "reviewed selected assembly",
+          "object": "drivers/misc/mckernel/m15_mmap_trace_gates.o",
+          "sha256": "6fa26dd1b9306095441d7039e20f1597572e6365de0042bfa87d6face2166677"
+        },
+        {
+          "language": "reviewed selected assembly",
+          "object": "drivers/misc/mckernel/m15_mm_write_warning.o",
+          "sha256": "ebeaeb0c367e9b7631d462af53c6ee216a310030a66ddc2c8d9d0224fc59c656"
+        }
+      ],
+      "reviewed_artifact": {
+        "bytes": 2374656,
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/modules/mcctrl.ko",
+        "sha256": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+      },
+      "root": "mcctrl_rust.rs"
+    }
+  ],
+  "narrow_new_C_adapter_classification": "ACCEPT_EXACT_NECESSARY_LINUX_HOST_PLATFORM_ADAPTER_C_CLASSIFICATION",
+  "positive_saved_stage_lifecycle": {
+    "bytes": 9434,
+    "identity": {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 2248177,
+      "mode": 384,
+      "nlink": 1,
+      "uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-a2f-stage-qualification-p03-max-1/qualification-1/ACTUAL-LIFECYCLE-AND-PARENT.json",
+    "sha256": "624d25defdb13536966f3c0c629164236e3fcb9ea899dadb9ed31a0744929232"
+  },
+  "runtime_rows": [
+    {
+      "derived_member": {
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "size": 4493400,
+        "uid": 0
+      },
+      "recorded_ref": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/bin/native-boot",
+        "sha256": "cd50d3da3f8707a3bb1735da4873f9ac09e8ac6990abfbb423a7a518f4cd7818",
+        "size": 4493400
+      },
+      "role": "native_boot",
+      "target": "bin/native-boot"
+    },
+    {
+      "derived_member": {
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+        "size": 398096,
+        "uid": 0
+      },
+      "recorded_ref": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/assets/mcexec",
+        "sha256": "df65517e79c5f0923cd7c1547469f645dd2857648a596349781d5e62c79682b4",
+        "size": 398096
+      },
+      "role": "mcexec",
+      "target": "bin/mcexec"
+    },
+    {
+      "derived_member": {
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600,
+        "uid": 0
+      },
+      "recorded_ref": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "role": "loader",
+      "target": "lib64/ld-linux-x86-64.so.2"
+    },
+    {
+      "derived_member": {
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896,
+        "uid": 0
+      },
+      "recorded_ref": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      "role": "libc",
+      "target": "lib64/libc.so.6"
+    },
+    {
+      "base_and_derived_member": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "name": "usr/local/lib64/libihk.so",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+        "size": 12095128,
+        "uid": 0
+      },
+      "role": "IHK_same_reviewed_userspace_interface"
+    },
+    {
+      "base_and_derived_member": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "name": "usr/local/sbin/ihkconfig",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "95b661ae705775b0806e1f132758b155fba27ba062a16c82a3b32e623751a87b",
+        "size": 40960,
+        "uid": 0
+      },
+      "role": "IHK_same_reviewed_userspace_interface"
+    },
+    {
+      "base_and_derived_member": {
+        "archive_index": 0,
+        "gid": 0,
+        "mode": 33261,
+        "mtime": 0,
+        "name": "usr/local/sbin/ihkosctl",
+        "nlink": 1,
+        "rdevmajor": 0,
+        "rdevminor": 0,
+        "sha256": "85bb95dad74941c680e6f43078648569b2de1b0aa7b449a1a81b59ed0844c672",
+        "size": 37776,
+        "uid": 0
+      },
+      "role": "IHK_same_reviewed_userspace_interface"
+    }
+  ],
+  "schema": "independent-saved-three-module-current-cohort-join-v1",
+  "source099": "099cb5b874e34a72848e12838d367da62b097db6",
+  "stage_lock": {
+    "bytes": 9140,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/capture-3/records/stage-lock.json",
+    "sha256": "f0f7cf6f846efdec7f826a1f07589bb396da1b430d3cc998189e58539ebd97ef"
+  }
+}

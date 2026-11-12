@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T01:32:50.252987+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T01:53:16.470837+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -18,7 +18,7 @@ UID1000, same six-owner ceiling/depth1/currentHOST0,6,7/max3/4GiB and nativeheld
 
 ## Current decision
 
-**Original closure is99/156: M14=70.00%, M15=67.19%.** Whole original
+**Original closure is100/156: M14=70.00%, M15=68.86%.** Whole original
 M14-03-05-DEFAULT GOc7f765f0 remains counted on sourcec964/imagea2f00a61/map15b10db2.
 All original criteria/weights/denominators and M14-before-M15 acceptance order stay
 unchanged. C4 and remaining FUNCTIONAL/native/parent/file/milestone conditions are
@@ -29,10 +29,19 @@ callbacks, all unknown owners and positive saved producer/reader cleanup join
 literal E1. C4 are fully reviewed live project-C, not retired. I01 E1=100 while
 E2/E3/ACCEPT=0 yields original I01 mean25; M14 exact70.00, M15 unchanged67.19.
 [Whole E1 decision](docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json).
-Checkpoint48 fd709dcf is pushed/fetched12ownedblobs. PR3receipt
+Checkpoint48 fd709dcf published the earlier E1 closure. PR3receipt
 [6807005440](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6807005440)
-is POSTED_CONFIRMED for70.00/67.19,99/156, dedupeM14-I01-E1@956fecb2. No changed-pair
-report remains pending; publish again only for a further verified pair change.
+remains POSTED_CONFIRMED for the PRIOR70.00/67.19,99/156 pair. The new
+70.00/68.86,100/156 pair below is pending one report after fetched-byte verification.
+
+**New original technical closure:** independent whole-leaf GO92b2554c closes
+ONLY M15-I02-matched-artifacts: exact099 threeKOs/config106055/Linux415b/Kbuild/
+Rust+ASM/providers join c964/a2f BOTH staged image paths andf133/runtime. Original
+I02 mean60→80; exact M15 becomes84835/1232=68.86%, delta5/3points; M14 remains70.
+All156 atomic rows/weights/criteria stay unchanged. Module load/native/I02parent
+and M14-before-M15 acceptance remain open. Root checkpoints this100th atomic
+check now; one changed-pair report follows fetched-byte verification.
+[Independent whole-leaf decision](docs/verification/m15-i02-matched-artifacts-20261112/INDEPENDENT-REVIEW.json).
 
 All33 unrelated tracked dirty paths and historical UNKNOWN/holds stay preserved.
 The missed75% November10 target is not a stop time.
@@ -207,24 +216,36 @@ native12 and every oldUNKNOWN. Source diagnosis72b36712 identifies sudo's joined
 SUDO_COMMAND169865B exceeding the128KiB single-string limit; this is source-derived,
 with actual stderr retained. No privileged probe, settings change or unchanged retry.
 
-**Bounded transport repair:** P04Source d384/READYb84b keeps exact e81/0ca bodies
-in verified149459B DATAa406; RO/nofollow/UID1000:1000/0600/nlink1/stableFD+path,
-fullSHA/memberSHA/schema/duplicate-key refusals precede compile.28slots remain,
-argv27961B+64KiBreserve93497; Pub b954/bade checks argv/environment/ARG_MAX.
-SourceAcq f1b0ae27 is GO; SDK outer9feba has no findings. P04Tests owns the
-small actual reconstruction/two-refusal/outer-size HOST packet, then SDK supplies
-final operationGO from that actual result. Root freshly measures current9032,
-source/caps/currentfree/claim/pidfd admission and issues the corrected normal
-frontdoor once. No first-native command or original criterion has passed yet.
-[Actual failure and exact transport source](docs/verification/native-admission-debug-20261112/verified-source-data-transport-1/STATUS.json).
+**Verified transport check ACTUALLY PASS:** packet8920/GO862c passed01:40:07Z,
+three fullreader cases+28slot bound27961+65536=93497. Q60db joins complete rows,
+24pins/12refs/Owner1632868+b53387341/allwaits+streams/fullRoot9f29exit0.
+Root immediately retired onlycurrent256MiB/job1(cd220); oldE2BIG remains FAILED.
+SDK finalcombinedGO7390 binds actualQ, sourcef1b0 and unchanged green proofs.
 
-**Parallel original preparation:** P04Source is active on preserved M14-06-04-
-FUNCTIONAL time-case commands; PublicABI is active on M15-I01-deployed/I02 matched
-artifacts using c964/a2f/f133/099 and the qualified tools/libraries. Both deliver
-exact commands/inputs/unmatched clauses without changing the first-repeat cohort.
-SourceAcq and P04Tests keep the critical transport work; SDK finalGO follows their
-actual source/result. No current payload job exists after scoped retirement; ready
-independent packets may use CPU0/6/7 within max3/4GiB TOTAL after actual admission.
+**Current actual native blocker:** corrected b954/bade command reached realRoot
+through verifiedDATA after fresh9032/source/HOST admissioned7f. Original live
+session62718, sudo1634456/b53414302 and provider1634459/b53414308 remain owned.
+Driver prepare_source_manifest126 failed at installed graph_observations70:
+`ValueError: duplicate mountpoint`, before native launch. Caller reports all own
+handlesCLOSED/no owncloseerrors, but provider retains restoration custody.
+Actualruntime298a/inode1048651 flags524304 (old524288) prove its ownedI was set;
+no restore or current1.5GiB/job/native12 release is claimed. SourceAcq diagnoses
+only that exact mount predicate and legitimate owning-context cleanup; no retry,
+flagclear, installedhotpatch, signal or new native claim. Root keeps original
+live tool/streams/charge while the bounded diagnosis runs.
+
+**Parallel original execution:** P04Source's timeHOST packet/SDKGO8d9f obtained
+reviewed CPU7successor52bd/GOd948 to leaveCPU6 free. FreshRoot51a1 admission
+included live nativecontrol1.5GiB plus time768MiB plus864333824B overhead inside
+HOST4/max3; MemAvailable29.07GB/floors passed. ActualtimeHOST98af2c ran its three
+pure oracle controls, then Docker `ps` preflight exited2: Go failed to reserve
+page summary virtual memory under inherited256MiB-AS/512MiB-hard. No container,
+payload or collector compile ran. P04Tests owns the smallest actual DockerCLI
+virtual-AS profile correction using an existing qualified profile; retain oracle
+PASS and firstfailure, run only unstarted phases after independentGO/freshadmit.
+PublicABI prepares exact MCPSbfbc/MCINSPECT9af6 deployment in the genuinely matched
+46d provider namespace: UbuntuHOST lacks requiredGLIBC2.38 proof, privateDESTDIR
+alone stays insufficient. First c964/a2f/468d/f133 cohort remains unchanged.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
@@ -233,8 +254,9 @@ behavior remains open. Source-ready tinyclone-disabled provider5dd6/independent2
 stays PRIVATE for a later necessary image, no C3 claim/currenta2f reset. Maskrestore
 source contract3df4/e77f/f2dd explicitly needs initialUSR1+USR2unblocked; nextcase
 payload/oracle/collector design stays unissued behind firstrepeat cleanup.
-Requested blocker-return6807553710 is confirmed.70.00/67.19 receipt6807005440 stays
-the sole current percentage report; nonew original check from these repairs.
+Requested blocker returns6807553710/6811756510 are confirmed. Prior70.00/67.19
+receipt6807005440 is preserved; only the matched-artifact wholeGO below changes
+the current pair to70.00/68.86. Native and HOST repairs earn no other original check.
 
 **Actual native prerequisites remain:** authenticated normal Root/native issuance,
 authenticated effective source/claim/current-free/caps/pidfd custody and positive
