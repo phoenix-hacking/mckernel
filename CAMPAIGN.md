@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T00:30:50.668763+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T00:46:08.474245+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -196,6 +196,11 @@ bounded nonescaping original-handle/parent retention correction; P04Tests
 prepares only that changed pureentry check. Allother28argv/profile/source
 predicates are clear. No new Popen/signal/kill/replay or oldsuite is allowed;
 fresh measurements/caps and Root actualARGV slots26/27 remain unissued.
+Correction1f668/be094 has SDK source-deltaGOdf565, but its2pureactualentry
+controls and finaloperationGO remain pending. No native run, initialRootDATA or
+runtimeflags have been issued. Exactoriginaldefect and corrected bytes are
+published for the00:40 outcome request, independently of unrelated progress:
+[Remaining capture source/defect](docs/verification/native-admission-debug-20261112/outer-keeper-correction-pending-1/STATUS.json).
 RealRoot creates its later native nonce/PID; genuine fresh source/currentfree/
 claim/caps/pidfd gates and positive runtime/native/source restoration stay required.
 
