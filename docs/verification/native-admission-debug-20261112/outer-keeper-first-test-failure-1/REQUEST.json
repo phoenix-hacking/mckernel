@@ -1,0 +1,409 @@
+{
+  "actual_full_unit_selection": {
+    "bytes": 1707,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/ACTUAL-ENTRY-SELECTION.json",
+    "sha256": "7235742cd511eeafe7564663e89de9f85e7bbc86977a362a81781a47da8320b1"
+  },
+  "at": "2026-11-12T00:41:29.601207+00:00",
+  "canonical_or_installed_edits": false,
+  "claims": {
+    "original_native_and_historical_UNKNOWN_outcomes_unchanged": true,
+    "real_Popen_process_native_Root_flags_signals_pause_or_account_calls": false,
+    "scope": "Two pure actual-entry failure vectors only; no acceptance/scenario quota or parent/runtime/native authority."
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=4194304",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py"
+      ],
+      "expected_exit": 0,
+      "id": "actual-outer-keeper-two-entry-vectors",
+      "required_stderr": "empty",
+      "required_stdout_json": {
+        "cases": [
+          {
+            "actual_pause_endpoint_calls": 0,
+            "caught_errno": 5,
+            "caught_same_original_primary": true,
+            "caught_type": "OSError",
+            "events": [
+              [
+                "main",
+                1
+              ],
+              [
+                "fake-popen",
+                1
+              ],
+              [
+                "now-failure",
+                "KeyboardInterrupt"
+              ],
+              [
+                "wait",
+                "timeout"
+              ],
+              [
+                "now",
+                "MODEL_TIME"
+              ],
+              [
+                "save",
+                "SOURCE-KEEPER-UNKNOWN-CUSTODY.json"
+              ],
+              [
+                "wait",
+                0
+              ],
+              [
+                "now",
+                "MODEL_TIME"
+              ],
+              [
+                "save",
+                "CLIENTS.json"
+              ],
+              [
+                "now",
+                "MODEL_TIME"
+              ],
+              [
+                "save",
+                "LATE-ORIGINAL-DIRECT-WAIT.json"
+              ],
+              [
+                "save",
+                "OUTERMOST-ORIGINAL-CUSTODY.json"
+              ]
+            ],
+            "fake_Popen_calls": 1,
+            "id": "secondary_interruption_outside_perwait",
+            "keeper_capture_errors": [],
+            "main_calls": 1,
+            "original_client_record": {
+              "birth": "900001",
+              "late_join_at": "MODEL_TIME",
+              "late_original_direct_wait_joined": true,
+              "late_original_exit": 0,
+              "pid": 20000001,
+              "primary_error": "original-capture-failure",
+              "resource_charge_retained": true,
+              "status": "UNKNOWN"
+            },
+            "original_traceback_still_reachable": true,
+            "outer_original_waits": [],
+            "outer_reports": [
+              {
+                "each_traceback_preserves_source_and_lower_fault": true,
+                "native_runtime_and_historical_release_inferred": false,
+                "original_direct_waits": [],
+                "original_main_primary_type": "OSError",
+                "raw_error_types": [
+                  "KeyboardInterrupt"
+                ]
+              }
+            ],
+            "outer_retention_errors": [
+              {
+                "errno": null,
+                "label": "existing-retention-path",
+                "message": "secondary clock interruption",
+                "same_injected_object": true,
+                "traceback_functions": [
+                  "retain_original_pending_nonescaping",
+                  "preserve_original_pending_waits",
+                  "now"
+                ],
+                "type": "KeyboardInterrupt"
+              }
+            ],
+            "pause_signal_or_real_process_actions": 0,
+            "pending_empty": true,
+            "positive_original_wait": true,
+            "primary_can_leave_only_after_original_wait": true,
+            "same_original_object_for_every_wait": true,
+            "save_names": [
+              "SOURCE-KEEPER-UNKNOWN-CUSTODY.json",
+              "CLIENTS.json",
+              "LATE-ORIGINAL-DIRECT-WAIT.json",
+              "OUTERMOST-ORIGINAL-CUSTODY.json"
+            ],
+            "waits": [
+              [
+                30,
+                "timeout",
+                true
+              ],
+              [
+                30,
+                0,
+                true
+              ]
+            ]
+          },
+          {
+            "actual_pause_endpoint_calls": 0,
+            "caught_errno": null,
+            "caught_same_original_primary": true,
+            "caught_type": "KeyboardInterrupt",
+            "events": [
+              [
+                "main",
+                1
+              ],
+              [
+                "fake-popen",
+                1
+              ],
+              [
+                "now-failure",
+                "OSError"
+              ],
+              [
+                "wait",
+                "timeout"
+              ],
+              [
+                "now-failure",
+                "OSError"
+              ],
+              [
+                "wait",
+                0
+              ],
+              [
+                "save",
+                "OUTERMOST-ORIGINAL-CUSTODY.json"
+              ],
+              [
+                "stderr"
+              ]
+            ],
+            "fake_Popen_calls": 1,
+            "id": "record_failure_after_positive_wait",
+            "keeper_capture_errors": [
+              {
+                "errno": 5,
+                "label": "OUTERMOST-ORIGINAL-CUSTODY.json",
+                "message": "postjoin record unavailable",
+                "same_injected_object": true,
+                "traceback_functions": [
+                  "keeper_record",
+                  "save"
+                ],
+                "type": "OSError"
+              },
+              {
+                "errno": 32,
+                "label": "keeper-stderr",
+                "message": "report stderr unavailable",
+                "same_injected_object": true,
+                "traceback_functions": [
+                  "keeper_record",
+                  "write"
+                ],
+                "type": "BrokenPipeError"
+              }
+            ],
+            "main_calls": 1,
+            "original_client_record": {
+              "birth": "900001",
+              "outermost_original_direct_wait_joined": true,
+              "outermost_original_exit": 0,
+              "pid": 20000001,
+              "primary_error": "original-capture-failure",
+              "resource_charge_retained": true,
+              "status": "UNKNOWN"
+            },
+            "original_traceback_still_reachable": true,
+            "outer_original_waits": [
+              {
+                "attempt": 0,
+                "exit": 0,
+                "pid": 20000001
+              }
+            ],
+            "outer_reports": [
+              {
+                "each_traceback_preserves_source_and_lower_fault": true,
+                "native_runtime_and_historical_release_inferred": false,
+                "original_direct_waits": [
+                  {
+                    "attempt": 0,
+                    "exit": 0,
+                    "pid": 20000001
+                  }
+                ],
+                "original_main_primary_type": "KeyboardInterrupt",
+                "raw_error_types": [
+                  "OSError",
+                  "OSError"
+                ]
+              }
+            ],
+            "outer_retention_errors": [
+              {
+                "errno": 28,
+                "label": "existing-retention-path",
+                "message": "record field unavailable",
+                "same_injected_object": true,
+                "traceback_functions": [
+                  "retain_original_pending_nonescaping",
+                  "preserve_original_pending_waits",
+                  "now"
+                ],
+                "type": "OSError"
+              },
+              {
+                "errno": 28,
+                "label": "existing-retention-path",
+                "message": "record field unavailable",
+                "same_injected_object": true,
+                "traceback_functions": [
+                  "retain_original_pending_nonescaping",
+                  "preserve_original_pending_waits",
+                  "now"
+                ],
+                "type": "OSError"
+              }
+            ],
+            "pause_signal_or_real_process_actions": 0,
+            "pending_empty": true,
+            "positive_original_wait": true,
+            "primary_can_leave_only_after_original_wait": true,
+            "same_original_object_for_every_wait": true,
+            "save_names": [
+              "OUTERMOST-ORIGINAL-CUSTODY.json"
+            ],
+            "waits": [
+              [
+                30,
+                "timeout",
+                true
+              ],
+              [
+                30,
+                0,
+                true
+              ]
+            ]
+          }
+        ],
+        "real_main_Popen_native_Root_flags_signals_or_pause_executed": false,
+        "scope": "ACTUAL_OUTER_ENTRY_ORIGINAL_HANDLE_RETENTION_CONTROLLED_EFFECTS_ONLY",
+        "source_sha256": "1f668620d63bf7ab4a4b86ee6c8d2128b96d59d4e19c4d0601ab2dc894870657"
+      },
+      "wall_seconds": 20
+    }
+  ],
+  "contract": {
+    "bytes": 2926,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/TEST-CONTRACT.json",
+    "sha256": "6aef3775c1e6b3449a78a5c9b09fdf09b530c30837bb1cd6528aca545f9423f6"
+  },
+  "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1",
+  "external_oracles": {
+    "bytes": 6804,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/EXPECTED.json",
+    "sha256": "b5d0add7bfdb09305c4d82e31756f672bb3c8cac9565ff538788763116e2f1bf"
+  },
+  "fresh_output_root": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/output-1",
+  "inputs": {
+    "bytes": 4798,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/INPUTS.json",
+    "sha256": "e1f8953b52f2e9c365067f93e8c647099344636338b47f86de78efa64047f2df"
+  },
+  "limits": [
+    "The actual selected entry/keeper bodies make every custody decision. Only initial main effect, originalFakePopen.wait, time/record/save/stderr are controlled. No original native main is called.",
+    "All modeled UNKNOWN/retained charge fields remain; originalpositivewait is only modeled samehandle lower endpoint, not proof of native/currentRuntime restoration.",
+    "Root supplies genuine fresh complete ownership/jobs/account/service/resource admission withinHOST4/max3/fresh26/floors. Legacyseeded innerRSS is supplemental only.",
+    "No actual original source-script top-level admission setup/Root/native/flags/process/signal or real pause occurs. No old passing suite replay."
+  ],
+  "original_acceptance": false,
+  "owner": "/root/p04_tests_max",
+  "ownership": {
+    "full_Root_tool_completion_before_current256MiB_release": true,
+    "guard_overhead_AST": {
+      "bytes": 8606,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/exact-build-route-1/config-build-1/kernel-modules-1/artifact-qualification-1/module-export-contract-reconciliation-1/reader-successor-1/run_once.py",
+      "sha256": "983b8c3ceabcd8dc4d2e1999d75e6edbef91145a5f2ab18bfa1a2dfa6639c822"
+    },
+    "helper": {
+      "bytes": 4668,
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "sha256": "afe7403ead1bf8b2c527dfa34a0c0c19010cde5f27a646ccf1545fb8f3b9bc1d"
+    },
+    "immediate_positive_actual_PID_birth_direct_family_wait_streams_exactstatus": true,
+    "labels": [
+      "actual-outer-keeper-two-entry-vectors"
+    ],
+    "no_peer_retirement": true,
+    "protected_parent_basis": {
+      "bytes": 5545,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/provider-entry-tests-p04tests-max-1/run_root_once.py",
+      "sha256": "69ea2f4c098b7270f786ad1f3cfcf2a5dce0de8e23e3c3fb4814e1da0f6a20f7"
+    },
+    "record_count": 1
+  },
+  "private_tmp": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/output-1/tmp",
+  "profile": {
+    "CPU_seconds": 10,
+    "Root_actual_fresh_admission_required": true,
+    "Root_fresh_complete_current_owner_overhead_accounting_required": true,
+    "all_controller_worker_overhead_inside_shared4": true,
+    "conservative_other_HOST_job_slots": 1,
+    "conservative_other_HOST_reserved_bytes": 268435456,
+    "cpu": 0,
+    "file_size_limit_bytes": 4194304,
+    "fresh_MemAvailable_floor_bytes": 27917287424,
+    "host_disk_floor_bytes": 17179869184,
+    "inner_legacy_overhead_is_not_complete_current_owner_audit": true,
+    "jobs": 1,
+    "max_address_space_bytes": 268435456,
+    "no_CPU1_or_native_borrow": true,
+    "other_payload_rule": "Root freshly reconciles no other payload or atmost1 separately admitted HOST peer<=256MiB on allowedCPU6/7. Conservative peer reserve is no grant or release.",
+    "output_disk_reservation_bytes": 16777216,
+    "scratch_disk_floor_bytes": 12884901888,
+    "shared_HOST_total_bytes": 4294967296,
+    "shared_jobs_max": 3,
+    "wall_seconds": 20
+  },
+  "schema": 1,
+  "source": {
+    "bytes": 18085,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-publicabi-max-1/correction-1/run_root_once.py",
+    "sha256": "1f668620d63bf7ab4a4b86ee6c8d2128b96d59d4e19c4d0601ab2dc894870657"
+  },
+  "source_or_fixture_or_helper_execution_by_author": false,
+  "source_ready": {
+    "bytes": 2778,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-publicabi-max-1/correction-1/READY.NOT-EXECUTED.json",
+    "sha256": "aa6dfceab8108444881eff383effc67d56cf268c73a9e8c59690e17849807240"
+  },
+  "source_review": {
+    "bytes": 4625,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/REVIEW.source.json",
+    "sha256": "df56523a8da581ef190a1c7a92f66cdd1af6caad79f21438bba8127578a4d83a"
+  },
+  "status": "FROZEN_FIRST_TWO_ACTUAL_OUTER_KEEPER_ENTRY_VECTORS_UNEXECUTED"
+}

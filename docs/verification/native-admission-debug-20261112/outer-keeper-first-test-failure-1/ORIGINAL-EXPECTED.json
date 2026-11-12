@@ -1,0 +1,274 @@
+{
+  "cases": [
+    {
+      "actual_pause_endpoint_calls": 0,
+      "caught_errno": 5,
+      "caught_same_original_primary": true,
+      "caught_type": "OSError",
+      "events": [
+        [
+          "main",
+          1
+        ],
+        [
+          "fake-popen",
+          1
+        ],
+        [
+          "now-failure",
+          "KeyboardInterrupt"
+        ],
+        [
+          "wait",
+          "timeout"
+        ],
+        [
+          "now",
+          "MODEL_TIME"
+        ],
+        [
+          "save",
+          "SOURCE-KEEPER-UNKNOWN-CUSTODY.json"
+        ],
+        [
+          "wait",
+          0
+        ],
+        [
+          "now",
+          "MODEL_TIME"
+        ],
+        [
+          "save",
+          "CLIENTS.json"
+        ],
+        [
+          "now",
+          "MODEL_TIME"
+        ],
+        [
+          "save",
+          "LATE-ORIGINAL-DIRECT-WAIT.json"
+        ],
+        [
+          "save",
+          "OUTERMOST-ORIGINAL-CUSTODY.json"
+        ]
+      ],
+      "fake_Popen_calls": 1,
+      "id": "secondary_interruption_outside_perwait",
+      "keeper_capture_errors": [],
+      "main_calls": 1,
+      "original_client_record": {
+        "birth": "900001",
+        "late_join_at": "MODEL_TIME",
+        "late_original_direct_wait_joined": true,
+        "late_original_exit": 0,
+        "pid": 20000001,
+        "primary_error": "original-capture-failure",
+        "resource_charge_retained": true,
+        "status": "UNKNOWN"
+      },
+      "original_traceback_still_reachable": true,
+      "outer_original_waits": [],
+      "outer_reports": [
+        {
+          "each_traceback_preserves_source_and_lower_fault": true,
+          "native_runtime_and_historical_release_inferred": false,
+          "original_direct_waits": [],
+          "original_main_primary_type": "OSError",
+          "raw_error_types": [
+            "KeyboardInterrupt"
+          ]
+        }
+      ],
+      "outer_retention_errors": [
+        {
+          "errno": null,
+          "label": "existing-retention-path",
+          "message": "secondary clock interruption",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "retain_original_pending_nonescaping",
+            "preserve_original_pending_waits",
+            "now"
+          ],
+          "type": "KeyboardInterrupt"
+        }
+      ],
+      "pause_signal_or_real_process_actions": 0,
+      "pending_empty": true,
+      "positive_original_wait": true,
+      "primary_can_leave_only_after_original_wait": true,
+      "same_original_object_for_every_wait": true,
+      "save_names": [
+        "SOURCE-KEEPER-UNKNOWN-CUSTODY.json",
+        "CLIENTS.json",
+        "LATE-ORIGINAL-DIRECT-WAIT.json",
+        "OUTERMOST-ORIGINAL-CUSTODY.json"
+      ],
+      "waits": [
+        [
+          30,
+          "timeout",
+          true
+        ],
+        [
+          30,
+          0,
+          true
+        ]
+      ]
+    },
+    {
+      "actual_pause_endpoint_calls": 0,
+      "caught_errno": null,
+      "caught_same_original_primary": true,
+      "caught_type": "KeyboardInterrupt",
+      "events": [
+        [
+          "main",
+          1
+        ],
+        [
+          "fake-popen",
+          1
+        ],
+        [
+          "now-failure",
+          "OSError"
+        ],
+        [
+          "wait",
+          "timeout"
+        ],
+        [
+          "now-failure",
+          "OSError"
+        ],
+        [
+          "wait",
+          0
+        ],
+        [
+          "save",
+          "OUTERMOST-ORIGINAL-CUSTODY.json"
+        ],
+        [
+          "stderr"
+        ]
+      ],
+      "fake_Popen_calls": 1,
+      "id": "record_failure_after_positive_wait",
+      "keeper_capture_errors": [
+        {
+          "errno": 5,
+          "label": "OUTERMOST-ORIGINAL-CUSTODY.json",
+          "message": "postjoin record unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "keeper_record",
+            "save"
+          ],
+          "type": "OSError"
+        },
+        {
+          "errno": 32,
+          "label": "keeper-stderr",
+          "message": "report stderr unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "keeper_record",
+            "write"
+          ],
+          "type": "BrokenPipeError"
+        }
+      ],
+      "main_calls": 1,
+      "original_client_record": {
+        "birth": "900001",
+        "outermost_original_direct_wait_joined": true,
+        "outermost_original_exit": 0,
+        "pid": 20000001,
+        "primary_error": "original-capture-failure",
+        "resource_charge_retained": true,
+        "status": "UNKNOWN"
+      },
+      "original_traceback_still_reachable": true,
+      "outer_original_waits": [
+        {
+          "attempt": 0,
+          "exit": 0,
+          "pid": 20000001
+        }
+      ],
+      "outer_reports": [
+        {
+          "each_traceback_preserves_source_and_lower_fault": true,
+          "native_runtime_and_historical_release_inferred": false,
+          "original_direct_waits": [
+            {
+              "attempt": 0,
+              "exit": 0,
+              "pid": 20000001
+            }
+          ],
+          "original_main_primary_type": "KeyboardInterrupt",
+          "raw_error_types": [
+            "OSError",
+            "OSError"
+          ]
+        }
+      ],
+      "outer_retention_errors": [
+        {
+          "errno": 28,
+          "label": "existing-retention-path",
+          "message": "record field unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "retain_original_pending_nonescaping",
+            "preserve_original_pending_waits",
+            "now"
+          ],
+          "type": "OSError"
+        },
+        {
+          "errno": 28,
+          "label": "existing-retention-path",
+          "message": "record field unavailable",
+          "same_injected_object": true,
+          "traceback_functions": [
+            "retain_original_pending_nonescaping",
+            "preserve_original_pending_waits",
+            "now"
+          ],
+          "type": "OSError"
+        }
+      ],
+      "pause_signal_or_real_process_actions": 0,
+      "pending_empty": true,
+      "positive_original_wait": true,
+      "primary_can_leave_only_after_original_wait": true,
+      "same_original_object_for_every_wait": true,
+      "save_names": [
+        "OUTERMOST-ORIGINAL-CUSTODY.json"
+      ],
+      "waits": [
+        [
+          30,
+          "timeout",
+          true
+        ],
+        [
+          30,
+          0,
+          true
+        ]
+      ]
+    }
+  ],
+  "real_main_Popen_native_Root_flags_signals_or_pause_executed": false,
+  "scope": "ACTUAL_OUTER_ENTRY_ORIGINAL_HANDLE_RETENTION_CONTROLLED_EFFECTS_ONLY",
+  "source_sha256": "1f668620d63bf7ab4a4b86ee6c8d2128b96d59d4e19c4d0601ab2dc894870657"
+}

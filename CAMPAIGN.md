@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T00:46:08.474245+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T00:51:57.757446+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -204,6 +204,18 @@ published for the00:40 outcome request, independently of unrelated progress:
 RealRoot creates its later native nonce/PID; genuine fresh source/currentfree/
 claim/caps/pidfd gates and positive runtime/native/source restoration stay required.
 
+
+
+**Keeper HOST first run failed only oracle encoding.** Packet5cfd/GO f6cc ran
+00:47:05Z: actualchild1616362/b53069185 exited0, allOwner/family/streams positive;
+fullRoot50d763 exited1 on JSONoraclecompare. Exactly4secondary message strings
+in oldexpectedb5d omitted standardPythonOSError Errno prefixes; allothercomplete
+vector fields match, including mainonce/samehandle/timeout→originalwait0.
+SourceAcqQ7ea41b6e independently confirms the diagnosis and current-only256MiB
+job retirement71464306. StatusremainsFAILED. P04Tests owns one source-backed
+fourliteral oracle/request correction, no production/fixture logic change or
+weakened custody predicate. No native/flags/initialRootDATA issued.
+[Exact failing test/oracle/diff](docs/verification/native-admission-debug-20261112/outer-keeper-first-test-failure-1/STATUS.json).
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
 on realC/Rust195objects, source/header and9client/container/Root cleanup; wholeF02

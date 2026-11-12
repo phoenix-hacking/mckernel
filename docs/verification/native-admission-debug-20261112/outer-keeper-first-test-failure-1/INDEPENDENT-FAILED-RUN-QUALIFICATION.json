@@ -1,0 +1,170 @@
+{
+  "actions": {
+    "actualprocess_control_native_Root_flags_account_or_source_state_action": false,
+    "original_evidence_or_shared_canonical_edits": false,
+    "private_saved_data_review_only": true,
+    "target_fixture_helper_import_or_execution": false
+  },
+  "actual_failure": {
+    "actual_child_status": 0,
+    "all_other_full2row_JSON_fields_equal": true,
+    "exact_message_differences": [
+      {
+        "actual_saved": "[Errno 5] postjoin record unavailable",
+        "json_pointer": "/cases/1/keeper_capture_errors/0/message",
+        "original_expected": "postjoin record unavailable"
+      },
+      {
+        "actual_saved": "[Errno 32] report stderr unavailable",
+        "json_pointer": "/cases/1/keeper_capture_errors/1/message",
+        "original_expected": "report stderr unavailable"
+      },
+      {
+        "actual_saved": "[Errno 28] record field unavailable",
+        "json_pointer": "/cases/1/outer_retention_errors/0/message",
+        "original_expected": "record field unavailable"
+      },
+      {
+        "actual_saved": "[Errno 28] record field unavailable",
+        "json_pointer": "/cases/1/outer_retention_errors/1/message",
+        "original_expected": "record field unavailable"
+      }
+    ],
+    "exception": "AssertionError",
+    "finished_at": "2026-11-12T00:47:05.830122+00:00",
+    "parent_check": "run_root_once.py28 full json.loads(stdout)==required_stdout_json",
+    "parent_full_tool_status": 1,
+    "production_source_changed_or_failed": false,
+    "result_status": "FAILED_PRESERVED_NO_UNCHANGED_RETRY",
+    "stderr_bytes": 0
+  },
+  "actual_process_custody": {
+    "Owner_records": [
+      {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "actual-outer-keeper-two-entry-vectors",
+        "leader": 1616362,
+        "leader_birth": "53069185",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    ],
+    "Root_tool": {
+      "chunk_id": "50d763",
+      "exit_code": 1,
+      "initial_already_terminal": true,
+      "initial_equals_final_bytes": true,
+      "intermediate_wait_invented": false,
+      "session_id": null,
+      "traceback_retains_exact_failed_check": true
+    },
+    "one_real_child": {
+      "birth": "53069185",
+      "direct_parent_joined": true,
+      "no_error_no_timeout_no_group_signal_no_adopted_kill_or_reap": true,
+      "pid": 1616362,
+      "remaining_direct_children": [],
+      "status": 0,
+      "streams_closed": true,
+      "whole_family_joined": true
+    },
+    "physical_release_evidence": "Positive actual Owner direct+whole joins/stream closure and full original Root tool terminal, not PID absence or modeled FakePopen wait.",
+    "request_and_prior_review_hashes_match_actual_inner_admission": true
+  },
+  "created_utc": "2026-11-12T00:50:47.601012+00:00",
+  "decision": "FAILED_ORACLE_CHECK_QUALIFIED_CURRENT_HOST_PROCESS_RETIREMENT_GO",
+  "inputs": {
+    "RESULT": {
+      "bytes": 1725,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/RESULT.json",
+      "sha256": "ff3086374fa08ae09a9b5e8b6d4cfe235b0fa4f83d907ae87e11e2e20a9dc9e8"
+    },
+    "Root_final": {
+      "bytes": 404,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/ROOT-TOOL-FINAL.json",
+      "sha256": "e104ec8af78fdb18ea6daf8e752f8c26fa9529810eebd4450e995c50d78e47f6"
+    },
+    "Root_initial": {
+      "bytes": 404,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/ROOT-TOOL-INITIAL.json",
+      "sha256": "e104ec8af78fdb18ea6daf8e752f8c26fa9529810eebd4450e995c50d78e47f6"
+    },
+    "actual_Owner": {
+      "bytes": 404,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/ownership.json",
+      "sha256": "86b7854efbdcee4cc015f731894c68325da8c06bb9eac022f68efcd69f1aafa2"
+    },
+    "actual_stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/actual-outer-keeper-two-entry-vectors.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual_stdout": {
+      "bytes": 4155,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/actual-outer-keeper-two-entry-vectors.stdout",
+      "sha256": "7b82bdc7f3ce6b201bdc5721166e0ac69e3f560d9d7a3a0da7285f2282d252fe"
+    },
+    "fixture": {
+      "bytes": 7647,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py",
+      "sha256": "9a5c8d587048c515f5bb79e6f9e8d69cb310a2110f739965eb7a822822a77816"
+    },
+    "inner_admission": {
+      "bytes": 666,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/execution-1/ADMISSION.json",
+      "sha256": "0e0eafd4e921849998eac96ecad8378044cf94ac593bb1218d882c224f03a7bb"
+    },
+    "original_expected": {
+      "bytes": 6804,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/EXPECTED.json",
+      "sha256": "b5d0add7bfdb09305c4d82e31756f672bb3c8cac9565ff538788763116e2f1bf"
+    },
+    "prior_operation_GO": {
+      "bytes": 12049,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-review-sourceacq-max-1/REVIEW.json",
+      "sha256": "f6ccabe41fccb887c6fcea0a70e71d266d7b6284f5f96dcb80d0c4c861e9c407"
+    },
+    "request": {
+      "bytes": 15126,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/REQUEST.json",
+      "sha256": "5cfd545aee1c2ecf83baac8e892cefe20159be83d1ac45a460d0063be59675de"
+    }
+  },
+  "next_action": "P04Tests sole author freezes one source-backed four-literal expected correction; independent delta/operation review and fresh Root admission before necessary rerun. No production/source/provider/runtime/flag action or oldsuite replay.",
+  "normative_source_encoding": {
+    "actual_observation_expression": "message=str(error) on the same actual injected OSError/BrokenPipeError object, preserving explicit errno. No fixture normalization exists.",
+    "fixture_lines": [
+      54,
+      61,
+      64,
+      85,
+      89
+    ],
+    "permissible_bounded_successor": "Only those four literals plus derived source-independent oracle/request/input/READY/parent pins in a fresh namespace; keep fixture9a5/source1f668/commands/profile/ownership algorithms byte-identical. Never copy wholesale actualoutput or weaken details/strip prefix forPASS.",
+    "reviewer_note": "Initial oracle inspection missed the four built-in errno prefixes; first actual run exposed it. Original failed expected/request/actualoutput are retained.",
+    "source_backed_expected_rule": "Literal four expected message fields must include the built-in OSError errno prefix associated with injected errno28,5,32; preserve full original text/errno/type/rawobject/TB/order/UNKNOWN predicates."
+  },
+  "retirement_disposition": {
+    "Root_may_retire_only_current": {
+      "bytes": 268435456,
+      "cpu": 0,
+      "jobs": 1
+    },
+    "actual_release_by_reviewer": false,
+    "all_modeled_original_UNKNOWN_and_resource_retained_fields_unchanged": true,
+    "modeled_fakePID_20000001_is_not_actual_owner": true,
+    "native_runtime_source_or_any_historical_charge_release": false,
+    "semantic_PASS_required_for_physical_release": false
+  },
+  "reviewer": "/root/source_acquisition_review_max",
+  "schema": "mckernel.outer-keeper-first-HOST-failure-and-current-process-qualification.v1",
+  "scope": "Saved exact first5cfd/f6cc run only, no execution/replay. Child controlled test exit0 but protected parent/fullRoot exit1 at complete stdout oracle equality. Current real CPU0/256MiB/job1 physical disposition is independent of failed four-message golden; every modeled/native/historical UNKNOWN remains.",
+  "semantic_test_PASS": false
+}
