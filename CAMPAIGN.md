@@ -28,19 +28,27 @@ gates. Root is sole canonical integrator/native executor. Optional mailbox updat
 at pinned ecc3ee6 is fetched for reuse but deferred behind ready original closure.
 Existing1200-second foreground steering is active; no new supervision plumbing.
 
-Current operational disposition: fullactualA+B+C is independently GO08bcffce.
-Original73649 process waits/streams and exactruntime524288 restoration are positive;
-Root scopedreceiptff6e2d29 retires ONLY originalcurrent1.5GiB/job1. Later F05
-terminal5def cleanup ACTUALLYPASSED exactprofile/AppArmor/exited0/nonOOM/Pid0,
-nonforce removal/absence/allfamilies/fullRoot0; independentQ4bc262a7 and Rootd81d9c31
-retire ONLY newF051GiB+cleanup128MiB/jobs2. No currentHOSTpayloadfamily is retained;
-native12 and historicalsource/global/UNKNOWN holds remain. Nextactualoperation is
-normal correctedgraph fixed30 producer6c0601c7 under final9field INSTALL_ONLYreview
-and freshcomplete2GiB/account/source/floors grant, then strictactualnew30readback
-and fresh firstsignal admission. UTI148a operation is ready but shares that one
-heavy lane and cannot overlap two2GiB jobs. No actualfirstsignal has run. RealF05
-ELF/map compiled0 are preserved for passiveproof+unchangedruntimeobserver-only
-successor; no recompile. Othereligible source lanes preparetime/F08 only.
+Current operational disposition: previousnativecontrol A+B+C is independently
+GO08bcffce; actualruntime524288 and scopedRootff6 retire ONLY original1.5GiB/job1.
+BothF05 containers were separately removed with actualqualifications/retirements;
+successfulELFe28d/map5e82 are preserved for remainingpassive/runtime-only51c/GO9bcc.
+
+NEW correctedgraph normalpublisher6c060/79d0/GO15ad issued ONCE at12:06:43, code
+noncea614e34d, originalsession36902. ItFAILED phase0beforeproveninstall:
+ValueError(saved usage differs from actual accepted account receipt), then cap150
+Rootparentlease_handoff reportedUNKNOWN/InterruptedError configuredstop. Current
+2GiB/job1 remainsHELD with originaldriver1871865/b57146947, sudo1871868/b57146984,
+Rootparent1871871/b57146992 and keeper1871873/b57147005; no originalfullRoot/lease/
+installerclosure or strictnew30 proof. No newuserstop is inferred fromlocalcap.
+Sourceowner native_current_binding diagnoses actualsaved/current receipt tuple;
+native_binding_review independentlytraces/reviews and m15_installed_leaf_review
+owns exactcurrentprocess/leasecustodydisposition. All4 savedreceiptfields exist;
+trace90ebb314 identifies immutableissuance tuple versus newestlivecomparison, not
+missingfields. Preserve actualfailure/rawcaptures, no issuerreplay or inflight
+mutation. UTI2GiB and any otherexecution wait actualcompletepool/sourcegrant;
+a614nativebindings stayconditional/notready. Native12/oldsource/globalUNKNOWNs
+and rejectedcollector remainheld/excluded. OthereligibleF08sourcework proceeds.
+No actualfirstsignal has run; originals105/156,70.00/74.59 remainunchanged.
 
 Historical first attempt and changed-input evidence:
 Native sourceGOea3d/finaloperationGOce728 passed fresh Root measurement3640
