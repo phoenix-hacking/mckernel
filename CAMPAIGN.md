@@ -28,27 +28,36 @@ gates. Root is sole canonical integrator/native executor. Optional mailbox updat
 at pinned ecc3ee6 is fetched for reuse but deferred behind ready original closure.
 Existing1200-second foreground steering is active; no new supervision plumbing.
 
-Current operational disposition: previousnativecontrol A+B+C is independently
-GO08bcffce; actualruntime524288 and scopedRootff6 retire ONLY original1.5GiB/job1.
-BothF05 containers were separately removed with actualqualifications/retirements;
-successfulELFe28d/map5e82 are preserved for remainingpassive/runtime-only51c/GO9bcc.
+Current operational disposition: originala614 codepublication/session36902 STILL
+retains2GiB/job1; driver1871865/sudo1871868/Rootparent1871871 remainmatched, keeper
+1871873 absent but no retirement inferred. Sourcepairedissuance correctiond199/f7b
+has independentGO7be and actual16/16 PASS Root4719/complete1305B exactgolden,
+independentQb737; onlynew256 retired7cbc. Reboundnormalproducer89cc/issuer6d99/
+prelim830e/caller1790 and strictreader8bec/6353/ed9c have conditionalreferenceGO207e;
+package30/407882 unchanged. NewnormalissuerGO/admission/nonce/outcomes UNISSUED.
 
-NEW correctedgraph normalpublisher6c060/79d0/GO15ad issued ONCE at12:06:43, code
-noncea614e34d, originalsession36902. ItFAILED phase0beforeproveninstall:
-ValueError(saved usage differs from actual accepted account receipt), then cap150
-Rootparentlease_handoff reportedUNKNOWN/InterruptedError configuredstop. Current
-2GiB/job1 remainsHELD with originaldriver1871865/b57146947, sudo1871868/b57146984,
-Rootparent1871871/b57146992 and keeper1871873/b57147005; no originalfullRoot/lease/
-installerclosure or strictnew30 proof. No newuserstop is inferred fromlocalcap.
-Sourceowner native_current_binding diagnoses actualsaved/current receipt tuple;
-native_binding_review independentlytraces/reviews and m15_installed_leaf_review
-owns exactcurrentprocess/leasecustodydisposition. All4 savedreceiptfields exist;
-trace90ebb314 identifies immutableissuance tuple versus newestlivecomparison, not
-missingfields. Preserve actualfailure/rawcaptures, no issuerreplay or inflight
-mutation. UTI2GiB and any otherexecution wait actualcompletepool/sourcegrant;
-a614nativebindings stayconditional/notready. Native12/oldsource/globalUNKNOWNs
-and rejectedcollector remainheld/excluded. OthereligibleF08sourcework proceeds.
-No actualfirstsignal has run; originals105/156,70.00/74.59 remainunchanged.
+CURRENT custodyreaderabdd/GO5912 ACTUALLYPASSEDa6920b at13:04:10, Q480e verifies
+allnewinput/outputFD generations, ownwait/streams/fullRoot0; onlyreader256 retired
+fa55. ProtectedRoot.DATA1078/83706B/inode2252646 staysRoot0700/0600/unmodified.
+User-requested savedmetadata projection2bac/GO845c ACTUALLYPASSED1a525f, no live
+recollection/account/targetaction; onlyprojection256 retired7846. Exact2errors are
+keeperFNFE/errno2 atbothbookends; Rootparentchildren[] withFD23pidfd Pid=-1/NSpid=-1,
+driverFD13pidfd pointsSUDO and driver/SUDO/parent relationships match. Historical
+keeperdirectwait remainsUNPROVEN. Finitefailed-dispositionconditionsa5b are NOT GO:
+proc_vm_index_fix authors Root-privateDATA-validated singleexactParent1871871/b57146992
+pidfdSIGKILL9 actor, m15_installed_leaf_review independentlyreviews; no groups,
+controller/driver/SUDO/keeper signals, flags/fakeprotocol/successvalidator. Only
+actualterminalParent plus ORIGINAL36902 driver/SUDOwait/captureclosure and separate
+failedscopeQ can retireoriginal2GiB. No actualnormalretry or firstsignal yet.
+
+IndependentF05 remainingpassive+3cases ACTUALLYPASS51c/GO9bcc/e36a at12:22:30,
+all16innerfamilies/twoCIDs/outer/fullRoot0; scopedonlynew1GiB retired1e54, actualQ0d8.
+No compilerreplay/native/device/fullF05credit. UTI2GiB remainsqueuedwhile2GiBpublisher
+heldplusoverhead. Timefuture43file/sourcepin/data conditionalGO07c69; no stage/run.
+F08 additiveOwner/callersourceGOa09a preservesoldprefix and realmain; nextprotected
+HOSTcapture is authored privately bytime_functional_source forfunctional_delta_review.
+Rootaloneexecutes/integrates. Native12/allhistoricalSource/globalUNKNOWNs/excluded
+collector remainheld/excluded. Originals105/156,M14=70.00,M15=74.59 unchanged.
 
 Historical first attempt and changed-input evidence:
 Native sourceGOea3d/finaloperationGOce728 passed fresh Root measurement3640
