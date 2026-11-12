@@ -1,4 +1,6 @@
-# M14 Stable Image Baselines and Fast Iteration
+# M14/M15 Stable Baselines and System Recovery
+
+**Stabilization reference updated:** November 12, 2026.
 
 **Historical evidence snapshot:** November 10, 2026, from published checkpoint
 `e34b958d35d508d29fbfc9ee9b7efd868a331b80`.
@@ -122,6 +124,229 @@ instruction is [recorded in the mailbox][current-instruction]. The existing
 [recovery guide](M14-M15-NATIVE-RECOVERY-20261112.md) supplies the scoped native
 recovery details. This index introduces no new wrapper, retention service, test
 quota, milestone criterion or accepted runtime result.
+
+## System stabilization and host preservation — November 12, 2026
+
+**Evidence cutoff:** checkpoint `2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b`,
+published at 14:40:51 America/Boise / 21:40:51 UTC. The procedures below preserve
+completed work and define how to build on it. They do not certify unperformed
+runtime tests. Current execution state and assignments remain in CAMPAIGN.md.
+
+### New results to retain with the existing baseline
+
+| Component | Reusable result | Boundary that remains open |
+| --- | --- | --- |
+| Failed c309 HOST attempt | Qualified cleanup released that attempt's HOST reservation. | This establishes no successful c309 publication. Raw UNKNOWN/error fields, the normal lease, held Root FD and historical keeper-wait records remain preserved. |
+| Publisher failure reporting | Minimal reporting correction; six focused controls passed. Four failure stages are distinguished and secondary reporting errors retain the original failure. | Actual new publication, acknowledgement, complete waits/lease closure and matching physical readback remain required. |
+| M15 F05 public `ihk_create_os` | Three cases passed: results 0, 7 and -5, exactly one close per case, owned descriptors closed and stdin restored. | Controlled lower-libc seams do not prove the real IHK device/backend or whole F05 behavior. |
+| UTI production-crate metadata | Actual private production metadata compilation/typecheck passed; matching ABI35/C evidence reused. | No implementation-body, ACK/lifetime, final image or native acceptance is implied. |
+| M14 TLS artifact prerequisites | Original C/assembly/payload steps retained; the missing static collector compile and three remaining passive checks passed. Collector: 1,064,312 bytes, static ELF64 x86_64, no interpreter or dynamic dependencies. | TLS runtime/restoration and whole functional acceptance remain open. |
+| M15 F08 service context | Authenticated source member read and read-only context of the three real active udev units passed. | Package provenance, monitor visibility, processed events and provider lifetime still require their own evidence. |
+
+Preserve each result's source, exact invocation, artifact identity, actual output,
+qualification and cleanup together. The committed evidence is indexed by the
+[21:04 execution report][stable-results-first] and the
+[21:42 execution report][stable-results-second]. The [F05 actual output][stable-f05]
+is a runtime result at its stated scope. The [TLS qualification][stable-tls],
+[reporting qualification][stable-reporting] and [UTI qualification][stable-uti]
+record their separate boundaries.
+
+### Host preservation: keep what passed and close only the missing copy gap
+
+The 25-file read-only c964/a2f snapshot and original configured cache above are
+already preserved. The matched staging manifest and last successful 1f5f
+installed package remain the anchors. Retention handoff `c85d` maps 54 paths to
+existing protected artifacts and **six additional files totaling 67,930,797 bytes**.
+At this evidence cutoff, those six new copies have **not** been performed.
+A proposed destination or a GitHub commit alone is not a host-copy receipt.
+
+The [exact f133 staging manifest][stable-stage] records the following six source
+assets, whose total matches the pending retention tranche. Root must correlate
+these with the existing c85d source/destination rows before copying; the published
+manifest does not prove that any destination already exists. Paths below are
+relative to the matched deployment staging directory listed above.
+
+| Source asset | Bytes |
+| --- | ---: |
+| `base.cpio.gz` | 25,589,058 |
+| `derived.cpio.gz` | 26,152,936 |
+| `assets/bzImage` | 16,134,144 |
+| `overlay-manifest.json` | 15,535 |
+| `root-base.json` | 11,768 |
+| `source/native_diagnostic_overlay.py` | 27,356 |
+| **Total** | **67,930,797** |
+
+Workstation Root completes the existing retention operation at the next compatible
+HOST boundary, keeping the ready publication/native critical path moving:
+
+1. Use the existing 54-path disposition and six-file copy list. Confirm exact
+   current sources and the existing preservation operation against the saved
+   review; resolve only missing entries. Reuse the 25-file snapshot and its
+   receipts instead of making another whole-tree copy.
+2. Preserve the six genuinely missing assets in a separate versioned directory
+   under the existing workstation work area. Use the established copy workflow;
+   do not overwrite the saved baseline, working cache, installed generation,
+   dirty source edits or live operation state. Read-only snapshots must be
+   independent copies rather than writable aliases or hard links to changing
+   files.
+3. Record actual source and destination paths, bytes, hashes and modes in the
+   existing manifest/receipt format. Verify the newly copied bytes once against
+   their already-qualified source identities and record completion/cleanup.
+   A mismatch stays explicit and is repaired at that file's scope.
+4. Save this guide in the canonical host checkout at
+   `docs/development/M14-STABLE-BASELINE.md`. Place a reference copy beside
+   the retained manifest, with its source commit and SHA-256. The adjacent copy
+   must retain the absolute evidence links; repository-relative links resolve
+   from the canonical checkout.
+5. Preserve the recent F05, TLS, UTI, reporting and F08 source/results in their
+   existing verified locations. Record the retained path and pinned evidence for
+   each. Copy only any indispensable artifact that the disposition proves is
+   otherwise temporary or missing; report that delta rather than starting an
+   unbounded inventory.
+6. Return a host receipt naming the resolved checkout/guide path, adjacent guide
+   path, preservation manifest, copied file count/bytes, checks performed and any
+   unresolved item. Commit and push the guide and compact evidence references.
+   Keep the large binaries and private operational material in their established
+   host locations.
+
+The host preservation is complete only when its actual copy/readback receipt is
+available. This is a finite retention task, not another image build, new daemon,
+new proof framework or replacement acceptance checklist.
+
+### Reuse, repair and promotion procedure
+
+**Start from the saved cohort.** Identify the retained c964 source, a2f image,
+f133 matched deployment inputs and successful 1f5f control package by their full
+recorded identities. Preserve current source successors and dirty work; these
+retained identities are reuse references. Keep their source/configuration, compute toolchain, Linux-module
+toolchain, provider and ABI bindings separate and exact. A compatible cached
+build can be reused; a compiler/container tag alone is not an immutable identity.
+
+**Classify a change before running anything.**
+
+| Changed input | Necessary work |
+| --- | --- |
+| Documentation or status text | Save/review the text and verify publication; no image or native rerun. |
+| Publisher/reporting module | Check the changed reporting behavior, then publish and physically qualify the new control generation. Reuse unchanged image/modules and completed focused controls. |
+| One application, collector or test artifact | Rebuild/check only its affected target and dependent observations; retain passing unchanged steps. |
+| Kernel source, selected provider, configuration, ABI or link input | Incremental rebuild of affected targets and the required linked-image/ownership checks, followed by matching affected functional evidence. |
+| Missing/corrupt saved file | Restore that exact artifact from a qualified retained copy; reassess only evidence whose identity or custody changed. |
+| Runtime failure with unchanged artifacts | Preserve the first actual failure, process/lease/resource state and original captures. Repair and qualify that scope before another operation that depends on it or its retained resources. Independent eligible work can continue under its own actual admission. |
+
+Keep candidate outputs separate from the last passing version. Promote only the
+layer whose required execution, readback and cleanup have actually passed. A
+reporting failure must not demote an unchanged image; a successful compile must
+not promote a native runtime result. Before a repeat, name the changed input or
+resolved failure that makes it useful. Repeated green suites and blind retries
+do not improve stability.
+
+For the current reporting correction, reuse the six passed focused controls and
+the prior eight unchanged supervisor controls. The next useful proof is a normal
+new publisher run with actual acknowledgement, original waits/lease completion
+and physical qualification of its new 30-file package. Bind both CORE and provider
+generation to that successful package before separate native admission. Keep
+c964/a2f/f133 unchanged unless a real dependent input changes. The old successful
+407,882-byte readback cannot validate the failed 420,488-byte candidate or a later
+generation with different contents.
+
+### Controller, guardian and mailbox recovery
+
+Use the existing launcher/guardian/mailbox stack and saved campaign state. Record
+the currently installed entry point, resolved state directory and real unit names
+in the host receipt. Keep the original failure log, stop reason, last completed
+action, outstanding owner/resource state and next repair visible.
+
+A healthy controller continues work. Inspect status before any restart; an idle
+worker, completed child turn or retained historical error is not by itself a
+current controller failure. If a component fails, the existing supervisor/guardian
+recovers only the affected eligible component and records the reason and result.
+Independent ready M14/M15 work can continue within the actual shared resource
+limits while a failed lane is repaired.
+
+Recovery must retain the same saved campaign, dirty work, finite credit-run ID,
+cumulative budget and unresolved ownership. Do not use an unqualified generic
+start command that overwrites the saved engine configuration, creates a new
+credit-run identity, launches a duplicate controller or treats an old lease as
+fresh authority. Genuine service/account/resource holds remain visible and are
+reported through the existing mailbox instead of being hidden by restart loops.
+
+Keep the 10-minute mailbox check and the existing SENT, RECEIVED, ACCEPTED,
+WORKING, BLOCKED and RESULT distinctions. A receipt confirms delivery; only an
+actual host result confirms that the guide/copies or repair are complete. A block
+report identifies the first concrete error, its owner, the smallest next repair
+and the precise user input needed, if any. The status text records baseline
+identities, current candidate, last successful action and remaining original
+M14/M15 conditions. Use the installed supported status/recovery commands and their
+saved arguments; current CAMPAIGN.md remains the active handoff.
+
+#### Supported inspection and saved recovery inputs
+
+From the existing workstation checkout:
+
+```sh
+cd /home/holden/mckernel
+python3 -B scripts/start_os_overnight.py status
+python3 -B scripts/run_os_goal.py --progress
+python3 -B scripts/run_os_goal.py --status
+```
+
+These report the actual unit names, state directory, current supervision/activity
+and saved stop evidence. Follow the returned `state_directory` and
+`state.json`'s actual log paths. The usual state directory is
+`/home/holden/mckernel/.git/os-autopilot`; a linked worktree may have a different
+resolved Git common directory. [Status implementation][stable-service]
+[Launcher status modes][stable-launcher]
+
+| Evidence | Path relative to the resolved state directory |
+| --- | --- |
+| Saved campaign and current log references | `state.json` |
+| Watcher state/history | `watcher.json`, `watcher.jsonl` |
+| Guardian state/checkpoint/saved arguments | `guardian.json`, `guardian-checkpoint.json`, `guardian-engine-config.json` |
+| Last stop and stop history | `latest-stop.json`, `stop-events.jsonl` |
+| Human-readable status and publication receipts | `status.txt`, `status-text-state.json`, `status-publish.json` |
+| Mailbox receipt/command history | `mailbox-state.json`, `instructions/` |
+| Existing cumulative credit-run record | `credit-runs/7c6ef3604bfb4008a917bba8cfb6cfaa.json` |
+
+`python3 -B scripts/start_os_overnight.py status-text` refreshes the derived local
+status text without starting model work or publishing remotely. It does write
+local telemetry. Inspect the real guardian/engine unit names returned by
+`status` with `systemctl --user status` and `journalctl --user -u`; do not
+guess the path-dependent unit suffix. Treat private logs/configuration as host
+state and publish only the compact evidence needed for diagnosis.
+
+For explicit continuation after a resolved stop, the existing mailbox supports a
+new, unedited authorized-user comment in PR #3 with `/mckernel-resume` alone on
+the first line. This goes through the guardian and its saved engine configuration.
+It does not clear unresolved ownership or other real holds.
+[Mailbox parser][stable-mailbox]
+
+For a necessary local relaunch, the campaign records the reviewed command at:
+
+```text
+/home/holden/mckernel-work/relaunch-preparation-20261112T093247Z/launch-command.txt
+```
+
+Reconcile that saved command against the current engine configuration, original
+Root/objective and finite credit-run record before using the normal front door.
+The complete argv and numeric budget are host-only; do not reconstruct them from
+defaults. Do not use `prepare` as a reason to stop a healthy owner: its default
+launch inspection can legitimately report that ownership is occupied.
+Do not restart the guardian as routine maintenance: its termination handler
+requests a checkpoint/stop of model work.
+[Start/config handling][stable-service] [Guardian handling][stable-guardian]
+
+### Definition of a usable stable baseline
+
+A reusable baseline has retained artifacts and build inputs, matching source and
+toolchain/configuration identities, passing evidence at a stated scope, an intact
+previous good version, and a written recovery route. Stability is maintained by
+changing one dependent scope at a time, preserving failures, restoring only the
+affected component and publishing completed results promptly.
+
+This checkpoint remains **105/156** counted checks, **M14 70.00%** and
+**M15 74.59%**. These are dated figures. Host preservation and documentation do
+not create milestone credit; the remaining native functional and original whole
+requirements still need their actual acceptance evidence.
 
 ## Historical baseline — November 10, 2026
 
@@ -374,3 +599,17 @@ subsequent changes. [Pinned ledger][ledger-snapshot]
 [current-diagnosis]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/native-reporting-c309-failure-20261112/SOURCE-DIAGNOSIS.json
 [current-instruction]: https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6834295484
 [current-delivery]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m15-i01-deployed-20261112/WHOLE-REVIEW.json
+
+[stable-results-first]: https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6835906353
+[stable-results-second]: https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6836731718
+[stable-f05]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/docs/verification/m15-f05-public-create-20261112/ACTUAL-OBSERVER.stdout
+[stable-tls]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/docs/verification/m14-tls-compiler-partial-20261112/missing-static-passive-correction-1/QUALIFICATION.json
+[stable-reporting]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/docs/verification/native-result-predicate-reporting-20261112/QUALIFICATION.json
+[stable-uti]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/docs/verification/uti-private-DATA-metadata-20261112/QUALIFICATION.json
+
+[stable-stage]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/docs/verification/native-admission-debug-20261111/a2f-actual-stage-and-new-generation-1/stage/actual-output/native-diagnostic-manifest.json
+[stable-service]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/scripts/os_goal_service.py
+[stable-launcher]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/scripts/run_os_goal.py
+[stable-mailbox]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/scripts/os_goal_mailbox.py
+[stable-guardian]: https://github.com/phoenix-hacking/mckernel/blob/2b0c30fa630a9a8ef9b3874e1bd52229596b4f3b/scripts/os_goal_guardian.py
+
