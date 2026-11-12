@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T02:21:09.421668+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T03:08:21.118339+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -247,29 +247,48 @@ ran. Root retired onlycurrent768MiB/job1(0bb0); originalnative1.5GiB/job1 stays.
 The earlier inherited-AS Go failure/3f67 stays FAILED, not replayed.
 [Actual compiler/artifact qualification](docs/verification/m14-time-functional-host-20261112/STATUS.json).
 
-**Current recovery input:** SourceAcq2170 proves the current legal autofs51→
-binfmt_misc56 stack coversZEROSource53; installedgraph globallyrefusesduplicates.
-P04Source froze private mount-ID/held-FD-aware graphdce3/callera9b5/READY18b626,
-with topology and ambiguity refusals; SDK materialreview and changedHOSTtests
-remain pending. Pub prepares normal30/hashchain consequences, no installededit.
-Existing e81 holder has NO callable restore/handoff endpoint and no truthful
-NativeParentRetirement exists because launch was not attempted. P04Tests froze
-read-only priorrow+HELD/FLOCK/FD collector2deb; SourceAcq finite source/opreview
-includes a caught receipt-newline defect before any privileged collection.
-One bounded corrected packet follows review; no signal/flagclear/claim/release.
-Root retains original62718/sudo1634456/provider1634459/runtimeI/1.5GiB/native12
-pending actual legitimate ownership records and separate reviewed reconciliation.
-[Exact installed source, error, legalstack and recovery condition](docs/verification/native-admission-debug-20261112/actual-prelaunch-mount-failure-1/STATUS.json).
+**Actual recovery evidence is now collected and qualified.** Original2deb/1956
+passed02:38:47Z, fullRootb47395 exit0/noSession; SourceAcqQ1f15 binds21inputs,
+actualRoot0collector1652378 andsudo1652375/b53739304 positiveFD/stream/parent
+closure. Journal81be/dev66306/inode53524941/586B has exactfirstprior524288 plus
+RUNTIME_HELD row; runtime FD24/FLOCK belongs1634459 oninode1048651; flagsremain
+524304 atbothbookends. Onlynewreader256MiB/job1 retiredcbbf; Root-private9389B
+record67e1 remainsprivate/retained. Preliminarynewline/hash concerns were FALSE
+ALARMS: exactASTU+000A andall7terminal-LF-aware methodhashes match, so no code
+successor/readrerun was needed. This corrects the prior provisional defect report.
+SourceAcq conditionsda319/c319 andlatestuserc05f permit standingtechnical recovery
+afternewexactreview/freshadmission; no newpermissionprompt/pause is needed.
+P04Tests prepares guardedA exact-ownerPIDFDdisposition, B genuineoriginal62718/
+Popen/sudo/fulltool+streamsclosure, C separatelyadmittedexclusiveFLOCK/journal-
+bound524304→524288CAS/restoration. Noactionyet, no fakeNativeParentRetirement,
+PIDabsence-release, peerFDclose, namespacequery, hotpatch or flagclear. Original
+62718/sudo1634456/provider1634459/1.5GiB/runtimeI/native12 stayretained.
+[Actual owner/FD/FLOCK evidence](docs/verification/native-admission-debug-20261112/actual-custody-record-and-mount-repair-1/STATUS.json).
 
-**Independent M15 deployment attempted the genuine46d namespace.** AS-only
-successora5a77/GO2f73 ran after fresh55ba sharedadmission; no newbuild/private-
-DESTDIR shortcut. Actualldso-list-MCPS exited0 with savedrawoutput, but reader4668
-failed on one namelessaddressline before complete dependencyclassification or
-MCINSPECTloader. CID3af2 exited1/nonOOM/Pid0 and ownedremove0; nineouterclients,
-innerloaderfamily/fullRootec65→a757exit1 are positive (SDKQb211).
-Root retired onlythatcurrent768MiB/job1(a4e7), leaving nativeheld. Pub derives
-same-child auxiliary-vector/mapping identity and a strict classifier successor;
-no blanketunclassifiedallowance, wholeI01 credit, projectmain or nativecall.
+**Mount repair has passed its changed HOST checks.** Privategraphdce3/callera9b5/
+READY18b6/materialGOf83c preserveallrawmountIDs/topology/whole-tableequality and
+bind visiblecoveringmounts toactualheldFDmount_id/device/stablefstat; ambiguity,
+cycles andmissingnonrootparents refuse. Actualdf36/GOd672 passed02:56:08Z:
+10parser+8heldFD+4bookend controls, complete22observations equal5ae9; Q2cdec
+joinsactualOwned1657445/family/streams/fullRootd248exit0. Onlythatnew256/job1
+retired3d9e. No realRoot/ns/native/53sourceadmission ran. Pubf800 normalfixed30
+package remainsuninstalled; SourceAcq5d83 foundone genuine-read-vs-notification
+adapter mismatch, nowcorrected privatelyea434/source7501/request0165. It reuses
+qualified9032/39a/current9d35 neweststate/ledger/dualclock25s and exactkind/method/
+receiveclocks; no relabel/stringwaiver. Materialreview/focusedchanged controls
+andactualoldownerrestoration precedenormaladoption/strict30readback.
+
+**MCPS real46d second attempt remains FAILED and under focused escalation.**
+Sixpurefamilies/14controls cf54/481fc passed02:47:50Z (Qa996, fullRoot55159f0);
+onlynew256/job1 retired1c239. Actualcorrectedc818 deliveryafb/P04SourceGOeb928
+ran03:02:39Z withfreshf202 grant. LoaderMCPS exited0 anddurablycaptured19AUXV
+fields, but AT_SYSINFO_EHDR isabsent; strictreader correctlyrefused, anonymous
+map remainsunclassified. No MCINSPECTloader/fullDEPLOYEDidentityJSON or wholeI01
+credit. CID3fa3 nonOOM/exited1/Pid0/ownedremoved, nineouterclients/innerloader/
+fullRoot37b7→bf709exit1 positivelyjoined. Root retiredonlynew768/job1(0b08),
+notnativeholder. SDK issecond boundeddiagnosis owner afteroneparsercorrection,
+derivingactualsource-supported samechildmapping proof; no guessedflag/line
+whitelist/unmodifiedretry. Old125B/b211 failure andallgreenproofs staypreserved.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
