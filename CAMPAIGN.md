@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T15:17:22.115071+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T15:27:31.979118+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -24,7 +24,11 @@ actual1f5 firstrepeat source/outer; native_binding_review issued final89af opera
 GO. Root ACTUALLY issued that combined path in originalsession81012 under fresh
 complete12-field admission8ac40 and genuine11-key projection37c69. Its current
 1.5GiB/job1 HOST family remains retained through all original waits, runtime/source
-restoration and independent result qualification. No signal result is claimed yet.
+restoration and independent result qualification. Actualdeadline path now FAILED native_resource_admission.py558 with
+"exact current direct native supervisor join required"; raw primary/TB preserved
+in currentouter stderr. No signal success or native/source/runtime retirement is
+claimed. native_current_binding prepares only current81012 read-only custody input;
+native_binding_review reviews its exact operation and legitimate recovery conditions.
 Time_functional_source now prepares only missing original time/vDSO capture/cohort
 inputs behind positive first-repeat cleanup. proc_vm_index_fix owns private UTI
 DATA provider binding after proved ABI35; no body/ACK/lifetime selection.
@@ -86,7 +90,12 @@ IndependentfinalSDKGO89af/fullshortargv4180 is now frozen. Root fresh current-ow
 account snapshot accepted actual durable read, verified all53 actualsource rows and
 canonical runtime298a/priorflags524288, empty native kernel groups/resource census,
 and produced11-key projection37c69/exact12-field admission8ac40. Actualouteraa047e
-originalsession81012 is running. The genuine publisher/provider/frontdoor must
+originalsession81012 retains custody after watchdogdeadline: actualstderr1785B
+reports UNKNOWN_NATIVE_CUSTODY at NativeParentRetirement558; the genuine
+supervisor direct wait was not a normal exit. Root retains all current handles,
+runtime flags/lease/native/source and1.5GiB; no replay or flagclear. Collector
+author native_current_binding/reviewer native_binding_review derive actual
+current owning-context evidence next. The genuine publisher/provider/frontdoor must
 create/pin4-key immutable input, prove real claim/currentfree/caps/pidfds/effective
 source and report full native/source/runtime restoration. No application PASS or
 whole signal/frame/xstate/error acceptance is claimed from issuance.
