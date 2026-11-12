@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T11:25:01.646396+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T11:52:05.601738+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -28,6 +28,21 @@ gates. Root is sole canonical integrator/native executor. Optional mailbox updat
 at pinned ecc3ee6 is fetched for reuse but deferred behind ready original closure.
 Existing1200-second foreground steering is active; no new supervision plumbing.
 
+Current operational disposition: fullactualA+B+C is independently GO08bcffce.
+Original73649 process waits/streams and exactruntime524288 restoration are positive;
+Root scopedreceiptff6e2d29 retires ONLY originalcurrent1.5GiB/job1. Later F05
+terminal5def cleanup ACTUALLYPASSED exactprofile/AppArmor/exited0/nonOOM/Pid0,
+nonforce removal/absence/allfamilies/fullRoot0; independentQ4bc262a7 and Rootd81d9c31
+retire ONLY newF051GiB+cleanup128MiB/jobs2. No currentHOSTpayloadfamily is retained;
+native12 and historicalsource/global/UNKNOWN holds remain. Nextactualoperation is
+normal correctedgraph fixed30 producer6c0601c7 under final9field INSTALL_ONLYreview
+and freshcomplete2GiB/account/source/floors grant, then strictactualnew30readback
+and fresh firstsignal admission. UTI148a operation is ready but shares that one
+heavy lane and cannot overlap two2GiB jobs. No actualfirstsignal has run. RealF05
+ELF/map compiled0 are preserved for passiveproof+unchangedruntimeobserver-only
+successor; no recompile. Othereligible source lanes preparetime/F08 only.
+
+Historical first attempt and changed-input evidence:
 Native sourceGOea3d/finaloperationGOce728 passed fresh Root measurement3640
 and actualouter6c5855/session73649 issued the original fixed repeat path. It
 FAILED BEFORE native launch at installed342d graph149: ValueError("mount path
@@ -61,7 +76,66 @@ patcha3ee corrects only six li→ri tokens in real Rust/C remote-vector range ch
 real-body valid-buffer fixture/sourceGO1fb8 passed actualsavedQd621 at its HOST scope.
 No canonical image/source selection or behavior credit from these preparations.
 
-Current11:25 recovery update: exactPhaseA helper stopped BEFORE phase_A with
+Actual11:49:35 PhaseC PASSED under finaloperationGO6998 and freshcomplete13
+grant e193441e: cleanupactor1865168 acquiredexclusiveFLOCK on66306:1048651,
+verified actualpriorjournal/inode/hash and current524304, restoredonly524288,
+then closedallownFDs/runtimeFDlast. Result11572ad4/fullRoot5de950a3 exit0/noSession;
+onlynewC256 retired5bf0ea00. IndependentwholeactualABCQ and original1.5GiB scoped
+retirement remainpending. Root's preissue abbreviatedcontract-hash typo was
+caught BEFORE grant/child/action, preserved, corrected to actualf7d2 digest.
+
+F05 listnormalized8bbe ACTUALLY compiled successfully: container5defe56f wait0,
+exit0/Pid0/nonOOM, eightpositiveCLI families/streams and parent1863766/b57015536
+wait1. Wrapper then rejected AppArmorProfile: createdempty became legitimate
+started/terminaldocker-default; no observer ran. ActualELF/map in output-2 must
+be reused, not recompiled. Independentactualcompiler/failureQ9e0c38fb preserves
+this scope. NewF051GiB/terminalCID remainsheld pending strictphase-profile source
+review and exactCIDnonforce removal/absence/fullRoot; cleanupauthor/reviewer
+remain functional_delta_review/proc_vm_index_fix. Currentheldpayloads are again
+native1.5 plus NEWF051GiB/twojobs, until actualrespective scopedretirements. The
+old64aec6 retirement960f remainsvalid onlythatoldgeneration. Native_rootowner
+normalfixed30final9field review is queued to native_binding_review afteractualABCQ;
+no newpublisher/readback/native retry until realguards pass.
+
+IndependentactualA+B Q3ee6a936 and exactC-handoff7b309ba9 are complete: actual
+pidfdresult, newclient/fullRoot0, ORIGINAL73649 toolterminal1, lateoriginalsudo
+wait-15/streams and complete rawprovider captures match. No syntheticbackfill of
+the truncated toolresponse. Runtimeflags/native1.5 stay held; author nowfreezes
+onlyactualPhaseC packet from those refs. F05 source successor8bb/bf264/e1e858
+fixes listrow representation only, exact5mountfields unchanged, freshoutput-2/
+names2, allactualcleanupQ/retirement pinned before create; independentreviewpending.
+
+F05 exactCID cleanup3b4092/GO26c0 has now PASSED: all3actualCLI families and
+outer/fullRoot0d8f35e, neverstarted64aec6 exactprofileverified, nonforce removed
+and exactIDabsence positive. IndependentsavedQ3bd11d0e confirms scopedRootretirement
+960f3397 of ONLY oldF051GiB+newcleanup128MiB/twojobs; oldfailedcompile1880/actual
+readback and allfouroriginalCLIfamilies remain preserved. Currentheldpayload is
+native1.5GiB/job1/runtimeflags pendingC; no unretiredF05CID charge remains. F05
+list-normalized successor source/operationreview proceeds without greenreruns.
+UTI exactoperationGO148a66bc now binds corrected same-handle keeperbe7/a601/0194,
+serialC326/Rust277/22mounts/3DATAoverlays/passive35word280Bextractor. StillUNISSUED
+until actualcurrentABCQ/retirement and freshcomplete2GiB+overhead grant. Existing
+native_current_binding now prepares disjoint realinstalledF08 main/daemon/udev
+HOSTpacket(-k0,-i-1,noIHKworkers); time_functional_source prepares only missing
+futuretime stage/manifest/caller bindings from passed artifacts. Allsix owners
+are healthySol/MAX, soleRootactualexecution; currentfirstrepeatcohortunchanged.
+
+Actual11:32:26 PhaseA PASSED after full13-field validation and actualcomputed
+request/review/admission SHA binding. Only outputpath changed under deltaGOf1bf;
+originaloperationGO10c/e3request/helper699 unchanged. Pidfdterminaltrue followed
+exactSIGTERM15 to1837769/b56509608. Ownchild1860198/b56941248 directwait0/streams
+and fullRoot0 (b3a88c39); onlynew256MiB retired32a4dbe7. Root then joined ORIGINAL
+session73649: terminalexit1/noSession (1e99f285), actualsamePopen sudo1837766 latewait
+-15/streamsclosed, originalRESULTc288 reports no remainingdirectchildren/noapp/
+noautomaticrelease. HistoricalUNKNOWNflags and1.5GiB/runtime restoration remain
+held until separately reviewed PhaseC
+exclusiveFLOCK+journal/inode/hash-bound524304->524288 restoration. Recoveryauthor
+native_binding_review and independent m15_installed_leaf_review own that handoff.
+F05 exactcreatedCID cleanup3b4092e8 (new128MiB) is prepared for independentreview;
+no compiler started, and its1GiB remains reserved. Only one additional admitted
+payload job may run at a time while both held jobs remain.
+
+Historical11:25 recovery update: exactPhaseA helper stopped BEFORE phase_A with
 KeyError(invocation), because Root admission omitted invocation and same finite
 run keys. Actualnewclient1856335/b56878258 wait1/streams/receiptpositive, no signal;
 onlynew256MiB retiredb4eb58. Earlier Rootdigest-placeholder assert was zeroaction
