@@ -1,0 +1,80 @@
+{
+  "schema": "m15-f05-create-independent-operation-review.v1",
+  "reviewer": "/root/functional_delta_review; explicit gpt-6.1-sol/MAX; independent bounded correction review; no recursion",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. One existing public ihk_create_os ownedFD0/FD7 three-case slice only; no IHK device/native/backend or wholeF05 acceptance.",
+  "decision": "GO_BOUNDED_FULL_MODE_PIN_CORRECTION_AND_FINITE_OPERATION_PENDING_FRESH_ROOT_ACTUAL_ADMISSION",
+  "request_sha256": "53942068f24fc8879f8208d4772f1fbb4d7d3c30d9a2b373c1daa4f680054b04",
+  "run_root_once_sha256": "551941067e6833a3f2f8f9c0f6c56ae36430f5223e4d77663d405c21fbea7177",
+  "capture_root_once_sha256": "c2e1ba6dd9486f5753fbf04d56b63ab681227edb296e7f2b2fe80ba6cfb620d3",
+  "prepared_source_sha256": "0e54b2ee8a2dfd1299a5aa9df0c34659e96f4aaf38fe088f9301745ca9d405fc",
+  "correction_audit_sha256": "1c4b8729df2da44428e14fa2b3dd67d83f55fb16573644ef969b90743c1b14e1",
+  "source_correction_patch_sha256": "8eeee4b4c406c975a6e2e3131f7acf84540d59ba9138c0975c2b0cb751bfc823",
+  "saved_stat_controls_sha256": "01a63b8ff4338d983e1a63010e4a662e20b80ccddce55cc7d1c8d555164f07e9",
+  "full_argv_ref": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/ARGV.PROPOSED.json",
+    "bytes": 12326,
+    "sha256": "10f6b519cbc3450f647223d60832cff87dc16439f2d9f2dc75c31e89ce4cbf7d"
+  },
+  "reused_source_oracle_review": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/INDEPENDENT-REVIEW.json",
+    "sha256": "ea33ce14837007f03621685220d58d59a35c8a14968fab6ab014320d5c60fcdc",
+    "scope": "Unchanged observer/source/header/provider/three-oracle/profile/ownership review only. Its missed pin-mask bug is resolved by this one bounded correction; only the new request5394/source5519/capturec2e1 union is approved here."
+  },
+  "preserved_actual_preissue_failure": {
+    "tool": "8c56f6",
+    "diagnosis_path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/ROOT-ACTUAL-ADMISSION-1/EXACT-PREISSUE-PIN-DIAGNOSIS.json",
+    "diagnosis_sha256": "8103029f25d4681b798daeb8d5025e87c1d9d42e233a5ee1d22ca3e495c78504",
+    "no_payload_or_admission_or_Popen_issued": true,
+    "classification": "Source-pin full-mode representation defect, not evidence of a resource refusal. The diagnostic actual0o755 was masked by0o777; it does not prove the current full sudo mode or absence of its special bit. Original raw failure and original4d42/d4c5/0f7658/a5b868 remain preserved.",
+    "reviewer_correction": "The earlier review missed that the validator discarded special mode bits while the frozen manifest retained0o4755. This review resolves that exact mismatch without modifying tools, required mode, permission rules or source eligibility."
+  },
+  "bounded_source_delta": {
+    "result": "MATCHES_ONE_REQUIRED_CORRECTION",
+    "only_parent_executable_change": "pin() changes oct(st.st_mode & 0o777) to oct(st.st_mode & 0o7777). The full expected mode comparison and every file content/identity/owner/size check stay intact.",
+    "other_source_bytes": "Raw diff shows parent otherwise changes only its fixed request SHA; capture changes only that request SHA. All lifecycle/guard/admission/OwnerAFE/E088/keeper/compile/passive/runtime/cleanup code is unchanged.",
+    "necessary_data_delta": "Fresh correction/HERE/output/capture/review/admission paths, new names/owner labels/output sources and corresponding frozen pins. Input manifest76252 is byte-identical by cmp; only its new file identity/path changes. All11 mount destinations/access modes, complete profiles and inner compiler/readelf/runtime argv remain unchanged.",
+    "no_policy_relaxation_or_live_effect": "Expected sudo mode remains exactly0o4755. A real0o755, extraSGID/sticky or changed permission mode must reject. No chmod/chown/helper/privilege action, exemption or assumed live-mode clearance is supplied by the correction."
+  },
+  "saved_mode_controls_review": {
+    "scope": "Six supplied constructed regular-file st_mode integers only; reviewed as arithmetic, not a live tool-mode/permission observation or compiler/runtime test.",
+    "required0o4755_accepts": true,
+    "missing_SUID0o0755_rejects": true,
+    "extra_SGID0o6755_rejects": true,
+    "SGID_instead0o2755_rejects": true,
+    "extra_sticky0o5755_rejects": true,
+    "changed_permissions0o4750_rejects": true,
+    "actual_current_sudo_full_mode": "UNPROVED_BY_THIS_REVIEW; Root must freshly validate it under ordinary source/permission admission. An actual mismatch remains a genuine hold."
+  },
+  "unchanged_functional_scope_reused": {
+    "provider": "Actual matched Rust DSO b7bc, public header00b5 and selected lifecycle2818/deviceopenf1b5/caller2ad6; four versioned GLIBC lower effects only. No production/provider/library build or old destroy/CLI/ABI suite replay.",
+    "cases": "Exactly real owned localFD0 -> publicindex0, localFD7 -> publicindex7 and localFD7/ioctlEIO -> public-5, each AOIC/one public close with cleanup errno changing to ECANCELED. Fixture-owned stdin backup/restore/close and valid /dev/null descriptors remain unchanged; no SYS_ioctl or real IHK endpoint.",
+    "checks": "One first actual new-observer compile/passive ELF/link-map proof, then readonly runtime with435B exact expected stdout. The predecessor failed before payload issue, so this does not replay a passing compiler or observer result. Compiler/observer correctness remains unproved until Root executes and qualifies actual results.",
+    "custody_cleanup": "Fsynced attempts/argv/ownedCID precede each qualified OwnerAFE Popen/create. Full created and terminal Config/HostConfig/all mounts/AppArmor checks, explicit wait0/nonOOM/Pid0/exact logs, nonforce owned terminal removal, all original CLI/parent streams/waits and actual fullRoot qualification are unchanged. On uncertainty keep actual records/owners/charges; no container kill, force remove, automatic release or unchanged retry."
+  },
+  "fresh_admission_union": {
+    "schema": "m15-f05-create-fresh-Root-actual-admission.v1",
+    "field_count": 21,
+    "fields": ["schema","at","saved_Root","invocation","finite_credit_run_id","request_sha256","review_sha256","source_manifest_sha256","host_CPU","new_family_bytes","new_jobs","actual_account_service_source_permission_result","actual_complete_Root_source_owner_account_service_permission_evidence_refs","HOST_jobs_before","HOST_reserved_bytes","controller_worker_overhead_bytes","MemAvailable_bytes","host_free_bytes","scratch_free_bytes","native12_and_all_other_holds_unchanged","host_boot_id"],
+    "binding": "Root supplies real current source/account/service/permission/owner/resource witnesses; exact savedRoot/invocation/finite7c6, request5394, this review digest, unchanged manifest76252, CPU7/newjob1/new1GiB, hostboot, age0..25s and full current aggregate values. No actual grant or private account values were read or issued here.",
+    "resource_limits": "All retained actual slices including nativefirstrepeat81012 current1.5GiB/job1 and every controller/worker/prospective HOST overhead plus new1GiB must fit4GiB/max3; fresh26GiB memory, host16GiB+128MiB and scratch12GiB+128MiB floors. Native2-5/12GiB ownership and historicalUNKNOWNs stay separate and unchanged. Current no-running-Docker/name/output/source/permission preflights must actually pass.",
+    "Root_preissue_gate": "Any Root preissue pin comparison for this packet must use the same complete0o7777 mode expression, not repeat the known old0o777 check from8c56. Current full mode/content/identity/permission checks remain mandatory; source correction is not service or permission clearance.",
+    "actual_grant_issued": false
+  },
+  "literal_Root_outer_argv_template": [
+    "/usr/bin/taskset","-c","7","/usr/bin/python3","-B",
+    "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/capture_root_once.py",
+    "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/INDEPENDENT-REVIEW.json",
+    "<ACTUAL_THIS_REVIEW_SHA256>",
+    "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/ROOT-ADMISSION.json",
+    "<FRESH_ACTUAL_ROOT_ADMISSION_SHA256>"
+  ],
+  "review_actions": {
+    "bounded_raw_source_request_argv_diffs_and_saved_preissue_diagnosis_reads": true,
+    "frozen_new_source_hashes_manifest_cmp_and_six_saved_integer_cases_reviewed": true,
+    "observer_provider_headers_or_existing_qualified_tests_rerun": false,
+    "subject_parse_import_compile_readelf_Docker_live_stat_probe_namespace_account_native_flags_or_privilege_action": false,
+    "author_canonical_source_or_actual_tool_permission_edits": false,
+    "actual_admission_charge_release_or_original_acceptance": false
+  },
+  "preservation": "Native81012 is UNKNOWN_NATIVE_CUSTODY after watchdog/NativeParentRetirement558, with1.5GiB retained and no native success/retry inferred. Native12, same savedRoot/finite7c6 and every actual source/service/account/resource/historicalUNKNOWN hold persist. Root alone admits/executes/composes and explicitly retires only qualified scopes. No wholeF05/percentage/C-retirement or M14/M15 credit; M14 before M15. Rejected worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 collector request stays excluded from replay/rephrasing/reassignment. No recursive agents."
+}

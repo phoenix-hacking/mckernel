@@ -1,0 +1,83 @@
+{
+  "compiler_or_observer_correctness_proved": false,
+  "new_actual_sudo_mode_observation": false,
+  "required_mode_from_unchanged_sudo_manifest": "0o4755",
+  "rows": [
+    {
+      "accepted": true,
+      "corrected_full_mode": "0o4755",
+      "expected_accepted": true,
+      "expected_required_mode": "0o4755",
+      "name": "required_suid_4755",
+      "old_masked_mode": "0o755",
+      "saved_constructed_st_mode": "0o104755",
+      "status": "PASS"
+    },
+    {
+      "accepted": false,
+      "corrected_full_mode": "0o755",
+      "expected_accepted": false,
+      "expected_required_mode": "0o4755",
+      "name": "missing_suid_0755",
+      "old_masked_mode": "0o755",
+      "saved_constructed_st_mode": "0o100755",
+      "status": "PASS"
+    },
+    {
+      "accepted": false,
+      "corrected_full_mode": "0o6755",
+      "expected_accepted": false,
+      "expected_required_mode": "0o4755",
+      "name": "extra_sgid_6755",
+      "old_masked_mode": "0o755",
+      "saved_constructed_st_mode": "0o106755",
+      "status": "PASS"
+    },
+    {
+      "accepted": false,
+      "corrected_full_mode": "0o2755",
+      "expected_accepted": false,
+      "expected_required_mode": "0o4755",
+      "name": "sgid_instead_2755",
+      "old_masked_mode": "0o755",
+      "saved_constructed_st_mode": "0o102755",
+      "status": "PASS"
+    },
+    {
+      "accepted": false,
+      "corrected_full_mode": "0o5755",
+      "expected_accepted": false,
+      "expected_required_mode": "0o4755",
+      "name": "extra_sticky_5755",
+      "old_masked_mode": "0o755",
+      "saved_constructed_st_mode": "0o105755",
+      "status": "PASS"
+    },
+    {
+      "accepted": false,
+      "corrected_full_mode": "0o4750",
+      "expected_accepted": false,
+      "expected_required_mode": "0o4755",
+      "name": "changed_permissions_4750",
+      "old_masked_mode": "0o750",
+      "saved_constructed_st_mode": "0o104750",
+      "status": "PASS"
+    }
+  ],
+  "schema": "m15-f05-create-full-mode-pure-saved-stat-controls.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. One public ihk_create_os valid-owned-fd0/fd7 result/one-close behavior slice; no IHK device/native/backend or wholeF05 claim.",
+  "source": "Synthetic regular-file mode integers derived from frozen required mode and direct contrasting mode bits; no live sudo stat/probe, helper, compiler, library, Docker or privilege execution.",
+  "source_expression_only": "oct(st.st_mode & 0o7777)",
+  "source_parent": {
+    "bytes": 15735,
+    "dev": 66306,
+    "gid": 1000,
+    "inode": 2253245,
+    "mode": "0o600",
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/run_root_once.py",
+    "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/run_root_once.py",
+    "sha256": "551941067e6833a3f2f8f9c0f6c56ae36430f5223e4d77663d405c21fbea7177",
+    "uid": 1000
+  },
+  "status": "PASS_6_DIRECT_MODE_CONTROLS"
+}

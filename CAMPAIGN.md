@@ -1,9 +1,51 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T15:27:31.979118+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T17:04:26.884669+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+Current 16:51+ operational update supersedes all older phase banners below:
+original81012/provider1930708/b58283682/sudo1930695/b58283676 remains UNKNOWN,
+1.5GiB/job1 retained. Current saved-data projection actually PASSED f75e60/ae82,
+Q1e321/Root25d349 retired ONLY new256MiB. It measured runtimeFD24 carrying FLOCK,
+FD151 unlocked pinned reader, one journalFD22; all current snapshots stable.
+Saved13 records include watchdog deadline/owned graph lease; original raw wait
+status/type/first child exception were not persisted and remain unavailable via
+the supported saved route. No secondwait or success inference. Initial reader
+f11328 failed uniqueness, then d0267e failed undefinedobs beforeRAW; both raw
+failures preserved and ONLY their new256MiB families retired c648/af075.
+Next actual operation: native_current_binding freezes finite failed-provider
+PhaseA from conditions7bef; native_binding_review reviews exact actor/parent/
+fieldunion. Root owns original81012/SUDO/wait/streams PhaseB; separate runtime
+exclusive-FLOCK/journal/inode/hashCAS524304->524288 PhaseC remains UNISSUED.
+Persistent native config/source/loader I files and installed-package I are
+evidence, not rollback targets. Native12/source/globalUNKNOWN remain retained.
+
+Parallel reporting source516c has independent sourceGOdc2b; only two pre-pause
+reports +one same-wait DATA report before unchanged validation. Proc_vm_index_fix
+froze eight real-function controls/capture accc8/a093; functional_delta_review was
+explicitly reactivated on the actual complete packet for operation review. Pure HOST controls may run with fresh admission alongside
+recovery; live adoption/native issuance still require positive current recovery.
+UTI metadata GO080f and F05 full-mode GO8815 remain queued behind that genuine
+81012 disposition. C4 remain all4/2965B; no source-only retirement. Timeeddd/07c69
+is ready at SOURCE/DATA scope, missing actual stage/native/mapping/timepage/TSC
+lifecycle evidence. Whole F03/F04 assessment84fde is NOT_GO only for the named
+real-main/device/known-workload and authentic dump/GDB/positive-CONT obligations.
+
+Independent F08 descriptor GET a07c PASSED/d617 and its256 retiredfbad. Primary
+GET ec1fe1 actually PASSED:209917B a2ef compressed,1779000B00052 open,617 rows,
+exact systemd0:257-23.el10_2.1.rocky.0.1.src/19134402B/SHA71e60083 selected; newer
+2.2 not selected. Exact archive-only packet53d56/fb222 is frozen and independently reviewing;
+no SRPM GET/signature/patch extraction/service readiness from metadata. Primary actualQ09e867 and Root8fc207 now retire ONLY its new256MiB/job1.
+Current HOST payload remains native81012/1.5GiB/job1 plus all actual overhead. Source fetch author/reviewer remain
+time_functional_source/m15_installed_leaf_review. Scope/weights unchanged:105/156,
+M14=70.00%,M15=74.59%. No unchanged percentage post.
+
+One exact reference file docs/development/M14-M15-NATIVE-RECOVERY-20261112.md was
+adopted byte-for-byte from fc738a4f without branch reset/switch or legacy reading
+list/replay. CAMPAIGN alone remains the active plan. All six canonical owners are
+explicitSol/MAX/no recursion, same savedRoot/finite7c6 and all real holds preserved.
 
 Manual invocation20261112T094452Z-12a4bea0 is ACTUALLY running under the same saved
 Root/goal/finite7c6, worker1824291/b56295805/server1824293/b56295812, guardian
@@ -38,6 +80,30 @@ Qa099; Root790d retired its old768+new128MiB after genuine original waits/remova
 F05 public-createGOea33 queues behind first-native priority and its real empty-Docker
 preflight. Root remains sole compositor/native executor. No optional mailbox/pool
 project or green replay. Existing1200-second foreground steering remains active.
+
+Current independent source increments: UTI DATA provider4612/d238 has focused
+source-onlyGO5052, using the actual35word production proof without another ABI
+compile. Proc_vm_index_fix now freezes only its real production-crate metadata
+changed-input packet; selection/body/ACK/lifetime/C4 remain untouched. F05 full-mode
+successor0e54/request5394/parent5519 has focusedGO8815: only pin mask0777->07777,
+required04755 and every profile/oracle/provider preserved. Root8c56 was a preissue
+masked-mode defect (not a resource refusal), no payload/charge/grant. User15:25
+queues its first payload behind actual81012 custody disposition and fresh grant.
+Time source/data eddd/07c69 is complete, missing only real separately staged time
+manifest/source/lifecycle outputs after firstrepeat cleanup; no green rerun.
+M15-F03 real-main handoffb896 is complete and waits actual matching known workload/
+device/custody after81012; mcps options are ignored and VA->PA is not invented.
+M15_installed_leaf_review prepares only original F04 real dump/GDB handoff;
+time_functional_source derives only actual Rocky libudev034f enabled-monitor
+provider context for the failed F08, preserving group0 and no daemon replay.
+Functional_delta_review completed both source reviews and is available for the
+next concrete compiler/capture delta. Native_current_binding and native_binding_review
+remain on the current81012 collector/owning-context recovery input, the critical
+next executable operation. Initial collector52dd/request768 is UNEXECUTED; reviewer
+found only newnative reads outside the claimed final custody bookends. Root used
+followup_task to reactivate the completed author for a move-only fresh-output
+successor; final operationGO awaits that actual corrected hash chain. No current
+81012 release or retry follows; source-only packet is not collection evidence. Originals105/156 and70.00/74.59 remain unchanged.
 
 Current operational disposition: reviewed a614 failed-publication recovery ACTUALLY
 PASSED at13:41:05 under request24662047/GO f8edc474 and fresh complete30-field
