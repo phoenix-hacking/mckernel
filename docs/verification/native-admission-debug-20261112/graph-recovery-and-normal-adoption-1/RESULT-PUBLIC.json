@@ -1,0 +1,220 @@
+{
+  "evidence_checksums": {
+    "actual_caller_terminal": {
+      "bytes": 1880,
+      "file": "CALLER-TERMINAL.json",
+      "sha256": "5afcdb134663ab32f5ef10828664558be720fc1c592a2e4fa4ee6de2516b9950"
+    },
+    "actual_root_capsule": {
+      "bytes": 8310,
+      "file": "ROOT-EXEC-COMPLETION.ACTUAL.json",
+      "sha256": "0ec96c7f198acc029fc2067dd17bf433eeaabb49d90a3b1092202cb873c2942e"
+    },
+    "actual_strict30_result": {
+      "bytes": 20140,
+      "file": "RESULT.json",
+      "sha256": "d5bf3a73f18b558c32ff5559d26ceaa67073ad8b18969040e96bebb6c22bd4d3"
+    },
+    "current_1_5_retirement": {
+      "bytes": 1455,
+      "file": "ROOT-CURRENT-RETIREMENT.json",
+      "sha256": "bfbf2045fc04f0bc2ebbdd7f9bdfcd4e622bfbd8ca14352478e08d240df28fde"
+    },
+    "graph_22_test_qualification": {
+      "bytes": 18956,
+      "file": "QUALIFICATION.json",
+      "sha256": "2cdec8903a222b1bd2285874e6aebd87059a4d581368fc3bcc8d75119d5bdcd9"
+    },
+    "graph_source_review": {
+      "bytes": 16021,
+      "file": "REVIEW.json",
+      "sha256": "f83c6cced1d7525dd56f85bdeb2f7a26279bb2332b11b2fca7fa85512934ffb9"
+    },
+    "normal_producer_qualification": {
+      "bytes": 24013,
+      "file": "QUALIFICATION.json",
+      "sha256": "9c4080ce107ca889a6656c96e79e962d29afb031f5e9aa4ec9143139cee4d49a"
+    },
+    "normal_strict30_qualification": {
+      "bytes": 20680,
+      "file": "QUALIFICATION.json",
+      "sha256": "82e86c3e3d5b9a6e21e8839ca1577a0248f3a3d87fea8f93b6bc64a1decd73e6"
+    },
+    "receipt_10_test_qualification": {
+      "bytes": 19227,
+      "file": "QUALIFICATION.json",
+      "sha256": "f6ddc6e78063ecda02f79cb54c2aa65b9e9276e6bb8ce6f74ed4bf01fca13b4d"
+    },
+    "receipt_source_review": {
+      "bytes": 13921,
+      "file": "REVIEW.json",
+      "sha256": "12d832abef0e5e469695b20b81bd4e30e86e9b09a011c5e7845847680f2191c0"
+    },
+    "recovery_ABC": {
+      "bytes": 17526,
+      "file": "QUALIFICATION.json",
+      "sha256": "ef42bd4caa4a721599cd040ca4a89232cbef5f854e36ea19b714001955e3345d"
+    }
+  },
+  "exact_changed_source_fragments": [
+    {
+      "first_line": 118,
+      "function": "prepare_source_manifest",
+      "last_line": 146,
+      "origin": {
+        "bytes": 104222,
+        "file": "normal_native_once.CALLER-DELTA-ONLY.py",
+        "sha256": "a9b57b26256dc84fe31660374aa14ceda20e96415415666bdbac68c253a435a6"
+      },
+      "projection": "Complete exact FunctionDef only; top-level actor/account/credit literals and all operational document contents are omitted.",
+      "segment_sha256": "d02bc2e83d678aadc6f7c8b93a8f511d985eb67b67a423d243eadb5ed7480afe",
+      "source_segment": "def prepare_source_manifest(source, observations):\n    plan = {}\n    seen = {}\n    namespace_record = own(os.open('/proc/self/ns/mnt', os.O_RDONLY | os.O_CLOEXEC),\n                           'actual-source-namespace')\n    ns = os.fstat(namespace_record['fd'])\n    process = observations.process(os.getpid())\n    need((process[1], process[2]) == (ns.st_dev, ns.st_ino), 'source namespace changed')\n    mounts = observations.read_mountinfo(os.getpid(), process)\n    selected = {}\n    for row in CORE['source_rows']:\n        path = row['host']\n        need(row['target'] == path, 'same absolute source target required')\n        handle = own(source.open_exact(path), 'consumed-source:' + path)\n        info = os.fstat(handle['fd'])\n        need(stat.S_ISREG(info.st_mode) and info.st_nlink == 1,\n             'consumed source must be regular with exactly one link: ' + path)\n        need(source.digest_path(path, info) == row['content_sha256'],\n             'consumed source content mismatch: ' + path)\n        source.enumerate_source(handle['fd'], path, info.st_dev, plan, seen)\n        selected[path] = observations.source_mount(mounts, path, handle['fd'])\n    need(observations.process(os.getpid()) == process and\n         observations.read_mountinfo(os.getpid(), process) == mounts,\n         'actual Root source topology changed')\n    return {'sources': CORE['source_rows'],\n            'inode_plan_sha256': hashlib.sha256(canonical(\n                {path: list(plan[path]) for path in sorted(plan)})).hexdigest(),\n            'mount_map_sha256': hashlib.sha256(canonical(\n                {'namespace': [ns.st_dev, ns.st_ino], 'roots': selected})).hexdigest()}"
+    },
+    {
+      "first_line": 178,
+      "function": "accepted_usage_receipt",
+      "last_line": 205,
+      "origin": {
+        "bytes": 41669,
+        "file": "preliminary-current.py",
+        "sha256": "7501df5ab9badc1a67e2942195ca8ad841170d7351d3c4990bffab7d096ea95f"
+      },
+      "projection": "Complete exact FunctionDef only; top-level actor/account/credit literals and all operational document contents are omitted.",
+      "segment_sha256": "920cb4564c210f3b62cc7ec6613119f42ea6cec9cf35a26cba09c0eaad6d1997",
+      "source_segment": "def accepted_usage_receipt(state, usage, credit_record, now, mono):\n    \"\"\"Match saved usage to a genuine current-owner receipt without an account call.\"\"\"\n    import types\n    if type(usage) is not dict:\n        raise ValueError('actual account receipt usage required')\n    helper_path = CURRENT / 'current_account_snapshot.py'\n    owner_path = CURRENT / 'CURRENT-ACTUAL-OWNER.json'\n    helper_raw, _ = read_bound(helper_path, 65536)\n    owner_raw, _ = read_bound(owner_path, 65536)\n    if (hashlib.sha256(helper_raw).hexdigest() != '9032c50ef25ba72e7c04a06727a5b917a3823b748c63e9cdaef7c663e0d9ad85' or\n        hashlib.sha256(owner_raw).hexdigest() != '9d35de6e6d00cae2d5c3e7303a70c143326fcba982e5d6e419f0675d7a1fd31e'):\n        raise ValueError('qualified account consumer or current owner source differs')\n    helper = types.ModuleType('_qualified_publication_account_receipt')\n    helper.__file__ = str(helper_path)\n    exec(compile(helper_raw, str(helper_path), 'exec'), helper.__dict__)\n    accepted = helper._load_current_validator()(state, credit_record, strict_json(owner_raw),\n                int(now * 1000000000), int(mono * 1000000000), 25)\n    # The qualified validator chooses the newest persisted observation and checks\n    # its source/request, current owner, both clocks, original credit and vetoes.\n    # A read stays a read; a notification keeps its separate supported method.\n    if (usage.get('source_kind') != accepted['source'] or\n        usage.get('source_event') != accepted['method'] or\n        type(usage.get('receipt_received_utc_ns')) is not int or\n        usage['receipt_received_utc_ns'] != accepted['received_utc_ns'] or\n        type(usage.get('receipt_received_mono_ns')) is not int or\n        usage['receipt_received_mono_ns'] != accepted['received_mono_ns']):\n        raise ValueError('saved usage differs from actual accepted account receipt')\n    return accepted"
+    }
+  ],
+  "graph_HOST_controls": {
+    "Root_exit": 0,
+    "Root_no_session": true,
+    "actual_native_namespace_or_full53_admission_proven": false,
+    "all22_full_rows_and_topology_equality_match": true,
+    "bookend_cases": 4,
+    "caller_join_static_only": true,
+    "held_FD_cases": 8,
+    "hidden_IDs_and_raw_table_equality_preserved": true,
+    "parser_cases": 10,
+    "qualification": "QUALIFIED_GO_ACTUAL_CHANGED_MOUNT_PARSER_AND_HELD_SOURCE_FD_HOST_SCOPE_ONLY",
+    "real_fixture_owned_FD_and_registered_mount_id": true
+  },
+  "normal_code_producer": {
+    "Root_capture_sha256": "0ec96c7f198acc029fc2067dd17bf433eeaabb49d90a3b1092202cb873c2942e",
+    "Root_exit": 0,
+    "Root_no_session": true,
+    "caller_observation_error_count": 0,
+    "caller_resource_unknown": false,
+    "caller_sudo_direct_wait_status": 0,
+    "full_Root_tool_and_streams_joined": true,
+    "lease_disposition": "VERIFIED_CLOSED",
+    "native_currentfree": null,
+    "native_release": false,
+    "outcome": "COMPLETE",
+    "qualification": "QUALIFIED_ACTUAL_NORMAL_CODE_PRODUCER_AND_CURRENT2GiB_FAMILY_RETIREMENT_ELIGIBLE_PHYSICAL30_READBACK_PENDING",
+    "raw_reservation_release_false_preserved": true,
+    "request_sha256": "0165594d7636b45be3730a315cda82bc97d6133e2cb7462052f77c1c75b4a67e",
+    "scope": "ROOT_CODE_INSTALL_ONLY",
+    "verified_FULL_sha256": "f0d9fd7de613a92baf76a2120329a6782434a791bf015b8a20faebbc5d80ab3c",
+    "wrapper_sha256": "07e5bb13677266092a99cca55ecc3cd5f3172f0100825605ec95642dc4903d57"
+  },
+  "physical_strict_readback": {
+    "GID0_or_all_ancestor_exact0755_I_not_inferred": true,
+    "ancestor_guard": [
+      "Root owned",
+      "no group/other write",
+      "no symlink"
+    ],
+    "controller_activated": false,
+    "count": 30,
+    "guard_wording_note": "This projection states actual reader guards only. SourceAcq wording addendum is forthcoming; raw qualification prose is not copied. Actual30 rows remain unchanged.",
+    "installed_directory_guard": {
+      "immutable_I": true,
+      "mode": "0755",
+      "uid": 0
+    },
+    "native_currentfree": null,
+    "native_release": false,
+    "native_runtime_ready": false,
+    "per_file_guard": {
+      "immutable_I": true,
+      "mode": "0444",
+      "nlink": 1,
+      "stable_bytes_size_SHA_and_path": true,
+      "uid": 0
+    },
+    "qualification": "QUALIFIED_ACTUAL_NEW_GENERATION_342d_PHYSICAL_ALL30_CODE_ONLY_AND_POSITIVE_READER_CLOSURE",
+    "qualification_sha256": "82e86c3e3d5b9a6e21e8839ca1577a0248f3a3d87fea8f93b6bc64a1decd73e6",
+    "raw_RESULT_sha256": "d5bf3a73f18b558c32ff5559d26ceaa67073ad8b18969040e96bebb6c22bd4d3",
+    "status": "FIXED30_ORDINARY_READBACK_VERIFIED_CODE_ONLY",
+    "total_bytes": 407504
+  },
+  "projection_policy": "Explicitly selected source segments, checksums, public functional outcomes and scoped closure facts only. This is a projection, not a copy of raw account/owner/control/capsule/private evidence.",
+  "receipt_HOST_controls": {
+    "full_Root_exit": 0,
+    "full_Root_session": null,
+    "full_external_oracles_match": true,
+    "live_account_or_issuer_execution": false,
+    "newer_veto_and_strict25s_bound_tested": true,
+    "notification_only_transport_fallback_preserved": true,
+    "positive": 2,
+    "qualification": "GO_ACTUAL_TEN_NORMAL_RECEIPT_TRANSFER_CONTROLS_MATCH_FULL_FROZEN_ORACLES_WITH_POSITIVE_CURRENT_FAMILY_CLOSURE",
+    "read_method_preserved": true,
+    "refusals": 8,
+    "rows": 10
+  },
+  "recovery": {
+    "NativeParentRetirement_created": false,
+    "Root_current_only_retired_HOST_bytes": 1610612736,
+    "Root_current_only_retired_jobs": 1,
+    "Root_exit": 0,
+    "Root_no_session": true,
+    "all_original_A_B_and_current_C_positive": true,
+    "new_FLOCK_and_runtime_last_own_FD_closure_verified": true,
+    "original_prelaunch_failure_preserved": true,
+    "qualification": "QUALIFIED_CURRENT_RUNTIME_OWNED_I_RESTORED_ALL_A_B_C_POSITIVE_CURRENT_FAMILY_RETIREMENT_ELIGIBLE_ONLY",
+    "removed_only_current_owned_I_bit": 16,
+    "restored_flags": 524288,
+    "runtime_prior_flags": 524288,
+    "runtime_required_owned_flags_before_restore": 524304,
+    "same_inode_exact_prior_restored": true
+  },
+  "schema": "cp63-safe-functional-recovery-and-code-adoption-result-projection.v1",
+  "scope": {
+    "code_publication_and_ordinary_UID1000_physical_readback_only": true,
+    "native12_source_global_Scratch_historical_UNKNOWNs_unchanged": true,
+    "no_milestone_or_larger_goal_acceptance_from_this_projection": true,
+    "no_new_native_grant_or_claim": true,
+    "no_old468d_or_2c4c_success_substitution": true
+  },
+  "source_checksums": {
+    "graph": {
+      "bytes": 15335,
+      "file": "graph_observations.py",
+      "sha256": "dce3ab2de7b6d7abbafb2cfaceb163ee191d23ea2cd80ea9a415eebcd66a7e88"
+    },
+    "graph_caller": {
+      "bytes": 104222,
+      "file": "normal_native_once.CALLER-DELTA-ONLY.py",
+      "sha256": "a9b57b26256dc84fe31660374aa14ceda20e96415415666bdbac68c253a435a6"
+    },
+    "install_review": {
+      "bytes": 537,
+      "file": "INSTALL-ONLY-REVIEW.json",
+      "sha256": "afda595101c9a7bf14979466ebcbf4ed82787e3a426c2e670f7eed57aac90442"
+    },
+    "producer_request": {
+      "bytes": 5438,
+      "file": "REQUEST.PROPOSED.json",
+      "sha256": "0165594d7636b45be3730a315cda82bc97d6133e2cb7462052f77c1c75b4a67e"
+    },
+    "producer_wrapper": {
+      "bytes": 14525,
+      "file": "ROOT-ISSUE-AND-EXECUTE-ONCE.py",
+      "sha256": "07e5bb13677266092a99cca55ecc3cd5f3172f0100825605ec95642dc4903d57"
+    },
+    "receipt_adapter": {
+      "bytes": 41669,
+      "file": "preliminary-current.py",
+      "sha256": "7501df5ab9badc1a67e2942195ca8ad841170d7351d3c4990bffab7d096ea95f"
+    }
+  }
+}

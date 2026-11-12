@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T03:08:21.118339+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T04:12:12.613485+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -115,27 +115,7 @@ retirement6c455bbb. SDK reviews the changed source/capture.
 No unchanged rerun, partialgroup deletion, permission fallback or native claim.
 [Actual source/review/failure](docs/verification/native-admission-debug-20261111/v1-kernel-parent-first-attempt-1/PUBLICATION-SCOPE.json).
 
-**Next actual first-native step:** PublicABI binds actualnewowner to installed
-468d code30/strict1cf/e428 and matchingc964/a2f/f133/c886/38b6. Real prerequisite
-checks found3 nativecgroup parents/five scalars ENOENT (existingv1-kernel-parent
-e6b setup is preparation, not claim); runner/backend/qmp actualnlink2 violate
-unchanged NativeSourceCustody97/inplace107; canonicalowner463 differs from loaded
-qualified3ecb and fails retirement665 equality. Exact4file normal preparation
-d59f15 proposes reviewed3ecb canonicaladoption plus same-byte nlink1 inputs, with
-allpreimage identities/flags/holds preserved. SourceAcq materialGO5167457b is complete. Root readonlyflagsacef6226 confirms
-all4exactpreimages, noimmutable/append flags and preservedqmp0664; no mutation
-has run. SDK setupGO5c939 is complete; P04Source binds its existing protected
-fast-exit-safe capture and SDK reviews only that outer delta. Root alone acts
-after exact operationGO and fresh scoped admission. The first readonly Root
-preflight failed only an overbroad unrelated-process readability assertion;
-no payload issued and no denied access retried. Actual ownedtree494673920B,
-MemAvailable~29.27GB/disk~120.84GB and3targets absent were observed, not grants. No flagclear,
-source fallback, native reservation release, new framework or guessedfree grant.
-Pub must freeze the actual existing verified-byte Root-context/bootstrap command,
-not a nonexistent root_parent.py or a literal root_bootstrap.py withoutnative main.
-Genuine frontdoor is root_bootstrap.launch_named_native_from_registered_loader
-through watchdog/supervisor_entry; callerRootselfPID/caps/config/rootFD must be
-issued by its real owning process after validated preparation.
+**Next first-native step:** PublicABI binds actual qualified generation342d graphdce3 and callera9b5 to the unchanged c964/a2f/f133 staged cohort. Exact source constants and normal package paths receive independent changed-input review; Root then measures fresh owner/account/HOST/native/source/currentfree/caps/pidfd admission before the single repeat operation. Code-only installation and controller ownership do not grant native resources. All recovered-family retirements and historical UNKNOWNs remain separately recorded.
 
 **Four canonical native-source inputs are ACTUALLY PREPARED.** Exact7f6c/0181
 under operationGOef781 and freshRoot ee59 passed after23:12:30Z freshadmission, fullTool1a0a8f exit0,
@@ -224,17 +204,13 @@ three fullreader cases+28slot bound27961+65536=93497. Q60db joins complete rows,
 Root immediately retired onlycurrent256MiB/job1(cd220); oldE2BIG remains FAILED.
 SDK finalcombinedGO7390 binds actualQ, sourcef1b0 and unchanged green proofs.
 
-**Current actual native blocker:** corrected b954/bade command reached realRoot
-through verifiedDATA after fresh9032/source/HOST admissioned7f. Original live
-session62718, sudo1634456/b53414302 and provider1634459/b53414308 remain owned.
-Driver prepare_source_manifest126 failed at installed graph_observations70:
-`ValueError: duplicate mountpoint`, before native launch. Caller reports all own
-handlesCLOSED/no owncloseerrors, but provider retains restoration custody.
-Actualruntime298a/inode1048651 flags524304 (old524288) prove its ownedI was set;
-no restore or current1.5GiB/job/native12 release is claimed. SourceAcq diagnoses
-only that exact mount predicate and legitimate owning-context cleanup; no retry,
-flagclear, installedhotpatch, signal or new native claim. Root keeps original
-live tool/streams/charge while the bounded diagnosis runs.
+**Actual failed native preflight is reconciled and restored.** Original session62718/provider1634459/b53414308/sudo1634456/b53414302 failed before native entry at the installed graph duplicate-mount predicate. Source-backed correctiondce3/a9b5 preserves mount-ID/held-FD topology and ambiguity refusal; all22 changed checks pass/Q2cdec. Read-only custodyQ1f15, exact-owner pidfd phaseA, original session/stream joins phaseB and independently reviewed exclusive-FLOCK journal/inode/hash CAS phaseC are complete. Actual runtime298a/inode1048651 was restored524304→524288; fullABCQef42 and Rootbfbf retire ONLY that original current1.5GiB/job. Failed diagnostics/historical UNKNOWN/native12/Scratch/source holds remain; no recovery replay or native acceptance.
+
+**Corrected normal graph package and physical30 ACTUALLY PASS.** New016559/07e5 under independent9-field GOafda and freshRoota42e ran once at03:46Z, fulltoold964fa exit0/noSession. Nonce342d20ce has canonical FULLf0d9/finalDISPOSITION, three positive keeper/installer/Root roles, normallease VERIFIED_CLOSED/COMPLETE, resource_unknownFALSE/data_errorNULL and original caller/stream waits positive. Actual capsule0ec96 and saved independentQ9c4080 verify that code-only scope; Rooted3d retires ONLY new2GiB. Reviewed strict764a/request2f259 under fresh128MiB17a417 read all30 immutable Root-owned files/407504B at03:59Z, actualresultd5bf/fullRoot894fee exit0/noSession/no ownread-close errors; Root991e retires only new128MiB. IndependentphysicalQ82e86 verifies that exact30-file result and positive reader/FD/Root closure. Raw global/history/source/native12 UNKNOWNs stay intact. PublicABI owns exact changed-binding recipef4f23 to actualnew30/a9b5/dce3 and then fresh genuine claim/currentfree/source/caps/pidfd admission. c964/a2f/f133 stays first-repeat kernel/stage; no producer/recovery/old468d readback replay.
+
+[Published graph repair and actual restoration/publication/readback proof](docs/verification/native-admission-debug-20261112/graph-recovery-and-normal-adoption-1/PUBLICATION-SCOPE.json).
+
+**Parallel M15 runtime delivery ACTUALLY PASS.** Source5b1d/materialGOc664 and35 new controls/Q69365 feed finaloperationGOa684. After priority normal-family/readback closures, freshCPU7/768MiB admissiond4d722 ran exact0d590 argv04:00:15–16Z. ActualRocky46d deliveryresulte0d1/fullRoot67e16a→d8b4a5 exit0 positively joins all clients/streams/containerterminal0/nonOOM/removal; current768MiB retired7dd80 only. MCPSbfbc/MCINSPECT9af6 actual same-child LD_DEBUG mapping geometry/full providers/configured-prefix joins now await saved SDK qualification and independent whole M15-I01-deployed decision. Earlier missing-auxv failures stay FAILED; no fixture-only or whole-condition credit is inferred. SourceAcq/PublicABI finish new30/native binding while this disjoint saved-result review proceeds.
 
 **Parallel original execution has a real passing compiler result.** CPU7 time
 successor e73b/GO8c029 ran02:02:42–51Z after fresh9032/AS∞/sharedHOST admission.
@@ -243,7 +219,7 @@ containerterminal0/nonOOM/removal/fullRoot63807→3b63exit0 are positive. Actual
 Qd34bc441/handoff02fd1d8e qualifies10artifact identities/41input+receiptpins:
 payloada98d17960B dynamicx64ET_EXEC joins b058/0853, collectordc0e1029888B static
 ET_EXEC/nointerp/noNEEDED. ThreepriororaclePASS reused; no app/collectormain/native
-ran. Root retired onlycurrent768MiB/job1(0bb0); originalnative1.5GiB/job1 stays.
+ran. Root retired onlycurrent768MiB/job1(0bb0); the later originalnative1.5GiB/job1 retirement is separately recorded above.
 The earlier inherited-AS Go failure/3f67 stays FAILED, not replayed.
 [Actual compiler/artifact qualification](docs/verification/m14-time-functional-host-20261112/STATUS.json).
 
