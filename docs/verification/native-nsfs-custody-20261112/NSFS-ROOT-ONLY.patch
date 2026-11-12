@@ -1,0 +1,17 @@
+--- /var/lib/mckernel-code-342d20ce74ad38c41aaaef6aa1fc31d8c49638d02bfbca1e841ac267b510c5ba/installed-source-342d20ce74ad38c41aaaef6aa1fc31d8c49638d02bfbca1e841ac267b510c5ba/graph_observations.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-native-binding-1/nsfs-root-correction-1/graph_observations.PROPOSED.py
+@@ -146,7 +146,13 @@
+                 'mount device fields')
+         device = tuple(int(value) for value in fields[2].split(':'))
+         root = decode_path(fields[3]); point = decode_path(fields[4])
+-        require(root.startswith('/') and point.startswith('/'), 'mount path fields')
++        # nsfs.show_path emits its namespace tag/inode instead of a pathname.
++        # Current supported HOST rows are mnt:[positive unsigned ns_common.inum].
++        nsfs_root = (fields[sep + 1] == 'nsfs' and
++                     re.fullmatch(r'mnt:\[[1-9][0-9]{0,9}\]', root) is not None and
++                     int(root[5:-1]) <= 0xffffffff)
++        require((root.startswith('/') or nsfs_root) and point.startswith('/'),
++                'mount path fields')
+         opts = fields[5].split(',')
+         require(('ro' in opts) != ('rw' in opts), 'ambiguous mount access')
+         records.append(dict(mount_id=ident, parent_mount_id=parent, device=device,

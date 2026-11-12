@@ -1,0 +1,117 @@
+{
+  "baseline_failure_not_replayed": true,
+  "observations": [
+    {
+      "all_fields_equal": true,
+      "id": "actual-f793-all91-and-four-nsfs-preserved",
+      "nsfs_ids": [
+        1852,
+        2732,
+        2983,
+        3669
+      ],
+      "raw_rows": 91,
+      "result": "PASS"
+    },
+    {
+      "id": "nsfs-root-change-visible-map-equal-full-table-unequal",
+      "result": "PASS"
+    },
+    {
+      "id": "canonical-positive-uint32-boundary",
+      "result": "PASS"
+    },
+    {
+      "id": "tagged-root-on-ordinary-filesystem",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "ordinary-relative-root-remains-refused",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "relative-nsfs-path",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "empty-inode",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "zero-inode",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "negative-inode",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "leading-zero-inode",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "nondigit-inode",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "missing-bracket",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "other-unqualified-tag",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "uint32-overflow",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "oversized-decimal",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "tagged-nsfs-relative-covering-mountpoint",
+      "message": "mount path fields",
+      "result": "REFUSED"
+    },
+    {
+      "id": "tagged-nsfs-ambiguous-access",
+      "message": "ambiguous mount access",
+      "result": "REFUSED"
+    },
+    {
+      "id": "tagged-nsfs-invalid-mount-id",
+      "message": "duplicate or invalid mount id",
+      "result": "REFUSED"
+    },
+    {
+      "id": "tagged-nsfs-missing-nonroot-parent",
+      "message": "mount parent outside visible root",
+      "result": "REFUSED"
+    },
+    {
+      "id": "duplicate-nsfs-raw-row-not-filtered",
+      "message": "duplicate or invalid mount id",
+      "result": "REFUSED"
+    },
+    {
+      "id": "nsfs-visible-same-parent-point-ambiguity-not-filtered",
+      "message": "ambiguous visible mount stack",
+      "result": "REFUSED"
+    }
+  ],
+  "schema": "mckernel-new-nsfs-root-expected-controls.v1",
+  "scope": "Only new actualf793 and explicit synthetic nsfs branch/refusal inputs; not native tests or new acceptance quota"
+}

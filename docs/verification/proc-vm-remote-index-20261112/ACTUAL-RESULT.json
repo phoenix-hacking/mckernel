@@ -1,0 +1,146 @@
+{
+  "actual_process_vm_syscall_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-12T10:40:04.542277+00:00",
+  "first_repeat_cohort_changed": false,
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "d12adea18243b3c627e05dcc5e291bc1fad6bbdc4fb7738e88d1685569cfb869",
+  "results": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--sysroot",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+        "--edition=2021",
+        "--crate-name",
+        "proc_vm_index_fixture",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=0",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "linker=/usr/bin/cc",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/preimage.rs",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/preimage.bin"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "exit": 0,
+      "expected_exit": 0,
+      "id": "preimage-compile",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "preimage-compile",
+        "leader": 1843870,
+        "leader_birth": "56626987",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/preimage.bin"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "exit": 1,
+      "expected_exit": 1,
+      "id": "preimage-fixture",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "preimage-fixture",
+        "leader": 1843881,
+        "leader_birth": "56627000",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 1,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+        "--sysroot",
+        "/home/holden/mckernel-work/scratch-readonly-20261105/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+        "--edition=2021",
+        "--crate-name",
+        "proc_vm_index_fixture",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=0",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "linker=/usr/bin/cc",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/postimage.rs",
+        "-o",
+        "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/postimage.bin"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "exit": 0,
+      "expected_exit": 0,
+      "id": "postimage-compile",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "postimage-compile",
+        "leader": 1843882,
+        "leader_birth": "56627001",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/proc-vm-index-fixture/postimage.bin"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "exit": 0,
+      "expected_exit": 0,
+      "id": "postimage-fixture",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "postimage-fixture",
+        "leader": 1843893,
+        "leader_birth": "56627013",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "3ea7e06a876b724f8e519d64ae6ff57ea60575e544a011f185f9f0454ad2d824",
+  "started_at": "2026-11-12T10:40:03.319677+00:00",
+  "status": "PASS_PROC_VM_INDEX_REAL_BODY_REGRESSION_ONLY"
+}

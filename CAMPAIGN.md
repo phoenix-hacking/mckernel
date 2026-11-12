@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T10:08:54.749727+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T11:25:01.646396+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -28,21 +28,58 @@ gates. Root is sole canonical integrator/native executor. Optional mailbox updat
 at pinned ecc3ee6 is fetched for reuse but deferred behind ready original closure.
 Existing1200-second foreground steering is active; no new supervision plumbing.
 
-Native sourceGOea3d/finaloperationGOce728 are ready for unchanged alternate-repeat
-on342d/c964/a2f/f133 with actualnewowner. They also repair inherited strict DATA
-member sizes to final42710/104522 without dropping hash/schema checks. Root next
-executes reviewed current measurement b58b, binds actual DATA26/27 and only then
-runs the single frontdoor operation after its genuine source/currentfree/claim/
-caps/pidfd gates. Require16handlers/deliveries/altstackhits,exit0/emptyerr and positive
-owned restoration; no whole frame/xstate/error credit from that case. Previously
-failed compiler family has positive nine-client/container/Root1 closure; only its
-768MiB current charge was reconciled, without replaying the excluded request.
+Native sourceGOea3d/finaloperationGOce728 passed fresh Root measurement3640
+and actualouter6c5855/session73649 issued the original fixed repeat path. It
+FAILED BEFORE native launch at installed342d graph149: ValueError("mount path
+fields"). Actual target1837769/b56509608 mountinfo f793 has legal nsfs roots
+mnt:[inode] at four absolute /run/snapd/ns paths; parser incorrectly required all
+roots to be paths. Newstrict5073 branch/sourceGOd2ace preserves all91 rows and
+ordinary path/device/ambiguity/heldFD rules. Actual21new controls PASSED2c73b7,
+qualifiedbb4578; no old22/10/provider/keeper/transport green suite rerun.
+
+Current provider1837769/sudo1837766/b56509602/originalsession73649 and NEW1.5GiB
+remain RETAINED with runtime restoration custody. Ownhandles CLOSED is not whole
+family release. Actualreadonlycollector80a6/GOd760 PASSED10:51Z (Rootb0196e,
+result6f9f): genuine first-prior524288/current524304, runtimeFD24/FLOCKowner,
+journal/input/FDbookends and Root-private proof retained. Only newreader256MiB
+and controls256MiB retired1abb3a/3bd7; independent actualqualification/conditions
+feed separate reviewedphaseA exactpidfd stop, phaseB ORIGINAL73649wait/streams,
+then phaseC exclusiveFLOCK+journal/inode/hash-bound restore. No new native retry,
+installedhotpatch or original1.5release before those positive results. Normal
+changedgraph fixed30 successor/readback follows cleanup, then fresh actualrepeat
+admission. The existing c964/a2f/f133 cohort and342d rollback remain intact.
+
+ProcVM meaningful new valid-buffer real-body regression PASSED: fourcommands
+0/1/0/0, baselinefault and threecandidate observations, allfamilies/streams/Root0
+(0f762124/3fe82f). IndependentsavedQd621 confirms onlynew768MiB retirementc8ddee;
+no native process_vm or originalacceptance inference. Private pairedindexpatcha3ee
+has sourceGO1fb8; canonicalsource/image still preserved for firstrepeat.
 
 Timeinputs6bf/obligationsd14/reviewb57 reuse passeda98d/dc0e/threeoracles; actual
 time stage/manifest/source binding follows first-repeat cleanup. Private procVM
 patcha3ee corrects only six li→ri tokens in real Rust/C remote-vector range checks;
-real-body valid-buffer fixture6506/sourceGO1fb8 awaits independent operation review.
+real-body valid-buffer fixture/sourceGO1fb8 passed actualsavedQd621 at its HOST scope.
 No canonical image/source selection or behavior credit from these preparations.
+
+Current11:25 recovery update: exactPhaseA helper stopped BEFORE phase_A with
+KeyError(invocation), because Root admission omitted invocation and same finite
+run keys. Actualnewclient1856335/b56878258 wait1/streams/receiptpositive, no signal;
+onlynew256MiB retiredb4eb58. Earlier Rootdigest-placeholder assert was zeroaction
+and preservede7c2aa. Nativeprovider1837769/session73649/1.5GiB/runtimeI remain held.
+Author native_binding_review freezes only newcapture output and full admission
+contract; m15_installed_leaf_review independently reviews the narrow successor.
+PhaseB still requires ORIGINAL73649 join, then independently admitted PhaseC.
+
+IndependentF05 actual packet1880 failed before compiler after four positive CLI
+joins and createdcontainer64aec6e2 profile readback. Config/HostConfig passed;
+mount comparison tuples versus JSONlists requires bounded saved-data correction.
+Parent1856967/b56888542 wait1/streamsclosed. That known unstarted container and
+new1GiB remain held pending exact-ID reviewed disposition. Authors functional_delta_review
+and proc_vm_index_fix prepare/review only correction and cleanup. Actualaggregate
+heldpayloads are2.5GiB/twojobs plus allcontroller/worker overhead; PhaseA256MiB fits
+onlyafter fresh complete admission, while UTI2GiB stays queued. No payload ran,
+no new acceptance. Conditionalfixed30 sourceGOac11 binds correctedrequest6c0601c7;
+actual recovery/newpublisher/strictphysical30 remain required before native retry.
 
 ## Previous preparation: repaired in place; workload remained paused then
 
@@ -148,7 +185,7 @@ all criterion strings are unchanged. No main/device/native/C-retirement or final
 only the private finite-credit amount; original private digest stays28f3.
 [Whole I01 deployment](docs/verification/m15-i01-deployed-20261112/WHOLE-REVIEW.json),
 [three installed-identity decisions and exact scope](docs/verification/m15-installed-identities-20261112/STATUS.json).
-Changed-pair publication105/156,70.00/74.59 is pending fetched checkpoint verification;
+Changed-pair publication105/156,70.00/74.59 is fetched-verified at2fc70617 and POSTED_CONFIRMED in PR3comment6820943913;
 prior receipt6812117790 remains solely the historical100/156,70.00/68.86 report.
 
 All original criteria/weights/denominators and M14-before-M15 acceptance order stay
