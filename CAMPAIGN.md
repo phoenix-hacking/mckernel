@@ -1,27 +1,46 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T18:59:29.324723+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T19:24:53.761882+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
 
-CURRENT c309 actual result_verify failure supersedes priorpreissue banners.
-Correctedhelper0fb/GOe792 with qualifiedsudo/socket/env+childlimits succeeded
-throughfreshpreflight/account/admission and issued SAMEunusedcdc publisherONCE,
-newnoncec309bcdd, original8e36f5/session81691 LIVE. Actualownedstderr443B/43ed
-reports ROOT_INSTALL_FAILURE_DATA_V1, ValueError/result_verify, redactedmessage,
-UNKNOWN; parent1995217/b59502337, keeper1995219/b59502349, installer1995220/
-b59502365 and capture2254658/2254659 are point observations only. Stage also
-covers ACKsend; exact failingpredicate/verifiedresult/ACK and originalcaller/
-sudo/keeper/installer/lease/capture/fullRoot closure remain UNPROVED. Retain
-CURRENT2GiB/job1/exclusiveHOST; no newnonce/issuer/native reissue or sourcehotpatch.
-Functional_delta_review diagnoses exactsource +minimumsaved INSTALL-RESULT/START
-projection; native_binding_review froze currentcustodyconditionscc1561 and will
-review only finitecurrentowning-context collection/disposition. Parentfailureloop
-has NOrecoveryRPC; no inventedframes/processmemory/tracing or normalvalidator
-weakening. Native_current_binding froze conditional BOTH CORE/providerrecipe
-7b62/prospectivec309 only; actualinode/FULL/Q/readback/sourceGO/nativeauthority
-unset. No partiallyinstalledgeneration credit/adoption.
+Current reporting publication c309 / original session81691 failed at result_verify;
+that stage includes verification, proof-cap checks and ACK send. The original
+2GiB/job1 exclusive HOST family, roles, lease and captures remain retained.
+No installed generation or native acceptance is claimed.
+
+The exact saved-result reader ACTUALLY PASSED once at 19:22:39Z: corrected
+requestd4b90 / actor87560 / parent49ed, independent GO290db and fresh complete
+30-field admissionaf997; outer tool7361bd exit0, own actor wait0/FDs/streams
+closed. RESULT47aaab45 / safe projectioncacd4334 contain 16 actual journal rows:
+installer directwait0, both capture writers closed, RESULT_DURABLE hash matching
+the saved result, and no RESULT_PARENT_ACK. The saved proof names30 source files
+and cataloguecb618; this DATA is not installed-file readback or publication
+closure. The newly observed directory is DATA, never original held-directory-FD
+proof. Reader Q7e77b6 and Root's scoped receipt now retire ONLY its256MiB/job1; the
+original c3092GiB/job1 remains held.
+
+Current accountable next actions, all six canonical owners explicit Sol/MAX:
+- native_binding_review completed reader Q7e77 and now reviews only the finite
+  current-family disposition.
+- native_current_binding authors that exact c309 disposition against actual
+  parent1995217/b59502337, keeper1995219/b59502349 and original81691 joins.
+- functional_delta_review compares only actual saved fields with the pinned
+  verifier/source to identify the first contradicted or still-unproved predicate.
+- proc_vm_index_fix finishes the ordinary TLS protected HOST packet; completed
+  time_functional_source supplies its independent operation review when frozen.
+- m15_installed_leaf_review's F08 bounded member-reader GO9bc7/argv921b is ready
+  and queued behind genuine c309 disposition. UTI metadataGO080f and F05GO8815
+  retain the same real resource gate; no successful signal prerequisite is added.
+
+Root next executes only an independently reviewed exact disposition under fresh
+actual admission, preserves original waits/streams, and retires matching scopes
+only after positive closure/qualification. Parent failure loop has no recovery
+RPC. No new nonce, issuer/native replay, verifier rerun, private-memory tracing,
+partial-generation adoption or source hotpatch. Both CORE/provider bindings7b62
+remain conditional. All native12/source/globalUNKNOWN and excluded collector
+holds, same finite7c6, original105/156 and70.00/74.59 remain unchanged.
 
 Earlier81012A/B/C/failedHOSTQ/Root633f remain complete (old1.5GiB notretained).
 F08 realqualifiedquery306f29/Qa9b/Roote72d, actualsyntaxece463/extraction5880->
