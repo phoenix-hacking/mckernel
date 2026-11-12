@@ -1,12 +1,118 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T07:06:31Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T10:08:54.749727+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Current invocation: stopped on a service rejection
+## Current invocation: actual guarded resume RUNNING
 
-Invocation20261111T223223Z-fb7f73db stopped at2026-11-12T04:26:19Z, exit23,
-with goalPAUSED and a current `cyberPolicy` rejection. Failed P04Tests worker
+Manual invocation20261112T094452Z-12a4bea0 is ACTUALLY running under the same saved
+Root/goal/finite7c6, worker1824291/b56295805/server1824293/b56295812, guardian
+SUPERVISED. The normal explicit-user guard returned no current blocker; real
+successful account/rateLimits/read and durable same-ledger receipt are current.
+This records observed normal startup, not an invented external service-clearance
+receipt. The prior preparation and held-start records below remain historical.
+No controller/goal/balance reset, backup restoration or native admission occurred.
+Rejected worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02
+and its signal/frame/xstate collector request remain excluded from replay,
+rephrasing and reassignment. Declared local instruction amendments were read and
+validated against their current audited hashes; they are not exact GitHub quotes.
+All new owners are explicitSol/MAX/depth1. HOST0,6,7/max3/4GiB total/fresh26GiB and
+16/12GiB disk floors; native2-5/12GiB one separate Root admission; CPU1 excluded.
+
+Six current owners: native_current_binding prepares exact current342d repeat;
+native_binding_review independently reviews new controls/packet; time_functional_source
+owns unselected current-header UTI ABI data after reviewed timeinputs; functional_delta_review
+owns time/procVM changed-input evidence; proc_vm_index_fix owns the private paired
+remote-index correction; m15_installed_leaf_review decides saved original installed
+gates. Root is sole canonical integrator/native executor. Optional mailbox update
+at pinned ecc3ee6 is fetched for reuse but deferred behind ready original closure.
+Existing1200-second foreground steering is active; no new supervision plumbing.
+
+Native sourceGOea3d/finaloperationGOce728 are ready for unchanged alternate-repeat
+on342d/c964/a2f/f133 with actualnewowner. They also repair inherited strict DATA
+member sizes to final42710/104522 without dropping hash/schema checks. Root next
+executes reviewed current measurement b58b, binds actual DATA26/27 and only then
+runs the single frontdoor operation after its genuine source/currentfree/claim/
+caps/pidfd gates. Require16handlers/deliveries/altstackhits,exit0/emptyerr and positive
+owned restoration; no whole frame/xstate/error credit from that case. Previously
+failed compiler family has positive nine-client/container/Root1 closure; only its
+768MiB current charge was reconciled, without replaying the excluded request.
+
+Timeinputs6bf/obligationsd14/reviewb57 reuse passeda98d/dc0e/threeoracles; actual
+time stage/manifest/source binding follows first-repeat cleanup. Private procVM
+patcha3ee corrects only six li→ri tokens in real Rust/C remote-vector range checks;
+real-body valid-buffer fixture6506/sourceGO1fb8 awaits independent operation review.
+No canonical image/source selection or behavior credit from these preparations.
+
+## Previous preparation: repaired in place; workload remained paused then
+
+The user explicitly requests repair/preparation only, without restoring from
+backups or deleting/emptying ledgers. State syntax was repaired with exactly ONE
+inserted quote and ZERO removed characters. All existing values, the saved Root,
+goal, finite7c6 credit ledger and resource/ownership records were preserved.
+The previously blanked error classifications were not repopulated or treated as
+service clearance. No new start intent, campaign turn, native work or acceptance.
+
+The earlier sentence cleanup damaged eight operational instruction records:
+three pending copies and five source registries. These now carry explicit LOCAL
+revision notices and honest current text hashes; their prior edited text remains
+verbatim as a suffix. Original recorded digests, complete pre-amendment records,
+source IDs, statuses and submission times are retained in an append-only audit.
+Delivered receipts were not changed or requeued; six pending/zero sending remain.
+One previously redacted superseded archive still differs from its old receipt.
+Both are retained unchanged and the discrepancy is explicitly recorded; the
+prepared command does not reference or replay that historical binding.
+
+Validation PASS: all15 top-level control JSON files parse; all207 source registry
+hashes validate; all6 pending/source pairs agree; credit ledger/goal unchanged.
+Actual read-only account/configuration preflight passed Sol/MAX dispatcher,
+same finite allowance, CPUs0,6,7,28.36GiB available and101.52GiB host disk free.
+Pinned new startup note5974B and normal frontdoor dry-run passed with zero model
+calls. Independent read-only review found no remaining data/argv defect. Worker,
+auditor and reviewer DEFAULTS remain HIGH; every future assignment must explicitly
+select MAX under the standing instruction. No source defaults were changed.
+
+Actual HOST service/process check09:39:58Z confirms guardian1561218/b51981693 live,
+heartbeat4.4s, engine MainPID0. Guardian remainsHELD/current_or_unattributed_failure
+and the saved goal PAUSED. This preparation does not verify live model-service
+permission, grant native admission or clear any actual external restriction.
+A later user-authorized run uses the NORMAL guarded frontdoor and the same Root,
+ledger, rejected-task exclusion and stricter HOST/native limits; no hidden flags,
+new conversation, automatic retry or state/guard override.
+
+Preparation and exact launch command:
+`/home/holden/mckernel-work/relaunch-preparation-20261112T093247Z/readiness.json`
+`/home/holden/mckernel-work/relaunch-preparation-20261112T093247Z/launch-command.txt`
+Amendment audit:
+`.git/os-autopilot/instructions/amendments/relaunch-preparation-20261112T093247Z.jsonl`.
+
+## Previous resume evaluation: guardian held
+
+
+At08:10Z the foreground user requested beginning McKernel and explicitly reported
+"The hold has been cleared" after the supported account-setup/review question.
+Fresh read-only account/model preflight passed with the same signed-in credits,
+finite7c6, Sol/MAX, affinity0,6,7 and27.23GiB available. That preflight establishes
+authentication/configuration, not policy clearance. One NORMAL GUARDED manual
+start was submitted as request01d230ceb76d485a8cc2a57ed100f865. Guardian1561218
+evaluated its explicit-user intent and recorded statusheld/reason
+`account_policy_or_permission_failure`, launchNULL. The savedRoot/goal remain
+stopped/paused under the same223223Z invocation; no new campaign worker, server,
+native work or original acceptance was started. Rejected-task identity and all
+prior errors, holds, UNKNOWNs, budgets and dirty work remain preserved.
+
+Read-only independent source review confirms that the existing guardian refuses
+current policy failures even for explicit starts and exposes no supported
+clearance-reconciliation receipt. Do not use internal `--supervisor` or
+`--guardian-run-id` controls to skip that decision, edit state/guards to force
+admission, or loop another resume attempt. Next action is supported reconciliation
+of the LOCAL launcher hold with the reported account clearance. The user's
+account step is reported complete; do not present another account-setup request
+as if this evaluation proved that step incomplete.
+Operational receipt/startup binding:
+`/home/holden/mckernel-work/m14-m15-explicit-resume-20261112T080954Z/guarded-resume-result.json`.
+
+## Saved invocation: stopped on a service rejection Failed P04Tests worker
 `01a1c48d-4d96-7cc3-b733-73a97973152f`, turn
 `01a1ce01-20cf-7e03-9442-f6d521fb8b02`, was checking the signal/frame/xstate
 collector. That notice alone does not establish that cybersecurity work occurred.
@@ -33,8 +139,18 @@ evidence, not fresh account/resource admission for another invocation.
 
 ## Current decision
 
-**Original closure is100/156: M14=70.00%, M15=68.86%.** Whole original
+**Original closure is105/156: M14=70.00%, M15=74.59%.** Whole original
 M14-03-05-DEFAULT GOc7f765f0 remains counted on sourcec964/imagea2f00a61/map15b10db2.
+Four new whole original identity leaves and explicit original I01 gate acceptance are recorded once: M15-I01-deployed
+(finalf36e), M15-F02-deployed/M15-F06-installed/M15-F07-installed (independent28f3).
+I01 mean60→80 from deployment, then100 by independent original gate GO697e; exact M15=275675/3696=74.59. Original weights/156denominator and
+all criterion strings are unchanged. No main/device/native/C-retirement or final milestone acceptance is inferred; only original I01 is explicitly accepted by separate whole review. The three-leaf public review explicitly redacts
+only the private finite-credit amount; original private digest stays28f3.
+[Whole I01 deployment](docs/verification/m15-i01-deployed-20261112/WHOLE-REVIEW.json),
+[three installed-identity decisions and exact scope](docs/verification/m15-installed-identities-20261112/STATUS.json).
+Changed-pair publication105/156,70.00/74.59 is pending fetched checkpoint verification;
+prior receipt6812117790 remains solely the historical100/156,70.00/68.86 report.
+
 All original criteria/weights/denominators and M14-before-M15 acceptance order stay
 unchanged. C4 and remaining FUNCTIONAL/native/parent/file/milestone conditions are
 open. Four accepted M14 files and M15-F01 remain closed at their exact scopes.
@@ -3177,11 +3293,7 @@ cohorts and 0 C retirements**. Exact open gates: **F03, F06, I01 supported-defau
 ownership/zero-C/ABI, I02 reproducible matched image/modules, I03 matching native
 applications and resource restoration**. Four accepted files and35/35 historical
 functional closure retain their exact separate scopes. The23+5 C cursor remains
-historical; no fresh final-image count is claimed.
-
-**Original hold is now bound to machine evidence:** the rejected `generic_c`
-turn is `failed` with service code`cyberPolicy`; held=true, replay=false and
-equivalent reassignment=false. The record contains no loaded request items, named
+historical; no fresh final-image count is claimed. The record contains no loaded request items, named
 issuer or scoped release condition. The cited old notice line is a different
 goal event. Account prerequisites in the actual service notice are not release
 authority; no account change, appeal or retry occurred. Bounded proof:
