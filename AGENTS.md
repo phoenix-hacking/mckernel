@@ -7,6 +7,10 @@ narrative logs or follow their reading lists. This supersedes older campaign
 startup/read-order instructions, including references in the retained goal identity.
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Include that scope in every delegated task. A policy-rejected task retains its
+worker/turn identity and stays excluded from replay, rephrasing or reassignment
+pending supported review. A fresh conversation or local history cleanup cannot
+clear a current service/account hold; resolve that hold before normal saved-campaign resume.
 Dispatcher: `gpt-6.1-sol`, reasoning `max`; every subsequent worker, auditor and
 reviewer task uses explicit `gpt-6.1-sol` / reasoning `max` under the latest user
 instruction. Reuse completed HIGH work; do not restart healthy turns to change effort.

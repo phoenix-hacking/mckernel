@@ -1,20 +1,35 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T04:12:12.613485+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T07:06:31Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Current invocation: explicitly resumed
+## Current invocation: stopped on a service rejection
 
-ACTIVE under manual invocation20261111T223223Z-fb7f73db. This new user authorization
-supersedes retiring signal_15/pause banners. Same savedRoot/goal and finite7c6
-continue; no goal/launcher/budget reset. Actualnewworker1575383/b52260962,
-server1575385/b52260969, watcher1575381/b52260954 and guardian1561218/b51981693
-are live. SDK39a/7207/068e are loaded; actual9032 consumption of genuine read31
-at22:33:21 has independent activationQ842ec545, sourceoutcomeb8ef0bc8. Later live
-read37 is a different observation, not substituted for captured31. New operations
-still need their own fresh current-owner/account/resource/source admission.
-ActualRoot and resumed owners areSol/MAX; permissiondanger-full-access/never,
-UID1000, same six-owner ceiling/depth1/currentHOST0,6,7/max3/4GiB and nativeheld12.
+Invocation20261111T223223Z-fb7f73db stopped at2026-11-12T04:26:19Z, exit23,
+with goalPAUSED and a current `cyberPolicy` rejection. Failed P04Tests worker
+`01a1c48d-4d96-7cc3-b733-73a97973152f`, turn
+`01a1ce01-20cf-7e03-9442-f6d521fb8b02`, was checking the signal/frame/xstate
+collector. That notice alone does not establish that cybersecurity work occurred.
+The worker1575383/b52260962 and server1575385/b52260969 are absent; the watcher
+positively recorded retirement. Guardian1561218/b51981693 remainsHELD for
+`account_policy_or_permission_failure`. This is not a technical crash or an
+automatic-retry grant. The recorded service notice requires account-security
+setup at https://chatgpt.com/cyber; a suspected false positive uses Codex `/feedback`.
+
+The user requests functional OS/Rust engineering only and a later restart.
+Resolve the service requirement through its supported path before normal resume;
+do not replay or reassign the rejected task, erase the hold, switch accounts/models,
+or use a fresh conversation as clearance. The harness now carries the engineering
+scope and rejected worker/turn exclusion into startup and manual-resume instructions,
+and refuses fresh-session creation/reuse over a current service/policy hold.
+31 focused offline startup/resume/fresh-session regressions passed; no model or
+native work was launched. Current launcher changes require matching reviewed source
+bindings before any execution. No new M14/M15 acceptance is claimed by this fix.
+
+Same savedRoot/goal, finite7c6, six-owner ceiling/depth1, Sol/MAX task routing,
+HOST0,6,7/max3/4GiB, nativeheld12 and all source/UNKNOWN reservations remain.
+Prior SDK39a/7207/068e activation and read31/Q842ec545 remain historical qualified
+evidence, not fresh account/resource admission for another invocation.
 
 ## Current decision
 

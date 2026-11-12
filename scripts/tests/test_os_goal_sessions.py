@@ -51,7 +51,7 @@ class FreshSessionTests(unittest.TestCase):
                       "goal": {"objective": "Retained original objective", "status": "blocked",
                                "tokenBudget": 12345, "tokensUsed": 987},
                       "stop_reason": "turn_failed",
-                      "last_error": {"codexErrorInfo": "cyberPolicy", "message": "Retain verbatim"}}
+                      "last_error": {"codexErrorInfo": "serverOverloaded", "message": "Retain verbatim"}}
         self.save()
         (self.directory / "logs").mkdir()
         (self.directory / "logs" / "old.jsonl").write_bytes(b"old log\n")
@@ -137,6 +137,52 @@ class FreshSessionTests(unittest.TestCase):
     def test_valid_paused_goal_and_null_server_are_accepted(self):
         self.state["goal"]["status"] = "paused"
         self.state["server_pid"] = None
+        self.save()
+        self.assertIsNone(self.fresh()["thread_id"])
+
+    def test_current_policy_stop_cannot_be_archived_into_a_fresh_cursor(self):
+        for info in ("cyberPolicy", {"type": "cyberPolicy"}, {"cyberPolicy": {}}):
+            with self.subTest(info=info):
+                self.state["last_error"]["codexErrorInfo"] = info
+                self.save()
+                self.assert_refused()
+                self.assertFalse((self.directory / "session-archives").exists())
+
+    def test_missing_provenance_is_not_evidence_of_a_historical_rejection(self):
+        self.state.update(log_dir="current-run")
+        self.state["last_error"]["codexErrorInfo"] = "cyberPolicy"
+        for provenance in (None, {}, {"log_dir": None}):
+            with self.subTest(provenance=provenance):
+                self.state["last_error_provenance"] = provenance
+                self.save()
+                self.assert_refused()
+
+    def test_explicit_service_holds_block_manual_fresh_session(self):
+        for flag in ("service_hold", "policy_hold", "auth_hold", "billing_hold"):
+            with self.subTest(flag=flag):
+                self.state[flag] = True
+                self.save()
+                self.assert_refused()
+                self.state.pop(flag)
+
+    def test_policy_stop_in_prepared_archive_cannot_be_reused(self):
+        fresh = self.fresh()
+        archived = Path(fresh["previous_session"]["state_path"])
+        old = json.loads(archived.read_bytes())
+        old["last_error"]["codexErrorInfo"] = "cyberPolicy"
+        archived.write_text(json.dumps(old))
+        self.assert_refused()
+
+    def test_old_policy_error_does_not_replace_a_later_user_stop(self):
+        self.state["stop_reason"] = "signal_15"
+        self.state["last_error"]["codexErrorInfo"] = "cyberPolicy"
+        self.save()
+        self.assertIsNone(self.fresh()["thread_id"])
+
+    def test_another_invocations_policy_error_does_not_create_a_current_hold(self):
+        self.state.update(log_dir="current-run", last_error_provenance={
+            "log_dir": "previous-run", "error": {"codexErrorInfo": "cyberPolicy"}})
+        self.state["last_error"]["codexErrorInfo"] = "cyberPolicy"
         self.save()
         self.assertIsNone(self.fresh()["thread_id"])
 

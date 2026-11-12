@@ -132,6 +132,37 @@ def _recovery_allowed(state):
     return True
 
 
+def _require_no_service_hold(state):
+    """A new conversation is not clearance for a current service rejection."""
+    held = any(state.get(key) for key in
+               ("service_hold", "policy_hold", "auth_hold", "billing_hold"))
+    error = state.get("last_error")
+    info = error.get("codexErrorInfo") if isinstance(error, dict) else None
+    if isinstance(info, dict):
+        info = (info.get("type") or info.get("code") or
+                ("cyberPolicy" if "cyberPolicy" in info else None))
+    provenance = state.get("last_error_provenance")
+    if not isinstance(provenance, dict):
+        failure = state.get("last_failure")
+        if isinstance(failure, dict) and failure.get("error") == error:
+            provenance = failure
+    historical = (isinstance(provenance, dict) and (
+        (isinstance(provenance.get("log_dir"), str) and provenance["log_dir"]
+         and isinstance(state.get("log_dir"), str) and state["log_dir"]
+         and provenance["log_dir"] != state["log_dir"]) or
+        any(state.get(key) is not None and provenance.get(key) is not None
+            and state[key] != provenance[key]
+            for key in ("worker_pid", "worker_start", "server_pid", "server_start"))))
+    rejected = (not historical and state.get("stop_reason") in
+                {"turn_failed", "server_error", "rate_limit"}
+                and info in ("cyberPolicy", "policyViolation", "contentPolicyViolation"))
+    if held or rejected:
+        raise ValueError(
+            "Fresh session cannot clear a service/policy hold. Resolve the recorded "
+            "account/security requirement or use supported review, then resume the "
+            "saved campaign; do not retry or rephrase the rejected task.")
+
+
 def _validate_proof(base, directory, proof_path, raw, state):
     from watch_os_goal import process_start, should_restart
 
@@ -178,6 +209,7 @@ def validate_prepared_fresh_session(directory: Path, repo: Path, state=None,
                 or not isinstance(previous, dict)
                 or not isinstance(previous.get("state_path"), str)):
             raise ValueError("State is not a prepared fresh session")
+        _require_no_service_hold(saved)
         path = Path(previous["state_path"])
         if (not path.is_absolute() or path.name != "state.json"
                 or path.parent.parent != directory / "session-archives"
@@ -197,6 +229,7 @@ def validate_prepared_fresh_session(directory: Path, repo: Path, state=None,
                 or old.get("stop_reason") != previous.get("stop_reason")
                 or (expected_objective is not None and goal["objective"] != expected_objective)):
             raise ValueError("Prepared fresh archive ownership or metadata does not match")
+        _require_no_service_hold(old)
         return saved
 
 
@@ -249,6 +282,7 @@ def prepare_fresh_session(directory: Path, repo: Path, write_json, recovery: boo
             raise ValueError("Explicit fresh session requires a stopped paused or blocked campaign")
         if expected_objective is not None and goal["objective"] != expected_objective:
             raise ValueError("Saved goal belongs to a different objective")
+        _require_no_service_hold(state)
         _absent(state.get("worker_pid"), "worker")
         if "server_pid" not in state:
             raise ValueError("Missing prior server identity")

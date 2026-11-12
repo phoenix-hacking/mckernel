@@ -77,6 +77,19 @@ LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
 INCLUDED_USAGE_STOP_PERCENT = 100
 CREDIT_NOTIFICATION_MAX_AGE_SECONDS = 15
 USER_INPUT_METHOD = "item/tool/requestUserInput"
+ENGINEERING_SCOPE = (
+    "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. "
+    "Scope each task to an original M14/M15 provider/ABI, coherent image/module, "
+    "or functional/lifecycle requirement. Do not undertake vulnerability scanning, "
+    "exploit development, penetration testing, red teaming or credential collection. "
+    "Preserve legitimate kernel behavior tests and their original acceptance criteria. "
+    "Include this scope and any rejected-task exclusions in every delegated task. "
+    "On a cyberPolicy rejection, stop the affected task and preserve its request, "
+    "worker/turn identity and service notice. Use supported account resolution or "
+    "Codex /feedback for a suspected false positive. Do not retry, rephrase or "
+    "reassign the rejected task, switch accounts/models, or clear service records. "
+    "A new conversation or local history cleanup does not clear a service hold. "
+)
 AUTONOMY_REPLY = (
     "Automatic launcher response applying the user's standing instruction; "
     "no new human answer was provided. Continue the authorized OS milestone "
@@ -84,7 +97,9 @@ AUTONOMY_REPLY = (
     "defaults and record assumptions. If a missing fact, credential or external "
     "resource cannot be inferred, record that task's blocker and continue other "
     "ready work. Do not fabricate facts, select an external-action approval, "
-    "weaken acceptance criteria, or repeat this question."
+    "weaken acceptance criteria, or repeat this question. This automatic answer "
+    "does not authorize security testing, replay of a rejected task or clearance "
+    "of a service/account hold."
 )
 
 
@@ -199,6 +214,8 @@ def restart_advice(state):
     if is_policy_stop(state):
         failed = failure_location(state)
         return ("service-side cyberPolicy stop; automatic retry is disabled. "
+                "Local history cleanup or a fresh session does not clear this hold. "
+                "Resolve the recorded account/security requirement before resuming. "
                 "Report a suspected false positive with Codex /feedback; "
                 "thread=" + str(failed.get("thread_id") or state.get("thread_id", "unknown"))
                 + "; turn=" + str(failed.get("id", "unknown"))
@@ -783,6 +800,8 @@ class Campaign:
             "schema_version": 1, "repo": str(repo), "thread_id": None, "created_at": utc()}
         if self.state.get("schema_version") != 1 or self.state.get("repo") != str(repo):
             raise RuntimeError("State belongs to a different repository or unsupported schema.")
+        self.prior_policy_failure = (dict(failure_location(self.state))
+                                     if is_policy_stop(self.state) else None)
         self.log_dir = directory / "runs" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8])
         self.log_dir.mkdir(parents=True, mode=0o700)
         self.rpc_factory, self.rpc = rpc_factory, None
@@ -1638,7 +1657,7 @@ class Campaign:
                       "mark the larger saved whole-system goal complete at that point. "
                       if getattr(self.args, "stop_after_m14_m15", False) else "")
         return (
-            prefix + repair + milestones + "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. "
+            prefix + repair + milestones + ENGINEERING_SCOPE +
             "Read CAMPAIGN.md as the SOLE human-readable plan, status and handoff. Do not read "
             "legacy narrative logs or follow their reading lists. This replaces the old reading "
             "order in the retained goal identity and archived conversation. On fresh/recovered "
@@ -1768,6 +1787,12 @@ class Campaign:
 
     def manual_resume_instruction(self, note):
         previous = (self.state.get("last_instruction") or {}).get("id", "not recorded")
+        failure = self.prior_policy_failure
+        exclusion = ("\nPreserved policy rejection: thread=" +
+                     str(failure.get("thread_id") or self.state.get("thread_id", "unknown")) +
+                     "; turn=" + str(failure.get("id", "unknown")) + ". "
+                     "That task remains excluded from replay or reassignment. A scope "
+                     "statement is not service/account clearance.\n" if failure is not None else "")
         return (
             "EXPLICIT USER RESUME — new manual launcher invocation " + self.log_dir.name + ".\n"
             "The user has invoked the launcher NOW to resume unfinished functional OS and "
@@ -1780,7 +1805,8 @@ class Campaign:
             "Preserve signal, quota and selected included/credit budget, billing, ownership/resource and service "
             "controls; do not replay rejected work or expired execution releases. "
             "The launcher's automatic recovery does not issue this manual authorization.\n"
-            + (("Current invocation scope and execution instructions:\n" + note) if note else "")
+            + ENGINEERING_SCOPE + exclusion +
+            (("Current invocation scope and execution instructions:\n" + note) if note else "")
         )
 
     def begin(self):
