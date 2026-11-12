@@ -1,0 +1,56 @@
+{
+  "actual_kernel_CPU_offload_hostwait_native_executed": false,
+  "all_waits_streams_joined": true,
+  "finished_at": "2026-11-12T00:56:56.330463+00:00",
+  "original_acceptance": false,
+  "remaining_direct_children": [],
+  "request_sha256": "fc001589e464a46647464bd5f06a12e1179e20395e2761d170c16de31c5b5fb9",
+  "results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=268435456",
+        "--cpu=10",
+        "--fsize=4194304",
+        "--nofile=64",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "TMPDIR=/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1/output-1/tmp",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/oserror-message-oracle-correction-1",
+      "exit": 0,
+      "id": "actual-outer-keeper-two-entry-vectors",
+      "ownership": {
+        "adopted_kills": [],
+        "adopted_reaps": [],
+        "error": null,
+        "label": "actual-outer-keeper-two-entry-vectors",
+        "leader": 1619686,
+        "leader_birth": "53128235",
+        "leader_group_signalled": false,
+        "leader_parent_joined": true,
+        "remaining_direct_children": [],
+        "status": 0,
+        "streams_closed": true,
+        "timed_out": false,
+        "whole_descendants_joined": true
+      }
+    }
+  ],
+  "review_sha256": "31b78e1ec175ade0f4382173629d28805b99e0aafbae494f7764fb0eb4fc37d9",
+  "started_at": "2026-11-12T00:56:56.268326+00:00",
+  "status": "PASS_TWO_OUTER_KEEPER_ENTRY_VECTORS_PENDING_SAVED_QUALIFICATION"
+}

@@ -1,0 +1,74 @@
+{
+  "actual_execution_or_new_probes": false,
+  "actual_failure_qualification": {
+    "bytes": 7070,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/transport-correction-1/actual-result-1/QUALIFICATION.json",
+    "sha256": "ed16d4f6335128d19298fd770f347df9ff0def211666147fdf8fdee97b2fe891"
+  },
+  "at_utc": "2026-11-12T01:13:56.707995+00:00",
+  "decision": "ESTABLISHED_ORDINARY_EXEC_TRANSPORT_SIZE_DEFECT_SOURCE_SUFFICIENT_SUDO_COMMAND_MECHANISM_NO_RETRY_GRANT",
+  "inference_limits": [
+    "The final failed exec environment was not captured. The named SUDO_COMMAND value is reconstructed from same-version upstream source+actual argv and supported by installed plugin format, not claimed as a captured runtime environment.",
+    "Exact Ubuntu-patched full source/binary equivalence and original sudo stack/PAM limit values are not independently attested here. The sufficient per-environment-string overflow does not require increasing stack or loosening a limit.",
+    "Actual sudo policy/plugin status beyond installed source/literal is not probed. Raw diagnostic is E2BIG, not a captured authentication/permission/policy denial; this grants no privilege or native permission."
+  ],
+  "metrics": {
+    "bytes": 4115,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/transport-correction-1/BOUNDARY-METRICS.json",
+    "sha256": "ac0e6c7d87494a5bb57c2844124190fa001357b76a8159ddde3ce4d39c880662"
+  },
+  "observed_facts": [
+    "One original28-element direct-list command launched sudo1623165/b53188181 and it was positively waited1 with streams closed; full Root5e90a5 exit1/noSession.",
+    "Exact61-byte stderr is sudo unable to execute /usr/bin/env: Argument list too long. Stdout empty. No selected publisher/provider/native reports; env exec failed before selected Python/Root code could run.",
+    "Actual argv contains169869 bytes including NUL; largest original argument104441 bytes. Original individual-string and aggregate SC_ARG_MAX checks did not account for a later sudo-generated single environment string.",
+    "Installed package version is1.8.31-1ubuntu1.5; read-only installed plugin contains the matching SUDO_COMMAND formatting literal. No sudo policy/credential/root-private file was read or command/probe executed."
+  ],
+  "original_acceptance": false,
+  "original_failure_preserved": true,
+  "owner": "/root/sdk_binding_source_max; independent source/evidence diagnosis, Pub/P04Source own correction writers",
+  "retirement_scope": "Only current HOST1.5GiB/job1 by Root from ed16 positive process proof; native12GiB/historical/Scratch/UNKNOWN/source/runtime/flags/account holds unchanged.",
+  "same_version_source_mechanism": {
+    "environment": "env.c rebuild_env constructs SUDO_COMMAND from full user_cmnd and joined user_args using asprintf, without a truncation bound (upstream lines1046\u20131057). This occurs before sudo execs /usr/bin/env.",
+    "exact_source_derived_environment_bytes": 169865,
+    "exec_boundary": "src/exec.c exec_cmnd passes details.argv plus rebuilt details.envp to sudo_execve. env -i has not run and cannot yet remove SUDO_COMMAND.",
+    "kernel": "Linux5.15 fs/exec.c copy_strings applies MAX_ARG_STRLEN to every argument AND environment string. Local matching UAPI declares PAGE_SIZE*32; actual PAGE_SIZE4096 yields131072B. Aggregate bprm_stack_limits/SC_ARG_MAX is a separate limit.",
+    "over_limit_bytes": 38793,
+    "per_string_limit_bytes": 131072,
+    "sudoers_user_args": "sudoers.c set_cmnd normal MODE_RUN joins every NewArgv+1 argument separated by spaces (upstream lines786\u2013824). No shell execution is involved."
+  },
+  "schema": "mckernel.native-outer-sudo-E2BIG-finite-source-diagnosis.v1",
+  "smallest_required_correction": {
+    "behavior": "Transport the SAME exact0181/e81/0ca bodies through the existing verified-byte seam with a short authenticated argument vector. Preserve actual Root authority, code/digest/custody and one-process control flow; no mutable path-as-code trust or alternate privilege route.",
+    "new_operation": "A meaningful source/input change plus independent source/operation review and genuinely fresh complete Root admission must precede any new command. No unchanged retry, privileged probe or model/tool/session workaround.",
+    "preflight": "Check all real per-string bounds and conservative aggregate argv+environment reserve below128KiB as well as SC_ARG_MAX; include sudo reconstructed command length. Keep current AS/stack/CPU/permissions and sudo-A/env-i profile, no new limit widening or env-policy alteration.",
+    "source_owner": "P04Source owns publisher verified-byte input seam; Pub owns short argv/protected capture binding, per Root direct assignment. No implementation authored by this reviewer.",
+    "targeted_validation": "Only changed transport constructor/verified-byte decode or input/custody boundary and exact byte/hash/argument reconstruction/refusal controls, selected by actual correction. Reuse existingkeeper/source/diagnostic/provider green proofs where source bodies remain equal."
+  },
+  "source_or_state_mutations": false,
+  "source_snapshots": [
+    {
+      "bytes": 39188,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/transport-correction-1/source-references/sudo-1.8.31-env.c",
+      "sha256": "06b54140e2d20f79e90f8e736fb82afbed67d5b5fca8db4f91e07156a67827a6",
+      "url": "https://raw.githubusercontent.com/sudo-project/sudo/SUDO_1_8_31/plugins/sudoers/env.c"
+    },
+    {
+      "bytes": 37406,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/transport-correction-1/source-references/sudo-1.8.31-sudoers.c",
+      "sha256": "17e503f9794559ee95f4d07c698a6ba18752388f1a64ccd15cf8010ca986a76e",
+      "url": "https://raw.githubusercontent.com/sudo-project/sudo/SUDO_1_8_31/plugins/sudoers/sudoers.c"
+    },
+    {
+      "bytes": 12636,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/transport-correction-1/source-references/sudo-1.8.31-exec.c",
+      "sha256": "a94799777d33267952bd8f4045b767dafd129d98259d6b3703cd88787c15dc72",
+      "url": "https://raw.githubusercontent.com/sudo-project/sudo/SUDO_1_8_31/src/exec.c"
+    },
+    {
+      "bytes": 50558,
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-runtime-native-outer-capture-review-sdk-max-1/correction-1/transport-correction-1/source-references/linux-5.15-exec.c",
+      "sha256": "b82eacb91ad8c574f0aadde5fc7578261a52fb2d4305352a846c60998f67917b",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v5.15/fs/exec.c"
+    }
+  ]
+}

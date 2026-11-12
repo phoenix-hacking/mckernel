@@ -1,0 +1,99 @@
+{
+  "Golden_derived_from_actual_stdout": false,
+  "changes": [
+    {
+      "after": "[Errno 28] record field unavailable",
+      "before": "record field unavailable",
+      "constructor": "OSError",
+      "literal_errno": 28,
+      "literal_strerror": "record field unavailable",
+      "path": "/cases/1/outer_retention_errors/0/message"
+    },
+    {
+      "after": "[Errno 28] record field unavailable",
+      "before": "record field unavailable",
+      "constructor": "OSError",
+      "literal_errno": 28,
+      "literal_strerror": "record field unavailable",
+      "path": "/cases/1/outer_retention_errors/1/message"
+    },
+    {
+      "after": "[Errno 5] postjoin record unavailable",
+      "before": "postjoin record unavailable",
+      "constructor": "OSError",
+      "literal_errno": 5,
+      "literal_strerror": "postjoin record unavailable",
+      "path": "/cases/1/keeper_capture_errors/0/message"
+    },
+    {
+      "after": "[Errno 32] report stderr unavailable",
+      "before": "report stderr unavailable",
+      "constructor": "BrokenPipeError",
+      "literal_errno": 32,
+      "literal_strerror": "report stderr unavailable",
+      "path": "/cases/1/keeper_capture_errors/1/message"
+    }
+  ],
+  "family": "KEEPER-ORACLE-OSERROR-ENCODING-01",
+  "independent_failed_result_qualification": {
+    "bytes": 8391,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-review-sourceacq-max-1/failed-result-1/QUALIFICATION.json",
+    "sha256": "7ea41b6ee5865874f0c61433a3f8a7bdde018264ffe1376360650d89c261306c"
+  },
+  "no_detail_stripping_or_predicate_weakening": true,
+  "no_fixture_or_actual_keeper_source_or_profile_change": true,
+  "normalizer": "full str(error)",
+  "only_four_external_message_fields_change": true,
+  "original_oracle": {
+    "bytes": 6804,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/EXPECTED.json",
+    "sha256": "b5d0add7bfdb09305c4d82e31756f672bb3c8cac9565ff538788763116e2f1bf"
+  },
+  "original_request": {
+    "bytes": 15126,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/REQUEST.json",
+    "sha256": "5cfd545aee1c2ecf83baac8e892cefe20159be83d1ac45a460d0063be59675de"
+  },
+  "prior_same_interpreter_actual_OSError_encoding": {
+    "bytes": 14079,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-frontdoor-callsite-review-p04tests-max-1/tests-1/request-binding-correction-1/qualification-1/QUALIFICATION.json",
+    "sha256": "4cbbacfbd7132457bbde5deeb70ec2adde9ebb982418f6be222b285cb2ea55ee"
+  },
+  "schema": 1,
+  "source_literal_constructors": [
+    {
+      "errno": 32,
+      "line": 64,
+      "strerror": "report stderr unavailable",
+      "type": "BrokenPipeError"
+    },
+    {
+      "errno": 5,
+      "line": 38,
+      "strerror": "original-main-failure",
+      "type": "OSError"
+    },
+    {
+      "errno": 5,
+      "line": 61,
+      "strerror": "postjoin record unavailable",
+      "type": "OSError"
+    },
+    {
+      "errno": 28,
+      "line": 54,
+      "strerror": "record field unavailable",
+      "type": "OSError"
+    }
+  ],
+  "source_normalizer_lines": [
+    86,
+    89
+  ],
+  "standard_contract": "For these standard Python3.8 OSError/BrokenPipeError(errno,strerror) objects, full str(error) encodes [Errno N] plus the literal strerror; bare strerror is not full str(error).",
+  "unchanged_fixture": {
+    "bytes": 7647,
+    "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/native-outer-keeper-tests-p04tests-max-1/outer_keeper_cases.py",
+    "sha256": "9a5c8d587048c515f5bb79e6f9e8d69cb310a2110f739965eb7a822822a77816"
+  }
+}

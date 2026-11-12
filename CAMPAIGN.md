@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T00:51:57.757446+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T01:32:50.252987+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -190,32 +190,42 @@ main/Root/flag/native call occurred. Rootpreflight had first stopped on obsolete
 transitioncustodian1129750; correction requires current5roles and preserves the
 prior whole-tree864333824B accounting conservatively, with no owner/UNKNOWN release.
 
-**Current one capture repair:** Pub outer07b93/a484 is unexecuted, finiteSDK
-NO_GO41bca823 found exactlyone pending-keeper escape boundary. Pub owns its
-bounded nonescaping original-handle/parent retention correction; P04Tests
-prepares only that changed pureentry check. Allother28argv/profile/source
-predicates are clear. No new Popen/signal/kill/replay or oldsuite is allowed;
-fresh measurements/caps and Root actualARGV slots26/27 remain unissued.
-Correction1f668/be094 has SDK source-deltaGOdf565, but its2pureactualentry
-controls and finaloperationGO remain pending. No native run, initialRootDATA or
-runtimeflags have been issued. Exactoriginaldefect and corrected bytes are
-published for the00:40 outcome request, independently of unrelated progress:
-[Remaining capture source/defect](docs/verification/native-admission-debug-20261112/outer-keeper-correction-pending-1/STATUS.json).
-RealRoot creates its later native nonce/PID; genuine fresh source/currentfree/
-claim/caps/pidfd gates and positive runtime/native/source restoration stay required.
+**Keeper correction is ACTUALLY QUALIFIED.** Source-backed four-message oracle
+successorfc001/GO31b78 passed00:56:56Z. Complete two-vector observations equal
+external5c2036f2; actualchild1619686/b53128235 and fullRootca8793 exited0 with
+positive samehandle/wait/stream closure. Q490f0859 qualifies only the changed
+entry/retention scope; current256MiB/job1 retirede54a. Earlier5cfd/50d763 failure
+stays FAILED. No unchanged diagnostic/provider/keeper suite replay.
 
+**First combined attempt failed before native entry.** Fresh9032/source/resource
+admission plus finalGO9879 invoked be094 at01:06:55Z. Tool5e90a5/sudo1623165
+returned1: `sudo: unable to execute /usr/bin/env: Argument list too long`.
+The env/Python/publisher/provider/native path never entered; initialRootDATA and
+runtime flags remain unmodified. SDKQed16 proves originalsudo wait1/streams and
+fullRoot closure. Root retired ONLY current1610612736B HOST/job1(6ad905f1), keeping
+native12 and every oldUNKNOWN. Source diagnosis72b36712 identifies sudo's joined
+SUDO_COMMAND169865B exceeding the128KiB single-string limit; this is source-derived,
+with actual stderr retained. No privileged probe, settings change or unchanged retry.
 
+**Bounded transport repair:** P04Source d384/READYb84b keeps exact e81/0ca bodies
+in verified149459B DATAa406; RO/nofollow/UID1000:1000/0600/nlink1/stableFD+path,
+fullSHA/memberSHA/schema/duplicate-key refusals precede compile.28slots remain,
+argv27961B+64KiBreserve93497; Pub b954/bade checks argv/environment/ARG_MAX.
+SourceAcq f1b0ae27 is GO; SDK outer9feba has no findings. P04Tests owns the
+small actual reconstruction/two-refusal/outer-size HOST packet, then SDK supplies
+final operationGO from that actual result. Root freshly measures current9032,
+source/caps/currentfree/claim/pidfd admission and issues the corrected normal
+frontdoor once. No first-native command or original criterion has passed yet.
+[Actual failure and exact transport source](docs/verification/native-admission-debug-20261112/verified-source-data-transport-1/STATUS.json).
 
-**Keeper HOST first run failed only oracle encoding.** Packet5cfd/GO f6cc ran
-00:47:05Z: actualchild1616362/b53069185 exited0, allOwner/family/streams positive;
-fullRoot50d763 exited1 on JSONoraclecompare. Exactly4secondary message strings
-in oldexpectedb5d omitted standardPythonOSError Errno prefixes; allothercomplete
-vector fields match, including mainonce/samehandle/timeout→originalwait0.
-SourceAcqQ7ea41b6e independently confirms the diagnosis and current-only256MiB
-job retirement71464306. StatusremainsFAILED. P04Tests owns one source-backed
-fourliteral oracle/request correction, no production/fixture logic change or
-weakened custody predicate. No native/flags/initialRootDATA issued.
-[Exact failing test/oracle/diff](docs/verification/native-admission-debug-20261112/outer-keeper-first-test-failure-1/STATUS.json).
+**Parallel original preparation:** P04Source is active on preserved M14-06-04-
+FUNCTIONAL time-case commands; PublicABI is active on M15-I01-deployed/I02 matched
+artifacts using c964/a2f/f133/099 and the qualified tools/libraries. Both deliver
+exact commands/inputs/unmatched clauses without changing the first-repeat cohort.
+SourceAcq and P04Tests keep the critical transport work; SDK finalGO follows their
+actual source/result. No current payload job exists after scoped retirement; ready
+independent packets may use CPU0/6/7 within max3/4GiB TOTAL after actual admission.
+
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal
 on realC/Rust195objects, source/header and9client/container/Root cleanup; wholeF02
