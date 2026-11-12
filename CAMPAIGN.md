@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T21:38:54.124800+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T23:05:21.924330+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -28,8 +28,80 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload families/jobs: ZERO/ZERO; all controller/worker overhead
-still requires fresh measurement before admission. Oldcontainer cleanup2e3 PASSED
+CURRENT HOST payload families/jobs: ZERO/ZERO. Corrected sixasset preservation
+ACTUALLY PASSED65ec18/0 under final32field995a/GO1c555a6c: exactly6files/67930797B,
+12cp/chmod originalwaits, source-heldFD/bookends/newdestdigests+independentinodes/
+readonlymodes and old25metadata unchanged. Qfa665502/Root97dddca1 retire ONLY
+corrected256MiB/job1. Actual retained manifest c903e207/16549B at
+/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/PRESERVED-COHORT.json.
+Canonical PR8 guide plus append-only currentreceipt and adjacent reference both
+42096B/SHA c9d6f9e160712d114ee8c64405f71ac7bd03f7c6376c4d40c0d0dcc20c5e3076;
+adjacent M14-STABLE-BASELINE.md is0444. Originalreviewed39532B/ccb1 prefix remains
+exact; no treecopy/rebuild/restart/state orcredit reset. Hoststabilizationreceipt
+is baseline-guide-pr8-adoption-1/HOST-STABILIZATION.ACTUAL.json. Earlierfailed
+precopyQ60123d94/Rootd6a5cbfc remain separate, notretiredagain. All native/source/
+normallease/account/globalUNKNOWNs and original105/156/70.00/74.59 unchanged.
+Next Root functional execution is F08 minimumcontext operationGO9dedc9ad after
+actual closedseed/permission/providerlifetime/currentaccount+resource admission;
+only hostnet+one genuineROsocketbind, unchangedmonitor/Owner/TERM/waits. Events/
+wholeF08 remain open. NativeCurrent future56399 nonaccount29ed source binding and
+NativeBinding review continue; no publisher beforedistinctfreshinput/OPGO/actual
+exclusive admission, ACK/fullRootQ+NEW30Q before actualnativebinding/admission.
+All overhead/fresh26GiB/floors remain mandatory.
+
+Historical failedprecopy evidence:
+Reviewed
+cf13/actual31grant12321bb7 returned originalfd3866/exit1: parent pin(input_manifest)
+requires fullmetadata but received3keyref, KeyError resolved beforeexecutiondir,
+sixsourcehandles/25snapshotmetadata, destinationmkdir or anycopy/chmod. Destination
+remainsabsent. Exactraw/tool/parentwait/streams preserved; Proc authors ONE bounded
+full-refshape successor, NativeBinding audits allrealpin/ref callsites without
+weakeningvalidation. Review caught class-scope/new-prior and rawstderr-vs-JSON
+mistakes BEFORE any new operation; corrected freshchild/actual32union still needs
+finalGO. No assetcopy/rebuild/reenumeration or destination cleanup was performed.
+
+TLS0891
+staging ACTUALLY PASSED2af3d5/session10871->545c46/0: oneexistingstager, derived
+CPIO26166986B/57a5ea56, rawoverlay17127B/9d4417f4 and nativeDATA6397B/9103ae49.
+Q2b5b25e6/Root622b9e7c retire ONLY its1GiB/job1; TLS83e5/collector04ddd/cohort/
+six savedfiles remain unchanged. No runtime/TLS restoration/native/original credit.
+F08 exactalias read1aa91e/0/Q02cb48b2/Rootd3dbe76a also retires only320MiB/job1:
+same binary/root and unique udev245.4 installedDB record only, no authentication/
+protocol/readiness/event/lifetime credit. F08 conditionalprofile0638/a462 source
+integration now belongs to TimeSource with Fdelta independentreview, no runtime.
+Normal future candidate d1ee8655 is distinct SOURCE/DATA-only under prospective
+2de591; NativeBinding reviews changedpaths and unapplied two-line NONACCOUNT29ed
+exclusion. No issuer/accountguard edit/oldnonce retry/currentexecution authority.
+Every futureoperation still needs its own actually new coherent current-owner/
+newestaccepted receipt through unchangedguards, actual latest resource/lease/
+source/permission data, independentoperationGO and freshRootadmission.
+
+Explicit finite stabilization6837388952: PR8 guide bd35ed0c was adopted exactly
+at docs/development/M14-STABLE-BASELINE.md (39532B/ccb1c3dd). Its adjacent copy and
+sixasset preservation remain pending actualcopy/Q. Proc owns existingc85d-based
+finite-six-copy-operation-1/e5f42de7, NativeBinding independently reviews; ONLY6
+missing f133assets/67930797B, existing25readonlysnapshot/cache unchanged. No tree
+recopy/rebuild/controller or retentionframework. This supplements CAMPAIGN, the
+sole active plan. Root will append currentactualreceipt and refreshstatus through
+the existing workflow after result; no unsupported original/native credit.
+
+Earlier29ed failed exclusive HOST scope is now CLOSED at Q8c1f7ce2/Root0eb1037e:
+ONLY2GiB/job1 retired, accountrefusal/issuednonce/oldUNKNOWNs remain. Exact
+new-preflight GOf4f13695/helpered1a ran tool395ed3/terminal1 at21:46:46. Qualified
+Docker query passed empty; genuine initial account admission and nonce29ed211b
+were ISSUED. Caller base_check/live_controls then refused newest.status ACCEPTED
+at run_os_goal.py403 before installation. This is not an unissued attempt; full
+rawtool/nonce/cap/actualgrant are retained. No ROOT-EXEC completion or ACK exists.
+NativeCurrent/NativeBinding diagnose only saved fields/code; actual failedinstant
+selected status/tuple/reason remains unproved. Later21:47 ACCEPTED observations
+are current DATA only, never retrospective clearance. No account refresh/state/
+ledger edits, guard weakening, older-success fallback or unchanged issuer retry.
+m15_installed_leaf_review qualifies only exact actual query/originaltool lifetime
+and current2GiB scope. After its genuine disposition, next eligible original work
+is TLS0891 overlay staging and F08 exactalias provenance read under their own
+review/fresh current account/source/resource admission; no native/UNKNOWN release.
+
+Oldcontainer cleanup2e3 PASSED
 2d24c2/exit0; Q32b50d0f/Rootd774507e retire ONLY oldTLS576+cleanup192/twojobs.
 Residual31field pre-Popen failure e81bd3/KeyError no_exclusive_other_owner_scope
 is preserved; failedscopeQ3754874c/Root50821205 retire ONLY that distinct failed
@@ -42,12 +114,11 @@ checks, all0; collector1064312B/04ddd142, original six TLS artifacts unchanged.
 CIDfe2f8707 removed/nonOOM; ten HOST clients, three inner commands and original
 Root closure are qualified at Q02aa0032. Root27a143d0 retires ONLY actual corrected
 768MiB/job1; no separate post-rmquery is invented. No firstthree rerun, TLS runtime/
-restoration/fulloriginal/native credit. The next shared native prerequisite is
-normal reporting publication: sourceGOc16ba1b9 and exact9field installGO57614610
-are frozen; native_current_binding completes the wholequalified0fb/e792 preflight
-literal current-zeroHOST/source/review binding, native_binding_review reviews
-only that delta, then Root fresh-admits the exclusive normal producer once.
-Actual ACK/lease/installer/fullRootQ and physicalNEW30/Q precede both CORE/provider
+restoration/fulloriginal/native credit. Normal sourceGOc16ba1b9/ninefield57614610
+and all passing controls remain reusable at their scope; failed29ed is not install
+proof. Any future publication needs separately reviewed/admitted genuinely new
+current-owner/newest accepted receipt through unmodified validation. Actual ACK/
+lease/installer/fullRootQ and physicalNEW30/Q still precede bothCORE/provider
 generation binding and separate native admission. c964/a2f/f133 stay unchanged.
 
 F08 current-service READONLY receipt ACTUALLY PASSED syntax7c5ab1 and original
