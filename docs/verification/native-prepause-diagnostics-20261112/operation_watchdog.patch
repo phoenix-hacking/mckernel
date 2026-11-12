@@ -1,0 +1,259 @@
+--- /home/holden/mckernel-work/resume-20261112T094452Z-native-binding-1/nsfs-normal-fixed30-1/candidate/package/operation_watchdog.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-diagnostic-successor-1/operation_watchdog.PROPOSED.py
+@@ -2,6 +2,10 @@
+ Future one-shot parent watchdog. No process or root operation starts at import.
+ """
+ import fcntl
++import hashlib
++import json
++import math
++import sys
+ import os
+ import select
+ import resource
+@@ -132,6 +136,237 @@
+     finally:os.close(fd)
+ 
+ 
++def capture_raw_exception(label, error, traceback_object=None):
++    if traceback_object is None:
++        traceback_object = BaseException.__dict__['__traceback__'].__get__(error, type(error))
++    key = (label, id(error), id(traceback_object))
++    if key not in RAW_SEEN:
++        RAW_SEEN.add(key)
++        RAW_FAILURES.append({'label': label, 'error': error, 'traceback': traceback_object})
++    # Explicit exception chains are evidence too. Read builtin descriptors, not
++    # a user-defined attribute/formatting hook; cycles remain raw and bounded.
++    chain_seen = {id(error)}
++    current = error
++    for index in range(16):
++        cause = BaseException.__dict__['__cause__'].__get__(current, type(current))
++        context = BaseException.__dict__['__context__'].__get__(current, type(current))
++        child = cause if cause is not None else context
++        if child is None or id(child) in chain_seen:
++            break
++        chain_seen.add(id(child))
++        tb = BaseException.__dict__['__traceback__'].__get__(child, type(child))
++        chain_label = label + ':chain:' + str(index)
++        chain_key = (chain_label, id(child), id(tb))
++        if chain_key not in RAW_SEEN:
++            RAW_SEEN.add(chain_key)
++            RAW_FAILURES.append({'label': chain_label, 'error': child, 'traceback': tb})
++        current = child
++
++def capture_secondary_exceptions():
++    global SECONDARY_CAPTURED
++    while SECONDARY_CAPTURED < len(SECONDARY):
++        index = SECONDARY_CAPTURED
++        label, error = SECONDARY[index]
++        SECONDARY_CAPTURED += 1
++        capture_raw_exception('secondary:' + str(index) + ':' + label, error)
++
++def diagnostic_secondary(label, error):
++    # The original exception/TB is retained before any attempt to describe it.
++    capture_raw_exception(label, error)
++    SECONDARY.append((label, error))
++
++def diagnostic_type(value):
++    cls = type(value)
++    return type.__getattribute__(cls, '__module__') + '.' + type.__getattribute__(cls, '__name__')
++
++def diagnostic_value(value, depth=0):
++    cls = type(value)
++    if value is None or cls in (bool, int):
++        return value
++    if cls is float:
++        return value if math.isfinite(value) else {'nonfinite_float': True}
++    if cls is str:
++        return {'text': value[:32768], 'truncated': len(value) > 32768,
++                'sha256': hashlib.sha256(value.encode('utf-8', 'backslashreplace')).hexdigest()}
++    if cls is bytes:
++        return {'bytes_hex': value[:16384].hex(), 'truncated': len(value) > 16384,
++                'sha256': hashlib.sha256(value).hexdigest()}
++    if depth < 4 and cls in (tuple, list):
++        return {'items': [diagnostic_value(item, depth + 1) for item in value[:64]],
++                'truncated': len(value) > 64}
++    return {'opaque_type': diagnostic_type(value), 'raw_object_retained': True}
++
++def render_raw_failure(record):
++    error = record['error']
++    raw_args = BaseException.__dict__['args'].__get__(error, type(error))
++    value = {'label': record['label'], 'type': diagnostic_type(error),
++             'raw_args': diagnostic_value(raw_args), 'errno': None,
++             'traceback_frames': [], 'traceback_truncated': False,
++             'raw_exception_and_traceback_retained': True}
++    if isinstance(error, OSError):
++        value['errno'] = diagnostic_value(OSError.__dict__['errno'].__get__(error, type(error)))
++    tb = record['traceback']
++    while tb is not None and len(value['traceback_frames']) < 128:
++        code = tb.tb_frame.f_code
++        value['traceback_frames'].append({'file': code.co_filename,
++                                           'line': tb.tb_lineno, 'function': code.co_name})
++        tb = tb.tb_next
++    value['traceback_truncated'] = tb is not None
++    # A formatter/report failure must not recursively invoke the same failing
++    # hook. Its exact primitive BaseException args and real TB remain evidence.
++    if 'diagnostic-' in record['label']:
++        value['message'] = json.dumps(value['raw_args'], sort_keys=True)
++        value['message_encoding'] = 'exact_bounded_primitive_baseexception_args'
++    else:
++        try:
++            message = str(error)
++        except BaseException as formatting_error:
++            diagnostic_secondary('diagnostic-message-format:' + record['label'], formatting_error)
++            value['message'] = json.dumps(value['raw_args'], sort_keys=True)
++            value['message_encoding'] = 'formatter_failed_exact_bounded_args_and_raw_object_retained'
++        else:
++            value['message'] = message[:65536]
++            value['message_truncated'] = len(message) > 65536
++            value['message_sha256'] = hashlib.sha256(message.encode('utf-8', 'backslashreplace')).hexdigest()
++            value['message_encoding'] = 'actual_exception_str'
++    return value
++
++def diagnostic_payload(phase):
++    capture_secondary_exceptions()
++    records = []
++    index = 0
++    # Rendering can add a formatting failure; include that real exception too.
++    while index < len(RAW_FAILURES):
++        records.append(render_raw_failure(RAW_FAILURES[index]))
++        index += 1
++        capture_secondary_exceptions()
++    return {'schema': 'native-root-caller-failure-diagnostics-v1', 'phase': phase,
++            'pid': os.getpid(), 'exceptions': records,
++            'native_authority_or_release': False, 'raw_objects_retained': True}
++
++def diagnostic_write(fd, raw):
++    offset = 0
++    while offset < len(raw):
++        wrote = os.write(fd, raw[offset:])
++        need(wrote > 0, 'short caller diagnostic capture write')
++        offset += wrote
++
++def need(ok,message):
++    if not ok:raise ValueError(message)
++
++def own(fd,label):
++    row={'fd':fd,'historical_fd':fd,'label':label,'state':'HELD'};OWNED.append(row);return row
++
++def close_once(row):
++    if row['state']!='HELD':return
++    fd=row.pop('fd');row['state']='CLOSE_ATTEMPTED_UNKNOWN'
++    try:os.close(fd)
++    except BaseException as error:
++        diagnostic_secondary('provider-close:'+row['label'],error);raise
++    row['state']='CLOSED'
++
++def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
++
++# Reporting owns only its newly opened report FDs. The caller's root_fd is
++# borrowed for this finite write; it is never closed or transferred here.
++OWNED=[]
++SECONDARY=[]
++RAW_FAILURES=[]
++RAW_SEEN=set()
++SECONDARY_CAPTURED=0
++NATIVE_REPORT_BOUNDARIES=[]
++NATIVE_REPORT_SECONDARY=[]
++DIAGNOSTIC_SEQUENCE=0
++REPORT_LIMIT=512*1024
++
++
++def _persist_native_context(root_fd,phase,payload):
++    global DIAGNOSTIC_SEQUENCE
++    record=None;stored=False
++    try:
++        source.root_private(root_fd)
++        DIAGNOSTIC_SEQUENCE+=1
++        nonce=payload['nonce']
++        need(type(nonce) is str and len(nonce)==64 and all(x in '0123456789abcdef' for x in nonce),'native diagnostic nonce shape')
++        name='NATIVE-CONTEXT-DIAGNOSTIC-'+nonce+'-'+str(os.getpid())+'-'+str(DIAGNOSTIC_SEQUENCE)+'.json'
++        raw=canonical(payload)+b'\n';need(len(raw)<=REPORT_LIMIT,'bounded native diagnostic payload')
++        fd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=root_fd)
++        record=own(fd,'native-context-diagnostic:'+name)
++        diagnostic_write(fd,raw);os.fsync(fd);os.fsync(root_fd);stored=True
++    except BaseException as reporting_error:
++        diagnostic_secondary('diagnostic-private-native-context:'+phase,reporting_error)
++    finally:
++        if record is not None and record['state']=='HELD':
++            try:close_once(record)
++            except BaseException:stored=False
++    return stored
++
++
++def _native_report_notice(payload,stored):
++    # Full exception args/messages and account/config contents stay private.
++    # A successful normal wait emits no stream data.
++    notice={'schema':'native-context-diagnostic-notice-v1','phase':payload['phase'],
++      'nonce':payload['nonce'],'config_sha256':payload['config_sha256'],
++      'pid':payload['pid'],'birth':payload.get('birth'),'private_record_complete':stored,
++      'primary_type':payload.get('primary_type'),'native_authority_or_release':False,
++      'primary_raw_exception_and_traceback_retained':True,'reporting_failure_is_secondary':True}
++    raw=canonical(notice)+b'\n';need(len(raw)<=8192,'bounded native diagnostic notice')
++    for fd,label in ((2,'stderr'),(1,'stdout')):
++        try:diagnostic_write(fd,raw)
++        except BaseException as reporting_error:
++            diagnostic_secondary('diagnostic-native-context-'+label,reporting_error)
++        else:return True
++    return False
++
++
++def report_native_context(root_fd,phase,nonce,config_sha,error=None,wait_data=None):
++    """Finite DATA reporting; no wait, signal, resource or lifetime decision."""
++    stored=False;boundary=None
++    try:
++        tb=None if error is None else BaseException.__dict__['__traceback__'].__get__(error,type(error))
++        boundary={'phase':phase,'error':error,'traceback':tb,'wait_data':wait_data,
++          'caller_root_fd_borrowed_not_owned':root_fd,'secondary':[]}
++        NATIVE_REPORT_BOUNDARIES.append(boundary)
++        if error is not None:capture_raw_exception('primary',error,tb)
++        payload=diagnostic_payload(phase)
++        payload.update({'source_component':'operation_watchdog','nonce':nonce,'config_sha256':config_sha,
++          'utc_ns':time.time_ns(),'mono_ns':time.monotonic_ns(),'birth':None,
++          'wait_data':wait_data,'primary_type':None if error is None else diagnostic_type(error),
++          'reporting_only_no_native_or_resource_authority':True})
++        try:payload['birth']=sys.modules['native_current_owner'].birth(os.getpid())
++        except BaseException as reporting_error:
++            diagnostic_secondary('diagnostic-native-context-birth',reporting_error)
++            payload['birth_unproved']=True
++        boundary['payload_context']=payload
++        stored=_persist_native_context(root_fd,phase,payload)
++        boundary['private_record_complete']=stored
++        if error is not None or not stored:_native_report_notice(payload,stored)
++    except BaseException as reporting_error:
++        # Nothing in reporting may replace a primary or bypass its old hold.
++        raw=(reporting_error,BaseException.__dict__['__traceback__'].__get__(reporting_error,type(reporting_error)))
++        NATIVE_REPORT_SECONDARY.append(raw)
++        if boundary is not None:boundary['secondary'].append(raw)
++    return stored
++
++
++def report_native_wait(watchdog,returned_pid,raw_status):
++    try:
++        exited=os.WIFEXITED(raw_status);signalled=os.WIFSIGNALED(raw_status)
++        expected=sys.modules['native_resource_admission'].VerifiedNativeRequest
++        data={'requested_pid':watchdog.pid,'expected_supervisor_birth':watchdog.birth,
++          'returned_pid':returned_pid,'raw_wait_status':raw_status,
++          'WIFEXITED':exited,'exit_status':os.WEXITSTATUS(raw_status) if exited else None,
++          'WIFSIGNALED':signalled,'term_signal':os.WTERMSIG(raw_status) if signalled else None,
++          'request_type':diagnostic_type(watchdog.native_request),
++          'request_exact_current_type':type(watchdog.native_request) is expected,
++          'one_existing_own_waitpid_return_only':True,'native_validation_or_success':False}
++        return report_native_context(watchdog.root_fd,'OWN_SUPERVISOR_WAITPID_RETURNED',
++          watchdog.nonce,watchdog.native_request.sha256,wait_data=data)
++    except BaseException as reporting_error:
++        NATIVE_REPORT_SECONDARY.append((reporting_error,BaseException.__dict__['__traceback__'].__get__(reporting_error,type(reporting_error))))
++        return False
++
++
+ class Watchdog:
+     """Retain the same open lease description while supervising exact child PID.
+ 
+@@ -176,6 +411,7 @@
+                     if not self._poll(wire.boot_now()+self.grace):fail('supervisor direct join unknown')
+             # waitpid only for this own child; other process/cgroup custody is unknown.
+             got,status=os.waitpid(self.pid,0)
++            if self.native_request is not None:report_native_wait(self,got,status)
+             if got!=self.pid:fail('direct wait identity')
+             self.wait_status=status
+             if self.native_request is not None:

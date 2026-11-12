@@ -1,9 +1,34 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T17:04:26.884669+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T17:22:04.389633+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+Current 17:18+ result supersedes the older retained-process banners below: exact
+provider PhaseA ACTUALLY PASSED53950d/GO60609/actual32a33d, one pidfdTERM15 and
+positive actor/FD/wait/stream/fullRoot0. Root then joined ORIGINAL81012 via its
+genuine tool6bdaa3: terminal1 retains old TimeoutExpired621, originalSUDO late
+wait-15/streamsclosed, all four oldroles absent. Stable captures939B/1785B retain
+the original primary. Runtime/source/native12 and old1.5GiB/job1 remain held;
+Anew256 remains pending independentQ. Native_binding_review qualifies actualA+B;
+native_current_binding prepares separately reviewed exclusive-runtimeFLOCK CAS
+524304->524288 from real journal/inode/hash and currentnative/source controls.
+No supervisorsecondwait, guessed rawstatus/cause, successvalidator or native replay.
+Configured development path is genuinely /run/lock/mckernel-development.lock;
+actualabsence113080 is now explicitly ABSENT_UNPROVEN DATA via reviewed611b7,
+no created/substituted lock or nativefree/release inference.
+
+Eight real-function reporting controls ACTUALLY PASSEDaf69e9/RESULT4004/exact618B
+034085/alleightrows/ownFD+originalwait+fullRoot0; independentQea6aa/Rootd731 retire
+ONLY new256MiB/job1. Proc_vm_index_fix composes only reporting normalfixed30 private
+successor, liveadoption waits positive currentrecovery/newsourceGO/operationGO.
+Exact systemd SRPM GET ACTUALLY PASSED f587b9->0982d4/RESULT1b8a:19134402B/71e60083
+physicalfile66306:2253628/0600/exactns, HTTP200/exactURL/redirect0/directwait0/full
+closure. IndependentQ3286/Root currentSRPM-onlyreceipt retire ONLY that new256.
+Time source prepares passive trusted downstream source/patch acquisition; no
+RPMsignature/extraction/service readiness/originalcredit from GET. Originals
+remain105/156, M14=70.00%,M15=74.59%; all existing holds/excludedcollector preserved.
 
 Current 16:51+ operational update supersedes all older phase banners below:
 original81012/provider1930708/b58283682/sudo1930695/b58283676 remains UNKNOWN,
