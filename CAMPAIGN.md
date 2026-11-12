@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T23:05:21.924330+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T23:29:29.692513+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -28,7 +28,33 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload families/jobs: ZERO/ZERO. Corrected sixasset preservation
+CURRENT HOST payload reservations/jobs: ZERO/ZERO after matching actual current
+qualifications and scoped Root retirements; fresh overhead is still required.
+F08 minimumcontext
+ACTUALLY PASSED syntax0 and original99e9f9/session33764->f3e79b/exit0 under
+GO9dedc9ad/fresh32field f3e49de0/seed a86da07b. Parent RESULTc24aeb5a and outer
+5df969d7 record actual protocol15/group2 readiness, one ownedTERM, daemon+launcher
+waits0, unchanged publisher-before/after tuple, terminal0/nonOOM/Pid0 and exactCID
+nonforce removal+absence. Saved Q392f75b9 and Root76affd8a retire ONLY its
+768MiB/job1; the separate time scope is also now retired below. EPOLLIN registration
+is not event delivery; real event/kmsg/hungup/wholeF08/native clauses remain open.
+TIME4FA staging ACTUALLY PASSED original6ac362/session35053->b99b0d/exit0 under
+GO02ebd5f3 and fresh32field cf14094c: exact qualified4fa/9eb/214d, no compiler/
+oracle replay. Derived26152301B/cfd67ebc, DATAmanifest5162B/e6a7783e and sourceRows
+72715651 are saved. FunctionalDelta Qd76ad5ad qualifies actual de6a9e9e/16881B
+result and original client/Root closure; Root3cc66d4a retires ONLY its1.25GiB/job1
+and joins the preceding separate F08 retirement. No retained HOST payload remains.
+The admission counted retained F08 plus measured1056354304B overhead inside4GiB/
+max3; no extra capture reserve. No time/runtime/native/original acceptance follows.
+NativeCurrent now rebinds ONLY ccef4787/ce2ae8c4's obsolete Root97 receipt to actual
+latest Qd76ad5ad/Root3cc66d4a after NativeBinding conditional review fc15d20d.
+Focused changed-literal operationGO/fullargv and fresh actual current census plus all
+unchanged currentowner/newestaccount/lease/source/permission guards remain required.
+Proc owns only later named TLS source/admission binding from passed stage9103;
+TimeSource prepares only the next real F08 event observation. No green repeats.
+Original105/156, M14=70.00%, M15=74.59% and all genuine holds stay unchanged.
+
+At the prior stabilization boundary HOST payloads/jobs were ZERO/ZERO. Corrected sixasset preservation
 ACTUALLY PASSED65ec18/0 under final32field995a/GO1c555a6c: exactly6files/67930797B,
 12cp/chmod originalwaits, source-heldFD/bookends/newdestdigests+independentinodes/
 readonlymodes and old25metadata unchanged. Qfa665502/Root97dddca1 retire ONLY
@@ -41,7 +67,7 @@ exact; no treecopy/rebuild/restart/state orcredit reset. Hoststabilizationreceip
 is baseline-guide-pr8-adoption-1/HOST-STABILIZATION.ACTUAL.json. Earlierfailed
 precopyQ60123d94/Rootd6a5cbfc remain separate, notretiredagain. All native/source/
 normallease/account/globalUNKNOWNs and original105/156/70.00/74.59 unchanged.
-Next Root functional execution is F08 minimumcontext operationGO9dedc9ad after
+F08 minimumcontext operationGO9dedc9ad has now executed as recorded above after
 actual closedseed/permission/providerlifetime/currentaccount+resource admission;
 only hostnet+one genuineROsocketbind, unchangedmonitor/Owner/TERM/waits. Events/
 wholeF08 remain open. NativeCurrent future56399 nonaccount29ed source binding and

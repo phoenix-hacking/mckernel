@@ -1,0 +1,217 @@
+{
+  "HOST_limits": {
+    "RLIMIT_AS": [
+      -1,
+      -1
+    ],
+    "RLIMIT_CORE": [
+      0,
+      0
+    ],
+    "RLIMIT_CPU": [
+      -1,
+      -1
+    ],
+    "RLIMIT_FSIZE": [
+      67108864,
+      67108864
+    ],
+    "RLIMIT_NOFILE": [
+      512,
+      512
+    ],
+    "affinity": [
+      7
+    ],
+    "gid": 1000,
+    "uid": 1000
+  },
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "actual_namespace_route_authority": "UNISSUED_ROOT_ONLY; actual inside net/userns and control physical/F_OK guards mandatory; Docker mode/sourcepath string alone is insufficient.",
+  "container_limits": {
+    "CPU": [
+      7
+    ],
+    "CapDrop": [
+      "ALL"
+    ],
+    "NanoCpus": 1000000000,
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "core": [
+      0,
+      0
+    ],
+    "cpu_rlimit": [
+      60,
+      60
+    ],
+    "fsize": [
+      33554432,
+      33554432
+    ],
+    "init": true,
+    "inside_Python_AS": [
+      536870912,
+      536870912
+    ],
+    "ipc": "private",
+    "memory_and_swap_bytes": 536870912,
+    "network": "host",
+    "pids_limit": 64,
+    "readonly_root": true,
+    "tmpfs": "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+    "uid_gid": "1000:1000"
+  },
+  "container_name": "mck-m15-f08-real-context-20261112-1",
+  "create_argv_template": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "create",
+    "--name",
+    "mck-m15-f08-real-context-20261112-1",
+    "--label",
+    "mckernel.preparation-owner=m15-f08-real-context-1",
+    "--init",
+    "--pull=never",
+    "--network=host",
+    "--ipc=private",
+    "--cpus=1",
+    "--cpuset-cpus=7",
+    "--memory=512m",
+    "--memory-swap=512m",
+    "--pids-limit=64",
+    "--ulimit",
+    "core=0:0",
+    "--ulimit",
+    "fsize=33554432:33554432",
+    "--ulimit",
+    "cpu=60:60",
+    "--user",
+    "1000:1000",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,noexec,size=64m,mode=1777",
+    "--workdir",
+    "/output",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-owned-main-implementation-1/owned_process.py,dst=/input/owned_process.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/f08_owned_main.py,dst=/input/f08_owned_main.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel/scripts/pidfd_compat.py,dst=/input/pidfd_compat.py,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/F08-OPERATION.Root.json,dst=/input/F08-OPERATION.json,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/build-output/stage/usr/local/sbin/ihkmond,dst=/usr/local/sbin/ihkmond,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/linux/user/libihk.so,dst=/usr/local/lib64/libihk.so,readonly",
+    "--mount",
+    "type=bind,src=/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/execution-1/container-output,dst=/output",
+    "--mount",
+    "type=bind,src=/run/udev/control,dst=/run/udev/control,readonly",
+    "--entrypoint",
+    "/usr/bin/env",
+    "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "-i",
+    "LANG=C",
+    "LC_ALL=C",
+    "PATH=/usr/bin:/bin",
+    "TZ=UTC",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "TMPDIR=/tmp",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/input/f08_owned_main.py",
+    "--operation",
+    "/input/F08-OPERATION.json",
+    "--operation-sha256",
+    "@OPERATION_SHA256@"
+  ],
+  "excluded_rejected_task": {
+    "disposition": "Excluded from replay, rephrasing and reassignment.",
+    "request": "signal/frame/xstate collector",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "expected_genuine_context": {
+    "bytes": 2959,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/EXPECTED-CONTEXT.json",
+    "sha256": "d6a2709ad85338997d7fb48f3d5d33b8f2e4b3e436979740521ce0778a92f9fa"
+  },
+  "expected_mount_count": 8,
+  "expected_mounts": [
+    {
+      "destination": "/input/owned_process.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-owned-main-implementation-1/owned_process.py"
+    },
+    {
+      "destination": "/input/f08_owned_main.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/f08_owned_main.py"
+    },
+    {
+      "destination": "/input/pidfd_compat.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel/scripts/pidfd_compat.py"
+    },
+    {
+      "destination": "/input/F08-OPERATION.json",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/F08-OPERATION.Root.json"
+    },
+    {
+      "destination": "/usr/local/sbin/ihkmond",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihkmond-matching-provider-build-1/build-output/stage/usr/local/sbin/ihkmond"
+    },
+    {
+      "destination": "/usr/local/lib64/libihk.so",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/build-output-195/linux/user/libihk.so"
+    },
+    {
+      "destination": "/output",
+      "read_only": false,
+      "source": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/execution-1/container-output"
+    },
+    {
+      "destination": "/run/udev/control",
+      "read_only": true,
+      "source": "/run/udev/control"
+    }
+  ],
+  "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "lifecycle_identity_join": "Verify exact owned Name/owner labels at created and terminal phases; created AppArmor empty, started/terminal docker-default. Revalidate every original profile constraint and full Id/Image/Name/Created/Config/HostConfig plus sorted full Mounts records against captured created info before removal. No blanket AppArmor allowance.",
+  "owner": "/root/time_functional_source",
+  "owner_labels": {
+    "mckernel.preparation-owner": "m15-f08-real-context-1"
+  },
+  "parent_charge_scope": "Complete512MiB container plus256MiB parent/outer family planning candidate; current Root/controller/worker and other retained slices must separately fit the same4GiB total. This is no grant.",
+  "phase_AppArmor": {
+    "created": "",
+    "started": "docker-default",
+    "terminal": "docker-default"
+  },
+  "profile_delta": "Only networknone\u2192candidatehost plus ONE exact real RO controlnode bind (7\u21928 mountroles), plus fresh source/RootDATA/output/names. No other namespace/user/cap/device/service change or body/provider alteration. Actual permission/route/grant UNISSUED.",
+  "schema": "mckernel.m15.f08.minimum-genuine-context-host-profile.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sole_unissued_argv_value": "Final operationSHA is supplied from the external Root-issued immutable DATA ref; no payload/argv override.",
+  "source_profile_reuse": {
+    "bytes": 10180,
+    "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/mcps-rocky-runtime-delivery-1/parent-as-correction-1/loader-identity-correction-1/same-child-file-map-correction-1/REQUEST.json",
+    "sha256": "a6cfc83c8e02333a8f85485b4340548231d28104af255c8bccdf85d9ef6109c0"
+  },
+  "status": "IMPLEMENTED_PRIVATE_NEW_PROFILE_PENDING_FINAL_INDEPENDENT_SOURCE_PROFILE_OPERATION_REVIEW_NO_GRANT"
+}
