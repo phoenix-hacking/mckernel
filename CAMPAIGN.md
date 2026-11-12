@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T20:57:05.351081+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T21:38:54.124800+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -28,7 +28,38 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT sole HOST payload charge: failed TLS576MiB/job1. Source4a151 actual
+CURRENT HOST payload families/jobs: ZERO/ZERO; all controller/worker overhead
+still requires fresh measurement before admission. Oldcontainer cleanup2e3 PASSED
+2d24c2/exit0; Q32b50d0f/Rootd774507e retire ONLY oldTLS576+cleanup192/twojobs.
+Residual31field pre-Popen failure e81bd3/KeyError no_exclusive_other_owner_scope
+is preserved; failedscopeQ3754874c/Root50821205 retire ONLY that distinct failed
+new768MiB/ONEjob. No compiler or Docker had started on that failed attempt.
+Bounded correction0ca58afd/requestc6ee4db6 preserves the exclusive guard and proves
+the complete real parent+outer32field/prior12field union. DeltaGOfa252657 and fresh
+actual32grant ee045201 ACTUALLY PASSED93d77e/session4960->9a2fd1/exit0: ONE missing
+HOSTGCC9/staticlibcf983 collector compile plus THREE previously unrun46d passive
+checks, all0; collector1064312B/04ddd142, original six TLS artifacts unchanged.
+CIDfe2f8707 removed/nonOOM; ten HOST clients, three inner commands and original
+Root closure are qualified at Q02aa0032. Root27a143d0 retires ONLY actual corrected
+768MiB/job1; no separate post-rmquery is invented. No firstthree rerun, TLS runtime/
+restoration/fulloriginal/native credit. The next shared native prerequisite is
+normal reporting publication: sourceGOc16ba1b9 and exact9field installGO57614610
+are frozen; native_current_binding completes the wholequalified0fb/e792 preflight
+literal current-zeroHOST/source/review binding, native_binding_review reviews
+only that delta, then Root fresh-admits the exclusive normal producer once.
+Actual ACK/lease/installer/fullRootQ and physicalNEW30/Q precede both CORE/provider
+generation binding and separate native admission. c964/a2f/f133 stay unchanged.
+
+F08 current-service READONLY receipt ACTUALLY PASSED syntax7c5ab1 and original
+aa48d5/session15575->42c632/exit0; Q58e13667/Rootd3b9f487 retire ONLY new320MiB/job1.
+Real three udev units active/running, stable MainPID420/birth/exe/unitbookends and
+controlsocket/owner-FD/netns metadata are DATA only. Package owner is UNAVAILABLE;
+no live monitor/protocol/group2/event/provider lifetime or F08 acceptance. Time
+source prepares only a conditional exact registered-path alias/package-provenance
+read from saved bytes, with functional_delta_review independent; no service
+inventory replay, namespace/service change, fake endpoint or daemon retry.
+
+Source4a151 actual
 97302->471fc51 compiled/linked the firstthree TLS C/ASM/payload steps successfully;
 exact saved artifacts19760B ELF/map/objects are reused. Step4 static generic
 collector failed cannotfind-lc in46d; commands5-7 remain unrun. PartialQd5d00579
